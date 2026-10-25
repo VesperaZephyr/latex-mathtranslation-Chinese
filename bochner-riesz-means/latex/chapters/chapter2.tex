@@ -1,0 +1,1239 @@
+% 第 2 章 The Hilbert Transform (原书第 27-60 页)
+\chapter{Hilbert 变换}
+\label{chap:2}
+
+本章是全书最长也最重要的一章. 我们只讨论一个主题: Fourier 级数的一维求和理论. 我们要做的, 是建立 $(T,K,\mu)$ 如何相互作用的基本模型. 这意味着我们需要研究一个函数与其 Fourier 变换之间的关系.
+
+\section{引言}
+\label{sec:2.1}
+
+我们先来分析一类 Fourier 乘子, 即 Bochner--Riesz 平均. 它们的优点在于提供了一种受到精确控制而又可以变化的光滑性. 它们构成一个模型, 用于研究光滑性如何影响 Fourier 变换.
+
+\begin{definition}\label{def:2.1}
+若 $\lambda>-1$, 定义
+\[
+\mu_{\lambda}(\xi)=\bigl(1-|\xi|^{2}\bigr)_{+}^{\lambda}.
+\]
+也就是说, 若 $|\xi|<1$, 则 $\mu_\lambda(\xi)=(1-|\xi|^2)^{\lambda}$; 若 $|\xi|\geq 1$, 则 $\mu_\lambda(\xi)=0$. 我们还定义 $K_\lambda=\check{\mu}_\lambda$ 与 $T_\lambda f=K_\lambda\star f$.
+
+三元组 $(K_{\lambda},T_{\lambda},\mu_{\lambda})$ 称为 $\lambda$ 阶 Bochner--Riesz 平均.
+\end{definition}
+
+\begin{remark}\label{rem:2.2}
+若 $0\leq\lambda\leq 1$, 则 $\mu_{\lambda}$ 是 $\lambda$ 阶 H\"older 连续的, 即
+\[
+|\mu_{\lambda}(r)-\mu_{\lambda}(s)|\leq C|r-s|^{\lambda},
+\]
+而对任何 $\lambda_0<\lambda$, $\lambda_0$ 阶 H\"older 连续性都不成立. 若 $\lambda\geq 1$, 则 $\mu_\lambda$ 有 $[\lambda]$ 阶导数, 而且这些导数是 $\lambda-[\lambda]$ 阶 H\"older 连续的.
+
+这里的要点是: 乘子 $\mu_\lambda$ 具有可变而受控的光滑性. 此外, 若 $\lambda=0$, 则 $\mu_0$ 是 $\mathbb{R}^n$ 中单位球的特征函数, 于是第~\ref{chap:1} 章的工作告诉我们, $\mu_0$ 的 $L^p$ 有界性等价于 Fourier 级数的 $L^p$ 收敛性.
+\end{remark}
+
+\begin{proposition}\label{prop:2.3}
+卷积核 $K_{\lambda}(x)$ 由下式给出:
+\[
+K_{\lambda}(x)=c_{\lambda}\frac{J_{\frac{1}{2}+\lambda}(2\pi|x|)}{|x|^{\frac{1}{2}+\lambda}},
+\qquad |K_{\lambda}(x)|\leq C|x|^{-(1+\lambda)}.
+\]
+\end{proposition}
+
+\begin{remark}\label{rem:2.4}
+\index{Bessel 函数 (Bessel functions)}
+记号 $J_{\nu}$ 表示 $\nu$ 阶 Bessel 函数, 即微分方程
+\[
+z^{2}D^{2}J_{\nu}+zD J_{\nu}+(z^{2}-\nu^{2})J_{\nu}=0
+\]
+的解, 我们关心的是在 $z=0$ 处解析的那个解.
+
+有了对 Bessel 函数的这一认定, 该命题容易证明; 我们只需计算
+$z^{\nu}\int_{-1}^{+1}e^{izt}(1-t^2)^{\nu-\frac{1}{2}}\,dt$
+满足该微分方程且解析. 我们可以通过改变积分围道并作渐近展开来得到 $|K_\lambda|$ 大小的估计. 事实上, 我们将在第~\ref{chap:6} 章中详细地做这件事. 我们现在不做这个计算, 因为本书这一部分的目的, 是看清 $\mu_\lambda$ 的光滑性如何影响 $K_\lambda$ 的大小. 上述命题确切地告诉我们: $K_\lambda$ 在无穷远处的衰减速度与乘子 $\mu_\lambda$ 的光滑度 $\lambda$ 成正比. 这些 Bessel 函数公式的问题在于它们是整体的: $K_\lambda$ 的显式公式是对整个 $\mu_\lambda$ 作平均得到的. 但 $\mu_\lambda$ 是一个除 $|\xi|=1$ 外处处光滑的函数; 既然我们想理解 $|\xi|=1$ 处奇性的影响, 把 $\mu_\lambda$ 在整个 $[-1,+1]$ 上平均在概念上就是错误的. 我们其实更愿意在 $\mu_\lambda$ 于 $|\xi|=1$ 处的奇性附近局部化.
+\end{remark}
+
+\essayhead{ess:2.5}{Fourier 变换的一个直观计算}
+
+我们想重新思考计算 Fourier 变换的整个问题; 我们要考察的问题是: 函数的光滑性如何影响其 Fourier 变换的衰减速度. 我们打算先理解一些简单的例子, 然后把它推广为一般的理解.
+
+关于``光滑性--衰减''问题, 我们有两个基本模型. 第一个是在分析 Hausdorff--Young 定理时做过的一个计算. 我们在那里算得 $\widehat{f\bigl(\frac{x}{\delta}\bigr)}(\xi)=\delta\hat{f}(\delta\xi)$. 为什么这是一个关于光滑性的结果? 因为当 $\delta$ 变小时, $f\bigl(\frac{x}{\delta}\bigr)$ 的支集变小, 而 $f$ 的大小不变. 收缩 $\delta$ 迫使 $f$ 的大小在很短的范围内发生巨大变化: 导数增大了. 它对 Fourier 变换的影响是乘以因子 $\delta$ (小), 并把 $\hat{f}$ 伸缩一个因子 $\delta$. 若把 $\hat{f}$ 想成紧支集的, 那么 $\hat{f}(\delta\xi)$ 的支集随 $\delta$ 变小而扩大. 这意味着 Fourier 变换不如 $\delta$ 大时衰减得那么快.
+
+这一切都是定性的; 定量的分析包含在不等式
+\[
+|x^{2}\check{\psi}(x)|\leq\|x^{2}\check{\psi}\|_{\infty}\leq C\|D_{\xi}^{2}\psi\|_{1}.
+\]
+之中. 在这里应用它有一个技术上的困难: 对 $0\leq\lambda<1$, 函数 $\mu_\lambda$ 根本没有导数. 我们只好自力更生. 我们将为处理这类奇性建立一个标准模型. 我们要一点一点地逼近 $\mu_\lambda$ 的奇性; 把 $\mu_\lambda$ 写成一些标准函数之和, 其中每一个的奇性都是我们能控制的. 设 $\mu_\lambda=\sum\mu_\lambda\phi_j$, 其中每个 $\phi_j$ 光滑且支集远离 $|\xi|=1$. 这一安排使得 $\mu_\lambda\phi_j$ 光滑, 从而可以用标准的光滑性估计求出其 Fourier 变换的大小. 当然, 我们必须把所有单个的 Fourier 变换加起来, 而当 $j\to\infty$ 时, 我们预计 $\mu_\lambda\phi_j$ 越来越不光滑, 于是它的 Fourier 变换越来越大: 潜在地, 我们有了一个求不出和的级数. 为了摆脱困境, 我们需要控制 $\mu_\lambda\phi_j$ 在其支集上的变化. 若支集在 $[a_j,a_{j+1}]$ 中, 我们需要看到 $\mu_\lambda$ 的大小在区间的长度上没有显著变化. 于是, 我们需要常数 $c_1,c_2$ 使得
+\[
+c_{1}\leq\frac{\mu_{\lambda}(a_{j+1})}{\mu_{\lambda}(a_{j})}\leq c_{2}.
+\]
+对接近奇点 $1$ 的 $a_j$, 这提示
+\[
+c_{1}\leq\left|\frac{(1-a_{j+1})}{(1-a_{j})}\right|\leq c_{2},
+\]
+而 $a_{j}=1-2^{-j}$ 就很合适.
+
+我们偷点懒, 假装奇点在 $0$ 而不在 $1$, 于是让所有的 $\phi_j$ 都是同一个函数的伸缩 (利用``伸缩使导数变大''这一直观). 设 $\phi_j(\xi)=\phi(2^j\xi)$, 并假装 $\phi_j$ 的支集包含在 $I_j\cup-I_j$ 中, 这里 $I_j=(1-2^{-j},\,1-2^{-(j+1)})$. 那么 $\mu_\lambda\phi_j$ 的大小约为 $2^{-\lambda j}$, 于是近似地,
+\[
+\widetilde{\mu_{\lambda}}=\sum_{j=0}^{\infty}2^{-\lambda j}\check{\phi}_{j}\,\widetilde{\mu}_{\lambda}(x)=\sum_{j=0}^{\infty}2^{-\lambda j}\check{\phi}_{j}(x)=\sum_{j=0}^{\infty}2^{-\lambda j}2^{-j}\check{\phi}(2^{-j}x).
+\]
+近似地, 于是,
+\[
+|K_{\lambda}(x)|\leq\sum_{j=0}^{\infty}2^{-(1+\lambda)j}|\check{\phi}(2^{-j}x)|.
+\]
+若选取 $\phi$ 非常光滑, 我们就能容易地控制其大小; 对 $\phi\in\mathcal{S}$, 当 $|y|\leq 1$ 时 $|\check{\phi}(y)|\leq C$, 当 $|y|\geq 1$ 时 $|\check{\phi}(y)|\leq C|y|^{-2}$. 利用这个精确的估计,
+\begin{align*}
+|K_{\lambda}(x)|&\leq C_{1}\sum_{|2^{-j}x|\leq1}2^{-(1+\lambda)j}+C_{2}\sum_{|2^{-j}x|\geq1}2^{-(1+\lambda)j}|2^{-j}x|^{-2} \\
+&\leq C_{1}\sum_{[\log|x|]-1}^{\infty}2^{-(1+\lambda)j}+C_{2}\sum_{0}^{[\log|x|]+1}2^{-(1-\lambda)j}|x|^{-2} \\
+&\leq C_{1}|x|^{-(1+\lambda)}+C_{2}|x|^{-(\lambda+1)}|x|^{-2}.
+\end{align*}
+这就证明了 $0\leq\lambda<1$ 时的估计; 若 $\lambda\geq 1$, 则需要对 $\check{\phi}$ 利用其在无穷远处更快衰减的估计.
+
+\essayhead{ess:2.6}{Fourier 变换的一个精确计算}
+
+在~\ref*{ess:2.5} 中计算 Fourier 变换时, 我们第一次偷懒是在集合 $I_j$ 上用估计 $\mu_{\lambda}\phi_j=2^{-\lambda j}$. 第二次偷懒是假定诸 $\phi_j$ 都是同一个 $\phi$ 的伸缩; 我们需要用诸如
+\[
+|x^{2}\check{\psi}(x)|\leq\|x^{2}\check{\psi}\|_{\infty}\leq C\|D_{\xi}^{2}\psi\|_{1}.
+\]
+这样更精确的估计来取代伸缩直观.
+
+我们先来精确地构造 $\phi_j$. 设 $\psi(x)=\exp(-x^{-2})$; 则 $\psi$ 是 $C^\infty$ 的且支在 $[0,\infty)$ 中. 于是函数 $\psi(x)\psi(1-x)$ 光滑且支在 $[0,1]$ 中. 取这个函数的适当伸缩与平移, 记为 $\phi$, 使其支在 $[-\frac{5}{4},-\frac{1}{4}]$ 中. 令 $\phi_j(\xi)=\phi\bigl(2^j(|\xi|-1)\bigr)$. 注意, 若把 $I_j$ 定义为区间 $[1-5\cdot 2^{-(j+2)},\,1-2^{-(j+2)}]$, 则 $\phi_j$ 的支集包含在 $J_j=I_j\cup-I_j$ 中. 现在令
+\[
+\chi_{j}(\xi)=\frac{\phi_{j}(\xi)}{\sum_{k=0}^{\infty}\phi_{k}(\xi)}
+\]
+当 $\xi\in J_j$; 而当 $\xi$ 在 $J_j$ 之外时 $\chi_j(\xi)=0$. 注意, 若 $\xi\in J_j$, 则 $\bigl|D_\xi^\alpha\chi_j(\xi)\bigr|\leq C_\alpha 2^{\alpha j}$.
+
+精确化的一个义务是必须核查许多琐碎的细节; 例如对 $\xi\in J_j$ 有 $0<\sum\phi_k<\infty$. 这两个不等式中, 第一个是平凡的: $\phi_k\geq 0$ 且 $\sum\phi_k\geq\phi_j$. 而在 $J_j$ 的内部 $\phi_j>0$, 而 $J_j$ 的端点位于 $J_{j-1}$ 或 $J_{j+1}$ 的内部, 故和为正. 此外, $J_j$ 只与 $J_{j-1}$ 或 $J_{j+1}$ 相交, 于是对固定的 $\xi$, 这个和至多有三个非零项, 因而自然是有限的.
+
+最后, 令 $\psi_j=\mu_\lambda\phi_j$. 由构造, $\psi_j\in\mathcal{S}$, $\operatorname{supp}\psi_j\subset J_j$, 于是 $\sum\psi_j=\mu_\lambda$. 现在估计 $\check{\psi}_j$: 利用 $\mu_\lambda$ 在 $J_j$ 上光滑这一事实,
+\[
+|D_{\xi}^{\alpha}\mu_{\lambda}(\xi)|\;\chi_{J_{j}}(\xi)\leq C_{\alpha}2^{-(\lambda-\alpha)j}.
+\]
+于是
+\begin{align*}
+|\check{\psi}_{j}(x)|&\leq\|\check{\psi}_{j}\|_{\infty}\leq\|\phi_{j}\|_{1}
+=\int_{J_{j}}|\mu_{\lambda}|\,\chi_{J_{j}}\leq C\,2^{\lambda j}|J_{j}|, \\
+&=C\,2^{-(1+\lambda)j};\qquad
+|x^{2}\check{\psi}_{j}(x)|\leq\|x^{2}\check{\psi}_{j}\|_{\infty}\leq\|D_{\xi}^{2}\psi_{j}\|_{1} \\
+&\leq C\|D_{\xi}^{2}\mu_{\lambda}\,\chi_{J_{j}}\|_{1}
++C\|D_{\xi}\mu_{\lambda}\,D_{\xi}\chi_{J_{j}}\|_{1}
++\|\mu_{\lambda}D_{\xi}^{2}\chi_{J_{j}}\|_{1} \\
+&\leq C|J_{j}|\left(2^{-(\lambda-2)j}+2^{-(\lambda-1)j}2^{j}+2^{-\lambda j}2^{2j}\right).
+\end{align*}
+总之, $|\check{\psi}_{j}(x)|\leq 2^{-\lambda j}|2^{-j}x|^{-2}$.
+
+好, 现在的证明与~\ref*{ess:2.5} 中完全一样. 再一次, 若 $\lambda\geq 1$, 我们想要的估计就是出不来: $\sum_{j\geq 0}2^{(1-\lambda)j}|x|^{-2}$ 给出 $|x|^{-2}$ 量级的项, 当 $1-\lambda\leq 0$ 时这根本不够. 为了对付这一点, 我们可以估计 $|x|^3|\check{\psi}_j|$ 与 $D_{\xi}^{3}(\mu_{\lambda}\chi_{J_j})$.
+
+\essayhead{ess:2.7}{Fourier 变换与标准模型}
+
+``analysis''一词可以拆成它的希腊语词根, 意为``向上''与``分解''. 在西方思想史上, 分析就是把一个对象拆成更小的部分并试图理解每一部分的过程. 这里有两个希望: 其一, 尽管整体可能无法研究, 但各个部分是可以研究的; 其二, 人们希望通过对部分的研究能够以某种方式重建整体. 后一个希望常常是个问题; 注意到, 我们并没有恢复出关于 $\check{\mu}_{\lambda}$ 的完全信息, 而只得到了 $\check{\mu}_{\lambda}$ 在无穷远处大小的信息.
+
+我们在本节想做的是让整个分析过程在直观上更有吸引力. 我们看到, 孤立 $|\xi|=1$ 处的奇性有很多好处; 我们让 $\mu_\lambda$ 在小区间上表现得如同常数. 于是, 为控制 $\mu_\lambda=\sum\mu_\lambda\chi_{I_j}=\sum 2^{-\lambda j}\chi_{I_j}$ 的 Fourier 变换, 我们只需控制 $|\check{\chi}_{I_j}|$. 现在我们只关心 $|\check{\chi}_{I_j}|$ 的大小; 这意味着我们可以把 $I_j$ 平移到以原点为中心, 而只使 Fourier 变换改变一个绝对值为 $1$ 的相位因子. 于是所有的 $\chi_{I_j}$ 都是区间 $I=[-1,1]$ 的特征函数的真正伸缩. 而伸缩对 Fourier 变换的影响是已知的: $|\check{\chi}_{I_j}(x)|\leq 2^{-j}|\check{\chi}_{I}(2^{-j}x)|$. 起初我们需要理解一整族复杂函数的 Fourier 变换; 现在我们要做的只是理解单个区间的特征函数的 Fourier 变换.
+
+直观上,
+\[
+\check{\chi}_{I}(x)=\int_{I}e^{2\pi ix\xi}\,d\xi
+\]
+是一个振荡指数函数在区间上的平均. 若频率很大, 振荡就快, 整个区间上的平均值接近零. 能够对 $\check{\chi}_I$ 作出贡献的频率必须与区间的大小相匹配: 频率必须等于区间的长度. 我们必须有 $|2^{-j}x|\leq 1$. 对这样的 $x$,
+\[
+|\check{\mu}_{\lambda}(x)|=2^{-(1+\lambda)j}\leq|x|^{-(1+\lambda)}.
+\]
+坏消息是这个计算是错的; 若波的频率不是区间长度的整数倍, Fourier 变换在区间上就不会平均为零. 误差将是指数函数一个波长的量级, 即 $|2^{-j}x|^{-1}$. 若 $x$ 很大, 这就给 $|\check{\mu}_\lambda(x)|$ 带来大小为 $\sum_{|2^{-j}x|>1}2^{-(1+\lambda)j}|2^{-j}x|^{-1}$ 的误差, 对大的 $x$ 它是 $|x|^{-1}$ 量级的. 这个估计糟透了.
+
+我们可以用光滑函数 $\psi$ (支在 $I_j$ 中) 替换 $\chi_I$ 来得到更好的估计, 然后再伸缩与平移. 推理与之前相同, 只是若频率不能恰好装进区间 $I_j$, 计算的误差将与指数函数的一个波长乘以函数 $\psi$ 在区间端点处的高度成比例. 由于 $\psi$ 在区间端点附近无穷阶消失, 这一贡献会非常小. 若 $\psi$ 是线性的, 高度就是 $0+(\text{斜率})(\xi \text{ 的改变量})=(D_\xi\psi)(|\text{波长}|)$. 总误差贡献将是 $|\text{波长}|^2=|2^{-j}x|^2$; 它给总和贡献一项大小为 $|x|^{-(1+\lambda)}$ 的量, 这正是我们想要的. 若 $\lambda\geq 1$, 这一切都不成立, 我们需要利用 $\psi$ 无穷阶消失的事实, 于是 $\psi$ 在端点附近的高度如同 $|D_\xi^k\psi|\,|\text{波长}|^k$, 等等. 我们稍后会做一个精确的版本; 直观是清楚的.
+
+这里有一个基本的要点, 在量子力学中称为不确定性原理: 我们不能简单地忽略那些很快但不完全匹配区间的频率. 这些频率贡献大小与频率成比例的误差. 若函数 $\phi$ 的支集被限制在一个小集合中, 则 $\hat{\phi}$ 不是紧支集的; 它是实解析的, 所以肯定不是紧支集的. 不可能把 $\phi$ 与 $\hat{\phi}$ 同时局部化在一个小集合中. 既然控制 Fourier 乘子需要同时控制 $\mu_{\lambda}$ 与 $K_{\lambda}=\check{\mu}_{\lambda}$, 我们可以预期我们的结果来之不易.
+
+\begin{corollary}\label{cor:2.8}
+若 $\lambda>0$, 则 $T_\lambda$ 在 $L^p(\mathbb{R}^1)$ ($1\leq p\leq\infty$) 上有界.
+\end{corollary}
+
+\begin{proof}
+若 $\lambda>0$, 则 $K_\lambda\in L^1$, 因此
+\[
+{}_{p}\|T_{\lambda}\|\leq\|K_{\lambda}\|_{1}<\infty. \qedhere
+\]
+\end{proof}
+
+\begin{lemma}\label{lem:2.9}
+若 $\lambda=0$, 则 $T_0$ 在 $L^1(\mathbb{R}^1)$ 上无界.
+\end{lemma}
+
+\begin{proof}
+若 $\lambda=0$, 我们对 $T_\lambda$ 的估计并不能表明 $K_\lambda\in L^1$. 但话说回来, 我们的估计本来就很糟糕. 另一方面, 若对所有的 $f\in\mathcal{S}$ 都有 $T_0 f\in L^1$, 则 $\widehat{T_0 f}(\xi)$ 对所有 $\xi$ 连续. 这意味着 $\chi_{[-1,1]}\hat{f}(\xi)$ 对所有使 $\hat{f}\in\mathcal{S}$ 的 $\hat{f}$ 连续. 这是荒谬的.
+\end{proof}
+
+\begin{remark}\label{rem:2.10}
+\begin{enumerate}[label=\alph*)]
+\item 引理~\ref{lem:2.9} 的证明几乎是平凡的; 它比紧环面 $\mathbb{T}^{n}$ 上的类似结果容易得多. 但~\ref*{lem:2.9} 与 $\mathbb{T}^{n}$ 上的那个结果是等价的.
+\item 我们的标准模型能否帮助解释 $\lambda>0$ 与 $\lambda=0$ 之间的差别? 直观上, $\mu_{\lambda}=\sum 2^{-\lambda j}\phi(2^j\xi)$. 由于 $\phi\in\mathcal{S}$, 所有的 $\phi(2^j\xi)$ 都给出 $L^p$ 乘子, 其范数为 $\|\check{\phi}\|_1$. 于是我们用一个非常平凡的估计: ${}_p\|T_{\lambda}\|\leq\sum 2^{-\lambda j}\|\check{\phi}\|_1=C\sum 2^{-\lambda j}$. $\lambda>0$ 与 $\lambda=0$ 之间的差别一目了然. 但这没有解释 $T_0$ 将在 $p>1$ 时于 $L^p$ 上有界这一事实; 这表明, 对 $\lambda=0$, 我们需要粗估计之外的手段来把 $\mu_\lambda$ 从它的碎片重新拼合起来. 不过我们是能够做到的.
+\end{enumerate}
+\end{remark}
+
+\section{Hilbert 变换}
+\label{sec:2.2}
+
+\begin{definition}\label{def:2.11}
+\index{Hilbert 变换 (Hilbert transform)|emph}
+Hilbert 变换 $H$ 是如下给出的 Fourier 乘子算子, 定义在 $L^2(\mathbb{R}^1)$ 上:
+\[
+\widehat{Hf}(\xi)=i\,\mathrm{sign}(\xi)\,\hat{f}(\xi).
+\]
+\end{definition}
+
+\begin{lemma}\label{lem:2.12}
+$T_{0}$ 在 $L^{p}$ 上有界当且仅当 $H$ 在 $L^{p}$ 上有界.
+\end{lemma}
+
+\begin{proof}
+两个算子都以一个尖锐的跳跃间断为特征; 由 $H$ 制造 $T_0$ 并不困难. 注意:
+\begin{gather*}
+\chi_{(-\infty,0)}(\xi)=\frac{1+i\,(i\,\mathrm{sign}\,\xi)}{2};\quad
+\chi_{(0,\infty)}(\xi)=\frac{1-i\,(i\,\mathrm{sign}\,\xi)}{2}; \\
+\chi_{(-1,1)}=\chi_{(-\infty,1)}(\xi)\chi_{(-1,\infty)}(\xi)
+=\chi_{(-\infty,0)}(\xi-1)\chi_{(0,\infty)}(\xi+1).
+\end{gather*}
+于是定理~\ref{thm:1.23} 表明, Hilbert 变换的这些改动不会产生显著影响: ${}_p\|T_0\|\leq\frac{1}{4}\bigl(1+{}_p\|H\|\bigr)^2$.
+
+反之, 若 $T_0$ 在 $L^p$ 上有界, 则把 $\chi_{(-1,1)}$ 平移就得到 $\chi_{(0,2)}$, 而乘子范数不变. 再伸缩得 $\chi_{(0,R)}$, 然后对 Schwartz 函数取极限得 $\chi_{(0,\infty)}$. 对负的一侧作类似的推理, 然后把它们相加得到 $i\,\mathrm{sign}\,\xi$ 并无困难.
+\end{proof}
+
+\begin{remark}\label{rem:2.13}
+把 $T_0$ 换成 $H$ 看起来是件特别愚蠢的事. 毕竟, 区间的特征函数属于 $L^1$, 于是与它相伴的卷积核属于 $L^1$. 但 $H$ 的乘子太糟糕了, 它的卷积核不可能属于 $L^1$ (否则其 Fourier 变换就会在无穷远处衰减). 我刚刚把一个局部化的、卷积核可积的乘子, 换成了一个整体的乘子, 其核甚至不是局部可积的.
+\end{remark}
+
+\begin{proposition}\label{prop:2.14}
+若 $f\in\mathcal{S}$, 则
+\[
+Hf(x)=\lim_{\epsilon\to0}\frac{1}{\pi}\int_{\epsilon\le|y|\le\frac{1}{\epsilon}}\frac{1}{y}f(x-y)\,dy.
+\]
+\end{proposition}
+
+\begin{proof}
+我们在分布意义下的计算中会稍微偷点懒:
+\begin{align*}
+\lim_{\epsilon}\frac{1}{\pi}\int_{\epsilon\leq|y|\leq\frac{1}{\epsilon}}\frac{1}{y}e^{-2\pi iy\xi}\,dy
+&=\lim\frac{2i}{\pi}\int_{\epsilon}^{\frac{1}{\epsilon}}\frac{1}{y}\sin 2\pi\xi y\,dy \\
+&=\frac{2i}{\pi}\,\mathrm{sign}\,\xi\,\lim_{\epsilon}\int_{\epsilon}^{\frac{1}{\epsilon}}\frac{1}{y}\sin y\,dy
+=\left(\frac{2i}{\pi}\,\mathrm{sign}\,\xi\right)\left(\frac{\pi}{2}\right).
+\end{align*}
+没有哪个真正的分析学家能抗拒不用围道积分来求积分
+\[
+\lim_{\epsilon}\int_{\epsilon}^{\frac{1}{\epsilon}}\frac{1}{y}\sin y\,dy
+\]
+的诱惑. 下面的技巧是 K.~Merryfield 告诉我们的; 这些积分都经过精心安排使之绝对收敛, 因此我们所做的形式运算都是合法的.
+\[
+\int_{0}^{\infty}\frac{\sin y}{y}\,dy
+=\left[\frac{(1-\cos y)}{y}\right]_{0}^{\infty}+\int_{0}^{\infty}\frac{1-\cos x}{x^{2}}\,dx.
+\]
+但 $x^{-2}=\int_{0}^{\infty}s\,e^{-sx}\,ds$, 于是上式右端的积分为
+\begin{align*}
+\int_{0}^{\infty}\!\!\int_{0}^{\infty}&(1-\cos x)\,s\,e^{-sx}\,dx\,ds
+=\int_{0}^{\infty}\left(\frac{1}{s}-\frac{s}{s^{2}+1}\right)s\,ds \\
+&=\int_{0}^{\infty}\frac{1}{s^{2}+1}\,ds=\arctan\infty-\arctan 0=\frac{\pi}{2}. \qedhere
+\end{align*}
+\end{proof}
+
+\begin{remark}\label{rem:2.15}
+\begin{enumerate}[label=\alph*)]
+\item 非正式地, 我们将写 $Hf=\frac{1}{x}\star f$. 当然, 由于 $x=0$ 处的奇性, 这个卷积只对非常特殊的 $f$ 收敛. 这正是我们把 $T_0$ 换成 $H$ 时所预期的. 我们有所收获吗? 与 $K_0$ 相应的卷积核是 $\frac{\sin 2\pi x}{x}$, 它在零附近是收敛的. 但 $K_0$ 与 $\frac{1}{x}$ 都不在 $L^1$ 中, 于是这些算子的 $L^p$ 有界性不依赖于大小, 而是依赖于核的正部与负部之间的相消 (对照注~\ref{rem:1.17}: 无论卷积核的绝对值还是其正部与负部, 都不给出在任何 $p$ 于 $L^p$ 上有界的乘子). 而一旦不带绝对值, 我们至少得到一个在 $L^2$ 上有界的算子.
+
+结论是: 相消 (cancellation) 对理解 $T_0$ 或 $H$ 都是本质性的. 但两者的卷积核分别是 $\frac{\sin 2\pi x}{x}$ 与 $\frac{1}{x}$. Hilbert 变换的相消性质要容易控制得多.
+\item 对 $(\mathrm{sign}\,\xi)$ 的逆变换作一个直观计算是容易的. 由于 $\mathrm{sign}\,\xi=\frac{\xi}{|\xi|}$ 在伸缩 $\xi\mapsto\delta\xi$ ($\delta>0$) 下不变, 其卷积核 $K$ 必须满足 $\delta K(\delta x)=K(x)$, 于是 $K(x)=\frac{\omega(x/|x|)}{|x|}$, 其中 $\omega$ 是某个在伸缩下不变的函数. 但 $\frac{1}{x}$ 是奇函数, 而 Fourier 变换保持奇性, 所以 $\omega$ 必须是奇函数中在伸缩下不变的那一个的倍数, 即 $\frac{x}{|x|}$. 这意味着 $K$ 是 $\frac{c}{x}$ 的形式.
+\item 我们知道 $H$ 在 $L^{1}$ 上无界, 而在 $L^{2}$ 上有界. 这两个事实我们都有证明, 而且都是用 Fourier 变换技术证明的. 但这还不够好, 因为 Fourier 变换平均得太多, 而 $H$ 在 $L^{1}$ 上的无界性源于乘子在 $\xi=0$ 处的一个纯局部的间断. 对于卷积核 $\frac{1}{x}$ 与 $L^p$ 有界性之间的关系, 我们没有局部层面的理解; 作为一个分布, 它对任何 $L^p$ 中的任何函数都同样糟糕. 下面的结果, 以及再下一节, 将构造出对``卷积核如何影响算子的 $L^p$ 有界性''的更好理解.
+\end{enumerate}
+\end{remark}
+
+\begin{lemma}\label{lem:2.16}
+设 $I=[0,1]$, $f=\chi_I$. 则 $Hf\in L^p$ 当且仅当 $1<p<\infty$.
+\end{lemma}
+
+\begin{proof}
+为证 $Hf\notin L^{1}$, 我们必须设法避免相消; 在积分 $\int_{-1}^{1}\frac{1}{x-y}\,dy$ 中我们专看 $x-y>0$ 的部分. 于是若 $y\in(-1,1)$, $x\in(n,n+1)$, 则 $\frac{1}{x-y}\geq\frac{1}{n}$, 因此
+\[
+Hf(x)\geq\sum\frac{2}{n}\chi_{(n,n+1)}(x),\qquad \|Hf\|_{1}=\infty.
+\]
+为证正面的结果, 我们把靠近奇性的点与远离奇性的点区分开: 对 $x$ 分成两个区间 $(0,2)$ 与 $(2,\infty)$. 在后者上, 我们在 $(n,n+1)$ 上用估计 $\frac{1}{x-y}\leq\frac{1}{n-1}$; 于是对 $p>1$, $\int_{2}^{\infty}\leq 2^{p}\sum\frac{1}{n^{p}}<\infty$.
+
+在区间 $(0,2)$ 上, 我们利用相消得到
+\[
+Hf(x)=\log|x+1|-\log|x-1|.
+\]
+第一项属于 $L^\infty(0,2)$; 第二项可以在 $(0,1)$ 与 $(1,2)$ 上对称地分析; 我们将一点一点地逼近奇性以度量其影响. 在 $(0,1)$ 上,
+$\int_0^1|Hf|^p=\sum_k\int_{1-2^{-k}}^{1-2^{-(k+1)}}|Hf|^p\leq\sum k^{p}2^{-k}<\infty$.
+\end{proof}
+
+\begin{remark}\label{rem:2.17}
+计算的目的是洞察; 我们学到了什么? 首先, 我们得到一个并不十分意外的结果: 远离 $f$ 的支集处, $Hf$ 的行为如同 $\frac{1}{x}$. 这部分地控制了 $Hf$ 的 $L^p$ 行为. 毕竟在无穷远处, $\frac{1}{x}\in L^p$ 当且仅当 $p>1$. 但还有另一个区域, 即 $x$ 靠近 $f$ 的支集的区域, 在那里 $\frac{1}{x}$ 的大小变得无关紧要, 而相消变得重要. 这个区域需要用到 $\int_{\epsilon\leq|y|\leq\frac{1}{\epsilon}}\frac{1}{x}\,dy=0$ 这一事实.
+\end{remark}
+
+\section{Cotlar 定理}
+\label{sec:2.3}
+\index{殆正交性 (almost orthogonality)}
+
+在本节中, 我们将在不使用 Fourier 变换的情况下证明 $H$ 在 $L^2(\mathbb{R}^1)$ 上的有界性. 我们尤其想看到核 $\frac{1}{x}$ 的相消是如何被用来控制 $H$ 的.
+
+我们将求助于标准模型; 我们应该一点点逼近 $i\,\mathrm{sign}(\xi)$ 在 $\xi=0$ 处的奇性, 把它写成
+\[
+i\,\mathrm{sign}(\xi)=\sum 2^{-0j}\phi(2^{j}\xi).
+\]
+我们想在卷积核一侧给出它的解释:
+\[
+K(x)=\sum 2^{-j}\check{\phi}(2^{-j}x).
+\]
+直观上, $\phi$ 的大部分支集在 $[1,2]$ 中; 这是不对的, 但它使我们猜到: 逼近卷积核奇性的正确方式是写
+\[
+\frac{1}{x}=\sum_{j=-\infty}^{\infty}K_{j}(x);
+\]
+这里
+\[
+K_{j}(x)=\frac{1}{x}\chi_{(2^{j},2^{j+1})}(|x|).
+\]
+正如所料, $\sum{}_2\|K_j\|=\infty$, 于是 $H$ 的 $L^2$ 有界性取决于诸 $K_j$ 之间如何相互作用.
+
+使我们能从 $K_j$ 重建 $H$ 的关键直观来自 Fourier 变换分析: 在 Fourier 变换一侧, $K_j$ 的作用如同乘以 $\phi_j$. 这些 $\phi_j$ 非常像区间 $[2^{-(j+1)},2^{-j}]$ 的特征函数. 它们是投影算子; 而且是到 $L^2$ 的相互正交的子空间上的投影 (我甚至可以把它们想成沿对角线为 $1$ 的对角算子). 度量这类算子大小的正确方法, 不是把所有单个部分的大小加起来, 而是取各部分范数中的最大者, 在这里它是有限的.
+
+这一讨论是``$H$ 在 $L^2$ 上有界''的 Fourier 变换证明的算子理论版本. 我们要做的是把这个关于投影的想法翻译到卷积核一侧. 从算子理论的角度, ``是投影''这一条件即是: 与核 $K_j$ 相应的算子 $T_j$ 满足正交性条件 $T_kT_j=0$. 现在我们要做两件事: i) 核实正交性对我们的算子确实成立 (它们并不是被定义为投影的); ii) 核实正交性足以给出 $L^2$ 有界性.
+
+为了核查正交性, 我们不允许使用估计
+\[
+{}_{2}\|T_{k}T_{j}\|=\|\hat{K}_{k}\hat{K}_{j}\|_{\infty},
+\]
+因为我们不使用 Fourier 变换. 我们仅有的把卷积核与算子范数联系起来的估计是
+\[
+{}_{2}\|T_{k}T_{j}\|=\|K_{k}\star K_{j}\|_{1},
+\]
+所以我们需要理解 $K_j\star K_k$ 的大小. 在 $k=1$、$j$ 很大的特殊情形, 我们看图~\ref{fig:2}. 卷积 $K_j\star K_k$ 应当被视为一个平均过程; 在区域 $(2^j,2^{j+1})$ 中, $K_j$ 几乎不变化, 而在此区域之外它是零. 另一方面, $K_1$ 在长度为 $2$ 的区间中在正负之间跳跃, 于是我们预计它对缓慢变化的函数 $K_j$ 的平均值为零.
+
+这是我们的希望; 不幸的是, 这个直观是错的. 有两个问题: $K_j$ 缓慢变化但非常数, 于是 $K_1$ 的正部与负部``看到''的 $K_j$ 的区域不同, 不会平均为零; $K_j$ 的光滑度控制着平均值到底有多大. 其次, 当 $x\in(2^j-1,2^j)$ 时, $K_1$ 的负部对 $0$ 作平均, 而正部对 $K_j$ 作平均. 这给出一个在测度为 $1$ 的集合上大小为 $2^{-j}$ 的量:
+\[
+\|K_{j}\star K_{1}\|_{1}>2^{-j}.
+\]
+卷积确实很小, 但不是零, 于是我们关于投影的整套哲学体系土崩瓦解.
+
+还有一条生路: 拟正交投影 (almost orthogonal projections) 理论. 这一理论利用了 $T_jT_k$ 非常小这一事实, 并巧妙地反复使用这个估计, 使各项之间的相互作用非常小. 该理论使用谱半径定理: 算子 $T$ 的范数由
+\[
+\|T\|=\lim_{n\to\infty}\|T^{n}\|^{\frac{1}{n}}
+\]
+给出. 取 $T$ 的 $n$ 次幂使我能迭代任何已有的估计; 另一方面, 我必须记录多个 $T_{i_j}$ 与 $T_{i_k}$ 相互平均的组合学.
+
+\begin{theorem}\label{thm:2.18}
+\index{Cotlar 定理 (Cotlar's lemma)}
+设 $\{T_{k}\}$ 是 Hilbert 空间上的一族有界算子, 并设
+\begin{align*}
+&\left\|T_{k}\right\|\leq C, \\
+&\|T_{i}^{\star}T_{j}\|\leq\phi^{2}(i-j), \\
+&\|T_{i}T_{j}^{\star}\|\leq\phi^{2}(i-j).
+\end{align*}
+则
+\[
+\Bigl\|\sum_{j=-N}^{N}T_{j}\Bigr\|\leq\sum_{j=-\infty}^{\infty}\phi(j).
+\]
+\end{theorem}
+
+\begin{proof}
+设 $T$ 表示 $\sum_{j=-N}^{N}T_{j}$; 则 $T^{\star}T$ 是自伴的, 谱半径定理适用于它. 我们真正想知道的是 $T$ 的范数; 其关系为:
+\[
+\|T f\|^{2}=(T f,T f)=(f,T^{\star}T f)\leq\|f\|^{2}\|T^{\star}T\|;
+\]
+因此
+\[
+\left\|T\right\|\leq\left\|T^{\star}T\right\|^{\frac{1}{2}}.
+\]
+于是我们可以满足于估计这个算子的范数. 做一下组合,
+\[
+(T^{\star}T)^{n}=\sum T_{i_{1}}^{\star}T_{i_{2}}T_{i_{3}}^{\star}\ldots T_{i_{2n}}.
+\]
+我们预计能控制成对的迭代, 尽管对复杂的和的关系也许不行:
+\begin{align*}
+\|T_{i_{1}}^{\star}\ldots T_{i_{2n}}\|&\leq\phi^{2}(i_{1}-i_{2})\ldots\phi^{2}(i_{2n-1}-i_{2n}), \\
+\|T_{i_{1}}^{\star}\ldots T_{i_{2n}}\|&\leq C^{2}\|T_{i_{2}}\ldots T_{i_{2n-1}}^{\star}\| \\
+&\leq\phi^{2}(i_{2}-i_{3})\ldots\phi^{2}(i_{2n-2}-i_{2n-1}).
+\end{align*}
+把这些估计相乘再开方, 得到
+\[
+\left\|T_{i_{1}}^{\star}\ldots T_{i_{2n}}\right\|\leq C\,\phi(i_{1}-i_{2})\ldots\phi(i_{2n-1}-i_{2n}).
+\]
+最后,
+\begin{align*}
+\|(T^{\star}T)^{n}\|&\leq C\sum\phi(i_{1}-i_{2})\phi(i_{2}-i_{3})\cdots\phi(i_{2n-1}-i_{2n}) \\
+&\leq\left[\sum_{j=-\infty}^{\infty}\phi(j)\right]\left[\sum\phi(i_{1}-i_{2})\phi(i_{2}-i_{3})\cdots\phi(i_{2n-2}-i_{2n-1})\right] \\
+&\leq\left[\sum_{j=-\infty}^{\infty}\phi(j)\right]^{2n-2}\left[\sum\phi(i_{1}-i_{2})\right] \\
+&\leq\left[\sum_{j=-\infty}^{\infty}\phi(j)\right]^{2n-1}(2N).
+\end{align*}
+总之,
+\[
+\|(T^{\star}T)^{n}\|^{\frac{1}{n}}\leq\lim_{n\to\infty}[2CN]^{\frac{1}{n}}\left[\sum\phi(j)\right]^{2-\frac{1}{n}},
+\]
+结论随之得证.
+\end{proof}
+
+\begin{theorem}\label{thm:2.19}
+设 $I_j=(2^j,2^{j+1})$, $K_j=\frac{1}{x}\chi_{I_j}(|x|)$, $T_j f(x)=K_j\star f(x)$. 则
+\[
+{}_{2}\|T_{j}\|\leq 3,
+\qquad
+{}_{2}\|T_{j}^{\star}T_{i}\|={}_{2}\|T_{j}T_{i}^{\star}\|\leq 2^{-|i-j|}.
+\]
+因此, Hilbert 变换在 $L^{2}$ 上有界.
+\end{theorem}
+
+\begin{proof}
+首先, ${}_{2}\|T_{j}\|\leq\|K_{j}\|_{1}=\log 4\leq 3$.
+
+此外, 回忆 $T_i^{\star}=J_0J_1T_iJ_0J_1$, 其中诸 $J$ 是共轭与反射等距算子, 我们得到估计:
+\[
+{}_{2}\|T_{j}^{\star}T_{i}\|={}_{2}\|T_{j}T_{i}^{\star}\|={}_{2}\|T_{j}T_{i}\|\leq\|K_{i}\star K_{j}\|_{1}.
+\]
+而且, 若 $i>j$, 一个小小的变量替换表明
+\[
+K_{i}\star K_{j}(x)=2^{-j}\bigl(K_{i-j}\star K_{0}\bigr)\bigl(2^{-j}x\bigr),
+\]
+而这个伸缩不改变 $K_i\star K_j$ 的 $L^1$ 范数. 所以只需证明当 $m$ 很大时的估计
+\[
+\|K_{m}\star K_{0}\|_{1}\leq C2^{-m}.
+\]
+
+我们对卷积的直观理解是: 它表示一个函数对另一个函数的平均; 当函数的不同支集相互重叠时, 计算就变得棘手. 我们先把这种重叠理清楚: 令
+\[
+S_{m}=\{y \mid 1<|y|<2,\; 2^{m}<|x-y|<2^{m+1}\}.
+\]
+则 $S_{m}$ 是
+\[
+K_{m}\star K_{0}(x)=\int K_{m}(x-y)K_{0}(y)\,dy
+\]
+中被积函数非零的 $y$ 的集合. 我们的直观告诉我们这个积分很小, 因为 $K_{0}$ 的平均值为零而 $K_{m}$ 缓慢变化. 当我们注意到
+\[
+\int_{S_{m}}\frac{1}{x}\,\frac{1}{y}\,dy=0
+\]
+时, 这两个事实都可以加以利用; 于是
+\begin{align*}
+K_{m}\star K_{0}(x)&=\int K_{m}(x-y)K_{0}(y)\,dy
+=\int_{S_{m}}\frac{1}{x-y}\,\frac{1}{y}\,dy \\
+&=\int_{S_{m}}\left[\frac{1}{x-y}-\frac{1}{x}\right]\frac{1}{y}\,dy.
+\end{align*}
+由``缓慢变化''的技巧, 这两个分式之差应当很小; 我们可以用 Taylor 定理来估计它. 但既然我们可以真的把减法做出来, 何乐而不为:
+\[
+\left[\frac{1}{x-y}-\frac{1}{x}\right]\frac{1}{y}=\frac{1}{x^{2}}\left[1-\frac{y}{x}\right]^{-1}.
+\]
+而若 $m$ 很大,
+\[
+\left|\frac{y}{x}\right|\leq\frac{2}{2^{m}}<\frac{1}{2},
+\]
+因此
+\[
+\left|K_{m}\star K_{0}(x)\right|\leq 2\,\frac{1}{x^{2}}\int_{S_{m}}dy\leq\frac{4}{x^{2}},
+\]
+因为 $|S_m|\leq 2$. 最后, 我们要计算 $K_m\star K_0$ 的 $L^1$ 范数. 其支集为
+\[
+\{x \mid \text{存在 } y \text{ 使 } 1<|y|<2,\; 2^{m}<|x-y|<2^{m+1}\}
+\subset\{x \mid 2^{m}-2<|x|<2^{m}+2\},
+\]
+于是
+\[
+\left\|K_{m}\star K_{0}\right\|_{1}<4\int\frac{1}{x^{2}}\,dx\leq C2^{-m}.
+\]
+现在对 $\phi(j)=2^{-|j|}$ 应用定理~\ref{thm:2.18}. 我们看到
+\[
+S_{N}f(x)=\sum_{j=-N}^{N}T_{j}f(x)
+\]
+在 $L^{2}$ 上一致有界. 于是
+\[
+\lim_{N\to\infty}S_{N}f(x)=\lim_{\epsilon\to0}\int_{\epsilon<|y|<\frac{1}{\epsilon}}\frac{1}{x-y}f(y)\,dy
+\]
+在 $L^{2}$ 中收敛. 在 Schwartz 函数上, 其极限为 $Hf$, 因此
+\[
+{}_{2}\|H\|\leq\sup_{N}\,{}_2\Bigl\|\sum_{j=-N}^{N}T_{j}\Bigr\|<\infty. \qedhere
+\]
+\end{proof}
+
+\begin{remark}\label{rem:2.20}
+看清这个证明为什么成功是重要的. 在早先的直观中, 我们得到过简单的估计
+\[
+Hf\sim\frac{1}{x};
+\]
+而这里, 不知怎的, 我们得到了
+\[
+H f\sim\frac{1}{x^{2}}.
+\]
+改进从何而来? 它来自两个来源: 我们计算了 $K_m\star K_0$, 由于 $m$ 那么大, 这就像计算 $H(K_0)$; 然后我们利用 $K_m$ 的光滑性与 $\int K_0=0$ 来做估计. 这个计算的一个显式版本如下. 设 $f$ 支在一个区间 $I$ 上, 其中心为 $y_0$; 设 $\int f=0$. 设 $\tilde{I}$ 是与 $I$ 同心但长度三倍的区间. 若 $x\notin\tilde{I}$ 且 $y\in I$, 则:
+\begin{align*}
+Hf(x)&=\int\frac{1}{x-y}f(y)\,dy
+=\int\left[\frac{1}{x-y}-\frac{1}{x-y_{0}}\right]f(y)\,dy \\
+&=\int_{I}\frac{y-y_{0}}{(x-y)(x-y_{0})}\,f(y)\,dy.
+\end{align*}
+但是
+\[
+\left|\frac{1}{x-y}\right|\leq\frac{C}{|x|};\qquad
+\frac{|y-y_{0}|}{|x-y_{0}|}\leq\frac{C|I|}{|x|},
+\]
+于是
+\[
+|H f(x)|\leq\frac{C|I|}{|x|}\int_{I}|f|.
+\]
+\end{remark}
+
+\essayhead{ess:2.21}{攻克 Hilbert 变换的 \texorpdfstring{$L^{p}$}{Lp} 有界性}
+
+我们知道 $H$ 在 $L^1$ 上无界, 在 $L^2$ 上有界. 此外, 我们的 $L^1$ 反例给出 $Hf\sim\frac{1}{x}$, 这在某种程度上暗示 $H$ 是弱 $(1,1)$ 的. 于是, 要证明 $L^p$ 有界性, 在弱 $L^1$ 与 $L^2$ 之间内插就够了.
+
+为了执行这个纲领, 我需要知道 $L^1$ 与 $L^2$ 有何不同. Marcinkiewicz 内插的证明提示了 $f\in L^1$ 的一个分裂. 令
+\[
+G=\Bigl\{x \,\Big|\, |f(x)|\leq\frac{\lambda}{2}\Bigr\};\quad
+B=\Bigl\{x \,\Big|\, |f(x)|>\frac{\lambda}{2}\Bigr\};\quad g=\chi_{G},\ \text{等等.}
+\]
+那么 $g$ 实在是很好:
+\begin{align*}
+\lambda^{2}\left|\left\{\left|H g\right|>\lambda\right\}\right|
+&\leq\int_{\left\{\left|H g\right|>\lambda\right\}}\left|H g\right|^{2} \\
+&\leq\left\|H g\right\|_{2}^{2}\leq\left\|g\right\|_{2}^{2}
+=\int_{G}\left|f\right|^{2}\leq\lambda\int_{G}\left|f\right| \\
+&\leq\lambda\|f\|_{1};
+\end{align*}
+这给出了 $H$ 在 $f$ 的好部分上的弱 $L^{1}$ 行为. 为了控制 $H$ 在坏部分上的作用, 我们把前面的两个观察合在一起: 若 $f$ 在一个区间上为常数, 我们能控制 $Hf$; 若 $f$ 在一个区间上平均值为零, 我们能控制 $Hf$. 当然 $f$ 并不支在一个区间上, 但我们可以强迫它如此. 注意, 若 $f$ 属于 $\mathcal{S}$, 则 $B$ 是开集, 从而可以写成互不相交的区间 $I$ 的并. 现在令 $f_I$ 表示 $f$ 在 $I$ 上的平均:
+\[
+f_{I}=\frac{1}{\left|I\right|}\int_{I}f.
+\]
+则
+\[
+f\chi_{I}=\bigl[f_{I}+(f-f_{I})\bigr]\chi_{I}=f_{I}\chi_{I}+b_{I};
+\]
+现在 $f_{I}\chi_{I}$ 在每个 $I$ 上为常数, 而 $b_{I}$ 在 $I$ 上的平均为零. 总而言之,
+\[
+b=f\chi_{B}=\sum b_{I}+\sum f_{I}\chi_{I}.
+\]
+我们有了分解, 也能控制 Hilbert 变换在各部分上的作用; 还有什么会阻止我们完成证明吗? 有的:
+
+\begin{enumerate}[label=\arabic*)]
+\item 在 $\tilde{I}$ 之外, 我们能控制 $Hb_{I}$; 但在 $\tilde{I}$ 上无法控制.
+\item Minkowski 不等式不成立; 我们不能简单地写
+\[
+|\{\textstyle\sum|f_{I}|>\lambda\}|\leq C\sum|\{|f_{I}|>\lambda\}|;
+\]
+常数 $C$ 将依赖于和式中项数的多少.
+\end{enumerate}
+
+第一个困难意味着我们必须放弃控制 $Hb$ 在 $B^{\star}=\bigcup\tilde{I}$ 上的一切希望. 这倒不是什么大问题:
+\begin{align*}
+\left|\left\{x\in B^{\star}\,\middle|\,|H b(x)|>\lambda\right\}\right|
+&\leq|B^{\star}|\leq\sum|\tilde{I}|=3\sum|I|=3|B|=3\Bigl|\Bigl\{|f|>\frac{\lambda}{2}\Bigr\}\Bigr| \\
+&\leq\frac{6}{\lambda}\int_{\{|f|>\frac{\lambda}{2}\}}|f|
+\leq\frac{6}{\lambda}\|f\|_{1}.
+\end{align*}
+这给出了 $b$ 在 $B^{\star}$ 上的弱 $L^1$ 估计. 第二个困难更难对付; 我们将被迫在某个使三角不等式成立的空间中做估计; 否则我们无从把 $Hf$ 从它的碎片重建起来. 现在, $b$ 是 $f$ 的 $L^1$ 部分, 我们预计 $Hb$ 会表现得像 $\frac{1}{x^{2}}$, 于是 $L^1$ 应当是控制 $Hb$ 的合适空间:
+\[
+\lambda\left|\left\{x\in(B^{\star})^{c}\,\middle|\,\left|H\Bigl(\sum b_{I}\Bigr)\right|>\lambda\right\}\right|
+\leq\int_{(B^{\star})^{c}}\left|H\Bigl(\sum b_{I}\Bigr)\right|
+\leq\sum\int_{(B^{\star})^{c}}|H(b_{I})|.
+\]
+我们无法指望控制 $H$ 在诸 $\tilde{I}$ 相交处的作用, 而且除了在 $(\tilde{I})^{c}$ 上, 我们对 $H(b_I)$ 也没有特别好的控制. 这意味着我们必须扩大积分区域; $(B^{\star})^{c}\subset(\tilde{I})^{c}$, 且:
+\[
+\sum\int_{(B^{\star})^{c}}|H(b_{I})|\leq\sum\int_{(\tilde{I})^{c}}|H(b_{I})|.
+\]
+现在逐项分析. 设 $y_{I}$ 为 $I$ 的中心, 则
+\[
+\left(H b_{I}\right)(x)=\int_{I}\left[\frac{1}{x-y}-\frac{1}{x-y_{I}}\right]b_{I}(y)\,dy,
+\]
+\begin{align*}
+\int_{(\tilde{I})^{c}}|H(b_{I})(x)|\,dx
+&\leq\int_{(\tilde{I})^{c}}\int_{I}\left|\frac{1}{x-y}-\frac{1}{x-y_{I}}\right||b_{I}(y)|\,dy\,dx \\
+&=\int_{I}|b_{I}(y)|\int_{(\tilde{I})^{c}}\left|\frac{1}{x-y}-\frac{1}{x-y_{I}}\right|dx\,dy.
+\end{align*}
+内层积分可以显式算出; 它被
+\[
+4\log\left|1-\frac{|y-y_{I}|}{|I|}\right|
+\]
+控制. 由于 $y\in I$, $x\in(\tilde{I})^{c}$, 有 $\frac{|y-y_{I}|}{|I|}\leq\frac{1}{2}$, 于是我们得到估计
+\[
+\int_{(\tilde{I})^{c}}|H(b_{I})(x)|\,dx\leq 8\int_{I}|b_{I}(y)|\,dy.
+\]
+从而
+\begin{align*}
+\sum\int_{(B^{\star})^{c}}|H(b_{I})|
+&\leq 8\sum\int_{I}|b_{I}(y)|\,dy \\
+&\leq 8\sum\int_{I}\bigl(|f(y)|+|f_{I}(y)|\bigr)\,dy
+=8\sum\int_{I}|f(y)|\,dy+8\sum|I|\,|f_{I}| \\
+&=16\sum\int_{I}|f(y)|\,dy
+=16\int_{B}|f(y)|\,dy\leq 16\|f\|_{1}.
+\end{align*}
+这一项就这样处理了. 现在剩下的只有常数项 $f_{I}\chi_{I}$. 处理常数项这种事想必不必费什么力气. 和之前一样, 我们需要一个使三角不等式成立的空间; 但也和之前一样, 我们的直观告诉我们 $H(f)(x)\sim\frac{1}{x}$, 所以 $L^{1}$ 并不是合适的工作空间. $L^{2}$ 是令人满意的; 于是,
+\begin{align*}
+&\left|\left\{\left|H\Bigl(\sum f_{I}\chi_{I}\Bigr)\right|>\lambda\right\}\right| \\
+&\leq\frac{1}{\lambda^{2}}\int\left|H\Bigl(\sum f_{I}\chi_{I}\Bigr)\right|^{2} \\
+&\leq C\frac{1}{\lambda^{2}}\int\left|\sum f_{I}\chi_{I}\right|^{2} \\
+&\leq C\frac{1}{\lambda^{2}}\sum\int_{I}\left|f_{I}\chi_{I}\right|^{2};
+\end{align*}
+最后一步是因为诸 $I$ 互不相交. 要完成证明, 我们还需要去掉一个 $\lambda$ 的幂和一个 $|f_I|$ 的幂: 我们需要估计
+\[
+\frac{1}{\left|I\right|}\int_{I}\left|f\right|\leq C\lambda,
+\]
+即 $|f_{I}|\leq C\lambda$; 这将给我们最终估计
+\begin{align*}
+C\frac{1}{\lambda}\sum\int_{I}|f_{I}|
+&=C\frac{1}{\lambda}\sum|I|\,|f_{I}| \\
+&=C\frac{1}{\lambda}\sum\int_{I}|f|
+=C\frac{1}{\lambda}\int_{B}|f|\leq C\frac{1}{\lambda}\|f\|_{1}.
+\end{align*}
+当然, 若和式中只有一项, 我们真正需要的是估计
+\[
+\frac{1}{\left|I\right|}\int_{I}\left|f\right|\leq C\lambda.
+\]
+唉, 正确的估计全都朝相反的方向: 由于 $I\subset B$,
+\[
+|f_{I}|\geq\frac{\lambda}{2}.
+\]
+这一切意味着, 常数项 $f_{I}\chi_{I}$ 才是控制 $H$ 的真正症结所在. 这本不该让我们吃惊: 正是它们在 $\infty$ 处表现得像 $\frac{1}{x}$; 正是它们贡献了非 $L^{1}$ 的行为.
+
+我们能做什么? 已知的不等式
+\[
+|f_{I}|\geq\frac{\lambda}{2}
+\]
+与我们想要的不等式
+\[
+|f_{I}|\leq C\lambda
+\]
+提示我们必须小心地选取区间 $I$. 它们必须与函数 $f$ 紧密匹配; 直观上说, 选取它们时必须使 $f$ 在 $I$ 上变化不太大. 形式上, 我们需要的是以下四条性质: 我们必须把 $\mathbb{R}$ 分解成互不相交的集合
+\begin{enumerate}[label=\arabic*)]
+\item $\mathbb{R}=G\cup B$;
+\item $B=\bigcup I$, 诸 $I$ 互不相交且满足 $f_I\leq C\lambda$;
+\item $|B|\leq C\frac{1}{\lambda}\|f\|_{1}$;
+\item 若 $x\in G$, 则 $|f(x)|\leq\lambda$.
+\end{enumerate}
+
+若能对任何 $L^1$ 函数做到这一点, 我们就可以用我们的锦囊妙计证明 $H$ 在 $L^1$ 上弱有界; 然后内插并用对偶性得到它在 $1$ 与 $\infty$ 之间的所有 $L^p$ 上有界. 我们所获得的, 是 $H$ 的完全消除. 现在的问题成了一个关于 $L^1$ 函数的问题: 它们能否被切成在小区间上变化不太大的碎块. 问题是: 平均而言, 一个 $L^1$ 函数到底有多少``光滑性''?
+
+\section{Hardy--Littlewood 极大函数}
+\label{sec:2.4}
+
+如何控制一个函数在区间上的变化? 让 $f_I>\lambda$ 是容易的部分; 对任意的区间和任意的 $\lambda$, 别指望还能同时得到 $f_I<C\lambda$. 我们先这样选区间使得 $f_I<C\lambda$; 所有满足这一点的区间都被扔进 $B$; 然后我们再操心其余三条性质.
+
+取定一个 $\lambda$ 和一个 $f$, 不妨设 $f$ 非负. 第一个小细节是: 到底有没有好区间. 由于 $\int f<\infty$, 我们总能找到 $J$, $N$ 使得当 $|J|\geq N$ 时
+\[
+\frac{1}{\left|J\right|}\int_{J}f<\lambda.
+\]
+另一方面, 我们不能把所有这样的区间都拿来用, 因为我们打算用 $\frac{1}{\lambda}\|f\|_{1}$ 控制 $|B|$. 有一个简单但重要的绕过办法: 取一个满足
+\[
+\frac{1}{\left|J\right|}\int_{J}f<\lambda
+\]
+的区间 $J$. 现在设 $I$ 表示 $J$ 的左半或右半, 并假设
+\[
+\lambda<\frac{1}{|I|}\int_{I}f.
+\]
+这样的区间留作 $B$ 的一部分是好的, 因为它具有我们所需的平均值的下界性质. 当然困难的部分是上界性质. 诀窍在这里:
+\[
+\frac{1}{\left|I\right|}\int_{I}f\leq\frac{1}{\left|I\right|}\int_{J}f
+=\frac{2}{\left|J\right|}\int_{J}f<2\lambda.
+\]
+于是我们没有丢掉平均值在上面的界. 现在继续这个剖分过程. 区间的左右两半总是互不相交的, 而若我们找到一个特别好的半区间 $I$ 满足
+\[
+\lambda<\frac{1}{|I|}\int_{I}f,
+\]
+就把它留给 $B$. 这一过程产生一族互不相交的区间, 其平均值下界为 $\lambda$、上界为 $2\lambda$. 由于诸区间互不相交, 我们甚至得到
+\[
+|B|=\sum|I|\leq\sum\frac{1}{\lambda}\int_{I}f\leq\frac{1}{\lambda}\|f\|_{1}.
+\]
+那么, 这一次什么地方出错了? 首先, 我们甚至还没有尝试控制 $B^{c}$. 其次, 凭什么说, 若
+\[
+\frac{1}{|J|}\int_{J}f<\lambda,
+\]
+我就总能找到一个子区间 $I$ 使
+\[
+\lambda\leq\frac{1}{|J|}\int_{I}f\,?
+\]
+当然, 没有什么能阻止我把 $J$ 的两半再对分, 一再对分下去. 这个过程凭什么会停止? 嗯, 我们确实还有一些选择余地. 若这个过程永不停止, 我们显然不想要 $J$ 进 $B$; 另一方面, $G$ 中的点必须满足: 若 $x\in G$, 则 $|f(x)|\leq\lambda$. 而关于 $x\in G$ 我们所知道的, 只是存在一个包含 $x$ 的无穷区间序列 $I_j$, 满足 $|I_{j+1}|=\frac{1}{2}|I_j|$, 且始终没有 $\lambda<f_{I_j}$, 也就是说始终有 $f_{I_j}\leq\lambda$. 那么凭什么下结论说 $f\leq\lambda$?
+
+这是一个基本问题: 我们能由 $f$ 的平均值的信息恢复关于 $f$ 的信息吗? 若 $f$ 连续, 答案是简单的:
+\[
+\lim_{h\to0}\frac{1}{h}\int_{x}^{x+h}f(y)\,dy=f(x),
+\]
+因为这正是对积分的求导. 若令 $I_{j}=[x,x+2^{-j}]$, 我们得到
+\[
+\lim_{j\to\infty}f_{I_{j}}=\lim_{j\to\infty}\frac{1}{|I_{j}|}\int_{I_{j}}f=f(x),
+\]
+而 $f_{I_j}\leq\lambda$ 蕴含 $f(x)\leq\lambda$.
+
+然而, 使用它仍有技术上的困难. 第一, $I_j$ 并不是区间 $[x,x+2^{-j}]$; 除了 $x\in I_j$ 之外我们对 $I_j$ 毫无控制. 所以我们不能直接用对积分求导的论证.
+
+第二, 众所周知, 积分的导数依赖于函数. Darboux 定理告诉我, 函数的导数满足介值性质. 这意味着若 $f$ 跳过某个值, 就不存在可微的 $F$ 使 $F'=f$. 我们并非总能由平均值恢复 $f$.
+
+要得到正确的积分微分学, 我们必须忽略零测集上发生的事, 只要求几乎处处收敛:
+\[
+\lim_{\substack{|I|\to0\\ x\in I}}f_{I}=f(x)
+\]
+是否对几乎所有的 $x$ 成立? 若 $f$ 连续可微, 这是一个容易的 $\epsilon$--$\delta$ 论证. 问题一如既往是从稠密集过渡到整个 $L^{1}$. 这是一个标准问题, 也有一个标准解法: 取一列在 $L^{1}$ 中收敛于 $f$ 的光滑函数 $f_n$. 我想说的是
+\[
+f(x)=\lim_{n}f_{n}(x)=\lim_{n}\lim_{I}(f_{n})_{I}=\lim_{I}\lim_{n}(f_{n})_{I}=\lim_{I}f_{I}.
+\]
+所以我真正想做的是交换两个极限, 但没有某种一致收敛我永远做不到. 我们在给 Fourier 级数求和时遇到过同样的问题; 当时需要对算子范数的一致估计. 这里也一样, 只不过这是一个逐点的算子, 所以我们需要逐点的一致性; 我们需要对
+\[
+\sup_{\substack{I\\ x\in I}}\frac{1}{|I|}\int_{I}f
+\]
+的估计.
+
+\begin{definition}\label{def:2.22}
+\index{Hardy--Littlewood 极大函数 (Hardy--Littlewood maximal function)|emph}
+设 $f$ 局部可积. $f$ 的 Hardy--Littlewood 极大函数记作 $f^{\ast}$, 定义为
+\[
+f^{\ast}(x)=\sup_{\substack{I\\ x\in I}}\frac{1}{|I|}\int_{I}|f(y)|\,dy.
+\]
+\end{definition}
+
+\begin{lemma}\label{lem:2.23}
+设 $f\in L^1$ 且 $f$ 不几乎处处为零. 则 $f^{\star}\notin L^1$.
+\end{lemma}
+
+\begin{proof}
+选取 $N$ 使 $\int_{-N}^{N}|f|\geq\frac{1}{2}\|f\|_1$. 现在任取 $|x|\geq N$ 的 $x$. 令 $I=[-|x|,|x|]$;
+\begin{align*}
+f^{\star}(x)&\geq\frac{1}{|I|}\int_{I}|f|
+=\frac{1}{2|x|}\int_{-|x|}^{|x|}|f|\geq\frac{1}{2|x|}\int_{-N}^{N}|f| \\
+&\geq\frac{1}{4|x|}\,\|f\|_{1}.
+\end{align*}
+于是对大的 $x$,
+\[
+f^{\star}(x)\geq\frac{C}{x},\qquad C=\|f\|_{1}\geq 0. \qedhere
+\]
+\end{proof}
+
+\begin{theorem}\label{thm:2.24}
+映射 $f\mapsto f^{\star}$ 是弱 $(1,1)$ 的.
+\end{theorem}
+
+\begin{proof}
+我们可以假设 $f$ 非负. 令
+\[
+E=\{x \mid f^{\star}(x)>\lambda\}.
+\]
+关于如何估计 $E$ 的测度, 我们有一套实际的哲学, 即: 对每个 $x\in E$, 存在 $I$ 使 $x\in I$ 且 $f_I>\lambda$. 于是对任何 $x\in I$, 有 $f^{\star}>\lambda$, 从而 $x\in E$. 这意味着 $E$ 被一大堆区间覆盖. 若这些区间互不相交, 我们就得到
+\begin{align*}
+|E|&=|\bigcup I|=\sum|I| \\
+&\leq\sum\frac{1}{\lambda}\int_{I}f=\frac{1}{\lambda}\int_{E}f\leq\frac{1}{\lambda}\|f\|_{1}.
+\end{align*}
+糟糕的是, 按我们定义它们的方式, 这些区间 $I$ 不可能互不相交.
+
+我们的策略是丢掉大部分区间, 但保留足够多, 使我们不至扔掉该集合的大部分质量. 做到这一点的能力称为覆盖引理 (covering lemma)\index{覆盖引理 (covering lemma)}, 它与 $L^{1}$ 函数无关, 只与区间的几何及其相交方式有关.
+
+在决定保留哪些区间、丢弃哪些区间时, 我们实际上没有多少选择. 若保留区间 $I_1$, 就必须丢掉所有与它相交的区间. 我们如何确定被丢掉的区间没有占 $E$ 的大部分测度? 有一个简单的窍门: 若有两个互相重叠的区间, 我们总保留较大的那个, 记为 $I_\star$. 假设有 $20$ 个区间原本与 $I_\star$ 相交, 而我们把它们全丢了. 我们是否丢掉了 $E$ 的大部分测度? 没有! 若 $x\in I\cap I_\star$, 则 $I\subset(x-|I|,\,x+|I|)\subset(x-|I_\star|,\,x+|I_\star|)$, 因为 $I_\star$ 是诸区间中最大的. 由于 $x\in I_\star$, 整个 $(x-|I_\star|,\,x+|I_\star|)$ 包含在一个与 $I_\star$ 同心、长度为其 $5$ 倍的区间中. 在丢掉所有与 $I_\star$ 相交的区间时, 我们至多把合起来的测度缩小一个 $5$ 的因子, 这是一个固定的因子, 与区间的个数、$I_\star$ 的大小或任何东西都无关. 我们的窍门将会奏效. 当然, 还有技术细节要处理.
+
+我们首先假设 $E$ 有有限测度, 然后对每个 $x\in E$ 取定一个 $I$ 使 $x\in I$ 且 $f_I>\lambda$. 这个取定的集合族记为 $\mathcal{B}_\infty$. 我们在 $\mathcal{B}_\infty$ 中找不到最大元, 但可以接近. 设 $L_1=\sup\{|I| \mid I\in\mathcal{B}_\infty\}$. 若 $L_1=\infty$, 取 $I$ 使 $|I|>|E|$, 就完事了. 否则, 取 $I_1$ 使
+\[
+|I_{1}|>\frac{1}{2}L_{1};\qquad
+\mathcal{B}_{2}=\{I\in\mathcal{B}_{1} \mid I\cap I_{1}=\varnothing\},\qquad
+L_{2}=\sup\{|I| \mid I\in\mathcal{B}_{2}\},
+\]
+依此类推. 当然若 $\sum|I_j|=\infty$, 我们又完事了; 否则就得干点活.
+
+我们一直没有试着证明 $\bigcup I\subset\bigcup I_j^{\star}$; 为此需要: 若 $x\in E$, 则 $x\in I$ 对某个 $I$ 成立, 而我们必须找到一个 $k$ 使 $x\in I_k^{\star}$. 这个策略对诸 $\mathcal{B}$ 意味着什么? 我们需要找到一个 $k$ 使得 $I\in\mathcal{B}_k$ 但 $I\notin\mathcal{B}_{k+1}$. 这并不太难, 因为诸 $\mathcal{B}$ 中区间的长度越来越小. 设 $I\in\mathcal{B}_j$ 对所有的 $j$ 成立; 则 $\frac{1}{2}|I|<\frac{1}{2}L_j<|I_j|$. 另一方面, $\sum|I_j|<\infty$, 于是要么 $|I|=0$, 要么该级数在某处终止. 但级数只有当 $L_j=0$ 时才终止, 而那时又有 $|I|=0$. 这表明存在 $k$ 使 $I\in\mathcal{B}_k$ 而 $I\notin\mathcal{B}_{k+1}$.
+
+这对我们有利, 因为 $I\in\mathcal{B}_k$ 蕴含
+\[
+\frac{1}{2}|I|\leq\frac{1}{2}L_{k}\leq|I_{k}|,
+\]
+而若 $I\notin\mathcal{B}_{k+1}$, 则存在 $x\in I\cap I_k$. 正如直观的引入所言, $I\subset I_k^{\star}$. 于是, 对每个 $I\in\mathcal{B}_1$, 存在 $k$ 使 $I\subset I_k^{\star}$. 从而 $E\subset\bigcup I_k^{\star}$, 且
+\[
+\left|E\right|\leq\left|\bigcup I_{k}^{\star}\right|\leq\sum\left|I_{k}^{\star}\right|=5\sum\left|I_{j}\right|,
+\]
+故 $|\{f^{\star}>\lambda\}|\leq\frac{5}{\lambda}\|f\|_{1}$.
+\end{proof}
+
+\begin{corollary}\label{cor:2.25}
+若 $1<p\leq\infty$, 则 $\|f^{\star}\|_p\leq C_p\|f\|_p$.
+\end{corollary}
+
+\begin{proof}
+注意到
+\[
+|f_{I}|\leq\frac{1}{|I|}\int_{I}|f|\leq\|f\|_{\infty},
+\]
+故 $f^{\star}(x)\leq\|f\|_{\infty}$, 从而
+\[
+\|f^{\star}\|_{\infty}\leq\|f\|_{\infty}.
+\]
+于是可以用 Marcinkiewicz 内插定理, 即定理~\ref{thm:1.21}, 得到结论. 有一点小问题: 我们只对线性算子证明了 Marcinkiewicz 定理, 但给出的证明对次线性算子, 即满足 $T(f+g)\leq T(f)+T(g)$ 的算子, 同样适用.
+\end{proof}
+
+\begin{corollary}\label{cor:2.26}
+若 $f\in L^{1}$, 则对几乎每个 $x$,
+\[
+\lim_{\substack{|I|\to0\\ x\in I}}\frac{1}{|I|}\int_{I}f(y)\,dy=f(x).
+\]
+\end{corollary}
+
+\begin{proof}
+若 $f$ 连续, 这是平凡的. 要从稠密集过渡到整个 $L^{1}$, 我们利用收敛的一致性. 证明会有点特别, 因为极大算子事实上在 $L^{1}$ 上并不有界. 令
+\[
+T f(x)=\left|\limsup_{I}f_{I}(x)-\liminf_{I}f_{I}(x)\right|.
+\]
+若 $g$ 连续, 则 $Tg=0$; 取任意的 $f\in L^1$ 与任意连续的 $g$, 注意到
+\[
+T f=T(f-g+g)\leq T(f-g)+Tg=T(f-g)\leq 2(f-g)^{\star}.
+\]
+于是
+\[
+|\{x \mid T f(x)>\lambda\}|\leq\Bigl|\Bigl\{x \,\Big|\, (f-g)^{\star}(x)>\frac{\lambda}{2}\Bigr\}\Bigr|\leq\frac{10}{\lambda}\|f-g\|_{1}.
+\]
+由于 $g$ 任意, 而左端与 $g$ 无关,
+\[
+|\{x \mid T f(x)>\lambda\}|=0.
+\]
+这意味着对几乎所有的 $x$, $Tf=0$.
+\end{proof}
+
+\begin{corollary}\label{cor:2.27}
+若 $p<1$ 且 $I$ 是任意区间, 则
+\[
+\|f^{\star}\chi_{I}\|_{p}\leq C_{p}|I|^{\frac{1}{p}-1}\|f\|_{1}.
+\]
+\end{corollary}
+
+\begin{proof}
+\begin{align*}
+\int_{I}|f^{\star}|^{p}&=p\int_{0}^{\infty}\lambda^{p-1}|I\cap\{f^{\star}\geq\lambda\}|\,d\lambda \\
+&\leq p\int_{0}^{\infty}\lambda^{p-1}\min\Bigl\{|I|,\frac{c}{\lambda}\|f\|_{1}\Bigr\}\,d\lambda \\
+&=p\int_{0}^{c|I|^{-1}\|f\|_{1}}|I|\,\lambda^{p-1}\,d\lambda
++c\,p\int_{c|I|^{-1}\|f\|_{1}}^{\infty}\lambda^{p-1}\lambda^{-1}\|f\|_{1}\,d\lambda \\
+&=c|I|^{1-p}\|f\|_{1}^{p}+\frac{C_{p}}{1-p}|I|^{1-p}\|f\|_{1}^{p}. \qedhere
+\end{align*}
+\end{proof}
+
+\begin{theorem}\label{thm:2.28}
+\index{Calderon--Zygmund 分解 (Calder'on--Zygmund decomposition)}
+设 $f\in L^1$, $f>0$, $\lambda\geq 0$ 取定. 则存在可测集 $G$, $B$ 与区间 $I$ 使得:
+\begin{enumerate}[label=\arabic*)]
+\item $\mathbb{R}=G\cup B$; $G\cap B=\varnothing$;
+\item $B=\bigcup I$; 诸 $I$ 内部互不相交且满足 $\lambda<f_I\leq 2\lambda$;
+\item $|B|\leq\frac{c}{\lambda}\|f\|_1$;
+\item 对几乎所有的 $x\in G$, $|f(x)|\leq\lambda$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+我们从本节开头的做法开始, 把 $\mathbb{R}$ 分成等长区间 $J$, 满足
+\[
+|J|\geq\frac{1}{\lambda}\|f\|_{1},
+\]
+于是自动地有
+\[
+f_{J}=\frac{1}{|J|}\int_{J}f\leq\frac{1}{|J|}\|f\|_{1}\leq\lambda.
+\]
+若 $\lambda<f_J$ 我们就保留 $J$; 否则把 $J$ 对分成 $J_0$, $J_1$. 若 $\lambda<f_{J_i}$, 就把 $J_i$ 放进保留的集合族. 若我们决定保留某个区间, 注意到
+\[
+f_{J_{i}}=\frac{2}{\left|J\right|}\int_{J_{i}}f
+\leq\frac{2}{\left|J\right|}\int_{J}f\leq 2\lambda,
+\]
+于是对保留的区间自动有 $\lambda<f_{I_i}\leq 2\lambda$. 此外, 保留的区间内部互不相交, 因为它们是内部互不相交的区间的子集. 保留区间的并记为 $B$, 并令 $G$ 为其补集. 定理中唯一不能从构造直接得出的是 4). 若 $x\in G$, 则 $x$ 属于某个未被保留的初始区间 $J$, 也属于某个未被保留的剖分, 等等. 于是有一列区间 $I_k$, 使 $x\in I_k$ 且 $|I_{k+1}|=\frac{1}{2}|I_k|$. 由于没有哪个 $I_k$ 被留进 $B$, 故 $f_{I_k}\leq\lambda$; 于是由推论~\ref{cor:2.26}, 对几乎所有 $x\in G$, $f(x)\leq\lambda$.
+\end{proof}
+
+\begin{remark}\label{rem:2.29}
+我们其实更愿意取 $B=\{x \mid f^{\star}(x)\geq\lambda\}$, 那样就可以避免上面的选取过程. 但我们怎能构造出区间 $I$? 条件 $f_I\leq 2\lambda$ 提示 $I$ 与 $g$ 相伴, 但事实上 $I\cap G=\varnothing$. 这是怎么回事? 设 $y\in\tilde{I}\cap G$. 则
+\[
+f_{I}=\frac{3}{|\tilde{I}|}\int_{I}f\leq 3f_{\tilde{I}}\leq 3f^{\star}(y)\leq 3\lambda.
+\]
+所以这种形式的界其实与``属于 $G$''大有关系. 要把它说清楚, 我们需要知道: 若 $x\in B$, 则存在区间 $I$ 使 $x\in I$ 且 $G\cap\tilde{I}\neq\varnothing$. 换一种说法: $x$ 到 $B^c$ 的距离与 $I$ 的长度是可比的.
+\end{remark}
+
+\begin{theorem}\label{thm:2.30}
+\index{Whitney 分解 (Whitney decomposition)}
+\index{二进区间 (dyadic intervals)}
+设 $B$ 是 $\mathbb{R}$ 的真开子集. 则 $B$ 可以写成内部互不相交的区间 $I$ 的并, 满足
+\[
+|I|\leq d(B^{c},I)\leq 4|I|.
+\]
+\end{theorem}
+
+\begin{proof}
+最省事的窍门是令
+\[
+\mathcal{B}_{k}=\{I \mid 2^{k}<|I|<2^{k+1}\ \text{且}\ 2^{k}<d(I,B^{c})\leq 2^{k+1}\}.
+\]
+$\mathcal{B}_{k}$ 中的区间将覆盖 $B$, 且它们自动具有正确的距离性质. 当然它们并不互不相交, 所以还有活要干. 我们将像之前一样, 从一个标准的区间族出发不断取半. 令
+\[
+\mathcal{D}_{j}=\{I \mid I=[k2^{-j},(k+1)2^{-j}],\ k\in\mathbb{Z}\}.
+\]
+$\mathcal{D}_j$ 中的区间称为二进区间 (dyadic intervals); 它们自动具有我们需要的互不相交性质. 而且 $\mathcal{D}_{j+1}$ 中的区间是 $\mathcal{D}_j$ 中区间的一半. 这个互不相交性质可以换个说法: 若两个区间 $I$ 与 $J$ 的内部有非平凡的交, 则其中一个包含另一个.
+
+现在令
+\[
+\mathcal{B}_{j}=\{J\in\mathcal{D}_{j} \mid \text{存在 } x\in J \text{ 使 } 2\cdot 2^{-j}<d(x,B^{c})\leq 2\cdot 2^{-(j-1)}\}.
+\]
+我们断言: 若 $J\in\mathcal{B}_{j}$, 则 $|J|\leq d(J,B^{c})\leq 4|J|$. 这应当是平凡的, 因为 $J$ 的长度约为 $2^{-j}$, 而 $J$ 与 $B^c$ 的距离和 $x$ 与 $B^c$ 的距离可比. 细节如下: 我们知道 $J$ 中有 $x$ 使
+\[
+2\cdot 2^{-j}<d(x,B^{c})\leq 2\cdot 2^{-(j-1)};
+\]
+因此
+\[
+2\left|J\right|<d(x,B^{c})\leq 4\left|J\right|,
+\]
+进而
+\[
+d(J,B^{c})=\inf\{|z-y| \mid z\in J,\,y\in B^{c}\}
+\leq\inf\{|x-y| \mid y\in B^{c}\}=d(x,B^{c}).
+\]
+类似地,
+\begin{align*}
+d(J,B^{c})&=\inf\{|z-y| \mid z\in J,\,y\in B^{c}\} \\
+&=\inf\{|z-x+x-y| \mid z\in J,\,y\in B^{c}\} \\
+&\geq\inf\{|x-y| \mid y\in B^{c}\}-\sup\{|z-x| \mid z\in J\}
+=d(x,B^{c})-|J|\geq 2|J|-|J|.
+\end{align*}
+为完成定理的证明, 我们需要证明 $B$ 是互不相交的区间 (大概是诸 $\mathcal{B}_j$ 中的 $I$) 的并. 若 $J\in\mathcal{B}_j$, 则 $d(J,B^c)>0$, 由于 $B^c$ 是闭的, 故 $J\subset B$. 另一方面, 若 $x\in B$, 则由 $B$ 是开集知 $d(x,B^c)>0$. 于是存在 $J\in\mathcal{D}_j$ 使 $x\in J$, 因为 $\bigcup\mathcal{D}_j=\mathbb{R}$. 为了得到互不相交性, 我们将使用最大尺寸的区间并利用二进性质. 此处的事情有点神秘, 因为许多区间相互包含, 我们容易把它们重复计数. 我们需要证明的是: 若 $x\in B$, 则 $x$ 包含在一个、且只有一个最大尺寸的区间中. 现在, 若区间 $J$ 包含 $x$, 则
+\[
+|J|\leq d(J,B^{c})\leq d(x,B^{c}),
+\]
+于是包含 $x$ 的区间的长度有界. 而且, 包含 $x$ 的二进区间按包含关系是全序的, 所以它们的并是包含 $x$ 的最大尺寸的二进区间. 极大性现在给出了互不相交性.
+\end{proof}
+
+\begin{corollary}\label{cor:2.31}
+设 $f\in L^1$, $f\geq 0$ 与 $\lambda$ 取定. 则存在集合 $G$, $B$ 与内部互不相交的区间 $I$, 满足:
+\begin{enumerate}[label=\arabic*)]
+\item $\mathbb{R}=G\cup B$;
+\item $B=\bigcup I$, $f_I\leq c\lambda$;
+\item $|B|\leq\frac{c}{\lambda}\|f\|_1$;
+\item 对几乎所有 $x\in G$, $f(x)\leq\lambda$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+令
+\[
+G=\{x \mid f^{\star}(x)\leq\lambda\};\qquad B=\{x \mid f^{\star}(x)>\lambda\}.
+\]
+则第 1) 条显然成立, 而积分的微分学自动给出 4). 由于极大算子是弱 $(1,1)$ 的, 3) 也是自动的. 为得到诸区间, 注意 $B$ 是开集, 于是定理~\ref{thm:2.30} 给出具有良好距离性质的互不相交区间 $I$. 这些性质必须翻译成 2) 中那种平均型的条件.
+
+设 $I$ 是我们的区间之一, 并设 $\tilde{I}$ 是与 $I$ 同心但长度十倍的区间. 由于 $d(I,B^c)\leq 4|I|$, 必有 $x$ 使 $x\in\tilde{I}\cap B^c$. 当然
+\[
+f_{\tilde{I}}\leq f^{\star}(x)\leq\lambda.
+\]
+但随后
+\[
+f_{I}\leq 10f_{\tilde{I}}\leq 10\lambda. \qedhere
+\]
+\end{proof}
+
+现在我们可以证明 Hilbert 变换的有界性了. 但我们不如把本质抽象出来, 证明一个更一般的定理.
+
+\begin{theorem}\label{thm:2.32}
+\index{H\"ormander 条件 (H\"ormander condition)}
+\index{奇异积分 (singular integrals)}
+设 $(T,K,\mu)$ 是 $L^{2}$ 的乘子, 且 $K$ 满足
+\[
+\sup_{y}\int_{|x|>2|y|}|K(x-y)-K(x)|\,dx\leq C.
+\]
+则 $T$ 是弱 $(1,1)$ 的, 从而在所有满足 $1<p<\infty$ 的 $p$ 上有界.
+\end{theorem}
+
+\begin{proof}
+我们真正要做的, 只是重复上一节末尾的计算. 取定 $\lambda>0$, 对 $f>0$ 与 $\frac{\lambda}{2}$ 应用定理~\ref{thm:2.28}. 令
+\[
+g=f\chi_{G},\qquad b=f\chi_{B},\qquad h_{I}=(b-b_{I})\chi_{I}.
+\]
+由于 $|Tf|\leq|Tg|+|Tb|$, 我们可以对每一部分分别做弱 $(1,1)$ 估计.
+\begin{align*}
+\Bigl|\Bigl\{|T g|>\frac{\lambda}{2}\Bigr\}\Bigr|
+&\leq\frac{4}{\lambda^{2}}\|T g\|_{2}^{2}
+\leq\frac{C}{\lambda^{2}}\|g\|_{2}^{2}=\frac{C}{\lambda^{2}}\int_{G}|g|^{2} \\
+&=\frac{C}{\lambda^{2}}\int_{G}|f|\,|f|\leq\frac{C}{\lambda}\int_{G}|f|
+\leq\frac{C}{\lambda}\|f\|_{1}.
+\end{align*}
+为处理坏的部分, 我们写 $b=\sum(b-b_I)\chi_I+b_I\chi_I$. 注意诸 $I$ 的互不相交性蕴含这个和几乎处处收敛. 则
+\begin{align*}
+\Bigl|\Bigl\{\,\Bigl|T\Bigl(\sum b_{I}\chi_{I}\Bigr)\Bigr|>\frac{\lambda}{4}\Bigr\}\Bigr|
+&\leq\frac{16}{\lambda^{2}}\Bigl\|T\Bigl(\sum b_{I}\chi_{I}\Bigr)\Bigr\|_{2}^{2}
+\leq\frac{C}{\lambda^{2}}\Bigl\|\sum b_{I}\chi_{I}\Bigr\|_{2}^{2} \\
+&=\frac{C}{\lambda^{2}}\int\Bigl|\sum b_{I}\chi_{I}\Bigr|^{2}
+=\frac{C}{\lambda^{2}}\sum\int|b_{I}\chi_{I}|^{2}
+=\frac{C}{\lambda^{2}}\sum\int_{I}|b_{I}|^{2}.
+\end{align*}
+这个和能从平方中提出来, 是因为和中的区间互不相交; 也就是说, 逐点地,
+\[
+\Bigl|\sum b_{I}\chi_{I}\Bigr|^{2}=\sum|b_{I}\chi_{I}|^{2}.
+\]
+现在
+\[
+b_{I}=(f\chi_{B})_{I}=f_{I}\leq C\lambda,
+\]
+于是我们又有
+\begin{align*}
+\frac{C}{\lambda^{2}}\sum\int_{I}|b_{I}|^{2}
+&\leq\frac{C}{\lambda}\sum\int_{I}|b_{I}|
+=\frac{C}{\lambda}\sum|b_{I}|\,|I|=\frac{C}{\lambda}\sum\int_{I}|b| \\
+&=\frac{C}{\lambda}\int_{B}|f|\leq\frac{C}{\lambda}\|f\|_{1}.
+\end{align*}
+如我们所知, 式子中麻烦的部分是 $L^1$ 的部分, 即诸 $h_I$. 设 $B^\star=\bigcup\tilde{I}$; 则
+\[
+\Bigl|\Bigl\{x\in B^{\star}\,\Big|\,\Bigl|T\Bigl(\sum h_{I}\Bigr)\Bigr|>\frac{\lambda}{4}\Bigr\}\Bigr|
+\leq|B^{\star}|\leq 4|B|\leq\frac{C}{\lambda}\|f\|_{1}.
+\]
+另一方面,
+\begin{align*}
+\Bigl|\Bigl\{x\in(B^{\star})^{c}\,\Big|\,\Bigl|T\Bigl(\sum h_{I}\Bigr)\Bigr|>\frac{\lambda}{4}\Bigr\}\Bigr|
+&\leq\frac{4}{\lambda}\int_{(B^{\star})^{c}}\Bigl|T\Bigl(\sum h_{I}\Bigr)\Bigr|
+\leq\frac{4}{\lambda}\sum\int_{(\tilde{I})^{c}}|T(h_{I})| \\
+&=\frac{4}{\lambda}\sum\int_{(\tilde{I})^{c}}\left|\int K(x-y)h_{I}(y)\,dy\right|dx.
+\end{align*}
+现在 $h_I=(b-b_I)\chi_I$, 于是 $\int_I h_I=0$. 若 $y_I$ 表示 $I$ 的中心, 那么我们可以随意插入一项 $-\int_I K(x-y_I)h_I\,dy$; 这给出
+\begin{align*}
+&\frac{4}{\lambda}\sum\int_{(\tilde{I})^{c}}\left|\int_{I}[K(x-y)-K(x-y_{I})]\,h_{I}(y)\,dy\right|dx \\
+&\leq\frac{4}{\lambda}\sum\int_{I}\int_{(\tilde{I})^{c}}|K(x-y)-K(x-y_{I})|\,dx\,|h_{I}(y)|\,dy \\
+&=\frac{4}{\lambda}\sum\int_{I}\int_{(\tilde{I}-y_{I})^{c}}|K(z+y-y_{I})-K(z)|\,dz\,|h_{I}(y)|\,dy.
+\end{align*}
+为分析这个积分, 注意到若令 $I=[-L+y_I,\,L+y_I]$, 并设 $y\in I$, $z\in(\tilde{I}-y_I)^c$, 则 $|z|>2L>2|y-y_I|$, 于是对此类 $y$,
+\begin{align*}
+&\int_{(\tilde{I}-y_{I})^{c}}|K(z+y-y_{I})-K(z)|\,dz\;|h_{I}(y)| \\
+&\quad \leq\int_{|z|>2|y-y_{I}|}|K(z+y-y_{I})-K(z)|\,dz\;|h_{I}(y)| \\
+&\leq C,
+\end{align*}
+最后一步用了 $K$ 满足的假设. 这意味着最后一项被
+\[
+\frac{C}{\lambda}\sum\int_{I}|h_{I}|
+\leq\frac{C}{\lambda}\sum\int_{I}|b|+\frac{C}{\lambda}\sum\int_{I}|b_{I}|
+\leq\frac{C}{\lambda}\|f\|_{1}
+\]
+控制. 至此证明完成, 因为所有四项都被 $\frac{C}{\lambda}\|f\|_1$ 控制.
+\end{proof}
+
+\begin{remark}\label{rem:2.33}
+该定理的假设适用于核
+\[
+K_{\epsilon}(x)=\frac{1}{x}\chi_{\{\epsilon<|x|<\frac{1}{\epsilon}\}}(x),
+\]
+而且假设中的所有估计对 $\epsilon$ 一致. 由此, 算子 $T_{\epsilon}f=K_{\epsilon}\star f$ 在 $L^p$ 上一致有界, 因此
+\[
+\lim_{\epsilon\to0}K_{\epsilon}\star f
+\]
+在 $L^p$ 中收敛. 在 $L^2$ 的一个稠密集上, 它收敛到 Hilbert 变换, 于是 $T_\epsilon f$ 在 $L^p$ 中收敛到 $Hf$. 我们无法对逐点收敛下任何结论; 这还是那个交换极限的老问题, 需要某种一致的估计. 我们需要理解 $\sup_\epsilon|K_\epsilon\star f|$.
+\end{remark}
+
+\section{极大 Hilbert 变换}
+\label{sec:2.5}
+
+上一节中, 我们证明了 Hilbert 变换在 $L^{p}$ 上有界; 不幸的是, 论证是通过一个 $L^{p}$ 极限过程进行的. 缺陷在于: 对 $L^{p}$ 中的任意函数, 我们其实并不知道 Hilbert 变换是否逐点存在. 本节的目的是通过控制正确的极大函数来获得逐点信息.
+
+\begin{definition}\label{def:2.34}
+\index{极大 Hilbert 变换 (maximal Hilbert transform)|emph}
+函数 $f$ 的极大 Hilbert 变换记作 $H^{\star}f$, 定义为
+\[
+H^{\star}f(x)=\sup_{\epsilon>0}\left|\int_{|y|>\epsilon}f(x-y)\frac{1}{y}\,dy\right|.
+\]
+\end{definition}
+
+\begin{remark}\label{rem:2.35}
+我想在一个更一般的背景下考察极大 Hilbert 变换与 Hardy--Littlewood 极大函数, 以找出一个统一的主题. 对 $f^{\ast}$, 设 $\psi(x)=\frac{1}{2}\chi_{I}(x)$, 这里 $I=[-1,1]$. 若 $\psi_{\epsilon}(x)=\frac{1}{\epsilon}\psi\bigl(\frac{x}{\epsilon}\bigr)$, 且 $I_{\epsilon}=[-\epsilon,\epsilon]$, 则
+\begin{align*}
+\psi_{\epsilon}\star f(x)&=\frac{1}{2\epsilon}\int_{x-\epsilon}^{x+\epsilon}f(y)\,dy
+=\frac{1}{|I_{\epsilon}|}\int_{I_{\epsilon}}f(y)\,dy \\
+&\leq\sup_{x\in I}\frac{1}{|I|}\int_{I}f(y)\,dy\leq f^{\star}(x).
+\end{align*}
+对 $H^{\star}f$ 有类似的公式: 设
+\[
+\psi(x)=\frac{1}{x}\chi_{(1,\infty)}(|x|),
+\]
+并注意到
+\[
+\psi_{\epsilon}\star f(x)=\int_{|y|>\epsilon}f(x-y)\frac{1}{y}\,dy.
+\]
+同样地,
+\[
+H^{\star}f=\sup_{\epsilon>0}|\psi_{\epsilon}\star f|.
+\]
+\end{remark}
+
+\begin{definition}\label{def:2.36}
+\index{恒等逼近 (approximate identity)|emph}
+设 $\psi\in L^1$, $\psi\geq 0$, $\int\psi=1$; 令
+\[
+\psi_{\epsilon}(x)=\frac{1}{\epsilon}\psi\Bigl(\frac{x}{\epsilon}\Bigr).
+\]
+则 $\psi_{\epsilon}$ 称为一个\emph{恒等逼近} (approximate identity).
+\end{definition}
+
+\begin{remark}\label{rem:2.37}
+``恒等逼近''这个名称来自我们即将证明的一个结果: 若 $\psi$ 足够好, 则当 $\epsilon\to 0$ 时 $\psi_{\epsilon}\star f$ 收敛到 $f$. 也就是说, 就卷积而言 $\psi_{\epsilon}$ 的作用近似于恒等算子.
+
+我们想做的是度量 $\psi_{\epsilon}\star f$ 收敛到 $f$ 的速度. 利用 $\int\psi_{\epsilon}=1$,
+\[
+|\psi_{\epsilon}\star f(x)-f(x)|=\left|\int\psi_{\epsilon}(y)\bigl[f(x-y)-f(x)\bigr]dy\right|.
+\]
+现在假设 $f$ 有某种连续性; 比如
+\[
+|f(x-y)-f(x)|\leq C|y|^{\lambda}.
+\]
+那么上面的积分被
+\[
+C\int|\psi_{\epsilon}(y)|\,|y|^{\lambda}\,dy
+=C\epsilon^{\lambda}\int|\psi(y)|\,|y|^{\lambda}\,dy=C\epsilon^{\lambda}
+\]
+控制. 于是 $\psi_{\epsilon}\star f$ 收敛到 $f$, 且收敛速度由 $f$ 的光滑性控制. 这个论证在比如 $f\in\mathcal{S}$ 时有效, 而要过渡到 $L^{p}$, 我们照例需要一致估计.
+\end{remark}
+
+\begin{proposition}\label{prop:2.38}
+设 $\psi$ 是偶的、递减的且属于 $L^{1}$. 则存在与 $\psi$ 无关的常数 $C$, 使得
+\[
+\sup_{\epsilon>0}|\psi_{\epsilon}\star f(x)|\leq C\|\psi\|_{1}f^{\star}(x).
+\]
+\end{proposition}
+
+\begin{proof}
+我们将证明: 对所有满足假设的 $\psi$,
+\[
+|\psi\star f(0)|\leq C\|\psi\|_{1}f^{\star}(0).
+\]
+这使我们可以耍点小聪明. 首先, 把 $f$ 换成 $\tau_{x}f$, 并注意到
+\begin{align*}
+|\psi\star f(x)|&=|(\tau_{x}\psi\star f)(0)|
+=|\psi\star(\tau_{x} f)(0)|\leq C\|\psi\|_{1}(\tau_{x} f)^{\star}(0) \\
+&=C\|\psi\|_{1}f^{\star}(x).
+\end{align*}
+这些等式成立是因为卷积与平移交换, 并且估计
+\[
+|\psi\star f(0)|\leq C\|\psi\|_{1}f^{\star}(0)
+\]
+对 $\tau_x f$ 与对 $f$ 同样有效. 下一个花招: 我们注意到, 若 $\psi$ 满足假设, 则 $\psi_\epsilon$ 也满足, 而且这两个函数的 $L^1$ 范数相等. 因此
+\[
+|\psi_{\epsilon}\star f(x)|\leq C\|\psi\|_{1}f^{\star}(x).
+\]
+现在对两边取上确界即得命题的结论.
+
+为估计
+\[
+|\psi\star f(0)|=\left|\int\psi(-x)f(x)\,dx\right|=\left|\int\psi(x)f(x)\,dx\right|,
+\]
+我们注意到 $\psi$ 递减且可积, 于是
+\[
+\lim_{R\to\infty}\psi(R)=0.
+\]
+局部可积性还蕴含
+\[
+\lim_{\epsilon\to0}\int_{0}^{\epsilon}f=0,
+\]
+于是我们可以分部积分并忽略边界项:
+\[
+\left|\int_{0}^{\infty}\psi(x)f(x)\,dx\right|
+=\left|\int_{0}^{\infty}\int_{0}^{y}f(x)\,dx\,d\psi(y)\right|.
+\]
+由于 $\psi$ 递减, $d\psi\leq 0$, 于是最后的积分被
+\begin{align*}
+-\int_{0}^{\infty}\int_{0}^{y}|f(x)|\,dx\,d\psi(y)
+&\leq-\int_{0}^{\infty}2y\,f^{\star}(0)\,d\psi(y) \\
+&=-2f^{\star}(0)\int_{0}^{\infty}y\,d\psi(y)
+=2f^{\star}(0)\int_{0}^{\infty}\psi(y)\,dy=f^{\star}(0)\|\psi\|_{1}
+\end{align*}
+控制.
+\end{proof}
+
+\begin{proposition}\label{prop:2.39}
+\[
+H^{\star}f(x)\leq[H f]^{\star}(x)+C f^{\star}(x).
+\]
+\end{proposition}
+
+\begin{proof}
+尽管我们知道
+\[
+H^{\star}f=\sup_{\epsilon>0}|\psi_{\epsilon}\star f(x)|,
+\]
+$\psi_{\epsilon}$ 却不可积. 这里的窍门是把它写成一个可积部分加上一个奇异部分, 然后把奇异部分的作用看作一个 Hilbert 变换; 可积部分贡献 $Cf^\star(x)$, 奇异部分给我们 $[Hf]^\star(x)$. 我们关于 Hilbert 变换的直观是: 可积部分来自核的光滑性, 大小约为 $\frac{1}{x^{2}}$; 为得到这个估计, 设 $\phi$ 是光滑、偶且递减的函数, 满足 $\phi\geq 0$, $\int\phi=1$, $\operatorname{supp}\phi\subset[-1,1]$. 令 $\varphi(x)=\psi(x)-\phi\star\frac{1}{x}$. 则:
+\begin{align*}
+|\varphi(x)|=\left|\psi(x)-\phi\star\frac{1}{x}\right|
+&=\left|\psi(x)\int\phi(y)\,dy-\phi\star\frac{1}{x}\right| \\
+&\leq\int_{|y|\leq1}\left|\frac{1}{x}-\frac{1}{x-y}\right|\phi(y)\,dy \\
+&\leq\frac{1}{x^{2}}\int_{|y|\leq1}\left|\frac{y}{1-\frac{y}{x}}\right|\phi(y)\,dy.
+\end{align*}
+若 $|x|\geq 2$, 我们可以利用 $|y|\leq 1$ 来估计被积函数, 得到
+\[
+|\varphi(x)|\leq\frac{C}{x^{2}},
+\]
+正如我们所预料的. 于是
+\[
+\psi=\phi\star\frac{1}{x}+\varphi,
+\qquad
+\psi_{\epsilon}=\Bigl(\phi\star\frac{1}{x}\Bigr)_{\epsilon}+\varphi_{\epsilon}
+=\phi_{\epsilon}\star\frac{1}{x}+\varphi_{\epsilon},
+\]
+且
+\begin{align*}
+H^{\star}f(x)&\leq\sup_{\epsilon}\left|\phi_{\epsilon}\star\frac{1}{x}\star f(x)\right|+\left|\varphi_{\epsilon}\star f(x)\right| \\
+&\leq\sup_{\epsilon}\bigl[\phi_{\epsilon}\star H f(x)\bigr]+\sup_{\epsilon}\left|\varphi_{\epsilon}\star f(x)\right|.
+\end{align*}
+由于 $\phi$ 被一个可积递减函数控制, 命题~\ref{prop:2.38} 适用. 我们已经看到, 在 $|x|\geq 2$ 的范围内 $\varphi$ 被一个偶的可积递减函数控制; 若 $|x|\leq 2$, 则要看得更仔细. 在 $|x|\leq 1$ 的范围内, $\psi(x)=0$, 于是 $\varphi=-\phi\star\frac{1}{x}$. 由于 $\phi$ 光滑, $-\phi\star\frac{1}{x}$ 连续从而有界. 在 $1\leq|x|\leq 2$ 的范围内, $\phi$ 光滑, $\phi\star\frac{1}{x}$ 也光滑. 于是 $\varphi$ 被一个偶的递减可积函数控制, 命题~\ref{prop:2.38} 适用, 第二项也被 Hardy--Littlewood 极大函数控制.
+\end{proof}
+
+\begin{theorem}\label{thm:2.40}
+\index{积分的微分 (differentiation of integrals)}
+$H^{\star}$ 是弱 $(1,1)$ 的.
+\end{theorem}
+
+\begin{proof}
+首先注意, 命题~\ref{prop:2.39} 蕴含 $H^{\star}$ 在 $1<p<\infty$ 时于 $L^p$ 上有界, 因为 Hilbert 变换与 Hardy--Littlewood 极大函数在那里都有界. 我们不能得出该算子在 $L^1$ 上有任何有界性的结论, 因为它是两个都不保持 $L^1$ 的算子的复合. 我们要做的是使用定理~\ref{thm:2.32} (Hilbert 变换有界性之证明) 中的技术. 我们可以沿用之前那些区间 $I$, 因为它们与 $\epsilon$ 无关. 技术困难出现在估计形如
+\[
+\int_{I^{c}}\int_{I}|\psi_{\epsilon}(x-y)-\psi_{\epsilon}(x)|\,dx\,dy
+\]
+的项时. 我们用 $\psi_{\epsilon}$ 截断破坏了 $\frac{1}{x}$ 的光滑性, 所以不能用惯常的光滑性论证. 另一方面, 若 $I$ 不靠近奇点, 我们就是安全的. 这意味着我们将不得不让区间与 $\epsilon$ 相适配.
+
+如同定理~\ref{thm:2.32} 的证明, 我们只须努力得到 $H^{\star}\bigl(\sum h_I\bigr)$ 的估计, 因为所有其他估计都把问题送回 $L^2$, 而 Hilbert 变换与极大函数都是从 $L^2$ 到 $L^2$ 有界的. 对常数项, 取定一个 $\epsilon$ 并把所有的 $I$ 分成三类:
+
+\begin{enumerate}[label=\alph*)]
+\item 考察所有那些对一切 $y\in I$ 都有 $|x-y|<\epsilon$ 的 $I$. 则
+\[
+\int\psi_{\epsilon}(x-y)h_{I}(y)\,dy=\int_{|x-y|>\epsilon}\frac{1}{x-y}h_{I}(y)\chi_{I}(y)\,dy=0.
+\]
+这一类我们可以处理.
+\item 那些对一切 $y\in I$ 都有 $|x-y|>\epsilon$ 的 $I$. 这些区间看不到我们引入的粗糙性, 所以可以像以前那样估计:
+\[
+\int_{|x-y|>\epsilon}K(x-y)h_{I}(y)\chi_{I}(y)\,dy
+=\int_{I}\bigl[K(x-y)-K(x-y_{I})\bigr]h_{I}(y)\,dy,
+\]
+估计照旧进行.
+\item 那些存在 $y_0\in I$ 使 $|x-y_0|=\epsilon$ 的 $I$. 此时卷积核中有一个从 $0$ 到 $\frac{1}{x-y}$ 的跳跃. 幸运的是, $|x-y_0|$ 与 $\epsilon$ 之间的关系使我们能用 $\epsilon$ 控制 $x-y$, 于是 $\int_I\frac{1}{x-y}h_I(y)\,dy$ 可以联系到 $h_I$ 在一个半径为 $\epsilon$ 的区间上的平均. 后者由 Hardy--Littlewood 极大函数控制.
+\end{enumerate}
+
+要真正完成这个证明, 我们必须先把条件 $x\in\tilde{I}^{c}$, $y\in I$ 与条件 $|x-y|<\epsilon$ 联系起来. 我们断言: 对这样的 $x,y$,
+\[
+\frac{\epsilon}{2}<|x-y|<\frac{3\epsilon}{2}.
+\]
+事实上, $|x-y|\geq|x-y_{0}|-|y-y_{0}|\geq\epsilon-|I|$. 但
+\[
+\epsilon=|x-y_{0}|\geq 2|I|;\qquad -|I|>-\frac{\epsilon}{2};\qquad |x-y|>\frac{\epsilon}{2}.
+\]
+另一方面, $y\in I$ 蕴含
+\[
+|x-y|\leq|x-y_{0}|+|y-y_{0}|=\epsilon+|y-y_{0}|\leq\epsilon+|I|<\frac{3\epsilon}{2}.
+\]
+于是:
+\begin{align*}
+&\left|\int_{|x-y|<\epsilon}\frac{1}{x-y}\,h_{I}(y)\chi_{I}(y)\,dy\right| \\
+&\leq\int_{|x-y|<\epsilon}\frac{1}{|x-y|}\,|h_{I}(y)\chi_{I}(y)|\,dy \\
+&\leq\frac{2}{\epsilon}\int_{|x-y|<\epsilon}|h_{I}(y)\chi_{I}(y)|\,dy \\
+&\leq\frac{C}{\epsilon}\int_{|x-y|<\frac{3\epsilon}{2}}|h_{I}(y)|\chi_{I}(y)\,dy.
+\end{align*}
+这就足以完成证明: 对任何 $\epsilon>0$,
+\begin{align*}
+&\left|\int_{|x-y|>\epsilon}\frac{1}{x-y}\Bigl(\sum h_{I}\chi_{I}\Bigr)dy\right| \\
+&\leq 0+\sum\int_{I}|K(x-y)-K(x-y_{I})|\,|h_{I}(y)|\,dy \\
+&\qquad+\sum\frac{2}{\epsilon}\int_{|x-y|<\frac{3\epsilon}{2}}|h_{I}(y)|\chi_{I}(y)\,dy.
+\end{align*}
+于是, 对 $x\in(B^{\star})^{c}$,
+\[
+|H^{\star}f(x)|\leq\sum\int_{I}|K(x-y)-K(x-y_{I})|\,|h_{I}(y)|\,dy
++\Bigl[\sum|h_{I}(y)|\chi_{I}\Bigr]^{\star},
+\]
+这个估计足以让我们完成证明.
+\end{proof}
+
+\section{第 2 章评注}
+\label{sec:2.6}
+
+\noindent (2.1):\quad Bochner--Riesz 平均由 Riesz 平均 $(1-|\xi|)^{\lambda}$ 演化而来. 两者的乘子性质等价, 因为它们只差一个与 $\mathcal{S}$ 中函数的乘法. 像 Bochner~\cite{bochner} 那样把乘子用 $|\xi|^2$ 加以改动, 使我们能够算出 $T_\lambda$ 的精确公式, 而这些公式在 Bochner 关于局部化失效的证明中起了关键作用.
+
+\noindent (2.4):\quad 关于 Bessel 算子的细节可见 Watson~\cite{watson} 6.1. 这里引用的公式归功于 Sonine; 另见 Stein 与 Weiss~\cite{steinweiss}.
+
+\noindent (2.18):\quad 这个结果的最早版本归功于 Cotlar, 由此才有``Cotlar 引理''的说法. 一个加强的版本由 Stein 得到; 这里的证明取自 Knapp--Stein~\cite{knapp-stein}. 更几何化的结果见 Fefferman~\cite{fefferman-pointwise}. 关于谱半径定理, 见 Rudin~\cite{rudinfa}.
+
+\noindent (2.23):\quad 再说一次, 看这个结果最直观的方式是取 $f$ 为一个 $\delta$ 函数. Stein~\cite{stein-limits} 展示了如何把这类直观严格化.
+
+\noindent (2.26):\quad 推论~\ref{cor:2.26} 有一个逆命题, 它用到 Stein 关于算子序列极限的结果~\cite{stein-limits}. 我们一直在说, 一致估计有助于交换极限; Stein 的结果表明, 推论~\ref{cor:2.26} 中极限的存在性蕴含弱 $(1,1)$ 估计.
+
+\noindent (2.28):\quad 把 $\mathbb{R}$ 分解为好集与坏集的做法, 以~\cite{calderon-zygmund} 命名为 Calder\'on--Zygmund 分解. 若用球或立方体作平均, 这个结果与定理~\ref{thm:2.24} 都可推广到 $\mathbb{R}^n$.
+
+\noindent (2.30):\quad 这个结果归功于 Whitney~\cite{whitney}, 它的建立是为了控制函数在集合边界附近的可微性质. 为什么这样做会有帮助呢?
+
+\noindent (2.32):\quad Hilbert 变换在 $L^{p}$ 上有界的证明归功于 M.~Riesz~\cite{riesz}. Riesz 用的是复变技术; 特别地, Hilbert 变换是把调和函数变成其共轭调和函数的算子 (从而使这一对函数成为解析函数). Kolmogorov~\cite{kolmogorov} 同样用复变方法证明了弱 $(1,1)$ 有界性, 证明了单位圆盘内解析函数的边值的存在性. 这里给出的证明是 Calder\'on 与 Zygmund 证明的一个变体; 它的独特优点是可以推广到多维. 我们采用了 Stein~\cite{stein-singular} 的表述. 核上的条件来自 H\"ormander~\cite{hormander}. 也可以有别的光滑性条件; 见 Stein~\cite{stein-singular}.
+
+\noindent (2.40):\quad 我们陈述这个结果时, 仿佛它适用于 H\"ormander 型的核 $K$; 但事实上我们需要对 $K$ 使用逐点估计, 比如 $|x-y|\leq\epsilon$ 这样的估计. 更一般的处理见 Stein~\cite{stein-singular}.

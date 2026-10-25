@@ -1,0 +1,291 @@
+% sections/sec3_construction.tex
+\section{张量积的构造}
+\label{sec:construction}
+
+到达 $R$-模 $P$ 的双线性映射 $M \times N \to P$ 可以与线性映射 $P \to Q$ 复合，从而得到一个双线性映射 $M \times N \to Q$：
+\begin{center}
+\begin{tikzcd}[row sep=1.8cm, column sep=2.5cm]
+M \times N \arrow[r, "B\text{（双线性）}"] \arrow[dr, "L \circ B\text{（复合仍为双线性）}"'] & P \arrow[d, "L\text{（线性）}"] \\
+& Q
+\end{tikzcd}
+\end{center}
+
+我们将把 $M$ 与 $N$ 的张量积构造为一个普遍映射问题的解：寻找一个 $R$-模 $T$ 与一个双线性映射 $b \colon M \times N \to T$，使得 $M \times N$ 上的每一个双线性映射都可以唯一地分解为该双线性映射 $b$ 与一个从 $T$ 出发的线性映射的复合：
+\begin{center}
+\begin{tikzcd}[row sep=1.8cm, column sep=2.5cm]
+M \times N \arrow[r, "b\text{（双线性）}"] \arrow[dr, "B\text{（双线性）}"'] & T \arrow[d, "\exists\,L\text{（线性？）}", dashed] \\
+& P
+\end{tikzcd}
+\end{center}
+
+这完全类似于群 $G$ 的交换化 $G/[G, G]$ 的普遍映射性质：从 $G$ 到阿贝尔群 $A$ 的同态与从 $G/[G, G]$ 到 $A$ 的同态是``同一回事''，因为每个同态 $f \colon G \to A$ 都可以唯一地分解为规范同态 $\pi \colon G \to G/[G, G]$ 与唯一同态 $\widetilde{f} \colon G/[G, G] \to A$ 的复合：
+\begin{center}
+\begin{tikzcd}[row sep=1.8cm, column sep=2.5cm]
+G \arrow[r, "\pi"] \arrow[dr, "f"'] & G/[G, G] \arrow[d, "\exists!\,\widetilde{f}", dashed] \\
+& A
+\end{tikzcd}
+\end{center}
+
+\begin{definition}\label{def:tensor-product}
+$M$ 与 $N$ 的\newterm{tensor-prod-def}{张量积}{tensor product} $M \otimes_R N$ 是一个赋予了双线性映射 $M \times N \xrightarrow{\otimes} M \otimes_R N$ 的 $R$-模，满足：对于每一个双线性映射 $M \times N \xrightarrow{B} P$，都存在唯一的线性映射 $M \otimes_R N \xrightarrow{L} P$ 使得如下交换图成立：
+\begin{equation}
+\begin{tikzcd}[row sep=large, column sep=large]
+M \times N \arrow[r, "\otimes"] \arrow[dr, "B"'] & M \otimes_R N \arrow[d, "\exists!\,L", dashed] \\
+& P
+\end{tikzcd} \label{eq:3.0}
+\end{equation}
+即对所有 $m \in M$ 与 $n \in N$ 均有 $B(m, n) = L(m \otimes n)$.
+\end{definition}
+
+尽管群交换化 $G/[G, G]$ 普遍映射性质中的函数全都是群同态（分别从 $G$ 与 $G/[G, G]$ 出发），但在 $M \otimes_R N$ 的普遍映射性质中，所涉及的函数类型并不相同：从 $M \times N$ 出发的函数是\textbf{双线性}的，而从 $M \otimes_R N$ 出发的函数是\textbf{线性}的.简而言之，从 $M \times N$ 出发的双线性映射被转化为了从 $M \otimes_R N$ 出发的线性映射.
+
+张量积的定义不仅包含一个新模 $M \otimes_R N$，还包含一个到达它的特指双线性映射 $\otimes \colon M \times N \to M \otimes_R N$.这也类似于群交换化 $G/[G, G]$ 的普遍映射性质：不仅需要群 $G/[G, G]$，还需要固定同态 $\pi \colon G \to G/[G, G]$，使得所有到达阿贝尔群的同态都能通过它分解.普遍映射性质必须固定这笔额外的结构信息.
+
+在具体构造张量积之前，我们先证明任意两个张量积在本质上都是相同的.设 $R$-模 $T$ 与 $T'$，以及双线性映射 $M \times N \xrightarrow{b} T$ 与 $M \times N \xrightarrow{b'} T'$，均满足张量积的普遍映射性质.由 $M \times N \xrightarrow{b} T$ 的万有性，映射 $M \times N \xrightarrow{b'} T'$ 唯一地通过 $T$ 分解：存在唯一的线性映射 $f \colon T \to T'$ 使得
+\begin{equation}
+\begin{tikzcd}[row sep=large, column sep=large]
+M \times N \arrow[r, "b"] \arrow[dr, "b'"'] & T \arrow[d, "f"] \\
+& T'
+\end{tikzcd} \label{eq:3.1}
+\end{equation}
+交换.反过来，由 $M \times N \xrightarrow{b'} T'$ 的万有性，映射 $M \times N \xrightarrow{b} T$ 也唯一地通过 $T'$ 分解：存在唯一的线性映射 $f' \colon T' \to T$ 使得
+\begin{equation}
+\begin{tikzcd}[row sep=large, column sep=large]
+M \times N \arrow[r, "b'"] \arrow[dr, "b"'] & T' \arrow[d, "f'"] \\
+& T
+\end{tikzcd} \label{eq:3.2}
+\end{equation}
+交换.将~\eqref{eq:3.1} 与~\eqref{eq:3.2} 串联拼接成如下交换图：
+\begin{center}
+\begin{tikzcd}[row sep=large, column sep=large]
+& T \arrow[d, "f"] \\
+M \times N \arrow[ur, "b"] \arrow[r, "b'"{description}] \arrow[dr, "b"'] & T' \arrow[d, "f'"] \\
+& T
+\end{tikzcd}
+\end{center}
+抹去中间层，便得到交换图：
+\begin{equation}
+\begin{tikzcd}[row sep=large, column sep=large]
+M \times N \arrow[r, "b"] \arrow[dr, "b"'] & T \arrow[d, "f' \circ f"] \\
+& T
+\end{tikzcd} \label{eq:3.3}
+\end{equation}
+根据 $(T, b)$ 的万有性，使得图~\eqref{eq:3.3} 交换的从 $T$ 到 $T$ 的线性映射是唯一的.而恒等映射 $\id_T$ 显然满足条件，故必有 $f' \circ f = \id_T$.同理，按相反顺序将~\eqref{eq:3.1} 与~\eqref{eq:3.2} 串联拼接，便可得到 $f \circ f' = \id_{T'}$.因此，$T$ 与 $T'$ 通过 $f$ 是同构的 $R$-模，且 $f \circ b = b'$，这意味着 $f$ 将 $b$ 与 $b'$ 相结合.因此，$M$ 与 $N$ 的任意两个张量积都可以以唯一的方式相识同构，并且这种同构与从 $M \times N$ 出发的特指双线性映射是相容的\footnote{``相容''的意思是，若 $f \colon T \to T'$ 是使 $f \circ b = b'$ 的唯一同构，则对任意 $(m, n)$ 均有 $f(b(m, n)) = b'(m, n)$.}.
+
+\begin{theorem}\label{thm:tensor-exists}
+$M$ 与 $N$ 的张量积必定存在.
+\end{theorem}
+
+\begin{proof}
+将笛卡尔积 $M \times N$ 单纯视为一个集合.我们在该集合上构造自由 $R$-模：
+\[
+  F_R(M \times N) = \bigoplus_{(m, n) \in M \times N} R \delta_{(m, n)}.
+\]
+（这是一个极其庞大的 $R$-模.若 $R = \R$ 且 $M = N = \R^3$，则 $F_R(M \times N)$ 是由 $\R^6$ 多个 $R$ 的副本构成的直和.这个直和遍历 $\R^3$ 中所有成对的向量，绝非仅仅取自一组基，其分量位于 $R$ 中.对于一般的模，基甚至根本不存在.）
+
+设 $D$ 是 $F_R(M \times N)$ 中由以下所有形如这些关系的元素所生成的子模：
+\begin{gather*}
+  \delta_{(m + m', n)} - \delta_{(m, n)} - \delta_{(m', n)}, \quad
+  \delta_{(m, n + n')} - \delta_{(m, n)} - \delta_{(m, n')}, \\
+  \delta_{(rm, n)} - r\delta_{(m, n)}, \quad
+  \delta_{(m, rn)} - r\delta_{(m, n)}.
+\end{gather*}
+模 $F_R(M \times N)$ 对 $D$ 的商模便可用作张量积：令
+\[
+  M \otimes_R N := F_R(M \times N) / D.
+\]
+我们将 $M \otimes_R N$ 中的陪集 $\delta_{(m, n)} + D$ 记作 $m \otimes n$.
+
+根据 $D$ 的定义，在商模 $F_R(M \times N) / D$ 中有同余关系：
+\[
+  \delta_{(m + m', n)} \equiv \delta_{(m, n)} + \delta_{(m', n)} \pmod D,
+\]
+在 $M \otimes_R N$ 中这恰好写成
+\[
+  (m + m') \otimes n = m \otimes n + m' \otimes n.
+\]
+同理，在 $M \otimes_R N$ 中亦有 $m \otimes (n + n') = m \otimes n + m \otimes n'$ 以及 $r(m \otimes n) = rm \otimes n = m \otimes rn$.这些关系正是当初定义子模 $D$ 的原因，它们说明由 $(m, n) \mapsto m \otimes n$ 给出的函数 $M \times N \xrightarrow{\otimes} M \otimes_R N$ 确为双线性映射.（除此映射之外，我们不会考虑任何其他从 $M \times N$ 到 $M \otimes_R N$ 的函数.）
+
+现在我们证明从 $M \times N$ 出发的所有双线性映射都可以唯一地通过上面写出的双线性映射 $M \times N \to M \otimes_R N$ 分解.假设 $P$ 是一个 $R$-模，且 $M \times N \xrightarrow{B} P$ 是一双线性映射.若单纯将 $M \times N$ 视为一个集合（暂时忽略 $B$ 的双线性），由自由模的普遍映射性质，函数 $B \colon M \times N \to P$ 可以唯一延拓为一个线性映射 $\ell \colon F_R(M \times N) \to P$，满足 $\ell(\delta_{(m, n)}) = B(m, n)$，使得交换图成立：
+\begin{center}
+\begin{tikzcd}[row sep=large, column sep=large]
+M \times N \arrow[r, "\delta"] \arrow[dr, "B"'] & F_R(M \times N) \arrow[d, "\ell"] \\
+& P
+\end{tikzcd}
+\end{center}
+我们希望说明 $\ell$ 在商模 $M \otimes_R N$ 上能够良定义，这等价于证明 $\ker \ell$ 包含子模 $D$.由 $B$ 的双线性：
+\begin{gather*}
+  B(m + m', n) = B(m, n) + B(m', n), \quad B(m, n + n') = B(m, n) + B(m, n'), \\
+  rB(m, n) = B(rm, n) = B(m, rn),
+\end{gather*}
+代入 $\ell$ 的定义即得：
+\begin{gather*}
+  \ell(\delta_{(m + m', n)}) = \ell(\delta_{(m, n)}) + \ell(\delta_{(m', n)}), \quad
+  \ell(\delta_{(m, n + n')}) = \ell(\delta_{(m, n)}) + \ell(\delta_{(m, n')}), \\
+  r\ell(\delta_{(m, n)}) = \ell(\delta_{(rm, n)}) = \ell(\delta_{(m, rn)}).
+\end{gather*}
+由于 $\ell$ 是线性的，这些等式说明 $\ell$ 将子模 $D$ 的每一组生成元都映为 $0$.因此 $\ker \ell$ 包含子模 $D$，从而 $\ell$ 诱导出唯一的商模线性映射 $L \colon F_R(M \times N)/D \to P$，使得 $L(\delta_{(m, n)} + D) = \ell(\delta_{(m, n)}) = B(m, n)$.
+
+由于 $F_R(M \times N)/D = M \otimes_R N$ 且 $\delta_{(m, n)} + D = m \otimes n$，这正是交换图：
+\begin{equation}
+\begin{tikzcd}[row sep=large, column sep=large]
+M \times N \arrow[r, "\otimes"] \arrow[dr, "B"'] & M \otimes_R N \arrow[d, "L"] \\
+& P
+\end{tikzcd} \label{eq:3.4}
+\end{equation}
+这表明从 $M \times N$ 出发的任何双线性映射 $B$ 均来自于一个线性映射 $L \colon M \otimes_R N \to P$，使得对所有 $m \in M$ 与 $n \in N$ 均有 $L(m \otimes n) = B(m, n)$.
+
+最后需证明满足图~\eqref{eq:3.4} 交换的线性映射 $L$ 是唯一的.回到 $M \otimes_R N$ 作为自由模商模的定义，自由模 $F_R(M \times N)$ 中的每个元素都是形如 $\sum_{i=1}^k r_i \delta_{(m_i, n_i)}$ 的有限和.商映射 $F_R(M \times N) \to F_R(M \times N)/D = M \otimes_R N$ 是线性的，因此 $M \otimes_R N$ 中的每一个元素都是有限和：
+\begin{equation}
+  r_1 (m_1 \otimes n_1) + \dots + r_k (m_k \otimes n_k). \label{eq:3.5}
+\end{equation}
+这意味着元素 $m \otimes n$ 在 $R$ 上张成了整个 $M \otimes_R N$.因此，从 $M \otimes_R N$ 出发的任何线性映射由其在所有元素 $m \otimes n$ 上的取值完全且唯一决定.故而满足 $m \otimes n \mapsto B(m, n)$ 的线性映射 $M \otimes_R N \to P$ 至多只有一个.我们在图~\eqref{eq:3.4} 中已经构造出了这样一个线性映射，因此它必定是唯一的.
+\end{proof}
+
+既然证明了 $M$ 与 $N$ 的张量积存在\footnote{1948 年，Bourbaki \cite{bourbaki-alg} 像我们这里一样，将张量积构造为自由模的商模.1938 年，Whitney \cite{whitney} 对阿贝尔群的张量积给出了等价构造.}，其本质唯一性使得我们称 $M \otimes_R N$ 为``\textbf{那个}''张量积（the tensor product），而非``一个''张量积.不要忘记，这一构造不仅包含模 $M \otimes_R N$，还包含由 $(m, n) \mapsto m \otimes n$ 给出的特指双线性映射 $M \times N \xrightarrow{\otimes} M \otimes_R N$，从 $M \times N$ 出发的所有双线性映射都必须通过它分解.我们称这个特指映射为从 $M \times N$ 到张量积的规范双线性映射.
+
+$M \otimes_R N$ 中的元素称为\termcn{张量}，通常用字母 $t$ 表示.具有形如 $m \otimes n$ 的张量称为\newterm{elementary-tensor}{简单张量}{elementary tensor}（也称初等张量、纯张量、单项张量或可分解张量）.正如集合 $A$ 上的自由模 $F_R(A)$ 中的元素通常不是单个 $\delta_a$ 而是它们的线性组合一样，$M \otimes_R N$ 中的元素通常不是简单张量\footnote{对于 $R \neq 0$，$R^2 \otimes_R R^2$ 中非简单张量的一个显式例子将在例~\ref{ex:nonelementary} 中给出.我们实际上在例~\ref{ex:rank-one} 中就已经见过一个：$e_1 e_1^\top + e_2 e_2^\top$ 无法写成单个 $v w^\top$ 的形式.}，而是简单张量的线性组合.事实上，由于 $r(m \otimes n) = (rm) \otimes n$，每一个张量都可以写成若干简单张量的和式.这表明 $M \otimes_R N$ 中的所有元素均具有式~\eqref{eq:1.4} 的形式.
+
+每个张量都是简单张量的和，但其自身未必是简单张量，这一特性常令初学者感到困惑.困惑的一个根源在于：在直和 $M \oplus N$ 中每个元素都是一对 $(m, n)$，为什么在 $M \otimes_R N$ 中不能每个元素都具有 $m \otimes n$ 的形式呢？这里有两个相关的直观类比有助于消除这种陌生感：
+\begin{itemize}
+  \item $R$-模 $R[X, Y]$ 是 $R[X]$ 与 $R[Y]$ 的张量积（参见例~\ref{ex:poly-tensor}）.正如 Eisenbud 与 Harris 在其概型论著作中所指出的 \cite[第~39~页]{eisenbud-harris}，研究双变元多项式绝不仅限于研究形如 $f(X)g(Y)$ 的乘积多项式.事实上，$R[X, Y]$ 中的绝大多数多项式都不能写成 $f(X)g(Y)$，但它们全部是此类乘积的有限和（实际上是单项式 $a_{ij} X^i Y^j$ 的和）.
+  \item 简单张量在全体张量中的地位，完全类似于二元偏微分方程（PDE）的分离变量解 $f(x)g(y)$ 在所有通解中的地位\footnote{感谢 David Vogan 提出这一精妙类比.}.PDE 的解通常是不可分离的；我们首先求出所有分离变量解，然后将一般通解表示为分离变量解的叠加和（或级数和）.
+\end{itemize}
+
+从现在起，请忘掉将 $M \otimes_R N$ 显式构造为庞大自由模 $F_R(M \times N)$ 之商的做法.试图通过商模的构造细节来思考张量积，只会带来不必要的混乱.更重要的是铭记张量积的普遍映射性质，我们从下一节起将系统地运用这一性质.为了熟悉 $\otimes$ 的双线性，我们先证明两个简单的命题：
+
+\begin{theorem}\label{thm:spanning-tensor}
+设 $M$ 与 $N$ 分别具有生成集 $\{x_i\}_{i \in I}$ 与 $\{y_j\}_{j \in J}$.则张量积 $M \otimes_R N$ 作为 $R$-模由所有简单张量 $x_i \otimes y_j$ 线性生成.
+\end{theorem}
+
+\begin{proof}
+$M \otimes_R N$ 中的简单张量形如 $m \otimes n$.将它们展开为 $m = \sum_i a_i x_i$ 与 $n = \sum_j b_j y_j$（其中非零系数仅有有限个）.根据 $\otimes$ 的双线性，
+\[
+  m \otimes n = \left(\sum_i a_i x_i\right) \otimes \left(\sum_j b_j y_j\right) = \sum_{i, j} a_i b_j (x_i \otimes y_j)
+\]
+是诸张量 $x_i \otimes y_j$ 的线性组合.由于每个简单张量都是这组特定张量 $x_i \otimes y_j$ 的线性组合，而每个一般张量又是有限个简单张量的和，因此诸 $x_i \otimes y_j$ 构成了 $M \otimes_R N$ 的一个生成集.
+\end{proof}
+
+\begin{example}\label{ex:rk-tensor}
+设 $e_1, \dots, e_k$ 为 $R^k$ 的标准基.则 $R$-模 $R^k \otimes_R R^k$ 由 $k^2$ 个简单张量 $e_i \otimes e_j$ 线性生成.我们在后文（定理~\ref{thm:free-tensor-basis}）将会看到，这些简单张量实际上构成了 $R^k \otimes_R R^k$ 的一组自由基；当 $R$ 为域时，这与第~\ref{sec:intro}~节中物理学家使用基对向量空间张量积所作的``定义''完全吻合.
+\end{example}
+
+\begin{theorem}\label{thm:zero-tensor}
+在 $M \otimes_R N$ 中，恒有 $m \otimes 0 = 0$ 以及 $0 \otimes n = 0$.
+\end{theorem}
+
+\begin{proof}
+这与环中证明 $a \cdot 0 = 0$ 完全相同：由于固定 $m$ 时 $m \otimes n$ 对 $n$ 是加性的，
+\[
+  m \otimes 0 = m \otimes (0 + 0) = m \otimes 0 + m \otimes 0.
+\]
+两边减去 $m \otimes 0$，即得 $m \otimes 0 = 0$.同理可证 $0 \otimes n = 0$.
+\end{proof}
+
+\begin{example}\label{ex:torsion-collapse}
+若 $A$ 是有限阿贝尔群，则 $\Q \otimes_\Z A = 0$.这是因为其中的每个简单张量都为 $0$：对任意 $a \in A$，存在正整数 $n$ 使得 $na = 0$.于是在 $\Q \otimes_\Z A$ 中，对任意有理数 $r$，
+\[
+  r \otimes a = \left(n \cdot \frac{r}{n}\right) \otimes a = \frac{r}{n} \otimes (na) = \frac{r}{n} \otimes 0 = 0.
+\]
+每个张量都是简单张量的和，既然每个简单张量都为 $0$，那么全体张量皆为 $0$.（例如在 $\Q \otimes_\Z \Z/7\Z$ 中有 $\frac{1}{3} \otimes (5 \bmod 7) = 0$.由此可见，完全可能出现 $m \otimes n = 0$ 而 $m$ 与 $n$ 均非零的情形.）
+
+要证明 $\Q \otimes_\Z A = 0$，甚至不需要 $A$ 是有限群，只需 $A$ 的每个元素都是阶有限的扭元即可.商群 $\Q/\Z$ 具有这一性质，因此 $\Q \otimes_\Z (\Q/\Z) = 0$.同理亦有 $\Q/\Z \otimes_\Z \Q/\Z = 0$.
+\end{example}
+
+由于 $M \otimes_R N$ 在加法上由简单张量生成，从 $M \otimes_R N$ 出发的任何线性（乃至纯加性）映射由它在简单张量上的取值完全决定.这正是为什么在实践中，张量积上的线性映射通常仅通过其在简单张量上的作用来指定.这好比用矩阵来描述有限维自由模之间的线性映射：矩阵表面上只给出了基向量的像，但这些信息已足以完全确定映射在整个空间上的行为.
+
+然而，基向量与简单张量之间存在一个至关重要的本质区别：\textbf{简单张量之间存在大量的线性关系}.从 $\R^2$ 出发的线性映射由它在 $(1, 0), (2, 3), (8, 4)$ 与 $(-1, 5)$ 上的取值决定，但这四个取值绝不能任意给出，它们必须满足这四个向量之间已有的所有线性关系，因为线性映射必须保持线性关系.同样地，在简单张量上随意定义一个函数，通常\textbf{根本无法}延拓为张量积上的线性映射：简单张量虽然生成了张量积，但它们绝不是线性无关的！
+
+不能随心所欲地通过二元函数在简单张量上构造映射.例如，令 $m \otimes m' \mapsto m + m'$ 或 $m \otimes m' \mapsto m$ 的所谓``映射'' $M \otimes_R M \to M$ 是完全不成立的，因为 $m \otimes m' = (-m) \otimes (-m')$，但一般而言 $m + m' \neq -m - m'$ 且 $m \neq -m$.从 $M \otimes_R N$ 出发构造线性映射的唯一正确途径，是利用 $M \otimes_R N$ 的普遍映射性质（将双线性映射转化为线性映射），因为简单张量之间所有可能的线性关系——无论显而易见的还是极其隐晦的——都已经内建在普遍映射性质之中了.我们在第~\ref{sec:examples}~节中将进行大量这方面的练习.理解如何利用普遍映射性质来计算具体例题和证明张量积的性质，是掌握张量积的唯一捷径；如果无法在 $M \otimes_R N$ 上正确构造函数，就谈不上真正理解了张量积.
+
+张量积可以自然推广到多个因子的情形.给定 $k$ 个模 $M_1, \dots, M_k$，存在一个模 $M_1 \otimes_R \dots \otimes_R M_k$，它是 $k$-重线性映射的万有对象：它配有一个 $k$-重线性映射 $M_1 \times \dots \times M_k \xrightarrow{\otimes} M_1 \otimes_R \dots \otimes_R M_k$，且从 $M_1 \times \dots \times M_k$ 出发的任何 $k$-重线性映射都能唯一地通过与从 $M_1 \otimes_R \dots \otimes_R M_k$ 出发的线性映射复合而分解：
+\begin{center}
+\begin{tikzcd}[row sep=large, column sep=large]
+M_1 \times \dots \times M_k \arrow[r, "\otimes"] \arrow[dr, "f"'] & M_1 \otimes_R \dots \otimes_R M_k \arrow[d, "\exists!\,L", dashed] \\
+& P
+\end{tikzcd}
+\end{center}
+$(m_1, \dots, m_k)$ 在该模中的像记作 $m_1 \otimes \dots \otimes m_k$.该 $k$-重张量积可以直接通过自由模 $F_R(M_1 \times \dots \times M_k)$ 的商模来构造，也可以通过每次对两个模作张量积来逐步构造：
+\[
+  (\dots((M_1 \otimes_R M_2) \otimes_R M_3) \dots) \otimes_R M_k.
+\]
+两种构造满足相同的普遍映射性质，因而在规范同构意义下是等价的.单个模 $M$ 的张量幂 $M^{\otimes k}$ 是多重张量积的重要特例：
+\[
+  M^{\otimes 0} = R, \quad M^{\otimes 1} = M, \quad M^{\otimes 2} = M \otimes_R M, \quad M^{\otimes 3} = M \otimes_R M \otimes_R M, \dots
+\]
+（其中约定 $M^{\otimes 0} = R$，正如约定 $a^0 = 1$ 一样.）
+
+\subsection*{常见初学者问答}
+
+现在我们解答关于张量积的七个初学者常见疑问：
+
+\begin{enumerate}
+  \item \textbf{究竟什么是 $m \otimes n$？}
+  
+  严格来说，$m \otimes n$ 就是有序对 $(m, n) \in M \times N$ 在张量积定义中的规范双线性映射 $M \times N \xrightarrow{\otimes} M \otimes_R N$ 之下的像.
+  
+  另一个在实践中更为切合的回答是：$m \otimes n$ 是张量积 $M \otimes_R N$ 中的这样一个元素——对于任意双线性映射 $M \times N \xrightarrow{B} P$，与其对应的线性映射 $M \otimes_R N \to P$ 在该元素处的值恰好等于 $B(m, n)$.请回顾定理~\ref{thm:tensor-exists} 的证明，确认这一性质的确成立.
+  
+  \item \textbf{$m \otimes n = 0$ 意味着什么？}
+  
+  $m \otimes n = 0$ 当且仅当从 $M \times N$ 出发的\textbf{每一个}双线性映射在 $(m, n)$ 处均取值为 $0$.
+  
+  事实上，若 $m \otimes n = 0$，则对任意双线性映射 $B \colon M \times N \to P$，存在与之相伴的线性映射 $L \colon M \otimes_R N \to P$，使得
+  \[
+    B(m, n) = L(m \otimes n) = L(0) = 0.
+  \]
+  反之，如果从 $M \times N$ 出发的每个双线性映射都把 $(m, n)$ 映为 $0$，那么规范双线性映射 $M \times N \xrightarrow{\otimes} M \otimes_R N$ 作为其中一个特例，必然也将 $(m, n)$ 映为 $0$.既然此映射把 $(m, n)$ 映为 $m \otimes n$，我们便断定 $m \otimes n = 0$.
+  
+  这一事实带来了一个极其重要的实用技巧：\textbf{要证明某个简单张量 $m \otimes n$ 不为零，只需找到一个双线性映射 $B$ 使得 $B(m, n) \neq 0$ 即可}.请牢记这一思想！它将在定理~\ref{thm:free-tensor-basis} 的证明中发挥关键作用.
+  
+  这也给出了定理~\ref{thm:zero-tensor}（$m \otimes 0 = 0$ 且 $0 \otimes n = 0$）的另一种证明，因为任意双线性映射显然满足 $B(m, 0) = 0$ 与 $B(0, n) = 0$.
+  
+  作为练习，请利用普遍映射性质证明：在 $M_1 \otimes_R \dots \otimes_R M_k$ 中 $m_1 \otimes \dots \otimes m_k = 0$ 当且仅当所有从 $M_1 \times \dots \times M_k$ 出发的 $k$-重线性映射都在 $(m_1, \dots, m_k)$ 处取值为 $0$.
+  
+  \item \textbf{$M \otimes_R N = 0$ 意味着什么？}
+  
+  张量积 $M \otimes_R N = 0$ 当且仅当从 $M \times N$ 出发的每一个双线性映射（到达任意模）都恒等于零.
+  
+  首先假设 $M \otimes_R N = 0$.则所有简单张量 $m \otimes n$ 均为 $0$，由第 (2) 问的结论，对所有双线性映射均有 $B(m, n) = 0$，从而 $B$ 恒为零.反之，若每一个双线性映射均恒为零，则规范双线性映射 $M \times N \xrightarrow{\otimes} M \otimes_R N$ 恒为零，这意味着对所有 $m$ 和 $n$ 均有 $m \otimes n = 0$.由于简单张量生成整个张量积，所有简单张量的消亡蕴含了整个模 $M \otimes_R N = 0$.
+  
+  回到例~\ref{ex:torsion-collapse}，当 $A$ 为扭群时 $\Q \otimes_\Z A = 0$，这无非是说从 $\Q \times A$ 出发的每一个 $\Z$-双线性映射都恒为零.这很容易直接验证：若 $B$ 是这样一个映射且 $na = 0$（$n \geq 1$），则
+  \[
+    B(r, a) = B\left(n \cdot \frac{r}{n}, a\right) = B\left(\frac{r}{n}, na\right) = B\left(\frac{r}{n}, 0\right) = 0.
+  \]
+  反用这一结论：\textbf{要证明某个张量积模 $M \otimes_R N \neq 0$，只需在 $M \times N$ 上构造出一个非零的双线性映射即可}.
+  
+  \item \textbf{$\sum_{i=1}^k m_i \otimes n_i = \sum_{j=1}^\ell m'_j \otimes n'_j$ 意味着什么？}
+  
+  $\sum_{i=1}^k m_i \otimes n_i = \sum_{j=1}^\ell m'_j \otimes n'_j$ 当且仅当对从 $M \times N$ 出发的所有双线性映射 $B$，都有
+  \[
+    \sum_{i=1}^k B(m_i, n_i) = \sum_{j=1}^\ell B(m'_j, n'_j).
+  \]
+  证明思路与前两问完全相同，留给读者作为练习.例如，$\sum_{i=1}^k m_i \otimes n_i = 0$ 意味着对所有双线性映射 $B$ 均有 $\sum_{i=1}^k B(m_i, n_i) = 0$.
+  
+  \item \textbf{张量积是如何让双线性映射看起来像线性映射的？}
+  
+  对于双线性映射 $B \colon M \times N \to P$，其双线性由式~\eqref{eq:2.1} 与~\eqref{eq:2.2} 刻画.对于与之对应的线性映射 $L \colon M \otimes_R N \to P$，由于
+  \begin{gather*}
+    (m_1 + m_2) \otimes n = m_1 \otimes n + m_2 \otimes n, \quad m \otimes (n_1 + n_2) = m \otimes n_1 + m \otimes n_2, \\
+    (rm) \otimes n = r(m \otimes n) = m \otimes (rn),
+  \end{gather*}
+  在 $L$ 上这四个关于 $B$ 的双线性等式全部变成了 $L(t + t') = L(t) + L(t')$ 与 $L(rt) = rL(t)$ 的特例，这正是 $L$ 为线性映射的定义.
+  
+  \item \textbf{张量积在数学之外有哪些应用？}
+  
+  张量广泛应用于物理学与工程学（连续介质应力、弹性力学、电磁学、广义相对论度规、弥散磁共振成像等），在这些领域中，张量是在坐标变换下服从多重线性变换规则的物理量.物理学中的张量处理将在第~\ref{sec:physics}~节中详细讨论.
+  
+  \item \textbf{有没有什么办法能在头脑中直观想象张量积？}
+  
+  张量（哪怕是简单张量）并没有像``向量是一根带箭头的线段''那样直观的几何图像.上一问提到的物理表现虽然具体，但对理解抽象模的张量积并无直接帮助.
+  
+  初学者在面对张量积时都会感到不适应.Cathy O'Neil 与 Johan de Jong 的两段名言精彩地概括了理解张量积的心路历程\footnote{分别参见 \url{https://mathbabe.org/2011/07/20/tensor-product/} 与 MathOverflow 讨论 \url{https://mathoverflow.net/questions/35466}.}：
+  \begin{itemize}
+    \item \textbf{O'Neil}：``几个月后，我忽然意识到了一件事.我其实并没有比以前更'理解'张量积，但我已经'习惯'于不去理解它们了.这真是太奇妙了.每当张量积出现时，我不再感到痛苦焦虑；相反，我几乎被它们精巧狡黠的运作方式逗乐了.''
+    \item \textbf{de Jong}：``正是那些你能证明的具体定理，塑造了你应当如何思考张量积.换言之，你要让初等的引理和具体的例子来逐步构建你对该数学对象的直觉.除此之外别无他法，根本不会有某种神奇的直觉突然从天而降来帮你'秒懂'它.''
+  \end{itemize}
+\end{enumerate}
+
+\begin{remark}\label{rem:whitney}
+最早在向量空间之外定义张量积的 Hassler Whitney，在阿贝尔群 $A$ 与 $B$ 存在到达阿贝尔群 $C$ 的 $\Z$-双线性映射 $A \times B \to C$ 时，称它们为关于 $C$ 的群对（group pair），并写道 \cite[第~499~页]{whitney}：``任何这样的群对都可以通过选取一个同态 $A \otimes_\Z B \to C$ 来定义''.因此，把 $\otimes_\Z$ 视作解决普遍映射问题的思想，本质上正是归功于 Whitney.
+\end{remark}

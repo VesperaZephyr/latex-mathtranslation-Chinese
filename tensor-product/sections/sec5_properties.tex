@@ -1,0 +1,215 @@
+% sections/sec5_properties.tex
+\section{张量积的一般性质}
+\label{sec:properties}
+
+模的直和同构 $M \oplus N \cong N \oplus M$ 以及 $(M \oplus N) \oplus P \cong M \oplus (N \oplus P)$ 在张量积中有着完美的类似物：$M \otimes_R N \cong N \otimes_R M$ 以及 $(M \otimes_R N) \otimes_R P \cong M \otimes_R (N \otimes_R P)$.此外，$\otimes_R$ 对 $\oplus$ 满足分配律：$M \otimes_R (N \oplus P) \cong (M \otimes_R N) \oplus (M \otimes_R P)$.在实际应用中，这些同构具体是如何运作的，往往比它们单纯的存在性更为重要.
+
+\begin{theorem}[交换性]\label{thm:tensor-comm}
+存在唯一的 $R$-模同构 $M \otimes_R N \cong N \otimes_R M$，满足 $m \otimes n \mapsto n \otimes m$.
+\end{theorem}
+
+\begin{proof}
+我们要构造一个把 $m \otimes n$ 映为 $n \otimes m$ 的线性映射 $M \otimes_R N \to N \otimes_R M$.为此，我们退一步，先从 $M \times N$ 出发构造到达目标模 $N \otimes_R M$ 的映射：定义
+\[
+  M \times N \to N \otimes_R M, \quad (m, n) \mapsto n \otimes m.
+\]
+由于 $n \otimes m$ 在 $m$ 与 $n$ 上分别是线性的，因此该映射是双线性的.由张量积的普遍映射性质，存在唯一的线性映射 $f \colon M \otimes_R N \to N \otimes_R M$，使得对所有简单张量均有 $f(m \otimes n) = n \otimes m$.
+
+交换 $M$ 与 $N$ 的角色，同理存在唯一的线性映射 $g \colon N \otimes_R M \to M \otimes_R N$，满足 $g(n \otimes m) = m \otimes n$.
+
+在简单张量上显然有 $f(g(n \otimes m)) = f(m \otimes n) = n \otimes m$ 以及 $g(f(m \otimes n)) = m \otimes n$.由于简单张量生成各自的张量积模，由加性即知 $f \circ g = \id$ 且 $g \circ f = \id$.因此 $f$ 为同构.
+\end{proof}
+
+\begin{theorem}[结合律]\label{thm:tensor-assoc}
+存在唯一的 $R$-模同构 $(M \otimes_R N) \otimes_R P \cong M \otimes_R (N \otimes_R P)$，满足 $(m \otimes n) \otimes p \mapsto m \otimes (n \otimes p)$.
+\end{theorem}
+
+\begin{proof}
+由定理~\ref{thm:spanning-tensor}，$(M \otimes_R N) \otimes_R P$ 由元素 $(m \otimes n) \otimes p$ 生成，而 $M \otimes_R (N \otimes_R P)$ 由元素 $m \otimes (n \otimes p)$ 生成.因此其上的线性映射由在这些简单张量上的取值唯一决定.
+
+为构造正向线性映射，考虑函数 $M \times N \times P \to M \otimes_R (N \otimes_R P)$，定义为 $(m, n, p) \mapsto m \otimes (n \otimes p)$.对每个固定的 $p \in P$，映射 $b_p(m, n) = m \otimes (n \otimes p)$ 是双线性的，故诱导线性映射 $f_p \colon M \otimes_R N \to M \otimes_R (N \otimes_R P)$，满足 $f_p(m \otimes n) = m \otimes (n \otimes p)$.
+
+进而考虑函数 $(M \otimes_R N) \times P \to M \otimes_R (N \otimes_R P)$（定义为 $(t, p) \mapsto f_p(t)$）.该函数在 $t$ 上是线性的；同时在简单张量 $t = m \otimes n$ 上容易验证它对 $p$ 也是线性的，从而由加性对所有张量 $t$ 均对 $p$ 线性.故它是一个双线性映射！
+
+由张量积普遍映射性质，存在唯一的线性映射 $f \colon (M \otimes_R N) \otimes_R P \to M \otimes_R (N \otimes_R P)$，满足 $f(t \otimes p) = f_p(t)$，特别地 $f((m \otimes n) \otimes p) = m \otimes (n \otimes p)$.反方向映射 $g$ 的构造完全对称，由生成元的线性性即知它们互为逆同构.
+\end{proof}
+
+\begin{theorem}[对有限直和的分配律]\label{thm:tensor-distrib-finite}
+存在唯一的 $R$-模同构
+\[
+  M \otimes_R (N \oplus P) \cong (M \otimes_R N) \oplus (M \otimes_R P),
+\]
+满足 $m \otimes (n, p) \mapsto (m \otimes n, m \otimes p)$.
+\end{theorem}
+
+\begin{proof}
+我们直接证明 $(M \otimes_R N) \oplus (M \otimes_R P)$ 具备张量积 $M \otimes_R (N \oplus P)$ 的普遍映射性质：
+
+定义双线性映射 $b \colon M \times (N \oplus P) \to (M \otimes_R N) \oplus (M \otimes_R P)$ 为 $b(m, (n, p)) = (m \otimes n, m \otimes p)$.设 $B \colon M \times (N \oplus P) \to Q$ 为任意给定的双线性映射.若交换图
+\begin{equation}
+\begin{tikzcd}[row sep=large, column sep=large]
+M \times (N \oplus P) \arrow[r, "b"] \arrow[dr, "B"'] & (M \otimes_R N) \oplus (M \otimes_R P) \arrow[d, "L"] \\
+& Q
+\end{tikzcd} \label{eq:5.1}
+\end{equation}
+成立，则必有 $L(m \otimes n, 0) = B(m, (n, 0))$ 以及 $L(0, m \otimes p) = B(m, (0, p))$.
+
+由于 $(m, n) \mapsto B(m, (n, 0))$ 与 $(m, p) \mapsto B(m, (0, p))$ 均为双线性映射，分别诱导线性映射 $L_1 \colon M \otimes_R N \to Q$ 与 $L_2 \colon M \otimes_R P \to Q$.定义 $L(t_1, t_2) = L_1(t_1) + L_2(t_2)$，则 $L$ 是线性的且使得图~\eqref{eq:5.1} 严格交换.这证明了 $(M \otimes_R N) \oplus (M \otimes_R P)$ 满足普遍映射性质，因而通过唯一的线性映射与 $M \otimes_R (N \oplus P)$ 典范同构.
+\end{proof}
+
+\begin{theorem}[对任意直和的分配律]\label{thm:tensor-distrib-arbitrary}
+设 $\{N_i\}_{i \in I}$ 为一族 $R$-模.则存在唯一的 $R$-模同构
+\[
+  M \otimes_R \bigoplus_{i \in I} N_i \cong \bigoplus_{i \in I} (M \otimes_R N_i),
+\]
+满足 $m \otimes (n_i)_{i \in I} \mapsto (m \otimes n_i)_{i \in I}$.
+\end{theorem}
+
+\begin{proof}
+证明与定理~\ref{thm:tensor-distrib-finite} 类似：映射 $b(m, (n_i)_{i \in I}) = (m \otimes n_i)_{i \in I}$ 是双线性的.对任意给定的双线性映射 $B \colon M \times (\bigoplus N_i) \to Q$，限制在各分量上的映射诱导出族 $\{L_i \colon M \otimes_R N_i \to Q\}$，从而唯一确定线性映射 $L((t_i)_{i \in I}) = \sum_{i \in I} L_i(t_i)$.因此直和 $\bigoplus_{i \in I} (M \otimes_R N_i)$ 满足普遍映射性质，结论得证.
+\end{proof}
+
+\begin{remark}\label{rem:tensor-prod-counterexample}
+定理~\ref{thm:tensor-distrib-arbitrary} 的结论对于模的\textbf{直积}（direct product）\textbf{不再成立}！虽然始终存在自然的 $R$-线性映射
+\begin{equation}
+  M \otimes_R \prod_{i \in I} N_i \to \prod_{i \in I} (M \otimes_R N_i), \quad m \otimes (n_i) \mapsto (m \otimes n_i), \label{eq:5.2}
+\end{equation}
+但它通常不是同构.例如取 $R = \Z, M = \Q$ 以及 $N_i = \Z/p^i\Z$（$i \geq 1$）.式~\eqref{eq:5.2} 的右侧为零，因为对每个 $i$ 均有 $\Q \otimes_\Z (\Z/p^i\Z) = 0$（例~\ref{ex:torsion-collapse}）；而左侧为 $\Q \otimes_\Z \prod_{i \geq 1} (\Z/p^i\Z)$，由于无限直积 $\prod_{i \geq 1} (\Z/p^i\Z)$ 不是扭群（元素 $(1, 1, 1, \dots)$ 具有无限阶），由定理~\ref{thm:domain-torsion-behavior} 知左侧\textbf{绝不为零}！
+\end{remark}
+
+\begin{theorem}[部分变量张量化的技术引理]\label{thm:partial-tensor-lemma}
+设 $M_1, \dots, M_k, N$ 为 $R$-模（$k > 2$），并设函数
+\[
+  \varphi \colon M_1 \times \dots \times M_{k-2} \times M_{k-1} \times M_k \to N
+\]
+在固定其他坐标时关于最后两个坐标 $M_{k-1}$ 与 $M_k$ 是双线性的.则存在唯一的函数
+\[
+  \Phi \colon M_1 \times \dots \times M_{k-2} \times (M_{k-1} \otimes_R M_k) \to N,
+\]
+使其在固定其他坐标时关于最后坐标 $M_{k-1} \otimes_R M_k$ 是线性的，且满足
+\begin{equation}
+  \Phi(m_1, \dots, m_{k-2}, m_{k-1} \otimes m_k) = \varphi(m_1, \dots, m_{k-2}, m_{k-1}, m_k). \label{eq:5.3}
+\end{equation}
+若 $\varphi$ 在所有坐标上是多重线性的，则 $\Phi$ 亦为多重线性的.
+\end{theorem}
+
+\begin{proof}
+固定 $m_1, \dots, m_{k-2}$ 时，$\varphi$ 限制在 $M_{k-1} \times M_k$ 上是双线性的，由张量积普遍映射性质诱导出唯一的线性映射 $\Phi_{m_1, \dots, m_{k-2}} \colon M_{k-1} \otimes_R M_k \to N$.定义 $\Phi(m_1, \dots, m_{k-2}, t) = \Phi_{m_1, \dots, m_{k-2}}(t)$ 即满足全部要求.
+\end{proof}
+
+\begin{theorem}[张量-Hom 伴随同构]\label{thm:tensor-hom-adjoint}
+设 $M, N, P$ 为 $R$-模.则存在典范 $R$-模同构
+\[
+  \operatorname{Bil}_R(M, N; P) \cong \Hom_R(M \otimes_R N, P) \cong \Hom_R(M, \Hom_R(N, P)).
+\]
+\end{theorem}
+
+\begin{proof}
+第一个同构 $\operatorname{Bil}_R(M, N; P) \cong \Hom_R(M \otimes_R N, P)$ 纯粹是张量积普遍映射性质的重述：每个双线性映射 $B$ 一对一对应唯一的线性映射 $L_B$.
+
+对于第二个同构：给定双线性映射 $B \colon M \times N \to P$，对每个 $m \in M$，$B(m, -)$ 是从 $N$ 到 $P$ 的线性映射，故 $m \mapsto B(m, -)$ 构成了线性映射 $f_B \colon M \to \Hom_R(N, P)$.反之，给定线性映射 $L \colon M \to \Hom_R(N, P)$，由 $(m, n) \mapsto (L(m))(n)$ 定义的映射 $B_L \colon M \times N \to P$ 是双线性的.容易检验两方向互为逆同构.
+\end{proof}
+
+若记函子 $\mathbf{F}_N(M) = M \otimes_R N$ 以及 $\mathbf{G}_N(P) = \Hom_R(N, P)$，定理~\ref{thm:tensor-hom-adjoint} 写为
+\[
+  \Hom_R(\mathbf{F}_N(M), P) \cong \Hom_R(M, \mathbf{G}_N(P)).
+\]
+这完全类似于内积中矩阵与其转置的关系 $Av \cdot w = v \cdot A^\top w$.在范畴论中，$\mathbf{F}_N$ 与 $\mathbf{G}_N$ 称为\newterm{adjoint-functors}{伴随函子对}{adjoint functors}（$\mathbf{F}_N$ 左伴随于 $\mathbf{G}_N$）.
+
+\begin{corollary}\label{cor:dual-tensor}
+设 $M, N$ 为 $R$-模.则有 $R$-模同构
+\[
+  \operatorname{Bil}_R(M, N; R) \cong (M \otimes_R N)^\vee \cong \Hom_R(M, N^\vee) \cong \Hom_R(N, M^\vee).
+\]
+\end{corollary}
+
+\begin{theorem}\label{thm:dual-tensor-hom}
+设 $M$ 与 $N$ 为 $R$-模.存在自然的 $R$-线性映射
+\[
+  M^\vee \otimes_R N \to \Hom_R(M, N), \quad \varphi \otimes n \mapsto [m \mapsto \varphi(m)n].
+\]
+若 $M$ 与 $N$ 为有限生成自由模，则该映射为同构.特别地，若 $F$ 为有限自由模，则
+\[
+  F^\vee \otimes_R F \cong \End_R(F).
+\]
+\end{theorem}
+
+\begin{proof}
+映射 $(\varphi, m, n) \mapsto \varphi(m)n$ 是三线性的，由定理~\ref{thm:partial-tensor-lemma} 诱导出双线性映射 $(M^\vee \otimes_R N) \times M \to N$，进而给出所需的线性映射 $f \colon M^\vee \otimes_R N \to \Hom_R(M, N)$.
+
+当 $M$ 与 $N$ 分别具有有限基 $\{e_j\}$ 与 $\{e'_i\}$ 时，元素 $e_j^\vee \otimes e'_i$ 对应的线性算子将基元素 $e_j$ 映为 $e'_i$，而将其余基向量映为 $0$.在矩阵表示下，这正是初等矩阵 $E_{ij}$.由于所有初等矩阵构成了矩阵空间的一组基，因此 $f$ 将基映为基，必定是同构.
+\end{proof}
+
+\begin{remark}\label{rem:dual-tensor-failure}
+当模不是有限自由时，定理~\ref{thm:dual-tensor-hom} 中的映射可能既非单射亦非满射.例如取 $R = \Z/p^2\Z$ 以及 $M = N = R/pR$.此时 $M^\vee \cong M$，$M^\vee \otimes_R M \cong M$ 且 $\Hom_R(M, M) \cong M$，但自然映射 $M^\vee \otimes_R M \to \Hom_R(M, M)$ 却是恒等于零的！
+\end{remark}
+
+\begin{example}\label{ex:vector-space-dual-tensor}
+对有限维 $K$-向量空间 $V$ 与 $W$，有典范同构 $V^\vee \otimes_K W \cong \Hom_K(V, W)$ 以及 $W \otimes_K V^\vee \cong \Hom_K(V, W)$.此时，任何线性映射 $L \in \Hom_K(V, W)$ 都可以无坐标地写为若干简单张量 $\varphi_i \otimes w_i$ 的和.
+
+当 $M$ 与 $N$ 为有限自由模时，利用双对偶同构 $M \cong M^{\vee\vee}$，可得张量积的无坐标描述：
+\begin{equation}
+  M \otimes_R N \cong \operatorname{Bil}_R(M^\vee, N^\vee; R), \label{eq:5.4}
+\end{equation}
+其中简单张量 $m \otimes n$ 作用在对偶元对 $(\varphi, \psi)$ 上给出标量 $\varphi(m)\psi(n)$.许多教材（如 Alekseevskij 等人 \cite[第~65~页]{alekseevskij}、O'Neill \cite[第~35~页]{oneill} 以及 Halmos \cite[第~40~页]{halmos}）正是采用式~\eqref{eq:5.4} 作为有限维向量空间张量积的初始定义.
+\end{example}
+
+\begin{theorem}[张量秩与线性映射的秩]\label{thm:tensor-rank}
+设 $V, W$ 为有限维 $K$-向量空间.将线性映射 $L \colon V \to W$ 视为 $V^\vee \otimes_K W$ 中的张量，则 $L$ 作为线性映射的秩 $\operatorname{rank}(L) = \dim_K L(V)$，恰好等于将其表示为非零简单张量之和时所需的最少项数：
+\[
+  \operatorname{rank}(L) = \min\left\{d \geq 0 : L = \sum_{i=1}^d \varphi_i \otimes w_i\right\}.
+\]
+\end{theorem}
+
+\begin{proof}
+设 $r = \operatorname{rank}(L)$.若 $L = \sum_{i=1}^d \varphi_i \otimes w_i$，则显然 $L(V) \subset \operatorname{Span}(w_1, \dots, w_d)$，故 $r \leq d$.
+
+反之，选取像空间 $L(V)$ 的一组基 $\{e_1, \dots, e_r\}$.对任意 $v \in V$，将 $L(v)$ 展开为 $\sum_{i=1}^r c_i(v) e_i$.由基展开的唯一性与 $L$ 的线性性，每个坐标系数 $c_i \colon V \to K$ 都是线性的，从而 $c_i \in V^\vee$.因此在 $V^\vee \otimes_K W$ 中有 $L = \sum_{i=1}^r c_i \otimes e_i$，即 $L$ 确可写成 $r$ 个简单张量之和.
+\end{proof}
+
+\begin{example}\label{ex:r3-r4-rank}
+在 $\R^3 \otimes_\R \R^4$ 中，考虑由标准基展开的 12 项简单张量和：
+\begin{align*}
+  t &= e_1 \otimes e'_1 + 4e_1 \otimes e'_2 + 2e_1 \otimes e'_3 + 3e_1 \otimes e'_4 + 2e_2 \otimes e'_1 + 5e_2 \otimes e'_2 \\
+  &\quad + 3e_2 \otimes e'_3 + 4e_2 \otimes e'_4 + e_3 \otimes e'_1 + 7e_3 \otimes e'_2 + 3e_3 \otimes e'_3 + 5e_3 \otimes e'_4.
+\end{align*}
+通过同构 $\R^3 \otimes_\R \R^4 \cong \Hom(\R^3, \R^4)$，它对应于 $4 \times 3$ 矩阵
+\[
+  A = \begin{pmatrix}
+    1 & 2 & 1 \\
+    4 & 5 & 7 \\
+    2 & 3 & 3 \\
+    3 & 4 & 5
+  \end{pmatrix}.
+\]
+对 $A$ 进行行化简得到行阶梯形矩阵，发现其秩为 $2$（前两列 $w_1, w_2$ 线性无关，第三列 $w_3 = 3w_1 - w_2$）.由定理~\ref{thm:tensor-rank}，张量 $t$ 的张量秩恰好为 $2$！利用定理~\ref{thm:tensor-rank} 的证明方法，可将 $t$ 精确分解为仅仅两项简单张量之和：
+\[
+  t = (e_1 + 3e_3) \otimes (e'_1 + 4e'_2 + 2e'_3 + 3e'_4) + (e_2 - e_3) \otimes (2e'_1 + 5e'_2 + 3e'_3 + 4e'_4).
+\]
+\end{example}
+
+\begin{example}\label{ex:id-tensor-rank}
+设 $V$ 为 $n$ 维向量空间，基为 $e_1, \dots, e_n$.则张量 $\sum_{i=1}^n e_i \otimes e_i \in V \otimes_K V$ 的张量秩恰为 $n$，它绝不可能表示为少于 $n$ 个简单张量的和.因为在 $V \otimes_K V \cong \End_K(V)$ 下它对应于恒等算子 $\id_V$，而 $\id_V$ 的秩为 $n$.
+\end{example}
+
+\begin{theorem}\label{thm:injective-elementary}
+线性映射 $f \colon M \otimes_R N \to P$ 在所有简单张量上是单射，当且仅当 $\ker f$ 中不含任何张量秩为 $1$ 或 $2$ 的非零张量.
+\end{theorem}
+
+\begin{proof}
+若 $f$ 在简单张量上单射，且 $t \in \ker f$ 的秩至多为 $2$，则可写为 $t = m \otimes n - m' \otimes n'$（若秩 $\leq 1$ 则取 $m' = 0$）.由 $f(t) = 0$ 得 $f(m \otimes n) = f(m' \otimes n')$，单射性给出 $m \otimes n = m' \otimes n'$，故 $t = 0$.
+
+反之，若 $f(m \otimes n) = f(m' \otimes n')$，则差 $m \otimes n - m' \otimes n' \in \ker f$ 的秩至多为 $2$.由假设此差必为 $0$，故 $m \otimes n = m' \otimes n'$.
+\end{proof}
+
+\begin{corollary}\label{cor:injective-elementary-not-whole}
+线性映射 $f \colon M \otimes_R N \to P$ 在简单张量上单射但在全体张量上不是单射，当且仅当 $\ker f \neq 0$ 且 $\ker f$ 中的所有非零张量的张量秩均至少为 $3$.
+\end{corollary}
+
+\begin{example}\label{ex:grinberg-counterexample}
+设 $\dim_K V = n \geq 3$.张量 $t = \sum_{i=1}^n e_i \otimes e_i \in V \otimes_K V$ 的秩为 $n \geq 3$.自然商映射
+\[
+  f \colon V \otimes_K V \to (V \otimes_K V) / Kt
+\]
+的核为一维子空间 $Kt$.其所有非零元的张量秩均为 $n \geq 3$.由推论~\ref{cor:injective-elementary-not-whole}，$f$ 在所有简单张量上严格单射，但在全体张量上绝非单射！这给出了注~\ref{rem:injectivity-caution} 所警示现象的一个极为精彩的构造.
+\end{example}

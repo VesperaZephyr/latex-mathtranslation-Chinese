@@ -1,0 +1,208 @@
+% sections/sec6_base_ext.tex
+\section{基变换}
+\label{sec:base-ext}
+
+在代数学中，我们经常需要将一个环上的模替换为另一个相关联环上的模.例如在高等代数中，常常将 $\R^n$ 扩充为 $\C^n$，通过将实坐标扩张为复坐标而构造出一个复向量空间；在多项式理论中，证明 $\Z[X]$ 中多项式的不可约性时，常将其视为 $\Q[X]$ 中的多项式，或者通过将系数模 $p$ 约化而将其置于 $(\Z/p\Z)[X]$ 中来考察.我们将看到，所有这些将模的标量环予以更换的过程（$\R^n \to \C^n$、$\Z[X] \to \Q[X]$、$\Z[X] \to (\Z/p\Z)[X]$），均可以通过张量积以统一的方式精确描述.
+
+设 $f \colon R \to S$ 是交换环的同态.我们可以利用 $f$ 将任意 $S$-模 $N$ 视为 $R$-模，其标量作用定义为 $rn := f(r)n$.特别地，$S$ 自身通过 $rs := f(r)s$ 成为一个 $R$-模.这种将 $S$-模 $N$ 转化为 $R$-模的过程称为\newterm{restriction-scalars}{标量限制}{restriction of scalars}.
+
+\begin{example}\label{ex:subring-rest}
+若 $R \subset S$ 且 $f$ 为包含映射（如 $\R \hookrightarrow \C$ 或 $\Q \hookrightarrow \C$），这正是将复向量空间视为实向量空间或有理向量空间的标准方式.
+\end{example}
+
+\begin{example}\label{ex:quotient-rest}
+若 $S = R/I$ 且 $f$ 为模 $I$ 的自然商同态，则每个 $R/I$-模均可通过令 $r$ 以 $r \bmod I$ 的方式作用而自然成为 $R$-模.
+\end{example}
+
+\begin{theorem}\label{thm:s-lin-is-r-lin}
+设 $N$ 与 $N'$ 为 $S$-模.若映射 $N \to N'$ 是 $S$-线性的，则当我们把 $N$ 与 $N'$ 视为 $R$-模时，它也是 $R$-线性的.
+\end{theorem}
+
+\begin{proof}
+设 $\varphi \colon N \to N'$ 为 $S$-线性的，则对所有 $s \in S$ 与 $n \in N$ 均有 $\varphi(sn) = s\varphi(n)$.对任意 $r \in R$：
+\[
+  \varphi(rn) = \varphi(f(r)n) = f(r)\varphi(n) = r\varphi(n),
+\]
+因此 $\varphi$ 是 $R$-线性的.
+\end{proof}
+
+为了记号清晰，由于我们需要频繁在 $R$-模与 $S$-模之间切换，后文通常用 $M$（或 $M'$ 等）表示原生的 $R$-模，而用 $N$（或 $N'$ 等）表示原生的 $S$-模.由于 $N$ 通过标量限制也是 $R$-模，我们可以形成张量积 $R$-模 $M \otimes_R N$，其中标量可以在 $\otimes$ 两侧转移：
+\[
+  r(m \otimes n) = (rm) \otimes n = m \otimes rn = m \otimes f(r)n.
+\]
+
+\newterm{base-extension-concept}{基变换}{base extension}（或称标量扩张）的目标是逆转标量限制的过程：对于一个给定的 $R$-模 $M$，我们希望构造出一个由形如 $sm$ 的元素组成的 $S$-模，使得当 $s = f(r)$ 时与原有的 $rm$ 严格吻合.这个新的 $S$-模将通过在 $R$-模 $S \otimes_R M$ 上赋予特定的 $S$-模结构来实现.
+
+\begin{theorem}\label{thm:s-tensor-m-struct}
+加法群 $S \otimes_R M$ 上存在唯一的 $S$-模结构，使得对所有简单张量满足
+\begin{equation}
+  s'(s \otimes m) := (s's) \otimes m. \label{eq:6.1}
+\end{equation}
+该结构与原有的 $R$-模结构相容，即对所有 $r \in R$ 与 $t \in S \otimes_R M$ 均有 $rt = f(r)t$.
+\end{theorem}
+
+\begin{proof}
+由于简单张量在加法上生成整个张量积，规则~\eqref{eq:6.1} 完全确定了任意 $s' \in S$ 在所有张量上的作用.
+
+为证良定义性，固定 $s' \in S$，考虑映射 $S \times M \to S \otimes_R M$（定义为 $(s, m) \mapsto (s's) \otimes m$）.该映射是 $R$-双线性的，由普遍映射性质诱导出唯一的 $R$-线性映射 $\mu_{s'} \colon S \otimes_R M \to S \otimes_R M$，使得 $\mu_{s'}(s \otimes m) = (s's) \otimes m$.定义 $S$-数乘为 $s't := \mu_{s'}(t)$.容易验证其满足模的各项公理：
+\begin{gather*}
+  1 \cdot t = t, \quad s(t_1 + t_2) = st_1 + st_2, \\
+  (s_1 + s_2)t = s_1 t + s_2 t, \quad s_1(s_2 t) = (s_1 s_2)t.
+\end{gather*}
+相容性来自：$f(r)(s \otimes m) = (f(r)s) \otimes m = (rs) \otimes m = r(s \otimes m)$.
+\end{proof}
+
+完全类似地，右侧张量积 $M \otimes_R S$ 上亦具有唯一的 $S$-模结构，满足 $s'(m \otimes s) = m \otimes (s's)$.由定理~\ref{thm:tensor-comm}，两模通过 $s \otimes m \mapsto m \otimes s$ 给出典范的 $S$-模同构：$S \otimes_R M \cong M \otimes_R S$.
+
+\begin{example}\label{ex:r-mod-i-base-ext}
+在定理~\ref{thm:quotient-tensor-m} 中我们证明了 $(R/I) \otimes_R M \cong M/IM$ 作为 $R$-模同构.由于两边均自然具有 $R/I$-模结构，容易验证该同构同时也是 $R/I$-模同构.
+\end{example}
+
+\begin{example}\label{ex:s-mod-j-base-ext}
+令 $N = S \otimes_R M$.对 $S$ 的任意理想 $J$，$JN$ 是 $N$ 的 $S$-子模，且商模 $N/JN$ 是 $S/J$-模.有典范的 $S/J$-模同构
+\[
+  (S/J) \otimes_R M \cong N/JN = (S \otimes_R M) / J(S \otimes_R M).
+\]
+特别地，取 $S = R[X]$ 且 $J = XR[X]$，则 $S/J \cong R$.若 $N = R[X] \otimes_R M$，则商模 $N/XN \cong R \otimes_R M \cong M$.这表明我们可以从标量扩张模 $N$ 唯一直观地恢复出原模 $M \cong N/XN$.
+\end{example}
+
+\begin{theorem}\label{thm:free-base-ext}
+若 $F$ 是具有基 $\{e_i\}_{i \in I}$ 的自由 $R$-模，则标量扩张 $S \otimes_R F$ 是以 $\{1 \otimes e_i\}_{i \in I}$ 为基的自由 $S$-模.
+\end{theorem}
+
+\begin{proof}
+由定理~\ref{thm:m-tensor-free}，每个元素均可唯一表示为 $\sum s_i \otimes e_i = \sum s_i (1 \otimes e_i)$，这恰好说明 $\{1 \otimes e_i\}$ 是自由 $S$-基.
+\end{proof}
+
+\begin{example}\label{ex:rn-cn-ext}
+由定理~\ref{thm:free-base-ext}，作为 $S$-模有 $S \otimes_R R^n \cong S^n$.特别地，
+\[
+  \C \otimes_\R \R^n \cong \C^n, \quad \C \otimes_\R \mathrm{M}_n(\R) \cong \mathrm{M}_n(\C)
+\]
+作为复向量空间同构.
+\end{example}
+
+\begin{example}\label{ex:poly-base-ext}
+作为 $S$-模有 $S \otimes_R R[X] \cong S[X]$.例如：
+\[
+  \C \otimes_\R \R[X] \cong \C[X], \quad \Q \otimes_\Z \Z[X] \cong \Q[X], \quad (\Z/p\Z) \otimes_\Z \Z[X] \cong (\Z/p\Z)[X].
+\]
+\end{example}
+
+\begin{example}\label{ex:cn-restrict-extend}
+如果我们将 $\C^n$ 视为实向量空间（限制标量，此时 $\dim_\R \C^n = 2n$），然后再将其标量扩张回 $\C$：
+\[
+  \C \otimes_\R \C^n \cong \C \otimes_\R \R^{2n} \cong \C^{2n} \cong \C^n \oplus \C^n.
+\]
+这绝非回到原空间 $\C^n$，而是变成了原空间的两个副本！原因在于：一旦限制标量，$\C^n$ 就忘掉了自己原本是复向量空间；当再做标量扩张时，它只是将原本独立的实维度重新复化.
+\end{example}
+
+\begin{theorem}\label{thm:direct-sum-base-ext}
+对任意一族 $R$-模 $\{M_i\}_{i \in I}$，存在典范 $S$-模同构
+\[
+  S \otimes_R \bigoplus_{i \in I} M_i \cong \bigoplus_{i \in I} (S \otimes_R M_i).
+\]
+\end{theorem}
+
+\begin{theorem}\label{thm:domain-rank}
+设 $R$ 为整环，$K$ 为其分式域.对任意有限生成 $R$-模 $M$，$K \otimes_R M$ 是有限维 $K$-向量空间，且
+\[
+  \operatorname{rank}(M) := \dim_K(K \otimes_R M)
+\]
+等于 $M$ 中 $R$-线性无关元的最大个数，并且是 $M$ 的任意生成集元素个数的下界.
+\end{theorem}
+
+\begin{example}\label{ex:ideal-rank-one}
+整环 $R$ 的任意非零理想 $I$ 均具有秩 $1$：任取两非零元 $a, b \in I$，有 $ba - ab = 0$，故任意两元均线性相关；同时 $K \otimes_R I \cong K$，故 $\dim_K(K \otimes_R I) = 1$.
+\end{example}
+
+\begin{theorem}\label{thm:m-tensor-n-s-mod}
+设 $M$ 为 $R$-模，$N$ 为 $S$-模.
+\begin{enumerate}
+  \item 加法群 $M \otimes_R N$ 上具有唯一的 $S$-模结构，使得 $s(m \otimes_R n) = m \otimes_R sn$.
+  \item 存在典范的 $S$-模同构
+  \begin{equation}
+    M \otimes_R N \cong (S \otimes_R M) \otimes_S N, \quad m \otimes_R n \mapsto (1 \otimes_R m) \otimes_S n. \label{eq:6.3}
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+
+式~\eqref{eq:6.3} 表明：跨越不同环的张量积 $M \otimes_R N$ 可以通过先对 $M$ 作标量扩张 $S \otimes_R M$，随后在 $S$ 上作标准的模张量积来完全实现.
+
+\begin{corollary}\label{cor:iso-base-ext}
+若 $M \cong M'$ 为 $R$-模同构，且 $N$ 为 $S$-模，则作为 $S$-模有
+\[
+  M \otimes_R N \cong M' \otimes_R N \quad\text{以及}\quad N \otimes_R M \cong N \otimes_R M'.
+\]
+\end{corollary}
+
+\begin{example}\label{ex:invariance-rank-free}
+利用张量积可以极其漂亮地证明自由模秩的不变性：设 $R \neq 0$ 且 $R^m \cong R^n$.任取 $R$ 的极大理想 $\mathfrak{m}$，由推论~\ref{cor:iso-base-ext}，在域 $R/\mathfrak{m}$ 上有向量空间同构：
+\[
+  (R/\mathfrak{m}) \otimes_R R^m \cong (R/\mathfrak{m}) \otimes_R R^n \implies (R/\mathfrak{m})^m \cong (R/\mathfrak{m})^n.
+\]
+由线性代数中域上向量空间基维数的唯一性，即得 $m = n$！
+\end{example}
+
+\begin{theorem}\label{thm:k-vector-tensor-same}
+设 $R$ 为整环，$K$ 为其分式域.对任意 $K$-向量空间 $V$ 与 $W$，$V \otimes_R W$ 上通过 $V$ 引入的 $K$-向量空间结构与通过 $W$ 引入的 $K$-向量空间结构\textbf{完全相同}，即对所有 $x \in K$ 恒有
+\[
+  xv \otimes_R w = v \otimes_R xw.
+\]
+\end{theorem}
+
+\begin{proof}
+设 $x = a/b$（$a, b \in R, b \neq 0$）.利用标量在 $\otimes_R$ 两侧的转移与 $V, W$ 上的 $K$-线性运算：
+\[
+  \left(\frac{a}{b}v\right) \otimes_R w = \frac{1}{b}v \otimes_R aw = \frac{1}{b}v \otimes_R b\left(\frac{a}{b}w\right) = v \otimes_R \frac{a}{b}w.
+\]
+\end{proof}
+
+\begin{corollary}\label{cor:v-tensor-r-w-k}
+在定理~\ref{thm:k-vector-tensor-same} 的设定下，有典范的 $K$-向量空间同构
+\[
+  V \otimes_R W \cong V \otimes_K W, \quad v \otimes_R w \mapsto v \otimes_K w.
+\]
+\end{corollary}
+
+\begin{example}\label{ex:r-tensor-z-r}
+由于 $\R$ 是 $\Q$-向量空间，有 $\R \otimes_\Z \R \cong \R \otimes_\Q \R$.注意，虽然通过乘法有满射 $\R \otimes_\Q \R \to \R$（$x \otimes y \mapsto xy$），但它\textbf{绝非单射}（例如 $\pi \otimes 1 - 1 \otimes \pi \neq 0$ 但其像为 $0$）.
+\end{example}
+
+\begin{theorem}\label{thm:s-module-assoc-collection}
+设 $M, M'$ 为 $R$-模，$N, N'$ 为 $S$-模.
+\begin{enumerate}
+  \item $M \otimes_R N \cong N \otimes_R M$（作为 $S$-模同构）；
+  \item $(M \otimes_R N) \otimes_R M' \cong M \otimes_R (N \otimes_R M')$（作为 $S$-模同构）；
+  \item 存在唯一的 $S$-模同构 $(M \otimes_R N) \otimes_S N' \cong M \otimes_R (N \otimes_S N')$；
+  \item $N \otimes_R (M \oplus M') \cong (N \otimes_R M) \oplus (N \otimes_R M')$（作为 $S$-模同构）.
+\end{enumerate}
+\end{theorem}
+
+\begin{corollary}\label{cor:base-ext-of-tensor}
+设 $M$ 与 $M'$ 为 $R$-模.存在唯一的 $S$-模同构
+\[
+  S \otimes_R (M \otimes_R M') \cong (S \otimes_R M) \otimes_S (S \otimes_R M'),
+\]
+满足 $s \otimes_R (m \otimes_R m') \mapsto s((1 \otimes_R m) \otimes_S (1 \otimes_R m'))$.换言之，\textbf{张量积的标量扩张同构于标量扩张后的模在目标环上的张量积}.
+\end{corollary}
+
+\begin{theorem}[基变换的普遍映射性质]\label{thm:base-ext-ump}
+设 $M$ 为 $R$-模.对于任意 $S$-模 $N$ 与任意 $R$-线性映射 $\varphi \colon M \to N$，存在唯一的 $S$-线性映射 $\varphi^S \colon S \otimes_R M \to N$ 使得如下交换图成立：
+\begin{equation}
+\begin{tikzcd}[row sep=large, column sep=large]
+M \arrow[r] \arrow[dr, "\varphi"'] & S \otimes_R M \arrow[d, "\exists!\,\varphi^S", dashed] \\
+& N
+\end{tikzcd}
+\end{equation}
+其中横向映射为 $m \mapsto 1 \otimes m$，且 $\varphi^S(s \otimes m) = s\varphi(m)$.
+\end{theorem}
+
+\begin{theorem}[伴随性：标量扩张左伴随于标量限制]\label{thm:base-ext-adjunction}
+设 $M$ 为 $R$-模，$N$ 为 $S$-模.由 $\varphi \mapsto \varphi^S$ 给出的映射诱导了 $S$-模同构：
+\begin{equation}
+  \Hom_R(M, \operatorname{Res}_{S/R}(N)) \cong \Hom_S(S \otimes_R M, N). \label{eq:6.6}
+\end{equation}
+\end{theorem}
+
+式~\eqref{eq:6.6} 是现代代数与代数几何中最基础的伴随同构之一，它表明函子 $S \otimes_R -$（标量扩张）是遗忘函子 $\operatorname{Res}_{S/R}$（标量限制）的左伴随函子.

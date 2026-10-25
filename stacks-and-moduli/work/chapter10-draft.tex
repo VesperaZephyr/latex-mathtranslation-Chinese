@@ -1,0 +1,85 @@
+% !TeX program = xelatex
+% Jarod Alper, Stacks and Moduli, draft dated January 5, 2026.
+% Translation in progress; see translation-status.md for exact coverage.
+\documentclass[fontsetup=font-setup-open,titlesetup=titles-setup,coverpage=frontmatter/title,coververso=frontmatter/cover-verso,geometry=a4,colors=true]{AJbook}
+\usepackage{mycommand}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc,arrows.meta,patterns,decorations.pathmorphing}
+\usepackage{booktabs,tabularx}
+\usepackage{float}
+\usepackage{needspace}
+% Keep Chapter 7-10 theorem headings and their hyperlink anchors on the same page.
+\newcommand{\chaptersevenkeepheading}[1]{\BeforeBeginEnvironment{#1}{\ifnum\value{chapter}=7\relax\Needspace{5\baselineskip}\fi\ifnum\value{chapter}=8\relax\Needspace{5\baselineskip}\fi\ifnum\value{chapter}=9\relax\Needspace{5\baselineskip}\fi\ifnum\value{chapter}=10\relax\Needspace{5\baselineskip}\fi}}
+\forcsvlist{\chaptersevenkeepheading}{definition,theorem,lemma,proposition,corollary,remark,example,exercise,construction,caution,question,properties}
+\usepackage[bookmarksnumbered=true]{hyperref}
+\usepackage{bookmark}
+\pdfstringdefDisableCommands{\def\Theta{Θ}\def\mathbb#1{#1}\def\mathcal#1{#1}\def\mathsf#1{#1}\def\phi{φ}}
+\usepackage[xindy]{imakeidx}
+\makeindex[columns=2,intoc=true,title={名词索引暨英译},options=-M texindy -I latex -C utf8 -L english,noautomatic]
+\indexsetup{othercode=\raggedcolumns}
+\addbibresource{stacks-references.bib}
+\DeclareFieldFormat{shorthandwidth}{#1}
+\newcommand{\newterm}[2]{\textit{#1} (\textup{#2})\index{#2@#1\quad #2|hyperpage}}
+\DeclareMathOperator{\Gr}{Gr}
+\DeclareMathOperator{\Hilb}{Hilb}
+\DeclareMathOperator{\Quot}{Quot}
+\DeclareMathOperator{\Hur}{Hur}
+\DeclareMathOperator{\Bun}{Bun}
+\DeclareMathOperator{\Proj}{Proj}
+\DeclareMathOperator{\im}{im}
+\newcommand{\cBun}{\mathcal{B}\!un}
+\newcommand{\Sch}{\mathsf{Sch}}
+\newcommand{\Sets}{\mathsf{Sets}}
+\newcommand{\Groupoids}{\mathsf{Groupoids}}
+\newcommand{\QCoh}{\mathsf{QCoh}}
+\newcommand{\Coh}{\underline{\mathrm{Coh}}}
+\newcommand{\Mod}{\mathsf{Mod}}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Op}{Op}
+\newcommand{\Pre}{\mathsf{Pre}}
+\newcommand{\Sh}{\mathsf{Sh}}
+% Source references resolve to translated labels once these labels exist.
+% Until then they point to the supplied English PDF, without fake translated anchors.
+\input{source-refs.tex}
+\newcommand{\bookref}[1]{\ifcsname r@src:#1\endcsname\ref{src:#1}\else\ifcsname srcpage:#1\endcsname\sourceref{#1}\else\ref{src:#1}\fi\fi}
+\newcommand{\bookeqref}[1]{(\bookref{#1})}
+\newenvironment{epigraph}{\begin{quote}\small}{\end{quote}}
+\newcommand{\epigraphauthor}[1]{\par\smallskip\hfill #1\par}
+\makeatletter
+% Explicit targets are used where shared figure numbering would reuse a float destination.
+\newcommand{\bookfiguretarget}[1]{\par\hypertarget{source-figure:#1}{}}
+\newcommand{\bookfigurehref}[1]{\def\@currentHref{source-figure:#1}}
+\AtBeginDocument{%
+  \counterwithin{theorem}{section}% original common X.Y.Z sequence
+  \counterwithin{equation}{section}% equations, figures, tables share this sequence
+  \counterwithin{figure}{section}% including section zero before section 1.1
+  \counterwithin{table}{section}%
+  \let\c@equation\c@theorem
+  \let\c@figure\c@theorem
+  \let\c@table\c@theorem
+  \renewcommand{\theequation}{\thetheorem}%
+  \renewcommand{\thefigure}{\thetheorem}%
+  \renewcommand{\thetable}{\thetheorem}%
+  \hypersetup{linkcolor=MidnightBlue,citecolor=BrickRed,urlcolor=MidnightBlue,linktoc=all,pdfborder={0 0 0},pdftitle={叠与模空间(翻译进行中)},pdfauthor={Jarod Alper}}%
+}
+\makeatother
+\AtBeginDocument{%
+\theoremstyle{plain}
+\theorembodyfont{\fangsong}
+\theoremheaderfont{\sffamily\bfseries\CJKfamily{pffont}}
+\theoremsymbol{}
+\newtheorem{properties}[theorem]{性质}
+}
+\providecommand{\sslash}{\mathbin{/\mkern-6mu/}}
+\errorcontextlines=100
+\begin{document}\mainmatter\setcounter{chapter}{9}
+\input{chapters/ch10-introduction.tex}
+\input{chapters/ch10-sec01-varieties.tex}
+\input{chapters/ch10-sec01b-ksb.tex}
+\input{chapters/ch10-sec01c-fano.tex}
+\input{chapters/ch10-sec01d-abelian.tex}
+\input{chapters/ch10-sec02-sheaves.tex}
+\input{chapters/ch10-sec02b-higgs.tex}
+\input{chapters/ch10-sec02c-g-bundles.tex}
+\input{chapters/ch10-sec02d-bridgeland.tex}
+\clearpage\end{document}

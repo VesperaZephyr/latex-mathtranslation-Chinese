@@ -1,0 +1,927 @@
+% ================================================================
+%  第 4 章 平移不变算子 (Translation invariant operators)
+%  依据原书 PDF 第 63--81 页译出；编号审计见文件末尾注释
+% ================================================================
+
+\chapter{平移不变算子}
+
+\epigraph{分析学家像猎人一样，通常待在总部打磨他的工具. 他时不时出去打猎. 但很快回到家中，继续磨快他的刀.}{Koji Ohkitani}
+
+\section{一般事实}
+
+有界可测函数 $m(\xi)$ 是空间 $L^p(\R^n)$（$1 \leq p \leq \infty$）的傅里叶\newterm{multiplier}{乘子}{multiplier}，若公式
+\begin{align*}
+  \widehat{T f}(\xi)=m(\xi)\widehat{f}(\xi),
+\end{align*}
+对 Schwartz 空间 $\mathcal{S}(\R^n)$ 中的 $f$ 定义，且有到 $L^p(\R^n)$ 的有界扩张. 这意味着存在有限常数 $C$，使
+\begin{align*}
+  \left\|T f\right\|_{p}\leq C\left\|f\right\|_{p},\qquad f\in\mathcal{S}(\R^{n}).
+\end{align*}
+这种 $C$ 的最小值称为乘子的范数，记为 $|T|_{p}$ 或 $|m|_{p}$.
+
+这些算子还可以用平移不变性来刻画，即它们与底层欧氏空间 $\R^{n}$ 的平移交换.
+
+我们回忆几个一般事实.
+
+\begin{fact}\label{fact:4.1}
+若 $T \neq 0$ 是从 $L^p(\R^n)$ 到 $L^q(\R^n)$ 的有界\newterm{translation-invariant-operator}{平移不变算子}{translation invariant operator}，则必有 $q \geq p$.
+\end{fact}
+
+\begin{proof}
+首先注意，对 $1 \leq r < \infty$，有
+\begin{align*}
+  \lim_{\|h\|\to\infty}\|\tau_{h} f+f\|_{r}=2^{1/r}\|f\|_{r},
+\end{align*}
+其中 $\tau_{h}$ 表示沿向量 $h$ 的平移:
+\begin{align*}
+  \tau_{h}f(x)=f(x-h).
+\end{align*}
+令
+\begin{align*}
+  C_{p,q}(T)=\inf\{C:\left\|T f\right\|_{q}\leq C\left\|f\right\|_{p},\ \text{对所有 } f\in L^{p}(\R^{n})\}.
+\end{align*}
+则有估计
+\begin{align*}
+  \|T(\tau_{h}f+f)\|_{q}\leq C_{p,q}(T)\|\tau_{h}f+f\|_{p},
+\end{align*}
+\begin{align*}
+  \|T(\tau_{h}f+f)\|_{q}=\|\tau_{h}(T f)+T f\|_{q}.
+\end{align*}
+令 $\|h\|\to\infty$ 取极限，得
+\begin{align*}
+  2^{1/q}\left\|Tf\right\|_{q}\leq C_{p,q}(T)\,2^{1/p}\left\|f\right\|_{p},
+  \quad\text{即}\quad
+  \left\|Tf\right\|_{q}\leq C_{p,q}(T)\,2^{1/p-1/q}\left\|f\right\|_{p},
+\end{align*}
+在 $q < p$ 的情形，这与 $C_{p,q}(T)$ 的定义矛盾.
+\end{proof}
+
+\begin{fact}\label{fact:4.2}
+若 $T: L^p(\R^n) \to L^q(\R^n)$（$q \geq p$）与平移交换，则存在缓增分布 $K \in \mathcal{S}'(\R^n)$，使对每个 $\varphi \in \mathcal{S}(\R^n)$ 都有 $T\varphi = K * \varphi$.
+\end{fact}
+
+\begin{proof}
+首先注意，若 $T$ 与平移交换，则它也与求导交换: $T(D^\alpha \varphi) = D^\alpha(T \varphi)$. 此外，Sobolev 嵌入的一个推论是: 假设对每个 $|\alpha| \leq n/q + 1$ 有 $D_x^\alpha f \in L^q(\R^n)$，则蕴含 $f$ 的连续性以及估计
+\begin{align*}
+  \|f\|_{\infty}\lesssim\sum_{|\alpha|\leq n/q+1}\|D_{x}^{\alpha}f\|_{q}.
+\end{align*}
+给定 $f \in \mathcal{S}(\R^n)$，有 $Tf(x) = T(\tau_x f)(0)$. 考虑在 $\mathcal{S}(\R^n)$ 上由公式
+\begin{align*}
+  \mathcal{L}f:=T(\tau_{x}f)(0)
+\end{align*}
+定义的线性映射. 我们有
+\begin{align*}
+  |\mathcal{L}f|=|T(\tau_{x}f)(0)|\lesssim\sum_{|\alpha|\leq n/q+1}\|D^{\alpha}T f\|_{q}
+  \lesssim\sum_{|\alpha|\leq n/q+1}\|D^{\alpha}f\|_{q}.
+\end{align*}
+但这个估计蕴含存在缓增分布 $\widetilde{K} \in \mathcal{S}'(\R^n)$，使得
+\begin{align*}
+  T f(0)=\langle\widetilde{K},f\rangle,
+\end{align*}
+即在分布意义下
+\begin{align*}
+  T f(x)=T(\tau_{x}f)(0)=\langle\widetilde{K},\tau_{x}\varphi\rangle=K*f(x),\qquad
+  K(y)=\widetilde{K}(-y).
+\end{align*}
+因此，若 $T$ 与平移交换且在某个 $L^p(\R^n)$ 上有界，则对每个 $\varphi \in \mathcal{S}(\R^n)$ 有 $\widehat{Tf} = \widehat{K}\cdot\widehat{\varphi} = m\cdot\widehat{\varphi}$，其中 $m = \widehat{K}$ 是相伴的乘子，$K \in \mathcal{S}'(\R^n)$ 是 $T$ 的核.
+
+设 $q$ 是 $p$ 的共轭指数，即 $1/p + 1/q = 1$，并假设 $T\varphi = K * \varphi$ 在 $L^p(\R^n)$ 上有界. 恒等式
+\begin{align*}
+  \int T\varphi(x)\,\psi(x)\,\mathrm{d}x=\int \varphi(x)\,T\psi(x)\,\mathrm{d}x,
+\end{align*}
+对每对 Schwartz 函数 $\varphi$ 与 $\psi$ 成立，表明 $T$ 在 $L^p(\R^n)$ 上的有界性等价于其在 $L^q(\R^n)$ 上的有界性. 于是 Riesz--Thorin 插值蕴含 $T$ 必在 $L^2(\R^n)$ 上有界，再结合 Plancherel 定理，得出 $m$ 必是有界函数:
+\begin{align*}
+  \left\|m\right\|_{\infty}=\left|m\right|_{2}=\left|T\right|_{2}.
+\end{align*}
+当乘子 $m$ 取实值时，算子 $T$ 与其伴随 $T^{*}$ 一致；但一般地，$T^{*}$ 由复共轭乘子 $\overline{m}$ 给出.
+\end{proof}
+
+\begin{fact}\label{fact:4.3}
+若乘子 $T$ 在 $L^1(\R^n)$ 或 $L^\infty(\R^n)$ 上有界，则其核 $K = \mathrm{d}\mu$ 是总变差有限的测度.
+\end{fact}
+
+\begin{proof}
+假设蕴含线性映射 $\mathcal{L}\colon\varphi\to T\varphi(0)$ 满足 $|\mathcal{L}(\varphi)|\lesssim\|\varphi\|_\infty$；Riesz 表示定理给出总变差有限的唯一测度 $\mu$，使 $T\varphi(0)=\int\varphi(y)\,\mathrm{d}\mu(y)$. 则平移不变性蕴含
+\begin{align*}
+  T\varphi(x)=\int\varphi(y-x)\,\mathrm{d}\mu(y).
+\end{align*}
+\end{proof}
+
+\begin{fact}[K. de Leew]\label{fact:4.4}
+若 $m(\xi, \eta)$（$\xi \in \R^j$，$\eta \in \R^k$）是 $L^p(\R^{j+k})$ 的傅里叶乘子，则对几乎每个 $\xi \in \R^j$，$m(\xi, \cdot)$ 是 $L^p(\R^k)$ 的傅里叶乘子；类似地，对几乎每个 $\eta \in \R^k$，$m(\cdot, \eta)$ 是 $L^p(\R^j)$ 的乘子.
+\end{fact}
+
+\begin{proof}
+首先假设 $m(\xi, \eta)$ 连续. 取函数 $f_1, g_1 \in \mathcal{S}(\R^j)$ 与 $f_2, g_2 \in \mathcal{S}(\R^k)$，有
+\begin{align*}
+  &\Big|\int_{\R^{j}}\int_{\R^{k}}m(\xi,\eta)\,\widehat{f_{1}}(\xi)\widehat{f_{2}}(\eta)\,
+   \overline{\widehat{g_{1}}(\xi)}\;\overline{\widehat{g_{2}}(\eta)}\,\mathrm{d}\xi\,\mathrm{d}\eta\Big|\\
+  &\qquad\leq|m|_{L^{p}(\R^{j+k})}\|f_{1}\|_{L^{p}(\R^{j})}\|g_{1}\|_{L^{q}(\R^{j})}
+   \|f_{2}\|_{L^{p}(\R^{k})}\|g_{2}\|_{L^{q}(\R^{k})},
+\end{align*}
+把这个不等式的左端写成
+\begin{align*}
+  \Big|\int_{\R^{j}}\Big[\int_{\R^{k}}m(\xi,\eta)\,\widehat{f}_{2}(\eta)\,\overline{\widehat{g}_{2}(\eta)}\,\mathrm{d}\eta\Big]\,
+  \widehat{f}_{1}(\xi)\,\overline{\widehat{g}_{1}(\xi)}\,\mathrm{d}\xi\Big|,
+\end{align*}
+可以得出
+\begin{align*}
+  M(\xi)=\int_{\R^{k}}m(\xi,\eta)\,\widehat{f}_{2}(\eta)\,\overline{\widehat{g}_{2}(\eta)}\,\mathrm{d}\eta
+\end{align*}
+是 $L^q(\R^j)$ 的傅里叶乘子，其范数以 $|m|_p\,\|f_2\|_p\,\|g_2\|_q$ 为界；又因每个乘子必满足 $\|M\|_{L^\infty} = |M|_2 \leq |M|_p$（$1 \leq p \leq \infty$），得
+\begin{align*}
+  \Big|\int_{\R^{k}}m(\xi,\eta)\,\widehat{f}_{2}(\eta)\,\overline{\widehat{g}_{2}(\eta)}\,\mathrm{d}\eta\Big|
+  \leq|m|_{p}\|f_{2}\|_{p}\|g_{2}\|_{q},
+\end{align*}
+这正说明对每个 $\xi \in \R^j$ 有 $|m(\xi,\cdot)|_p \leq |m|_p$. 类似地，对每个 $\eta \in \R^k$ 有 $|m(\cdot,\eta)|_p \leq |m|_p$.
+
+为去掉乘子连续性的限制，我们如下进行: 取 $\xi \in \R^j$，使 $(\xi, \eta)$ 对几乎每个 $\eta \in \R^k$ 都是 $m$ 的 Lebesgue 点，并写 $m_\varepsilon = m * \phi_\varepsilon$，其中 $\phi_\varepsilon(x, y) = \varepsilon^{-(j+k)} \chi_Q(x/\varepsilon, y/\varepsilon)$，$Q$ 是 $\R^{j+k}$ 中以原点为中心的单位方体.
+
+由前面的论证，有
+\begin{align*}
+  \Big|\int_{\R^{k}}m_{\varepsilon}(\xi,\eta)\,\widehat{f_{2}}(\eta)\,\overline{\widehat{g_{2}}(\eta)}\,\mathrm{d}\eta\Big|
+  \leq|m_{\varepsilon}|_{p}\|f_{2}\|_{p}\|g_{2}\|_{q}
+  \leq|m|_{p}\|f_{2}\|_{p}\|g_{2}\|_{q}.
+\end{align*}
+于是控制收敛定理给出
+\begin{align*}
+  \Big|\int_{\R^{k}}m(\xi,\eta)\,\widehat{f}_{2}(\eta)\,\overline{\widehat{g}_{2}(\eta)}\,\mathrm{d}\eta\Big|
+  \leq|m|_{p}\left\|f_{2}\right\|_{p}\left\|g_{2}\right\|_{q}
+\end{align*}
+对每个 $f_2 \in \mathcal{S}(\R^j)$ 与 $g_2 \in \mathcal{S}(\R^k)$ 成立，由此即可完成证明.
+\end{proof}
+
+这些事实所含的重要信息，对不同于 $1$ 或 $2$ 的 $p$ 而言仍很不令人满意. 即使对这两种情形，一般也很难判断一个\newterm{bounded-function}{有界函数}{bounded function}何时是有限测度的傅里叶变换，或者一个缓增分布何时有有界的傅里叶变换.
+
+由于可积函数的傅里叶变换是连续的，我们至少有一个 $L^{1}$-乘子的必要条件: 它必须是连续函数. 然而，$\R$ 上的希尔伯特变换，定义为
+\begin{align*}
+  H f(x)=\frac{1}{\pi}\,\mathrm{p.v.}\int_{}^{}\frac{f(x-y)}{y}\,\mathrm{d}y
+  =\frac{1}{\pi}\lim_{\varepsilon\to 0}\int_{|y|\geq\varepsilon}\frac{f(x-y)}{y}\,\mathrm{d}y,
+\end{align*}
+或等价地，对每个 $f \in \mathcal{S}(\R)$,
+\begin{align*}
+  \widehat{Hf}(\xi)=-i\,\operatorname{sign}(\xi)\widehat{f}(\xi),
+\end{align*}
+在 $L^p(\R)$（$1 < p < \infty$）上有界，这说明上述必要条件只对空间 $L^1$ 成立.
+
+\section{奇异积分（Calderón--Zygmund 理论概要）}
+
+希尔伯特变换把我们引向傅里叶乘子理论的下一阶段，其中包含 Marcinkiewicz、Calderón、Zygmund、Stein 以及许多其他人的重要贡献. 它是现代傅里叶分析的核心范式，已在若干专著中作了充分讨论. 这里我们将考虑它的几个基本构件，以激发围绕所谓圆盘乘子问题的进一步发展.
+
+下面我们将考虑\newterm{tempered-distribution}{缓增分布}{tempered distribution} $K$，其傅里叶变换 $m = \widehat{K}$ 属于 $L^\infty(\R^n)$，且 $K$ 在原点之外与一个局部可积函数（也记作 $K$）一致，满足
+\begin{align*}
+  \int_{|x|\geq 2|y|>0}|K(x-y)-K(x)|\,\mathrm{d}x\leq c<\infty,\qquad \text{对 } y \text{ 一致}.
+\end{align*}
+分布 $K$ 通过公式
+\begin{align*}
+  T f(x)=\mathrm{p.v.}\int K(x-y)f(y)\,\mathrm{d}y
+  =\lim_{\varepsilon\to 0}\int_{|y|\geq\varepsilon}f(x-y)K(y)\,\mathrm{d}y
+\end{align*}
+定义\newterm{singular-integral}{奇异积分}{singular integral}算子 $T$，它对 Schwartz 类 $\mathcal{S}(\R^n)$ 中的函数有定义.
+
+\begin{theorem}\label{thm:4.5}
+$T$ 有到空间 $L^p(\R^n)$（$1 < p < \infty$）的有界扩张.
+\end{theorem}
+
+齐次核给出一个特殊情形:
+\begin{align*}
+  K(x)=\frac{\Omega(x/\|x\|)}{\|x\|^{n}},
+\end{align*}
+其中 $\int_{S^{n-1}}\Omega(y)\,\mathrm{d}\sigma(y)=0$，且满足 Dini--Lipschitz $S^{n-1}$ 条件，即
+\begin{align*}
+  \int_{0}^{1}\frac{\omega(t)}{t}\,\mathrm{d}t<\infty,\qquad
+  \omega(t)=\sup_{\substack{|x-y|=t\\ |x|=|y|=1}}|\Omega(x)-\Omega(y)|.
+\end{align*}
+定义
+\begin{align*}
+  T_{\varepsilon}f(x)=\int_{|y|\geq\varepsilon}\frac{\Omega(y)}{|y|^{n}}f(x-y)\,\mathrm{d}y,\qquad
+  T^{*}f(x)=\sup_{\varepsilon>0}|T_{\varepsilon}f(x)|.
+\end{align*}
+
+\begin{theorem}\label{thm:4.6}
+(a) $\{T_{\varepsilon}\}_{\varepsilon>0}$ 在 $L^{p}(\R^{n})$ 上对 $1<p<\infty$ 一致有界.
+
+(b) $T^*$ 是弱型 $(1, 1)$ 的，且当 $1 < p < \infty$ 时存在 $L^p$-范数下的极限 $\lim_{\varepsilon \to 0} T_\varepsilon f = T f$.
+
+(c) 若 $f \in \mathcal{S}(\R^n)$，则 $\widehat{Tf}(\xi) = m(\xi)\widehat{f}(\xi)$，其中 $m$ 是 $0$ 次齐次函数.
+\end{theorem}
+
+给定 $\xi \in S^{n-1}$，有公式
+\begin{align*}
+  m(\xi)=\int_{S^{n-1}}\left[\frac{\pi i}{2}\operatorname{sign}(\xi\cdot\eta)+\log\left(\frac{1}{|\xi\cdot\eta|}\right)\right]\Omega(\eta)\,\mathrm{d}\sigma(\eta).
+\end{align*}
+E.~M.~Stein 的专著 \cite{b96} 含有上述定理证明的出色阐述.
+
+设 $m \in L^\infty(\R^n)$ 满足
+\begin{align*}
+  |D^{\alpha}m(\xi)|\leq C_{\alpha}|\xi|^{-|\alpha|},\qquad |\alpha|\leq[n/2]+1,
+\end{align*}
+其中 $[x]$ 表示整数部分.
+
+\begin{theorem}\label{thm:4.7}
+在上述假设下，$m$ 是 $L^p(\R^n)$（$1 < p < \infty$）上的有界傅里叶乘子.
+\end{theorem}
+
+\begin{proof}
+首先考虑半直线 $(0,\infty)$ 上的光滑单位分解 $1=\sum_{j=-\infty}^{\infty}\phi_{j}(t)$，其中 $\phi_{j}(t)=\phi(2^{-j}t)$，光滑函数 $\phi\geq 0$ 支于区间 $(1/2,5/2)$. 然后把乘子分解如下:
+\begin{align*}
+  m(\xi)=\sum_{j=-\infty}^{\infty}m(\xi)\phi_{j}(|\xi|)=\sum_{j=-\infty}^{\infty}m_{j}(\xi),
+\end{align*}
+并定义
+\begin{align*}
+  K^{N}(x)=\sum_{j=-N}^{N}\widehat{m_{j}}(x)=\sum_{j=-N}^{N}K_{j}(x).
+\end{align*}
+定理将是下列估计的推论:
+\begin{align*}
+  \int_{\left|x\right|\geq 2\left|y\right|>0}\left|K^{N}(x-y)-K^{N}(x)\right|\mathrm{d}x\le C<\infty,\qquad \text{对 } y \text{ 与 } N \text{ 一致}.
+\end{align*}
+为看出这一点，牢记关于核 $\widehat{m_j}(x)$ 的启发式``拟设'': 由测不准原理，它必须本质上支于球 $|x| \leq 2^{-j}$ 中，因为其傅里叶变换 $m_j$ 支于环 $|\xi| \sim 2^j$，且由定理假设，其各阶导数相应衰减.
+
+更具体地，对每个 $|j| \leq \log N$，考虑积分
+\begin{align*}
+  \int_{|x|\geq 2|y|>0}|K_{j}(x-y)-K_{j}(x)|\,\mathrm{d}x.
+\end{align*}
+
+情形 (a). 当 $|y| \geq 2^{-j}$ 时，不能指望差 $K_j(x - y) - K_j(x)$ 中有相消，因此必须分别估计各项.
+
+一方面，当 $|x| \leq 2^{-j}$ 时 $|K_j(x)| \lesssim 2^{jn}$. 另一方面，若 $|x| \geq 2^{-j}$,
+\begin{align*}
+  |K_{j}(x)|\lesssim|x|^{-\theta(n)}\sum_{|\alpha|=\theta(n)}
+  \Big|\int e^{-2\pi i x\cdot\xi}D_{\xi}^{\alpha}m_{j}(\xi)\,\mathrm{d}\xi\Big|,
+\end{align*}
+其中 $\theta(n) = [n/2] + 1$.
+
+于是
+\begin{align*}
+  \int_{|x|\geq 2|y|>0}|K_{j}(x)|\,\mathrm{d}x
+  &\lesssim\sum_{|\alpha|=\theta(n)}
+   \Big[\int_{|x|\geq 2|y|}\frac{1}{|x|^{2\theta(n)}}\,\mathrm{d}x\Big]^{1/2}
+   \Big[\int|D^{\alpha}_{\xi}m_{j}(\xi)|^{2}\,\mathrm{d}\xi\Big]^{1/2}\\
+  &\lesssim(|y|2^{j})^{-\theta(n)+n/2},
+\end{align*}
+然后
+\begin{align*}
+  \sum_{|y|2^{j}\geq 1}\int_{|x|>2|y|}|K_{j}(x)|\,\mathrm{d}x\leq C<\infty,\qquad \text{对 } y \text{ 一致}.
+\end{align*}
+对积分
+\begin{align*}
+  \sum_{\left|y\right|2^{j}\geq 1}\int_{\left|x\right|>2\left|y\right|}\left|K_{j}(x-y)\right|\mathrm{d}x
+\end{align*}
+有类似的估计.
+
+情形 (b). 为结束证明，必须估计当 $|y| \leq 2^{-j}$ 时积分
+\begin{align*}
+  \int_{|x|\geq 2|y|>0}|K_{j}(x-y)-K_{j}(x)|\,\mathrm{d}x
+\end{align*}
+之和. 现在期望有相消发生，使差的积分小于各项本身. 使用 Taylor 展开:
+\begin{align*}
+  \left|K_{j}(x-y)-K_{j}(x)\right|
+  &\lesssim\sum_{1\leq|\alpha|<\theta(n)}\frac{1}{\alpha!}\left|D^{\alpha}K_{j}(x)\right|\left|y^{\alpha}\right|
+   +\sum_{|\alpha|=\theta(n)}\frac{1}{\alpha!}\int_{0}^{1}\left|D^{\alpha}K_{j}(x-ty)\right|\mathrm{d}t\cdot\left|y\right|^{\theta(n)}.
+\end{align*}
+考虑典型项
+\begin{align*}
+  |D^{\alpha}K_{j}(x)|\,|y^{\alpha}|,\qquad 1\leq|\alpha|\leq\theta(n)=[n/2]+1,
+\end{align*}
+并把积分区域再次分成二进环:
+\begin{align*}
+  I_{j}^{s}(y)=\int_{2^{s}|y|\leq|x|\leq 2^{s+1}|y|}|y^{\alpha}|\,|D^{\alpha}K_{j}(x)|\,\mathrm{d}x.
+\end{align*}
+于是有两种情形:
+
+(1) 当 $2^s |y|\,2^j \leq 1$ 时，写
+\begin{align*}
+  I_{j}^{s}(y)
+  &\lesssim|y^{\alpha}|\left(2^{s}|y|\right)^{n/2}\Big(\int|\xi|^{2|\alpha|}|m_{j}(\xi)|^{2}\,\mathrm{d}\xi\Big)^{1/2}\\
+  &\lesssim|y|^{|\alpha|}\left(2^{s}|y|\right)^{n/2}2^{j|\alpha|}2^{jn/2}
+  =\left(|y|2^{j}\right)^{|\alpha|}\left(2^{s}|y|2^{j}\right)^{n/2},
+\end{align*}
+由此得估计
+\begin{align*}
+  \sum_{\substack{|y|\leq 2^{-j}\\ 2^{s}|y|2^{j}\leq 1}}I_{j}^{s}(y)<\infty,\qquad \text{对 } y \text{ 一致}.
+\end{align*}
+
+(2) 为结束证明，处理情形 $1 \leq 2^s |y|\,2^j$. 有
+\begin{align*}
+  D^{\alpha}K_{j}(x)=\frac{1}{(2\pi i x)^{\beta}}\int e^{2\pi i x\cdot\xi}D^{\beta}(\xi^{\alpha}m_{j}(\xi))\,\mathrm{d}\xi.
+\end{align*}
+因此,
+\begin{align*}
+  |D^{\alpha}K_{j}(x)|\lesssim\sum_{|\beta|=\theta(n)}\frac{1}{|x|^{\theta(n)}}
+  \Big|\int e^{2\pi i x\cdot\xi}D^{\beta}(\xi^{\alpha}m_{j}(\xi))\,\mathrm{d}\xi\Big|.
+\end{align*}
+于是
+\begin{align*}
+  I_{s}^{j}(y)
+  &=\int_{2^{s}|y|\leq|x|\leq 2^{s+1}|y|}|y|^{|\alpha|}\left|D^{\alpha}K_{j}(x)\right|\mathrm{d}x\\
+  &\lesssim|y|^{|\alpha|}\sum_{|\beta|=\theta(n)}
+   \Big[\int_{2^{s}|y|\leq|x|\leq 2^{s+1}|y|}\frac{1}{|x|^{2\theta(n)}}\,\mathrm{d}x\Big]^{1/2}
+   \Big[\int|D^{\beta}(\xi^{\alpha}m_{j}(\xi))|^{2}\,\mathrm{d}\xi\Big]^{1/2}\\
+  &\lesssim(|y|2^{j})^{|\alpha|}\frac{(2^{s}|y|2^{j})^{n/2}}{(2^{s}|y|2^{j})^{\theta(n)}},
+\end{align*}
+而由于我们处于 $|y|2^j < 1$，$2^s |y|2^j > 1$ 且 $\theta(n) > n/2$ 的区间，可以结束证明.
+\end{proof}
+
+接下来考虑满足下列条件的光滑函数族 $\{\phi_j\}_{j\in\Z}$:
+\begin{align*}
+  \supp(\phi_{j})\subset(2^{j-1},2^{j+1}),\qquad
+  |D^{\alpha}\phi_{j}(\xi)|\leq C_{\alpha}2^{-j|\alpha|},\quad |\alpha|\leq\theta(n).
+\end{align*}
+用 $\{r_j(t)\}$ 表示区间 $[0,1]$ 上的 Rademacher 函数集，有下面的乘子集:
+\begin{align*}
+  m_{t}(\xi)=\sum_{j}r_{j}(t)\phi_{j}(|\xi|),\qquad
+  T_{t}f(x)=\sum_{j}r_{j}(t)T_{j}f(x),\qquad
+  \widehat{T_{j}f}(\xi)=\phi_{j}(|\xi|)\widehat{f}(\xi).
+\end{align*}
+可以应用定理 4.7 得到对 $t \in [0,1]$ 一致的 $L^p$-界:
+\begin{align*}
+  \int|T_{t}f(x)|^{p}\,\mathrm{d}x\leq C_{p}\int|f(x)|^{p}\,\mathrm{d}x,\quad 1<p<\infty.
+\end{align*}
+接着把这个不等式在区间 $t \in [0,1]$ 上积分，并利用 Rademacher 函数满足的著名 Khintchine 估计:
+\begin{align*}
+  \int_{0}^{1}\int|T_{t}f(x)|^{p}\,\mathrm{d}x\,\mathrm{d}t
+  =\int\int_{0}^{1}|T_{t}f(x)|^{p}\,\mathrm{d}x\,\mathrm{d}t
+  \simeq\int\Big(\sum_{j}|T_{j}f(x)|^{2}\Big)^{p/2}\mathrm{d}x,
+\end{align*}
+其中 $1 < p < \infty$，由此得估计:
+\begin{align*}
+  \left\|\left(\sum_{j}|T_{j}f|^{2}\right)^{1/2}\right\|_{p}\leq C_{p}\left\|f\right\|_{p}.
+\end{align*}
+
+现在假设 $\sum_j \phi_j(|\xi|) \equiv 1$，并设 $\psi_j$ 是支于 $(2^{j-2}, 2^{j+2})$ 的光滑函数，使 $\psi_j \equiv 1$ 于 $\supp(\phi_j)$，且对 $|\alpha| \leq \theta(n)$ 有 $|D^\alpha \psi_j(\xi)| \leq C_\alpha |\xi|^{-|\alpha|}$.
+
+给定 Schwartz 类 $\mathcal{S}(\R^{n})$ 中的 $f$ 与 $g$，有
+\begin{align*}
+  \int f(x)\overline{g(x)}\,\mathrm{d}x
+  &=\int\widehat{f}(\xi)\overline{\widehat{g}(\xi)}\,\mathrm{d}\xi
+  =\sum_{j}\int\phi_{j}(\xi)\widehat{f}(\xi)\overline{\psi_{j}(\xi)}\;\overline{\widehat{g}(\xi)}\,\mathrm{d}\xi\\
+  &\leq\int\Big(\sum_{j}|T_{j} f(x)|^{2}\Big)^{1/2}\Big(\sum_{j}|\widetilde{T}_{j} g(x)|^{2}\Big)^{1/2}\mathrm{d}x\\
+  &\leq\Big\|\Big(\sum_{j}|T_{j} f|^{2}\Big)^{1/2}\Big\|_{p}\Big\|\Big(\sum_{j}|\widetilde{T}_{j} g|^{2}\Big)^{1/2}\Big\|_{q},
+\end{align*}
+其中
+\begin{align*}
+  \widehat{T_{j}g}(\xi)=\psi_{j}(\xi)\widehat{g}(\xi).
+\end{align*}
+由于我们知道
+\begin{align*}
+  \left\|\Big(\sum_{j}|\widetilde{T}_{j}g|^{2}\Big)^{1/2}\right\|_{q}\leq C_{q}\left\|g\right\|_{q},
+\end{align*}
+可以得出结论:
+
+\begin{corollary}[Littlewood--Paley]\label{cor:4.8}
+在上述假设下，有范数等价
+\begin{align*}
+  \left\|\Big(\sum_{j}|T_{j}f|^{2}\Big)^{1/2}\right\|_{p}\simeq\|f\|_{p},\qquad 1<p<\infty.
+\end{align*}
+\end{corollary}
+
+\section{Hardy--Littlewood 极大函数的加权不等式}
+
+下面我们将考虑奇异积分与极大算子关于绝对连续测度 $\omega(x)\,\mathrm{d}x$ 的有界性，其中 $\mathrm{d}x$ 照例是 $\R^n$ 中的 Lebesgue 测度.
+
+这一主题的历史始于 Helson 与 Szegő 1960 年的论文 \cite{b90}，其中证明了: 希尔伯特变换在 $L^2(\mathrm{d}\mu)$ 上有界，当且仅当
+\begin{align*}
+  \mathrm{d}\mu=\omega(x)\,\mathrm{d}x,\qquad
+  \omega=\exp(u+H v),
+\end{align*}
+其中 $u$ 与 $v$ 是满足 $\|v\|_\infty < \pi/2$ 的 $L^\infty$-函数.
+
+Hardy 不等式:
+\begin{align*}
+  \Big[\int_{0}^{\infty}\Big|\int_{0}^{x}f(y)\,\mathrm{d}y\Big|^{p}x^{-r-1}\,\mathrm{d}x\Big]^{1/p}
+  \leq\frac{p}{r}\Big[\int_{0}^{\infty}|y f(y)|^{p}y^{r-1}\,\mathrm{d}y\Big]^{1/p},
+\end{align*}
+也可以视为现代理论的一个先例. 然后有下面的定理，见 \cite{b89}.
+
+\begin{theorem}[C. Fefferman--Stein]\label{thm:4.9}
+对每个 $r > 1$，存在有限常数 $C_r(n)$，使得
+\begin{align*}
+  \int_{\R^{n}}[Mf(x)]^{r}\omega(x)\,\mathrm{d}x\leq C_{r}(n)\int_{\R^{n}}|f(x)|^{r}M\omega(x)\,\mathrm{d}x
+\end{align*}
+对每对局部可积函数 $f$ 与 $\omega$ 成立，其中 $M$ 表示 Hardy--Littlewood 极大函数.
+\end{theorem}
+
+此外，还有下面的弱型不等式:
+\begin{align*}
+  \int_{\left\{M f>\alpha\right\}}\omega(x)\,\mathrm{d}x\lesssim\frac{1}{\alpha}\int_{\R^{n}}\left|f(x)\right|M\omega(x)\,\mathrm{d}x.
+\end{align*}
+
+\begin{proof}
+由于 $f \to Mf$ 从 $L^\infty(\omega(x)\,\mathrm{d}x)$ 到 $L^\infty(\omega(x)\,\mathrm{d}x)$ 有界，只须证明弱型估计，因为 Marcinkiewicz 插值定理将提供其余情形.
+
+固定 $\R^n$ 的一个二进方体分解 $\{Q_\nu^k\}$，其中
+\begin{align*}
+  \ell(Q_{\nu}^{k})=2^{k},\qquad \nu\in\Z^{n},
+\end{align*}
+并注意到给定方体 $Q$，恰有 $2^n$ 个二进方体 $Q_\nu^k$ 满足
+\begin{align*}
+  \ell(Q)\leq\ell(Q_{\nu}^{k})\leq 2\ell(Q),\qquad Q\cap Q_{\nu}^{k}\neq\emptyset.
+\end{align*}
+不等式
+\begin{align*}
+  \frac{1}{\left|Q\right|}\int_{Q}\left|f(y)\right|\,\mathrm{d}y\geq\alpha
+\end{align*}
+蕴含与 $Q$ 相关联的那 $2^{n}$ 个二进方体中至少有一个满足
+\begin{align*}
+  \frac{1}{\left|Q_{\nu}\right|}\int_{Q_{\nu}}\left|f(y)\right|\,\mathrm{d}y\geq\frac{\alpha}{4^{n}}.
+\end{align*}
+此外，有包含关系 $Q \subset Q_\nu^*$，其中 $Q_\nu^*$ 是与 $Q_\nu$ 同心且 $\ell(Q_\nu^*) = 3\ell(Q_\nu)$ 的方体.
+
+标准覆盖论证给出 $\{Mf > \alpha\} \subset \bigcup_\nu Q_\nu^*$，其中 $Q_\nu$ 是不交的二进方体. 则
+\begin{align*}
+  \int_{\left\{M f>\alpha\right\}}\omega(x)\,\mathrm{d}x
+  &\leq\sum_{\nu}\int_{Q_{\nu}^{*}}\omega
+  \leq\sum_{\nu}\frac{1}{\left|Q_{\nu}^{*}\right|}\int_{Q_{\nu}^{*}}\omega\cdot 3^{n}|Q_{\nu}|\\
+  &\leq(12)^{n}\frac{1}{\alpha}\sum_{\nu}\Big(\frac{1}{\left|Q_{\nu}^{*}\right|}\int_{Q_{\nu}^{*}}\omega\Big)\int_{Q_{\nu}}\left|f(y)\right|\,\mathrm{d}y\\
+  &\leq(12)^{n}\frac{1}{\alpha}\sum_{\nu}\int_{Q_{\nu}}\left|f(y)\right|M\omega(y)\,\mathrm{d}y
+  \lesssim\frac{1}{\alpha}\int\left|f(y)\right|M\omega(y)\,\mathrm{d}y.
+\end{align*}
+这里我们再次用 $|E|$ 表示集合 $E \subset \R^n$ 的 Lebesgue 测度.
+\end{proof}
+
+\begin{corollary}\label{cor:4.10}
+若局部可积函数 $\omega$ 对几乎每个 $x \in \R^n$ 满足 $M\omega(x) \leq C\omega(x)$，则对一般可测函数 $f$ 有
+\begin{align*}
+  \int_{\R^{n}}\left|M f(x)\right|^{r}\omega(x)\,\mathrm{d}x\lesssim\int_{\R^{n}}\left|f(x)\right|^{r}\omega(x)\,\mathrm{d}x.
+\end{align*}
+\end{corollary}
+
+\begin{definition}\label{def:4.11}
+\newterm{weight}{权重}{weight} $w$ 属于类 $A_1$，当且仅当存在有限常数 $C$，使对几乎每个 $x \in \R^n$ 有 $M\omega(x) \leq C\omega(x)$. 上式中的最小 $C$ 称为\termcn{权常数}.
+\end{definition}
+
+\begin{proposition}\label{prop:4.12}
+对每个局部可积函数 $\omega$ 与 $r > 1$，函数 $[M(\omega^r)(x)]^{1/r}$ 属于类 $A_1$，其常数与 $\omega$ 无关地有界.
+\end{proposition}
+
+\begin{proof}
+设 $Q$ 是含点 $x$ 的方体，$Q^*$ 是其以因子 $3$ 扩张的版本. 用 $M_{Q^*}$ 表示限制在 $Q^*$ 的子方体平均上的 Hardy--Littlewood 极大函数. 对每个 $s$，$0 < s < 1$，有不等式
+\begin{align*}
+  \left(\frac{1}{\left|Q^{*}\right|}\int_{Q^{*}}\left[M_{Q^{*}}f(x)\right]^{s}\mathrm{d}x\right)^{1/s}
+  \leq C_{s}(n)\frac{1}{\left|Q^{*}\right|}\int_{Q^{*}}\left|f(x)\right|\mathrm{d}x,
+\end{align*}
+其中有限常数 $C_{s}(n)$ 只依赖于 $s$ 与维数 $n$.
+
+定义集合
+\begin{align*}
+  E=\big\{y\in Q:[M\omega^{r}(y)]^{1/r}=[M_{Q^{*}}\omega^{r}(y)]^{1/r}\big\},
+\end{align*}
+并注意在其补集 $Q \setminus E$ 内部，有
+\begin{align*}
+  \sup_{y\in Q\setminus E}[M\omega^{r}(y)]^{1/r}\lesssim\inf_{y\in Q\setminus E}[M\omega^{r}(y)]^{1/r}
+  \lesssim[M\omega^{r}(x)]^{1/r}.
+\end{align*}
+于是
+\begin{align*}
+  \frac{1}{|Q|}\int_{Q}[M\omega^{r}(y)]^{1/r}\,\mathrm{d}y
+  &\lesssim\frac{1}{|Q^{*}|}\int_{Q^{*}}[M\omega^{r}(y)]^{1/r}\,\mathrm{d}y
+   +\frac{1}{|Q|}\int_{Q\setminus E}[M\omega^{r}(y)]^{1/r}\,\mathrm{d}y\\
+  &\lesssim\left[\frac{1}{|Q^{*}|}\int_{Q^{*}}\omega^{r}(y)\,\mathrm{d}y\right]^{1/r}
+   +[M\omega^{r}(x)]^{1/r}.
+\end{align*}
+在上式中对所有含点 $x$ 的方体 $Q$ 取上确界，得到
+\begin{align*}
+  M[M\omega^{r}(x)]^{1/r}\approx[M\omega^{r}(x)]^{1/r}.
+\end{align*}
+于是我们证明了: 若 $\omega \in A_1$，则 Hardy--Littlewood 极大函数关于测度 $\omega(x)\,\mathrm{d}x$ 是弱型 $(1, 1)$ 的. 这个陈述有一个逆命题:
+\end{proof}
+
+\begin{theorem}\label{thm:4.13}
+若 $M$ 关于 $\omega(x)\,\mathrm{d}x$ 是弱型 $(1,1)$ 的，则 $\omega \in A_1$.
+\end{theorem}
+
+\begin{proof}
+设 $x \in Q_1 \subset Q_2$，其中 $Q_1$ 与 $Q_2$ 是 $\R^n$ 中的方体，$x$ 是 $\omega$ 的 Lebesgue 点. 取 $f = \chi_{Q_1}$，有
+\begin{align*}
+  Mf(z)\geq\frac{|Q_{1}|}{|Q_{2}|},\qquad z\in Q_{2}.
+\end{align*}
+因此,
+\begin{align*}
+  \int_{Q_{2}}\omega\leq\int_{\left\{M f>|Q_{1}|/|Q_{2}|\right\}}\omega
+  \leq C\frac{|Q_{2}|}{|Q_{1}|}\int_{Q_{1}}\omega,
+\end{align*}
+即
+\begin{align*}
+  \frac{1}{\left|Q_{2}\right|}\int_{Q_{2}}\omega\leq C\frac{1}{\left|Q_{1}\right|}\int_{Q_{1}}\omega,
+\end{align*}
+令 $Q_1 \Rightarrow x$ 取极限，得
+\begin{align*}
+  \frac{1}{\left|Q_{2}\right|}\int_{Q_{2}}\omega\leq C\omega(x),
+\end{align*}
+从而
+\begin{align*}
+  M\omega(x)\leq C\omega(x),
+\end{align*}
+即 $\omega \in A_1$.
+\end{proof}
+
+\begin{definition}\label{def:4.14}
+非负的 $w$ 属于类 $A_p$（$1 < p < \infty$），若存在有限常数 $C$，使
+\begin{align*}
+  \sup_{Q}\left[\frac{1}{|Q|}\int_{Q}\omega\right]
+  \left[\frac{1}{|Q|}\int_{Q}\omega^{-1/(p-1)}\right]^{p-1}\leq C.
+\end{align*}
+\end{definition}
+
+\begin{theorem}\label{thm:4.15}
+Hardy--Littlewood 极大函数在 $L^p(\omega(x)\,\mathrm{d}x)$ 上有界，当且仅当 $\omega \in A_p$.
+\end{theorem}
+
+\begin{proof}
+（$\Rightarrow$）首先假设 $M$ 在 $L^p(\omega\,\mathrm{d}x)$ 上有界. 给定方体 $Q$，有
+\begin{align*}
+  M(f\chi_{Q})(x)\geq\frac{1}{|Q|}\int_{Q}\left|f(y)\right|\,\mathrm{d}y\cdot\chi_{Q}(x).
+\end{align*}
+于是
+\begin{align*}
+  \left[\frac{1}{\left|Q\right|}\int_{Q}\left|f(y)\right|\,\mathrm{d}y\right]^{p}\int_{Q}\omega
+  \leq C\int\left|f(x)\right|^{p}\omega(x)\,\mathrm{d}x
+\end{align*}
+对每个 $f$ 成立. 取
+\begin{align*}
+  f=\omega^{-1/(p-1)},
+\end{align*}
+得到
+\begin{align*}
+  \left[\frac{1}{\left|Q\right|}\int_{Q}\omega^{-1/(p-1)}\right]^{p}\int_{Q}\omega
+  \leq C\int_{Q}\omega^{-1/(p-1)}(x)\,\mathrm{d}x.
+\end{align*}
+
+（$\Leftarrow$）现在假设 $\omega \in A_p$，$1 < p < \infty$，设 $q$ 是 $p$ 的共轭指数，即 $1/p + 1/q = 1$. 对每个局部可积函数 $f$，有
+\begin{align*}
+  \frac{1}{|Q|}\int_{Q}|f|
+  &\leq\Big[\frac{1}{|Q|}\int_{Q}|f|^{p}\omega\Big]^{1/p}
+   \Big[\frac{1}{|Q|}\int_{Q}\omega^{-q/p}\Big]^{1/q}\\
+  &=\Big[\frac{1}{|Q|}\int_{Q}|f|^{p}\omega\Big]^{1/p}
+   \Big[\frac{1}{|Q|}\int_{Q}\omega^{-1/(p-1)}\Big]^{(p-1)/p}
+  \leq\frac{1}{\int_{Q}\omega}\Big[\int_{Q}|f|^{p}\omega\Big]^{1/p},
+\end{align*}
+即
+\begin{align*}
+  M f(x)\lesssim[M_{\omega}f^{p}(x)]^{1/p},
+\end{align*}
+其中
+\begin{align*}
+  M_{\omega}g(x)=\sup_{Q\ni x}\frac{1}{\int_{Q}\omega}\int_{Q}|g(x)|\omega(x)\,\mathrm{d}x.
+\end{align*}
+定理将是下列引理的推论.
+\end{proof}
+
+\begin{lemma}\label{lem:4.16}
+(i) 假设 $\mu = \omega\,\mathrm{d}x$ 是倍数的，即存在有限常数 $C$，使对每个方体 $Q$ 有 $\mu(Q^*) \leq C\mu(Q)$. 则 $M_\mu f$ 在 $L^p(\mu)$ 上有界.
+
+(ii) 若在极大函数的定义中限于二进方体，则无需倍数假设，(i) 的结论仍成立.
+\end{lemma}
+
+\begin{proof}
+证明与 $\mu$ 为 $\R^n$ 中 Lebesgue 测度的情形相同. 注意此引理蕴含: 对 $\omega \in A_p$，极大函数对每个 $r > p$ 在 $L^r(\omega\,\mathrm{d}x)$ 上有界.
+\end{proof}
+
+\begin{lemma}\label{lem:4.17}
+给定 $\omega \in A_p$，$p > 1$，有
+
+(i) $\omega \in A_{\infty}$，即存在 $r > 0$，使若 $E \subset Q$（$E$ 可测，$Q$ 是方体），则
+\begin{align*}
+  \frac{\mu(E)}{\mu(Q)}\leq C\Big[\frac{|E|}{|Q|}\Big]^{r},
+\end{align*}
+其中 $\mu = \omega\,\mathrm{d}x$，$|E|$ 表示 Lebesgue 测度，$C < \infty$ 是普适常数；
+
+(ii) 存在 $\varepsilon > 0$，使 $\omega \in A_{p-\varepsilon}$.
+\end{lemma}
+
+\begin{lemma}\label{lem:4.18}
+给定 $\omega \in A_p$，存在 $\delta > 0$ 与有限常数 $C$，使对每个方体 $Q$，下列逆 Hölder 不等式成立:
+\begin{align*}
+  \Big[\frac{1}{|Q|}\int_{Q}\omega^{1+\delta}\Big]^{1/(1+\delta)}
+  \leq C\frac{1}{|Q|}\int_{Q}\omega.
+\end{align*}
+\end{lemma}
+
+\begin{proof}[引理~\ref{lem:4.18} $\Rightarrow$ 引理~\ref{lem:4.17} 的证明]
+(i) 我们有
+\begin{align*}
+  \mu(E)=\int_{E}\omega
+  \leq\left(\frac{1}{|Q|}\int_{Q}\omega^{1+\delta}\right)^{1/(1+\delta)}
+  |E|^{\delta/(1+\delta)}|Q|^{1/(1+\delta)}
+  \lesssim\frac{1}{|Q|}\int_{Q}\omega\;|E|^{\delta/(1+\delta)}|Q|^{1/(1+\delta)},
+\end{align*}
+即
+\begin{align*}
+  \frac{\mu(E)}{\mu(Q)}\lesssim\Big[\frac{|E|}{|Q|}\Big]^{\delta/(1+\delta)}.
+\end{align*}
+
+(ii) 给定 $\omega \in A_p$，有
+\begin{align*}
+  v=\omega^{-1/(p-1)}\in A_{q},
+\end{align*}
+其中 $q$ 满足 $1/p + 1/q = 1$. 于是引理 4.18 给出
+\begin{align*}
+  \left[\frac{1}{\left|Q\right|}\int_{Q}v^{1+\delta}\right]^{1/(1+\delta)}
+  \lesssim\frac{1}{\left|Q\right|}\int_{Q}v(x)\,\mathrm{d}x
+\end{align*}
+对某个 $\delta > 0$ 成立，这蕴含 $\omega \in A_{p-\varepsilon}$，其中 $\varepsilon = (p-1)\frac{\delta}{1+\delta}$. 这是因为
+\begin{align*}
+  &\left[\frac{1}{|Q|}\int_{Q}\omega\right]
+   \left[\frac{1}{|Q|}\int_{Q}\omega^{-(1+\delta)/(p-1)}\right]^{(p-1)/(1+\delta)}\\
+  &\qquad\lesssim\left[\frac{1}{|Q|}\int_{Q}v^{-1/(q-1)}\right]^{q-1}
+   \left[\frac{1}{|Q|}\int_{Q}v^{1+\delta}\right]^{1/(1+\delta)}\\
+  &\qquad\lesssim\left[\frac{1}{|Q|}\int_{Q}v^{-1/(q-1)}\right]^{q-1}
+   \left[\frac{1}{|Q|}\int_{Q}v\right]\leq C<\infty.
+\end{align*}
+\end{proof}
+
+还剩下引理 4.18 要证，为此先作如下的:
+
+\begin{claim*}
+给定 $w \in A_p$，存在常数 $\tau$，$0 < \tau < 1$，使得若 $E \subset Q$ 满足 $|E| \leq \frac{1}{2}|Q|$，则 $\mu(E) \leq \tau\mu(Q)$.
+\end{claim*}
+
+\begin{proof}[断言的证明]
+对任何 $x \in Q$，限制在 $Q$ 的子方体上的极大函数 $M_Q$ 满足
+\begin{align*}
+  M_{Q}(\chi_{Q\setminus E})\geq\frac{|Q\setminus E|}{|Q|}\geq\frac{1}{2}.
+\end{align*}
+设 $p_{1} > p$. 有
+\begin{align*}
+  \left(\frac{1}{2}\right)^{p_{1}}\int_{Q}\omega
+  \lesssim\int\left[M_{Q}(\chi_{Q\setminus E})(x)\right]^{p_{1}}\omega(x)\,\mathrm{d}x
+  \lesssim\int_{Q}\chi_{Q\setminus E}(x)\omega(x)\,\mathrm{d}x.
+\end{align*}
+即
+\begin{align*}
+  \int_{Q}\omega\leq C\int_{Q\setminus E}\omega
+\end{align*}
+对某个有限常数 $C$ 成立. 因此,
+\begin{align*}
+  \int_{E}\omega=\int_{Q}\omega-\int_{Q\setminus E}\omega
+  \leq\left(1-\frac{1}{C}\right)\int_{Q}\omega=\tau\int_{Q}\omega,
+\end{align*}
+其中 $\tau = 1 - 1/C$.
+\end{proof}
+
+\begin{proof}[引理~\ref{lem:4.18} 证明的完成]
+利用估计的膨胀不变性，并把 $\omega$ 乘上适当的实数，不失一般性可设 $|Q| = 1$ 且 $\int_Q \omega = 1$.
+
+用引理 4.16，对每个 $\lambda_k = 2^{(n+1)k}$ 找到一族 $Q \subset \R^n$ 的二进子方体 $\{Q_j^k\}$，使
+\begin{align*}
+  2^{(n+1)k}\leq\omega_{Q_{j}^{k}}=\frac{1}{|Q_{j}^{k}|}\int_{Q_{j}^{k}}\omega
+  \leq 2^{(n+1)k+n},\qquad \text{对每个 } j,
+\end{align*}
+且
+\begin{align*}
+  \omega(x)\leq 2^{(n+1)k},\qquad \text{a.e.}\ x\in D_{k}^{c}=Q\setminus\bigcup_{j}Q_{j}^{k}.
+\end{align*}
+容易看出，族 $\{Q_j^{k+1}\}$ 中每个方体都是前一代某个 $Q_i^k$ 的子方体，且
+\begin{align*}
+  |Q_{i}^{k}\cap D_{k+1}|<\frac{1}{2}|Q_{i}^{k}|
+\end{align*}
+对第 $k$ 代的每个方体成立，于是
+\begin{align*}
+  |D_{k}\cap D_{k+1}|\leq\frac{1}{2}|D_{k}|.
+\end{align*}
+因此，由上述断言，有估计:
+\begin{align*}
+  \int_{D_{k}}\omega\leq\tau\int_{D_{k-1}}\omega\leq\tau^{k}\int_{D_{0}}\omega,\qquad 0<\tau<1,
+\end{align*}
+以及
+\begin{align*}
+  \int_{Q}\omega^{1+\delta}
+  &=\int_{Q\setminus D_{0}}\omega^{1+\delta}
+   +\sum_{k=0}^{\infty}\Big[\int_{D_{k}\setminus D_{k-1}}\omega(x)\,\mathrm{d}x\Big]2^{(n+1)(k+1)\delta}\\
+  &\leq 2^{\delta}+\sum_{k=0}^{\infty}\tau^{k}\left(2^{(n+1)\delta}\right)^{k}2^{(n+1)\delta},
+\end{align*}
+它对某个 $\delta > 0$ 收敛.
+\end{proof}
+
+\section{奇异积分的加权不等式}
+
+现在引入``sharp 函数算子''是方便的，它对局部可积函数 $f$ 由下列公式定义:
+\begin{align*}
+  f^{\#}(x)=\sup_{x\in Q}\frac{1}{|Q|}\int_{Q}\left|f(y)-f_{Q}\right|\,\mathrm{d}y,
+\end{align*}
+其中对每个方体 $Q$,
+\begin{align*}
+  f_{Q}=\frac{1}{|Q|}\int_{Q}f(y)\,\mathrm{d}y.
+\end{align*}
+
+\begin{theorem}\label{thm:4.19}
+给定 $\omega \in A_\infty$ 与 $f \in \bigcup_{1<p<\infty} L^p(\R^n)$，有不等式
+\begin{align*}
+  \int_{\R^{n}}(M f(x))^{p}\omega(x)\,\mathrm{d}x
+  \leq C(p,\omega)\int_{\R^{n}}(f^{\sharp}(x))^{p}\omega(x)\,\mathrm{d}x,
+\end{align*}
+其中 $C(p, \omega) < \infty$，$M$ 是 Hardy--Littlewood 极大算子.
+\end{theorem}
+
+\begin{proof}
+证明将基于下列估计:
+\begin{equation}\label{eq:4.1}
+  \mu(\{M F(x)>\alpha,\;F^{\sharp}(x)<\gamma\alpha\})
+  \leq C\gamma^{\delta}\mu(\{M F(x)>\alpha/2^{n+1}\}),
+\end{equation}
+它对每个 $\gamma, \alpha > 0$ 成立，其中 $C < \infty$ 是有限常数，与 $\gamma$、$\alpha$ 和 $F$ 无关；$\delta > 0$ 由 $\omega$ 的 $A_\infty$ 性质给出:
+\begin{align*}
+  \frac{\mu(E)}{\mu(Q)}\leq\Bigl[\frac{|E|}{|Q|}\Bigr]^{\delta},
+\end{align*}
+照例 $M$ 表示 Hardy--Littlewood 极大函数.
+
+首先证明 \eqref{eq:4.1} 蕴含定理:
+\begin{align*}
+  &\int_{\R^{n}}[Mf(x)]^{p}\omega(x)\,\mathrm{d}x
+  =p\int_{0}^{\infty}\alpha^{p-1}\mu(\{Mf(x)>\alpha\})\,\mathrm{d}\alpha\\
+  &\quad\leq p\int_{0}^{\infty}\alpha^{p-1}\mu(\{Mf(x)>\alpha,\;f^{\sharp}(x)<\gamma\alpha\})\,\mathrm{d}\alpha
+   +p\int_{0}^{\infty}\alpha^{p-1}\mu(\{f^{\sharp}(x)>\gamma\alpha\})\,\mathrm{d}\alpha\\
+  &\quad\leq pC\int_{0}^{\infty}\alpha^{p-1}\mu(\{Mf>\alpha/2^{n+1}\})\,\mathrm{d}\alpha\cdot\gamma^{\delta}
+   +p\int_{0}^{\infty}\alpha^{p-1}\mu(\{f^{\sharp}>\gamma\alpha\})\,\mathrm{d}\alpha\\
+  &\quad\leq pC\gamma^{\delta}2^{(n+1)(p-1)}2^{n+1}\int_{0}^{\infty}\alpha^{p-1}\mu(\{Mf>\alpha\})\,\mathrm{d}\alpha
+   +p\left(\frac{1}{\gamma}\right)^{p}\int_{0}^{\infty}\alpha^{p-1}\mu(\{f^{\sharp}>\alpha\})\,\mathrm{d}\alpha\\
+  &\quad\leq C\gamma^{\delta}2^{(n+1)p}\int_{\R^{n}}[Mf(x)]^{p}\omega(x)\,\mathrm{d}x
+   +\frac{1}{\gamma^{p}}\int_{\R^{n}}[f^{\sharp}(x)]^{p}\omega(x)\,\mathrm{d}x,
+\end{align*}
+取足够小的 $\gamma$ 使 $C\gamma^{\delta}2^{(n+1)p} \leq 1/2$，即得定理.
+
+为结束证明，我们来证 \eqref{eq:4.1}.
+
+如前，设 $\{Q_i^0\}$ 是 $\R^n$ 的不交二进方体族，满足
+\begin{align*}
+  \frac{\alpha}{2^{n+1}}\leq f_{Q_{j}^{0}}<2^{n}\frac{\alpha}{2^{n+1}}=\frac{\alpha}{2},
+\end{align*}
+并考虑对应停时
+\begin{align*}
+  \alpha\leq f_{Q_{k}^{1}}<2^{n}\alpha
+\end{align*}
+的二进方体类 $\{Q_k^1\}$. 由于我们知道每个 $Q_k^1$ 是某个 $Q_j^0$ 的子方体，只须证明对每个 $j$ 下列不等式成立:
+\begin{align*}
+  \mu(\{x\in Q_{j}^{0}:M f(x)>\alpha,\;f^{\sharp}(x)<\gamma\alpha\})
+  \leq c\gamma^{\delta}\mu(Q_{j}^{0}).
+\end{align*}
+此外，利用条件 $A_{\infty}$，只须证明对 Lebesgue 测度有下列估计:
+\begin{align*}
+  |\{x\in Q_{j}^{0}:M f(x)>\alpha,\;f^{\sharp}(x)<\gamma\alpha\}|\leq\gamma|Q_{j}^{0}|.
+\end{align*}
+为看出这一点，对每个 $Q_j^0$ 考虑包含于其内的下一代的成员. 有两种可能:
+
+(1) 若
+\begin{align*}
+  \frac{1}{\left|Q_{j}^{0}\right|}\int_{Q_{j}^{0}}\left|f-f_{Q_{j}^{0}}\right|\geq\gamma\alpha,
+\end{align*}
+则集合 $\{x \in Q_j^0 : M f(x) > \alpha,\ f^\sharp(x) < \gamma \alpha\}$ 是空的，无事可证.
+
+(2) 否则，有
+\begin{align*}
+  \gamma\alpha
+  &>\frac{1}{\left|Q_{j}^{0}\right|}\int_{Q_{j}^{0}}\left|f-f_{Q_{j}^{0}}\right|
+  \geq\frac{1}{\left|Q_{j}^{0}\right|}\sum_{Q_{k}^{1}\subset Q_{j}^{0}}\int_{Q_{k}^{1}}\left|f-f_{Q_{j}^{0}}\right|\\
+  &\geq\frac{1}{\left|Q_{j}^{0}\right|}\sum_{Q_{k}^{1}\subset Q_{j}^{0}}\left|Q_{k}^{1}\right|\left|f_{Q_{k}^{1}}-f_{Q_{j}^{0}}\right|
+  \geq\frac{\alpha}{2}\sum_{Q_{k}^{1}\subset Q_{j}^{0}}\frac{\left|Q_{k}^{1}\right|}{\left|Q_{j}^{0}\right|},
+\end{align*}
+由此即得所求估计，因为
+\begin{align*}
+  \bigcup_{k}Q_{k}^{1}\supset\{x\in Q_{j}^{0}:M f(x)>\alpha\}.
+\end{align*}
+\end{proof}
+
+设 $Tf = (\mathrm{p.v.}\ K) * f$ 是满足下列条件的奇异积分算子:
+\begin{align*}
+  \widehat{K}(\xi)=m(\xi)\in L^{\infty}(\R^{n}),
+\end{align*}
+\begin{align*}
+  |K(x)|\leq|x|^{-n},\qquad |\nabla K(x)|\leq|x|^{-n-1},\quad |x|>0.
+\end{align*}
+
+\begin{theorem}\label{thm:4.20}
+有
+\begin{align*}
+  (T f)^{\sharp}(x)\leq C_{r}\left[M(|f|^{r})(x)\right]^{1/r}
+\end{align*}
+对每个 $r > 1$ 成立，其中有限常数 $C_{r}$ 与 $f$ 无关.
+\end{theorem}
+
+\begin{proof}
+给定方体 $Q$ 与 $x \in Q$，考虑 $f$ 到 $Q^*$ 与 $\R^n \setminus Q^*$ 的分解:
+\begin{align*}
+  f=f|_{Q^{*}}+f|_{\R^{n}\setminus Q^{*}}=f^{(1)}+f^{(2)}.
+\end{align*}
+则
+\begin{align*}
+  T f=T f^{\left(1\right)}+T f^{\left(2\right)},
+\end{align*}
+且
+\begin{align*}
+  \frac{1}{\left|Q\right|}\int_{Q}\left|Tf-(Tf)_{Q}\right|
+  &\leq\frac{1}{\left|Q\right|}\int_{Q}\left|Tf^{(1)}-(Tf^{(1)})_{Q}\right|
+   +\frac{1}{\left|Q\right|}\int_{Q}\left|Tf^{(2)}-(Tf^{(2)})_{Q}\right|\\
+  &=I+II.
+\end{align*}
+我们有
+\begin{align*}
+  \mathrm{I}
+  &\leq\frac{2}{|Q|}\int_{Q}|Tf^{(1)}|
+  \leq 2\left[\frac{1}{|Q|}\int_{Q}|Tf^{(1)}|^{r}\right]^{1/r}
+  \leq 2C_{r}(n)\left[\frac{1}{|Q|}\int_{Q}|f^{(1)}|^{r}\right]^{1/r}\\
+  &\leq 2C_{r}(n)\left[\frac{1}{|Q|}\int_{Q^{*}}|f|^{r}\right]^{1/r}
+  \leq 2C_{r}(n)\left(Mf^{r}\right)^{1/r},
+\end{align*}
+其中 $C_{r}(n)$ 与 $f$ 和 $Q$ 无关.
+
+对另一项，写
+\begin{align*}
+  \mathrm{II}=\frac{1}{\left|Q\right|}\int_{Q}\Big|\int_{Q}\bigl(T f^{(2)}(y)-T f^{(2)}(z)\bigr)\,\mathrm{d}z\Big|\,\mathrm{d}y.
+\end{align*}
+给定 $y, z \in Q$，有
+\begin{align*}
+  \left|Tf^{(2)}(y)-Tf^{(2)}(z)\right|
+  &=\left|\int\left[K(y-u)-K(z-u)\right]f^{(2)}(u)\,\mathrm{d}u\right|\\
+  &\leq\sum_{\nu}\int_{Q_{3^{\nu+1}}^{*}\setminus Q_{3^{\nu}}^{*}}
+   C\left|\nabla K(t-u)\right|\left|y-z\right|\left|f^{(2)}(u)\right|\,\mathrm{d}u,
+\end{align*}
+其中 $Q_N^*$ 表示 $Q$ 以因子 $N$ 的膨胀，$t$ 是由中值定理指定的、位于 $y$ 与 $z$ 所连线段上的点，$C < \infty$ 是绝对常数.
+
+因此，对 $y, z \in Q$，有估计
+\begin{align*}
+  |Tf^{(2)}(y)-Tf^{(2)}(z)|
+  &\leq C\sum_{\nu=0}^{\infty}\diam(Q)\frac{1}{|Q_{3^{\nu+1}}^{*}|}
+   \int_{Q_{3^{\nu+1}}^{*}}|f^{(2)}|\,\frac{1}{2^{\nu}\diam(Q)}\\
+  &\lesssim Mf(x)\lesssim(Mf^{r}(x))^{1/r}.
+\end{align*}
+\end{proof}
+
+\begin{corollary}\label{cor:4.21}
+在上述假设下，对每个权重 $\omega \in A_p$（$1 < p < \infty$），$T$ 是 $L^p(\omega\,\mathrm{d}x)$ 上的有界算子.
+\end{corollary}
+
+\begin{proof}
+有
+\begin{align*}
+  \int|T f(x)|^{p}\omega(x)\,\mathrm{d}x
+  \lesssim\int|(T f)^{\sharp}(x)|^{p}\omega(x)\,\mathrm{d}x
+  \leq C_{p,r}\int(M f^{r}(x))^{p/r}\omega(x)\,\mathrm{d}x.
+\end{align*}
+由于对某个 $\varepsilon > 0$ 有 $\omega \in A_{p-\varepsilon}$，可以选取 $r > 1$ 使 $p/r = p - \varepsilon$，因此
+\begin{align*}
+  \int|T f(x)|^{p}\omega(x)\,\mathrm{d}x
+  \leq\widetilde{C}_{p}(\omega)\int|f(x)|^{p}\omega(x)\,\mathrm{d}x,
+\end{align*}
+其中 $\widetilde{C}_{p}(\omega)$ 只依赖于 $p$ 与 $w$ 作为 $A_{p}$ 权的界.
+\end{proof}
+
+设
+\begin{align*}
+  T_{j}f=K_{j}*f
+\end{align*}
+是一组一致有界的奇异积分算子，即 $\|\widehat{K}_j\|_\infty \leq C$，$|K_j(x)| \leq C|x|^{-n}$，$|\nabla K_j(x)| \leq C|x|^{-n-1}$.
+
+\begin{theorem}\label{thm:4.22}
+向量值算子 $\{f_j\} \mapsto \{T_j f_j\}$ 在 $L^p(\ell^r)$ 上有界，其中 $1 < p < \infty$，$1 < r < \infty$.
+\end{theorem}
+
+\begin{proof}
+对偶论证表明，算子在 $L^p(\ell^r)$ 上的有界性等价于其在 $L^q(\ell^s)$ 上的有界性，其中 $1/p + 1/q = 1$，$1/r + 1/s = 1$. 因此，只须证明 $p \geq r$ 的情形.
+
+$p = r$ 的情形由经典 Calderón--Zygmund 理论得出. 若 $p > r$，有
+\begin{align*}
+  \Big[\int_{\R^{n}}\Big[\sum_{j}|T_{j}f_{j}(x)|^{r}\Big]^{p/r}\mathrm{d}x\Big]^{r/p}
+  =\sup_{\|g\|_{q}=1}\int_{\R^{n}}\sum_{j}|T_{j}f_{j}(x)|^{r}g(x)\,\mathrm{d}x,
+\end{align*}
+其中 $r/p + 1/q = 1$，且
+\begin{align*}
+  \sum_{j}\int_{\R^{n}}|T_{j} f_{j}(x)|^{r} g(x)\,\mathrm{d}x
+  &\leq\sum_{j}\int_{\R^{n}}|T_{j} f_{j}(x)|^{r}\left(Mg^{s}(x)\right)^{1/s}\mathrm{d}x\\
+  &\leq C_{r,s}\int_{\R^{n}}\Big[\sum_{j}|f_{j}(x)|^{r}\Big]\left(Mg^{s}(x)\right)^{1/s}\mathrm{d}x\\
+  &\leq C_{r,s}\left\|\Big(\sum_{j}|f_{j}|^{r}\Big)^{1/r}\right\|_{p}
+   \Big[\int_{\R^{n}}(Mg^{s}(x))^{q/s}\Big]^{1/q},
+\end{align*}
+选取 $s > 1$ 使 $q/s > 1$，便有
+\begin{align*}
+  \|(M g^{s})^{1/s}\|_{q}\lesssim\|g\|_{q}\lesssim 1.
+\end{align*}
+\end{proof}
+
+% ================================================================
+% 编号审计 (第 4 章):
+%   fact    fact:4.1 → 事实 4.1 (§4.1)
+%   fact    fact:4.2 → 事实 4.2 (§4.1)
+%   fact    fact:4.3 → 事实 4.3 (§4.1)
+%   fact    fact:4.4 → 事实 4.4 (K. de Leew) (§4.1)
+%   theorem thm:4.5  → 定理 4.5  (§4.2)
+%   theorem thm:4.6  → 定理 4.6  (§4.2)
+%   theorem thm:4.7  → 定理 4.7  (§4.2)
+%   corollary cor:4.8 → 推论 4.8 (Littlewood–Paley) (§4.2)
+%   theorem thm:4.9  → 定理 4.9 (C. Fefferman–Stein) (§4.3)
+%   corollary cor:4.10 → 推论 4.10 (§4.3)
+%   definition def:4.11 → 定义 4.11 (A_1 权) (§4.3)
+%   proposition prop:4.12 → 命题 4.12 (§4.3)
+%   theorem thm:4.13 → 定理 4.13 (§4.3)
+%   definition def:4.14 → 定义 4.14 (A_p 权) (§4.3)
+%   theorem thm:4.15 → 定理 4.15 (§4.3)
+%   lemma    lem:4.16 → 引理 4.16 (§4.3)
+%   lemma    lem:4.17 → 引理 4.17 (§4.3)
+%   lemma    lem:4.18 → 引理 4.18 (§4.3)
+%   theorem thm:4.19 → 定理 4.19 (§4.4)
+%   theorem thm:4.20 → 定理 4.20 (§4.4)
+%   corollary cor:4.21 → 推论 4.21 (§4.4)
+%   theorem thm:4.22 → 定理 4.22 (§4.4)
+%   公式: eq:4.1 (定理 4.19 证明中的关键估计)
+%   无编号 Claim 用 claim* 环境 (引理 4.18 证明内).
+%   \cite 使用: b89 b90 b96
+% ================================================================

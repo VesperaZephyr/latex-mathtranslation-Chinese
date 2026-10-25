@@ -1,0 +1,134 @@
+%% intro.tex
+\chapter*{引言}\label{chapter:intro}
+
+域 $k$ 上的\textit{椭圆曲线} (elliptic curve)\index{tuoyuanquxian@椭圆曲线(elliptic curve)}, 是指一个\textit{亏格} (genus) 为 $1$ 且带有一个指定基点 (distinguished point) 的\textit{非奇异射影曲线} (nonsingular projective curve). 当 $k$ 的特征不为 $2$ 或 $3$ 时, 它可以实现为平面射影曲线
+\[
+Y^2 Z = X^3 + a X Z^2 + b Z^3, \qquad 4 a^3 + 27 b^2 \neq 0.
+\]
+其中指定的基点为 $(0:1:0)$. 例如, 下图展示了两条椭圆曲线的实点 (real points, 无穷远点除外): 
+
+\begin{center}
+\begin{tikzpicture}[scale=0.95, line cap=round, line join=round, >=Stealth]
+  \begin{scope}[xshift=-4.2cm]
+    \draw[->] (-2.5,0) -- (3,0) node[right] {$X$};
+    \draw[->] (0,-3.5) -- (0,3) node[above] {$Y$};
+    \draw[thick, blue!70!black, domain=-1:1.5, samples=300] plot (\x, {sqrt(max(0,\x^3 + 1))});
+    \draw[thick, blue!70!black, domain=-1:1.5, samples=300] plot (\x, {-sqrt(max(0,\x^3 + 1))});
+    \node at (0.3,-2.8) {$Y^2 = X^3 + 1$};
+  \end{scope}
+  \begin{scope}[xshift=3.5cm]
+    \draw[->] (-2.5,0) -- (3,0) node[right] {$X$};
+    \draw[->] (0,-3.5) -- (0,3) node[above] {$Y$};
+
+    % left oval: x = -t^2, y = t*sqrt(1-t^4)
+    \draw[thick, blue!70!black, domain=-1:1, samples=300, variable=\t]
+      plot ({-(\t*\t)}, {\t*sqrt(1-(\t*\t*\t*\t))});
+
+    % right open branch: x = 1+t^2, y = t*sqrt((t^2+1)(t^2+2))
+    \draw[thick, blue!70!black, domain=-1.15:1.15, samples=300, variable=\t]
+      plot ({1+\t*\t}, {\t*sqrt((\t*\t+1)*(\t*\t+2))});
+
+    \node at (0,-3) {$Y^2=X(X^2-1)$};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+尽管求解椭圆曲线 $E$ 上以有理数为坐标的点 (rational points) 自古希腊时代起就吸引着数学家们, 但直到 1922 年, Mordell\index{Mordell} 才证明了: 只需从有限个点出发, 通过作弦与切线的方法, 就能构造出曲线上的所有有理点. 这就是著名的\textit{Mordell定理}\index{dingli@定理(theorem)!Mordell@Mordell(Mordell)}, 它更精确地表明: $E$ 上的有理点所构成的 Abel 群 $E(\Q)$ 是有限生成的 (finitely generated). 计算 $E(\Q)$ 的\textit{挠子群} (torsion subgroup) 已有简洁的算法, 但至今仍没有被严格证明的算法可用于计算其秩 (rank). 在计算机在数学中的早期应用之一中, 伯奇与斯温纳顿-戴尔 (Birch and Swinnerton-Dyer) 通过数值实验发现了秩与曲线在各个素数 $p$ 下模 $p$ 约化后的点数 $N_p$ 之间的深刻关系. 证明这一关系 (即 Birch--Swinnerton-Dyer 猜想\index{caixiang@猜想(conjecture)!Birch-Swinnerton-Dyer@Birch--Swinnerton-Dyer(Birch and Swinnerton-Dyer)}) 是当代数学中最重要的未解问题之一. 本书\hyperref[ch:4]{第 IV 章}证明了Mordell定理, 并详细阐述了 BSD 猜想.
+
+1955 年, Taniyama\index{Taniyama} 提出: 一条给定椭圆曲线所附带的 $N_p$ 应当总能以某种简单的方式源自某个\textit{模形式} (modular form) (用现代术语来说, 即该椭圆曲线是模的, modular\index{tuoyuanquxian@椭圆曲线(elliptic curve)!mode@模的(modular)}). 1985 年, Frey\index{Frey} 洞察到: 对于Fermat方程 $X^n + Y^n = Z^n$ ($n > 2$) 的非平凡解所构造出的椭圆曲线, 这一性质似乎不可能成立. 他的观察促使 Serre\index{Serre} 重新审视了能推导出此结论的旧猜想; 里贝特 (Ribet)\index{Ribet} 完满证明了足够多的猜想, 从而确立了 Frey 的断言: Fermat方程非平凡解所对应的椭圆曲线绝不可能是模的. 最终, 1994 年 怀尔斯 (Wiles\index{Wiles}, 在泰勒 Taylor 的协助下) 证明了极其广泛的一类椭圆曲线全都是模的, 由此完成了Fermat大定理的证明. 本书\hyperref[ch:5]{第 V 章}专门阐释这些重大成果.
+
+本书的前三章系统建立椭圆曲线的基础理论.
+
+椭圆曲线还被用来为许多初看之下与其毫无关联的重要问题提供重要启示. 我们此处提及其中的三个问题.
+
+\subsection*{整数的快速分解}
+存在一种利用椭圆曲线进行整数因数分解的算法, 它在许多方面都优于以前的算法. 几千年来人们一直在研究整数分解, 但近来该课题具有了极高的实用价值: 给定一个整数 $n = pq$ (其中 $p$ 与 $q$ 为两个大素数), 存在一种加密体制, 使得任何知晓 $n$ 的人都可以加密信息, 但只有掌握 $p$ 和 $q$ 的人才能进行解密. 该密码体制的安全性完全依赖于没有未授权者能够分解 $n$. 参见 \cite[VI, 4]{koblitz1994} 或 \cite[IV, 4]{silvermantate1992}.
+
+\subsection*{格与球堆积问题}
+\textit{球堆积问题} (sphere packing problem) 是指在 $n$ 维欧几里得空间中寻找 $n$ 维单位球的一种排布, 使其在互不重叠的前提下尽可能多地覆盖空间. 如果各个球的中心恰好构成 $n$ 维空间中的一个\textit{格} (lattice), 则该排布称为\textit{格堆积} (lattice packing).
+
+\begin{center}
+\begin{tikzpicture}[line cap=round, line join=round, scale = 0.75]
+
+  % --- 绘图参数设置 ---
+  \def\r{0.8}          % 圆的半径
+  \def\dx{1.6}         % 水平间距 (2 * 半径)
+  \def\dy{1.3856}      % 垂直间距 (sqrt(3) * 半径，即 60度堆叠高度)
+  \def\offset{0.8}     % 上排圆相对于下排的偏移量 (等于半径)
+
+  % --- 绘制圆和圆心点 ---
+  \foreach \i in {0,1,2,3} {
+    % 下排圆
+    \coordinate (B\i) at (\i*\dx, 0);
+    \draw[thick] (B\i) circle (\r);
+    \fill (B\i) circle (1.5pt);
+    
+    % 上排圆
+    \coordinate (T\i) at (\i*\dx + \offset, \dy);
+    \draw[thick] (T\i) circle (\r);
+    \fill (T\i) circle (1.5pt);
+  }
+
+  % --- 绘制连接圆心的格点线 ---
+  \draw[thick] (B0) -- (B3); % 下排水平线
+  \draw[thick] (T0) -- (T3); % 上排水平线
+  
+  \foreach \i in {0,1,2,3} {
+    \draw[thick] (B\i) -- (T\i); % 斜向连接线
+  }
+
+  % --- 绘制右侧文字说明 ---
+  \node[anchor=west, align=left, font=\small] at (6.5, \dy/2) {
+    平面上的最优堆积\\
+    是一种格堆积.
+  };
+
+\end{tikzpicture}
+\end{center}
+
+椭圆曲线已被用于在许多维数中构造出比以往所知的所有堆积都更密集的格堆积. 参见\hyperref[ch:4]{第 IV 章} \S \ref{sec:4.11}.
+
+\subsection*{同余数}
+若一个自然数 $n$ 是某个三边长均为有理数的直角三角形的面积, 则称 $n$ 为\textit{同余数} (congruent number)\index{tongyushu@同余数(congruent number)}. 例如, $6$ 是同余数, 因为它是 $(3,4,5)$ 直角三角形的面积. 这样的三角形早在 Diophantus 的著作中就已出现, 而判定给定自然数 $n$ 是否为同余数的问题, 在公元 $10$ 世纪的阿拉伯手稿中就已有明确阐述 (\cite{dickson1966}). 斐波那契 (Fibonacci) 证明了 $5$ 与 $6$ 是同余数, Fermat 证明了 $1, 2, 3$ 不是同余数, Euler 则证明了 $7$ 是同余数. 然而, 一个初等论证表明: $n$ 是同余数当且仅当椭圆曲线
+\[
+Y^2 = X^3 - n^2 X
+\]
+存在一个点 $(x,y)$ 满足 $x,y \in \Q$ 且 $y \neq 0$. 正是借助于椭圆曲线研究的现代进展, 人们才在这一古老问题上取得了突破性的重大进展. 参见第 \pageref{subsec:congruent} 页.
+
+\subsection*{为何称之为“椭圆曲线”？}
+计算椭圆 (ellipse) 的弧长会导出无法用初等函数表示的积分. 这些积分被称为“椭圆积分” (elliptic integrals)\index{tuoyuanjifen@椭圆积分(elliptic integral)}, 而该名称随后被沿用到了它们自然所在的曲线上 (见 III, \S\ref{sec:3.2}). 关于椭圆积分如何导出椭圆曲线, 以及为什么椭圆不是椭圆曲线 (且永远不可能是) 的通俗解释, 参见 \cite{rice2012}.
+
+\subsection*{预备知识}
+需要掌握高年级本科生或研究生一年级通常讲授的近世代数、复分析与拓扑学基础知识. 若具备一些代数几何与代数数论的知识将很有帮助, 但并非必不可少.
+
+\subsection*{符号约定}
+我们使用以下标准符号: $\N$ 为自然数集 $\{0,1,2,\dots\}$, $\Z$ 为整数环, $\Q$ 为有理数域, $\R$ 为实数域, $\C$ 为复数域, $\F_p$ 为含 $p$ 个元素的有限域. 数域 (number field) 是指 $\Q$ 的有限扩域.
+
+全书中, $k$ 均表示一个域, $k^{\mathrm{al}}$ 为 $k$ 的\textit{代数闭包} (algebraic closure). 所有环均假定为带 $1$ 的交换环, 环同态均要求将 $1$ 映射到 $1$. 对于环 $A$, $A^\times$ 表示 $A$ 中的\textit{单位群} (group of units): 
+\[
+A^\times = \{a \in A \mid \text{存在}\  b \in A \text{使得}\  ab = 1\}.
+\]
+对于 Abel 群 $X$,
+\[
+X_n = \{x \in X \mid nx = 0\}.
+\]
+对于有限集 $S$, $\# S$ 或偶尔用 $[ S ]$ 表示 $S$ 的元素个数. 对于带有等价关系的集合中的元素 $a$, 我们有时用 $[a]$ 表示 $a$ 的等价类. 符号 $\log$ 总是指自然对数.
+
+\begin{tabbing}
+\hspace{2.5cm} \= \kill
+$X \stackrel{\mathrm{def}}{=} Y$ \> $X$ 被定义为 $Y$, 或按定义等于 $Y$; \\
+$X \subset Y$ \> $X$ 是 $Y$ 的子集 (不一定是真子集); \\
+$X \approx Y$ \> $X$ 与 $Y$ 同构; \\
+$X \simeq Y$ \> $X$ 与 $Y$ 典范同构 (canonically isomorphic), 或指明了从一者到另一者的给定同构.
+\end{tabbing}
+
+{\emergencystretch=3em \subsection*{参考讲义}
+除书末列出的参考文献外, 我还引用了我个人网站 (\url{https://www.jmilne.org/math/}) 上的以下在线讲义: \par}
+\begin{description}
+\item[ANT] \textit{Algebraic Number Theory}, v3.07.
+\item[CA] \textit{A Primer of Commutative Algebra}, v4.03.
+\item[FT] \textit{Fields and Galois Theory}, v4.61.
+\end{description}
+
+\subsection*{致谢}
+感谢以下各位为本书早期版本提供的勘误与意见: Alan Bain, Leen Bleijenga, Keith Conrad, Jean Cougnard, Rankeya Datta, Mark Faucette, Jochen Gerhard, Enis Kaya, Michael M\u{u}ller, Stefan M\u{u}ller, Holger Partsch, PENG Bo, Jasper Scholten, Nicholas Wilson, Dmitriy Zanin 以及其他人士.

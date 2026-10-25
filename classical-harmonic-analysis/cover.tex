@@ -1,0 +1,99 @@
+% ============ cover.tex —— 封面与“关于本重排版”页 ============
+% 由 AJbook.cls 的 coverpage 选项（coverpage=cover）引入
+% 设计仿自《代数学方法》封面风格（李文威），图案改为调和分析主题
+
+\setCJKfamilyfont{coverfont}{SimHei}	% 设置书名字体（Fandol 环境下回退）
+\setCJKfamilyfont{cover-author-font}{SimHei}
+\colorlet{octa}{cyan!50!gray}
+\definecolor{ANTnavy}{HTML}{16223B}
+\definecolor{ANTgold}{HTML}{B08D57}
+\definecolor{ANTgoldlight}{HTML}{D9C29B}
+\definecolor{ANTgrey}{HTML}{8C93A6}
+
+\begin{titlepage}
+\begin{tikzpicture}[remember picture, overlay]
+
+  % ---------- outer frame ----------
+  \draw[ANTnavy, line width=1.1pt]
+       ($(current page.north west)+(1.4cm,-1.4cm)$) rectangle
+       ($(current page.south east)+(-1.4cm,1.4cm)$);
+  \draw[ANTgold, line width=0.4pt]
+       ($(current page.north west)+(1.6cm,-1.6cm)$) rectangle
+       ($(current page.south east)+(-1.6cm,1.6cm)$);
+
+  % ---------- corner ornaments ----------
+  \begin{scope}[shift={($(current page.north west)+(1.4cm,-1.4cm)$)}]
+    \draw[ANTgold, line width=0.9pt] (0,0) -- (0.55,0);
+    \draw[ANTgold, line width=0.9pt] (0,0) -- (0,-0.55);
+    \filldraw[ANTgold] (0,0) circle (1.6pt);
+  \end{scope}
+  \begin{scope}[shift={($(current page.north east)+(-1.4cm,-1.4cm)$)}]
+    \draw[ANTgold, line width=0.9pt] (0,0) -- (-0.55,0);
+    \draw[ANTgold, line width=0.9pt] (0,0) -- (0,-0.55);
+    \filldraw[ANTgold] (0,0) circle (1.6pt);
+  \end{scope}
+  \begin{scope}[shift={($(current page.south west)+(1.4cm,1.4cm)$)}]
+    \draw[ANTgold, line width=0.9pt] (0,0) -- (0.55,0);
+    \draw[ANTgold, line width=0.9pt] (0,0) -- (0,0.55);
+    \filldraw[ANTgold] (0,0) circle (1.6pt);
+  \end{scope}
+  \begin{scope}[shift={($(current page.south east)+(-1.4cm,1.4cm)$)}]
+    \draw[ANTgold, line width=0.9pt] (0,0) -- (-0.55,0);
+    \draw[ANTgold, line width=0.9pt] (0,0) -- (0,0.55);
+    \filldraw[ANTgold] (0,0) circle (1.6pt);
+  \end{scope}
+
+  % ---------- top ornament: Fourier 部分和的 Gibbs 现象 ----------
+  \begin{scope}[shift={($(current page.north)+(0,-5.6cm)$)}]
+    \begin{scope}
+      \clip (-3.3,-1.9) rectangle (3.3,1.9);
+      \draw[ANTgrey, line width=0.5pt] (-3.3,0) -- (3.3,0);
+      \draw[ANTgrey, line width=0.5pt] (0,-1.9) -- (0,1.9);
+      % 部分和 S_N(x) = 4/π Σ_{k=1}^{N} sin((2k-1)x)/(2k-1)，N=1,3,7
+      \draw[ANTgrey, line width=0.7pt, domain=-3.1:3.1, samples=200]
+           plot (\x, {1.5*sin(\x r)});
+      \draw[ANTgold, line width=0.7pt, domain=-3.1:3.1, samples=200]
+           plot (\x, {1.5*(sin(\x r) + sin(3*\x r)/3)});
+      \draw[ANTnavy, line width=0.9pt, domain=-3.1:3.1, samples=300]
+           plot (\x, {1.5*(sin(\x r) + sin(3*\x r)/3 + sin(5*\x r)/5 + sin(7*\x r)/7)});
+    \end{scope}
+    \node[ANTnavy, font=\scriptsize] at (0,-2.25) {$\displaystyle \frac{\pi}{4} = \sum_{k=1}^{\infty}\frac{\sin(2k-1)x}{2k-1}$};
+  \end{scope}
+
+  % ---------- title block ----------
+  \node[ANTgold, font=\scriptsize\sffamily] at ($(current page.center)+(0,1.9cm)$) {E\,N\,C\,Y\,C\,L\,O\,P\,E\,D\,I\,A \quad O\,F \quad A\,N\,A\,L\,Y\,S\,I\,S \quad \uppercase{I}};
+
+  \draw[ANTgold, line width=0.5pt] ($(current page.center)+(-2.6cm,1.55cm)$) -- ($(current page.center)+(2.6cm,1.55cm)$);
+
+  \node[ANTnavy, align=center] at ($(current page.center)+(0,0.55cm)$)
+       {\Huge\bfseries 古典调和分析\\ \large Classical Harmonic Analysis};
+
+  \draw[ANTgold, line width=0.5pt] ($(current page.center)+(-2.6cm,-0.65cm)$) -- ($(current page.center)+(2.6cm,-0.65cm)$);
+
+  \node[ANTnavy, font=\normalsize\itshape] at ($(current page.center)+(0,-1.15cm)$)
+       {奇异积分入门 \,\textbullet\, Hardy 空间理论 \,\textbullet\, 交换 Banach 代数 \,\textbullet\, 振荡积分与 Kakeya 问题};
+
+  % ---------- bottom : authors / date ----------
+  \node[ANTnavy, font=\large] at ($(current page.south)+(0,5.0cm)$) {薮田公三\,\textbullet\,佐藤圓治\,\textbullet\,田中仁\,\textbullet\,宮地晶彦\,\textbullet\,中路貴彦};
+  \node[ANTgrey, font=\large] at ($(current page.south)+(0,4.2cm)$) {\today};
+
+  \node[ANTgold, font=\small] at ($(current page.south)+(0,3.3cm)$)
+       {$\displaystyle \widehat{f}(\xi) = \int_{\mathbb{R}^n} f(x)\,e^{-2\pi i x\cdot\xi}\,\dd x$};
+
+\end{tikzpicture}
+\vfill
+
+\cleardoublepage
+\end{titlepage}
+
+% ---------- 关于本重排版 ----------
+\thispagestyle{empty}
+\begin{center}
+    \small
+    \noindent\emph{关于本重排版}\\[0.5em]
+    本文件为《古典調和解析》（解析学百科 I，朝倉書店 2008 年刊行）的中文非官方 \LaTeX{} 重排版，\\
+    内容忠实于原书，未作任何内容删改。重排版仅用于学习交流，原书版权归作者与原出版社所有。\\
+    \vspace{0.5cm}
+    原书：薮田公三，佐藤圓治，田中仁，宮地晶彦，中路貴彦，《古典調和解析》，\\
+    朝倉書店，2008 年（ISBN 978-4-254-11726-4）。
+\end{center}

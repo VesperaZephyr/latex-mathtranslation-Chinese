@@ -1,0 +1,510 @@
+% =====================================================================
+% 第四讲 (Exposé IV) 平坦态射 (Morphismes plats)
+% A. Grothendieck
+% 原书页码: pp. 71-86
+% =====================================================================
+\chapter{平坦态射}
+
+我们在这里主要给出在前面各讲中用到的\emph{平坦性} (flatness) 性质. 更详细的研究将在准备中的《代数几何原理》第四章\footnote{参见 EGA IV 11 和 12.}中给出，那里系统研究下列情形：$X$ 在局部诺特 $Y$ 上局部有限型，$\mathcal{F}$ 在 $X$ 上凝聚\index[term]{ningjuceng@凝聚层}且 $Y$-平坦，给出 $Y$ 的性质、$\mathcal{F}$ 的性质、以及 $\mathcal{F}$ 在 $X \to Y$ 的纤维上诱导的凝聚层的性质之间的关系 (特别是从维数、上同调维数、深度等观点). 尤其有系统获得 Seidenberg 型或 Bertini 型定理 (对超平面截面的) 的方法. 在这一语境下应用平坦性方法的关键结果如下 (将在下面证明)：若 $Y$ 整，$X$ 在 $Y$ 上有限型，$\mathcal{F}$ 在 $X$ 上凝聚，则存在 $Y$ 的非空开集 $U$，使得 $\mathcal{F}$ 在 $U$ 之上的 $X$ 的点处 $Y$-平坦. 平坦性进入代数几何的第二种方式，大概更为重要，是下降 (descent) 理论：参见例如 Grothendieck 在 Bourbaki 讨论班就这一主题的两个报告\footnote{以及，更详细的报告，下面的讲 VIII 和 IX.}. 平坦性因而似乎是代数几何中一个中心技术概念.
+
+回忆平坦性和忠实平坦性概念是由 Serre 在 GAGA 中引入的\index[term]{pingtanxing@平坦性}. 下面第 1、2 节的阐述也可以见 Bourbaki 的《交换代数》(Alg. Comm.) (当然，如书名所示，它不限于交换基环的情形)\footnote{N. Bourbaki，Algèbre Commutative，Chap. I (Modules Plats)，Act. Sc. Ind 1290，Paris，Hermann (1961).}.
+
+与前几讲相反，我们不假设所考虑的环必然是诺特的.
+
+\section{平坦模的平凡推论}
+
+环 $A$ 上的模 $M$ 称为平坦的 (flat) (若想指明 $A$ 则称 $A$-平坦)，若函子
+\[
+T_M \colon N \longmapsto M \otimes_A N
+\]
+(它总是右正合的) 正合，i.e. 把单同态变为单同态. 这等价于说第一个右导出函子，或所有右导出函子为零，i.e. 有
+\[
+\mathrm{Tor}_{1}^{A}(M, N) = 0 \qquad \text{对每个 } N,
+\]
+相应地有
+\[
+\operatorname{Tor}_{i}^{A}(M, N) = 0 \quad \text{对 } i > 0, \text{每个 } N.
+\]
+由于诸 $\mathrm{Tor}_i$ 与归纳极限可交换，只需对有限型 $N$ 验证这些条件，甚至 (取 $N$ 的以单生成模为商的合成序列) 只需有
+\[
+\mathrm{Tor}_{1}^{A}(M, N) = 0
+\]
+若 $N$ 单生成，i.e. 形如 $A/I$，$I$ 是 $A$ 的理想. 还注意
+\[
+\mathrm{Tor}_{1}^{A}(M, A/I) = 0 \quad \Longleftrightarrow \quad I \otimes_A M \to M = A \otimes_A M \text{ 单射},
+\]
+这从 Tor 的正合序列 (考虑到 $\mathrm{Tor}_{1}^{A}(M, A) = 0$) 看出. 故 $M$ 平坦等价于说：对每个理想 $I$，自然同态
+\[
+I \otimes_A M \longrightarrow IM
+\]
+是同构. 只需对有限型 $I$ 验证，更不用说只需验证函子 $M \otimes$ 在有限型模上正合.
+
+每当我们有一个正合函子 $T$ 时，若把 $N$ 的子对象 $N'$ 的 $T(N')$ 等同于 $T(N)$ 的子对象，则对 $N$ 的两个子对象 $N'$，$N''$ 有
+\[
+\begin{array}{l}
+T(N' \cap N'') = T(N') \cap T(N''), \\
+T(N' + N'') = T(N') + T(N'').
+\end{array}
+\]
+
+平坦模的直和、平坦模的直因子都是平坦的. 特别地，$A$ 平坦，自由模从而射影模平坦. 两个平坦模的张量积平坦，且若 $M$ 在 $A$ 上平坦，则对每个基变换 $A \to B$，$M \otimes_A B$ 在 $B$ 上平坦 (因为张量积的结合律和正合函子的复合仍正合). 若 $M$ 在 $B$ 上平坦，$B$ 在 $A$ 上平坦，则 $M$ 在 $A$ 上平坦 (同理).
+
+Tor 的正合序列加上 Tor 的``交换性''，给出：
+
+\begin{proposition}\label{prop:IV.1.1}
+设 $0 \to M' \to M \to M'' \to 0$ 是 $A$-模的正合序列，$M''$ 平坦. 则
+\begin{enumerate}[(i)]
+\item 该序列与任何 $A$-模 $N$ 张量后仍正合; 
+\item 为使 $M$ 平坦，必要且充分条件是 $M'$ 平坦.
+\end{enumerate}
+\end{proposition}
+
+可以说，从张量积的行为的观点看，平坦模与自由模或射影模``一样好'' (而 \ref{prop:IV.1.1} 中的正合序列``一样好''，仿佛它分裂).
+
+设 $S$ 是 $A$ 的乘法稳定子集，则 $S^{-1}A$ 在 $A$ 上平坦，因为 $S^{-1}A \otimes N = S^{-1}N$ 是 $N$ 的正合函子. 若 $M$ 是 $A$-平坦的，则 $S^{-1}M = S^{-1}A \otimes M$ 是 $S^{-1}A$-平坦的，逆命题在 $M \to S^{-1}M$ 是同构时成立，i.e. 若 $S$ 的元素在 $M$ 中是双射 (因为平坦性的传递性，$S^{-1}A$ 在 $A$ 上平坦). 更一般地，预概形态射 $X \to Y$ 以及要研究相对 $Y$ 的平坦性的 $X$ 上拟凝聚层 $\mathcal{F}$ 的情形，导致带两个环的情形：
+
+\begin{proposition}\label{prop:IV.1.2}
+设 $A \to B$ 是环同态，$M$ 是 $B$-模，$T$ 是 $B$ 的乘法稳定子集.
+\begin{enumerate}[(i)]
+\item 若 $M$ 是 $A$-平坦的，则 $T^{-1}M$ 是 $A$-平坦的 (从而对 $A$ 的任意映入 $T$ 的乘法稳定子集 $S$，也是 $S^{-1}A$-平坦的).
+\item 反过来，若对 $B$ 的每个极大理想 $n$，$M_{\mathfrak{n}}$ 在 $A_{\mathfrak{n}}$ 上平坦 ($M_{\mathfrak{n}}$ 在 $A$ 上平坦，或等价地在 $A_{\mathfrak{m}}$ 上平坦，其中 $m$ 是 $n$ 的原像)，则 $M$ 是 $A$-平坦的.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+事实上，有对 $A$-模 $N$ 函子性的公式：
+\[
+T^{-1}M \otimes_A N = T^{-1}(M \otimes_A N),
+\]
+因为由 $\otimes$ 的结合律公式，两端函子性地同构于 $T^{-1}B \otimes_B M \otimes_B N_{(B)}$ (其中 $N_{(B)} = N \otimes_A B$). 立即得出，若 $M \otimes_A N$ 对 $N$ 正合，则 $T^{-1}\mathcal{M} \otimes_A \mathcal{N}$ 亦然 (作为两个正合函子的复合)，由此得 (i). 同样得出 (ii)，因为为验证 $B$-模序列的正合性，只需验证它在 $B$ 的所有极大理想处的局部化正合.
+\end{proof}
+
+\begin{proposition}\label{prop:IV.1.3}
+(i) 设 $M$ 是 $A$-平坦模\index[term]{pingtanmo@平坦模}. 若 $x \in A$ 在 $A$ 中非零因子，则它在 $M$ 中非零因子. 特别地，若 $A$ 整，则 $M$ 无挠.
+(ii) 假设 $A$ 整，且对 $A$ 的每个极大理想 $m$，$A_{\mathfrak{m}}$ 是主理想环 (例如 $A$ 是 Dedekind 环，甚至是主理想环). 为使 $A$-模 $M$ 平坦，必要且充分条件是它无挠.
+\end{proposition}
+
+\begin{proof}
+(i) 由下述事实得出：$M$ 中的倍扩 $x$ 由 $A$ 中的倍扩 $x$ 与 $M$ 张量得到. 对 (ii)，借助 \ref{prop:IV.1.2} (ii) 可以先假设 $A$ 主; 必须证明若 $M$ 无挠，则对 $A$ 的每个理想 $I$，单射 $I \to A$ 与 $M$ 张量后仍是单射，这意味着 $I$ 的生成元 $x$ 在 $M$ 中非零因子，好.
+\end{proof}
+
+\section{忠实平坦模}
+
+从一个范畴到另一个范畴的函子 $F$ 称为忠实的 (faithful)，若对每个 $X$，$Y$，映射 $\mathrm{Hom}(X, Y) \to \operatorname{Hom}\bigl(F(X), F(Y)\bigr)$ 单射. 若是加性范畴的加性函子，这等价于说 $F(u) = 0$ 蕴含 $u = 0$，且这蕴含 $F(X) = 0$ 蕴含 $X = 0$. 为使 $F$ 忠实且正合，必要且充分条件是：对 $\mathcal{C}$ 中态射的任何序列 $M' \to M \to M''$，变换后的序列 $F(M') \to F(M) \to F(M'')$ 正合当且仅当前一个正合. 或：$F$ 正合，且 $F(X) = 0$ 蕴含 $X = 0$. (N.B. 为能谈论正合性，必须假设所涉及的范畴是 Abel 的.) 假设有 $\mathcal{C}$ 的非零对象族 $(M_i)$，使得 $\mathcal{C}$ 的每个非零对象都有一个子对象，其商同构于某个 $M_i$. 则 $F$ 忠实且正合等价于：$F$ 正合，且对每个 $i$ 有 $F(M_i) \neq 0$. 若 $\mathcal{C}$ 是环 $A$ 上的模范畴，例如可取 $(M_i)$ 为诸 $A/\mathfrak{m}$ 组成的族，$m$ 遍历 $A$ 的极大理想. (事实上，每个非零模都有非零单生成子模，故同构于某个 $A/I$ ($I \neq A$)，后者由 Krull 定理有一个同构于某个 $A/\mathfrak{m}$ 的商.) 由这些平凡推论特别得出：
+
+\begin{proposition}\label{prop:IV.2.1}
+设 $M$ 是 $A$-模. 下列条件等价：
+\begin{enumerate}[(i)]
+\item 函子 $M \otimes_A$ 忠实且正合.
+\item[(i bis)] $M$ 平坦，且 $M \otimes_A N = 0$ 蕴含 $N = 0$.
+\item[(i ter)] $M$ 平坦，且对 $A$ 的每个极大理想 $m$，$M \otimes A/\mathfrak{m} \neq 0$.
+\item 对任何同态序列 $N' \to N \to N''$，与 $M$ 张量后的序列正合当且仅当初始序列正合.
+\end{enumerate}
+\end{proposition}
+
+此时称 $M$ 是 $A$-\emph{忠实平坦模} (faithfully flat module)\index[term]{zhongshipingtanmo@忠实平坦模}. 特别地，若 $M$ 忠实平坦，则 $N \to N'$ 是单同态 (满同态，同构) 当且仅当与 $M$ 张量后的同态亦然. 忠实平坦模是忠实的，因为 $M$ 中的倍扩 $f$ 由 $A$ 中的倍扩 $f$ 与 $M$ 张量得到.
+
+像 §1 中那样看到通常的传递性性质：两个忠实平坦模的张量积忠实平坦; 若 $M$ 在 $A$ 上忠实平坦，则对任何基扩张 $A \to B$，$M \otimes_A B$ 在 $B$ 上忠实平坦; 若 $B$ 是在 $A$ 上忠实平坦的 $A$-代数且 $M$ 是忠实平坦 $B$-模，则 $M$ 是忠实平坦 $A$-模.
+
+\begin{corollary}\label{cor:IV.2.2}
+设 $A \to B$ 是局部环的局部同态，$M$ 是有限型 $B$-模. 为使 $M$ 在 $A$ 上忠实平坦，必要且充分条件是它在 $A$ 上平坦且非零.
+\end{corollary}
+
+\begin{proof}
+由判则 (i ter) 和 Nakayama 引理得出. 特别地，为使 $B$ 是 $A$-平坦的，必要且充分条件是它是忠实 $A$-平坦的.
+\end{proof}
+
+\begin{proposition}\label{prop:IV.2.3}
+设 $A \to B$ 是环同态，$M$ 是在 $A$ 上忠实平坦的 $B$-模. 对 $A$ 的每个素理想 $p$，存在 $B$ 的素理想 $q$ 诱导它.
+\end{proposition}
+
+\begin{proof}
+除以 $p$，归结到 $\mathfrak{p} = 0$ 的情形. 在素理想 0 处局部化，归结到 $A$ 是域的情形. 但 $M$ 在 $A$ 上忠实平坦故非零，更不用说 $B \neq 0$，故 $B$ 有素理想，它只能诱导 $A$ 的惟一的素理想! 几何上可以说，在 $X = \operatorname{Spec}(B)$ 上存在相对 $A$``忠实平坦''的拟凝聚层 $\mathcal{F}$，蕴含 $X \to Y = \operatorname{Spec}(A)$ 满射.
+\end{proof}
+
+\begin{corollary}\label{cor:IV.2.4}
+假设 $M$ 在 $A$ 上平坦，在 $B$ 上有限型，且 $\mathrm{Supp}\, M = \mathrm{Spec}(B)$ (i.e. 对 $B$ 的每个素理想 $q$ 有 $M_{\mathfrak{q}} \neq 0$). 则 $B$ 的包含 $pB$ 的极小素理想 $q$ 诱导 $p$.
+\end{corollary}
+
+\begin{proof}
+仍归结到 $\mathfrak{p} = 0$ 的情形 (因为所有假设除以后都保持)，故 $A$ 整. 归结为下述陈述：
+\end{proof}
+
+\begin{corollary}\label{cor:IV.2.5}
+$M$ 如上，$B$ 的每个极小素理想 $q$ 诱导 $A$ 的素理想 $p$，它是极小的.
+\end{corollary}
+
+\begin{proof}
+事实上，在 $p$ 和 $q$ 处局部化，归结为证明：若 $A$ 和 $B$ 局部，同态 $A \to B$ 局部，$M$ 是在 $A$ 上平坦的非零 $B$-模，且 $\dim B = 0$，则 $\dim A = 0$. 由 \ref{prop:IV.2.3} 和 \ref{cor:IV.2.2}，结论是 $A$ 的每个素理想都由 $B$ 的素理想诱导，从而由 $B$ 的极大理想诱导，故是极大理想，证毕. 几何上，\ref{cor:IV.2.5} 意味着 $X = \operatorname{Spec}(B)$ 的每个不可约分支都支配 $Y = \operatorname{Spec}(A)$ 的某个不可约分支 (在 $X$ 上存在支集为 $X$、相对 $Y$ 平坦的有限型拟凝聚层的条件下).
+\end{proof}
+
+注意在 \ref{cor:IV.2.4} 中不必假设 $M$ 在 $A$ 上忠实平坦，但此时不保证存在包含 $pB$ 的素理想 (从而不保证存在其中极小的).
+
+\begin{proposition}\label{prop:IV.2.6}
+设 $i \colon A \to B$ 是环同态. 下列条件等价：
+\begin{enumerate}[(i)]
+\item $B$ 是忠实平坦 $A$-模.
+\item $B$ 在 $A$ 上平坦，且 $\operatorname{Spec}(B) \to \operatorname{Spec}(A)$ 满射.
+\item[(ii bis)] $B$ 在 $A$ 上平坦，且每个极大理想由 $B$ 的理想诱导.
+\item $i$ 单射，且 Coker $i$ 是 $A$-平坦模.
+\item 函子 $M_{(B)} = M \otimes_A B$ (关于 $A$-模 $M$) 正合，且典范函子同态 $M \to M_{(B)}$ 单射.
+\item[(iv bis)] 对 $A$ 的每个理想 $I$，$I \otimes_A B \to IB$ 是同构，且 $IB$ 在 $A$ 中的原像等于 $I$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+有 (i)$\Rightarrow$(ii) (由 \ref{prop:IV.2.3})，(ii)$\Rightarrow$(ii bis) 平凡，(ii bis)$\Rightarrow$(i) 由 \ref{prop:IV.2.1} 的判则 (i ter). 有 (iii)$\Rightarrow$(iv) (由 \ref{prop:IV.1.1})，(iv)$\Rightarrow$(iv bis) 平凡 (在第二个条件中取 $M = A/I$)，(iv bis)$\Rightarrow$(i) 由 §1 开头所见的理想平坦性判则和判则 \ref{prop:IV.2.1} (i ter). 最后，(iv)$\Rightarrow$(iii) 由 \ref{prop:IV.1.1} 的简单逆命题，(i)$\Rightarrow$(iv) 因为若 $N$ 是 $M \to M \otimes_A B = T(M)$ 的核，则 ($T$ 正合) $N \to T(N)$ 为零，从而 $T(N) = N \otimes_A B = 0$，故 $N = 0$，证毕.
+\end{proof}
+
+\section{与完备化的关系}
+
+设 $A$ 是诺特环，$I$ 是 $A$ 中的理想，$\widehat{A}$ 是 $A$ 按 $I$-预adic 拓扑的分离完备化，对每个 $A$-模 $M$，$\widehat{M}$ 是它按 $I$-预adic 拓扑的完备化. 它是 $A$-模，于是有典范同态
+\[
+M \otimes_A \widehat{A} \longrightarrow \widehat{M}.
+\]
+当 $M$ 遍历有限型模时，函子 $M \mapsto \widehat{M}$ 正合，这容易由 Krull 定理得出：若 $N \subset M$，则 $N$ 的拓扑是 $M$ 的拓扑诱导的. 由于 $M \otimes_A \widehat{A}$ 右正合，容易由此推出 (把 $M$ 用 $L \to L' \to M$ 解出，其中 $L$ 和 $L'$ 有限自由) 上面的函子同态是同构 ($\widehat{M}$ 也右正合)，从而 $M \otimes_A \widehat{A}$ 也是 $M$ 的正合函子. 因此：
+
+\begin{proposition}\label{prop:IV.3.1}
+设 $A$ 是诺特环，$I$ 是 $A$ 的理想，则 $A$ (按 $I$-预adic 拓扑) 的分离完备化 $\widehat{A}$ 在 $A$ 上平坦.
+\end{proposition}
+
+\begin{corollary}\label{cor:IV.3.2}
+为使 $\widehat{A}$ 在 $A$ 上忠实平坦，必要且充分条件是 $I$ 含于 $A$ 的根式 (radical) 中.
+\end{corollary}
+
+\begin{proof}
+事实上，只需应用判则 \ref{prop:IV.2.1} (i ter).
+\end{proof}
+
+这些结果概括了从线性代数的观点所能说的、关于 $A$ 与 $\widehat{A}$ 之间关系的一切. 推论 \ref{cor:IV.3.2} 在 $A$ 是诺特局部环且 $I$ 含于极大理想 $m$ 中 (通常与之相等) 时最常用.
+
+\section{与自由模的关系}
+
+\begin{proposition}\label{prop:IV.4.1}
+设 $A$ 是环，$I$ 是 $A$ 的理想，$M$ 是 $A$-模. 假设处于下列假设之一：
+\begin{enumerate}[a)]
+\item $I$ 幂零; 
+\item $A$ 诺特，$I$ 在 $A$ 的根式中，且 $M$ 有限型.
+\end{enumerate}
+为使 $M$ 在 $A$ 上自由，必要且充分条件是 $M \otimes A/I$ 在 $A/I$ 上自由，且 $\mathrm{Tor}_{1}^{A}(M, A/I) = 0$.
+\end{proposition}
+
+\begin{proof}
+必要性显然，证明充分性. 设 $(e_i)$ 是 $M$ 的元素族，其在 $M \otimes A/I = M/IM$ 中的像定义 $A/I$ 上的基 (在情形 (b) 中是有限族). 设 $L$ 是在同一个指标集上构造的 $A$-自由模，于是有同态 $L \to M$，其与 $A/I$ 的张量化 $T$ 诱导同构 $T(L) \stackrel{\sim}{\longrightarrow} T(M)$. 若 $Q$ 是 $L \to M$ 的余核，则有 $T(Q) = 0$，由 Nakayama 引理 (在条件 (a) 或 (b) 下成立) 得 $Q = 0$. 故 $L \to M$ 满射，设 $R$ 是其核，则有正合序列
+\[
+0 \longrightarrow R \longrightarrow L \longrightarrow M \longrightarrow 0,
+\]
+由此，由于 $\operatorname{Tor}_{1}^{A}(M, A/I) = 0$，得正合序列 $0 \to T(R) \to T(L) \to T(M) \to 0$，故 $T(R) = 0$，再由 Nakayama 引理 (考虑到在情形 (b) 中，$A$ 诺特故 $R$ 有限型) 得 $R = 0$.
+\end{proof}
+
+\begin{corollary}\label{cor:IV.4.2}
+可以把条件 $\mathrm{Tor}_{1}^{A}(M, A/I) = 0$ 换成：典范满同态
+\begin{equation}
+\mathrm{gr}_{I}^{0}(M) \otimes_{A/I} \mathrm{gr}_{I}(A) \longrightarrow \mathrm{gr}_{I}(M) \tag{($*$)}
+\end{equation}
+是同构.
+\end{corollary}
+
+\begin{proof}
+事实上，若 $M$ 自由，这当然成立. 所以必须证明：若 $M \otimes A/I$ 在 $A/I$ 上自由且关于 gr 的条件成立，则 $M$ 自由. 重做上面的证明，构造 $L \to M$，由假设该同态诱导相伴分次环的同构，故其核含于诸 $I^n L$ 的交，从而为零 (在 (a) 中平凡，在 (b) 中众所周知). 证毕.
+\end{proof}
+
+\begin{corollary}\label{cor:IV.4.3}
+假设 $A/I$ 是域. 则 $M$ 的下列条件等价：
+\begin{enumerate}[(i)]
+\item $M$ 自由; 
+\item $M$ 射影; 
+\item $M$ 平坦; 
+\item $\mathrm{Tor}_{1}^{A}(M, A/I) = 0$; 
+\item 典范同态 (∗) 双射.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+事实上，在所考虑的情形，$M \otimes A/I$ 自动自由.
+\end{proof}
+
+前面的结果在下列两种情形下成立：
+\begin{enumerate}[a)]
+\item $M$ 是局部环 $A$ (其极大理想 $I$ 幂零，例如 Artin 局部环) 上的任意模.
+\item $M$ 是诺特局部环上的有限型模.
+\end{enumerate}
+
+为备忘回忆：
+
+\begin{corollary}\label{cor:IV.4.4}
+假设 $A$ 是极大理想 $\mathfrak{m} = I$、剩余域 $k = A/I$、分式域 $K$ 的诺特整局部环. 设 $M$ 是 $A$ 上的有限型模. 则前面 (i)$\dots$(v) 的等价条件还等价于
+\begin{enumerate}[(i)]
+\item[((vi))] $M \otimes_A K$ 和 $M \otimes_A k$ 是维数相同的向量空间 (i.e. $M$ 在 $A$ 上的秩等于 $A$-模 $M$ 的生成元的最小个数).
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+证明直接; 推广到 $A$ 只假设无幂零元的情形留给读者：此时必须要求 $M$ 在 $A$ 的诸极小素理想处的秩等于向量空间 $M \otimes_A k$ 的维数.
+\end{proof}
+
+\section{平坦性的局部判则}
+
+\begin{proposition}\label{prop:IV.5.1}
+设 $A$ 是带理想 $I$ 的环，$M$ 是 $A$-模. 假设
+\[
+\operatorname{Tor}_{1}^{A}(M, A/I^n) = 0 \quad \text{对 } n > 0,
+\]
+则典范满同态
+\begin{equation}
+\mathrm{gr}_{I}^{0}(M) \otimes_{A/I} \mathrm{gr}_{I}(A) \longrightarrow \mathrm{gr}_{I}(M) \tag{($*$)}
+\end{equation}
+是同构. 逆命题在 $I$ 幂零时成立.
+\end{proposition}
+
+\begin{proof}
+假设意味着同态
+\[
+I^n \otimes_A M \longrightarrow I^n M
+\]
+是同构，由此立即得出同态
+\[
+I^n/I^{n+1} \otimes_A M \longrightarrow I^n M/I^{n+1} M
+\]
+是同构. 反过来，假设此条件成立且 $I$ 幂零，证明对每个 $n$ 有 $\operatorname{Tor}_{1}^{A}(M, A/I^n) = 0$. 对大的 $n$ 这成立，对 $n$ 作向下归纳，假设已对 $n+1$ 证明. 有交换图
+\[
+\begin{tikzcd}[row sep=large, column sep=large]
+& M \otimes I^{n+1} \arrow[r] \arrow[d] & M \otimes I^n \arrow[r] \arrow[d] & M \otimes (I^n/I^{n+1}) \arrow[r] \arrow[d] & 0 \\
+0 \arrow[r] & MI^{n+1} \arrow[r] & MI^n \arrow[r] & MI^n/MI^{n+1}
+\end{tikzcd}
+\]
+其中两行正合. 由假设，最后一个垂直箭头是同构，归纳假设也意味着第一个垂直箭头是同构. 故中间的垂直箭头亦然，证明完毕.
+\end{proof}
+
+下面的命题是讨论班进行期间 Serre 提出的; 它使本节的证明大为简化.
+
+\begin{proposition}\label{prop:IV.5.2}
+设 $A \to B$ 是环同态，$M$ 是 $A$-模. 下列条件等价：
+\begin{enumerate}[(i)]
+\item 对每个 $B$-模 $N$，有 $\mathrm{Tor}_{1}^{A}(M, N) = 0$; 
+\item $\mathrm{Tor}_{1}^{A}(M, B) = 0$，且 $M_{(B)} = M \otimes_A B$ 是 $B$-平坦的.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+有函子同构
+\[
+M \otimes_A N = (M \otimes_A B) \otimes_B N,
+\]
+它把左端 (看作 $M$ 的函子) 表示为两个函子 $M \mapsto M \otimes_A B$ 和 $P \mapsto P \otimes_B N$ 的复合. 由于前者把 $A$ 上的自由模变为 $B$ 上的自由模，从而把射影变为射影，有复合函子的谱序列
+\[
+\operatorname{Tor}_{n}^{A}(M, N) \Longleftarrow \operatorname{Tor}_{p}^{B}\bigl(\operatorname{Tor}_{q}^{A}(M, B), N\bigr),
+\]
+由此得低次项的正合序列
+\[
+0 \longleftarrow \operatorname{Tor}_{1}^{B}(M \otimes_A B, N) \longleftarrow \operatorname{Tor}_{1}^{A}(M, N) \longleftarrow \operatorname{Tor}_{1}^{A}(M, B) \otimes_A N.
+\]
+若 (i) 成立，由这个正合序列得出对每个 $N$ 有 $\operatorname{Tor}_{1}^{B}(M \otimes_A B, N) = 0$，i.e. $M \otimes_A B$ 是 $B$-平坦的，由此得 (ii). 若反过来 (ii) 成立，则在正合序列中围住 $\mathrm{Tor}_{1}^{A}(M, N)$ 的项为零，故有 (i).
+\end{proof}
+
+\begin{corollary}\label{cor:IV.5.3}
+假设 $B = A/I$，则前面的条件等价于：
+\begin{enumerate}[(i)]
+\item[((iii))] 对每个被 $I$ 的幂零化的 $A$-模 $N$，$\mathrm{Tor}_{1}^{A}(M, N) = 0$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+事实上，(i) 意味着 $N$ 被 $I$ 零化时如此. 把假设应用于诸 $I^n N/I^{n+1}N$，由此推出 (iii).
+\end{proof}
+
+\begin{corollary}\label{cor:IV.5.4}
+在 \ref{cor:IV.5.3} 的条件下，所考虑的条件蕴含函子同态
+\begin{equation}
+\mathrm{gr}_{I}^{0}(M) \otimes_{A/I} \mathrm{gr}_{I}(A) \longrightarrow \mathrm{gr}_{I}(M) \tag{($*$)}
+\end{equation}
+是同构，且 $M \otimes_A A/I$ 在 $A/I$ 上平坦.
+\end{corollary}
+
+\begin{proof}
+只需应用 (iii) 和 (\cref{prop:IV.5.1}). 用 \ref{prop:IV.5.1} 在 $I$ 幂零情形的逆命题，得到：
+\end{proof}
+
+\begin{corollary}\label{cor:IV.5.5}
+设 $A$ 是带幂零理想 $I$ 的环，$M$ 是 $A$-模. 下列条件等价：
+\begin{enumerate}[(i)]
+\item $M$ 是 $A$-平坦的; 
+\item $M \otimes_A A/I$ 是 $A/I$-平坦的，且 $\mathrm{Tor}_{1}^{A}(M, A/I) = 0$; 
+\item $M \otimes_A A/I$ 是 $A/I$-平坦的，且相伴分次环上的典范同态 (∗) 是同构.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+事实上，它们分别是前面的条件 (iii) 和 (ii)，以及推论 \ref{cor:IV.5.4} 的条件.
+\end{proof}
+
+不再假设 $I$ 幂零，则先验地只有蕴含 (i)$\Rightarrow$(ii)$\Rightarrow$(iii). 另一方面，由于条件 (iii) 除以 $I$ 的幂后仍稳定，由 \ref{cor:IV.5.5} 看到它蕴含
+\begin{enumerate}[(i)]
+\item[((iv))] 对每个整数 $n$，$M \otimes A/I^n$ 在 $A/I^n$ 上平坦.
+\end{enumerate}
+要给出由此能推出 (i) (i.e. $M$ 是 $A$-平坦的) 的条件. 我说为此只需 $A$ 诺特且 $M$ 满足下列有限性条件：对 $A$ 上的每个有限型模 $N$，$M \otimes_A N$ 按 $I$-预adic 拓扑分离. (只需对 $A$ 中有限型理想 $N$ 验证.) 事实上，证明在这些条件下，若 $N' \to N$ 是有限型模的单同态，则 $\mathcal{M} \otimes_A \mathcal{N}' \to \mathcal{M} \otimes_A \mathcal{N}$ 是单同态. 只需证明其核含于诸 $\mathcal{I}^n(M \otimes_A N') = \operatorname{Im}(M \otimes_A \mathcal{I}^n N' \to M \otimes_A \mathcal{N}')$，或含于诸 $\operatorname{Im}(M \otimes_A V'_n \to M \otimes_A N') = \mathrm{Ker}(M \otimes_A N' \to M \otimes_A (N'/V'_n))$，其中 $V'_n$ 遍历 $N'$ (配备 $I$-adic 拓扑) 中 0 的可数个基本邻域组. 由 Krull 定理，$N'$ 的 $I$-adic 拓扑由 $N$ 的拓扑诱导，可以取 $V'_n = N' \cap I^n N$. 考虑交换图
+\[
+\begin{tikzcd}[row sep=large, column sep=large]
+M \otimes_A N' \arrow[r] \arrow[d] & M \otimes_A (N'/V'_n) \arrow[d] \\
+M \otimes_A N \arrow[r] & M \otimes_A (N/I^n N)
+\end{tikzcd}
+\]
+由于 $N'/V'_n$ 和 $N/I^n N$ 被 $I^n$ 零化，第二个垂直同态等同于由单射 $N'/V'_n \to N/I^n N$ 与平坦 $(A/I^n)$-模 $M \otimes_A A/I^n$ 张量得到的同态，故单射. 因此 $M \otimes_A N' \to M \otimes_A N$ 的核含于 $M \otimes_A N' \to M \otimes_A (N'/V'_n)$ 的核，这正是要证的.
+
+$M$ 所满足的``有限性''条件，在 $M$ 是诺特 $A$-代数 $B$ (满足 $IB$ 含于 $B$ 的根式) 上的有限型模时尤其成立：此时对 $A$ 上的每个有限型模 $N$，$M \otimes_A N$ 是 $B$ 上的有限型模，故由 Krull 定理对 $I$-adic 拓扑 (= 其 $(IB)$-adic 拓扑) 分离. 于是得到：
+
+\begin{theorem}\label{thm:IV.5.6}
+设 $A \to B$ 是诺特环的同态，$I$ 是 $A$ 的理想，使得 $IB$ 含于 $B$ 的根式，$M$ 是有限型 $B$-模. 下列条件等价：
+\begin{enumerate}[(i)]
+\item $M$ 是 $A$-平坦的; 
+\item $M \otimes_A A/I$ 是 $A/I$-平坦的，且 $\mathrm{Tor}_{1}^{A}(M, A/I) = 0$; 
+\item $M \otimes_A A/I$ 是 $A/I$-平坦的，且典范同态
+\[
+\mathrm{gr}_{I}^{0}(M) \otimes_{A/I} \mathrm{gr}_{I}(A) \longrightarrow \mathrm{gr}_{I}(M)
+\]
+是同构; 
+\item 对每个整数 $n$，$M \otimes_A A/I^n$ 在 $A/I^n$ 上平坦.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+这个结果在 $A$，$B$ 是诺特局部环、$A \to B$ 是局部同态、$I$ 是 $A$ 中含于其极大理想的理想 (且 \ref{thm:IV.5.6} 可以立即归结到这个情形) 时最常用. 一个有趣的情形是 $A/I$ 是域，i.e. $I$ 极大，此时``$M \otimes_A (A/I)$ 在 $A/I$ 上平坦''的条件成为多余; 此外，由于诸 $A/I^n$ 是 Artin 局部环，条件 (iv) 意味着诸 $M \otimes_A (A/I^n)$ 在诸 $A/I^n$ 上自由.
+\end{proof}
+
+\begin{corollary}\label{cor:IV.5.7}
+设 $A \to B$ 是诺特局部环的局部同态，$u \colon M' \to M$ 是有限型 $B$-模的同态，假设 $M$ 在 $A$ 上平坦. 则下列条件等价：
+\begin{enumerate}[(i)]
+\item $u$ 单射，且 Coker $u$ 在 $A$ 上平坦; 
+\item $u \otimes_A k \colon M' \otimes_A k \to M \otimes_A k$ 单射
+\end{enumerate}
+\end{corollary}
+
+(其中 $k$ 表示 $A$ 的剩余域.)
+
+(i)$\Rightarrow$(ii) 由 \ref{prop:IV.1.1}，证明逆命题. 首先 $u$ 单射，因为只需在相伴分次环上验证，在那里由读者将写出的交换方块得出. 设 $M''$ 是其余核，则有正合序列
+\[
+0 \longrightarrow M' \longrightarrow M \longrightarrow M'' \longrightarrow 0,
+\]
+由此由 Tor 的正合序列，考虑到假设 (ii) 和 $\mathrm{Tor}_{1}^{A}(M, k) = 0$，有关系 $\mathrm{Tor}_{1}^{A}(M'', k) = 0$，故由定理 \ref{thm:IV.5.6}，$M''$ 在 $A$ 上平坦.
+
+\begin{corollary}\label{cor:IV.5.8}
+在 \ref{thm:IV.5.6} 的条件下，设 $J$ 是 $B$ 的含 $IB$ 且含于根式的理想. 设 $\widehat{A}$ 是 $A$ 的 $I$-adic 完备化，$\widehat{B}$ 和 $M$ 是 $B$ 和 $M$ 的 $J$-adic 完备化. 为使 $M$ 是 $A$-平坦的，必要且充分条件是 $\widehat{M}$ 是 $\widehat{A}$-平坦的.
+\end{corollary}
+
+\begin{proof}
+(N.B. 充分性已经容易由 \ref{cor:IV.3.2} 得出.) 在情形 $(A, B, I, M)$ 和 $(\widehat{A}, \widehat{B}, I\widehat{A}, \widehat{M})$ 中使用 \ref{thm:IV.5.6} 的判则 (iii). 借助 \ref{cor:IV.3.2}，看到对两种情形得到的条件等价.
+\end{proof}
+
+\begin{corollary}\label{cor:IV.5.9}
+设 $A \to B \to C$ 是诺特局部环的局部同态，$M$ 是有限型 $C$-模 (N.B. $C$ 只是为了能对 $M$ 施加有限性条件). 假设 $B$ 在 $A$ 上平坦. 设 $k$ 是 $A$ 的剩余域. 下列条件等价：
+\begin{enumerate}[(i)]
+\item $M$ 在 $B$ 上平坦; 
+\item $M$ 在 $A$ 上平坦，且 $M \otimes_A k$ 在 $B \otimes_A k$ 上平坦.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+蕴含 (i)$\Rightarrow$(ii) 平凡，证明 (ii)$\Rightarrow$(i). 对 $(B, C, \mathfrak{m}B = I, M)$ 应用判则 (iii) of \ref{thm:IV.5.6}，由于 $M \otimes_B (B/I) = M \otimes_B (B \otimes_A k) = M \otimes_A k$，该判则的第一个条件恰意味着 $M \otimes_A k$ 在 $B \otimes_A k$ 上平坦，好. 判则的第二个条件成立，因为 $M$ 在 $A$ 上平坦且 $B$ 在 $A$ 上平坦，由张量积结合律公式. —— 当然，若以 \ref{cor:IV.5.5} 代替 \ref{thm:IV.5.6}，则在假设 $A$ 的理想 $m$ 幂零时，得到无诺特条件和有限性条件的类似陈述. ($m$ 取极大这一事实其实没有用到; 但某种意义上``$m$ 极大''的情形是``尽可能好''的.)
+\end{proof}
+
+\section{平坦态射与开集}
+
+先回忆一些关于可构造集 (constructible sets) 的结果，它们在流传的 Dieudonné-Rosenlicht 概形讨论班笔记中已经证明\footnote{参见 EGA 0$_{\mathrm{III}}$ 9，EGA IV 1.8 和 1.10.}.
+
+设 $X$ 是拓扑空间. 随 Chevalley，称 $X$ 的子集可构造，若它是有限个局部闭子集的并.
+
+\begin{lemma}\label{lem:IV.6.1}
+设 $X$ 是诺特拓扑空间，$Z$ 是 $X$ 的子集. 为使 $Z$ 可构造，必要且充分条件是：对 $X$ 的每个不可约闭子集 $Y$，$Z \cap Y$ 在 $Y$ 中不稠密，或包含空间 $Y$ 的一个非空开子集.
+\end{lemma}
+
+由此，用交换代数的众所周知的引理，得出：
+
+ \begin{lemma}[Chevalley]\label{lem:IV.6.2}
+设 $f \colon X \to Y$ 是预概形的有限型态射，$Y$ 诺特. 则 $f(X)$ 可构造.
+\end{lemma}
+
+\begin{lemma}\label{lem:IV.6.3}
+设 $X$ 是诺特拓扑空间，其每个不可约闭子集都有生成点，$U$ 是 $X$ 的可构造子集，$x \in X$. 为使 $U$ 是 $x$ 的邻域，必要且充分条件是 $x$ 的每个推广 (generalization) $y$ (i.e. 每个满足 $x \in \overline{\{y\}}$ 的 $y \in X$) 都在 $U$ 中.
+\end{lemma}
+
+特别地：
+
+\begin{corollary}\label{cor:IV.6.4}
+设 $X$ 是诺特拓扑空间，其每个不可约闭子集都有生成点，$U$ 是 $X$ 的子集. 为使 $U$ 开，必要且充分条件是它满足下列两个条件：
+\begin{enumerate}[a)]
+\item $U$ 包含其每个点的所有推广; 
+\item 若 $x \in U$，则 $U \cap \overline{\{x\}}$ 包含空间 $\overline{\{x\}}$ 的一个非空开子集.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+事实上，由 \ref{lem:IV.6.1}，$U$ 必然可构造，应用证明 $U$ 是其每个点的邻域的判则 \ref{lem:IV.6.3}.
+\end{proof}
+
+\begin{corollary}\label{cor:IV.6.5}
+设 $f \colon X \to Y$ 是预概形的有限型态射，$Y$ 局部诺特，$x$ 是 $X$ 的点，$y = f(x)$. 为使 $f$ 把 $x$ 的每个邻域变成 $y$ 的邻域，必要且充分条件是：对 $y$ 的每个推广 $y'$，存在 $x$ 的推广 $x'$，使得 $f(x') = y'$.
+\end{corollary}
+
+\begin{proof}
+显然可以假设 $X$ 和 $Y$ 仿射，从而诺特. 条件充分，因为只需证明 $f(X)$ 是 $y$ 的邻域，而由 \ref{lem:IV.6.1}，$f(X)$ 可构造，只需应用判则 \ref{lem:IV.6.3}. 条件必要，因为设 $Y' = \overline{\{y'\}}$，$F$ 是不含 $x$ 的 $f^{-1}(Y')$ 的不可约分支的并. 则 $X - F$ 是 $x$ 的开邻域，故其像是 $y$ 的邻域，更不用说包含 $y'$，故存在 $x'_1 \in X - F$ 使得 $f(x'_1) = y'$. 考虑 $f^{-1}(Y')$ 的包含 $x'_1$ 的不可约分支，它必然包含 $x$ (否则它含于 $F$)，设 $x'$ 是其生成点. 它是 $x$ 的推广，且 $f(x')$ 是 $f(x'_1) = y'$ 的推广，含于 $Y'$，故等于 $y'$，证毕.
+\end{proof}
+
+\begin{theorem}\label{thm:IV.6.6}
+设 $f \colon X \to Y$ 是局部有限型态射，$Y$ 局部诺特，$F$ 是 $X$ 上支集为 $X$、相对 $Y$ 平坦的凝聚层. 则 $f$ 是开态射 (i.e. 把开集变为开集).
+\end{theorem}
+
+\begin{proof}
+只需对每个点 $x \in X$ 证明判则 \ref{cor:IV.6.5}. 而 $x$ 的推广 $x'$ 对应于 $\mathcal{O}_x$ 的素理想，$y$ 的推广 $y'$ 对应于 $\mathcal{O}_y$ 的素理想，因此必须验证 $\mathcal{O}_y$ 的每个素理想都由 $\mathcal{O}_x$ 的素理想诱导. 而 $\mathcal{F}_x$ 是 $\mathcal{O}_x$-模，非零且 $\mathcal{O}_y$ 平坦，故由 \ref{cor:IV.2.2} 在 $\mathcal{O}_y$ 上忠实平坦. 于是可以应用 \ref{prop:IV.2.3}，证明完毕.
+\end{proof}
+
+\begin{remarkstar}
+由于平坦性对基扩张保持，在 \ref{cor:IV.6.5} 的条件下 $f$ 甚至泛开 (universally open). 不过我并不知道，当 $Y$ 整且 $X$ 在 $Y$ 上有限型时，$f$ 是否在 $X$ 的每个分支 $X_i$ 上诱导开态射，或甚至只是等维 (equidimensional) 态射\index[term]{dengweitaishe@等维态射}\footnote{对第二个问题的答案是肯定的，对第一个问题即使 $f$ 平展也是否定的; 参见 EGA IV 12.1.1.5 和 EGA Err$_{\mathrm{IV}}$ 33.}，i.e. 其所有纤维的分支都有相同维数 (只知道 $X_i$ 支配 $Y$). 问题与下面有关：设 $A \to B$ 是诺特局部环的局部同态，使得 $B$ 在 $A$ 上平坦且 $mB$ 是 $B$ 的定义理想 (这还蕴含 $\dim B = \dim A$). 是否对 $B$ 的每个极小素理想 $\mathfrak{p}_i$ 都有 $\dim B/\mathfrak{p}_i = \dim B$? 只指出：把 \ref{thm:IV.6.6} 的平坦性假设换成``$f$ 泛开''这一假设，第一个问题的答案是肯定的.
+\end{remarkstar}
+
+\begin{lemma}\label{lem:IV.6.7}
+设 $A$ 是诺特整环，$B$ 是 $A$ 上的有限型代数，$M$ 是有限型 $B$-模. 则存在 $A$ 的非零元素 $f$，使得 $M_f$ 是 $A_f$ 上的自由模 (更不用说平坦).
+\end{lemma}
+
+\begin{proof}
+设 $K$ 是 $A$ 的分式域，则 $B \otimes_A K$ 是 $K$ 上的有限型代数，$M \otimes_A K$ 是后者的有限型模. 设 $n$ 是该模支集的维数，对 $n$ 归纳. 若 $n < 0$，i.e. $M \otimes_A K = 0$，则取 $M$ 在 $B$ 上的有限个生成元，看到存在零化这些生成元 (从而零化 $M$) 的 $f \in A$，故 $M_f = 0$，已经成功. 假设 $n \geqslant 0$. 知道 $B$-模 $M$ 有合成序列，其逐次商同构于模 $B/\mathfrak{p}_i$，诸 $\mathfrak{p}_i$ 是 $B$ 的素理想. 由于自由模的扩张是自由的，归结到 $M$ 本身形如 $B/\mathfrak{p}$，或等同于 $B$，其中 $B$ 是整 $A$-代数. 把 Noether 正规化引理应用于 $K$-代数 $B \otimes_A K$，容易看到存在 $A$ 的非零元素 $f$，使得 $B_f$ 在子环 $A_f[t_1, \dots, t_n]$ (其中 $t_i$ 是未定元) 上整. 故可以先假设 $B$ 在 $C = A[t_1, \dots, t_n]$ 上整，从而是有限型无挠 $C$-模. 设 $m$ 是其秩，则有 $C$-模的正合序列：
+\[
+0 \longrightarrow C^m \longrightarrow B \longrightarrow M' \longrightarrow 0,
+\]
+其中 $M'$ 是挠 $C$-模. 由此，$C \otimes_A K$-模 $M' \otimes_A K$ 的 Krull 维数严格小于 $C \otimes_A K$ 的维数 $n$. 由归纳假设，只要对 $A$ 的适当非零元素 $f$ 局部化，可以假设 $M'$ 是 $A$-自由模. 另一方面，$C^m$ 是 $A$-自由模. 故 $B$ 此时是 $A$-自由模，完成.
+\end{proof}
+
+\begin{lemma}\label{lem:IV.6.8}
+设 $A$ 是诺特环，$B$ 是 $A$ 上的有限型代数，$M$ 是有限型 $B$-模，$p$ 是 $B$ 的素理想，$q$ 是它在 $A$ 上诱导的素理想. 假设 $M_{\mathfrak{p}}$ 在 $A_{\mathfrak{q}}$ 上平坦 (或在 $A$ 上平坦，都一样). 则存在 $g \in B - \mathfrak{p}$，使得
+\begin{enumerate}[a)]
+\item $(M/\mathfrak{q}M)_g$ 在 $A/\mathfrak{q}$ 上平坦; 
+\item $\mathrm{Tor}_{1}^{A}(M, A/\mathfrak{q})_g = 0$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+事实上，把 \ref{lem:IV.6.7} 应用于 $\bigl(A/(q), B/\mathfrak{q}B, M/\mathfrak{q}M\bigr)$，先看到存在 $f \in A - \mathfrak{q}$，使得 $(M/\mathfrak{q}M)_f$ 在 $A/\mathfrak{q}$ 上平坦. 另一方面，由于 $M_{\mathfrak{p}}$ 在 $A$ 上平坦，有 $\mathrm{Tor}_{1}^{A}(M, A/\mathfrak{q})_{\mathfrak{p}} = \mathrm{Tor}_{1}^{A}(M_{\mathfrak{p}}, A/\mathfrak{q}) = 0$，故因 $\operatorname{Tor}_{1}^{A}(M, A/\mathfrak{q})$ 是有限型 $B$-模，存在 $g \in B - \mathfrak{p}$ 使得 (b) 成立. 于是可以 (把 $g$ 换成 $gf$) 假设 (a) 同时成立，证明完毕.
+\end{proof}
+
+\begin{corollary}\label{cor:IV.6.9}
+用 \ref{lem:IV.6.8} 的记号，对 $B$ 的每个含 $p$ 而不含 $g$ 的素理想 $p'$，$M_{\mathfrak{p}'}$ 在 $A$ 上平坦 (或等价地，在 $A_{\mathfrak{q}'}$ 上平坦，其中 $q'$ 是 $p'$ 诱导的 $A$ 的素理想).
+\end{corollary}
+
+\begin{proof}
+只需对系统 $(A, B_{\mathfrak{q}'}, \mathfrak{q}, M_{\mathfrak{q}'})$ 应用判则 \ref{thm:IV.5.6} (ii)，使用 Tor 的局部化.
+\end{proof}
+
+\begin{theorem}\label{thm:IV.6.10}
+设 $f \colon X \to Y$ 是有限型态射，$Y$ 局部诺特，$F$ 是 $X$ 上的凝聚层. 设 $U$ 是满足``$\mathcal{F}_x$ 在 $\mathcal{O}_{f(x)}$ 上平坦''的点 $x \in X$ 的集合. 则 $U$ 是开集.
+\end{theorem}
+
+\paragraph*{证明.} 可以假设 $X$ 和 $Y$ 仿射，环为 $B$ 和 $A$，故 $\mathcal{F}$ 由有限型 $B$-模 $M$ 定义. 应用判则 \ref{cor:IV.6.4}. 条件 (a) 由 \ref{prop:IV.1.2} (i) 平凡成立，剩下验证 \ref{cor:IV.6.4} 的条件 (b). 这正是引理 \ref{lem:IV.6.8} 和推论 \ref{cor:IV.6.9} 所做的.
+
+在许多问题中，定理 \ref{thm:IV.6.10} 的下列较弱形式就足够了 (它已经由引理 \ref{lem:IV.6.7} 得出，因而不需要可构造集的技术，也不需要定理 \ref{thm:IV.5.6})：
+
+\begin{corollary}\label{cor:IV.6.11}
+在 \ref{thm:IV.6.10} 的条件下，若假设 $Y$ 整，则存在 $Y$ 中的非空开集 $V$，使得 $\mathcal{F}$ 在 $f^{-1}(V)$ 的所有点处相对 $Y$ 平坦.
+\end{corollary}
+
+\begin{proof}
+事实上，开集 $U$ 包含 $Y$ 的生成点的纤维 (因为该点的局部环是域)，故它包含形如 $f^{-1}(V)$ 的开集，因为 $X$ 在 $Y$ 上有限型. 由 \ref{cor:IV.6.11} 还容易得出下列结果，其中 $Y$ 假设诺特 (但不必整)：存在 $Y$ 的局部闭子集组成的划分 $Y_i$，使得 (给 $Y_i$ 配备诱导约化结构) $\mathcal{F}$ 在每个 $X_i = X \times_Y Y_i$ 上诱导相对 $Y_i$ 平坦的层.
+\end{proof}

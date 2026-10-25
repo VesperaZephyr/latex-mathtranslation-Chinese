@@ -1,0 +1,106 @@
+\section{沿 Faltings 的方法证明射影性}\label{src:9.6}
+\begin{epigraph}
+不过, 我绝不是主张应当避免 [GIT], 只是说有时拥有另一种方法或许是好的.
+\epigraphauthor{Gerd Faltings \cite{Fal93}}
+\end{epigraph}
+我们改用 Faltings 的论证 \cite{Fal93} (另见 \cite{ABB+22}), 给出 $M_{r,d}^{\mathrm{ss}}$ 的射影性 (定理~\hyperref[thm:B]{B}) 的内蕴证明. 已经完成的一些准备工作如下:
+\begin{itemize}
+\item $C$ 上向量丛 $V$ 诱导 $\cBun_{r,d}$ 上的行列式线丛 $\mathcal L_V:=\det\big(\mathrm Rp_{2,*}(\mathcal F_{\mathrm{univ}}\otimes p_1^*V)\big)^\vee$ (定义~\bookref{9.4.15}), 并有整体截面 $s_V\in\Gamma(\cBun_{r,d},\mathcal L_V)$ (见~\bookeqref{9.4.21}). 对 $\xi\in\mathrm{Pic}^d(C)$, 线丛 $\mathcal L_V|_{\cBun_{r,\xi}}$ 仅依赖于 $\mathrm{rk}\,V$ 与 $\deg V$ (习题~\bookref{9.4.17}(2)), 而截面 $s_V|_{\cBun_{r,\xi}}$ 确实依赖于 $V$.
+\item 截面 $s_V$ 在 $[F]\in\cBun_{r,d}(\Bbbk)$ 处不消失, 当且仅当 $\mathrm H^0(C,F\otimes V)=\mathrm H^1(C,F\otimes V)=0$ (引理~\bookref{9.4.22}).
+\item 若 $(\mathrm{rk}\,V,\deg V)$ 是 $(r',r'(g-1)-d')$ 的倍数, 其中 $r'=r/\gcd(r,d)$, $d'=d/\gcd(r,d)$, 则 $\mathcal L_V|_{\cBun_{r,d}^{\mathrm{ss}}}$ 沿良模空间 $\cBun_{r,d}^{\mathrm{ss}}\to M_{r,d}^{\mathrm{ps}}$ 下降为 $M_{r,d}^{\mathrm{ps}}$ 上的线丛 $L_V$ (命题~\bookref{9.4.29}).
+\end{itemize}
+为完成 $M_{r,d}^{\mathrm{ps}}$ 的射影性证明, 首先将 $L_V$ 在 $M_{r,d}^{\mathrm{ps}}$ 上的丰沛性归结为其在固定行列式的多重稳定向量丛模空间 $M_{r,\xi}^{\mathrm{ps}}$ 上的限制的丰沛性. 随后显式给出 $L_V$ 的幂的足够多截面, 证明 $L_V$ 在 $M_{r,\xi}^{\mathrm{ps}}$ 上半丰沛 (推论~\bookref{9.6.7}). 最后证明对 $m\gg0$, 映射 $|L_V^{\otimes m}|:M_{r,\xi}^{\mathrm{ps}}\to\mathbb P^N$ 不压缩任何曲线, 从而拟有限, 进而有限 (定理~\bookref{9.6.8}).
+\subsection{\texorpdfstring{关于 $\mathrm H^0(C,F\otimes V)$ 消失的关键引理}{关于零次上同调消失的关键引理}}\label{src:9.6.1-subsection}
+以下引理是我们改写 Faltings 射影性论证的技术核心. Faltings 半稳定性判据 (\bookref{9.6.4}) 与 $L_V$ 的半丰沛性的证明将取 $\epsilon=0$ 使用此引理, 而 $L_V$ 的丰沛性 (定理~\bookref{9.6.8}) 的证明将取 $\epsilon=-1,0,1$ 使用它. 可将 $\epsilon$ 看作扰动等式 $\chi(C,F\otimes V)=0$ 的一个``调节因子''. 证明基于受 \cite{EP04} 和 \cite[\S5]{Lan83b} 启发的维数计数; 这些文献还建立了 $V$ 的秩的有效界.
+\begin{lemma}\label{src:9.6.1}
+设 $F$ 是 $C$ 上秩 $r$, 次数 $d$ 的向量丛, $\epsilon$ 为整数. 设 $m\gg0$, $V$ 为满足
+\[
+\mathrm{rk}\,V=mr',\qquad\deg V=mr'(g-1)-md'+\epsilon
+\]
+的一般稳定向量丛, 其中 $r'=r/\gcd(r,d)$, $d'=d/\gcd(r,d)$.
+\begin{enumerate}[(1)]
+\item 若 $V^\vee\to F$ 为非零映射, 则其像 $F'$ 的斜率满足 $\mu(F')\geq\mu(F)$.
+\item 若 $F$ 稳定且 $\epsilon\leq0$, 则不存在非零映射 $V^\vee\to F$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+对偶 $V^\vee$ 的秩为 $mr'$, 次数为 $mr'(1-g)+md'-\epsilon$. 设 $V^\vee\to F$ 为像为 $F'$ 的非零映射. 因为 $V^\vee$ 稳定, 有
+\[
+\mu(F')\geq\mu(V^\vee)=\mu(F)+1-g-\frac{\epsilon}{mr'}.
+\]
+在 $\mu(F')<\mu(F)$ 的约束下, $\mu(F')$ 只有有限种选择, 因而 $F'$ 的秩与次数也只有有限种选择.
+
+为证明 (1), 固定整数 $1\leq r_{F'}\leq r$ 和 $d_{F'}$, 满足 $d_{F'}/r_{F'}<\mu(F)$. 我们建立一个簇的维数上界, 它参数化每个满足下述性质的稳定丛 $V$: 存在映射 $V^\vee\to F$, 其像 $F'$ 的秩为 $r_{F'}$, 次数为 $d_{F'}$. 这样的 $V^\vee$ 均可置于正合列
+\begin{equation}\label{src:9.6.2}
+\begin{tikzcd}[ampersand replacement=\&,column sep=small,row sep=small]
+0\arrow[r]\&G\arrow[r]\&V^\vee\arrow[r]\arrow[dr]\&F'\arrow[r]\arrow[d,hook]\&0\\
+\&\&\&F,\&
+\end{tikzcd}
+\end{equation}
+其中 $G$ 的秩为 $mr'-r_{F'}$, 次数为 $mr'(1-g)+md'-\epsilon-d_{F'}$. 出现在~\bookeqref{9.6.2} 中的层 $F'$ 构成有界族, 因为每个 $F'$ 都是 $F$ 的固定秩与次数的子层. 根据引理~\bookref{9.6.3}, 存在有限型 $\Bbbk$-概形 $U_1$ 与 $C\times U_1$ 上向量丛 $\mathcal F_1$, 满足 $\dim U_1\leq r_{F'}^2(g-1)+1$, 参数化每个这样的 $F'$. 因为固定秩与次数的稳定丛也有界, Quot 概形的有界性表明~\bookeqref{9.6.2} 中的子层 $G$ 由概形 $U_2$ 与 $C\times U_2$ 上向量丛 $\mathcal F_2$ 参数化, 且 $\dim U_2\leq(mr'-r_{F'})^2(g-1)+1$.
+
+注意 $\mathrm{Hom}_{\mathcal O_C}(F',G)=0$, 因为 $V^\vee$ 稳定, 任意非零映射 $F'\to G$ 都会诱导既非零也非同构的自同态 $V^\vee\twoheadrightarrow F'\to G\hookrightarrow V^\vee$. 因此, 应用习题~\bookref{9.2.12} (或命题~\bookref{9.2.13}), $F'$ 被 $G$ 的扩张由 $\mathbb A(\mathrm{Ext}^1_{\mathcal O_C}(F',G)^\vee)$ 参数化. 根据 Riemann--Roch,
+\[
+\begin{aligned}
+\dim\mathrm{Ext}^1_{\mathcal O_C}(F',G)&=-\chi(C,F'^\vee\otimes G)\\
+&=-\deg(F'^\vee\otimes G)-\mathrm{rk}(F'^\vee\otimes G)(1-g)\\
+&=\deg(F')\mathrm{rk}(G)-\mathrm{rk}(F')\deg(G)+\mathrm{rk}(F')\mathrm{rk}(G)(g-1)\\
+&=d_{F'}(mr'-r_{F'})-r_{F'}(mr'(1-g)+md'-\epsilon-d_{F'})\\
+&\qquad+r_{F'}(mr'-r_{F'})(g-1)\\
+&=(d_{F'}r'-r_{F'}d')m+2r_{F'}r'(g-1)m-r_{F'}^2(g-1)+r_{F'}\epsilon\\
+&=r_{F'}r'(\mu(F')-\mu(F))m+2r_{F'}r'(g-1)m-r_{F'}^2(g-1)+r_{F'}\epsilon.
+\end{aligned}
+\]
+所以~\bookeqref{9.6.2} 中每个这样的 $V^\vee$ 由 $\mathbb A(\mathbb E)$ 参数化, 其中
+\[
+\mathbb E:=\big(p_{23,*}\mathcal E\!xt^1_{\mathcal O_{C\times U_1\times U_2}}(p_{12}^*\mathcal F_1,p_{13}^*\mathcal F_2)\big)^\vee.
+\]
+计算得
+\[
+\begin{aligned}
+\dim\mathbb A(\mathbb E)&\leq\dim U_1+\dim U_2+\dim\mathrm{Ext}^1_{\mathcal O_C}(F',G)\\
+&\leq r_{F'}^2(g-1)+1+(mr'-r_{F'})^2(g-1)+1\\
+&\qquad+r_{F'}r'(\mu(F')-\mu(F))m+2r_{F'}r'(g-1)m-r_{F'}^2(g-1)-r_{F'}\epsilon\\
+&=(mr')^2(g-1)+r_{F'}r'(\mu(F')-\mu(F))m-r_{F'}\epsilon+2.
+\end{aligned}
+\]
+因为 $\mu(F')<\mu(F)$, $m$ 的系数为负. 故当 $m$ 足够大时,
+\[
+\dim\mathbb A(\mathbb E)<(mr')^2(g-1)+1=\dim M_{\mathrm{rk}\,V,\deg V}^{\mathrm s}.
+\]
+因此, 一般稳定丛 $V$ 不会出现在~\bookeqref{9.6.2} 形式的扩张中.
+
+对 (2), 因为 $F$ 稳定, (1) 表明任意非零映射 $V^\vee\to F$ 必为满射. 计算参数化所有能置于短正合列 $0\to G\to V^\vee\to F\to0$ 的稳定丛 $V$ 的簇的维数. 使用上述参数化所有这样的 $G$ 的概形 $U_2$ 与 $C\times U_2$ 上向量丛 $\mathcal F_2$, 可知每个这样的 $V^\vee$ 由 $\mathbb P\mathbb E$ 参数化, 其中 $\mathbb E:=\big(p_{2,*}\mathcal E\!xt^1_{\mathcal O_{C\times U_2}}(\mathcal F_1,p_1^*F)\big)^\vee$. $G$ 的秩为 $mr'-r$, 次数为 $mr'(1-g)+md'-\epsilon-d$, 故
+\[
+\begin{aligned}
+\dim\mathbb P\mathbb E&\leq\dim U_2+\dim\mathrm{Ext}^1_{\mathcal O_C}(F,G)-1\\
+&=(mr'-r)^2(g-1)+1+2rr'(g-1)m-r^2(g-1)+r\epsilon-1\\
+&=(mr')^2(g-1)+r\epsilon\\
+&\leq(mr')^2(g-1)\qquad(\text{使用 }\epsilon\leq0)\\
+&<M_{\mathrm{rk}\,V,\deg V}^{\mathrm s}.
+\end{aligned}
+\]
+这表明一般稳定丛 $V$ 的对偶不能满射到 $F$.
+\end{proof}
+\begin{lemma}\label{src:9.6.3}
+设 $\{G_\alpha\}_{\alpha\in\Lambda}$ 是 $C$ 上秩 $k$ 的向量丛的有界族. 则存在 $\Bbbk$ 上有限型概形 $U$, 维数至多 $k^2(g-1)+1$, 以及 $C\times U$ 上向量丛 $\mathcal G$, 使得每个 $G_\alpha$ 都作为 $\mathcal G$ 在某个 $u\in U$ 处的纤维出现.
+\end{lemma}
+\begin{proof}
+因为 $G_\alpha$ 的次数只有有限种可能, 可归结到每个 $\alpha$ 均满足固定的 $\deg G_\alpha=l$ 的情形. 设 $\mathcal U\subseteq\cBun_{k,l}$ 为包含每个 $G_\alpha$ 的有限型开子叠. 先在稳定轨迹 $\mathcal U\cap\cBun_{k,l}^{\mathrm s}$ 上证明断言. 最小呈示的存在性 (\bookref{4.6.1}) 给出任意稳定丛 $G_\alpha$ 附近的光滑邻域 $U\to\cBun_{k,l}^{\mathrm s}$, 其中概形 $U$ 的维数为 $\dim\cBun_{k,l}^{\mathrm{ss}}+\dim\operatorname{Aut}(G_\alpha)=k^2(g-1)+1$. 另一种证明利用 $\cBun_{k,l}^{\mathrm s}$ 是代数空间 $M_{k,l}^{\mathrm s}$ 上的 $\mathbb G_m$-gerbe, 且 $\dim M_{k,l}^{\mathrm s}=k^2(g-1)+1$ (定理~\bookref{9.3.11}), 并利用 $M_{k,l}^{\mathrm s}$ 的 平展 覆盖后 $\cBun_{k,l}^{\mathrm s}\to M_{k,l}^{\mathrm s}$ 存在截面.
+
+因此可假设 $\mathcal U$ 中每个丛 $G_\alpha$ 均不稳定. 此时可将 $G_\alpha$ 写为非零丛的扩张 $0\to G_{\alpha,2}\to G_\alpha\to G_{\alpha,1}\to0$, 满足 $\mu(G_{\alpha,2})\geq\mu(G_\alpha)$. 因为族 $\{G_\alpha\}$ 有界, $G_{\alpha,i}$ 的秩与次数只有有限种可能. 假设 $\mathrm{rk}\,G_{\alpha,i}=k_i$, $\deg G_{\alpha,i}=l_i$ 固定, 归纳假设断言对有界族 $\{G_{\alpha,1}\}$ 与 $\{G_{\alpha,2}\}$ 成立. 设 $U_i\to\cBun_{k_i,l_i}$ 来自维数 $\dim U_i\leq k_i^2(g+1)+1$ 的概形, 其像包含每个 $G_{\alpha,i}$. 利用扩张叠 $\mathbb E:=\underline{\mathrm{EXT}}(p_{12}^*\mathcal F_{1,\mathrm{univ}},p_{13}^*\mathcal F_{2,\mathrm{univ}})$ (命题~\bookref{9.2.13}), 其中 $\mathcal F_{i,\mathrm{univ}}$ 为 $C\times\cBun_{k_i,l_i}$ 上万有丛, 得到 Cartesian 图
+\[
+\begin{tikzcd}[ampersand replacement=\&]
+U\arrow[r]\arrow[d]\&\mathbb E\arrow[r]\arrow[d]\&\cBun_{r,d}\\
+U_1\times U_2\arrow[r]\&\cBun_{k_1,l_1}\times\cBun_{k_2,l_2}\arrow[ul,phantom,"\square"]\&
+\end{tikzcd}
+\]
+根据习题~\bookref{9.1.4}, $\mathbb E\to\cBun_{k_1,l_1}\times\cBun_{k_2,l_2}$ 的相对维数为 $k_1k_2(g-1)+(l_1k_2-l_2k_1)\leq k_1k_2(g-1)$, 这里用了 $\mu(G_{\alpha,2})\geq\mu(G_\alpha)$. 因为 $k^2=(k_1+k_2)^2>k_1^2+k_2^2+k_1k_2$ 且 $g>1$, 得到
+\[
+\begin{aligned}
+\dim U&\leq\dim U_1+\dim U_2+k_1k_2(g-1)\\
+&\leq(k_1^2+k_1k_2+k_2^2)(g-1)+2\\
+&\leq k^2(g-1)+1.
+\end{aligned}
+\]
+\end{proof}

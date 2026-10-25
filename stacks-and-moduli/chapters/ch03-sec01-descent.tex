@@ -1,0 +1,181 @@
+% Source printed pp. 70-81.
+\section{下降理论}\label{src:3.1}
+\index{descent theory@下降理论\quad descent theory|hyperpage}
+\begin{epigraph}
+因此, 人的一切知识始于直观, 由此进至概念, 最后止于理念.
+\epigraphauthor{Immanuel Kant}
+\end{epigraph}
+下降在模理论中的重要性几乎怎么强调都不为过. 其核心思想极为简单, 而且你已经熟悉其中的一个特例: 拟凝聚层, 概形态射以及概形本身都可以在 Zariski 覆盖上局部构造, 并且它们的大部分性质都可以在 Zariski 局部检验. 事实上, 发展概形理论的一个核心技巧, 就是归约到仿射概形的情形, 再应用交换代数中的结果. 下降理论表明, 上述每类对象 (拟凝聚层, 概形态射与概形) 不仅可以在 Zariski 局部构造, 也可以在平展局部 (甚至 fppf 或 fpqc 局部) 构造, 并且其性质也可以局部检验. 这使我们能够将关于代数叠的命题归约到概形 (甚至仿射概形) 的情形来证明.
+
+下降理论最初由 Grothendieck 在~\cite{FGAI}, \cite[§6]{SGA1}~及~\cite[§IV]{EGA}~中发展, 是对 Weil~\cite{Wei56}~开创的 Galois 下降理论的广泛推广. 下降理论的应用远远超出模理论. 例如, 由于域扩张是忠实平坦的, 可以将域 $k$ 上概形的性质归约到代数闭域的情形. 类似地, 由于 Noether 局部环到其完备化的映射 $A\to\widehat A$ 是忠实平坦的, 可以将 $A$ 的性质归约到其完备化的性质. 下降理论已有许多出色的阐述, 如~\cite[§6]{BLR90}, \cite{Vis05}, \cite[第 4 章]{Ols16}, \cite[第 4 章]{Poo17}~及~\cite[Tag 0238]{SP}, 因而我们有时会略去细节.
+
+\subsection{拟凝聚层的下降}\label{src:3.1.1-subsection}
+下面这个关键的代数事实是拟凝聚层下降的基础.
+\begin{proposition}\label{src:3.1.1}
+若 $\varphi:A\to B$ 是忠实平坦的环映射, 则
+\[
+\begin{tikzcd}[column sep=large]
+0\arrow[r]&A\arrow[r,"\varphi"]&B
+\arrow[r,shift left=1.1ex,"b\mapsto b\otimes1"]
+\arrow[r,shift right=1.1ex,"b\mapsto1\otimes b"']&B\otimes_A B
+\end{tikzcd}
+\]
+正合 (即是\newterm{等化子}{equalizer}序列). 更一般地, 若 $M$ 是 $A$-模, 则
+\begin{equation}\label{src:3.1.2}
+\begin{tikzcd}[column sep=large]
+0\arrow[r]&M\arrow[r,"m\mapsto m\otimes1"]&M\otimes_A B
+\arrow[r,shift left=1.1ex,"m\otimes b\mapsto m\otimes b\otimes1"]
+\arrow[r,shift right=1.1ex,"m\otimes b\mapsto m\otimes1\otimes b"']&M\otimes_A B\otimes_A B
+\end{tikzcd}
+\end{equation}
+正合.
+\end{proposition}
+\begin{proof}
+由忠实平坦性的等价条件~(\bookref{A.2.19}), $A\to B$ 与 $M\to M\otimes_A B$ 必为单射. 由于 $A\to B$ 忠实平坦, 序列~\bookeqref{3.1.2}~正合当且仅当
+\[
+\begin{tikzcd}[font=\scriptsize,column sep=large]
+0\arrow[r]&M\otimes_A B
+\arrow[r,"m\otimes b'\mapsto m\otimes1\otimes b'"]&
+M\otimes_A B\otimes_A B
+\arrow[r,shift left=1.1ex,"m\otimes b\otimes b'\mapsto m\otimes b\otimes1\otimes b'"]
+\arrow[r,shift right=1.1ex,"m\otimes b\otimes b'\mapsto m\otimes1\otimes b\otimes b'"']&
+M\otimes_A B\otimes_A B\otimes_A B
+\end{tikzcd}
+\]
+正合. 上述序列可以改写为
+\[
+\begin{tikzcd}[font=\scriptsize,column sep=large]
+0\arrow[r]&M\otimes_A B\arrow[r,"x\mapsto x\otimes1"]&
+(M\otimes_A B)\otimes_B(B\otimes_A B)
+\arrow[r,shift left=1.1ex,"x\otimes y\mapsto x\otimes y\otimes1"]
+\arrow[r,shift right=1.1ex,"x\otimes y\mapsto x\otimes1\otimes y"']&
+(M\otimes_A B)\otimes_B(B\otimes_A B)\otimes_B(B\otimes_A B)
+\end{tikzcd}
+\]
+这恰是将序列~\bookeqref{3.1.2}~应用于环映射 $B\to B\otimes_A B$, $b\mapsto1\otimes b$, 以及 $B$-模 $M\otimes_A B$ 所得的序列. 由于 $B\to B\otimes_A B$ 有左逆 $b\otimes b'\mapsto bb'$, 我们只需在 $\varphi:A\to B$ 有左逆 $s:B\to A$, $s\circ\varphi=\id_A$ 时证明命题. 设 $x=\sum_i m_i\otimes b_i\in M\otimes_A B$ 满足
+\[
+\sum_i m_i\otimes b_i\otimes1=\sum_i m_i\otimes1\otimes b_i
+\quad\text{于 }M\otimes_A B\otimes_A B.
+\]
+对这一等式应用
+\[
+\id_M\otimes\id_B\otimes s:
+M\otimes_A B\otimes_A B\longrightarrow
+M\otimes_A B\otimes_A A\cong M\otimes_A B,
+\]
+便知 $x=\sum_i m_i\otimes\varphi(s(b_i))
+=\sum_i\varphi(s(b_i))m_i\otimes1$ 属于 $M\to M\otimes_A B$ 的像.
+\end{proof}
+\begin{exercise}\label{src:3.1.3}
+记 $(B/A)^{\otimes n}$ 为 $n$ 重张量积 $B\otimes_A\cdots\otimes_A B$. 证明正合序列~\bookeqref{3.1.2}~可以延拓为长正合序列
+\[
+0\longrightarrow M\xrightarrow{d}M\otimes_A(B/A)^{\otimes1}
+\xrightarrow{d}M\otimes_A(B/A)^{\otimes2}\xrightarrow{d}\cdots,
+\]
+其中微分为
+\[
+\begin{aligned}
+d:M\otimes_A(B/A)^{\otimes n}&\longrightarrow M\otimes_A(B/A)^{\otimes(n+1)},\\
+m\otimes b_1\otimes\cdots\otimes b_n
+&\longmapsto\sum_{i=0}^{n+1}(-1)^i
+m\otimes b_1\otimes\cdots\otimes b_{i-1}\otimes1
+\otimes b_{i+1}\otimes\cdots\otimes b_n.
+\end{aligned}
+\]
+\end{exercise}
+回顾定义~\bookref{A.2.20}, 概形态射 $f:S'\to S$ 是 fpqc 的, 是指 $f$ 忠实平坦, 且 $S$ 的每个拟紧开子集都是 $S'$ 的某个拟紧开子集的像. Fpqc 态射包括忠实平坦且拟紧的态射, 但定义更为广泛, 例如也包括 fppf 态射 (即忠实平坦且局部有限表现的态射).
+
+始终记住下面这个特例会很有帮助: 由 $S$ 的 Zariski 覆盖 $\{U_i\}$ 诱导的平展态射 $f:S'=\coprod_i U_i\to S$. 此时纤维积 $S'\times_S S'$ 就是 $\coprod_{i,j}U_i\cap U_j$, 更高重纤维积也有类似的描述.
+\begin{proposition}[拟凝聚层的 fpqc 下降]\label{src:3.1.4}
+设 $f:S'\to S$ 是概形的 fpqc 态射.
+\begin{enumerate}
+\item 设 $\mathcal F$ 与 $\mathcal G$ 是拟凝聚 $\mathcal O_S$-模. 记 $p_1,p_2:S'\times_S S'\rightrightarrows S'$ 为两个投影, $q:S'\times_S S'\to S$ 为复合 $f\circ p_i$. 则序列
+\[
+\begin{tikzcd}[font=\footnotesize,column sep=normal]
+0\arrow[r]&\Hom_{\mathcal O_S}(\mathcal F,\mathcal G)
+\arrow[r,"f^*"]&\Hom_{\mathcal O_{S'}}(f^*\mathcal F,f^*\mathcal G)
+\arrow[r,shift left=1.1ex,"p_1^*"]
+\arrow[r,shift right=1.1ex,"p_2^*"']&
+\Hom_{\mathcal O_{S'\times_S S'}}(q^*\mathcal F,q^*\mathcal G)
+\end{tikzcd}
+\]
+正合.
+\item 设 $\mathcal H$ 是拟凝聚 $\mathcal O_{S'}$-模, 而 $\alpha:p_1^*\mathcal H\to p_2^*\mathcal H$ 是 $\mathcal O_{S'\times_S S'}$-模同构, 在 $S'\times_S S'\times_S S'$ 上满足上循环条件 $p_{23}^*\alpha\circ p_{12}^*\alpha=p_{13}^*\alpha$. 则存在拟凝聚 $\mathcal O_S$-模 $\mathcal G$ 及同构 $\varphi:\mathcal H\to f^*\mathcal G$, 使得在 $S'\times_S S'$ 上有 $p_1^*\varphi=p_2^*\varphi\circ\alpha$. 数据 $(\mathcal G,\varphi)$ 在唯一同构的意义下唯一.
+\end{enumerate}
+\end{proposition}
+下图有助于理解 (2):
+\[
+\begin{tikzcd}[column sep=large]
+{p_{23}^*\alpha\circ p_{12}^*\alpha=p_{13}^*\alpha}\arrow[d,dash]&
+{p_1^*\mathcal H\xrightarrow{\alpha}p_2^*\mathcal H}\arrow[d,dash]&
+\mathcal H\arrow[d,dash]&\mathcal G\arrow[d,dash]\\
+S'\times_S S'\times_S S'
+\arrow[r,shift left=2.2ex,"p_{12}"]\arrow[r,"p_{13}" description]
+\arrow[r,shift right=2.2ex,"p_{23}"']&
+S'\times_S S'\arrow[r,shift left=1.1ex,"p_1"]
+\arrow[r,shift right=1.1ex,"p_2"']&S'\arrow[r,"f"]&S
+\end{tikzcd}
+\]
+上循环条件 $p_{23}^*\alpha\circ p_{12}^*\alpha=p_{13}^*\alpha$ 以及等式 $p_1^*\varphi=p_2^*\varphi\circ\alpha$ 应理解为下列图的交换性:
+\[
+\begin{tikzcd}[font=\footnotesize,column sep=small,row sep=normal]
+&p_{12}^*p_1^*\mathcal H
+\arrow[r,"p_{12}^*\alpha"]\arrow[dl,equal]&
+p_{12}^*p_2^*\mathcal H\arrow[dr,equal]&\\
+p_{13}^*p_1^*\mathcal H\arrow[dr,"p_{13}^*\alpha"']&&&
+p_{23}^*p_1^*\mathcal H\arrow[dl,"p_{23}^*\alpha"]\\
+&p_{13}^*p_2^*\mathcal H\arrow[r,equal]&p_{23}^*p_2^*\mathcal H&
+\end{tikzcd}
+\qquad\text{以及}\qquad
+\begin{tikzcd}
+p_1^*\mathcal H\arrow[r,"p_1^*\varphi"]\arrow[d,"\alpha"']&
+p_1^*f^*\mathcal G\arrow[d,equal]\\
+p_2^*\mathcal H\arrow[r,"p_2^*\varphi"']&p_2^*f^*\mathcal G
+\end{tikzcd}
+\]
+命题~\bookref{3.1.4}~可以改述为范畴等价
+\begin{equation}\label{src:3.1.5}
+\QCoh(S)\xrightarrow{\sim}\QCoh(S'\to S),
+\qquad\mathcal G\longmapsto(f^*\mathcal G,\mathrm{can}),
+\end{equation}
+其中 $\QCoh(S'\to S)$ 是 $S'\to S$ 的\newterm{下降数据}{descent data}范畴. 其对象是二元组 $(\mathcal H,\alpha)$, 由拟凝聚 $\mathcal O_{S'}$-模 $\mathcal H$ 及满足上循环条件的同构 $\alpha:p_1^*\mathcal H\to p_2^*\mathcal H$ 组成; 态射 $(\mathcal H',\alpha')\to(\mathcal H,\alpha)$ 是满足 $\alpha\circ p_1^*\beta=p_2^*\beta\circ\alpha'$ 的态射 $\beta:\mathcal H'\to\mathcal H$. 注意, 若 $\mathcal H=f^*\mathcal G$, $\mathcal G\in\QCoh(S)$, 则有典范同构 $\mathrm{can}:p_1^*\mathcal H\xrightarrow{\sim}p_2^*\mathcal H$, 因为复合 $f\circ p_1$ 与 $f\circ p_2$ 相等.
+
+换一种说法, 这个结果断言 $S'\to S$ 的每个下降数据 $(\mathcal H,\alpha)$ 都是\newterm{有效的}{effective}, 即属于~\bookeqref{3.1.5}~的本质像. 最后, 我们很快将看到, 这等价于说参数化拟凝聚层的预叠 $\QCoh$ 是 fpqc 拓扑中的叠 (例~\bookref{3.5.9}).
+\begin{proof}
+若 $S'=\Spec A'$ 与 $S=\Spec A$ 都是仿射的, 写成 $\mathcal F=\widetilde M$ 与 $\mathcal G=\widetilde N$. 命题~\bookref{3.1.1}~表明 $0\to N\to N\otimes_A A'\rightrightarrows N\otimes_A A'\otimes_A A'$ 正合. 对其应用 $\Hom_A(M,-)$, 并利用张量与 Hom 的伴随关系, 如
+\[
+\Hom_A(M,N\otimes_A A')
+=\Hom_{A'}(M\otimes_A A',N\otimes_A A'),
+\]
+便得 (1). 对于 (2), 写成 $\mathcal H=\widetilde{M'}$, 将 $A$-模 $M$ 定义为下列等化子:
+\[
+\begin{tikzcd}[column sep=large]
+0\arrow[r]&M\arrow[r]&M'
+\arrow[r,shift left=1.1ex,"m\mapsto m\otimes1"]
+\arrow[r,shift right=1.1ex,"m\mapsto\alpha(m\otimes1)"']&M'\otimes_A A'
+\end{tikzcd}
+\]
+将这一 $A$-模序列与 $A'$ 作张量积, 可将 $M\otimes_A A'$ 表示为 $M'\otimes_A A'\rightrightarrows M'\otimes_A A'\otimes_A A'$ 的等化子. 另一方面, 命题~\bookref{3.1.1}~中的关键代数结果表明, $M'$ 可以与同一个等化子等同. 由此得到 $A'$-模同构 $\varphi:M'\to M\otimes_A A'$, 并可检验 $p_1^*\varphi=p_2^*\varphi\circ\alpha$.
+
+一般情形在 $S$ 上是 Zariski 局部的, 因而可设 $S$ 仿射. 由于 $f$ 是 fpqc 的, $S$ 是某个拟紧开子集 $U'\subset S'$ 的像. 选取 $U'$ 的有限仿射覆盖 $\{U_i'\}$, 可归约到仿射概形之间的忠实平坦映射 $\coprod_i U_i'\to S$ (细节留给读者), 而这正是已经验证过的情形.
+
+事实上, 有一个一般结果 (见习题~\bookref{3.3.7}~与~\bookref{3.5.5}): 要对 fpqc 态射 $S'\to S$ 验证性质 (1)--(2), 只需对 Zariski 覆盖 $\{U_i\}$ 诱导的映射 $\coprod_i U_i\to S$ (这一情形我们已经知道) 以及仿射概形之间的忠实平坦映射 $S'\to S$ (这一情形刚刚验证过) 验证即可. 另见~\cite[定理 $1$, 第 315 页]{FGAI}, \cite[定理 $6.4$]{BLR90}, \cite[定理 $4.23$]{Vis05}~及~\cite[Tag 023T]{SP}.
+\end{proof}
+\begin{remark}\label{src:3.1.6}
+模的下降其实适用于比忠实平坦映射更广的一类环映射 $A\to B$. 它对泛单射映射成立 (见定义~\bookref{A.2.22}), 而且出人意料的是, 逆命题也成立! 更精确地, $A\to B$ 是泛单射当且仅当到下降数据范畴的函子
+\[
+\begin{aligned}
+\Mod_A&\longrightarrow
+\left\{(N,\alpha)\ \middle|\
+\begin{gathered}
+N\in\Mod_B,\quad
+\alpha:N\otimes_{B,p_1}(B\otimes_A B)
+\xrightarrow{\sim}N\otimes_{B,p_2}(B\otimes_A B),\\
+\text{满足上循环条件 }p_{23}^*\alpha\circ p_{12}^*\alpha=p_{13}^*\alpha
+\end{gathered}
+\right\},\\
+M&\longmapsto(M\otimes_A B,\mathrm{can})
+\end{aligned}
+\]
+是范畴等价. 见~\cite{Mes00}~或~\cite[Tag 08XA]{SP}.
+\end{remark}

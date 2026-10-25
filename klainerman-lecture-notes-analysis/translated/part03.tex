@@ -1,0 +1,864 @@
+% ==== part03 第 3 章 分布理论 (Distribution Theory) ====
+% 源: MinerU_latex_lecture nots.tex 第 3675--5210 行;pdf_text.txt 第 2789--4042 行(PDF 第 55--76 页)
+%
+% 术语(新增,键=中文=英文):
+%   distribution=分布、indicator-function=示性函数、fundamental-solution=基本解、
+%   test-function=检验函数、mollification=磨光、multi-index=多重指标、support=支集、
+%   compactly-supported=紧支撑、locally-integrable=局部可积、convolution=卷积、
+%   bump-function=隆起函数、cutoff-function=截断函数、principal-value=主值、
+%   analytic-continuation=解析延拓、partition-of-unity=单位分解、pull-back=回拉、
+%   push-forward=前推、homogeneous=齐次的、characteristic-function=特征函数、
+%   restriction-theorem=限制定理、trace-theorem=迹定理、wavefront-set=波前集、
+%   cotangent-bundle=余切丛、tensor-product=张量积
+% 注: 傅里叶变换、波动方程、Laplace 算子、Dirac delta 函数、Heaviside 函数、Gamma/Beta 函数、
+%   Borel 测度、Lebesgue 积分等经典术语按普通中文书写(可能由其他部分首次引入,待协调).
+%
+% REFS(需跨章/待解析项):
+%   - 公式编号: 原书第 3 章显式编号的公式为 (127)--(136) 共 10 个,均加了 \label{eq:c3-12x} 等;
+%     本部分按指南把全部行间公式写成 \[ ... \] 自动编号(原书其余行间公式不编号),共 81 个,
+%     故显示编号与原书 (127)--(136) 不对应;任务描述"~176--~230"与实际 78 个不符,请协调员核对生产环境编号规则.
+%   - 第 4407 行 "the Lebesgue diferentiation theorem of section (2.6)" -> 正文写"第 2.6 节的 Lebesgue 微分定理",所在章未知 -> 目标: 待解析
+%   - 第 4468 行 "Hörmander, [?] section 3.4" 文献编号 [?] 原书破损 -> 正文写"Hörmander 著作\cite{ho}第 3.4 节"
+%   - 第 5076 行 "Hörmander's book [?]" 同上
+%   - 第 5000 行 "the Appendix (??)" 与第 4964 行 "given in the Appendix" -> 正文写"附录",页码/引用待解析(附录 A 部分)
+%   - 第 4705、5188 行 "(∗ ∗ ∗)" 为原书占位引用,正文按原文保留 "(∗∗∗)"
+%   - 脚注: 本部分含两处原书脚注,均已译入正文 \footnote:
+%     ① 第 4066 行 "non-metrizable1" 处;② 第 4866 行 "follow2" 处.
+%     任务提及的脚注 6(Laplace-Beltrami 算子,pdf_text.txt 第 4460 行)的标记位于第 4 章(part04 范围),不在本部分.
+%
+% 编号说明:
+%   - 原书 Proposition 3.8 为 "iff"(pdf_text 第 3492 行),源 OCR 误为 "if",按 pdf 译"当且仅当".
+%   - 原书 "a fundamental solution solution for Δ"(pdf_text 第 2902 行)重复拼写,按"基本解"处理.
+%   - 引言的未编号 Definition 在源文件中位于 \section{1} 之内(第 3787 行),故置于第 1 节;
+%     任务结构表将其列在"引言"下,此处按源结构处理,用 definition* 无编号环境.
+%   - 第 2.5 节 "Operations with distributions"、第 3.5 节 "Support of a distribution"、
+%     第 4.2 节 "Other topics we have not discussed" 均为原书带编号子标题,用 \mtsubsec 推进共享计数器;
+%     第 4 节内 "Proof of the Pullback Formula for m=1"、"Applications" 为未编号子标题,用 \mtsubsecn{}{}.
+%   - 习题按原书分节编号: 第 1 节 1--5;第 2 节 2 个未编号"习题.";第 3 节 1--6 加 1 个未编号;第 4 节 1--6.
+
+\chapter{分布理论}
+
+\section*{引言}
+
+以下是对\newterm{distribution}{分布}{distribution}理论的非常简短的概述;如需更深入地了解这一主题, 我建议参阅 F.G.~Friedlander 与 M.~Joshi 的优秀著作 \emph{Introduction to the Theory of Distributions} \cite{fr-io}.Hörmander 在 Springer 出版的 \emph{The Analysis of Linear Partial Differential Operators} 第一卷 \cite{ho} 也会很有用.
+
+\textbf{记号.} 在本讲义中, 我们用记号 $A\lesssim B$ 表示 $A\leq cB$, 其中 $c$ 是一个与 $A$、$B$ 无关的数值常数.当 $\Omega\subseteq\mathbb{R}^n$ 是一个集合时, 我们可以用 $(x\in\Omega)$ 表示集合 $\Omega$ 的\newterm{indicator-function}{示性函数}{indicator function}.例如, $(5\leq|x|<7)$ 是一个在 $5\leq x<7$ 时等于 1、否则等于 0 的函数.
+
+\section{分布理论导论}
+
+对分布理论的简短描述包含一个不可避免的矛盾说法:它是一种"使能"理论, 使我们能够对完全不可微的函数求导, 并像根本不存在任何问题一样对它们进行操作.它的主要应用是在偏微分方程理论中.
+
+我们首先回顾偏微分方程中 \newterm{fundamental-solution}{基本解}{fundamental solution} 的概念是如何通过经典电磁学诞生的.当电荷不运动时, 任何电荷分布 $\rho : \mathbb{R}^3\to\mathbb{R}$ 都会产生一个电场, 该电场(不计通常的符号与物理常数)是"势函数" $V : \mathbb{R}^3\to\mathbb{R}$ 的梯度.将 $V$ 与电荷密度 $\rho$ 联系起来的经典物理定律是 Poisson 方程
+
+\begin{equation}
+\Delta V = \rho\label{eq:c3-127}
+\end{equation}
+
+其中 $\Delta = \sum_{i=1}^3\partial_i^2$ 表示 Laplace 算子, 并且基于物理理由, 我们可以要求 $V$(或至少其导数)在无穷远处消失, 从而使远距离相互作用变弱.
+
+与其他任何场论一样, 除非方程 \eqref{eq:c3-127} 对(合理的资料 $\rho$)存在唯一解, 且该解在某种意义下连续依赖于资料, 否则该物理理论不可能有效而完备.除了解决这些问题之外, 我们还至少希望对解的行为有定性的理解.就目前的情形而言, 由于存在大量的对称性, 我们甚至能够导出显式公式;但对于所涉及的启发式分析而言, 重要的只是算子 $\Delta = \sum_{i=1}^3\partial_i^2$ 是线性的且与平移交换(即它是常系数的线性微分算子).事实上, Laplace 算子同时关于平移和旋转不变, 其意义是:当 $T$ 是 Euclid 空间的刚体运动时, 对所有光滑函数都有 $\Delta(f\circ T) = (\Delta f)\circ T$.
+
+想法是先求解 \eqref{eq:c3-127} 的特殊情形, 即电荷密度 $\rho(x)$ 是集中在点 $\boldsymbol{y}\in\mathbb{R}^3$ 处的单位电荷(我们形式地写 $\rho(x) = \delta_y(x)$, 其中 Dirac delta 函数对应于在 $y$ 处的单位点质量的密度函数).我们将在后面讨论 Dirac delta 函数的含义, 但此刻让我们接受它的形式定义:一个作用在连续函数 $f$ 上、在点 $y$ 处产生 $f$ 的值的算子, 即 $\delta_y$ 是测度,
+
+\[
+\delta_y(f) = f(y).
+\]
+
+因此, 我们寻找方程 $\Delta V_y(x) = \delta_y(x)$ 的解 $V_y(x)$(该方程目前无意义, 因为 $\delta_y$ 不是函数).由 $\Delta$ 的线性, 我们可以把通解写成点贡献之解的叠加:
+
+\begin{equation}
+V(x) = \int V_y(x)\rho(y)\, dy\label{eq:c3-128}
+\end{equation}
+
+形式地, 我们甚至可以对任意固定的 $y\in\mathbb{R}^3$ 求解方程 $\Delta V_y(x) = \delta_y(x)$.鉴于 $\Delta$ 的平移不变性, 我们可以假设 $y=0$.由于 $\Delta$ 旋转不变(见习题 1), $\delta_0$ 亦然, 那么若解唯一, 任何解 $V_0(x) = V_0(|x|)$ 也应旋转不变.我们称 $V_0(x)$ 为 Laplace 算子的基本解.于是, 假设 $V_0(x)$ 存在且具有球对称性, 我们得到(利用散度定理)
+
+\[
+\begin{aligned}
+1 &= \int_{|x|\leq R}\delta_0(x)\, dx \\
+&= \int_{|x|\leq R}\Delta V_0(x)\, dx \\
+&= \int_{|x|=R}\frac{dV}{dr}(|x|)\, d\sigma(x) \\
+&= 4\pi R^2\frac{dV}{dr}(R)
+\end{aligned}
+\]
+
+我们选择在无穷远处衰减的唯一基本解, 即 $V_0(x) = \frac{-1}{4\pi}\frac{1}{R}$.因此, 平移回 $\delta_y$, 我们得到 $V_y(x) = \frac{-1}{4\pi}\frac{1}{|x-y|}$.通过直接计算可以看出, 在 $y$ 之外 $\Delta V_y(x) = 0$, 甚至可以证明, 对(譬如说)光滑、\newterm{compactly-supported}{紧支撑}{compactly supported}的密度 $\rho$, \eqref{eq:c3-128} 确实求解了 \eqref{eq:c3-127}.此外, 对 \eqref{eq:c3-128} 取梯度, 可以得到一个可被实验证伪的结论:远离电荷源处, 电场按
+
+\[
+\frac{\text{总电荷}}{(\text{距离})^2}
+\]
+
+渐近衰减.
+
+\begin{definition*}
+我们称 $V_y(x) = \frac{-1}{4\pi}\frac{1}{|x-y|}$ 为 $\Delta$ 在 $\mathbb{R}^3$ 中的基本解.更一般地, 我们定义线性算子 $L$ 在 $\mathbb{R}^n$ 中(即作用于 $\mathbb{R}^n$ 上的函数)的基本解为"广义"函数 $V_y(x)$, 使得 $L(V_y) = \delta_y$.
+\end{definition*}
+
+给定 $L$ 的一个基本解, 我们可以对任何光滑、紧支撑的 $f$ 求出方程 $Lu = f$ 的解:形式地(暂时不管积分可能毫无意义)令
+
+\[
+u(x) = \int V_y(x)f(y)\, dy
+\]
+
+\textbf{习题 1.} 非正式地证明:若 $L$ 与平移交换, 即对所有平移 $x\mapsto x+y$ 有 $(Lf)(\cdot+y) = L(f(\cdot+y))$, 则基本解也与平移交换, 其意义是 $V_y(x) = V(x-y)$, 其中 $V$ 满足 $L(V) = \delta_0$.
+
+一旦找到算子 $L$ 的基本解 $V_y$, 我们既需要把它理解为广义函数, 也需要理解上述形式积分的意义.这正是分布理论所完成的.分布理论使我们能够把启发式计算严格化, 更重要的是, 它使我们能够像处理正则函数一样处理奇异对象.当然, 这种新自由是有界限的, 一个好的理论应当把这些界限讲清楚.
+
+\textbf{习题 2.} 不难证明, 对 $\rho\in\mathcal{C}_0^{\infty}(\mathbb{R}^3)$, 势函数 $V(x) = \frac{-1}{4\pi}\int_{\mathbb{R}^3}\frac{1}{|x-y|}\rho(y)\, dy$ 在无穷远处、在 $\rho$ 的支集之外, 行为如同 $\frac{-1}{4\pi}\frac{\int_{\mathbb{R}^3}\rho(y)\, dy}{|x|} + o(|x|^{-2})$.证明这一渐近性并理解误差的一种方法是对 $\frac{1}{|x-sy|} = \frac{1}{|x|} + \int_0^1\frac{d}{ds}\frac{1}{|x-sy|}\, ds$ 作 Taylor 展开(其想法是参数 $y$ 相对较小).
+
+当电荷分布以原点为中心(即向量值积分 $\int_{\mathbb{R}^3}y\rho(y)\, dy = 0$)时, 证明更精确的结果(带显式余项):当 $|x|\to\infty$ 时,
+
+\[
+V(x) = \frac{-1}{4\pi}\frac{\int_{\mathbb{R}^3}\rho(y)\, dy}{|x|} + O(|x|^{-3})
+\]
+
+为使计算简单, 可以把精确的一阶 Taylor 展开 $\phi(1) = \phi(0) + \phi'(0) + \int_0^1(1-s)\phi''(s)\, ds$ 应用于辅助函数 $\phi(s) = \frac{1}{|x-sy|}$.另外, 对绝对值函数求导的一个方便途径是观察到 $|x-sy|^2 = \langle x-sy, x-sy\rangle$, 其中 $\langle\, ,\, \rangle$ 表示 Euclid 内积.
+
+\begin{remark*}
+若总电荷 $\int\rho(y)\, dy$ 不为 0, 则可以找到"电荷中心" $y_c = \int y\rho\, dy/\int\rho\, dy$, 使得 $\int(y-y_c)\rho(y)\, dy = 0$.在这种情况下, 我们可以围绕 $y = y_c$ 作 Taylor 展开, 看到相应的势函数渐近行为如同以 $y_c$ 为中心:
+
+\[
+V(x) \approx \frac{-1}{4\pi}\frac{\int_{\mathbb{R}^3}\rho(y)\, dy}{|x-y_c|}.
+\]
+
+不过要注意, 当电荷以 $\int\rho(y)\, dy = 0$ 的意义"抵消"时, 相应的势函数 $V$ 在无穷远处衰减得更快, 如同 $\frac{C}{|x|^2}$.这种对局部化、振荡数据增强衰减的现象, 不仅在物理解释电荷抵消时电作用力在远距离上为何微弱方面很重要, 而且在分析中也十分重要——在许多其他自然出现的情形中也会产生类似的抵消.我们将在后面的讲义中看到这种抵消被以关键方式使用.
+\end{remark*}
+
+\textbf{习题 3.} 前一节中的推理可以推广到"求解"有界区域内部的势函数, 该区域的边界接地.即考虑问题:对边界上 $V=0$ 的有界区域 $\Omega$ 中的 $x$, 有 $\Delta V(x) = \rho(x)$.原则上, 你如何构造形如 $V(x) = \int K(x, y)\rho(y)\, dy$ 的通解?线性在哪里起作用?
+
+\textbf{习题 4.} 假设在 $\mathbb{R}^3$ 中半径为 $R_1$ 的球面上均匀分布着一个单位负电荷, 在半径为 $R_2$ 的球面上均匀分布着一个单位正电荷.求与此电荷构型 $\rho$ 相关的静电势函数 $V$.
+
+\textbf{习题 5.} a.~用引言中的非正式论证, 对每个 $n\geq 2$ 求出 $\Delta$ 在 $\mathbb{R}^n$ 中的基本解 $K_n(x)$, 即求解 $\Delta K_n(x) = \delta_0(x)$, 并给出 $K_n$ 的显式公式.
+
+b.~讨论相应的解
+
+\[
+V(x) = \int K_n(x-y)\rho(y)\, dy
+\]
+
+当 $|x|\to\infty$ 时的行为, 其中 $\rho$ 紧支撑.即当 $|x|\to\infty$ 时, 主项是什么, 误差有多大?
+
+\section{检验函数与分布}
+
+我们从一些标准记号开始.我们用 $x = (x_1, \ldots, x_n)$ 表示 $\mathbb{R}^n$ 中的向量, 并令 $\lambda x = (\lambda x_1, \ldots, \lambda x_n)$, $x+y = (x_1+y_1, \ldots, x_n+y_n)$.我们用 $x\cdot y$ 表示标准标量积, 用 $|x| = (x\cdot x)^{\frac{1}{2}}$ 表示 $x$ 的 Euclid 长度.给定函数 $f : \Omega\to\mathbb{C}$, 我们用 $\mathrm{supp}(f)$ 表示集合 $\{x\in\Omega : f(x)\neq 0\}$ 在 $\Omega$ 中的闭包, 并称之为 $f$ 的\newterm{support}{支集}{support}.我们用 $\mathcal{C}^k(\Omega)$ 表示 $\Omega$ 上 $k$ 次连续可微的复值函数集合, 用 $\mathcal{C}_0^k(\Omega)$ 表示其中紧支撑的子集.我们还用 $\mathcal{C}^{\infty}(\Omega) = \cap_{k\in\mathbb{N}}\mathcal{C}^k(\Omega)$ 表示无穷可微函数空间, 用 $\mathcal{C}_0^{\infty}(\Omega)$ 表示其中紧支撑的子集.后者在分布理论中起着特别重要的作用;它被称为 $\Omega$ 上的\newterm{test-function}{检验函数}{test function}空间.
+
+设 $\Omega\subset\mathbb{R}^n$, $f\in\mathcal{C}^{\infty}(\Omega)$.我们用 $\partial_i f$ 表示偏导数 $\frac{\partial f}{\partial x_i}$, $i = 1, \ldots, n$.对高阶导数我们使用标准的\newterm{multi-index}{多重指标}{multi-index}记号.一个多重指标 $\alpha$ 是非负整数的 $n$ 元组 $\alpha = (\alpha_1, \ldots, \alpha_n)$, 其长度为 $|\alpha| = \alpha_1+\cdots+\alpha_n$.令 $\alpha+\beta = (\alpha_1+\beta_1, \ldots, \alpha_n+\beta_n)$.我们用 $\alpha!$ 表示阶乘之积 $\alpha_1!\cdots\alpha_n!$.再令 $\partial^{\alpha}f = \partial_1^{\alpha_1}\cdots\partial_n^{\alpha_n}f$.显然 $\partial^{\alpha+\beta}f = \partial^{\alpha}\partial^{\beta}f$.给定两个光滑函数 $u$、$v$, 我们有 Leibniz 公式:
+
+\[
+\partial^{\alpha}(u\cdot v) = \sum_{\beta+\gamma=\alpha}\frac{\alpha!}{\beta!\gamma!}\partial^{\beta}u\, \partial^{\gamma}v.
+\]
+
+光滑函数 $f : \mathbb{R}^n\to\mathbb{C}$ 在原点附近的 Taylor 公式可以写成如下形式:
+
+\[
+f(x) = \sum_{|\alpha|\leq k}\frac{1}{\alpha!}\partial^{\alpha}f(0)\, x^{\alpha} + O(|x|^{k+1}) \quad \text{当 } x\to 0.
+\]
+
+这里 $x^{\alpha}$ 表示单项式 $x^{\alpha} = x_1^{\alpha_1}\cdots x_n^{\alpha_n}$.
+
+我们首先解释一种一般方法(通常称为\newterm{mollification}{磨光}{mollification}), 它可以用来用光滑函数逼近较粗糙的函数.本质上, 取要逼近的函数 $f$, 按照某个支集很小的光滑概率测度 $\rho$ 随机平移 $f$ 后, 用其平均代替 $f$.直观上很清楚且容易证明, 随机扰动后的函数是原函数的光滑逼近(想象一场小地震后棱角分明的沙堆);为了得到更好的逼近, 把 $\rho$ 的支集收缩到 0.这一方法的技术实现如下.
+
+\begin{proposition}\label{prop:c3-2.1}
+设 $f\in\mathcal{C}_0^k(\mathbb{R}^n)$, $0\leq k<\infty$.设 $\rho\in\mathcal{C}_0^{\infty}(\mathbb{R}^n)$ 是支集 $\mathrm{supp}(\rho)$ 含于单位球 $B(0, 1) = \{|x|\leq 1\}$ 的光滑函数, 且 $\int\rho(x)\, dx = 1$.我们令 $\rho_{\varepsilon}(x) = \varepsilon^{-n}\rho(x/\varepsilon)$, 并设
+
+\[
+f_{\varepsilon}(x) = f*\rho_{\varepsilon}(x) = \varepsilon^{-n}\int f(y)\rho\left(\frac{x-y}{\varepsilon}\right)dy = \int f(x-\varepsilon z)\rho(z)\, dz.
+\]
+
+则我们有:
+
+\begin{enumerate}
+\item 函数 $f_{\varepsilon}$ 属于 $\mathcal{C}_0^{\infty}(\mathbb{R}^n)$, 且 $\mathrm{supp}(f_{\varepsilon})\subset\mathrm{supp}(f) + B(0, \varepsilon)$;
+\item 当 $\varepsilon\to 0$ 时, $\partial^{\alpha}f_{\varepsilon}\longrightarrow\partial^{\alpha}f$ 一致收敛.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+命题的第一部分由定义立即得出, 因为关于支集的论断是显然的, 并且通过分部积分, 我们可以把 $f_{\varepsilon}$ 的所有导数转移到被积函数的光滑部分 $\rho_{\varepsilon}$ 上.为证明第二个论断, 我们只需写出
+
+\[
+\partial^{\alpha}f_{\varepsilon}(x) - \partial^{\alpha}f(x) = \int\left(\partial^{\alpha}f(x-\varepsilon z) - \partial^{\alpha}f(x)\right)\rho(z)\, dz.
+\]
+
+因此, 对 $|\alpha|\leq k$,
+
+\[
+\begin{aligned}
+|\partial^{\alpha}f_{\varepsilon}(x) - \partial^{\alpha}f(x)| &\leq \int|\partial^{\alpha}f(x-\varepsilon z) - \partial^{\alpha}f(x)|\, |\rho(z)|\, dz \\
+&\leq \int|\rho(z)|\, dz\sup_{|z|\leq 1}|\partial^{\alpha}f(x-\varepsilon z) - \partial^{\alpha}f(x)| \\
+&\lesssim \sup_{|z|\leq 1}|\partial^{\alpha}f(x-\varepsilon z) - \partial^{\alpha}f(x)|
+\end{aligned}
+\]
+
+考虑到函数 $\partial^{\alpha}f$ 的一致连续性, 证明现在可以容易地完成.
+\end{proof}
+
+作为该命题的推论, 可以容易地验证:检验函数空间 $\mathcal{C}_0^{\infty}(\Omega)$ 在空间 $\mathcal{C}^k(\Omega)$ 以及 $L^p(\Omega)$, $1\leq p<\infty$ 中稠密.当然, 首先必须至少构造一个满足 $\int\rho\, dx = 1$ 的 $\rho\in C_0^{\infty}(\mathbb{R}^n)$.隆起函数 $\rho(x) = e^{\frac{-1}{1-|x|^2}}\cdot(|x|<1)$ 的某个倍数即可.构造例子的另一种方法是从任意 $\mathcal{C}^1$ 隆起函数出发, 利用随机平移的光滑化效应(如上述命题), 同时控制支集, 通过迭代过程的极限得到光滑隆起函数.
+
+\begin{definition}\label{def:c3-2.2}
+分布 $u\in\mathcal{D}'(\Omega)$ 是线性泛函 $u : \mathcal{C}_0^{\infty}(\Omega)\to\mathbb{C}$, 它验证如下性质:
+
+对任意紧集 $K\subset\Omega$, 存在整数 $N$ 与常数 $C = C_{K, N}$, 使得对所有支集满足 $\mathrm{supp}(\phi)\subset K$ 的 $\phi\in\mathcal{C}_0^{\infty}(\Omega)$, 有
+
+\[
+|\langle u, \phi\rangle| \leq C\sum_{|\alpha|\leq N}\sup|\partial^{\alpha}\phi|.
+\]
+
+如果在上面的定义中对每个 $K$ 都可以使用同一个整数 $N$, 则称最小的这样的 $N$ 为分布的阶.例如, Riesz 表示定理(刻画了紧 Hausdorff 空间上 $\mathcal{C}(X)$ 的对偶)保证 0 阶分布就是 Borel 测度.
+\end{definition}
+
+等价地, 分布 $u$ 是关于定义在 $\mathcal{C}_0^{\infty}(\Omega)$ 上的某个拓扑连续的线性泛函 $u : \mathcal{C}_0^{\infty}(\Omega)\to\mathbb{C}$.这个拓扑是一种相当非正统的拓扑(不可度量\footnote{该拓扑可以构造为 Fréchet 空间 $C_K$ 的归纳极限拓扑, 其中 $K\subseteq\Omega$ 紧致, $C_K$ 是支集含于 $K$ 的所有光滑函数构成的空间, 由半范数 $\phi\mapsto\sup_K|\partial^{\alpha}\phi|$(对所有多重指标 $\alpha$)赋予 Fréchet 空间结构.不过我们并不需要它的精确定义.}, 局部凸), 但不必介意这些;我们完全可以不担心其精确定义而走得很远.我们只需要知道, 在这个拓扑中, 当 $\phi_j$ 的所有支集都包含在 $\Omega$ 的一个紧子集中, 并且对每个多重指标 $\alpha$, $\partial^{\alpha}\phi_j$ 在一致范数下趋于 0 时, 序列 $\phi_j$ 在 $\mathcal{C}_0^{\infty}(\Omega)$ 中收敛到 0.记住这个定义, 我们有以下非常有用的分布刻画:
+
+\begin{proposition}\label{prop:c3-2.3}
+线性形式 $u : \mathcal{C}_0^{\infty}(\Omega)\longrightarrow\mathbb{C}$ 是 $\mathcal{D}'(\Omega)$ 中的分布, 当且仅当对每个在 $\mathcal{C}_0^{\infty}(\Omega)$ 中当 $j\to\infty$ 时收敛到 0 的检验函数序列 $\phi_j$, 都有 $\lim_{j\to\infty}u(\phi_j) = 0$.
+\end{proposition}
+
+\begin{proof}
+此证明可见 Friedlander 著作第 1.3 节, 定理 1.3.2.
+\end{proof}
+
+\begin{example*}
+任何\newterm{locally-integrable}{局部可积}{locally integrable}函数 $f\in L^1_{\mathrm{loc}}(\Omega)$ 定义了一个分布:
+
+\[
+\langle f, \phi\rangle = \int f\phi, \quad \forall\phi\in\mathcal{C}_0^{\infty}(\Omega).
+\]
+
+于是我们可以把 $L^1_{\mathrm{loc}}(\Omega)$ 视为 $\mathcal{D}'(\Omega)$ 的子空间.特别地, 空间 $\mathcal{C}^{\infty}(\Omega)\subset L^1_{\mathrm{loc}}(\Omega)$ 也是如此.
+
+即使 $u\in\mathcal{D}'(\Omega)$ 不是局部可积函数, 甚至当 $\phi$ 严格说来不是检验函数时, 人们也常常使用形式记号 $\langle u, \phi\rangle = \int_{\Omega}u(x)\phi(x)\, dx$.这种记号在概念上可能更简单, 但请记住, 这绝不是真正的 Lebesgue 积分.不过, 通常可以把这种形式积分解释为经典积分的极限.
+\end{example*}
+
+\begin{example*}
+支集在 $x_0\in\mathbb{R}^n$ 处、质量为 1 的 Dirac 测度定义为
+
+\[
+\langle\delta_{x_0}, \phi\rangle = \phi(x_0).
+\]
+\end{example*}
+
+\begin{remark*}
+我们也常常用 $u(\phi)$ 而不是 $\langle u, \phi\rangle$ 来表示分布 $u$ 作用在检验函数上的结果.于是 $\delta_{x_0}(\phi) = \phi(x_0)$.
+\end{remark*}
+
+\begin{definition}\label{def:c3-2.4}
+称分布序列 $u_j\in\mathcal{D}'(\Omega)$ 弱收敛到分布 $u\in\mathcal{D}'(\Omega)$, 若对所有 $\phi\in\mathcal{C}_0^{\infty}(\Omega)$, 有 $u_j(\phi)\to u(\phi)$.
+\end{definition}
+
+例如, 当 $m\to\infty$ 时, 序列 $u_m = e^{imx}$ 在 $\mathcal{D}'(\mathbb{R})$ 中弱收敛到 0.另外, 若 $f\in L^1(\mathbb{R}^n)$, 且 $\int_{\mathbb{R}^n}f(x)\, dx = 1$, 则当 $\lambda\to\infty$ 时, 函数族 $f_{\lambda}(x) = \lambda^n f(\lambda x)$ 弱收敛到 $\delta_0$.
+
+我们将能够证明, 任何分布都是序列 $u_n\in\mathcal{C}_0^{\infty}(\Omega)$ 的弱极限.由于这一事实, 许多最初对函数定义的操作都可以以唯一、自然的方式通过连续性延拓到 $\mathcal{D}'(\Omega)$.
+
+\textbf{习题.} 给定紧集 $K\subseteq\mathbb{R}^n$ 与正距离 $\delta>0$, 构造一个光滑函数 $\eta : \mathbb{R}^n\to\mathbb{R}$, 使其支集包含在集合 $\{x \mid |y-x|\leq\delta \text{ 对某个 } y\in K\}$ 中, 即 $K$ 的 $\delta$-邻域内, 并且使得在 $K$ 的某个邻域中 $\eta(y) = 1$.提示:从一个粗糙的\newterm{cutoff-function}{截断函数}{cutoff function}出发, 留出一些"回旋余地".
+
+\mtsubsec{分布上的运算}
+
+使用分布空间的好处在于, 虽然这个空间远大于光滑函数空间, 但检验函数上最重要的操作都可以搬到分布上来.
+
+\textbf{1. 与光滑函数相乘:} 给定 $u\in\mathcal{D}'(\Omega)$ 与 $f\in\mathcal{C}^{\infty}(\Omega)$, 我们定义
+
+\[
+\langle fu, \phi\rangle = \langle u, f\phi\rangle, \quad \forall\phi\in\mathcal{C}_0^{\infty}(\Omega)
+\]
+
+以便与 $u$ 是函数时的恒等式一致:
+
+\[
+\int(fu)\phi\, dx = \int u(f\phi)\, dx.
+\]
+
+容易验证, 乘以光滑函数是分布空间的连续自同态.
+
+\textbf{2. 与检验函数的\newterm{convolution}{卷积}{convolution}:} 考虑 $u\in\mathcal{D}'(\mathbb{R}^n)$, $\phi\in\mathcal{C}_0^{\infty}(\mathbb{R}^n)$.以自然的方式推广两个函数的卷积, 我们定义
+
+\[
+u*\phi(x) = \langle u_y, \phi(x-y)\rangle,
+\]
+
+下标表示 $u$ 理解为作用于变量 $y$ 的函数.注意, 若 $u$ 是局部可积函数, $u\in L^1_{\mathrm{loc}}(\mathbb{R}^n)$, 则该定义与通常的定义一致:
+
+\[
+u*\phi(x) = \int u(y)\phi(x-y)\, dy.
+\]
+
+\begin{remark*}
+分布与检验函数的卷积不仅仅是另一个分布.相反, 注意对每个分布 $u\in\mathcal{D}'(\mathbb{R}^n)$ 与 $\phi\in\mathcal{C}_0^{\infty}(\mathbb{R}^n)$, 我们有 $u*\phi\in\mathcal{C}^{\infty}(\mathbb{R}^n)$, 它实际上是一个光滑函数.例如, 若 $e_k$ 表示标准单位向量, 则我们可以沿 $e_k$ 方向求导如下:
+
+\[
+\begin{aligned}
+\frac{u*\phi(x+he_k) - u*\phi(x)}{h} &= h^{-1}\langle u_y, \phi(x+he_k-y) - \phi(x-y)\rangle \\
+&= \left\langle u_y, \int_0^1\partial_k\phi(x+the_k-y)\, dt\right\rangle.
+\end{aligned}
+\]
+
+现在, 由于 $x\in K$ 被限制在某个紧集 $K\subset\mathbb{R}^n$ 中, 故对每个序列 $h_i\to 0$, 相应的函数序列 $y\mapsto\int_0^1\partial_k\phi(x+th_ie_k-y)\, dt$ 连同其所有导数一致收敛到 $\partial_k\phi(x-y)$ 及其相应的导数.而且它们都是紧支撑的, 支集包含在某个紧集 $K'$ 中.因此,
+
+\[
+\lim_{h\to 0}\frac{u*\phi(x+he_k) - u*\phi(x)}{h} = u*\partial_k\phi(x).
+\]
+
+从而 $u*\phi$ 具有连续偏导数.我们可以继续这样下去, 并得出结论:事实上 $u*\phi\in\mathcal{C}^{\infty}(\mathbb{R}^n)$.
+\end{remark*}
+
+\textbf{3. 分布的微分:} 对每个分布 $u\in\mathcal{D}'(\Omega)$, 我们定义
+
+\[
+\langle\partial^{\alpha}u, \phi\rangle = (-1)^{|\alpha|}\langle u, \partial^{\alpha}\phi\rangle.
+\]
+
+我们作此定义是为了与函数的分部积分公式一致:
+
+\[
+\int\partial_i u(x)\phi(x)\, dx = \int u(x)(-\partial_i\phi(x))\, dx, \quad \phi\in\mathcal{C}_0^{\infty}(\mathbb{R}^n),
+\]
+
+该公式可以(例如)通过考虑差商来证明.
+
+同样, 容易验证我们由此定义了分布空间的连续自同态.当然, 上述操作是光滑函数上通常操作的唯一可能延拓.负号可以对偶地看作对测度 $\mu = \phi(x)\, dx$ 的微分.若我们暂时用 $\tau_v$ 表示"按 $v$ 平移"的运算, 则
+
+\[
+\partial_1\mu = \lim_{h\to 0}\frac{\tau_{he_1}\mu - \mu}{h}
+\]
+
+具有密度函数 $-\partial_1\phi(x)$, 且极限可以在 $\mathcal{C}_0^{\infty}$ 的拓扑中取.在这种对偶意义下, 我们有 $\partial_1u = \lim_{h\to 0}\frac{u(x+he_1)-u(x)}{h}$, 这里的极限是在弱拓扑中取的;只要我们以分布理论的意义解释所有积分, 这常常使我们能够在"积分号下求导".
+
+我们现在可以定义一般的线性偏微分算子对分布的作用.事实上, 设
+
+\[
+P(x, \partial) = \sum_{|\alpha|\leq m}a_{\alpha}\partial^{\alpha}, \quad a_{\alpha}\in\mathcal{C}^{\infty}(\Omega),
+\]
+
+是这样一个算子.则
+
+\[
+\langle P(x, \partial)u, \phi\rangle = \langle u, P(x, \partial)^{\dagger}\phi\rangle,
+\]
+
+其中 $P(x, \partial)^{\dagger}$ 是形式共轭算子:
+
+\[
+P(x, \partial)^{\dagger}v = \sum_{|\alpha|\leq m}(-1)^{|\alpha|}\partial^{\alpha}(a_{\alpha}v).
+\]
+
+注意, 若 $u_j\in\mathcal{D}'(\Omega)$ 弱收敛到 $u\in\mathcal{D}'(\Omega)$, 则 $P(x, \partial)u_j$ 弱收敛到 $P(x, \partial)u$.
+
+\textbf{习题.} 证明对所有 $u\in\mathcal{D}'(\Omega)$, 存在序列 $u_j\in\mathcal{C}_0^{\infty}(\Omega)$, 使得当 $j\to\infty$ 时 $u_j\to u$(按分布的意义, 即弱收敛).从而 $\mathcal{C}_0^{\infty}(\Omega)$ 在 $\mathcal{D}'(\Omega)$ 中稠密(关于后者的弱拓扑).
+
+\section{实直线上的分布举例}
+
+\textbf{1.} 最简单的非平凡分布是 Dirac delta 函数 $\delta_0 = \delta_0(x)$, 定义为 $\langle\delta_0(x), \phi\rangle = \phi(0)$.我们有时不带下标地写 $\delta(x)$, 表示 $\mathbb{R}$ 上原点处的点质量.
+
+\textbf{2.} 另一个简单的例子是 Heaviside 函数 $H(x)$, 当 $x\geq 0$ 时等于 1, 当 $x<0$ 时等于 0.或者, 利用局部可积函数与分布之间的标准等同:
+
+\[
+\langle H(x), \phi\rangle = \int_0^{\infty}\phi(x)\, dx.
+\]
+
+注意 $H'(x) = \delta(x)$, 且 $H(x) = \int_{-\infty}^x\delta(t)\, dt$ 是 $\delta_0$ 的累积分布函数.
+
+\textbf{3.} 一个更精细的例子是 $\mathrm{pv}(\frac{1}{x})$, 或简写为 $\frac{1}{x}$, 称为\newterm{principal-value}{主值}{principal value}分布:
+
+\[
+\left\langle\frac{1}{x}, \phi\right\rangle = \lim_{\varepsilon\to 0}\left(\int_{-\infty}^{-\varepsilon}\frac{1}{x}\phi(x)\, dx + \int_{\varepsilon}^{\infty}\frac{1}{x}\phi(x)\, dx\right).
+\]
+
+注意, $\log|x|$ 是局部可积的, 从而按照标准等同是一个分布.容易证明 $\frac{d}{dx}\log|x| = \mathrm{pv}(\frac{1}{x})$.注意, $\mathrm{pv}(\frac{1}{x})$ 是奇分布(它与偶检验函数正交), 并且是一阶的, 尽管在原点之外它是 0 阶的.事实上, 把 $\phi = \phi_{\mathrm{ev}} + \phi_{\mathrm{odd}}$ 分解为偶部与奇部, 我们有
+
+\[
+\left\langle\mathrm{pv}\left(\frac{1}{x}\right), \phi\right\rangle = \int\frac{\phi_{\mathrm{odd}}}{x}\, dx = \int\int_{-1}^1\phi'(tx)\, dt\, dx
+\]
+
+我们还要注意, 相比之下, 函数 $\frac{1}{|x|}\cdot(x\neq 0)$ 不能作为分布延拓到整条直线上.
+
+\textbf{习题 1.} 证明直线上的分布 $t\frac{d}{dt}\delta(t)$ 等于 $-\delta(t)$, 这是一个非零分布.这看起来可能违反直觉, 因为 $t$ 或 $\delta'(t)$ 似乎在每个点都消失.
+
+\textbf{习题 2.} 对满足 $0<\arg(z)<\pi$ 的 $z\in\mathbb{C}$, 设 $\log z = \log|z| + i\arg(z)$.我们可以把 $x\mapsto\log z = \log(x+iy)$ 视为一族依赖于 $y\in\mathbb{R}^+$ 的分布.对 $x\neq 0$, 我们有 $\lim_{y\to 0^+}\log z = \log|x| + i\pi(1-H(x))$.证明当 $y\to 0$, $y\in\mathbb{R}^+$, $\partial_x\log z$ 弱收敛到分布 $\frac{1}{x+i0}$, 并且
+
+\begin{equation}
+\frac{1}{x+i0} = x^{-1} - i\pi\delta_0(x).\label{eq:c3-129}
+\end{equation}
+
+\textbf{习题 3.} 若 $\Omega$ 是开连通集, $u\in\mathcal{D}'(\Omega)$, 且所有导数 $\partial_i u = 0$(按分布的意义), 则 $u$ 是常数.
+
+\textbf{习题 4.} 任何非负分布(即当 $\phi\geq 0$ 时 $\langle u, \phi\rangle\geq 0$)事实上都是 Borel 测度.根据测度的 Riesz 表示定理, 只需证明:对每个紧集 $K\subseteq\mathbb{R}^n$, 存在常数 $C = C_K$, 使得对所有支集在 $K$ 中的 $\phi$,
+
+\[
+|u(\phi)|\leq C_K\max|\phi|
+\]
+
+成立.
+
+\textbf{习题 5.} (利用前面的习题)若 $u : (-\infty, b)\to\mathbb{R}$ 是非降函数, 并且(为简单起见)在 $-\infty$ 处消失, 则存在唯一的 Borel 测度 $\mu\geq 0$, 使得对 Lebesgue 几乎处处 $x\in(-\infty, b]$, 有 $u(x) = \int_{-\infty}^x 1\, d\mu(t)$.用 $\mu$ 的语言来说, $u$ 何时连续?何时绝对连续?
+
+\begin{remark*}
+单调函数几乎处处可微这一经典结果可以由上述习题结合一些基本的测度论与第 2.6 节的 Lebesgue 微分定理导出.
+\end{remark*}
+
+\textbf{习题 6.} 刻画凸函数 $f : (a, b)\to\mathbb{R}$.即证明以下论断等价:
+
+\begin{enumerate}
+\item 对所有 $\alpha\in[0, 1]$ 与 $x, y\in(a, b)$, 有 $f(\alpha x+(1-\alpha)y)\leq\alpha f(x)+(1-\alpha)f(y)$;
+\item $f$ 连续;$f'$(按分布理论的意义)是非降函数, 从而局部有界;
+\item $f$ 连续;$f''$ 是非负分布, 从而限制在任何有界集上时是有限测度.
+\end{enumerate}
+
+提示:凸函数类在随机平移运算下保持不变, 因此磨光可能有帮助.
+
+\begin{center}$\square$\end{center}
+
+我们现在通过\newterm{analytic-continuation}{解析延拓}{analytic continuation}定义一个重要的分布族 $\chi_+^z$, 其中 $z\in\mathbb{C}$.我们将在后面研究波动方程的基本解时再次见到这一族, 也将在研究 傅里叶变换的\newterm{restriction-theorem}{限制定理}{restriction theorem}时再次见到它.
+
+首先回顾 Gamma 函数的定义:
+
+\begin{definition}\label{def:c3-3.1}
+对 $\mathrm{Re}(z)>0$, 我们定义
+
+\begin{equation}
+\Gamma(z) = \int_0^{\infty}e^{-t}t^{z-1}\, dt\label{eq:c3-130}
+\end{equation}
+
+以及 Beta 函数:
+
+\begin{equation}
+B(a, b) = \int_0^1s^{a-1}(1-s)^{b-1}\, ds\label{eq:c3-131}
+\end{equation}
+\end{definition}
+
+显然 $\Gamma(a+1) = a\Gamma(a)$, 且 $\Gamma(1) = 1$.从而 $\Gamma(n+1) = n!$.回忆以下恒等式成立:
+
+\begin{equation}
+B(a, b) = \frac{\Gamma(a)\cdot\Gamma(b)}{\Gamma(a+b)}\label{eq:c3-132}
+\end{equation}
+
+我们还为将来的应用记下:
+
+\begin{equation}
+\Gamma(a)\Gamma(1-a) = B(a, 1-a) = \frac{\pi}{\sin(\pi a)}\label{eq:c3-133}
+\end{equation}
+
+特别地, $\Gamma(1/2) = \pi^{1/2}$.
+
+\textbf{习题.} 证明公式 \eqref{eq:c3-132} 与 \eqref{eq:c3-133}.可参见 Hörmander 著作[?]第 3.4 节.
+
+\begin{definition}\label{def:c3-3.2}
+对 $\mathrm{Re}(a)>0$, 我们用 $j_a(\lambda)$ 表示这样的局部可积函数:对 $\lambda<0$ 恒等于 0, 且
+
+\begin{equation}
+j_a(\lambda) = \frac{1}{\Gamma(a)}\lambda^{a-1}, \quad \lambda>0.\label{eq:c3-134}
+\end{equation}
+\end{definition}
+
+下面的命题是众所周知的:
+
+\begin{proposition}\label{prop:c3-3.3}
+对所有满足 $a, b, \mathrm{Re}(a), \mathrm{Re}(b)>0$ 的 $a, b$,
+
+\[
+j_a*j_b = j_{a+b}
+\]
+\end{proposition}
+
+\begin{proof}
+我们有:
+
+\[
+\begin{aligned}
+j_a*j_b(\lambda) &= \frac{1}{\Gamma(a)}\frac{1}{\Gamma(b)}\int_0^{\lambda}\mu^{a-1}(\lambda-\mu)^{b-1}\, d\mu \\
+&= \frac{1}{\Gamma(a)}\frac{1}{\Gamma(b)}\lambda^{a+b-1}\int_0^1s^{a-1}(1-s)^{b-1}\, ds \\
+&= \frac{B(a, b)}{\Gamma(a)\cdot\Gamma(b)}\lambda^{a+b-1} = \frac{1}{\Gamma(a+b)}\lambda^{a+b-1} = j_{a+b}(\lambda)
+\end{aligned}
+\]
+\end{proof}
+
+\begin{proposition}\label{prop:c3-3.4}
+存在一族对所有 $a\in\mathbb{C}$ 定义的分布 $j_a$, 它们与 $\mathrm{Re}(a)>0$ 时的函数 $j_a$ 一致, 并且满足 $j_a*j_b = j_{a+b}$, $\frac{d}{d\lambda}j_a(\lambda) = j_{a-1}(\lambda)$, 以及 $j_0 = \delta_0$, 即原点处的 Dirac delta 函数.此外, 对所有正整数 $m$, $j_{-m}(x) = \partial_x^m\delta_0(x)$.
+\end{proposition}
+
+\begin{proof}
+证明基于观察 $\frac{d}{d\lambda}j_a(\lambda) = j_{a-1}(\lambda)$.于是, 对检验函数 $\phi$,
+
+\[
+\int_{\mathbb{R}}j_{a-1}(\lambda)\phi(\lambda)\, d\lambda = -\int_{\mathbb{R}}j_a(\lambda)\phi'(\lambda)\, d\lambda
+\]
+
+基于这一观察, 我们对每个满足 $\mathrm{Re}(a)+m>0$ 的 $a\in\mathbb{C}$, 把分布 $j_a$ 定义为
+
+\[
+\langle j_a, \phi\rangle = (-1)^m\int_0^{\infty}j_{a+m}(\lambda)\phi^{(m)}(\lambda)\, d\lambda
+\]
+
+特别地,
+
+\[
+\langle j_0, \phi\rangle = -\int_0^{\infty}j_1(\lambda)\phi'(\lambda)\, d\lambda = -\int_0^{\infty}\phi'(\lambda)\, d\lambda = \phi(0)
+\]
+
+从而 $j_0 = \delta_0$.也容易看出, 对所有 $a, b\in\mathbb{C}$, 有 $j_a*j_b = j_{a+b}$.
+\end{proof}
+
+\begin{remark*}
+在应用中人们常常看到分布族 $\chi_+^a = j_{a+1}$.显然 $\chi_+^a*\chi_+^b = \chi_+^{a+b+1}$, $\frac{d}{d\lambda}\chi_+^b(\lambda) = \chi_+^{b-1}(\lambda)$, 且 $\chi_+^{-1} = \delta_0$.还要注意, 对正整数 $k$, 有 $\chi_+^k(\lambda) = \frac{\lambda^k}{k!}\cdot(\lambda>0)$;更一般地, $\chi_+^a$ 是 $a$ 次齐次的, 即对任何正常数 $t$, $\chi_+^a(t\lambda) = t^a\chi_+^a(\lambda)$.当 $\mathrm{Re}(a)>-1$ 时(此时 $\chi_+^a$ 是函数), 这种齐次性显然是有意义的.你能对所有的 $a\in\mathbb{C}$ 也赋予它意义吗?
+\end{remark*}
+
+\mtsubsec{分布的支集}
+
+分布的支集可以如下容易地导出:
+
+\begin{definition}\label{def:c3-3.6}
+对 $u\in\mathcal{D}'(\Omega)$, 我们定义 $u$ 的支集的补:
+
+\[
+\Omega\setminus\mathrm{supp}(u) = \{x\in\Omega \mid \exists\, V_x\ni x\text{ 开集, 使得 } \langle u, \phi\rangle = 0, \ \forall\phi\in\mathcal{C}_0^{\infty}(V_x)\}
+\]
+\end{definition}
+
+\begin{lemma}\label{lem:c3-3.7}
+若 $u\in\mathcal{D}'(\Omega)$, 且 $\phi$ 是支集满足 $\mathrm{supp}(\phi)\subset\Omega\setminus\mathrm{supp}(u)$ 的检验函数, 则 $\langle u, \phi\rangle = u(\phi) = 0$.
+\end{lemma}
+
+\begin{proof}
+这可以通过\newterm{partition-of-unity}{单位分解}{partition of unity}论证容易地推出.该论证可见 Friedlander 著作第 1.4 节.
+\end{proof}
+
+上述引理可以用来证明, 任何紧支撑的分布 $u\in\mathcal{D}'(\Omega)$ 都可以延拓到 $\mathcal{C}^{\infty}(\mathbb{R}^n)$ 中的检验函数:取任意在 $u$ 的支集上等于 1 的截断函数 $\psi\in\mathcal{C}_0^{\infty}(\mathbb{R}^n)$, 并定义 $u(\phi) = u(\psi\phi)$.事实上, 下面的命题表明, 我们可以把紧支撑分布视为某个 $N$ 的 $\mathcal{C}^N(\mathbb{R}^n)$ 的对偶的元素:
+
+\begin{proposition}\label{prop:c3-3.8}
+分布 $u\in\mathcal{D}'(\mathbb{R}^n)$ 具有紧支集 $K\subset\mathbb{R}^n$, 当且仅当存在 $N\in\mathbb{N}$, 使得对所有 $\phi\in\mathcal{C}_0^{\infty}(\mathbb{R}^n)$, 有
+
+\[
+|u(\phi)|\leq C_U\sup_{x\in U}\sum_{|\alpha|\leq N}|\partial^{\alpha}\phi(x)|,
+\]
+
+其中 $U$ 是 $K$ 的任意开邻域.
+\end{proposition}
+
+\begin{proof}
+这可以通过使用一个在分布的支集上恒等于 1 的截断函数来看出.
+\end{proof}
+
+\begin{remark*}
+如果我们给 $\mathcal{C}^{\infty}(\mathbb{R}^n)$ 赋以由半范数族 $\phi\to\sup_{K_i}|\partial^{\alpha}\phi|$ 诱导的 Fréchet 拓扑, 其中 $\alpha\in\mathbb{N}^n$, $K_i$ 跑遍穷竭 $\mathbb{R}^n$ 的可数紧集族, 则紧支撑分布空间可以与 $\mathcal{C}^{\infty}(\mathbb{R}^n)^{*}$ 等同, 即与 $\mathcal{C}^{\infty}(\mathbb{R}^n)$ 的对偶空间等同.
+\end{remark*}
+
+我们有以下关于支集为单点的分布结构的有用事实(本质上与 Taylor 展开对偶).我们将在讲义的各个部分发现这一结果很有用, 尽管它的应用基本上总可以用重复其证明的某种变形来代替.我们不会给出全部细节, 但主要思想都在.
+
+\begin{proposition}\label{prop:c3-3.9}
+设 $u\in\mathcal{D}'(\mathbb{R}^n)$, 并假设 $\mathrm{supp}(u)\subset\{0\}$.则存在某个整数 $N$、复数 $a_{\alpha}$ 与 $\delta_0$(在 $\mathbb{R}^n$ 中支集在 0 处的 Dirac 测度), 使得
+
+\[
+u = \sum_{|\alpha|\leq N}a_{\alpha}\partial^{\alpha}(\delta_0).
+\]
+\end{proposition}
+
+\begin{proof}
+设 $u$ 是支集在原点的分布, $\phi\in\mathcal{C}_0^{\infty}(\mathbb{R}^n)$ 是检验函数.一般说来, $\langle u, \phi\rangle$ 并不只依赖于 $\phi$ 在 0 处的值, 但 $\langle u, \phi\rangle$ 确实只依赖于 $\phi$ 在 0 的任意小邻域上的限制.所以设 $\eta\in\mathcal{C}_0^{\infty}(\mathbb{R}^n)$ 是在原点的一个邻域上等于 1 的截断函数, 并设 $\eta_{\delta}(x) = \eta(\frac{x}{\delta})$($\delta>0$)是支集更小的截断函数.则 $\langle u, \phi\rangle = \langle u, \eta_{\delta}\phi\rangle$.我们希望证明 $\langle u, \phi\rangle$ 只依赖于 $\phi$ 的前 $N$ 阶导数, 其中
+
+\[
+|\langle u, \psi\rangle|\leq C\|\psi\|_{\mathcal{C}^N} = C\sum_{|\alpha|\leq N}\max|\partial^{\alpha}\psi|, \quad \psi\in\mathcal{C}_0^{\infty}(\mathbb{R}^n)
+\]
+
+通过 Taylor 展开, 归结为所有导数 $\partial^{\alpha}\phi = 0$(对 $|\alpha|\leq N$)的情形.更精确地说, 我们可以写
+
+\[
+\begin{aligned}
+\phi(x) &= \phi(0) + \int_0^1\frac{d}{dt}\phi(tx)\, dt \\
+&= \phi(0) + \sum_i\int_0^1x^i\partial^i\phi(tx)\, dt \\
+&= \phi(0) + \sum_i\partial^i\phi(0)x^i + \int_0^1(1-t)\frac{d^2}{dt^2}\phi(tx)\, dt
+\end{aligned}
+\]
+
+并继续分部积分, 直到把 $\phi$ 写成系数对应于 $\phi$ 在 0 处导数的多项式, 加上形如 $x^{\tau}\phi_{\tau}$ 的项之和, 其中 $\tau$ 是满足 $|\tau|>N$ 的多重指标, 函数 $\phi_{\tau}$ 光滑(但显然并非都有紧支集).
+
+按这种方式展开 $\phi$, 我们需要证明 $\langle u, \eta_{\delta}x^{\tau}\phi_{\tau}\rangle = 0$.这里我们将使用估计 $|\langle u, \psi\rangle|\leq C\|\psi\|_{\mathcal{C}^N}$, 因此我们必须估计阶数 $|\alpha|\leq N$ 的导数 $\partial^{\alpha}(\eta_{\delta}x^{\tau}\phi_{\tau})$.注意
+
+\[
+\partial^{\alpha}\left(\eta\left(\frac{x}{\delta}\right)\right) = \delta^{-|\alpha|}(\partial^{\alpha}\eta)\left(\frac{x}{\delta}\right)
+\]
+
+这种导数与缩放的关系与量纲分析一致, 如果我们把 $\delta$ 与 $x$ 视为具有相同的"单位", 并把每个微分 $\partial^i$ 视为具有倒数单位.这也是分析中极其常见的一个计算, 我们后面将会看到.我们利用这一缩放, 把单项式因子吸收进截断函数:$\eta(\frac{x}{\delta})x^{\tau}\phi_{\tau} = \delta^{\tau}\tilde{\eta}(\frac{x}{\delta})\phi_{\tau}$.于是我们得到
+
+\[
+\begin{aligned}
+|\langle u, \eta_{\delta}x^{\tau}\phi_{\tau}\rangle| &= \delta^{\tau}|\langle u, \tilde{\eta}_{\delta}\phi_{\tau}\rangle| \\
+&\leq C\sum_{|\alpha|\leq N}\delta^{\tau}\max|\partial^{\alpha}(\tilde{\eta}_{\delta}\phi_{\tau})|
+\end{aligned}
+\]
+
+人们可以用 Leibniz 公式展开这些导数:
+
+\[
+\partial^{\alpha}(\tilde{\eta}_{\delta}\cdot\phi_{\tau}) = \sum_{\beta+\gamma=\alpha}\frac{\alpha!}{\beta!\gamma!}\partial^{\beta}\tilde{\eta}_{\delta}\partial^{\gamma}\phi_{\tau}
+\]
+
+并产生数量庞大的项, 但求出这些乘积的精确公式可能并不有用, 尽管至少完整地过一遍细节或许是值得的.然而在实践中, 人们通过理解会出现哪些类型的项来避免那些并非问题核心的细节(例如常数的精确值), 特别是要挑出"最坏"的项.在本例中, 最坏的项出现在某个导数落到截断函数 $\tilde{\eta}_{\delta} = \tilde{\eta}(\frac{x}{\delta})$ 上时, 该截断函数随着 $\delta\to 0$ 变得越来越尖锐.对这样的项, 每个导数都产生一个 $\delta^{-1}$ 因子.但是, 至多有 $N$ 个导数可以落到这个截断函数上, 因此对某个与 $\delta$ 无关(尽管可能依赖于 $\eta$ 与 $\phi$)的常数 $C'$, 有
+
+\[
+|\langle u, \eta_{\delta}x^{\tau}\phi_{\tau}\rangle|\leq C'\delta^{\tau-N}
+\]
+
+由于 $\tau>N$, 当 $\delta\to 0$ 时它趋于 0.
+\end{proof}
+
+现在我们已经引入了支集的概念, 重要的是注意:两个分布的卷积一般不能定义, 只有当关于分布支集的某些条件满足时才能定义.我们特别注意到, 若 $u_1, u_2\in\mathcal{D}'(\mathbb{R}^n)$ 其中之一是紧支撑的, 则卷积 $u_1*u_2$ 可以定义.事实上, 假设 $u_2$ 紧支撑, 我们简单定义(∗∗∗)
+
+\[
+(u_1*u_2)*\phi = u_1*(u_2*\phi), \quad \forall\phi\in\mathcal{C}_0^{\infty}(\mathbb{R}^n).
+\]
+
+这里, $\mathrm{supp}(u_2*\phi)\subset\{x+y : x\in\mathrm{supp}(u_2), y\in\mathrm{supp}(\phi)\}$, 这是一个紧集.这一定义延拓了函数的经典卷积.
+
+\section{分布的回拉}
+
+设 $\Omega\subseteq\mathbb{R}^n$ 与 $\Omega'\subseteq\mathbb{R}^m$ 是开集, $u\in\mathcal{D}'(\Omega')$ 是 $\Omega'$ 上的分布, $f : \Omega\to\Omega'$.我们有时可以定义\newterm{pull-back}{回拉}{pull-back} $f^*u\in\mathcal{D}'(\Omega)$.可能存在障碍;例如, 若 $f$ 是常值函数, 则 $u\circ f$ 只对连续函数 $u$ 有意义;更一般地, 若 $f$ 把某个正测度集映到零测度集, 则对只在忽略零测度集的意义下良定义的 $u\in L^p$, $u\circ f$ 甚至没有意义.为确保上面提到的障碍都不出现, 我们假设 $f$ 光滑, 且其导数矩阵 $Df$ 在每一点都满秩, 从而至少任何开集都映到另一个开集.
+
+为在可能时一致地定义 $u$ 经 $f$ 的回拉, 我们使用对偶性, 把函数的回拉视为测度\newterm{push-forward}{前推}{push-forward}的伴随运算, 并令
+
+\[
+\langle f^*u, \phi\rangle = \langle u, f_{\#}\phi\rangle
+\]
+
+其中 $f_{\#}\phi$ 是(有限复)测度 $\phi\, dx$ 在映射 $f$ 下的前推(的密度函数).
+
+我们将在后面证明 $f_{\#}\phi$ 是光滑函数, 从而回拉是良定义的.显然, $f^*u$ 关于分布 $u$ 对弱极限连续.这一连续性的一个直接后果是, 光滑函数 $u$ 与 $f$ 的链式法则可以推广到 $u$ 是分布的情形.例如,
+
+\[
+\nabla u(f(x)) = u'(f(x))\nabla f(x)
+\]
+
+按分布的意义成立.
+
+上述定义当然与测度论的形式体系一致.但是, 前推测度是否具有一个可以作为合法检验函数的密度函数并不是显而易见的, 如何用这一定义进行计算也不清楚, 所以让我们先明确讨论几个具体例子.
+
+\begin{example*}
+当 $f : \Omega\to\Omega'$ 是具有逆映射 $g$ 的 $\mathcal{C}^{\infty}$ 微分同胚时, 我们对 $y = f(x)$ 应用熟悉的换元公式:
+
+\[
+\begin{aligned}
+\int u(f(x))\phi(x)\, dx &= \int u(f(x))\phi(g(f(x)))\, dx \\
+&= \int u(y)\phi(g(y))\cdot|\det Dg(y)|\, dy
+\end{aligned}
+\]
+
+其中 $Dg$ 是 $g$ 的导数矩阵.这一计算启发我们对这样的微分同胚定义回拉:
+
+\[
+\langle f^*u, \phi\rangle = \langle u, |\det Dg(y)|\phi\circ g\rangle, \quad \phi\in\mathcal{C}_0^{\infty}(\Omega)
+\]
+
+在这种情况下我们看到, 换元公式等价于回拉的定义.
+\end{example*}
+
+\begin{example*}
+若 $f : \Omega\to\mathbb{R}$ 具有非零梯度, 则我们可以显式地得到 delta 函数 $\delta_t$ 的回拉, 即 $f^*(\delta_t) = \frac{1}{|\nabla f|}d\sigma$.这里, $d\sigma$ 表示嵌入超曲面 $f^{-1}(t) = \{f(x) = t\}\subset\mathbb{R}^n$ 上的标准曲面测度, $\nabla f$ 表示 $f$ 的梯度.
+
+换言之, 我们可以计算前推测度的密度函数在 $t$ 处的值:
+
+\[
+f_{\#}\phi(t) = \int_{f^{-1}(t)}\phi(x)\frac{d\sigma(x)}{|\nabla f|},
+\]
+
+从而不仅可以对 delta 函数, 而且可以对任意分布 $u\in\mathcal{D}'(\mathbb{R})$ 计算 $\langle f^*u, \phi\rangle = \langle u, f_{\#}\phi\rangle$.这样, 回拉公式可以非正式地写成某种分解:
+
+\[
+u(f(x)) = \int u(t)\delta(f(x)-t)\, dt
+\]
+
+它可以由恒等式 $u(y) = \int u(t)\delta(y-t)\, dt$ 形式地导出.
+
+作为这一公式的一个应用示例, 可以看到半径为 $R$ 的球的体积的导数就是半径为 $R$ 的球面的面积, 这得益于 $\nabla|x| = \frac{x}{|x|}$ 的梯度具有范数 1 以及如下微分:
+
+\[
+\frac{d}{dr}\int H(r-|x|)\, dx = \int\delta(r-|x|)\, dx.
+\]
+
+这个公式在几何上是清楚的:当我们比较半径为 $r$ 的球的体积与稍大的半径为 $r+\varepsilon$ 的球的体积时, 体积的变化本质上等于 $\varepsilon$ 乘以表面积.
+\end{example*}
+
+由于 delta 函数的回拉对我们非常重要, 让我们给出这个公式的证明.一旦我们证明了这一公式, 我们建立的理论就足以完整地完成前面的计算.我们将对分布 $H(r-\cdot)$ 关于变量 $r$ 取差商, 这些差商本质上支集在一个"加厚的球面"上.然后我们使用这个平凡的观察:分布的回拉 $\langle f^*u, \phi\rangle = \langle u, f_{\#}\phi\rangle$ 关于 $u$ 对弱极限连续.
+
+现在让我们证明 delta 函数的回拉公式.证明中的几何图像基本上是前面考虑的特殊情形 $f(x) = |x|$ 的推广.
+
+\mtsubsecn{}{回拉公式的证明($m=1$)}
+
+如有必要, 通过取单位分解分解 $\phi$, 我们可以假设 $f$ 可以被补全为 $\phi$ 的支集上的坐标系, 这由于 $|\nabla f|$ 不消失而在 $\phi$ 的支集中任何一点的小邻域内总是可能的, 并且有限多个这样的邻域就足够了.我们考虑测度 $\mu = \phi(y)\, dy$, 并设 $\Psi(t) : \mathbb{R}\to\mathbb{C}$ 是由下式定义的分布函数:
+
+\[
+\Psi(t) = f_{\#}\mu(-\infty, t] = \int\phi(y)\cdot(f(y)\leq t)\, dy.
+\]
+
+我们现在希望证明
+
+\[
+\Psi'(t) = \lim_{\varepsilon\to 0}\frac{1}{\varepsilon}\int(t<f(y)\leq t+\varepsilon)\cdot\phi(y)\, dy
+\]
+
+在每一点 $t\in\mathbb{R}$ 都存在, 由此将推出\footnote{当 $\Psi$ 连续且在每一点 $t$ 处经典可微时, 微积分基本定理适用.} $\Psi$ 绝对连续, 并且由该公式给出的 $\Psi'(t) = f_{\#}\phi(t)$ 确实是正确的密度函数.为记号简单, 让我们假设 $\varepsilon>0$.
+
+我们现在通过换坐标验证:在点 $y_0\in f^{-1}(t)$ 的非常近旁, 加厚超曲面 $\{y \mid t<f(y)\leq t+\varepsilon\}$ 可以被参数化为具有"高度" $\frac{\varepsilon}{|\nabla f|(y_0)} + o(\varepsilon)$ 和"宽度" $\sim d\sigma_{f^{-1}(t)}(y_0)$, 这至少从一般情形的图像来看是直观上可信的(例如, 在前面的例子 $f(x) = |x|$ 中).
+
+我们可以(不失一般性地)假设 $\frac{\partial f}{\partial y^1}(y_0)\neq 0$, 并考虑满足
+
+\begin{equation}
+f(h(x), x') = x^1\label{eq:c3-135}
+\end{equation}
+
+的光滑函数 $h(x^1, \ldots, x^n)$, 对包含 $\phi$ 的支集的 $(t = f(y^0), y_0^1, \ldots, y_0^n)$ 的邻域中的所有 $\boldsymbol{x} = (x^1, x^2, \ldots, x^n) = (x^1, x')$.然后我们本质上用 $f$ 代替 $y^1$ 作为坐标, 作坐标变换 $(y^1, y^2, \ldots, y^n) = (h(x), x^2, \ldots, x^n)$, 得到:
+
+\[
+\begin{aligned}
+&\lim_{\varepsilon\to 0}\int\left[\frac{1}{\varepsilon}(t<f(y)\leq t+\varepsilon)\cdot\phi(y)\right]|dy^1\wedge dy^2\wedge\ldots\wedge dy^n| \\
+&= \lim_{\varepsilon\to 0}\int\left[\frac{1}{\varepsilon}(t<x^1\leq t+\varepsilon)\cdot\phi(h(x), x')\right]|dh\wedge dx^2\wedge\ldots\wedge dx^n| \\
+&= \lim_{\varepsilon\to 0}\int\left[\frac{1}{\varepsilon}(t<x^1\leq t+\varepsilon)\cdot\phi(h(x), x')\right]\left|\frac{\partial h}{\partial x^1}(x)\right||dx^1\wedge dx^2\wedge\ldots\wedge dx^n| \\
+&= \lim_{\varepsilon\to 0}\int\left[\frac{1}{\varepsilon}(t<x^1\leq t+\varepsilon)\cdot\left(\phi/\left|\frac{\partial f}{\partial y^1}\right|\right)\circ(h(x^1, x'), x')\right]dx^1\ldots dx^n \\
+&= \int\left(\phi/\left|\frac{\partial f}{\partial y^1}\right|\right)\circ(h(t, x'), x')\, dx'
+\end{aligned}
+\]
+
+为计算第二行中变换的 Jacobi 行列式, 我们使用了微分形式的简写, 它快速概括了这一事实:$n$ 维平行六面体的体积在一个顶点沿其他顶点张成的空间平移时保持不变, 即通过恒等式
+
+\[
+\begin{aligned}
+dh\wedge dx^2\wedge\ldots\wedge dx^n &= \left(\frac{\partial h}{\partial x^1}dx^1\right)\wedge dx^2\wedge\ldots\wedge dx^n \\
+&\quad + \left(\sum_{2}^n\frac{\partial h}{\partial x^i}dx^i\right)\wedge dx^2\wedge\ldots\wedge dx^n \\
+&= \frac{\partial h}{\partial x^1}dx^1\wedge\ldots\wedge dx^n
+\end{aligned}
+\]
+
+而 $\frac{\partial h}{\partial x^1}$ 通过对定义 $h$ 的隐式方程 \eqref{eq:c3-135} 隐式求导来计算.现在显然 $\Psi' = f_{\#}\phi$ 是 $t$ 的光滑函数.
+
+方程 \eqref{eq:c3-135} 还表明, 对固定的 $t$, 函数 $\psi_t(x') = h(t, x')$ 把超曲面 $f^{-1}(t)$ 参数化为函数 $x^1 = \psi_t(x')$ 的图, 其中 $x'$ 变化.我们现在希望用曲面测度来解释 $f^{-1}(t)$ 上的积分:
+
+\[
+d\sigma_{f^{-1}(t)}(x') = \left(1+\sum_{2}^n\left(\frac{\partial\psi_t}{\partial x^j}\right)^2\right)^{1/2}dx'
+\]
+
+于是我们通过对 $f(\psi_t(x'), x') = t$ 隐式求导来计算曲面密度, 得到
+
+\[
+\frac{\partial f}{\partial y^1}\cdot\frac{\partial\psi_t}{\partial x^j} + \frac{\partial f}{\partial y^j} = 0 \quad j = 2, \ldots, n
+\]
+
+从而我们看到,
+
+\[
+|\nabla f| = \sqrt{\sum\left(\frac{\partial f}{\partial y^i}\right)^2} = \left|\frac{\partial f}{\partial y^1}\right|\cdot\left(1+\sum_{2}^n\left(\frac{\partial\psi_t}{\partial x^j}\right)^2\right)^{1/2}
+\]
+
+代入 $\int(\phi/|\frac{\partial f}{\partial y^1}|)\circ\psi_t(x')\, dx'$ 就给出上面例 2 中的公式.
+
+上述证明本可以通过使用相同的变量替换 $(y^1, \ldots, y^n) = (h(x), x^2, \ldots, x^n)$ 直接证明
+
+\[
+\int u(f(y))\phi(y)\, dy = \int u(t)f_{\#}\phi(t)\, dt
+\]
+
+对所有 $u\in\mathcal{C}^{\infty}(\mathbb{R})$ 成立来简化, 或者等价地用光滑的近似 delta 函数代替尖锐的近似 delta 函数 $\frac{1}{\varepsilon}(0<t\leq\varepsilon)$.我们之所以选择上面这个较长的证明, 是因为它具有直观的几何吸引力, 也为了演示如何使用分布函数计算 $f_{\#}\phi$.更简短、更一般的证明连同一些计算工具一起在附录中给出.
+
+\textbf{习题 1.} 设 $S_{\lambda} : \mathbb{R}^n\to\mathbb{R}^n$ 是伸缩映射 $S_{\lambda}(x) = \lambda x$.我们说分布 $u\in\mathcal{D}'(\mathbb{R}^n)$ 是 $a$ 次\newterm{homogeneous}{齐次的}{homogeneous}, 若 $S_{\lambda}^*u = \lambda^a u$.证明当 $u$ 是函数时, 该定义与通常的定义一致.证明在 $\mathbb{R}^n$ 中, $\delta_0$ 是 $-n$ 次齐次的.
+
+\textbf{习题 2.} 证明 $\mathbb{R}^n$ 中任何既 $-n$ 次齐次又支集在原点的分布都是 $\delta_0$ 的常数倍.
+
+上面的例子是一个更一般公式的特殊情形.当 $f : \Omega\to\mathbb{R}^m$ 是其导数处处满射的光滑映射时, 我们可以用下面的显式公式计算 $f_{\#}\phi$:
+
+\begin{equation}
+(f_{\#}\phi)(y) = \int_{f^{-1}(y)}\phi(x)\frac{d\sigma(x)}{\|f^*\omega\|(x)}\label{eq:c3-136}
+\end{equation}
+
+这里, $d\sigma$ 表示余维数 $m$ 的子流形 $f^{-1}(y)\subseteq\Omega$ 上的诱导测度, $f^*\omega = df^1\wedge\ldots\wedge df^m$ 是 $\mathbb{R}^m$ 上体积形式 $\omega = dy^1\wedge\ldots\wedge dy^m$ 的回拉, $\|\cdot\|$ 表示由 $m$ 形式上的逐点内积诱导的范数.测度 $d\sigma$ 也可以写成 $\frac{|*f^*\omega|}{\|f^*\omega\|}$, 其中 $*f^*\omega$ 是 $f^*\omega$ 的 Hodge 对偶.这些概念都将在附录中进一步回顾, 其中一般公式 \eqref{eq:c3-136} 以不同于上面证明的 $m=1$ 情形的方式得到证明.证明由分解体积形式
+
+\[
+dx^1\wedge\ldots\wedge dx^n = \frac{1}{\|f^*\omega\|^2}(f^*\omega\wedge*f^*\omega)
+\]
+
+然后先在 $f$ 的水平集上积分组成.
+
+存在更一般的条件, 使得当分布 $u$ 的奇性被更精确地理解时, 回拉运算 $f^*u$ 可以进行.
+
+\mtsubsecn{}{应用}
+
+这些运算的第一个应用将是证明 Gauss 散度定理, 它把函数 $\phi$ 的某个导数在集合 $\Omega$ 内部的积分表示为 $\phi$ 的边界积分.可以把 $\Omega$ 上任何导数的积分表示为 $\phi$ 的差商积分的极限;但对偶地, 可以固定函数 $\phi$, 对 $\Omega$ 的\newterm{characteristic-function}{特征函数}{characteristic function}取伴随差商.于是, 散度定理等价于开集特征函数的微分.
+
+我们现在计算具有光滑边界的区域 $\Omega$ 的特征函数 $\chi_{\Omega}$ 的梯度, 但让我们先用语言来描述.可以把 $\chi_{\Omega}$ 的图像想象成一张 $\Omega$ 形的桌子.如果我们略微扰动 $\chi_{\Omega}$ 以得到光滑逼近 $\tilde{\chi}_{\Omega}$, 显然 $\tilde{\chi}_{\Omega}$ 的梯度指向 $\Omega$ 内部且垂直于边界 $\partial\Omega$(沿最大增大的方向), 而且梯度本质上仍然支集在 $\Omega$ 的边界上.因此, 毫不奇怪, 我们得到
+
+\begin{proposition}[Gauss 散度定理]\label{prop:c3-4.1}
+对任何检验函数 $\phi\in\mathcal{C}_0^{\infty}(\mathbb{R}^n)$,
+
+\[
+-\int_{\Omega}\nabla\phi(x)\, dx = \int\nabla\chi_{\Omega}(x)\phi(x)\, dx = \int_{\partial\Omega}\phi(x)\vec{n}\, d\sigma_{\partial\Omega}(x),
+\]
+
+其中 $\vec{n}$ 表示内向单位法向量.
+\end{proposition}
+
+\begin{proof}
+通过取单位分解, 我们可以分解 $\phi = \sum_{\alpha}\phi_{\alpha}$, 其中每个 $\phi_{\alpha}$ 是支集在小区 $V_{\alpha}$ 内的光滑函数, 使得 $V_{\alpha}\cap\Omega = \{x\in V_{\alpha} : f_{\alpha}(x)>0\}$ 是某个定义函数 $f = f_{\alpha}$ 的上水平集, 且该函数在边界上具有非零梯度.在 $V_{\alpha}$ 中, 我们(按分布的意义)有等式 $\chi_{\Omega} = H\circ f_{\alpha}$, 即
+
+\[
+\int\chi_{\Omega}(x)\phi(x)\, dx = \int H(f_{\alpha}(x))\phi(x)\, dx
+\]
+
+对任何支集在 $V_{\alpha}$ 中的检验函数 $\phi$ 成立.因此, 由链式法则,
+
+\[
+\nabla\chi_{\Omega}(x) = \delta(f_{\alpha}(x))\nabla f_{\alpha}(x) = \frac{\nabla f_{\alpha}}{|\nabla f_{\alpha}|}(x)d\sigma_{\partial\Omega}(x) = \vec{n}\, d\sigma_{\partial\Omega}(x)
+\]
+
+这证明了命题.
+\end{proof}
+
+我们可以略微修改证明, 以允许对 $f$ 宽松得多的正则性条件:首先逼近 $\Omega$ 的特征函数并取极限(例如让一族前 Heaviside 函数 $H_{\varepsilon}$ 收敛到 Heaviside 函数).例如, 当边界可以局部表示为 Lipschitz 函数的图时, 法向量几乎处处良定义, 我们以此方式对更多类型的集合(如多边形、立方体等)得到同样的公式.细节可在 Hörmander 的著作\cite{ho}中找到.
+
+推广这些想法, 我们可以概述更一般的 Stokes 定理的一个快速证明.证明本质上如下:对定向 $k$ 维流形 $Y$(它可能嵌入到更高维流形 $X$ 中)、$X$ 上的 $k-1$ 形式 $\omega$, 以及检验函数 $\phi\in\mathcal{C}_0^{\infty}(X)$, 我们有
+
+\[
+0 = \int_Y d(\phi\omega) = \int_Y\phi\, d\omega + \int_Y d\phi\wedge\omega
+\]
+
+当 $\phi$ 的支集在一个坐标片内时这是显然的.若 $M\subseteq Y$ 是 $Y$ 的具有光滑边界 $\partial M$ 的开子集, 我们取 $\phi$ 逼近 $M$ 的特征函数(从而 $d\phi$ 的支集在 $\partial M$ 上), 在极限中得到 Stokes 定理:
+
+\[
+\int_M d\omega = \int_{\partial M}\omega
+\]
+
+分布理论向流形情形的推广大体上是直接的, 并在 Hörmander 的著作中有所概述.
+
+讲义末尾关于子流形上积分的附录可能对下面的一些习题有帮助.
+
+\textbf{习题 3.} 证明:若 $f$、$g$ 是 $\mathbb{R}^n$ 上处处具有非零微分的两个光滑函数, 则对所有 $a, b\in\mathbb{R}^n\times\mathbb{R}^n$:
+
+\[
+\int\delta_0(f(a)-x)\delta_0(g(b)-x)\, dx = \delta_0(f(a)-g(b)).
+\]
+
+提示:两边都应理解为 $\mathbb{R}^n\times\mathbb{R}^n$ 上的分布.可以把回拉的定义改写成 $u(g(b)) := \int u(x)\delta_0(g(b)-x)\, dx$ 的形式.用近似 delta 函数逼近, 我们可以延拓到 $u(x) = \delta_0(f(a)-x)$ 的情形.或者, 利用 $f(a) = a$ 与 $g(b) = b$ 均为恒等映射的明显特殊情形, 并对一般的 $f$ 与 $g$ 取回拉.
+
+\textbf{习题 4.} 从去心正方形
+
+\[
+S = \{(x, y) : \max(|x|, |y|)<1\}\setminus\{(0, 0)\}
+\]
+
+中随机抽取一点.随机变量 $x\cdot y$ 的概率密度是什么?
+
+\textbf{习题 5.} 设 $f : \mathbb{R}^3\to\mathbb{R}^2$ 是映射 $(\tau, \beta) = f(x, y, z) = (x^2+y^2+z^2, z)$, 它在直线 $x=y=0$ 之外非奇异.对 $\phi\in\mathcal{C}_0^{\infty}(\mathbb{R}^3\setminus\{x=y=0\})$, 直接证明(例如通过计算分布函数)前推测度 $f_{\#}\phi$ 由
+
+\[
+\left(\int_0^{2\pi}\phi(\tau, \beta, \theta)\, d\theta\right)\cdot(\tau>\beta^2)\frac{|d\tau\wedge d\beta|}{2}
+\]
+
+给出, 这里 $(\tau, \beta, \theta)$ 是 $\mathbb{R}^3$ 上的坐标, 其中 $\theta$ 是 $x, y$ 平面中的极角.验证公式 \eqref{eq:c3-136} 给出同样的结果.
+
+\textbf{习题 6.} 证明:若 $\delta_0$ 是 $\mathbb{R}$ 上的 Dirac delta 函数, 则把它视为 $(t, x)\in\mathbb{R}\times\mathbb{R}^3\setminus\{(0, 0)\}$ 上的分布时, 有
+
+\[
+\langle\delta_0(t^2-|x|^2), \phi\rangle = \int_{\mathbb{R}^3}(\phi(|x|, x)+\phi(-|x|, x))\frac{dx}{2|x|}
+\]
+
+为什么这个公式作为 $\mathbb{R}^{3+1}$ 全体上的分布有意义, 即使导数 $d(t^2-|x|^2) = 2t\, dt - \sum_{i=1}^3 2x_i\, dx^i$ 在原点消失?为什么这是把 $\delta_0(t^2-|x|^2)$ 延拓到整个 $\mathbb{R}^{3+1}$ 并保持 $-2$ 次齐次性的唯一可能定义?
+
+\mtsubsec{其他未讨论的主题}
+
+我们没有包括关于分布相乘的一节, 因为一般说来, 无法定义分布的、有意义且结合性的乘积, 使其连续地延拓函数的通常乘法.(试构造直线上三个分布的例子, 使它们的乘积(若可定义)不能结合, 或者两个分布的例子, 使它们的乘积不能交换.)
+
+相乘奇性不相交的分布没有困难——只需用光滑单位分解在空间中局部化即可.当奇性发生在相同点时, 问题就更微妙了.当奇性"不碰撞"时(由\newterm{wavefront-set}{波前集}{wavefront set}的概念精确化, 该概念在 $\mathbb{R}^n$ 的\newterm{cotangent-bundle}{余切丛}{cotangent bundle}中度量分布奇性的位置与方向), 相乘仍然可能——在这种情况下, 必须尝试同时在空间与"频率"上局部化以形式化乘法.例如, 可以证明 $\delta_0(x_1, x_2) = \delta(x_1)\cdot\delta(x_2)\in\mathcal{D}'(\mathbb{R}^2)$.我们将在讲义的多处提到波前集的概念, 但对这个集合究竟是什么保持模糊;关于波前集与奇性传播的严格讨论, 见(∗∗∗).对我们的目的而言, 记住奇性既有位置也有"方向"就够了.
+
+为了给出最一般情形的更明确提示:给定两个分布 $u(x)$ 与 $v(x)\in\mathcal{D}'(X)$, 以显然的方式定义\newterm{tensor-product}{张量积}{tensor product} $u(x_1)v(x_2)\in\mathcal{D}'(X\times X)$, 而乘法(当可能时)是张量积沿对角嵌入 $X\hookrightarrow X\times X$ 的回拉 $u(x)v(x)$.不过要注意, 对角嵌入不满足我们最初定义分布回拉时假设的条件, 因为它的导数不是满射.即使在这种情形下, 有时也可以定义回拉, 但同样必须满足某些涉及该映射与被回拉分布的波前集的条件, 因为很清楚, 例如, 并非所有分布都能限制到更低维的子集上.我们将在后面涉及基本解的一些计算中, 以及研究\newterm{trace-theorem}{迹定理}{trace theorem}(它使我们能够在处理 PDE 中的某些广义函数时理解"边界值"的意义)和 傅里叶变换的限制定理时, 再次面对这个问题.

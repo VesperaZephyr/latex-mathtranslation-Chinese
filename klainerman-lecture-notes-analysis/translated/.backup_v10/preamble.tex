@@ -1,0 +1,154 @@
+% ================================================================
+% 《分析讲义》中译本 —— 兼容层 (mathtranslation.cls 之上的必要补充)
+% ----------------------------------------------------------------
+% mathtranslation.cls 是排版最高依据. 本文件只做模板允许的、使编号/
+% 结构与原书一致的补充; 不改动正文内容.
+%   1. 定理类环境共享同一计数器, 编号显示为"节号.序号"(与原书一致;
+%      无节之章与章引言为"0.x").
+%   2. \mtsubsec{标题}: 节内带编号子标题, 推进共享计数器.
+%   3. \mtsubsecn{数字}{标题}: 独立编号子标题, 不推进计数器(第 1 章用).
+%   4. 未编号环境 theorem* / definition* / ...(原书未编号对象用).
+%   5. \thmref 等按类型引用命令.
+%   6. \bookpart{标题}: 独立大标题(进目录).
+%   7. 页眉页脚(天眉): 偶数页章名、奇数页节名.
+%   8. 封面"译者 翻译及重排"信用行(略大于出版社信息).
+% ================================================================
+
+% ---------- 0. \chapter 别名 ----------
+% mathtranslation.cls 基于 ctexart(无 \chapter 命令), 但用 titlesec 把 \section
+% 排版成"章"样式(见 cls 中 ChapterSectionLabel / \titleformat{\section}).
+% 附录等处用 \chapter{...} 书写, 这里别名到 \section 即可正确渲染为章/附录标题.
+\let\chapter\section
+
+% ---------- 1. 共享定理计数器 ----------
+% mathtranslation.cls 默认各定理环境拥有独立计数器; 本书要求共享, 故在此
+% 解除原定义并以 [theorem] 重建(编号机制见第 2 条).
+\makeatletter
+\let\definition\relax\let\enddefinition\relax
+\let\lemma\relax\let\endlemma\relax
+\let\corollary\relax\let\endcorollary\relax
+\let\proposition\relax\let\endproposition\relax
+\let\remark\relax\let\endremark\relax
+\let\example\relax\let\endexample\relax
+\let\problem\relax\let\endproblem\relax
+\makeatother
+
+\theoremstyle{mtfang}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{proposition}[theorem]{命题}
+\newtheorem{remark}[theorem]{注}
+\theoremstyle{mtsong}
+\newtheorem{example}[theorem]{例}
+\newtheorem{problem}[theorem]{问题}
+
+% 未编号版本(原书未编号的定义、定理、注等)
+\newtheorem*{theorem*}{定理}
+\newtheorem*{definition*}{定义}
+\newtheorem*{lemma*}{引理}
+\newtheorem*{corollary*}{推论}
+\newtheorem*{proposition*}{命题}
+\newtheorem*{remark*}{注}
+\newtheorem*{example*}{例}
+\newtheorem*{problem*}{问题}
+
+% ---------- 2. 编号显示与原书一致 ----------
+% "节号.序号"(如 3.4); 无节章/章引言为 "0.x".
+\renewcommand{\thetheorem}{\arabic{subsection}.\arabic{theorem}}
+% 节标题显示为 "1." "2." 形式(与原书一致, 不带章号).
+\renewcommand{\thesubsection}{\arabic{subsection}.}
+
+% ---------- 3. 节内子标题 ----------
+% 带编号子标题: 推进共享计数器并显示 "节号.序号 标题".
+\newcommand{\mtsubsec}[1]{%
+  \par\medskip\noindent\refstepcounter{theorem}%
+  {\songfont\bfseries\arabic{subsection}.\arabic{theorem}\quad #1}\par\smallskip
+}
+% 独立编号子标题: 只显示 "数字. 标题", 不推进计数器(第 1 章情形).
+% 用法: \mtsubsecn{数字}{标题}(数字为 0 或空时只显示标题).
+\newcommand{\mtsubsecn}[2]{%
+  \par\medskip\noindent%
+  {\songfont\bfseries\ifx\relax#1\relax\else #1.\quad\fi#2}\par\smallskip
+}
+
+% ---------- 4. 按类型区分的引用命令 ----------
+% 所有定理类环境共享同一计数器, 故 \autoref 无法区分类型(一律显示"定理").
+% 引用时用下列命令: \thmref{...} → "定理 N", \lemref{...} → "引理 N" 等.
+\newcommand{\thmref}[1]{定理~\ref{#1}}
+\newcommand{\lemref}[1]{引理~\ref{#1}}
+\newcommand{\defref}[1]{定义~\ref{#1}}
+\newcommand{\propref}[1]{命题~\ref{#1}}
+\newcommand{\corref}[1]{推论~\ref{#1}}
+\newcommand{\remref}[1]{注~\ref{#1}}
+\newcommand{\exref}[1]{例~\ref{#1}}
+\newcommand{\probref}[1]{问题~\ref{#1}}
+
+% ---------- 6. 独立大标题(用于"第 1 部分"等), 进入目录 ----------
+\newcommand{\bookpart}[1]{%
+  \clearpage
+  \phantomsection
+  \addcontentsline{toc}{section}{#1}%
+  \begin{center}
+    {\Large\bfseries #1}
+  \end{center}
+  \vspace{1.2cm}
+}
+
+% ---------- 7. 页眉页脚(天眉) ----------
+% 仿原书: 偶数页(左页)为"页码 章名", 奇数页(右页)为"节名 页码", 页码位于天眉.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[LE]{\songfont\small\thepage\quad\leftmark}
+\fancyhead[LO]{\songfont\small\rightmark}
+\fancyhead[RO]{\songfont\small\thepage}
+
+\makeatletter
+\renewcommand{\sectionmark}[1]{%
+  \ifInAppendix
+    \markboth{附录~\thesection~#1}{附录~\thesection~#1}%
+  \else
+    \markboth{第~\thesection~章~#1}{第~\thesection~章~#1}%
+  \fi
+}
+\renewcommand{\subsectionmark}[1]{\markright{#1}}
+\makeatother
+
+% ---------- 8. 封面(补充"翻译及重排"信用行) ----------
+\renewcommand{\makecover}{%
+  \begin{titlepage}
+    \thispagestyle{empty}
+    \flushleft
+
+    \rule{\textwidth}{1.2pt} \\[0.1cm]
+    \rule{\textwidth}{0.8pt} \\[1.5cm]
+
+    \hspace{2cm} {\fontsize{45pt}{60pt}\selectfont \bfseries \BookTitleCN} \\[0.8cm]
+    \hspace{2cm} {\fontsize{25pt}{30pt}\selectfont \textit{\BookTitleEN}} \\[1.5cm]
+
+    \rule{\textwidth}{0.6pt} \\[2cm]
+
+    \hspace{2cm} {\Huge \textsc{\OriginalAuthor}} \\[6cm]
+
+    \vfill
+
+    \noindent
+    \begin{minipage}[b]{0.46\textwidth}
+        \raggedright
+        \includegraphics[width=5.7cm]{logo.pdf}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.50\textwidth}
+        \raggedleft
+        {\small \OriginalEdition · \OriginalPublisher · \OriginalYear} \\
+        {\small Translated by \Translator} \\
+        {\small Model: \ModelUsed} \\
+        {\small Updated: \ifdefempty{\TranslationDate}{\today}{\TranslationDate}} \\
+        {\normalsize\Translator\ 翻译及重排}
+    \end{minipage}
+
+    \vspace*{1cm}
+  \end{titlepage}
+}

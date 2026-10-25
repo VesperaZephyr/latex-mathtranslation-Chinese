@@ -1,0 +1,1397 @@
+% chapters/ch06.tex - 第 6 章: 微局部化
+\input{chapters/tikz_ch06.tex}
+
+\chapter{微局部化}\label{ch:06}
+\index{weijubuhua@微局部化 (microlocalization)}%
+
+我们现在转向研究分布更为精细的——微局部的——性质, 以及与之密切相关的非椭圆现象. 关于全符号展开之局部性的如下观察引导我们引入波前集的概念. 回忆全符号复合公式~\eqref{eq:4.86} (模去 $S^{-\infty}$): 若 $A = \OpL(a), B = \OpL(b)$ 是 $\R^n$ 上的伪微分算子, 则
+\begin{equation}\label{eq:6.1}
+    \sigma_L(A \circ B)(x, \xi) \sim \sum_{\alpha \in \N_0^n} \frac{1}{\alpha!} \partial_\xi^\alpha a(x, \xi) \cdot D_x^\alpha b(x, \xi).
+\end{equation}
+这一公式的一个关键特征 (迄今为止我们只在主符号层面用到过它) 是: 它在 $(x, \xi)$ 中是局部的. 我们希望断言: 若 $A$ 在 $(x, \xi)$ 处或其附近是``平凡的'', 则对任意 $B$, $A \circ B$ 在该处同样是平凡的. 由于表达式~\eqref{eq:6.1} 是渐近和, 因而在任何固定点 $(x, \xi)$ 处并无内容, ``平凡性''的正确概念必须只依赖于符号在锥形集合中当 $|\xi| \to \infty$ 时的行为, 并且必须对用 $-\infty$ 阶符号所作的修改不敏感. 因此, ``平凡性''指的是在 $\R^n_\xi \setminus \{0\}$ 的锥形子集中 (以及在点 $x \in \R^n$ 附近) 当 $|\xi| \to \infty$ 时的快速衰减. 这引向符号的\textbf{本质支集} (定义~\ref{def:6.1}) 与伪微分算子的\textbf{算子波前集} (定义~\ref{def:6.3}) 这两个概念: 符号 $a$ 的本质支集由所有使 $a$ 在 $x$ 附近、在接近 $\xi$ 的方向上并非平凡的点 $(x, \xi) \in \R^n \times (\R^n \setminus \{0\})$ 组成; 伪微分算子的算子波前集则是其左符号的本质支集.
+
+人们也可以不要求 $a \in S^m(\R^n_x; \R^n_\xi)$ 在 $x \in \R^n$ 附近、在以 $\xi \in \R^n \setminus \{0\}$ 为中心的锥内``平凡'', 而要求相反的性质, 即当 $|\xi| \to \infty$ 时的下界 $|a(x, \xi)| \ge c |\xi|^m$ ($c > 0$). 这给出符号与伪微分算子的\textbf{椭圆集}概念 (第~\ref{sec:6.2}~节). 分布 $u$ 的\textbf{波前集} (在第~\ref{sec:6.3}~节引入) 随后由所有使 $u$ 在 $(x, \xi)$ 附近非``微局部光滑''的点 $x$ 与方向 $\xi$ 组成, 这里的意思是: 不存在任何在 $(x, \xi)$ 处椭圆的伪微分算子能将 $u$ 映为光滑函数. 其想法在于, 椭圆算子保持局部奇性 (即 $x \in \R^n$ 附近的奇性) (命题~\ref{prop:4.32}), 而波前集的这一定义导致微局部奇性 (即位于 $x$ 附近、频率方向 $\xi \in \R^n \setminus \{0\}$ 上的奇性) 的同样保持.
+
+将这一点与算子波前集相联系, 则~\eqref{eq:6.1} 的一个简单推论是: 在所有使 $A$ 平凡 (即不含算子波前集) 的 $(x, \xi)$ 附近, $A u$ 是微局部光滑的 (即没有波前集). 因此, 人们应当把 $A$ 看成在所有不属于其算子波前集的 $(x, \xi)$ 附近的微局部光滑化算子.
+
+波前集可用来给出相当精确的条件, 判定何时可以对分布做乘法、作 $L^2$ 意义下的配对, 或将其限制到子流形上 (第~\ref{sec:6.4}~节).
+
+至此, 所有微局部概念都导致 $\R^n_x \times (\R^n_\xi \setminus \{0\})$ 中的锥形子集, 或在流形上导致 $T^* M \setminus o$ 中关于纤维为锥形的子集. 编码此类子集的一种有效方式是通过余球面丛, 它以特别有用的方式作为相空间的径向紧化 $\overline{T^* M}$ 的无穷远边界而出现 (第~\ref{sec:6.5}~节).
+
+我们以半经典背景下的微局部概念的讨论结束本章 (第~\ref{sec:6.6}~节).
+
+从现在起, 除非另有说明, 所有伪微分算子均应是适正支集的, 或者是 $\R^n$ 上的一致伪微分算子代数中的元素 (在第~\ref{sec:6.6}~节中则为其半经典版本).
+
+\section{算子波前集}\label{sec:6.1}
+\index{ess supp@$\esupp$ (本质支集)}%
+\index{WF'@$\WF'(A)$ (算子波前集)}%
+
+鉴于对~\eqref{eq:6.1} 的讨论, 我们引入:
+
+\begin{definition}[本质支集]\label{def:6.1}
+设 $a \in S^m(\R^n; \R^N)$. 则点 $(x_0, \xi_0) \in \R^n \times (\R^N \setminus \{0\})$ 不属于 $a$ 的\textbf{本质支集}
+\begin{equation}\label{eq:6.2}
+    \esupp a \subset \R^n_x \times (\R^N_\xi \setminus \{0\}),
+\end{equation}
+当且仅当 $a$ 在 $x_0$ 附近且在 $\xi_0$ 的某个锥形邻域内是 $-\infty$ 阶符号 (见图~\ref{fig:6.1}); 即存在 $\epsilon > 0$, 使得对所有 $\alpha \in \N_0^n$, $\beta \in \N_0^N$, $k \in \R$, 均有
+\begin{equation}\label{eq:6.3}
+    |\partial_x^\alpha \partial_\xi^\beta a(x, \xi)| \le C_{\alpha \beta k} \langle \xi \rangle^{-k} \qquad \forall\, (x, \xi) \in \R^n \times (\R^N \setminus \{0\}), \;\; |x - x_0| + \left| \frac{\xi}{|\xi|} - \frac{\xi_0}{|\xi_0|} \right| < \epsilon.
+\end{equation}
+\end{definition}
+
+\begin{figure}[htbp]
+\centering
+\drawFigSixOne
+\caption{$\xi_0 \in \R^n \setminus \{0\}$ 的锥形邻域. 该集合由 (6.3) 中出现的两类条件刻画: 位置位于小球 $B(x_0, \epsilon)$ 内, 且方向位于围绕 $\xi_0/|\xi_0|$ 的角锥内.}
+\label{fig:6.1}
+\end{figure}
+
+对于光滑流形 $M$ 上向量丛 $E \to M$ 的符号 $a \in S^m(E)$, 在 $E$ 的局部平凡化下用完全相同的方式定义锥形子集 $\esupp a \subset E \setminus o$ (其中 $o \subset E$ 为零截面).
+
+事实上, 只需对 $\alpha = \beta = 0$ 假定~\eqref{eq:6.3}; 对一般 $\alpha, \beta$ 的估计随后自动成立 (习题~\ref{ex:6.1}).
+
+由定义, $\esupp a$ 是 $\R^n \times (\R^N \setminus \{0\})$ 的闭子集. 此外, $\esupp a$ 关于 $\xi$ 是锥形的, 即 $(x, \xi) \in \esupp a$ 蕴涵对一切 $\lambda > 0$ 有 $(x, \lambda \xi) \in \esupp a$.
+
+\begin{remark}[术语]\label{rem:6.2}
+我们提醒读者不要将 $\esupp$ 与测度论中的概念相混淆. 一些作者为避免这一冲突, 把定义~\ref{def:6.1} 中引入的集合称为符号的``锥支集'' (conic support).
+\end{remark}
+
+\begin{definition}[算子波前集: $\R^n$ 情形]\label{def:6.3}
+设 $A = \OpL(a) \in \Psi^m(\R^n)$, $m \in \R$. 则定义 $A$ 的\textbf{算子波前集}为如下闭的、关于 $\xi$ 锥形的集合
+\begin{equation}\label{eq:6.4}
+    \WF'(A) \defeq \esupp(a) \subset \R^n_x \times (\R^n_\xi \setminus \{0\}).
+\end{equation}
+\end{definition}
+
+以下结论可由~\eqref{eq:4.83}、\eqref{eq:4.86}、左约化与右约化的公式~\eqref{eq:4.50}--\eqref{eq:4.51}, 以及伪微分算子局部坐标不变性证明中的公式~\eqref{eq:5.13} 立即得出:
+
+\begin{proposition}[算子波前集的性质]\label{prop:6.4}
+设 $A, B$ 为 $\R^n$ 上的伪微分算子.
+\begin{enumerate}
+    \item 设 $A$ 的 Schwartz 核具有紧支集. 则 $\WF'(A) = \emptyset$ 当且仅当 $A \in \Psi^{-\infty}(\R^n)$.
+    \item 设 $A = \OpR(a')$. 则 $\WF'(A) = \esupp a'$.
+    \item $\WF'(A + B) \subset \WF'(A) \cup \WF'(B)$.
+    \item $\WF'(A \circ B) \subset \WF'(A) \cap \WF'(B)$.
+    \item $\WF'(A^*) = \WF'(A)$.
+    \item 设 $\Omega, \Omega' \subset \R^n$ 为开集, $\kappa \colon \Omega \to \Omega'$ 为微分同胚, $A \in \Psi_{\mathrm{c}}^m(\Omega')$ (回忆定义~\ref{def:5.1}), 且 $A_\kappa \defeq \kappa^* A (\kappa^{-1})^* \in \Psi_{\mathrm{c}}^m(\Omega)$, 则
+    \begin{equation}\label{eq:6.5}
+        \kappa_*(\WF'(A_\kappa)) = \WF'(A),
+    \end{equation}
+    其中 $\kappa_*(x, \xi) = (\kappa(x), (\kappa'(x)^T)^{-1}\xi)$.
+\end{enumerate}
+\end{proposition}
+
+性质 (4) 正是我们引入 $\esupp$ 与 $\WF'$ 的动机.
+
+\begin{remark}[空的算子波前集]\label{rem:6.5}
+在 (1) 中对 Schwartz 核所作的假设, 是为了避免如下情形: $A = \Op(a)$ 具有空的算子波前集, 但估计~\eqref{eq:6.3} 中的常数在 $|x_0|$ 变大时并不保持有界. 一个例子是 $a(x, \xi) = \chi(\langle \xi \rangle \langle x \rangle^{-1})$, 其中 $0 \neq \chi \in \SmoothComp(\R^n)$: 这是 $\R^n$ 上的 0 阶一致符号, 但不是任何负阶的一致符号, 尽管 $\WF'(\Op(a)) = \emptyset$, 因为对一切 $\psi \in \SmoothComp(\R^n)$ 有 $\psi a \in S^{-\infty}$.
+\end{remark}
+
+公式~\eqref{eq:6.5} 蕴涵算子波前集可以对流形上的算子不变地定义:
+
+\begin{definition}[算子波前集: 流形情形]\label{def:6.6}
+设 $M$ 为流形, $A \in \Psi^m(M)$ (不必适正支集). 则 $\WF'(A) \subset T^* M \setminus o$ 是闭锥形子集 (即在 $T^* M$ 的纤维伸缩下不变), 它在 $T^*_p M$ ($p \in M$) 附近由 $\WF'(A_0)$ 给出, 其中 $A_0 \defeq (F^{-1})^* \psi A \psi F^*$, $F \colon U \to F(U) \subset \R^n$ 是满足 $p \in U$ 的坐标卡, $\psi \in \SmoothComp(U)$ 在 $p$ 附近等于 1, 并且使用由 $F$ 诱导的 $T^* M$ 的局部平凡化.
+\end{definition}
+
+人们把 $\WF'(A) \subset T^* M \setminus o$ 看成相空间中 $A$ 非微局部平凡的那个集合. 命题~\ref{prop:6.4} 中的性质 (1) 与 (3)--(5) 对流形上的伪微分算子同样成立. 在流形上, 性质 (1) 实际上无需对 $A$ 的 Schwartz 核作任何假设.
+
+\begin{example}[椭圆伪微分算子]\label{eg:6.7}
+若 $A \in \Psi^m(M)$ 是椭圆的, 则 $\WF'(A) = T^* M \setminus o$.
+\end{example}
+
+\begin{example}[微分算子]\label{eg:6.8}
+设 $A = \sum_{|\alpha| \le m} a_\alpha(x) D_x^\alpha \in \Diff^m(\R^n)$. 则
+\begin{equation}\label{eq:6.6}
+    \WF'(A) = \bigcup_{|\alpha| \le m} \supp a_\alpha \times (\R^n \setminus \{0\}).
+\end{equation}
+因此, 微分算子永远没有``有趣''的算子波前集, 因为对每个 $x_0 \in \R^n$, 交集 $\WF'(A) \cap (T^*_{x_0} \R^n \setminus \{0\})$ 或者等于 $T^*_{x_0} \R^n \setminus \{0\}$, 或者为空.
+\end{example}
+
+\begin{example}[Fourier 乘子]\label{eg:6.9}
+设 $\chi \in S^m(\R^n_\xi)$, 并考虑 Fourier 乘子 $A = \chi(D) \defeq \Op(\chi)$. 则 $\WF'(A) = \R^n_x \times \esupp \chi$, 这里把 $\esupp \chi$ 视为 $\R^n_\xi \setminus \{0\}$ 的子集.
+\end{example}
+
+\begin{example}[微局部化算子]\label{eg:6.10}
+把例~\ref{eg:6.8} (取 $m = 0$) 与例~\ref{eg:6.9} 相结合. 设 $\phi \in \SmoothComp(\R^n)$, $\chi \in S^0(\R^n_\xi)$. 则
+\begin{equation}\label{eq:6.7}
+    A \defeq \chi(D) \circ \phi(x) = \OpR(\chi(\xi)\phi(y)) \in \Psi^0(\R^n)
+\end{equation}
+满足 $\WF'(A) = \supp \phi \times \esupp \chi$.
+\end{example}
+
+\begin{example}[量化]\label{eg:6.11}
+量化映射~\eqref{eq:5.92}--\eqref{eq:5.93} (即命题~\ref{prop:5.41} 的主题) 具有如下附加性质: 对一切 $a \in S^m(T^* M)$ 有 $\WF'(\Op(a)) = \esupp a$.
+\end{example}
+
+与锥形集合打交道有时是繁琐的 (而且浪费, 因为一整条射线可以与它的任一点等同). 在大多数场合, 人们可以通过在余球面丛上工作来简化记号:
+\begin{equation}\label{eq:6.8}
+    S^* M \defeq (T^* M \setminus o) / \R_+,
+\end{equation}
+其纤维为 $S^*_p M = (T^*_p M \setminus o)/\R_+$, 其中 $\R_+$ 在纤维上按伸缩作用. 于是 $S^* M$ 是典型纤维为 $\mathbb{S}^{n-1}$ 的纤维丛. 我们可以把 $T^* M \setminus o$ 的锥形子集与它在 $S^* M$ 中的像等同. 例如, 若 $A \in \Psi^m(M)$, 则对 $\alpha \in S^*_p M$, 条件 $\alpha \in \WF'(A)$ 是指 $(p, \xi) \in \WF'(A)$, 其中 $\alpha = [\xi]$ (即 $\alpha = \R_+ \xi$). 注意 $S^* M$ 的紧子集与 $T^* M \setminus o$ 的这样的锥形子集相对应: 其横截面 (即与某个 $T^* M$ 纤维度量下 $|\xi| = 1$ 的交) 是紧的. 投影映射记为
+\begin{equation}\label{eq:6.9}
+    \pi \colon S^* M \to M.
+\end{equation}
+
+下述技术性结果说明人们可以微局部地构造单位分解:
+
+\begin{lemma}[微局部单位分解]\label{lem:6.12}
+设 $S^* M = \bigcup_i U_i$ 为开覆盖. 则存在算子 $A_i \in \Psi^0(M)$ 使得:
+\begin{enumerate}
+    \item $A_i$ 的 Schwartz 核的支集是局部有限的;
+    \item $\WF'(A_i) \subset U_i$;
+    \item $\sum_i A_i = I$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+只需对覆盖的一个局部有限加细证明结论 (仍记作 $\{U_i\}$), 并且每个 $U_i$ 还位于某个坐标卡上方. 即 $U_i \subset S^*_{V_i} M = \pi^{-1}(V_i)$, 其中 $F_i \colon V_i \to F_i(V_i) \subset \R^n$ 为坐标卡, 且 $\{V_i\}$ 局部有限.
+
+取从属于覆盖 $\{U_i\}$ 的单位分解 $\{\chi_i\}$; 固定 $\psi_i \in \SmoothComp(F_i(V_i))$ 使得在 $F_i(\pi(\supp \chi_i))$ 附近 $\psi_i \equiv 1$. 令
+\begin{equation}\label{eq:6.10}
+    A'_i \defeq F_i^* \psi_i \Op(\chi_i) \psi_i (F_i^{-1})^*.
+\end{equation}
+则 $A'_i$ 满足 (1) 与 (2). 由于 $\sum_i \sigma^0(A'_i) = 1$, 我们有 $\sum_i A'_i = I - R'$, $R' \in \Psi^{-1}(M)$. 固定适正支集算子 $B \in \Psi^0(M)$, 使得 $B \sim \sum_{j=0}^\infty (R')^j$, 并令 $A_i \defeq A'_i B$. 此时 (1) 仍成立 (因为 $B$ 适正支集), 而 (2) 由命题~\ref{prop:6.4}(4) 成立; 并且 $\sum_i A_i = I - R$, $R \in \Psi^{-\infty}(M)$. 把任意一个 $A_i$ 换为 $A_i + R$, 即完成证明.
+\end{proof}
+
+\begin{corollary}[微局部化算子]\label{cor:6.13}
+设 $K \subset U \subset S^* M$, 其中 $K$ 闭、$U$ 开. 则存在 $A \in \Psi^0(M)$ 使得 $\WF'(A) \subset U$ 且 $\WF'(I - A) \cap K = \emptyset$. 我们说 $A$ 在 $K$ 上微局部地等于 $I$.
+\end{corollary}
+
+\begin{proof}[推论~\ref{cor:6.13} 的证明]
+$S^* M = U \cup (S^* M \setminus K)$ 构成 $S^* M$ 的开覆盖. 引理~\ref{lem:6.12} 给出单位分解 $I = A + B$, 满足 $\WF'(A) \subset U$ 且 $\WF'(I - A) \cap K = \WF'(B) \cap K = \emptyset$.
+\end{proof}
+
+
+
+\section{椭圆集, 特征集}\label{sec:6.2}
+\index{tuoyuanji@椭圆集 (elliptic set)}%
+\index{tezhengji@特征集 (characteristic set)}%
+
+下面我们以微局部的方式细化符号与算子的椭圆性概念.
+
+\begin{definition}[椭圆集]\label{def:6.14}
+设 $a \in S^m(\R^n; \R^N)$. 则 $a$ 的\textbf{椭圆集}
+\begin{equation}\label{eq:6.11}
+    \Ell(a) \subset \R^n \times (\R^N \setminus \{0\})
+\end{equation}
+由所有这样的 $(x_0, \xi_0) \in \R^n \times (\R^N \setminus \{0\})$ 组成: $a$ 在 $(x_0, \xi_0)$ 的某个锥形邻域内是椭圆的; 即存在 $c, C > 0$ 与 $\epsilon > 0$ 使得
+\begin{equation}\label{eq:6.12}
+    |a(x, \xi)| \ge c |\xi|^m, \qquad |\xi| \ge C, \;\; |x - x_0| + \left| \frac{\xi}{|\xi|} - \frac{\xi_0}{|\xi_0|} \right| < \epsilon.
+\end{equation}
+$\Ell(a)$ 的补集是\textbf{特征集}
+\begin{equation}\label{eq:6.13}
+    \Char(a) \defeq (\R^n \times (\R^N \setminus \{0\})) \setminus \Ell(a).
+\end{equation}
+对光滑流形 $M$ 上的符号 $a \in S^m(T^* M)$, 我们在局部坐标卡中用同样的方式定义 $\Ell(a) \subset T^* M \setminus o$. 对 $A \in \Psi^m(\R^n)$ 或 $A \in \Psi^m(M)$, 定义 $\Ell(A) \defeq \Ell(\sigma^m(A))$ 与 $\Char(A) \defeq \Char(\sigma^m(A))$.
+\end{definition}
+
+集合 $\Ell(A)$ 与 $\Char(A)$ 依赖于阶数 $m$, 因此为表述的极致清晰起见可以写作 $\Ell^m(A)$ 与 $\Char^m(A)$. 对 $a \in S^m(\R^n; \R^N)$, 与定义~\ref{def:3.11} 更接近的一个等价定义是: 存在 $b \in S^{-m}(\R^n; \R^N)$ 使得 $a b - 1$ 在 $(x_0, \xi_0)$ 的某个锥形邻域内是 $-1$ 阶符号. 注意 $\Ell(A)$ 是开集且关于 $\xi$ 锥形. 此外
+\begin{equation}\label{eq:6.14}
+    \Ell^{m+m'}(A \circ B) = \Ell^m(A) \cap \Ell^{m'}(B), \qquad A \in \Psi^m(M), \;\; B \in \Psi^{m'}(M).
+\end{equation}
+
+\begin{example}[椭圆算子]\label{eg:6.15}
+$M$ 上的椭圆算子的椭圆集等于 $T^* M \setminus o$, 其特征集为空.
+\end{example}
+
+\begin{example}[波动算子]\label{eg:6.16}
+在 $\R^n = \R_t \times \R^{n-1}_x$ 上, 典范动量变量记为 $\sigma \in \R$, $\xi \in \R^{n-1}$. 波动算子
+\[
+    \Box = -D_t^2 + \sum_{j=1}^{n-1} D_{x_j}^2
+\]
+的主符号为 $\sigma^2(\Box)(t, x, \sigma, \xi) = -\sigma^2 + |\xi|^2$. 因此其特征集在每个余切纤维中是不含顶点的双锥:
+\begin{equation}\label{eq:6.15}
+    \Char(\Box) = \{(t, x, \sigma, \xi) \colon -\sigma^2 + |\xi|^2 = 0, \; (\sigma, \xi) \neq (0, 0)\}.
+\end{equation}
+这是 $T^* \R^n \setminus o$ 的余维为 1 的锥形子流形.
+\end{example}
+
+椭圆拟逆构造 (定理~\ref{thm:4.29}) 可以微局部化:
+
+\begin{proposition}[微局部椭圆拟逆]\label{prop:6.17}
+设 $A \in \Psi^m(M)$, 并设 $K \subset \Ell(A) \subset S^* M$ 为闭子集. 则存在 $A$ 在 $K$ 上的微局部拟逆, 即算子 $B \in \Psi^{-m}(M)$ 使得
+\begin{equation}\label{eq:6.16}
+    K \cap \WF'(A B - I) = \emptyset, \qquad K \cap \WF'(B A - I) = \emptyset.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+由推论~\ref{cor:6.13}, 可以选取 $Q, \tilde{Q} \in \Psi^0(M)$ 使得
+\begin{equation}\label{eq:6.17}
+    \WF'(I - Q) \cap K = \emptyset, \qquad \WF'(I - \tilde{Q}) \cap \WF'(Q) = \emptyset, \qquad \WF'(Q), \WF'(\tilde{Q}) \subset \Ell(A).
+\end{equation}
+再取 $B_0 \in \Psi^{-m}(M)$ 使得 $\sigma^{-m}(B_0) = \sigma^0(\tilde{Q})/\sigma^m(A)$, 并写出
+\begin{equation}\label{eq:6.18}
+    A B_0 = I - R = I - Q R - (I - Q) R, \qquad R \in \Psi^0(M).
+\end{equation}
+我们有 $\WF'((I - Q)R) \cap K = \emptyset$; 而 $\sigma^0(Q R) = \sigma^0(Q)(1 - \sigma^0(\tilde{Q})) = 0$, 故 $Q R \in \Psi^{-1}(M)$. 然后我们用 Neumann 级数论证 (对比引理~\ref{lem:4.30}) 改进 $K$ 附近的情形. 即令
+\begin{equation}\label{eq:6.19}
+    \Psi^0(M) \ni B' \sim \sum_{j=0}^\infty (Q R)^j
+\end{equation}
+并置 $B \defeq B_0 B' \in \Psi^{-m}(M)$. 则
+\begin{equation}\label{eq:6.20}
+    A B = I - R'' - (I - Q) R B', \qquad R'' \in \Psi^{-\infty}(M), \quad \WF'((I - Q) R B') \cap K = \emptyset,
+\end{equation}
+故 $\WF'(A B - I) \cap K = \emptyset$.
+
+微局部左拟逆, 即满足 $\WF'(\tilde{B} A - I) \cap K = \emptyset$ 的 $\tilde{B} \in \Psi^0(M)$, 可以类似地构造. 于是, 模去算子波前集与 $K$ 不相交的算子, 我们有
+\begin{equation}\label{eq:6.21}
+    B \equiv (\tilde{B} A) B = \tilde{B}(A B) \equiv \tilde{B}.
+\end{equation}
+若给 $B$ 加上一个算子波前集与 $K$ 不相交的算子, \eqref{eq:6.16} 的有效性不变. 因此每个微局部左拟逆也是右拟逆, 反之亦然.
+\end{proof}
+
+\eqref{eq:6.21} 中所用的记号有自然的推广: 若 $\WF'(A - B) \cap K = \emptyset$, 则称 $A \equiv B$ 在 $K \subset S^* M$ 上微局部相等. 人们希望用命题~\ref{prop:6.17} 把椭圆正则性理论 (命题~\ref{prop:4.32}) 加强为如下类型的陈述: 若 $A u = f$, 则在 $\Ell(A)$ 上, $u$ 在 $f$ 光滑之处也是``光滑''的. 这引向波前集的概念, 我们下面讨论之.
+
+
+
+\section{分布的波前集: 微局部椭圆正则性}\label{sec:6.3}
+\index{boqianji@波前集 (wave front set)}%
+\index{weijubu tuoyuan zhengxing@微局部椭圆正则性 (microlocal elliptic regularity)}%
+
+设 $u \in \mathscr{S}'(\R^n)$, $A \in \Psi^m(\R^n)$. 则 $A u \in \mathscr{S}'(\R^n)$ 在 $\WF'(A)$ 之外是``平凡的'': 关于 $u$ 的奇性的全部信息都在 $(T^* \R^n \setminus o) \setminus \WF'(A)$ 中丢失. 事实上, 若 $B \in \Psi^0(\R^n)$ 满足 $\WF'(B) \cap \WF'(A) = \emptyset$, 则由命题~\ref{prop:6.4}(1) 有 $B(A u) \in \Smooth(\R^n)$. ``平凡性''的精确概念就是波前集的缺失. 我们直接在流形上定义之:
+
+\begin{definition}[波前集]\label{def:6.18}
+设 $u \in \Distr(M)$. 则 $\alpha \in S^* M$ 不属于 $u$ 的\textbf{波前集}
+\begin{equation}\label{eq:6.22}
+    \alpha \notin \WF(u) \subset S^* M
+\end{equation}
+当且仅当存在 $\alpha$ 的邻域 $U \subset S^* M$ 使得
+\begin{equation}\label{eq:6.23}
+    A \in \Psi^0(M), \;\; \WF'(A) \subset U \;\; \Longrightarrow \;\; A u \in \Smooth(M).
+\end{equation}
+等价地, 可以把 $\WF(u)$ 视为 $T^* M \setminus o$ 的锥形子集. 若 $\alpha \notin \WF(u)$, 则称 $u$ 在 $\alpha$ 附近\emph{微局部光滑}. 由定义, $\WF(u) \subset S^* M$ 是闭的 (等价地, $\WF(u) \subset T^* M \setminus o$ 是锥形且闭的). 当 $M = \R^n$ 时, 对 $u \in \mathscr{S}'(\R^n)$ 用一致伪微分算子 $A \in \Psi^0(\R^n)$ 检验也可以等价地定义 $\WF(u)$, 这一简单验证留给读者.
+\end{definition}
+
+下面给出 $\WF(u)$ 的几个等价定义. 我们首先把需要检验~\eqref{eq:6.23} 的算子族缩减为一个算子.
+
+\begin{lemma}[波前集: 等价定义 \#1]\label{lem:6.19}
+设 $u \in \Distr(M)$. 则 $\alpha \notin \WF(u)$ 当且仅当存在 $A \in \Psi^0(M)$ 在 $\alpha$ 处椭圆, 使得 $A u \in \Smooth(M)$.
+\end{lemma}
+
+\begin{proof}
+方向``$\Longrightarrow$''是显然的. 为证``$\Longleftarrow$'', 取 $U \defeq \Ell(A)$, 它是 $\alpha$ 的邻域. 设 $B \in \Psi^0(M)$ 且 $\WF'(B) =: K \subset U$; 我们断言 $B u \in \Smooth(M)$. 命题~\ref{prop:6.17} 给出 $A$ 在 $K$ 上的微局部拟逆 $Q \in \Psi^0(M)$, 即 $Q A = I - R$, $R \in \Psi^0(M)$, $\WF'(R) \cap K = \emptyset$. 因此
+\begin{equation}\label{eq:6.24}
+    B u = B(Q A + R) u = (B Q)(A u) + B R u \in \Smooth(M).
+\end{equation}
+事实上 $A u \in \Smooth(M)$, 故第一项光滑; 而 $\WF'(B R) \subset \WF'(B) \cap \WF'(R) \subset K \cap \WF'(R) = \emptyset$, 故 $B R \in \Psi^{-\infty}(M)$, 从而 $B R u \in \Smooth(M)$.
+\end{proof}
+
+\begin{corollary}[波前集: 等价定义 \#2]\label{cor:6.20}
+设 $u \in \Distr(M)$. 则
+\begin{equation}\label{eq:6.25}
+    \WF(u) = \bigcap_{\substack{A \in \Psi^0(M) \\ A u \in \Smooth(M)}} \Char(A).
+\end{equation}
+\end{corollary}
+
+这引向波前集的如下具体描述.
+
+\begin{proposition}[波前集: 等价定义 \#3]\label{prop:6.21}
+设 $u \in \Distr(\R^n)$, $(x_0, \xi_0) \in \R^n \times (\R^n \setminus \{0\})$.
+\begin{enumerate}
+    \item 若存在 $\phi \in \SmoothComp(\R^n)$, $\phi(x_0) \neq 0$, 与 $\epsilon > 0$ 使得对所有 $N \in \R$ 有
+    \begin{equation}\label{eq:6.26}
+        |\widehat{\phi u}(\xi)| \le C_N |\xi|^{-N}, \qquad \xi \in \R^n, \;\; |\xi| \ge 1, \;\; \left| \frac{\xi}{|\xi|} - \frac{\xi_0}{|\xi_0|} \right| < \epsilon,
+    \end{equation}
+    则 $(x_0, \xi_0) \notin \WF(u)$.
+    \item 若对每个 $\epsilon > 0$ 都存在 $\phi \in \SmoothComp(B(x_0, \epsilon))$ 与 $N \in \R$, 使得~\eqref{eq:6.26} 对任何常数 $C_N$ 都不成立, 则 $(x_0, \xi_0) \in \WF(u)$.
+\end{enumerate}
+在~\eqref{eq:6.26} 中我们用到 $\phi u \in \mathscr{E}'(\R^n)$ 的 Fourier 变换是连续函数 (命题~\ref{prop:2.11}). 我们把命题~\ref{prop:6.21}(2) 的逆否形式写出:
+
+(2') 设 $(x_0, \xi_0) \notin \WF(u)$. 则存在 $\epsilon > 0$ 使得对一切 $\phi \in \SmoothComp(B(x_0, \epsilon))$ 与 $N \in \R$, 存在常数 $C_N$ 使~\eqref{eq:6.26} 成立.
+
+对流形上的分布, 同一结论在任一局部坐标卡中成立. 定义~\ref{def:6.18} 中波前集的内蕴处理的一个优点是, 它自动蕴涵波前集是 $T^* M \setminus o$ 的子集; 相比之下, 这一点从命题~\ref{prop:6.21} 的刻画中并不立即显然. (我们鼓励读者尝试直接证明命题~\ref{prop:6.21} 中条件的坐标不变性.)
+\end{proposition}
+
+\begin{proof}[命题~\ref{prop:6.21} 的证明]
+设~\eqref{eq:6.26} 成立. 取 $\psi \in \Smooth(\mathbb{S}^{n-1})$, 其支集位于 $\xi_0/|\xi_0|$ 周围的 $\epsilon$-球内, 且 $\psi(\xi_0/|\xi_0|) \neq 0$. 再固定 $\chi \in \Smooth(\R^n_\xi)$, 使得 $|\xi| \le 1$ 时 $\chi(\xi) = 0$, $|\xi| \ge 2$ 时 $\chi(\xi) = 1$. 令
+\begin{equation}\label{eq:6.27}
+    a(y, \xi) \defeq \chi(\xi) \psi\left( \frac{\xi}{|\xi|} \right) \phi(y) \in S^0(\R^n; \R^n).
+\end{equation}
+则 $|\mathcal{F}(\OpR(a) u)(\xi)| \le C_N \langle \xi \rangle^{-N}$, 从而 $\OpR(a) u \in \Smooth(\R^n)$. 因 $a$ 在 $(x_0, \xi_0)$ 处椭圆, 这蕴涵 $(x_0, \xi_0) \notin \WF(u)$.
+
+对 (2), 设 $(x_0, \xi_0) \notin \WF(u)$. 取 $B \in \Psi^0(\R^n)$ 在 $(x_0, \xi_0)$ 处椭圆且 $B u \in \Smooth(\R^n)$. 取 $\epsilon > 0$ 使得 $|x - x_0| < 2\epsilon$ 与 $|\xi/|\xi| - \xi_0/|\xi_0|| < 2\epsilon$ 蕴涵 $(x, \xi) \in \Ell(B)$. 设给定 $\phi \in \SmoothComp(B(x_0, \epsilon))$ 与 $\psi \in \Smooth(\mathbb{S}^{n-1})$, 其中对一切满足 $|\omega - \xi_0/|\xi_0|| < \epsilon$ 的 $\omega \in \mathbb{S}^{n-1}$ 有 $\psi(\omega) = 1$, 且对一切 $\omega \in \supp \psi$ 有 $|\omega - \xi_0/|\xi_0|| < 2\epsilon$. 用~\eqref{eq:6.27} 定义 $a(y, \xi)$ 并置 $A \defeq \OpR(a)$. 则
+\begin{equation}\label{eq:6.28}
+    \WF'(A) \subset \Ell(B).
+\end{equation}
+(见例~\ref{eg:6.10}.) 因此 $A u \in \Smooth(\R^n)$. 我们断言实际上有
+\begin{equation}\label{eq:6.29}
+    A u \in \mathscr{S}(\R^n),
+\end{equation}
+于是对 $A u$ 取 Fourier 逆变换即得~\eqref{eq:6.26} 对一切 $N$ 成立. 为证~\eqref{eq:6.29}, 取 $\tilde{\phi} \in \SmoothComp(\R^n)$ 在 $\supp \phi$ 附近恒等于 1. 则 $\tilde{\phi}(A u) \in \SmoothComp(\R^n)$, 而 $(1 - \tilde{\phi}) A u = \Op(a') u$, 其中
+\begin{equation}\label{eq:6.30}
+    a'(x, y, \xi) \defeq (1 - \tilde{\phi}(x)) a(y, \xi) \in S^0(\R^n \times \R^n; \R^n).
+\end{equation}
+注意 $a'(x, y, \xi) = 0$ 在 $x = y$ 附近成立. 因此 $\Op(a') \in \Psi^{-\infty}(\R^n)$. (这由推论~\ref{cor:4.9} 与命题~\ref{prop:4.13} 得出.) 由于 $\Op(a')$ 的 Schwartz 核的支集位于 $\R^n \times B(x_0, \epsilon)$ 中, 且当 $|x - y| \to \infty$ 时快速衰减, 它属于 $\mathscr{S}(\R^n \times \R^n)$, 从而 $\Op(a') u = \Op(a')(\tilde{\phi} u) \in \mathscr{S}(\R^n)$ (习题~\ref{ex:2.20}).
+\end{proof}
+
+\begin{remark}[解释]\label{rem:6.22}
+在~\eqref{eq:6.26} 的记号下, 考虑 $\widehat{\phi u}$ 的 Fourier 逆变换公式
+\begin{equation}\label{eq:6.31}
+    (\phi u)(x) = (2\pi)^{-n} \int_{\R^n} \ee^{\ii x \cdot \xi} \widehat{\phi u}(\xi) \,\dd\xi.
+\end{equation}
+它把 $\phi u$ 重构为平面波 $\ee^{\ii x \cdot \xi}$ 的叠加, 振幅为 $\widehat{\phi u}(\xi)$. 若 $\widehat{\phi u}(\xi)$ 在 $\xi/|\xi|$ 接近 $\xi_0/|\xi_0|$ 时并不快速衰减, 则对 $|\xi| \ge 1$、$|\xi/|\xi| - \xi_0/|\xi_0|| < \epsilon$ 的 $\xi \in \R^n$ 所作的积分便叠加上具有快速振荡与``非平凡''振幅、方向 $\approx \xi_0/|\xi_0|$ 的平面波. 注意 $\xi_0/|\xi_0|$ 是平面波 $x \mapsto \ee^{\ii x \cdot \xi_0}$ 的水平集的余法方向. 这正是``波前集''这一术语的来由.
+\end{remark}
+
+下面说明 $\WF$ 是 $\singsupp$ 的重要精细化:
+
+\begin{theorem}[波前集与奇异支集]\label{thm:6.23}
+记 $\pi \colon T^* M \to M$ 为投影. 设 $u \in \Distr(M)$. 则
+\begin{equation}\label{eq:6.32}
+    \pi(\WF(u)) = \singsupp u.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+若 $x_0 \notin \singsupp u$, 则存在 $\chi \in \SmoothComp(M)$ 满足 $\chi(x_0) \neq 0$ 且 $\chi u \in \SmoothComp(M)$. 但对一切 $0 \neq \xi_0 \in T^*_{x_0} M$, 算子 $A_\alpha \in \Psi_{\mathrm{cl}}^0(M)$ 在 $(x_0, \xi_0)$ 处椭圆; 故 $(T^*_{x_0} M \setminus o) \cap \WF(u) = \emptyset$.
+
+反之, 设 $x_0 \notin \pi(\WF(u))$. 则对每个 $\alpha \in S^*_{x_0} M$ 存在 $A_\alpha \in \Psi_{\mathrm{cl}}^0(M)$ 在 $\alpha$ 处椭圆且 $A_\alpha u \in \Smooth(M)$. 令 $U_\alpha \defeq \Ell(A_\alpha) \cap S^*_{x_0} M$. 则 $U_\alpha$ 构成紧集 $S^*_{x_0} M$ 的开覆盖, 故可取有限子覆盖
+\begin{equation}\label{eq:6.33}
+    S^*_{x_0} M = \bigcup_{i=1}^N U_{\alpha_i}, \qquad \alpha_i \in S^*_{x_0} M, \;\; i = 1, \ldots, N.
+\end{equation}
+固定 $M$ 上的一个体积密度, 并考虑算子
+\begin{equation}\label{eq:6.34}
+    A \defeq \sum_{i=1}^N A^*_{\alpha_i} A_{\alpha_i} \in \Psi^0(M).
+\end{equation}
+它在 $S^*_{x_0} M$ 上椭圆, 因为 $\sigma^0(A) = \sum_{i=1}^N |\sigma^0(A_{\alpha_i})|^2$, 且对每个 $\alpha \in S^*_{x_0} M$ 存在指标 $i$ 使 $\sigma^0(A_{\alpha_i}) \neq 0$ 在 $\alpha$ 处成立. 此外 $A u \in \Smooth(M)$. 于是对一切满足 $S^*_{\supp\chi} M \subset \Ell(A)$ 的 $\chi \in \SmoothComp(M)$, 由引理~\ref{lem:6.19} 的证明可得 $\chi u \in \Smooth(M)$. 取这样的 $\chi$ 使 $\chi(x_0) \neq 0$, 即得 $x_0 \notin \singsupp u$.
+\end{proof}
+
+\begin{corollary}[波前集与光滑性]\label{cor:6.24}
+设 $u \in \Distr(M)$. 则 $\WF(u) = \emptyset$ 当且仅当 $u \in \Smooth(M)$.
+\end{corollary}
+
+现在给出一些例子.
+
+\begin{example}[$\delta$-分布]\label{eg:6.25}
+(1) 考虑 $\delta \in \Distr(\R^n)$. 我们断言
+\begin{equation}\label{eq:6.35}
+    \WF(\delta) = \{(0, \xi) \in \R^n \times (\R^n \setminus \{0\}) \colon \xi \neq 0\}.
+\end{equation}
+由于 $\singsupp \delta = \{0\}$, 定理~\ref{thm:6.23} 蕴涵 $\WF(\delta) \subseteq \{(0, \xi) \colon \xi \neq 0\}$. 给定 $\phi \in \SmoothComp(\R^n)$ 且 $\phi(0) \neq 0$, 有 $\widehat{\phi\delta}(\xi) = \phi(0)$, 它在任何 $\xi_0 \neq 0$ 的锥形邻域中都不快速衰减. 由命题~\ref{prop:6.21} 即得结论. (也可以用推论~\ref{cor:6.24} 给出一个临时论证: 因 $\delta \notin \Smooth(\R^n)$, 必有 $\WF(\delta) \neq \emptyset$; 但 $\delta$ 是旋转对称的, 故 $(0, \xi) \in \WF(\delta)$ 蕴涵对一切 $R \in \SO(n)$ 有 $(0, R\xi) \in \WF(\delta)$; 这给出~\eqref{eq:6.35}.)
+
+(2) 更一般地, 若把 $\R^n = \R^k_x \times \R^{n-k}_y$ 分解, $k \le n-1$, 则对 $u(x, y) = \delta(y)$ 有
+\begin{equation}\label{eq:6.36}
+    \WF(u) = \{(x, y, \xi, \eta) \colon y = 0, \; \xi = 0, \; \eta \neq 0\} = N^* \{y = 0\} \setminus o.
+\end{equation}
+\end{example}
+
+\begin{example}[半空间的特征函数]\label{eg:6.26}
+把 $\R^n = \R \times \R^{n-1}$ 中的点写成 $x = (x_1, x')$. 设 $u(x_1, x') = H(x_1)$, 其中 $H$ 为 Heaviside 函数. 则
+\begin{equation}\label{eq:6.37}
+    \WF(u) = \{(x_1, x', \xi_1, \xi') \colon x_1 = 0, \; \xi' = 0, \; \xi_1 \neq 0\} = N^* \{x_1 = 0\} \setminus o.
+\end{equation}
+我们用命题~\ref{prop:6.21} 验证之. 首先注意 $\singsupp u = \{x_1 = 0\}$. 现在取 $\phi \in \SmoothComp(\R)$ 在 0 附近等于 1, 并取 $\chi \in \SmoothComp(\R^{n-1})$. 则
+\begin{equation}\label{eq:6.38}
+    \mathcal{F}\big( \phi(x_1) \chi(x') u(x_1, x') \big)(\xi_1, \xi') = \hat{\chi}(\xi') \int_0^\infty \ee^{-\ii x_1 \xi_1} \phi(x_1) \,\dd x_1.
+\end{equation}
+该积分等于 $\mathcal{F}(H\phi) = (2\pi)^{-1} \hat{H} * \hat{\phi}$. 由 $\hat{\phi} \in \mathscr{S}(\R)$, $\int_{\R} \hat{\phi}(\xi_1) \,\dd\xi_1 = 2\pi$, 以及 $\hat{H}(\xi_1) = -\ii(\xi_1 - \ii 0)^{-1}$ (回忆习题~\ref{ex:2.6}), 可得
+$\mathcal{F}(H\phi)(\xi_1) = -\ii \xi_1^{-1} + r(\xi_1)$, 其中 $|r(\xi_1)| \le C_N |\xi_1|^{-N}$ 对一切 $N$ 与 $|\xi_1| \ge 1$ 成立. 第一个结论是上界
+\begin{equation}\label{eq:6.39}
+    |\mathcal{F}(\phi\chi u)(\xi_1, \xi')| \le C_N \langle \xi_1 \rangle^{-1} \langle \xi' \rangle^{-N}
+\end{equation}
+对一切 $N$ 成立. 该式在一切点 $(\xi_1, \xi') \neq (\pm 1, 0)$ 的充分小的锥形邻域中快速衰减. 第二个结论是
+\begin{equation}\label{eq:6.40}
+    \mathcal{F}(\phi\chi u)(\xi_1, 0) = \frac{1}{\ii \xi_1} \hat{\chi}(0) + r(\xi_1), \qquad |\xi_1| \ge 1,
+\end{equation}
+其中 $r$ 当 $|\xi_1| \to \infty$ 时快速衰减. 该式当 $|\xi_1| \to \infty$ 时不快速衰减, 故 $(0, x', \xi_1, 0) \in \WF(u)$.
+\end{example}
+
+\begin{example}[光滑区域的特征函数]\label{eg:6.27}
+例~\ref{eg:6.26} 的一个弯曲版本如下. 设 $\Omega \subset \R^n$ 为光滑有界区域. 则
+$\WF(1_\Omega) = N^* \partial\Omega \setminus o$ (习题~\ref{ex:6.3}).
+\end{example}
+
+\begin{example}[带角区域的特征函数]\label{eg:6.28}
+把 $\R^2$ 中的点写成 $x = (x_1, x_2)$. 设 $u(x_1, x_2) = H(x_1) H(x_2)$. 则
+\begin{equation}\label{eq:6.41}
+\begin{split}
+    \WF(u) ={} & \left( N^* \{x_1 = 0, \, x_2 > 0\} \setminus o \right) \cup \left( N^* \{x_2 = 0, \, x_1 > 0\} \setminus o \right) \\
+    & \cup \left( N^* \{x_1 = x_2 = 0\} \setminus o \right).
+\end{split}
+\end{equation}
+见图~\ref{fig:6.2} (左图). 读者可以用计算~\eqref{eq:6.38} 的一个变体验证 $x_1 = x_2 = 0$ 附近的情形.
+\end{example}
+
+\begin{figure}[htbp]
+\centering
+\drawFigSixTwo
+\caption{左图: $H(x_1)H(x_2)$ 的波前集 (例~\ref{eg:6.28}). 右图: $H(x_1)\delta(x_2)$ 的波前集 (例~\ref{eg:6.29}).}
+\label{fig:6.2}
+\end{figure}
+
+\begin{example}[截断 $\delta$-分布]\label{eg:6.29}
+在上一例的记号下, 考虑 $u(x_1, x_2) = H(x_1)\delta(x_2)$; 这是指分布
+$\mathscr{S}(\R^2) \ni \phi \mapsto \int_0^\infty \phi(x_1, 0) \,\dd x_1$. 则
+\begin{equation}\label{eq:6.42}
+    \WF(u) = \left( N^* \{x_1 > 0, \, x_2 = 0\} \setminus o \right) \cup \left( N^* \{x_1 = x_2 = 0\} \setminus o \right).
+\end{equation}
+见图~\ref{fig:6.2} (右图). 详细验证留给读者.
+\end{example}
+
+\begin{example}[$+ \ii 0$ 型分布]\label{eg:6.30}
+回忆习题~\ref{ex:2.6} 中的分布 $(x + \ii 0)^{-1} = \lim_{\epsilon \to 0} (x + \ii \epsilon)^{-1} \in \mathscr{S}'(\R)$. 则 $\WF((x + \ii 0)^{-1}) = \{(0, \xi) \colon \xi > 0\}$. 这可由 $\mathcal{F}((x + \ii 0)^{-1}) = -2\pi \ii H$ 推出. 各种推广见习题~\ref{ex:6.4} 与~\ref{ex:6.10}.
+\end{example}
+
+\begin{example}[伪微分算子的 Schwartz 核]\label{eg:6.31}
+若 $A \in \Psi^m(\R^n)$ 是伪微分算子, 其 Schwartz 核记为 $K$, 则 (习题~\ref{ex:6.9})
+\begin{equation}\label{eq:6.43}
+    \WF(K) = \{(x, x, \xi, -\xi) \colon (x, \xi) \in \WF'(A)\}.
+\end{equation}
+对一般的 $K \in \mathscr{S}'(\R^n \times \R^m)$, 人们记 $\WF'(K) \defeq \{(x, y, \xi, -\eta) \colon (x, y, \xi, \eta) \in \WF(K)\}$, 其中的撇号表示对第二组动量变量 $\eta$ 作反射; 参见 Hörmander~\cite[定理 2.5.14]{Hor71a}. 这正是算子波前集记号 $\WF'(A)$ 的渊源.
+\end{example}
+
+下面研究波前集与偏微分方程的关系. 为了分析偏微分方程解的波前集, 通常既没有必要也并无益处去使用诸如命题~\ref{prop:6.21} 那样的手工刻画. (这与人们可以在对伪微分算子的 Schwartz 核知之甚少的情况下使用它们相类似.) 我们首先证明:
+
+\begin{proposition}[伪微分算子的微局部性]\label{prop:6.32}
+设 $A \in \Psi^m(M)$, $u \in \Distr(M)$. 则
+\begin{equation}\label{eq:6.44}
+    \WF(A u) \subset \WF'(A) \cap \WF(u).
+\end{equation}
+鉴于定理~\ref{thm:6.23}, 这是伪微分算子的拟局部性 (命题~\ref{prop:4.16} 及其到流形的推广) 的重大加强.
+\end{proposition}
+
+\begin{proof}[命题~\ref{prop:6.32} 的证明]
+若 $\alpha \notin \WF'(A)$, 则存在 $B \in \Psi^0(M)$ 在 $\alpha$ 处椭圆且 $\WF'(B) \cap \WF'(A) = \emptyset$. 于是 $B(A u) = (B A) u \in \Smooth(M)$, 因为 $B A \in \Psi^{-\infty}(M)$, 从而 $\alpha \notin \WF(A u)$.
+
+若 $\alpha \notin \WF(u)$, 则存在 $B \in \Psi^0(M)$ 在 $\alpha$ 处椭圆且 $B u \in \Smooth(M)$. 取 $\tilde{B} \in \Psi^0(M)$ 在 $\alpha$ 处椭圆且 $\WF'(\tilde{B}) \subset \Ell(B)$. 设 $Q \in \Psi^0(M)$ 是 $B$ 在 $\WF'(\tilde{B})$ 上的微局部拟逆, 即 $Q B = I - R$, $R \in \Psi^0(M)$, $\WF'(\tilde{B}) \cap \WF'(R) = \emptyset$. 则
+\begin{equation}\label{eq:6.45}
+    \tilde{B}(A u) = \tilde{B} A (Q B + R) u = \tilde{B} A Q (B u) + (\tilde{B} A R) u.
+\end{equation}
+第一项因 $B u$ 光滑而光滑; 第二项因 $\tilde{B} A R \in \Psi^{-\infty}(M)$ 而光滑.
+\end{proof}
+
+此外还有下述正则性结果, 它实质性地加强了命题~\ref{prop:4.32}:
+
+\begin{proposition}[微局部椭圆正则性]\label{prop:6.33}
+设 $A \in \Psi^m(M)$, $u \in \Distr(M)$. 则
+\begin{equation}\label{eq:6.46}
+    \WF(u) \subset \WF(A u) \cup \Char(A).
+\end{equation}
+特别地, 若 $A$ 椭圆, 则 $\WF(u) = \WF(A u)$.
+\end{proposition}
+
+\begin{proof}
+设 $\alpha \notin \WF(A u)$ 且 $\alpha \in \Ell(A)$. 则存在 $B \in \Psi^0(M)$ 在 $\alpha$ 处椭圆且 $B(A u) \in \Smooth(M)$. 取椭圆算子 $\Lambda \in \Psi^{-m}(M)$. 由~\eqref{eq:6.14} 有 $\alpha \in \Ell(\Lambda B A)$, 故 $\Lambda B A u \in \Smooth(M)$ 蕴涵 $\alpha \notin \WF(u)$ (由推论~\ref{cor:6.20}). (这里引入 $\Lambda$ 是为了平移阶数: $\Lambda B A \in \Psi^0(M)$.)
+
+关于椭圆 $A$ 的结论由~\eqref{eq:6.44} 与~\eqref{eq:6.46} 得出, 因为此时 $\Char(A) = \emptyset$.
+\end{proof}
+
+\begin{example}[由偏微分方程得到波前集的上界]\label{eg:6.34}
+(1) 考虑 $\delta \in \Distr(\R^n)$. 则 $x_j \delta = 0$, $j = 1, \ldots, n$. 在命题~\ref{prop:6.33} 中取 $A = x_j$, $u = \delta$, 得
+\begin{equation}\label{eq:6.47}
+    \WF(\delta) \subset \bigcap_{j=1}^n \Char(x_j) = \{(0, \xi) \colon \xi \neq 0\}.
+\end{equation}
+由例~\ref{eg:6.25}, 等号成立.
+
+(2) 考虑 $u(x_1, x_2) = H(x_1)\delta(x_2) \in \Distr(\R^2)$. 则 $\partial_{x_1} u = \delta(x_1, x_2)$ 且 $x_2 u = 0$. 鉴于 $\supp u \subset \{x_1 \ge 0\}$, 于是得到
+\begin{equation}\label{eq:6.48}
+\begin{aligned}
+    \WF(u) & \subset \WF(\delta) \cup \Char(\partial_{x_1}) \cap \Char(x_2) \cap \{x_1 \ge 0\} \\
+    & = \{(x_1, 0, \xi_1, \xi_2) \colon x_1 = 0 \text{ 或 } (x_1 > 0 \text{ 且 } \xi_1 = 0), \; (\xi_1, \xi_2) \neq (0, 0)\}.
+\end{aligned}
+\end{equation}
+由例~\ref{eg:6.29}, 等号成立.
+
+(3) 考虑 $u(t, x) = \tfrac{1}{2} H(t - x) H(t + x) = \tfrac{1}{2} H(t) 1_{|x| \le t} \in \Distr(\R^2_{t, x})$. 令 $A = -D_t^2 + D_x^2$. 则 $A u = \delta(t, x)$. 把典范动量变量记作 $\sigma, \xi$, 于是
+\begin{equation}\label{eq:6.49}
+\begin{aligned}
+    \WF(u) & \subset \{(t, x, \sigma, \xi) \colon -\sigma^2 + \xi^2 = 0, \; (\sigma, \xi) \neq (0, 0)\} \\
+    & \qquad \cup \{(0, 0, \sigma, \xi) \colon (\sigma, \xi) \neq (0, 0)\}.
+\end{aligned}
+\end{equation}
+人们可以用例~\ref{eg:6.28} 通过坐标变换来计算 $\WF(u)$. 由这一非椭圆方程 $A u = \delta$, 用更强的工具实际上可以提取多得多的信息 (见下面的例~\ref{eg:8.6}).
+\end{example}
+
+前面研究的波前集更确切地说是\emph{光滑波前集}或 $\Smooth$ 波前集: 它度量分布的奇性. 在应用中, 下述更精细的概念更为有用:
+
+\begin{definition}[$H^s$ 波前集]\label{def:6.35}
+设 $s \in \R$, $u \in \Distr(M)$. 则 $u$ 的 $H^s$ 波前集为
+\begin{equation}\label{eq:6.50}
+    \WF^s(u) \defeq \bigcap_{\substack{A \in \Psi^0(M) \\ A u \in H^s_{\mathrm{loc}}(M)}} \Char(A).
+\end{equation}
+即: 其补集由所有这样的 $\alpha \in S^* M$ 组成——存在 $A \in \Psi^0(M)$ 在 $\alpha$ 处椭圆且 $A u \in H^s_{\mathrm{loc}}(M)$.
+\end{definition}
+
+这与定义~\ref{def:6.18} 平行的一个替代定义等价. 若 $\alpha \notin \WF^s(u)$, 则称 $u$ 在 $\alpha$ 附近微局部地属于 $H^s$. 我们把与 $\Smooth$ 波前集相应的结论汇总如下, 其证明留给读者. 我们有
+\begin{equation}\label{eq:6.51}
+    \WF^s(u) = \emptyset \;\; \Longleftrightarrow \;\; u \in H^s_{\mathrm{loc}}(M).
+\end{equation}
+与命题~\ref{prop:6.21} 类似的结果如下:
+
+\begin{proposition}[$H^s$ 波前集: 等价定义]\label{prop:6.36}
+设 $u \in \Distr(\R^n)$, $(x_0, \xi_0) \in \R^n \times (\R^n \setminus \{0\})$.
+\begin{enumerate}
+    \item 若存在 $\phi \in \SmoothComp(\R^n)$, $\phi(x_0) \neq 0$, 与 $\psi \in \Smooth(\mathbb{S}^{n-1})$, $\psi(\xi_0/|\xi_0|) \neq 0$, 使得
+    \begin{equation}\label{eq:6.52}
+        \langle \xi \rangle^s \psi\left( \frac{\xi}{|\xi|} \right) \widehat{\phi u}(\xi) \in L^2(\R^n_\xi),
+    \end{equation}
+    则 $(x_0, \xi_0) \notin \WF^s(u)$.
+    \item 若对每个 $\epsilon > 0$ 都存在 $\phi \in \SmoothComp(B(x_0, \epsilon))$, $\phi(x_0) \neq 0$, 以及 $\psi \in \Smooth(\mathbb{S}^{n-1})$, 满足 $\psi(\xi_0/|\xi_0|) \neq 0$ 且对 $\omega \in \supp \psi$ 有 $|\omega - \xi_0/|\xi_0|| < \epsilon$, 使得~\eqref{eq:6.52} 不成立, 则 $(x_0, \xi_0) \in \WF^s(u)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{example}[Sobolev 波前集]\label{eg:6.37}
+(1) 考虑 $\delta \in \Distr(\R^n)$. 则当 $s < -\tfrac{n}{2}$ 时 $\WF^s(\delta) = \emptyset$, 而当 $s \ge -\tfrac{n}{2}$ 时 $\WF^s(\delta) = T^*_0 \R^n \setminus o$.
+
+(2) 设 $\Omega \subset \R^n$ 为光滑有界区域. 则当 $s < \tfrac{1}{2}$ 时 $\WF^s(1_\Omega) = \emptyset$, 而当 $s \ge \tfrac{1}{2}$ 时 $\WF^s(1_\Omega) = N^* \partial\Omega \setminus o$.
+
+(3) 当 $s < -\tfrac{1}{2}$ 时 $\WF^s((x + \ii 0)^{-1}) = \emptyset$, 而当 $s \ge -\tfrac{1}{2}$ 时 $\WF^s((x + \ii 0)^{-1}) = \{(0, \xi) \colon \xi > 0\}$.
+\end{example}
+
+命题~\ref{prop:6.32} 与~\ref{prop:6.33} 的加强版是:
+
+\begin{proposition}[微局部性与微局部椭圆正则性: $H^s$ 版本]\label{prop:6.38}
+设 $A \in \Psi^m(M)$, $u \in \Distr(M)$. 则
+\begin{equation}\label{eq:6.53}
+    \WF^{s-m}(A u) \subset \WF'(A) \cap \WF^s(u),
+\end{equation}
+\begin{equation}\label{eq:6.54}
+    \WF^s(u) \subset \WF^{s-m}(A u) \cup \Char^m(A).
+\end{equation}
+特别地, 若 $A$ 椭圆, 则 $\WF^s(u) = \WF^{s-m}(A u)$.
+\end{proposition}
+
+关于微局部椭圆正则性的定性陈述~\eqref{eq:6.54} 的定量版本如下.
+
+\begin{proposition}[微局部椭圆正则性估计]\label{prop:6.39}
+设 $A \in \Psi^m(M)$. 设 $B, G \in \Psi^0(M)$ 满足
+\begin{equation}\label{eq:6.55}
+    \WF'(B) \subset \Ell(G), \qquad \WF'(B) \subset \Ell(A).
+\end{equation}
+设 $B$ 与 $G$ 的 Schwartz 核的支集位于 $K \times K$ 中, 其中 $K \subset M$ 紧致; 设 $\tilde{K} \subset M$ 是包含 $K$ 的紧集, 使得 $\supp K_A \cap (K \times M) \subset K \times \tilde{K}$, 其中 $K_A$ 表示 $A$ 的 Schwartz 核. (见图~\ref{fig:6.3}.) 设 $\chi \in \SmoothComp(M)$ 在 $\tilde{K}$ 附近恒等于 1. 则对一切 $s, N \in \R$, 存在 $C > 0$ 使得
+\begin{equation}\label{eq:6.56}
+    \|B u\|_{H^s} \le C \left( \|G A u\|_{H^{s-m}} + \|\chi u\|_{H^{-N}} \right).
+\end{equation}
+这里 $\|\cdot\|_{H^s}$ 表示 $\dot{H}^s(K')$ 上的一个范数, 其中 $K' \defeq \supp \chi$ (见命题~\ref{prop:5.58}). 估计~\eqref{eq:6.56} 在下述强意义下成立: 若 $u \in \Distr(M)$ 使右端有限, 则左端也有限, 且估计成立.
+\end{proposition}
+
+\begin{figure}[htbp]
+\centering
+\drawFigSixThree
+\caption{左图: 微局部椭圆正则性估计~\eqref{eq:6.56} 的图示. 右图: $B, G$ 的 Schwartz 核的支集位于深色方块中, 而 $A$ 的 Schwartz 核的支集与 $K$ 上方的带状区域之交落在 $K \times \tilde{K}$ 内; 虚线为 $M \times M$ 中的对角线.}
+\label{fig:6.3}
+\end{figure}
+
+对微分算子 $A$, 当然可以取 $\tilde{K} = K$. 我们强调命题~\ref{prop:6.39} 优于先验估计: 它得到的是 $u$ 的微局部 $H^s$ 归属 (并带有估计), 而不只是假定 (并估计) 这种归属.
+
+\begin{proof}[命题~\ref{prop:6.39} 的证明]
+由于 $\WF'(B) \subset \Ell(G A)$, 命题~\ref{prop:6.17} 给出 $Q \in \Psi^{-m}(M)$ 使得 $Q G A = I - R$, $R \in \Psi^0(M)$, $\WF'(B) \cap \WF'(R) = \emptyset$. 因此
+\begin{equation}\label{eq:6.57}
+    B u = B \chi u = B Q G A \chi u + B R \chi u = B Q (G A u) + B R (\chi u).
+\end{equation}
+若 $\chi u \in H^{-N}$ 且 $G A u \in H^{s-m}$, 该式把 $B u$ 表示为一个 $H^s$ 元素与一个 $\Smooth$ 元素之和; 因此 $B u \in H^s$. 对~\eqref{eq:6.57} 取 $H^s$-范数并利用推论~\ref{cor:5.60} 即得估计~\eqref{eq:6.56}.
+\end{proof}
+
+原则上可以追踪~\eqref{eq:6.56} 中常数 $C$ 对 $A, B, G, s, m, N, \chi$ 的依赖. 一个简单但常常足够的观察是: 对固定的 $s, m, N, \chi$, 常数 $C$ 可以取为 $A, B, G$ 的固定半范数的函数.
+
+人们也可以把定量的命题~\ref{prop:6.39} 看成定性的命题~\ref{prop:6.38} 与闭图像定理的推论 (习题~\ref{ex:6.13}). 这一抽象途径在概念上相当有吸引力, 但有两个主要缺点. 第一, \eqref{eq:6.56} 中的常数 $C$ 无法追踪. 第二, 定性陈述~\eqref{eq:6.54} 最自然的证明正是通过恒等式~\eqref{eq:6.57}, 而它立刻蕴涵定量陈述~\eqref{eq:6.56}; 也就是说, 应用闭图像定理只是重新得到了人们在记录~\eqref{eq:6.54} 时忘记写下的定量界.
+
+本节最后记录 $\Smooth$ 与 $H^s$ 波前集之间的关系:
+
+\begin{proposition}[$\Smooth$ 与 $H^s$ 波前集]\label{prop:6.40}
+设 $u \in \Distr(M)$. 则
+\begin{equation}\label{eq:6.58}
+    \WF(u) = \bigcup_{s \in \R} \WF^s(u).
+\end{equation}
+\end{proposition}
+
+容易看出 $\bigcup_{s \in \R} \WF^s(u)$ 包含于 $\WF(u)$.
+
+\begin{proof}[命题~\ref{prop:6.40} 的证明]
+显然 $\WF^s(u) \subset \WF(u)$; 这给出~\eqref{eq:6.58} 中的``$\supseteq$''. 为证``$\subseteq$'', 设 $\alpha \in S^* M$ 有开邻域 $U \subset S^* M$ 使得对一切 $s \in \R$ 有 $U \cap \WF^s(u) = \emptyset$. 则若 $A \in \Psi^0(M)$ 满足 $\WF'(A) \subset U$ 且在 $\alpha$ 处椭圆, 便有 $A u \in \bigcap_{s \in \R} H^s_{\mathrm{loc}}(M) = \Smooth(M)$, 从而 $\alpha \notin \WF(u)$.
+\end{proof}
+
+
+
+\section{配对, 乘积, 限制}\label{sec:6.4}
+\index{peidui@配对 (pairing)}%
+\index{fenbu chengji@分布乘积 (product of distributions)}%
+\index{xianzhi@限制 (restriction)}%
+
+现在我们利用波前集对如下问题给出相当精确的回答: 两个分布的乘积何时是良定义的? 分布何时可以限制到子流形上? 为记号简洁起见, 我们主要在 $\R^n$ 上工作, 但所有结果在流形上都有类似物.
+
+我们首先考虑 $L^2(\R^n)$ 内积的推广:
+\begin{equation}\label{eq:6.59}
+    \langle u, v \rangle_{L^2} = \int_{\R^n} u(x) \overline{v(x)} \,\dd x.
+\end{equation}
+
+\begin{proposition}[带波前集条件的 $L^2$ 配对]\label{prop:6.41}
+设 $u, v \in \mathscr{E}'(\R^n)$ 满足 $\WF(u) \cap \WF(v) = \emptyset$. 若 $A \in \Psi^0(\R^n)$ 满足
+\begin{equation}\label{eq:6.60}
+    \WF(u) \cap \WF'(A) = \emptyset, \qquad \WF(v) \cap \WF'(I - A) = \emptyset
+\end{equation}
+(见图~\ref{fig:6.4}), 则
+\begin{equation}\label{eq:6.61}
+    \langle u, v \rangle_{L^2} \defeq \langle A u, v \rangle_{L^2} + \langle u, (I - A^*) v \rangle_{L^2}
+\end{equation}
+是良定义的, 且与 $A$ 的选取无关.
+\end{proposition}
+
+\begin{figure}[htbp]
+\centering
+\drawFigSixFour
+\caption{命题~\ref{prop:6.41} 中 $u, v$ 的波前集与 $A$ 的微局部性质. $\WF'(A)$ 避开 $\WF(u)$, 而 $\WF'(I - A)$ 避开 $\WF(v)$; 两者以一条``分离''曲线示意.}
+\label{fig:6.4}
+\end{figure}
+
+\begin{proof}
+由命题~\ref{prop:6.32}, $A u, (I - A^*) v \in \Smooth(\R^n)$, 故~\eqref{eq:6.61} 是良定义的. 为强调其对 $A$ 的依赖, 把~\eqref{eq:6.61} 的右端记为 $\langle u, v \rangle_{L^2, A}$.
+
+设 $B \in \Psi^0(\R^n)$ 也满足~\eqref{eq:6.60} 中对 $A$ 的条件. 则
+\begin{equation}\label{eq:6.62}
+    \langle u, v \rangle_{L^2, B} \defeq \langle B u, v \rangle_{L^2} + \langle u, (I - B^*) v \rangle_{L^2}
+\end{equation}
+同样是良定义的, 而我们要证明差
+\begin{equation}\label{eq:6.63}
+    \langle u, v \rangle_{L^2, A} - \langle u, v \rangle_{L^2, B} = \langle (A - B) u, v \rangle_{L^2} - \langle u, (A^* - B^*) v \rangle_{L^2}
+\end{equation}
+为零. 若 $u, v \in \SmoothComp(\R^n)$, 这由分部积分得出. 当 $u, v$ 只是一般分布时, 需要用逼近论证. 取 $v_j \in \SmoothComp(\R^n)$ 使得在 $\mathscr{E}'(\R^n)$ 中 $v_j \to v$; 则
+\begin{equation}\label{eq:6.64}
+    \langle (A - B) u, v \rangle_{L^2} = \lim_{j \to \infty} \langle (A - B) u, v_j \rangle_{L^2} = \lim_{j \to \infty} \langle u, (A^* - B^*) v_j \rangle_{L^2}.
+\end{equation}
+我们希望证明它等于 $\langle u, (A^* - B^*) v \rangle_{L^2}$. 我们有 $(A^* - B^*) v_j \to (A^* - B^*) v$ 在 $\Distr(\R^n)$ 中成立; 但因 $u \in \mathscr{E}'(\R^n)$, 这尚不足以下结论.
+
+于是取 $Q \in \Psi^0(\R^n)$, 使其 Schwartz 核紧支集, 且满足 $\WF'(Q) \cap \WF(u) = \emptyset$ 与 $\WF'(I - Q) \cap (\WF'(A) \cup \WF'(B)) = \emptyset$. 则可进一步写出
+\begin{equation}\label{eq:6.65}
+    \langle u, (A^* - B^*) v_j \rangle_{L^2} = \langle u, (I - Q)(A^* - B^*) v_j \rangle_{L^2} + \langle u, Q(A^* - B^*) v_j \rangle_{L^2}.
+\end{equation}
+由于 $(I - Q)(A^* - B^*) \in \Psi^{-\infty}(\R^n)$, 我们有 $(I - Q)(A^* - B^*) v_j \to (I - Q)(A^* - B^*) v$ 在 $\Smooth(\R^n)$ 中成立, 故第一个配对收敛到 $\langle u, (I - Q)(A^* - B^*) v \rangle_{L^2}$. 第二个配对等于
+\begin{equation}\label{eq:6.66}
+    \langle Q^* u, (A^* - B^*) v_j \rangle_{L^2} \longrightarrow \langle Q^* u, (A^* - B^*) v \rangle_{L^2}, \qquad j \to \infty,
+\end{equation}
+因为 $Q^* u \in \SmoothComp(\R^n)$. 又因 $(A^* - B^*) v \in \Smooth(\R^n)$, 我们可以把 $Q^*$ 移回第二个因子.
+
+总之, 我们证明了~\eqref{eq:6.64} 中的极限确实等于 $\langle u, (A^* - B^*) v \rangle_{L^2}$, 从而~\eqref{eq:6.63} 为零.
+\end{proof}
+
+命题~\ref{prop:6.41} 的一个更精确的形式将在第~\ref{ch:08}~章与第~\ref{ch:10}~章的正对易子论证中用到. 首先回忆引理~\ref{lemma:2.16}: $L^2$ 配对~\eqref{eq:6.59} 延拓为半双线性配对 $H^s(\R^n) \times H^{-s}(\R^n) \to \CC$. 于是:
+
+\begin{lemma}[带 $H^s$ 波前集条件的 $L^2$ 配对]\label{lem:6.42}
+设 $s \in \R$. 设 $u \in H^s(\R^n)$, $v \in \mathscr{E}'(\R^n)$, 并假定 $\WF(u) \cap \WF^{-s}(v) = \emptyset$ (即: 在 $u$ 非光滑之处, $v$ 微局部地属于 $H^{-s}$). 设 $A \in \Psi^0(\R^n)$ 满足
+\begin{equation}\label{eq:6.67}
+    \WF(u) \cap \WF'(A) = \emptyset, \qquad \WF^{-s}(v) \cap \WF'(I - A) = \emptyset.
+\end{equation}
+则 $\langle u, v \rangle_{L^2} \defeq \langle A u, v \rangle_{L^2} + \langle u, (I - A^*) v \rangle_{L^2}$ 与 $A$ 无关.
+\end{lemma}
+
+其证明留给读者.
+
+对分布 $v \in \Distr(\R^n)$, 我们有
+\begin{equation}\label{eq:6.68}
+    \WF(\bar{v}) = -\WF(v) \defeq \{(x, -\xi) \colon (x, \xi) \in \WF(v)\}.
+\end{equation}
+于是由命题~\ref{prop:6.41} 可推出, 对
+\begin{equation}\label{eq:6.69}
+    \langle u, v \rangle = \langle u, \bar{v} \rangle_{L^2}, \qquad u, v \in \mathscr{E}'(\R^n), \;\; \WF(u) \cap (-\WF(v)) = \emptyset
+\end{equation}
+可以定义双线性配对.
+
+\begin{corollary}[分布的乘积]\label{cor:6.43}
+设 $u, v \in \mathscr{E}'(\R^n)$, 并假定
+\begin{equation}\label{eq:6.70}
+    \WF(u) \cap (-\WF(v)) = \emptyset.
+\end{equation}
+则由
+\begin{equation}\label{eq:6.71}
+    \Smooth(\R^n) \ni \phi \mapsto \langle u, \phi v \rangle \in \CC
+\end{equation}
+(其中内积由~\eqref{eq:6.69} 给出) 定义的泛函是一个分布 $u v \in \mathscr{E}'(\R^n)$.
+\end{corollary}
+
+更一般地, 条件~\eqref{eq:6.70} 允许人们对 $u, v \in \Distr(\R^n)$ 作乘法而得 $u v \in \Distr(\R^n)$. 条件~\eqref{eq:6.70} 比条件 $\singsupp u \cap \singsupp v = \emptyset$ 更精细, 后者是借助 $\R^n$ 上的单位分解容易定义乘积 $u v$ 的情形. 至于推论~\ref{cor:6.43} 在何种意义下是光滑 $u, v$ 的逐点乘积的唯一延拓, 见习题~\ref{ex:6.15}.
+
+\begin{proof}[推论~\ref{cor:6.43} 的证明]
+取适正支集算子 $A \in \Psi^0(\R^n)$ 使得 $\WF(u) \cap \WF'(A) = \emptyset$ 且 $(-\WF(v)) \cap \WF'(I - A) = \emptyset$. 则
+\begin{equation}\label{eq:6.72}
+    \langle u, \phi v \rangle = \langle A u, \phi v \rangle + \langle u, (I - A^T)(\phi v) \rangle.
+\end{equation}
+由于 $A u \in \Smooth(\R^n)$, 第一项关于 $\phi$ 连续. 估计第二项需要更多工夫. 取适正支集算子 $B \in \Psi^0(\R^n)$ 使得 $\WF'(B) \cap \WF'(I - A^T) = \emptyset$ 且 $\WF'(I - B) \cap \WF(v) = \emptyset$. 则
+\begin{equation}\label{eq:6.73}
+    v = B v + w, \qquad w = (I - B) v \in \SmoothComp(\R^n).
+\end{equation}
+我们可以这样估计
+\begin{equation}\label{eq:6.74}
+    \langle u, (I - A^T)(\phi v) \rangle = \langle u, (I - A^T)(\phi w) \rangle + \langle u, (I - A^T)\phi B v \rangle
+\end{equation}
+的第一项: 由 $u \in \mathscr{E}'(\R^n)$ 的连续性, 对某个 $\chi \in \SmoothComp(\R^n)$ 有
+$|\langle u, (I - A^T)(\phi w) \rangle| \le C \|\chi (I - A^T)(\phi w)\|_{\mathcal{C}^k_b(\R^n)}$. 由 Sobolev 嵌入, 这被 $C' \|\chi (I - A^T)(w\phi)\|_{H^s(\R^n)}$ 控制, 其中固定 $s > \tfrac{n}{2} + k$. 由于 $\chi (I - A^T) \circ (w\,\cdot) \in \Psi^0(\R^n)$ 的 Schwartz 核紧支集, 它进一步被 $C'' \|\tilde{\chi}\phi\|_{H^s(\R^n)}$ 控制, 其中 $\tilde{\chi} \in \SmoothComp(\R^n)$. 取整数 $k' \ge s$, 最终被 $C''' \|\phi\|_{\mathcal{C}^{k'}_b(\R^n)}$ 控制.
+
+现在考虑~\eqref{eq:6.74} 的第二项. 由于 $I - A^T$ 与 $B$ 均适正支集, 伪微分算子 $(I - A^T) \circ (\phi\,\cdot) \circ B \in \Psi^{-\infty}(\R^n)$ 连续依赖于 $\phi \in \Smooth(\R^n)$. 因此
+\begin{equation}\label{eq:6.75}
+    (I - A^T)\phi B v \in \Smooth(\R^n)
+\end{equation}
+也连续依赖于 $\phi \in \Smooth(\R^n)$.
+\end{proof}
+
+例如 $(x + \ii 0)^{s_1} \cdot (x + \ii 0)^{s_2} = (x + \ii 0)^{s_1 + s_2}$. 另一方面, $\delta \cdot \delta$ 不是良定义的.
+
+最后考虑子流形上的限制. 我们从局部模型开始:
+\begin{equation}\label{eq:6.76}
+    Y = \{(x, 0) \colon x \in \R^k\} \subset \R^n = \R^k_x \times \R^{n-k}_y.
+\end{equation}
+记 $\iota \colon Y \hookrightarrow \R^n$ 为包含映射. $u \in \SmoothComp(\R^n)$ 到 $Y$ 的限制由 $\iota^* u \in \SmoothComp(Y)$ 给出. 把它视为紧支集分布, 它以下述方式作用于检验函数:
+\begin{equation}\label{eq:6.77}
+    \Smooth(\R^k) \ni \phi \mapsto (\iota^* u)(\phi) = \langle u \cdot \delta(y), \tilde{\phi} \rangle, \qquad \tilde{\phi} \in \Smooth(\R^n), \;\; \iota^* \tilde{\phi} = \phi.
+\end{equation}
+若 $u \in \mathscr{E}'(\R^n)$ 满足
+\begin{equation}\label{eq:6.78}
+    \WF(u) \cap \{(x, 0, 0, \eta) \colon x \in \R^k, \; \eta \in \R^{n-k} \setminus \{0\}\} = \emptyset,
+\end{equation}
+则由推论~\ref{cor:6.43} 与例~\ref{eg:6.25}, 乘积 $u(x, y)\delta(y) \in \mathscr{E}'(\R^n)$ 是良定义的, 于是得到下述结果的第一部分:
+
+\begin{proposition}[分布到线性子空间的限制]\label{prop:6.44}
+设 $u \in \mathscr{E}'(\R^n)$ 满足~\eqref{eq:6.78}. 则~\eqref{eq:6.77} 定义了元素 $\iota^* u \in \mathscr{E}'(Y)$, 并且
+\begin{equation}\label{eq:6.79}
+    \WF(\iota^* u) \subset \{(x, \xi) \in \R^k \times (\R^k \setminus \{0\}) \colon \exists\, \eta \in \R^{n-k} \text{ 使 } (x, 0, \xi, \eta) \in \WF(u)\}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+对任意在 0 附近恒等于 1 的 $\chi \in \SmoothComp(\R^{n-k})$ 有 $\iota^*(\chi u) = \iota^* u$. 假设~\eqref{eq:6.78} 蕴涵: 若 $\chi$ 的支集充分小, 则用 $\chi u$ 替换 $u$ 后,
+\begin{equation}\label{eq:6.80}
+    \hat{u}(\xi, \eta) \text{ 在 } \{0\} \times (\R^{n-k} \setminus \{0\}) \text{ 周围的锥内快速衰减.}
+\end{equation}
+(这由 $\supp u$ 的紧致性与关于 $x$ 的单位分解得出.) 当 $u = u(x, y) \in \SmoothComp(\R^n)$ 时, Fourier 逆变换公式给出
+\begin{equation}\label{eq:6.81}
+    \widehat{\iota^* u}(\xi) = (\mathcal{F}_1 u)(\xi, 0) = (2\pi)^{-(n-k)} \int_{\R^{n-k}} \hat{u}(\xi, \eta) \,\dd\eta,
+\end{equation}
+其中 $\mathcal{F}_1$ 表示对 $u$ 的第一个变量作 Fourier 变换. 我们断言, 对满足~\eqref{eq:6.80} 的 $u \in \mathscr{E}'(\R^n)$ 同一公式成立. 为证此, 我们用推论~\ref{cor:6.43} 中 $u \cdot \delta(y)$ 的定义, 取~\eqref{eq:6.61} 中的 $A = \mathcal{F}^{-1}\psi\mathcal{F}$, 其中 $\psi \in S^0(\R^n_{\xi, \eta})$ 在 $\{0\} \times (\R^{n-k}_\eta \setminus \{0\})$ 的某个锥形邻域内等于 1, 而在稍大的锥形邻域之外等于 0, 使得 $\psi \hat{u}$ 沿一切方向快速衰减. 光滑函数 $\mathcal{F}(\iota^* u)$ 在 $\xi_0 \in \R^k$ 处的值由 $u \cdot \delta(y)$ 与 $\ee^{-\ii \xi_0 \cdot}$ 的分布配对给出, 故
+\begin{equation}\label{eq:6.82}
+    \mathcal{F}(\iota^* u)(\xi_0) = \langle A u, \ee^{-\ii x \cdot \xi_0}\delta(y) \rangle + \langle u, (I - A^T)(\ee^{-\ii x \cdot \xi_0}\delta(y)) \rangle.
+\end{equation}
+(为便于阅读我们补写了变量.) 第一个配对等于
+\begin{equation}\label{eq:6.83}
+\begin{aligned}
+    \langle \mathcal{F}^{-1}\psi\mathcal{F} u, \ee^{-\ii x \cdot \xi_0}\delta(y) \rangle
+    & = \langle \psi(\xi, \eta)\hat{u}(\xi, \eta), \mathcal{F}^{-1}(\ee^{-\ii x \cdot \xi_0}\delta(y)) \rangle \\
+    & = \langle \psi(\xi, \eta)\hat{u}(\xi, \eta), (2\pi)^{-(n-k)}\delta(\xi - \xi_0) \rangle \\
+    & = (2\pi)^{-(n-k)} \int_{\R^{n-k}} \psi(\xi_0, \eta)\hat{u}(\xi_0, \eta) \,\dd\eta.
+\end{aligned}
+\end{equation}
+第二个配对等于
+\begin{equation}\label{eq:6.84}
+\begin{aligned}
+    \langle u, \mathcal{F}(1 - \psi)\mathcal{F}^{-1}(\ee^{-\ii x \cdot \xi_0}\delta(y)) \rangle
+    & = \langle u, \mathcal{F}(1 - \psi)(2\pi)^{-(n-k)}\delta(\xi - \xi_0) \rangle \\
+    & = \langle u, (2\pi)^{-(n-k)} \ee^{-\ii x \cdot \xi_0} \int_{\R^{n-k}} \ee^{-\ii y \cdot \eta}(1 - \psi(\xi_0, \eta)) \,\dd\eta \rangle \\
+    & = (2\pi)^{-(n-k)} \int_{\R^{n-k}} \langle u, \ee^{-\ii x \cdot \xi_0}\ee^{-\ii y \cdot \eta} \rangle (1 - \psi(\xi_0, \eta)) \,\dd\eta \\
+    & = (2\pi)^{-(n-k)} \int_{\R^{n-k}} (1 - \psi(\xi_0, \eta)) \hat{u}(\xi_0, \eta) \,\dd\eta.
+\end{aligned}
+\end{equation}
+把~\eqref{eq:6.83} 与~\eqref{eq:6.84} 相加即得~\eqref{eq:6.81}.
+
+为证~\eqref{eq:6.79}, 现在把~\eqref{eq:6.81} 应用于 $u$ 的局部化版本. 设 $(x_0, \xi_0) \in \R^k \times (\R^k \setminus \{0\})$ 使得对一切 $\eta \in \R^{n-k}$ 有 $(x_0, 0, \xi_0, \eta) \notin \WF(u)$. 则对每个 $\eta \in \R^{n-k}$ 存在 $\epsilon_\eta > 0$ 使得对一切 $\psi \in \SmoothComp(B(x_0, \epsilon_\eta)) \subset \SmoothComp(\R^k)$ 与 $\chi \in \SmoothComp(B(0, \epsilon_\eta)) \subset \SmoothComp(\R^{n-k})$, $\psi(x)\chi(y)u(x, y)$ 的 Fourier 变换在 $(\xi_0, \eta)$ 的某个锥形邻域 $C_\eta \subset \R^n \setminus \{0\}$ 中快速衰减. 由~\eqref{eq:6.80}, $\psi(x)\chi(y)u(x, y)$ 的 Fourier 变换对一切 $\psi \in \SmoothComp(\R^k)$, $\chi \in \SmoothComp(\R^{n-k})$ 也在 $\{0\} \times \R^{n-k}$ 的某个锥形邻域 $C_\infty$ 中快速衰减.
+
+使 $(\xi_0, \eta) \notin C_\infty$ 的有界集 $\eta \in \R^{n-k}$ 可被有限多个集合 $\{\eta \in \R^{n-k} \colon (\xi_0, \eta) \in C_{\eta_i}\}$ 覆盖, 其中 $\eta_i \in \R^{n-k}$, $i = 1, \ldots, N$; 见图~\ref{fig:6.5}. 令 $\epsilon \defeq \min\{\epsilon_1, \ldots, \epsilon_N\}$. 则对 $\psi \in \SmoothComp(B(x_0, \epsilon))$ 与 $\chi \in \SmoothComp(B(0, \epsilon))$, 可得存在 $\delta > 0$ 使得
+\begin{equation}\label{eq:6.85}
+    |\widehat{\psi\chi u}(\xi, \eta)| \le C_N \langle \xi \rangle^{-N} \langle \eta \rangle^{-N}, \qquad \left| \frac{\xi}{|\xi|} - \frac{\xi_0}{|\xi_0|} \right| < \delta,
+\end{equation}
+对一切 $N$ 成立. 对 $\chi u$ (它满足 $\iota^*(\chi u) = \iota^* u$) 应用~\eqref{eq:6.81}, 即得
+\begin{equation}\label{eq:6.86}
+    |\widehat{\psi \iota^* u}(\xi)| \le C_N \langle \xi \rangle^{-N}, \qquad \left| \frac{\xi}{|\xi|} - \frac{\xi_0}{|\xi_0|} \right| < \delta,
+\end{equation}
+对一切 $N$ 成立. 因此 $(x_0, \xi_0) \notin \WF(\iota^* u)$.
+\end{proof}
+
+\begin{figure}[htbp]
+\centering
+\drawFigSixFive
+\caption{$\mathcal{F}(\psi(x)\chi(y)u(x, y))$ 快速衰减的若干锥; 图中画出的是 $n = 2$, $k = 1$ 的情形. 水平方向对应 $(\xi, \eta)$ 中的 $\xi$ 轴, 中心射线为 $(\xi_0, 0)$ 方向.}
+\label{fig:6.5}
+\end{figure}
+
+\begin{example}[$\delta$-分布的限制]\label{eg:6.45}
+在 $\R^2_{x, y}$ 上考虑 $u_a = \delta(y - a x)$, $a \in \R$. 则当 $a \neq 0$ 时 $u_a$ 到 $Y = \{y = 0\}$ 的限制是良定义的. 我们有 $\iota^* u_a = |a|^{-1}\delta$. 注意当 $|a| \to 0$ 时该式爆破; 在此极限下, $\WF(u_\alpha)$ 收敛到 $N^*\{y = 0\} \setminus o$.
+\end{example}
+
+\begin{example}[限制的波前集]\label{eg:6.46}
+一般说来, 包含关系~\eqref{eq:6.79} 不是等式. 例如在 $\R^2_{x, y}$ 上, $u(x, y) = y \delta(x)$ 到 $y = 0$ 的限制为 0, 尽管 $\WF(u) = \{(x, y, \xi, \eta) \in \R^2 \times (\R^2 \setminus \{0\}) \colon x = 0, \; \eta \neq 0\}$.
+\end{example}
+
+\begin{corollary}[分布到子流形的限制]\label{cor:6.47}
+设 $M$ 为光滑流形, $Y \subset M$ 为光滑子流形. 则存在线性限制映射
+\begin{equation}\label{eq:6.87}
+    \iota^* \colon \{u \in \Distr(M) \colon \WF(u) \cap N^* Y = \emptyset\} \to \Distr(Y),
+\end{equation}
+且 $\WF(\iota^* u) \subset T^* Y \setminus o$ 包含于 $\WF(u) \cap T^*_Y M$ 在 $T^*_Y M / N^* Y \cong T^* Y$ 中的像.
+\end{corollary}
+
+
+
+\section{插曲: 相空间的径向紧化}\label{sec:6.5}
+\index{jingxiang jinghua@径向紧化 (radial compactification)}%
+\index{sheying zuobiao@射影坐标 (projective coordinates)}%
+
+我们已经看到, 在余球面丛~\eqref{eq:6.8} 上工作是方便的. 对此还有另一种看法. 设 $a \in S^0_{\mathrm{cl}}(T^* M)$ 为经典符号; 则对每个 $0 \neq \xi \in T^*_p M$, $p \in M$, 极限
+\begin{equation}\label{eq:6.88}
+    a_0(p, [\xi]) \defeq \lim_{\lambda \to \infty} a(p, \lambda \xi)
+\end{equation}
+是良定义的, 并且 $T^* M \setminus o \ni \xi \mapsto a_0(p, [\xi])$ 等于 $a$ 的齐次主符号. 虽然可以把 $[\xi]$ 看成 $\xi$ 在商 $(T^*_p M \setminus o)/\R_+$ 中的等价类, 但更自然的看法是把它视为方向 $\xi$ 上的``无穷远点''. 因此我们希望给 $T^*_p M$ 附加上一个方向的``无穷远球面''. 基本构造在 $\R^n$ 上进行:
+
+\begin{definition}[径向紧化]\label{def:6.48}
+$\R^n$ 的\textbf{径向} (或\textbf{射影}) \textbf{紧化}是集合 $\overline{\R^n} = \R^n \sqcup \mathbb{S}^{n-1}$, 配上如下带边光滑流形结构: 把 $0 \neq x \in \R^n$ 用极坐标写成 $x = r\omega$, $r > 0$, $\omega \in \mathbb{S}^{n-1}$, 则
+\begin{equation}\label{eq:6.89}
+    \overline{\R^n} = \big( \R^n \sqcup [0, \infty)_\rho \times \mathbb{S}^{n-1}_\omega \big) \big/ \sim,
+\end{equation}
+其中 $\R^n \setminus \{0\} \ni r\omega \sim (r^{-1}, \omega)$. 于是 $\rho^{-1}(0) \cong \mathbb{S}^{n-1}$ 是``无穷远球面'', 而 $\R^n \subset \overline{\R^n}$ 是内部.
+\end{definition}
+
+流形 $\overline{\R^n}$ 与 $\R^n$ 中的闭单位球微分同胚; 一个显式的微分同胚由
+$\R^n \ni x \mapsto \frac{2\arctan|x|}{\pi}\frac{x}{|x|} \in B(0, 1)$ 的连续延拓给出. 为理解 $\overline{\R^n}$ 的开子集与 $\R^n$ 的开子集之间的关系, 考虑由 $(\rho, \omega) = (0, \omega_0)$ 给出的点 $\alpha \in \partial\overline{\R^n}$. 则集合
+\begin{equation}\label{eq:6.90}
+    U_\delta \defeq \{\rho < \delta, \; |\omega - \omega_0| < \delta\}
+\end{equation}
+($\delta > 0$) 构成 $\alpha$ 的邻域基. $U_\delta$ 与 $\R^n$ 的交为
+\begin{equation}\label{eq:6.91}
+    U_\delta \cap \R^n = \{x \in \R^n \colon |x| > \delta^{-1}\} \cap \left\{0 \neq x \in \R^n \colon \left| \frac{x}{|x|} - \omega_0 \right| < \delta\right\},
+\end{equation}
+即围绕 $\omega_0$、张角为 $\delta$ 的锥的远端. 见图~\ref{fig:6.6}.
+
+我们有 $\Smooth(\overline{\R^n}) = S^0_{\mathrm{cl}}(\R^n)$, 意思是: $\Smooth(\overline{\R^n})$ 的元素限制到稠密子集 $\R^n$ 上所得的函数空间等于 $S^0_{\mathrm{cl}}(\R^n)$. 事实上, 在 $\overline{\R^n_\xi}$ 上光滑恰好意味着: 在 $\rho = |\xi|^{-1} = 0$ 处有关于 $\rho$ 的 Taylor 展开, 并且在 $\xi$ 有界时光滑. 从这一视角看, 习题~\ref{ex:3.4}(2) 本质上是平凡的: 当 $\chi \in S^0_{\mathrm{cl}}(\R^n)$, $a \in S^0_{\mathrm{cl}}(\R^n)$ ($a \in S^m_{\mathrm{cl}}(\R^n)$ 的情形只需作微小修改), 且 $a \neq 0$ 于 $\supp \chi$ 上时, $\chi/a$ 是 $\overline{\R^n}$ 上的光滑函数, 从而是 $\R^n$ 上的经典符号.
+
+\begin{remark}[渐近求和与 Borel 引理]\label{rem:6.49}
+经典符号的渐近求和本质上是 Borel 引理 (关于具有指定 Taylor 系数的光滑函数的存在性) 在无穷远处的版本. 作为一个具体例子, 设 $\chi \in \Smooth(\R)$ 在 $(-\infty, 1]$ 上等于 0, 在 $[2, \infty)$ 上等于 1. 设 $c_j \in \CC$ 为任意数, 并令 $a_j(\xi) \defeq c_j \xi^{-j}\chi(\xi)$, 故 $a_j \in S^{-j}_{\mathrm{cl}}(\R)$. 则渐近和 $S^0_{\mathrm{cl}}(\R) \ni a \sim \sum_{j \ge 0} a_j$ 是 $\overline{\R}$ 上的光滑函数, 其在 $\xi = +\infty$ 处的第 $j$ 个 Taylor 系数 (即 $(\xi^{-1})^j$ 的系数) 恰为 $c_j$.
+\end{remark}
+
+$\partial\overline{\R^n}$ 附近便于计算的局部坐标是射影坐标: 把 $x$ 写成 $(x_1, \ldots, x_n)$, 并考虑子集 $\{x_1 > 0\} \subset \R^n$. 然后令
+\begin{equation}\label{eq:6.92}
+    \rho_1 \defeq \frac{1}{x_1}, \qquad \hat{x}_j \defeq \frac{x_j}{x_1}, \quad j = 2, \ldots, n.
+\end{equation}
+则 $(\rho_1, \hat{x}_2, \ldots, \hat{x}_n)$ 是 $\R^n$ 上的局部坐标系, 由连续性它延拓为 $\overline{\R^n}$ 上的局部坐标系
+\begin{equation}\label{eq:6.93}
+    [0, \infty)_{\rho_1} \times \R^{n-1}_{\hat{x}_2, \ldots, \hat{x}_n},
+\end{equation}
+这是因为 $(\hat{x}_2, \ldots, \hat{x}_n)$ 是单位球面 $\mathbb{S}^{n-1} \subset \R^n$ 上子集 $x_1 > 0$ 的光滑局部坐标系. 与 $\R^n$ 上的标准坐标系一起, 这样的坐标系 (在改变 $x_1$ 的符号并置换指标后) 覆盖 $\overline{\R^n}$. 见图~\ref{fig:6.7}.
+
+流形 $\overline{\R^n}$ 具有下述在线性坐标变换下的不变性:
+
+\begin{lemma}[可逆线性映射与径向紧化]\label{lem:6.50}
+设 $A \in \GL(n, \R)$. 则矩阵-向量乘法 $\R^n \ni x \mapsto A x \in \R^n$ 由连续性延拓为微分同胚 $\underline{A} \colon \overline{\R^n} \to \overline{\R^n}$.
+\end{lemma}
+
+\begin{proof}
+把 $A$ 写成 $(a_{ij})_{i, j = 1, \ldots, n}$. 设 $e_1 = (1, 0, \ldots, 0) \in \R^n$. 通过对目标 $\R^n$ 的标准坐标重排号并可能改变其中一个的符号, 我们可以假定对 $A e_1 = (a_{11}, a_{21}, \ldots, a_{n1})$ 有 $a_{11} > 0$. 我们在定义域 $\R^n$ 中 $e_1$ 的锥形邻域内使用坐标~\eqref{eq:6.92}. 把目标 $\R^n$ 中的点记作 $y = (y_1, \ldots, y_n)$, 于是可以在 $A e_1$ 的锥形邻域内使用坐标
+\begin{equation}\label{eq:6.94}
+    \tau_1 \defeq \frac{1}{y_1}, \qquad \hat{y}_j \defeq \frac{y_j}{y_1}, \quad j = 2, \ldots, n.
+\end{equation}
+现在 $x = \rho_1^{-1}(1, \hat{x}_2, \ldots, \hat{x}_n)$, 故
+\begin{equation}\label{eq:6.95}
+    A x = \rho_1^{-1} \left( a_{11} + \sum_{j=2}^n a_{1j}\hat{x}_j, \;\ldots,\; a_{n1} + \sum_{j=2}^n a_{nj}\hat{x}_j \right).
+\end{equation}
+当 $\hat{x}_2, \ldots, \hat{x}_n$ 充分小时, 第一个系数为正. 因此, 在坐标~\eqref{eq:6.94} 下, $A$ 把 $(\rho_1, \hat{x}_2, \ldots, \hat{x}_n)$ 映为 $(\tau_1, \hat{y}_2, \ldots, \hat{y}_n)$, 其中
+\begin{equation}\label{eq:6.96}
+    \tau_1 = \frac{\rho_1}{a_{11} + \sum_{j=2}^n a_{1j}\hat{x}_j}, \qquad \hat{y}_j = \frac{a_{j1} + \sum_{k=2}^n a_{jk}\hat{x}_k}{a_{11} + \sum_{j=2}^n a_{1j}\hat{x}_j}, \quad j = 2, \ldots, n,
+\end{equation}
+是 $(\rho_1, \hat{x}_2, \ldots, \hat{x}_n)$ 的光滑函数. 于是 $A$ 延拓为光滑映射 $\overline{\R^n} \to \overline{\R^n}$. 对 $A^{-1}$ 作同样的考虑即知 $A^{-1} \colon \overline{\R^n} \to \overline{\R^n}$ 也光滑.
+\end{proof}
+
+该引理使我们能定义有限维实向量空间以及实向量丛的径向紧化.
+
+\begin{definition}[向量丛的径向紧化]\label{def:6.51}
+设 $E \to M$ 为实秩 $k$ 向量丛. 则\textbf{径向紧化} $\overline{E} \to M$ 是通过逐纤维径向紧化 $E$ 的每个纤维而得到的 (典型纤维为 $\overline{\R^k}$ 的) 光滑纤维丛. (在 $E$ 的局部平凡化下, $\overline{E}$ 的转移映射是 $E$ 的转移映射借助引理~\ref{lem:6.50} 的连续延拓.)
+\end{definition}
+
+作为微局部分析工作者, 我们关心的是径向紧化余切丛
+\begin{equation}\label{eq:6.97}
+    \overline{T^* M} \to M.
+\end{equation}
+注意对 $p \in M$, 通过映射 $S^*_p M \ni [\xi] \mapsto \lim_{\lambda \to \infty}\lambda\xi \in \partial\overline{T^*_p M}$, 可以把 $S^*_p M$ 与 $\overline{T^*_p M}$ 的无穷远球面等同. 这便把
+\begin{equation}\label{eq:6.98}
+    S^* M \subset \overline{T^* M}
+\end{equation}
+嵌入为子流形 (事实上是纤维子丛), 称为\emph{纤维无穷远}.
+
+由于
+\begin{equation}\label{eq:6.99}
+    \Smooth(\overline{T^* M}) = S^0_{\mathrm{cl}}(T^* M),
+\end{equation}
+我们现在可以把 $a \in S^0_{\mathrm{cl}}(T^* M)$ 的主符号等同于 $a$ 在纤维无穷远上的限制 $a|_{S^* M} = a|_{\partial\overline{T^*}M}$. $a$ 的椭圆集是子集 $\{\alpha \in S^* M \colon a(\alpha) \neq 0\}$ (习题~\ref{ex:6.18}). 甚至对非经典符号 $a \in S^0(T^* M)$, 把 $\Ell(a)$ 视为纤维无穷远的子集也是合理的, 这归因于下述观察: 对 $\alpha \in S^* M$, 有
+\begin{equation}\label{eq:6.100}
+    \alpha \in \Ell(a) \;\; \Longleftrightarrow \;\; \exists\, \chi \in \Smooth(\overline{T^* M}), \; \chi(\alpha) \neq 0, \text{ 使得 } \frac{\chi}{a} \in S^0(T^* M).
+\end{equation}
+我们同样可以刻画本质支集:
+\begin{equation}\label{eq:6.101}
+    \alpha \notin \esupp a \;\; \Longleftrightarrow \;\; \exists\, \chi \in \Smooth(\overline{T^* M}), \; \chi(\alpha) \neq 0, \text{ 使得 } \chi a \in S^{-\infty}(T^* M).
+\end{equation}
+
+我们最后提及理解纤维无穷远之相关性的另一种有用方式. 为简洁起见, 只对仅依赖于 $\xi$ 的符号讨论. 具体地说, 符号 $a \in S^0(\R^n_\xi)$ 的椭圆性只依赖于等价类
+\begin{equation}\label{eq:6.102}
+    [a] \in S^0(\R^n)/\langle \xi \rangle^{-1} S^0(\R^n);
+\end{equation}
+注意 $\langle \xi \rangle^{-1}S^0 = S^{-1}$. 但 $\langle \xi \rangle^{-1} \in \Smooth(\overline{\R^n})$ 恰在 $\partial\overline{\R^n}$ 上为零, 且在那里为一阶零点. 在经典情形, 这与下述把流形 ($\overline{\R^n}$) 上光滑函数限制到子流形 ($\partial\overline{\R^n}$) 的代数编码方式密切相关: 考虑商 $\Smooth(\overline{\R^n})/\mathcal{I}$, 其中 $\mathcal{I} \subset \Smooth(\overline{\R^n})$ 是在 $\partial\overline{\R^n}$ 上为零的光滑函数构成的理想. 该商恰为 $S^0_{\mathrm{cl}}(\R^n)/S^{-1}_{\mathrm{cl}}(\R^n) \cong \Smooth(\partial\overline{\R^n})$, 同构由限制到 $\partial\overline{\R^n}$ 给出.
+
+\begin{figure}[htbp]
+\centering
+\drawFigSixSix
+\caption{左图: 点 $\alpha \in \partial\overline{\R^n}$ 的开邻域 $U_\delta \subset \overline{\R^n}$ (见~\eqref{eq:6.90}). 右图: $U_\delta$ 与 $\R^n$ 的交, 即围绕 $\omega_0$、张角为 $\delta$ 的锥的远端.}
+\label{fig:6.6}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\drawFigSixSeven
+\caption{$\R^n$ 的径向紧化 $\overline{\R^n}$ (图中 $n = 2$), 以及射影坐标~\eqref{eq:6.92} 中 $\rho_1$ 与 $\hat{x}_2$ 的若干水平集. 边界 $\partial\overline{\R^n} = \mathbb{S}^{n-1}$ 对应 $\rho_1 = 0$.}
+\label{fig:6.7}
+\end{figure}
+
+
+
+\section{半经典微局部分析}\label{sec:6.6}
+\index{banjingdian boqianji@半经典波前集 (semiclassical wave front set)}%
+\index{banjingdian tuoyuanji@半经典椭圆集 (semiclassical elliptic set)}%
+
+符号 $a \in S^0_{\hbar}(\R^N)$ 的半经典椭圆性 (定义~\ref{def:3.21}) 涉及 $a$ 模去空间 $h S^{-1}_{\hbar} = h\langle \xi \rangle^{-1}S^0_{\hbar}$ 的可逆性, 而该空间中的符号带有 $\langle \xi \rangle^{-1}$ 与 $h$ 两个附加因子. 仿照~\eqref{eq:6.102} 之后的讨论, 我们被引向构造一个空间, 使得 $h\langle \xi \rangle^{-1}$ 在其各边界超曲面上为零. 一个自然的选择是带角流形
+\begin{equation}\label{eq:6.103}
+    [0, 1)_h \times \overline{\R^N_\xi}.
+\end{equation}
+经典符号 $a = (a_h)_{h \in (0,1)} \in S^0_{\hbar, \mathrm{cl}}(\R^N)$ 从 $(0,1) \times \R^N$ 延拓为 $[0,1) \times \overline{\R^N}$ 上的光滑函数; 反之, 光滑函数在 $[0,1) \times \overline{\R^N}$ 上限制到 $(0,h_0) \times \R^N$ 上, 对每个 $h_0 \in (0,1)$ 都定义一个经典符号 (这里需要 $h \nearrow h_0$ 时的一致性). 也就是说, 为表述清晰而要求半经典符号对一切 $h \in (0,1)$ 有定义、但在 $h \nearrow 1$ 时不要求一致界, 我们有
+\begin{equation}\label{eq:6.104}
+    S^0_{\hbar, \mathrm{cl}}(\R^N) = \Smooth([0,1) \times \overline{\R^N}).
+\end{equation}
+于是可以把商空间 $S^0_{\hbar, \mathrm{cl}}/h\langle \xi \rangle^{-1}S^0_{\hbar, \mathrm{cl}}$ 与 $[0,1) \times \overline{\R^N}$ 上光滑函数到其边界超曲面的限制所构成的空间等同:
+\begin{equation}\label{eq:6.105}
+    S^0_{\hbar, \mathrm{cl}}(\R^N) \big/ h S^{-1}_{\hbar, \mathrm{cl}}(\R^N) \;\cong\; \left\{ (a_{\mathrm{fin}}, a_\partial) \colon
+    \begin{array}{l}
+        a_{\mathrm{fin}} \in \Smooth(\{0\} \times \overline{\R^N}), \quad a_\partial \in \Smooth([0,1) \times \partial\overline{\R^N}), \\[2pt]
+        a_{\mathrm{fin}}|_{\{0\} \times \partial\overline{\R^N}} = a_\partial|_{\{0\} \times \partial\overline{\R^N}}
+    \end{array} \right\}.
+\end{equation}
+见图~\ref{fig:6.8}.
+
+这提示我们在半经典情形把椭圆集等概念定义为
+\begin{equation}\label{eq:6.106}
+    \partial\big( [0,1) \times \overline{\R^N} \big) = \{0\} \times \overline{\R^N} \cup [0,1) \times \partial\overline{\R^N}
+\end{equation}
+的子集. 然而这并不是我们所要做的. 毕竟, 半经典椭圆性只涉及符号在 $h$ 很小时的性态; 人们对固定正 $h$ 时在纤维无穷远处的性态并不关心. 现在, 若符号 $a = (a_h)_{h \in (0,1)} \in S^0_{\hbar, \mathrm{cl}}(\R^N)$ 在 $\{0\} \times \overline{\R^N}$ 上的限制 $a|_{h=0}$ 可逆, 则由 $\overline{\R^N}$ 的紧致性, 存在 $h_0 > 0$ 使得 $a$ 对 $h < h_0$ 可逆, 且 $(a_h^{-1})_{h \in (0,h_0)} \in S^0_{\hbar, \mathrm{cl}}(\R^N)$. 因此半经典微局部分析的场所只是~\eqref{eq:6.106} 右端的第一个空间. 我们把这个空间与 $\overline{\R^N}$ 等同. 符号与算子的最终定义 (直接以流形语言表述) 如下.
+
+\begin{definition}[半经典本质支集, 椭圆集与算子波前集]\label{def:6.52}
+设 $M$ 为光滑流形, $a \in S^m_{\hbar}(T^* M)$, $A \in \Psi^m_{\hbar}(M)$.
+\begin{enumerate}
+    \item (本质支集.) 我们说
+    \begin{equation}\label{eq:6.107}
+        \alpha \notin \esupp_{\hbar} a \subset \overline{T^* M} \;\; \Longleftrightarrow \;\; \exists\, \chi \in S^0_{\mathrm{cl}}(T^* M), \; \chi(\alpha) \neq 0, \text{ 使得 } \chi a \in h^\infty S^{-\infty}_{\hbar}(T^* M).
+    \end{equation}
+    这里把 $\chi$ 视为 $[0,1) \times \overline{T^* M}$ 上与 $h$ 无关的函数, 而 $\chi a \in h^\infty S^{-\infty}_{\hbar}$ 的意思是: 存在 $h_0 > 0$ (依赖于 $\alpha, \chi$) 使得 $(\chi a_h)_{h \in (0,h_0)} \in h^\infty S^{-\infty}_{\hbar}$.
+    \item (椭圆集.) 我们说
+    \begin{equation}\label{eq:6.108}
+        \alpha \in \Ell_{\hbar}(a) \subset \overline{T^* M}
+    \end{equation}
+    (若要显式标明阶数则记作 $\Ell^m_{\hbar}(a)$) 当且仅当存在 $\chi \in S^0_{\mathrm{cl}}(T^* M)$ 使得 $\chi(\alpha) \neq 0$ 且 $\chi/a \in S^{-m}_{\hbar}(T^* M)$. 定义 $\Char_{\hbar}(a) \defeq \overline{T^* M} \setminus \Ell_{\hbar}(a)$.
+    \item (半经典伪微分算子的概念.) 我们在局部坐标下用 $\esupp_{\hbar}(a_0)$ 定义半经典算子波前集 $\WF'_{\hbar}(A) \subset \overline{T^* M}$ 在 $\overline{T^*_p M}$ ($p \in M$) 附近的部分, 其中 $\Oph(a_0)$ 是 $A$ 在 $p$ 附近的局部坐标卡中的表达式. 此外定义
+    \begin{equation}\label{eq:6.109}
+        \Ell_{\hbar}(A) \defeq \Ell_{\hbar}(\sigma^m_{\hbar}(A)), \qquad \Char_{\hbar}(A) \defeq \Char_{\hbar}(\sigma^m_{\hbar}(A)) \subset \overline{T^* M}.
+    \end{equation}
+\end{enumerate}
+\end{definition}
+
+这些集合一般不是相空间的锥形子集. 关于本质支集与椭圆集的等价刻画见习题~\ref{ex:6.20}--\ref{ex:6.21}. 由 $\overline{T^* M}$ 的纤维的紧致性, 对 $a \in S^m_{\hbar}(T^* M)$ 可得: $\esupp_{\hbar} a = \emptyset$ 当且仅当对一切 $\chi \in \SmoothComp(M)$ 与 $h < h_0(\chi)$ 有 $\chi a \in h^\infty S^{-\infty}_{\hbar}(T^* M)$. (当 $M$ 紧时, 这意味着 $a \in h^\infty S^{-\infty}_{\hbar}(T^* M)$.) 类似地, 给定 $A \in \Psi^m_{\hbar}(M)$, $\WF'_{\hbar}(A) = \emptyset$ 当且仅当对一切 $\chi \in \SmoothComp(M)$ 有 $\chi A \in h^\infty \Psi^{-\infty}_{\hbar}(M)$.
+
+\begin{figure}[htbp]
+\centering
+\drawFigSixEight
+\caption{空间 $[0,1) \times \overline{\R^N}$. 我们把底边界 $\{0\} \times \overline{\R^N}$ 视为半经典微局部对象 (本质支集, 椭圆集等) 所在的位置; 竖直方向为 $h$, 水平方向为 $\overline{\R^N}$, 右边界为 $[0,1) \times \partial\overline{\R^N}$.}
+\label{fig:6.8}
+\end{figure}
+
+\begin{example}[半经典特征集]\label{eg:6.53}
+(1) 对半经典微局部化算子 $A = \psi(hD)\phi(x)$, 其中 $\phi, \psi \in \SmoothComp(\R^n)$, 有 $\WF'_{\hbar}(A) = \supp \phi \times \supp \psi$.
+
+(2) 记 $\Delta$ 为 $M = \R^n$ 上的 Laplacian, 或 Riemann 流形 $(M, g)$ 上的 Laplace--Beltrami 算子. 则 $A_h = h^2\Delta - z \in \Diff^2_{\hbar}(M)$ 当 $z \notin [0, \infty)$ 时具有空的特征集; 而当 $z \in [0, \infty)$ 时特征集为 $\Char_{\hbar}(A) = \{(x, \xi) \in T^* M \colon |\xi|^2 = z\}$. 注意对每个 $x \in M$ 这是 $T^*_x M$ 的紧子集.
+
+(3) $A_h = h D_x - z \in \Diff^1_{\hbar}(\R)$ 的特征集为 $\{(x, \xi) \in \R \times \R \colon \xi = z\} \subset T^* \R$ (因此当 $z \notin \R$ 时为空).
+
+(4) 考虑 $A_h \defeq h^m B$, 其中 $B \in \Diff^m(M)$, $m \ge 1$, 不依赖于 $h$: 此时 $\Char^m_{\hbar}(A) = \{(x, \lambda\xi) \colon (x, \xi) \in \Char^m(B) \subset T^* M \setminus o, \; \lambda \ge 0\}$.
+\end{example}
+
+下述结果与命题~\ref{prop:6.17} 的证明方式相同:
+
+\begin{proposition}[半经典微局部椭圆拟逆]\label{prop:6.54}
+设 $A \in \Psi^m_{\hbar}(M)$, 并设 $K \subset \Ell_{\hbar}(A)$ 为闭子集. 则存在 $B \in \Psi^{-m}_{\hbar}(M)$ 使得
+\begin{equation}\label{eq:6.110}
+    K \cap \WF'_{\hbar}(A B - I) = \emptyset, \qquad K \cap \WF'_{\hbar}(B A - I) = \emptyset.
+\end{equation}
+\end{proposition}
+
+转向分布族 $u = (u_h)_{h \in (0,h_0)}$ 的半经典波前集, 我们再次强调所刻画的是 $h \to 0$ 时的一致行为. 该定义应满足两个准则. 第一, 若在每个紧子集上, 对一切 $k \in \R$, 族 $\{h^{-k}u_h \colon h \in (0,h_1)\}$ 在每个半经典 Sobolev 空间中一致有界, 则 $u$ 应有空的半经典波前集 (其中 $h_1 \in (0,h_0]$ 可以依赖于该紧子集). 第二, 若 $u$ 是任一``合理的''分布族, 而 $R \in h^\infty\Psi^{-\infty}_{\hbar}(M)$ 是残余算子, 则 $R u$ 应有空的半经典波前集. 这些准则迫使我们把半经典波前集的定义范围限制在 $h$-\emph{缓增}的分布族上:
+
+\begin{definition}[$h$-缓增族的半经典波前集]\label{def:6.55}
+设 $M$ 为光滑流形, $u = (u_h)_{h \in (0,h_0)}$ 为一族分布 $u_h \in \Distr(M)$.
+\begin{enumerate}
+    \item 称 $u$ 是\textbf{$h$-缓增}的, 若对每个 $\chi \in \SmoothComp(M)$, 族 $(\chi u_h)_{h \in (0,h_0)}$ 在 $h^{-N}H^{-N}_{\hbar, \mathrm{loc}}(M)$ 中一致有界 (等价地, 在 $h^{-N}\dot{H}^{-N}_{\hbar}(K)$ 中一致有界, 其中 $K = \supp \chi$), 其中 $N \in \R$ (依赖于 $\chi$).
+    \item 对 $s \in \R$ 与 $k \in \R \cup \{\infty\}$, 如下定义 $h$-缓增族 $u$ 的 $h^k H^s_{\hbar}$ 波前集:
+    \begin{equation}\label{eq:6.111}
+        \alpha \notin \WF^{s,k}_{\hbar}(u) \subset \overline{T^* M} \;\; \Longleftrightarrow \;\; \exists\, A \in \Psi^0_{\hbar}(M), \; \alpha \in \Ell_{\hbar}(A), \text{ 使得 } A u \text{ 在 } h^k H^s_{\hbar, \mathrm{loc}}(M) \text{ 中一致有界}.
+    \end{equation}
+    (这里要求 $A$ 适正支集.) 对 $k = \infty$, 记该集合为 $\WF^s_{\hbar}(u) \defeq \WF^{s,\infty}_{\hbar}(u)$.
+\end{enumerate}
+\end{definition}
+
+利用命题~\ref{prop:6.54} 以及 $u$ 为 $h$-缓增的先验假设, 可以证明~\eqref{eq:6.111} 等价于下述条件: 对一切满足 $\WF'_{\hbar}(A)$ 包含于 $\alpha$ 的某个固定开邻域 $U \subset \overline{T^* M}$ 的 $A \in \Psi^0_{\hbar}(M)$, $A u$ 在 $h^k H^s_{\hbar, \mathrm{loc}}$ 中一致有界. 关于半经典波前集的手工刻画见习题~\ref{ex:6.22}.
+
+\begin{remark}[有限频率]\label{rem:6.56}
+在有限点 $\alpha \in T^* M \subset \overline{T^* M}$ 处, 可微阶 $s$ 无关紧要; 即 $\WF^{s,k}_{\hbar}(u) \cap T^* M$ 与 $s \in \R$ 无关. 对 $k = \infty$, 记该集合为
+\begin{equation}\label{eq:6.112}
+    \WF_{\hbar}(u) \defeq \WF^{0,\infty}_{\hbar}(u) \cap T^* M \subset T^* M.
+\end{equation}
+它有时被称为 $u$ 在有限频率处的半经典波前集.
+\end{remark}
+
+粗略地说, 在点 $\xi_0 \in T^*_{x_0} M$ 附近, 半经典波前集 $\WF^{0,k}_{\hbar}(u)$ 记录了 $u_h$ 在 $x_0$ 附近来自频率 $\approx h^{-1}\xi_0$ 的振幅是否不满足 $\mathcal{O}(h^k)$ 的界. 因此 $\WF_{\hbar}$ 探测尺度为 $\mathcal{O}(h)$ 的振荡.
+
+\begin{remark}[空的半经典波前集]\label{rem:6.57}
+利用 $\overline{T^* M}$ 的纤维的紧致性并发挥半经典伪微分算子的映射性质, 可以看出
+\begin{equation}\label{eq:6.113}
+    \WF^{s,k}_{\hbar}(u) = \emptyset \;\; \Longleftrightarrow \;\; \forall\, \chi \in \SmoothComp(M) \colon \chi u \text{ 在 } h^k \dot{H}^s_{\hbar}(K) \text{ 中一致有界}, \; K \defeq \supp \chi, \; h < h_0(\chi).
+\end{equation}
+\end{remark}
+
+\begin{example}[相干态]\label{eg:6.58}
+固定 $x_0, \xi_0 \in \R^n$. 考虑
+\begin{equation}\label{eq:6.114}
+    u_h = (\pi h)^{-\frac{n}{4}} \ee^{-|x - x_0|^2/2h} \ee^{\ii (x - x_0) \cdot \xi_0/h} \in \mathscr{S}(\R^n), \qquad h \in (0, 1).
+\end{equation}
+它满足 $\|u_h\|_{L^2(\R^n)} = 1$ 对一切 $h$ 成立. 我们断言对 $u = (u_h)_{h \in (0,1)}$ 有
+\begin{equation}\label{eq:6.115}
+    \WF^{s,k}_{\hbar}(u) = \begin{cases} \{(x_0, \xi_0)\}, & k > 0, \\ \emptyset, & k \le 0. \end{cases}
+\end{equation}
+(特别地, $\WF_{\hbar}(u) = \WF^s_{\hbar}(u) = \{(x_0, \xi_0)\}$.) 通过对 $x$ 作平移, 可以化归为 $x_0 = 0$ 的情形. 利用习题~\ref{ex:4.13}, 还可进一步化归为 $\xi_0 = 0$ 的情形. 为证~\eqref{eq:6.115}, 我们于是可以用 $\Oph(a)$ 检验 $u_h$, 其中 $a(x, \xi) = \chi(x)\psi(\xi)$, $\chi \in \SmoothComp(\R^n)$, $\psi \in S^0(\R^n)$. 只需证明: 若 $(0,0) \notin \supp a$, 则
+\begin{equation}\label{eq:6.116}
+\begin{aligned}
+    \Oph(a) u_h(x) & = (\pi h)^{-\frac{n}{4}} (2\pi h)^{-n} \iint_{\R^n} \int_{\R^n} \ee^{\ii (x - y) \cdot \xi/h} a(x, \xi) \ee^{-|y|^2/2h} \,\dd y \,\dd\xi \\
+    & = (\pi h)^{-\frac{n}{4}} (2\pi h)^{-\frac{n}{2}} \chi(x) \int_{\R^n} \ee^{\ii x \cdot \xi/h} \ee^{-|\xi|^2/2h} \psi(\xi) \,\dd\xi
+\end{aligned}
+\end{equation}
+在 $h^\infty H^s_{\hbar}(\R^n)$ 中对一切 $s$ 一致有界. 由于沿 $hD_x$ 求导只会得到类似的表达式 (只是 $\psi$ 变成更高阶的符号), 我们只需对 $s = 0$ 检验. 若 $0 \notin \supp \psi$, 则被积函数被 $C_N h^N \langle \xi \rangle^{-n-1}$ 控制 (对一切 $N$). 若 $0 \notin \supp \chi$, 则可写出 $\ee^{\ii x \cdot \xi/h} = (h\frac{x \cdot D_\xi}{|x|^2})^N \ee^{\ii x \cdot \xi/h}$, 并作 $N$ 次分部积分以获取因子 $h^N$.
+\end{example}
+
+我们把例~\ref{eg:6.58} 的下述变形留给读者分析: 若用 $\ee^{-|x - x_0|^2}$ 使~\eqref{eq:6.114} 中的 Gauss 函数更不局部化, 则半经典波前集是全部 $\{(x, \xi_0) \colon x \in \R^n\}$; 反之, 若用 $\ee^{-|x - x_0|^2/h^2}$ 使其更局部化, 则半经典波前集等于 $\{(x_0, \xi) \colon \xi \in \R^n\}$.
+
+与命题~\ref{prop:6.38} 类似地, 我们有:
+
+\begin{proposition}[半经典微局部性与微局部椭圆正则性]\label{prop:6.59}
+设 $A \in \Psi^m_{\hbar}(M)$, $u$ 为 $h$-缓增族, $s \in \R$, $k \in \R \cup \{\infty\}$. 则
+\begin{equation}\label{eq:6.117}
+    \WF^{s-m,k}_{\hbar}(A u) \subset \WF'_{\hbar}(A) \cap \WF^{s,k}_{\hbar}(u), \qquad \WF^{s,k}_{\hbar}(u) \subset \WF^{s-m,k}_{\hbar}(A u) \cup \Char^m_{\hbar}(A).
+\end{equation}
+\end{proposition}
+
+\begin{example}\label{eg:6.60}
+我们重温例~\ref{eg:6.58}, 并注意
+\begin{equation}\label{eq:6.118}
+    A_h \defeq (hD_x - \xi_0)^2 + |x - x_0|^2 - h n \;\; \Longrightarrow \;\; A_h u_h = 0.
+\end{equation}
+但 $A = (A_h)_{h \in (0,1)} \in \Psi^2_{\hbar}(M)$, $M = \R^n$, 具有半经典主符号 $|\xi - \xi_0|^2 + |x - x_0|^2$, 故 $\WF^{s,k}_{\hbar}(u) \subset \Char_{\hbar}(A) = \{(x_0, \xi_0)\}$. (我们把 $\Psi^2_{\hbar}(M)$ 写出, 是为了强调 $A$ 符合定义~\ref{def:5.84} 而不符合定义~\ref{def:2.23}.) 回忆 $\|u_h\|_{L^2} = 1$, 即得~\eqref{eq:6.115}.
+\end{example}
+
+与命题~\ref{prop:6.39} 类似的结果如下.
+
+\begin{proposition}[定量半经典微局部椭圆估计]\label{prop:6.61}
+设 $A \in \Psi^m_{\hbar}(M)$. 设 $B, G \in \Psi^0_{\hbar}(M)$ 满足
+\begin{equation}\label{eq:6.119}
+    \WF'_{\hbar}(B) \subset \Ell_{\hbar}(G), \qquad \WF'_{\hbar}(B) \subset \Ell_{\hbar}(A).
+\end{equation}
+设 $B_h$ 与 $G_h$ 的 Schwartz 核的支集位于 $K \times K$ 中, 其中 $K \subset M$ 紧致; 设 $\tilde{K} \subset M$ 是包含 $K$ 的紧集, 使得对一切 $h$ 有 $\supp K_{A_h} \cap (K \times M) \subset K \times \tilde{K}$, 其中 $K_{A_h}$ 表示 $A_h$ 的 Schwartz 核. 设 $\chi \in \SmoothComp(M)$ 在 $\tilde{K}$ 附近恒等于 1. 则存在 $h_0 > 0$ 使得对一切 $s, N \in \R$ 存在 $C > 0$ 满足
+\begin{equation}\label{eq:6.120}
+    \|B u\|_{H^s_{\hbar}} \le C \left( \|G A u\|_{H^{s-m}_{\hbar}} + h^N \|\chi u\|_{H^{-N}_{\hbar}} \right), \qquad h < h_0.
+\end{equation}
+这里 $\|\cdot\|_{H^s_{\hbar}}$ 表示 $\dot{H}^s_{\hbar}(K')$ 上的范数, 其中 $K' = \supp \chi$. 估计~\eqref{eq:6.120} 在下述强意义下成立: 若右端有限, 则左端也有限, 且估计成立.
+\end{proposition}
+
+\begin{proof}
+证明与命题~\ref{prop:6.39} 的证明本质相同: 对 $G A$ 在 $\WF'_{\hbar}(B)$ 上的合适的半经典微局部椭圆拟逆 $Q$ (它对 $h < h_0$ 有定义, 其中 $h_0$ 充分小), 我们有恒等式~\eqref{eq:6.57}; 此时 $B R$ 是残余半经典算子 (可以安排其 Schwartz 核紧支集), 因此它作为 $h^{-N}H^{-N}_{\hbar} \to H^s_{\hbar}$ 的映射一致有界. 这给出~\eqref{eq:6.120}.
+\end{proof}
+
+
+
+\section*{注记}
+\addcontentsline{toc}{section}{注记}
+
+波前集以目前的形式由 Hörmander~\cite{Hor71a} 引入. Sato~\cite{Sat70} 此前为他的超函数引入了相关概念. 解析波前集在 Sjöstrand~\cite{Sjo82} 与 Martinez~\cite{Mar01} 中讨论. 对向量丛的分布截面, Dencker~\cite{Den82} 引入的\emph{极化集} (polarization set) 是波前集的进一步精细化; 它记录在相空间某点处携带最强奇性的分量.
+
+除第~\ref{sec:6.4}~节所研究的分布运算之外, 人们还可以分析分布沿光滑映射的拉回与沿光滑紧映射的推前的波前集. 更一般地, 可以用 $A$ 的 Schwartz 核的波前集来证明关于 $\WF(A u)$ 与 $\WF(u)$ 之关系的相当一般的结论, 其中 $A \colon \SmoothComp(\R^n) \to \Distr(\R^m)$; 例如见 Hörmander~\cite[§2.5]{Hor71a}. 推论~\ref{cor:6.43} 的 Sobolev 精细化可在 Beals--Reed~\cite{BR84} 中找到.
+
+我们把半经典波前集定义为 $\overline{T^* M}$ 的子集, 这实质上取自 Vasy~\cite[§2.1]{Vas13}. 当我们第~\ref{ch:10}~章讨论径向点估计时, 径向紧化的概念优势将变得更加清楚. 我们明确限制到 $\partial([0,1) \times \overline{T^* M})$ 的子集 $\{h = 0\} \cong \overline{T^* M}$, 因为这样更符合半经典工具的通常用法. Dyatlov--Zworski~\cite{DZ16} 也这样做. (把 $\WF_{\hbar}$ 作为 $T^* M \sqcup S^* M$ 的子集、即分别处理有限与无限频率的等价定义, 见 Dyatlov~\cite{Dya12}.)
+
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+
+\begin{exer}[本质支集的等价定义]\label{ex:6.1}
+设 $a \in S^m(\R^n; \R^N)$. 证明 $(x_0, \xi_0) \in \R^n \times (\R^N \setminus \{0\})$ 不属于 $\esupp a$ 当且仅当存在 $\epsilon > 0$ 使得对一切 $k \in \R$ 有
+\begin{equation}\label{eq:6.121}
+    |a(x, \xi)| \le C_k \langle \xi \rangle^{-k} \qquad \forall\, (x, \xi) \in \R^n \times (\R^N \setminus \{0\}), \;\; |x - x_0| + \left| \frac{\xi}{|\xi|} - \frac{\xi_0}{|\xi_0|} \right| < \epsilon.
+\end{equation}
+\end{exer}
+
+\begin{exer}[为什么是锥形集合?]\label{ex:6.2}
+本习题的目的是展示 $S^0$ 类符号只能在一个关于 $\xi$ 的锥形集合中局部化, 而不能在``更窄''的集合中局部化, 这有两种表现方式.
+\begin{enumerate}
+    \item 设 $a \in S^0(\R^n; \R^N)$, $(x_0, \xi_0) \in \R^n \times (\R^N \setminus \{0\})$, 并设存在 $c, C > 0$ 使得对一切 $\lambda \ge C$ 有 $|a(x_0, \lambda\xi_0)| \ge c$. 证明 $(x_0, \xi_0) \in \Ell^0(a)$.
+    \item 把 $\R^N$ 中的点写成 $\xi = (\xi_1, \xi')$, $\xi_1 \in \R$, $\xi' \in \R^{N-1}$. 对 $\theta \in (0, 1)$ 与 $r > 0$, 令
+    \begin{equation}\label{eq:6.122}
+        C^\theta_r \defeq \{(\xi_1, \xi') \colon \xi_1 > 0, \; |\xi'| \le r\xi_1^\theta\}.
+    \end{equation}
+    设 $0 < r < r'$. 证明不存在符号 $a \in S^0(\R^N_\xi)$ 使得 $a = 1$ 于 $C^\theta_r \cap \{|\xi| > 2\}$ 上, 而 $a = 0$ 于 $C^\theta_{r'} \cap \{|\xi| > 1\}$ 之外.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[特征函数的波前集]\label{ex:6.3}
+设 $\Omega \subset \R^n$ 为光滑有界区域, 其\emph{特征函数}为
+\begin{equation}\label{eq:6.123}
+    1_\Omega(x) = \begin{cases} 1, & x \in \Omega, \\ 0, & x \notin \Omega. \end{cases}
+\end{equation}
+计算 (并给出证明) $\WF(1_\Omega)$ 与 $\WF^s(1_\Omega)$, $s \in \R$.
+\end{exer}
+
+\begin{exer}[$\pm \ii 0$ 型分布]\label{ex:6.4}
+设 $s \in \CC \setminus \N_0$. 回忆习题~\ref{ex:2.6} 中的分布 $(x \pm \ii 0)^s \in \mathscr{S}'(\R)$. 证明
+\begin{equation}\label{eq:6.124}
+    \WF((x \pm \ii 0)^s) = \{(0, \xi) \colon \pm\xi > 0\}.
+\end{equation}
+并计算 $r \in \R$ 时的 $\WF^r((x \pm \ii 0)^s)$.
+\end{exer}
+
+\begin{exer}[具有特殊波前集的分布]\label{ex:6.5}
+设 $n \in \N$. 构造一个分布 $u \in \Distr(\R^n)$, 使其波前集 $\WF(u) \subset S^* \R^n$ 只由一个点组成.
+\end{exer}
+
+\begin{exer}[与 $\delta$-分布的张量积]\label{ex:6.6}
+设 $s \in \R$, $u \in H^s(\R^n_x)$. 对 $j \in \N_0$, 令 $v(t, x) \defeq \delta^{(j)}(t) u(x) \in \Distr(\R^{1+n}_{t, x})$.
+\begin{enumerate}
+    \item 证明只要 $s' \le s - j - \tfrac{1}{2}$ 且 $s' < -j - \tfrac{1}{2}$, 便有 $v \in H^{s'}(\R^{1+n})$.
+    \item 设 $s \ge 0$. 证明 $\WF^{s-j-\frac{1}{2}}(v) \subset N^*\{t = 0\} \setminus o = \{(t, x, \tau, \xi) \colon t = 0, \; \xi = 0, \; \tau \neq 0\}$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[紧算子]\label{ex:6.7}
+本习题的目的是证明习题~\ref{ex:5.31} 中结果的逆命题.
+\begin{enumerate}
+    \item 设 $\chi \in \SmoothComp(\R^n)$ 在 0 附近等于 1, 设 $\psi \in \Smooth(\mathbb{S}^{n-1})$ 在非空开集 $S \subset \mathbb{S}^{n-1}$ 上等于 1. 令 $L \defeq \OpR((1 - \chi(\xi))\psi(\frac{\xi}{|\xi|})\chi(y)) \in \Psi^0(\R^n)$. 证明存在 $u_j \in L^2(\R^n)$, $j \in \N$, 具有如下性质:
+    \begin{equation}\label{eq:6.125}
+    \begin{gathered}
+        \|u_j\|_{L^2} = 1 \;\; \forall j; \qquad \|u_j - u_k\|_{L^2} > \tfrac{1}{2} \;\; \forall j \neq k; \\
+        \|u_j - L u_j\| \to 0 \text{ 于 } L^2; \qquad u_j - L u_j \text{ 在 } H^s \, (s > 0) \text{ 中有界}.
+    \end{gathered}
+    \end{equation}
+    \item 设 $M$ 为闭流形, $A \in \Psi^0_{\mathrm{cl}}(M)$, $a = \sigma^0(A)$. 设 $A \colon L^2(M) \to L^2(M)$ 紧. 证明 $\lim_{|\xi| \to \infty}|a(x, \xi)| = 0$, 其中 $|\cdot|$ 表示 $T^* M$ 的纤维上的一个范数.
+    \item 利用第 (1) 部分的一个推广证明第 (2) 部分对任意 $A \in \Psi^0(M)$ 均成立; 该推广中取 $L = \OpR(b(\xi)\chi(y))$, 其中 $b \in S^0(\R^n_\xi)$ 在半径为 $c\lambda_i$、中心为 $\lambda_i\xi_0$ 的球上等于 1; 这里 $\xi_0 \in \R^n \setminus \{0\}$ 与 $c > 0$ 固定, 而 $\lambda_i \to \infty$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[余法分布]\label{ex:6.8}
+设 $a \in S^m(\R^k_x; \R^{n-k}_\zeta)$.
+\begin{enumerate}
+    \item 赋予振荡积分
+    \begin{equation}\label{eq:6.126}
+        u(x, z) \defeq (2\pi)^{-(n-k)} \int_{\R^{n-k}} \ee^{\ii z \cdot \zeta} a(x, \zeta) \,\dd\zeta
+    \end{equation}
+    以分布意义, 使得当 $m < -(n-k)$ 时它与收敛的积分一致, 并且映射 $a \mapsto u$ 对一切 $m \in \R$ 是连续的 $S^m(\R^k; \R^{n-k}) \to \mathscr{S}'(\R^n)$.
+    \item 证明 $\WF(u) \subset \{(x, z, \xi, \zeta) \colon z = 0, \; \xi = 0\}$.
+    \item 证明 $\WF(u) = \{(x, 0, 0, \zeta) \colon (x, \zeta) \in \esupp a\}$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[伪微分算子 Schwartz 核的波前集]\label{ex:6.9}
+设 $A \in \Psi^m(M)$ 为伪微分算子, 其 Schwartz 核记为 $K$. 证明
+\begin{equation}\label{eq:6.127}
+    \WF(K) = \{(x, x, \xi, -\xi) \in T^*(M \times M) \colon (x, \xi) \in \WF'(A)\}.
+\end{equation}
+\end{exer}
+
+\begin{exer}[半空间中的全纯函数]\label{ex:6.10}
+下面是习题~\ref{ex:6.4} 的部分推广. 记 $\Omega = \{z \in \CC \colon \operatorname{Im} z > 0\}$ 为上半平面, 设 $F \colon \Omega \to \CC$ 全纯. 假定对每个 $C > 0$ 存在 $C', N \in \R$ 使得当 $z \in \Omega$, $|\operatorname{Re} z| < C$, $\operatorname{Im} z \in (0, 1]$ 时 $|F(z)| < C'|\operatorname{Im} z|^{-N}$.
+\begin{enumerate}
+    \item 证明函数 $F_\epsilon = F(\cdot + \ii\epsilon) \in \Smooth(\R)$ 当 $\epsilon \searrow 0$ 时在 $\Distr(\R)$ 中收敛. 其极限记为 $f \defeq F(\cdot + \ii 0) \in \Distr(\R)$.
+    \item 证明 $\WF(F(\cdot + \ii 0)) \subset \{(x, \xi) \colon \xi > 0\}$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[$H^s$ 波前集]\label{ex:6.11}
+设 $K \subset S^* M$ 闭. 证明对 $u \in \Distr(M)$ 下述条件等价:
+\begin{enumerate}
+    \item $\WF^s(u) \cap K = \emptyset$;
+    \item 存在 $G \in \Psi^0(M)$, $K \subset \Ell(G)$, 使得 $G u \in H^s_{\mathrm{loc}}(M)$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[另一个微局部椭圆正则性估计]\label{ex:6.12}
+设 $B \in \Psi^0(M)$. 设 $B_1, \ldots, B_J \in \Psi^0(M)$ 满足 $\WF'(B) \subset \bigcup_{j=1}^J \Ell(B_j)$. 设 $B, B_j$ 的 Schwartz 核的支集位于 $K \times K$ 中, 其中 $K \subset M$ 紧致. 设 $\chi \in \SmoothComp(M)$ 在 $K$ 附近恒等于 1. 证明对一切 $N \in \R$ 存在 $C > 0$ 使得估计
+\begin{equation}\label{eq:6.128}
+    \|B u\|_{H^s} \le C \left( \sum_{j=1}^J \|B_j u\|_{H^s} + \|\chi u\|_{H^{-N}} \right)
+\end{equation}
+成立 (在强意义下). 这里 $\|\cdot\|_{H^s}$ 是 $\dot{H}^s(K')$ 上的范数, $K' \defeq \supp \chi$.
+\end{exer}
+
+\begin{exer}[定性与定量微局部椭圆正则性]\label{ex:6.13}
+我们在命题~\ref{prop:6.39} 的假设下工作, 并使用那里引入的记号. 利用命题~\ref{prop:6.38} 证明映射
+\begin{equation}\label{eq:6.129}
+    \{u \in \dot{H}^{-N}(K) \colon \supp u \subset \chi^{-1}(1), \; G A u \in \dot{H}^{s-m}(K')\} \ni u \mapsto B u \in \dot{H}^s(K')
+\end{equation}
+是良定义的. 再用闭图像定理推出估计~\eqref{eq:6.56}.
+\end{exer}
+
+\begin{exer}[微局部椭圆估计的稳定性]\label{ex:6.14}
+设 $A \in \Diff^m(M)$, $B, G \in \Psi^0(M)$, $K = \tilde{K} \subset M$, 且 $\chi \in \SmoothComp(M)$ 满足命题~\ref{prop:6.39} 的假设. 固定 $s, N \in \R$. 证明存在常数 $C'$ 与 $A$ 在 $\Diff^m(M)$ 中的邻域 $\mathcal{U}$, 使得估计~\eqref{eq:6.56} 对 $C'$ 与 $A' \in \mathcal{U}$ 分别代替 $C$ 与 $A$ 成立. (若 $A$ 是伪微分算子、$K$ 与 $\tilde{K}$ 为一般紧集, 只要把 $A'$ 限制为那些 Schwartz 核满足命题~\ref{prop:6.39} 中相应支集条件的算子, 同样的结论成立.)
+\end{exer}
+
+\begin{exer}[乘法与限制映射的唯一性]\label{ex:6.15}
+给定闭锥形子集 $\Lambda \subset T^* \R^n \setminus o$, 我们在空间
+\begin{equation}\label{eq:6.130}
+    \mathscr{E}'_\Lambda(\R^n) \defeq \{u \in \mathscr{E}'(\R^n) \colon \WF(u) \subset \Lambda\}
+\end{equation}
+上赋予一个局部凸拓扑, 其半范数族由 $u \mapsto |\langle u, \phi \rangle|$ ($\phi \in \Smooth(\R^n)$) 与 $u \mapsto \|A u\|_{\mathcal{C}^k_b(\R^n)}$ ($k \in \N_0$, $A \in \Psi^0(\R^n)$, $\WF'(A) \cap \Lambda = \emptyset$) 给出.
+\begin{enumerate}
+    \item 证明 $\mathscr{E}'_\Lambda(\R^n)$ 序列完备, 且 $\SmoothComp(\R^n)$ 是序列稠密子空间.
+    \item 设 $\Lambda, \Lambda' \subset T^* \R^n \setminus o$ 为闭锥形, 且 $\Lambda \cap (-\Lambda') = \emptyset$. 证明 $\SmoothComp(\R^n) \times \SmoothComp(\R^n) \ni (u, v) \mapsto u v \in \SmoothComp(\R^n)$ 唯一地延拓为序列连续的双线性映射
+    \begin{equation}\label{eq:6.131}
+        \mathscr{E}'_\Lambda(\R^n) \times \mathscr{E}'_{\Lambda'}(\R^n) \to \mathscr{E}'(\R^n).
+    \end{equation}
+    \item 设 $Y \defeq \R^k \times \{0\} \subset \R^k \times \R^{n-k}$, 并设闭锥形子集 $\Lambda \subset T^* \R^n \setminus o$ 满足 $\Lambda \cap (N^* Y \setminus o) = \emptyset$. 证明限制映射 $\SmoothComp(\R^n) \ni u \mapsto u|_Y \in \SmoothComp(Y)$ 唯一地延拓为序列连续映射
+    \begin{equation}\label{eq:6.132}
+        \mathscr{E}'_\Lambda(\R^n) \to \mathscr{E}'(Y).
+    \end{equation}
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[球极投影与径向紧化]\label{ex:6.16}
+考虑映射
+\begin{equation}\label{eq:6.133}
+    \varphi \colon \mathbb{S}^n_{>} \defeq \{x = (x_1, \ldots, x_{n+1}) \in \R^{n+1} \colon |x| = 1, \; x_{n+1} > 0\} \ni x \mapsto \left( \frac{x_1}{x_{n+1}}, \ldots, \frac{x_n}{x_{n+1}} \right) \in \R^n.
+\end{equation}
+证明 $\varphi$ 由连续性延拓为微分同胚
+\begin{equation}\label{eq:6.134}
+    \overline{\varphi} \colon \mathbb{S}^n_{\ge} \defeq \{x \in \R^{n+1} \colon |x| = 1, \; x_{n+1} \ge 0\} \to \overline{\R^n},
+\end{equation}
+它把 $\mathbb{S}^n$ 的赤道微分同胚地映到 $\partial\overline{\R^n} = \mathbb{S}^{n-1}$. 见图~\ref{fig:6.9}.
+\end{exer}
+
+\begin{figure}[htbp]
+\centering
+\drawFigSixNine
+\caption{球极投影~\eqref{eq:6.133} 的图示 ($n = 1$): 上半球面经 $\varphi$ 映到 $\R$ 上, 赤道映到 $\partial\overline{\R} = \mathbb{S}^{0}$ (即径向紧化的无穷远点).}
+\label{fig:6.9}
+\end{figure}
+
+\begin{exer}[残余符号与径向紧化]\label{ex:6.17}
+证明 $S^{-\infty}(T^* M)$ 等于在 $\partial\overline{T^*}M = S^* M$ 上无限阶消失的光滑函数空间 $\dot{\Smooth}(\overline{T^*}M)$; 即限制映射 $\dot{\Smooth}(\overline{T^*}M) \ni u \mapsto u|_{T^* M} \in S^{-\infty}(T^* M)$ 是同构.
+\end{exer}
+
+\begin{exer}[关于经典符号的更多内容]\label{ex:6.18}
+设 $a \in S^0_{\mathrm{cl}}(T^* M) = \Smooth(\overline{T^*}M)$.
+\begin{enumerate}
+    \item 证明 $\Ell(a) = \{\alpha \in S^* M \colon a(\alpha) \neq 0\}$.
+    \item 证明 $S^* M \setminus \esupp a$ 等于所有这样的 $\alpha \in S^* M$ 之集: 存在开邻域 $U \subset S^* M$ 使得 $a$ 在 $U$ 上无限阶消失.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[符号在径向紧化上的正则性]\label{ex:6.19}
+在带边光滑流形 $M$ 上, 记 $\mathcal{V}_{\mathrm{b}}(M) \subset \mathcal{V}(M) = \Smooth(M; TM)$ 为所有与边界相切的向量场 $V$ 构成的空间, 即对一切 $p \in \partial M$ 有 $V_p \in T_p\partial M$.
+\begin{enumerate}
+    \item 证明 $\partial_{x_i}$ 与 $x_i\partial_{x_j}$ ($i, j = 1, \ldots, n$) 定义了 $\mathcal{V}_{\mathrm{b}}(\overline{\R^n})$ 中的元素.
+    \item 反之, 证明每个 $V \in \mathcal{V}_{\mathrm{b}}(\overline{\R^n})$ 可以写成 $V = \sum_{i=1}^n a_i \partial_{x_i} + \sum_{i,j=1}^n a_{ij}x_i\partial_{x_j}$, 其中 $a_i, a_{ij} \in \Smooth(\overline{\R^n})$.
+    \item 设 $a \in \Smooth(\R^n_\xi)$. 证明 $a \in S^0(\R^n)$ 当且仅当对一切 $V_1, \ldots, V_k \in \mathcal{V}_{\mathrm{b}}(\overline{\R^n})$, $k \in \N$, $V_1 \cdots V_k a$ 在 $\R^n$ 上有界.
+\end{enumerate}
+\emph{注.} 于是 $S^0_{\mathrm{cl}}(\R^n)$ 与 $S^0(\R^n)$ 的差别在于光滑性 (在 $\mathcal{V}(\overline{\R^n})$ 的元素作用下保持有界) 与余法性 (在 $\mathcal{V}_{\mathrm{b}}(\overline{\R^n})$ 的元素作用下保持有界) 之间.
+\end{exer}
+
+\begin{exer}[半经典本质支集]\label{ex:6.20}
+设 $a = (a_h)_{h \in (0,h_0)} \in S^m_{\hbar}(\R^n; \R^N)$.
+\begin{enumerate}
+    \item 设 $\alpha = (x_0, \xi_0) \in \R^n \times \R^N$. 证明 $\alpha \notin \esupp_{\hbar} a$ 当且仅当存在 $\epsilon > 0$ 使得对一切 $k$ 有
+    \begin{equation}\label{eq:6.135}
+        |a_h(x, \xi)| \le C_k h^k \qquad \forall\, |x - x_0| + |\xi - \xi_0| < \epsilon.
+    \end{equation}
+    \item 设 $\alpha = (x_0, [\xi_0]) \in \R^n \times \partial\overline{\R^N}$. 证明 $\alpha \notin \esupp_{\hbar} a$ 当且仅当存在 $\epsilon > 0$ 使得对一切 $k$ 有
+    \begin{equation}\label{eq:6.136}
+        |a_h(x, \xi)| \le C_k h^k \langle \xi \rangle^{-k} \qquad \forall\, |x - x_0| + \left| \frac{\xi}{|\xi|} - \frac{\xi_0}{|\xi_0|} \right| < \epsilon.
+    \end{equation}
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[半经典椭圆集]\label{ex:6.21}
+设 $a = (a_h)_{h \in (0,h_0)} \in S^m_{\hbar}(\R^n; \R^N)$.
+\begin{enumerate}
+    \item 设 $\alpha = (x_0, \xi_0) \in \R^n \times \R^N$. 证明 $\alpha \notin \Ell_{\hbar}(a)$ 当且仅当存在 $\epsilon, c > 0$ 使得
+    \begin{equation}\label{eq:6.137}
+        |a_h(x, \xi)| \ge c \qquad \forall\, |x - x_0| + |\xi - \xi_0| < \epsilon.
+    \end{equation}
+    \item 设 $\alpha = (x_0, [\xi_0]) \in \R^n \times \partial\overline{\R^N}$. 证明 $\alpha \notin \Ell_{\hbar}(a)$ 当且仅当存在 $\epsilon, c > 0$ 使得
+    \begin{equation}\label{eq:6.138}
+        |a_h(x, \xi)| \ge c \langle \xi \rangle^m \qquad \forall\, |x - x_0| + \left| \frac{\xi}{|\xi|} - \frac{\xi_0}{|\xi_0|} \right| < \epsilon.
+    \end{equation}
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[半经典波前集的刻画]\label{ex:6.22}
+设 $u = (u_h)_{h \in (0,h_0)}$ 为 $\R^n$ 上的 $h$-缓增分布族, $s, k \in \R$.
+\begin{enumerate}
+    \item 设 $\alpha = (x_0, \xi_0) \in \R^n \times \R^n$. 证明 $\alpha \notin \WF^{s,k}_{\hbar}(u)$ 当且仅当存在 $\phi, \psi \in \SmoothComp(\R^n)$ 满足 $\phi(x_0) \neq 0$, $\psi(\xi_0) \neq 0$, 以及 $h_1 \in (0,h_0]$ 使得
+    \begin{equation}\label{eq:6.139}
+        \{h^{-k}\psi(h\xi)\widehat{\phi u_h}(\xi) \colon h < h_1\} \text{ 在 } L^2(\R^n_\xi) \text{ 中一致有界}.
+    \end{equation}
+    \item 设 $\alpha = (x_0, [\xi_0]) \in \R^n \times \partial\overline{\R^n}$. 证明 $\alpha \notin \WF^{s,k}_{\hbar}(u)$ 当且仅当存在 $\phi \in \SmoothComp(\R^n)$ 满足 $\phi(x_0) \neq 0$, $\psi \in \Smooth(\mathbb{S}^{n-1})$ 满足 $\psi(\xi_0/|\xi_0|) \neq 0$, $\chi \in \SmoothComp([0,1))$ 满足 $\chi(0) \neq 0$, 以及 $h_1 \in (0,h_0]$ 使得
+    \begin{equation}\label{eq:6.140}
+        \left\{ h^{-k}\langle h\xi \rangle^s \chi(\langle h\xi \rangle^{-1}) \psi\left( \frac{\xi}{|\xi|} \right) \widehat{\phi u_h}(\xi) \colon h < h_1 \right\} \text{ 在 } L^2(\R^n_\xi) \text{ 中一致有界}.
+    \end{equation}
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[与 $h$ 无关分布的半经典波前集]\label{ex:6.23}
+设 $M$ 为光滑流形, $u \in \Distr(M)$; 把 $u$ 视为与 $h$ 无关的分布族. 证明:
+\begin{enumerate}
+    \item 对一切 $s \ge 0$ 与 $\epsilon > 0$ 有 $\WF^{0,s}_{\hbar}(u) \cap (T^* M \setminus o) \subset \WF^s(u) \subset \WF^{0,s+\epsilon}_{\hbar}(u) \cap (T^* M \setminus o)$. (这里把 $\WF^s(u)$ 视为 $T^* M \setminus o$ 的子集.)
+    \item 对一切 $s \ge 0$ 有 $\WF^{s,s}_{\hbar}(u) \cap S^* M = \WF^s(u)$. (这里把 $\WF^s(u)$ 视为 $S^* M$ 的子集.)
+    \item 设 $\epsilon > 0$. 则 $o_{\supp u} \subset \WF^{0,\epsilon}_{\hbar}(u)$, 其中 $o_{\supp u} \subset T^* M$ 是 $\supp u$ 上的零截面.
+    \item 对一切 $s \in \R$ 有 $\WF^{0,s}_{\hbar}(u) \cap o \subset o_{\supp u}$.
+    \item $\WF_{\hbar}(u) \cap T^* M = \WF(u) \cup o_{\supp u}$. (这里把 $\WF(u)$ 视为 $T^* M \setminus o$ 的子集.)
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[振荡分布, I]\label{ex:6.24}
+设 $a, \varphi \in \Smooth(\R^n)$. 证明
+\begin{equation}\label{eq:6.141}
+    \WF_{\hbar}(a(x)\ee^{\ii\varphi(x)/h}) = \{(x, \dd\varphi(x)) \colon x \in \supp a\}.
+\end{equation}
+(提示: 习题~\ref{ex:4.13}.)
+\end{exer}
+
+\begin{exer}[振荡分布, II]\label{ex:6.25}
+设 $\beta > 0$, $0 \neq \xi_0 \in \R^n$. 计算 $\WF^s_{\hbar}(\ee^{\ii x \cdot \xi_0/h^\beta})$.
+\end{exer}
+
+\begin{exer}[特征函数的粗糙估计]\label{ex:6.26}
+设 $(M, g)$ 为紧 Riemann 流形, $n = \dim M$. 改进习题~\ref{ex:5.30} 的结果: 证明存在常数 $C$ 使得对一切 $\phi \in \Smooth(M)$, $\|\phi\|_{L^2} = 1$, $\Delta_g\phi = \lambda\phi$, 有
+\begin{equation}\label{eq:6.142}
+    \|\phi\|_{L^\infty} \le C(1 + \lambda)^{\frac{n}{4}}.
+\end{equation}
+为此, 固定 $\psi_0 \in \SmoothComp([0, \infty))$ 在 $[0,2]$ 上等于 1, 并令 $\psi(x, \xi) = \psi_0(|\xi|^2_{g^{-1}})$. 对 $h = \lambda^{-\frac12}$, 把对一列 $L^2(M)$-标准化的特征函数 $u_h \in \Smooth(M)$ (即 $(h^2\Delta_g - 1)u_h = 0$ 且 $\|u_h\|_{L^2(M)} = 1$) 的下述两个估计结合起来:
+\begin{enumerate}
+    \item 证明对一切 $N$ 有 $\|(1 - \Oph(\psi))u_h\|_{L^\infty} \le C_N h^N$.
+    \item 证明 $\|\Oph(\psi)u_h\|_{L^\infty} \le C h^{-\frac{n}{2}}$. (提示: 先在 $\R^n$ 上证明.)
+\end{enumerate}
+\emph{注.} \eqref{eq:6.142} 中的指数可以改进为 $\frac{n-1}{4}$. (对单位 $n$-球面上适当选取的特征函数列, 该指数是最优的.) 见 Zworski~\cite[第 7.4 章]{Zwo12}.
+\end{exer}
+
+下述习题延续习题~\ref{ex:4.14}--\ref{ex:4.22} 中对 $\R^n$ 上散射微积分 (scattering calculus) 的讨论. 我们记
+\begin{equation}\label{eq:6.143}
+    {}^{\mathrm{sc}}T^* \R^n \defeq \overline{\R^n} \times \overline{\R^n}
+\end{equation}
+为径向紧化的散射余切丛, 并记 $S^{m,r}({}^{\mathrm{sc}}T^* \R^n) \defeq S^{m,r}(\R^n; \R^n)$.
+
+\begin{exer}[本质支集与椭圆集: 散射符号与算子]\label{ex:6.27}
+对散射符号 $a \in S^{m,r}({}^{\mathrm{sc}}T^* \R^n)$, 给出本质支集 $\esupp_{\mathrm{sc}} a$ 与椭圆集 $\Ell^{m,r}_{\mathrm{sc}}(a) \subset \partial({}^{\mathrm{sc}}\overline{T^*}\,\overline{\R^n})$ 的合理定义 (即与定义~\ref{def:6.1}, \ref{def:6.14}, \ref{def:6.52} 相关的定义). 该定义应满足: $\esupp_{\mathrm{sc}} a = \emptyset$ 当且仅当 $a$ 是残余符号; $\Ell^{m,r}_{\mathrm{sc}}(a) = \emptyset$ 当且仅当 $a \in S^{m-1,r-1}({}^{\mathrm{sc}}T^* \R^n)$. 然后用散射伪微分算子 $A \in \Psi^{m,r}_{\mathrm{sc}}(\R^n)$ 的全符号与主符号分别定义 $\WF'_{\mathrm{sc}}(A)$ 与 $\Ell_{\mathrm{sc}}(A)$ (更确切地说 $\Ell^{m,r}_{\mathrm{sc}}(A)$).
+\end{exer}
+
+\begin{exer}[散射波前集, I]\label{ex:6.28}
+给定 $u \in \mathscr{S}'(\R^n)$, 给出其散射波前集 $\WF^{s,r}_{\mathrm{sc}}(u) \subset \partial({}^{\mathrm{sc}}\overline{T^*}\,\overline{\R^n})$ 的合理定义 (即与定义~\ref{def:6.18} 和~\ref{def:6.55} 相关的定义). 该定义应满足: $\WF^{s,r}_{\mathrm{sc}}(u) = \emptyset$ 当且仅当 $u \in \langle x \rangle^{-r}H^s(\R^n)$. 再给出 $\WF_{\mathrm{sc}}(u) \subset \partial({}^{\mathrm{sc}}\overline{T^*}\,\overline{\R^n})$ 的合理定义, 使得 $\WF_{\mathrm{sc}}(u) = \emptyset$ 当且仅当 $u \in \mathscr{S}(\R^n)$. 证明关于算子波前集, 特征集与散射波前集之间的相互作用通常的那些性质.
+\emph{注.} 假定 $u$ 为缓增分布这一先验条件, 与定义~\ref{def:6.55} 中的 $h$-缓增条件相类似. 因此散射波前集同时检验正则性与衰减.
+\end{exer}
+
+\begin{exer}[散射波前集, II]\label{ex:6.29}
+设 $u \in \mathscr{S}'(\R^n)$.
+\begin{enumerate}
+    \item 证明 $\WF^{s,r}_{\mathrm{sc}}(u) \cap (\R^n \times \partial\overline{\R^n}) = \WF^s(u)$.
+    \item 对散射符号 $a = a(x, \xi)$, 证明 $\mathcal{F}(\OpL(a)u) = \OpR(\mathcal{R}^* a)\mathcal{F}u$, 其中 $\mathcal{R}(y, \xi) = (-\xi, y)$. 并推出 $\WF^{s,r}_{\mathrm{sc}}(\hat{u}) = \mathcal{R}^{-1}(\WF^{r,s}_{\mathrm{sc}}(u))$.
+    \item 设 $\xi_0 \in \R^n$, $u(x) \defeq \langle x \rangle^{-\frac{n-1}{2}}\ee^{\ii x \cdot \xi_0}$. 对一切 $r \in \R$ 计算 $\WF^{0,r}_{\mathrm{sc}}(u)$.
+\end{enumerate}
+\end{exer}
+

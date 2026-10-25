@@ -1,0 +1,93 @@
+%% main.tex  (新模板: AJbook)
+\documentclass[
+  colors,
+  fontsetup=font-setup-open,
+  titlesetup=titles-setup,
+  geometry=b5
+]{AJbook}
+
+% ---- 数学字体: 保留 mtpro2 ----
+\usepackage[lite,subscriptcorrection,slantedGreek,nofontinfo]{mtpro2}
+
+% ---- 新模板自带宏包 ----
+\usepackage{mycommand}
+\usepackage{myarrows}
+\usepackage{quiver}
+% ---- 西文正文 ----
+\setmainfont{Times New Roman}
+
+% ---- 章节中使用的 enumerate 语法 (enumitem) ----
+\usepackage{enumitem}
+\usepackage{wrapfig}  % 文字环绕
+% ---- TikZ 库 (章节插图所需) ----
+\usetikzlibrary{arrows.meta,decorations.markings,decorations.pathmorphing,patterns,shapes.geometric,positioning,calc,backgrounds}
+
+% ---- 章节 TikZ 图使用的配色 (沿用旧模板配色) ----
+\definecolor{notesnavy}{HTML}{24364B}
+\definecolor{notesblue}{HTML}{426B8A}
+\definecolor{notesteal}{HTML}{477C78}
+\definecolor{notesgold}{HTML}{A47B3C}
+\definecolor{notesred}{HTML}{945A56}
+\definecolor{notesink}{HTML}{29323A}
+\definecolor{notesmuted}{HTML}{6F7880}
+\definecolor{notesrule}{HTML}{D8DDE2}
+\definecolor{notespaper}{HTML}{F7F8FA}
+\definecolor{noteswarm}{HTML}{FAF8F3}
+
+% ---- 原书常用宏 ----
+\newcommand{\Sha}{\text{Ш}}
+
+% 单字母数域记号 (mycommand.sty 已定义 \R,\Q,\Z,\N,\PP 等, 这里只补缺失的)
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\HH}{\mathbb{H}}
+
+% ---- 定理编号格式: 匹配原书 (节.序号) ----
+% 原书节号为纯数字 (每章从 1 开始), 定理编号为 节.序号 (如 1.16)
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}
+% titles-setup.tex 在节/子节标题排版后调用这些命令
+\newcommand{\AJseccount}{\renewcommand{\thetheorem}{\arabic{section}.\arabic{theorem}}}
+\newcommand{\AJsubseccount}{\renewcommand{\thetheorem}{\arabic{section}.\arabic{theorem}}}
+
+% 公式编号按节
+\numberwithin{equation}{section}
+\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
+
+% ---- 参考文献数据库 (biblatex 已由 AJbook 载入, backend=biber) ----
+\addbibresource{references.bib}
+
+% ---- 索引 ----
+\usepackage{imakeidx}
+\makeindex[title={名词索引暨英译},columns=2,intoc=true,options=-s main.ist]	% 名词索引
+
+% ---- hyperref (AJbook 在 AtEndPreamble 中依据 hyperref 设置链接色) ----
+\usepackage[bookmarksnumbered=true]{hyperref}
+
+
+\title{椭圆曲线 (Elliptic Curves, 第 2 版)}
+\author{J.S.\ Milne 著\quad 中文翻译与重排v4}
+\date{2026 年 10 月}
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\maketitle
+\cleardoublepage
+\hypersetup{pageanchor=true}
+
+\frontmatter
+
+\include{preface}
+
+\mainmatter
+\include{intro}
+\include{chapter1}
+\include{chapter2}
+\include{chapter3}
+\include{chapter4}
+\include{chapter5}
+
+\backmatter
+\include{refs}
+
+\end{document}

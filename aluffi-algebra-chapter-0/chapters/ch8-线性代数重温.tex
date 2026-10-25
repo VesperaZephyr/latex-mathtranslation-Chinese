@@ -1,0 +1,3204 @@
+% 第八章 线性代数重温 --- 中译
+% 原书 pp. 483--... (Aluffi, Algebra: Chapter 0, Chapter VIII).
+% 本文件进度: §8.1 Preliminaries, reprise ✅ (2026-08-31). 待续: §8.2 Tensor products and the Tor functors.
+
+\chapter{线性代数重温}
+\label{chap:linear-algebra-reprise}
+
+
+% ===== 记号索引 v1 集中埋点 (页码参考原书书页; 首次出现位置待人工校对) =====
+% 本章记号条目（13 条）。OCR 已做最佳校正，但部分符号字形与首次
+% 出现位置仍待逐条人工复核（页码沿用原书第 699 页 Index of Notation）。
+% ===== /记号索引 =====
+\index[sym1]{$D^{\cate{c}}$@$D^{\cate{c}}$}
+\index[sym1]{$f^*$@$f^*$}
+\index[sym1]{$J$@$J$}
+\index[sym1]{$K\text{-}\cate{Aff}$@$K\text{-}\cate{Aff}$}
+\index[sym1]{$\Lambda:R$@$\Lambda:R$}
+\index[sym1]{$\varinjlim$@$\varinjlim$}
+\index[sym1]{$\varprojlim$@$\varprojlim$}
+\index[sym1]{$\mathbb{Q}_p$@$\mathbb{Q}_p$}
+\index[sym1]{$\Rees_R(I)$@$\Rees_R(I)$}
+\index[sym1]{$\mathbb{S}^*_R$@$\mathbb{S}^*_R$}
+\index[sym1]{$\tr:R$@$\tr:R$}
+\index[sym1]{$z$@$z$}
+\index[sym1]{$\mathbb{Z}_p$@$\mathbb{Z}_p$}
+我们重新回到线性代数, 任务是研究比第六章回顾过的那些更为精细的构造. 我们的主要目标是讨论多重线性代数的若干方面, 张量积, 以及 $\Hom$ 的若干应用, 并特别把注意力放在对偶模上. 在此过程中我们还会遇到其他一些有趣的概念, 包括投射模与内射模, 以及 $\Tor$ 与 $\Ext$ 的初步.
+
+与第六章一样, 我们将尝试处理更一般的 $R$-模情形, 仅当这能带来极大的简化或符合根深蒂固的习惯时才专门化到向量空间. 在这个一般性的层面上涵盖这些素材, 给了我们一个绝佳的借口去补充本书第一章描述过的那些预备性概念.
+
+\section{预备知识重述}
+\label{sec:lin-alg-reprise-1}
+
+\subsection{函子}
+\label{subsec:functors}
+
+\index{fanchou@范畴(category)!Ab@Ab!xiao@小(small)}我们在本书中异常早地引入了范畴的概念, 其动机在于: 在代数的最基础处, 万有问题几乎无处不在. 我们希望, 范畴所提供的这种统一视角能帮助读者整理好我们已经遇到的那些基本构造所承载的信息.
+
+然而, 到目前为止我们从未认真地需要``从一个范畴走到另一个范畴'', 因此我们也并不觉得非得通过更形式化地讨论这是如何做到的, 来补全对范畴的初等介绍. 细心的读者大概已经在字里行间看到过这种现象发生, 至少是以不怎么有趣的方式: 例如, 如果我们剥去一个环的乘法结构, 剩下的就是一个 Abel 群; 而如果一个域 $F$ 是一个域 $k$ 的扩张, 那么我们可以把 $F$ 看成一个 $k$-向量空间: 于是, 从 $\cate{Ring}$ 到 $\cate{Ab}$, 或者从扩张 $k$ 的范畴 $\cate{Fld}_k$ 到 $k$\dcate{-Vect}, 都有显然的``走法''. 更有趣的例子有: 环的单位群, 一个复形的同调, 一个 Galois 域扩张的自同构群 (注意后者``把箭头调转了方向''; 见下), 等等. 隐含地, 我们实际上已经遇到了这种``范畴之间的函数''的许多实例.
+
+函子的概念把这些操作形式化了. 两个范畴 $\cate{C}$, $\cate{D}$ 之间的一个函子会把``$\cate{C}$ 的对象送到 $\cate{D}$ 的对象'', 而由于范畴携带了态射的信息, 函子也必须处理这一信息.
+
+\begin{definition}\label{def:functor}
+\index{xiebianhanzi@协变函子(covariant functor)}设 $\cate{C}$, $\cate{D}$ 为两个范畴. 一个\emph{协变函子}
+\[
+\mathcal{F}:\cate{C}\to\cate{D}
+\]
+是对每个 $A\in\Obj(\cate{C})$ 指定一个对象 $\mathcal{F}(A)\in\Obj(\cate{D})$, 并对 $\cate{C}$ 中每一对对象 $A$, $B$ 指定一个函数
+\[
+\Hom_{\cate{C}}(A,B)\to\Hom_{\cate{D}}(\mathcal{F}(A),\mathcal{F}(B))
+\]
+的赋值; 这个函数也记作 $\mathcal{F}$\footnote{这一点有点不幸, 因为这个函数的记号依赖于 $A$ 和 $B$, 但在实践中不会引起混淆. 有些作者为清晰起见写作 $\mathcal{F}_{A,B}$.}, 并且必须保持恒等态射与复合. 也就是说,
+\[
+\mathcal{F}(1_A)=1_{\mathcal{F}(A)}
+\]
+对一切 $A\in\Obj(\cate{C})$ 成立, 并且
+\[
+\mathcal{F}(\beta\circ\alpha)=\mathcal{F}(\beta)\circ\mathcal{F}(\alpha)
+\]
+对一切 $A,B,C\in\Obj(\cate{C})$, 一切 $\alpha\in\Hom_{\cate{C}}(A,B)$, 一切 $\beta\in\Hom_{\cate{C}}(B,C)$ 成立.
+
+\index{fanbianhanzi@反变函子(contravariant functor)}一个\emph{反变函子} $\cate{C}\to\cate{D}$ 就是一个协变函子 $\cate{C}^{\op}\to\cate{D}$ (从反范畴出发).
+\end{definition}
+
+反范畴 $\cate{C}^{\op}$ 是通过``把箭头反向''从 $\cate{C}$ 得到的; 参见习题~I.\ref{ex:opposite-category}. 反变函子 $G:\cate{C}\to\cate{D}$ (即协变函子 $\cate{C}^{\op}\to\cate{D}$) 保持复合, 这意味着对一切 $A,B,C\in\Obj(\cate{C})$, 一切 $\alpha\in\Hom_{\cate{C}}(A,B)$, 一切 $\beta\in\Hom_{\cate{C}}(B,C)$:
+\[
+\mathcal{G}(\beta\circ\alpha)=\mathcal{G}(\alpha)\circ\mathcal{G}(\beta).
+\]
+
+形象地说,
+\begin{center}
+\begin{tikzcd}[column sep=large]
+A \ar[r, "\alpha"] \ar[rr, "\beta\circ\alpha"', bend right=22] & B \ar[r, "\beta"] & C
+\end{tikzcd}
+\end{center}
+被一个反变函子 $G$ 送为
+\begin{center}
+\begin{tikzcd}[column sep=large]
+\mathcal{G}(A) & \mathcal{G}(B) \ar[l, "\mathcal{G}(\alpha)"] & \mathcal{G}(C) \ar[l, "\mathcal{G}(\beta)"'] \ar[ll, "\mathcal{G}(\beta\circ\alpha)", bend right=22]
+\end{tikzcd}
+\end{center}
+注意复合的次序被调换了. 协变函子``保持''箭头, 也就是说, $\cate{C}$ 中每个图, 例如
+\begin{center}
+\begin{tikzcd}[column sep=large, row sep=large]
+{} & B \ar[dr, "\beta"'] & {} \\
+A \ar[ur, "\alpha_1"] \ar[rr, "\alpha_2"'] \ar[dr, "\alpha_3"'] & {} & D \\
+{} & C \ar[ur, "\gamma"'] & {}
+\end{tikzcd}
+\qquad
+\begin{tikzcd}[column sep=large, row sep=large]
+{} & \mathcal{F}(B) \ar[dr, "\mathcal{F}(\beta)"'] & {} \\
+\mathcal{F}(A) \ar[ur, "\mathcal{F}(\alpha_1)"] \ar[rr, "\mathcal{F}(\alpha_2)"'] \ar[dr, "\mathcal{F}(\alpha_3)"'] & {} & \mathcal{F}(D) \\
+{} & \mathcal{F}(C) \ar[ur, "\mathcal{F}(\gamma)"'] & {}
+\end{tikzcd}
+\end{center}
+都被协变函子 $\mathcal{F}:\cate{C}\to\cate{D}$ 映为一个箭头方向相同的图. 反变函子 $\mathcal{G}:\cate{C}\to\cate{D}$ ``反转''箭头:
+\begin{center}
+\begin{tikzcd}[column sep=large,row sep=large]
+& \mathcal G(B) \ar[dl,"\mathcal G(\alpha_1)"'] & \\
+\mathcal G(A) & & \mathcal G(D) \ar[ul,"\mathcal G(\beta)"'] \ar[ll,"\mathcal G(\alpha_2)"'] \ar[dl,"\mathcal G(\gamma)"] \\
+& \mathcal G(C) \ar[ul,"\mathcal G(\alpha_3)"] &
+\end{tikzcd}
+\end{center}
+在两种情形下, 交换图都被映为交换图.
+
+在许多情形中, 反变函子被称为\emph{预层}. 于是, 范畴 $\cate{C}$ 上的一个\emph{集合预层}无非是一个反变函子 $\cate{C}\to\cate{Set}$.
+
+如果 $\Hom_{\cate{C}}(A,B)$ 带有更多的结构, 我们可能要求函子保持这一结构. 例如, 我们已经看到: 对 $\cate{C}=R\dcate{-Mod}$ (一个环 $R$ 上的左模范畴), $\Hom_{R\text{-Mod}}(A,B)$ 自身是一个 Abel 群 (见 §III.\ref{subsec:R-Mod-hom} 末尾); 一个函子 $F:R\dcate{-Mod}\to S\dcate{-Mod}$ 如果保持这一结构, 也就是说, 如果对应的函数
+\[
+\Hom_{R\text{-Mod}}(A,B)\to\Hom_{S\text{-Mod}}(\mathcal{F}(A),\mathcal{F}(B))
+\]
+对所有 $R$-模 $A$, $B$ 都是 Abel 群的同态, 则称之为\emph{可加的}.
+
+\subsection{函子的例子}
+\label{subsec:examples-functors}
+
+\index{fanchou@范畴(category)!Ab@Ab!zifanchou@子范畴(subcategory)}在实践中, 给一个范畴的对象指定另一个范畴的对象, 往往伴随着一个 (心理上) ``自然的'' 关于态射的对应指派, 而它显然或是协变的, 或是反变的. 我们说这个指派是\emph{函子的}, 如果它保持复合.
+
+在 §\ref{subsec:functors} 开头提到的所有那些朴素的运算 (例如把一个环看成一个加法下的 Abel 群) 都是协变函子: 例如, 一个环同态特别地也是一个底层 Abel 群的同态, 这一事实就等于说, 给每个环标上它的底层 Abel 群定义了一个协变函子 $\cate{Ring}\to\cate{Ab}$. 由于这类函子是通过``遗忘''一个给定对象的部分结构而得到的, 它们被贴切地称为\emph{遗忘函子}.
+
+我们已经简要地提到过几个稍具想象力的例子; 这里再把它们列一遍.
+
+\begin{example}\label{ex:units-functor}
+若 $R$ 是一个环, 我们以 $R^{*}$ 表示 $R$ 中的单位群; 每个环同态 $R\to S$ 都诱导一个群同态 $R^{*}\to S^{*}$, 并且这个指派与复合相容; 因此这个运算定义了一个协变函子 $\cate{Ring}\to\cate{Grp}$.
+\end{example}
+
+\begin{example}\label{ex:autk-contravariant}
+从 Galois 域扩张到群的运算 $\Aut_k(\_)$ 是反变函子性的. 确实, 若把 $k\subseteq E\subseteq F$ 看成一个 Galois 扩张的态射 ($k\subseteq E$ 到 $k\subseteq F$), 我们就有一个对应的群同态
+\[
+\Aut_k(F)\to\Aut_k(E)
+\]
+它由限制给出: $\varphi\mapsto\varphi|_E$; 由于 Galois 条件, 后者把 $E$ 映到 $E$. 两个限制的合成仍是一个限制, 因此这个指派的确是函子性的.
+\end{example}
+
+\begin{example}\label{ex:spec-functor}
+在 §III.\ref{subsec:prime-maximal-def} 中我们已经把交换环 $R$ 的\emph{谱} $\Spec R$ 定义为 $R$ 的素理想之集. 若 $R$, $S$ 是交换环, $\varphi:R\to S$ 是一个环同态, 则一个素理想 $\mathfrak{p}$ 的逆像 $\varphi^{-1}(\mathfrak{p})$ 仍是一个素理想; 于是 $\varphi$ 诱导一个集合间的函数
+\[
+\varphi^{*}:\Spec(S)\to\Spec(R).
+\]
+这个指派显然是函子性的, 因此我们可以把 $\Spec$ 看成一个从交换环范畴到 $\cate{Set}$ 的反变函子. 读者将赋予 $\Spec(R)$ 一个拓扑 (习题~\ref{ex:spec-zariski}), 使这个例子 (甚至) 更有意思.
+\end{example}
+
+\begin{example}\label{ex:presheaf-set}
+若 $S$ 是一个集合, 回想 (例~I.\ref{ex:power-set-category}) 可以构造一个范畴 $\widehat{S}$, 其对象是 $S$ 的子集, 其态射对应于子集的包含. $S$ 上的一个\emph{集合预层}是一个反变函子 $\widehat{S}\to\cate{Set}$. 一个原型例子是如下函子: 它对 $U\subseteq S$ 指派从 $U$ 到一个固定集合的函数之集; 包含 $U\subseteq V$ 被映到限制 $\rho\mapsto\rho|_U$. 通过考虑更丰富的结构, 可以得到更有趣 (也更有用) 的例子. 例如, 若 $T$ 是一个拓扑空间, 可以定义一个范畴, 其对象是 $T$ 中的开集, 其态射是包含; 这就引出了拓扑空间上的预层概念. 诸如``$T$ 的开集上的 (群值的) 连续复值函数''这类标准概念, 最自然地就被看成一个在 $T$ 上的 Abel 群预层的数据. 这类具体例子常常满足额外的假设, 使它们成为\emph{层}; 但那是另一本书的主题. 在某种意义上, 研究几何的一个分支 (例如复微分几何) 就等于研究装备了一个合适的层 (例如复可微函数层) 的空间.
+\end{example}
+
+在接下来的几节中, 我们将反复用到如下一类在任何范畴上都存在的, 极为重要的函子. 设 $\cate{C}$ 是一个范畴, $X$ 是 $\cate{C}$ 的一个对象. 那么赋值
+\[
+A\mapsto\Hom_{\cate{C}}(X,A),\qquad A\mapsto\Hom_{\cate{C}}(A,X)
+\]
+分别定义了一个协变函子与一个反变函子 $\cate{C}\to\cate{Set}$. 它们分别记作 $\Hom_{\cate{C}}(X,\_)$, $\Hom_{\cate{C}}(\_,X)$. 例如, 若
+\[
+A\xrightarrow{\alpha}B\xrightarrow{\beta}C
+\]
+是 $\cate{C}$ 中的一个图, 考察
+\begin{center}
+\begin{tikzcd}[row sep=large,column sep=large]
+A \ar[r,"\alpha"] \ar[dr,"\xi_A"'] & B \ar[r,"\beta"] \ar[d,"\xi_B"] & C \ar[dl,"\xi_C"] \\
+& X &
+\end{tikzcd}
+\end{center}
+每个 $\alpha:A\to B$ 都决定一个函数
+\[
+\Hom_{\cate{C}}(B,X)\to\Hom_{\cate{C}}(A,X),
+\]
+它把 $\xi_B$ 映为 $\xi_A:=\xi_B\circ\alpha$, 也就是说, 它要求左边的三角交换. 复合的结合律
+\[
+\xi_C\circ(\beta\circ\alpha)=(\xi_C\circ\beta)\circ\alpha
+\]
+精确表达了这个指派的\emph{反变函子性}. 函子 $\Hom_{\cate{C}}(\_,X)$ 在 $\cate{C}$ 明确时常常简记为 $h_X$.
+
+勇敢的读者可以玩味如下事实: 这一技巧把 $\cate{C}$ 的每个对象 $X$ 联系到一个在 $\cate{C}$ 上的集合预层 $h_X$. 这就提出了自然且重要的问题, 例如如何判断一个给定的集合预层 $\mathcal{F}$ 是否事实上对某个 $\cate{C}$ 的对象 $X$ 等于 $h_X$ (这使 $\mathcal{F}$ ``可表''), 以及一个对象 $X$ 能否由对应的预层 $h_X$ 重构出来. 例如, 若 $\cate{Top}$ 是拓扑空间的范畴, $p$ 表示 $\cate{Top}$ 的终对象 (即单点拓扑空间), 那么 $h_X(p)$ 无非就是 $X$ 被看作一个集合. 因此, 在这类``几何''语境中 (例如代数几何), $h_X(A)$ 被称为``$X$ 的 $A$-点之集''; $h_X$ 就是 $X$ 的\emph{点函子}.
+
+\subsection{两个范畴何时``等价''}
+\label{subsec:equiv-categories}
+
+\index{fanchou@范畴(category)!Ab@Ab!sanjiao@三角(triangle)}迄今为止遇到的几乎每一个``同构''概念, 归根结底都是``保持结构的双射'', 读者很自然地会期待: 那个用来辨认两个范畴的天然概念也应当从同一个模型抽取而来, 即一个把一边的对象与另一边的对象精确匹配的函子, 并保持态射的结构.
+
+\index{fanchou@范畴(category)!Ab@Ab!daiyuji@带余积(with coproducts)}人们当然可以引入这样的概念, 但它会过分严苛. 回想, 万有问题 (也就是我们遇到的几乎每一个构造) 的解都只定义到同构为止 (命题~I.\ref{prop:initial-final-unique}). 要求一个语境中的解与另一个语境中的解精确匹配, 会是成问题的. 一个范畴中对象的结构是由它的同构类\footnote{不应当把这个观点推得太远. 把范畴中同构的对象想成``相同''固然诱人, 但这同样成问题, 而且 (就我们所知) 并不会引向一个可行的替代方案. 例如, 范畴中某些对象可能具有``更多的自同构''而其他对象没有, 如果我们简单地把范畴切成同构类, 并将所有同构强行提升为恒等态射, 这些信息就会丢失.} 充分承载的, 而``等价''的自然概念应当着眼于匹配同构类, 而非个别的对象. 态射是更本质的信息; 一个函子的优劣首先看它如何在态射上起作用.
+
+\begin{definition}\label{def:faithful-full}
+设 $\cate{C}$, $\cate{D}$ 为两个范畴. 一个协变函子 $\mathcal{F}:\cate{C}\to\cate{D}$ 是\emph{忠实的}, 如果对 $\cate{C}$ 的所有对象 $A$, $B$, 诱导出的函数
+\[
+\Hom_{\cate{C}}(A,B)\to\Hom_{\cate{D}}(\mathcal{F}(A),\mathcal{F}(B))
+\]
+是单射; 如果这个函数对所有的 $A$, $B$ 都是满射, 则称之为\emph{满的}.
+\end{definition}
+
+\emph{完全忠实的}函子 $F:\cate{C}\to\cate{D}$ 在态射上是双射, 于是很容易推出它们保持同构类: 在 $\cate{C}$ 中 $A\cong B$ 当且仅当在 $\cate{D}$ 中 $\mathcal{F}(A)\cong\mathcal{F}(B)$ (习题~\ref{ex:fully-faithful-iso}). 就所有意图与目的而言, 一个完全忠实的函子 $F:\cate{C}\to\cate{D}$ 把 $\cate{C}$ 等同于 $\cate{D}$ 的一个\emph{全的}\footnote{``全''子范畴的定义见习题~I.\ref{ex:subcategory}.} 子范畴, 即便``在对象上'' $F$ 对这个子范畴既不必是单射也不必是满射. 如下定义捕捉了这一想法:
+
+\begin{definition}\label{def:equiv-categories}
+\index{benzhimanhanzi@本质满函子(essentially surjective functor)}设 $\cate{C}$, $\cate{D}$ 为两个范畴. 一个协变函子 $\mathcal{F}:\cate{C}\to\cate{D}$ 是一个\emph{范畴等价}, 如果它是完全忠实的并且``本质满''的; 也就是说, $\mathcal{F}$ 在态射集上诱导双射, 并且对 $\cate{D}$ 的每个对象 $Y$, 都存在 $\cate{C}$ 的一个对象 $X$ 使得在 $\cate{D}$ 中 $\mathcal{F}(X)\cong Y$.
+
+如果存在满足定义~\ref{def:equiv-categories} 中要求的函子 $F:\cate{C}\to\cate{D}$, 则称两个范畴 $\cate{C}$, $\cate{D}$ \emph{等价}. 这究竟是不是一个等价关系 (为什么它是对称的?) 绝非显然, 但事实确实如此. 实际上, 一个范畴等价 $\mathcal{F}$ 有一个``逆'' (在适当弱化的意义下): 一个函子 $\mathcal{G}:\cate{D}\to\cate{C}$, 使得从 $\mathcal{F}\circ\mathcal{G}$ 与 $\mathcal{G}\circ\mathcal{F}$ 到恒等函子都有``自然同构'' (见 §\ref{subsec:comparing-functors}). 由于我们不会太频繁地使用这些概念, 我们把这个问题留给感兴趣的读者去研究与寻找证明.
+\end{definition}
+
+\begin{example}\label{ex:matrices-fd-vect}
+(参见习题~I.\ref{ex:matrix-category}.) 构造一个范畴, 取对象为非负整数, $\Hom(m,n)$ 为元素在域 $k$ 中的 $n\times m$ 矩阵之集, 复合由矩阵乘法定义 (并对没有行或列的矩阵给予适当的注意). 所得范畴等价于有限维 $k$-向量空间的范畴. 确实, 我们从前者到后者得到一个函子: 把 $n$ 送到向量空间 $k^n$ (装备标准基), 把每个矩阵送到对应的线性映射. 这个函子显然是完全忠实的, 并且它是本质满的, 因为向量空间由它们的维数分类. 这个例子使 §VI.\ref{subsec:matrices} 末尾的启发性讨论变得 (更) 精确.
+\end{example}
+
+\begin{example}\label{ex:k-aff}
+回想 (定义~VII.\ref{def:coordinate-ring}) 一个域 $K$ 上的仿射代数集的坐标环是一个既约的, 交换的, 有限型的 $K$-代数. 我们可以如下定义 $K$-仿射代数集的范畴 $K\dcate{-Aff}$: 规定其对象为某个仿射 $K$-空间中的代数子集, 并定义\footnote{把 $S$ 与 $T$ 的次序颠倒是合理的: 正如读者在习题~VII.\ref{ex:polynomial-functions} 中所验证的, $K[S]$ 可以解释为 $S$ 上的``多项式函数''的 $K$-代数; 任意函数 $\varphi:S\to T$ 都决定一个函数的拉回 $K[T]\to K[S]$:\index[sym1]{34@$K\dcate{-Aff}$}
+\[\begin{tikzcd}[ampersand replacement=\&,column sep=large,row sep=large]
+S \ar[rr,"\varphi"] \ar[dr,"\alpha"'] \& \& T \ar[dl,"\beta"] \\
+\& K \&
+\end{tikzcd}\]
+这里 $\alpha=\beta\circ\varphi$. 若 $\varphi$ 是代数集的态射, 这个拉回把多项式函数映到多项式函数, 并给出 $K$-代数同态 $K[T]\to K[S]$.}$\Hom_{K\dcate{-Aff}}(S,T)$ 为 $\Hom_{K\dcate{-Alg}}(K[T],K[S])$.
+
+于是, $K\dcate{-Aff}$ 的定义使得把仿射代数集 $S$ 映到它的坐标环 $K[S]$ 的函子 $K\dcate{-Aff}^{\mathrm{op}}\to K\dcate{-Alg}$ 成为 $K\dcate{-Aff}$ 的反范畴与既约的, 交换的, 有限型 $K$-代数组成的子范畴之间的一个等价.
+\end{example}
+
+\subsection{极限与余极限}
+\index{jixian@极限(limit)!toushe@投射(projective)}\index{jixian@极限(limit)!ni@逆(inverse)}\index{jixian@极限(limit)!neishe@内射(injective)}\index{jixian@极限(limit)!zhi@直(direct)}\index{jixian@极限(limit)}\label{subsec:limits-colimits}
+
+本书一路上遇到的各种万有性质, 全都是范畴论极限这一概念的特例, 值得显式地提一下. 设 $\mathcal{F}:\cate{I}\to\cate{C}$ 是一个协变函子, 其中把 $\cate{I}$ 想成一个``指标范畴''. $\mathcal{F}$ 的\emph{极限} (如果存在) 是 $\cate{C}$ 的一个对象 $L$, 配备对 $\cate{I}$ 的所有对象 $I$ 都有的态射 $\lambda_I:L\to\mathcal{F}(I)$, 满足如下性质.
+
+\begin{itemize}
+\item 若 $\alpha:I\to J$ 是 $\cate{I}$ 中的一个态射, 则 $\lambda_J=\mathcal{F}(\alpha)\circ\lambda_I$:
+\begin{center}
+\begin{tikzcd}
+& L \ar[dl, "\lambda_I"'] \ar[dr, "\lambda_J"] & \\
+\mathcal{F}(I) \ar[rr, "\mathcal{F}(\alpha)"] & & \mathcal{F}(J)
+\end{tikzcd}
+\end{center}
+\index{zhui@锥(cone)!hanzide@函子的(of functors)}\index{zhui@锥(cone)!yingshe@映射(map)}\index{zhui@锥(cone)}\item $L$ 关于这一性质是\emph{终的}: 也就是说, 若 $M$ 是另一个对象, 也配备满足前述要求的态射 $\mu_I$, 则存在唯一的态射 $M\to L$ 使所有相关的图交换\footnote{给定 $M$ 及这些态射的任一资料称为 $\mathcal{F}$ 的一个\emph{锥 (cone)}. 因此 $\mathcal{F}$ 的极限是一个``万有锥'': 它是 $\mathcal{F}$ 的锥的范畴 (极易定义) 中的终对象.}.
+\end{itemize}
+
+极限 $L$ (如果存在) 在同构意义下唯一, 正如每个由万有性质定义的概念一样. 它记作 $\varprojlim\mathcal{F}$. ``向左的''箭头提醒我们, $L$ 站在通过 $\mathcal{F}$ 由 $I$ 索引的 $\cate{C}$ 的所有对象``之前'' (但在同构意义下, 它是能做到这一点的``最后一个''对象). 这个概念也称为\emph{反向极限}或\emph{射影极限}.\index[sym1]{38@$\varprojlim$}
+
+\begin{example}\label{ex:products-limit}
+(乘积.) 设 $\cate{I}$ 是由两个对象 $1$, $2$ 组成的``离散范畴'', 只有恒等态射\footnote{这后一规定正是使该范畴成为``离散''范畴的原因; 参见例~I.\ref{ex:power-set-category}.}, 并设 $\mathcal{A}$ 是一个从 $\cate{I}$ 到任意范畴 $\cate{C}$ 的函子; 令 $A_1=\mathcal{A}(1)$, $A_2=\mathcal{A}(2)$ 为被 $\cate{I}$ 索引的 $\cate{C}$ 的两个对象. 那么 $\varprojlim\mathcal{A}$ 无非就是 §I.\ref{subsec:products-up} 中定义的 $A_1$ 与 $A_2$ 在 $\cate{C}$ 中的\emph{乘积}: 极限存在当且仅当 $A_1$ 与 $A_2$ 在 $\cate{C}$ 中的乘积存在.
+
+我们可以类似地定义 $\cate{C}$ 中任意 (可能是无穷) 一族对象的乘积, 把它作为在相应的离散指标范畴上的极限, 当然, 这极限得存在才行.
+\end{example}
+
+如果指标范畴 $\cate{I}$ 带有更多的结构, 极限的概念会更有意思.
+
+\index{denghuazi@等化子(equalizer)}\begin{example}\label{ex:equalizers-kernels}
+(等化子与核.) 再次令 $\cate{I}$ 是一个有两个对象 $1$, $2$ 的范畴, 但假定态射看起来像这样:
+\[
+\begin{tikzcd}[column sep=large]
+2 \ar[r,shift left=.7ex,"\alpha"] \ar[r,shift right=.7ex,"\beta"'] & 1
+\end{tikzcd}
+\]
+\index{lingtaishe@零态射(zero-morphism)!zai Abel fanchouzhong@在 Abel 范畴中(in an abelian category)}也就是说, 在离散范畴上添加两个从一个对象到另一个对象的``平行''态射 $\alpha$, $\beta$. 一个函子 $K:\cate{I}\to\cate{C}$ 等价于选取 $\cate{C}$ 中的两个对象 $A_1$, $A_2$ 以及它们之间的两个平行态射. 这种函子的极限称为\emph{等化子}. 举一个具体的例子, 设 $\cate{C}=R\dcate{-Mod}$ 是某个环 $R$ 上的 $R$-模范畴; 令 $\varphi:A_2\to A_1$ 是一个同态, 并如上选取 $K$, 使得 $\mathcal{K}(\alpha)=\varphi$ 且 $\mathcal{K}(\beta)=$ 零态射. 那么 $\varprojlim K$ 无非就是 $\varphi$ 的\emph{核}, 读者可验证之 (习题~\ref{ex:kernel-verify}).
+\end{example}
+
+\begin{example}\label{ex:limits-chains}
+(链上的极限.) 在另一个典型情形中, $\cate{I}$ 可能由一个全序集组成, 例如:
+\[
+\dots\longrightarrow 4\longrightarrow 3\longrightarrow 2\longrightarrow 1
+\]
+(也就是说, 对象是 $i$, 对所有正整数 $i$; 且当 $i\geq j$ 时存在唯一的态射 $i\to j$; 我们只画出了态射 $j+1\to j$). 选取 $F:\cate{I}\to\cate{C}$ 等价于对所有正整数 $i$ 选取 $\cate{C}$ 的对象 $A_i$, 以及对所有 $i\geq j$ 选取态射 $\varphi_{ji}:A_i\to A_j$, 并要求 $\varphi_{ii}=1_{A_i}$, 且对所有 $i\geq j\geq k$ 有 $\varphi_{kj}\circ\varphi_{ji}=\varphi_{ki}$. 也就是说, 选取 $F$ 等价于选取 $\cate{C}$ 中的一个图
+\[
+\dots\xrightarrow{\varphi_{45}}A_4\xrightarrow{\varphi_{34}}A_3\xrightarrow{\varphi_{23}}A_2\xrightarrow{\varphi_{12}}A_1.
+\]
+一个反向极限 $\varprojlim\mathcal{F}$ (当态射 $\varphi_{ji}$ 由语境显然时, 也可记作 $\varprojlim_i A_i$) 于是一个对象 $A$, 配备态射 $\varphi_i:A\to A_i$, 使得整个图
+\begin{center}
+\begin{tikzcd}[column sep=2em,row sep=large]
+& & A \ar[dll,dashed] \ar[dl,"\varphi_4"'] \ar[d,"\varphi_3"'] \ar[dr,"\varphi_2"] \ar[drr,"\varphi_1"] & & \\
+\cdots \ar[r,"\varphi_{45}"'] & A_4 \ar[r,"\varphi_{34}"'] & A_3 \ar[r,"\varphi_{23}"'] & A_2 \ar[r,"\varphi_{12}"'] & A_1
+\end{tikzcd}
+\end{center}
+交换, 并且任何满足此要求的其他对象都唯一地经由 $A$ 分解.
+
+这种极限在许多标准情形中都存在. 例如, 设 $\cate{C}=R\dcate{-Mod}$ 是固定环 $R$ 上的左模范畴, 并令 $A_i$, $\varphi_{ji}$ 如上.
+\end{example}
+
+\begin{claim}\label{claim:inverse-limit-exists}
+极限 $\varprojlim_i A_i$ 在 $R\dcate{-Mod}$ 中存在.
+\end{claim}
+
+\begin{proof}
+乘积 $\prod_i A_i$ 由任意序列 $(a_i)_{i>0}$ (其中 $a_i\in A_i$) 组成. 称一个序列 $(a_i)_{i>0}$ 是\emph{相干的}, 如果对所有 $i>0$ 都有 $a_i=\varphi_{i,i+1}(a_{i+1})$. 相干序列组成 $\prod_i A_i$ 的一个 $R$-子模 $A$; 典范投影限制为 $R$-模同态 $\varphi_i:A\to A_i$. 读者将验证 $A$ 是一个极限 $\varprojlim_i A_i$ (习题~\ref{ex:inverse-limit-verify}).
+\end{proof}
+
+这个例子很容易推广到由更一般的偏序集索引的族.
+
+极限的``对偶概念''是一个函子 $F:\cate{I}\to\cate{C}$ 的\emph{余极限}. 余极限是 $\cate{C}$ 的一个对象 $C$, 配备对 $\cate{I}$ 的所有对象 $I$ 都有的态射 $\gamma_I:\mathcal{F}(I)\to C$, 使得对所有 $\alpha:I\to J$ 都有 $\gamma_I=\gamma_J\circ\mathcal{F}(\alpha)$, 并且 $C$ 关于此要求是\emph{初的}.
+
+我们再次遇到过这一构造的好几个实例: 例如, 一个范畴中两个对象 $A_1$, $A_2$ 的余积 (如果存在) 就是在这有两个对象的离散范畴上的余极限, 正如它们的乘积是相应的极限一样. 余核是余极限, 正如核是极限一样 (参见例~\ref{ex:equalizers-kernels}).
+
+$F$ 的余极限 (毫不意外地) 记作 $\varinjlim F$, 称为 $F$ 的\emph{正向极限}或\emph{内射极限}.\index[sym1]{37@$\varinjlim$}
+
+再考虑全序集 $\cate{I}$ 的典型情形, 例如:
+\[
+1\longrightarrow 2\longrightarrow 3\longrightarrow 4\longrightarrow\dots.
+\]
+一个函子 $\mathcal{F}:\cate{I}\to\cate{C}$ 由对象与态射的选取组成
+\[
+A_1\xrightarrow{\psi_{12}}A_2\xrightarrow{\psi_{23}}A_3\xrightarrow{\psi_{34}}A_4\xrightarrow{\psi_{45}}\dots,
+\]
+而正向极限 $\varinjlim_i A_i$ 将是一个对象 $A$, 配备态射 $\psi_i:A_i\to A$, 使得下图交换, 并且 $A$ 关于此要求是初的:
+\[
+\begin{tikzcd}[column sep=2em,row sep=large]
+A_1 \ar[r,"\psi_{12}"] \ar[drr,"\psi_1"'] & A_2 \ar[r,"\psi_{23}"] \ar[dr,"\psi_2"] & A_3 \ar[r,"\psi_{34}"] \ar[d,"\psi_3"] & A_4 \ar[r,"\psi_{45}"] \ar[dl,"\psi_4"] & \cdots \ar[dll,dashed] \\
+& & A & &
+\end{tikzcd}
+\]
+
+\begin{example}\label{ex:direct-limit-union}
+若 $\cate{C}=\cate{Set}$ 且所有 $\psi_{ij}$ 都是单射, 我们就是在谈论一个``嵌套的集合序列'':
+\[
+A_1\subseteq A_2\subseteq A_3\subseteq A_4\subseteq\dots;
+\]
+这个序列的正向极限就是``无穷并'' $\bigcup_i A_i$.
+\end{example}
+
+我们已经无耻地依赖了读者的直觉并使用过这一概念, 例如在我们构造一个域的代数闭包时 (在 §VII.\ref{subsec:algebraic-closure} 中), 或者每当我们提到``有无限多个变量的''多项式环时 (例如在例~III.\ref{ex:infinitely-many-variables} 中). 更形式地, $\bigcup_i A_i$ 由对 $(i,a_i)$ 的等价类组成, 其中 $a_i\in A_i$, 且当 $i\leq j$ 时 $(i,a_i)$ 与 $(j,a_j)$ 等价当且仅当 $a_j=\psi_{ij}(a_i)$.
+
+在 $R$-模的语境中, 可以考虑直和 $D=\bigoplus_i A_i$, 以及由对所有 $i\leq j$ 形如 $a_i-\psi_{ij}(a_i)$ 的元素生成的子模 $K\subseteq D$\erratumfootnote{此处官方勘误将原书公式中的 $a_j-\psi_{ij}(a_i)$ 更正为 $a_i-\psi_{ij}(a_i)$。} (其中每个 $A_i$ 被等同于它在 $D$ 中的像). 那么商 $D/K$ 满足所需的万有性质, 读者可验证之. 事实上, 对更一般的偏序集做这些构造也不更难 (习题~\ref{ex:colimit-verify}). 在\emph{有向集}的情形下它们更显式, 行为也更好: 偏序集 $I$ 使得对一切 $i,j\in I$ 都存在 $k\in I$ 满足 $i\leq k$, $j\leq k$.
+
+\index{youlihanshudeya@有理函数的芽(germ of a rational function)}若干标准构造依赖于正向极限: 例如, 函数的芽 (或者更一般地, ``预层的茎'') 就是用正向极限定义的.
+
+\subsection{比较函子}
+\label{subsec:comparing-functors}
+
+\index{fanchou@范畴(category)!Ab@Ab!daiji@带积(with products)}在把函子介绍为``范畴之间的态射''这一自然概念之后, 下一步自然要考虑``函子之间的态射''以及其他比较给定两个函子的方式. 本书不需要对这些概念做详尽的描述, 但我们要简要提几个概念与基本评注, 同样是因为它们提供了一个统一的视角.
+
+\index{ziran@自然(natural)!bianhuan@变换(map)}\index{ziran@自然(natural)!tonggou@同构(isomorphism)}\index{ziran@自然(natural)}\begin{definition}\label{def:natural-transformation}
+\index{ziranbianhuan@自然变换(natural transformation)}设 $\cate{C}$, $\cate{D}$ 为两个范畴, 并设 $F$, $G$ 为 (比如说协变的) 函子 $\cate{C}\to\cate{D}$. 一个\emph{自然变换}\footnote{更标准的记号是 $\Rightarrow$, 但它看起来太像逻辑蕴含联结词了, 我们不太喜欢, 故本书以 $\rightsquigarrow$ 表示自然变换.}$F\rightsquigarrow G$ 是对每个对象 $X\in\cate{C}$ 给出的一个态射 $\nu_X:\mathcal{F}(X)\to\mathcal{G}(X)\in\cate{D}$ 的数据, 使得对所有 $\alpha:X\to Y\in\cate{C}$ 如下图表交换:
+\begin{center}
+\begin{tikzcd}
+\mathcal{F}(X) \ar[r, "\mathcal{F}(\alpha)"] \ar[d, "\nu_X"'] & \mathcal{F}(Y) \ar[d, "\nu_Y"] \\
+\mathcal{G}(X) \ar[r, "\mathcal{G}(\alpha)"] & \mathcal{G}(Y)
+\end{tikzcd}
+\end{center}
+一个\emph{自然同构}是一个自然变换 $\nu$, 使得对每个 $X$ 都有 $\nu_X$ 是同构.
+\end{definition}
+
+\index{Hurewicz@Hurewicz!Witold@Witold}自然变换出现在许多语境中, 例如当比较拓扑中同调与余调的不同概念时. 读者很可能遇到过 Hurewicz 同态 (从 $\pi_1$ 到 $H_1$); 它是一个自然变换. 事实上, 任何诸如``存在一个自然的 (或典范的) 同态\ldots''这样的陈述, 都很可能隐藏了两个函子之间的一个自然变换. ``自然的''这个词的技术含义, 一般来说, 与其心理上的用法是一致的.
+
+\index{bansuihanzi@伴随函子(adjoint functors)!baochijixian/yujixian@保持极限/余极限(preserve limits/colimits)}\index{bansuihanzi@伴随函子(adjoint functors)}一个特别基本而重要的例子是\emph{伴随函子}的概念, 我们将在一个颇为非形式的层面上提及它, 而把借助自然变换使其形式化这一任务留给不屈不挠的读者. 设 $\cate{C}$, $\cate{D}$ 为两个范畴, 并设 $F:\cate{C}\to\cate{D}$, $G:\cate{D}\to\cate{C}$ 为函子. 我们说 $F$ 与 $G$ \emph{伴随} (并说 $G$ 是 $F$ 的\emph{右伴随}, $F$ 是 $G$ 的\emph{左伴随}), 如果对 $\cate{C}$ 的所有对象 $X$ 与 $\cate{D}$ 的所有对象 $Y$ 都存在自然同构
+\[
+\Hom_{\cate{C}}(X,\mathcal{G}(Y))\xrightarrow{\sim}\Hom_{\cate{D}}(\mathcal{F}(X),Y).
+\]
+(更精确地说, 应当存在一个``双函子'' $\cate{C}^{\mathrm{op}}\times\cate{D}\to\cate{Set}$ 的自然同构: $\Hom_{\cate{C}}(\_,\mathcal{G}(\_))\stackrel{\sim}{\to}\Hom_{\cate{D}}(\mathcal{F}(\_),\_)$.)
+
+再一次, 我们一路上遇到的若干构造都可以用这些术语重述, 并且我们在本章还会遇到更多这样的情形.
+
+\begin{example}\label{ex:free-group-adjoint}
+在给定集合上构造自由群 (§II.\ref{subsec:free-groups}) 的用意在于: 给一个集合 $A$ 到一个群 $G$ 的集合函数, 与给一个从 $F(A)$ 到 $G$ 的群同态 (§II.\ref{subsec:free-universal}) 是``同一回事''. 这真正意味着: 对所有集合 $A$ 与所有群 $G$ 都有自然等同
+\[
+\Hom_{\cate{Set}}(A,S(G))\cong\Hom_{\cate{Grp}}(F(A),G),
+\]
+其中 $S(G)$ ``遗忘''了 $G$ 的群结构. 也就是说, 构造自由群的函子 $F:\cate{Set}\to\cate{Grp}$ 是遗忘函子 $S:\cate{Grp}\to\cate{Set}$ 的\emph{左伴随}.
+
+\index{yiwanghanzi@遗忘函子(forgetful functor)!ziyouhanzideyoubansui@自由函子的右伴随(right-adjoint to free)}这当然适用于我们遇到的所有其他``自由''对象的构造: 自由函子一般说来都是遗忘函子的左伴随.
+\end{example}
+
+\index{hanzide@函子的(of functors)}于是, 有趣的函子可能是看似无害的函子的伴随. 这有技术上的好处: 有趣者的性质可以翻译成无害者的性质, 从而给出这些性质的更易的证明.
+
+事实上, 一个函子有伴随这一事实本身就赋予该函子以方便的特性. 我们说 $F$ 是一个\emph{左伴随函子}, 如果它有一个右伴随; 而 $G$ 是一个\emph{右伴随函子}, 如果它有一个左伴随. (比如说) 右伴随函子的某些性质, 甚至可以在不知道伴随的左伴随函子是什么的情况下确立. 这里是这一现象的原型例子.
+
+\begin{lemma}\label{lem:right-adjoint-limits}
+右伴随函子与极限交换.
+\end{lemma}
+
+也就是说, 若 $\mathcal{G}:\cate{D}\to\cate{C}$ 有左伴随 $\mathcal{F}:\cate{C}\to\cate{D}$, 且 $\mathcal{A}:\cate{I}\to\cate{D}$ 是另一个函子, 则存在典范同构
+\[
+\mathcal{G}(\varprojlim\mathcal{A})\xrightarrow{\sim}\varprojlim(\mathcal{G}\circ\mathcal{A})
+\]
+(当然, 如果极限存在的话). 正如每个好的微积分学生应当立刻理解的, 这表示右伴随函子是连续的. (毋庸讳言, 左伴随函子则转而与余极限交换, 并应被称为余连续的.)
+
+我们不会血淋淋地证明引理~\ref{lem:right-adjoint-limits}, 但我们要努力说服读者: 这类陈述比看上去容易, 它们归根结底就是对定义各个概念的万有性质做适当的应用. 相比之下, 在不借助抽象废话的情况下证明某个具体给定的函子保持乘积 (例如), 有时可能显得涉及一些``真正的''工作.
+
+假设 $\mathcal{G}:\cate{D}\to\cate{C}$ 是 $\mathcal{F}:\cate{C}\to\cate{D}$ 的右伴随, 且 $\mathcal{A}:\cate{I}\to\cate{D}$ 是一个给定的函子. 如我们所见, $\mathcal{A}$ 的极限关于拟合进交换图是终的:
+\begin{center}
+\begin{tikzcd}
+& \varprojlim\mathcal{A} \ar[dl,"\lambda_I"'] \ar[dr,"\lambda_J"] & \\
+\mathcal{A}(I) \ar[rr, "\mathcal{A}(\alpha)"] & & \mathcal{A}(J)
+\end{tikzcd}
+\end{center}
+(记号应无疑问). 作用 $\mathcal{G}$, 我们得到 (在 $\cate{C}$ 中的) 交换图\[
+\begin{tikzcd}[column sep=large,row sep=large]
+& \mathcal G(\varprojlim\mathcal A) \ar[dl,"\mathcal G(\lambda_I)"'] \ar[dr,"\mathcal G(\lambda_J)"] & \\
+\mathcal G\circ\mathcal A(I) \ar[rr,"\mathcal G\circ\mathcal A(\alpha)"'] & & \mathcal G\circ\mathcal A(J)
+\end{tikzcd}
+\]并因此由定义 $\mathcal{G}\circ\mathcal{A}$ 的极限的万有性质得到唯一的态射 $\mathcal{G}(\varprojlim\mathcal{A})\to\varprojlim(\mathcal{G}\circ\mathcal{A})$.\[
+\begin{tikzcd}[column sep=large,row sep=1.5em]
+& \mathcal G(\varprojlim\mathcal A) \ar[d,dashed,"\exists!"] \ar[ddl,bend right=30] \ar[ddr,bend left=30] & \\
+& \varprojlim(\mathcal G\circ\mathcal A) \ar[dl] \ar[dr] & \\
+\mathcal G\circ\mathcal A(I) \ar[rr,"\mathcal G\circ\mathcal A(\alpha)"'] & & \mathcal G\circ\mathcal A(J)
+\end{tikzcd}
+\] 再由伴随的等同
+\[
+\Hom_{\cate{C}}(X,\mathcal{G}(Y))\stackrel{\sim}{\longrightarrow}\Hom_{\cate{D}}(\mathcal{F}(X),Y)
+\]
+出发, $\cate{C}$ 中的态射 $\varprojlim(\mathcal{G}\circ\mathcal{A})\to\mathcal{G}\circ\mathcal{A}(I)$ 决定 (在 $\cate{D}$ 中的) 态射 $\mathcal{F}(\varprojlim(\mathcal{G}\circ\mathcal{A}))\to\mathcal{A}(I)$. 由定义 $\varprojlim\mathcal{A}$ 的万有性质, 我们得到唯一的态射 $\mathcal{F}(\varprojlim(\mathcal{G}\circ\mathcal{A}))\to\varprojlim\mathcal{A}$\[
+\begin{tikzcd}[column sep=large,row sep=1.5em]
+& \mathcal F(\varprojlim(\mathcal G\circ\mathcal A)) \ar[d,dashed,"\exists!"] \ar[ddl,bend right=30] \ar[ddr,bend left=30] & \\
+& \varprojlim\mathcal A \ar[dl] \ar[dr] & \\
+\mathcal A(I) \ar[rr,"\mathcal A(\alpha)"'] & & \mathcal A(J)
+\end{tikzcd}
+\], 再作用伴随, 这决定了唯一的态射 $\varprojlim(\mathcal{G}\circ\mathcal{A})\to\mathcal{G}(\varprojlim\mathcal{A})$. 总之, 我们得到了自然态射
+\[
+\mathcal{G}(\varprojlim\mathcal{A})\to\varprojlim(\mathcal{G}\circ\mathcal{A}),\qquad\varprojlim(\mathcal{G}\circ\mathcal{A})\to\mathcal{G}(\varprojlim\mathcal{A}).
+\]
+容易验证这些态射的复合是恒等 (凭借构造中所援引的各种万有性质的唯一性部分), 从而完成引理~\ref{lem:right-adjoint-limits} 的验证.
+
+这个概要所缺的, 是对每个所需图都交换这一事实的显式验证, 而这是应用上述万有性质所必需的. 读者大概会同意: 这类验证即便可能有些繁琐, 也必定是例行公事.
+
+引理~\ref{lem:right-adjoint-limits} 推出, 例如右伴随函子保持乘积, 并且当核有意义时它们必须``保持核''.
+
+\begin{example}\label{ex:exact-functors}
+(正合函子.) 一个函子是\emph{正合的}, 如果它保持正合性, 也就是说, 它把正合序列送到正合序列. 迄今为止我们只在一个环上的模的语境中 (§III.\ref{subsec:complexes}) 研究过正合性, 因此设 $R$, $S$ 为环, 并设 $F:R\dcate{-Mod}\to S\dcate{-Mod}$ 是一个可加函子; $F$ 是正合的当且仅当每当
+\[
+0\longrightarrow A\xrightarrow{\varphi}B\xrightarrow{\psi}C\longrightarrow 0
+\]
+是一个 $R$-模的正合序列时,
+\[
+0\longrightarrow\mathcal{F}(A)\xrightarrow{\mathcal{F}(\varphi)}\mathcal{F}(B)\xrightarrow{\mathcal{F}(\psi)}\mathcal{F}(C)\longrightarrow 0
+\]
+都是一个 $S$-模的正合序列. 由此容易推出: 每个正合复形的像都是正合的 (习题~\ref{ex:exact-functor-complex}).
+
+当一个函子不是正合的, 但却保持序列的``部分''正合性时, 会出现一个常见且非常有趣的情景 (我们会在本章后面, 例如在 §\ref{subsec:tensor-flatness} 中遇到这类例子). 我们说一个可加函子 $F$ 是\emph{左正合的}, 如果每当
+\[
+0\longrightarrow A\xrightarrow{\varphi}B\xrightarrow{\psi}C
+\]
+正合时,
+\[
+0\longrightarrow\mathcal{F}(A)\xrightarrow{\mathcal{F}(\varphi)}\mathcal{F}(B)\xrightarrow{\mathcal{F}(\psi)}\mathcal{F}(C)
+\]
+也正合.
+
+左正合函子会引出一整列``新的'', 相关的 (``导出的'') 函子; 这一极为重要的现象在同调代数中被研究, 我们将在第~IX 章回到它.
+\end{example}
+
+\begin{claim}\label{claim:right-adjoint-leftexact}
+$R\dcate{-Mod}\to S\dcate{-Mod}$ 的右伴随可加函子是左正合的.
+\end{claim}
+
+如读者将验证的 (习题~\ref{ex:right-adjoint-leftexact}), 这由右伴随函子保持核这一事实推出. (注意序列的正合性等价于 $\varphi:A\hookrightarrow B$ 把 $A$ 等同于 $\ker\psi$.)
+
+当然相应的余陈述也成立: 由于左伴随函子与余极限交换, 而余核是余极限, 因此左伴随可加函子 $G:R\dcate{-Mod}\to S\dcate{-Mod}$ 必然是\emph{右正合的}, 也就是说, 如果
+\[
+A\xrightarrow{\varphi}B\xrightarrow{\psi}C\longrightarrow 0
+\]
+正合, 则
+\[
+\mathcal{G}(A)\xrightarrow{\mathcal{G}(\varphi)}\mathcal{G}(B)\xrightarrow{\mathcal{G}(\psi)}\mathcal{G}(C)\longrightarrow 0
+\]
+也正合.\erratumfootnote{此处官方勘误将正合列中的末项对象 $C$ 更正为 $\mathcal{G}(C)$。}
+
+\subsection*{习题}
+\phantomsection
+\addcontentsline{toc}{subsection}{习题}
+
+\begin{prob}\label{ex:functor-product}
+设 $\mathcal{F}:\cate{C}\to\cate{D}$ 是一个协变函子, 并假设 $\cate{C}$ 与 $\cate{D}$ 都有乘积. 证明对 $\cate{C}$ 的所有对象 $A$, $B$, 都存在唯一的态射 $\mathcal{F}(A\times B)\to\mathcal{F}(A)\times\mathcal{F}(B)$, 使得涉及自然投影的相关图交换.
+
+若 $\cate{D}$ 有余积 (记作 $\amalg$), 且 $G:\cate{C}\to\cate{D}$ 是反变的, 证明存在唯一的态射 $\mathcal{G}(A)\amalg\mathcal{G}(B)\to\mathcal{G}(A\times B)$ (同样, 使得一个适当的图交换).
+\end{prob}
+
+\begin{prob}\label{ex:fully-faithful-iso}
+$\triangleright$ 设 $\mathcal{F}:\cate{C}\to\cate{D}$ 是一个完全忠实的函子. 若 $A$, $B$ 是 $\cate{C}$ 中的对象, 证明在 $\cate{C}$ 中 $A\cong B$ 当且仅当在 $\cate{D}$ 中 $\mathcal{F}(A)\cong\mathcal{F}(B)$. [\S\ref{subsec:equiv-categories}]
+\end{prob}
+
+\begin{prob}\label{ex:group-action-functor}
+回想 (§II.\ref{sec:def-group}) 一个群 $G$ 可以被看成一个只有一个对象的群胚 $\mathcal{G}$. 证明: 定义一个群 $G$ 在一个范畴 $\cate{C}$ 的对象上的作用, 等价于定义一个函子 $\mathcal{G}\to\cate{C}$.
+\end{prob}
+
+\begin{prob}\label{ex:localization-functor}
+$\neg$ 设 $R$ 是一个交换环, $S\subseteq R$ 是习题~V.\ref{ex:localization-ring} 意义下的一个乘性子集. 证明``局部化是一个函子'': 给每个 $R$-模 $M$ 指定局部化 $S^{-1}M$ (习题~V.\ref{ex:localization-module}), 给每个 $R$-模同态 $\varphi:M\to N$ 指定自然诱导出的同态 $S^{-1}M\to S^{-1}N$, 这就定义了一个从 $R$-模范畴到 $S^{-1}R$-模范畴的协变函子. [习题~\ref{ex:localization-exact}]
+\end{prob}
+
+\begin{prob}\label{ex:field-units-norm}
+对域 $F$, 以 $F^{*}$ 表示 $F$ 中带乘法的非零元素组成的群. 把域映到 $F^{*}$, 并把域同态 $\varphi:k\to F$ 映到限制 $\varphi|_{k^{*}}:k^{*}\to F^{*}$ 的赋值 $Fld\to\cate{Grp}$ 显然是一个协变函子.
+
+另一方面, 域的同态\footnote{注意域之间没有``零同态''; 参见 §VII.\ref{subsec:basic-defs}.}可以视为域扩张. 固定一个域 $k$, 考虑其有限扩张及这些扩张之间的态射所成的范畴 $\cate{Fld}_k^f$. 证明: 在对象上把 $F$ 映到 $F^*$, 并把态射 $F_1\subseteq F_2$ 映到从 $F_2^*$ 到 $F_1^*$ 的范数 $N_{F_1\subseteq F_2}$ (参见习题~VII.\ref{ex:norm-alpha}), 给出了一个反变函子 $\cate{Fld}_k^f\to\cate{Grp}$. 对迹陈述并证明一个类似的结论 (参见习题~VII.\ref{ex:trace-alpha}).
+\end{prob}
+
+\begin{prob}\label{ex:presheaf-ab-groups}
+$\neg$ 形式化拓扑空间 $T$ 上的一个 Abel 群预层的概念. 若 $\mathcal{F}$ 是 $T$ 上的一个预层, $\mathcal{F}(U)$ 中的元素称为 $\mathcal{F}$ 在 $U$ 上的\emph{截面}. 由包含 $V\subseteq U$ 诱导的同态 $\rho_{UV}:\mathcal{F}(U)\to\mathcal{F}(V)$ 称为\emph{限制映射}.
+
+证明: 令 $\mathcal{C}(U)$ 为 $U$ 上连续复值函数组成的加法 Abel 群, 并以函数的通常限制定义截面的限制, 就得到一个预层的例子.
+
+对这个预层, 证明可以唯一地黏合在重叠开集上一致的截面. 也就是说, 若 $U$, $V$ 是开集, $s_U\in\mathcal{C}(U)$, $s_V\in\mathcal{C}(V)$ 在限制到 $U\cap V$ 后一致, 证明存在唯一的 $s\in\mathcal{C}(U\cup V)$ 使得 $s$ 在 $U$ 上限制为 $s_U$, 在 $V$ 上限制为 $s_V$.
+
+这本质上就是使 $\mathcal{C}$ 成为一个层的条件. [IX.\ref{ex:1.15}]
+\end{prob}
+
+\begin{prob}\label{ex:spec-zariski}
+$\triangleright$ 在 $\Spec R$ 上如下定义一个拓扑: 声明闭集为形如 $V(I)$ 的集合, 其中 $I\subseteq R$ 是一个理想, $V(I)$ 表示包含 $I$ 的素理想之集.
+
+\begin{itemize}
+\item 验证这确实在 $\Spec R$ 上定义了一个拓扑. (这就是 $\Spec R$ 上的 Zariski 拓扑.)
+\item 把这个拓扑与 §VII.\ref{subsec:affine-geometry} 中定义的 Zariski 拓扑联系起来.
+\item 证明于是 $\Spec$ 成为从交换环范畴到拓扑空间范畴 (其态射为连续函数) 的一个反变函子.
+\end{itemize}
+[\S\ref{subsec:examples-functors}]
+\end{prob}
+
+\begin{prob}\label{ex:k-aff-points}
+$\triangleright$ 设 $K$ 是一个代数闭域, 并考虑例~\ref{ex:k-aff} 中定义的范畴 $K\dcate{-Aff}$.
+
+\begin{itemize}
+\item 以 $h_S$ 记函子 $\Hom_{K\dcate{-Aff}}(\_,S)$ (如 §\ref{subsec:examples-functors}), 并令 $p=\mathbb{A}_K^0$ 为一个点. 证明在 $S$ 与 $h_S(p)$ 之间存在一个自然双射. (使用习题~VII.\ref{ex:points-maximal-ideals}.)
+\item 说明每个 $\varphi\in\Hom_{K\dcate{-Aff}}(S,T)$ 如何决定一个集合函数 $S\to T$.
+\item 若 $S\subseteq\mathbb{A}_K^m$, $T\subseteq\mathbb{A}_K^n$, 证明由态射 $\varphi\in\Hom_{K\dcate{-Aff}}(S,T)$ 决定的函数 $S\to T$ 是一个``多项式函数'' $\mathbb{A}_K^m\to\mathbb{A}_K^n$ 的限制. (这个练习的一部分是要弄明白这是什么意思!)
+\end{itemize}
+\end{prob}
+
+\begin{prob}\label{ex:functor-category}
+$\neg$ 设 $\cate{C}$, $\cate{D}$ 为范畴, 并假设 $\cate{C}$ 是小范畴. 定义一个\emph{函子范畴} $\cate{D}^{\cate{C}}$, 其对象为协变函子 $\cate{C}\to\cate{D}$, 其态射为自然变换\footnote{之所以要求 $\cate{C}$ 为小范畴, 是因为这保证了两个函子之间的自然变换确实构成一个集合.}.\index[sym1]{11@$\cate{D}^{\cate{C}}$}
+
+证明赋值 $X\mapsto h_X:=\Hom_{\cate{C}}(\_,X)$ (参见 §\ref{subsec:examples-functors}) 定义了一个协变函子 $\cate{C}\to\cate{Set}^{\cate{C}^{\mathrm{op}}}$. (以自然的方式定义它在态射上的作用.) [习题~\ref{ex:representable-functors}, IX.\ref{ex:1.11}]
+\end{prob}
+
+\begin{prob}\label{ex:yoneda-lemma}
+$\neg$ 设 $\cate{C}$ 为范畴, $X$ 为 $\cate{C}$ 的对象, 并考虑反变函子 $h_X:=\Hom_{\cate{C}}(\_,X)$ (参见 §\ref{subsec:examples-functors}). 对每个反变函子 $\mathcal{F}:\cate{C}\to\cate{Set}$, 证明在自然变换 $h_X\rightsquigarrow\mathcal{F}$ 之集与 $\mathcal{F}(X)$ 之间存在一个双射, 定义如下. 一个自然变换 $\nu:h_X\rightsquigarrow\mathcal{F}$ 的数据由对每个对象 $A\in\cate{C}$ 给出的一个从 $h_X(A)=\Hom_{\cate{C}}(A,X)$ 到 $\mathcal{F}(A)$ 的态射 $\nu_A$ 组成. 把 $\nu$ 映到 $\mathrm{id}_X\in h_X(X)$ 在 $\mathcal{F}(X)$ 中的像 $\nu_X(\mathrm{id}_X)$.\erratumfootnote{此处官方勘误显式引入自然变换记号 $\nu$ 及其分量态射 $\nu_A$，并将对应像元素显式记为 $\nu_X(\mathrm{id}_X)$。} (提示: 构造所指映射的逆. 对每个 $f\in\mathcal{F}(X)$ 与每个 $\varphi\in\Hom_{\cate{C}}(A,X)$, 你如何构造 $\mathcal{F}(A)$ 中的一个元素?)
+
+这个结果称为\emph{Yoneda 引理}. [习题~\ref{ex:representable-functors}, IX.\ref{ex:2.17}]
+\end{prob}
+
+\begin{prob}\label{ex:representable-functors}
+\index{kebiaohanzi@可表函子(representable functor)}(参见习题~\ref{ex:functor-category}.) 设 $\cate{C}$ 是一个小范畴. 一个反变函子 $\cate{C}\to\cate{Set}$ 是\emph{可表的}, 如果它自然同构于某个函子 $h_X$ (参见 §\ref{subsec:examples-functors}). 此时 $X$ \emph{表出}该函子. 证明 $\cate{C}$ 等价于 $\cate{Set}^{\cate{C}^{\mathrm{op}}}$ 中可表函子组成的子范畴. (提示: Yoneda; 参见习题~\ref{ex:yoneda-lemma}.)
+
+于是, 每个 (小) 范畴都等价于某个函子范畴的一个子范畴.
+\end{prob}
+
+\begin{prob}\label{ex:adjunction-represent}
+设 $\cate{C}$, $\cate{D}$ 为范畴, 并设 $F:\cate{C}\to\cate{D}$, $G:\cate{D}\to\cate{C}$ 为函子. 证明 $F$ 是 $G$ 的左伴随, 当且仅当对 $\cate{D}$ 的每个对象 $Y$, 对象 $\mathcal{G}(Y)$ 表出函子 $h_Y\circ F$, 且这一表出自然地依赖于 $Y$.
+\end{prob}
+
+\begin{prob}\label{ex:zen-category}
+设 $\cate{Z}$ 为``禅''范畴, 由无对象与无态射组成. 可以设想一个从 $\cate{Z}$ 到任意范畴 $\cate{C}$ 的函子 $Z$: 不需要指定任何资料. 当这样的对象存在时, $\varprojlim Z$ 是什么?
+\end{prob}
+
+\begin{prob}\label{ex:kernel-verify}
+$\triangleright$ 验证例~\ref{ex:equalizers-kernels} 中描述的构造确实如所声称的那样恢复了 $R$-模同态的核. [\S\ref{subsec:limits-colimits}]
+\end{prob}
+
+\begin{prob}\label{ex:inverse-limit-verify}
+$\triangleright$ 验证断言~\ref{claim:inverse-limit-exists} 证明中给出的构造确实是一个反向极限, 如所声称的那样. [\S\ref{subsec:limits-colimits}]
+\end{prob}
+
+\begin{prob}\label{ex:colimit-verify}
+$\triangleright$ 充实 §\ref{subsec:limits-colimits} 中给出的在 $\cate{Set}$ 与 $R\dcate{-Mod}$ 中对任意指标偏序集的余极限构造的梗概. 在 $\cate{Set}$ 中注意, 当偏序集 $\cate{I}$ 是有向的时 (即对所有 $i,j\in\cate{I}$, 存在 $k\in\cate{I}$ 使得 $i\leq k$, $j\leq k$), 余极限的构造更简单. [\S\ref{subsec:limits-colimits}]
+\end{prob}
+
+\begin{prob}\label{ex:iadic-completion}
+$\neg$ 设 $R$ 是一个交换环, $I\subseteq R$ 是一个理想. 注意若 $n\geq m$ 则 $I^n\subseteq I^m$, 于是当 $n\geq m$ 时有自然的同态 $\varphi_{mn}:R/I^n\to R/I^m$.
+
+\begin{itemize}
+\item 证明反向极限 $\widehat{R}_I:=\varprojlim_n R/I^n$ 作为一个交换环存在. 这称为 $R$ 的\emph{$I$-进完备化}.
+\item 由反向极限的万有性质, 存在唯一的同态 $R\to\widehat{R}_I$. 证明这个同态的核是 $\bigcap_n I^n$.
+\item 令 $I=(x)\subseteq R[x]$. 证明完备化 $\widehat{R[x]}_I$ 同构于 §III.\ref{subsec:polynomial-rings} 中定义的幂级数环 $R[[x]]$.
+\end{itemize}
+[习题~\ref{ex:krull-intersection}, 习题~\ref{ex:p-adic}]
+\end{prob}
+
+\begin{prob}\label{ex:krull-intersection}
+设 $R$ 是一个交换 Noether 环, $I\subseteq R$ 是一个理想. 那么 $I\cdot\bigcap_n I^n=\bigcap_n I^n$; 读者将在习题~\ref{ex:krull-intersection-ideal} 中证明这一点.
+
+假定此结论, 并证明 $\bigcap_n I^n$ 等于满足如下条件的 $r\in R$ 之集: 存在某个 $a\in I$ 使得 $(1-a)r=0$. (提示: 一个包含关系是初等的. 对另一个, 使用习题~VI.\ref{ex:nakayama-ideal-version} 形式的 Nakayama 引理. 这个结果归于 Krull.)
+
+例如, 若 $I$ 是真理想, 则当 $R$ 是一个整环或是局部环时, $\bigcap_n I^n=(0)$. 在这些情形中, 到 $I$-进完备化的自然映射 $R\to\widehat{R}_I$ 是单射 (参见习题~\ref{ex:iadic-completion}).
+\end{prob}
+
+\begin{prob}\label{ex:p-adic}
+$\neg$ 练习~\ref{ex:iadic-completion} 中给出的构造的一个重要例子是 $p$-进整数环 $\mathbb{Z}_p$: 对正素数 $p$, 它是极限 $\varprojlim_r\mathbb{Z}/p^r\mathbb{Z}$.\index[sym1]{71@$\mathbb{Z}_p$}
+
+$\mathbb{Z}_p$ 的分式域记作 $\mathbb{Q}_p$; $\mathbb{Q}_p$ 中的元素称为\emph{$p$-进数}.\index[sym1]{51@$\mathbb{Q}_p$}
+
+\begin{itemize}
+\item 说明: 给出一个 $p$-进整数 $A$ 等价于给出一个整数序列 $A_r$ ($r\geq 1$), 满足 $0\leq A_r<p^r$, 且当 $s\leq r$ 时 $A_s\equiv A_r\bmod p^s$.
+\item 等价地, 说明每个 $p$-进整数都有唯一的无穷展开 $A=a_0+a_1\cdot p+a_2\cdot p^2+a_3\cdot p^3+\cdots$, 其中 $0\leq a_i\leq p-1$.
+\end{itemize}
+$p$-进整数的算术可以完全用这些展开式来进行, 正如普通算术用普通十进制展开式来进行一样.
+
+\begin{itemize}
+\item 按上面的记号, 证明 $A\in\mathbb{Z}_p$ 可逆当且仅当 $a_0\neq 0$.
+\item 证明 $\mathbb{Z}_p$ 是一个局部整环, 其极大理想由 (在 $\mathbb{Z}_p$ 中的像) $p$ 生成.
+\item 证明 $\mathbb{Z}_p$ 是一个 DVR (参见习题~V.\ref{ex:discrete-valuation}). (在 $\mathbb{Q}_p$ 上有一个明显的赋值.)
+\end{itemize}
+[\S~II.\ref{subsec:cyclic-groups}]
+\end{prob}
+
+\begin{prob}\label{ex:zhat}
+$\neg$ 若 $m$, $n$ 为正整数且 $m\mid n$, 则 $(n)\subseteq(m)$, 并且存在满的环同态 $\mathbb{Z}/n\mathbb{Z}\twoheadrightarrow\mathbb{Z}/m\mathbb{Z}$. 极限环 $\varprojlim_{(n)}\mathbb{Z}/n\mathbb{Z}$ 存在, 记作 $\widehat{\mathbb{Z}}$. 证明 $\widehat{\mathbb{Z}}\cong\End_{\cate{Ab}}(\mathbb{Q}/\mathbb{Z})$. (每个 $f\in\End_{\cate{Ab}}(\mathbb{Q}/\mathbb{Z})$ 由 $f(\frac{1}{n})$ 决定; 注意由于 $n\frac{1}{n}=1\equiv 0\bmod\mathbb{Z}$, 有 $f(\frac{1}{n})=\frac{g(n)}{n}$, 其中 $g(n)$ 可取为使 $0\leq g(n)<n$ 的整数. 证明若 $m\mid n$ 则 $g(m)\equiv g(n)\bmod m$, 并思考如何描述 $\widehat{\mathbb{Z}}$ 的元素.) [习题~\ref{ex:zhat-product}]\index[sym1]{70@$\widehat{\mathbb{Z}}$}
+\end{prob}
+
+\begin{prob}\label{ex:zhat-product}
+设 $\widehat{\mathbb{Z}}$ 如习题~\ref{ex:zhat}.
+
+\begin{itemize}
+\item 若 $R$ 是一个交换环, 对所有素数 $p$ 与所有 $r$ 都配有同态 $R\to\mathbb{Z}/p^r\mathbb{Z}$, 并且与所有投影 $\mathbb{Z}/p^r\mathbb{Z}\to\mathbb{Z}/p^s\mathbb{Z}$ ($s\leq r$) 相容, 证明对所有 $n$ 都存在环同态 $R\to\mathbb{Z}/n\mathbb{Z}$, 并且与所有投影 $\mathbb{Z}/n\mathbb{Z}\to\mathbb{Z}/m\mathbb{Z}$ ($m\mid n$) 相容.
+\item 推出 $\widehat{\mathbb{Z}}$ 满足 $\mathbb{Z}_p$ (当 $p$ 取遍所有正素数时) 的数的乘积的万有性质.
+\end{itemize}
+
+于是有 $\prod_p\mathbb{Z}_p\cong\widehat{\mathbb{Z}}\cong\End_{\cate{Ab}}(\mathbb{Q}/\mathbb{Z})$.
+\end{prob}
+
+\begin{prob}\label{ex:diagonal-adjoint}
+设 $\cate{C}$ 是一个范畴, 考虑``乘积范畴'' $\cate{C}\times\cate{C}$ (弄明白这是什么意思!). 有一个``对角''函子把 $\cate{C}$ 的每个对象 $X$ 联系为 $\cate{C}\times\cate{C}$ 中的一对 $(X,X)$. 另一方面, 可能有一个``乘积函子'' $\cate{C}\times\cate{C}\to\cate{C}$, 把 $(X,Y)$ 联系为乘积 $X\times Y$; 例如 $\cate{Grp}$ 中就是这种情形. 让自己相信: 乘积函子是\emph{对角函子的右伴随}. 如果存在一个余积函子, 验证它是\emph{对角函子的左伴随}.
+\end{prob}
+
+\begin{prob}\label{ex:exact-functor-complex}
+$\triangleright$ 设 $R$, $S$ 为环. 证明一个可加协变函子 $F:R\dcate{-Mod}\to S\dcate{-Mod}$ 是正合的, 当且仅当每当在 $R\dcate{-Mod}$ 中 $A\xrightarrow{\varphi}B\xrightarrow{\psi}C$ 正合时, 在 $S\dcate{-Mod}$ 中 $\mathcal{F}(A)\xrightarrow{\mathcal{F}(\varphi)}\mathcal{F}(B)\xrightarrow{\mathcal{F}(\psi)}\mathcal{F}(C)$ 也正合. 推出一个正合函子把正合复形送到正合复形. [\S\ref{subsec:comparing-functors}, IX.\ref{ex:3.7}]
+\end{prob}
+
+\begin{prob}\label{ex:faithfully-exact}
+设 $R$, $S$ 为环. 一个可加协变函子 $\mathcal{F}:R\text{-Mod}\to S\text{-Mod}$ 是\emph{忠实正合的}, 如果 $\mathcal{F}(A)\xrightarrow{\mathcal{F}(\varphi)}\mathcal{F}(B)\xrightarrow{\mathcal{F}(\psi)}\mathcal{F}(C)$ 在 $S\dcate{-Mod}$ 中正合, 当且仅当 $A\xrightarrow{\varphi}B\xrightarrow{\psi}C$ 在 $R\dcate{-Mod}$ 中正合. 证明一个正合函子 $\mathcal{F}:R\dcate{-Mod}\to S\dcate{-Mod}$ 是忠实正合的, 当且仅当对每个非零 $R$-模 $M$ 都有 $\mathcal{F}(M)\neq 0$, 当且仅当对每个 $R\dcate{-Mod}$ 中的非零态射 $\varphi$ 都有 $\mathcal{F}(\varphi)\neq 0$.
+\end{prob}
+
+\begin{prob}\label{ex:localization-exact}
+$\neg$ 证明局部化 (习题~\ref{ex:localization-functor}) 是一个正合函子.
+
+\index{jubu@局部(local)}事实上证明局部化``保持同调'': 若
+\[
+M_{\bullet}:\dots\longrightarrow M_{i+1}\xrightarrow{d_{i+1}}M_i\xrightarrow{d_i}M_{i-1}\longrightarrow\dots
+\]
+是一个 $R$-模的复形, $S$ 是 $R$ 的一个乘性子集, 则 $M_{\bullet}$ 的第 $i$ 个同调的局部化 $S^{-1}H_i(M_{\bullet})$ 就是局部化复形
+\[
+S^{-1}M_{\bullet}:\dots\longrightarrow S^{-1}M_{i+1}\xrightarrow{S^{-1}d_{i+1}}S^{-1}M_i\xrightarrow{S^{-1}d_i}S^{-1}M_{i-1}\longrightarrow\dots
+\]
+的第 $i$ 个同调 $H_i(S^{-1}M_{\bullet})$.
+[\ref{ex:tensor-localization-flat}, \ref{ex:flat-local}, \ref{ex:tor-localize}]
+\end{prob}
+
+\begin{prob}\label{ex:localization-faithfully-exact}
+证明局部化在如下意义下是忠实正合的: 设 $R$ 是一个交换环, 并设
+\begin{equation*}\tag{*}
+0\longrightarrow A\longrightarrow B\longrightarrow C\longrightarrow 0
+\end{equation*}
+是一个 $R$-模的序列. 则 (*) 正合, 当且仅当对每个素数理想 $\mathfrak{p}\subseteq R$, 诱导出的 $R_{\mathfrak{p}}$-模序列\index[sym1]{55@$R_{\mathfrak{p}}$}
+\[
+0\longrightarrow A_{\mathfrak{p}}\longrightarrow B_{\mathfrak{p}}\longrightarrow C_{\mathfrak{p}}\longrightarrow 0
+\]
+正合, 当且仅当对每个极大理想 $\mathfrak{p}$ 它正合. (参见习题~V.\ref{ex:local-vanish}.)
+\end{prob}
+
+\begin{prob}\label{ex:right-adjoint-leftexact}
+$\triangleright$ 设 $R$, $S$ 为环. 证明 $R\dcate{-Mod}\to S\dcate{-Mod}$ 的右伴随函子是左正合的, 而左伴随函子是右正合的. [\S\ref{subsec:comparing-functors}]
+\end{prob}
+
+\begin{prob}\label{ex:center-of-category}
+$\neg$ 设 $\cate{C}$ 为一个范畴, 并考虑恒等函子 $\mathscr{I}:\cate{C}\to\cate{C}$. 证明: 自然变换 $\mathscr{I}\rightsquigarrow\mathscr{I}$ 的集合 $\End(\mathscr{I})$ 在复合运算下构成一个交换环. 该交换环称为 $\cate{C}$ 的\emph{中心} (center). 若 $R$ 是一个环, 证明 $R\dcate{-Mod}$ 的中心同构于 $R$ 的中心. [习题~\ref{ex:morita-commutative}]\erratumfootnote{习题 1.28 系第二次印刷新增（第一次印刷的习题到 1.27 即止）。此处依第二次印刷：$\End(\mathscr{I})$ 在复合下构成交换\emph{环}，且末句无``以自然的方式成为一个环''一语。官方勘误图在 ``monoid'' 与 ``a ring in a natural way, and it is'' 处作了标注，与第二次印刷的正文不一致，未予采用。}
+\end{prob}
+
+\section{张量积与 Tor 函子}
+\label{sec:tensor-tor}
+
+在本章余下的部分, 我们将在交换环 $R$ 上的模范畴 $R\dcate{-Mod}$ 中工作. 本质上我们将看到的一切都可以无困难地提升到非交换情形, 但在那种情形下会丢失一些结构. 例如, 若 $R$ 不是交换的, 那么在左 $R$-模范畴 $R\dcate{-Mod}$ 中, 同态集 $\Hom_{R\dcate{-Mod}}(M,N)$ 就``只是'' Abel 群 (参见 §III.\ref{subsec:R-Mod-hom} 末尾). 张量积 $M\otimes_R N$ 只有在 $M$ 是右 $R$-模, $N$ 是左 $R$-模时才能定义 (在某种意义下, 两个模结构互相抵消, 剩下的只是一个 Abel 群). 相比之下, 在交换情形我们将能把 $M\otimes_R N$ 简单地定义成一个 $R$-模. 一般而言, 只要模带有相容的左、右模结构, 理论就与交换情形一样进行, 除了诸如张量的交换性这类问题——在这里期望 $R$ 的交换性不起任何作用是不合理的. 总而言之, 交换情形略为精简, 并且 (我们相信) 在传达该理论基本特征的直观方面已经足够.
+
+因此, 除非另作说明, $R$ 表示一个固定的交换环.
+
+\subsection{双线性映射与张量积的定义}
+\label{subsec:bilinear-tensor-def}
+
+若 $M$ 与 $N$ 是 $R$-模, 我们在久远的过去观察到 (§III.\ref{subsec:mod-prod-coprod}), $M\oplus N$ 同时充当 $M$ 与 $N$ 的积与余积: 极限与余极限重合的情形. 作为集合, $M\oplus N$ 就是 $M\times N$; $M\oplus N$ 上的 $R$-模结构由按分量加法与数量乘法定义. 一个 $R$-模同态
+\[
+M\oplus N\to P
+\]
+由 $R$-模同态 $M\to P$ 与 $N\to P$ 决定 (这正使得 $M\oplus N$ 成为一个余积).
+
+但从 $M\times N$ 到 $R$-模 $P$ 还有另一种与 $R$-模结构相容的映射方式.
+
+\begin{definition}\label{def:tensor-product}
+设 $M$, $N$, $P$ 为 $R$-模. 一个函数 $\varphi:M\times N\to P$ 称为 $R$-\emph{双线性的}, 如果
+\begin{itemize}
+\item 对每个 $m\in M$, 函数 $n\mapsto\varphi(m,n)$ 是一个 $R$-模同态 $N\to P$;
+\item 对每个 $n\in N$, 函数 $m\mapsto\varphi(m,n)$ 是一个 $R$-模同态 $M\to P$.
+\end{itemize}
+于是, 若 $\varphi:M\times N\to P$ 是 $R$-双线性的, 则对每个 $m\in M$, 每个 $n_1,n_2\in N$, 每个 $r_1,r_2\in R$,
+\[
+\varphi(m,r_1n_1+r_2n_2)=r_1\varphi(m,n_1)+r_2\varphi(m,n_2),
+\]
+对 $\varphi(\_,n)$ 类似.
+\end{definition}
+
+注意 $\varphi$ 自身并不是线性的, 即便我们把 $M\times N$ 视为如上回忆的 $R$-模 $M\oplus N$. 另一方面, 应当有办法``像''处理 $R$-线性映射那样处理 $R$-双线性映射, 因为这类映射在 $R$-模的语境中大量出现. 例如, $R$ 上的乘法本身就是一个 $R$-双线性映射
+\[
+R\times R\to R.
+\]
+我们关于万有性质的经验提示了处理这个问题的自然方式. 我们需要一个新的 $R$-模 $M\otimes_R N$, 带有一个 $R$-双线性映射
+\[
+\otimes:M\times N\to M\otimes_R N,
+\]
+使得每个 $R$-双线性映射 $M\times N\to P$ 都唯一地通过这个新的模 $M\otimes_R N$ 分解,
+\begin{center}
+\begin{tikzcd}
+M\times N\ar[r, "\otimes"]\ar[dr, "\varphi"'] & M\otimes_R N\ar[d, dashed, "\overline{\varphi}"]\\
+& P
+\end{tikzcd}
+\end{center}
+并且使得 $\overline{\varphi}$ 是一个通常的 $R$-模同态.
+
+于是, 如果我们想``把 $M\times N$ 上的 $R$-双线性映射视为 $R$-线性的'', 那么 $M\otimes_R N$ 就是 $M\times N$ 在 $R\dcate{-Mod}$ 中可获得的``最佳逼近''. 这个模 $M\otimes_R N$ 称为 $M$ 与 $N$ 在 $R$ 上的\emph{张量积}. 下标 $R$ 非常重要: 若 $M$ 与 $N$ 是两个环 $R$, $S$ 上的模, 那么 $S$-双线性与 $R$-双线性并不是一回事, 因此 $M\otimes_R N$ 与 $M\otimes_S N$ 可能是完全不同的对象. 在语境中, 如果基环是明确的, 略去下标也非不寻常, 但我们不推荐这种做法.
+
+上述规定把张量积表达为一个万有问题的解; 因此我们立刻就知道, 如果存在, 它在同构意义下是唯一的 (再次是命题~I.\ref{prop:initial-final-unique}), 并且我们可以着手系统地运用万有性质来研究它.
+
+\begin{example}\label{ex:tensor-r-n}
+对所有 $R$-模 $N$, 有 $R\otimes_R N\cong N$.
+
+确实, 每个 $R$-双线性映射 $R\times N\to P$ 都唯一地通过 $N$ 分解 (这可立即验证):
+\begin{center}
+\begin{tikzcd}[column sep=large,row sep=large]
+R\times N \ar[r,"\otimes"] \ar[dr,"\varphi"'] & N \ar[d,dashed,"\exists!\overline\varphi"] \\
+& P
+\end{tikzcd}
+\end{center}
+其中 $\otimes(r,n)=rn$. 由万有对象的唯一性, 必有 $N\cong R\otimes_R N$.
+\end{example}
+
+再举一个例子, 容易看出必定存在一个典范同构
+\[
+M\otimes_R N\xrightarrow{\sim} N\otimes_R M.
+\]
+确实, 每个 $R$-双线性映射 $\varphi:M\times N\to P$ 都可分解为\footnote{这里有一个情形交换性确实起了作用: 若 $R$ 不是交换的, 这个分解就会出问题, 即便 $M$ 与 $N$ 带有双模结构. 因此在那种情形下不能推出 $M\otimes_R N\cong N\otimes_R M$.}
+\[
+M\times N\xrightarrow{\quad} N\times M\xrightarrow{\psi} P,
+\]
+其中 $\psi(n,m)=\varphi(m,n)$; $\psi$ 也是 $R$-双线性的, 所以它唯一地通过 $N\otimes_R M$ 分解. 因此 $\varphi$ 唯一地通过 $N\otimes_R M$ 分解, 这足以断定存在典范同构 $N\otimes_R M\cong M\otimes_R N$.
+
+然而, 除非我们先确立 $M\otimes_R N$ 确实存在, 否则这类考虑多少有些空洞. 这需要做一点工作.
+
+\begin{lemma}\label{lem:tensor-exists}
+张量积在 $R\dcate{-Mod}$ 中存在.
+\end{lemma}
+
+\begin{proof}
+给定 $R$-模 $M$ 与 $N$, 我们``手工''构造一个满足万有要求的模. 令 $F^R(M\times N)=R^{\oplus(M\times N)}$ 为 $M\times N$ 上的自由 $R$-模 (§III.\ref{subsec:free-modules}). 这个模带有一个集合映射
+\[
+j:M\times N\to F^R(M\times N),
+\]
+对从 $M\times N$ 到任意 $R$-模 $P$ 的所有集合映射都是万有的; 主要任务就是把它变成一个 $R$-双线性映射. 例如, 我们必须把 $F^R(M\times N)$ 中形如 $j(m,n_1+n_2)$ 的元素与 $j(m,n_1)+j(m,n_2)$ 等元素等同起来. 于是, 令 $K$ 为 $F^R(M\times N)$ 的由所有形如
+\[
+j(m,r_1n_1+r_2n_2)-r_1j(m,n_1)-r_2j(m,n_2)
+\]
+与
+\[
+j(r_1m_1+r_2m_2,n)-r_1j(m_1,n)-r_2j(m_2,n)
+\]
+的元素生成的 $R$-子模, 其中 $m,m_1,m_2$ 取遍 $M$, $n,n_1,n_2$ 取遍 $N$, $r_1,r_2$ 取遍 $R$. 令
+\[
+M\otimes_R N:=\frac{F^R(M\times N)}{K},
+\]
+并赋予由 $j$ 与自然的投射复合得到的映射 $\otimes:M\times N\to M\otimes_R N$:
+\[
+\otimes:M\times N\xrightarrow{j} F^R(M\times N)\longrightarrow M\otimes_R N=F^R(M\times N)/K.
+\]
+元素 $\otimes(m,n)$ (即 $j(m,n)$ 模 $K$ 的类) 记为 $m\otimes n$.
+
+显然 $(m,n)\mapsto m\otimes n$ 定义了一个 $R$-双线性映射. 我们还需验证 $M\otimes_R N$ 满足万有性质, 这也直截了当. 若 $\varphi:M\times N\to P$ 是任意 $R$-双线性映射, 由自由 $R$-模的万有性质, 我们得到一个唯一诱导出的从自由 $R$-模出发的 $R$-线性映射 $\tilde{\varphi}$:
+\begin{center}
+\begin{tikzcd}
+M\times N\ar[r, "j"]\ar[dr, "\varphi"'] & F^R(M\times N)\ar[d, dashed, "\tilde{\varphi}"]\\
+& P
+\end{tikzcd}
+\end{center}
+我们断言 $\tilde{\varphi}$ 在 $K$ 上限制为 $0$. 确实, 为了验证这一点, 只需验证 $\tilde{\varphi}$ 把 $K$ 的每个生成元送往零, 而这由 $\varphi$ 是 $R$-双线性的事实推出. 例如,
+\[
+\tilde{\varphi}\bigl(j(m,r_1n_1+r_2n_2)-r_1j(m,n_1)-r_2j(m,n_2)\bigr)
+=\varphi(m,r_1n_1+r_2n_2)-r_1\varphi(m,n_1)-r_2\varphi(m,n_2)=0.
+\]
+由此 (凭商元的万有性质!) $\tilde{\varphi}$ 唯一地通过模 $K$ 的商分解:
+\begin{center}
+\begin{tikzcd}[column sep=large,row sep=large]
+M\times N \ar[r,"j"] \ar[d,"\otimes"'] \ar[dr,"\varphi" description] & F^R(M\times N) \ar[dl,"\pi"'] \ar[d,"\widetilde\varphi"] \\
+M\otimes_R N \ar[r,dashed,"\exists!\overline\varphi"'] & P
+\end{tikzcd}
+\end{center}
+我们就做完了.
+\end{proof}
+
+与万有对象常常遇到的情况一样, 用来证明 $M\otimes_R N$ 存在的显式构造几乎从不被动用. 不过最好记住, $M\otimes_R N$ 的元素来自 $M\times N$ 上的自由 $R$-模的元素, 因此 $M\otimes_R N$ 的一个任意元素是一个有限线性组合
+\begin{equation*}\tag{*}
+\sum_i r_i(m_i\otimes n_i),
+\end{equation*}
+其中 $r_i\in R$, $m_i\in M$, $n_i\in N$. $\otimes:M\times N\to M\otimes_R N$ 的 $R$-双线性归结为如下规则:
+\[
+\begin{aligned}
+m\otimes(n_1+n_2)&=m\otimes n_1+m\otimes n_2,\\
+(m_1+m_2)\otimes n&=m_1\otimes n+m_2\otimes n,\\
+m\otimes(rn)&=(rm)\otimes n=r(m\otimes n),
+\end{aligned}
+\]
+对所有 $m,m_1,m_2\in M$, $n_1,n_2,n\in N$, $r\in R$ 成立. 特别地注意 (*) 中的系数 $r_i$ 并非必要, 因为它们可以被吸收进相应的项 $m_i\otimes n_i$:
+\[
+\sum_i r_i(m_i\otimes n_i)=\sum_i (r_i m_i)\otimes n_i.
+\]
+形如 $m\otimes n$ 的元素 (即在表达式中只需一个求和项) 称为\emph{纯张量}. 亲爱的读者, 请记住纯张量是特殊的: 通常, 并非张量积的每个元素都是纯张量. 见习题~\ref{ex:tensor-cyclic-pure} 中每个张量碰巧都是纯张量的一个情形, 并体会那是多么特殊.
+
+不过纯张量作为张量积的一组生成元非常有用. 例如, 若两个同态 $\alpha,\beta:M\otimes_R N\to P$ 在纯张量上重合, 则 $\alpha=\beta$. 涉及张量积的计算常常被化归为对纯张量的简单验证.
+
+\subsection{与 Hom 的伴随以及显式计算}
+\label{subsec:tensor-hom-adjunction}
+
+张量积是 Hom 的左伴随. 一旦我们解析了这句粗略陈述的含义, 它就近乎显然; 但正如我们在 §\ref{subsec:comparing-functors} 中发现的, 仅凭 $\otimes_R$ 是某个函子的左伴随这一事实, 就足以对它得出有趣的结论.
+
+首先, 我们注意到每个 $R$-模 $N$ 都通过 $\otimes_R$ 定义了一个新的协变函子 $R\dcate{-Mod}\to R\dcate{-Mod}$, 在对象上由
+\[
+M\mapsto M\otimes_R N
+\]
+给出. 为了看清它在态射上如何作用, 设
+\[
+\alpha:M_1\to M_2
+\]
+是一个 $R$-模同态. 与 $N$ 作笛卡尔积并与 $\otimes$ 复合, 定义了一个 $R$-双线性映射
+\[
+M_1\times N\to M_2\times N\to M_2\otimes N,
+\]
+从而诱导出一个 $R$-线性映射
+\[
+\alpha\otimes N:M_1\otimes N\to M_2\otimes N.
+\]
+在纯张量上, 这个映射简单地由 $m\otimes n\mapsto\alpha(m)\otimes n$ 给出, 而函子性立即推出: 若 $\beta:M_0\to M_1$ 是第二个同态, 则 $(\alpha\otimes N)\circ(\beta\otimes N)$ 与 $(\alpha\circ\beta)\otimes N$ 都把纯张量 $m\otimes n$ 映到 $\alpha(\beta(m))\otimes n$, 所以它们必须在所有张量上一致.
+
+本小节开头给出的伴随陈述把这个函子与协变函子 $P\mapsto\Hom_{R\dcate{-Mod}}(N,P)$ 相比较; 参见 §\ref{subsec:examples-functors}. 让我们更精确地看清它是如何运作的.
+
+我们定义 $M\otimes_R N$ 的方式使得: 给出一个到 $R$-模 $P$ 的 $R$-线性映射 $M\otimes_R N\to P$, 就``等同于''给出一个 $R$-双线性映射 $M\times N\to P$. 现在回忆 $R$-双线性映射的定义: $\varphi:M\times N\to P$ 是 $R$-双线性的, 当且仅当对所有 $m\in M$ 与 $n\in N$, $\varphi(m,\_)$ 与 $\varphi(\_,n)$ 都是 $R$-线性映射. 这个规定的前半部分说 $\varphi$ 决定了一个函数
+\[
+M\to\Hom_R(N,P);
+\]
+后半部分说这是一个 $R$-模同态. 因此, 一个 $R$-双线性映射``等同于''$\Hom_R(M,\Hom_R(N,P))$ 中的一个元素.
+
+这些简单的考虑应当足以让如下看似复杂的陈述变得自然:
+
+\begin{lemma}\label{lem:tensor-hom-adj}
+对所有 $R$-模 $M$, $N$, $P$, 存在 $R$-模的同构
+\[
+\Hom_R(M,\Hom_R(N,P))\cong\Hom_R(M\otimes_R N,P).
+\]
+\end{lemma}
+
+\begin{proof}
+如陈述之前所指出的, 每个 $\alpha\in\Hom_R(M,\Hom_R(N,P))$ 都通过
+\[
+(m,n)\mapsto\alpha(m)(n)
+\]
+决定一个 $R$-双线性映射 $\varphi:M\times N\to P$. 由万有性质, $\varphi$ 唯一地通过一个 $R$-线性映射 $\overline{\varphi}:M\otimes_R N\to P$ 分解. 因此 $\alpha$ 决定了一个良定义的元素 $\overline{\varphi}\in\Hom_R(M\otimes_R N,P)$.
+
+读者将验证 (习题~\ref{ex:tensor-hom-adj-proof}) 这个映射 $\alpha\mapsto\overline{\varphi}$ 是 $R$-线性的, 并构造一个逆.
+\end{proof}
+
+\begin{corollary}\label{cor:tensor-left-adjoint}
+对每个 $R$-模 $N$, 函子 $\_\otimes_R N$ 是函子 $\Hom_R(N,\_)$ 的左伴随.
+\end{corollary}
+
+\begin{proof}
+断言是: 引理~\ref{lem:tensor-hom-adj} 中发现的同构在 §\ref{subsec:comparing-functors} 中暗示但未充分解释的意义下是自然的一; 感兴趣的读者核查这个自然性应当不会有困难. \qed
+\end{proof}
+
+由引理~\ref{lem:right-adjoint-limits} (或者更确切地说, 是它的余版本), 我们可以断定: 对每个 $R$-模 $N$, 函子 $\_\otimes_R N$ 保持余极限, 并且由 §\ref{subsec:bilinear-tensor-def} 中验证的张量积的基本交换性, $M\otimes_R\_$ 也保持余极限. 特别地——这是又一份巴甫洛夫条件反射的好材料——
+\[
+M\otimes_R\_\ \text{与}\ \_\otimes_R N\ \text{都是右正合函子}
+\]
+(参见例~\ref{ex:exact-functors}).
+
+这些观察有几个推论, 使得涉及张量积的``计算''更合情理. 这里是一个样本:
+
+\begin{corollary}\label{cor:tensor-direct-sum}
+对所有 $R$-模 $M_1,M_2,N$,
+\[
+(M_1\oplus_R M_2)\otimes N\cong(M_1\otimes_R N)\oplus(M_2\otimes_R N).
+\]
+(此外, 由交换性, $M\otimes_R(N_1\oplus N_2)\cong(M\otimes_R N_1)\oplus(M\otimes_R N_2)$ 同样成立.) 确实, 余积就是余极限. 事实上, $\otimes$ 必与任意 (可能是无限的) 直和交换:
+\[
+\Bigl(\bigoplus_{\alpha\in A}M_\alpha\Bigr)\otimes_R N\cong\bigoplus_{\alpha\in A}(M_\alpha\otimes_R N).
+\]
+\end{corollary}
+
+这算出了所有自由 $R$-模的张量积:
+
+\begin{corollary}\label{cor:tensor-free}
+对任意两个集合 $A$, $B$,
+\[
+R^{\oplus A}\otimes_R R^{\oplus B}\cong R^{\oplus(A\times B)}.
+\]
+\end{corollary}
+
+确实, ``分配''直和把左边辨认为直和 $(R^{\oplus A})^{\oplus B}$, 它同构于右边 (习题~III.\ref{ex:double-sum}). 对有限生成自由模, 这简单地就是说 $R^{\oplus m}\otimes R^{\oplus n}\cong R^{\oplus mn}$.
+
+注意, 若 $e_1,\dots,e_m$ 生成 $M$ 且 $f_1,\dots,f_n$ 生成 $N$, 那么纯张量 $e_i\otimes f_j$ 必生成 $M\otimes_R N$. 在自由情形, 若 $e_i$ 与 $f_j$ 分别构成 $R^{\oplus m}$, $R^{\oplus n}$ 的基, 则 $mn$ 个元素 $e_i\otimes f_j$ 必是 $R^{\oplus m}\otimes_R R^{\oplus n}$ 的一组基. 确实它们生成它; 因而它们必线性无关, 因为这个模是秩为 $mn$ 的自由模. 特别地, 当 $R$ 是一个域 $k$ 而模因此只是 $k$-向量空间时 (命题~VI.\ref{prop:vector-space-basis}), 这就是全部可能. 在更一般的环上张量积更有趣.
+
+\begin{corollary}\label{cor:tensor-quotient-ideal}
+对所有 $R$-模 $N$ 与 $R$ 的所有理想 $I$,
+\[
+\frac{R}{I}\otimes_R N\cong\frac{N}{IN}.
+\]
+\end{corollary}
+
+确实, $\_\otimes_R N$ 是右正合的; 于是正合序列
+\[
+0\longrightarrow I\longrightarrow R\longrightarrow\frac{R}{I}\longrightarrow 0
+\]
+诱导出一个正合序列
+\[
+I\otimes_R N\longrightarrow R\otimes_R N\longrightarrow\frac{R}{I}\otimes_R N\longrightarrow 0.
+\]
+$I\otimes_R N$ 在 $R\otimes_R N\cong N$ 中的像由纯张量 $a\otimes n$ ($a\in I$, $n\in N$) 的像生成; 这就是 $IN$. 因此第二个序列把 $N/(IN)$ 与 $(R/I)\otimes_R N$ 等同, 如所需.
+
+\begin{corollary}\label{cor:tensor-quotient-ideal-2}
+对所有理想 $I$, $J\subseteq R$,
+\[
+\frac{R}{I}\otimes_R\frac{R}{J}\cong\frac{R}{I+J}.
+\]
+\end{corollary}
+
+这由推论~\ref{cor:tensor-quotient-ideal} 与``第三同构定理''命题~III.\ref{prop:module-third-iso} 立即推出. 确实, $IR/J=(I+J)/J$.
+
+\begin{example}\label{ex:tensor-zm-zn}
+$\mathbb{Z}/m\mathbb{Z}\otimes_{\mathbb{Z}}\mathbb{Z}/n\mathbb{Z}\cong\mathbb{Z}/\gcd(m,n)\mathbb{Z}$.
+
+确实, 在 $\mathbb{Z}$ 中 $(m)+(n)=(\gcd(m,n))$. 例如,
+\[
+\frac{\mathbb{Z}}{2\mathbb{Z}}\otimes_{\mathbb{Z}}\frac{\mathbb{Z}}{3\mathbb{Z}}\cong 0,
+\]
+这是资格考试上的宠儿 (参见习题~\ref{ex:tensor-zm-zn-zero}).
+\end{example}
+
+推论~\ref{cor:tensor-quotient-ideal} 是 $\otimes$ 一个基本应用的一个模板范例: 张量积可用来把涉及 $R$ 的构造 (例如商去一个理想 $I$) 转移到涉及 $R$-模的构造 (例如商去一个相应的子模). 这个操作有好几个实例; 读者将在习题~\ref{ex:tensor-localization-iso} 中考察局部化.
+
+\index{pingtan@平坦(flat)!toushe@投射(projective)}\index{pingtan@平坦(flat)!jubuhuanshangdemoziyou@局部环上的模自由(modules over local rings are free)}\index{pingtan@平坦(flat)!shijubuxingzhi@是局部性质(is a local property)}\index{pingtan@平坦(flat)!ziyou@自由(free)}\index{pingtan@平坦(flat)!pingtanxingpanbiefa@平坦性判别法(criterion for flatness)}\index{pingtan@平坦(flat)}\subsection{张量的正合性性质; 平坦性}
+\label{subsec:tensor-flatness}
+
+重要的是记住张量积并不是一个正合函子: 左正合性很可能失败. 这已经在推论~\ref{cor:tensor-quotient-ideal} 之后的讨论中出现的序列里观察到: 对一个理想 $I$ 与一个 $R$-模 $N$, 由包含 $I\subseteq R$ 经与 $N$ 作张量所诱导的映射
+\[
+I\otimes_R N\to N
+\]
+可能不是单射.
+
+\begin{example}\label{ex:tensor-mult-inj}
+乘 2 给出一个包含
+\[
+\begin{tikzcd}[column sep=large]\mathbb Z \ar[r,hook,"\cdot2"] & \mathbb Z\end{tikzcd},
+\]
+把第一个 $\mathbb{Z}$ 的副本等同于第二个副本中的理想 $(2)$. 与 $\mathbb{Z}/2\mathbb{Z}$ 在 $\mathbb{Z}$ 上作张量 (并牢记 $R\otimes_R N\cong N$), 我们得到同态
+\[
+\frac{\mathbb{Z}}{2\mathbb{Z}}\xrightarrow{\cdot 2}\frac{\mathbb{Z}}{2\mathbb{Z}},
+\]
+它把 $[0]$ 与 $[1]$ 都送到零. 这是零同态, 特别地它不是单射.
+\end{example}
+
+另一方面, 若 $N\cong R^{\oplus A}$ 是自由的, 那么 $\_\otimes_R N$ 是正合的. 确实, 每个包含
+\[
+M_1\subseteq M_2
+\]
+都被映到 $M_1\otimes_R R^{\oplus A}\to M_2\otimes_R R^{\oplus A}$, 它被 (由推论~\ref{cor:tensor-direct-sum}) 辨认为包含
+\[
+M_1^{\oplus A}\subseteq M_2^{\oplus A}.
+\]
+
+\begin{example}\label{ex:tensor-flat-kvect}
+因为向量空间是自由的 (命题~VI.\ref{prop:vector-space-basis}), 在 $k\dcate{-Vect}$ 中张量是正合的: 如果
+\[
+0\longrightarrow V_1\longrightarrow V_2\longrightarrow V_3\longrightarrow 0
+\]
+是一个 $k$-向量空间的正合序列而 $W$ 是一个 $k$-向量空间, 那么诱导出的序列
+\[
+0\longrightarrow V_1\otimes_k W\longrightarrow V_2\otimes_k W\longrightarrow V_3\otimes_k W\longrightarrow 0
+\]
+在两边都正合.
+\end{example}
+
+读者现在应当想知道, 研究 $R$-模 $N$ 上的一个条件, 保证函子 $\_\otimes_R N$ 既左正合又右正合, 是否有用.
+
+\begin{definition}\label{def:flat-module}
+一个 $R$-模 $N$ 是\emph{平坦的}, 如果函子 $\_\otimes_R N$ 是正合的.
+\end{definition}
+
+在习题中读者将探索这个概念的一些简单性质, 以及在某些特殊情形有用的等价表述.
+
+\index{pingtan@平坦(flat)!mo@模(module)}我们已经验证过 $\mathbb{Z}/2\mathbb{Z}$ 不是平坦 $\mathbb{Z}$-模, 而自由模是平坦的. 平坦模极为重要: 在代数几何中, ``平坦性''表达的是如下事实——一个族中的对象``连续地''变化, 保持某些关键的不变量.
+
+\begin{example}\label{ex:flat-geometric}
+考虑平面 $\mathbb{A}^2$ 中的仿射代数集 $\mathcal{V}(xy)$ (在一个固定域 $k$ 上) 以及``到第一个坐标的投影'' $\mathcal{V}(xy)\to\mathbb{A}^1$, $(x,y)\mapsto x$:
+\begin{center}
+\begin{tikzpicture}[scale=.85]
+\draw[->] (-2,0)--(2,0) node[right] {$x$};
+\draw[->] (0,-1.3)--(0,1.5) node[above] {$y$};
+\node at (-1.5,1) {$\mathcal V(xy)$};
+\draw[->,thick] (0,-1.6)--(0,-2.8) node[midway,right] {投影};
+\draw[->] (-2,-3.2)--(2,-3.2) node[right] {$\mathbb A^1$};
+\fill (0,-3.2) circle (2pt) node[below] {$0$};
+\draw[dashed,gray] (-1,0)--(-1,-3.2);\draw[dashed,gray] (1,0)--(1,-3.2);
+\end{tikzpicture}
+\end{center}
+用坐标环的术语 (参见 §VII.\ref{subsec:affine-geometry}), 这个映射对应于 $k$-代数的同态
+\[
+k[x]\to\frac{k[x,y]}{(xy)}
+\]
+它由把 $x$ 映到陪集 $x+(xy)$ 给出 (这对已经做出习题~VII.\ref{ex:polynomial-functions} 的读者将完全清楚!). 这个同态在 $k[x,y]/(xy)$ 上定义了一个 $k[x]$-模结构, 我们可以问后者在定义~\ref{def:flat-module} 的意义下是否平坦. 从几何观点看, 在 $x=0$ 的点上方显然发生了某种``不平坦''的事, 于是我们考虑理想 $(x)$ 在 $k[x]$ 中的包含:
+\[
+\begin{tikzcd}[column sep=large]k[x] \ar[r,hook,"\cdot x"] & k[x]\end{tikzcd}.
+\]
+与 $k[x,y]/(xy)$ 作张量, 我们得到
+\[
+\frac{k[x,y]}{(xy)}\xrightarrow{\cdot x}\frac{k[x,y]}{(xy)},
+\]
+它不是单射, 因为它把非零陪集 $y+(xy)$ 送到零. 因此 $k[x,y]/(xy)$ 作为 $k[x]$-模不是平坦的.
+
+``平坦''这个术语正是由这类``几何''例子所启发.
+\end{example}
+
+\subsection{Tor 函子}
+\label{subsec:tor-functors}
+
+函子 $\_\otimes_R N$ 的``正合性的失败''由另一个函子 $R\dcate{-Mod}\to R\dcate{-Mod}$ 度量, 称为 $\Tor_1^R(\_,N)$: 如果 $N$ 是平坦的 (例如, 如果它是自由的), 那么对所有模 $M$ 有 $\Tor_1^R(M,N)=0$. 事实上 (令人惊讶地) 如果
+\[
+0\longrightarrow A\longrightarrow B\longrightarrow C\longrightarrow 0
+\]
+是一个 $R$-模的正合序列, 那么与任意 $N$ 作张量后我们得到一个新的正合序列:
+\[
+\Tor_1^R(C,N)\longrightarrow A\otimes_R N\longrightarrow B\otimes_R N\longrightarrow C\otimes_R N\longrightarrow 0,
+\]
+于是如果 $\Tor_1^R(C,N)=0$, 那么左边的模就消失了; 因此在这一情形下每个以 $C$ 结尾的短正合序列在经与 $N$ 作张量后保持正合. 事实上 (惊人地) 对所有 $N$ 都可以用更多的 Tor 模把这个序列继续下去, 得到一个更长的正合复形:
+\[
+\Tor_1^R(A,N)\longrightarrow\Tor_1^R(B,N)\longrightarrow\Tor_1^R(C,N)\longrightarrow A\otimes_R N\longrightarrow B\otimes_R N\longrightarrow C\otimes_R N\longrightarrow 0.
+\]
+这还不是故事的结尾: 还可以通过调用新的函子 $\Tor_2^R(\_,N)$, $\Tor_3^R(\_,N)$ 等把这个复形继续得更远. 这些就是张量的导函子. 要``计算''这些函子, 可以应用如下步骤: 给定一个 $R$-模 $M$, 找一个自由分解 (§VI.\ref{subsec:finitely-presented})
+\[
+\cdots\longrightarrow R^{\oplus S_2}\longrightarrow R^{\oplus S_1}\longrightarrow R^{\oplus S_0}\longrightarrow M\longrightarrow 0;
+\]
+丢掉 $M$, 并把自由部分与 $N$ 作张量, 得到一个复形 $M_\bullet\otimes_R N$:
+\[
+\cdots\longrightarrow N^{\oplus S_2}\longrightarrow N^{\oplus S_1}\longrightarrow N^{\oplus S_0}\longrightarrow 0
+\]
+(再次回想张量交换余极限, 从而交换直和, 因此 $R^{\oplus m}\otimes_R N\cong N^{\oplus m}$); 然后取这个复形的同调 (参见 §III.\ref{subsec:snake-lemma}). 惊人地, 这将不依赖于 (直到同构) 所选取的自由分解, 于是我们可以定义
+\[
+\Tor_i^R(M,N):=H_i(M_\bullet\otimes_R N).
+\]\erratumfootnote{此处官方勘误在张量积符号上补齐环下标 $R$，记为 $M_\bullet\otimes_R N$。}
+例如, 依此定义 $\Tor_0^R(M,N)\cong M\otimes_R N$ (习题~\ref{ex:tor0-tensor}), 并且如果 $N$ 是平坦的, 则对所有 $i>0$ 与所有 $M$ 有 $\Tor_i^R(M,N)=0$ (因为那时与 $N$ 作张量是正合函子, 所以张量化 $M$ 的分解返回一个正合序列, 从而没有同调). 事实上, 这证明了一个 Tor 函子的显著性质: 如果对所有 $M$ 有 $\Tor_1^R(M,N)=0$, 那么对所有 $i>0$ 与所有模 $M$ 有 $\Tor_i^R(M,N)=0$. 确实, 那时 $N$ 就是平坦的.
+
+此时你可能会觉得有什么有点失衡: 为什么聚焦于函子 $\_\otimes_R N$, 而不是 $M\otimes_R\_$? 因为 $M\otimes_R N$ 典范同构于 $N\otimes_R M$ (在交换情形; 参见例~\ref{ex:tensor-r-n}), 我们可以期望同样的结论适用于每个 $\Tor_i^R$: 对所有 $i$, $\Tor_i^R(M,N)$ 应典范同构于 $\Tor_i^R(N,M)$. 等价地, 我们应当能把 $\Tor_i^R(M,N)$ 计算为 $M\otimes_R N_\bullet$ 的同调, 其中 $N_\bullet$ 是 $N$ 的一个自由分解. 情况确实如此.
+
+在适当的时候 (§IX.\ref{sec:derived-functors} 与 §IX.\ref{sec:double-complexes}) 我们将证明这一点以及我们在这个小节中陈述的所有其他奇妙事实. 目前, 我们请读者相信 Tor 函子可以如我们所指示的那样定义, 而这里回顾的事实将足以做简单的计算 (例如见习题~\ref{ex:tor-torsion} 与 2.17) 与应用.
+
+事实上, 关于 PID 上的有限生成模我们已经知道得足够多, 从而对证明这类一般事实涉及什么有了初步的感觉. 回想我们已经能够确立: PID $R$ 上的每个有限生成模 $M$ 都有一个长度为 1 的自由分解:
+\[
+0\longrightarrow R^{\oplus m_1}\longrightarrow R^{\oplus m_0}\longrightarrow M\longrightarrow 0.
+\]
+这个性质刻画了 PID (命题~VI.\ref{prop:pid-resolution}). 如果
+\[
+0\longrightarrow A\longrightarrow B\longrightarrow C\longrightarrow 0
+\]
+是一个 $R$-模的正合序列, 不难看出可以产出``相容的''分解, 在下述意义下: 下面这个图的各行以及各列都将正合:
+\begin{center}
+\begin{tikzcd}[column sep=2em,row sep=1.5em]
+& 0 \ar[d] & 0 \ar[d] & 0 \ar[d] & \\
+0 \ar[r] & R^{\oplus a_1} \ar[r] \ar[d,"\alpha"'] & R^{\oplus b_1} \ar[r] \ar[d,"\beta"] & R^{\oplus c_1} \ar[r] \ar[d,"\gamma"] & 0 \\
+0 \ar[r] & R^{\oplus a_0} \ar[r] \ar[d] & R^{\oplus b_0} \ar[r] \ar[d] & R^{\oplus c_0} \ar[r] \ar[d] & 0 \\
+0 \ar[r] & A \ar[r] \ar[d] & B \ar[r] \ar[d] & C \ar[r] \ar[d] & 0 \\
+& 0 & 0 & 0 &
+\end{tikzcd}
+\end{center}
+(这将在 §IX.\ref{sec:derived-functors} 中血淋淋地详细证明.) 把两个``自由''行与 $N$ 作张量; 它们保持正合 (张量交换直和):
+\[
+\begin{tikzcd}[column sep=small]
+0 \ar[r] & N^{\oplus a_1} \ar[r] \ar[d, "\alpha\otimes N"'] & N^{\oplus b_1} \ar[r] \ar[d, "\beta\otimes N"'] & N^{\oplus c_1} \ar[r] \ar[d, "\gamma\otimes N"'] & 0 \\
+0 \ar[r] & N^{\oplus a_0} \ar[r] & N^{\oplus b_0} \ar[r] & N^{\oplus c_0} \ar[r] & 0
+\end{tikzcd}
+\]
+\index{sheyinli@蛇引理(snake lemma)}现在这些列 (前后都加上 0) 恰好就是复形 $A_\bullet\otimes_R N$, $B_\bullet\otimes_R N$, $C_\bullet\otimes_R N$, 它们的同调``计算''Tor 模. 应用蛇引理 (引理~III.\ref{lem:snake}; 参见注~III.\ref{rem:snake-homology}) 给出正合序列
+\[
+\begin{tikzcd}[column sep=.8em,row sep=2em,font=\small]
+0 \ar[r] & H_1(A_\bullet\otimes_R N) \ar[r] & H_1(B_\bullet\otimes_R N) \ar[r] & H_1(C_\bullet\otimes_R N) \ar[dll,out=0,in=180,looseness=1,"\delta" description] & \\
+& H_0(A_\bullet\otimes_R N) \ar[r] & H_0(B_\bullet\otimes_R N) \ar[r] & H_0(C_\bullet\otimes_R N) \ar[r] & 0
+\end{tikzcd}
+\]
+即
+\[
+0\longrightarrow\Tor_1^R(A,N)\longrightarrow\Tor_1^R(B,N)\longrightarrow\Tor_1^R(C,N)\xrightarrow{\ \delta\ } A\otimes_R N\longrightarrow B\otimes_R N\longrightarrow C\otimes_R N\longrightarrow 0,
+\]
+这正是上面所变出的 Tor 模序列, 左边还附带一个 0 (这是由于如果 $R$ 是 PID 则 $\Tor_2^R$ 消失; 参见习题~\ref{ex:tor-pid-vanish}).
+
+注意如果 $k$ 是一个域, 则 $\Tor_i^k$ 对 $i>0$ 消失, 因为向量空间是平坦的; 而如果 $R$ 是 PID, 则 $\Tor_i^R$ 对 $i>1$ 消失 (习题~\ref{ex:tor-pid-vanish}). 鉴于上面描述的计算 Tor 的步骤以及 §VI.\ref{subsec:pids-resolutions} 末尾的考虑, 这些事实并不令人惊讶: 环 $R$ 上模的自由分解长度的一个上界将蕴含非零 Tor 的一个上界. 对特别好的环 (例如对应代数几何中``光滑''点的环), 这个上界与 Krull 维数一致; 但这类精确结果超出了本书的范围.
+
+\subsection*{习题}
+\phantomsection
+\addcontentsline{toc}{subsection}{习题}
+
+$R$ 表示一个固定的交换环.
+
+\begin{prob}\label{ex:tensor-cyclic-pure}
+$\triangleright$ 设 $M$, $N$ 为 $R$-模, 并假定 $N$ 是循环的. 证明 $M\otimes_R N$ 的每个元素都可写成一个纯张量. [\S\ref{subsec:bilinear-tensor-def}]
+\end{prob}
+
+\begin{prob}\label{ex:tensor-zm-zn-zero}
+$\triangleright$ ``手工''证明 (即, 不诉诸张量的右正合性) 若 $m$, $n$ 是互素的整数, 则 $\mathbb{Z}/n\mathbb{Z}\otimes_{\mathbb{Z}}\mathbb{Z}/m\mathbb{Z}\cong 0$. [\S\ref{subsec:tensor-hom-adjunction}]
+\end{prob}
+
+\begin{prob}\label{ex:tensor-poly-rings}
+证明 $R[x_1,\dots,x_n]\otimes_R R[y_1,\dots,y_m]\cong R[x_1,\dots,x_n,y_1,\dots,y_m]$.
+\end{prob}
+
+\begin{prob}\label{ex:tensor-ralgebra-coproduct}
+$\neg$ 设 $S$, $T$ 为交换 $R$-代数. 验证如下:
+\begin{itemize}
+\item 张量积 $S\otimes_R T$ 有一个乘法运算, 在纯张量上定义为 $(s_1\otimes t_1)\cdot(s_2\otimes t_2):=s_1s_2\otimes t_1t_2$, 并使之成为一个交换 $R$-代数.
+\item 相对于这个结构, 存在 $R$-代数同态 $i_S:S\to S\otimes T$ 与 $i_T:T\to S\otimes T$, 分别由 $i_S(s):=s\otimes 1$, $i_T(t):=1\otimes t$ 定义.
+\item 带有这两个结构同态的 $R$-代数 $S\otimes_R T$ 是交换 $R$-代数范畴中 $S$ 与 $T$ 的余积: 若 $U$ 是一个交换 $R$-代数且 $f_S:S\to U$, $f_T:T\to U$ 是 $R$-代数同态, 则存在唯一的 $R$-代数同态 $f_S\otimes f_T$ 使下图交换:
+\begin{center}
+\begin{tikzcd}
+& S\ar[dl, "i_S"']\ar[dr, "f_S"] & \\
+S\otimes_R T\ar[rr, dashed, "f_S\otimes f_T"] & & U\\
+& T\ar[ul, "i_T"]\ar[ur, "f_T"'] &
+\end{tikzcd}
+\end{center}
+\end{itemize}
+特别地, 如果 $S$ 与 $T$ 干脆就是交换环, 那么 $S\otimes_{\mathbb{Z}}T$ 是交换环范畴中 $S$ 与 $T$ 的余积. 这解决了 §III.\ref{subsec:ring-products} 末尾留下的一个问题. [习题~\ref{ex:tensor-field-ext-ring}]
+\end{prob}
+
+\begin{prob}\label{ex:tensor-localization-iso}
+$\triangleright$ (参见习题~V.\ref{ex:localization-ring} 与 V.\ref{ex:localization-module}.) 设 $S$ 是 $R$ 的一个乘性子集, 并设 $M$ 是一个 $R$-模. 证明 $S^{-1}M\cong M\otimes_R S^{-1}R$ (作为 $R$-模). (使用张量积的万有性质.)
+\end{prob}
+
+通过这一同构, $M\otimes_R S^{-1}R$ 继承了一个 $S^{-1}R$-模结构. [§\ref{subsec:tensor-hom-adjunction}, 习题~\ref{ex:tensor-rank}, 习题~\ref{ex:tensor-localization-flat}, §\ref{sec:base-change}]
+
+\begin{prob}\label{ex:tensor-localization-assoc}
+$\neg$ (参见习题~V.\ref{ex:localization-ring} 与 V.\ref{ex:localization-module}.) 设 $S$ 是 $R$ 的一个乘性子集, 并设 $M$ 是一个 $R$-模.
+\begin{itemize}
+\item 设 $N$ 是一个 $S^{-1}R$-模. 证明 $(S^{-1}M)\otimes_{S^{-1}R} N\cong M\otimes_R N$.
+\item 设 $A$ 是一个 $R$-模. 证明 $(S^{-1}A)\otimes_R M\cong S^{-1}(A\otimes_R M)$.
+\end{itemize}
+(两者都可``手工''完成, 通过分析引理~\ref{lem:tensor-exists} 中的构造. 例如, 存在一个同态 $M\otimes_R N\to (S^{-1}M)\otimes_{S^{-1}R} N$, 它是满的, 因为 (用显然的记号) 在 $(S^{-1}M)\otimes_{S^{-1}R} N$ 中有 $\frac{m}{s}\otimes n=m\otimes\frac{n}{s}$; 验证它是单射归结为对定义两个张量积的关系式做简单的操作. 这两个同构都将是张量积结合性的容易推论; 参见习题~\ref{ex:tensor-assoc-localization}.) [习题~\ref{ex:flat-local}, §\ref{sec:base-change}]
+\end{prob}
+
+\begin{prob}\label{ex:tensor-base-change-field}
+\index{huan@环(ring)!zihuan@子环(subring)}改变张量中的基环可能有所作为, 也可能毫无作用:
+\begin{itemize}
+\item 证明 $\mathbb{Q}\otimes_{\mathbb{Z}}\mathbb{Q}\cong\mathbb{Q}\otimes_{\mathbb{Q}}\mathbb{Q}$.
+\item 证明 $\mathbb{C}\otimes_{\mathbb{R}}\mathbb{C}\not\cong\mathbb{C}\otimes_{\mathbb{C}}\mathbb{C}$.
+\end{itemize}
+\end{prob}
+
+\begin{prob}\label{ex:tensor-rank}
+设 $R$ 是一个整环, 带有分式域 $K$, 并设 $M$ 是一个有限生成 $R$-模. 张量积 $V:=M\otimes_R K$ 是一个 $K$-向量空间 (习题~\ref{ex:tensor-localization-iso}). 证明 $\dim_K V$ 等于 $M$ 作为 $R$-模的秩, 在定义~VI.\ref{def:rank-fg} 的意义下.
+\end{prob}
+
+\begin{prob}\label{ex:tensor-fg-ab-grp}
+设 $G$ 是一个秩为 $r$ 的有限生成 Abel 群. 证明 $G\otimes_{\mathbb{Z}}\mathbb{Q}\cong\mathbb{Q}^r$. 证明对无穷多个素数 $p$, 有 $G\otimes_{\mathbb{Z}}(\mathbb{Z}/p\mathbb{Z})\cong(\mathbb{Z}/p\mathbb{Z})^r$.
+\end{prob}
+
+\begin{prob}\label{ex:tensor-field-ext-ring}
+设 $k\subseteq k(\alpha)=F$ 是一个有限单域扩张. 注意 $F\otimes_k F$ 有一个自然的环结构; 参见习题~\ref{ex:tensor-ralgebra-coproduct}.
+\begin{itemize}
+\item 证明 $\alpha$ 在 $k$ 上可分, 当且仅当 $F\otimes_k F$ 作为环是既约的.
+\item 证明 $k\subseteq F$ 是 Galois 的, 当且仅当 $F\otimes_k F$ 作为环同构于 $F^{[F:k]}$.
+\end{itemize}
+(使用推论~\ref{cor:tensor-quotient-ideal} 来``计算''这个张量积. 来自 §V.\ref{subsec:crt} 的 CRT 可能用得上.)
+\end{prob}
+
+\begin{prob}\label{ex:tensor-hom-adj-proof}
+$\triangleright$ 完成引理~\ref{lem:tensor-hom-adj} 的证明. [\S\ref{subsec:tensor-hom-adjunction}]
+\end{prob}
+
+\begin{prob}\label{ex:tensor-localization-flat}
+设 $S$ 是 $R$ 的一个乘性子集 (参见习题~V.\ref{ex:localization-ring}). 证明 $S^{-1}R$ 在 $R$ 上是平坦的. (提示: 习题~\ref{ex:tensor-localization-iso} 与 1.25.)
+\end{prob}
+
+\begin{prob}\label{ex:flat-direct-sum}
+证明平坦模的直和是平坦的.
+\end{prob}
+
+\begin{prob}\label{ex:tor0-tensor}
+$\triangleright$ 证明, 依 §\ref{subsec:tor-functors} 中给出的定义, $\Tor_0^R(M,N)$ 同构于 $M\otimes_R N$. [\S\ref{subsec:tor-functors}]
+\end{prob}
+
+\begin{prob}\label{ex:tor-torsion}
+$\triangleright$ 证明对 $R$ 中一个非零因子 $r$ 与一个 $R$-模 $N$, 模 $\Tor_1^R(R/(r),N)$ 同构于 $N$ 的 $r$-挠子模, 即满足 $rn=0$ 的元素 $n\in N$ 组成的子模 (参见 §VI.\ref{subsec:torsion}). (这正是 Tor 被称为 Tor 的原因.) [§\ref{subsec:tor-functors}, 习题~\ref{ex:ext-extensions}]
+\end{prob}
+
+\begin{prob}\label{ex:tor-ideal-intersect}
+设 $I$, $J$ 为 $R$ 的理想. 证明 $\Tor_1^R(R/I,R/J)\cong(I\cap J)/IJ$. (例如, 由引理~V.\ref{lem:crt-reduce-pairwise}, 若 $I+J=R$ 则这个 $\Tor_1^R$ 消失.) 证明对 $i>1$ 有 $\Tor_i^R(R/I,R/J)\cong\Tor_{i-1}^R(I,R/J)$.
+\end{prob}
+
+\begin{prob}\label{ex:tor-pid-vanish}
+$\triangleright$ 设 $M$, $N$ 是 PID $R$ 上的模. 证明对 $i\geq 2$ 有 $\Tor_i^R(M,N)=0$. (为简单起见, 假定 $M$, $N$ 有限生成.) [\S\ref{subsec:tor-functors}]
+\end{prob}
+
+\begin{prob}\label{ex:flat-cyclic}
+设 $R$ 是一个整环. 证明一个循环 $R$-模是平坦的, 当且仅当它是自由的.
+\end{prob}
+
+\begin{prob}\label{ex:flat-criterion}
+$\neg$ 如下判别法相当有用.
+\begin{itemize}
+\item 证明一个 $R$-模 $M$ 是平坦的, 当且仅当每个单态 $R$-模同态 $A\hookrightarrow B$ 都诱导出一个单态 $R$-模同态 $A\otimes_R M\hookrightarrow B\otimes_R M$.
+\item 证明只需对所有有限生成模 $B$ 验证这个条件. (提示: 这一次, 回指引理~\ref{lem:tensor-exists} 中给出的张量积构造. 一个元素 $\sum_i a_i\otimes m_i\in A\otimes_R M$ 在 $B\otimes_R M$ 中变成零, 当且仅当对应的元素 $\sum_i(a_i,m_i)$ 等于在自由 $R$-模 $F^R(B\times M)$ 中定义 $B\otimes_R M$ 的关系式的一个组合. 这将是一个只涉及 $B$ 中有限多个元素的恒等式; 于是\ldots.)
+\item 证明只需在 $B=R$ 且 $A=I$ 是 $R$ 的一个理想时验证这个条件. (提示: 现在我们可以假定 $B$ 有限生成. 找子模 $B_j$ 使得 $A=B_0\subseteq B_1\subseteq\cdots\subseteq B_r=B$, 每个 $B_j/B_{j-1}$ 循环. 化归到验证当 $B/A$ 循环因而 $\cong R/I$ (对某理想 $I$) 时 $A\otimes_R M$ 单射地嵌入 $B\otimes_R M$; 再用一个 $\Tor_1^R$ 的论证——或者, 这要求多费一点力气——用蛇引理的巧妙运用——得出结论.)
+\item 推出一个 $R$-模 $M$ 是平坦的, 当且仅当对每个理想 $I\subseteq R$, 自然同态 $I\otimes_R M\to IM$ 是一个同构.
+\end{itemize}
+如果你相信 Tor, 那么现在你也可以证明一个 $R$-模 $M$ 是平坦的, 当且仅当对所有理想 $I\subseteq R$ 有 $\Tor_1^R(R/I,M)=0$. [习题~\ref{ex:flat-pid-torsionfree}]
+\end{prob}
+
+\begin{prob}\label{ex:flat-pid-torsionfree}
+设 $R$ 是一个 PID. 证明一个 $R$-模 $M$ 是平坦的, 当且仅当它是无挠的. (若 $M$ 有限生成, §VI.\ref{subsec:classification-theorem} 的分类定理使这特别容易. 否则, 使用习题~\ref{ex:flat-criterion}.)
+\end{prob}
+
+\index{daishuji@代数集(algebraic set)}从几何观点看, 这大致是说: 一个代数集在一条非奇异曲线上``不平坦'', 当且仅当这个集的某个分支被收缩到一个点. 这个现象在例~\ref{ex:flat-geometric} 的图中展示.
+
+\begin{prob}\label{ex:flat-local}
+$\neg$ (参见习题~V.\ref{ex:local-ring}.) 证明平坦性是一个局部性质: 一个 $R$-模 $M$ 是平坦的, 当且仅当对所有素理想 $\mathfrak{p}$ 有 $M_{\mathfrak{p}}$ 是平坦 $R_{\mathfrak{p}}$-模, 当且仅当对所有极大理想 $\mathfrak{m}$ 有 $M_{\mathfrak{m}}$ 是平坦 $R_{\mathfrak{m}}$-模. (提示: 使用习题~\ref{ex:localization-exact} 与 2.6.
+
+$\Longrightarrow$ 方向将是直截了当的. 对逆命题, 设 $A\subseteq B$ 为 $R$-模, 并设 $K$ 为诱导同态 $A\otimes_R M\to B\otimes_R M$ 的核. 证明局部化同态 $A_{\mathfrak{m}}\otimes_{R_{\mathfrak{m}}}M_{\mathfrak{m}}\to B_{\mathfrak{m}}\otimes_{R_{\mathfrak{m}}}M_{\mathfrak{m}}$ 的核同构于 $K_{\mathfrak{m}}$, 并使用习题~V.\ref{ex:local-vanish}.) [习题~\ref{ex:tor-localize}]
+\end{prob}
+
+\begin{prob}\label{ex:tor-localize}
+$\neg$ 设 $M$, $N$ 为 $R$-模, 并设 $S$ 是 $R$ 的一个乘性子集. 使用 §\ref{subsec:tor-functors} 中给出的 Tor 的定义证明 $S^{-1}\Tor_i^R(M,N)\cong\Tor_i^{S^{-1}R}(S^{-1}M,S^{-1}N)$. (使用习题~\ref{ex:localization-exact}.) 用这个事实给出一个更精简的证明, 说明平坦性是一个局部性质 (习题~\ref{ex:flat-local}). [习题~\ref{ex:flat-maxideal-tor}]
+\end{prob}
+
+\begin{prob}\label{ex:flat-ses}
+$\triangleright$ 设
+\[
+0\longrightarrow M\longrightarrow N\longrightarrow P\longrightarrow 0
+\]
+是一个 $R$-模的正合序列, 并假定 $P$ 是平坦的.
+\begin{itemize}
+\item 证明 $M$ 是平坦的, 当且仅当 $N$ 是平坦的.
+\item 证明对所有 $R$-模 $Q$, 诱导出的序列
+\[
+0\longrightarrow M\otimes_R Q\longrightarrow N\otimes_R Q\longrightarrow P\otimes_R Q\longrightarrow 0
+\]
+正合.
+\end{itemize}
+[习题~\ref{ex:flat-local-free}, §\ref{subsec:duality-exactness}]
+\end{prob}
+
+\begin{prob}\label{ex:flat-local-free}
+$\neg$ 设 $R$ 是一个交换 Noether 局部环, 带有 (唯一的) 极大理想 $\mathfrak{m}$, 并设 $M$ 是一个有限生成平坦 $R$-模.
+\begin{itemize}
+\item 选取元素 $m_1,\dots,m_r\in M$, 它们在模 $\mathfrak{m}M$ 后的陪集构成 $M/\mathfrak{m}M$ 作为域 $R/\mathfrak{m}$ 上向量空间的一组基. 由 Nakayama 引理, $M=\langle m_1,\dots,m_r\rangle$ (习题~VI.\ref{ex:local-nakayama-gen}).
+\item 得到一个正合序列
+\[
+0\longrightarrow N\longrightarrow R^{\oplus r}\longrightarrow M\longrightarrow 0,
+\]
+其中 $N$ 有限生成.
+\item 证明这个序列诱导出一个正合序列
+\[
+0\longrightarrow N/\mathfrak{m}N\longrightarrow(R/\mathfrak{m})^{\oplus r}\longrightarrow M/\mathfrak{m}M\longrightarrow 0.
+\]
+(使用习题~\ref{ex:flat-ses}.)
+\item 推出 $N=0$. (Nakayama.)
+\item 断定 $M$ 是自由的.
+\end{itemize}
+因此, 一个 Noether\footnote{Noether 假定实际上并非必要, 但它通过允许使用 Nakayama 引理而简化了证明.} 局部环上的有限生成模是平坦的, 当且仅当它是自由的. 与习题~VI.\ref{ex:local-direct-summand} 比较. [习题~\ref{ex:flat-maxideal-tor}, 习题~\ref{ex:local-fg-projective-flat}, 习题~\ref{ex:locally-free}]
+\end{prob}
+
+\begin{prob}\label{ex:flat-maxideal-tor}
+设 $R$ 是一个交换 Noether 环, 并设 $M$ 是一个有限生成 $R$-模. 证明
+\[
+M\text{ 平坦}\Longleftrightarrow \Tor_1^R(M,R/\mathfrak{m})=0\quad\text{对每个 }R\text{ 的极大理想 }\mathfrak{m}.
+\]
+\index{jubu@局部(local)!canshu@参数(parameter)!zai DVR zhong@在 DVR 中(in a DVR)}(使用习题~\ref{ex:flat-local}, 并提炼你在习题~\ref{ex:flat-local-free} 中使用的论证; 记住由习题~\ref{ex:tor-localize}, Tor 局部化. Noether 假定实际上并非必要, 但离开它证明会更难.)
+\end{prob}
+
+\section{基变换}
+\label{sec:base-change}
+
+我们再三提倡这样一个观点: 环 $R$ 的深刻性质被编码在 $R$-模的范畴 $R\dcate{-Mod}$ 之中; 一种极端的立场是干脆把 $R$ 换成 $R\dcate{-Mod}$ 作为研究的主要对象. 于是问题随之而来: 从这一观点出发应当如何处理环同态? 或者更一般地, 两个 (交换) 环 $R$, $S$ 上的模范畴 $R\dcate{-Mod}$ 与 $S\dcate{-Mod}$ 彼此之间可能有什么关系? 读者应当预见到这将通过两个范畴之间的函子来实现, 并且范畴层面的情形会比环层面的情形丰富得多.
+
+\index{pinghengshuangxianxingyingshe@平衡双线性映射(balanced bilinear map)}\subsection{平衡映射}
+\label{subsec:balanced-maps}
+
+在得以纵览基本定义之前, 我们必须先提升对张量积的理解. 结果是, $M\otimes_R N$ 满足一个比 \S\ref{subsec:bilinear-tensor-def} 中考察过的那个更包罗万象的万有性质. 设 $M$, $N$ 是交换环 $R$ 上的模 (如在 \S\ref{subsec:bilinear-tensor-def} 中那样), 并设 $G$ 是一个 Abel 群, 即一个 $\Z$-模.
+
+\begin{definition}\label{def:balanced-map}
+一个 $\Z$-双线性映射 $\varphi:M\times N\to G$ 称为 $R$-\emph{平衡的}, 如果对所有 $m\in M$, 所有 $n\in N$, 所有 $r\in R$,
+\[
+\varphi(rm,n)=\varphi(m,rn).
+\]
+\end{definition}
+
+若 $G$ 是一个 $R$-模且 $\varphi:M\times N\to G$ 是 $R$-双线性的, 则它是 $R$-平衡的\footnote{还要注意, 若 $R$ 不交换, 而 $M$, $N$ 分别带有右 $R$-模结构与左 $R$-模结构, 那么``平衡映射''这一概念依然有意义. 这导向非交换情形下张量 (作为 Abel 群) 的定义.}. 但一般而言, ``$R$-平衡''这一概念看起来要宽泛得多, 因为甚至并不要求 $G$ 是一个 $R$-模. 这可能让读者怀疑: 分解平衡映射的万有问题的解, 也许是某个与``通常''的张量积不同的玩意儿. 不过这一次我们运气不错, 通常的张量积同样胜任平衡映射的万有工作.
+
+为了理解这一点, 回想我们把 $M\otimes_R N$ 构造成一个商
+\[
+M\otimes_R N=\frac{R^{\oplus(M\times N)}}{K},
+\]
+其中 $K$ 由为使映射
+\[
+M\times N\longrightarrow R^{\oplus(M\times N)}\longrightarrow\frac{R^{\oplus(M\times N)}}{K}
+\]
+为 $R$-双线性所必需的关系生成. 我们已经观察到, $M\otimes_R N$ 的每个元素都可以写成纯张量的一个线性组合:
+\[
+\sum_i m_i\otimes n_i;
+\]
+由此推出, 由 $(m,n)\mapsto m\otimes n$ 在生成元上定义的群同态
+\[
+\Z^{\oplus(M\times N)}\twoheadrightarrow M\otimes_R N
+\]
+是满的; 它的核 $K_B$ 由这样的组合
+\[
+\sum_i(m_i,n_i)\in\Z^{\oplus(M\times N)}\quad\text{使得}\quad\sum_i(m_i,n_i)\in K
+\]
+构成, 其中右端的和在 $R^{\oplus(M\times N)}$ 中看待. 读者将验证 (习题~\ref{ex:balanced-tensor-kernel}) $K_B$ 由形如
+\[
+(m,n_1+n_2)-(m,n_1)-(m,n_2),\qquad
+(m_1+m_2,n)-(m_1,n)-(m_2,n),\qquad
+(rm,n)-(m,rn)
+\]
+的元素生成 (其中 $m,m_1,m_2\in M$, $n,n_1,n_2\in N$, $r\in R$). 因此, 我们得到一个诱导出的 Abel 群同构
+\begin{equation}\tag{$*$}
+\frac{\Z^{\oplus(M\times N)}}{K_B}\cong\frac{R^{\oplus(M\times N)}}{K},
+\end{equation}
+它相当于 $M\otimes_R N$ 的另一种描述. 这一观察的要点在于, (*) 式左端的群显然是分解 $\Z$-双线性, $R$-平衡映射的万有问题的一个解. 因此, 我们证明了
+
+\begin{lemma}\label{lem:balanced-factors-tensor}
+设 $R$ 是交换环; 设 $M$, $N$ 是 $R$-模, $G$ 是 Abel 群. 那么每个 $\Z$-双线性, $R$-平衡的映射 $\varphi:M\times N\to G$ 都通过 $M\otimes_R N$ 分解; 也就是说, 存在唯一的群同态 $\overline{\varphi}:M\otimes_R N\to G$ 使得图
+\begin{center}
+\begin{tikzcd}
+M\times N\ar[r, "\varphi"]\ar[d, "\otimes"'] & G\\
+M\otimes_R N\ar[ur, dashed, "\exists!\ \overline{\varphi}"'] &
+\end{tikzcd}
+\end{center}
+交换.
+\end{lemma}
+
+\S\ref{subsec:bilinear-tensor-def} 中考察的万有性质, 可复原为如下陈述: 若 $G$ 是 $R$-模且 $\varphi$ 是 $R$-双线性的, 则诱导出的群同态 $M\otimes_R N\to G$ 事实上是一个 $R$-线性映射.
+
+\begin{remark}\label{rmk:balanced-noncommutative}
+只要 $M$ 是右 $R$-模而 $N$ 是左 $R$-模, 平衡映射 $\varphi:M\times N\to G$ 就可以定义, 即便 $R$ 不交换: 要求对所有 $m\in M$, $n\in N$, $r\in R$ 有 $\varphi(mr,n)=\varphi(m,rn)$. 由 (*) 式左端所定义的 Abel 群仍然有意义, 并且被取作张量积 $M\otimes_R N$ 的定义; 但要注意, 它一般并不带有 $R$-模结构. 例如当 $M$ 是一个双边 $R$-模时, 这个结构就会恢复.
+\end{remark}
+
+\subsection{双模; 再看伴随}
+\index{shuangmo@双模(bimodule)}\label{subsec:bimodules-adjunction}
+
+张量的这个强化了的万有性质, 将使我们得以升级引理~\ref{lem:tensor-hom-adj} 中给出的伴随公式. 这需要引入又一个概念.
+
+\begin{definition}\label{def:bimodule}
+设 $R$, $S$ 是两个交换\footnote{再一次, 非交换的情形很值得追究, 但 (并非没有顾虑地) 我们决定不这么做. 在这种更一般的情形中, 要求 $N$ 同时是左 $R$-模与右 $S$-模, 并带有由 $(rn)s=r(ns)$ 表达的相容性 (对所有 $n\in N$, $r\in R$, $s\in S$ 的选择). 这类簿记正是把理论推广到非交换情形所需要的.} 环. 一个 $(R,S)$-\emph{双模}是一个 Abel 群 $N$, 带有相容的 $R$-模结构与 $S$-模结构, 意即对所有 $n\in N$, 所有 $r\in R$, 所有 $s\in S$,
+\[
+r(sn)=s(rn).
+\]
+\end{definition}
+
+例如, 由于 $R$ 交换, 每个 $R$-模 $N$ 都是一个 $(R,R)$-双模: 对所有 $r_1,r_2\in R$ 与所有 $n\in N$,
+\[
+r_1(r_2n)=(r_1r_2)n=(r_2r_1)n=r_2(r_1n).
+\]
+
+若 $M$ 是一个 $R$-模而 $N$ 是一个 $(R,S)$-双模, 则张量积 $M\otimes_R N$ 获得一个 $S$-模结构: 在纯张量 $m\otimes n$ 上定义 $s\in S$ 的作用为
+\[
+s(m\otimes n):=m\otimes(sn),
+\]
+再线性地延拓到所有张量上. 事实上, 这赋予 $M\otimes_R N$ 一个 $(R,S)$-双模结构.
+
+类似地, 若 $N$ 是一个 $(R,S)$-双模而 $P$ 是一个 $S$-模, 则 Abel 群 $\Hom_S(N,P)$ 是一个 $(R,S)$-双模: 其 $R$-模结构由 $(r\alpha)(n)=\alpha(rn)$ 定义, 其中 $r\in R$, $n\in N$, $\alpha\in\Hom_S(N,P)$.
+
+这一团麻烦是必需的, 哪怕只是为了让我们所许诺的伴随升级有意义. 正如大多数这类结果一样, 一旦理解了陈述在说什么, 证明就不困难.
+
+\begin{lemma}\label{lem:hom-tensor-adj-bimodule}
+设 $M$ 是 $R$-模, $N$ 是 $(R,S)$-双模, $P$ 是 $S$-模. 那么存在 Abel 群的典范同构
+\[
+\Hom_R\bigl(M,\Hom_S(N,P)\bigr)\cong\Hom_S(M\otimes_R N,P).
+\]
+\end{lemma}
+
+\begin{proof}
+每个元素 $\alpha\in\Hom_R(M,\Hom_S(N,P))$ 通过
+\[
+\varphi(m,\_):=\alpha(m)
+\]
+确定一个映射
+\[
+\varphi:M\times N\to P;
+\]
+$\varphi$ 显然是 $\Z$-双线性的. 进而, 对所有 $r\in R$, $m\in M$, $n\in N$:
+\[
+\varphi(rm,n)=\alpha(rm)(n)\stackrel{1}{=}r\alpha(m)(n)\stackrel{2}{=}\alpha(m)(rn)=\varphi(m,rn),
+\]
+其中 $\stackrel{1}{=}$ 由 $\alpha$ 的 $R$-线性而成立, $\stackrel{2}{=}$ 由 $\Hom_S(N,P)$ 上 $R$-模结构的定义而成立. 于是 $\varphi$ 是 $R$-平衡的. 由引理~\ref{lem:balanced-factors-tensor}, 这样的一个映射确定 (且被确定于) 一个 Abel 群同态
+\[
+\overline{\varphi}:M\otimes_R N\to P,
+\]
+使得 $\varphi(m,n)=\overline{\varphi}(m\otimes n)$. 我们断言 $\overline{\varphi}$ 是 $S$-线性的. 确实, 对所有 $s\in S$ 以及所有纯张量 $m\otimes n$,
+\[
+\begin{aligned}
+\overline{\varphi}\bigl(s(m\otimes n)\bigr)&=\overline{\varphi}\bigl(m\otimes(sn)\bigr)=\varphi(m,sn)=\alpha(m)(sn)=s\alpha(m)(n)=s\varphi(m,n)\\
+&=s\overline{\varphi}(m\otimes n),
+\end{aligned}
+\]
+这里我们使用了 $\alpha(m)$ 的 $S$-线性. 因此
+\[
+\overline{\varphi}\in\Hom_S(M\otimes_R N,P).
+\]
+把论证倒推回去, $\Hom_S(M\otimes_R N,P)$ 的每个元素都确定 $\Hom_R(M,\Hom_S(N,P))$ 的一个元素, 并且这两个对应显然互为逆.
+\end{proof}
+
+若 $R=S$, 我们就恢复了引理~\ref{lem:tensor-hom-adj} 的伴随公式; 注意在这种情形下该同构显然是 $R$-线性的.
+
+\subsection{标量的限制与扩张}
+\index{xianzhi@限制(restriction)!yucengdejiemiande@预层的截面的(of sections of a presheaf)}\index{xianzhi@限制(restriction)!chunliangde@纯量的(of scalars)}\label{subsec:restriction-extension-scalars}
+
+回到本节开头提到的主题, 考虑我们有一个 (交换) 环的同态 $f:R\to S$ 的情形. 很自然地会去寻找 $R$, $S$ 上的模范畴 $R\dcate{-Mod}$ 与 $S\dcate{-Mod}$ 之间的函子. 有一个相当朴素的从 $S\dcate{-Mod}$ 到 $R\dcate{-Mod}$ 的函子 (``标量的限制''), 而张量积使我们能够定义一个从 $R\dcate{-Mod}$ 到 $S\dcate{-Mod}$ 的函子 (``标量的扩张''). 还可以定义第三个重要的函子 $R\dcate{-Mod}\to S\dcate{-Mod}$, 它同样在``扩张标量'', 但我们不知道它有什么好名字.
+
+\emph{标量的限制.} 设 $f:R\to S$ 是一个环同态, 并设 $N$ 是一个 $S$-模. 回想 (\S~III.\ref{subsec:module-def}) 这意味着我们选定了环 $S$ 在 Abel 群 $N$ 上的一个作用, 也就是一个环同态
+\[
+\sigma:S\to\End_{\cate{Ab}}(N).
+\]
+与 $f$ 复合,
+\[
+\sigma\circ f:R\longrightarrow S\longrightarrow\End_{\cate{Ab}}(N)
+\]
+定义了 $R$ 在 Abel 群 $N$ 上的一个作用, 从而定义了 $N$ 上的一个 $R$-模结构.
+
+(甚至) 更显式地说, 若 $r\in R$ 而 $n\in N$, 则通过令
+\[
+rn:=f(r)n
+\]
+来定义 $r$ 在 $n$ 上的作用.
+
+由于 $S$ 交换, 这事实上定义了 $N$ 上的一个 $(R,S)$-双模结构. 进而, $S$-线性同态自然是 $R$-线性的; 这个对应 (协变地) 函子性地给出 $S\dcate{-Mod}\to R\dcate{-Mod}$.
+
+若 $f$ 是单射, 于是 $R$ 可以被视为 $S$ 的一个子环, 那么我们所做的一切不过是把 $N$ 视为在一个``受限的''标量范围上的模, 术语由此而来. 例如, 这正是我们以最简单的方式把一个复向量空间视为实向量空间的做法.
+
+我们将用 $f_*$ 记这个由 $f$ 通过限制标量诱导出的函子 $S\dcate{-Mod}\to R\dcate{-Mod}$. 注意 $f_*$ 平凡地是正合的, 因为一个模同态的核与像不依赖于基环. 鉴于例~\ref{ex:exact-functors} 中的考虑, 这暗示 $f_*$ 可能同时具有一个左伴随函子与一个右伴随函子, 而事实将恰恰如此 (命题~\ref{prop:base-change-adjoints}).\index[sym1]{16@$f_*$}
+
+\emph{标量的扩张}是从 $R\dcate{-Mod}$ 到 $S\dcate{-Mod}$ 定义的, 它把 $R$-模 $M$ 对应到张量积
+\[
+f^*(M):=M\otimes_R S,
+\]
+后者 (如我们在 \S\ref{subsec:bimodules-adjunction} 中所见) 自然带有一个 $S$-模结构. 这个对应显然是协变函子性的. 若
+\[
+R^{\oplus B}\longrightarrow R^{\oplus A}\longrightarrow M\longrightarrow 0
+\]
+是 $M$ 的一个展示 (参见 \S~VI.\ref{subsec:finitely-presented}), 则以 $S$ 作张量 (借助张量的右正合性) 给出 $f^*(M)$ 的一个展示:\index[sym1]{15@$f^*$}
+\[
+S^{\oplus B}\longrightarrow S^{\oplus A}\longrightarrow M\otimes_R S\longrightarrow 0.
+\]
+
+直观上, 这说的是 $f^*(M)$ 由与 $M$ ``同样的生成元与关系''定义, 但系数取在 $S$ 中.
+
+第三个函子记作 $f^!$, 它同样从 $R\dcate{-Mod}$ 作用到 $S\dcate{-Mod}$, 是把我们手头的配料组合起来的又一种自然方式: 若 $M$ 是一个 $R$-模, 我们在 \S\ref{subsec:bimodules-adjunction} 中已经指出\footnote{在 \S\ref{subsec:bimodules-adjunction} 中 $R$ 与 $S$ 的角色是颠倒的.}
+\[
+f^!(M):=\Hom_R(S,M)
+\]
+可以被赋予一个自然的 $S$-模结构 (通过令 $s\alpha(s'):=\alpha(ss')$). 这同样显然是一个协变函子性的规定.
+
+\begin{proposition}\label{prop:base-change-adjoints}
+设 $f:R\to S$ 是交换环的一个同态. 那么, 采用上述记号, $f_*$ 是 $f^*$ 的右伴随, 且是 $f^!$ 的左伴随. 特别地, $f_*$ 正合, $f^*$ 右正合, 而 $f^!$ 左正合.
+\end{proposition}
+
+\begin{proof}
+设 $M$, $N$ 分别是一个 $R$-模与一个 $S$-模. 注意, 平凡地, $\Hom_S(S,N)$ 典范同构于 $N$ (作为 $S$-模), 也同构于 $f_*(N)$ (作为 $R$-模). 于是\footnote{这些是 Abel 群的同构, 而如果对 $\Hom_S$ 项施加 $f_*$, 它们事实上是 $R$-模的同构.}
+\[
+\begin{aligned}
+\Hom_R(M,f_*(N))&\cong\Hom_R\bigl(M,\Hom_S(S,N)\bigr)\\
+&\cong\Hom_S(M\otimes_R S,N)=\Hom_S(f^*(M),N),
+\end{aligned}
+\]
+这里我们使用了引理~\ref{lem:hom-tensor-adj-bimodule}. 这些双射是典范的\footnote{读者应当验证这一点 ....}, 这就证明了 $f^*$ 是 $f_*$ 的左伴随.
+
+类似地, 存在典范同构 $N\cong N\otimes_S S$ (例~\ref{ex:tensor-r-n}); 于是作为 $R$-模有 $N\otimes_S S\cong f_*(N)$, 且对每个 $R$-模 $M$
+\[
+\begin{aligned}
+\Hom_R(f_*(N),M)&\cong\Hom_R(N\otimes_S S,M)\\
+&\cong\Hom_S\bigl(N,\Hom_R(S,M)\bigr)=\Hom_S(N,f^!(M)),
+\end{aligned}
+\]
+仍是依据引理~\ref{lem:hom-tensor-adj-bimodule}. 这表明 $f^!$ 是 $f_*$ 的右伴随, 证明完毕.
+\end{proof}
+
+\begin{remark}[警告]\label{rmk:base-change-notation-warning}
+我们对记号 $f_*$ 等的选择多少有些不合常规, 读者不应当过分拘泥于它. 它受到概形上的层论中类似物的启发, 但上面回顾的某些性质在那个更宽的语境中需要作关键的调整: 例如 $f_*$ 作为概形上的层运算并不是正合的.
+\end{remark}
+
+\subsection*{习题}
+\phantomsection
+\addcontentsline{toc}{subsection}{习题}
+
+在以下习题中, $R$, $S$ 记交换环.
+
+\begin{prob}\label{ex:balanced-tensor-kernel}
+$\triangleright$ 验证纯张量的一个组合 $\sum_i(m_i\otimes n_i)$ 在张量积 $M\otimes_R N$ 中为零, 当且仅当 $\sum_i(m_i,n_i)\in\Z^{\oplus(M\times N)}$ 是形如
+\[
+(m,n_1+n_2)-(m,n_1)-(m,n_2),\qquad
+(m_1+m_2,n)-(m_1,n)-(m_2,n),\qquad
+(rm,n)-(m,rn)
+\]
+的元素的组合, 其中 $m,m_1,m_2\in M$, $n,n_1,n_2\in N$, $r\in R$. [\S\ref{subsec:balanced-maps}]
+\end{prob}
+
+\begin{prob}\label{ex:tensor-restriction-map}
+若 $f:R\to S$ 是一个环同态, 且 $M$, $N$ 是 $S$-模 (从而通过限制标量成为 $R$-模), 证明存在 $R$-模的一个典范同态 $M\otimes_R N\to M\otimes_S N$.
+\end{prob}
+
+\begin{prob}\label{ex:tensor-assoc-bimodule}
+$\triangleright$ 设 $R$, $S$ 是交换环, 并设 $M$ 是 $R$-模, $N$ 是 $(R,S)$-双模, $P$ 是 $S$-模. 证明存在 $R$-模的同构
+\[
+M\otimes_R(N\otimes_S P)\cong(M\otimes_R N)\otimes_S P.
+\]
+在这个意义上, $\otimes$ 是``结合的''. [习题~\ref{ex:tensor-assoc-localization}, §\ref{subsec:multilinear-maps}]
+\end{prob}
+
+\begin{prob}\label{ex:tensor-assoc-localization}
+$\triangleright$ 用张量积的结合性 (习题~\ref{ex:tensor-assoc-bimodule}) 再次证明习题~\ref{ex:tensor-localization-assoc} 中给出的公式. (使用习题~\ref{ex:tensor-localization-iso}.) [习题~\ref{ex:tensor-localization-assoc}]
+\end{prob}
+
+\begin{prob}\label{ex:base-change-limits}
+设 $f:R\to S$ 是一个环同态. 证明 $f^!$ 与极限交换, $f^*$ 与余极限交换, 而 $f_*$ 与两者都交换. 特别地, 推出这三个函子都保持有限直和.
+\end{prob}
+
+\begin{prob}\label{ex:restriction-faithfully-exact}
+\index{baoshouhanzi@保守函子(conservative functor)}设 $f:R\to S$ 是一个环同态, 并设 $\varphi:N_1\to N_2$ 是一个 $S$-模同态. 证明 $\varphi$ 是同构当且仅当 $f_*(\varphi)$ 是同构. (具有这一性质的函子称为\emph{保守的}.) 事实上, 证明 $f_*$ 是忠实正合的: $S$-模的序列
+\[
+0\longrightarrow L\longrightarrow M\longrightarrow N\longrightarrow 0
+\]
+正合, 当且仅当 $R$-模的序列
+\[
+0\longrightarrow f_*(L)\longrightarrow f_*(M)\longrightarrow f_*(N)\longrightarrow 0
+\]
+正合. 特别地, $R$-模的一个序列正合, 当且仅当它作为 Abel 群的序列正合. (这一点完全平凡, 但尽管如此仍然有用.)
+\end{prob}
+
+\begin{prob}\label{ex:restriction-dimension}
+设 $i:k\subseteq F$ 是一个有限域扩张, 并设 $W$ 是一个维数为 $n$ 的 $F$-向量空间. 计算 $i_*(W)$ 作为 $k$-向量空间的维数 (其中 $i_*$ 是标量的限制; 参见 \S\ref{subsec:restriction-extension-scalars}).
+\end{prob}
+
+\begin{prob}\label{ex:extension-dimension}
+设 $i:k\subseteq F$ 是一个有限域扩张, 并设 $V$ 是一个维数为 $n$ 的 $k$-向量空间. 计算 $i^*(V)$ 与 $i^!(V)$ 作为 $F$-向量空间的维数.
+\end{prob}
+
+\begin{prob}\label{ex:extension-universal-property}
+设 $f:R\to S$ 是一个环同态, 并设 $M$ 是一个 $R$-模. 证明扩张 $f^*(M)$ 满足如下万有性质: 若 $N$ 是一个 $S$-模, 且 $\varphi:M\to N$ 是一个 $R$-线性映射, 则存在唯一的 $S$-线性映射 $\tilde{\varphi}:f^*(M)\to N$ 使得图
+\begin{center}
+\begin{tikzcd}
+M\ar[r, "\varphi"]\ar[d, "\iota"'] & N\\
+f^*(M)\ar[ur, dashed, "\exists!\ \tilde{\varphi}"'] &
+\end{tikzcd}
+\end{center}
+交换, 其中 $\iota:M\to f^*(M)=M\otimes_R S$ 由 $m\mapsto m\otimes 1$ 定义. (于是, $f^*(M)$ 是 $R$-模 $M$ 在 $S$-模范畴中的``最佳逼近''.)
+\end{prob}
+
+\begin{prob}\label{ex:projection-formula}
+证明如下的\emph{投影公式}: 若 $f:R\to S$ 是一个环同态, $M$ 是一个 $R$-模, 而 $N$ 是一个 $S$-模, 则作为 $R$-模有 $f_*(f^*(M)\otimes_S N)\cong M\otimes_R f_*(N)$.
+\end{prob}
+
+\begin{prob}\label{ex:extension-flat}
+设 $f:R\to S$ 是一个环同态, 并设 $M$ 是一个平坦 $R$-模. 证明 $f^*(M)$ 是一个平坦 $S$-模.
+\end{prob}
+
+\begin{prob}\label{ex:geometric-opposite-base-change}
+在``几何''的语境中 (例如注记~\ref{rmk:base-change-notation-warning} 所暗示的那一种), 人们实际上会在与交换环的范畴相对的范畴中工作; 参见例~\ref{ex:k-aff}. 一个环同态 $f:R\to S$ 对应于反范畴中的一个态射 $f^\circ:S^\circ\to R^\circ$, 而我们可以简单地把 $f^\circ_*$ 等定义为 $f_*$ 等.
+
+对反范畴中的态射 $f^\circ:S^\circ\to R^\circ$ 与 $g^\circ:T^\circ\to S^\circ$, 证明
+\begin{itemize}
+\item $(f^\circ\circ g^\circ)_*\cong f^\circ_*\circ g^\circ_*$,
+\item $(f^\circ\circ g^\circ)^*\cong g^{\circ *}\circ f^{\circ *}$,
+\item $(f^\circ\circ g^\circ)^!\cong g^{\circ !}\circ f^{\circ !}$,
+\end{itemize}
+其中 $\cong$ 表示``自然同构''. (这些正是记号所提示的公式: 下标中的 $*$ 总是提示该记号的一种基本的``协变性'', 而上标中的修饰语通常提示反变性. 切换到反范畴在代数几何的语境中是自然的.)
+\end{prob}
+
+\begin{prob}\label{ex:base-change-z-fp}
+设 $p>0$ 是一个素数, 并设 $\pi:\Z\to\Z/p\Z$ 是自然投射. 对所有有限生成 Abel 群 $A$, 计算 $\pi^*(A)$ 与 $\pi^!(A)$ (作为 $\Z/p\Z$ 上的向量空间). 对所有有限生成 Abel 群 $A$, 计算 $\iota^*(A)$ 与 $\iota^!(A)$, 其中 $\iota:\Z\hookrightarrow\Q$ 是自然包含.
+\end{prob}
+
+\begin{prob}\label{ex:quotient-base-change}
+设 $f:R\to S$ 是一个满的环同态; 于是对 $R$ 的某个理想 $I$ 有 $S\cong R/I$.
+\begin{itemize}
+\item 证明: 对所有 $R$-模 $M$, $f^!(M)\cong\{m\in M\mid \forall a\in I,\ am=0\}$, 而 $f^*(M)\cong M/IM$. (习题~III.\ref{ex:hom-left-exact} 可能有所帮助.)
+\item 证明: 对所有 $S$-模 $N$, $f^!f_*(N)\cong N$ 且 $f^*f_*(N)\cong N$.
+\item 证明 $f_*$ 是完全忠实的 (定义~\ref{def:faithful-full}).
+\item 推出: 若存在一个满同态 $R\to S$, 则 $S\dcate{-Mod}$ 等价于 $R\dcate{-Mod}$ 的一个全子范畴.
+\end{itemize}
+\end{prob}
+
+\index{Morita@Morita!Kiiti@Kiiti}\begin{prob}\label{ex:morita-commutative}
+设 $f:R\to S$ 是一个环同态, 并假定函子 $f_*:S\dcate{-Mod}\to R\dcate{-Mod}$ 是范畴的一个等价.
+\begin{itemize}
+\item 证明: 存在一个环同态 $\overline{g}:S\to\End_{\cate{Ab}}(R)$, 使得复合 $R\to S\to\End_{\cate{Ab}}(R)$ 正是把 $R$ 实现为它自身上的模的那个同态 (也就是命题~III.\ref{prop:cayley-rings} 中所研究的那个同态).
+\item 利用 $S$ 交换以及 $f_*$ 完全忠实这一点, 推出 $\overline{g}(S)$ 同构于 $R$. (细化习题~III.\ref{ex:center-of-end} 的结果.) 推出 $f$ 有一个左逆 $g:S\to R$.
+\item 因此, $f_*\circ g_*$ 自然同构于恒等函子; 特别地, 作为 $R$-模有 $f_*\circ g_*(S)\cong S$. 证明这蕴含 $g$ 是单射. (若 $a\in\ker g$, 证明 $a$ 属于 $f_*\circ g_*(S)$ 的零化子.)\erratumfootnote{官方勘误图主张把 $f_*\circ g_*(S)\cong S$（作为 $R$-模）改为 $g_*\circ f_*(S)\cong S$（作为 $S$-模）；第二次印刷正文仍作 $f_*\circ g_*(S)$ 与 ``$R$-模''，故此处从第二次印刷。}
+\item 断定 $f$ 是一个同构.
+\end{itemize}
+\end{prob}
+
+如果两个环的左模范畴等价, 则称这两个环\emph{Morita 等价}. 本习题的结果, 是如下事实的一个 (非常) 特殊的情形: 两个交换环 Morita 等价当且仅当它们同构. 事实上, 这个更一般的陈述或许比本习题的特例更容易 (!) 证明. 回想 (习题~\ref{ex:center-of-category}), 对任意环 $R$, $R\dcate{-Mod}$ 的中心同构于 $R$ 的中心. 不难由此推出, 若 $R\dcate{-Mod}$ 与 $S\dcate{-Mod}$ 等价, 则 $R$ 与 $S$ 的中心同构. 因此两个 Morita 等价的交换环 $R$, $S$ 必须同构. 交换性在这个陈述中是至关重要的: 例如, 可以证明任意环 $R$ 都 Morita 等价于矩阵环\footnote{作者曾被告知 $\mathcal{M}_{n,n}(\CC)$ ``不是当真非交换的'', 因为它 Morita 等价于交换的 $\CC$.} $\mathcal{M}_{n,n}(R)$, 对所有 $n>0$.
+
+\section{多重线性代数}
+\label{sec:multilinear-algebra}
+
+\subsection{多重线性、对称、交错映射}
+\label{subsec:multilinear-maps}
+
+\index{duozhongxianxingyingshe@多重线性映射(multilinear map)}多重线性映射可以仿照双线性映射来定义: 若 $M_1,\dots,M_\ell,P$ 是 $R$-模, 一个函数
+\[
+\varphi:M_1\times\cdots\times M_\ell\longrightarrow P
+\]
+称为 $R$-\emph{多重线性的}, 如果它在每个因子中都是 $R$-线性的, 也就是说, 任意固定除第 $i$ 个分量外的所有分量所得到的函数在第 $i$ 个分量中是 $R$-线性的, 其中 $i=1,\dots,\ell$.\erratumfootnote{此处官方勘误澄清指标范围终点为 $\ell$（$i=1,\dots,\ell$）。}
+
+于是自然要问: $R$-多重线性映射能否转化为 $R$-线性映射; 也就是说, 是否存在一个 $R$-模 $M_1\otimes_R\cdots\otimes_R M_\ell$, 使得每个 $R$-多重线性映射都必须通过它分解. 幸运的是, 这个模已经唾手可得:
+
+\begin{claim}\label{claim:multilinear-tensor-factor}
+每个 $R$-多重线性映射 $M_1\times\cdots\times M_\ell\to P$ 都唯一地通过
+\[
+((\cdots(M_1\otimes_R M_2)\otimes_R\cdots)\otimes_R M_{\ell-1})\otimes_R M_\ell
+\]
+分解.
+\end{claim}
+
+确实, 可以归纳地论证: 若 $\varphi:M_1\times\cdots\times M_\ell\to P$ 是多重线性的, 则对每个 $m_\ell\in M_\ell$, 函数
+\[
+(m_1,\dots,m_{\ell-1})\longmapsto\varphi(m_1,\dots,m_{\ell-1},m_\ell)
+\]
+是 $R$-多重线性的, 因此它通过 $(\cdots(M_1\otimes_R M_2)\otimes_R\cdots)\otimes_R M_{\ell-1}$ 分解; 于是 $\varphi$ 诱导一个唯一的双线性映射
+\[
+((\cdots(M_1\otimes_R M_2)\otimes_R\cdots)\otimes_R M_{\ell-1})\times M_\ell\longrightarrow P,
+\]
+而这个映射又由 $\otimes_R$ 的万有性质诱导一个唯一的线性映射
+\[
+((\cdots(M_1\otimes_R M_2)\otimes_R\cdots)\otimes_R M_{\ell-1})\otimes_R M_\ell\longrightarrow P.
+\]
+
+当然, 在这个论证中选择最后一个因子作为``枢轴''是任意的: 任何别的组合因子的方式都会给出同一个万有问题的一个解. 特别地, 当 $\ell=3$ 时, 由此得到典范同构
+\[
+(M_1\otimes_R M_2)\otimes_R M_3\cong M_1\otimes_R(M_2\otimes_R M_3)
+\]
+对所有 $R$-模 $M_1,M_2,M_3$ 成立. 在这个意义上, 张量积在 $R\dcate{-Mod}$ 中是结合的\footnote{事实上, 张量积以一种更精致的意义是结合的; 参见习题~\ref{ex:tensor-assoc-bimodule}.}, 因此我们的确可以使用记号 $M_1\otimes_R\cdots\otimes_R M_\ell$.
+
+这个模的元素是纯张量的有限线性组合
+\[
+\sum_i m_{1,i}\otimes\cdots\otimes m_{\ell,i}.
+\]
+结构映射
+\[
+M_1\times\cdots\times M_\ell\longrightarrow M_1\otimes_R\cdots\otimes_R M_\ell
+\]
+作用为 $(m_1,\dots,m_\ell)\mapsto m_1\otimes\cdots\otimes m_\ell$. 由这个映射的多重线性性, 例如有
+\[
+(rm_1)\otimes\cdots\otimes m_\ell=m_1\otimes\cdots\otimes(rm_\ell)=r(m_1\otimes\cdots\otimes m_\ell).
+\]
+按约定, 在 $0$ 个因子上的张量积取为基环 $R$.
+
+当所有因子都相同时, 张量主题还会出现另一些重要的变体. 我们使用简写记号
+\[
+\Tpow_R^\ell(M):=M^{\otimes \ell}=\underbrace{M\otimes_R\cdots\otimes_R M}_{\ell\ \text{次}}
+\]
+表示一个模 $M$ 与自身作 $\ell$ 次张量积; 这称为 $M$ 的 ($\ell$-次)\emph{张量幂}. 对每个 $R$-模 $P$, 每个 $R$-多重线性映射 $M^\ell\to P$ 都唯一地通过 $\Tpow_R^\ell(M)$ 分解:
+\begin{center}
+\begin{tikzcd}
+M^\ell\ar[r, "\varphi"]\ar[d] & P\\
+\Tpow_R^\ell(M)\ar[ur, dashed, "\exists!\ \overline{\varphi}"'] &
+\end{tikzcd}
+\end{center}
+我们规定 $\Tpow_R^1(M)=M$; 按我们的约定, $\Tpow_R^0(M)=R$.
+
+现在我们可以对 $\varphi$ 施加进一步的限制, 再次研究相应的万有问题. 流行的选择有:
+\begin{itemize}
+\item $\varphi$ 可以要求为\emph{对称的}; 也就是说, 对所有 $\sigma\in S_\ell$ 以及所有 $m_1,\dots,m_\ell$, 要求
+\[
+\varphi(m_{\sigma(1)},\dots,m_{\sigma(\ell)})=\varphi(m_1,\dots,m_\ell);
+\]
+\item 或者 $\varphi$ 可以要求为\emph{交错的}; 也就是说, 当存在 $i\neq j$ 使得 $m_i=m_j$ 时,
+\[
+\varphi(m_1,\dots,m_\ell)=0.
+\]
+\end{itemize}
+读者可能原本期待第二个规定写成: 对所有 $\sigma\in S_\ell$ 以及所有 $m_1,\dots,m_\ell$, 要求
+\[
+\varphi(m_{\sigma(1)},\dots,m_{\sigma(\ell)})=(-1)^\sigma\varphi(m_1,\dots,m_\ell).
+\]
+这个版本的问题是, 如果基环的特征为 $2$, 那么对称映射与交错映射之间就没有区别了. 不过请看下面的结论:
+
+\begin{lemma}\label{lem:alternating-sign}
+设 $\varphi:M^\ell\to P$ 是一个 $R$-多重线性函数.
+\begin{itemize}
+\item 若 $\varphi$ 是交错的, 则对所有 $\sigma\in S_\ell$ 以及所有 $m_1,\dots,m_\ell$,
+\[
+\varphi(m_{\sigma(1)},\dots,m_{\sigma(\ell)})=(-1)^\sigma\varphi(m_1,\dots,m_\ell).
+\]
+\item 若 $2$ 在 $R$ 中为单位, 则逆命题也成立.
+\end{itemize}
+\end{lemma}
+
+\begin{proof}
+对第一个断言, 只需证明交换任意两个因子都会改变交错映射的符号 (因为置换由对换生成). 由于其他因子对这一操作没有影响, 我们可以把问题约化到 $\ell=2$ 的情形. 因此, 我们只需证明若对所有 $m\in M$ 有 $\varphi(m,m)=0$, 则对所有 $m_1,m_2\in M$ 有
+\[
+\varphi(m_2,m_1)=-\varphi(m_1,m_2).
+\]
+为此, 用双线性性展开 $0=\varphi(m_1+m_2,m_1+m_2)$, 并再次使用交错条件.
+
+对第二个断言, 我们仍可以约化到 $\ell=2$ 的情形. 对 $m_1=m_2=m$, 式子 $\varphi(m_2,m_1)=-\varphi(m_1,m_2)$ 给出 $\varphi(m,m)=-\varphi(m,m)$; 因此
+\[
+2\varphi(m,m)=0.
+\]
+若 $2$ 在 $R$ 中为单位, 这就推出 $\varphi(m,m)=0$, 正如所需.
+\end{proof}
+
+于是, 交错映射确实满足 (也许) 更自然的那个规定, 并且这在大多数情形中事实上刻画了交错映射.
+
+\subsection{对称幂与外幂}
+\label{subsec:symmetric-exterior-powers}
+
+对称的 (相应地, 交错的) 条件自然伴随有相应的万有对象: 模 $\Spow_R^\ell(M)$, $\Apow_R^\ell(M)$ (分别称为\emph{对称幂}与\emph{外幂}\footnote{模 $\Apow_R^\ell(M)$ 也称为 $M$ 的 $\ell$-次 \emph{楔幂} (wedge power).}). 这些模的构造模式应当是读者如今已相当熟悉的了. 例如, 设 $W\subseteq\Tpow_R^\ell(M)$ 是由所有满足存在 $i\neq j$ 使 $m_i=m_j$ 的纯张量 $m_1\otimes\cdots\otimes m_\ell$ 生成的子模; 那么
+\[
+\Apow_R^\ell(M):=\frac{\Tpow_R^\ell(M)}{W}
+\]
+\index{jiaocuoduozhongxianxingyingshe@交错多重线性映射(alternating multilinear map)}\index{duozhongxianxingyingshe@多重线性映射(multilinear map)!jiaocuo@交错(alternating)}满足交错多重线性映射所期望的万有性质, 也就是说, 每个多重线性的交错映射 $\varphi:M^\ell\to P$ 都诱导唯一的 $R$-线性映射 $\overline{\varphi}$:
+\begin{center}
+\begin{tikzcd}
+M^\ell\ar[r, "\varphi"]\ar[d, "\wedge"'] & P\\
+\Apow_R^\ell(M)\ar[ur, dashed, "\exists!\ \overline{\varphi}"'] &
+\end{tikzcd}
+\end{center}
+这里, 映射 $\wedge$ 当然是复合
+\[
+M\times\cdots\times M\longrightarrow M\otimes\cdots\otimes M\longrightarrow\frac{M\otimes\cdots\otimes M}{W}=\Apow_R^\ell(M),
+\]
+而 $W$ 是使这个多重线性映射 $\wedge$ 成为交错映射的最小子模. 纯张量的像用 $\wedge$ 而不是 $\otimes$ 表示:
+\[
+m_1\otimes\cdots\otimes m_\ell\longmapsto m_1\wedge\cdots\wedge m_\ell.
+\]
+
+读者将验证 (习题~\ref{ex:exterior-universal-property}) $\Apow_R^\ell(M)$ 确实可以如我们刚才所断言的那样构造, 并且会对对称幂 $\Spow_R^\ell(M)$ 给出类似的构造.
+
+模 $\Apow_R^\ell(M)$ 由纯``交错''张量生成. 由引理~\ref{lem:alternating-sign}, 例如
+\[
+m_1\wedge m_2\wedge m_3=-m_1\wedge m_3\wedge m_2,
+\]
+并且, 当然, 若 $m_i$ 中有两个相同, 则 $m_1\wedge\cdots\wedge m_\ell=0$. 由此推出, 若 $e_1,\dots,e_r$ 生成 $M$, 则 $\Apow_R^\ell(M)$ 由所有形如
+\[
+e_{i_1}\wedge\cdots\wedge e_{i_\ell}
+\]
+的元素生成, 其中 $1\le i_1<\cdots<i_\ell\le r$. 特别地, 若 $M$ 有限生成, 则对所有 $\ell\gg0$ 有 $\Apow_R^\ell(M)=0$. 若 $M$ 自由, 我们可以得到非常精确的结果:
+
+\begin{lemma}\label{lem:exterior-free-rank}
+设 $R$ 是交换环, $M$ 是秩为 $r$ 的自由 $R$-模. 则 $\Apow_R^\ell(M)$ 是秩为 $\binom{r}{\ell}$ 的自由 $R$-模.
+\end{lemma}
+
+\begin{proof}
+满足 $1\le i_1<\cdots<i_\ell\le r$ 的指标序列 $(i_1,\dots,i_\ell)$ 共有 $\binom{r}{\ell}$ 个, 因此我们只需证明生成元 $e_{i_1}\wedge\cdots\wedge e_{i_\ell}$ 线性无关.
+
+固定 $I=(i_1,\dots,i_\ell)$, 其中 $1\le i_1<\cdots<i_\ell\le r$, 考虑映射
+\[
+\varphi_I:M^\ell\longrightarrow R
+\]
+按如下规则定义:
+\[
+\varphi_I(e_{j_1},\dots,e_{j_\ell})=
+\begin{cases}
+(-1)^\sigma & \text{若存在置换 }\sigma\text{ 使得 }\sigma(j_k)=i_k\text{ 对所有 }k\text{ 成立},\\
+0 & \text{否则},
+\end{cases}
+\]
+再多重线性地延拓. 注意, 如果这样的 $\sigma$ 存在则唯一, 因此所规定的 $\varphi_I$ 的值是良定的. 又因为 $M$ 自由, $M$ 的每个元素都可唯一地表为 $e_i$ 的线性组合; 故 $\varphi_I$ 对 $M^\ell$ 的所有元素都是良定的. 进而, $\varphi_I$ 显然是交错的 (习题~\ref{ex:phi-alternating}). 于是它唯一地通过某个 $R$-线性映射
+\[
+\overline{\varphi_I}:\Apow_R^\ell(M)\longrightarrow R
+\]
+分解, 且具有性质
+\[
+\overline{\varphi_I}(e_{j_1}\wedge\cdots\wedge e_{j_\ell})=
+\begin{cases}
+(-1)^\sigma & \text{若存在置换 }\sigma\text{ 使得 }\sigma(j_k)=i_k\text{ 对所有 }k\text{ 成立},\\
+0 & \text{否则}.
+\end{cases}
+\]
+
+现在假设
+\[
+\sum_{1\le i_1<\cdots<i_\ell\le r}\lambda_{i_1\dots i_\ell}\,e_{i_1}\wedge\cdots\wedge e_{i_\ell}=0;
+\]
+则取 $I=(i_1,\dots,i_\ell)$ 有
+\[
+\lambda_{i_1\dots i_\ell}=\overline{\varphi_I}\left(\sum_{1\le j_1<\cdots<j_\ell\le r}\lambda_{j_1\dots j_\ell}\,e_{j_1}\wedge\cdots\wedge e_{j_\ell}=0\right)=\overline{\varphi_I}(0)=0.
+\]\erratumfootnote{此处官方勘误在求和表达式内明确写出 $=0$ 的线性无关条件。}
+这表明生成元 $e_{i_1}\wedge\cdots\wedge e_{i_\ell}$ 之间没有非平凡的线性关系, 正如所断言.
+\end{proof}
+
+注意, 特别地, 由此推出若 $M$ 是秩为 $r$ 的自由 $R$-模, 则
+\[
+\Apow_R^r(M)\cong R;
+\]
+一个同构由映射
+\[
+\varphi_{1\dots r}:M^r\longrightarrow R
+\]
+诱导, 这个映射通过令
+\[
+\varphi_{1\dots r}(e_{i_1},\dots,e_{i_r})=
+\begin{cases}
+\pm 1 & \text{若指标 }i_1,\dots,i_r\text{ 互不相同},\\
+0 & \text{否则}
+\end{cases}
+\]
+定义, 其中符号由把指标排序的置换决定. (这是引理~\ref{lem:exterior-free-rank} 证明中所考虑的映射 $\varphi_I$ 的一个特殊情形.)
+
+\begin{claim}\label{claim:det-exterior}
+设 $A$ 是域 $k$ 上的 $r\times r$ 矩阵, 并设 $a_i\in k^r$ 是 $A$ 的第 $i$ 列. 那么采用上面的记号有
+\[
+\det(A)=\varphi_{1\dots r}(a_1,\dots,a_r).
+\]
+\end{claim}
+
+这是直截了当的, 因为行列式的标准性质 (在 \S~VI.\ref{subsec:determinant} 中得到) 证明它是列的多重线性、交错映射, 且单位矩阵的行列式为 $1$. 由于这个原因, 自由模 $F$ 的\emph{最高外幂} (即, 若 $F$ 的秩为 $r$ 则为 $\Apow_R^r(F)$) 称为 $F$ 的\emph{行列式}, 记作 $\det F$.
+
+更一般地, 函数 $\varphi_I$ 给出了 $\Apow_R^\ell k^r$ 与 $k^{\binom{r}{\ell}}$ 之间的一个显式同构.
+
+\begin{example}\label{ex:exterior-minors}
+对 $V=k^4$, $\Apow_k^2 V$ 的维数为 $\binom{4}{2}=6$. 在``纯楔'' $a_1\wedge a_2$ 上, 同构 $\Apow_k^2 V\to k^6$ 作用如下. 把向量 $a_1,a_2$ 看作一个 $4\times2$ 矩阵 $A$ 的两列; 然后把 $a_1\wedge a_2$ 送到 $A$ 的六个 $2\times2$ 子式的集合:
+\[
+A=\begin{pmatrix}
+a_1^1 & a_2^1\\
+a_1^2 & a_2^2\\
+a_1^3 & a_2^3\\
+a_1^4 & a_2^4
+\end{pmatrix}
+\longmapsto
+\begin{pmatrix}
+a_1^1a_2^2-a_2^1a_1^2\\
+a_1^1a_2^3-a_2^1a_1^3\\
+a_1^1a_2^4-a_2^1a_1^4\\
+a_1^2a_2^3-a_2^2a_1^3\\
+a_1^2a_2^4-a_2^2a_1^4\\
+a_1^3a_2^4-a_2^3a_1^4
+\end{pmatrix}.
+\]
+这个定义由线性性延拓到整个 $\Apow_k^2 V$.
+\end{example}
+
+与交错情形类似, 若 $e_1,\dots,e_r$ 生成 $M$, 则对称幂 $\Spow_R^\ell(M)$ 由所有形如
+\[
+e_{i_1}\otimes\cdots\otimes e_{i_\ell}
+\]
+的张量 (的像\footnote{我们不知道有什么被普遍接受的记号来表示``对称''张量; 一个合理的选择是用一个简单的小点, 如同多项式环这个特殊情形中那样.}) 生成, 其中 $1\le i_1\le\cdots\le i_\ell\le r$. 在这种情形中, 一般所有 $\Spow_R^\ell(M)$ 都非零.\erratumfootnote{此处官方勘误规范了对称幂记号的底环下标 $\Spow_R^\ell(M)$ 及张量指标范围 $1\le i_1\le\cdots\le i_\ell\le r$。}
+
+\subsection{小插曲: 分次代数}
+\index{fenci@分次(graded)!huan@环(ring)}\index{fenci@分次(graded)!mo@模(module)}\index{fenci@分次(graded)!tongtai@同态(homomorphism)}\index{fenci@分次(graded)!daishu@代数(algebra)}\index{fenci@分次(graded)}\label{subsec:graded-algebra}
+
+我们已经对每一个非负整数 $\ell$ 得到了模 $M$ 的张量幂、对称幂、外幂. 结果, 在每一种情形中同时考虑``所有的 $\ell$''都是有用的. 通过这样做得到的结构, 是一个非常重要概念的特例, 而这个概念值得我们给予比此处所能允许的更多的篇幅.
+
+一个\emph{分次环}是一个 (不必交换的) 环 $S$, 带有一个分解
+\[
+S=\bigoplus_{i\ge0}S_i
+\]
+把 Abel 群 $(S,+)$ 分解为 Abel 群 $S_i$ 的直和, 其中 $i$ 是非负整数\footnote{当然可以考虑更一般的分次, 但本节的应用中出现的正是这种情形.}, 使得
+\[
+S_i\cdot S_j\subseteq S_{i+j}.
+\]
+这一规定可解析如下: 把 $S_i$ 通过自然映射等同于它在 $S$ 中的像; $S_i$ 的非零元素称为\emph{次数为 $i$ 的齐次元}; 这个条件规定了两个次数分别为 $i,j$ 的齐次元的乘积是次数为 $i+j$ 的齐次元 (前提是非零).
+
+\begin{example}\label{ex:poly-graded}
+任意环 $R$ 上的多项式环 $R[x_1,\dots,x_n]$ 带有一个自然的分次, 由多项式的 (通常) 次数给出. 我们可以写
+\[
+R[x_1,\dots,x_n]=R\oplus\langle x_1,\dots,x_n\rangle\oplus\langle x_1^2,x_1x_2,\dots,x_n^2\rangle\oplus\cdots.
+\]
+\end{example}
+
+读者应当不难给出分次\emph{模}和分次\emph{代数}的概念. 例如, 一个分次环 $S=\bigoplus_i S_i$ 是某个分次环 $R=\bigoplus_i R_i$ 上的\emph{分次代数}, 如果它带有 $R$ 的一个作用 (使它成为一个``通常的'' $R$-代数) 并且进一步有 $R_i\cdot S_j\subseteq S_{i+j}$. 特别地, 若 $R=R_0$ (从而 $R$ 是交换环, 被``集中''在次数 $0$ 上视为分次环), 我们只是在要求 $S$ 的每个分次片段都是 $R$-模.
+
+一个具体的例子是, 交换环 $R[x_1,\dots,x_n]$ 是一个分次 $R$-代数, 由次数为 $1$ 的片段作为 $R$-代数生成. 这是许多有趣情形的重要样板.
+
+我们无法抵挡来自交换代数的另一个例子的诱惑:
+
+\begin{example}\label{ex:rees-algebra-graded}
+设 $R$ 是交换环, $I\subseteq R$ 是一个理想. 则 $R$-模的直和
+\[
+\bigoplus_{\ell\ge0}I^\ell=R\oplus I\oplus I^2\oplus I^3\oplus\cdots
+\]
+具有自然的环结构, 因为 $I^i\cdot I^j\subseteq I^{i+j}$. 所得的分次 $R$-代数称为 $I$ 的 \emph{Rees 代数}, 记作 $\Rees_R(I)$, 在代数几何中具有根本的重要性 (因为它对应于\emph{爆破} (blow-up) 的概念, 一类特别重要的正则映射). 勇敢的读者可以尝试探索多项式环 $k[x,y]$ 中理想 $I=(x,y)$ 的 Rees 代数 (习题~\ref{ex:rees-symmetric}), 它是这个构造最简单有趣的实例 (嗯, 第二简单: 最简单的例子也许是习题~III.\ref{ex:rees-algebra}).\index[sym1]{56@$\Rees_R(I)$}
+\end{example}
+
+分次环上的分次所携带的额外信息非常丰富, 而分次环与分次代数的理论极其丰厚. 例如, 仿射代数几何的概要已在 \S~VII.\ref{subsec:affine-geometry} 中勾勒, 而射影代数几何可以沿着类似的线索用分次环来发展. 正如我们在 \S~VII.\ref{subsec:affine-geometry} 末尾提到的, 这提供了一种``整体化''手续, 带来重要的技术优势.
+
+就本节 (非常朴素的) 目的而言, 以下的一般评注已足够.
+
+分次环在环同态下构成一个范畴, 但如果我们进一步要求同态保持分次, 它就变成一个更有趣的范畴; 也就是说, 若 $S=\bigoplus_i S_i$ 与 $T=\bigoplus_i T_i$ 是分次环, 考虑满足 $\varphi(S_i)\subseteq T_i$ 的环同态 $\varphi:S\to T$. 这样的同态称为\emph{分次同态}. 当然, 指定一类特殊的同态也就会指定一类特殊的理想, 也就是作为分次同态的核出现的那些理想.
+
+\begin{definition}\label{def:homogeneous-ideal}
+分次环 $S=\bigoplus_i S_i$ 的理想 $I$ 称为\emph{齐次的}, 如果 $I=\bigoplus_i(I\cap S_i)$.
+\end{definition}
+
+\begin{lemma}\label{lem:homogeneous-ideal}
+设 $S=\bigoplus_i S_i$ 是分次环, $I\subseteq S$ 是 $S$ 的一个理想. 则下列陈述等价:
+\begin{itemize}
+\item[(i)] $I$ 是齐次的;
+\item[(ii)] 若 $s\in S$ 且 $s=\sum_i s_i$ 是 $s$ 分解为齐次元 $s_i\in S_i$ 的分解, 则 $s\in I\iff s_i\in I$ 对所有 $i$ 成立;
+\item[(iii)] $I$ 有一组由齐次元组成的生成集;
+\item[(iv)] $I$ 是一个分次同态的核.
+\end{itemize}
+\end{lemma}
+
+\begin{proof}
+(i)$\iff$(ii) 正是齐次理想的定义; (ii)$\iff$(iii) 留给读者 (习题~\ref{ex:homogeneous-equiv}).
+
+(ii)$\implies$(iv): 假设 (ii) 成立, 通过在 $S/I$ 上令次数为 $i$ 的片段由 $S$ 中次数为 $i$ 的元素的陪集 (以及 $0$) 组成来定义 $S/I$ 上的一个分次. 由 (ii), 这是良定的, 并且立刻可以验证它在 $S/I$ 上诱导了一个分次环结构. 于是理想 $I$ 就是分次同态 $S\to S/I$ 的核, 这就验证了 (iv).
+
+(iv)$\implies$(ii): 设 $\varphi:S\to T$ 是一个分次同态, 并假设 $I=\ker\varphi$. 设 $s=\sum_i s_i\in\ker\varphi$, 其中 $s_i\in S_i$. 则在 $T$ 中 $\sum_i\varphi(s_i)=0$, 且对每个 $i$, $\varphi(s_i)$ 是次数为 $i$ 的齐次元. 由此推出对所有 $i$ 有 $\varphi(s_i)=0$, 也就是说每个 $s_i\in\ker\varphi=I$, 这就蕴含 (ii).
+\end{proof}
+
+注意, 一个分次同态 $\varphi:S\to T$ 对每个 $i$ 都诱导一个 Abel 群同态 $\varphi_i:S_i\to T_i$. 于是 $\ker\varphi$ 就是所有 $\ker\varphi_i$ 的直和.
+
+\begin{example}\label{ex:homogeneous-ideal-example}
+理想 $I=(y-x^2)$ 在环 $k[x,y]$ 中 (若赋予通常次数的分次) 不是齐次的: 事实上 $y-x^2\in I$ 而 $y\notin I$, 这与引理~\ref{lem:homogeneous-ideal} 的条件 (ii) 矛盾. 理想 $(y,y-x^2)$ 是齐次的, 因为它等于 $(y,x^2)$, 而 $y$ 与 $x^2$ 都是齐次元.
+
+多项式环的通常分次并不是唯一的选择: 我们也可以把 $k[x,y]$ 这样分次, 常数放在次数 $0$, 不定元 $x$ 指定次数 $1$, $y$ 指定次数 $2$. 在这种分次下, 理想 $(y-x^2)$ 就是齐次的.
+\end{example}
+
+射影代数几何 (几乎) 遵循 \S~VII.\ref{subsec:affine-geometry} 中回顾的仿射代数几何的蓝图, 但只使用 $k[x_1,\dots,x_n]$ (带通常分次) 中的齐次理想.
+
+\subsection{张量代数}
+\label{subsec:tensor-algebras}
+
+回到多重线性代数的语境, 再次考虑交换环 $R$ 上的模 $M$. 我们定义 $M$ 的\emph{张量代数}为分次 $R$-代数\index[sym1]{63@$\Tpow_R^*$}
+\[
+\Tpow_R^*(M):=\bigoplus_{\ell\ge0}\Tpow_R^\ell(M):
+\]
+乘法在纯张量上由
+\[
+(m_1\otimes\cdots\otimes m_i)\cdot(n_1\otimes\cdots\otimes n_j):=m_1\otimes\cdots\otimes m_i\otimes n_1\otimes\cdots\otimes n_j
+\]
+定义, 并由线性性延拓. 类似地, 我们可以定义 $M$ 的\emph{对称代数}与\emph{外代数}:\index[sym1]{36@$\Apow_R^*$}\index[sym1]{60@$\Spow_R^*$}
+\[
+\Spow_R^*(M):=\bigoplus_{\ell\ge0}\Spow_R^\ell(M),\qquad
+\Apow_R^*(M):=\bigoplus_{\ell\ge0}\Apow_R^\ell(M).
+\]
+
+\begin{remark}\label{rmk:exterior-skew-comm}
+张量代数不是交换的; 对称代数是交换的; 而外代数按如下意义是``斜交换的': 若 $\alpha\in\Apow_R^i(M)$, $\beta\in\Apow_R^j(M)$, 则
+\[
+\alpha\wedge\beta=(-1)^{ij}\beta\wedge\alpha
+\]
+(习题~\ref{ex:exterior-skew-comm}), 这里我们用 $\wedge$ 表示 $\Apow_R^*(M)$ 中的运算. 读者应当在微分形式理论中见过这个公式; 微分形式大概是外代数最重要的例子.
+\end{remark}
+
+对称幂与外幂的定义正是为了产生满的分次代数同态
+\[
+\Tpow_R^*(M)\twoheadrightarrow\Spow_R^*(M),\qquad
+\Tpow_R^*(M)\twoheadrightarrow\Apow_R^*(M).
+\]
+正如我们在引理~\ref{lem:homogeneous-ideal} 中学到的, 这些同态的核是张量代数的某些齐次理想; 因此这些理想必由齐次元生成.
+
+\begin{lemma}\label{lem:sym-ext-quotients}
+设 $I_{\Spow},I_{\Apow}\subseteq\Tpow_R^*(M)$ 分别是所有形如 $(m\otimes n-n\otimes m)$ (其中 $m,n\in M$) 的元素以及所有形如 $m\otimes m$ (其中 $m\in M$) 的元素生成的理想. 则
+\[
+\Spow_R^*(M)\cong\frac{\Tpow_R^*(M)}{I_{\Spow}},\qquad
+\Apow_R^*(M)\cong\frac{\Tpow_R^*(M)}{I_{\Apow}}
+\]
+作为分次 $R$-代数.
+\end{lemma}
+
+\begin{proof}
+我们已经在 \S\ref{subsec:graded-algebra} 中观察到, 一个分次同态的核是它在每个次数上诱导的同态的核的直和; 于是本引理的陈述易从 §\ref{subsec:symmetric-exterior-powers} 中给出的从张量幂到对称幂与外幂的典范投射的核的显式描述推出.
+\end{proof}
+
+\begin{remark}\label{rmk:sym-invariant-quotient}
+在某些情形中, 也可以在 $\Tpow_R^*(M)$ 内构造出同构于 $\Spow_R^*(M)$ 与 $\Apow_R^*(M)$ 的子代数. 例如, 在对称群作用下不变的可以用以在 $\Tpow_R^*(M)$ 中给出 $\Spow_R^*(M)$ 的一个副本: $\frac12(m_1\otimes m_2+m_2\otimes m_1)$ 就是这样一个``对称张量''. 然而, 引入分母会对基环 $R$ 带来令人不快的限制, 因此之故我们偏爱引理~\ref{lem:sym-ext-quotients} 中的``商''构造.
+\end{remark}
+
+现在容易建立上述代数所满足的万有性质. 注意, 按构造存在 $M$ 与 $\Tpow_R^1(M),\Spow_R^1(M),\Apow_R^1(M)$ 的典范同构, 因此特别地存在典范映射
+\[
+M\longrightarrow\Tpow_R^*(M),\qquad
+M\longrightarrow\Spow_R^*(M),\qquad
+M\longrightarrow\Apow_R^*(M).
+\]
+
+\begin{proposition}\label{prop:tensor-algebra-univ}
+设 $R$ 是交换环, $M$ 是 $R$-模. 则对每个 $R$-代数 $T$ 以及每个 $R$-模同态 $\varphi:M\to T$, 存在唯一的 $R$-代数同态 $\overline{\varphi}:\Tpow_R^*(M)\to T$ 使得下图交换:
+\begin{center}
+\begin{tikzcd}
+M\ar[r, "\varphi"]\ar[d] & T\\
+\Tpow_R^*(M)\ar[ur, dashed, "\exists!\ \overline{\varphi}"'] &
+\end{tikzcd}
+\end{center}
+\end{proposition}
+
+\begin{proposition}\label{prop:sym-algebra-univ}
+设 $R$ 是交换环, $M$ 是 $R$-模. 则对每个交换 $R$-代数 $S$ 以及每个 $R$-模同态 $\psi:M\to S$, 存在唯一的 $R$-代数同态 $\overline{\psi}:\Spow_R^*(M)\to S$ 使得下图交换:
+\begin{center}
+\begin{tikzcd}
+M\ar[r, "\psi"]\ar[d] & S\\
+\Spow_R^*(M)\ar[ur, dashed, "\exists!\ \overline{\psi}"'] &
+\end{tikzcd}
+\end{center}
+\end{proposition}
+
+\begin{proposition}\label{prop:exterior-algebra-univ}
+设 $R$ 是交换环, $M$ 是 $R$-模. 则对每个 $R$-代数 $A$ 以及每个 $R$-模同态 $\lambda:M\to A$ 满足 $\lambda(m)^2=0$ 对所有 $m\in M$ 成立, 存在唯一的 $R$-代数同态 $\overline{\lambda}:\Apow_R^*(M)\to A$ 使得下图交换:
+\begin{center}
+\begin{tikzcd}
+M\ar[r, "\lambda"]\ar[d] & A\\
+\Apow_R^*(M)\ar[ur, dashed, "\exists!\ \overline{\lambda}"'] &
+\end{tikzcd}
+\end{center}
+\end{proposition}
+
+细节现在可以放心地留给读者 (例如, 从张量幂的万有性质建立第一个命题, 然后从引理~\ref{lem:sym-ext-quotients} 推出第二和第三个).
+
+\begin{example}\label{ex:free-symmetric-poly}
+\index{ziyou@自由(free)!mo@模(module)}自由的情形特别容易理解. 例如,
+\[
+\Spow_R^*(R^{\oplus r})\cong R[x_1,\dots,x_r].
+\]
+确实, 多项式环关于映到交换环满足适当的万有性质 (参见 \S~III.\ref{subsec:poly-universal} 与命题~III.\ref{prop:free-algebra}). 同样, $\Tpow_R^*(R^{\oplus r})$ 应当被想成一个``非交换''多项式环, 其中 $r$ 个不定元彼此不交换 (参见 \S~III.\ref{subsec:free-modules}).
+\end{example}
+
+当然, 构造 $\Tpow_R^*$, $\Spow_R^*$, $\Apow_R^*$ 都是函子性的, 它们关于正合序列的行为有趣且重要. 例如, 假设
+\[
+0\longrightarrow L\longrightarrow M\longrightarrow N\longrightarrow 0
+\]
+是 $R$-模的正合序列. 则 $L$ 可以等同于 $M\cong\Spow_R^1(M)$ 的一个子集; 因此它定义了代数 $\Spow_R^*(M)$ 的一个理想 $L\cdot\Spow_R^*(M)$. 不难证明序列\footnote{这里的移位 $\bullet-1$ 是为了保持该序列中的次数.}
+\[
+0\longrightarrow L\cdot\Spow_R^{\bullet-1}(M)\longrightarrow\Spow_R^*(M)\longrightarrow\Spow_R^*(N)\longrightarrow 0
+\]
+是正合的. 这在计算中常常有用 (参见习题~\ref{ex:rees-symmetric}). 我们愿把任何进一步的探索留给更有动力的读者.
+
+\subsection*{习题}
+\phantomsection
+\addcontentsline{toc}{subsection}{习题}
+
+在以下习题中, $R$ 表示交换环, $k$ 表示域.
+
+\begin{prob}\label{ex:exterior-universal-property}
+\index{duozhongxianxingyingshe@多重线性映射(multilinear map)!duichen@对称(symmetric)}$\triangleright$ 验证 §\ref{subsec:symmetric-exterior-powers} 中构造的模 $\Apow_R^\ell(M)$ 确实满足交错多重线性映射的万有性质. 构造一个满足对称多重线性映射万有性质的模 $\Spow_R^\ell(M)$. [§\ref{subsec:symmetric-exterior-powers}]
+\end{prob}
+
+\begin{prob}\label{ex:tensor-sym-ext-functorial}
+在 $R$-线性映射上定义 $\Tpow_R^\ell$, $\Spow_R^\ell$, $\Apow_R^\ell$ 的作用, 使这些概念成为协变函子.
+\end{prob}
+
+\begin{prob}\label{ex:ideal-wedge-nonzero}
+设 $I$ 是 $k[x,y]$ 中的理想 $(x,y)$; 于是 $I$ 的每个元素都可以 (当然, 不唯一地) 写成 $fx+gy$ 的形式, 其中 $f,g\in k[x,y]$. 定义函数 $\varphi:I\times I\to k$ 为
+\[
+\varphi(f_1x+g_1y,f_2x+g_2y):=f_1(0,0)g_2(0,0)-f_2(0,0)g_1(0,0).
+\]
+\begin{itemize}
+\item 证明 $\varphi$ 是良定的.
+\item 证明 $\varphi$ 是 $k[x,y]$-双线性的并且是交错的.
+\item 证明 $I\Apow_{k[x,y]}(I)\neq 0$.
+\end{itemize}
+注意 $I$ 作为 $k[x,y]$-模的秩为 $1$; 如果它是自由的, 那么它与自身的外楔就必须为零.\erratumfootnote{官方勘误图主张把上式改写为二次外幂 $\Apow_{k[x,y]}^2(I)$，并在本句补入``由引理 VIII.4.3''；第二次印刷正文仍作 $I\Apow_{k[x,y]}(I)$ 与本句原文，故此处从第二次印刷。}
+\end{prob}
+
+\begin{prob}\label{ex:exterior-direct-sum}
+设 $F_1,F_2$ 是有限秩的自由 $R$-模.
+\begin{itemize}
+\item 构造一个``有意义的''同构 $\det(F_1)\otimes\det(F_2)\cong\det(F_1\oplus F_2)$.
+\item 更一般地, 证明
+\[
+\Apow_R^r(F_1\oplus F_2)\cong\bigoplus_{i+j=r}\bigl(\Apow_R^i(F_1)\bigr)\otimes_R\bigl(\Apow_R^j(F_2)\bigr).
+\]
+\end{itemize}
+\end{prob}
+
+\begin{prob}\label{ex:phi-alternating}
+$\triangleright$ 验证引理~\ref{lem:exterior-free-rank} 的证明中所定义的多重线性映射 $\varphi_I$ 是交错的. [§\ref{subsec:symmetric-exterior-powers}]
+\end{prob}
+
+\begin{prob}\label{ex:wedge-independent}
+设 $V$ 是向量空间, $v_1,\dots,v_\ell\in V$. 证明 $v_1,\dots,v_\ell$ 线性无关当且仅当 $v_1\wedge\cdots\wedge v_\ell\neq0$.
+\end{prob}
+
+\begin{prob}\label{ex:plucker-embedding}
+$\neg$ 设 $V$ 是 $k$-向量空间, 而 $\{v_1,\dots,v_\ell\}$, $\{w_1,\dots,w_\ell\}$ 是 $V$ 中两组线性无关的向量. 证明 $\{v_1,\dots,v_\ell\}$ 与 $\{w_1,\dots,w_\ell\}$ 张成 $V$ 的同一个子空间, 当且仅当 $v_1\wedge\cdots\wedge v_\ell$ 与 $w_1\wedge\cdots\wedge w_\ell$ 在 $\Apow_k^\ell V$ 中互为非零倍数. (对有意思的方向, 若 $\langle v_1,\dots,v_\ell\rangle\neq\langle w_1,\dots,w_\ell\rangle$, 则必有一个向量 $u$ 属于第一个子空间但不属于第二个. 关于 $(v_1\wedge\cdots\wedge v_\ell)\wedge u$ 与 $(w_1\wedge\cdots\wedge w_\ell)\wedge u$ 在 $\Apow_k^{\ell+1}V$ 中你能说些什么?)
+
+推出存在一个从 $V$ 的 $\ell$-维子空间的 Grassmannian (习题~VI.\ref{ex:grassmannian-cells}) 到射影空间 $\mathbb{P}(\Apow_k^\ell V)$ 的单射: Grassmannian 被等同于外幂 $\Apow_k^\ell V$ 的射影化中的``纯楔''集合. 这称为 Grassmannian 的 \emph{Plücker 嵌入}. [习题~\ref{ex:plucker-equations}]
+\end{prob}
+
+\begin{prob}\label{ex:plucker-equations}
+习题~\ref{ex:plucker-embedding} 中描述的 Plücker 嵌入把 $k^4$ 的 $2$-维子空间的 Grassmannian $\Gr_k(2,4)$ 实现为 $\mathbb{P}(\Apow_k^2k^4)\cong\mathbb{P}^5_k$ 的一个子集: $\Gr_k(2,4)\subseteq\mathbb{P}^5_k$. 选取射影坐标 (习题~VII.\ref{ex:projective-cover}) $(x_{12}:x_{13}:x_{14}:x_{23}:x_{24}:x_{34})$ 于 $\mathbb{P}(\Apow_k^2k^4)$, 按例~\ref{ex:exterior-minors} 中相应的子式列出. 证明 $\Gr_k(2,4)$ 是零点集
+\[
+\mathscr{V}(x_{12}x_{34}-x_{13}x_{24}+x_{14}x_{23})
+\]
+的轨迹 (记号如习题~VII.\ref{ex:projective-algebraic-set}). (记住你知道如何写出 $\Gr_k(2,4)$ 的每一点: 回顾习题~VI.\ref{ex:grassmannian-24}.)
+
+于是, $\Gr_k(2,4)$ 可以被视为一个射影代数集. 事实上, 所有 Grassmannian 都可以通过相应的 Plücker 嵌入类似地实现为射影代数集 (在习题~\ref{ex:projective-variety} 的意义下).
+
+$\triangleright$ 证明 $\Gr_k(2,4)$ 可以被六个 $\A_k^4$ 的副本覆盖. (回忆习题~VII.\ref{ex:projective-cover} 中 $\mathbb{P}^5_k$ 可以被六个 $\A_k^5$ 的副本覆盖; 证明其中每一个与 $\Gr_k(2,4)$ 的交可以自然地等同于 $\A_k^4$.)
+\end{prob}
+
+\begin{prob}\label{ex:sym-alt-canonical-split}
+假设 $2$ 在 $R$ 中为单位, 并设 $F$ 是有限秩的自由 $R$-模.
+\begin{itemize}
+\item 定义函数 $\lambda:\Apow_R^2(F)\to\Tpow_R^2(F)$ 在一组基 $e_i\wedge e_j$ ($i<j$) 上为
+\[
+\lambda(e_i\wedge e_j)=\tfrac12(e_i\otimes e_j-e_j\otimes e_i),
+\]
+并由线性性延拓. 证明 $\lambda$ 是 $R$-模的单同态, 且对所有 $f_1,f_2\in F$ 有 $\lambda(f_1\wedge f_2)=\tfrac12(f_1\otimes f_2-f_2\otimes f_1)$.
+\item 定义函数 $\sigma:\Spow_R^2(F)\to\Tpow_R^2(F)$ 在一组基 $e_i\otimes e_j$ ($i\le j$) 上为
+\[
+\sigma(e_i\otimes e_j)=\tfrac12(e_i\otimes e_j+e_j\otimes e_i),
+\]
+并由线性性延拓. 证明 $\sigma$ 是 $R$-模的单同态, 且对所有 $f_1,f_2\in F$ 有 $\sigma(f_1\otimes f_2)=\tfrac12(f_1\otimes f_2+f_2\otimes f_1)$.
+\item 证明 $\lambda$ 把 $\Apow_R^2(F)$ 等同于映射 $\Tpow_R^2(F)\to\Spow_R^2(F)$ 的核, 而 $\sigma$ 把 $\Spow_R^2(F)$ 等同于映射 $\Tpow_R^2(F)\to\Apow_R^2(F)$ 的核.
+\end{itemize}
+特别地, 存在一个``有意义的''同构 $F\otimes_R F\cong\Apow_R^2(F)\oplus\Spow_R^2(F)$.
+\end{prob}
+
+\begin{prob}\label{ex:homogeneous-equiv}
+$\triangleright$ 证明引理~\ref{lem:homogeneous-ideal} 中的等价性 (ii)$\iff$(iii). [§\ref{subsec:graded-algebra}]
+\end{prob}
+
+\begin{prob}\label{ex:projective-variety}
+$\neg$ 设 $I\subseteq k[x_0,\dots,x_n]$ 是一个齐次理想. 证明条件 ``对所有 $F\in I$ 有 $F(c_0,\dots,c_n)=0$'' 对 $\mathbb{P}_k^n$ 中的一点 $(c_0:\dots:c_n)$ 是良定的: 它不依赖于为该点 $(c_0:\dots:c_n)$ 所选取的代表元 $(c_0,\dots,c_n)$. (参见习题~VII.\ref{ex:projective-algebraic-set}, 但要注意并非 $I$ 中所有的 $F$ 都是齐次的.)
+
+于是, 每个齐次理想 $I\subseteq k[x_0,\dots,x_n]$ 都决定一个``射影代数集''
+\[
+\mathscr{V}(I):=\{(c_0:\dots:c_n)\in\mathbb{P}_k^n\mid (\forall F\in I),\ F(c_0,\dots,c_n)=0\}.
+\]
+注意 $\mathscr{V}((x_0,\dots,x_n))=\emptyset$. 理想 $(x_0,\dots,x_n)=\bigoplus_{i>0}k[x_0,\dots,x_n]_i$ 被不太恭敬地称为\emph{无关理想}. [习题~\ref{ex:plucker-equations}, 习题~\ref{ex:weak-homogeneous-nullstellensatz}]
+\end{prob}
+
+\begin{prob}\label{ex:weak-homogeneous-nullstellensatz}
+(参见习题~\ref{ex:projective-variety}.) 证明``弱齐次零点定理'': 若 $k$ 是代数闭域, 而 $I\subseteq k[x_0,\dots,x_n]$ 是一个齐次理想, 则 $\mathscr{V}(I)=\emptyset$ 当且仅当 $\sqrt{I}$ 是 $k[x_0,\dots,x_n]$ 或无关理想 $(x_0,\dots,x_n)$. (把它转化为关于 $\mathbb A_k^{n+1}$ 的一个问题.)
+\end{prob}
+
+\begin{prob}\label{ex:weyl-algebra}
+设 $k$ 是特征为零的域. 一个单变量、带多项式系数的\emph{微分算子}是形如
+\begin{equation*}\tag{$*$}
+a_0(x)+a_1(x)\partial_x+\cdots+a_r(x)\partial_x^r
+\end{equation*}
+\index{Weyl@Weyl!Hermann@Hermann!daishu@代数(algebra)}的线性组合, 其中 $a_i(x)\in k[x]$. 这里 $x$ 在多项式 $f(x)\in k[x]$ 上的作用是用 $x$ 相乘, 而 $\partial_x$ 的作用则是取形式导数 (如在 \S~VII.\ref{subsec:separable-polynomials} 中那样). 带上显然的运算, 微分算子构成一个环, 称为 (第一) \emph{Weyl 代数}. 注意 Weyl 代数是非交换的: 例如
+\[
+(x\partial_x)f(x)=xf'(x),
+\]
+而
+\[
+(\partial_x x)f(x)=\partial_x(xf(x))=f(x)+xf'(x).
+\]
+因此 $(\partial_x x-x\partial_x)f(x)=f(x)$, 或者换句话说
+\begin{equation*}\tag{$**$}
+\partial_x x-x\partial_x=1
+\end{equation*}
+\index{Weyl@Weyl!Hermann@Hermann}在 Weyl 代数中成立. 证明 Weyl 代数同构于商
+\[
+\Tpow^*_k(\langle x,y\rangle)/(yx-xy-1).
+\]
+(用 $(**)$ 把 Weyl 代数的每个元素写成 $(*)$ 给出的形式. 证明这个表示唯一, 并推出 $(**)$ 生成了 $x$ 与 $\partial_x$ 之间的所有关系. 然后用第一同构定理.)
+
+\index{D-mo@D-模(D-module)}关系 $(**)$ 表达了 (差一个因子) 量子力学中位置算子与动量算子不可交换这一基本事实. Weyl 代数正是为研究这一现象而引入的. 微分算子环上的模称为 \emph{D-模}.
+\end{prob}
+
+\begin{prob}\label{ex:symmetric-power-free}
+设 $F$ 是秩为 $r$ 的自由 $R$-模. 证明 $\Spow_R^\ell(F)$ 是自由的, 并计算它的秩.
+\end{prob}
+
+\begin{prob}\label{ex:symmetric-algebra-direct-sum}
+设 $F_1,F_2$ 是有限秩的自由 $R$-模. 证明 $\Spow_R^*(F_1\oplus F_2)\cong\Spow_R^*(F_1)\otimes_R\Spow_R^*(F_2)$.
+\end{prob}
+
+\begin{prob}\label{ex:exterior-skew-comm}
+$\triangleright$ 验证注记~\ref{rmk:exterior-skew-comm} 中所断言的外代数的斜交换性. [§\ref{subsec:tensor-algebras}]
+\end{prob}
+
+\begin{prob}\label{ex:exterior-algebra-dimension}
+设 $V$ 是维数为 $r$ 的 $k$-向量空间. 证明作为向量空间, 外代数 $\Apow_k^*(V)$ 的维数为 $2^r$.
+\end{prob}
+
+\begin{prob}\label{ex:rees-noetherian}
+$\neg$ 证明: 若 $R$ 是 Noether 环, 则理想 $I$ 的 Rees 代数 $\Rees_R(I)$ 也是 Noether 的. [习题~\ref{ex:artin-rees}]
+\end{prob}
+
+\begin{prob}\label{ex:artin-rees}
+$\neg$ 设 $R$ 是 Noether 环, $I$ 是 $R$ 的理想, 考虑 Rees 代数 $\Rees_R(I)=\bigoplus_{\ell\ge0}I^\ell$. 由习题~\ref{ex:rees-noetherian}, $\Rees_R(I)$ 是 Noether 的.
+\begin{itemize}
+\item 设 $\ell\ge0$, 设 $J_\ell\subseteq I^\ell$ 是 $R$ 的理想, 并把 $J:=\bigoplus_{\ell\ge0}J_\ell$ 视为 $\Rees_R(I)$ 的子 $R$-模. 证明 $J$ 是 $\Rees_R(I)$ 的理想当且仅当对所有 $\ell,n\ge0$ 有 $I^nJ_\ell\subseteq J_{\ell+n}$.
+\item 假设 $J:=\bigoplus_{\ell\ge0}J_\ell$ 是 $\Rees_R(I)$ 的理想. 证明 $J$ 有一组有限的齐次生成元.
+\item 选取 $J$ 的一组有限齐次生成元, 并设 $s$ 是这组生成元中元素的最大次数. 证明 $J_{s+1}\subseteq I^{s+1}J_0+I^sJ_1+\cdots+IJ_s$ (作为 $R$ 的理想).
+\item 证明对所有 $\ell\ge0$ 有 $J_{s+\ell}=I^\ell J_s$.
+\end{itemize}
+\index{Artin–Rees yinli@Artin–Rees 引理(Artin-Rees lemma)}这是``Artin--Rees''引理的一个特殊情形. [习题~\ref{ex:krull-intersection-ideal}]
+\end{prob}
+
+\begin{prob}\label{ex:krull-intersection-ideal}
+$\neg$ 设 $R$ 是 Noether 环, $I$ 是 $R$ 的理想. 证明
+\[
+I\cdot\bigcap_{n\ge0}I^n=\bigcap_{n\ge0}I^n.
+\]
+(提示: 习题~\ref{ex:artin-rees}.) [\ref{ex:krull-intersection}]
+\end{prob}
+
+\begin{prob}\label{ex:rees-symmetric}
+$\triangleright$ 设 $k$ 是域, 考虑环 $R=k[x,y]$ 中的理想 $I=(x,y)$. 证明 Rees 代数 $\bigoplus_{j\ge0}I^j$ 同构于多项式环 $k[x,y,s,t]$ 关于理想 $(tx-sy)$ 的商. 推出, 在这个情形中, $I$ 的 Rees 代数同构于对称代数 $\Spow_{k[x,y]}^*(I)$.
+
+(对最后一点, 用 §\ref{subsec:tensor-algebras} 末尾提到的正合序列. 有助于先把 $I$ 作为 $k[x,y]$-模的一个展示明确写出来; 为此, 回顾习题~VI.\ref{ex:free-res-Z} 可能有帮助.) [§\ref{subsec:graded-algebra}, §\ref{subsec:tensor-algebras}]
+\end{prob}
+
+\begin{prob}\label{ex:koszul-complex}
+$\neg$ 设 $\underline{a}$ 表示 $R$ 中元素 $a_1,\dots,a_n$ 的一个序列, 并设 $F\cong R^n$. 把 $\Apow_R^r(F)$ 重新命名为 $K_r(\underline{a})$. 通过在基上令
+\[
+d(e_{i_1}\wedge\cdots\wedge e_{i_r})=\sum_{j=1}^r(-1)^{j-1}a_{i_j}\,e_{i_1}\wedge\cdots\wedge\widehat{e_{i_j}}\wedge\cdots\wedge e_{i_r}
+\]
+定义 $R$-模同态 $d_r:K_r(\underline{a})\to K_{r-1}(\underline{a})$, 其中帽子表示该元素被略去.
+\begin{itemize}
+\item 证明 $d_{r-1}\circ d_r=0$.
+\end{itemize}
+于是, $R$ 中元素 $a_1,\dots,a_n$ 的一个序列决定了一个 $R$-模复形
+\[
+0\longrightarrow K_n(\underline{a})\xrightarrow{\ d_n\ }\cdots\xrightarrow{\ d_2\ }K_1(\underline{a})\xrightarrow{\ d_1\ }K_0(\underline{a})=R\longrightarrow R/I\longrightarrow 0,
+\]
+其中 $I=(a_1,\dots,a_n)$. 这称为 $\underline{a}$ 的 \emph{Koszul 复形}.
+\begin{itemize}
+\item 验证习题~VI.\ref{ex:koszul-2} 与 VI.\ref{ex:koszul-3} 中构造的复形都是 Koszul 复形.
+\end{itemize}
+正如习题~VI.\ref{ex:koszul-2} 与 VI.\ref{ex:koszul-3} 中对 $n=2,3$ 所证明的, 若 $(a_1,\dots,a_n)$ 是 $R$ 中的正则序列, 则 Koszul 复形是正合的, 从而给出 $R/I$ 的一个自由分解. 试着一般地证明这一点. [VI.\ref{ex:koszul-3}]
+\end{prob}
+
+\section{Hom 与对偶}\label{sec:hom-duals}
+
+我们对张量积的快速纵览不时地使我们与 $\Hom$ 函子靠得很近, 本章将以对这些函子的若干关注收尾. 与张量的情形一样, 我们将全神贯注于伴随性与正合性, 因为具体的计算严重地依赖于这些性质. 我们将在下一节 (也是本章最后一节) 中更仔细地处理这些性质; 本节将集中于 $\Hom$ 的一个重要的特殊情形, 即\emph{对偶函子}.
+
+与本章其余部分一样, $R$ 表示一个固定的交换环.
+
+\subsection{再谈伴随}\label{subsec:hom-adjunction-again}
+
+细心的读者会同意, 我们关于张量积所知的几乎一切都源于它是一个左伴随函子这一事实. 这一事实在引理~\ref{lem:tensor-hom-adj} 中被明确表述, 其另一面给了我们同样多的关于 $\Hom$ 函子的协变风味的信息:
+\[
+L\longmapsto\Hom_{R\dcate{-Mod}}(N,L).
+\]
+明确地说, 下面的陈述正是推论~\ref{cor:tensor-left-adjoint} 的原样重述:
+
+\begin{corollary}\label{cor:hom-right-adjoint-tensor}
+对每个 $R$-模 $N$, 函子 $\Hom_R(N,\_)$ 右伴随于函子 $\_\otimes_R N$.
+\end{corollary}
+
+那么 $\Hom$ 的``反变''风味又如何:
+\[
+M\longmapsto h_N(M):=\Hom_{R\dcate{-Mod}}(M,N)
+\]
+(这个函子已在一般性的讨论中出现过, 见 \S\ref{subsec:examples-functors})?
+
+\begin{proposition}\label{prop:hom-self-adjoint}
+对每个 $R$-模 $N$, 函子 $\Hom_R(\_,N)$ 右伴随于它自身.
+\end{proposition}
+
+这条陈述应当被仔细解读, 因为 $\Hom_R(\_,N)$ 是一个反变函子. 命题~\ref{prop:hom-self-adjoint} 的表述可能把我们引入歧途, 让我们误以为 $\Hom_R(\_,N)$ 也必须是它自己的左伴随, 但情况并非如此 (事实上, 这将使它成为一个右正合函子, 而我们很快就会看到 $\Hom_R(\_,N)$ 一般并不是右正合的).
+
+要点在于, 按照反变函子的定义, $h_N=\Hom_R(\_,N)$ 应当被看作从相反范畴出发的一个协变函子:
+\[
+h_N:R\dcate{-Mod}^{\op}\longrightarrow R\dcate{-Mod};
+\]
+它也可以被看作到相反范畴的一个协变函子,
+\[
+h_N^{\op}:R\dcate{-Mod}\longrightarrow R\dcate{-Mod}^{\op},
+\]
+只需在事后而非事前把箭头反向即可. 命题~\ref{prop:hom-self-adjoint} 的一个更精确的表述是:
+\[
+h_N\ \text{右伴随于}\ h_N^{\op}.
+\]
+
+\begin{proof}
+设 $L$, $M$, $N$ 为 $R$-模. 回想 (参见引理~\ref{lem:tensor-hom-adj} 之前的讨论) $R$-双线性映射
+\[
+\varphi:L\times M\to N
+\]
+可以等同于 $R$-线性映射
+\[
+L\to\Hom_R(M,N).
+\]
+同理, 它们也可以等同于 $R$-线性映射
+\[
+M\to\Hom_R(L,N):
+\]
+对固定的 $m\in M$, 函数 $\varphi(\_,m)$ 是一个 $R$-线性映射 $L\to N$. 追踪这两种等同就得到一个典范双射
+\begin{equation*}\tag{$*$}
+\Hom_R(L,\Hom_R(M,N))\cong\Hom_R(M,\Hom_R(L,N)).
+\end{equation*}
+我们遵循 $\Hom_R$ 代表 $\Hom_{R\dcate{-Mod}}$ 的约定. 只要翻转箭头, 我们同样可以把它看作 $\Hom_{R\dcate{-Mod}^{\op}}$; 于是, $(*)$ 中的典范双射可以改写为
+\[
+\Hom_{R\dcate{-Mod}}(L,\Hom_{R\dcate{-Mod}}(M,N))\cong\Hom_{R\dcate{-Mod}^{\op}}(\Hom_{R\dcate{-Mod}^{\op}}(N,L),M)
+\]
+或者, 利用证明之前引入的记号, 改写为
+\[
+\Hom_{R\dcate{-Mod}}(L,h_N(M))\cong\Hom_{R\dcate{-Mod}^{\op}}(h_N^{\op}(L),M).
+\]
+这说明 $h_N$ 右伴随于 $h_N^{\op}$ (自然性要求也是立刻的, 照例留给读者验证).
+\end{proof}
+
+由于 $\Hom_R(N,\_)$ (由推论~\ref{cor:hom-right-adjoint-tensor}) 与 $\Hom_R(\_,N)$ (由命题~\ref{prop:hom-self-adjoint}) 都是右伴随函子, 引理~\ref{lem:right-adjoint-limits} 告诉我们它们保持极限. 这一事实同样必须仔细解读, 因为 $\Hom_R(\_,N)$ 的反变性质: 例如, 乘积是 $R\dcate{-Mod}$ 中的极限, 但直和是 $R\dcate{-Mod}$ 中的余极限, 因而是 $R\dcate{-Mod}^{\op}$ 中的极限. 于是:
+
+\begin{corollary}\label{cor:hom-limits-products}
+对每个 $R$-模 $N$ 与每个 $R$-模族 $\{M_i\}_{i\in I}$,
+\[
+\Hom_R\Bigl(N,\prod_{i\in I}M_i\Bigr)\cong\prod_{i\in I}\Hom_R(N,M_i),
+\]
+\[
+\Hom_R\Bigl(\bigoplus_{i\in I}M_i,N\Bigr)\cong\prod_{i\in I}\Hom_R(M_i,N).
+\]
+\end{corollary}
+
+另外, 正如断言~\ref{claim:right-adjoint-leftexact} 中指出的, $\Hom$ 的协变与反变两种风味都是右伴随这一事实对其正合性有直接的影响, 为清单再添一条巴甫洛夫式的表述:
+\[
+\Hom_R(M,\_)\ \text{与}\ \Hom_R(\_,N)\ \text{都是左正合函子}.
+\]
+由 $\Hom_R(\_,N)$ 的反变性质, 后者的左正合性意味着: 若
+\[
+A\longrightarrow B\longrightarrow C\longrightarrow 0
+\]
+是 $R$-模的正合序列, 则诱导序列
+\[
+0\longrightarrow\Hom_R(C,N)\longrightarrow\Hom_R(B,N)\longrightarrow\Hom_R(A,N)
+\]
+也是正合的. 勤勉的读者早在很久以前就曾``手工''验证过这一点 (习题~III.\ref{ex:hom-left-exact}), 而没有求助于伴随性. 直接证明这两个 $\Hom$ 函子的左正合性是直截了当且有教益的.
+
+\subsection{对偶模}\label{subsec:dual-modules}
+
+我们将在 \S\ref{sec:projective-injective-ext} 中进一步探究 $\Hom$ 的正合性 (以及正合性的缺失). 但在此之前, 我们想考察 $\Hom$ 函子反变一面的一个重要的特殊情形.
+
+\begin{definition}\label{def:dual-module}
+设 $M$ 是一个 $R$-模. $M$ 的\emph{对偶} $M^\vee$ 是 $R$-模 $\Hom_R(M,R)$.
+\end{definition}
+
+对偶模的一个用途是, 至少在特殊情形下, 把 $\Hom$ 的计算转译为 $\otimes$ 的计算.
+
+\begin{proposition}\label{prop:hom-eval-iso}
+设 $M$ 是任意 $R$-模, $F$ 是一个有限秩的自由 $R$-模. 则
+\[
+\Hom_R(M,F)\cong M^\vee\otimes_R F.
+\]
+\end{proposition}
+
+\begin{proof}
+由假设 $F\cong R^{\oplus n}\cong R^n$; 因而
+\[
+\Hom_R(M,F)\cong\Hom_R(M,R^n)\cong\Hom_R(M,R)^n\cong\Hom_R(M,R)\otimes_R R^n\cong M^\vee\otimes_R F,
+\]
+最后一步用了推论~\ref{cor:hom-limits-products}.
+\end{proof}
+
+事实上, 注意到对所有的 $R$-模 $M$, $N$ 都有一个自然的``求值''映射
+\[
+\epsilon:M^\vee\otimes_R N\to\Hom_R(M,N)
+\]
+它在纯张量上定义为: 把 $f\otimes n$ (其中 $f\in\Hom_R(M,R)$, $n\in N$) 映到 $R$-模同态 $M\to N$
+\[
+m\longmapsto f(m)n.
+\]
+读者将验证 (习题~\ref{ex:eval-iso-free}) 当 $N$ 是有限秩自由模时 $\epsilon$ 是同构; 这给出了命题~\ref{prop:hom-eval-iso} 的一个更精确的版本.
+
+\subsection{自由模的对偶}\label{subsec:duals-free-modules}
+
+按照定义, ``对偶''函子 $M\mapsto M^\vee$ 是 $\Hom$ 反变风味的特殊情形; 因而它自身是反变的, 并且保持极限. 下面是一个直接的推论:
+
+\begin{lemma}\label{lem:duals-direct-sum}
+对每族 $R$-模 $\{M_i\}$, $\bigl(\bigoplus_i M_i\bigr)^\vee\cong\prod_i M_i^\vee$.
+\end{lemma}
+
+专门取 $M_i=R$ (对所有 $i$) 便确定了自由模的对偶:
+
+\begin{corollary}\label{cor:dual-free-product}
+自由模的对偶同构于若干份 $R$ 的乘积:
+\[
+(R^{\oplus S})^\vee\cong R^S.
+\]
+特别地, $(R^n)^\vee\cong R^n$: 若 $F$ 是一个有限秩的自由 $R$-模, 则 $F^\vee\cong F$.
+\end{corollary}
+
+\begin{proof}
+这由引理~\ref{lem:duals-direct-sum} 以及 $R^\vee=\Hom_R(R,R)$ 同构于 $R$ 这一事实推出.
+\end{proof}
+
+请仔细注意推论~\ref{cor:dual-free-product} 的陈述中从左边到右边``神奇消失''的 $\oplus$: 直和经由反变的 $\Hom$ 变成了直积 (推论~\ref{cor:hom-limits-products}). 然而, 有限多个模的直积恰好同构于它们的直和 (这一点我们早有耳闻: 命题~III.\ref{prop:mod-prod-coprod}), 这就是陈述的第二部分.
+
+\begin{remark}\label{rmk:dual-product-vs-sum}
+若 $S$ 无限, 则 $R^S$ 比 $R^{\oplus S}$ ``大得多'': 前一个模由所有的函数 $S\to R$ 组成, 而后一个只保留那些除有限多个 $s\in S$ 外全为零的函数.
+\end{remark}
+
+\begin{remark}\label{rmk:basis-not-determined}
+注意, 集合 $S$ 并不由自由模 $F=R^{\oplus S}$ 的同构类确定. 我们在推论~VI.\ref{cor:free-module-isomorphism} 中证明过 (当 $R$ 是整环时) $S$ 的基数由 $F$ 的同构类确定, 但当然 $S$ 本身 (比如说作为 $F$ 的子集) 是不被确定的. 事实上, 回想 (\S~VI.\ref{subsec:linear-independence-bases}) 一个具体的同构 $F\cong R^{\oplus S}$ 的选取等价于 $F$ 的一组基的选取. 现在, 推论~\ref{cor:dual-free-product} 中出现的同构需要知道 $S$; 的确, 我们马上就会验证 (例~\ref{ex:dual-basis-dependence}) 这个同构即使在有限情形也依赖于基的选取. 它不是典范的! 读者应当努力记住这条口号: 有限秩自由模——例如有限维向量空间——同构于它的对偶, 但不是典范地.
+\end{remark}
+
+这一注释可以借助下面的概念来澄清.
+
+\begin{definition}\label{def:dual-basis}
+考虑 $R^n$ 的标准基 $(\mathbf{e}_1,\dots,\mathbf{e}_n)$. $(R^n)^\vee\cong R^n$ 的\emph{对偶基}是 $(\check{\mathbf{e}}_1,\dots,\check{\mathbf{e}}_n)$, 其中 $\check{\mathbf{e}}_i\in(R^n)^\vee=\Hom_R(R^n,R)$ 由
+\[
+\check{\mathbf{e}}_i(\mathbf{e}_j)=
+\begin{cases}
+1 & \text{若 } j=i,\\
+0 & \text{否则}
+\end{cases}
+\]
+确定.
+\end{definition}
+
+推论~\ref{cor:dual-free-product} 中的同构 $(R^n)^\vee\cong R^n$ 恰好通过匹配 $\mathbf{e}_i$ 与 $\check{\mathbf{e}}_i$ 得到: 对于完成了习题~\ref{ex:dual-free-direct} 的读者, 这一点再清楚不过. 特别地, 向量 $\check{\mathbf{e}}_i$ 确实构成 $(R^n)^\vee$ 的一组基.
+
+\begin{example}\label{ex:dual-basis-dependence}
+要看清这些同构确实依赖于基的选取, 考虑 $R^2$ 的标准基 $(\mathbf{e}_1,\mathbf{e}_2)$ 与 $(R^2)^\vee$ 中相应的对偶基 $(\check{\mathbf{e}}_1,\check{\mathbf{e}}_2)$, 然后给 $R^2$ 选另一组基 $(\mathbf{e}'_1,\mathbf{e}'_2)$, 其中 $\mathbf{e}'_1=\mathbf{e}_1$ 而 $\mathbf{e}'_2=\mathbf{e}_1+\mathbf{e}_2$, 并设 $(\check{\mathbf{e}}'_1,\check{\mathbf{e}}'_2)$ 为相应的对偶基. 按定义
+\[
+\check{\mathbf{e}}'_1(\mathbf{e}'_2)=0,
+\]
+而
+\[
+\check{\mathbf{e}}_1(\mathbf{e}'_2)=\check{\mathbf{e}}_1(\mathbf{e}_1+\mathbf{e}_2)=1+0=1.
+\]
+因此, 即使 $\mathbf{e}'_1=\mathbf{e}_1$, 仍有 $\check{\mathbf{e}}'_1\neq\check{\mathbf{e}}_1$: 由这两组基确定的两个同构 $R^2\cong(R^2)^\vee$ 是不同的.
+\end{example}
+
+对偶导致非典范同构这一事实多少有些令人不快, 但很快就会有神奇的事情发生 (\S\ref{subsec:duals-matrices-biduality}): 我们将通过对偶函子的两次应用, 恢复出 (有限秩自由模上的) 一个典范的——即不依赖于任何选取的——同构. 对偶函子引入的任何扭转都将在再次应用对偶时被解开.
+
+\subsection{对偶与正合性}\label{subsec:duality-exactness}
+
+在看到这一点之前, 让我们思量一下对偶是反变 $\Hom$ 的特殊情形这一事实的另一个直接推论:
+
+\begin{lemma}\label{lem:duality-left-exact}
+对偶函子是左正合的: 每一个 $R$-模的正合序列
+\[
+L\longrightarrow M\longrightarrow N\longrightarrow 0
+\]
+都诱导一个正合序列
+\[
+0\longrightarrow N^\vee\longrightarrow M^\vee\longrightarrow L^\vee.
+\]
+\end{lemma}
+
+\begin{proof}
+这是 $\Hom$ 的左正合性的直接推论.
+\end{proof}
+
+对偶函子一般不是正合的: 例如, 对 Abel 群 (也就是 $\Z$-模) 的正合序列
+\[
+0\longrightarrow\Z\xrightarrow{\cdot 2}\Z\longrightarrow\Z/2\Z\longrightarrow 0
+\]
+取对偶给出序列
+\begin{equation*}\tag{$*$}
+0\longrightarrow 0\longrightarrow\Z^\vee\xrightarrow{\gamma}\Z^\vee\longrightarrow 0
+\end{equation*}
+因为 $\Z/2\Z$ 的对偶是零 (习题~\ref{ex:dual-z2}). 该序列中的映射 $\gamma$ 是乘以 $2$ 的对偶. 若 $f:\Z\to\Z$ 是 $\Z^\vee$ 的一个元素, 则 $\gamma(f)$ 由复合得到:
+\[
+\begin{tikzcd}
+\Z \ar[rr,"\cdot 2"] \ar[dr,"\gamma(f)"'] & & \Z \ar[dl,"f"] \\
+& \Z &
+\end{tikzcd}
+\]
+由线性性, $\gamma(f)(n)=f(2n)=2f(n)$ 对所有 $n\in\Z$ 都是偶数. 特别地, 恒等映射 $\Z\to\Z$ (作为 $\Z^\vee$ 的元素) 不在 $\gamma$ 的像中. 因此 $\gamma$ 不是满的, 序列 $(*)$ 不是正合的.
+
+对偶是正合的情形是存在的; 在消化 \S\ref{sec:projective-injective-ext} 之后我们对此会有更好的理解, 但眼下下面的观察已经足够.
+
+\begin{proposition}\label{prop:dual-free-exact}
+设
+\[
+0\longrightarrow M\xrightarrow{\mu} N\xrightarrow{\nu} P\longrightarrow 0
+\]
+是 $R$-模的正合序列, 其中 $P$ 自由. 则诱导序列
+\[
+0\longrightarrow P^\vee\xrightarrow{\nu^\vee} N^\vee\xrightarrow{\mu^\vee} M^\vee\longrightarrow 0
+\]
+是正合的.
+\end{proposition}
+
+这对勤勉的读者来说也不是新东西, 因为它是习题~III.\ref{ex:free-splits} 的特殊情形, 而且它也是习题~\ref{ex:flat-ses} 的推论. 但这里有一个直接的论证:
+
+\begin{proof}
+引理~\ref{lem:duality-left-exact} 处理了除从 $M\to N$ 诱导的映射 $N^\vee\to M^\vee$ 的满性之外的一切:
+\[
+\begin{tikzcd}
+M \ar[r,"\mu"] \ar[d,"f"'] & N \ar[ld,dashed,"g"] \\
+R
+\end{tikzcd}
+\]
+问题是: 每个 $R$-线性映射 $f:M\to R$ 是否都能延拓为一个 $R$-线性映射 $g:N\to R$ 使得 $f=g\circ\mu$, 也就是说, $f=\mu^\vee(g)$.
+
+由于 $P$ 自由, $P\cong F^R(S)\cong R^{\oplus S}$ 对某个集合 $S$ 成立. 任意地 (随便选!) 为标准基向量 $\mathbf{e}_s\in R^{\oplus S}$ 选取其在 $N$ 中的原像, 就得到一个集合函数 $S\to N$, 再由自由模的万有性质延拓为一个 $R$-线性映射 $\rho:P\to N$:
+\[
+\begin{tikzcd}
+0 \ar[r] & M \ar[r,"\mu"] & N \ar[r,shift left=.7ex,"\nu"] & P \ar[l,shift left=.7ex,dashed,"\rho"] \ar[r] & 0.
+\end{tikzcd}
+\]
+由构造, $\nu\circ\rho=\mathrm{id}_P$. 现在设 $n\in N$. 则 $\nu(\rho(\nu(n)))=\nu(n)$, 从而 $\nu(n-\rho(\nu(n)))=0$. 由给定序列的正合性, 存在 $m\in M$ 使得
+\[
+n-\rho(\nu(n))=\mu(m).
+\]
+元素 $m$ 是唯一的, 因为 $\mu$ 是单射. 令
+\[
+g(n):=f(m)
+\]
+便给出所需的延拓. 的确, 立刻可以验证 $g$ 是 $R$-线性的, 并且按定义 $g(\mu(m))=f(m)$.
+\end{proof}
+
+特别地,
+
+\begin{corollary}\label{cor:duality-exact-vect}
+对偶函子在向量空间上是正合的.
+\end{corollary}
+
+\subsection{对偶与矩阵; 双对偶}\label{subsec:duals-matrices-biduality}
+
+即使没有完整的正合性, 引理~\ref{lem:duality-left-exact} 与推论~\ref{cor:dual-free-product} (原则上) 把任何有限展示模的对偶的计算化为矩阵运算. 若
+\[
+R^n\xrightarrow{\alpha} R^m\longrightarrow M\longrightarrow 0
+\]
+是 $R$-模 $M$ 的一个展示, 则对偶 $M^\vee$ 被等同于 $\alpha$ 的对偶的核:
+\[
+0\longrightarrow M^\vee\longrightarrow R^m\xrightarrow{\alpha^\vee} R^n.
+\]
+这里我们使用了推论~\ref{cor:dual-free-product} 中的同构 $(R^m)^\vee\cong R^m$, $(R^n)^\vee\cong R^n$. 映射 $\alpha^\vee$ 由对映射 $\alpha$ 施加函子 $\Hom_R(\_,R)$ 得到. 取定基之后, $\alpha$ 由一个 $m\times n$ 矩阵确定; 同样, $\alpha^\vee$ 对应于一个 $n\times m$ 矩阵. 这两个矩阵之间有什么关系? 当然, 这个问题只有一个说得通的答案, 而且它是对的:
+
+\begin{lemma}\label{lem:dual-map-transpose}
+设 $A$ 是在标准基下表示线性映射 $\alpha:R^n\to R^m$ 的矩阵. 则对偶映射 $\alpha^\vee:(R^m)^\vee\to(R^n)^\vee$ 在相应的对偶基下由 $A$ 的转置表示.
+\end{lemma}
+
+这一事实的 (简单) 验证留给读者 (习题~\ref{ex:dual-map-transpose-proof}). 要点是: 一个矩阵 $A$ 的余核的对偶是 $A$ 的转置的核.
+
+对偶的左正合性蕴含了对哪些模可以作为其他模的对偶的限制:
+
+\begin{proposition}\label{prop:dual-torsion-free}
+设 $R$ 是整环, $M$ 是一个 $R$-模. 则 $M^\vee$ 无挠.
+\end{proposition}
+
+\begin{proof}
+存在满同态 $R^{\oplus S}\to M$, 从而有正合序列
+\[
+R^{\oplus T}\to R^{\oplus S}\to M\to 0.
+\]
+取对偶后, $M^\vee$ 被实现为诱导映射 $R^S\to R^T$ 的核; 因而 $M^\vee$ 可以等同于乘积 $R^S$ 的一个子模. 后者没有非零挠元, 所以 $M^\vee$ 也没有.
+\end{proof}
+
+勤勉的读者已在习题~VI.\ref{ex:hom-torsion-free} 中证明过这一点, 而且所用方法很可能比我们刚才的更直接, 但没关系. 无论如何, 请记住: 取对偶消灭挠. 请通过完成习题~\ref{ex:dual-pid-fg} 来练一练手.\erratumfootnote{官方勘误图主张补入``在整环上''这一条件；第二次印刷正文无此限定，故此处从第二次印刷。}
+
+即使并非每个模都是某个模的对偶, 我们仍然可以问: 任意给定的模 $M$ 是否与某个恰当选取的对偶有某种关系? 事实的确如此: 存在一个到``双对偶''的典范映射
+\[
+\omega:\quad M\to M^{\vee\vee}.
+\]
+为了定义它, 考虑 $R$-双线性映射
+\[
+M^\vee\times M\to R
+\]
+它把 $(f,m)$ 映到 $f(m)$. 对每个 $m\in M$, 我们得到\footnote{具备范畴论思维习惯的读者可以把这一点看得更形式化一些, 具体做法是完成习题~\ref{ex:hom-canonical-bijection}.}一个 $R$-线性映射 $M^\vee\to R$, 即 $f\mapsto f(m)$; 换言之, 即 $M^{\vee\vee}$ 的一个元素 $\omega(m)$. 立刻可以验证 $\omega$ 是 $R$-线性的.
+
+由命题~\ref{prop:dual-torsion-free}, $M^{\vee\vee}$ 无挠. 事实上, 双对偶构造是一种标准的``清洗''模的手段, 即去掉它的挠.\erratumfootnote{官方勘误图主张此处强调``在整环上''这一前提；第二次印刷正文无此限定，故此处从第二次印刷。}
+
+即使挠不是问题, 映射 $\omega$ 也是有趣的. 正如在推论~\ref{cor:dual-free-product} 中所见, 若 $F$ 是一个有限秩自由 $R$-模, 则 $F$ 的一组基的选取决定一个同构 $F\cong F^\vee$; 但这确实依赖于基, 所以它不是典范同构. 做两次,
+\[
+F\cong F^\vee\cong F^{\vee\vee},
+\]
+先验地似乎只会把情况弄得更糟——当然, 复合两个非典范映射, 我们不能指望得到典范的东西, 对吧? 嗯, 在这个情形我们确实能, 因为这个复合无非就是映射 $\omega$ (习题~\ref{ex:double-dual-free}), 而 $\omega$ 对基的选取或其他这类含糊之处一无所知. 因此, 我们的口号可以增补如下: 有限秩自由模非典范地同构于它们的对偶, 而典范地同构于它们的双对偶.
+
+\index{ziyou@自由(free)!kuozhangdequn@扩张的群(group of an extension)!mo@模(module)}用矩阵的语言 (并记住对偶在自由模上是正合的) 来看, 这或许并不太令人惊讶. 毕竟, 对一个矩阵取两次转置就得到矩阵本身; 因此, 即便理解与矩阵的转置相对应的同态可能依赖于基的选取, 但若转置取两次, 这样的选取肯定是非本质的.
+
+顺带一提, 若相应的映射 $\omega$ 是同构, 则称模 $M$ 是\emph{自反的}. 于是, 自反模必然无挠, 而有限秩自由模是自反的.
+
+\subsection{向量空间上的对偶}\label{subsec:duality-vector-spaces}
+
+在所有这些讨论中, 域 $k$ 上向量空间的情形之所以特殊, 仅仅在于向量空间是自由的. 把前面的观察 (包括习题~\ref{ex:hom-free-tensor}) 为这个特殊情形收集起来, 我们有:
+
+\begin{itemize}
+\item 对偶是 $k\dcate{-Vect}$ 上的反变、正合函子.
+\item 若 $V$, $W$ 是向量空间, 则 $(V\oplus W)^\vee\cong V^\vee\oplus W^\vee$.
+\item 若 $V$, $W$ 是向量空间且 $\Dim V<\infty$ 或 $\Dim W<\infty$, 则 $\Hom_k(V,W)$ 同构于 $V^\vee\otimes_k W$.
+\item 若 $\Dim_k V<\infty$, 则 $V$ 上基的选取决定一个同构 $V\cong V^\vee$.
+\item 有限维向量空间是自反的: 若 $\Dim_k V<\infty$, 则典范映射 $\omega:V\to V^{\vee\vee}$ 是同构.
+\end{itemize}
+
+\subsection*{习题}
+\phantomsection
+\addcontentsline{toc}{subsection}{习题}
+
+\begin{prob}\label{ex:hom-free-tensor}
+证明: 若 $F$ 是一个有限秩的自由 $R$-模, $N$ 是任意 $R$-模, 则 $\Hom_R(F,N)\cong F^\vee\otimes_R N$. [\S\ref{subsec:duality-vector-spaces}]
+\end{prob}
+
+\begin{prob}\label{ex:epi-mono-hom}
+$\neg$ 设 $\alpha:A\to B$ 是 $R$-模的同态. 证明: 若对所有 $R$-模 $N$, 诱导映射\footnote{注意这里只需要 $\alpha^*$ 的``集合论''性质; 在本题中, $\Hom_R$ 的 $R$-模结构无关紧要. 因此, 该结果对非交换的 $R$ 同样成立.} $\alpha^*:\Hom_R(B,N)\to\Hom_R(A,N)$ 是单射, 则 $\alpha$ 是满同态; 若 $\alpha^*$ 对所有 $N$ 都是满的, 则 $\alpha$ 是单同态.
+
+证明第一条的逆命题成立, 而第二条的逆命题不成立. 然而, 证明: 若 $\alpha$ 有一个左逆, 则 $\alpha^*$ 对所有 $N$ 都是满的. [习题~\ref{ex:hom-seq-exact}, 习题~\ref{ex:hom-injective-test}]
+\end{prob}
+
+\begin{prob}\label{ex:hom-seq-exact}
+证明: $R$-模的序列
+\[
+0\longrightarrow A\xrightarrow{\alpha} B\xrightarrow{\beta} C\longrightarrow 0
+\]
+是正合的, 如果诱导序列
+\begin{equation*}\tag{$*$}
+0\longrightarrow\Hom_R(C,N)\xrightarrow{\beta^*}\Hom_R(B,N)\xrightarrow{\alpha^*}\Hom_R(A,N)\longrightarrow 0
+\end{equation*}
+对所有 $R$-模 $N$ 都是正合的. (这件事的大半你已在习题~\ref{ex:epi-mono-hom} 中完成. 为证 $\ker\beta\subseteq\Image\alpha$, 取 $N=B/\Image(\alpha)$.) 记住逆命题不成立, 因为一般地 $\Hom_R(\_,N)$ 不是正合的. 对 $\alpha$ 施加什么额外假设能保证 $(*)$ 对所有 $N$ 正合?
+\end{prob}
+
+\begin{prob}\label{ex:normal-bundle-ideal}
+$\neg$ 设 $I$ 是 $R$ 的理想. 由于 $I^2\subseteq I$, 有一个自然的限制映射 $\Hom_R(I,R/I)\to\Hom_R(I^2,R/I)$. 证明这个映射的像是 $0$. 证明 $\Hom_R(I/I^2,R/I)\cong\Hom_R(I,R/I)$. (这个模在代数几何中很重要, 因为在好的情形它承载着``法丛''的信息.) [习题~\ref{ex:ext-normal-bundle}]
+\end{prob}
+
+\begin{prob}\label{ex:eval-iso-free}
+证明: 若 $F$ 是有限秩自由模, 则求值映射 $M^\vee\otimes_R F\to\Hom_R(M,F)$ 是同构, 从而给出命题~\ref{prop:hom-eval-iso} 的另一种证明. [\S\ref{subsec:dual-modules}]
+\end{prob}
+
+\begin{prob}\label{ex:dual-z2}
+$\triangleright$ 证明 $(\Z/2\Z)^\vee=\Hom_\Z(\Z/2\Z,\Z)=0$. [\S\ref{subsec:duality-exactness}]
+\end{prob}
+
+\begin{prob}\label{ex:dual-free-direct}
+$\triangleright$ ``直接''证明 $(R^{\oplus S})^\vee\cong R^S$: 一个 $R$-线性映射 $R^{\oplus S}\to R$ 如何确定一个函数 $S\to R$? 这个对应及其逆是什么? [\S\ref{subsec:duals-free-modules}]
+\end{prob}
+
+\begin{prob}\label{ex:bilinear-duality}
+证明: $R$-线性映射 $M\to M^\vee$ 的数据等价于 $R$-双线性映射 $M\times M\to R$ 的数据, 并解释为什么这种等价可以按两种方式建立. 若 $F=R^n$ 是有限秩自由 $R$-模, 试确定对应于推论~\ref{cor:dual-free-product} 给出的同构 $F\cong F^\vee$ 的双线性映射 $F\times F\to R$.
+\end{prob}
+
+\begin{prob}\label{ex:nondegenerate-bilinear}
+\index{Gram–Schmidt guocheng@Gram–Schmidt 过程(Gram-Schmidt process)}\index{neiji@内积(inner product)}$R$-双线性映射 $\varphi:M\times M\to R$ 称为\emph{非退化的}, 如果诱导映射 $M\to M^\vee$ 都是单射; 称为\emph{非奇异的}, 如果它们都是同构. 当 $M$ 是有限维向量空间时, 两个概念重合. 证明 $\R^n$ 中的``标准内积'' (习题~VI.\ref{ex:orthonormal-matrix} 中定义) 是非退化的.\erratumfootnote{官方勘误图仅指出此句英文拼写；第二次印刷原文作 ``finite-dimensional vectors space''，中文译文不受影响。}
+
+若 $M$ 是秩 $n$ 的自由模, 设 $(\mathbf{e}_1,\dots,\mathbf{e}_n)$ 是 $M$ 的一组基, 并设 $A=(a_{ij})$ 是元素为 $a_{ij}=\varphi(\mathbf{e}_i,\mathbf{e}_j)$ 的矩阵. 证明 $\varphi$ 非退化当且仅当 $\det A\neq 0$, 且 $\varphi$ 非奇异当且仅当 $\det A$ 是单位. (参见命题~VI.\ref{prop:det-injective}.)
+\end{prob}
+
+\begin{prob}\label{ex:dual-map-transpose-proof}
+证明引理~\ref{lem:dual-map-transpose}.
+\end{prob}
+
+\begin{prob}\label{ex:dual-pid-fg}
+$\triangleright$ 设 $M$ 是 PID 上秩为 $r$ 的有限生成模. ``计算''对偶 $M^\vee$. [\S\ref{subsec:duals-matrices-biduality}]
+\end{prob}
+
+\begin{prob}\label{ex:hom-canonical-bijection}
+$\triangleright$ 设 $M$, $N$ 是 $R$-模. 证明存在典范双射
+\[
+\Hom_R(N,M^\vee)\cong\Hom_R(M,N^\vee).
+\]
+取 $N=M^\vee$, 左边有一个特殊的元素, 即恒等映射 $M^\vee\to M^\vee$. 证明右边与之对应的元素正是 \S\ref{subsec:duals-matrices-biduality} 中定义的映射 $\omega:M\to M^{\vee\vee}$. [\S\ref{subsec:duals-matrices-biduality}]
+\end{prob}
+
+\begin{prob}\label{ex:double-dual-free}
+$\triangleright$ 设 $F\cong R^n$ 是有限秩自由 $R$-模. 验证: 推论~\ref{cor:dual-free-product} 的 (非典范) 同构 $F\cong F^\vee\cong F^{\vee\vee}$ 的复合正是 \S\ref{subsec:duals-matrices-biduality} 中定义的 (典范) 同构 $\omega$. [\S\ref{subsec:duals-matrices-biduality}]
+\end{prob}
+
+\begin{prob}\label{ex:free-into-double-dual}
+设 $F$ 是自由 $R$-模 (任意秩). 证明典范映射 $F\to F^{\vee\vee}$ 是单射. 你所知道的最简单的使 $M\to M^{\vee\vee}$ 不是单射的模 $M$ 的例子是什么?
+\end{prob}
+
+\begin{prob}\label{ex:annihilator-subspace}
+$\neg$ 设 $V$ 是向量空间, $W\subseteq V$ 是子空间. $W$ 的\emph{零化子}\footnote{这一记号受习题~VI.\ref{ex:orthogonal-complement} 的启发, 后者是本题的特例. 你能看出为什么吗?}是
+\[
+W^\perp:=\{\check{v}\in V^\vee\mid(\forall w\in W),\ \check{v}(w)=0\}.
+\]
+证明 $W^\perp$ 是 $V^\vee$ 的子空间. 若 $\Dim V=n$ 且 $\Dim W=r$, 证明 $\Dim W^\perp=n-r$.
+
+假设 $V$ 有限维, 证明: 在典范同构 $V^{\vee\vee}\cong V$ 之下, $W^{\perp\perp}$ 同构地映到 $W$. [习题~\ref{ex:dual-exact-seq-free}, 习题~\ref{ex:grassmannian-dual}]
+\end{prob}
+
+\begin{prob}\label{ex:dual-exact-seq-free}
+设
+\[
+0\longrightarrow F_1\longrightarrow F_2\longrightarrow F_3\longrightarrow 0
+\]
+是自由 $R$-模的正合序列. 把 $F_1$ 看作 $F_2$ 的子模, 并把习题~\ref{ex:annihilator-subspace} 中为向量空间引入的记号外推过来, 证明 $F_1^\perp\cong F_3^\vee$.
+\end{prob}
+
+\begin{prob}\label{ex:grassmannian-dual}
+$\neg$ 设 $V$ 是维数 $n$ 的向量空间. 证明: 在 $V$ 的 $r$ 维子空间的 Grassmannian $\Gr(r,V)$ (参见习题~VI.\ref{ex:grassmannian-cells}) 与 $V$ 的对偶的 $(n-r)$ 维子空间的 Grassmannian $\Gr(n-r,V^\vee)$ 之间存在自然双射. (用习题~\ref{ex:annihilator-subspace}.)
+
+特别地, Grassmannian $\Gr_k(n-1,n)$ 与射影空间 $\mathbb{P}V=\Gr_k(1,n)$ 有相同的结构. 我们其实可以把维数 $n$ 的向量空间 $V$ 相伴的射影空间定义为 $V$ 中``余维数 $1$'' (即维数 $n-1$) 子空间之集. 有理由认为这样做更可取\footnote{这个问题并非无关紧要: $\mathbb{P}V$ 与 $\Gr(n-1,V)$ 之间确实存在双射, 但该双射依赖于基的选取. 因此我们不能简单地把 $\mathbb{P}V$ 与 $\Gr(n-1,V)$ 等同起来. 我们可以把 $\mathbb{P}V$ 与 $\Gr(n-1,V^\vee)$ 等同起来, 而且这样做有时是有用的.\erratumfootnote{官方勘误图仅指出英文 sometimes 一词的拼写；第二次印刷原文作 ``sometime''，中文译文不受影响。}}, 但约定俗成的规矩就是如此. [习题~VI.\ref{ex:grassmannian-cells}]
+\end{prob}
+
+\begin{prob}\label{ex:wedge-pairing}
+设 $F$ 是有限秩自由 $R$-模. 对任意 $r\ge 1$, 定义多重线性映射
+\[
+\delta:\underbrace{F\times\cdots\times F}_{r}\times\underbrace{F^\vee\times\cdots\times F^\vee}_{r}\to R
+\]
+为
+\[
+\delta(v_1,\dots,v_r,\check{w}_1,\dots,\check{w}_r)=\det(\check{w}_i(v_j))_{\substack{i=1,\dots,r\\ j=1,\dots,r}}.
+\]
+\begin{itemize}
+\item 证明 $\delta$ 对前 $r$ 个与后 $r$ 个分量都是多重线性且交错的.
+\item 推出 $\delta$ 诱导一个双线性映射 $\widetilde{\delta}:\Apow_R^r(F)\times\Apow_R^r(F^\vee)\to R$.
+\item 证明 $\widetilde{\delta}$ 诱导一个同构 $(\Apow_R^r(F))^\vee\cong\Apow_R^r(F^\vee)$.
+\end{itemize}
+\end{prob}
+
+\begin{prob}\label{ex:dual-opposite-ring}
+设 $R$ 是一个不必然交换的环, $M$ 是一个左 $R$-模. 证明 $M^\vee$ 带有自然的右 $R$-模结构. 证明 $R^\vee$ 作为环同构于相反环 $R^{\op}$. (参见习题~III.\ref{ex:opposite-ring}.)
+\end{prob}
+
+\section{投射模与内射模, 以及 Ext 函子}\label{sec:projective-injective-ext}
+
+我们在 \S\ref{subsec:hom-adjunction-again} 中已经看到 $\Hom$ 函子是左正合的, 而一般并不正合. 进一步追究这件事会把我们引上一条与张量积的情形所走过的道路相平行的道路. 在张量积的情形, 我们挑出了一类特殊的 (``平坦的'') 模, 使得 $\otimes$ 对它们正合, 并且我们发现张量积正合性的缺失可以用一整族新的 ($\Tor$) 函子来精确地度量. 对于 $\Hom$ 的协变与反变两种风味, 出现的情形完全一样, 我们将以概述这一故事来结束本章.
+
+这个简短的纵览应当足以应付读者可能会遇到的标准应用. 我们也希望它能成为下一章的动机: 我们在此不加证明地陈述的这些奇妙事实 (关于 Ext 函子的, 类似于 \S\ref{subsec:tor-functors} 中未加证明的关于 Tor 的那些事实) 其实可以用就事论事的方法不太费力地详细证明; 但它们在同调代数这套更宏大的装置中找到自己最自然的归宿, 而且事实上正处在它发展的源头. 坚持随我们读完整整第九章的读者将看到这里所预告的一切事实的完整证明, 而且还不止于此.
+
+与本章其余部分一样, $R$ 表示一个交换环. 如其他地方一样, 交换性这一假设本质上是不必要的; 它的方便之处在于, 下面定义的那些对象 (例如两个 $R$-模 $M$, $N$ 的 $\Ext_R^i(M,N)$) 都自然地带有 $R$-模结构. 如果 $R$ 不必然交换, 它们就``只是''Abel 群.
+
+\subsection{投射对象与内射对象}\label{subsec:projectives-injectives}
+
+\begin{definition}\label{def:projective-injective}
+设 $R$ 是一个 (交换) 环.
+\begin{itemize}
+\item $R$-模 $P$ 称为\emph{投射的}, 如果函子 $\Hom_R(P,\_)$ 正合.
+\item $R$-模 $Q$ 称为\emph{内射的}, 如果函子 $\Hom_R(\_,Q)$ 正合.
+\end{itemize}
+\end{definition}
+
+由于 $\Hom$ 无论如何都是左正合的, 这些定义有如下直截了当的转述:
+
+\begin{lemma}\label{lem:projective-injective-lifting}
+$R$-模 $P$ 投射, 当且仅当对 $R$-模的所有满态射 $\mu:M\to N$, 每个 $R$-线性映射 $p:P\to N$ 都提升为一个 $R$-线性映射 $\hat{p}:P\to M$:
+\begin{center}
+\begin{tikzcd}
+& P \ar[dl, dashed, "\hat{p}"'] \ar[d, "p"] & \\
+M \ar[r, "\mu"'] & N \ar[r] & 0
+\end{tikzcd}
+\end{center}
+$R$-模 $Q$ 内射, 当且仅当对 $R$-模的所有单态射 $\lambda:L\to M$, 每个 $R$-线性映射 $q:L\to Q$ 都延拓为一个 $R$-线性映射 $\hat{q}:M\to Q$:
+\begin{center}
+\begin{tikzcd}
+0 \ar[r] & L \ar[r, "\lambda"] \ar[dr, "q"'] & M \ar[d, dashed, "\hat{q}"] \\
+& & Q
+\end{tikzcd}
+\end{center}
+\end{lemma}
+
+\begin{proof}
+这是直截了当的. 由于对所有 $Q$, $\Hom_R(\_,Q)$ 都是左正合的, $Q$ 内射当且仅当只要序列
+\[
+0\longrightarrow L\longrightarrow M
+\]
+正合, 诱导序列
+\[
+\Hom_R(M,Q)\longrightarrow\Hom_R(L,Q)\longrightarrow 0
+\]
+就也正合. 这恰好转译为所给的条件. 关于投射模的论证完全类似.
+\end{proof}
+
+\begin{example}\label{ex:R-projective-not-injective}
+作为它自身上的模, $R$ 是投射的 (因为对所有模 $M$, $\Hom_R(R,M)$ 典范同构于 $M$), 但一般不是内射的 (因为对偶函子 $\Hom_R(\_,R)$ 一般不正合; 参见 \S\ref{subsec:hom-adjunction-again}).
+\end{example}
+
+引理~\ref{lem:projective-injective-lifting} 的一个变奏用序列的分裂来重新表述投射/内射条件 (参见 \S~III.\ref{subsec:split-exact} 的末尾). 例如, 设 $P$ 投射; 那么我们断言每个正合序列
+\[
+0\longrightarrow L\xrightarrow{\ \lambda\ }M\xrightarrow{\ \mu\ }P\longrightarrow 0
+\]
+都分裂, 其意义是: 存在 $M$ 的一个子模 $P'$, 使得 $\mu$ 在 $P'$ 上的限制是一个同构 $P'\to P$, 且 $M\cong\lambda(L)\oplus P'$. 事实上, 由于 $P$ 投射, 恒等映射 $P\xrightarrow{=}P$ 提升为一个同态 $\rho:P\to M$, 而读者随后可以验证 $P'=\rho(P)$ 符合要求. 粗略地说, 在这一情形下我们可以干脆把 $M$ 换成 $L\oplus P$.
+
+类似地, 若
+\[
+0\longrightarrow Q\longrightarrow M\longrightarrow N\longrightarrow 0
+\]
+正合且 $Q$ 内射, 则该序列必然分裂. 例如, $\Z$ 不是内射 $\Z$-模, 因为正合序列
+\[
+0\longrightarrow\Z\xrightarrow{\ \cdot 2\ }\Z\longrightarrow\Z/(2)\longrightarrow 0
+\]
+明显不分裂.\erratumfootnote{此处官方勘误明确箭头上的态射记号为标量乘法 $\cdot 2$。}
+
+不难证明这些性质事实上刻画了投射模与内射模. 用 \S~III.\ref{subsec:split-exact} 中引入的术语来说, 模 $P$ 投射当且仅当每个满态射 $M\to P$ 都是分裂满态射, 而模 $Q$ 内射当且仅当每个单态射 $Q\to M$ 都是分裂单态射. 把所有的细节都弄得一丝不苟, 就留给有进取心的读者了 (习题~\ref{ex:proj-inj-split}).
+
+\subsection{投射模}\label{subsec:projective-modules}
+
+引理~\ref{lem:projective-injective-lifting} 未必有助于建立对投射模或内射模的感觉. 我们对投射模还算满意, 因为有如下的刻画:
+
+\begin{proposition}\label{prop:projective-summand-free}
+$R$-模 $P$ 投射, 当且仅当它是一个自由模的直和项, 也就是说, 当且仅当存在一个自由 $R$-模 $F$, 一个 $R$-模 $K$, 以及一个同构 $K\oplus P\cong F$.
+\end{proposition}
+
+\begin{proof}
+$P$ 的任何一组生成元 $S$ 都决定自由模 $F=R^{\oplus S}$ 到 $P$ 的一个满射, 从而决定一个正合序列
+\[
+0\longrightarrow K\longrightarrow F\longrightarrow P\longrightarrow 0.
+\]
+正如上面所观察到的, 若 $P$ 投射, 这样的序列必然分裂; 于是在这一情形下 $F\cong K\oplus P$, 正是所需要的.
+
+反之, 设对某个自由 $R$-模 $F$ 有 $K\oplus P\cong F$. 显然 $F$ 满足引理~\ref{lem:projective-injective-lifting} 的提升性质:
+\begin{center}
+\begin{tikzcd}
+& F \ar[d, "f"] \ar[dl, dashed, "\hat{f}"'] \\
+M \ar[r, "\mu"'] & N \ar[r] & 0
+\end{tikzcd}
+\end{center}
+(若 $F=F^R(S)$, 对每个 $s\in S$ 定义 $\hat{f}(s)$ 为 $f(s)$ 的任意一个原像, 再依自由模的万有性质延拓到 $F$ 上). 由此, 通过巧妙地使用自然映射 $P\hookrightarrow K\oplus P\twoheadrightarrow P$, 容易得出提升性质对 $P$ 也成立. 细节留给读者.
+\end{proof}
+
+例如, 自由模是投射的. 命题~\ref{prop:projective-summand-free} 简化了投射模的简单性质的验证:
+
+\begin{corollary}\label{cor:projective-sums-flat}
+设 $P_1$, $P_2$ 是投射 $R$-模. 则 $P_1\oplus P_2$ 与 $P_1\otimes_R P_2$ 都是投射的. 投射模是平坦的.
+\end{corollary}
+
+\begin{proof}
+这些陈述容易从命题~\ref{prop:projective-summand-free}, 以及 $\otimes$ 关于 $\oplus$ 分配、自由模平坦这两件事实推出.
+\end{proof}
+
+有范畴论头脑的读者应当去为这些事实寻找另外的证明. 例如, 若 $P_1$ 与 $P_2$ 都投射, 则函子 $\Hom_R(P_1,\Hom_R(P_2,\_))$ 正合; 由伴随性, 这就是函子 $\Hom_R(P_1\otimes_R P_2,\_)$; 由于它正合, $P_1\otimes_R P_2$ 投射.
+
+借助伴随性来证明投射模平坦也是直截了当的 (习题~\ref{ex:projective-flat-adjunction}), 但要用上 (非平凡的) 事实: $R\dcate{-Mod}$ 有足够多的内射对象, 这将在下面讨论. 碰巧的是, 例如 Noether 环上的有限生成平坦模是投射的; 勤勉的读者已经在习题中做过证明这一点所需的全部工作了, 并将在习题~\ref{ex:locally-free} 中完成证明.
+
+自由模投射这一事实蕴含 $R\dcate{-Mod}$ \emph{有足够多的投射对象}: 这是说每个 $R$-模 $M$ 都有一个\emph{投射分解}, 即一个正合序列
+\[
+\cdots\longrightarrow P_2\longrightarrow P_1\longrightarrow P_0\longrightarrow M\longrightarrow 0.
+\]
+事实上, $M$ 的一个自由分解特别地就是一个投射分解. 由于一般地投射模比自由模``更多'', 原则上构造一个投射分解可以``更容易''. 同调代数的魔力表明, 在 (例如) 计算 Tor 模时, 可以用投射分解代替自由分解. 一旦我们走通第九章中的某些同调代数机械, 特别是 §IX.\ref{sec:double-complexes}, 这一点就会清楚了.
+
+\subsection{内射模}\label{subsec:injective-modules}
+
+\index{neishe@内射(injective)}我们可能不经意地向读者传达了这样一个信息: 每个范畴论的概念都可以通过``仅仅反转箭头''直截了当地导出一个镜像概念. 就内射模与投射模而言似乎正是如此: 一类模的定义确实可以通过简单地反转关键图中的箭头而从另一类模的定义得到.
+
+然而, 这种天真的看法也就到此为止了. 这里显现出自然界一种看来不可避免的不对称性, 它使得内射模比投射模更显得神秘. 例如, 并没有命题~\ref{prop:projective-summand-free} 那种风格的关于内射模的``容易的''描述 (不过参见注~\ref{rmk:cofree}); 而且, 虽然任意一个模都被某个投射的 (例如自由的) 模满射到是平凡的事情, 但关于内射模的``镜像''陈述却肯定不是平凡的.
+
+问题在于, 内射模有点难以想象: 虽然 $R$ 自身是投射 $R$-模的一个平凡的例子, 但此时读者很可能会发现, 哪怕只说出一个环上的单个非零内射模都很难. 好吧, 就说任何一个不是域的环: 如果 $R$ 是域, 那么 $R$ 自身是内射的. (为什么?) 但如果 $R$ 不是域 $\dots$? 设 $r$ 是 $R$ 中的一个非零因子, 考虑理想 $(r)\cong R$ 在 $R$ 中的包含:
+\[
+0\longrightarrow R\xrightarrow{\ \cdot r\ }R;
+\]
+要把 $R$ 上的恒等映射沿着乘以 $r$ 延拓过去,
+\begin{center}
+\begin{tikzcd}
+0 \ar[r] & R \ar[r, "\cdot r"] \ar[d, "\mathrm{id}_R"'] & R \ar[dl, dashed] \\
+& R &
+\end{tikzcd}
+\end{center}
+就需要存在 $s\in R$ 使得 $rs=1$. 除非 $r$ 是 $R$ 中的单位, 否则这是做不到的.
+
+这告诉我们, 一般地 $R$ 作为 $R$-模不是内射的, 并且切中了``问题''的要害: 要使 $Q$ 内射, 我们必须特别地能够把从 $R$ 的任一理想 $I$ 出发的任一映射 $I\to Q$ 延拓为一个映射 $R\to Q$. Zorn 引理的一个漂亮应用表明, 这一性质刻画了内射模:
+
+\begin{theorem}\label{thm:baer-criterion}
+$R$-模 $Q$ 内射, 当且仅当每个 $R$-线性映射 $f:I\to Q$ (其中 $I$ 是 $R$ 的一个理想) 都延拓为一个 $R$-线性映射 $\hat{f}:R\to Q$.
+\end{theorem}
+
+\index{Baer@Baer!Reinhold@Reinhold}这一判别法归功于 Reinhold Baer, 是他首先引入并研究了内射模 (约 1940 年).
+
+\begin{proof}
+陈述的``仅当''部分由内射的定义立刻得出. 为了验证``当''的部分, 设 $Q$ 满足所述的延拓条件, 设 $L\subseteq M$ 是 $R$-模的任一包含, 并设 $q:L\to Q$ 是一个给定的 $R$-线性映射:
+\begin{center}
+\begin{tikzcd}
+0 \ar[r] & L \ar[r] \ar[dr, "q"'] & M \ar[d, dashed, "\hat{q}"] \\
+& & Q
+\end{tikzcd}
+\end{center}
+我们想构造 $q$ 的一个延拓 $\hat{q}:M\to Q$.
+
+考虑由对 $(\tilde{L},\tilde{q})$ 组成的集合 $\mathcal{E}$, 其中 $\tilde{L}$ 取遍 $M$ 的包含 $L$ 的子模, 而 $\tilde{q}:\tilde{L}\to Q$ 延拓 $q$: $\tilde{q}|_L=q$. 那么 $\mathcal{E}$ 非空, 因为 $(L,q)\in\mathcal{E}$; 我们还可以在 $\mathcal{E}$ 上定义一个偏序, 规定 $(\tilde{L}',\tilde{q}')\preceq(\tilde{L}'',\tilde{q}'')$ 当且仅当 $\tilde{L}'\subseteq\tilde{L}''$ 且 $\tilde{q}''$ 延拓 $\tilde{q}'$. 显然每条链都有上界 (取相应的 $\tilde{L}$ 的并), 于是由 Zorn 引理存在一个极大延拓 $(\tilde{L},\tilde{q})$; 只要能证明 $\tilde{L}=M$, 我们就做完了.
+
+反设存在 $m\in M$, $m\not\in\tilde{L}$, 并考虑 $R$ 的真理想 $I=\{r\in R\mid rm\in\tilde{L}\}$. 我们可以通过令
+\[
+f(r):=\tilde{q}(rm)
+\]
+来定义一个 $R$-线性映射 $f:I\to Q$; 由假设, 这个映射延拓为一个 $R$-线性映射 $\hat{f}:R\to Q$. 但这样一来我们就可以用这个映射把 $\tilde{q}$ 延拓到 $\tilde{L}$ 之外: 令 $\overline{L}=\tilde{L}+\langle m\rangle\supsetneq\tilde{L}$, 并定义 $\overline{q}:\overline{L}\to Q$ 为
+\[
+\overline{q}(\ell+rm):=\tilde{q}(\ell)+\hat{f}(r)
+\]
+其中 $\ell\in\tilde{L}$, $r\in R$. 立刻可以验证这是良定义的, 且它显然延拓了 $\tilde{q}$. 但那样就有 $(\overline{L},\overline{q})\in\mathcal{E}$ 且 $(\tilde{L},\tilde{q})\prec(\overline{L},\overline{q})$, 这与 $(\tilde{L},\tilde{q})$ 的极大性矛盾, 证明完成.
+\end{proof}
+
+定理~\ref{thm:baer-criterion} 完全澄清了 PID 情形下的内射模概念. $R$-模 $D$ 称为\emph{可除的}, 如果对 $R$ 中每个非零因子 $r$ 都有 $rD=D$, 也就是说, 如果我们可以把 $D$ 的每个元素都``除以'' $R$ 的每个非零因子.
+
+\begin{corollary}\label{cor:pid-injective-divisible}
+设 $R$ 是 PID. 则 $R$-模 $Q$ 内射当且仅当它可除.
+\end{corollary}
+
+\begin{proof}
+习题~\ref{ex:divisible-injective-pid}.
+\end{proof}
+
+\begin{example}\label{ex:divisible-abelian-injective}
+看作 Abel 群 (即 $\Z$-模), $\Q$ 与 $\Q/\Z$ 都是内射的. 更一般地, 若 $D$ 是任一可除 Abel 群且 $K\subseteq D$, 则 $D/K$ 内射. (事实上, 它显然可除!)
+\end{example}
+
+从像 $\Z$ 这样亲切的 PID 走向一般的环可能仍显得困难, 但这正是我们先前的某些工作得到回报的地方. 回想: 对每个环同态 $f:S\to R$, 我们在 \S\ref{subsec:restriction-extension-scalars} 中定义了一个函子\footnote{小心——在 \S\ref{subsec:restriction-extension-scalars} 中同态是从 $R$ 到 $S$ 的, 所以 $f^!$ 的定义在这里看起来可能是反过来的.} $f^!:S\dcate{-Mod}\to R\dcate{-Mod}$, 令 $f^!(M)=\Hom_S(R,M)$. 这个函子保持内射对象:
+
+\begin{lemma}\label{lem:base-change-injective}
+设 $f:S\to R$ 是交换环的一个同态, 并设 $Q$ 是一个内射 $S$-模. 则 $f^!(Q)$ 是一个内射 $R$-模.
+\end{lemma}
+
+\begin{remark}\label{rmk:base-change-projective}
+类似地, $f^*$ 保持投射对象 (习题~\ref{ex:restriction-projective}).
+\end{remark}
+
+\begin{proof}
+由伴随性 (引理~\ref{lem:hom-tensor-adj-bimodule}),
+\[
+\Hom_R(\_,f^!(Q))\cong\Hom_S(f_*(\_),Q)
+\]
+作为 $R\dcate{-Mod}$ 上的函子. 由于 $f_*$ 正合 (命题~\ref{prop:base-change-adjoints}), 且 $\Hom_S(\_,Q)$ 由假设正合, $\Hom_R(\_,f^!(Q))$ 必正合. 这正是所要证的陈述.
+\end{proof}
+
+由于每个环 $R$ 都有一个 (唯一的) 映射 $\iota:\Z\to R$, 我们就有了一个对每个 $R$ 都好用的 $R\dcate{-Mod}$ 中内射对象的源头:
+
+\begin{corollary}\label{cor:hom-z-injective}
+设 $R$ 是交换环. 若 $D$ 是任一可除 Abel 群, 则 $\iota^!(D)=\Hom_\Z(R,D)$ 在 $R\dcate{-Mod}$ 中内射.
+\end{corollary}
+
+这一结果是作者所能达到的对内射模概念的``直觉''感受的极限. 例如, 至此我们清楚地看到了为什么 ``$R\dcate{-Mod}$ 有足够多的内射对象'':
+
+\begin{corollary}\label{cor:enough-injectives}
+设 $M$ 是一个 $R$-模. 则 $M$ 可以等同于一个内射 $R$-模的子模.
+\end{corollary}
+
+\begin{proof}
+我们断言, 只要证明 $\Z\dcate{-Mod}$ 有足够多的内射对象就够了. 事实上, 这将表明存在一个可除 Abel 群 $D$ 使得 $M\subseteq D$ ($M$ 特别地是一个 Abel 群); 由于 $R$-线性映射特别地是 $\Z$-线性的,
+\[
+M\cong\Hom_R(R,M)\hookrightarrow\Hom_\Z(R,M)\subseteq\Hom_\Z(R,D),
+\]
+而最右边那个模由推论~\ref{cor:hom-z-injective} 是内射的.
+
+于是我们化归到 $R=\Z$ 且 $M=A$ 是一个 Abel 群的情形. 存在从 $\Z^{\oplus A}$ 到 $A$ 的一个满同态, 从而对某个 $K\subseteq\Z^{\oplus A}$ 有一个等同
+\[
+A\cong\frac{\Z^{\oplus A}}{K}.
+\]
+把 $\Z^{\oplus A}$ 嵌入 $\Q^{\oplus A}$, 我们得到一个单同态
+\[
+A\hookrightarrow\frac{\Q^{\oplus A}}{K},
+\]
+而由于 $\Q^{\oplus A}/K$ 可除 (例~\ref{ex:divisible-abelian-injective}), 证明完成.
+\end{proof}
+
+作为一个直接的推论, 每个 $R$-模都有一个\emph{内射分解}: 一个正合序列
+\[
+0\longrightarrow M\longrightarrow Q_0\longrightarrow Q_1\longrightarrow Q_2\longrightarrow Q_3\longrightarrow\cdots
+\]
+其中每个 $Q_i$ 都内射. 事实上, 这是对 $M$ 应用推论~\ref{cor:enough-injectives} 造出 $Q_0$, 再对 $M\to Q_0$ 的余核应用它造出 $Q_1$, 如此继续而得到的.
+
+$R\dcate{-Mod}$ 有足够多的内射对象这一事实可以推广到层, 后者是\emph{层上同调}定义中的一个本质要素, 而层上同调是现代代数几何中极为重要的工具.
+
+\begin{remark}\label{rmk:cofree}
+推论~\ref{cor:enough-injectives} 可以被细化, 证明每个模事实上都可以实现为一个乘积 $\Hom_\Z(R,\Q/\Z)^S$ 的子模 (由推论~\ref{cor:hom-z-injective} 与习题~\ref{ex:product-injective}, 这是内射的). 这就是说, $\iota^!(\Q/\Z)=\Hom_\Z(R,\Q/\Z)$ 的乘积对内射对象所起的作用, 正如同自由模 ($=$ $R=\iota^*(\Z)$ 的余积) 对投射对象所起的作用. (毫不奇怪, 它们被称为\emph{余自由的}.) 由此推出, 每个内射 $R$-模都是某个 $S$ 的 $\Hom_\Z(R,\Q/\Z)^S$ 的直和项.
+\end{remark}
+
+\subsection{Ext 函子}\label{subsec:ext-functors}
+
+现在要走的下一步, 是构造出工具来``度量'' $\Hom_R$ 正合性的缺失, 其意义正如同函子 $\Tor_i^R$ 度量 $\otimes_R$ 正合性的缺失. 相应的函子称为 $\Ext_R^i$. 由于有两个与 $\Hom$ 相伴的函子 (协变的 $\Hom_R(M,\_)$ 与反变的 $\Hom_R(\_,N)$), 人们自然会期待有两个相应的函子序列. 令人惊奇的是, 同样的``双函子'' $\Ext_R^i(\_,\_)$ 对两者都适用! 对所有 $R$-模 $M$, $N$, 我们有如下诸条:
+\begin{itemize}
+\item 对所有 $i\ge 0$,
+\[
+\Ext_R^i(M,\_),\qquad \Ext_R^i(\_,N)
+\]
+分别是协变的、反变的函子 $R\dcate{-Mod}\to R\dcate{-Mod}$.
+\item 对 $i=0$,
+\[
+\Ext_R^0(M,N)=\Hom_R(M,N).
+\]
+\item 对每个 $R$-模的正合序列
+\[
+0\longrightarrow A\longrightarrow B\longrightarrow C\longrightarrow 0,
+\]
+\index{zhangzhenghexulie@长正合序列(long exact sequence)!Tor de@Tor 的(of Tor)}\index{zhangzhenghexulie@长正合序列(long exact sequence)!daochuhanzide@导出函子的(of derived functors)}\index{zhangzhenghexulie@长正合序列(long exact sequence)!（shang）tongdiaode@（上）同调的(of (co)homology)}\index{zhangzhenghexulie@长正合序列(long exact sequence)!zai（shang）tongdiaozhong@在（上）同调中(in (co)homology)}\index{zhangzhenghexulie@长正合序列(long exact sequence)}存在长正合序列
+\[
+\begin{tikzcd}[column sep=.8em,row sep=2.2em,font=\small]
+0 \ar[r] & \Hom_R(M,A) \ar[r] & \Hom_R(M,B) \ar[r] & \Hom_R(M,C) \ar[dll,out=0,in=180,looseness=1,"\delta_0" description] & {} \\
+{} & \Ext_R^{1}(M,A) \ar[r] & \Ext_R^{1}(M,B) \ar[r] & \Ext_R^{1}(M,C) \ar[dll,out=0,in=180,looseness=1,"\delta_1" description] & {} \\
+{} & \Ext_R^{2}(M,A) \ar[r] & \Ext_R^{2}(M,B) \ar[r] & \Ext_R^{2}(M,C) \ar[r] & \cdots
+\end{tikzcd}
+\]
+与
+\[
+\begin{tikzcd}[column sep=.8em,row sep=2.2em,font=\small]
+0 \ar[r] & \Hom_R(C,N) \ar[r] & \Hom_R(B,N) \ar[r] & \Hom_R(A,N) \ar[dll,out=0,in=180,looseness=1,"\delta'_0" description] & {} \\
+{} & \Ext_R^{1}(C,N) \ar[r] & \Ext_R^{1}(B,N) \ar[r] & \Ext_R^{1}(A,N) \ar[dll,out=0,in=180,looseness=1,"\delta'_1" description] & {} \\
+{} & \Ext_R^{2}(C,N) \ar[r] & \Ext_R^{2}(B,N) \ar[r] & \Ext_R^{2}(A,N) \ar[r] & \cdots
+\end{tikzcd}
+\]
+其中 $\delta_i$, $\delta'_i$ 是适当的自然连接态射.
+\end{itemize}
+
+这将在第九章中证明. 无论如何, 仅仅知道这样奇妙的东西存在, 就给了我们足够的信息来稍稍玩弄它们一番. 例如,
+\begin{itemize}
+\item[---] 若 $\Ext_R^1(P,\_)=0$, 则 $P$ 投射;
+\item[---] 若 $\Ext_R^1(\_,Q)=0$, 则 $Q$ 内射.
+\end{itemize}
+事实上, 相应的 $\Hom_R(P,\_)$ (相应地 $\Hom_R(\_,Q)$) 的正合性立刻由上面展示的正合序列得出.
+
+事实上, 再得寸进尺一点将告诉我们更多. 回想从函子 $\_\otimes_R N$ 定义 $\Tor_i^R(\_,N)$ 的步骤: 要计算这些函子在一个模 $M$ 处的值, 我们
+\begin{itemize}
+\item 找 $M$ 的一个自由分解:
+\[
+\cdots\longrightarrow R^{\oplus S_2}\longrightarrow R^{\oplus S_1}\longrightarrow R^{\oplus S_0}\longrightarrow M\longrightarrow 0;
+\]
+\item 把函子 $\_\otimes_R N$ 作用到自由部分上, 得到一个复形 $M_\bullet\otimes_R N$:
+\[
+\cdots\longrightarrow N^{\oplus S_2}\longrightarrow N^{\oplus S_1}\longrightarrow N^{\oplus S_0}\longrightarrow 0;
+\]
+\item 通过取这个复形的同调来定义 Tor:
+\[
+\Tor_i^R(M,N):=H_i(M_\bullet\otimes N).
+\]
+\end{itemize}
+我们还指出过, 投射分解可以用来代替自由分解\footnote{事实上, 用平坦模作分解就足够了; 这将在第九章中证明.}. 这一策略是把函子``导化''的一般步骤的一个例子. 你能想象出同样的策略如何被用来计算 Ext 模吗? 在稍微思考一下之前, 不要往下读!
+
+欢迎回来. 就 $\Ext_R^*(M,N)$ 而言, 看来有两条自然的、可能并不相同的路可走:
+\begin{itemize}
+\item[---] 可以从 $M$ 的一个投射分解出发:
+\[
+\cdots\longrightarrow P_2\longrightarrow P_1\longrightarrow P_0\longrightarrow M\longrightarrow 0;
+\]
+把反变函子 $\Hom_R(\_,N)$ 作用到投射部分上, 得到一个新的复形 $\Hom_R(M_\bullet,N)$, 即
+\[
+0\longrightarrow\Hom_R(P_0,N)\longrightarrow\Hom_R(P_1,N)\longrightarrow\Hom_R(P_2,N)\longrightarrow\cdots,
+\]
+然后取上同调\footnote{回想 \S~III.\ref{subsec:complexes}: 指标递增 (而非递减) 的复形的同调称为\emph{上同调}; 它通常记作 $H^i$, 用``上''指标.}, 提出定义
+\[
+\Ext_R^i(M,N):=H^i(\Hom_R(M_\bullet,N)).
+\]
+\item[---] 或者可以从 $N$ 的一个内射分解出发:
+\[
+0\longrightarrow N\longrightarrow Q_0\longrightarrow Q_1\longrightarrow Q_2\longrightarrow\cdots;
+\]
+把协变函子 $\Hom_R(M,\_)$ 作用到内射部分上, 得到一个新的复形 $\Hom_R(M,N_\bullet)$, 即
+\[
+0\longrightarrow\Hom_R(M,Q_0)\longrightarrow\Hom_R(M,Q_1)\longrightarrow\Hom_R(M,Q_2)\longrightarrow\cdots,
+\]
+再取上同调, 导致
+\[
+\Ext_R^i(M,N):=H^i(\Hom_R(M,N_\bullet)).
+\]
+\end{itemize}
+这些定义不依赖于任何选择, 而且彼此一致!
+
+读者仍旧要等到第九章才能看到下述事实的证明: 情况确实如此, 并且所得的模确实满足本小节开头所罗列的各项要求. 与 Tor 的情形一样, 性急的读者可以通过把 PID 上有限生成模的情形做出来 (好好利用蛇形引理) 而对所需的论证获得良好的感觉.
+
+\index{neishe@内射(injective)!R-Mod youzugouneishe@R-Mod 有足够内射(R-Mod has enough injectives)}愿意此刻就相信我们、相信所有这些漂亮结果的读者, 已经能够做许多计算, 并且 (甚至) 更好地理解内射模与投射模了. 例如,
+
+\begin{proposition}\label{prop:ext-projective-injective}
+$R$-模 $P$ 投射, 当且仅当 $\Ext_R^1(P,\_)=0$, 当且仅当对所有 $i>0$ 有 $\Ext_R^i(P,\_)=0$.
+
+$R$-模 $Q$ 内射, 当且仅当 $\Ext_R^1(\_,Q)=0$, 当且仅当对所有 $i>0$ 有 $\Ext_R^i(\_,Q)=0$.
+\end{proposition}
+
+\begin{proof}
+先证第二个断言: 我们已经指出过, 若 $\Ext_R^1(\_,Q)=0$ 则 $Q$ 内射, 而如果对所有 $i>0$ 有 $\Ext_R^i(\_,Q)=0$, 这一点就平凡地成立. 所以我们只需证明: 若 $Q$ 内射, 则对所有 $i>0$ 有 $\Ext_R^i(\_,Q)=0$. 这由上面给出的第二个定义立刻得出: 若 $Q$ 内射, 则
+\[
+0\longrightarrow Q\longrightarrow Q\longrightarrow 0\longrightarrow 0\longrightarrow\cdots
+\]
+是 $Q$ 的一个内射分解; 于是对一个 $R$-模 $M$, $\Ext_R^i(M,Q)$ 就是复形
+\[
+0\longrightarrow\Hom_R(M,Q)\longrightarrow 0\longrightarrow 0\longrightarrow\cdots
+\]
+的上同调, 给出 $\Ext_R^0(M,Q)=\Hom_R(M,Q)$ 以及对所有 $i>0$ 与所有 $M$ 的 $\Ext_R^i(M,Q)=0$.
+
+第一个断言类似地证明, 用的是上面给出的 Ext 的第一个定义.
+\end{proof}
+
+\subsection{\texorpdfstring{$\Ext^*_\Z(G,\Z)$}{Ext*Z(G,Z)}}\label{subsec:ext-g-z}
+
+我们将通过讨论任意有限生成 Abel 群的 $\Ext_\Z^*(G,\Z)$ 的计算, 来试图让读者相信计算 Ext 模并不是太不合理.
+\begin{itemize}
+\item[---] 由于 $\Hom$ 与有限直和可换 (推论~\ref{cor:hom-limits-products}), Ext 也与有限直和可换; 这是上面给出的定义的容易的推论.
+\item[---] 由有限生成 Abel 群的分类定理, 我们化归为计算 $\Ext_\Z^i(\Z,\Z)$ 与 $\Ext_\Z^i(\Z/m\Z,\Z)$, 其中 $m>0$, $i\ge 0$.
+\item[---] 第一个模在 $i=0$ 时是 $\Hom_\Z(\Z,\Z)\cong\Z$, 在 $i>0$ 时是 $0$: 事实上, 这由命题~\ref{prop:ext-projective-injective} 推出, 因为 $\Z$ 投射.
+\item[---] 第二个模: 用投射分解
+\[
+0\longrightarrow\Z\xrightarrow{\ \cdot m\ }\Z\longrightarrow\Z/m\Z\longrightarrow 0;
+\]
+由此得出 $\Ext_\Z^i(\Z/m\Z,\Z)$ 是复形
+\[
+0\longrightarrow\Hom_\Z(\Z,\Z)\xrightarrow{\ \cdot m\ }\Hom_\Z(\Z,\Z)\longrightarrow 0\longrightarrow 0\longrightarrow\cdots
+\]
+的上同调, 也就是复形
+\[
+0\longrightarrow\Z\xrightarrow{\ \cdot m\ }\Z\longrightarrow 0\longrightarrow 0\longrightarrow\cdots
+\]
+的上同调, 这确认了 $\Ext_\Z^0(\Z/m\Z,\Z)=\Hom_\Z(\Z/m\Z,\Z)=0$ ($\Z$ 没有挠), 并算出 $\Ext_\Z^1(\Z/m\Z,\Z)\cong\Z/m\Z$, 而 $\Ext^2$ 及更高阶的 Ext 都消失.
+\end{itemize}
+结论是, $\Ext_\Z^0(G,\Z)$ 拾取了 $G$ 的自由部分, 而 $\Ext_\Z^1(G,\Z)$ 同构于挠部分, 且对 $i\ge 2$ 有 $\Ext_\Z^i(G,\Z)=0$ (这本应在意料之中; 参见习题~\ref{ex:pid-ext-vanish}).
+
+特别地, 若 $G$ 是有限 Abel 群, 则
+\[
+G\cong\Ext_\Z^1(G,\Z);
+\]
+碰巧的是, 这个同构不是典范的.
+
+另一个 Ext 计算给出了这个群的另一种解释. 正合序列
+\[
+0\longrightarrow\Z\longrightarrow\Q\longrightarrow\Q/\Z\longrightarrow 0
+\]
+是 $\Z$ 的一个内射分解; 于是 $\Ext_\Z^*(G,\Z)$ 是
+\[
+0\longrightarrow\Hom_\Z(G,\Q)\longrightarrow\Hom_\Z(G,\Q/\Z)\longrightarrow 0\longrightarrow\cdots
+\]
+的上同调. 若 $G$ 是挠群 (例如, 若 $G$ 有限), 由此推出 $\Ext_\Z^1(G,\Z)$ 同构于 $\Hom_\Z(G,\Q/\Z)$.
+
+\index{Pontryagin@Pontryagin!Lev Semenovich@Lev Semenovich!duiou@对偶(dual)}\index{Pontryagin@Pontryagin!Lev Semenovich@Lev Semenovich}这个群是 $G$ 的 \emph{Pontryagin 对偶}, 记作 $\widehat{G}$. 于是我们验证了: 若 $G$ 是有限 Abel 群, 则 $G$ 同构于 (非典范地) 它的 Pontryagin 对偶 $\widehat{G}=\Hom_\Z(G,\Q/\Z)$. 当然, 这一事实直接验证也并不困难, 但从 Ext 的观点看它是立刻的.
+
+最后, Ext 这个记号源于: 人们可以在群 $\Ext_R^1(M,N)$ 与 $M$ 被 $N$ 的扩张的等价类之集之间构造一个双射, 这里 $M$ 被 $N$ 的扩张指的是正合序列
+\[
+0\longrightarrow M\longrightarrow E\longrightarrow N\longrightarrow 0
+\]\erratumfootnote{官方勘误图主张调换两端对象为 $0\to N\to E\to M\to 0$；第二次印刷正文仍作 $0\to M\to E\to N\to 0$，故此处从第二次印刷。}
+模去一个适当的同构关系 (参见 \S~IV.\ref{subsec:exact-sequences}). 例如, 直和 $E=M\oplus N$ 对应于这个 Ext 群的 $0$ 元素. 勤勉的读者将在习题中构造这个双射.
+
+\subsection*{习题}
+\phantomsection
+\addcontentsline{toc}{subsection}{习题}
+
+与通常一样, $R$ 表示一个固定的交换环.
+
+\begin{prob}\label{ex:proj-inj-split}
+$\triangleright$ 证明: $R$-模 $P$ 投射当且仅当每个满态射 $M\to P$ 都分裂; $Q$ 内射当且仅当每个单态射 $Q\to M$ 都分裂. [\S\ref{subsec:projectives-injectives}]
+\end{prob}
+
+\begin{prob}\label{ex:dual-free-exact-projective}
+证明: 只要 $P$ 是投射模, 命题~\ref{prop:dual-free-exact} 的结论就更一般地成立.
+\end{prob}
+
+\begin{prob}\label{ex:hom-injective-test}
+$\neg$ 证明: $R$-线性映射 $A\to B$ 是单射, 当且仅当对所有内射模 $Q$, 诱导映射 $\Hom_R(B,Q)\to\Hom_R(A,Q)$ 是满射. (提示: $R\dcate{-Mod}$ 有足够多的内射对象.) 这加强了习题~\ref{ex:epi-mono-hom} 的结果. [\S\ref{subsec:injective-modules}]
+\end{prob}
+
+\begin{prob}\label{ex:direct-sum-projective}
+$\neg$ 设 $\{P_i\}_{i\in I}$ 是一族 $R$-模. 证明 $\bigoplus_i P_i$ 投射当且仅当每个 $P_i$ 都投射. [IX.\ref{ex:5.4}]
+\end{prob}
+
+\begin{prob}\label{ex:projective-dual-projective}
+证明: 有限生成投射模的对偶是投射的. 证明有限生成投射模是自反的 (即同构于自己的双对偶).
+\end{prob}
+
+\begin{prob}\label{ex:restriction-projective}
+$\neg$ 若 $f:S\to R$ 是一个环同态而 $P$ 是一个投射 $S$-模, 则 $f^*(P)$ 是一个投射 $R$-模. [\S\ref{subsec:injective-modules}]\erratumfootnote{官方勘误图主张在题干开头补入动词``证明 (Prove that)''；第二次印刷正文无此动词，故此处从第二次印刷。}
+\end{prob}
+
+\begin{prob}\label{ex:projective-flat-adjunction}
+$\triangleright$ 用伴随性给出``投射模是平坦的''这一事实的一个证明. (提示: $R\dcate{-Mod}$ 有足够多的内射对象, 以及习题~\ref{ex:hom-injective-test}.) [\S\ref{subsec:projective-modules}, \ref{ex:local-fg-projective-flat}]
+\end{prob}
+
+\begin{prob}\label{ex:local-fg-projective-flat}
+证明: 习题~\ref{ex:flat-local-free} 与习题~\ref{ex:projective-flat-adjunction} 合起来蕴含习题~VI.\ref{ex:local-direct-summand} 的结果.
+\end{prob}
+
+\begin{prob}\label{ex:vect-flat-injective-projective}
+\index{Baer@Baer!Reinhold@Reinhold!panbiefa@判别法(criterion)}证明: 向量空间是平坦的, 内射的, 且投射的. (试着直接做, 不求助于 Baer 判别法.)
+\end{prob}
+
+\begin{prob}\label{ex:pid-fg-free-projective-flat}
+证明: PID 上的有限生成模自由当且仅当它投射, 当且仅当它平坦. (``手工''做这个, 不求助于习题~\ref{ex:locally-free}.)
+\end{prob}
+
+\begin{prob}\label{ex:local-ring-fg-projective-free}
+$\neg$ 证明: 局部环上的有限生成模投射当且仅当它自由. (你已经做过了, 在习题~VI.\ref{ex:local-direct-summand} 中.)
+
+除了 PID 与局部环, 还有其他一些环类使得投射模与自由模一致. 拓扑上的考虑让 Serre 猜想: 域上多项式环上的投射模必然自由, 但证明情况确实如此花了二十年. [\ref{ex:locally-free}]
+\end{prob}
+
+\begin{prob}\label{ex:locally-free}
+\index{jubuziyou@局部自由(locally free)}$\neg$ $R$-模 $M$ 称为\emph{局部自由的}, 如果对 $R$ 的每个素理想 $\mathfrak{p}$, $M_{\mathfrak{p}}$ 作为 $R_{\mathfrak{p}}$-模是自由的.
+
+证明: Noether 环上的有限生成模局部自由当且仅当它投射, 当且仅当它平坦. (用习题~\ref{ex:flat-local-free} 与习题~\ref{ex:local-ring-fg-projective-free} 的结果.)
+
+有限生成的假设是必要的 (参见习题~\ref{ex:Q-flat-not-projective}). [\ref{ex:pid-fg-free-projective-flat}]
+\end{prob}
+
+\begin{prob}\label{ex:Q-flat-not-projective}
+$\neg$ 证明: $\Q$ 作为 $\Z$-模是平坦的, 但不是投射的. [\ref{ex:locally-free}]
+\end{prob}
+
+\begin{prob}\label{ex:divisible-injective-pid}
+$\triangleright$ 证明: PID 上的模内射当且仅当它可除. (用 Baer 判别法.) [\S\ref{subsec:injective-modules}]
+\end{prob}
+
+\begin{prob}\label{ex:product-injective}
+$\triangleright$ 证明 $Q_1\oplus Q_2$ 内射当且仅当 $Q_1$, $Q_2$ 都内射. 更一般地, 证明: 若 $\{Q_i\}_{i\in I}$ 是一族 $R$-模, 则 $\prod_i Q_i$ 内射当且仅当每个 $Q_i$ 都内射. [\S\ref{subsec:injective-modules}, IX.\ref{ex:5.4}]
+\end{prob}
+
+\begin{prob}\label{ex:Z-plus-Q}
+证明 $\Z\oplus\Q$ 作为 $\Z$-模是平坦的, 但既不投射也不内射.
+\end{prob}
+
+\begin{prob}\label{ex:ext0-hom}
+用为 $\Ext_R^i(M,N)$ 提供的任一个定义, 证明 $\Hom_R(M,N)\cong\Ext_R^0(M,N)$.
+\end{prob}
+
+\begin{prob}\label{ex:pid-ext-vanish}
+$\triangleright$ 证明: 若 $R$ 是 PID, 则对所有 $i\ge 2$ 与所有 $R$-模 $M$, $N$ 有 $\Ext_R^i(M,N)=0$. [\S\ref{subsec:ext-g-z}]
+\end{prob}
+
+\begin{prob}\label{ex:ext-nonzero-divisor}
+设 $r$ 是 $R$ 中的一个非零因子, 并设 $M$ 是一个 $R$-模. 计算所有的 $\Ext^i(R/(r),M)$.
+\end{prob}
+
+\begin{prob}\label{ex:ext-normal-bundle}
+设 $I$ 是 $R$ 的一个理想. 证明 $\Ext_R^1(R/I,R/I)\cong\Hom_R(I/I^2,R/I)$. (参见习题~\ref{ex:normal-bundle-ideal}. 这是说这个 Ext 模本质上计算了一个嵌入的法丛.)
+\end{prob}
+
+\begin{prob}\label{ex:ext-extensions}
+$\neg$ 在习题~\ref{ex:tor-torsion} 中我们已经看到为什么 Tor 被称为 Tor. 那 Ext 为什么被称为 Ext 呢?
+
+设 $M$, $N$, $E$ 是 $R$-模. $M$ 被 $N$ 的一个\emph{扩张}是一个正合序列
+\begin{equation*}\tag{$*$}
+0\longrightarrow N\longrightarrow E\longrightarrow M\longrightarrow 0.
+\end{equation*}
+两个扩张是``同构的'', 如果存在一个交换图
+\begin{center}
+\begin{tikzcd}
+0 \ar[r] & N \ar[r] \ar[d, equal] & E \ar[r] \ar[d] & M \ar[r] \ar[d, equal] & 0 \\
+0 \ar[r] & N \ar[r] & E' \ar[r] & M \ar[r] & 0
+\end{tikzcd}
+\end{center}
+把它们联系起来. (注意, 由蛇形引理, 中间那个箭头那时必是同构: 参见习题~III.\ref{ex:short-five}.) 同构于标准序列 $0\to N\to N\oplus M\to M\to 0$ 的扩张称为``平凡的''.
+
+每个如上所述的扩张 $\mathcal{E}$ 都决定一个元素 $\epsilon=\epsilon(\mathcal{E})\in\Ext^1(M,N)$, 如下. 序列 $(*)$ 诱导出 Ext 的一个长正合序列, 即
+\[
+\cdots\longrightarrow\Hom_R(E,N)\longrightarrow\Hom_R(N,N)\longrightarrow\Ext_R^1(M,N)\longrightarrow\cdots,
+\]
+而我们令 $\epsilon(\mathcal{E})$ 为 $\Hom_R(N,N)$ 中那个特殊的元素 $\mathrm{id}_N$ 在 $\Ext_R^1(M,N)$ 中的像.
+
+证明: 若 $\mathcal{E}$ 与 $\mathcal{E}'$ 是同构的扩张, 则 $\epsilon(\mathcal{E})=\epsilon(\mathcal{E}')$. 证明: 若 $\mathcal{E}$ 是平凡扩张, 则 $\epsilon(\mathcal{E})=0$. [\ref{ex:yoneda-ext}]
+\end{prob}
+
+\begin{prob}\label{ex:yoneda-ext}
+习题~\ref{ex:ext-extensions} 告诉我们扩张决定 $\Ext_R^1$ 的元素. 通过构造映射 $\epsilon$ 的一个逆, 我们得到一个更加犀利的陈述: 对每个元素 $\kappa\in\Ext_R^1(M,N)$, 我们将构造一个扩张 $e(\kappa)$ 使得 $\epsilon(e(\kappa))=\kappa$, 并且使得 $e(\epsilon(\mathcal{E}))$ 同构于 $\mathcal{E}$.
+\begin{itemize}
+\index{zhangzhenghexulie@长正合序列(long exact sequence)!Ext de@Ext 的(of Ext)}\item 设 $F$ 是任一个满射到 $M$ 上的自由模, 并设 $i:K\hookrightarrow F$ 是 $\pi:F\twoheadrightarrow M$ 的核. 由于 $F$ 自由 (从而投射), Ext 的长正合序列的一段, 即
+\[
+\cdots\longrightarrow\Hom_R(K,N)\longrightarrow\Ext_R^1(M,N)\longrightarrow\Ext_R^1(F,N)=0\longrightarrow\cdots,
+\]
+告诉我们存在一个同态 $k:K\to N$ 映到元素 $\kappa\in\Ext_R^1(M,N)$.
+\item 我们现在有了一个单态射 $(i,k):K\to F\oplus N$. 设 $E$ 是余核 $(F\oplus N)/K$. 证明满态射 $(\pi,0):F\oplus N\to M$ 通过这个余核分解, 定义了一个满态射 $E\twoheadrightarrow M$.
+\item 证明自然单态射 $N\cong 0\oplus N\hookrightarrow F\oplus N$ 定义了一个单态射 $N\hookrightarrow E$, 把 $N$ 等同于 $E\to M$ 的核.
+\item 我们令 $e(\kappa)$ 为我们所得到的扩张
+\[
+0\longrightarrow N\longrightarrow E\longrightarrow M\longrightarrow 0.
+\]
+证明这一步骤中的不同选择导致同构的扩张.
+\item 证明 $e(\epsilon(\mathcal{E}))$ 同构于 $\mathcal{E}$, 且 $\epsilon(e(\kappa))=\kappa$.
+\end{itemize}
+要点是: 在 $\Ext_R^1(M,N)$ 与 $M$ 被 $N$ 的扩张的同构类之集之间存在一个自然双射. 名字正来源于此. ``更高阶的'' $\Ext_R^i$ ($i>1$) 也可以类似地处理: 例如, $\Ext_R^2(M,N)$ 可以用由正合序列
+\[
+0\longrightarrow N\longrightarrow E_1\longrightarrow E_2\longrightarrow M\longrightarrow 0
+\]
+组成的两步扩张来分析, 其中两个这样的扩张``同构''是指存在一个图
+\begin{center}
+\begin{tikzcd}
+0 \ar[r] & N \ar[r] \ar[d, equal] & E_1 \ar[r] \ar[d] & E_2 \ar[r] \ar[d] & M \ar[r] \ar[d, equal] & 0 \\
+0 \ar[r] & N \ar[r] & E'_1 \ar[r] & E'_2 \ar[r] & M \ar[r] & 0
+\end{tikzcd}
+\end{center}
+\index{Yoneda@Yoneda!Nobuo@Nobuo}处理 Ext 的这种途径归功于 Nobuo Yoneda.
+\end{prob}

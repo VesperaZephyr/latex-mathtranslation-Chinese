@@ -1,0 +1,440 @@
+% ================================================================
+% 《分析讲义》(LECTURE NOTES IN ANALYSIS, 2011, Sergiu Klainerman)
+% 中文译本主模板 —— 基于数译(mathtranslations.org)排版模板修改
+% 使用 XeLaTeX 编译两次以上(生成目录、交叉引用、术语索引页码).
+% 依赖: logo.pdf
+%
+% 相对原模板的修改:
+%  1. 定理类环境(定义/引理/定理/推论/命题/注/例/问题)共享同一计数器,
+%     编号显示为"节号.序号"(与原书一致;无节之章与章引言为"0.x").
+%  2. 新增 \mtsubsec{标题}: 节内带编号子标题,推进共享计数器(如"3.5. 能量色散").
+%  3. 新增 \mtsubsecn{数字}{标题}: 独立编号的子标题,不推进计数器(第 1 章用).
+%  4. 新增无编号环境 definition* / lemma* / theorem* / corollary* /
+%     proposition* / remark* / example* / problem*(原书未编号对象用).
+% ================================================================
+
+\documentclass[UTF8,11pt,fontset=none]{ctexart}
+
+% ---------- 页面、字体与数学 ----------
+\usepackage[paper=a4paper,left=2.5cm,right=2.5cm,top=2.8cm,bottom=2.8cm]{geometry}
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs,mathtools}
+\usepackage{graphicx,tikz,tikz-cd,titlesec}
+\usepackage{array,booktabs,longtable}
+\usepackage{etoolbox}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[
+    colorlinks=true,
+    linkcolor=MidnightBlue,
+    citecolor=BrickRed,
+    urlcolor=MidnightBlue,
+    linktoc=all,
+    bookmarksnumbered=true
+]{hyperref}
+
+% 英文: Computer Modern Unicode Serif
+\setmainfont{cmunrm.otf}[
+  BoldFont=cmunbx.otf,
+  ItalicFont=cmunti.otf,
+  BoldItalicFont=cmunbi.otf
+]
+
+% 中文: 正文宋体;专用术语楷体;定理类环境仿宋
+\setCJKmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]
+\newCJKfontfamily\songfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]
+\newCJKfontfamily\termfont{FandolKai-Regular.otf}
+\newCJKfontfamily\theoremfont[AutoFakeBold=2]{FandolFang-Regular.otf}
+\setCJKsansfont{FandolHei-Regular.otf}[BoldFont=FandolHei-Bold.otf]
+\setCJKmonofont{FandolFang-Regular.otf}
+
+\pagestyle{plain}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt}
+\linespread{1.16}
+
+% ---------- 译本元信息 ----------
+\newcommand{\BookTitleCN}{分析讲义}
+\newcommand{\BookTitleEN}{LECTURE NOTES IN ANALYSIS (2011)}
+\newcommand{\OriginalAuthor}{Sergiu Klainerman}
+\newcommand{\OriginalEdition}{2011 年讲义(普林斯顿大学)}
+\newcommand{\OriginalPublisher}{Princeton University}
+\newcommand{\OriginalYear}{2011}
+\newcommand{\Translator}{数译}
+\newcommand{\ModelUsed}{DeepSeek-V4-Flash}
+\newcommand{\TranslationDate}{18 Aug 2026}
+
+% ================================================================
+%                         术语系统
+% ================================================================
+\newcommand{\termcn}[1]{{\termfont #1}}
+
+\makeatletter
+\newcommand{\MTTermList}{}
+\newcommand{\MTRegisterTerm}[3]{%
+  \g@addto@macro\MTTermList{\MTTermRow{#1}{#2}{#3}}%
+}
+\newcommand{\MTTermRow}[3]{%
+  {\termfont #1} & #2 & \hyperref[#3]{\pageref*{#3}} \\
+}
+
+\newcommand{\newterm}[3]{%
+  \@ifundefined{MT@seen@#1}{%
+    \expandafter\gdef\csname MT@seen@#1\endcsname{}%
+    \phantomsection
+    \label{term:#1}%
+    \protected@write\@auxout{}{%
+      \string\MTRegisterTerm{\unexpanded{#2}}{\unexpanded{#3}}{term:#1}%
+    }%
+  }{}%
+  {\termfont #2}（#3）%
+}
+\makeatother
+
+\newcommand{\printterminology}{%
+  \clearpage
+  \phantomsection
+  \section*{术语索引}
+  \addcontentsline{toc}{section}{术语索引}
+
+  \vspace{0.5cm}
+  \begingroup
+  \renewcommand{\arraystretch}{1.28}
+  \begin{longtable}{>{\raggedright\arraybackslash}p{0.28\textwidth}>{\raggedright\arraybackslash}p{0.49\textwidth}>{\centering\arraybackslash}p{0.12\textwidth}}
+    \toprule
+    \textbf{中文术语} & \textbf{英文术语} & \textbf{页码} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{中文术语} & \textbf{英文术语} & \textbf{页码} \\
+    \midrule
+    \endhead
+    \MTTermList
+    \bottomrule
+  \end{longtable}
+  \endgroup
+}
+
+% ================================================================
+%                       定理类环境
+% ================================================================
+% 定义、引理、定理、推论、命题、注: 仿宋正文
+% 例、问题: 宋体正文
+% 环境标题后使用中文冒号.
+
+\newtheoremstyle{mtfang}%
+  {6pt}{6pt}%
+  {\theoremfont}%
+  {0pt}%
+  {\songfont\bfseries}%
+  {.}%
+  {0.5em}%
+  {}%
+
+\newtheoremstyle{mtsong}%
+  {6pt}{6pt}%
+  {\songfont}%
+  {0pt}%
+  {\songfont\bfseries}%
+  {.}%
+  {0.5em}%
+  {}%
+
+\theoremstyle{mtfang}
+% 所有定理类环境共享同一个计数器 theorem,按 subsection(原书"节")重置.
+\newtheorem{theorem}{定理}[subsection]
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{proposition}[theorem]{命题}
+\newtheorem{remark}[theorem]{注}
+
+\theoremstyle{mtsong}
+\newtheorem{example}[theorem]{例}
+\newtheorem{problem}[theorem]{问题}
+
+% 无编号版本(原书未编号的定义、定理、注等)
+\newtheorem*{theorem*}{定理}
+\newtheorem*{definition*}{定义}
+\newtheorem*{lemma*}{引理}
+\newtheorem*{corollary*}{推论}
+\newtheorem*{proposition*}{命题}
+\newtheorem*{remark*}{注}
+\newtheorem*{example*}{例}
+\newtheorem*{problem*}{问题}
+
+% 编号显示与原书一致: "节号.序号"(如 3.4);无节章/章引言为 "0.x"
+\renewcommand{\thetheorem}{\arabic{subsection}.\arabic{theorem}}
+% 节标题显示为 "1." "2." 形式(与原书一致,不带章号)
+\renewcommand{\thesubsection}{\arabic{subsection}.}
+
+% 节内带编号子标题: 推进共享计数器并显示 "节号.序号 标题"
+\newcommand{\mtsubsec}[1]{%
+  \par\medskip\noindent\refstepcounter{theorem}%
+  {\songfont\bfseries\arabic{subsection}.\arabic{theorem}\quad #1}\par\smallskip
+}
+% 节内独立编号子标题: 只显示 "数字. 标题",不推进计数器(第 1 章情形)
+% 用法: \mtsubsecn{数字}{标题}(数字为 0 或空时只显示标题)
+\newcommand{\mtsubsecn}[2]{%
+  \par\medskip\noindent%
+  {\songfont\bfseries\ifx\relax#1\relax\else #1.\quad\fi#2}\par\smallskip
+}
+
+% ---------- 按类型区分的引用命令 ----------
+% 所有定理类环境共享同一计数器,故 \autoref 无法区分类型(一律显示"定理").
+% 引用时用下列命令: \thmref{...} → "定理 N", \lemref{...} → "引理 N" 等.
+\newcommand{\thmref}[1]{定理~\ref{#1}}
+\newcommand{\lemref}[1]{引理~\ref{#1}}
+\newcommand{\defref}[1]{定义~\ref{#1}}
+\newcommand{\propref}[1]{命题~\ref{#1}}
+\newcommand{\corref}[1]{推论~\ref{#1}}
+\newcommand{\remref}[1]{注~\ref{#1}}
+\newcommand{\exref}[1]{例~\ref{#1}}
+\newcommand{\probref}[1]{问题~\ref{#1}}
+
+% autoref 名称
+\providecommand{\definitionautorefname}{定义}
+\renewcommand{\definitionautorefname}{定义}
+\providecommand{\lemmaautorefname}{引理}
+\renewcommand{\lemmaautorefname}{引理}
+\providecommand{\theoremautorefname}{定理}
+\renewcommand{\theoremautorefname}{定理}
+\providecommand{\corollaryautorefname}{推论}
+\renewcommand{\corollaryautorefname}{推论}
+\providecommand{\propositionautorefname}{命题}
+\renewcommand{\propositionautorefname}{命题}
+\providecommand{\exampleautorefname}{例}
+\renewcommand{\exampleautorefname}{例}
+\providecommand{\remarkautorefname}{注}
+\renewcommand{\remarkautorefname}{注}
+\providecommand{\problemautorefname}{问题}
+\renewcommand{\problemautorefname}{问题}
+\providecommand{\exerciseautorefname}{习题}
+\renewcommand{\exerciseautorefname}{习题}
+
+% 只有"例"和"注"以菱形表示环境结束.
+\newcommand{\envenddiamond}{%
+  \ifhmode
+    \unskip\nobreak\hfill\ensuremath{\diamond}%
+  \else
+    \noindent\hfill\ensuremath{\diamond}%
+  \fi
+  \par
+}
+\AtEndEnvironment{example}{\envenddiamond}
+\AtEndEnvironment{remark}{\envenddiamond}
+
+% ---------- proof 样式 ----------
+\makeatletter
+\renewcommand{\proofname}{证明}
+\renewenvironment{proof}[1][\proofname]{\par
+  \pushQED{\qed}%
+  \normalfont\songfont
+  \topsep6\p@\@plus6\p@\relax
+  \trivlist
+  \item[\hskip\labelsep\normalfont\songfont\bfseries #1：]\ignorespaces
+}{%
+  \popQED\endtrivlist\@endpefalse
+}
+\makeatother
+\renewcommand{\qedsymbol}{\ensuremath{\square}}
+
+% ================================================================
+%                     长证明双向链接
+% ================================================================
+\newcommand{\longprooflink}[2]{%
+  \par\smallskip
+  \hypertarget{longproof-source:#1}{}%
+  \begin{flushright}
+    \fbox{\hyperref[longproof:#1]{\textcolor{MidnightBlue}{#2（第~\pageref*{longproof:#1}~页）}}}%
+  \end{flushright}
+  \smallskip
+}
+
+\newenvironment{longproof}[2]{%
+  \def\CurrentLongProofKey{#1}%
+  \phantomsection
+  \hypertarget{longproof:#1}{}%
+  \label{longproof:#1}%
+  \begin{proof}[证明（#2）]
+}{%
+  \end{proof}
+  \begin{flushright}
+    \fbox{\hyperlink{longproof-source:\CurrentLongProofKey}{\textcolor{MidnightBlue}{返回原处}}}%
+  \end{flushright}
+  \medskip
+}
+
+% ================================================================
+%                   Chapter 风格的 section
+% ================================================================
+\newlength{\chapterNumSpace}
+\setlength{\chapterNumSpace}{1.4cm}
+\newif\ifInAppendix
+\InAppendixfalse
+\newif\ifInAppendixToc
+\InAppendixTocfalse
+
+\newlength{\tocSectionLabelWidth}
+\setlength{\tocSectionLabelWidth}{4.2em}
+\newlength{\tocAppendixGap}
+\setlength{\tocAppendixGap}{0.2em}
+\newlength{\tocSubIndent}
+\setlength{\tocSubIndent}{1.2em}
+\newlength{\tocSubNumWidth}
+\setlength{\tocSubNumWidth}{3.0em}
+
+\newcommand{\TocSectionNumber}[1]{%
+  \ifInAppendixToc
+    附录\hspace{\tocAppendixGap}#1%
+  \else
+    第~#1~章%
+  \fi
+}
+
+\makeatletter
+\renewcommand*\l@section[2]{%
+  \ifnum\c@tocdepth>\z@
+    \addvspace{0.55em}%
+    \begingroup
+      \parindent\z@
+      \rightskip\@pnumwidth
+      \parfillskip-\@pnumwidth
+      \leavevmode
+      \bfseries
+      \setlength{\@tempdima}{\tocSectionLabelWidth}%
+      \advance\leftskip\@tempdima
+      \hskip-\leftskip
+      \def\numberline##1{\makebox[\@tempdima][l]{\TocSectionNumber{##1}}}%
+      #1\nobreak\hfill\nobreak\makebox[\@pnumwidth][r]{#2}\par
+    \endgroup
+  \fi
+}
+\renewcommand*\l@subsection{\@dottedtocline{2}{\tocSubIndent}{\tocSubNumWidth}}
+\makeatother
+
+\let\OriginalAppendix\appendix
+\renewcommand{\appendix}{%
+  \OriginalAppendix
+  \InAppendixtrue
+  \addtocontents{toc}{\protect\InAppendixToctrue}%
+}
+
+\newcommand{\ChapterSectionLabel}{%
+  \thispagestyle{plain}%
+  \vspace*{-0.5cm}%
+  \makebox[\textwidth][r]{%
+    {\fontsize{18pt}{18pt}\selectfont\scshape
+      \ifInAppendix Appendix\else Chapter\fi
+    }\enspace
+    {\fontsize{62pt}{62pt}\selectfont\bfseries\thesection}%
+  }%
+  \par\vspace{-0.25cm}%
+  \noindent\rule{\dimexpr\textwidth-\chapterNumSpace\relax}{0.45pt}%
+}
+
+\titleformat{\section}[display]
+  {\normalfont}
+  {\ChapterSectionLabel}
+  {0cm}
+  {\raggedleft\rightskip=\chapterNumSpace\fontsize{30pt}{35pt}\selectfont\bfseries}
+  [\vspace{0.3cm}]
+
+\newcommand{\sectionbreak}{\clearpage}
+
+\titleformat{name=\section,numberless}[block]
+  {\normalfont\Large\bfseries\centering}
+  {}
+  {0pt}
+  {}
+
+\titlespacing{\section}{0pt}{0pt}{0pt}
+\ctexset{subsection={format=\large\bfseries}}
+
+% 独立大标题(用于"第 1 部分"等),进入目录
+\newcommand{\bookpart}[1]{%
+  \clearpage
+  \phantomsection
+  \addcontentsline{toc}{section}{#1}%
+  \begin{center}
+    {\Large\bfseries #1}
+  \end{center}
+  \vspace{1.2cm}
+}
+
+% ================================================================
+%                     习题与答案双向链接
+% ================================================================
+\newcounter{exercise}[subsection]
+\renewcommand{\theexercise}{\arabic{subsection}.\arabic{exercise}}
+\providecommand{\theHexercise}{\theexercise}
+\newlength{\exerciseLabelWidth}
+\newlength{\answerLabelWidth}
+\newcounter{answeritem}
+
+\makeatletter
+\newcommand{\maybehyperref}[2]{\@ifundefined{r@#1}{#2}{\hyperref[#1]{#2}}}
+
+\newcommand{\exercise@item}{%
+  \par\smallskip
+  \refstepcounter{exercise}%
+  \edef\exercise@number{\theexercise}%
+  \edef\exercise@label{exe:\exercise@number}%
+  \edef\exercise@answerlabel{ans:\exercise@number}%
+  \expandafter\label\expandafter{\exercise@label}%
+  \settowidth{\exerciseLabelWidth}{\textbf{\theexercise.}\enspace}%
+  \hangindent=\exerciseLabelWidth
+  \hangafter=1
+  \noindent
+  \maybehyperref{\exercise@answerlabel}{\textbf{\theexercise.}}\enspace
+  \ignorespaces
+}
+
+\newenvironment{exercises}{%
+  \par\medskip
+  \noindent{\large\bfseries 习题}\par\smallskip
+  \begingroup
+  \setlength{\parindent}{0pt}
+  \renewcommand{\item}{\exercise@item}%
+}{%
+  \par\endgroup\medskip
+}
+
+\newcommand{\answer@item}{%
+  \par\smallskip
+  \stepcounter{answeritem}%
+  \edef\answer@number{\answer@prefix.\arabic{answeritem}}%
+  \edef\answer@label{ans:\answer@number}%
+  \edef\answer@exerciselabel{exe:\answer@number}%
+  \phantomsection
+  \protected@edef\@currentlabel{\answer@number}%
+  \expandafter\label\expandafter{\answer@label}%
+  \settowidth{\answerLabelWidth}{\textbf{\answer@number.}\enspace}%
+  \hangindent=\answerLabelWidth
+  \hangafter=1
+  \noindent
+  \maybehyperref{\answer@exerciselabel}{\textbf{\answer@number.}}\enspace
+  \ignorespaces
+}
+
+\newenvironment{answers}[1]{%
+  \par\medskip
+  \def\answer@prefix{#1}%
+  \setcounter{answeritem}{0}%
+  \begingroup
+  \setlength{\parindent}{0pt}
+  \renewcommand{\item}{\answer@item}%
+}{%
+  \par\endgroup\medskip
+}
+\makeatother
+
+% ---------- 参考文献环境 ----------
+\newenvironment{mybibliography}[1]{%
+  \begingroup
+  \renewcommand{\section}[2]{}%
+  \begin{thebibliography}{#1}%
+}{%
+  \end{thebibliography}%
+  \endgroup
+}

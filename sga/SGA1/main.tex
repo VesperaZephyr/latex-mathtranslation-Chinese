@@ -1,0 +1,106 @@
+% =====================================================================
+% SGA 1 中文翻译重排
+% 《平展覆盖与基本群》(Révêtements étales et groupe fondamental)
+% Séminaire de Géométrie Algébrique du Bois Marie 1960-61
+% 由 A. Grothendieck 主持的讨论班, 附 M. Raynaud 女士的两个讲
+% 源: Lecture Notes in Mathematics 224, Springer-Verlag, 1971
+%     (arXiv:math/0206203 重排版)
+% 编译方式: xelatex -shell-escape (两遍以上; 术语索引用 xindy, 记号索引用 makeindex)
+% =====================================================================
+\documentclass[11pt, fontsetup=font-setup-open.tex, titlesetup=titles-setup.tex, geometry=a4]{AJbook}
+
+\usepackage{mycommand}
+\usepackage{myarrows}
+\usepackage{stmaryrd}
+\usepackage{tikz-cd}
+\usepackage{imakeidx}
+\usepackage[bookmarksnumbered=true, colorlinks=true,
+	linkcolor=MidnightBlue, citecolor=BrickRed, urlcolor=MidnightBlue,
+	bookmarksnumbered=true, pdftitle={平展覆盖与基本群 (SGA 1)}]{hyperref}
+
+% ---- 章编号: 按原书用罗马数字 (Exposé I-XIII, 无 VII) ----
+\renewcommand{\thechapter}{\Roman{chapter}}
+% \thesection 默认 = \thechapter.\arabic{section}, 定理编号随之
+% \thetheorem = \thesection.\arabic{theorem}, 如 IX.4.7, 与原书 "IX 4.7" 对应
+
+% ---- 章标题: "第 I 讲 ..." ----
+\renewcommand{\AJchapterttl}[1]{第\enspace #1\enspace 讲}
+
+% ---- 天眉: 章显示 "第 IX 讲", 节显示 "§IX.4" ----
+\AtBeginDocument{
+	\renewcommand{\chaptermark}[1]{\markboth{第\thechapter 讲\quad #1}{}}
+	\renewcommand{\sectionmark}[1]{\markright{\S\thesection \quad #1}}
+}
+
+% ---- 索引: 术语索引 + 记号索引 (与原文 Index terminologique / Index des notations 对应) ----
+\makeindex[
+	columns=2,
+	name=term,
+	program=truexindy,
+	intoc=true,
+	options=-M texindy -I xelatex -C utf8,
+	title={术语索引}]
+% 记号索引: SGA 的记号以数学符号为主, xindy 的符号排序模块无法解析
+% (如 $\pi_1(S,a)$ 等条目), 故记号索引沿用 makeindex; 术语索引用 xindy.
+\makeindex[
+	columns=3,
+	name=notations,
+	intoc=true,
+	title={记号索引}]
+
+% ---- 参考文献: 使用 biblatex + biber, 各讲内部独立编号 (refsection) ----
+\addbibresource{references.bib}
+
+% MinerU 通用: 压缩列表间距
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\begin{document}
+
+% 超链接颜色按模板: 内部链接 MidnightBlue, 文献引用 BrickRed, 网址 MidnightBlue
+\hypersetup{colorlinks=true, linkcolor=MidnightBlue, citecolor=BrickRed, urlcolor=MidnightBlue}
+
+% ===================== 封面 =====================
+\begin{titlepage}
+\centering
+\vspace*{2.0cm}
+{\Huge\bfseries 平展覆盖与基本群\par}
+\vspace{0.9cm}
+{\large\bfseries Révêtements étales et groupe fondamental\par}
+\vspace{1.6cm}
+{\large Séminaire de Géométrie Algébrique du Bois Marie, 1960--61\par}
+\vspace{0.7cm}
+{\large 由 A. Grothendieck 主持\par}
+\vspace{0.4cm}
+{\large 附 M. Raynaud 女士的两个讲\par}
+\vspace{3.2cm}
+{\large 中文翻译重排版\par}
+\vfill
+{\small 依据 Lecture Notes in Mathematics 224, Springer-Verlag (1971)\par}
+{\small 及 arXiv:math/0206203 重排版 (法国数学会 (SMF) 版) 翻译排版\par}
+\vspace{0.5em}
+{\normalsize 译者 翻译及重排\par}
+\end{titlepage}
+
+\frontmatter
+\input{front}
+
+\mainmatter
+\begin{refsection}\input{expose01}\end{refsection}
+\begin{refsection}\input{expose02}\end{refsection}
+\begin{refsection}\input{expose03}\end{refsection}
+\begin{refsection}\input{expose04}\end{refsection}
+\begin{refsection}\input{expose05}\end{refsection}
+\begin{refsection}\input{expose06}\end{refsection}
+\begin{refsection}\input{expose08}\end{refsection}
+\begin{refsection}\input{expose09}\end{refsection}
+\begin{refsection}\input{expose10}\end{refsection}
+\begin{refsection}\input{expose11}\end{refsection}
+\begin{refsection}\input{expose12}\end{refsection}
+\begin{refsection}\input{expose13}\end{refsection}
+
+\backmatter
+\printindex[term]
+\printindex[notations]
+
+\end{document}

@@ -1,0 +1,1435 @@
+% 第 4 章 行列式 (Determinanten)
+\chapter{行列式}\index{hanglieshi@行列式(Determinante)}
+
+\section*{预备说明}
+
+对每个系数取自域 $K$ 的方阵 $A$, 都可以借助一种计算规则指派一个不变量, 即所谓的\emph{行列式}(\textup{Determinante})\index{hanglieshi@行列式(Determinante)}.它不为零当且仅当 $A$ 的列或等价地 $A$ 的行线性无关, 亦即当且仅当 $A$ 可逆.
+
+为了了解人们如何以一种或多或少必然的方式被引向行列式的形成, 我们考虑一个矩阵
+
+\[
+A = \begin{pmatrix} \alpha_{11} & \alpha_{12} \\ \alpha_{21} & \alpha_{22} \end{pmatrix} \in K^{2 \times 2}
+\]
+
+并研究系数 $\alpha_{ij}$ 必须满足怎样的要求, 才能使 $A$ 的列线性相关.在 $A = 0$ 的情形, $A$ 的列当然平凡地线性相关.因此设 $A \neq 0$, 例如 $\alpha_{11} \neq 0$.于是 $A$ 的第一个列向量不为零, 而 $A$ 的两列线性相关当且仅当存在 $c \in K$ 满足
+
+\[
+\alpha_{12} = c \alpha_{11}, \qquad \alpha_{22} = c \alpha_{21}.
+\]
+
+由此得到
+
+\[
+c = \frac{\alpha_{12}}{\alpha_{11}}, \qquad \alpha_{22} = \frac{\alpha_{12}}{\alpha_{11}} \alpha_{21},
+\]
+
+进而得到关系
+
+\begin{equation}
+\alpha_{11} \alpha_{22} - \alpha_{21} \alpha_{12} = 0. \tag{$\ast$}
+\end{equation}
+
+沿着计算过程回溯可知, 在条件 $\alpha_{11} \neq 0$ 下, $A$ 的列线性相关当且仅当 ($\ast$) 中的表达式消失.现在可以完全同样地进行计算: 对 $\alpha_{21} \neq 0$, 若交换 $A$ 的两行; 对 $\alpha_{12} \neq 0$, 若交换 $A$ 的两列; 对 $\alpha_{22} \neq 0$, 若同时交换 $A$ 的两列与两行.由于在所有这些交换之下, ($\ast$) 中的表达式除符号外保持不变, 而且该表达式在 $A = 0$ 的情形自然也等于零, 所以我们能从计算中读出:
+
+一个(任意)矩阵 $A = (\alpha_{ij}) \in K^{2 \times 2}$ 具有极大秩当且仅当表达式
+
+\[
+\det(A) := \alpha_{11} \alpha_{22} - \alpha_{21} \alpha_{12},
+\]
+
+即 $A$ 的行列式, 不为零.
+
+与常规的讨论相比, 行列式表达式 $\det(A)$ 具有一个相当本质的优点: 借助它可以无须进行情形分类, 直接从矩阵 $A$ 的系数 $\alpha_{ij}$ 读出 $A$ 的秩的极大性.我们在第 3 章的预备说明中已经能观察到这种现象.在那里, 对
+
+\[
+A = \begin{pmatrix} \alpha_{11} & \alpha_{12} \\ \alpha_{21} & \alpha_{22} \end{pmatrix} \in K^{2 \times 2}, \qquad b = \binom{\beta_1}{\beta_2} \in K^2,
+\]
+
+其中 $A$ 有极大秩, 并对未知数向量 $t = \binom{t_1}{t_2}$, 研究了方程组 $A \cdot t = b$ 并得到一组解, 它借助上面定义的行列式表达式可以写成
+
+\[
+t_1 = \frac{\det\begin{pmatrix} \beta_1 & \alpha_{12} \\ \beta_2 & \alpha_{22} \end{pmatrix}}{\det\begin{pmatrix} \alpha_{11} & \alpha_{12} \\ \alpha_{21} & \alpha_{22} \end{pmatrix}}, \qquad t_2 = \frac{\det\begin{pmatrix} \alpha_{11} & \beta_1 \\ \alpha_{21} & \beta_2 \end{pmatrix}}{\det\begin{pmatrix} \alpha_{11} & \alpha_{12} \\ \alpha_{21} & \alpha_{22} \end{pmatrix}}.
+\]
+
+这里在推导过程中也需要进行情形分类, 尽管结果最终被证明是与情形无关的.这是\emph{克拉默法则}(\textup{Cramer'sche Regel})\index{kelamofaze@克拉默法则(Cramer'sche Regel)}的最简单情形, 我们将在本章中以一般形式证明它.
+
+从历史上看, 行列式的引入确实是与线性方程组的求解相联系的, 具体地说, 是与以克拉默(Cramer)命名的法则的发现相联系的.我们想用一个由 $3$ 个含 $3$ 个未知数的线性方程组成的方程组的例子来说明这一点:
+
+\[
+\begin{array}{l}
+\alpha_{11} t_1 + \alpha_{12} t_2 + \alpha_{13} t_3 = \beta_1 \\
+\alpha_{21} t_1 + \alpha_{22} t_2 + \alpha_{23} t_3 = \beta_2 \\
+\alpha_{31} t_1 + \alpha_{32} t_2 + \alpha_{33} t_3 = \beta_3
+\end{array}
+\]
+
+系数矩阵 $A = (\alpha_{ij})_{i, j = 1, 2, 3}$ 的秩为 $3$.则矩阵 $A' = (\alpha_{ij})_{i = 1, 2, 3;\ j = 2, 3}$ 仍有秩 $2$, 其中通过交换方程的顺序我们可以假设 $(\alpha_{ij})_{i = 1, 2;\ j = 2, 3}$ 有秩 $2$.我们现在设法求系数 $c_1, c_2 \in K$, 使得在把第一行的 $c_1$ 倍与第二行的 $c_2$ 倍加到第三行时, 未知数 $t_2$ 与 $t_3$ 被消去.这是可能的, 因为按我们的假设, $A'$ 的前两行线性无关.为此我们必须解方程组
+
+\[
+\alpha_{12} c_1 + \alpha_{22} c_2 = -\alpha_{32}
+\]
+
+\[
+\alpha_{13} c_1 + \alpha_{23} c_2 = -\alpha_{33}
+\]
+
+并按照 $2 \times 2$ 矩阵的克拉默法则得到
+
+\[
+\begin{array}{l}
+c_1 = \dfrac{\det\begin{pmatrix} -\alpha_{32} & \alpha_{22} \\ -\alpha_{33} & \alpha_{23} \end{pmatrix}}{\det\begin{pmatrix} \alpha_{12} & \alpha_{22} \\ \alpha_{13} & \alpha_{23} \end{pmatrix}} = \dfrac{\det\begin{pmatrix} \alpha_{22} & \alpha_{23} \\ \alpha_{32} & \alpha_{33} \end{pmatrix}}{\det\begin{pmatrix} \alpha_{12} & \alpha_{13} \\ \alpha_{22} & \alpha_{23} \end{pmatrix}}, \\
+c_2 = \dfrac{\det\begin{pmatrix} \alpha_{12} & -\alpha_{32} \\ \alpha_{13} & -\alpha_{33} \end{pmatrix}}{\det\begin{pmatrix} \alpha_{12} & \alpha_{22} \\ \alpha_{13} & \alpha_{23} \end{pmatrix}} = -\dfrac{\det\begin{pmatrix} \alpha_{12} & \alpha_{13} \\ \alpha_{32} & \alpha_{33} \end{pmatrix}}{\det\begin{pmatrix} \alpha_{12} & \alpha_{13} \\ \alpha_{22} & \alpha_{23} \end{pmatrix}},
+\end{array}
+\]
+
+其中 $\det\begin{pmatrix} \alpha_{12} & \alpha_{13} \\ \alpha_{22} & \alpha_{23} \end{pmatrix}$ 不为零.这样, 作为原方程组的第三个方程得到
+
+\[
+(\alpha_{11} c_1 + \alpha_{21} c_2 + \alpha_{31}) t_1 = \beta_1 c_1 + \beta_2 c_2 + \beta_3,
+\]
+
+其中的因子 $\alpha_{11} c_1 + \alpha_{21} c_2 + \alpha_{31}$ 不为零, 因为原方程组的系数矩阵的秩没有改变.这样一来我们就能除以这个系数, 于是得到
+
+\[
+t_1 = \frac{\beta_1 \det\begin{pmatrix} \alpha_{22} & \alpha_{23} \\ \alpha_{32} & \alpha_{33} \end{pmatrix} - \beta_2 \det\begin{pmatrix} \alpha_{12} & \alpha_{13} \\ \alpha_{32} & \alpha_{33} \end{pmatrix} + \beta_3 \det\begin{pmatrix} \alpha_{12} & \alpha_{13} \\ \alpha_{22} & \alpha_{23} \end{pmatrix}}{\alpha_{11} \det\begin{pmatrix} \alpha_{22} & \alpha_{23} \\ \alpha_{32} & \alpha_{33} \end{pmatrix} - \alpha_{21} \det\begin{pmatrix} \alpha_{12} & \alpha_{13} \\ \alpha_{32} & \alpha_{33} \end{pmatrix} + \alpha_{31} \det\begin{pmatrix} \alpha_{12} & \alpha_{13} \\ \alpha_{22} & \alpha_{23} \end{pmatrix}}.
+\]
+
+我们在假设矩阵 $A' = (\alpha_{ij})_{i = 1, 2, 3;\ j = 2, 3}$ 的前两行线性无关的条件下推导了 $t_1$ 的这个公式, 而这一情形总能通过交换方程组中各方程的顺序来实现.为了看出该公式在一般情形也成立, 还需证明它关于这样的交换是不变的.但这一点很容易验证, 只要利用行列式(在 $2 \times 2$ 矩阵的情形)在转置下不变, 并且在交换矩阵的两列或两行时改变符号.
+
+在 $t_1$ 的公式中可以看到, 分子与分母按同一个构成法则分别来自矩阵
+
+\[
+\begin{pmatrix} \beta_1 & \alpha_{12} & \alpha_{13} \\ \beta_2 & \alpha_{22} & \alpha_{23} \\ \beta_3 & \alpha_{32} & \alpha_{33} \end{pmatrix}, \qquad \begin{pmatrix} \alpha_{11} & \alpha_{12} & \alpha_{13} \\ \alpha_{21} & \alpha_{22} & \alpha_{23} \\ \alpha_{31} & \alpha_{32} & \alpha_{33} \end{pmatrix}.
+\]
+
+懂得行列式理论的人会说, 在 $t_1$ 的分子与分母中各放置着这些矩阵的行列式, 而且是按第一列展开的形式.人们可以把 $t_1$ 的分子或分母中的表达式取为 $3 \times 3$ 矩阵的行列式的定义, 此时该定义需要借助 $2 \times 2$ 矩阵的行列式知识.
+
+刚才介绍的这种方法以归纳的方式普遍适用于由 $n$ 个含 $n$ 个未知数的线性方程组成的方程组, 只要系数矩阵具有极大秩.由此得到与上面类似的 $t_1$ 公式, 其中分子与分母中都是若干 $(n - 1) \times (n - 1)$ 矩阵的行列式的倍数之和, 形式为 $n \times n$ 矩阵的行列式按第一列的展开.所得的表达式可以被提升为 $n \times n$ 矩阵的行列式的定义, 由此整体上得到矩阵的行列式的一个递归定义.
+
+不过要注意, 上述方法虽然对 $t_1$ 导致 $n \times n$ 矩阵的行列式按第一列展开, 但对满足 $1 \leq j \leq n$ 的任意 $t_j$ 则导致按第 $j$ 列展开.这例如可以通过交换未知数 $t_1$ 与 $t_j$ 看出来.因此, 若想在引入行列式的同时证明克拉默法则, 那么在每个递归步骤还必须同时证明行列式的一些一般性质, 例如按任意列(或行)展开行列式的可能性.我们自然不会以这种方式进行.作为替代, 我们从所谓的\emph{行列式函数}(\textup{Determinantenfunktion})\index{hanglieshihanshu@行列式函数(Determinantenfunktion)}的研究开始, 在其背景下会自动产生行列式的一个一般的非递归定义.为此需要用到关于置换的一些事实, 我们将在本章开头汇集这些事实.只有在澄清了行列式的定义与性质之后, 我们才最终证明克拉默法则, 并与此相关地证明按列或行展开行列式的可能性.在可选的一节中, 最终还要处理\emph{外积}(\textup{äußeres Produkt})\index{waiji@外积(äußeres Produkt)}, 在其背景下我们还要推导行列式的一般的\emph{拉普拉斯展开}(\textup{Laplace'scher Entwicklungssatz})\index{lapulasizhankai@拉普拉斯展开(Laplace'scher Entwicklungssatz)}定理.
+
+\section{置换}\index{zhihuan@置换(Permutation)}\index{duichenqun@对称群(symmetrische Gruppe)}\label{sec:4.1}
+
+我们在 \ref{sec:1.2} 节已经看到, 对集合 $X$, 双射自映射 $X \longrightarrow X$ 关于映射的复合构成一个群 $G$.恒等映射 $\operatorname{id} \in G$ 是单位元, $G$ 中元素 $f \colon X \longrightarrow X$ 的逆元由逆映射 $f^{-1} \colon X \longrightarrow X$ 给出.
+
+我们在这里要对一个自然数 $n$ 特别考虑集合 $X = \{1, \ldots, n\}$, 其中在 $n = 0$ 的情形把 $X$ 取为空集.对 $X$ 的相应双射自映射群, 人们写作 $\mathfrak{S}_n$, 并称之为指标 $n$ 的\emph{对称群}(\textup{symmetrische Gruppe})\index{duichenqun@对称群(symmetrische Gruppe)}或\emph{置换群}(\textup{Permutationsgruppe})\index{zhihuanqun@置换群(Permutationsgruppe)}.$\mathfrak{S}_n$ 的元素称为数 $1, \ldots, n$ 的置换, 因为它们在某种意义上交换这些元素在顺序中的位置.若对置换 $\sigma \in \mathfrak{S}_n$ 有 $\sigma(i) = a_i$, $i = 1, \ldots, n$, 则也写
+
+\[
+\sigma = \begin{pmatrix} 1 & \ldots & n \\ a_1 & \ldots & a_n \end{pmatrix}.
+\]
+
+置换群 $\mathfrak{S}_0$ 与 $\mathfrak{S}_1$ 都只由单位元组成, 它分别表示 $X = \emptyset$ 或 $X = \{1\}$ 上的恒等映射.此外 $\mathfrak{S}_2$ 是由 $2$ 个元素组成的群, 因而特别是阿贝尔的, 而 $\mathfrak{S}_n$ 在 $n \geq 3$ 时不再交换.例如对
+
+\[
+\sigma = \begin{pmatrix} 1 & 2 & 3 \\ 1 & 3 & 2 \end{pmatrix}, \qquad \tau = \begin{pmatrix} 1 & 2 & 3 \\ 2 & 3 & 1 \end{pmatrix}
+\]
+
+有
+
+\[
+\sigma \circ \tau = \begin{pmatrix} 1 & 2 & 3 \\ 3 & 2 & 1 \end{pmatrix}, \qquad \tau \circ \sigma = \begin{pmatrix} 1 & 2 & 3 \\ 2 & 1 & 3 \end{pmatrix}.
+\]
+
+我们想确定 $\mathfrak{S}_n$ 的元素个数.为此, 对 $n \in \mathbb{N}$, 把自然数 $\prod_{i = 1}^{n} i$ 记为 $n!$, 其中感叹号读作"阶乘".特别有 $0! = 1! = 1$ 以及 $2! = 2$.
+
+\begin{remark}[$\mathfrak{S}_n$ 的阶]\label{rem:4.1.1}\index{zhihuanqun@置换群(Permutationsgruppe)}
+$\mathfrak{S}_n$ 恰好由 $n!$ 个元素组成.
+\end{remark}
+
+\begin{proof}
+要想定义一个双射自映射 $\sigma \colon \{1, \ldots, n\} \longrightarrow \{1, \ldots, n\}$, 可以逐步进行: 先确定 $\sigma(1)$, 再确定 $\sigma(2)$, 依此类推, 直到最后确定 $\sigma(n)$.这里只需构造一个单射映射; 由于集合 $\{1, \ldots, n\}$ 的有限性, 它自动是双射的.对 $\sigma(1)$ 的选择, 最初有 $n$ 种可能, 因为 $\sigma(1)$ 可以取 $\{1, \ldots, n\}$ 中的任何元素.对 $\sigma(2)$ 的选择, 则还剩下 $n - 1$ 种可能, 因为 $\sigma(2) \in \{1, \ldots, n\}$ 必须选择得与 $\sigma(1)$ 不同, 因为我们想构造一个单射映射.在确定 $\sigma(3)$ 时还有 $n - 2$ 种可能, 依此类推, 直到最终在选择 $\sigma(n)$ 时只剩下一种可能.把各个数目相乘, 总共有 $n! = \prod_{i = 1}^{n} i$ 种可能来定义 $\{1, \ldots, n\}$ 的单射自映射.
+\end{proof}
+
+\begin{definition}[\emph{对换}\index{duihuan@对换(Transposition)}]\label{def:4.1.2}\index{duihuan@对换(Transposition)}
+一个置换 $\tau \in \mathfrak{S}_n$ 称为对换, 如果存在两个不同的数 $i, j \in \{1, \ldots, n\}$ 使得 $\tau(i) = j$, $\tau(j) = i$, 并且对其余所有的数 $k \in \{1, \ldots, n\}$ 有 $\tau(k) = k$.此时也写 $\tau = (i, j)$.
+\end{definition}
+
+对换 $\tau = (i, j)$ 恰好交换数 $i$ 与 $j$, 此外保持 $\{1, \ldots, n\}$ 的所有元素不动.特别有 $\tau^2 = \operatorname{id}$, 即 $\tau$ 与自身互为逆.$\mathfrak{S}_2$ 恰好由恒等映射和对换 $(1, 2)$ 组成, 而群 $\mathfrak{S}_0$ 与 $\mathfrak{S}_1$ 不含任何对换.
+
+\begin{theorem}\label{thm:4.1.3}
+每个 $\pi \in \mathfrak{S}_n$ 都是若干对换的乘积.
+\end{theorem}
+
+\begin{proof}
+我们按 $r(\pi)$ 作下降归纳, 其中 $r(\pi)$ 是在 $\{0, 1, \ldots, n\}$ 中取的最大者, 满足 $\pi(i) = i$ 对 $i = 1, \ldots, r(\pi)$ 成立.对 $r(\pi) = n$, 有 $\pi = \operatorname{id}$, 这是对换的空乘积.对 $r = r(\pi) < n$, 必有 $\pi(r + 1) > r + 1$.令 $\tau_1 = (r + 1, \pi(r + 1))$, 则乘积 $\tau_1 \pi$ 把元素 $1, \ldots, r + 1$ 恒等映到自身, 因而满足 $r(\tau_1 \pi) > r(\pi)$, 故按归纳假设是对换的乘积, 例如 $\tau_1 \pi = \tau_2 \cdots \tau_s$.从左边乘以 $\tau_1 = \tau_1^{-1}$, 即得所希望的 $\pi = \tau_1 \cdots \tau_s$.
+\end{proof}
+
+一个置换 $\pi \in \mathfrak{S}_n$ 被称为偶的或奇的, 取决于 $\pi$ 能否表示成偶数个或奇数个对换的乘积.我们想证明, 一个置换不可能既是偶的又是奇的.作为工具, 我们引入 $\pi$ 的所谓符号.
+
+\begin{definition}[置换的符号]\label{def:4.1.4}\index{fuhao@符号(Signum)}
+设 $\pi \in \mathfrak{S}_n$.则
+
+\[
+\sgn \pi = \prod_{1 \leq i < j \leq n} \frac{\pi(j) - \pi(i)}{j - i}
+\]
+
+称为置换 $\pi$ 的符号.
+\end{definition}
+
+从根本上说, 在置换 $\pi \in \mathfrak{S}_n$ 的符号的定义中, 乘积遍及 $\{1, \ldots, n\}$ 的一切二元素子集.更确切地说, 我们的意思是:
+
+\begin{remark}\label{rem:4.1.5}
+设 $M$ 是一组指标对 $(i, j)$ 构成的集合, 满足 $1 \leq i, j \leq n$, 使得对应 $(i, j) \longmapsto \{i, j\}$ 建立 $M$ 到 $\{1, \ldots, n\}$ 的一切二元素子集所成集合的双射.则
+
+\[
+\sgn \pi = \prod_{(i, j) \in M} \frac{\pi(j) - \pi(i)}{j - i}.
+\]
+\end{remark}
+
+\begin{proof}
+首先, $\{\{i, j\};\; 1 \leq i < j \leq n\}$ 恰好是 $\{1, \ldots, n\}$ 的一切二元素子集的集合.再注意到等式
+
+\[
+\frac{\pi(j) - \pi(i)}{j - i} = \frac{\pi(i) - \pi(j)}{i - j},
+\]
+
+命题即得.
+\end{proof}
+
+我们想从这个注记推出若干推论.
+
+\begin{theorem}\label{thm:4.1.6}
+设 $\pi \in \mathfrak{S}_n$.则 $\sgn \pi = (-1)^s$, 其中 $s$ 是序列 $\pi(1), \ldots, \pi(n)$ 中所有\emph{逆序}(\textup{Fehlstand})\index{nixu@逆序(Fehlstand)}的个数, 即所有满足 $\pi(i) > \pi(j)$ 的对 $(\pi(i), \pi(j))$, $1 \leq i < j \leq n$, 的个数.特别由此得到 $\sgn \pi = \pm 1$.对换 $\pi \in \mathfrak{S}_n$ 的符号计算为 $\sgn \pi = -1$.
+\end{theorem}
+
+\begin{proof}
+每个置换 $\pi \in \mathfrak{S}_n$ 把 $\{1, \ldots, n\}$ 的二元素子集再次映到这样的子集, 并由此在 $\{1, \ldots, n\}$ 的一切二元素子集所成集合上诱导一个双射自映射.因此
+
+\[
+\prod_{1 \leq i < j \leq n} (j - i) = \pm \prod_{1 \leq i < j \leq n} (\pi(j) - \pi(i)),
+\]
+
+从而 $\sgn \pi = \pm 1$.更确切地得到 $\sgn \pi = (-1)^s$, 其中 $s$ 等于右端为负的因子的个数, 即序列 $\pi(1), \ldots, \pi(n)$ 中逆序的个数.
+
+对一个对换 $\pi = (i, j)$ 且 $i < j$, 即
+
+\[
+\pi = \begin{pmatrix} 1 & \ldots & i-1 & i & i+1 & \ldots & j-1 & j & j+1 & \ldots & n \\ 1 & \ldots & i-1 & j & i+1 & \ldots & j-1 & i & j+1 & \ldots & n \end{pmatrix},
+\]
+
+在序列 $\pi(1), \ldots, \pi(n)$ 中恰好有 $j - i$ 个形如 $(j, *)$ 的逆序以及 $j - i$ 个形如 $(*, i)$ 的逆序.由于我们以两种方式把 $(j, i)$ 计作逆序, 得到
+
+\[
+\sgn \pi = (-1)^{2(j - i) - 1} = -1,
+\]
+
+正如所断言的.
+\end{proof}
+
+\begin{theorem}\label{thm:4.1.7}
+映射 $\sgn \colon \mathfrak{S}_n \longrightarrow \{1, -1\}$ 是一个\emph{群同态}(\textup{Homomorphismus von Gruppen})\index{quntongtai@群同态(Homomorphismus von Gruppen)}, 即对 $\sigma, \tau \in \mathfrak{S}_n$ 有 $\sgn(\sigma \circ \tau) = \sgn \sigma \cdot \sgn \tau$; 其中把 $\{1, -1\}$ 视为关于乘法的群.
+\end{theorem}
+
+\begin{proof}
+利用注记~\mtref{rem:4.1.5} 我们可以如下计算:
+
+\[
+\begin{array}{l}
+\sgn(\sigma \circ \tau) = \prod_{i < j} \frac{\sigma(\tau(j)) - \sigma(\tau(i))}{j - i} \\
+= \prod_{i < j} \frac{\sigma(\tau(j)) - \sigma(\tau(i))}{\tau(j) - \tau(i)} \cdot \prod_{i < j} \frac{\tau(j) - \tau(i)}{j - i} \\
+= \sgn \sigma \cdot \sgn \tau
+\end{array}
+\]
+\end{proof}
+
+\begin{corollary}\label{cor:4.1.8}
+若 $\pi \in \mathfrak{S}_n$ 可表示为 $s$ 个对换的乘积, 则 $\sgn \pi = (-1)^s$.
+\end{corollary}
+
+我们由此看到, 置换 $\pi \in \mathfrak{S}_n$ 是偶的, 即是偶数个对换的乘积, 当且仅当 $\sgn \pi = 1$; 相应地, $\pi$ 是奇的, 即是奇数个对换的乘积, 当且仅当 $\sgn \pi = -1$.
+
+在定理~\mtref{thm:4.1.7} 中我们谈到了群同态.一般地, 两个群 $G$ 与 $G'$ 之间的映射 $f \colon G \longrightarrow G'$ 称为群同态, 如果 $f$ 与 $G$ 和 $G'$ 中的乘法相容, 即如果对 $g, h \in G$ 恒有 $f(g \cdot h) = f(g) \cdot f(h)$.此时对 $G$ 和 $G'$ 中的单位元有 $f(1) = 1$, 且对 $g \in G$ 有 $f(g^{-1}) = f(g)^{-1}$.人们容易想到, $f$ 的核, 即 $\ker f = f^{-1}(1)$, 是 $G$ 的子群, 甚至是\emph{正规子群}(\textup{Normalteiler})\index{zhengguiziqun@正规子群(Normalteiler)}.这里正规子群是指满足 $g^{-1} \cdot h \cdot g \in N$ 对一切 $g \in G$ 和 $h \in N$ 成立的子群 $N \subset G$.后者当然只对非交换群才是一个真正的条件; 在交换群中, 每个子群都是正规子群.
+
+在定理~\mtref{thm:4.1.7} 的情形下, $\sgn$ 是 $\mathfrak{S}_n$ 到乘法群 $\{1, -1\}$ 的一个群同态.这个同态的核由 $\mathfrak{S}_n$ 中的一切\emph{偶置换}(\textup{gerade Permutation})\index{ouzhihuan@偶置换(gerade Permutation)}组成.它们构成一个正规子群, 特别是 $\mathfrak{S}_n$ 的子群 $\mathfrak{A}_n \subset \mathfrak{S}_n$.人们把 $\mathfrak{A}_n$ 称为指标 $n$ 的\emph{交替群}(\textup{alternierende Gruppe})\index{jiaotiqun@交替群(alternierende Gruppe)}.概括起来可以说:
+
+\begin{remark}[交替群]\label{rem:4.1.9}\index{jiaotiqun@交替群(alternierende Gruppe)}
+$\mathfrak{S}_n$ 中的偶置换构成一个正规子群
+
+\[
+\mathfrak{A}_n = \left\{\pi \in \mathfrak{S}_n;\; \sgn \pi = 1\right\} \subset \mathfrak{S}_n.
+\]
+
+此外,
+
+\[
+\mathfrak{S}_n - \mathfrak{A}_n = \left\{\pi \in \mathfrak{S}_n;\; \sgn \pi = -1\right\}
+\]
+
+由 $\mathfrak{S}_n$ 中的一切\emph{奇置换}(\textup{ungerade Permutation})\index{qizhihuan@奇置换(ungerade Permutation)}组成, 并且对每个奇置换 $\tau \in \mathfrak{S}_n$ 有
+
+\[
+\mathfrak{S}_n - \mathfrak{A}_n = \tau \mathfrak{A}_n = \mathfrak{A}_n \tau.
+\]
+
+其中 $\tau \mathfrak{A}_n$ 表示所有乘积 $\tau \circ \pi$ 的集合, $\pi \in \mathfrak{A}_n$, 对 $\mathfrak{A}_n \tau$ 相应地.
+\end{remark}
+
+\begin{proof}
+只需证明 $\mathfrak{S}_n$ 中的奇置换可以写成 $\tau \mathfrak{A}_n$ 或 $\mathfrak{A}_n \tau$ 的形式.若 $\tau$ 是奇的, 则用定理~\mtref{thm:4.1.7} 可知 $\tau \mathfrak{A}_n$ 与 $\mathfrak{A}_n \tau$ 包含在 $\mathfrak{S}_n - \mathfrak{A}_n$ 中.反过来, 若 $\pi \in \mathfrak{S}_n - \mathfrak{A}_n$, 则 $\tau^{-1} \circ \pi$ 与 $\pi \circ \tau^{-1}$ 是偶的, 由此得到 $\pi \in \tau \mathfrak{A}_n$ 或 $\pi \in \mathfrak{A}_n \tau$.
+\end{proof}
+
+\aufgaben
+
+\noindent\textbf{习题 1.} 确定下列置换的符号:
+
+\[
+\begin{pmatrix} 1 & 2 & 3 & 4 & 5 \\ 5 & 4 & 3 & 2 & 1 \end{pmatrix} \in \mathfrak{S}_5, \qquad \begin{pmatrix} 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\ 2 & 3 & 1 & 5 & 6 & 8 & 4 & 7 \end{pmatrix} \in \mathfrak{S}_8
+\]
+
+\medskip
+\noindent\textbf{习题 2.} 一个置换 $\pi \in \mathfrak{S}_n$ 称为 $r$-\emph{循环}(\textup{Zyklus})\index{xunhuan@循环(Zyklus)}, 如果存在两两不同的元素 $a_1, \ldots, a_r \in \{1, \ldots, n\}$ 使得
+
+\[
+\pi(a_i) = a_{i + 1} \quad \text{对 } i = 1, \ldots, r - 1,
+\]
+
+\[
+\pi(a_r) = a_1,
+\]
+
+并且 $\pi$ 保持 $\{1, \ldots, n\}$ 的所有其余元素不动.确定 $r$-循环 $\pi \in \mathfrak{S}_n$ 的符号 $\sgn \pi$.(AT 331)
+
+\medskip
+\noindent\textbf{习题 3.} 证明 $\mathfrak{S}_n$ 的每个元素 $\pi \in \mathfrak{S}_n$ 都有有限阶, 即存在 $r \in \mathbb{N} - \{0\}$ 使得 $\pi^r = 1$.
+
+\medskip
+\noindent\textbf{习题 4.} 证明: 若 $N \subset \mathfrak{S}_n$ 是含有一个对换的正规子群, 则已经有 $N = \mathfrak{S}_n$.(AT 332)
+
+\medskip
+\noindent\textbf{习题 5.} 确定交替群 $\mathfrak{A}_n$ 的元素个数.
+
+\medskip
+\noindent\textbf{习题 6.} 对一个群 $G$ 和子群 $N \subset G$ 证明: 若对一切 $g \in G$ 有 $gN \subset Ng$, 则 $N$ 已经是 $G$ 的正规子群.
+
+\medskip
+\noindent\textbf{习题 7.} 对一个群 $G$, 用 $S(G)$ 表示 $G$ 到 $G$ 的一切双射映射的集合.证明:
+\begin{enumerate}
+\item[(i)] $S(G)$ 关于映射的复合是一个群;
+\item[(ii)] 存在单射群同态 $G \longrightarrow S(G)$.
+\end{enumerate}
+
+\section{行列式函数}\index{hanglieshihanshu@行列式函数(Determinantenfunktion)}\label{sec:4.2}
+
+在本节中我们固定一个有限维数 $n$ 的 $K$-向量空间 $V$, 并考虑映射 $\varDelta \colon V^n \longrightarrow K$, 可以说是 $V$ 中 $n$ 个参数的 $K$ 值函数, 其中 $V^n$ 在 $n = 0$ 的情形只由空元组组成.这样的映射称为\emph{多重线性}(\textup{multilinear})\index{duochongxianxing@多重线性(multilinear)}的, 如果它在每个参数中都是线性的.其中 $\varDelta$ 称为在第 $i$ 个参数中线性, 如果对 $a_1, \ldots, a_n, a_i' \in V$ 和 $\alpha, \alpha' \in K$ 恒有
+
+\[
+\begin{array}{c}
+\varDelta(a_1, \ldots, a_{i-1}, \alpha a_i + \alpha' a_i', a_{i+1}, \ldots, a_n) \\
+= \alpha \cdot \varDelta(a_1, \ldots, a_{i-1}, a_i, a_{i+1}, \ldots, a_n) \\
++ \alpha' \cdot \varDelta(a_1, \ldots, a_{i-1}, a_i', a_{i+1}, \ldots, a_n).
+\end{array}
+\]
+
+此外, $\varDelta$ 称为交替的, 如果只要向量 $a_1, \ldots, a_n$ 中有两个相同, $\varDelta(a_1, \ldots, a_n)$ 就消失.
+
+\begin{definition}[行列式函数]\label{def:4.2.1}
+设 $V$ 是一个有限维数 $n$ 的 $K$-向量空间.$V$ 上的行列式函数是交替的多重线性映射 $\varDelta \colon V^n \longrightarrow K$.如果 $\varDelta$ 不是零映射, 则称 $\varDelta$ 为非平凡的.
+\end{definition}
+
+与 $K$-线性映射类似, 行列式函数可以相加, 也可以与 $K$ 中的纯量相乘, 从而得到新的行列式函数.因此 $V$ 上的行列式函数构成一个 $K$-向量空间, 我们将在下面看到, 它的维数是 $1$, 与 $V$ 的维数无关.不过我们首先给出行列式函数的一些基本性质.
+
+\begin{remark}\label{rem:4.2.2}
+对维数为 $n$ 的 $K$-向量空间 $V$, 考虑一个多重线性映射 $\varDelta \colon V^n \longrightarrow K$.则下列条件等价:
+\begin{enumerate}
+\item[(i)] $\varDelta$ 是交替的, 从而是行列式函数;
+\item[(ii)] 对每个线性相关的向量组 $a_1, \ldots, a_n \in V$, 有 $\varDelta(a_1, \ldots, a_n) = 0$.
+\end{enumerate}
+\end{remark}
+
+\begin{proof}
+只需证明蕴含 (i) $\Longrightarrow$ (ii).设 $a_1, \ldots, a_n$ 线性相关.则其中有一个向量, 例如 $a_1$, 可以表示为其余向量的线性组合, 即 $a_1 = \sum_{i = 2}^{n} \beta_i a_i$, 于是利用 $\varDelta$ 的多重线性性, 由 (i) 得到
+
+\[
+\varDelta(a_1, \ldots, a_n) = \sum_{i = 2}^{n} \beta_i \varDelta(a_i, a_2, \ldots, a_n) = 0.
+\]
+\end{proof}
+
+\begin{remark}\label{rem:4.2.3}
+设 $\varDelta$ 是 $V$ 上的行列式函数.对 $a_1, \ldots, a_n \in V$ 则成立:
+\begin{enumerate}
+\item[(i)] $\varDelta(\ldots, a_i, \ldots, a_j, \ldots) = -\varDelta(\ldots, a_j, \ldots, a_i, \ldots)$, 即 $\varDelta$ 在交换两个不同参数时改变符号;
+\item[(ii)] $\varDelta(a_{\pi(1)}, \ldots, a_{\pi(n)}) = \sgn \pi \cdot \varDelta(a_1, \ldots, a_n)$, 对 $\pi \in \mathfrak{S}_n$;
+\item[(iii)] $\varDelta(\ldots, a_i + \alpha a_j, \ldots, a_j, \ldots) = \varDelta(\ldots, a_i, \ldots, a_j, \ldots)$, 对 $\alpha \in K$, 即如果把一个参数的纯量倍加到第 $i$ 个参数上, $\varDelta$ 保持不变.
+\end{enumerate}
+\end{remark}
+
+\begin{proof}
+利用行列式函数的性质, 我们可以如下计算:
+
+\[
+\begin{array}{l}
+0 = \varDelta(\ldots, a_i + a_j, \ldots, a_i + a_j, \ldots) \\
+= \varDelta(\ldots, a_i, \ldots, a_i + a_j, \ldots) + \varDelta(\ldots, a_j, \ldots, a_i + a_j, \ldots) \\
+= \varDelta(\ldots, a_i, \ldots, a_i, \ldots) + \varDelta(\ldots, a_i, \ldots, a_j, \ldots) \\
++ \varDelta(\ldots, a_j, \ldots, a_i, \ldots) + \varDelta(\ldots, a_j, \ldots, a_j, \ldots) \\
+= \varDelta(\ldots, a_i, \ldots, a_j, \ldots) + \varDelta(\ldots, a_j, \ldots, a_i, \ldots)
+\end{array}
+\]
+
+其中显式写出的参数始终位于第 $i$ 与第 $j$ 个位置, 而在其余位置始终代入 $a_1, \ldots, a_{i-1}$ 或 $a_{i+1}, \ldots, a_{j-1}$ 或 $a_{j+1}, \ldots, a_n$ 作为参数.由这个计算即得断言 (i).此外, (ii) 是 (i) 的推论, 因为按定理~\mtref{thm:4.1.3} 每个置换都是对换的乘积, 而且按推论~\mtref{cor:4.1.8}, 当 $\pi$ 是 $s$ 个对换的乘积时有 $\sgn \pi = (-1)^s$.断言 (iii) 最终由下面的计算得出:
+
+\[
+\begin{array}{c}
+\varDelta(\ldots, a_i + \alpha a_j, \ldots, a_j, \ldots) \\
+= \varDelta(\ldots, a_i, \ldots, a_j, \ldots) + \alpha \varDelta(\ldots, a_j, \ldots, a_j, \ldots) \\
+= \varDelta(\ldots, a_i, \ldots, a_j, \ldots)
+\end{array}
+\]
+\end{proof}
+
+一个多重线性映射 $\varDelta \colon V^n \longrightarrow K$, 按我们的定义是交替的, 因而特别是按交换它的两个参数就改变符号这个意义交替的; 因此称为交替的.不过要注意, 这里的逆命题只有在 $K$ 中 $1 \neq -1$ 成立时才正确.
+
+接下来, 我们要在向量空间 $V = K^n$ 上构造一个非平凡的行列式函数的例子.
+
+\begin{lemma}\label{lem:4.2.4}
+对矩阵 $A = (\alpha_{ij})_{i, j} \in K^{n \times n}$, 通过
+
+\[
+\det(A) = \sum_{\pi \in \mathfrak{S}_n} \sgn \pi \cdot \alpha_{\pi(1), 1} \cdots \alpha_{\pi(n), n}
+\]
+
+定义 $A$ 的行列式.则 $\det$, 作为矩阵 $A$ 的 $n$ 个列的函数, 是 $V = K^n$ 上的行列式函数, 并且对单位矩阵 $E \in K^{n \times n}$ 有 $\det(E) = 1$.特别地, 行列式函数 $\det$ 是非平凡的.
+\end{lemma}
+
+\begin{proof}
+首先, 函数 $\det$ 在矩阵 $A$ 的列中多重线性, 因为乘积 $c_1 \cdots c_n$ 在每个因子中线性.其次还要证明, 只要 $A$ 中有两列相同, 就有 $\det(A) = 0$.设 $a_1, \ldots, a_n$ 是 $A$ 的列.若对两个指标 $i \neq j$ 有 $a_i = a_j$, 则可以考虑对换 $\tau = (i, j) \in \mathfrak{S}_n$.当 $\pi$ 遍历 $\mathfrak{S}_n$ 中的偶置换时, 按注记~\mtref{rem:4.1.9}, $\pi \circ \tau$ 遍历 $\mathfrak{S}_n$ 中的所有奇置换.因此得到
+
+\[
+\begin{array}{l}
+\det(a_1, \ldots, a_i, \ldots, a_j, \ldots, a_n) \\
+= \sum_{\pi \in \mathfrak{A}_n} \alpha_{\pi(1), 1} \cdots \alpha_{\pi(i), i} \cdots \alpha_{\pi(j), j} \cdots \alpha_{\pi(n), n} \\
+- \sum_{\pi \in \mathfrak{A}_n} \alpha_{\pi \circ \tau(1), 1} \cdots \alpha_{\pi \circ \tau(i), i} \cdots \alpha_{\pi \circ \tau(j), j} \cdots \alpha_{\pi \circ \tau(n), n} \\
+= 0,
+\end{array}
+\]
+
+因为由 $a_i = a_j$ 得到
+
+\[
+\begin{array}{c}
+\alpha_{\pi \circ \tau(i), i} = \alpha_{\pi(j), i} = \alpha_{\pi(j), j}, \\
+\alpha_{\pi \circ \tau(j), j} = \alpha_{\pi(i), j} = \alpha_{\pi(i), i},
+\end{array}
+\]
+
+以及 $\alpha_{\pi \circ \tau(k), k} = \alpha_{\pi(k), k}$ 对 $k \neq i, j$.
+
+最后, 容易验证 $\det(E) = 1$.此时在 $\det(E)$ 的定义和中, 除恒等置换 $\operatorname{id} \in \mathfrak{S}_n$ 对应的项外, 所有项都消失.
+\end{proof}
+
+此外, 我们将在 7.2/9 与 7.2/10 中看到, 行列式 $\det(A)$ 的绝对值可以几何地解释为 $A$ 的列向量在 $K^n$ 中张成的\emph{平行多面体}(\textup{Parallelotop})\index{pingxingduomianti@平行多面体(Parallelotop)}的\emph{体积}(\textup{Volumen})\index{tiji@体积(Volumen)}.
+
+接下来我们要弄清, 刚才给出的行列式函数的例子是以十分自然的方式产生的.
+
+\begin{lemma}\label{lem:4.2.5}
+设 $\varDelta$ 是 $V$ 上的行列式函数, $X = (x_1, \ldots, x_n)$ 是 $V$ 的一个基.对任意向量 $a_1, \ldots, a_n \in V$ 则成立:
+
+\[
+\varDelta(a_1, \ldots, a_n) = \det(a_{1, X}, \ldots, a_{n, X}) \cdot \varDelta(x_1, \ldots, x_n).
+\]
+
+其中 $a_{j, X} \in K^n$ 对 $j = 1, \ldots, n$ 表示 $a_j$ 关于基 $X$ 的坐标列向量, 即当 $a_j = \sum_{i = 1}^{n} \alpha_{ij} x_i$ 时有 $a_{j, X} = (\alpha_{1j}, \ldots, \alpha_{nj})^t$.
+\end{lemma}
+
+\begin{proof}
+利用行列式函数的性质得到:
+
+\[
+\begin{array}{l}
+\varDelta(a_1, \ldots, a_n) \\
+= \sum_{i_1, \ldots, i_n = 1}^{n} \alpha_{i_1, 1} \cdots \alpha_{i_n, n} \cdot \varDelta(x_{i_1}, \ldots, x_{i_n}) \\
+= \sum_{\pi \in \mathfrak{S}_n} \alpha_{\pi(1), 1} \cdots \alpha_{\pi(n), n} \cdot \varDelta(x_{\pi(1)}, \ldots, x_{\pi(n)}) \\
+= \sum_{\pi \in \mathfrak{S}_n} \sgn \pi \cdot \alpha_{\pi(1), 1} \cdots \alpha_{\pi(n), n} \cdot \varDelta(x_1, \ldots, x_n) \\
+= \det(a_{1, X}, \ldots, a_{n, X}) \cdot \varDelta(x_1, \ldots, x_n)
+\end{array}
+\]
+\end{proof}
+
+我们现在可以简单地从这两个引理推出若干推论.
+
+\begin{theorem}\label{thm:4.2.6}
+设 $X = (x_1, \ldots, x_n)$ 是 $K$-向量空间 $V$ 的一个基, $\varDelta$ 是 $V$ 上的行列式函数.则下列条件等价:
+\begin{enumerate}
+\item[(i)] $\varDelta$ 是平凡的;
+\item[(ii)] $\varDelta(x_1, \ldots, x_n) = 0$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+只需证明蕴含 (ii) $\Longrightarrow$ (i), 而它由引理~\mtref{lem:4.2.5} 中的公式得出.
+\end{proof}
+
+\begin{theorem}\label{thm:4.2.7}
+设 $\varDelta$ 是 $n$ 维 $K$-向量空间 $V$ 上的非平凡行列式函数.对 $n$ 个向量 $x_1, \ldots, x_n \in V$, 下列条件等价:
+\begin{enumerate}
+\item[(i)] $x_1, \ldots, x_n$ 线性相关;
+\item[(ii)] $\varDelta(x_1, \ldots, x_n) = 0$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+蕴含 (i) $\Longrightarrow$ (ii) 由注记~\mtref{rem:4.2.2} 得出.为证反向蕴含, 我们作间接证明, 假设 $x_1, \ldots, x_n$ 线性无关, 从而构成 $V$ 的一个基 $X$.按定理~\mtref{thm:4.2.6}, $\varDelta$ 则是平凡的, 与我们的假设矛盾.
+\end{proof}
+
+\begin{theorem}\label{thm:4.2.8}
+设 $V$ 是带基 $X = (x_1, \ldots, x_n)$ 的 $K$-向量空间.若对向量 $a \in V$ 用 $a_X$ 表示 $a$ 关于基 $X$ 的坐标列向量, 则通过
+
+\[
+\det_X(a_1, \ldots, a_n) = \det(a_{1, X}, \ldots, a_{n, X})
+\]
+
+在 $V$ 上定义了一个满足 $\det_X(x_1, \ldots, x_n) = 1$ 的行列式函数.$V$ 上的行列式函数的 $K$-向量空间由 $\det_X$ 生成, 从而具有维数 $1$.
+\end{theorem}
+
+\begin{proof}
+利用同构 $V \to K^n$, $a \mapsto a_X$, 可以看到 $\det_X$ 具有非平凡行列式函数且满足 $\det_X(x_1, \ldots, x_n) = 1$ 的性质, 因为 $\det$ 具有相应的性质; 参见引理~\mtref{lem:4.2.4}.此外, 引理~\mtref{lem:4.2.5} 表明, $V$ 上的每个其他行列式函数 $\varDelta$ 都是 $\det_X$ 的纯量倍.因此 $V$ 上的行列式函数的向量空间具有维数 $1$.
+\end{proof}
+
+\begin{corollary}\label{cor:4.2.9}
+设 $\varDelta, \varDelta'$ 是 $K$-向量空间 $V$ 上的行列式函数.若 $\varDelta$ 非平凡, 则存在唯一确定的元素 $\alpha \in K$ 满足 $\varDelta' = \alpha \cdot \varDelta$.
+\end{corollary}
+
+\aufgaben
+
+\noindent\textbf{习题 1.} 设 $V$ 是 $n$ 维 $K$-向量空间, $U \subset V$ 是 $r$ 维线性子空间, $x_{r + 1}, \ldots, x_n$ 是 $V$ 中一个给定的向量组.对行列式函数 $\varDelta \colon V^n \longrightarrow K$, 证明通过
+
+\[
+\varDelta_U(a_1, \ldots, a_r) := \varDelta(a_1, \ldots, a_r, x_{r + 1}, \ldots, x_n)
+\]
+
+可以定义一个行列式函数 $\varDelta_U \colon U^r \longrightarrow K$.$\varDelta_U$ 何时非平凡?
+
+\medskip
+\noindent\textbf{习题 2.} 设 $\varDelta \colon V^n \longrightarrow K$ 是 $n$ 维 $K$-向量空间 $V$ 上的非平凡行列式函数, $x_1, \ldots, x_{n-1}$ 是 $V$ 中一个线性无关的向量组.证明: 存在 $x_n \in V$ 使得 $\varDelta(x_1, \ldots, x_n) = 1$, 其中 $x_n$ 在 $V/\langle x_1, \ldots, x_{n-1}\rangle$ 中的剩余类被唯一确定.(AT 333)
+
+\medskip
+\noindent\textbf{习题 3.} 对带基 $X = (x_1, \ldots, x_n)$ 的 $n$ 维 $K$-向量空间 $V$, 考虑一切多重线性映射 $V^n \longrightarrow K$ 的 $K$-向量空间 $W$.确定 $\dim_K W$, 并给出 $W$ 的一个基.
+
+\section{矩阵与自同态的行列式}\label{sec:4.3}
+
+对矩阵 $A = (\alpha_{ij})_{i, j} \in K^{n \times n}$, 我们已经在引理~\mtref{lem:4.2.4} 中通过公式
+
+\[
+\det(A) = \sum_{\pi \in \mathfrak{S}_n} \sgn \pi \cdot \alpha_{\pi(1), 1} \cdots \alpha_{\pi(n), n}
+\]
+
+定义了行列式.这个公式在 $n = 0$ 的情形给出空矩阵的行列式值 $1$.在下面, 我们要更一般地引入有限维 $K$-向量空间的\emph{自同态的行列式}(\textup{Determinante eines Endomorphismus})\index{zitongtaidehanglieshi@自同态的行列式(Determinante eines Endomorphismus)}.
+
+\begin{remark}\label{rem:4.3.1}
+设 $f \colon V \longrightarrow V$ 是有限维数 $n$ 的 $K$-向量空间 $V$ 的一个自同态.又设 $\varDelta$ 是 $V$ 上的非平凡行列式函数; 按定理~\mtref{thm:4.2.8} 这样的函数恒存在.则成立:
+\begin{enumerate}
+\item[(i)] 在 $V$ 上通过
+
+\[
+\varDelta_f(a_1, \ldots, a_n) = \varDelta\big(f(a_1), \ldots, f(a_n)\big), \quad a_1, \ldots, a_n \in V,
+\]
+
+定义了一个行列式函数 $\varDelta_f$;
+\item[(ii)] 存在唯一确定的元素 $\alpha_f \in K$ 满足 $\varDelta_f = \alpha_f \cdot \varDelta$;
+\item[(iii)] 若 $X = (x_1, \ldots, x_n)$ 是 $V$ 的一个基, 则
+
+\[
+\alpha_f = \det\bigl(f(x_1)_X, \ldots, f(x_n)_X\bigr) = \det(A_{f, X, X}),
+\]
+
+其中 $f(x_i)_X$ 是 $f(x_i)$ 关于基 $X$ 的坐标列向量, $A_{f, X, X}$ 是 $f$ 关于基 $X$ 的矩阵.特别可以看出, $\alpha_f$ 与行列式函数 $\varDelta$ 的选取无关.
+\end{enumerate}
+\end{remark}
+
+\begin{proof}
+函数 $\varDelta_f$ 显然是多重线性的, 因为 $\varDelta$ 具有这个性质且 $f$ 是线性的.此外, 若 $a_1, \ldots, a_n$ 线性相关, 则 $f(a_1), \ldots, f(a_n)$ 也线性相关, 于是 $\varDelta_f(a_1, \ldots, a_n) = 0$.因此 $\varDelta_f$ 是行列式函数.按推论~\mtref{cor:4.2.9}, 存在唯一确定的常数 $\alpha_f \in K$ 满足 $\varDelta_f = \alpha_f \varDelta$.最后考虑 $V$ 的一个基 $X = (x_1, \ldots, x_n)$, 则由引理~\mtref{lem:4.2.5} 得到
+
+\[
+\begin{array}{c}
+\alpha_f \cdot \varDelta(x_1, \ldots, x_n) = \varDelta_f(x_1, \ldots, x_n) = \varDelta\big(f(x_1), \ldots, f(x_n)\big) \\
+= \det\big(f(x_1)_X, \ldots, f(x_n)_X\big) \cdot \varDelta(x_1, \ldots, x_n),
+\end{array}
+\]
+
+其中按定理~\mtref{thm:4.2.7} 有 $\varDelta(x_1, \ldots, x_n) \neq 0$, 从而
+
+\[
+\alpha_f = \det\bigl(f(x_1)_X, \ldots, f(x_n)_X\bigr).
+\]
+\end{proof}
+
+\begin{definition}[自同态的行列式]\label{def:4.3.2}\index{zitongtaidehanglieshi@自同态的行列式(Determinante eines Endomorphismus)}
+设 $f \colon V \longrightarrow V$ 是有限维 $K$-向量空间 $V$ 的一个自同态.则 $\det(f) := \alpha_f$(其中 $\alpha_f$ 按注记~\mtref{rem:4.3.1} 确定)称为自同态 $f$ 的行列式.对每个描述 $f$ 关于 $V$ 的基 $X$ 的矩阵 $A_{f, X, X}$ 有
+
+\[
+\det(f) = \det(A_{f, X, X}).
+\]
+
+特别在 $V = 0$ 的情形得到 $\det(f) = 1$.
+\end{definition}
+
+我们首先要推导行列式的一些基本性质.
+
+\begin{theorem}\label{thm:4.3.3}
+设 $V$ 是有限维数 $n$ 的 $K$-向量空间, $\operatorname{End}_K(V)$ 是 $V$ 的自同态环.则对 $f, g \in \operatorname{End}_K(V)$ 和 $\alpha \in K$ 成立:
+\begin{enumerate}
+\item[(i)] 对恒等映射 $\operatorname{id} \in \operatorname{End}_K(V)$ 有 $\det(\operatorname{id}) = 1$;
+\item[(ii)] $\det(\alpha f) = \alpha^n \cdot \det(f)$;
+\item[(iii)] $\det(f \circ g) = \det(f) \cdot \det(g)$;
+\item[(iv)] $\det(f) \neq 0 \Longleftrightarrow f$ 可逆;
+\item[(v)] 若 $f$ 可逆, 则 $\det(f^{-1}) = \det(f)^{-1}$;
+\item[(vi)] 对 $f$ 的\emph{伴随映射}(\textup{adjungierte Abbildung})\index{bansuiyingshe@伴随映射(adjungierte Abbildung)} $f^* \colon V^* \longrightarrow V^*$ 有 $\det(f^*) = \det(f)$.
+\end{enumerate}
+\end{theorem}
+
+在证明之前, 我们把相应的断言也改写为矩阵行列式的形式.
+
+\begin{theorem}\label{thm:4.3.4}
+对 $A, B \in K^{n \times n}$ 和 $\alpha \in K$ 成立:
+\begin{enumerate}
+\item[(i)] 对单位矩阵 $E \in K^{n \times n}$ 有 $\det(E) = 1$;
+\item[(ii)] $\det(\alpha A) = \alpha^n \cdot \det(A)$;
+\item[(iii)] $\det(A \cdot B) = \det(A) \cdot \det(B)$;
+\item[(iv)] $\det(A) \neq 0 \Longleftrightarrow A$ 可逆;
+\item[(v)] 若 $A$ 可逆, 则 $\det(A^{-1}) = \det(A)^{-1}$;
+\item[(vi)] 对 $A$ 的转置矩阵 $A^t$ 有 $\det(A^t) = \det(A)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[定理~\mtref{thm:4.3.6} 与定理~\mtref{thm:4.3.4} 的证明]
+通过在自同态与相应的矩阵之间来回转换, 参见 \ref{sec:3.1} 节以及定理~\mtref{thm:3.2.9}, 只需证明定理~\mtref{thm:4.3.6} 或定理~\mtref{thm:4.3.4} 中的断言之一即可.此外, 只有 $n = \dim V > 0$ 的情形有意义.
+\begin{enumerate}
+\item[(i)] $\det(E) = 1$ 我们已在引理~\mtref{lem:4.2.4} 中证明.
+\item[(ii)] 利用行列式函数的多重线性性: 若 $a_1, \ldots, a_n$ 是矩阵 $A \in K^{n \times n}$ 的列, 则
+
+\[
+\det(\alpha A) = \det(\alpha a_1, \ldots, \alpha a_n) = \alpha^n \det(a_1, \ldots, a_n) = \alpha^n \det(A).
+\]
+
+\item[(iii)] 对这个断言, 更适宜按自同态的行列式来论证.在 $V$ 上选取一个非平凡的行列式函数 $\varDelta$ 以及 $V$ 的一个基 $X = (x_1, \ldots, x_n)$.则
+
+\[
+\begin{array}{r l}
+\det(f \circ g) \cdot \varDelta(x_1, \ldots, x_n) & = \varDelta\big(f \circ g(x_1), \ldots, f \circ g(x_n)\big) \\
+& = \det(f) \cdot \varDelta\big(g(x_1), \ldots, g(x_n)\big) \\
+& = \det(f) \cdot \det(g) \cdot \varDelta(x_1, \ldots, x_n),
+\end{array}
+\]
+
+从而由 $\varDelta(x_1, \ldots, x_n) \neq 0$ 得到 $\det(f \circ g) = \det(f) \cdot \det(g)$.
+
+\item[(iv)] 矩阵 $A \in K^{n \times n}$ 可逆当且仅当它的秩为 $n$, 参见推论~\mtref{cor:3.3.7}, 即当且仅当 $A$ 的列线性无关.由此断言作为引理~\mtref{lem:4.2.4} 与定理~\mtref{thm:4.2.7} 的推论得出.
+
+\item[(v)] 对 $A \in \mathrm{Gl}(n, K)$, 按 (i) 与 (iii) 有
+
+\[
+\det(A) \cdot \det(A^{-1}) = \det(A \cdot A^{-1}) = \det(E) = 1.
+\]
+
+\item[(vi)] 对 $A = (\alpha_{ij})_{i, j} \in K^{n \times n}$ 有
+
+\[
+\begin{array}{l}
+\det(A) = \sum_{\pi \in \mathfrak{S}_n} \sgn \pi \cdot \alpha_{\pi(1), 1} \cdots \alpha_{\pi(n), n} \\
+\qquad = \sum_{\pi \in \mathfrak{S}_n} \sgn \pi \cdot \alpha_{1, \pi^{-1}(1)} \cdots \alpha_{n, \pi^{-1}(n)} \\
+\qquad = \sum_{\pi \in \mathfrak{S}_n} \sgn \pi^{-1} \cdot \alpha_{1, \pi^{-1}(1)} \cdots \alpha_{n, \pi^{-1}(n)} \\
+\qquad = \sum_{\pi \in \mathfrak{S}_n} \sgn \pi \cdot \alpha_{1, \pi(1)} \cdots \alpha_{n, \pi(n)} \\
+\qquad = \det(A^t).
+\end{array}
+\]
+\end{enumerate}
+\end{proof}
+
+\begin{corollary}\label{cor:4.3.5}
+设 $A \in K^{m \times n}$ 是秩为 $r$ 的矩阵.则可以通过删去 $A$ 的行与列构造一个满足 $\det(A') \neq 0$ 的方形子矩阵 $A' \in K^{r \times r}$, 并且 $r$ 具有这个性质的极大值.
+\end{corollary}
+
+\begin{proof}
+按推论~\mtref{cor:3.2.10}, 我们可以任意地把矩阵的秩解释为列秩或行秩.特别可以在 $A$ 中选出 $r$ 个线性无关的列组成线性无关组.删去其余各列, 得到 $A$ 的秩为 $r$ 的子矩阵 $A_1 \in K^{m \times r}$.相应地, 可以在 $A_1$ 中选出 $r$ 个线性无关的行.删去 $A_1$ 的其余各行, 得到 $A_1$ 亦即 $A$ 的秩为 $r$ 的方形子矩阵 $A' \in K^{r \times r}$.它按推论~\mtref{cor:3.3.7} 可逆, 从而按定理~\mtref{thm:4.3.4} 满足 $\det(A') \neq 0$.
+
+另一方面, 若 $A' \in K^{s \times s}$ 是 $A$ 的列数为 $s > r = \mathrm{rg}\, A$ 的方形子矩阵, 则 $A'$ 的列必然线性相关, 因为 $A$ 的任意 $s$ 个列都线性相关.于是由定理~\mtref{thm:4.3.4} 也有 $\det(A') = 0$.
+\end{proof}
+
+最后, 我们还讨论特殊矩阵 $A \in K^{n \times n}$ 的行列式的计算, 并首先研究对 $A$ 施行初等行变换或列变换时行列式如何变化.
+
+\begin{theorem}\label{thm:4.3.6}
+设 $\alpha \in K$, $A \in K^{n \times n}$, 以及 $i, j$ 是满足 $1 \leq i, j \leq n$ 的两个不同指标.
+\begin{enumerate}
+\item[(i)] 如果把 $A$ 的第 $j$ 行(或列)的 $\alpha$ 倍加到第 $i$ 行(或列), $\det(A)$ 不变;
+\item[(ii)] 如果在 $A$ 中交换第 $i$ 行(或列)与第 $j$ 行(或列), $\det(A)$ 改变符号;
+\item[(iii)] 如果把 $A$ 的第 $i$ 行(或列)乘以 $\alpha$, $\det(A)$ 乘以 $\alpha$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+按定理~\mtref{thm:4.3.4} 有 $\det(A) = \det(A^t)$.因此我们可以限于考虑初等列变换.于是所断言的命题直接由 $\det(A)$ 是 $A$ 的列中的行列式函数这一事实得出; 参见注记~\mtref{rem:4.2.3} 与引理~\mtref{lem:4.2.4}.
+\end{proof}
+
+上面的定理为显式计算矩阵 $A \in K^{n \times n}$ 的行列式提供了一个自然的方法: 先用高斯消元法确定秩 $r = \mathrm{rg}\, A$.对 $r < n$, 按注记~\mtref{rem:4.2.2} 得到 $\det(A) = 0$.而在 $r = n$ 的情形, 正如我们在 \ref{sec:3.3} 节看到的, 可以用初等行变换把 $A$ 化为单位矩阵 $E$, 其中 $\det(E) = 1$.若需要 $s$ 次这样的变换(可以任意混合使用初等行变换与列变换), 则行列式的值在每一步都改变一个因子 $\alpha_{\sigma}$, $\sigma = 1, \ldots, s$, 于是得到 $\det(A) = \alpha_1^{-1} \cdots \alpha_s^{-1}$.
+
+我们想给出若干计算特殊行列式的例子, 同时说明刚刚描述的方法在具体情形中如何应用.
+
+\begin{bsp}\label{bsp:4.3.1}
+设 $A = (\alpha_{ij})_{i, j} \in K^{n \times n}$ 满足 $\alpha_{ij} = 0$ 对 $i > j$, 即
+
+\[
+A = \begin{pmatrix} \alpha_{11} & \cdots & \cdots & * \\ 0 & \alpha_{22} & \cdots & * \\ \vdots & \ddots & \ddots & \vdots \\ 0 & \cdots & 0 & \alpha_{nn} \end{pmatrix}.
+\]
+
+则 $\det(A) = \prod_{i = 1}^{n} \alpha_{ii}$.事实上, 考虑和
+
+\[
+\det(A) = \sum_{\pi \in \mathfrak{S}_n} \sgn \pi \cdot \alpha_{\pi(1), 1} \cdots \alpha_{\pi(n), n}
+\]
+
+中对应置换 $\pi \in \mathfrak{S}_n$ 的项, 那么只要存在指标 $i \in \{1, \ldots, n\}$ 满足 $\pi(i) > i$, 该项就由于对 $\alpha_{ij}$ 的假设而消失.另一方面, $\pi(i) \leq i$, $i = 1, \ldots, n$, 只对恒等置换成立, 因此上面的和化归为一个项, 即 $\alpha_{11} \cdots \alpha_{nn}$.
+
+也可以按初等行变换来论证.若对某个指标 $i \in \{1, \ldots, n\}$ 有 $\alpha_{ii} = 0$, 则指标为 $1, \ldots, i$ 的列显然线性相关, 于是 $\det(A) = 0$.否则, 对 $i = 1, \ldots, n$ 把 $A$ 的第 $i$ 行乘以 $\alpha_{ii}^{-1}$, 此时行列式相应地各改变一个因子 $\alpha_{ii}^{-1}$.所得矩阵可以通过把第 $i$ 行($i = 2, \ldots, n$)的适当倍数加到前面的行化为单位矩阵.行列式的值保持不变, 从而如所希望的得到 $\det(A) = \alpha_{11} \cdots \alpha_{nn}$.
+\end{bsp}
+
+\begin{bsp}\label{bsp:4.3.2}
+对 $m, n \in \mathbb{N}$, 考虑矩阵 $A_{11} \in K^{m \times m}$, $A_{12} \in K^{m \times n}$, $A_{22} \in K^{n \times n}$ 以及零矩阵 $0 \in K^{n \times m}$.对复合矩阵
+
+\[
+A = \begin{pmatrix} A_{11} & A_{12} \\ 0 & A_{22} \end{pmatrix}
+\]
+
+则成立 $\det(A) = \det(A_{11}) \cdot \det(A_{22})$.为证明这一点, 设 $A$ 形如 $(\alpha_{ij})_{i, j = 1, \ldots, m + n}$.则对 $m + 1 \leq i \leq m + n$, $1 \leq j \leq m$, 有 $\alpha_{ij} = 0$.在和
+
+\[
+\det(A) = \sum_{\pi \in \mathfrak{S}_{m + n}} \sgn \pi \cdot \alpha_{\pi(1), 1} \cdots \alpha_{\pi(m + n), m + n}
+\]
+
+中, 因此只需考虑满足 $\pi(i) \leq m$ 对 $i = 1, \ldots, m$ 成立的置换 $\pi \in \mathfrak{S}_{m + n}$.此时自动有 $m + 1 \leq \pi(i) \leq m + n$ 对 $i = m + 1, \ldots, m + n$, 并且 $\pi$ 分解为 $\{1, \ldots, m\}$ 上的置换 $\sigma$ 与 $\{m + 1, \ldots, m + n\}$ 上的置换 $\tau$, 其中 $\sgn(\pi) = \sgn(\sigma) \cdot \sgn(\tau)$.由于这样, 所要考虑的置换 $\pi \in \mathfrak{S}_{m + n}$ 与对 $(\sigma, \tau) \in \mathfrak{S}_m \times \mathfrak{S}_n$ 双射对应, 于是令 $A_{22} = (\beta_{ij})_{i, j = 1, \ldots, n}$, 得到
+
+\[
+\begin{array}{l}
+\det(A) = \sum_{\sigma \in \mathfrak{S}_m, \tau \in \mathfrak{S}_n} \sgn(\sigma) \sgn(\tau) \alpha_{\sigma(1), 1} \cdots \alpha_{\sigma(m), m} \cdot \beta_{\tau(1), 1} \cdots \beta_{\tau(n), n} \\
+= \sum_{\sigma \in \mathfrak{S}_m} \sgn(\sigma) \alpha_{\sigma(1), 1} \cdots \alpha_{\sigma(m), m} \cdot \sum_{\tau \in \mathfrak{S}_n} \sgn(\tau) \beta_{\tau(1), 1} \cdots \beta_{\tau(n), n} \\
+= \det(A_{11}) \cdot \det(A_{22}),
+\end{array}
+\]
+
+正如所断言的.
+
+不过, 也可以不进行较大的计算, 而是用行列式函数的理论得到这个结果.设 $E_m \in K^{m \times m}$ 与 $E_n \in K^{n \times n}$ 是单位矩阵.首先从引理~\mtref{lem:4.2.4} 读出,
+
+\[
+\det(A) = \det \begin{pmatrix} A_{11} & A_{12} \\ 0 & A_{22} \end{pmatrix}
+\]
+
+特别地, 若暂时把 $A_{11}$ 的列视为变量, 它是 $A_{11}$ 的列中的行列式函数.于是由引理~\mtref{lem:4.2.5} 得到等式
+
+\[
+\det \begin{pmatrix} A_{11} & A_{12} \\ 0 & A_{22} \end{pmatrix} = \det(A_{11}) \cdot \det \begin{pmatrix} E_m & A_{12} \\ 0 & A_{22} \end{pmatrix}.
+\]
+
+相应地, 我们可以断定, 若把 $A_{22}$ 的行视为变量, 并利用一个矩阵的行列式等于其转置矩阵的行列式这一事实, 则
+
+\[
+\det \begin{pmatrix} E_m & A_{12} \\ 0 & A_{22} \end{pmatrix}
+\]
+
+是 $A_{22}$ 的行中的行列式函数.于是由引理~\mtref{lem:4.2.5} 得到等式
+
+\[
+\det \begin{pmatrix} E_m & A_{12} \\ 0 & A_{22} \end{pmatrix} = \det(A_{22}) \cdot \det \begin{pmatrix} E_m & A_{12} \\ 0 & E_n \end{pmatrix}.
+\]
+
+由于矩阵
+
+\[
+\begin{pmatrix} E_m & A_{12} \\ 0 & E_n \end{pmatrix}
+\]
+
+按例~\mtref{bsp:4.3.1} 具有行列式 $1$, 故如所希望的得到
+
+\[
+\det(A) = \det(A_{11}) \cdot \det(A_{22}).
+\]
+
+最后, 我们还展示如何用初等变换来论证.若 $\mathrm{rg}\, A_{11} < m$, 则 $A$ 不可能具有极大秩, 因为此时 $A$ 的前 $m$ 列线性相关.对 $\mathrm{rg}\, A_{22} < n$ 相应地, 因为此时 $A$ 的最后 $n$ 行线性相关.总之, 若 $A_{11}$ 与 $A_{22}$ 中至少有一个不可逆, 则 $\det(A) = 0 = \det(A_{11}) \det(A_{22})$.但若 $A_{11}$ 与 $A_{22}$ 都可逆, 则对 $A$ 的前 $m$ 行施行把子矩阵 $A_{11}$ 化为单位矩阵的初等行变换.此时 $A$ 的行列式显然改变一个因子 $\det(A_{11})^{-1}$.相应地, 对 $A$ 的最后 $n$ 行施行把子矩阵 $A_{22}$ 化为单位矩阵的初等行变换.这使行列式改变一个因子 $\det(A_{22})^{-1}$.所得矩阵具有例~\mtref{bsp:4.3.1} 中考虑的形式, 其中对角线元素全为 $1$.因此该矩阵的行列式为 $1$, 于是得到 $\det(A) = \det(A_{11}) \cdot \det(A_{22})$.
+\end{bsp}
+
+\begin{bsp}\label{bsp:4.3.3}
+一个著名的具体行列式的例子是所谓的\emph{范德蒙德行列式}(\textup{Vandermonde'sche Determinante})\index{fandemengdehanglieshi@范德蒙德行列式(Vandermonde'sche Determinante)}
+
+\[
+V(\alpha_1, \alpha_2, \ldots, \alpha_n) = \det \begin{pmatrix}
+1 & 1 & \ldots & 1 \\
+\alpha_1 & \alpha_2 & \ldots & \alpha_n \\
+\alpha_1^2 & \alpha_2^2 & \ldots & \alpha_n^2 \\
+\vdots & \vdots & \ddots & \vdots \\
+\alpha_1^{n-1} & \alpha_2^{n-1} & \ldots & \alpha_n^{n-1}
+\end{pmatrix},
+\]
+
+它对元素 $\alpha_1, \alpha_2, \ldots, \alpha_n \in K$ 构成.我们想归纳地证明
+
+\[
+V(\alpha_1, \alpha_2, \ldots, \alpha_n) = \prod_{i < j} (\alpha_j - \alpha_i).
+\]
+
+对 $n = 1$, 断言是平凡的.对 $n > 1$, 在上面矩阵中从第 $n$ 行减去第 $(n - 1)$ 行的 $\alpha_1$ 倍, 依此类推, 直到最后从第 $2$ 行减去第 $1$ 行的 $\alpha_1$ 倍.则
+
+\[
+V(\alpha_1, \alpha_2, \ldots, \alpha_n) = \det \begin{pmatrix}
+1 & 1 & \ldots & 1 \\
+0 & \alpha_2 - \alpha_1 & \ldots & \alpha_n - \alpha_1 \\
+0 & \alpha_2(\alpha_2 - \alpha_1) & \ldots & \alpha_n(\alpha_n - \alpha_1) \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & \alpha_2^{n-2}(\alpha_2 - \alpha_1) & \ldots & \alpha_n^{n-2}(\alpha_n - \alpha_1)
+\end{pmatrix},
+\]
+
+于是由上面的例~\mtref{bsp:4.3.2} 得到
+
+\[
+V(\alpha_1, \alpha_2, \ldots, \alpha_n) = \Bigl(\prod_{i > 1} (\alpha_i - \alpha_1)\Bigr) V(\alpha_2, \ldots, \alpha_n).
+\]
+
+由归纳法由此得出断言.
+\end{bsp}
+
+最后, 我们还希望对 $n \leq 3$ 的矩阵 $A = (\alpha_{ij})_{i, j} \in K^{n \times n}$ 显式给出它们的行列式.
+
+\[
+\begin{array}{r l}
+n = 1\colon & \det(A) = \alpha_{11} \\
+n = 2\colon & \det(A) = \alpha_{11} \alpha_{22} - \alpha_{21} \alpha_{12} \\
+n = 3\colon & \det(A) = \alpha_{11} \alpha_{22} \alpha_{33} + \alpha_{21} \alpha_{32} \alpha_{13} + \alpha_{31} \alpha_{12} \alpha_{23} \\
+& \qquad - \alpha_{11} \alpha_{32} \alpha_{23} - \alpha_{31} \alpha_{22} \alpha_{13} - \alpha_{21} \alpha_{12} \alpha_{33}
+\end{array}
+\]
+
+最后一个公式对应于排列
+
+\[
+\begin{array}{c}
+\mathfrak{S}_3 = \left\{\begin{pmatrix} 1 & 2 & 3 \\ 1 & 2 & 3 \end{pmatrix}, \begin{pmatrix} 1 & 2 & 3 \\ 2 & 3 & 1 \end{pmatrix}, \begin{pmatrix} 1 & 2 & 3 \\ 3 & 1 & 2 \end{pmatrix}, \right. \\
+\left. \begin{pmatrix} 1 & 2 & 3 \\ 1 & 3 & 2 \end{pmatrix}, \begin{pmatrix} 1 & 2 & 3 \\ 3 & 2 & 1 \end{pmatrix}, \begin{pmatrix} 1 & 2 & 3 \\ 2 & 1 & 3 \end{pmatrix} \right\}
+\end{array}
+\]
+
+各项的类型可以借助下面的图式(称为萨鲁斯(Sarrus)法则)来记忆:
+
+\[
+\begin{array}{c c c c c}
+\alpha_{11} & \alpha_{12} & \alpha_{13} & \alpha_{11} & \alpha_{12} \\
+\alpha_{21} & \alpha_{22} & \alpha_{23} & \alpha_{21} & \alpha_{22} \\
+\alpha_{31} & \alpha_{32} & \alpha_{33} & \alpha_{31} & \alpha_{32}
+\end{array}
+\]
+
+也就是说, 为计算 $\det(\alpha_{ij})_{i, j = 1, 2, 3}$, 要把沿从左上方到右下方延伸的 $3$ 条对角线上的元素的乘积相加, 再减去沿从左下方到右上方延伸的 $3$ 条对角线上的元素的乘积.
+
+\aufgaben
+
+\noindent\textbf{习题 1.} 对满足 $A^t = -A$ 且 $n$ 为奇数的 $A \in K^{n \times n}$, 证明: 在 $K$ 中有 $\det(A) = 0$ 或 $1 + 1 = 0$.
+
+\medskip
+\noindent\textbf{习题 2.} 对矩阵 $A \in K^{n \times n}$ 允许下列行运算:
+\begin{enumerate}
+\item[(i)] 交换两个不同的行, 并同时把其中一个行乘以 $-1$;
+\item[(ii)] 把某一行乘以常数 $\alpha \in K^*$, 并同时把另一个行乘以 $\alpha^{-1}$;
+\item[(iii)] 把某一行的一个倍数加到另一行.
+\end{enumerate}
+证明: 可逆矩阵 $A \in K^{n \times n}$ 可以用这样的行变换化为下列类型的\emph{对角矩阵}(\textup{Diagonalmatrix})\index{duijiaojuzhen@对角矩阵(Diagonalmatrix)}
+
+\[
+\begin{pmatrix} 1 & \ldots & 0 & 0 \\ \vdots & \ddots & \vdots & \vdots \\ 0 & \ldots & 1 & 0 \\ 0 & \ldots & 0 & d \end{pmatrix}
+\]
+
+其中 $d = \det(A)$.
+
+\medskip
+\noindent\textbf{习题 3.} 设 $A = (\alpha_{ij}) \in K^{n \times n}$ 满足
+
+\[
+\alpha_{ij} = \begin{cases} 1 & \text{对 } i < j \\ 0 & \text{对 } i = j \\ -1 & \text{对 } i > j \end{cases}
+\]
+
+且 $n$ 为偶数.证明 $\det(A) = 1$.(AT 333)
+
+\medskip
+\noindent\textbf{习题 4.} 计算矩阵
+
+\[
+\begin{pmatrix} 2 & 1 & 1 & \ldots & 1 \\ 1 & 2 & 1 & \ldots & 1 \\ 1 & 1 & 2 & \ldots & 1 \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 1 & 1 & 1 & \ldots & 2 \end{pmatrix} \in \mathbb{R}^{n \times n}
+\]
+
+的行列式.
+
+\medskip
+\noindent\textbf{习题 5.} 设 $V$ 是 $n$ 维 $K$-向量空间, $f \colon V \longrightarrow V$ 是一个自同态.对某个 $x \in V$ 设 $V = \langle x, f(x), \ldots, f^{n-1}(x)\rangle$, 并且
+
+\[
+f^n(x) = \alpha_{n-1} f^{n-1}(x) + \cdots + \alpha_1 f(x) + \alpha_0 x
+\]
+
+带系数 $\alpha_0, \ldots, \alpha_{n-1} \in K$.证明 $\det(f) = (-1)^{n+1} \alpha_0$.(AT 335)
+
+\medskip
+\noindent\textbf{习题 6.} 设 $\alpha_1, \ldots, \alpha_n, \beta_1, \ldots, \beta_n \in K$ 是满足对一切 $i, j$ 有 $\alpha_i + \beta_j \neq 0$ 的常数.证明(\emph{柯西行列式}(\textup{Cauchy'sche Determinante})\index{kexihanglieshi@柯西行列式(Cauchy'sche Determinante)}):
+
+\[
+\det \begin{pmatrix} (\alpha_1 + \beta_1)^{-1} & \ldots & (\alpha_1 + \beta_n)^{-1} \\ \vdots & & \vdots \\ (\alpha_n + \beta_1)^{-1} & \ldots & (\alpha_n + \beta_n)^{-1} \end{pmatrix} = \frac{\prod_{i < j} (\alpha_j - \alpha_i)(\beta_j - \beta_i)}{\prod_{i, j} (\alpha_i + \beta_j)}
+\]
+
+\section{克拉默法则}\index{kelamofaze@克拉默法则(Cramer'sche Regel)}\label{sec:4.4}
+
+我们首先对矩阵 $A = (\alpha_{ij})_{i, j} \in K^{n \times n}$ 解释所谓的\emph{伴随矩阵}(\textup{adjungierte Matrix; Komplementärmatrix})\index{bansuijuzhen@伴随矩阵(adjungierte Matrix; Komplementärmatrix)} $A^{\mathrm{ad}}$.为此, 对任意指标 $i, j \in \{1, \ldots, n\}$ 从 $A$ 构造一个 $(n \times n)$ 矩阵 $A_{ij}$, 方法是把 $A$ 的第 $i$ 行的所有元素 $\alpha_{i1}, \ldots, \alpha_{in}$ 与第 $j$ 列的所有元素 $\alpha_{1j}, \ldots, \alpha_{nj}$ 都换成 $0$, 只有位于第 $i$ 行与第 $j$ 列交点处的元素 $\alpha_{ij}$ 除外, 我们把它改为 $1$, 即:
+
+\[
+A_{ij} = \begin{pmatrix}
+\alpha_{11} & \cdots & \alpha_{1, j-1} & 0 & \alpha_{1, j+1} & \cdots & \alpha_{1n} \\
+\vdots & & \vdots & \vdots & \vdots & & \vdots \\
+\alpha_{i-1, 1} & \cdots & \alpha_{i-1, j-1} & 0 & \alpha_{i-1, j+1} & \cdots & \alpha_{i-1, n} \\
+0 & \cdots & 0 & 1 & 0 & \cdots & 0 \\
+\alpha_{i+1, 1} & \cdots & \alpha_{i+1, j-1} & 0 & \alpha_{i+1, j+1} & \cdots & \alpha_{i+1, n} \\
+\vdots & & \vdots & \vdots & \vdots & & \vdots \\
+\alpha_{n1} & \cdots & \alpha_{n, j-1} & 0 & \alpha_{n, j+1} & \cdots & \alpha_{nn}
+\end{pmatrix}
+\]
+
+此外, 通过删去 $A_{ij}$ 的第 $i$ 行与第 $j$ 列来定义矩阵 $A'_{ij} \in K^{(n-1) \times (n-1)}$.
+
+\begin{remark}\label{rem:4.4.1}
+设 $A \in K^{n \times n}$ 是带列 $a_1, \ldots, a_n \in K^n$ 的矩阵.则对指标 $1 \leq i, j \leq n$ 成立:
+\begin{enumerate}
+\item[(i)] $\det(A_{ij}) = (-1)^{i + j} \cdot \det(A'_{ij})$;
+\item[(ii)] $\det(A_{ij}) = \det(a_1, \ldots, a_{j-1}, e_i, a_{j+1}, \ldots, a_n)$, 其中 $e_i = (\delta_{1i}, \ldots, \delta_{ni})^t$ 是 $K^n$ 中的第 $i$ 个单位向量.
+\end{enumerate}
+\end{remark}
+
+\begin{proof}
+对 $i = j = 1$, $A_{ij}$ 具有形状
+
+\[
+A_{11} = \begin{pmatrix} 1 & 0 \\ 0 & A'_{11} \end{pmatrix},
+\]
+
+于是如同在 \ref{sec:4.3} 节中计算的那样, 得到
+
+\[
+\det(A_{11}) = 1 \cdot \det(A'_{11}).
+\]
+
+(i) 的一般情形容易化归于此, 只要在 $A_{ij}$ 中把第 $i$ 行与前面所有的行交换, 并把第 $j$ 列与前面所有的列交换.这总共有 $(i - 1) + (j - 1)$ 次交换, 所以新矩阵的行列式与 $\det(A_{ij})$ 相差一个因子 $(-1)^{i + j}$.
+
+此外, (ii) 由定理~\mtref{thm:4.3.6}(i) 得出, 因为带列 $a_1, \ldots, a_{j-1}, e_i, a_{j+1}, \ldots, a_n$ 的矩阵可以通过从其余各列减去第 $j$ 列 $e_i$ 的适当倍数化为矩阵 $A_{ij}$.
+\end{proof}
+
+\begin{definition}[\emph{代数余子式}\index{daishuyuzishi@代数余子式(algebraisches Komplement; Kofaktor)}与伴随矩阵]\label{def:4.4.2}\index{daishuyuzishi@代数余子式(algebraisches Komplement; Kofaktor)}\index{bansuijuzhen@伴随矩阵(adjungierte Matrix; Komplementärmatrix)}
+对矩阵 $A = (\alpha_{ij})_{i, j} \in K^{n \times n}$ 和指标 $1 \leq i, j \leq n$, 按前述方法构成矩阵 $A_{ij}$, $A'_{ij}$.则
+
+\[
+\tilde{\alpha}_{ij} = \det(A_{ij}) = (-1)^{i + j} \cdot \det(A'_{ij})
+\]
+
+称为 $A$ 关于指标对 $(i, j)$ 的代数\emph{余子式}(\textup{Cofaktor; Unterdeterminante})\index{yuzishi@余子式(Cofaktor; Unterdeterminante)}, 或用不太确切的说法, 称为 $A$ 关于系数 $\alpha_{ij}$ 的代数余子式.矩阵 $\tilde{A} = (\tilde{\alpha}_{ij})_{i, j}$ 称为 $A$ 的代数余子式矩阵, 而
+
+\[
+A^{\mathrm{ad}} := \tilde{A}^t = (\tilde{\alpha}_{ji})_{i, j}
+\]
+
+称为属于 $A$ 的伴随矩阵(或属于 $A$ 的\emph{互补矩阵}(\textup{Komplementärmatrix})\index{hubujuzhen@互补矩阵(Komplementärmatrix)}).
+\end{definition}
+
+接下来, 我们要证明矩阵 $A$ 与其伴随矩阵 $A^{\mathrm{ad}}$ 之间的一个基本关系, 它在其广义上被称为所谓的克拉默法则.
+
+\begin{regel}[克拉默法则]\label{reg:4.4.3}\index{kelamofaze@克拉默法则(Cramer'sche Regel)}
+设 $A = (\alpha_{ij})_{i, j} \in K^{n \times n}$, $E \in K^{n \times n}$ 是单位矩阵.则
+
+\[
+A^{\mathrm{ad}} \cdot A = A \cdot A^{\mathrm{ad}} = \det(A) \cdot E.
+\]
+
+详细地写出来, 这个恒等式意味着:
+
+\[
+\sum_{j = 1}^{n} \tilde{\alpha}_{ji} \alpha_{jk} = \delta_{ik} \cdot \det(A),
+\]
+
+\[
+\sum_{j = 1}^{n} \alpha_{ij} \tilde{\alpha}_{kj} = \delta_{ik} \cdot \det(A),
+\]
+
+对 $1 \leq i, k \leq n$.
+\end{regel}
+
+\begin{proof}
+设 $a_1, \ldots, a_n$ 是 $A$ 的 $n$ 个列.利用注记~\mtref{rem:4.4.1} 可以计算
+
+\[
+\begin{array}{l}
+\sum_{j = 1}^{n} \tilde{\alpha}_{ji} \alpha_{jk} = \sum_{j = 1}^{n} \alpha_{jk} \cdot \det(A_{ji}) \\
+\qquad = \sum_{j = 1}^{n} \alpha_{jk} \cdot \det(a_1, \ldots, a_{i-1}, e_j, a_{i+1}, \ldots, a_n) \\
+\qquad = \det(a_1, \ldots, a_{i-1}, a_k, a_{i+1}, \ldots, a_n) \\
+\qquad = \delta_{ik} \cdot \det(A),
+\end{array}
+\]
+
+即 $\tilde{A}^t \cdot A = \det(A) \cdot E$.为看出这也等于 $A \cdot \tilde{A}^t$, 对 $A^t$ 而不是 $A$ 使用刚证明的关系, 即
+
+\[
+(\widetilde{A^t})^t \cdot A^t = \det(A^t) \cdot E.
+\]
+
+由于显然有 $\widetilde{A^t} = \tilde{A}^t$, 利用 $\det(A^t) = \det(A)$, 参见定理~\mtref{thm:4.3.4}, 得到
+
+\[
+\tilde{A} \cdot A^t = \det(A) \cdot E.
+\]
+
+转置后如所希望的得到
+
+\[
+A \cdot \tilde{A}^t = \det(A) \cdot E.
+\]
+\end{proof}
+
+我们想从这个法则推出若干推论.首先, 作为法则~\mtref{reg:4.4.3} 中诸等式的特殊情形, 得到以拉普拉斯(Laplace)命名的按一行或一列展开行列式的定理.
+
+\begin{corollary}[按行或按列展开]\label{cor:4.4.4}\index{lapulasizhankai@拉普拉斯展开(Laplace'scher Entwicklungssatz)}
+设 $A = (\alpha_{ij})_{i, j} \in K^{n \times n}$.则成立:
+
+\[
+\det(A) = \sum_{i = 1}^{n} \alpha_{ij} \cdot \det(A_{ij}) = \sum_{i = 1}^{n} (-1)^{i + j} \cdot \alpha_{ij} \cdot \det(A'_{ij}), \qquad j = 1, \ldots, n,
+\]
+
+\[
+\det(A) = \sum_{j = 1}^{n} \alpha_{ij} \cdot \det(A_{ij}) = \sum_{j = 1}^{n} (-1)^{i + j} \cdot \alpha_{ij} \cdot \det(A'_{ij}), \qquad i = 1, \ldots, n.
+\]
+
+人们把这些称为 $\det(A)$ 按第 $j$ 列或第 $i$ 行展开的公式.
+\end{corollary}
+
+对可逆矩阵, 可以用法则~\mtref{reg:4.4.3} 中的公式来计算逆矩阵.
+
+\begin{corollary}\label{cor:4.4.5}
+对 $A \in \mathrm{Gl}(n, K)$ 有 $A^{-1} = \det(A)^{-1} \cdot A^{\mathrm{ad}}$.
+\end{corollary}
+
+此外, 我们还想推导与线性方程组的求解有关的狭义克拉默法则.
+
+\begin{corollary}[克拉默法则]\label{cor:4.4.6}
+对矩阵 $A \in \mathrm{Gl}(n, K)$ 和列向量 $b \in K^n$, 考虑线性方程组 $A \cdot x = b$.则 $x = A^{-1} b$ 是这个方程组的唯一解.若 $a_1, \ldots, a_n$ 是 $A$ 的列, 则 $A^{-1} \cdot b$ 的第 $i$ 个分量由
+
+\[
+\det(A)^{-1} \cdot \det(a_1, \ldots, a_{i-1}, b, a_{i+1}, \ldots, a_n)
+\]
+
+给出.
+\end{corollary}
+
+\begin{proof}
+我们使用推论~\mtref{cor:4.4.5} 中的公式 $A^{-1} = \det(A)^{-1} \cdot \tilde{A}^t$.则对 $b = (\beta_1, \ldots, \beta_n)^t$, $A^{-1} \cdot b$ 的第 $i$ 个分量借助注记~\mtref{rem:4.4.1} 计算为
+
+\[
+\begin{array}{l}
+\det(A)^{-1} \cdot \sum_{j = 1}^{n} \tilde{\alpha}_{ji} \beta_j = \det(A)^{-1} \cdot \sum_{j = 1}^{n} \det(A_{ji}) \beta_j \\
+\qquad = \det(A)^{-1} \cdot \sum_{j = 1}^{n} \det(a_1, \ldots, a_{i-1}, \beta_j e_j, a_{i+1}, \ldots, a_n) \\
+\qquad = \det(A)^{-1} \cdot \det(a_1, \ldots, a_{i-1}, b, a_{i+1}, \ldots, a_n).
+\end{array}
+\]
+\end{proof}
+
+\aufgaben
+
+\noindent\textbf{习题 1.} 用克拉默法则解下列线性方程组:
+
+\[
+\begin{array}{r c r c r c r}
+2x_1 & + & 2x_2 & + & 4x_3 & = & 1 \\
+2x_1 & - & 3x_2 & + & 2x_3 & = & 0 \\
+5x_1 & + & 4x_2 & + & 3x_3 & = & 1
+\end{array}
+\]
+
+\medskip
+\noindent\textbf{习题 2.} 设 $A = (\alpha_{ij}) \in \mathrm{Gl}(n, \mathbb{R})$ 是系数 $\alpha_{ij} \in \mathbb{Z}$ 的可逆矩阵.证明 (AT 336):
+\begin{enumerate}
+\item[(i)] $A^{-1}$ 的系数属于 $\mathbb{Q}$;
+\item[(ii)] $A^{-1}$ 的系数属于 $\mathbb{Z}$, 当且仅当 $\det(A) = \pm 1$.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{习题 3.} 对可逆矩阵 $A, B \in \mathrm{Gl}(n, K)$ 和 $\alpha \in K$ 证明:
+\begin{enumerate}
+\item[(i)] $(\alpha A)^{\mathrm{ad}} = \alpha^{n-1} A^{\mathrm{ad}}$;
+\item[(ii)] $(A^t)^{\mathrm{ad}} = (A^{\mathrm{ad}})^t$;
+\item[(iii)] $(AB)^{\mathrm{ad}} = B^{\mathrm{ad}} A^{\mathrm{ad}}$;
+\item[(iv)] $\det(A^{\mathrm{ad}}) = \det(A)^{n-1}$;
+\item[(v)] $(A^{\mathrm{ad}})^{\mathrm{ad}} = \det(A)^{n-2} A$;
+\item[(vi)] $(A^{\mathrm{ad}})^{-1} = (A^{-1})^{\mathrm{ad}}$.
+\end{enumerate}
+
+注记: 上述所有关系, 除最后一个外, 对 $K^{n \times n}$ 中的任意矩阵仍然成立.要从可逆矩阵的情形推出这一点, 需要一些目前尚不具备的构造.
+
+\medskip
+\noindent\textbf{习题 4.} 对列向量 $a_1, \ldots, a_n, b \in K^n$ 和系数 $\alpha_1, \ldots, \alpha_n \in K$, 设 $\sum_{i = 1}^{n} \alpha_i a_i = b$.证明
+
+\[
+\det(a_1, \ldots, a_{i-1}, b, a_{i+1}, \ldots, a_n) = \alpha_i \cdot \det(a_1, \ldots, a_n), \qquad i = 1, \ldots, n,
+\]
+
+并由此推出推论~\mtref{cor:4.4.6} 的断言.(AT 336)
+
+\section{\texorpdfstring{外积$^*$}{外积*}}\index{waiji@外积(äußeres Produkt)}\label{sec:4.5}
+
+在 \ref{sec:4.2} 节中, 我们研究了有限维数 $n$ 的 $K$-向量空间 $V$ 上 $n$ 个变量的交替多重线性形式.现在我们想更一般地考虑任意 $K$-向量空间 $V$ 上一定数量 $r$ 个变量的\emph{交替多重线性映射}(\textup{alternierende multilineare Abbildung})\index{jiaotiduochongxianxingyingshe@交替多重线性映射(alternierende multilineare Abbildung)}.其中, 到 $K$-向量空间 $W$ 中的映射 $\Phi \colon V^r \longrightarrow W$, $(a_1, \ldots, a_r) \longmapsto \Phi(a_1, \ldots, a_r)$ 称为多重线性的, 如果 $\Phi$ 在每个参数中线性; 称为交替的, 如果只要向量 $a_1, \ldots, a_r \in V$ 中有两个相同, 就有 $\Phi(a_1, \ldots, a_r) = 0$.与注记~\mtref{rem:4.2.2} 或注记~\mtref{rem:4.2.3} 中相应的方式一样, 可以证明:
+
+\begin{remark}\label{rem:4.5.1}
+对 $K$-向量空间 $V, W$ 和 $r \in \mathbb{N}$, 考虑交替多重线性映射 $\Phi \colon V^r \longrightarrow W$.则对向量 $a_1, \ldots, a_r \in V$ 成立:
+\begin{enumerate}
+\item[(i)] 若 $a_1, \ldots, a_r$ 线性相关, 则 $\Phi(a_1, \ldots, a_r) = 0$;
+\item[(ii)] 对每个置换 $\pi \in \mathfrak{S}_r$, 有 $\Phi(a_{\pi(1)}, \ldots, a_{\pi(r)}) = \sgn \pi \cdot \Phi(a_1, \ldots, a_r)$.
+\end{enumerate}
+\end{remark}
+
+特别由 (i) 得到, 在 $r > \dim_K V$ 的情形, 只有平凡的交错多重线性映射 $V^r \longrightarrow W$.在下面, 我们要对 $V$ 与 $r \in \mathbb{N}$ 构造一个 $K$-向量空间 $\bigwedge^r V$, 使得到任意 $K$-向量空间 $W$ 中的交替多重线性映射 $V^r \longrightarrow W$ 与 $K$-线性映射 $\bigwedge^r V \longrightarrow W$ 双射对应.
+
+\begin{theorem}[外积的泛性质]\label{thm:4.5.2}\index{fanxingzhi@泛性质(universelle Eigenschaft)}
+对 $K$-向量空间 $V$ 和自然数 $r \in \mathbb{N}$, 恒存在一个带多重线性\emph{交替映射}(\textup{alternierende Abbildung})\index{jiaotiyingshe@交替映射(alternierende Abbildung)} $\sigma \colon V^r \longrightarrow D$ 的 $K$-向量空间 $D$, 它具有下列泛性质:
+
+若 $\Phi \colon V^r \longrightarrow W$ 是到 $K$-向量空间 $W$ 中的交替多重线性映射, 则存在唯一的 $K$-线性映射 $\varphi \colon D \longrightarrow W$ 满足 $\Phi = \varphi \circ \sigma$, 使得如下图交换:
+
+\begin{center}
+\begin{tikzcd}[row sep=huge, column sep=huge]
+V^r \arrow[rr, "\sigma"] \arrow[dr, "\Phi"'] && D \arrow[dl, "\exists!\,\varphi"] \\
+& W
+\end{tikzcd}
+\end{center}
+
+对 $(D, \sigma)$, 由这个映射性质可以确定到差一个典范同构为止.
+\end{theorem}
+
+在定理的情形下, 两个具有所述泛映射性质的二元组 $(D, \sigma)$ 与 $(D', \sigma')$ 以典范方式同构, 这一点容易看出.此时存在唯一的 $K$-线性映射 $\iota \colon D \longrightarrow D'$ 满足 $\sigma' = \iota \circ \sigma$, 以及唯一的 $K$-线性映射 $\iota' \colon D' \longrightarrow D$ 满足 $\sigma = \iota' \circ \sigma'$.于是有
+
+\[
+\sigma = \iota' \circ \sigma' = \iota' \circ \iota \circ \sigma, \quad \sigma' = \iota \circ \sigma = \iota \circ \iota' \circ \sigma',
+\]
+
+从而
+
+\[
+\mathrm{id}_D \circ \sigma = (\iota' \circ \iota) \circ \sigma, \quad \mathrm{id}_{D'} \circ \sigma' = (\iota \circ \iota') \circ \sigma'.
+\]
+
+因此 $\mathrm{id}_D$ 与 $\iota' \circ \iota \colon D \longrightarrow D$ 是两个 $K$-线性映射, 它们通过与 $\sigma \colon V^r \longrightarrow D$ 复合得到同一个交替多重线性映射 $V^r \longrightarrow D$.对 $(D, \sigma)$ 的映射性质中的唯一性断言于是给出 $\iota' \circ \iota = \mathrm{id}_D$.相应地得到 $\iota \circ \iota' = \mathrm{id}_{D'}$, 由此推出 $\iota$ 与 $\iota'$ 是互为逆的同构, 正是定理断言存在的典范同构.
+
+在定理~\mtref{thm:4.5.2} 的情形中, 其证明我们将在下面继续, 人们把 $K$-向量空间 $D$ 称为 $V$ 的 $r$ 重外积或 $r$ 次\emph{外幂}(\textup{äußere Potenz})\index{waimi@外幂(äußere Potenz)}, 并为此使用记号 $\bigwedge^r V$.元组 $(a_1, \ldots, a_r) \in V^r$ 在多重线性交替映射 $\sigma \colon V^r \longrightarrow \bigwedge^r V$ 下的像记为
+
+\[
+a_1 \wedge \cdots \wedge a_r,
+\]
+
+其中人们也把这称为元素 $a_1, \ldots, a_r$ 的外积或\emph{楔积}(\textup{Dachprodukt})\index{xieji@楔积(Dachprodukt)}.这种乘积在单个因子里是线性和交替的, 即对固定指标 $i \in \{1, \ldots, r\}$ 和元素 $\alpha, \beta \in K$, $a_1, \ldots, a_r, b_i \in V$ 成立
+
+\[
+\begin{array}{c}
+a_1 \wedge \cdots \wedge (\alpha a_i + \beta b_i) \wedge \cdots \wedge a_r \\
+= \alpha \cdot (a_1 \wedge \cdots \wedge a_i \wedge \cdots \wedge a_r) + \beta \cdot (a_1 \wedge \cdots \wedge b_i \wedge \cdots \wedge a_r),
+\end{array}
+\]
+
+以及: 若向量 $a_1, \ldots, a_r$ 不两两不同, 则 $a_1 \wedge \cdots \wedge a_r = 0$.我们甚至可以从 $\bigwedge^r V$ 的泛映射性质提取出下列信息:
+
+\begin{remark}\label{rem:4.5.3}
+$K$-向量空间 $\bigwedge^r V$ 由元素 $a_1 \wedge \cdots \wedge a_r$($a_1, \ldots, a_r \in V$)生成.
+\end{remark}
+
+\begin{proof}
+设 $D' \subset \bigwedge^r V$ 是由所有形如 $a_1 \wedge \cdots \wedge a_r$ 的元素生成的线性子空间.由于 $\sigma \colon V^r \longrightarrow \bigwedge^r V$ 的像位于 $D'$ 中, 每个分解
+
+\[
+\Phi \colon V^r \xrightarrow{\sigma} \bigwedge^r V \xrightarrow{\varphi} W
+\]
+
+的交替多重线性映射 $\Phi \colon V^r \longrightarrow W$ 自动导致一个分解
+
+\[
+\Phi \colon V^r \xrightarrow{\sigma} D' \xrightarrow{\varphi'} W
+\]
+
+其中 $\varphi' = \varphi|_{D'}$.现在, 由于等式 $\Phi = \varphi' \circ \sigma$, $\varphi'$ 在 $\operatorname{im} \sigma$ 上必然是唯一确定的, 从而也在 $D'$ 中由 $\operatorname{im} \sigma$ 生成的线性子空间上, 即在 $D'$ 本身上唯一确定.因此 $D'$ 连同 $\sigma$ 满足外积的泛性质, 并且像上面那样看到, 嵌入 $D' \hookrightarrow \bigwedge^r V$ 是同构, 作为包含映射因而就是恒等.所以形如 $a_1 \wedge \cdots \wedge a_r$ 的元素确实构成 $D' = \bigwedge^r V$ 的生成系.
+\end{proof}
+
+我们在这里第一次经历这样的情形: 数学对象, 即 $K$-向量空间 $\bigwedge^r V$ 与交替多重线性映射
+
+\[
+\sigma \colon V^r \longrightarrow \bigwedge^r V, \quad (a_1, \ldots, a_r) \longmapsto a_1 \wedge \cdots \wedge a_r,
+\]
+
+不是以具体方式, 而只是到差一个典范同构为止地被定义.当然还必须证明, 具有所规定性质的对象确实存在.我们将为此使用一个显式的构造方法, 不过由于它的一般性质, 可能只有次要的意义.取而代之, 起刻画作用的泛性质是驾驭向量空间 $\bigwedge^r V$ 的决定性工具.
+
+为了结束定理~\mtref{thm:4.5.2} 的证明, 还需验证: 存在一个 $K$-向量空间 $D$, 连同交替多重线性映射 $\sigma \colon V^r \longrightarrow D$, 使它具有所断言的泛映射性质.为此, 受注记~\mtref{rem:4.5.3} 的断言启发, 我们考虑由一切符号 $v \in V^r$ 生成的自由 $K$-向量空间, 即
+
+\[
+\hat{D} = \left\{(\alpha_v)_{v \in V^r};\; \alpha_v \in K, \ \alpha_v = 0 \text{ 对几乎一切 } v \right\},
+\]
+
+把它视为笛卡尔积 $K^{V^r}$ 的线性子空间.元素组
+
+\[
+e_v = \left(\delta_{v, v'}\right)_{v' \in V^r}, \quad v \in V^r,
+\]
+
+构成 $\hat{D}$ 的一个基, 其中对元组 $v = (a_1, \ldots, a_r) \in V^r$, 除了 $e_v$ 之外我们也更详细地写 $e_{(a_1, \ldots, a_r)}$.
+
+设 $R \subset \hat{D}$ 是由所有下列形式的元素
+
+\[
+\begin{array}{c}
+e_{(\ldots, \alpha a + \beta b, \ldots)} - \alpha \cdot e_{(\ldots, a, \ldots)} - \beta \cdot e_{(\ldots, b, \ldots)}, \\
+e_{(\ldots, a, \ldots, a, \ldots)}
+\end{array}
+\]
+
+生成的线性子空间, 其中 $\alpha, \beta \in K$, $a, b \in V$(对第一种类型的元素, 各分量位于一个固定位置 $i$, 而其余分量在全部三个项中都保持不变).然后令 $D = \hat{D} / R$, 并把基元素 $e_{(a_1, \ldots, a_r)} \in \hat{D}$ 的剩余类记为 $a_1 \wedge \cdots \wedge a_r$.于是按 $R$ 的定义, 映射
+
+\[
+\sigma \colon V^r \longrightarrow D, \quad (a_1, \ldots, a_r) \longmapsto e_{(a_1, \ldots, a_r)} \longmapsto a_1 \wedge \cdots \wedge a_r,
+\]
+
+可以说是被迫成为多重线性和交替的.为看出 $\sigma$ 具有所断言的泛映射性质, 考虑到 $K$-向量空间 $W$ 中的交替多重线性映射 $\Phi \colon V^r \longrightarrow W$.则可以通过规定 $\hat{D}$ 的典范基 $(e_v)_{v \in V^r}$ 的像来定义一个映射 $\hat{\varphi} \colon \hat{D} \longrightarrow W$, 具体地由
+
+\[
+\hat{\varphi}\left(e_{(a_1, \ldots, a_r)}\right) = \Phi(a_1, \ldots, a_r), \quad (a_1, \ldots, a_r) \in V^r.
+\]
+
+为此可参见定理~\mtref{thm:2.1.7}(ii), 它需要在一个对未必有限的基也适用的版本中.于是产生下面的交换图, 其中映射 $\varphi$ 的存在性还需要解释:
+
+\begin{center}
+\begin{tikzcd}[row sep=huge, column sep=large]
+V^r \arrow[r, "\sigma"] \arrow[rd, "\Phi"'] & \hat{D} \arrow[d, "\hat{\varphi}"'] \arrow[r, "p"] & D \arrow[dl, "\varphi"] \\
+& W &
+\end{tikzcd}
+\end{center}
+
+由 $\Phi$ 多重线性和交替这一性质立即得到, $\ker \hat{\varphi}$ 包含 $R$ 的所有生成元, 因而包含 $R$ 本身.利用同态定理~\mtref{thm:2.2.8} 随之得到, $\hat{\varphi}$ 穿过商 $D = \hat{D} / R$, 即可以写成投影 $\hat{D} \longrightarrow D$ 与 $K$-线性映射 $\varphi \colon D \longrightarrow W$ 的复合, 其中 $\varphi$ 满足等式
+
+\begin{equation}
+\varphi(a_1 \wedge \cdots \wedge a_r) = \Phi(a_1, \ldots, a_r) \tag{$\ast$}
+\end{equation}
+
+对 $(a_1, \ldots, a_r) \in V^r$; 但这意味着 $\Phi = \varphi \circ \sigma$.
+
+现在还需弄清, $\varphi$ 由等式 $\Phi = \varphi \circ \sigma$ 唯一确定.若该等式成立, 即 ($\ast$) 对 $V^r$ 中的所有元组成立, 则作为 $K$-线性映射, $\varphi$ 至少在 $D$ 中由所有形如 $a_1 \wedge \cdots \wedge a_r$ 的元素生成的线性子空间上唯一确定; 参见定理~\mtref{thm:2.1.7}.这个子空间与 $D$ 相同, 因为按我们的构造, 元素 $e_{(a_1, \ldots, a_r)}$ 构成 $\hat{D}$ 的一个基, 因而元素 $a_1 \wedge \cdots \wedge a_r$ 仍然生成商向量空间 $D$.
+
+上面的构造在 $r = 0$ 的情形给出一个一维 $K$-向量空间 $\bigwedge^0 V$, 它由 $V^0$ 中空元组的像生成.这样的情形自然可以具体化: 令 $\bigwedge^0 V := K$, 其中约定乘积 $a_1 \wedge \cdots \wedge a_r$ 在 $r = 0$ 时为空, 因而具有值 $1$.
+
+接下来我们要考虑, 如何从 $K$-向量空间 $V$ 的一个基 $X = (x_1, \ldots, x_n)$ 出发得到 $\bigwedge^r V$ 的一个基.为此, 对 $n, r \in \mathbb{N}$, 用 $Z_r^n$ 表示 $\{1, \ldots, n\}$ 的一切 $r$ 元素子集的集合.此外, 对元素 $H \in Z_r^n$, 通过 $x_H = x_{h_1} \wedge \cdots \wedge x_{h_r}$ 定义向量 $x_H \in \bigwedge^r V$, 其中把 $H = \{h_1, \ldots, h_r\}$ 写成 $h_1 < \cdots < h_r$.对元素 $a_1, \ldots, a_r \in V$, 例如 $a_j = \sum_{i = 1}^{n} \alpha_{ij} x_i$ 带系数 $\alpha_{ij} \in K$, 我们还定义
+
+\[
+\det_{X, H}(a_1, \ldots, a_r) = \sum_{\pi \in \mathfrak{S}_r} \sgn(\pi) \cdot \alpha_{h_{\pi(1)}, 1} \cdots \alpha_{h_{\pi(r)}, r}.
+\]
+
+因此, $\det_{X, H}(a_1, \ldots, a_r)$, 除 $r = 0$ 这个也许平凡的情形外, 就是那个 $(r \times r)$ 矩阵的行列式, 它由 $(n \times r)$ 矩阵 $(a_{1, X}, \ldots, a_{r, X})$ 删去所有指标 $i \notin H$ 的行而得到; 其中 $a_{j, X}$ 分别是 $a_j$ 关于基 $X$ 的坐标列向量, $j = 1, \ldots, r$.特别得到, $\det_{X, H} \colon V^r \longrightarrow K$ 是交替多重线性映射.
+
+\begin{theorem}\label{thm:4.5.4}
+如前所述, 考虑带基 $X = (x_1, \ldots, x_n)$ 的 $K$-向量空间 $V$, 以及 $r$ 次外幂 $\bigwedge^r V$.
+\begin{enumerate}
+\item[(i)] 元素 $x_H$, $H \in Z_r^n$, 构成 $\bigwedge^r V$ 的一个基.特别地, $\dim_K \left(\bigwedge^r V\right) = \binom{n}{r}$;
+\item[(ii)] 对任意元素 $a_1, \ldots, a_r \in V$ 成立
+
+\[
+a_1 \wedge \cdots \wedge a_r = \sum_{H \in Z_r^n} \det_{X, H}(a_1, \ldots, a_r) \, x_H.
+\]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+$r = 0$ 的情形是平凡的; 故设 $r > 0$.作为交替多重线性映射, $\det_{X, H} \colon V^r \longrightarrow K$ 穿过一个 $K$-线性映射
+
+\[
+d_{X, H} \colon \bigwedge^r V \longrightarrow K,
+\]
+
+并且对 $H, H' \in Z_r^n$ 有 $d_{X, H}(x_{H'}) = \delta_{H, H'}$, 这容易看出.后面这些等式只有当下面的条件成立时才可能存在: 元素 $x_H$, $H \in Z_r^n$, 线性无关.至于 $x_H$ 构成生成系, 从而整体上构成 $\bigwedge^r V$ 的一个基, 则从 (ii) 得出, 因为形如 $a_1 \wedge \cdots \wedge a_r$ 的元素构成生成系.
+
+因此只需再验证断言 (ii).把 $a_j = \sum_{i = 1}^{n} \alpha_{ij} x_i$ 写成带系数 $\alpha_{ij} \in K$ 的形式, 则可以如下计算:
+
+\[
+\begin{array}{l}
+a_1 \wedge \cdots \wedge a_r = \sum_{i_1, \ldots, i_r = 1}^{n} \alpha_{i_1, 1} \cdots \alpha_{i_r, r} \cdot x_{i_1} \wedge \cdots \wedge x_{i_r} \\
+= \sum_{H \in Z_r^n} \sum_{\pi \in \mathfrak{S}_r} \sgn(\pi) \alpha_{h_{\pi(1)}, 1} \cdots \alpha_{h_{\pi(r)}, r} \cdot x_H \\
+= \sum_{H \in Z_r^n} \det_{X, H}(a_1, \ldots, a_r) \cdot x_H.
+\end{array}
+\]
+\end{proof}
+
+刚才的证明还表明, 由交替多重线性映射 $\det_{X, H} \colon V^r \to K$ 诱导的 $K$-线性映射 $d_{X, H} \colon \bigwedge^r V \to K$ 构成对偶空间 $(\bigwedge^r V)^*$ 的一个基, 它恰是由元素 $x_H$ 构成的 $\bigwedge^r V$ 之基的对偶基.
+
+若 $f \colon V \longrightarrow W$ 是 $K$-向量空间之间的线性映射, 则对 $r \in \mathbb{N}$ 存在唯一的 $K$-线性映射
+
+\[
+\bigwedge^r f \colon \bigwedge^r V \longrightarrow \bigwedge^r W
+\]
+
+满足
+
+\[
+\bigwedge^r f(a_1 \wedge \cdots \wedge a_r) = f(a_1) \wedge \cdots \wedge f(a_r).
+\]
+
+$\bigwedge^r f$ 的唯一性是显然的, 因为形如 $a_1 \wedge \cdots \wedge a_r$ 的元素生成向量空间 $\bigwedge^r V$.为证存在性, 在 $r > 0$ 的情形考虑交替多重线性映射
+
+\[
+V^r \longrightarrow \bigwedge^r W, \quad (a_1, \ldots, a_r) \longmapsto f(a_1) \wedge \cdots \wedge f(a_r),
+\]
+
+并利用它穿过 $\bigwedge^r V$ 这一事实.
+
+\begin{corollary}\label{cor:4.5.5}
+设 $f \colon V \longrightarrow V$ 是有限维数 $n$ 的 $K$-向量空间 $V$ 的一个自同态.则相应的自同态
+
+\[
+\bigwedge^n f \colon \bigwedge^n V \longrightarrow \bigwedge^n V
+\]
+
+正是乘以 $\det(f) \in K$.
+\end{corollary}
+
+\begin{proof}
+选取 $V$ 的一个基 $X = (x_1, \ldots, x_n)$.则
+
+\[
+\left(\bigwedge^n f\right)(x_1 \wedge \cdots \wedge x_n) = f(x_1) \wedge \cdots \wedge f(x_n),
+\]
+
+并且按定理~\mtref{thm:4.5.4}
+
+\[
+f(x_1) \wedge \cdots \wedge f(x_n) = \det\big(f(x_1)_X, \ldots, f(x_n)_X\big) \cdot x_1 \wedge \cdots \wedge x_n.
+\]
+
+由于 $x_1 \wedge \cdots \wedge x_n$ 构成 $\bigwedge^n V$ 的一个基, 断言随之得出.
+\end{proof}
+
+我们现在还想证明, 楔积"$\wedge$"可以在一个合适的环中理解为一种乘法.
+
+\begin{lemma}\label{lem:4.5.6}
+设 $V$ 是 $K$-向量空间.对 $r, s \in \mathbb{N}$, 存在一个 $K$-双线性映射
+
+\[
+\begin{array}{c}
+\wedge \colon \bigwedge^r V \times \bigwedge^s V \longrightarrow \bigwedge^{r + s} V, \\
+(a_1 \wedge \cdots \wedge a_r, b_1 \wedge \cdots \wedge b_s) \longmapsto a_1 \wedge \cdots \wedge a_r \wedge b_1 \wedge \cdots \wedge b_s,
+\end{array}
+\]
+
+它由给出的映射规则唯一刻画.
+\end{lemma}
+
+\begin{proof}
+考虑交替多重线性映射
+
+\[
+\begin{array}{c}
+\Phi \colon V^{r + s} \longrightarrow \bigwedge^{r + s} V, \\
+(a_1, \ldots, a_r, b_1, \ldots, b_s) \longmapsto a_1 \wedge \cdots \wedge a_r \wedge b_1 \wedge \cdots \wedge b_s,
+\end{array}
+\]
+
+其中我们假设 $r, s > 0$.$r = 0$ 或 $s = 0$ 的情形可以类似地处理, 使用空乘积具有值 $1$ 的约定.对固定选取的元素 $a_1, \ldots, a_r \in V$, 得到一个交替多重线性映射
+
+\[
+\begin{array}{c}
+V^s \longrightarrow \bigwedge^{r + s} V, \\
+(b_1, \ldots, b_s) \longmapsto a_1 \wedge \cdots \wedge a_r \wedge b_1 \wedge \cdots \wedge b_s,
+\end{array}
+\]
+
+它穿过 $\bigwedge^s V$.因此 $\Phi$ 诱导一个映射
+
+\[
+\begin{array}{c}
+\Phi' \colon V^r \times \bigwedge^s V \longrightarrow \bigwedge^{r + s} V, \\
+\left(a_1, \ldots, a_r, \sum_{j} b_{j1} \wedge \cdots \wedge b_{js}\right) \longmapsto \sum_{j} a_1 \wedge \cdots \wedge a_r \wedge b_{j1} \wedge \cdots \wedge b_{js},
+\end{array}
+\]
+
+并且由于形如 $a_1 \wedge \cdots \wedge a_r \wedge b_1 \wedge \cdots \wedge b_s$ 的楔积在单个因子里多重线性和交替, 可以看到对固定的 $b \in \bigwedge^s V$, $\Phi'(\cdot, b)$ 在 $V^r$ 上多重线性和交替.因此 $\Phi'$ 诱导一个映射
+
+\[
+\begin{array}{c}
+\Phi'' \colon \bigwedge^r V \times \bigwedge^s V \longrightarrow \bigwedge^{r + s} V, \\
+\left(\sum_{i} a_{i1} \wedge \cdots \wedge a_{ir}, \sum_{j} b_{j1} \wedge \cdots \wedge b_{js}\right) \longmapsto \sum_{i j} a_{i1} \wedge \cdots \wedge a_{ir} \wedge b_{j1} \wedge \cdots \wedge b_{js},
+\end{array}
+\]
+
+使得对一切 $b \in \bigwedge^s V$, $\Phi''(\cdot, b)$ 在 $\bigwedge^r V$ 上 $K$-线性.楔积的计算规则随后表明, $\Phi''$ 如所希望的那样甚至是 $K$-双线性的.至于 $\Phi''$ 由给出的映射规则唯一刻画, 则由形如 $a_1 \wedge \cdots \wedge a_r$ 的元素构成 $\bigwedge^r V$ 的生成系,且 $\bigwedge^s V$ 相应地也如此这一事实得出.
+\end{proof}
+
+现在可以对 $K$-向量空间 $V$ 构造一切外幂的(所构造的)直和
+
+\[
+\bigwedge V = \bigoplus_{r \in \mathbb{N}} \bigwedge^r V,
+\]
+
+这与 \ref{sec:1.6} 节类似, 指的是笛卡尔积 $\prod_{r \in \mathbb{N}} \bigwedge^r V$ 中由一切族 $(\lambda_r)_{r \in \mathbb{N}}$ 组成的部分, 其中 $\lambda_r \in \bigwedge^r V$ 且对几乎一切 $r \in \mathbb{N}$ 有 $\lambda_r = 0$.$\bigwedge V$ 以自然的方式是 $K$-向量空间, 并且可以证明, 引理~\mtref{lem:4.5.6} 中考虑的 $\bigwedge^r V \times \bigwedge^s V \longrightarrow \bigwedge^{r + s} V$ 类型的映射在 $\bigwedge V$ 上定义了一种乘法, 使得 $\bigwedge V$ 成为一个环.其中 $K = \bigwedge^0 V$ 以\emph{典范的}(\textup{kanonisch})\index{dianfande@典范的(kanonisch)}方式被看作 $\bigwedge V$ 的\emph{子环}(\textup{Unterring})\index{zihuan@子环(Unterring)}, 并称之为 $K$-代数.更确切地说, $\bigwedge V$ 称为 $V$ 的\emph{外代数}(\textup{äußere Algebra})\index{waidaishu@外代数(äußere Algebra)}.
+
+我们在这里只想利用引理~\mtref{lem:4.5.6} 中的乘法来推导行列式的一般的拉普拉斯\emph{展开定理}(\textup{Entwicklungssatz})\index{zhankaidingli@展开定理(Entwicklungssatz)}.为此再次考虑带基 $X = (x_1, \ldots, x_n)$ 的 $K$-向量空间 $V$, 并使用与定理~\mtref{thm:4.5.4} 中相同的记号, 特别地回顾元素 $H \in Z_r^n$ 的交替多重线性映射 $\det_{X, H} \colon V^r \longrightarrow K$.其中 $\det_{X, \{1, \ldots, n\}}$ 与定理~\mtref{thm:4.2.8} 中引入的行列式函数 $\det_X$ 一致.此外, 对 $H \in Z_r^n$, 把 $H^{\dagger} \in Z_{n-r}^n$ 定义为补集 $\{1, \ldots, n\} - H$, 并令 $\rho_H = (-1)^{\nu}$, 其中 $\nu$ 表示满足 $h > h^{\dagger}$ 的对 $(h, h^{\dagger}) \in H \times H^{\dagger}$ 的个数.
+
+\begin{theorem}[一般的拉普拉斯展开定理]\label{thm:4.5.7}\index{lapulasizhankai@拉普拉斯展开(Laplace'scher Entwicklungssatz)}
+设 $V$ 是带基 $X = (x_1, \ldots, x_n)$ 的 $K$-向量空间.用前面的记号, 对 $1 \leq r < n$ 和向量 $a_1, \ldots, a_n \in V$ 成立:
+
+\[
+\det_X(a_1, \ldots, a_n) = \sum_{H \in Z_r^n} \rho_H \cdot \det_{X, H}(a_1, \ldots, a_r) \cdot \det_{X, H^{\dagger}}(a_{r+1}, \ldots, a_n)
+\]
+\end{theorem}
+
+\begin{proof}
+利用定理~\mtref{thm:4.5.4} 和引理~\mtref{lem:4.5.6} 可以如下计算:
+
+\[
+\begin{array}{l}
+\det_X(a_1, \ldots, a_n) \cdot x_1 \wedge \cdots \wedge x_n \\
+= a_1 \wedge \cdots \wedge a_n \\
+= (a_1 \wedge \cdots \wedge a_r) \wedge (a_{r+1} \wedge \cdots \wedge a_n) \\
+= \left(\sum_{H \in Z_r^n} \det_{X, H}(a_1, \ldots, a_r) \cdot x_H\right) \wedge \left(\sum_{H \in Z_{n-r}^n} \det_{X, H}(a_{r+1}, \ldots, a_n) \cdot x_H\right) \\
+= \sum_{H \in Z_r^n} \det_{X, H}(a_1, \ldots, a_r) \cdot \det_{X, H^{\dagger}}(a_{r+1}, \ldots, a_n) \cdot x_H \wedge x_{H^{\dagger}} \\
+= \sum_{H \in Z_r^n} \rho_H \cdot \det_{X, H}(a_1, \ldots, a_r) \cdot \det_{X, H^{\dagger}}(a_{r+1}, \ldots, a_n) \cdot x_1 \wedge \cdots \wedge x_n
+\end{array}
+\]
+
+由于 $x_1 \wedge \cdots \wedge x_n$ 构成 $\bigwedge^n V$ 的一个基, 特别不为零, 故得到所希望的关系.
+\end{proof}
+
+把定理~\mtref{thm:4.5.7} 应用于 $V = K^n$ 和典范基, 推导出的公式描述了一个 $(n \times n)$ 矩阵的行列式按前 $r$ 列的展开.通过交换列并考虑相应的符号, 可以得到按任意给定的 $r$ 列的展开定理.此外, 通过转置, 还可以由此得到按给定的 $r$ 行的展开定理.
+
+\aufgaben
+
+\noindent\textbf{习题 1.} 设 $V$ 是 $K$-向量空间, $U \subset V$ 是线性子空间.表述一个刻画商向量空间 $V/U$ 的泛性质.
+
+\medskip
+\noindent\textbf{习题 2.} 设 $V$ 是 $K$-向量空间.证明: 给定的向量 $a_1, \ldots, a_r \in V$ 线性无关, 当且仅当元素 $a_1 \wedge \cdots \wedge a_r \in \bigwedge^r V$ 非平凡.(AT 337)
+
+\medskip
+\noindent\textbf{习题 3.} 设 $f \colon V \longrightarrow W$ 是 $K$-向量空间之间的线性映射.证明: 对 $r \in \mathbb{N}$, 若 $f$ 具有单射或满射的性质, 则映射
+
+\[
+\bigwedge^r f \colon \bigwedge^r V \longrightarrow \bigwedge^r W
+\]
+
+也具有相应的性质.
+
+\medskip
+\noindent\textbf{习题 4.} 设 $V$ 是维数 $n < \infty$ 的 $K$-向量空间.确定
+
+\[
+\dim \bigoplus_{r \in \mathbb{N}} \left(\bigwedge^r V\right).
+\]
+
+\medskip
+\noindent\textbf{习题 5.} 设 $K$ 是特征为 $0$ 的域, 即对 $n \in \mathbb{N}$, 幺元 $1_K \in K$ 的 $n$ 重和 $n \cdot 1_K$ 当且仅当 $n = 0$ 时消失.再考虑 $K$-向量空间 $V$ 及其外积 $\bigwedge^2 V$, 它由一切形如 $x \wedge y$($x, y \in V$)的乘积的有限和组成.对 $z \in \bigwedge^2 V$, 用 $\mathrm{rg}\, z$ 表示所有使得存在分解 $z = \sum_{i = 1}^{r} x_i \wedge y_i$($x_i, y_i \in V$)的 $r \in \mathbb{N}$ 的最小值; $\mathrm{rg}\, z$ 称为 $z$ 的秩.对 $z \in \bigwedge^2 V$ 与 $r \in \mathbb{N}$, 证明下列断言等价 (AT 338):
+\begin{enumerate}
+\item[(i)] $\mathrm{rg}\, z = r$;
+\item[(ii)] $z^r \neq 0$ 且 $z^{r+1} = 0$, 其中幂在 $V$ 的外代数 $\bigwedge V$ 中求.
+\end{enumerate}
+
+提示: 可以使用习题 2.
+
+\medskip
+\noindent\textbf{习题 6.} \emph{对称积}(\textup{symmetrisches Produkt})\index{duichenji@对称积(symmetrisches Produkt)}: 设 $V$ 是 $K$-向量空间, $r \in \mathbb{N}$.到 $K$-向量空间 $W$ 中的映射 $\Phi \colon V^r \longrightarrow W$ 称为对称的, 如果对一切 $r$ 元组 $(a_1, \ldots, a_r) \in V^r$ 和一切置换 $\pi \in \mathfrak{S}_r$ 有 $\Phi(a_{\pi(1)}, \ldots, a_{\pi(r)}) = \Phi(a_1, \ldots, a_r)$.证明: 存在一个带对称多重线性映射 $\sigma \colon V^r \longrightarrow P$ 的 $K$-向量空间 $P$, 它满足下列泛性质:
+
+对每个到 $K$-向量空间 $W$ 中的对称多重线性映射 $\Phi \colon V^r \longrightarrow W$, 存在唯一的满足 $\Phi = \varphi \circ \sigma$ 的 $K$-线性映射 $\varphi \colon P \longrightarrow W$.
+
+人们把 $P$ 称为 $V$ 的第 $r$ 个\emph{对称幂}(\textup{symmetrische Potenz})\index{duichenmi@对称幂(symmetrische Potenz)}.

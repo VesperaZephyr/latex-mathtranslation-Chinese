@@ -1,0 +1,137 @@
+% !TEX program = xelatex
+%
+% "线性代数"中译本
+% 原书: Siegfried Bosch, Lineare Algebra, 5., überarbeitete und erweiterte Auflage,
+%       Springer Spektrum, Berlin 2014.
+% 使用 AJbook 模板重排.
+%
+% 编译方式: xelatex main -> xelatex main -> texindy main.idx -> xelatex main
+% 说明:
+%   - 定理编号与原书一致, 采用 "节/目" 的格式, 例如 1.5/14 表示第 1 章第 5 节第 14 条.
+%   - 各节的习题以 \subsection*{习题} 形式出现, 不进入目录.
+%   - 文中 "定理""大定理""引理""推论""定义""注记""例""法则" 共用同一个计数器,
+%     与节号连排, 与原书编号方式相符.
+
+\documentclass[
+	11pt,
+	geometry=a4,
+	coverpage=coverpage,
+	fontsetup=font-setup-open,
+	titlesetup=titles-setup,
+]{AJbook}
+
+% ===== 常用数学命令与可交换箭头 =====
+\usepackage{mycommand}
+\usepackage{myarrows}
+\usepackage{tikz-cd}
+
+% amsmath 的 matrix/pmatrix 默认最多 10 列, 本书矩阵可达 16 列, 故提高上限.
+\setcounter{MaxMatrixCols}{20}
+
+% 允许 TeX 适当放宽单词间距, 缓解长公式造成的 Overfull 行
+\setlength{\emergencystretch}{3em}
+
+% 符号表跨页需要
+\usepackage{longtable}
+
+% ===== 超链接 (中文支持) =====
+\usepackage[bookmarksnumbered]{hyperref}
+
+% ===== 索引 =====
+% 名词索引兼作德汉术语对照: 条目格式为 \index{拼音@中文译名(德语术语)},
+% 因此排序键 (拼音) 与显示文字 (中文+德语) 分离, 由 xindy 以 UTF-8 处理.
+\usepackage[xindy]{imakeidx}
+% 索引内的交叉引用文字 (「见 / 另见」), 与 xindy 的 |see / |seealso 对应.
+% \see/\seealso 由 imakeidx 提供 (内部调用 \seename/\alsoname), 这里只改中文.
+\renewcommand{\seename}{\quad 见}
+\renewcommand{\alsoname}{\quad 另见}
+\makeindex[
+	columns=2,
+	program=truexindy,
+	intoc=false,
+	options=-M texindy -I xelatex -C utf8,
+	title={名词索引暨德汉术语对照}]
+
+% ===== 编号约定 (与原书一致) =====
+% 原书在定理类环境的标题里只印**节内序号**: 「Definition 1」「Satz 4」「Korollar 12」……
+% 所以 \thetheorem 只给 \arabic{theorem}; 而正文里的交叉引用需要能定位, 故给出
+% 完整编号「节/目」(如 1.5/8), 由 \mtref 生成 —— 这与原书自身引用其它条目的做法一致
+% (原书正文写 "Satz 1.5/8", 自己的标题写 "Satz 8").
+\newcommand{\AJseccount}{%
+	\renewcommand{\thetheorem}{\arabic{theorem}}%
+}
+\newcommand{\AJsubseccount}{%
+	\renewcommand{\thetheorem}{\arabic{theorem}}%
+}
+
+% \mtref{thm:1.5.8} -> 「1.5/8」: 由标签名直接推出章.节, 再拼上该条目的节内序号.
+% 用法: 定理~\mtref{thm:1.5.8}
+\makeatletter
+\newcommand{\mtref}[1]{\mt@refA#1\@nil}
+\def\mt@refA#1:#2.#3.#4\@nil{#2.#3/\ref{#1:#2.#3.#4}}
+\makeatother
+
+% ===== 各节末尾的习题标题 =====
+\newcommand{\aufgaben}{\subsection*{习题}\nopagebreak}
+
+% ===== 例的编号: 与原书一致, 各节内以 (1), (2), ... 单独编号 =====
+\newcounter{bspctr}[section]
+\renewcommand{\thebspctr}{(\arabic{bspctr})}
+
+\AtBeginDocument{%
+	% 补充定理类环境: 大定理 (Theorem) 与法则 (Regel), 与原书共用计数器.
+	\theorembodyfont{\fangsong}%
+	\newtheorem{bigtheorem}[theorem]{大定理}%
+	\theorembodyfont{\songti}%
+	\newtheorem{regel}[theorem]{法则}%
+	\theorembodyfont{}%
+	\theoremheaderfont{\sffamily\bfseries\thmheiti}%
+	\theoremseparator{\ }%
+	\theoremsymbol{}%
+	\newtheorem{bsp}[bspctr]{例}%
+	% 恢复证明样式, 以免影响后文
+	\theoremheaderfont{\sffamily\bfseries\CJKfamily{pffont}}%
+	\theoremseparator{\enspace}%
+	\theoremsymbol{\openbox}%
+	% cleveref 名称
+	\crefname{bigtheorem}{大定理}{大定理}%
+	\crefname{regel}{法则}{法则}%
+	\crefname{bsp}{例}{例}%
+	% 初始编号格式 (与原书一致: 标题只印节内序号)
+	\renewcommand{\thetheorem}{\arabic{theorem}}%
+}
+
+\begin{document}
+
+\frontmatter
+
+\mainmatter
+\input{chapters/01-向量空间}
+\input{chapters/02-线性映射}
+\input{chapters/03-矩阵}
+\input{chapters/04-行列式}
+\input{chapters/05-多项式}
+\input{chapters/06-标准形理论}
+\input{chapters/07-欧几里得与酉向量空间}
+
+% ===== 附录: 习题训练 =====
+% 无编号章在正文中会自动加入目录 (见 titles-setup.tex), 无需重复 \addcontentsline.
+\chapter*{习题训练}
+\markboth{习题训练}{}
+\input{chapters/08-习题训练}
+
+% ===== 附录: 符号表 =====
+\chapter*{符号表}
+\markboth{符号表}{}
+\input{chapters/09-符号表}
+
+% ===== 索引 =====
+% 原书无参考文献 (原书目录中只有 Symbolverzeichnis 与 Namen- und Sachverzeichnis),
+% 故本译本不设参考文献.
+\backmatter
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{名词索引暨德汉术语对照}
+\printindex
+
+\end{document}

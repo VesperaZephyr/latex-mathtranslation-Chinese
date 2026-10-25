@@ -1,0 +1,1056 @@
+% chapters/ch11.tex - 第 11 章: de Sitter 空间上线型波的迟时渐近性
+\input{chapters/tikz_ch11.tex}
+
+\chapter[de Sitter 空间上线型波的迟时渐近性]{de Sitter 空间上线型波的\\迟时渐近性}\label{ch:11}
+
+\index{de Sitter shikong@de Sitter 时空 (de Sitter space)}%
+\index{chishi jianjinzhan@迟时渐近展开 (late-time asymptotics)}%
+\index{sanse xiezhen@散射谐振 (scattering resonances)}%
+在本书的最后一章中, 我们结合所发展的几乎所有微局部工具, 放一场小小的微局部“烟花”, 以便精确刻画广义相对论中感兴趣的时空——\textbf{de Sitter 空间} (更确切地说是 de Sitter 空间静态贴片的邻域) 上线型波动型方程解的渐近 (迟时) 行为. 我们在第~\ref{sec:11.1}~节中描述该时空及其上的零测地流. 接着在第~\ref{sec:11.2}~节中陈述主要结论并勾勒其证明. 证明细节在第~\ref{sec:11.3}--\ref{sec:11.5}~节中给出. 我们在第~\ref{sec:11.6}~节中描述一个简单的非线性应用.
+
+就所考虑的时空而言, 我们并不追求任何一般性. 通过在一个简单、显式且具有几何趣味的时空上工作, 我们可以让分析工具成为关注的中心.
+
+\section{de Sitter 空间的几何}\label{sec:11.1}
+\index{Killing xiangliangchang@Killing 向量场 (Killing vector field)}%
+\index{yuzhouxue shijie@宇宙学视界 (cosmological horizon)}%
+\index{jingtai zuobiao@静态坐标 (static coordinates)}%
+
+我们将在如下时空流形上展开工作:
+
+\begin{definition}[$(2+1)$ 维 de Sitter 空间]\label{def:11.1}
+设 $X \defeq \{x \in \R^2 : |x| \le 2\}$, 并设时空流形为 $M \defeq \R_t \times X$. 记 $\R^2$ 中的点为 $x = (x_1, x_2)$. 则 $M$ 上的 \textbf{de Sitter 度量} (de Sitter metric) $g$ 定义为
+\begin{equation}\label{eq:11.1}
+    g \defeq -(1 - |x|^2) \,\dd t^2 - 2 \,\dd t \otimes_s (x \cdot \dd x) + \dd x^2,
+\end{equation}
+其中对称张量积记为 $\alpha \otimes_s \beta \defeq \frac{1}{2}(\alpha \otimes \beta + \beta \otimes \alpha)$, 且 $x \cdot \dd x \defeq x_1 \,\dd x_1 + x_2 \,\dd x_2$, $\dd x^2 \defeq \dd x_1^2 + \dd x_2^2$.
+\end{definition}
+
+\begin{remark}[高维推广]\label{rem:11.2}
+表达式~\eqref{eq:11.1} 同样在任意空间维度 $n \ge 1$ 下良定义了 de Sitter 度量, 此时 $X = \{x \in \R^n : |x| \le 2\}$. 本章中所有的论证均可字句不改地推广至任意维度 (仅某些指标需要根据维度稍作平移). 我们选择空间维度 $n = 2$ 纯粹是为了让几何图像能够直观地绘制在二维平面上.
+\end{remark}
+
+度量 $g$ 是非退化的; 其逆度量 (即余切丛上的对偶度量张量) 显式给出为
+\begin{equation}\label{eq:11.2}
+    g^{-1} = -\partial_t^2 - 2 \partial_t \otimes_s (x \cdot \partial_x) + \partial_x^2 - (x \cdot \partial_x)^2,
+\end{equation}
+其中 $x \cdot \partial_x \defeq x_1 \partial_{x_1} + x_2 \partial_{x_2}$, $\partial_x^2 \defeq \partial_{x_1}^2 + \partial_{x_2}^2$. 在区域 $\{x \ne 0\}$ 内, 采用极坐标 $r > 0$, $\theta \in \R/2\pi\mathbb{Z}$ (即 $x = (r\cos\theta, r\sin\theta)$) 处理更为方便. 此时度量与逆度量分别表为
+\begin{equation}\label{eq:11.3}
+\begin{aligned}
+    g &= -(1 - r^2) \,\dd t^2 - 2 \,\dd t \otimes_s r \,\dd r + \dd r^2 + r^2 \,\dd\theta^2, \\
+    g^{-1} &= -\partial_t^2 - 2 \partial_t \otimes_s r \partial_r + (1 - r^2)\partial_r^2 + r^{-2}\partial_\theta^2.
+\end{aligned}
+\end{equation}
+
+直接由定义可以立即得出时空 $(M, g)$ 的如下基本几何特征:
+\begin{enumerate}[label=(\arabic*)]
+    \item $g$ 是定常的 (stationary), 即 $\mathcal{L}_{\partial_t} g = 0$; 换言之, $\partial_t$ 是时空的一个 Killing 向量场.
+    \item 沿超曲面 $\{t = 0\} = \{0\} \times X$ 的法向余向量为 $\dd t$. 由 $g^{-1}(\dd t, \dd t) = -1 < 0$ 可知, $\dd t$ 在每一点处都是类时的 (timelike). 我们约定取时间有向性使得 $\dd t$ 为过去类时的 (past timelike). (务请注意, “时间”平移的生成元 $\partial_t$ 仅在内部区域 $|x| < 1$ 上才是类时的. 在 $|x| = 1$ 上它是类光的 (null), 而在外部区域 $|x| > 1$ 上它是类空的 (spacelike)!)
+    \item 对于 $r > 1$, 余向量
+    \begin{equation}\label{eq:11.4}
+        \dd r \text{ 是过去类时的},
+    \end{equation}
+    因为在该区域内 $g^{-1}(\dd r, \dd r) = 1 - r^2 < 0$, 且 $g^{-1}(\dd t, \dd r) = -r < 0$.
+    \item 超曲面
+    \begin{equation}\label{eq:11.5}
+        \overline{\mathcal{H}}^+ \defeq r^{-1}(1) \subset M
+    \end{equation}
+    是一个类光超曲面 (null hypersurface), 因为在 $r = 1$ 处余向量 $\dd r$ 是类光的 ($g^{-1}(\dd r, \dd r) = 0$). 它被称为\textbf{宇宙学视界} (cosmological horizon).
+\end{enumerate}
+
+由上述性质, 我们已能对 $(M, g)$ 的因果结构得出直观的结论: 若 $\gamma \colon I \to M$ 是一条未来有向的类光测地线 (即 $\gamma'(s)$ 是未来零向量, 故 $g(\gamma'(s), \dd t) < 0$), 并且在某个参数值处有 $r(\gamma(s_0)) \ge 1$, 则因 $\dd r$ 在 $r > 1$ 上是过去类时的且在 $r = 1$ 上是过去类光的, 必有 $\frac{\dd}{\dd s} r(\gamma(s)) = \dd r(\gamma'(s)) > 0$. 换言之, 任何穿越视界进入外部区域 $r > 1$ 的因果信号都将不可逆地朝向更大的 $r$ 方向逃逸, 绝不可能重新返回内部区域 $r < 1$. 这一因果倾斜现象通过图~\ref{fig:11.1} 中不同半径处类光锥 (光锥) 的演化形象地展现出来: 当从 $r = 0$ 走向 $r > 1$ 时, 向上指的未来光锥越来越向外侧 (即更大的 $r$ 方向) 剧烈倾斜.
+
+\begin{figure}[htbp]
+\centering
+\drawFigElevenOne
+\caption{de Sitter 时空中的三个光锥. 在中心对称轴 $r = 0$ 处, 向量 $\partial_t$ 位于未来光锥内部; 在视界 $\overline{\mathcal{H}}^+$ 处, $\partial_t$ 与光锥边界相切; 在视界外部 $r > 1$ 处, 未来光锥则完全倾斜朝向更大的 $r$.}\label{fig:11.1}
+\end{figure}
+
+全体类光余向量构成的集合
+\begin{equation}\label{eq:11.6}
+    \Sigma^\circ \defeq \{\zeta \in T^* M \setminus o : G(\zeta) = 0\}, \qquad G(\zeta) \defeq g^{-1}(\zeta, \zeta),
+\end{equation}
+是 $T^* M \setminus o$ 的一个光滑锥形余维数 1 子流形, 并且自然分解为两个连通分支:
+\begin{equation}\label{eq:11.7}
+    \Sigma^\circ = \Sigma_+^\circ \sqcup \Sigma_-^\circ, \qquad \Sigma_\pm^\circ \defeq \{\zeta \in \Sigma^\circ : \pm g^{-1}(\zeta, \dd t) < 0\}.
+\end{equation}
+$\Sigma_+^\circ$ (相应地 $\Sigma_-^\circ$) 中的余向量分别被称为未来类光 (future null) 与过去类光 (past null) 余向量.
+
+我们将深入研究提升至相空间的 $(M, g)$ 上未来零测地流. 这里所展现的动力学特性将在第~\ref{sec:11.3}~节与第~\ref{sec:11.4}~节中直接转化为微局部实主型奇性传播估计与径向点顺流估计. 在坐标卡 $(t, r, \theta)$ 下, 将余向量写作 $\zeta = -\sigma \,\dd t + \xi_r \,\dd r + \xi_\theta \,\dd\theta$, 则由式~\eqref{eq:11.3} 可得对偶度量函数 $G$ 为
+\begin{equation}\label{eq:11.8}
+\begin{aligned}
+    G(t, r, \theta, \sigma, \xi_r, \xi_\theta) &= -\sigma^2 + 2r \sigma \xi_r + (1 - r^2)\xi_r^2 + r^{-2}\xi_\theta^2 \\
+    &= -(\sigma - r\xi_r)^2 + \xi_r^2 + r^{-2}\xi_\theta^2.
+\end{aligned}
+\end{equation}
+(在 $\sigma$ 前面冠以负号是微局部分析处理时间变换的标准约定.) 相应地, $G$ 的 Hamilton 向量场的一半为
+\begin{equation}\label{eq:11.9}
+\begin{aligned}
+    \frac{1}{2} H_G &= \frac{1}{2}\left( -(\partial_\sigma G)\partial_t + (\partial_\xi G)\cdot\partial_x - (\partial_t G)\partial_\sigma - (\partial_r G)\partial_{\xi_r} - (\partial_\theta G)\partial_{\xi_\theta} \right) \\
+    &= (\sigma - r\xi_r)\partial_t + \big((\sigma - r\xi_r)r + \xi_r\big)\partial_r + r^{-2}\xi_\theta \partial_\theta - \big((\sigma - r\xi_r)\xi_r - r^{-3}\xi_\theta^2\big)\partial_{\xi_r}.
+\end{aligned}
+\end{equation}
+注意到在 $\Sigma_\pm^\circ$ 上恒有 $0 > \pm g^{-1}(\zeta, \dd t) = \mp \frac{1}{2}\partial_\sigma G(\zeta)$, 故
+\begin{equation}\label{eq:11.10}
+    \pm(\sigma - x \cdot \xi) = \pm(\sigma - r\xi_r) > 0 \qquad (\text{在 } \Sigma_\pm^\circ \text{ 上}).
+\end{equation}
+度量 $g$ 的定常性 (等价于 $\partial_t G = 0$) 意味着 $\frac{1}{2} H_G \sigma = 0$, 即频率参数 $\sigma$ 沿 $H_G$ 流守恒. 此外, 由于在 $\Sigma_+^\circ$ 上 $\frac{\dd t}{\dd s} = \sigma - r\xi_r > 0$, 积分曲线上的物理时间 $t(s)$ 严格单调递增至 $+\infty$, 故可选用物理时间 $t$ 自身作为重参数化的流参数. 将 $\frac{1}{2} H_G$ 在 $X$ 上的投影重新整理, 即定义在相空间子流形上的向量场
+\begin{equation}\label{eq:11.11}
+\begin{aligned}
+    H_\sigma &\defeq \big((\sigma - x \cdot \xi)x + \xi\big)\cdot\partial_x - (\sigma - x \cdot \xi)\xi \cdot \partial_\xi \\
+    &= \big((\sigma - r\xi_r)r + \xi_r\big)\partial_r + r^{-2}\xi_\theta \partial_\theta - \big((\sigma - r\xi_r)\xi_r - r^{-3}\xi_\theta^2\big)\partial_{\xi_r}
+\end{aligned}
+\end{equation}
+作用在特征切片
+\begin{equation}\label{eq:11.12}
+    \Sigma_\sigma^\circ \defeq \{(x, \xi) \in T^* X : (0, x, \sigma, \xi) \in \Sigma^\circ\} = \Sigma_{\sigma, +}^\circ \sqcup \Sigma_{\sigma, -}^\circ
+\end{equation}
+之上, 其中 $\Sigma_{\sigma, \pm}^\circ \defeq \{(x, \xi) \in T^* X : (0, x, \sigma, \xi) \in \Sigma_\pm^\circ\}$. 几何上, $\Sigma_\sigma^\circ$ 正是光锥切面 $\Sigma^\circ$ 与仿射超平面 $-\sigma \,\dd t + T^* X \subset T^* M \cap \{t = 0\}$ 的交集 (见图~\ref{fig:11.2}).
+
+\begin{figure}[htbp]
+\centering
+\drawFigElevenTwo
+\caption{光锥截面 $\Sigma_{0, \pm}^\circ$ 与 $\Sigma_{1, \pm}^\circ$ 在空间余切丛截面上的投影几何示意.}\label{fig:11.2}
+\end{figure}
+
+记 $\Sigma_\sigma$ 为 $\Sigma_\sigma^\circ$ 在紧化余切丛 $\overline{T^*} X$ 中的闭包:
+\begin{equation}\label{eq:11.13}
+    \Sigma_\sigma \defeq \overline{\Sigma_\sigma^\circ} \subset \overline{T^*} X, \qquad \Sigma_{\sigma, \pm} \defeq \overline{\Sigma_{\sigma, \pm}^\circ} \subset \overline{T^*} X \qquad (\sigma \in \R).
+\end{equation}
+它们与纤维无穷远边界 $S^* X = \partial \overline{T^*} X$ 的交集完全不依赖于频率 $\sigma$:
+\begin{equation}\label{eq:11.14}
+    \Sigma_0 \cap S^* X = \Sigma_\sigma \cap S^* X \qquad (\forall \sigma \in \R),
+\end{equation}
+因为这些交集全等于闭集 $\Sigma = \overline{\Sigma^\circ} \subset \overline{T^*} M \setminus o$ 与子流形 $S^* X \subset \overline{T^*} X \setminus o \subset \overline{T^*}_{\{t=0\}} M \setminus o$ 的交集 (读者可利用式~\eqref{eq:11.8} 验算此事实).
+
+对于 $\zeta \in T_z^* M \cap \Sigma^\circ$, 记
+\begin{equation}\label{eq:11.15}
+    \gamma_{z, \zeta} \colon I_{z, \zeta} \subseteq \R \to M
+\end{equation}
+为 $H_G$ 满足初值 $\gamma_{z, \zeta}(0) = \zeta$ 的极大积分曲线. 注意由于 $H_G$ 关于纤维变量具有 1 次齐次性, 有 $\gamma_{z, -\zeta}(s) = -\gamma_{z, \zeta}(-s)$ 以及 $\gamma_{z, \lambda\zeta}(s) = \lambda \gamma_{z, \zeta}(\lambda s)$ ($\lambda > 0$). 由此可知 $H_\sigma$ 在 $\Sigma_\sigma^\circ$ 上的动力学完整编码了全时空相空间上的零测地流. 此外我们记录如下重要反演对称性:
+\begin{equation}\label{eq:11.16}
+    H_\sigma|_{(x, \xi)} = -H_{-\sigma}|_{(x, -\xi)}; \qquad (x, \xi) \in \Sigma_{\sigma, \pm} \iff (x, -\xi) \in \Sigma_{-\sigma, \mp}.
+\end{equation}
+
+\begin{lemma}[$H_0$ 的径向集]\label{lem:11.3}
+使得向量场 $H_0$ 成为径向向量场的点集在 $\Sigma_0^\circ$ 中恰好等于视界余法丛去掉零截面:
+\[
+    N^*\{r = 1\} \setminus o.
+\]
+\end{lemma}
+
+\begin{proof}
+根据式~\eqref{eq:11.11}, $H_0$ 在点 $(x, \xi)$ 处为径向向量场意味着其空间投影为 0, 即 $(-x\cdot\xi)x + \xi = 0$. 由此得到 $|\xi|^2 = (x\cdot\xi)^2 |x|^2$. 将此代入式~\eqref{eq:11.8} (取 $\sigma = 0$) 得到
+\begin{equation}\label{eq:11.17}
+    0 = G = (x\cdot\xi)^2(-1 + |x|^2).
+\end{equation}
+结合式~\eqref{eq:11.10} 知 $x\cdot\xi \ne 0$, 故必有 $|x| = 1$; 从而 $\xi = (x\cdot\xi)x$, 这说明 $\xi \in N^*\{|x| = 1\} \setminus o$. 反之, 若 $r = 1$ 且 $\xi_\theta = 0$, 则由式~\eqref{eq:11.11} 立得 $H_0 = \xi_r^2 \partial_{\xi_r}$, 显然是严格径向的.
+\end{proof}
+
+由式~\eqref{eq:11.10}, $\Sigma_{0, \pm}^\circ$ 分别与法向余向量 $\mp \dd r \in N^*\{r = 1\}$ 的正锥相交. 在 $\Sigma_{0, \pm}^\circ \cap N^*\{r = 1\}$ 的锥形邻域内, 在紧化流形 $\overline{T^*} X$ 上引入射影坐标:
+\begin{equation}\label{eq:11.18}
+    \rho \defeq \frac{1}{\mp \xi_r} \ge 0, \qquad \hat{\xi}_\theta \defeq \frac{\xi_\theta}{\xi_r} \in \R.
+\end{equation}
+随后我们将未来 ('$+$') 与过去 ('$-$') \textbf{径向集} (radial sets) 分别定义为
+\begin{equation}\label{eq:11.19}
+    \mathcal{R}_\pm \defeq \{r = 1, \; \rho = 0, \; \hat{\xi}_\theta = 0\} \subset \Sigma_{0, \pm} \cap S^* X.
+\end{equation}
+为了在紧化余切丛 $\overline{T^*} X$ 上开展分析, 引入重标度 Hamilton 向量场:
+\begin{equation}\label{eq:11.20}
+    \mathsf{H}_\sigma \defeq (\sigma^2 + |\xi|^2)^{-\frac{1}{2}} H_\sigma; \qquad \mathsf{H}_0 \in \mathcal{V}(\overline{T^*} X \setminus o), \quad \mathsf{H}_\sigma \in \mathcal{V}(\overline{T^*} X) \quad (\sigma \ne 0).
+\end{equation}
+由引理~\ref{lem:10.2} (对 $\sigma = 0$) 以及 $\sigma \ne 0$ 时的对应结论, 向量场 $\mathsf{H}_\sigma$ 与纤维无穷远边界 $S^* X$ 相切. 作为式~\eqref{eq:11.14} 的重要补充, 在边界上有
+\begin{equation}\label{eq:11.21}
+    \mathsf{H}_\sigma|_{S^* X} = \mathsf{H}_0|_{S^* X},
+\end{equation}
+因为一方面在 $S^* X = \{|\xi|^{-1} = 0\}$ 上 $|\xi|^{-1}/(\sigma^2 + |\xi|^2)^{-1/2} = 1$; 另一方面标度差 $|\xi|^{-1}(H_\sigma - H_0) = \sigma |\xi|^{-1}(x\cdot\partial_x - \xi\cdot\partial_\xi)$ 是关于 $\rho$ 的 $\mathcal{O}(\rho)$ 小量, 在边界上完全消失.
+
+\begin{lemma}[$\mathcal{R}_\pm$ 的法向源性质]\label{lem:11.4}
+在坐标系~\eqref{eq:11.18} 下, 记 $\hat{\sigma} \defeq \sigma/\xi_r$. 则
+\begin{equation}\label{eq:11.22}
+    \pm \frac{1}{2} \rho H_\sigma = -(\hat{\sigma} + 1 - r^2) \partial_r - r^{-2}\hat{\xi}_\theta \partial_\theta + (r - \hat{\sigma} + r^{-3}\hat{\xi}_\theta^2)(\rho\partial_\rho + \hat{\xi}_\theta \partial_{\hat{\xi}_\theta}).
+\end{equation}
+将其限制于边界 $S^* X$ 相当于令 $\rho \partial_\rho$ 项消失并置 $\hat{\sigma} = 0$. 于是向量场
+\begin{equation}\label{eq:11.23}
+    V \defeq \left( \pm \frac{1}{2} \rho H_\sigma \right)\Big|_{S^* X} = -(1 - r^2)\partial_r - r^{-2}\hat{\xi}_\theta \partial_\theta + (r + r^{-3}\hat{\xi}_\theta^2)\hat{\xi}_\theta \partial_{\hat{\xi}_\theta}
+\end{equation}
+在径向集 $\mathcal{R}_\pm = \{r - 1 = 0, \; \hat{\xi}_\theta = 0\}$ 处的线性化映射显式给出为
+\begin{equation}\label{eq:11.24}
+    [V] \colon \dd(r - 1) \mapsto 2 \,\dd(r - 1), \qquad \dd\hat{\xi}_\theta \mapsto \dd\hat{\xi}_\theta.
+\end{equation}
+该线性化映射的特征值均为严格正数 ($2$ 与 $1$). 于是按法向源的定义~\ref{def:10.4}, $\mathcal{R}_\pm$ 是 $S^* X$ 中 $V$ 流的法向源 (normal source), 从而也是特征集交集 $\Sigma_{\sigma, \pm} \cap S^* X$ 中 $V$ 流的法向源. 此外,
+\begin{equation}\label{eq:11.25}
+    \pm \rho H_\sigma \rho = \beta_0 \rho, \qquad \beta_0|_{\mathcal{R}_\pm} = 2 > 0.
+\end{equation}
+\end{lemma}
+
+\begin{proposition}[$\Sigma_\sigma$ 中纤维无穷远处的 $\mathsf{H}_\sigma$ 流]\label{prop:11.5}
+设 $\gamma \colon I \subseteq \R \to \Sigma_{\sigma, \pm} \cap S^* X$ 为重标度向量场 $\pm \mathsf{H}_\sigma$ 的极大积分曲线. 则要么
+\begin{enumerate}[label=(\arabic*)]
+    \item 对所有 $s$, $\gamma(s) \in \mathcal{R}_\pm$; 要么
+    \item 当 $s \to s_0 \defeq \inf I$ 时 $\gamma(s)$ 汇入法向源 $\mathcal{R}_\pm$, 且当 $s \to s_1 \defeq \sup I$ 时其径向投影半径单调趋于边界 $r(\gamma(s)) \to 2$.
+\end{enumerate}
+(见图~\ref{fig:11.3}.)
+\end{proposition}
+
+\begin{figure}[htbp]
+\centering
+\drawFigElevenThree
+\caption{$\Sigma_{\sigma, \pm} \cap S^* X$ 内部的重标度 Hamilton 流. 流线自法向源 $\mathcal{R}_\pm$ 出发, 单调流向外部边界 $r = 2$.}\label{fig:11.3}
+\end{figure}
+
+\begin{proof}[命题~\ref{prop:11.5} 的证明]
+只需考虑 $\sigma = 0$ 的情形, 此时可以直接研究齐次向量场 $H_0$ 在 $T^* X \setminus o$ 上的积分曲线. 在 $\Sigma_0$ 上由式~\eqref{eq:11.8} 知 $0 \ne |\xi|^2 = (x \cdot \xi)^2 \le |x|^2 |\xi|^2$, 故必有 $|x| \ge 1$. 当 $|x| = 1$ 时必取等号, 故 $\xi$ 是 $x$ 的实数倍, 即 $(x, \xi) \in N^*\{|x| = 1\}$. 若 $\gamma$ 不完全包含在 $\mathcal{R}_\pm$ 内, 则对所有 $s$ 必有 $r(\gamma(s)) > 1$. 由式~\eqref{eq:11.10}, 在 $\Sigma_{0, \pm}$ 上 $\mp \xi_r > 0$, 故式~\eqref{eq:11.11} 给出
+\[
+    \pm \frac{1}{2} H_0 r = \pm(1 - r^2)\xi_r > 0 \qquad (\text{在 } \Sigma_{0, \pm} \cap \{r > 1\} \text{ 上}).
+\]
+这表明 $r(\gamma(s))$ 沿流线严格单调递增, 因此当 $s \to s_0$ 时 $r(\gamma(s)) \to 1$, 当 $s \to s_1$ 时 $r(\gamma(s)) \to 2$. 剩下只需证明当 $s \to s_0$ 时 $\gamma(s)$ 必收敛到 $\mathcal{R}_\pm$. 在 $\Sigma_{0, \pm} \cap S^* X \cap \{r = 1\}$ 的邻域 $\mathcal{U} \subset S^* X$ 内, 采用式~\eqref{eq:11.18} 的坐标 $(r, \theta, \hat{\xi}_\theta)$; 此时 $\Sigma_{0, \pm} \cap S^* X$ 在 $\mathcal{U}$ 内恰好由函数
+\begin{equation}\label{eq:11.26}
+    \xi_r^{-2} G|_{\sigma=0} = (1 - r^2) + r^{-2}\hat{\xi}_\theta^2
+\end{equation}
+的零点集给出. 在 $r = 1$ 处, 该式仅在 $\mathcal{R}_\pm$ 处 (即 $\hat{\xi}_\theta = 0$) 取零. 由于
+\begin{equation}\label{eq:11.27}
+    \partial_r(\xi_r^{-2} G|_{\sigma=0}) = -2r - 2r^{-3}\hat{\xi}_\theta^2 = -2 \ne 0 \qquad (\text{在 } \mathcal{R}_\pm \text{ 上}),
+\end{equation}
+由隐函数定理知 $\Sigma_{0, \pm} \cap \mathcal{U}$ 是 $S^* X$ 的光滑子流形. 因此由径向收敛 $r(\gamma(s)) \to 1$ 立即推知 $\gamma(s)$ 在 $S^* X$ 中必然收敛于 $\Sigma_{0, \pm} \cap S^* X \cap \{r = 1\} = \mathcal{R}_\pm$.
+\end{proof}
+
+接下来研究固定时间动量 $\sigma = 1$ 与空间动量 $\xi \in \overline{T_x^*} X$ 的零测地线. 其行为在定性上与命题~\ref{prop:11.5} 所研究的 $\sigma = 0$ 情形完全相同.
+
+\begin{proposition}[$\Sigma_1$ 中的 $\mathsf{H}_1$ 流]\label{prop:11.6}
+设 $\gamma \colon I \subseteq \R \to \Sigma_{1, \pm} \subset \overline{T^*} X$ 为重标度向量场 $\pm \mathsf{H}_1$ 的极大积分曲线. 则要么
+\begin{enumerate}[label=(\arabic*)]
+    \item 对所有 $s$, $\gamma(s) \in \mathcal{R}_\pm$; 要么
+    \item 当 $s \to s_0 \defeq \inf I$ 时 $\gamma(s)$ 汇入法向源 $\mathcal{R}_\pm$, 且当 $s \to s_1 \defeq \sup I$ 时其径向投影半径单调趋于边界 $r(\gamma(s)) \to 2$.
+\end{enumerate}
+(见图~\ref{fig:11.4}.)
+\end{proposition}
+
+\begin{proof}[命题~\ref{prop:11.6} 的证明]
+为论证清晰起见, 将参数简记为 $\sigma = 1$. 由于命题~\ref{prop:11.5} 已经刻画了无穷远边界 $S^* X$ 中的积分曲线, 这里只需考察内部相空间 $\Sigma_{\sigma, \pm}^\circ \subset T^* X$ 中的积分曲线. 根据式~\eqref{eq:11.4},
+\begin{equation}\label{eq:11.28}
+    \pm \frac{1}{2} \mathsf{H}_\sigma r = \pm(\sigma^2 + |\xi|^2)^{-\frac{1}{2}} \partial_\xi G = \pm 2 g^{-1}(\dd r, \cdot)(\sigma^2 + |\xi|^2)^{-\frac{1}{2}} > 0 \qquad (\text{在 } \Sigma_{\sigma, \pm} \cap \{r > 1\} \text{ 上}).
+\end{equation}
+因此, 当 $s \to s_0$ 时 $r(\gamma(s))$ 始终保持在 $[0, 2)$ 的紧子集中 (换言之, $\gamma$ 无法在反向时间逃逸穿过 $r = 2$).
+
+进一步计算可知, 在 $\Sigma_\sigma^\circ$ 上恒有
+\begin{equation}\label{eq:11.29}
+    -\frac{1}{2} H_\sigma(\sigma - x \cdot \xi) = |\xi|^2 = (\sigma - x \cdot \xi)^2.
+\end{equation}
+定义辅助函数 $F \defeq \pm(\sigma - x \cdot \xi)^{-1}$. 由式~\eqref{eq:11.10}, $F$ 在 $\Sigma_{\sigma, \pm}^\circ$ 上处处严格为正, 且满足方程 $\pm \frac{1}{2} H_\sigma F = 1$. 当 $s \to s_0$ 时, 积分曲线 $\gamma(s)$ 始终投影在 $X$ 的紧子集上 (因而在 $\overline{T^*} X$ 的紧子集中), 故必有 $F(\gamma(s)) \to 0$, 这意味着 $\pm(\sigma - x \cdot \xi) \to \infty$. 这强制要求动量模长趋于无穷 $|\xi| \to \infty$. 但是由于在 $\Sigma_\sigma^\circ$ 上恒有 $|\xi|^2 = (\sigma - x \cdot \xi)^2$, 两端同除以 $|\xi|^2$ 得到
+\begin{equation}\label{eq:11.30}
+    1 = \left( x \cdot \frac{\xi}{|\xi|} - \frac{\sigma}{|\xi|} \right)^2.
+\end{equation}
+由于 $\frac{\sigma}{|\xi|} \to 0$, 必然有 $|x \cdot \frac{\xi}{|\xi|}| \to 1$. 特别地, $\liminf_{s \to s_0} |x| \ge 1$. 另一方面由单调性式~\eqref{eq:11.28}, 不可能有 $\liminf_{s \to s_0} |x| > 1$. 因此必有 $|x| \to 1$, 从而单位方向向量 $\frac{\xi}{|\xi|} \to \mp \frac{x}{|x|}$. 这确立了当 $s \to s_0$ 时, $\gamma(s)$ 在紧化相空间中必严格汇聚至径向集 $\mathcal{R}_\pm$.
+
+在顺流方向上, 注意到函数 $F$ 在 $\Sigma_{\sigma, \pm} \subset \overline{T^*} X$ 上具有有限上界, 故当 $s \to s_1$ 时 $\gamma(s)$ 必须离开 $\overline{T^*} X$ 的任意紧子集. 这意味着在充分晚的流时间 $s$ 处必有 $r(\gamma(s)) > 1$. 随后由 $r \circ \gamma$ 的严格单调性推知, 当 $s \to s_1$ 时必有 $r(\gamma(s)) \to 2$.
+\end{proof}
+
+\begin{figure}[htbp]
+\centering
+\drawFigElevenFour
+\caption{$\Sigma_1$ 的两个分支. 未来分支 $\Sigma_{1, +}$ 更靠近读者; 过去分支 $\Sigma_{1, -}$ 仅生活在 $r \ge 1$ 上. 重标度 Hamilton 向量场 $\pm\mathsf{H}_1$ 在 $r = 1$ 处的径向集 $\mathcal{R}_\pm$ (粗点) 上具有法向源.}\label{fig:11.4}
+\end{figure}
+
+
+\section{主要结果的陈述}\label{sec:11.2}
+\index{dingchang bodong suanzi@定常波动算子 (stationary wave operator)}%
+\index{sanse xiezhen@散射谐振 (scattering resonances)}%
+\index{xiezhen tai@谐振态 (resonant states)}%
+\index{chishi jianjinzhan@迟时渐近展开 (late-time asymptotics)}%
+
+在本章余下的篇幅中, 我们在 de Sitter 空间 $(M, g)$ 上固定一个定常波动型算子:
+\begin{equation}\label{eq:11.31}
+    P \in \Diff^2(M), \qquad \sigma^2(P) = G;
+\end{equation}
+对偶度量函数 $G$ 在式~\eqref{eq:11.6} 中定义. (如果算子 $P$ 作用在由空间丛通过投影 $M = \R \times X \to X$ 拉回得到的某个光滑向量丛 $E \to M$ 的截面上, 本节中展示的所有论证完全平行成立.) 我们假设算子 $P$ 与时间平移对易, 即 $[\partial_t, P] = 0$. 由此可将 $P$ 唯一展开为
+\begin{equation}\label{eq:11.32}
+    P = P_0 + P_1 D_t + P_2 D_t^2, \qquad P_j \in \Diff^{2-j}(X), \quad j = 0, 1, 2.
+\end{equation}
+
+在 $P u = 0$ 的光滑解中, 具有时间依赖性 $\ee^{-\ii \sigma t}$ ($\sigma \in \mathbb{C}$) 的解将扮演特别的角色:
+
+\begin{definition}[谐振态]\label{def:11.7}
+对于 $\sigma \in \mathbb{C}$, 我们定义频率为 $\sigma$ 的\textbf{谐振态空间} (space of resonant states with frequency $\sigma$) 为
+\begin{equation}\label{eq:11.33}
+    \operatorname{Res}(P, \sigma) \defeq \left\{ v \in \ker P : \exists k \in \N_0, \; u_0, \ldots, u_k \in \mathcal{C}^\infty(X), \; v(t, x) = \sum_{j=0}^k u_j(x) t^j \ee^{-\ii \sigma t} \right\}.
+\end{equation}
+当 $\operatorname{Res}(P, \sigma) \neq \{0\}$ 时, 我们称 $\sigma \in \mathbb{C}$ 为一个\textbf{谐振} (resonance). 全体谐振构成的集合记作 $\operatorname{Res}(P) \subset \mathbb{C}$.
+\end{definition}
+
+注意如果 $v = \sum_{j=0}^k u_j(x) t^j \ee^{-\ii \sigma t} \in \operatorname{Res}(P, \sigma)$ 且 $u_k \neq 0$, 则亦有
+\[
+    0 \neq (\partial_t + \ii \sigma)^k v = k! u_k(x) \ee^{-\ii \sigma t} \in \operatorname{Res}(P, \sigma).
+\]
+这表明 $\operatorname{Res}(P, \sigma)$ 当非空时必包含具有纯调和时间依赖性 $\ee^{-\ii \sigma t}$ 的非零元素. 此外, 元素 $\ee^{-\ii \sigma t} u_0(x) \in \operatorname{Res}(P, \sigma)$ 可以用谱族 $\widehat{P}(\sigma)$ 来精确表征:
+\begin{equation}\label{eq:11.34}
+    u_0 \in \mathcal{C}^\infty(X), \quad \widehat{P}(\sigma) u_0 = 0, \qquad \widehat{P}(\sigma) \defeq P_0 - \sigma P_1 + \sigma^2 P_2.
+\end{equation}
+
+\begin{example}[标量波动算子的谐振]\label{eg:11.8}
+$(M, g)$ 上的标量波动算子 $P = \Box_g$ 的谱族在极坐标下显式给出为
+\begin{equation}\label{eq:11.35}
+    \widehat{\Box_g}(\sigma) = r^{-1} D_r r(1 - r^2) D_r + r^{-2} D_\theta^2 + 2(r D_r - \ii)\sigma - \sigma^2.
+\end{equation}
+谐振集合可显式计算为 $-\ii \N_0$, 且零模谐振态空间为常数函数张成的空间: $\operatorname{Res}(\Box_g, 0) = \operatorname{span}_{\mathbb{C}}\{1\}$. 更一般地, 可以计算质量微扰算子 $\Box_g + \mu$ ($\mu \in \mathbb{C}$) 的谐振: 它们由 $-\ii \sigma_\pm - \ii n$ ($n \in \N_0$) 给出, 其中 $\sigma_\pm = 1 \pm \sqrt{1 - \mu}$. 见习题~\ref{ex:11.1}.
+\end{example}
+
+\begin{remark}[与 Keldysh 算子的深层联系]\label{rem:11.9}
+如果在标量波动算子的谱族表达式~\eqref{eq:11.35} 中作坐标变换 $x = \frac{1 - r^2}{2}$, 所得到的算子恰好等于 $2(D_x x D_x - \sigma D_x + \frac{1}{2} D_\theta^2)$ 加上不影响主微局部几何的高阶余项. 这本质上正是所谓 \textbf{Keldysh 型算子} (见第~\ref{ch:10}~章的相关讨论). 算子 $\widehat{\Box_g}(\sigma)$ 通过一个径向集 ($r = 1$ 上方) 从椭圆 ($r < 1$) 过渡到双曲 ($r > 1$); 这对一般的 $\widehat{P}(\sigma)$ 同样成立.
+\end{remark}
+
+\begin{theorem}[谐振的离散与有限性]\label{thm:11.10}
+对任意 $\alpha \in \R$, 集合
+\[
+    \{\sigma \in \operatorname{Res}(P) : \operatorname{Im}\sigma \ge -\alpha\}
+\]
+是有限集. 对所有 $\sigma \in \operatorname{Res}(P)$, 空间 $\operatorname{Res}(P, \sigma)$ 都是有限维的.
+\end{theorem}
+
+\begin{theorem}[线型波的迟时渐近展开: $\mathcal{C}^\infty$ 版本]\label{thm:11.11}
+设 $w \in \mathcal{C}_{\mathrm{c}}^\infty(\R \times X)$ 且在 $\supp w$ 上 $t \ge 0$. 记 $v \in \mathcal{C}^\infty(\R \times X)$ 为前向问题 $P v = w$ 的唯一光滑前向解 (即在 $\supp v$ 上 $t \ge 0$). 则对所有 $\sigma \in \operatorname{Res}(P)$, 存在唯一的态 $u_\sigma \in \operatorname{Res}(P, \sigma)$, 使得对任意 $\alpha \in \R$, 差值函数
+\begin{equation}\label{eq:11.36}
+    \tilde v_\alpha(t, x) \defeq v(t, x) - \sum_{\substack{\sigma \in \operatorname{Res}(P) \\ \operatorname{Im}\sigma \ge -\alpha}} u_\sigma(t, x)
+\end{equation}
+满足一致快速指数衰减估计:
+\begin{equation}\label{eq:11.37}
+    |\partial_t^j \partial_x^\beta \tilde v_\alpha(t, x)| \le C_{\alpha j \beta} \ee^{-\alpha t} \qquad (\forall j \in \N_0, \; \beta \in \N_0^2, \; t \ge 0, \; x \in X).
+\end{equation}
+人们可以非正式地将式~\eqref{eq:11.36}--\eqref{eq:11.37} 简记为
+\begin{equation}\label{eq:11.38}
+    v \sim \sum_{\sigma \in \operatorname{Res}(P)} u_\sigma,
+\end{equation}
+这表达了 $v$ 在模去任意指数衰减余项的意义下完全展开为谐振态之和; 这就是 $v$ 的\textbf{谐振展开} (resonance expansion). 定理~\ref{thm:11.11} 的结论对于柯西初值问题的解同样成立 (习题~\ref{ex:11.2}).
+\end{theorem}
+
+\begin{remark}[全体谐振态均非平凡出现]\label{rem:11.12}
+任取 $\sigma \in \operatorname{Res}(P)$ 与非零态 $u_\sigma \in \operatorname{Res}(P, \sigma)$. 选取截断函数 $\chi \in \mathcal{C}^\infty(\R)$ 满足在 $(-\infty, 0]$ 上 $\chi = 0$ 且在 $[1, \infty)$ 上 $\chi = 1$. 记 $w \defeq P(\chi(t) u_\sigma) = [P, \chi] u_\sigma \in \mathcal{C}_{\mathrm{c}}^\infty(\R \times X)$. 则前向解 $v(t, x) = \chi(t) u_\sigma(t, x)$ 的渐近展开即为单个谐振项 $v \sim u_\sigma$. 这证明了每一个谐振态都确实作为某个紧支集源项的前向解的主导渐近项出现.
+\end{remark}
+
+定理~\ref{thm:11.11} 的证明思想大纲如下:
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{弱指数增长界}: 第一步是确立前向解 $v$ 的一个先验弱指数增长界 (引理~\ref{lem:11.14}), 粗略而言形如 $|v| \le C_0 \ee^{C_0 t}$. (实际的界是在加权 Sobolev 空间中建立的.)
+    \item \textbf{时间 Fourier 变换}: 我们现在可以在时间方向作 Fourier 变换, 约定为
+    \begin{equation}\label{eq:11.39}
+        \hat v(\sigma, x) \defeq \int_{-\infty}^\infty \ee^{\ii \sigma t} v(t, x) \,\dd t, \qquad \sigma \in \mathbb{C}.
+    \end{equation}
+    当 $\operatorname{Im}\sigma > C_0$ 时, $\hat v(\sigma) = \hat v(\sigma, \cdot)$ 是良定义的. 此时方程 $P v = w$ 蕴涵 $\widehat{P}(\sigma) \hat v(\sigma) = \hat w(\sigma)$. 若能证明谱族算子 $\widehat{P}(\sigma)$ 在适当的函数空间之间作用时对 $\operatorname{Im}\sigma > C_0$ 是可逆的, 则得到
+    \begin{equation}\label{eq:11.40}
+        \hat v(\sigma) = \widehat{P}(\sigma)^{-1} \hat w(\sigma), \qquad \operatorname{Im}\sigma > C_0.
+    \end{equation}
+    \item \textbf{谱族算子的分析}: 算子族 $\widehat{P}(\sigma) \in \Diff^2(X)$ ($\sigma \in \mathbb{C}$) 的分析处于证明的核心. 其主符号为 $\sigma^2(\widehat{P}(\sigma))(x, \xi) = G(0, x, 0, \xi)$, 因而其特征集为 $\Sigma_0^\circ$, 其 Hamilton 向量场为 $H_0$. 第~\ref{sec:11.1}~节中收集的动力学信息使我们能够应用微局部分析正则性结果 (椭圆估计、实主型奇性传播、径向点估计), 从而对方程 $\widehat{P}(\sigma) u = f$ 的解证明形如 $\|u\|_{H^s} \lesssim \|f\|_{H^{s-1}} + \|u\|_{H^{-N}}$ 的先验估计. 实际上我们将证明 $\widehat{P}(\sigma)$ 在适当的函数空间之间是 (非椭圆的) Fredholm 算子 (定理~\ref{thm:11.16}). 能量估计蕴涵了它对充分大的 $\operatorname{Im}\sigma$ 是可逆的 (命题~\ref{prop:11.18}), 因此 $\widehat{P}(\sigma)^{-1}$ 构成 Fredholm 算子的亚纯族 (参见定理~\ref{thm:5.77}).
+    \item \textbf{Cauchy 围道平移与留数拾取}: 我们推知式~\eqref{eq:11.40} 中的 $\hat v(\sigma)$ 在复平面上具有亚纯延拓. 在 $\hat v(\sigma, \cdot)$ 的逆 Fourier 变换表达式
+    \begin{equation}\label{eq:11.41}
+        v(t, \cdot) = \frac{1}{2\pi} \int_{\operatorname{Im}\sigma = C_0 + 1} \ee^{-\ii \sigma t} \widehat{P}(\sigma)^{-1} \hat w(\sigma) \,\dd \sigma
+    \end{equation}
+    中, 我们现在希望将积分围道向下平移至 $\operatorname{Im}\sigma = -\alpha$ (假定最终围道上不含任何谐振); 注意在此最终围道上 $|\ee^{-\ii \sigma t}| = \ee^{(\operatorname{Im}\sigma)t} = \ee^{-\alpha t}$. 根据留数定理, $\widehat{P}(\sigma)^{-1} \hat w(\sigma)$ 在带状区域 $-\alpha < \operatorname{Im}\sigma < C_0 + 1$ 内的极点精确产生了谐振展开式~\eqref{eq:11.36}, 而沿最终围道的积分则给出了余项式~\eqref{eq:11.37}. 严格细节见第~\ref{sec:11.5}~节.
+    \item \textbf{高能半经典分析}: 为了为围道平移的合理性提供严格证明, 当 $|\operatorname{Re}\sigma| \to \infty$ 时我们需要在有界带状区域内控制 $\widehat{P}(\sigma)^{-1} \hat w(\sigma)$ 的大小. 这就是我们需要对 $\widehat{P}(\sigma)$ 证明的高能估计, 我们在第~\ref{sec:11.4}~节中借助半经典技术完成此任务. 这些估计亦蕴涵了每个半平面 $\{\operatorname{Im}\sigma \ge -\alpha\}$ 仅包含有限多个谐振, 从而式~\eqref{eq:11.36} 中的求和对每个固定的 $\alpha \in \R$ 均只有有限项.
+\end{enumerate}
+
+为了严肃展开对 $P$ 的分析, 注意到对所有 $T > 0$, 子集
+\begin{equation}\label{eq:11.42}
+    M_T \defeq [0, T] \times X \subset M = \R \times X
+\end{equation}
+是 $\R \times \tilde X$ 内的容许时空区域 (定义~\ref{def:9.14}), 其中记 $\tilde X \defeq \{x \in \R^2 : |x| < 3\} \supset X$, 并在 $\R \times \tilde X$ 上赋予由式~\eqref{eq:11.1} 给出的度量 $g$. $M_T$ 的初始超曲面是 $\{0\} \times X$ (因为 $\dd t$ 是过去类时的), 终值超曲面是 $\{T\} \times X$ (因为 $\dd(T - t) = -\dd t$ 是未来类时的) 以及 $[0, T] \times \partial X$ (因为当 $r = 2$ 时 $\dd(2 - r) = -\dd r$ 是未来类时的). 对于定理~\ref{thm:11.11} 中的源项 $w$, 定理~\ref{thm:9.33} 适用于 $M_T$ 上的前向问题 $P v_T = w|_{M_T} \in \mathcal{C}^\infty(M_T)^{\bullet, -}$, 并给出唯一解 $v_T \in \mathcal{C}^\infty(M_T)^{\bullet, -}$. 由于对 $T' < T$ 由唯一性知 $v_T|_{M_{T'}} = v_{T'}$, 方程 $P v = w$ 的全时空前向解满足
+\begin{equation}\label{eq:11.43}
+    v \in \mathcal{C}^\infty(M_+)^{\bullet, -}, \qquad M_+ \defeq [0, \infty) \times X, \qquad v|_{M_T} = v_T.
+\end{equation}
+(即 $v$ 在 $M$ 上光滑且在 $t \le 0$ 时恒为零.) 供后续使用, 我们指出同样的论证更一般地表明
+\begin{equation}\label{eq:11.44}
+    w \in H_{\mathrm{loc}}^{s-1}(M_+)^{\bullet, -} \implies v \in H_{\mathrm{loc}}^s(M_+)^{\bullet, -}
+\end{equation}
+对所有 $s \in \R$ 均成立. 我们的目标是描述当 $t \to \infty$ 时 $v$ 的精确渐近行为. 我们首先证明一个弱指数增长界.
+
+\begin{definition}[指数加权 Sobolev 空间]\label{def:11.13}
+对于 $\alpha \in \R$ 与 $m \in \N_0$, 定义空间 $\ee^{\alpha t} H^m(M)$ 为紧支集光滑函数 $\mathcal{C}_{\mathrm{c}}^\infty(M)$ 在由下式定义的范数下的完备化空间:
+\begin{equation}\label{eq:11.45}
+    \|v\|_{\ee^{\alpha t} H^m(M)}^2 \defeq \sum_{j=0}^m \int_{-\infty}^\infty \ee^{-2\alpha t} \|\partial_t^j v(t, \cdot)\|_{\bar H^{m-j}(X)}^2 \,\dd t.
+\end{equation}
+回想 $M_+ \defeq [0, \infty) \times X$, 我们进一步定义
+\begin{equation}\label{eq:11.46}
+    \ee^{\alpha t} H^m(M_+)^{\bullet, -} \defeq \{v \in \ee^{\alpha t} H^m(M) : \supp v \subset \{t \ge 0\}\},
+\end{equation}
+其范数定义为 $\|v\|_{\ee^{\alpha t} H^m(M_+)^{\bullet, -}} \defeq \|v\|_{\ee^{\alpha t} H^m(M)}$. 对 $a < b$, 我们类似定义局部范数:
+\begin{equation}\label{eq:11.47}
+    \|v\|_{H^m([a, b] \times X)}^2 \defeq \sum_{j=0}^m \int_a^b \|\partial_t^j v(t, \cdot)\|_{\bar H^{m-j}(X)}^2 \,\dd t.
+\end{equation}
+式~\eqref{eq:11.46} 中的记号是类比第~\ref{ch:09}~章中可延拓与具支 Sobolev 空间 (定义~\ref{def:9.28}) 的记号选取的, 因为 $\ee^{\alpha t} H^m(M_+)^{\bullet, -}$ 的元素在 $\{t = 0\} = \{0\} \times X$ 处具有受限特征, 在 $[0, \infty) \times \partial X$ 处具有可延拓特征.
+\end{definition}
+
+\begin{lemma}[弱指数增长界]\label{lem:11.14}
+设 $m \in \N_0$. 存在常数 $C_0$, 使得前向问题 $P v = w \in \mathcal{C}_{\mathrm{c}}^\infty(M_+)^{\bullet, -}$ 的前向解 $v$ 遵从如下先验估计:
+\begin{equation}\label{eq:11.48}
+    \|v\|_{\ee^{C_0 t} H^m(M_+)^{\bullet, -}} \le C_0 \|w\|_{\ee^{C_0 t} H^{m-1}(M_+)^{\bullet, -}}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+根据定理~\ref{thm:9.33}, 存在常数 $C_1$ 使得
+\begin{equation}\label{eq:11.49}
+    \|v\|_{H^m([0, 2] \times X)^{\bullet, -}} \le C_1 \|Pv\|_{H^{m-1}([0, 2] \times X)^{\bullet, -}}.
+\end{equation}
+由推论~\ref{cor:9.38} 与算子 $P$ 的时间平移不变性, 进一步存在常数 $C_2 > 0$ 使得对所有 $t_0 \ge 1$,
+\begin{equation}\label{eq:11.50}
+    E(t_0) \defeq \|v\|_{H^m([t_0, t_0+1] \times X)}^2 \le C_2 \big( E(t_0 - 1) + F(t_0 - 1) \big),
+\end{equation}
+其中记 $F(t_0 - 1) \defeq \|Pv\|_{H^{m-1}([t_0-1, t_0+1] \times X)}^2$. 置 $\theta \defeq \frac{1}{2}\log C_2$, 我们从而有
+\begin{equation}\label{eq:11.51}
+    \ee^{-2\theta t_0} E(t_0) \le \ee^{-2\theta(t_0 - 1)} \big( E(t_0 - 1) + F(t_0 - 1) \big).
+\end{equation}
+固定任意 $\delta > 0$, 将式~\eqref{eq:11.51} 乘以 $\ee^{-2\delta t_0} = \ee^{-2\delta} \ee^{-2\delta(t_0 - 1)}$, 并对所有 $t_0 \in \{2, 3, 4, \ldots\}$ 求和, 移项得到
+\[
+    (1 - \ee^{-2\delta}) \sum_{t_0=2}^\infty \ee^{-2(\theta+\delta)t_0} E(t_0) \le C' \left( \|Pv\|_{H^{m-1}([0, 2] \times X)^{\bullet, -}}^2 + \sum_{t_0=1}^\infty \ee^{-2(\theta+\delta)t_0} F(t_0) \right).
+\]
+选取充分大的 $C_0 \ge \theta + \delta$, 即可完成弱指数界的证明.
+\end{proof}
+
+\section{谱族的 Fredholm 理论; 谐振}\label{sec:11.3}
+\index{dingchang bodong suanzi@定常谱族 (spectral family)}%
+\index{Fredholm suanzi@Fredholm 算子 (Fredholm operators)}%
+\index{cizhufanghao xiuzheng@次主符号修正 (subprincipal shift)}%
+
+引入微分算子 $P$ 的定常谱族 (spectral family):
+\begin{equation}\label{eq:11.52}
+    \widehat{P}(\sigma) \defeq \ee^{\ii \sigma t} P \ee^{-\ii \sigma t} = P_0 - \ii \sigma P_1 - \sigma^2 P_2 \in \Diff^2(X), \qquad \sigma \in \mathbb{C}.
+\end{equation}
+由式~\eqref{eq:11.9}, 算子 $\widehat{P}(\sigma)$ 的主符号完全不依赖于频率参数 $\sigma$:
+\begin{equation}\label{eq:11.53}
+    \sigma^2(\widehat{P}(\sigma))(x, \xi) = G(0, x, 0, \xi) = -(x \cdot \xi)^2 + |\xi|^2.
+\end{equation}
+因此, $\widehat{P}(\sigma)$ 的特征集与 Hamilton 向量场恰好等于第~\ref{sec:11.1}~节深入刻画的 $\Sigma_0^\circ$ 与 $H_0$.
+
+为了精准确定径向点顺流估计的正则度阈值, 我们需要提取 $P$ 在视界余法丛处的次主部信息:
+
+\begin{definition}[次主阈值平移量]\label{def:11.15}
+在式~\eqref{eq:11.8} 的坐标系 $(t, r, \theta, \sigma, \xi_r, \xi_\theta)$ 下, 我们定义函数 $\tilde\beta_0 \in \mathcal{C}^\infty(\mathbb{S}^1)$ 为
+\begin{equation}\label{eq:11.54}
+    \tilde\beta_0(\theta) \defeq \frac{1}{2} \sigma^1\left( \frac{P - P^*}{2\ii} \right)(0, 1, \theta, 0, -1, 0).
+\end{equation}
+这里我们定义形式伴随算子 $P^*$ 采用度量体积密度 $|\dd g| = |\dd t \,\dd x|$. 我们进一步定义
+\begin{equation}\label{eq:11.55}
+    \tilde\beta \defeq \sup_{\theta \in \mathbb{S}^1} \tilde\beta_0(\theta).
+\end{equation}
+例如, 对于 $P = \Box_g + \mu$ ($\mu \in \mathbb{C}$), 恒有 $\tilde\beta_0 = 0$. 式~\eqref{eq:11.54} 中的前置因子 $\frac{1}{2}$ 在 $\mathcal{R}_\pm$ 处等于 $\frac{1}{\beta_0}$ (参见式~\eqref{eq:10.20} 与式~\eqref{eq:11.25}).
+\end{definition}
+
+\begin{theorem}[谱族 $\widehat{P}(\sigma)$ 的 Fredholm 性质]\label{thm:11.16}
+固定 $\alpha \in \R$ 并设 $s > \frac{1}{2} + \alpha + \tilde\beta$. 则算子族
+\begin{equation}\label{eq:11.56}
+    \widehat{P}(\sigma) \colon \mathcal{X}^s(X) \defeq \left\{ u \in \bar H^s(X) : \widehat{P}(0) u \in \bar H^{s-1}(X) \right\} \to \bar H^{s-1}(X)
+\end{equation}
+对于 $\sigma \in \mathbb{C}$, $\operatorname{Im}\sigma > -\alpha$ 构成了 Fredholm 算子的解析族. 此外:
+\begin{enumerate}[label=(\arabic*)]
+    \item $\ker_{\bar H^s(X)} \widehat{P}(\sigma) \subset \bar{\mathcal{C}}^\infty(X)$;
+    \item 伴随算子的零空间满足对偶正则性:
+    \[
+        \ker_{\dot H^{-s+1}(X)} \widehat{P}(\sigma)^* \subset \bigcap_{\epsilon > 0} \dot H^{\frac{1}{2} - \tilde\beta + \operatorname{Im}\sigma - \epsilon}(X);
+    \]
+    \item $f \in \bar H^{s-1}(X)$ 属于式~\eqref{eq:11.56} 的值域当且仅当对所有满足 $\widehat{P}(\sigma)^* u^* = 0$ 的 $u^* \in \dot H^{-s+1}(X)$, 恒有 $\langle f, u^* \rangle_{L^2} = 0$.
+\end{enumerate}
+\end{theorem}
+
+由于 $\widehat{P}(\sigma) - \widehat{P}(0) \in \Diff^1(X)$, 对 $u \in \mathcal{X}^s(X)$ 确实有 $\widehat{P}(\sigma) u \in \bar H^{s-1}(X)$. 我们在式~\eqref{eq:11.56} 中使用 $\widehat{P}(0)$ 而非 $\widehat{P}(\sigma)$, 使得 $\mathcal{X}^s(X)$ 上的自然范数 $\|u\|_{\mathcal{X}^s(X)} \defeq \|u\|_{\bar H^s(X)} + \|\widehat{P}(0) u\|_{\bar H^{s-1}(X)}$ 不依赖于参数 $\sigma$.
+
+为证明定理~\ref{thm:11.16}, 我们首先计算:
+
+\begin{lemma}[$\widehat{P}(\sigma)$ 的阈值平移]\label{lem:11.17}
+设 $\rho = \mp \xi_r^{-1}$ 为式~\eqref{eq:11.18} 中 $\Sigma_{0, \pm}^\circ \cap N^*\{r = 1\}$ 附近的坐标, $\beta_0$ 如式~\eqref{eq:11.25} 所定义. 则
+\begin{equation}\label{eq:11.57}
+    \pm \rho \sigma^1\left( \frac{1}{2\ii}(\widehat{P}(\sigma) - \widehat{P}(\sigma)^*) \right) = \beta_0 \tilde\beta(\sigma), \qquad \tilde\beta(\sigma)|_{\mathcal{R}_\pm \cap S_{(1,\theta)}^* X} = \tilde\beta_0(\theta) - \operatorname{Im}\sigma.
+\end{equation}
+这里, 我们定义形式伴随算子 $\widehat{P}(\sigma)^*$ 使用体积密度 $|\dd x|$.
+\end{lemma}
+
+\begin{proof}
+我们有
+\begin{equation}\label{eq:11.58}
+    \widehat{P}(\sigma)^* = \widehat{P^*}(\bar\sigma).
+\end{equation}
+这依赖于体积密度 $|\dd x|$ 具有 $|\dd t| \otimes |\dd x| = |\dd g|$ 性质的唯一性. 因此 $\widehat{P}(0) - \widehat{P}(0)^* = \widehat{P - P^*}(0) \in \Diff^1(X)$, 其主符号为 $T^* X$ 上的纤维线性函数. 我们从而由式~\eqref{eq:11.54} 得到 $\sigma = 0$ 时的式~\eqref{eq:11.57}. 鉴于 $\widehat{P}(\sigma) - \widehat{P}(0) \in \Diff^1(X)$, 剩下只需证明在坐标 $(r, \theta, \xi_r, \xi_\theta)$ 下有
+\begin{equation}\label{eq:11.59}
+    \operatorname{Im}\sigma^1\big( \widehat{P}(\sigma) - \widehat{P}(0) \big)(1, \theta, \xi_r, 0) = 2\xi_r \operatorname{Im}\sigma.
+\end{equation}
+现在, $\widehat{P}(\sigma) - \widehat{P}(0) \equiv \sigma \partial_\sigma \widehat{P}(0) \pmod{\Diff^0(X)}$. 将 $X$ 上的函数与 $M$ 上不依赖于 $t$ 的函数等同, 我们计算
+\begin{equation}\label{eq:11.60}
+    \partial_\sigma \widehat{P}(0) u = \partial_\sigma\left( \ee^{\ii \sigma t} P \ee^{-\ii \sigma t} u \right)\Big|_{\sigma=0} = -\ii [P, t] u \qquad (u \in \mathcal{C}^\infty(X)).
+\end{equation}
+因此,
+\begin{equation}\label{eq:11.61}
+    \sigma^1\big(\partial_\sigma \widehat{P}(0)\big) = -H_G t.
+\end{equation}
+在 $(t, r, \theta, \sigma, \xi_r, \xi_\theta) = (0, 1, \theta, 0, \xi_r, 0)$ 处, 由式~\eqref{eq:11.9} 可知该项等于 $2\xi_r$.
+\end{proof}
+
+\begin{proof}[定理~\ref{thm:11.16} 的证明]
+证明概要如下:
+\begin{enumerate}[label=(\arabic*)]
+    \item 首先应用定理~\ref{thm:10.7}. 如同其陈述之后所指出的, 该结果结合了径向点估计 (以获得 $\mathcal{R}$ 附近的微局部 $H^s$ 控制)、实主型奇性传播 (以推导 $u$ 沿起始于 $\mathcal{R}$ 的穿孔邻域的零双特征曲线的 $H^s$ 控制), 以及微局部椭圆估计 (在 $\partial\Sigma_\sigma = \partial\Sigma_0$ 外部). 为了封堵 $r = 2$ 附近的这些估计, 我们借助推论~\ref{cor:9.38} 利用 $\widehat{P}(\sigma)$ 在该处的波动方程特征.
+    \item 对于伴随算子 $\widehat{P}(\sigma)^*$ 的估计, “传播估计”的方向被反转: 人们从 $r = 2$ 附近的波动方程估计开始, 使用实主型奇性传播沿零双特征曲线传播所得到的微局部 $H^{-s+1}$ 控制, 并使用径向点估计进一步传播进径向集 $\mathcal{R}$. 微局部椭圆估计再次在特征集外部使用.
+\end{enumerate}
+
+固定 $\psi, \chi \in \mathcal{C}_{\mathrm{c}}^\infty(X^\circ)$ 满足
+\begin{equation}\label{eq:11.62}
+    \psi = 1 \; (r \le 3/2), \quad \supp\psi \subset \{r < 2 - 1/4\}; \qquad \chi = 1 \; (r \le 2 - 1/8), \quad \supp\chi \subset \{r < 2 - 1/16\}.
+\end{equation}
+
+\noindent $\bullet$ \textbf{(1) 算子 $\widehat{P}(\sigma)$ 的半 Fredholm 先验估计}:
+固定伪微分算子 $B_\pm \in \Psi^0(X^\circ)$, 其 Schwartz 核支集包含在 $\{r \le 2 - 1/4\} \times \{r \le 2 - 1/4\}$ 内, 使得 $B_\pm$ 在 $\partial\Sigma_{\sigma, \pm} \cap S_{\supp\psi}^* X$ 上椭圆且 $\WF'(B_\pm) \cap \partial\Sigma_{\sigma, \mp} = \emptyset$. 我们可以将定理~\ref{thm:10.7}(1) (取 $B = B_\pm$ 与 $G \in \mathcal{C}_{\mathrm{c}}^\infty(\{r < 2 - 1/8\})$, $G = 1$ 对 $r \le 2 - 1/4$) 应用于 $\widehat{P}(\sigma)$ (对应“$+$”号) 与 $-\widehat{P}(\sigma)$ (对应“$-$”号). 动力学假设 (1iv) 已在命题~\ref{prop:11.5} 中验证, 正则性阈值 $\frac{1}{2} + \tilde\beta(\sigma)$ 已在引理~\ref{lem:11.17} 中计算. 借助椭圆正则性 (取习题~\ref{ex:6.12} 中的 $B = \psi$, $B_1 = B_+$, $B_2 = B_-$, 以及 $B_3 \in \Psi^0(X^\circ)$, 其 Schwartz 核支集包含在 $\{r \le 2 - 1/4\} \times \{r \le 2 - 1/4\}$ 内, 满足 $\WF'(B_3) \cap \partial\Sigma_{\sigma, \pm} = \emptyset$ 且 $\bigcup_{j=1}^3 \operatorname{Ell}(B_j) \supset S_{\supp\psi}^* X$), 我们随后获得如下估计:
+\begin{equation}\label{eq:11.63}
+    \|u\|_{\bar H^s(\{r < 3/2\})} \le \|\psi u\|_{H^s} \le C \big( \|\chi \widehat{P}(\sigma)u\|_{H^{s-1}} + \|\chi u\|_{H^{s_0}} \big) \le C' \big( \|\widehat{P}(\sigma)u\|_{\bar H^{s-1}(X)} + \|u\|_{\bar H^{s_0}(X)} \big)
+\end{equation}
+对 $s > s_0 > \frac{1}{2} + \tilde\beta(\sigma)$ 成立. (这在强意义下成立: 如果 $u$ 是 $X$ 上的可延拓分布使得右端有限, 则左端有限且估计式成立.) 我们这里使用了由 $G$ 的选取给出的 $G = G\chi$. 注意到
+\begin{equation}\label{eq:11.64}
+    \operatorname{Im}\sigma > -\alpha, \quad s > \frac{1}{2} + \alpha + \tilde\beta \implies s > \frac{1}{2} + \tilde\beta(\sigma).
+\end{equation}
+为了在其余区域 $\{3/2 \le r \le 2\}$ 或者说在其扩充 $\{5/4 \le r \le 2\}$ 内估计 $u$, 我们利用 $\dd r$ 的类时性质: 算子 $\widehat{P}(\sigma)$ 是 $(X, g_X)$ 子集 $\{r > 1\}$ 上的波动型算子, 其中 $g_X^{-1} \defeq \partial_x^2 - (x \cdot \partial_x)^2 = (1 - r^2)\partial_r^2 + r^{-2}\partial_\theta^2$. (这是 $X$ 上满足 $g_X^{-1} = g^{-1}|_{S^2 T^* X}$ 的度量.) 从而我们可以应用推论~\ref{cor:9.38} (取 $\Omega_{-\delta, 0} = \{3/2 \le r \le 2\}$ 与 $\Omega = \{5/4 \le r \le 2\}$) 得到
+\begin{equation}\label{eq:11.65}
+\begin{aligned}
+    \|u\|_{\bar H^s(\{5/4 < r < 2\})}
+    &\le C \big( \|\widehat{P}(\sigma) u\|_{\bar H^{s-1}(\{5/4 < r < 2\})} + \|u\|_{\bar H^s(\{5/4 < r < 3/2\})} \big) \\
+    &\le C' \big( \|\widehat{P}(\sigma) u\|_{\bar H^{s-1}(X)} + \|u\|_{\bar H^s(\{r < 3/2\})} \big);
+\end{aligned}
+\end{equation}
+该估计同样在强意义下成立. 选取适当的 $\chi_- \in \mathcal{C}_{\mathrm{c}}^\infty(\{r < 3/2\})$ 与 $\chi_+ \in \mathcal{C}_{\mathrm{c}}^\infty(\{5/4 < r \le 2\})$ 写出单位分解 $1 = \chi_- + \chi_+$, 结合式~\eqref{eq:11.63} 与式~\eqref{eq:11.65} 给出
+\begin{equation}\label{eq:11.66}
+\begin{aligned}
+    \|u\|_{\bar H^s(X)}
+    &\le \|\chi_- u\|_{\bar H^s(X)} + \|\chi_+ u\|_{\bar H^s(X)} \\
+    &\le C \big( \|u\|_{\bar H^s(\{r < 3/2\})} + \|u\|_{\bar H^s(\{5/4 < r < 2\})} \big) \\
+    &\le C' \big( \|\widehat{P}(\sigma) u\|_{\bar H^{s-1}(X)} + \|u\|_{\bar H^{s_0}(X)} \big).
+\end{aligned}
+\end{equation}
+该估计具有式~\eqref{eq:5.162} 的形式. 由于包含映射 $\bar H^s(X) \to \bar H^{s_0}(X)$ 是紧映射 (习题~\ref{ex:9.9}), 它蕴涵了 $\ker_{\mathcal{X}^s(X)} \widehat{P}(\sigma) = \ker_{\bar H^s(X)} \widehat{P}(\sigma)$ 是有限维的, 且映射~\eqref{eq:11.56} 的值域是闭的. 此外, 由于式~\eqref{eq:11.66} 对所有 $s > s_0$ 在强意义下成立, $u \in \bar H^{s_0}(X)$ 且 $\widehat{P}(\sigma) u = 0$ 蕴涵 $u \in \bar H^\infty(X) = \bar{\mathcal{C}}^\infty(X)$. 这证明了第 (1) 部分.
+
+\noindent $\bullet$ \textbf{(2) 形式伴随算子 $\widehat{P}(\sigma)^*$ 的半 Fredholm 先验估计}:
+我们将定理~\ref{thm:9.33} 应用于 $\Omega = \{5/4 \le r \le 2\}$ 上的波动型算子 $\widehat{P}(\sigma)^*$, 取 $\{r = 2\}$ 为初始超曲面, $\{r = 5/4\}$ 为终值超曲面. 从而,
+\begin{equation}\label{eq:11.67}
+    \|u^*\|_{H^{-s+1}(\{5/4 \le r \le 2\})^{\bullet, -}} \le C \|\widehat{P}(\sigma)^* u^*\|_{H^{-s}(\{5/4 \le r \le 2\})^{\bullet, -}} \le C' \|\widehat{P}(\sigma)^* u^*\|_{\dot H^{-s}(X)}.
+\end{equation}
+我们希望沿零双特征曲线将 $u^*$ 的 $H^{-s+1}$ 控制传播至整个 $\partial\Sigma_\sigma$; 根据命题~\ref{prop:11.5}, 这需要在 $\partial\Sigma_+$ 内沿反向 (即沿 $-\mathsf{H}_\sigma$) 传播, 在 $\partial\Sigma_-$ 内沿正向 (即沿 $\mathsf{H}_\sigma$) 传播. 从而我们可将径向点估计定理~\ref{thm:10.7}(2) 应用于 $\pm \widehat{P}(\sigma)^*$ (以 $B_\pm$ 代替 $B$, 其中 $B_\pm \in \Psi^0(X^\circ)$ 的 Schwartz 核支集包含在 $\{r \le 2 - 1/4\} \times \{r \le 2 - 1/4\}$ 内, 在 $\partial\Sigma_{\sigma, \pm} \cap S_{\supp\psi}^* X$ 上椭圆且满足 $\WF'(B_\pm) \cap \partial\Sigma_{\sigma, \mp} = \emptyset$; 此外取 $E \in \mathcal{C}_{\mathrm{c}}^\infty(\{5/4 < r < 2 - 1/8\})$ 在 $\{3/2 < r < 2 - 1/4\}$ 上等于 1, 且 $G = \chi$). 我们从而总共获得
+\begin{equation}\label{eq:11.68}
+    \|\psi u^*\|_{H^{-s+1}} \le C \big( \|\chi \widehat{P}(\sigma)^* u^*\|_{H^{-s}} + \|E u^*\|_{H^{-s+1}} + \|\chi u^*\|_{H^{s_0^*}} \big),
+\end{equation}
+其中我们固定 $s_0^* < -s + 1$. 所需的阈值条件为
+\begin{equation}\label{eq:11.69}
+    -s + 1 < \frac{1}{2} \pm \frac{1}{\beta_0} \rho \sigma^1\left( \frac{\widehat{P}(\sigma)^* - \widehat{P}(\sigma)}{2\ii} \right)\Big|_{\mathcal{R}_\pm},
+\end{equation}
+这等价于 $s > \frac{1}{2} + \tilde\beta(\sigma)$; 此式由式~\eqref{eq:11.64} 成立. 我们估计 $\|E u^*\|_{H^{-s+1}} \le C \|u^*\|_{H^{-s+1}(\{5/4 \le r \le 2\})^{\bullet, -}}$, 并使用式~\eqref{eq:11.67} 获得
+\begin{equation}\label{eq:11.70}
+    \|u^*\|_{\dot H^{-s+1}(X)} \le C \big( \|\widehat{P}(\sigma)^* u^*\|_{\dot H^{-s}(X)} + \|u^*\|_{\dot H^{s_0^*}(X)} \big).
+\end{equation}
+由于包含映射 $\dot H^{-s+1}(X) \to \dot H^{s_0^*}(X)$ 是紧的, 这特别蕴涵了 $\ker_{\dot H^{-s}(X)} \widehat{P}(\sigma)^*$ 是有限维的. 我们亦注意到只要满足阈值条件 $-s + 1 < \frac{1}{2} - \tilde\beta(\sigma)$, 估计式~\eqref{eq:11.70} 就在强意义下成立. 这证明了第 (2) 部分.
+
+\noindent $\bullet$ \textbf{算子 $\widehat{P}(\sigma)$ 的值域}:
+首先考虑 $u \in \mathcal{X}^s(X)$, 故 $u \in \bar H^s(X)$ 且 $f \defeq \widehat{P}(\sigma) u \in \bar H^{s-1}(X)$. 设 $u^* \in \ker_{\dot H^{-s+1}(X)} \widehat{P}(\sigma)^*$. 我们断言
+\begin{equation}\label{eq:11.71}
+    \langle f, u^* \rangle_{L^2} = \langle u, \widehat{P}(\sigma)^* u^* \rangle_{L^2} = 0.
+\end{equation}
+虽然所有的对偶配对都是良定义的, 但分部积分需要严格论证, 因为对于一般的 $u \in \bar H^s(X)$ 仅有 $\widehat{P}(\sigma) u \in \bar H^{s-2}(X)$, 它不能直接与 $u^*$ 作配对. 这一障碍可以通过标准的正则化与分部积分论证来克服; 细节留给读者 (习题~\ref{ex:11.4}).
+
+现设 $f \in \bar H^{s-1}(X)$ 对所有满足 $\widehat{P}(\sigma)^* u^* = 0$ 的 $u^* \in \dot H^{-s+1}(X)$ 均满足 $\langle f, u^* \rangle_{L^2} = 0$. 为证明存在 $u \in \bar H^s(X)$ 使得 $\widehat{P}(\sigma) u = f$, 我们采用对偶性论证. 定义线性泛函
+\begin{equation}\label{eq:11.72}
+    \lambda \colon \widehat{P}(\sigma)^* u^* \mapsto \langle u^*, f \rangle_{L^2}, \qquad u^* \in \dot H^{-s+2}(X).
+\end{equation}
+由我们对 $f$ 的假设, 这是良定义的. 固定 $\ker_{\dot H^{-s+1}(X)} \widehat{P}(\sigma)^*$ 在 $\dot H^{-s+1}(X)$ 中的一个补空间 $V \subset \dot H^{-s+1}(X)$. 则估计式~\eqref{eq:11.70} 蕴涵存在常数 $C'$ 使得对所有 $u^* \in V$ 均有 $\|u^*\|_{\dot H^{-s+1}(X)} \le C' \|\widehat{P}(\sigma)^* u^*\|_{\dot H^{-s}(X)}$ (见命题~\ref{prop:5.74} 的证明). 因此,
+\begin{equation}\label{eq:11.73}
+    |\lambda(\widehat{P}(\sigma)^* u^*)| \le C' \|f\|_{\bar H^{s-1}(X)} \|\widehat{P}(\sigma)^* u^*\|_{\dot H^{-s}(X)}.
+\end{equation}
+将 $\lambda$ 延拓为 $\dot H^{-s}(X)$ 上的连续线性泛函. 根据定理~\ref{thm:9.27}, 该延拓由与某个 $u \in \bar H^s(X)$ 的 $L^2$ 配对给出, 它满足
+\begin{equation}\label{eq:11.74}
+    \langle u^*, f \rangle_{L^2} = \langle \widehat{P}(\sigma)^* u^*, u \rangle_{L^2} = \langle u^*, \widehat{P}(\sigma) u \rangle_{L^2} \qquad (\forall u^* \in \dot H^{-s+2}(X)).
+\end{equation}
+因此, $\widehat{P}(\sigma) u = f$.
+\end{proof}
+
+回想每一个非零元素 $0 \neq u \in \ker \widehat{P}(\sigma)$ 都给出了波动方程 $P v = 0$ 的一个形如 $\ee^{(\operatorname{Im}\sigma)t}$ 增长的非平凡解 $v(t, x) = \ee^{-\ii \sigma t} u(x)$. 根据引理~\ref{lem:11.14}, 该方程的解在时间上不能增长得过快; 这对 $\operatorname{Im}\sigma$ 给出了一个先验上界. 更确切地:
+
+\begin{proposition}[大 $\operatorname{Im}\sigma$ 处的严格可逆性]\label{prop:11.18}
+存在常数 $C \in \R$, 使得对于所有满足 $\operatorname{Im}\sigma > C$ 的 $\sigma \in \mathbb{C}$, 式~\eqref{eq:11.56} 中的算子 $\widehat{P}(\sigma)$ 是可逆的.
+\end{proposition}
+
+\begin{proof}
+设 $0 \neq u \in \ker_{\bar{\mathcal{C}}^\infty(X)} \widehat{P}(\sigma)$. 置 $v(t, x) \defeq \ee^{-\ii \sigma t} u(x)$. 设 $\chi \in \mathcal{C}^\infty(\R)$ 满足在 $(-\infty, 0]$ 上 $\chi = 0$ 且在 $[1, \infty)$ 上 $\chi = 1$. 则
+\begin{equation}\label{eq:11.75}
+    P(\chi v) = w \defeq [P, \chi] v \in \mathcal{C}_{\mathrm{c}}^\infty(\R \times X).
+\end{equation}
+引理~\ref{lem:11.14} 给出 $\ee^{(-C_0 + \operatorname{Im}\sigma)t} \chi(t) u(x) \in L^2(M_+)$, 故 $-C_0 + \operatorname{Im}\sigma < 0$, 即 $\operatorname{Im}\sigma < C_0$. 这证明了当 $\operatorname{Im}\sigma \ge C_0$ 时 $\widehat{P}(\sigma)$ 的单射性.
+
+根据定理~\ref{thm:11.16}, $\widehat{P}(\sigma)$ 的满射性等价于 $\widehat{P}(\sigma)^*$ 的单射性. 当 $\operatorname{Im}\sigma$ 充分大时, 我们有 $\frac{1}{2} - \tilde\beta + \operatorname{Im}\sigma > 1$, 故定理~\ref{thm:11.16}(2) 表明每一个 $u^* \in \ker \widehat{P}(\sigma)^*$ 都属于 $\dot H^1(X)$. 鉴于式~\eqref{eq:11.58}, 我们从而看到
+\begin{equation}\label{eq:11.76}
+    P^* v^* = 0, \qquad v^*(t, x) = \ee^{-\ii \bar\sigma t} u^*(x).
+\end{equation}
+注意 $|v^*(t, x)| = \ee^{-(\operatorname{Im}\sigma)t} |u^*(x)|$. 给定任意 $w \in \ee^{C_0 t} H^1(M_+)^{\bullet, -}$, 我们可以求解 $P v = w$ 并得到解 $v \in \ee^{C_0 t} H^2(M_+)^{\bullet, -}$ (这里 $C_0$ 由取 $m = 2$ 的引理~\ref{lem:11.14} 给出). 如果 $\operatorname{Im}\sigma > C_0$, 我们因而可以分部积分推知
+\begin{equation}\label{eq:11.77}
+    \langle w, v^* \rangle_{L^2(M_+)} = \langle Pv, v^* \rangle_{L^2(M_+)} = \langle v, P^* v^* \rangle_{L^2(M_+)} = 0.
+\end{equation}
+由于 $w$ 是任意的, 这表明在 $t > 0$ 时 $v^* = 0$, 从而对所有 $t$ 恒有 $v^* = 0$.
+\end{proof}
+
+\begin{corollary}[预解算子的亚纯性]\label{cor:11.19}
+算子族 $\widehat{P}(\sigma)^{-1} \colon \bar H^{s-1}(X) \to \mathcal{X}^s(X)$ 在半平面 $\operatorname{Im}\sigma > -\alpha$ 上是亚纯算子族, 其极点构成离散集, 且各极点处的留数算子具有有限秩.
+\end{corollary}
+
+\begin{proposition}[谐振态的刻画]\label{prop:11.20}
+设 $\sigma_0 \in \mathbb{C}$ 且 $\operatorname{Im}\sigma_0 > -\alpha$. 则:
+\begin{enumerate}[label=(\arabic*)]
+    \item $\sigma_0 \in \operatorname{Res}(P)$ 当且仅当 $\widehat{P}(\sigma)^{-1}$ 在 $\sigma = \sigma_0$ 处具有极点.
+    \item 对所有 $\sigma_0 \in \operatorname{Res}(P)$, 空间 $\operatorname{Res}(P, \sigma_0)$ 由 $\ee^{-\ii \sigma t} \widehat{P}(\sigma)^{-1} f(\sigma)$ 在 $\sigma = \sigma_0$ 处的留数组成, 其中 $f$ 取遍具有 $\bar{\mathcal{C}}^\infty(X)$ 取值的多项式:
+    \begin{equation}\label{eq:11.78}
+        \operatorname{Res}(P, \sigma_0) = \left\{ \operatorname{res}_{\sigma = \sigma_0}\left( \ee^{-\ii \sigma t} \widehat{P}(\sigma)^{-1} f(\sigma) \right) : f(\sigma) \in \bar{\mathcal{C}}^\infty(X)[\sigma] \right\}.
+    \end{equation}
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+第一部分直接由推论~\ref{cor:11.19} 得出, 因为集合 $\operatorname{Res}(P) \cap \{\operatorname{Im}\sigma > -\alpha\}$ 对所有 $\alpha \in \R$ 都是离散的, 且 $\widehat{P}(\sigma)^{-1}$ 在 $\sigma = \sigma_0$ 处有极点当且仅当 $\widehat{P}(\sigma_0)$ 不可逆 (不为单射).
+
+对于第二部分, 固定 $s > \frac{1}{2} - \operatorname{Im}\sigma_0 + \tilde\beta$ 并写出
+\begin{equation}\label{eq:11.79}
+    \widehat{P}(\sigma)^{-1} = \sum_{j=1}^J (\sigma - \sigma_0)^{-j} B_j + \mathrm{hol}(\sigma),
+\end{equation}
+其中 $J$ 为极点的阶数, 算子 $B_1, \ldots, B_J \colon \bar H^{s-1}(X) \to \mathcal{X}^s(X)$ 具有有限秩, 且我们记 $\mathrm{hol}(\sigma)$ 为在 $\sigma = \sigma_0$ 附近全纯的算子族. 由于 $\sigma_0 \in \operatorname{Res}(P)$, 我们有 $J \ge 1$ 且 $B_J \neq 0$. 我们首先断言
+\begin{equation}\label{eq:11.80}
+    \operatorname{ran} B_j \subset \bar{\mathcal{C}}^\infty(X), \qquad j = 1, \ldots, J.
+\end{equation}
+为证明这一点, 我们写出
+\begin{equation}\label{eq:11.81}
+\begin{aligned}
+    I = \widehat{P}(\sigma) \widehat{P}(\sigma)^{-1} &= \sum_{j=1}^J \sum_{k=0}^2 (\sigma - \sigma_0)^{-j+k} \frac{\partial_\sigma^k \widehat{P}(\sigma_0)}{k!} B_j + \mathrm{hol}(\sigma) \\
+    &= \sum_{j=1}^J (\sigma - \sigma_0)^{-j} \sum_{k=0}^{\min(2, J-j)} \frac{\partial_\sigma^k \widehat{P}(\sigma_0)}{k!} B_{j+k} + \mathrm{hol}(\sigma).
+\end{aligned}
+\end{equation}
+$(\sigma - \sigma_0)^{-J}$ 的系数消失, 故 $\widehat{P}(\sigma_0) B_J = 0$, 从而 $\operatorname{ran} B_J \subset \ker_{\mathcal{X}^s(X)} \widehat{P}(\sigma_0) \subset \bar{\mathcal{C}}^\infty(X)$. 假设我们已经对 $j = J, J-1, \ldots, J_0+1 > 1$ 建立了式~\eqref{eq:11.80}, 则式~\eqref{eq:11.81} 中 $(\sigma - \sigma_0)^{-J_0}$ 的系数等于 $\widehat{P}(\sigma_0) B_{J_0}$ 加上值域包含在 $\bar{\mathcal{C}}^\infty(X)$ 内的算子之和. 我们从而需要证明
+\begin{equation}\label{eq:11.82}
+    u \in \mathcal{X}^s(X), \quad \widehat{P}(\sigma_0) u = f \in \bar{\mathcal{C}}^\infty(X) \implies u \in \bar{\mathcal{C}}^\infty(X).
+\end{equation}
+但这直接由估计式~\eqref{eq:11.66} 在强意义下成立所保证. (人们也可以直接论证: 由微局部椭圆正则性, $\WF(u)$ 包含在 $\widehat{P}(\sigma_0)$ 的特征集内; 由径向点估计, $\WF(u)$ 与 $\mathcal{R}_\pm$ 不交; 从而由实主型奇性传播, $\WF(u)$ 在 $X^\circ$ 上为空, 故 $u \in \mathcal{C}^\infty(X^\circ)$. 推论~\ref{cor:9.38} 给出 $u \in \bar{\mathcal{C}}^\infty(X)$.)
+
+现在设 $f(\sigma)$ 为具有 $\bar{\mathcal{C}}^\infty(X)$ 取值的多项式. 则
+\begin{equation}\label{eq:11.83}
+    v(t, \cdot) \defeq \operatorname{res}_{\sigma = \sigma_0}\left( \ee^{-\ii \sigma t} \widehat{P}(\sigma)^{-1} f(\sigma) \right) = \sum_{j=1}^J B_j \frac{\partial_\sigma^{j-1}(\ee^{-\ii \sigma t} f(\sigma))|_{\sigma=\sigma_0}}{(j-1)!}
+\end{equation}
+具有式~\eqref{eq:11.33} 的形式 (其中 $k = J - 1$). 此外, $u \in \operatorname{Res}(P, \sigma_0)$, 因为
+\begin{equation}\label{eq:11.84}
+    P v(t, \cdot) = \frac{1}{2\pi\ii} P \oint_{\sigma_0} \ee^{-\ii \sigma t} \widehat{P}(\sigma)^{-1} f(\sigma) \,\dd \sigma = \frac{1}{2\pi\ii} \oint_{\sigma_0} \ee^{-\ii \sigma t} f(\sigma) \,\dd \sigma = 0.
+\end{equation}
+这里 $\oint_{\sigma_0}(\cdot)\,\dd \sigma$ 是沿逆时针方向绕小圆周 $|\sigma - \sigma_0| = \epsilon$ 的围道积分. 同样的论证适用于在 $\sigma = \sigma_0$ 附近全纯的 $\bar{\mathcal{C}}^\infty(X)$ 值函数 $f$.
+
+反之, 设 $v = \sum_{j=0}^k \ee^{-\ii \sigma_0 t} t^j u_j(x) \in \operatorname{Res}(P, \sigma_0)$. 我们从而可以写出
+\begin{equation}\label{eq:11.85}
+    v(t, \cdot) = \operatorname{res}_{\sigma = \sigma_0}\left( \ee^{-\ii \sigma t} \tilde u(\sigma) \right), \qquad \tilde u(\sigma) \defeq \sum_{j=0}^k (\sigma - \sigma_0)^{-j-1} \tilde u_j
+\end{equation}
+对于某些可由 $u_j$ 算出的 $\tilde u_j \in \bar{\mathcal{C}}^\infty(X)$. 由于对所有 $t$ 均有
+\begin{equation}\label{eq:11.86}
+    0 = P v(t, \cdot) = \frac{1}{2\pi\ii} \oint_{\sigma_0} \ee^{-\ii \sigma t} \widehat{P}(\sigma) \tilde u(\sigma) \,\dd \sigma,
+\end{equation}
+我们推知 $F(\sigma) \defeq \widehat{P}(\sigma) \tilde u(\sigma)$ 是全纯的. 对于 $F$ 在 $\sigma = \sigma_0$ 附近的 $(J - 1)$ 阶 Taylor 展开式 $f(\sigma) \defeq \sum_{j=0}^{J-1} \frac{\partial_\sigma^j F(\sigma_0)}{j!}(\sigma - \sigma_0)^j$, 我们随后有
+\begin{equation}\label{eq:11.87}
+    \widehat{P}(\sigma)^{-1} f(\sigma) = \tilde u(\sigma) - \widehat{P}(\sigma)^{-1}\big( F(\sigma) - f(\sigma) \big) = \tilde u(\sigma) + \mathrm{hol}(\sigma).
+\end{equation}
+结合式~\eqref{eq:11.85}, 我们从而看到 $v(t, \cdot) = \operatorname{res}_{\sigma = \sigma_0}\left( \ee^{-\ii \sigma t} \widehat{P}(\sigma)^{-1} f(\sigma) \right)$.
+\end{proof}
+
+
+\section{高能估计}\label{sec:11.4}
+\index{gaoneng guji@高能估计 (high-energy estimates)}%
+\index{banjingdian canshu@半经典参数 (semiclassical parameter)}%
+\index{wuxiezhen dai@无谐振带状区域 (resonance-free strip)}%
+
+高能估计——即当 $\operatorname{Im}\sigma$ 有界且 $|\operatorname{Re}\sigma| \to \infty$ 时对 $\widehat{P}(\sigma)$ 的估计——的证明遵循与谱族 $\widehat{P}(\sigma)$ 的 Fredholm 性质 (定理~\ref{thm:11.16}) 相同的证明路线, 唯一区别在于此时我们必须使用半经典分析工具. 我们将证明:
+
+\begin{theorem}[高能估计]\label{thm:11.21}
+固定 $\alpha_+ \ge \alpha_- \in \R$, 并设 $s > \frac{1}{2} + \alpha_+ + \tilde\beta$. 则存在常数 $C, C'$ 使得
+\begin{equation}\label{eq:11.88}
+    \|u\|_{\bar H_{|\operatorname{Re}\sigma|^{-1}}^s(X)} \le C |\operatorname{Re}\sigma|^{-1} \|\widehat{P}(\sigma) u\|_{\bar H_{|\operatorname{Re}\sigma|^{-1}}^{s-1}(X)}, \qquad -\alpha_+ \le \operatorname{Im}\sigma \le -\alpha_-, \quad |\operatorname{Re}\sigma| > C'.
+\end{equation}
+特别地, 对于所有满足 $-\alpha_+ \le \operatorname{Im}\sigma \le -\alpha_-$ 的谐振 $\sigma \in \operatorname{Res}(P)$, 必有 $|\operatorname{Re}\sigma| \le C'$.
+\end{theorem}
+
+我们将此估计用半经典语言重新表述: 我们将
+\begin{equation}\label{eq:11.89}
+    h \defeq |\operatorname{Re}\sigma|^{-1} = \pm \frac{1}{\operatorname{Re}\sigma}, \qquad \pm \operatorname{Re}\sigma > 0,
+\end{equation}
+视作半经典参数, 并在半经典 Sobolev 空间上证明 $\widehat{P}(\sigma)$ 的半经典重标度算子族
+\begin{equation}\label{eq:11.90}
+    P_{z, h} \defeq h^2 \widehat{P}(h^{-1} z), \qquad z \defeq h\sigma = \frac{\sigma}{|\operatorname{Re}\sigma|} = \pm 1 + \ii h \operatorname{Im}\sigma
+\end{equation}
+的先验估计. 对于固定的 $\alpha \in \R$, 我们考虑 $\sigma = \pm h^{-1} - \ii \alpha$, 从而 $z = \pm 1 - \ii \alpha h$. 记
+\begin{equation}\label{eq:11.91}
+    P_{\pm, \alpha} \defeq P_{\pm 1 - \ii \alpha h, h} \in \Diff_h^2(X), \qquad \sigma^2(P_{\pm, \alpha})(x, \xi) = \sigma^2(P)((0, x), \mp \dd t + \xi) = G(0, x, \pm 1, \xi).
+\end{equation}
+$P_{\pm, \alpha}$ 的半经典特征集正是式~\eqref{eq:11.13} 中定义的集合 $\Sigma_{\pm 1} \subset \overline{T^*} X$, 且 $P_{\pm, \alpha}$ 的半经典主符号的 Hamilton 向量场等于式~\eqref{eq:11.11} 中定义的 $H_{\pm 1}$. 鉴于由式~\eqref{eq:11.16} 知 $H_1|_{(x, \xi)} = -H_{-1}|_{(x, -\xi)}$, 我们只需考虑“$+$”号的情形, 即 $\sigma = \sigma_0 - \ii \alpha$ 且 $\sigma_0 > 0$. 所期望的先验估计式~\eqref{eq:11.88} 此时读作
+\begin{equation}\label{eq:11.92}
+    \|u\|_{\bar H_h^s(X)} \le C h^{-1} \|P_{+, \alpha} u\|_{\bar H_h^{s-1}(X)}, \qquad h < h_0, \quad \alpha \in [\alpha_-, \alpha_+],
+\end{equation}
+其中 $h_0 = 1/C'$.
+
+\begin{proof}[定理~\ref{thm:11.21} 的证明]
+首先考虑固定的 $\alpha \in [\alpha_-, \alpha_+]$. 我们将遵循定理~\ref{thm:11.16} 证明的策略来确立如下先验估计:
+\begin{equation}\label{eq:11.93}
+    \|u\|_{\bar H_h^s(X)} \le C \left( h^{-1} \|P_{+, \alpha} u\|_{\bar H_h^{s-1}(X)} + h^N \|u\|_{\bar H_h^{s_0}(X)} \right).
+\end{equation}
+(这是式~\eqref{eq:11.66} 的半经典对应物.) 我们首先应用径向点 (以及实主型奇性传播与微局部椭圆) 估计定理~\ref{thm:10.17}(1), 类似于式~\eqref{eq:11.63} 给出
+\begin{equation}\label{eq:11.94}
+    \|u\|_{\bar H_h^s(\{r < 3/2\})} \le C \left( h^{-1} \|P_{+, \alpha} u\|_{\bar H_h^{s-1}(X)} + h^N \|u\|_{\bar H_h^{s_0}(X)} \right).
+\end{equation}
+(径向点估计的阈值条件再次为 $s > \frac{1}{2} + \alpha + \tilde\beta$.) 这使用了命题~\ref{prop:11.6} 中的动力学信息. 为了在余下区域 $\{5/4 \le r \le 2\}$ 内估计 $u$, 我们使用第~\ref{ch:09}~章中波动方程的能量估计与正则性延拓 (定理~\ref{thm:9.33} 与推论~\ref{cor:9.38}), 类似于式~\eqref{eq:11.65} 得到
+\begin{equation}\label{eq:11.95}
+    \|u\|_{\bar H_h^s(\{5/4 < r < 2\})} \le C \left( h^{-1} \|P_{+, \alpha} u\|_{\bar H_h^{s-1}(X)} + \|u\|_{\bar H_h^s(\{r < 3/2\})} \right).
+\end{equation}
+如同式~\eqref{eq:11.66} 中结合这两项估计, 即得式~\eqref{eq:11.93}. 当 $h_0 > 0$ 充分小时, 对 $h < h_0$ 有 $C h^N \|u\|_{\bar H_h^{s_0}(X)} \le \frac{1}{2} \|u\|_{\bar H_h^s(X)}$, 从而式~\eqref{eq:11.93} 蕴涵了期望的估计式~\eqref{eq:11.92}.
+
+为了证明式~\eqref{eq:11.92} 关于 $\alpha \in [\alpha_-, \alpha_+]$ 是一致成立的, 注意到
+\begin{equation}\label{eq:11.96}
+    P_{+, \alpha'} - P_{+, \alpha} \to 0 \qquad (\text{在 } h\Diff^1(X) \text{ 中, 当 } \alpha' \to \alpha \text{ 时}),
+\end{equation}
+从而当 $|\alpha' - \alpha|$ 充分小时有
+\begin{equation}\label{eq:11.97}
+    C h^{-1} \|P_{+, \alpha'} u\|_{\bar H^{s-1}(X)} \le C h^{-1} \|P_{+, \alpha} u\|_{\bar H^{s-1}(X)} + \frac{1}{2} \|u\|_{\bar H^s(X)}.
+\end{equation}
+因此, 式~\eqref{eq:11.93} 蕴涵了当 $|\alpha' - \alpha|$ 充分小时, 用 $2C$ 与 $\alpha'$ 代替 $C$ 与 $\alpha$ 后同一估计式依然成立. 区间 $[\alpha_-, \alpha_+]$ 的紧致性随后蕴涵了存在常数 $C$ 使得式~\eqref{eq:11.93} 对所有 $\alpha \in [\alpha_-, \alpha_+]$ 一致成立. 从而存在常数 $C, h_0$ 使得式~\eqref{eq:11.92} 对所有 $\alpha \in [\alpha_-, \alpha_+]$ 成立. (在概念上更清晰的论证使用式~\eqref{eq:11.93} 基础估计在具有实主符号的 $\Diff_h^2(X)$ 元素空间中关于 $P_{+, \alpha}$ 扰动的稳定性; 第~\ref{ch:10}~章有关于非半经典设定下类似稳定性结果的讨论.)
+\end{proof}
+
+\begin{remark}[伴随算子的高能估计]\label{rem:11.22}
+人们可以类似证明伴随估计式~\eqref{eq:11.70} 的半经典对应物:
+\begin{equation}\label{eq:11.98}
+    \|u^*\|_{\dot H_h^{-s+1}(X)} \le C \left( h^{-1} \|P_{+, \alpha}^* u^*\|_{\dot H_h^{-s}(X)} + h^N \|u^*\|_{\dot H_h^{-N}(X)} \right),
+\end{equation}
+其方法是先在 $r = 2$ 附近使用定理~\ref{thm:9.44}, 进而在 $X^\circ$ 其余部分使用定理~\ref{thm:10.17}(2). 对充分小的 $h$, 这蕴涵了 $P_{1 - \ii \alpha h, h}^*$ (即 $\widehat{P}(h^{-1} - \ii \alpha)^*$) 在 $\dot H^{-s+1}(X)$ 上的单射性. 结合由式~\eqref{eq:11.92} 得出的 $\widehat{P}(h^{-1} - \ii \alpha)$ 的单射性, 我们无需借助 $\widehat{P}(\sigma)$ 的指标 0 性质, 便直接确立了 $\widehat{P}(h^{-1} - \ii \alpha)$ 对充分小的 $h > 0$ 的可逆性.
+\end{remark}
+
+我们现在可以完成定理~\ref{thm:11.10} 的证明.
+
+\begin{figure}[htbp]
+\centering
+\drawFigElevenFive
+\caption{对于充分大的 $\operatorname{Im}\sigma$, 由命题~\ref{prop:11.18} 知不存在任何谐振. 在任意固定的水平带状区域内, 对于充分大的 $|\operatorname{Re}\sigma|$, 由定理~\ref{thm:11.21} 知同样不存在任何谐振.}\label{fig:11.5}
+\end{figure}
+
+\begin{proof}[定理~\ref{thm:11.10} 的证明]
+设 $C$ 为命题~\ref{prop:11.18} 中的常数. 将定理~\ref{thm:11.21} 应用于 $\alpha_- = -C$ 以及任意 $\alpha_+ > \alpha_-$, 立即推知集合 $\operatorname{Res}(P) \cap \{\sigma \in \mathbb{C} : \operatorname{Im}\sigma \ge -\alpha_+\}$ 必须是有限集. 见图~\ref{fig:11.5}.
+\end{proof}
+
+\section{迟时渐近性的证明}\label{sec:11.5}
+\index{chishi jianjinzhan@迟时渐近展开 (late-time asymptotics)}%
+\index{Cauchy weidao@Cauchy 围道积分 (Cauchy contour integral)}%
+\index{liushu yansuan@留数演算 (residue calculus)}%
+
+我们现在回到时空上的波动方程问题 $P v = w$ 并证明定理~\ref{thm:11.11}. 固定 $\alpha \in \R$ 使得 $P$ 的任何谐振的虚部都不等于 $-\alpha$. 记 $s_0 \defeq \frac{1}{2} + \alpha + \tilde\beta$ 为定理~\ref{thm:11.16} 与~\ref{thm:11.21} 中的正则性阈值. 给定
+\begin{equation}\label{eq:11.99}
+    w \in \mathcal{C}_{\mathrm{c}}^\infty(\R \times X), \qquad \supp w \subset \{t \ge 0\},
+\end{equation}
+引理~\ref{lem:11.14} (现应用于满足 $m \ge 2$ 与 $m > s_0$ 的某个固定整数 $m \in \N$) 给出了前向解的先验指数增长界: $v \in \ee^{C_0 t} H^m(M_+)^{\bullet, -}$. 对满足 $\eta > 0$ 的 $\operatorname{Im}\sigma \ge C_0 + \eta$, 我们从而可以良定义 Fourier 变换 $\hat v(\sigma, \cdot) = \int_\R \ee^{\ii \sigma t} v(t, \cdot) \,\dd t$, 并估计:
+\begin{equation}\label{eq:11.100}
+    \|\hat v(\sigma)\|_{\bar H^m(X)} \le \int_0^\infty |\ee^{\ii \sigma t}| \|v(t, \cdot)\|_{\bar H^m(X)} \,\dd t \le \int_0^\infty \ee^{-\eta t} \ee^{-C_0 t} \|v(t, \cdot)\|_{\bar H^m(X)} \,\dd t \le \frac{1}{\sqrt{2\eta}} \|v\|_{\ee^{C_0 t} \dot H^m(M_+)^{\bullet, -}}.
+\end{equation}
+由于当 $\operatorname{Im}\sigma > C_0$ 时 $\mathcal{F}(\partial_t v)(\sigma) = -\ii \sigma \hat v(\sigma)$, 对 $j = 0, \ldots, m$ 我们有关于 $|\sigma|^j \|\hat v(\sigma)\|_{\bar H^{m-j}(X)}$ 的类似界. 取 $\eta = 1$, 我们从而证明了
+\begin{equation}\label{eq:11.101}
+    \|\sigma^j \hat v(\sigma)\|_{\bar H^{m-j}(X)} \le C \|v\|_{\ee^{C_0 t} \dot H^m(M_+)^{\bullet, -}} \le C \|Pv\|_{\ee^{C_0 t} \dot H^{m-1}(M_+)^{\bullet, -}}, \qquad \operatorname{Im}\sigma = C_0 + 1.
+\end{equation}
+对 $P v = w$ 作时间 Fourier 变换并在 $t$ 方向分部积分, 进一步产生
+\begin{equation}\label{eq:11.102}
+    \widehat{P}(\sigma) \hat v(\sigma) = \hat w(\sigma), \qquad \operatorname{Im}\sigma > C_0.
+\end{equation}
+由于当 $\operatorname{Im}\sigma > C_0$ 时 $\widehat{P}(\sigma)$ 在 $\bar H^m(X)$ 上是单射的, 这蕴涵
+\begin{equation}\label{eq:11.103}
+    \hat v(\sigma) = \widehat{P}(\sigma)^{-1} \hat w(\sigma), \qquad \operatorname{Im}\sigma > C_0.
+\end{equation}
+由于 $m \ge 2$, 我们亦从式~\eqref{eq:11.101} 推知当 $\operatorname{Im}\sigma = C_0 + 1$ 时 $\|\hat v(\sigma)\|_{\bar H^{m-2}(X)} \le C \langle\sigma\rangle^{-2}$. Fourier 反演公式从而给出
+\begin{equation}\label{eq:11.104}
+    v(t, \cdot) = \frac{1}{2\pi} \int_{\operatorname{Im}\sigma = C_0 + 1} \ee^{-\ii \sigma t} \hat v(\sigma, \cdot) \,\dd \sigma = \frac{1}{2\pi} \int_{\operatorname{Im}\sigma = C_0 + 1} \ee^{-\ii \sigma t} \widehat{P}(\sigma)^{-1} \hat w(\sigma) \,\dd \sigma,
+\end{equation}
+其中积分在 $\bar H^{m-2}(X)$ 内绝对收敛.
+
+置 $\alpha_+ \defeq \alpha > \alpha_- \defeq -C_0 - 1$. 我们希望将式~\eqref{eq:11.104} 中的积分围道从 $\operatorname{Im}\sigma = -\alpha_-$ 向下平移至 $\operatorname{Im}\sigma = -\alpha_+ = -\alpha$. 固定定理~\ref{thm:11.21} 中的常数 $C'$. 对任意 $R > C'$, 考虑如下闭合矩形拼合围道:
+\begin{equation}\label{eq:11.105}
+\begin{aligned}
+    \gamma_R &\defeq \gamma_R^- \cup \gamma_{R, |}^- \cup \gamma_R^0 \cup \gamma_{R, |}^+ \cup \gamma_R^+, \\
+    \gamma_R^-(s) &= s - \ii \alpha_-, \qquad -\infty < s \le -R, \\
+    \gamma_{R, |}^-(s) &= -R - \ii s, \qquad \alpha_- \le s \le \alpha_+, \\
+    \gamma_R^0(s) &= s - \ii \alpha_+, \qquad -R \le s \le R, \\
+    \gamma_{R, |}^+(s) &= R + \ii s, \qquad -\alpha_+ \le s \le -\alpha_-, \\
+    \gamma_R^+(s) &= s - \ii \alpha_-, \qquad R \le s < \infty.
+\end{aligned}
+\end{equation}
+
+\begin{figure}[htbp]
+\centering
+\drawFigElevenSix
+\caption{由式~\eqref{eq:11.105} 定义的围道 $\gamma_R$ 以及矩形区域 $\mathcal{R}_R$ 内部包含的有限多个散射谐振极点.}\label{fig:11.6}
+\end{figure}
+
+见图~\ref{fig:11.6}. 对所有 $\sigma \in \gamma_R$, 预解算子 $\widehat{P}(\sigma)^{-1} \colon \bar H^{m-1}(X) \to \bar H^m(X)$ 处处良定义, 且它在矩形区域 $\mathcal{R}_R \defeq [-R, R] \times \ii[-\alpha_+, -\alpha_-]$ 内仅有有限多个极点. Cauchy 留数定理从而给出
+\begin{equation}\label{eq:11.106}
+    v(t, \cdot) = \frac{1}{2\pi} \int_{\gamma_R} \ee^{-\ii \sigma t} \widehat{P}(\sigma)^{-1} \hat w(\sigma) \,\dd \sigma + \sum_{\sigma_0 \in \operatorname{Res}(P) \cap \mathcal{R}_R} \ii \operatorname{res}_{\sigma = \sigma_0} \left( \ee^{-\ii \sigma t} \widehat{P}(\sigma)^{-1} \hat w(\sigma) \right).
+\end{equation}
+命题~\ref{prop:11.20} 表明右端的有限和是一组谐振态之和; 并且因为当 $R > C'$ 时集合 $\operatorname{Res}(P) \cap \mathcal{R}_R$ 与 $R$ 无关, 该求和与 $R$ 无关.
+
+\begin{lemma}[围道积分估计]\label{lem:11.23}
+设 $t \in \R$. 则当 $R \to \infty$ 时, $\ee^{-\ii \sigma t} \widehat{P}(\sigma)^{-1} \hat w(\sigma)$ 沿 $\gamma_R^\pm$ 与 $\gamma_{R, |}^\pm$ 的围道积分在 $L^2(X)$ 中趋于 0. 此外, 极限积分
+\begin{equation}\label{eq:11.107}
+    \lim_{R \to \infty} \int_{\gamma_R^0} \ee^{-\ii \sigma t} \widehat{P}(\sigma)^{-1} \hat w(\sigma) \,\dd \sigma = \int_{\operatorname{Im}\sigma = -\alpha} \ee^{-\ii \sigma t} \widehat{P}(\sigma)^{-1} \hat w(\sigma) \,\dd \sigma
+\end{equation}
+在 $L^2(X)$ 中收敛.
+\end{lemma}
+
+\begin{proof}
+记 $h = |\operatorname{Re}\sigma|^{-1}$. 由于 $w \in \mathcal{C}_{\mathrm{c}}^\infty(\R \times X)$, 我们有
+\begin{equation}\label{eq:11.108}
+    \|\hat w(\sigma)\|_{\bar H_h^{m-1}(X)} \le C \|\hat w(\sigma)\|_{\bar H^{m-1}(X)} \le C (1 + |\operatorname{Re}\sigma|)^{-2}, \qquad -\alpha_+ \le \operatorname{Im}\sigma \le -\alpha_-.
+\end{equation}
+(第一处不等式见习题~\ref{ex:2.23}.) 鉴于 $\|\widehat{P}(\sigma)^{-1} \hat w(\sigma)\|_{L^2(X)} \le C \|\widehat{P}(\sigma)^{-1} \hat w(\sigma)\|_{\bar H_h^m(X)}$, 定理~\ref{thm:11.21} 的高能估计蕴涵
+\begin{equation}\label{eq:11.109}
+    \|\widehat{P}(\sigma)^{-1} \hat w(\sigma)\|_{L^2(X)} \le C |\operatorname{Re}\sigma|^{-3}
+\end{equation}
+对围道 $\gamma_R^\pm, \gamma_{R, |}^\pm$ 上的 $\sigma$ 一致成立. 期望的结论由如下两个极限直接得出:
+\[
+    (\alpha_+ - \alpha_-) \cdot C R^{-3} \xrightarrow{R \to \infty} 0 \quad (\text{对 } \gamma_{R, |}^\pm), \qquad \int_R^\infty C s^{-3} \,\dd s \xrightarrow{R \to \infty} 0 \quad (\text{对 } \gamma_R^\pm).
+\]
+另一方面, 对于 $\operatorname{Im}\sigma = -\alpha_+$, 函数 $\widehat{P}(\sigma)^{-1} \hat w(\sigma)$ 在 $|\operatorname{Re}\sigma| \le C'$ 时在 $\bar H^m(X)$ 从而在 $L^2(X)$ 中有界, 且式~\eqref{eq:11.109} 蕴涵当 $|\operatorname{Re}\sigma| \ge C'$ 时 $\|\widehat{P}(\sigma)^{-1} \hat w(\sigma)\|_{L^2(X)} \le C^{\prime\prime\prime} |\operatorname{Re}\sigma|^{-3}$. 这蕴涵了最终断言.
+\end{proof}
+
+在式~\eqref{eq:11.106} 中取极限 $R \to \infty$ 给出
+\begin{equation}\label{eq:11.110}
+\begin{aligned}
+    v &= v_1 + v_2, \\
+    v_1(t, \cdot) &\defeq \frac{1}{2\pi} \int_{\operatorname{Im}\sigma = -\alpha} \ee^{-\ii \sigma t} \widehat{P}(\sigma)^{-1} \hat w(\sigma) \,\dd \sigma, \\
+    v_2(t, \cdot) &\defeq \sum_{\substack{\sigma_0 \in \operatorname{Res}(P) \\ \operatorname{Im}\sigma_0 > -\alpha}} \ii \operatorname{res}_{\sigma = \sigma_0} \left( \ee^{-\ii \sigma t} \widehat{P}(\sigma)^{-1} \hat w(\sigma) \right).
+\end{aligned}
+\end{equation}
+记 $\sigma = \lambda - \ii \alpha$ ($\lambda \in \R$), 我们有
+\begin{equation}\label{eq:11.111}
+    v_1(t, \cdot) = \frac{1}{2\pi} \ee^{-\alpha t} \int_\R \ee^{-\ii \lambda t} \widehat{P}(\lambda - \ii \alpha)^{-1} \mathcal{F}(\ee^{\alpha t} w)(\lambda) \,\dd \lambda.
+\end{equation}
+命题~\ref{prop:2.27} 的一个变体表明
+\begin{equation}\label{eq:11.112}
+    \|\mathcal{F}(\ee^{\alpha t} w)\|_{L^2(\R_\lambda; \langle\lambda\rangle^{-(m-1)} \bar H_{\langle\lambda\rangle^{-1}}^{m-1}(X))}
+\end{equation}
+被常数倍的 $\|\ee^{\alpha t} w\|_{H^{m-1}(M)}$ 上下双向控制. 式~\eqref{eq:11.88} 的先验估计 (对满足 $|\operatorname{Re}\lambda| \ge C'$ 的 $\sigma = \lambda - \ii \alpha$) 以及 $\widehat{P}(\lambda - \ii \alpha)^{-1}$ 的有界性 (对 $\lambda \in [-C', C']$) 蕴涵
+\begin{equation}\label{eq:11.113}
+    \|\widehat{P}(\lambda - \ii \alpha)^{-1} \mathcal{F}(\ee^{\alpha t} w)(\lambda)\|_{\langle\lambda\rangle^{-m} \bar H_{\langle\lambda\rangle^{-1}}^m(X)} \le C \|\mathcal{F}(\ee^{\alpha t} w)(\lambda)\|_{\langle\lambda\rangle^{-(m-1)} \bar H_{\langle\lambda\rangle^{-1}}^{m-1}(X)}.
+\end{equation}
+将此信息代入式~\eqref{eq:11.111} 并再次使用命题~\ref{prop:2.27}, 我们推知
+\begin{equation}\label{eq:11.114}
+    \|v_1\|_{\ee^{-\alpha t} H^m(M)} \le C \|w\|_{\ee^{-\alpha t} H^{m-1}(M)}.
+\end{equation}
+现在固定截断函数:
+\begin{equation}\label{eq:11.115}
+    \chi \in \mathcal{C}^\infty(\R), \qquad \chi = 0 \text{ 在 } (-\infty, 1], \qquad \chi = 1 \text{ 在 } [2, \infty).
+\end{equation}
+我们从而可以分解
+\begin{equation}\label{eq:11.116}
+    v = \chi v + (1 - \chi) v = \chi v_2 + \big( \chi v_1 + (1 - \chi) v \big).
+\end{equation}
+项 $\chi v_2$ 编码了谐振展开. 考察第二项: 由于 $(1 - \chi) v$ 在时间方向具有紧支集, 我们有
+\begin{equation}\label{eq:11.117}
+    \|\chi v_1 + (1 - \chi) v\|_{\ee^{-\alpha t} H^m(M)} \le C' \|w\|_{\ee^{-\alpha t} H^{m-1}(M)}.
+\end{equation}
+我们至此完整证明了定理~\ref{thm:11.11} 的如下定量 Sobolev 版本:
+
+\begin{theorem}[迟时渐近展开: Sobolev 空间版本]\label{thm:11.24}
+设 $\alpha \in \R$ 满足对所有 $\sigma \in \operatorname{Res}(P)$ 均有 $\operatorname{Im}\sigma \neq -\alpha$. 定义 $\operatorname{Res}_\alpha(P) \defeq \operatorname{Res}(P) \cap \{\operatorname{Im}\sigma > -\alpha\}$. 设 $\chi$ 如式~\eqref{eq:11.115}. 设整数 $m \ge 2$, $m > \frac{1}{2} + \alpha + \tilde\beta$. 对于 $w \in \ee^{-\alpha t} H^{m-1}(M_+)^{\bullet, -}$, 设 $v$ 为 $P v = w$ 的唯一前向解. 置
+\begin{equation}\label{eq:11.118}
+\begin{aligned}
+    u_{\sigma_0} &\defeq \ii \operatorname{res}_{\sigma = \sigma_0}\left( \ee^{-\ii \sigma t} \widehat{P}(\sigma)^{-1} \hat w(\sigma) \right), \qquad \sigma_0 \in \operatorname{Res}_\alpha(P), \\
+    \tilde v_\alpha(t, \cdot) &\defeq \chi(t) \frac{1}{2\pi} \int_{\operatorname{Im}\sigma = -\alpha} \ee^{-\ii \sigma t} \widehat{P}(\sigma)^{-1} \hat w(\sigma) \,\dd \sigma + (1 - \chi(t)) v(t, \cdot).
+\end{aligned}
+\end{equation}
+则 $u_{\sigma_0} \in \operatorname{Res}(P, \sigma_0)$, $\tilde v_\alpha \in \ee^{-\alpha t} H^m(M_+)^{\bullet, -}$, 且
+\begin{equation}\label{eq:11.119}
+    v(t, \cdot) = \chi(t) \sum_{\sigma_0 \in \operatorname{Res}_\alpha(P)} u_{\sigma_0} + \tilde v_\alpha(t, \cdot), \qquad t \in \R.
+\end{equation}
+此外, 解算子映射
+\begin{equation}\label{eq:11.120}
+    S_\alpha \colon \ee^{-\alpha t} H^{m-1}(M_+)^{\bullet, -} \to \bigoplus_{\sigma_0 \in \operatorname{Res}_\alpha(P)} \operatorname{Res}(P, \sigma_0) \oplus \ee^{-\alpha t} H^m(M_+)^{\bullet, -}
+\end{equation}
+是线性且连续的.
+\end{theorem}
+
+\begin{proof}[定理~\ref{thm:11.24} 的证明]
+当 $w$ 是光滑且紧支集时我们已经证明了式~\eqref{eq:11.119} 以及算子 $S_\alpha$ 的连续性. 对于一般的源项 $w \in \ee^{-\alpha t} H^{m-1}(M_+)^{\bullet, -}$, 通过稠密性逼近论证即可完成证明.
+\end{proof}
+
+\begin{proof}[定理~\ref{thm:11.11} 的证明]
+对于在 $\supp w$ 上满足 $t \ge 0$ 的 $w \in \mathcal{C}_{\mathrm{c}}^\infty(\R \times X)$, 我们可以对趋向无穷大的一列实数 $\alpha \to \infty$ 以及所有充分大的整数 $m$ (依赖于 $\alpha$) 应用定理~\ref{thm:11.24}. 各项 $u_{\sigma_0}$ 与 $\alpha$ 无关, 且对所有 $m$ 成立的隶属关系 $\tilde v_\alpha \in \ee^{-\alpha t} H^m(M_+)^{\bullet, -}$ 借助 Sobolev 嵌入定理直接给出了逐点指数衰减界式~\eqref{eq:11.37}.
+\end{proof}
+
+\begin{example}[标量波动方程的渐近行为]\label{eg:11.25}
+对于标量波动算子 $P = \Box_g$, 除零模 $\sigma = 0$ 之外所有谐振均满足 $\operatorname{Im}\sigma \le -1$, 且 $\operatorname{Res}(\Box_g, 0) = \operatorname{span}\{1\}$ (例~\ref{eg:11.8}). 取 $\alpha \in (0, 1)$ 应用定理~\ref{thm:11.24} 从而表明方程的前向解具有如下形式:
+\begin{equation}\label{eq:11.121}
+    v(t, x) = v_0 + \tilde v(t, x), \qquad v_0 \in \mathbb{C}, \quad |\tilde v(t, x)| = \mathcal{O}(\ee^{-\alpha t}), \quad t \to \infty.
+\end{equation}
+也就是说, 它们以指数速率快速衰减到一个常数!
+\end{example}
+
+\section{非线性玩具模型}\label{sec:11.6}
+\index{feixianxing bodong fangcheng@非线性波动方程 (nonlinear wave equations)}%
+\index{yasuoyingshe yuanli@压缩映射原理 (contraction mapping principle)}%
+
+我们通过求解一个 (玩具型) 非线性方程, 来展示定理~\ref{thm:11.24} 中算子 $S_\alpha$ 有界性所编码的定量估计的威力. 与第~\ref{sec:5.13}~节相同, 我们的主要工具是 Banach 压缩映射原理.
+
+\begin{theorem}[半线性波动方程]\label{thm:11.26}
+设 $\alpha \in (0, 1)$, 且设整数 $m \ge 3$. 则存在常数 $\epsilon > 0$ 使得下述结论成立: 对每一个满足范数 $\|w\|_{\ee^{-\alpha t} H^{m-1}(M_+)^{\bullet, -}} < \epsilon$ 的源项 $w \in \ee^{-\alpha t} H^{m-1}(M_+)^{\bullet, -}$, 半线性波动方程
+\begin{equation}\label{eq:11.122}
+    \Box_g v + \langle \dd v, \dd v \rangle_{g^{-1}} = w
+\end{equation}
+在空间 $\ee^{-\alpha t} H^m(M_+)^{\bullet, -}$ 中存在唯一解 $v$.
+\end{theorem}
+
+在证明中, 我们使用对于 $s \ge 2$, 空间 $H^s(M)$ 在逐点乘法下构成一个代数. (这使用了 $2 > \frac{\dim M}{2} = \frac{3}{2}$ 以及习题~\ref{ex:5.29} 的变体.) 因此对于 $m \ge 3$, 空间 $\ee^{-\alpha t} H^{m-1}(M_+)^{\bullet, -}$ 在逐点乘法下构成代数.
+
+\begin{proof}[定理~\ref{thm:11.26} 的证明]
+对于 $\alpha \in (0, 1)$, 我们有 $\operatorname{Res}_\alpha(\Box_g) = \{0\}$ 以及 $\operatorname{Res}(\Box_g, 0) = \operatorname{span}\{1\}$ (例~\ref{eg:11.8}). 我们采用定理~\ref{thm:11.24} 的记号. 谨记例~\ref{eg:11.25}, 我们将从非线性映射
+\begin{equation}\label{eq:11.123}
+    T \colon (v_0, \tilde v) \mapsto S_\alpha\big( w - \langle \dd(\chi v_0 + \tilde v), \dd(\chi v_0 + \tilde v) \rangle_{g^{-1}} \big)
+\end{equation}
+的不动点出发通过 $v \defeq \chi v_0 + \tilde v$ 来构造解 $v$.
+
+我们断言 $T$ 将 Banach 空间
+\begin{equation}\label{eq:11.124}
+    \mathcal{H} \defeq \mathbb{C} \oplus \ee^{-\alpha t} H^m(M_+)^{\bullet, -}
+\end{equation}
+映射到自身. 为看清这一点, 注意到在标架 $\dd t, \dd x_1, \dd x_2$ 下 $\dd(\chi v_0 + \tilde v) = v_0 \dd\chi + \dd\tilde v$ 的每一个分量都属于 $\ee^{-\alpha t} H^{m-1}(M_+)^{\bullet, -}$. 因此 $\langle \dd(\chi v_0 + \tilde v), \dd(\chi v_0 + \tilde v) \rangle_{g^{-1}} \in \ee^{-2\alpha t} H^{m-1}(M_+)^{\bullet, -}$ 优越地属于解算子 $S_\alpha$ 的定义域 $\ee^{-\alpha t} H^{m-1}(M_+)^{\bullet, -}$. 赋予 $\mathcal{H}$ 范数 $\|(v_0, \tilde v)\|_{\mathcal{H}} \defeq |v_0| + \|\tilde v\|_{\ee^{-\alpha t} H^m(M_+)^{\bullet, -}}$, 我们进一步获得
+\begin{equation}\label{eq:11.125}
+    \|T(v_0, \tilde v)\|_{\mathcal{H}} \le C \left( \|w\|_{\ee^{-\alpha t} H^{m-1}(M_+)^{\bullet, -}} + \|(v_0, \tilde v)\|_{\mathcal{H}}^2 \right).
+\end{equation}
+设 $\rho_0 > 0$ 充分小使得 $C \rho_0^2 < \frac{1}{2}\rho_0$. 则对所有 $\rho_1 \in (0, \rho_0]$, 以及对满足范数界 $\|w\| < \epsilon \defeq \frac{\rho_1}{2C}$ 的源项 $w$, 映射 $T$ 将 $\mathcal{H}$ 中围绕原点的闭球 $B(0, \rho_1) \subset \mathcal{H}$ 映射入自身.
+
+为了证明 $T$ 在某个 $0 < \rho_1 \le \rho_0$ 的闭球 $B(0, \rho_1)$ 上是严格压缩映射, 设 $V = (v_0, \tilde v), V' = (v_0', \tilde v') \in B(0, \rho_1)$. 利用双线性展开, 差值
+\begin{equation}\label{eq:11.126}
+\begin{aligned}
+    T(V) - T(V') = -S_\alpha\Big( & \langle \dd(\chi(v_0 - v_0') + (\tilde v - \tilde v')), \dd(\chi v_0 + \tilde v) \rangle_{g^{-1}} \\
+    & + \langle \dd(\chi v_0' + \tilde v'), \dd(\chi(v_0 - v_0') + (\tilde v - \tilde v')) \rangle_{g^{-1}} \Big).
+\end{aligned}
+\end{equation}
+的范数被 $C \|V - V'\|_{\mathcal{H}} \|V + V'\|_{\mathcal{H}} \le 2C \rho_1 \|V - V'\|_{\mathcal{H}} < \frac{1}{2} \|V - V'\|_{\mathcal{H}}$ (当 $\rho_1 < \frac{1}{4C}$ 时) 严格控制.
+
+Banach 压缩映射原理现在适用并给出映射 $T$ 的唯一不动点 $V = (v_0, \tilde v) \in B(0, \rho_1)$. 由 $T$ 的定义, 函数 $v \defeq \chi v_0 + \tilde v$ 精确求解了非线性波动方程~\eqref{eq:11.122}.
+
+解 $v$ 的唯一性通过注意到两个解 $v, v'$ 的差值 $u \defeq v - v'$ 支集包含在 $\{t \ge 0\}$ 内且满足齐次线性波动型方程而得出:
+\begin{equation}\label{eq:11.127}
+    L u = 0, \qquad L \defeq \Box_g + \langle \dd(\cdot), \dd v \rangle_{g^{-1}} + \langle \dd v', \dd(\cdot) \rangle_{g^{-1}}.
+\end{equation}
+$L$ 第二项 (为一阶项) 的系数具有 $\mathcal{C}^0$ 正则性. 这足以应用如同定理~\ref{thm:9.19} 证明中的能量方法 (参见式~\eqref{eq:9.47}--\eqref{eq:9.49} 对 $V u$ 项的处理), 由此推知 $u$ 在 $t < 0$ 时的消失性在所有 $t \ge 0$ 时得以持久保持. 从而必有 $v = v'$.
+\end{proof}
+
+\section*{注记}
+\addcontentsline{toc(1)}{section}{注记}
+
+定理~\ref{thm:11.10} 与定理~\ref{thm:11.11} 的证明在很大程度上遵循了 Vasy \cite{Vas13} 的开创性框架, 尽管若干技术细节有所不同. Vasy 在视界 $r^{-1}(1)$ 之外使用复吸收 (习题~\ref{ex:8.6}) 来“封堵” $r = 1$ 之外的问题. 更确切地, 一旦复吸收算子 $Q_\sigma \in \Diff^2$ 在 $r > 3/2$ 内椭圆, 翻倍构造便在无边界紧流形上产生了一个算子 $\widehat{P}(\sigma) - \ii Q_\sigma$, 人们可为其建立 Fredholm 性质 (习题~\ref{ex:8.7}). 虽然这种方法是纯微局部的, 但在构造 $Q_\sigma$ 时需要仔细处理使其与高能分析相兼容. 本章所展示的引入人工边界的处理方法最初由 Hintz--Vasy \cite{HV15} 详尽阐述. 它在 $r = 2$ 附近具有较弱的微局部性, 因为它深度利用了 $\widehat{P}(\sigma)$ 在 $r > 1$ 处的双曲和微分算子特征; 然而从波动方程的视角来看这是非常自然的.
+
+第~\ref{sec:11.3}~节中确立谱族 $\widehat{P}(\sigma)$ 的 Fredholm 性质的论证——尽管 $\widehat{P}(\sigma)$ 并非椭圆算子——是非椭圆 Fredholm 理论的经典范例. 相同方法的另一个重大应用是通过对谱族 $\Delta_g - (\frac{n-1}{2})^2 - \sigma^2$ 进行适当共轭并跨越共形边界延拓至合适的光滑流形, 证明所谓偶渐近双曲流形 $(M, g)$ 上的亚纯延拓的存在性. 该延拓算子完全共享了本章所考察的 $\widehat{P}(\sigma)$ 的全部核心几何特征. 这种建立亚纯延拓的方法被称为 \textbf{Vasy 方法} (Vasy's method). Zworski 在 \cite{Zwo16} 中对此方法给出了凝练精彩的综述. (亚纯延拓此前由 Mazzeo--Melrose \cite{MM87} 使用拟逆构造获得, 其偶性条件在 Guillarmou \cite{Gui05} 中得到阐明.)
+
+建立 $\widehat{P}(\sigma)^{-1}$ 亚纯性——在渐近 anti--de Sitter 时空背景下——并相应定义拟正规模的另一种途径由 Warnick \cite{War15} 给出; 它依赖于精细能量方法. 关键的径向点估计以 Dafermos--Rodnianski \cite{DR09} 引入的 (增强型) 红移估计 (redshift estimates) 的形式出现.
+
+其他重要时空类可以通过推广本章介绍的方法来深入分析. 一个至关重要的范例是 Kerr--de Sitter 黑洞时空, 由 Vasy 在 \cite[§6]{Vas13} 中系统分析. 该时空唯一的额外复杂几何特征是零测地流展现出常双曲捕获 (normally hyperbolic trapping). 陷阱集处的黑箱微局部估计由 Wunsch--Zworski \cite{WZ11} 与 Dyatlov \cite{Dya16} 严格证明. Schwarzschild--de Sitter 时空上的全谐振展开由 Bony--Häfner \cite{BH08} 借助 Sá Barreto--Zworski \cite{SBZ97} 的早期工作证明, 慢旋转 Kerr--de Sitter 黑洞时空上的展开由 Dyatlov \cite{Dya12} 确立. Kerr--de Sitter 时空全次极值范围内的部分谐振展开由 Petersen--Vasy \cite{PV21} 获得. 人们还可以对非定常但在时间趋向无穷时以指数速率 $\ee^{-\alpha t}$ 衰减稳定至 de Sitter (或 Kerr--de Sitter) 的时空建立定理~\ref{thm:11.11} 的类似物. 进一步的发展包括此类时空上半线性波动方程的整体解 \cite{HV15, HV16} 以及慢旋转 Kerr--de Sitter 黑洞的非线性稳定性 \cite{HV18}. 基于第~\ref{sec:11.6}~节中的谐振展开求解非线性波动方程最初在 Hintz--Vasy \cite{HV15} 中讨论. 定理~\ref{thm:11.26} 是那里所证定理的一个特例.
+
+严格 de Sitter 空间上几何波动方程 (例如张量束上的 Laplace--Beltrami 算子 $\Box_g v = w$) 解的渐近行为, 可以通过比本章简明得多的方式来分析, 即直接在全 de Sitter 空间上使用能量方法与正则奇异常微分方程分析 (本章研究的流形 $M$ 只是其子流形); 参见习题~\ref{ex:11.1}. 该方法源于 Hintz--Vasy \cite[附录 C]{HV18} 与 Hintz--Xie \cite{HX21, HX22}, 并建立在 Vasy \cite{Vas10} 的基础之上. 它的局限性在于无法应用于黑洞时空, 甚至无法应用于定理~\ref{thm:11.11} 分析的 $(M, g)$ 上的带有一般定常位势的一般波动型算子.
+
+\section*{习题}
+\addcontentsline{toc(1)}{section}{习题}
+
+\begin{exer}[标量波动算子的谐振]\label{ex:11.1}
+在本习题中, 我们证明例~\ref{eg:11.8} 中陈述的、在例~\ref{eg:11.25} 与定理~\ref{thm:11.26} 中所需要的所有断言.
+\begin{enumerate}[label=(\arabic*)]
+    \item 证明 $0 \in \operatorname{Res}(\Box_g)$ 且 $1 \in \operatorname{Res}(\Box_g, 0)$.
+    \item 引入坐标
+    \begin{equation}\label{eq:11.128}
+        \tau \defeq \ee^{-t} > 0, \qquad X \defeq x \ee^{-t} \in \R^2.
+    \end{equation}
+    证明度量与波动算子可表为
+    \begin{equation}\label{eq:11.129}
+        g = \frac{-\dd\tau^2 + \dd X^2}{\tau^2}, \qquad \Box_g = \tau \partial_\tau(\tau \partial_\tau - 2) - (\tau \partial_{X_1})^2 - (\tau \partial_{X_2})^2.
+    \end{equation}
+    (从而定义~\ref{def:11.1} 中的流形 $M$ 对应于 $[0, \infty)_\tau \times \R_X^2$ 的子集 $|X| \le 2\tau$.)
+    \item 证明超曲面 $|X| = 2 + 2\tau$ 是类空的. 由此推知
+    \begin{equation}\label{eq:11.130}
+        \Omega \defeq \{(\tau, X) : 0 < \tau \le 1, \; |X| \le 2 + 2\tau\}
+    \end{equation}
+    是一个容许时空区域, 其初始超曲面为 $\{\tau = 1\}$, 终值超曲面为 $\{|X| = 2 + 2\tau\}$. 见图~\ref{fig:11.7}.
+
+    \begin{figure}[htbp]
+    \centering
+    \drawFigElevenSeven
+    \caption{式~\eqref{eq:11.130} 中定义的容许时空梯形区域 $\Omega$.}\label{fig:11.7}
+    \end{figure}
+
+    \item 我们现在将式~\eqref{eq:11.129} 中的 $g$ 视作 $(0, 1]_\tau \times \mathcal{X}$ 上的度量, 其中 $\mathcal{X} \defeq (\R/5\mathbb{Z})_{X_1} \times (\R/5\mathbb{Z})_{X_2}$ 为环面, 并相应将 $\Box_g$ 视作 $((0, 1] \times \mathcal{X}, g)$ 上的波动算子. 假设对于所有 $f \in \mathcal{C}_{\mathrm{c}}^\infty((0, 1) \times \mathcal{X})$, 方程 $\Box_g u = f$ 的唯一前向解具有形式
+    \begin{equation}\label{eq:11.131}
+        u(\tau, X) = u_0(X) + \tilde u(\tau, X),
+    \end{equation}
+    其中
+    \begin{equation}\label{eq:11.132}
+        u_0 \in \mathcal{C}^\infty(\mathcal{X}), \qquad |(\tau \partial_\tau)^j \partial_X^\alpha \tilde u(\tau, X)| \le C_{j\alpha} \tau^\beta \qquad (j \in \N_0, \; \alpha \in \N_0^2)
+    \end{equation}
+    对某个固定的 $\beta \in (1, 2)$ 成立. 由此推导 $\operatorname{Res}(\Box_g) \cap \{\operatorname{Im}\sigma \ge -\beta\} \subseteq \{0, -\ii\}$. 结合第 (1) 步断言得出
+    \begin{equation}\label{eq:11.133}
+        \operatorname{Res}(\Box_g) \cap \{\operatorname{Im}\sigma > -1\} = \{0\}, \qquad \operatorname{Res}(\Box_g, 0) = \operatorname{span}\{1\}.
+    \end{equation}
+    \item 在本习题余下的部分中, 我们为 $f \in \mathcal{C}_{\mathrm{c}}^\infty((0, 1) \times \mathcal{X})$, 进而更一般地为支集包含在 $\tau < 1$ 内且满足
+    \begin{equation}\label{eq:11.134}
+        |(\tau \partial_\tau)^j \partial_X^\alpha f(\tau, X)| \le C_{j\alpha} \tau^\beta \qquad (j \in \N_0, \; \alpha \in \N_0^2)
+    \end{equation}
+    的源项 $f$ 确立式~\eqref{eq:11.131}--\eqref{eq:11.132} (其中 $\beta \in (1, 2)$ 固定). 首先证明前向柯西问题 $\Box_g u = f$ 存在唯一的全局光滑解. 然后证明对于能量泛函
+    \begin{equation}\label{eq:11.135}
+        E[u](\tau) \defeq \frac{1}{2} \int_{\mathcal{X}} \left( |\tau \partial_\tau u(\tau, X)|^2 + |\tau \partial_X u(\tau, X)|^2 \right) \,\dd X,
+    \end{equation}
+    有如下微分不等式估计:
+    \begin{equation}\label{eq:11.136}
+        -\tau \partial_\tau E[u](\tau) \le \int_{\mathcal{X}} |f(\tau, X)|^2 \,\dd X.
+    \end{equation}
+    由此推知 $\sup_{\tau \in (0, 1]} E[u](\tau) < \infty$.
+    \item 证明微分算子 $\partial_{X_1}, \partial_{X_2}$ 以及 $\partial_t = -\tau \partial_\tau - X \cdot \partial_X$ 均与波动算子 $\Box_g$ 对易. 由此推导
+    \begin{equation}\label{eq:11.137}
+        \sup_{\tau \in (0, 1]} E\left[ (\tau \partial_\tau)^k \partial_X^\gamma u \right] < \infty \qquad (\forall k \in \N_0, \; \gamma \in \N_0^2).
+    \end{equation}
+    \item 证明对于任意固定的 $\eta < 0$, 恒有
+    \begin{equation}\label{eq:11.138}
+        |(\tau \partial_\tau)^j \partial_X^\alpha u(\tau, X)| \le C_{j\alpha} \tau^\eta \qquad (\forall j \in \N_0, \; \alpha \in \N_0^2).
+    \end{equation}
+    \item 我们将式~\eqref{eq:11.138} 应用于 $\eta = \beta - 2$. 将方程 $\Box_g u = f$ 重写为关于 $\tau$ 的常微分算子方程:
+    \begin{equation}\label{eq:11.139}
+        \tau \partial_\tau(\tau \partial_\tau - 2) u = f + (\tau \partial_{X_1})^2 u + (\tau \partial_{X_2})^2 u.
+    \end{equation}
+    求解该常微分方程 (视 $X$ 为光滑参数), 并通过逐次渐近迭代完成式~\eqref{eq:11.131}--\eqref{eq:11.132} 的证明.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[初值问题]\label{ex:11.2}
+设 $P$ 为 de Sitter 空间 $(M, g)$ 上的定常波动型算子. 设 $v_0, v_1 \in \mathcal{C}^\infty(X)$. 证明初值问题
+\[
+    P v = 0, \qquad v|_{t=0} = v_0, \qquad \partial_t v|_{t=0} = v_1
+\]
+的唯一解当 $t \to \infty$ 时同样具有式~\eqref{eq:11.36}--\eqref{eq:11.37} 所给出的谐振展开.
+\end{exer}
+
+\begin{exer}[对偶谐振态的正则性]\label{ex:11.3}
+采用定理~\ref{thm:11.16} 的记号. 证明如果分布截面 $u^* \in \dot{\mathscr{D}}'(X)$ 满足 $\widehat{P}(\sigma)^* u^* = 0$, 则:
+\begin{enumerate}[label=(\arabic*)]
+    \item 当 $r > 1$ 时, 恒有 $u^* = 0$.
+    \item $u^*|_{\{r < 1\}} \in \mathcal{C}^\infty(\{r < 1\})$; 更精确地, $\WF(u^*) \subset \mathcal{R}_+ \cup \mathcal{R}_-$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[正则化论证]\label{ex:11.4}
+设 $N \in \R$.
+\begin{enumerate}[label=(\arabic*)]
+    \item 构造一族算子 $J_\epsilon \in \Psi^{-N}(\R^n)$ ($\epsilon \in (0, 1]$), 使得 $J_\epsilon$ 在 $\Psi^0(\R^n)$ 中一致有界, 对所有 $\eta > 0$ 在 $\Psi^\eta(\R^n)$ 中收敛至恒等算子 $I$, 并且满足只要 $\supp u \subset [0, \infty) \times \R^{n-1}$, 必有 $\supp J_\epsilon u \subset [0, \infty) \times \R^{n-1}$. (提示: 习题~\ref{ex:9.4}.)
+    \item 设 $M$ 为紧致流形, 并设 $\Omega \subset M$ 为具有光滑边界的光滑子流形. 构造算子族 $J_\epsilon \in \Psi^{-N}(M)$ ($\epsilon \in (0, 1]$), 使得 $J_\epsilon$ 在 $\Psi^0(M)$ 中一致有界, 对所有 $\eta > 0$ 在 $\Psi^\eta(M)$ 中收敛至 $I$, 并且 $\supp u \subset \Omega$ 蕴涵 $\supp J_\epsilon u \subset \Omega$.
+    \item 采用上一小问的记号. 固定 $M$ 上的一个体积密度. 设 $P \in \Diff^m(M)$, 并假设 $u \in \bar H^s(\Omega)$, $u^* \in \dot H^{-s+m-1}(\Omega)$ 满足 $P u \in \bar H^{s-m+1}(\Omega)$ 以及 $P^* u^* \in \dot H^{-s}(\Omega)$. 证明分部积分恒等式成立:
+    \begin{equation}\label{eq:11.140}
+        \langle P u, u^* \rangle_{L^2(\Omega)} = \langle u, P^* u^* \rangle_{L^2(\Omega)}.
+    \end{equation}
+    (作为一个特例, 这为式~\eqref{eq:11.71} 的计算提供了严格的数学证明.)
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[单纯极点的显式形式: 一般理论]\label{ex:11.5}
+采用定理~\ref{thm:11.16} 的记号. 假设 $\sigma_0 \in \mathbb{C}$ ($\operatorname{Im}\sigma_0 > -\alpha$) 是预解算子 $\widehat{P}(\sigma)^{-1}$ 的单纯极点 (simple pole), 即在式~\eqref{eq:11.79} 的记号下有 $J = 1$ 且 $\operatorname{rank} B_1 = 1$. 设非零元素 $0 \neq u \in \ker_{\bar H^s(X)} \widehat{P}(\sigma_0)$, $0 \neq u^* \in \ker_{\dot H^{-s+1}(X)} \widehat{P}(\sigma_0)^*$. 证明
+\begin{equation}\label{eq:11.141}
+    \widehat{P}(\sigma)^{-1} f = (\sigma - \sigma_0)^{-1} \frac{\langle f, u^* \rangle_{L^2(X)}}{\langle \partial_\sigma \widehat{P}(\sigma_0) u, u^* \rangle_{L^2(X)}} u + \mathrm{hol}(\sigma).
+\end{equation}
+\end{exer}
+
+\begin{exer}[单纯极点的显式形式: 标量波动算子]\label{ex:11.6}
+延续习题~\ref{ex:11.5}, 考虑标量波动算子 $P \defeq \Box_g$ 与零模谐振 $\sigma_0 = 0 \in \operatorname{Res}(P)$. 求出对偶谐振态 $u^*$, 并显式计算式~\eqref{eq:11.141} 中的第一项系数.
+\end{exer}
+

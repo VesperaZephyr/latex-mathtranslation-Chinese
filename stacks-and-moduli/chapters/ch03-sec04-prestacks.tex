@@ -1,0 +1,286 @@
+% Source printed pp. 86-93; continued in ch03-sec04b-fiber-products.tex.
+\section{预叠}\label{src:3.4}
+\begin{epigraph}
+红王后摇了摇头. ``如果你愿意, 尽可以说这是`胡话','' 她说, ``但我听过的胡话, 相比之下, 这简直像字典一样合乎情理!''
+\epigraphauthor{Lewis Carroll, 镜中奇遇}
+\end{epigraph}
+Grothendieck 在~\cite[§A.1]{FGAI}~及~\cite[§6]{SGA1}~中引入预叠与叠, 用以表述满足 fpqc 下降的对象的范畴结构. Giraud~\cite{Gir64,Gir71}~进一步发展了预叠的语言. 在 \S\bookref{1.6.1-subsection} 中已经解释了预叠的动机: 为记录自同构, 我们天真地考虑一个函子
+\[
+F:\mathcal S\longrightarrow\Groupoids.
+\]
+虽然这样理解预叠很有帮助, 但更方便的定义是将各个 $S\in\mathcal S$ 对应的群胚 $F(S)$ 组织成 $\mathcal S$ 上的一个大范畴 $\mathcal X$, 参数化二元组 $(a,S)$, 其中 $S\in\mathcal S$, $a\in F(S)$.
+
+\subsection{预叠的定义}\label{src:3.4.1-subsection}
+设 $\mathcal S$ 是范畴, $p:\mathcal X\to\mathcal S$ 是范畴的函子. 我们将这些数据画成
+\[
+\begin{tikzcd}[column sep=large]
+\mathcal X\arrow[d,"p"']&a\arrow[r,"\alpha"]\arrow[d,mapsto]&b\arrow[d,mapsto]\\
+\mathcal S&S\arrow[r,"f"']&T
+\end{tikzcd}
+\]
+其中小写字母 $a,b$ 是 $\mathcal X$ 的对象, 大写字母 $S,T$ 是 $\mathcal S$ 的对象. 我们称 $a$ 位于 $S$ 上, 态射 $\alpha:a\to b$ 位于 $f:S\to T$ 上.
+\begin{definition}[预叠]\label{src:3.4.1}
+函子 $p:\mathcal X\to\mathcal S$ 是范畴 $\mathcal S$ 上的预叠, 若:
+\begin{enumerate}[(1)]
+\item (拉回存在) 对每个由实线箭头组成的图
+\[
+\begin{tikzcd}
+a\arrow[r,dashed]\arrow[d,mapsto]&b\arrow[d,mapsto]\\
+S\arrow[r]&T
+\end{tikzcd}
+\]
+都存在位于 $S\to T$ 上的态射 $a\to b.
+$
+\item (拉回的泛性质) 对每个由实线箭头组成的图
+\[
+\begin{tikzcd}[column sep=large]
+a\arrow[r,dashed]\arrow[rr,bend left=35]\arrow[d,mapsto]&
+b\arrow[r]\arrow[d,mapsto]&c\arrow[d,mapsto]\\
+R\arrow[r]&S\arrow[r]&T
+\end{tikzcd}
+\]
+都存在位于 $R\to S$ 上的唯一箭头 $a\to b$, 将图补全.
+\end{enumerate}
+\end{definition}
+\begin{caution}\label{src:3.4.2}
+定义与讨论预叠时, 我们常写 $\mathcal X$ 而非 $\mathcal X\to\mathcal S$, 但必要时将投影记为 $p_{\mathcal X}:\mathcal X\to\mathcal S$. 函子 $\mathcal X\to\mathcal S$ 的定义应当是清楚的, 因而通常不再详细写出. 此外, 定义预叠 $\mathcal X$ 时, 常常只定义 $\mathcal X$ 中的对象与态射, 将复合律留给读者.
+\end{caution}
+\begin{remark}\label{src:3.4.3}
+上述公理 (2) 表明, 公理 (1) 中的拉回在唯一同构的意义下唯一. 我们常写 $f^*b$ 或简单地写 $b|_S$, 表示选定的一个拉回.
+\end{remark}
+\begin{definition}[纤维范畴]\label{src:3.4.4}
+若 $\mathcal X$ 是 $\mathcal S$ 上的预叠, 则 $S\in\mathcal S$ 上的纤维范畴 $\mathcal X(S)$ 是由 $\mathcal X$ 中位于 $S$ 上的对象及位于 $\id_S$ 上的态射组成的范畴.
+\end{definition}
+\begin{exercise}\label{src:3.4.5}
+证明纤维范畴 $\mathcal X(S)$ 是群胚.
+\end{exercise}
+\begin{caution}\label{src:3.4.6}
+我们的术语并不标准. 预叠通常称为群胚纤维化范畴. 在文献中 (参见~\cite[§4]{FGI+05}, \cite[§4.6]{Ols16}), 预叠有时被定义为满足预叠的公理~\bookref{3.5.1}(1) 的群胚纤维化范畴.
+
+若 $\mathcal X$ 中的态射 $b\to c$ 满足公理~\bookref{3.5.1}(2) 的泛性质, 则通常称它为 Cartesian 态射; 若对公理~\bookref{3.5.1}(1) 中的每个图, 都存在位于 $S\to T$ 上的 Cartesian 态射 $a\to b$, 则称 $p:\mathcal X\to\mathcal S$ 为纤维化范畴.
+用这些术语来说, 预叠 (按我们的定义) 就是每个箭头都为 Cartesian 的纤维化范畴; 等价地, 每个纤维范畴 $\mathcal X(S)$ 都是群胚.
+\end{caution}
+
+\subsection{例子}\label{src:3.4.2-subsection}
+\begin{example}[预层作为预叠]\label{src:3.4.7}
+若 $F:\mathcal S\to\Sets$ 是预层, 可以构造一个预叠 $\mathcal X_F$, 其范畴由二元组 $(a,S)$ 组成, 其中 $S\in\mathcal S$, $a\in F(S)$. $\mathcal X_F$ 中的态射 $(a',S')\to(a,S)$ 是满足 $a'=f^*a$ 的映射 $f:S'\to S$, 其中 $f^*$ 是 $F(f):F(S)\to F(S')$ 的简便记法. 投影 $\mathcal X_F\to\mathcal S$ 定义为 $(a,S)\mapsto S$. 注意, 纤维范畴 $\mathcal X_F(S)$ 等价于 (甚至等于) 集合 $F(S)$. 我们常常滥用记号, 将 $F$ 与 $\mathcal X_F$ 混同.
+\end{example}
+\begin{example}[可表预叠]\label{src:3.4.8}
+若 $S$ 是范畴 $\mathcal S$ 的对象, 则由 $S$ 上的对象组成的限制范畴 $\mathcal S/S$ 定义一个 $\mathcal S$ 上的预叠, 其中投影态射 $\mathcal S/S\to\mathcal S$ 为 $(T\to S)\mapsto T$. 这与将上例应用于可表预层 $\Mor(-,S):\mathcal S\to\Sets$ 所得到的预叠相同.
+\end{example}
+\begin{example}[概形作为预叠]\label{src:3.4.9}
+如上例, 概形 $X$ 定义一个由 $X$ 上的概形组成的预叠 $\Sch/X$. 投影 $\Sch/X\to\Sch$ 为 $(T\to X)\mapsto T$. 我们常常滥用记号, 将 $\Sch/X$ 简称为 $X$.
+\end{example}
+\begin{example}[光滑曲线的预叠]\label{src:3.4.10}
+定义 $\Sch$ 上的预叠 $\mathcal M$ 为由光滑曲线族 $C\to S$ 组成的范畴, 即由概形的光滑固有态射 $C\to S$ 组成, 使得每个几何纤维都是连通曲线. 映射 $(C'\to S')\to(C\to S)$ 是映射 $\alpha:C'\to C$ 与 $f:S'\to S$ 的数据, 使得图
+\[
+\begin{tikzcd}
+C'\arrow[r,"\alpha"]\arrow[d]\arrow[dr,phantom,"\square"]&C\arrow[d]\\
+S'\arrow[r,"f"']&S
+\end{tikzcd}
+\]
+为 Cartesian 图. 投影 $\mathcal M\to\Sch$ 为 $(C\to S)\mapsto S$.
+
+定义预叠 $\mathcal M_g$ 为 $\mathcal M$ 中由每个几何纤维的亏格都为 $g$ 的光滑曲线族 $C\to S$ 组成的全子范畴. 注意, 代数闭域 $k$ 上的纤维范畴 $\mathcal M_g(k)$ 是由 $k$ 上亏格为 $g$ 的光滑连通射影曲线 $C$ 组成的群胚, 且
+\[
+\Mor_{\mathcal M_g(k)}(C,C')=\Isom_{\Sch/k}(C,C').
+\]
+\end{example}
+\begin{exercise}[简单但重要]\label{src:3.4.11}
+验证 $\mathcal M$ 与 $\mathcal M_g$ 是预叠.
+\end{exercise}
+\begin{example}[凝聚层与向量丛的预叠]\label{src:3.4.12}
+设 $X$ 是域 $k$ 上的概形. 定义 $\Sch/k$ 上的预叠 $\QCoh(X)$ 为由二元组 $(E,S)$ 组成的范畴, 其中 $S$ 是 $k$ 上的概形, $E$ 是 $X_S=X\times_k S$ 上在 $S$ 上平坦的拟凝聚层. 态射 $(E',S')\to(E,S)$ 由概形映射 $f:S'\to S$ 以及 $\mathcal O_{X_{S'}}$-模同构 $f^*E\to E'$ 组成.\footnote{这一态射定义并不完全精确, 因为拉回 $f^*E$ 并非典范. 回顾, $f^*E$ 定义为 $f^{-1}E\otimes_{f^{-1}\mathcal O_S}\mathcal O_{S'}$. 虽然它存在且在唯一同构的意义下唯一, 但选择拉回 $f^*E$ 涉及在 $f^{-1}E$ 的定义中选择极限, 选择张量积及选择层化. 可以将态射 $(E',S')\to(E,S)$ 定义为三元组 $(f,F',\alpha)$ 的等价类, 其中 $f:S'\to S$ 是概形映射, $F'$ 是 $E$ 的一个选定拉回, $\alpha:F'\to E'$ 是同构; 当 $f=g$ 且典范同构 $\gamma:F'\xrightarrow{\sim}G'$ 满足 $\alpha=\beta\circ\gamma$ 时, 规定 $(f,F',\alpha)\sim(g,G',\beta)$. 另一种方式是利用推前 $f_*E'$ 的典范性, 将态射 $(E',S')\to(E,S)$ 定义为映射 $f:S'\to S$ 与 $\mathcal O_{X_S}$-模态射 $E\to f_*E'$, 并要求其伴随态射为同构.}
+投影 $\QCoh(X)\to\Sch/k$ 定义为 $(E,S)\mapsto S$.
+
+子叠 $\mathsf{Coh}(X)\subseteq\QCoh(X)$ 是由 $E$ 为 $X_S$ 上有限表现拟凝聚层的二元组 $(E,S)$ 组成的全子范畴 (当 $X_S$ 为 Noether 概形时, 等价于 $E$ 为凝聚层). 类似地, $\Bun(X)\subseteq\mathsf{Coh}(X)$ 是由 $E$ 为 $X_S$ 上向量丛的二元组组成的全子范畴 (即有限秩的局部自由拟凝聚层).
+\end{example}
+\begin{exercise}\label{src:3.4.13}
+验证 $\QCoh(X)$, $\mathsf{Coh}(X)$ 与 $\Bun(X)$ 是预叠.
+\end{exercise}
+
+\subsection{分类叠与商叠}\label{src:3.4.3-subsection}
+分类叠与商叠的动机已在 \S\bookref{1.6.5-subsection} 中给出. 它们的定义涉及主 $G$-丛. 对光滑仿射群概形 $G\to S$\footnote{在 \S\bookref{7.3.2-subsection} 中, 我们将对 fppf 群概形更一般地定义主 $G$-丛, 分类叠与商叠.}, $S$-概形 $T$ 上的主 $G$-丛是概形态射 $P\to T$, 配备通过 $\sigma:G\times_S P\to P$ 给出的 $G$ 在 $P$ 上的作用, 使得 $P\to T$ 是 $G$-不变的光滑态射, 且
+\[
+(\sigma,p_2):G\times_S P\longrightarrow P\times_T P,
+\qquad(g,p)\longmapsto(gp,p)
+\]
+是同构 (见定义~\bookref{B.1.50}); 换言之, $G$ 自由且传递地作用于 $P$, 其商为 $T$.
+等价地, $P\to T$ 是主 $G$-丛当且仅当存在平展覆盖 $T'\to T$, 使得 $P\times_T T'$ 与平凡主 $G$-丛 $G\times_S T'$ $G$-等变同构 (命题~\bookref{B.1.52}). 更多背景与例子见 \S\bookref{B.1.7-subsection}.
+\begin{definition}[分类叠]\label{src:3.4.14}
+光滑仿射群概形 $G\to S$ 的分类叠 $BG$ 是 $\Sch/S$ 上的范畴, 其对象是主 $G$-丛 $P\to T$, 而态射 $(P'\to T')\to(P\to T)$ 是 $G$-等变态射 $P'\to P$ 的数据, 使得
+\[
+\begin{tikzcd}
+P'\arrow[r]\arrow[d]\arrow[dr,phantom,"\square"]&P\arrow[d]\\
+T'\arrow[r]&T
+\end{tikzcd}
+\]
+为 Cartesian 图.
+\end{definition}
+\begin{definition}[商预叠与商叠]\label{src:3.4.15}
+设 $G\to S$ 是作用于 $S$ 上概形 $U$ 的光滑仿射群概形. 光滑仿射群概形 $G\to S$ 在 $S$-概形 $U$ 上作用的商预叠 $[U/G]^{\mathrm{pre}}$ 是 $\Sch/S$ 上由二元组 $(T,u)$ 组成的范畴, 其中 $T$ 是 $S$-概形, $u\in U(T)$. 态射 $(T',u')\to(T,u)$ 是 $S$-概形映射 $f:T'\to T$ 及元素 $g\in G(T')$ 的数据, 满足 $f^*u=g\cdot u'$. 注意, 纤维范畴 $[U/G]^{\mathrm{pre}}(T)$ 可以与例~\bookref{1.4.6}~中的商群胚 $[U(T)/G(T)]$ 等同.
+
+商叠 $[U/G]$ 是 $\Sch/S$ 上由下列图组成的范畴:
+\[
+\begin{tikzcd}
+P\arrow[r]\arrow[d]&U\\
+T&
+\end{tikzcd}
+\]
+其中 $P\to T$ 是主 $G$-丛, $P\to U$ 是 $S$-概形的 $G$-等变态射.
+态射 $(T'\leftarrow P'\to U)\to(T\leftarrow P\to U)$ 由态射 $T'\to T$ 及概形的 $G$-等变态射 $P'\to P$ 组成, 使得图
+\[
+\begin{tikzcd}[column sep=large]
+P'\arrow[r]\arrow[rr,bend left=35]\arrow[d]\arrow[dr,phantom,"\square"]&
+P\arrow[r]\arrow[d]&U\\
+T'\arrow[r]&T&
+\end{tikzcd}
+\]
+交换, 且左侧方形为 Cartesian 图.
+\end{definition}
+\begin{exercise}[简单]\label{src:3.4.16}
+验证 $[U/G]^{\mathrm{pre}}$ 与 $[U/G]$ 是 $\Sch/S$ 上的预叠.
+\end{exercise}
+我们很快将证明, $[U/G]$ 与 $BG=[S/G]$ 是 $(\Sch/S)_{\text{ét}}$ 上的叠 (命题~\bookref{3.5.13}), 这就说明了商叠与分类叠这些术语的合理性. 还将证明 $[U/G]$ 可与 $[U/G]^{\mathrm{pre}}$ 的叠化等同 (习题~\bookref{3.5.21}), 后面再证明 $[U/G]$ 是代数叠 (定理~\bookref{4.1.10}).
+
+\subsection{预叠的态射}\label{src:3.4.4-subsection}
+\begin{definition}\label{src:3.4.17}
+\begin{enumerate}[(1)]
+\item 预叠态射 $f:\mathcal X\to\mathcal Y$ 是函子 $f:\mathcal X\to\mathcal Y$, 使得图
+\[
+\begin{tikzcd}
+\mathcal X\arrow[rr,"f"]\arrow[dr,"p_{\mathcal X}"']&&
+\mathcal Y\arrow[dl,"p_{\mathcal Y}"]\\
+&\mathcal S&
+\end{tikzcd}
+\]
+严格交换, 即对每个对象 $a\in\operatorname{Ob}(\mathcal X)$, 在 $\mathcal S$ 中有对象等式 $p_{\mathcal X}(a)=p_{\mathcal Y}(f(a))$, 而对每个态射 $\alpha:a\to b$, 有 $p_{\mathcal X}(\alpha)=p_{\mathcal Y}(f(\alpha))$.
+\item 若 $f,g:\mathcal X\to\mathcal Y$ 是预叠态射, 则 \newterm{$2$-同构}{$2$-isomorphism} (或 $2$-态射) $\alpha:f\to g$ 是自然变换 $\alpha:f\to g$, 使得对每个对象 $a\in\mathcal X$, $\mathcal Y$ 中的态射 $\alpha_a:f(a)\to g(a)$ (它是同构) 位于 $\mathcal S$ 中的恒等态射上. 我们常将 $2$-同构 $\alpha$ 示意地画成
+\[
+\begin{tikzcd}[column sep=large]
+\mathcal X\arrow[r,bend left=35,"f",""{name=F,below}]
+\arrow[r,bend right=35,"g"'," "{name=G,above}]&
+\mathcal Y
+\arrow[Rightarrow,from=F,to=G,"\alpha"]
+\end{tikzcd}
+\]
+\item 定义范畴 $\Mor(\mathcal X,\mathcal Y)$, 其对象是预叠态射, 态射是 $2$-同构.
+\item \newterm{$2$-交换图}{$2$-commutative diagram} (通常简称交换图) 是图
+\[
+\begin{tikzcd}[column sep=large,row sep=large]
+\mathcal X'\arrow[r,"f'"]\arrow[d,"g'"']&
+\mathcal Y'\arrow[d,"g"]\\
+\mathcal X\arrow[r,"f"']&\mathcal Y
+\arrow[Rightarrow,from=1-2,to=2-1,shorten <=1.4em,shorten >=1.4em,"\alpha" description]
+\end{tikzcd}
+\]
+连同 $2$-同构 $\alpha:g\circ f'\xrightarrow{\sim}f\circ g'$.
+\item 预叠态射 $f:\mathcal X\to\mathcal Y$ 是单态射 (或满态射), 是指 $f$ 完全忠实 (或本质满); $f$ 是同构, 是指存在预叠态射 $g:\mathcal Y\to\mathcal X$ 以及 $2$-同构 $g\circ f\xrightarrow{\sim}\id_{\mathcal X}$ 与 $f\circ g\xrightarrow{\sim}\id_{\mathcal Y}$.
+\end{enumerate}
+\end{definition}
+\begin{exercise}[简单]\label{src:3.4.18}
+证明每个 $2$-同构都是函子的同构; 换言之, $\Mor(\mathcal X,\mathcal Y)$ 是群胚.
+\end{exercise}
+\begin{exercise}[细节]\label{src:3.4.19}
+设 $f:\mathcal X\to\mathcal Y$ 是范畴 $\mathcal S$ 上的预叠态射.
+\begin{enumerate}[(a)]
+\item 证明 $f$ 是单态射当且仅当对每个 $S\in\mathcal S$, $f_S:\mathcal X(S)\to\mathcal Y(S)$ 都完全忠实.
+\item 证明 $f$ 是同构当且仅当 $f$ 完全忠实且本质满.
+\end{enumerate}
+\end{exercise}
+若存在预层 $F$ 及 $\mathcal X$ 与对应于 $F$ 的预叠 $\mathcal X_F$ 之间的同构 (见例~\bookref{3.4.7}), 则称预叠 $\mathcal X$ 等价于预层.
+\begin{exercise}[有益的练习]\label{src:3.4.20}
+证明, $G$ 在 $U$ 上自由作用 (即作用映射 $(\sigma,p_2):G\times_S U\to U\times_S U$ 是单态射) 当且仅当 $[U/G]^{\mathrm{pre}}$ (或 $[U/G]$) 等价于预层. 我们将这些预层记为 $(U/G)^{\mathrm{pre}}$ 与 $U/G$.
+\end{exercise}
+
+\subsection{\texorpdfstring{$2$}{2}-Yoneda 引理}\label{src:3.4.5-subsection}
+Yoneda 引理~(\bookref{1.3.12})~断言, 对范畴 $\mathcal S$ 上的预层 $F:\mathcal S\to\Sets$ 与对象 $S\in\mathcal S$, 存在双射 $\Mor(S,F)\xrightarrow{\sim}F(S)$. 特别地, 有完全忠实嵌入 $\mathcal S\to\Pre(\mathcal S)$, 由 $S\mapsto\Mor(-,S)$ 给出, 将 $\mathcal S$ 嵌入其上的预层范畴. 我们需要预叠版本的 Yoneda 引理.
+回顾例~\bookref{3.4.8}, 对象 $S\in\mathcal S$ 可以看作 $\mathcal S$ 上的预叠, 也记为 $S$, 其位于 $T\in\mathcal S$ 上的对象是态射 $T\to S$, 态射 $(T\to S)\to(T'\to S)$ 是 $S$-态射 $T\to T'$.
+\begin{lemma}[$2$-Yoneda 引理]\label{src:3.4.21}
+设 $\mathcal X$ 是范畴 $\mathcal S$ 上的预叠, $S\in\mathcal S$. 函子
+\[
+\Mor(S,\mathcal X)\longrightarrow\mathcal X(S),
+\qquad f\longmapsto f_S(\id_S)
+\]
+是范畴等价.
+\end{lemma}
+\begin{proof}
+我们如下构造拟逆 $\Psi:\mathcal X(S)\to\Mor(S,\mathcal X)$.
+
+\textit{在对象上:} 对 $a\in\mathcal X(S)$, 定义 $\Psi(a):S\to\mathcal X$ 为如下预叠态射: 将位于 $T$ 上的对象 $(f:T\to S)$ (对应于 $S$ 的预叠中的对象) 送到一个选定的拉回 $f^*a\in\mathcal X(T)$; 将由 $S$-态射 $g:T'\to T$ 给出的态射 $(f':T'\to S)\to(f:T\to S)$ 送到利用预叠公理 (2) 唯一补全下图的态射 $f'^*a\to f^*a$:
+\[
+\begin{tikzcd}[column sep=large]
+f'^*a\arrow[r,dashed]\arrow[rr,bend left=35]\arrow[d,mapsto]&
+f^*a\arrow[r]\arrow[d,mapsto]&a\arrow[d,mapsto]\\
+T'\arrow[r,"g"']&T\arrow[r,"f"']&S.
+\end{tikzcd}
+\]
+\textit{在态射上:} 若 $\alpha:a'\to a$ 是 $\mathcal X(S)$ 中的态射, 则 $\Psi(\alpha):\Psi(a')\to\Psi(a)$ 定义为如下函子态射: 将态射 $f:T\to S$ (即 $S$ 中位于 $T$ 上的对象) 送到再次利用预叠公理 (2) 补全下图的唯一态射 $f^*a'\to f^*a$:
+\[
+\begin{tikzcd}
+f^*a'\arrow[r,dashed]\arrow[d]&f^*a\arrow[d]\\
+a'\arrow[r,"\alpha"']&a
+\end{tikzcd}
+\qquad\text{位于}\qquad
+\begin{tikzcd}
+T\arrow[d,"f"]\\S
+\end{tikzcd}
+\]
+验证 $\Psi$ 是拟逆的细节留给读者.
+\end{proof}
+\begin{caution}\label{src:3.4.22}
+在本讲义中, 我们常在态射 $S\to\mathcal X$ 与 $\mathcal X$ 中位于 $S$ 上的对象之间转换时使用 $2$-Yoneda 引理, 而不再特别说明.
+\end{caution}
+\begin{remark}\label{src:3.4.23}
+若 $f,g:S\to\mathcal X$ 是来自概形 $S$ 的态射, 通过 $2$-Yoneda 引理对应于对象 $a,b\in\mathcal X(S)$, 则 $2$-同构 $\alpha:f\xrightarrow{\sim}g$ 对应于同构 $a\xrightarrow{\sim}b$.
+\end{remark}
+\begin{remark}[万有族]\label{src:3.4.24}
+当 $F:\Sch\to\Sets$ 是可由概形 $M$ 表出的函子 $h_M=\Mor(-,M)$ 时, 通常的 Yoneda 引理~(\bookref{1.3.12})~给出双射 $\Mor(h_M,F)\cong F(M)$, 对应于恒等映射的对象 $U\in F(M)$ 是万有族 (见 \S\bookref{1.3.4-subsection}). $2$-Yoneda 引理不能直接给出万有族, 因为需要先定义 $\mathcal X$ 中位于 $\mathcal X$ 上的对象范畴 $\mathcal X(\mathcal X)$. 后面在 \S\bookref{4.1.7-subsection} 中, 我们将证明广义 $2$-Yoneda 引理~(\bookref{4.1.27}), 并用它定义代数叠的万有族.
+\end{remark}
+\begin{remark}[拉回选择与分裂]\label{src:3.4.25}
+在 $2$-Yoneda 引理的证明中, 我们为每个态射 $T\to S$ 选择了拉回 $f^*:\mathcal X(S)\to\mathcal X(T)$, 如~\cite[Tag 02XN]{SP}~所述. 文献中常称这种选择为 \newterm{拉回选择}{cleavage}~\cite[VI.7]{SGA1}, \cite[定义 $3.9$]{Vis05}. 选择拉回定义一个伪函子 $\mathcal S\to\Groupoids$. 若对复合 $T\xrightarrow{f}S\xrightarrow{g}U$, 函子 $(g\circ f)^*$ 与 $f^*\circ g^*$ 相等, 则常说这一拉回选择定义了\newterm{分裂}{splitting}, 或称 $\mathcal X$ 是分裂的. 此时, 诱导的伪函子 $\mathcal S\to\Groupoids$ 是严格函子. 每个预叠 (或更一般的纤维化范畴) 都在 $2$-范畴意义下等价于分裂预叠~\cite[Tag 004A]{SP}. 不必担心, 我们不会使用这些术语.
+\end{remark}
+\begin{example}[商叠的呈示]\label{src:3.4.26}
+考虑定义~\bookref{3.4.15}~中由群作用 $\sigma:G\times_S U\to U$ 得到的预叠 $[U/G]$. $[U/G]$ 中由图
+\[
+\begin{tikzcd}
+G\times_S U\arrow[r,"\sigma"]\arrow[d,"p_2"']&U\\
+U&
+\end{tikzcd}
+\]
+给出的位于 $U$ 上的对象, 通过 $2$-Yoneda 引理~(\bookref{3.4.21})~对应于态射 $U\to[U/G]$. 后面我们将验证 $U\to[U/G]$ 满射, 光滑且可表; 换言之, 它是光滑呈示. 这将验证 $[U/G]$ 是代数叠 (定理~\bookref{4.1.10}).
+\end{example}
+\begin{exercise}[有益的练习]\label{src:3.4.27}
+\begin{enumerate}[(a)]
+\item 证明存在态射 $p:U\to[U/G]^{\mathrm{pre}}$ 以及 $2$-交换图
+\[
+\begin{tikzcd}[column sep=large,row sep=large]
+G\times_S U\arrow[r,"\sigma"]\arrow[d,"p_2"']&U\arrow[d,"p"]\\
+U\arrow[r,"p"']&{[U/G]^{\mathrm{pre}}}
+\arrow[Rightarrow,from=1-2,to=2-1,shorten <=1.8em,shorten >=1.8em,"\alpha" description]
+\end{tikzcd}
+\]
+\item 证明 $U\to[U/G]^{\mathrm{pre}}$ 是预叠范畴中的范畴商, 即对每个预叠的 $2$-交换图
+\[
+\begin{tikzcd}[column sep=large,row sep=large]
+G\times_S U\arrow[r,"\sigma"]\arrow[d,"p_2"']&
+U\arrow[d,"p"']\arrow[ddr,bend left=25,"\varphi"]&\\
+U\arrow[r,"p"]\arrow[drr,bend right=25,"\varphi"']&
+{[U/G]^{\mathrm{pre}}}&{}\\
+&{}&\mathcal Z
+\arrow[Rightarrow,from=1-2,to=2-1,shorten <=1.8em,shorten >=1.8em,"\alpha" description]
+\arrow[Rightarrow,from=2-3,to=3-2,shorten <=2.6em,shorten >=2.6em,"\tau" description]
+\end{tikzcd}
+\]
+都存在态射 $\chi:[U/G]^{\mathrm{pre}}\to\mathcal Z$ 以及与 $\alpha,\tau$ 相容的 $2$-同构 $\beta:\varphi\xrightarrow{\sim}\chi\circ p$ (即以下两个自然变换相同):
+\[
+\begin{aligned}
+\varphi\circ\sigma&\xrightarrow{\beta\circ\sigma}\chi\circ p\circ\sigma
+\xrightarrow{\chi\circ\alpha}\chi\circ p\circ p_2,\\
+\varphi\circ\sigma&\xrightarrow{\tau}\varphi\circ p_2
+\xrightarrow{\beta\circ p_2}\chi\circ p\circ p_2.
+\end{aligned}
+\]
+证明 $\chi$ 在唯一 $2$-同构的意义下唯一.
+\end{enumerate}
+\end{exercise}

@@ -1,0 +1,203 @@
+% Source printed pp. 35-41, entire Section 1.6.
+\section{模叠}\label{src:1.6}
+\begin{epigraph}
+从先辈那里继承的东西, 要靠自己的努力获得, 才能真正拥有.
+\epigraphauthor{Johann Wolfgang von Goethe}
+\end{epigraph}
+如前所述, 现在我们将模函子与群胚观点结合起来. 定义一个模叠, 需要明确: 
+\begin{enumerate}[(1)]
+\item 对象的族; 
+\item 两个对象族如何同构; 以及
+\item 对象族如何沿态射拉回.
+\end{enumerate}
+注意, 这与指定模函子的区别在于, 我们不只指定两个族\textit{何时}同构, 而要指定它们\textit{如何}同构. 换言之, 需要指定一个对应
+\[
+F:\Sch\longrightarrow\Groupoids,\qquad S\longmapsto\operatorname{Fam}_S,
+\]
+将概形 $S$ 送到 $S$ 上的对象族组成的群胚. 但这究竟是什么意思?群胚组成一个``$2$-范畴'', 因为它们有对象(群胚), 态射(群胚间的函子)和 $2$-态射(函子间的自然变换). 怎样以具体的方式精确表述这样的对应?当然, 对每个态射 $f:S\to T$, 我们需要拉回函子 $f^*:\operatorname{Fam}_T\to\operatorname{Fam}_S$. 给定概形的复合 $S\xrightarrow{f}T\xrightarrow{g}U$, 还应有函子同构(即 $2$-态射)$\mu_{f,g}:(f^*\circ g^*)\xrightarrow{\sim}(g\circ f)^*$. 对三重复合 $S\xrightarrow{f}T\xrightarrow{g}U\xrightarrow{h}V$, 这些同构 $\mu_{f,g}$ 是否应满足相容条件?是的!这引出了\newterm{伪函子}{pseudo-functor}的概念, 但这里不展开; 我们鼓励读者自行写出细节, 或查阅~\cite[定义 $3.10$]{Vis05}~或~\cite[Tag 003N]{SP}. 我们采用一种略有不同的方法, 使用技术上更便利的预叠. 不过, 将预叠理解为对应 $\Sch\to\Groupoids$ 仍然很有用.
+
+\subsection{预叠定义的动机}\label{src:1.6.1-subsection}
+我们不去直接定义对应 $S\mapsto\operatorname{Fam}_S$, 而是构造一个巨大的范畴 $\mathcal X$, 编码所有群胚 $\operatorname{Fam}_S$, 并置于概形范畴 $\Sch$ 之上. 粗略地说, $\mathcal X$ 的对象将是概形 $S$ 上的一个对象族 $a$, 即 $a\in\operatorname{Fam}_S$; $S$ 上的族 $a$ 到 $T$ 上的族 $b$ 的态射 $a\to b$, 将由态射 $f:S\to T$ 以及 $a$ 与 $b$ 的拉回族之间的同构 $a\xrightarrow{\sim}f^*b$ 构成.
+
+$\Sch$ 上的一个预叠, 是范畴 $\mathcal X$ 连同函子 $p:\mathcal X\to\Sch$, 可以画成
+\[
+\begin{tikzcd}[column sep=large]
+\mathcal X\arrow[d,"p"] & a\arrow[r,"\alpha"]\arrow[d] & b\arrow[d]\\
+\Sch & S\arrow[r,"f"] & T
+\end{tikzcd}
+\]
+其中, 小写字母 $a,b$ 是 $\mathcal X$ 中的对象, 大写字母 $S,T$ 是概形. 我们说 $a$ \textit{在 $S$ 上}, $\alpha:a\to b$ \textit{在 $f:S\to T$ 上}. 此外, 还需要要求 $p:\mathcal X\to\Sch$ 满足某些自然公理. 粗略地说, 要求拉回的存在性和唯一性: 给定映射 $S\to T$ 以及 $T$ 上的对象 $b\in\mathcal X$, 应存在一个在 $f$ 上的箭头 $a\xrightarrow{\alpha}b$, 满足适当的万有性质; 见定义~\bookref{3.4.1}.
+
+给定概形 $S$, \newterm{纤维范畴}{fiber category} $\mathcal X(S)$ 定义为 $S$ 上的对象所组成的范畴, 其中态射都在恒等映射之上. 若 $\mathcal X$ 按上述方法由群胚 $\operatorname{Fam}_S$ 构造, 则 $\mathcal X(S)=\operatorname{Fam}_S$.
+\begin{example}[将集合值函子视为预叠]\label{src:1.6.1}
+模函子 $F:\Sch\to\Sets$ 可以按如下方式编码为模预叠: 定义由二元组 $(S,a)$ 组成的范畴 $\mathcal X_F$, 其中 $S$ 为概形, $a\in F(S)$. 映射 $(S',a)\to(S,a)$ 是满足 $a'=f^*a$ 的映射 $f:S'\to S$, 其中 $f^*$ 是 $F(f):F(S)\to F(S')$ 的便利简写. 注意, 纤维范畴 $\mathcal X_F(S)$ 等价于(甚至等于)集合 $F(S)$.
+\end{example}
+\begin{example}[光滑曲线的模预叠]\label{src:1.6.2}
+光滑曲线的模预叠, 是由光滑曲线族 $\mathcal C\to S$ 组成的范畴 $\mathcal M_g$, 连同由 $(\mathcal C\to S)\mapsto S$ 定义的函子 $p:\mathcal M_g\to\Sch$. $\mathcal M_g$ 中的态射 $(\mathcal C'\to S')\to(\mathcal C\to S)$ 是映射 $\alpha:\mathcal C'\to\mathcal C$ 和 $f:S'\to S$ 所组成的数据, 使图
+\[
+\begin{tikzcd}
+\mathcal C'\arrow[r,"\alpha"]\arrow[d]\arrow[dr,phantom,"\square"] & \mathcal C\arrow[d]\\
+S'\arrow[r,"f"] & S
+\end{tikzcd}
+\]
+为 Cartesian 图. 注意, 在纤维范畴 $\mathcal M_g(\mathbb C)$ 中, 对象是一条光滑曲线 $C$, 而态射 $C\to C$ 的集合等同于自同构群 $\operatorname{Aut}(C)$.
+\end{example}
+\begin{example}[向量丛的模预叠]\label{src:1.6.3}
+设 $C$ 为 $\mathbb C$ 上的光滑曲线. 其向量丛的模预叠 $\cBun_{r,d}(C)$ 是由二元组 $(E,S)$ 组成的范畴, 其中 $S$ 为 $\mathbb C$-概形, $E$ 为 $C_S=C\times_{\mathbb C}S$ 上的向量丛, 且对每个 $s\in S$, 在 $C\times_{\mathbb C}\operatorname{Spec}\kappa(s)$ 上的限制 $E_s$ 的秩为 $r$, 次数为 $d$. 函子 $p:\cBun_{r,d}(C)\to\Sch/\mathbb C$ 由 $(E,S)\mapsto S$ 定义. 映射 $(E',S')\to(E,S)$ 由概形映射 $f:S'\to S$ 及同构 $(\mathrm{id}\times f)^*E\xrightarrow{\sim}E'$ 构成.
+\end{example}
+
+\subsection{叠定义的动机}\label{src:1.6.2-subsection}
+叠之于预叠, 如同层之于预层. 这一概念再直观不过: 要求对象和态射能够唯一粘合.
+\begin{example}[层的模叠]\label{src:1.6.4}
+定义 $\Sch$ 上的范畴 $\mathcal X$, 其对象为二元组 $(E,S)$, 其中 $E$ 为概形 $S$ 上的 Abel 群层, 函子 $p:\mathcal X\to\Sch$ 由 $(E,S)\mapsto S$ 给出. $\mathcal X$ 中的映射 $(E',S')\to(E,S)$ 是概形映射 $f:S'\to S$, 连同同构 $f^{-1}E\xrightarrow{\sim}E'$(也可以给出一个伴随映射为同构的映射 $E\to f_*E'$).
+\end{example}
+你已经知道, 层的态射可以粘合: 令 $E$ 和 $F$ 为概形 $S$ 和 $T$ 上的层, $f:S\to T$ 为映射. 若 $\{S_i\}$ 为 $S$ 的 Zariski 开覆盖, 则映射 $f:S\to T$ 等价于一族态射 $f_i:S_i\to T$, 满足 $f_i|_{S_{ij}}=f_j|_{S_{ij}}$, 其中 $S_{ij}=S_i\cap S_j$. 类似地, 同构 $f^{-1}E\xrightarrow{\sim}E'$ 等价于在交集 $S_{ij}$ 上一致的同构 $(f^{-1}E)|_{S_i}\to E'|_{S_i}$~\cite[习题 II.1.15]{Har77}. 合在一起, 态射 $\alpha:(E,S)\to(F,T)$ 等价于态射 $\alpha_i:(E|_{S_i},S_i)\to(F,T)$, 满足 $\alpha_i|_{S_{ij}}=\alpha_j|_{S_{ij}}$.
+
+你也知道怎样粘合层. 这比粘合态射更复杂, 因为层具有自同构; 给定两个层, 我们更愿意说它们同构, 而非相等. 若 $\{S_i\}$ 为概形 $S$ 的 Zariski 开覆盖, 则给出 $S$ 上的层 $E$, 等价于给出每个 $S_i$ 上的层 $E_i$, 以及同构 $\phi_{ij}:E_i|_{S_{ij}}\to E_j|_{S_{ij}}$, 使其在三重交集 $S_{ijk}=S_i\cap S_j\cap S_k$ 上满足\newterm{上循环条件}{cocycle condition} $\phi_{ik}=\phi_{jk}\circ\phi_{ij}$~\cite[习题 II.1.22]{Har77}.
+
+同样地, 我们也可以考虑 $\mathcal O$-模, 拟凝聚层或向量丛的叠. 或者, 对概形 $X$, 可以考虑 $X$ 上的层, $\mathcal O$-模, 拟凝聚层或向量丛的叠, 其中概形 $S$ 上的对象是 $X\times S$ 上的一个层.
+
+叠的定义(定义~\bookref{3.5.1})只是将这两个自然的粘合概念公理化.
+
+\subsection{代数叠定义的动机}\label{src:1.6.3-subsection}
+要使叠成为几何对象, 需要规定它在适当意义下局部像概形. 如果不施加这样的条件, 就如同试图研究任意赋环空间 $(X,\mathcal O_X)$ 或不可表层 $F:\Sch\to\Sets$ 的几何. 若要像研究概形一样, 利用代数几何的工具(如凝聚层, 交换代数, 上同调等)研究叠, 就必须施加代数性条件.
+
+所施加的条件十分自然. 按一般性递增的顺序, 定义: 
+\begin{enumerate}[(1)]
+\item 函子 $X:\Sch\to\Sets$ 是\textit{代数空间}, 是指它为层(即对象在平展拓扑中能够唯一粘合), 且存在平展覆盖 $\{U_i\to X\}$, 其中每个 $U_i$ 都是仿射概形.
+\item 叠 $\mathcal X\to\Sch$ 是 \textit{Deligne--Mumford 叠}, 是指存在平展覆盖 $\{U_i\to\mathcal X\}$, 其中每个 $U_i$ 都是仿射概形.
+\item 叠 $\mathcal X\to\Sch$ 是\textit{代数叠}, 是指存在光滑覆盖 $\{U_i\to\mathcal X\}$, 其中每个 $U_i$ 都是仿射概形.
+\end{enumerate}
+当然, 需要将平展覆盖和光滑覆盖的概念精确化. 初步地说, 称 $\{U_i\to X\}$ 为平展覆盖, 是要求对每个函子映射 $T\to X$, 其中 $T$ 可由概形表出, 函子的纤维积可由概形 $T_i$ 表出, 并且 $T_i\to T$ 平展, $\coprod_i T_i\to T$ 为满射. 注意, 在 (1) 中将``平展''换成``Zariski'', 就恢复了概形的概念; 见习题~\bookref{1.3.44}. 要使这一切完全严格, 还需要一些时间来建立基础; 精确定义留到 \S\bookref{4.1}.
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{@{}X X X@{}}
+\toprule
+代数几何空间 & 对象类型 & 由什么粘合得到\\
+\midrule
+概形 & 赋环空间／层 & Zariski 拓扑中的仿射概形\\
+代数空间 & 层 & 平展拓扑中的仿射概形\\
+Deligne--Mumford 叠 & 叠 & 平展拓扑中的仿射概形\\
+代数叠 & 叠 & 光滑拓扑中的仿射概形\\
+\bottomrule
+\end{tabularx}
+\caption{概形, 代数空间, Deligne--Mumford 叠与代数叠都由仿射概形粘合得到.}\label{src:1.6.5}
+\end{table}
+\textit{为何使用光滑覆盖?}上面费了许多笔墨说明平展拓扑的动机, 此时看到代数叠在光滑拓扑下局部为概形, 你可能会感到意外. 对 Deligne--Mumford 叠(它们恰好是自同构群有限的代数叠), 平展覆盖已经足够. 但对 $\cBun_{r,d}(C)$ 这样具有无穷自同构群的代数叠, 我们需要光滑覆盖. 例如, 希望能够构造 $\mathbb G_m$(或 $\mathbb C^*$)在一点上的平凡作用的商 $[\operatorname{Spec}\mathbb C/\mathbb G_m]$(称为分类叠 $B\mathbb G_m$), 而它不存在由概形给出的平展覆盖.
+
+\subsection{模叠的例子}\label{src:1.6.4-subsection}
+给定编码一个模问题的叠, 构造光滑覆盖是该模问题本身的几何问题. 通过参数化附加信息, 将模问题刚性化, 常常就能解决这一问题. 通过例子最容易领会这个概念.
+\begin{example}[椭圆曲线的模叠]\label{src:1.6.6}
+椭圆曲线 $(E,p)$ 通过 $\mathcal O_E(3p)$ 嵌入 $\mathbb P^2$, 使 $E$ 由某个 $\lambda\neq0,1$ 的 Legendre 方程
+\[
+y^2z=x(x-z)(x-\lambda z)
+\]
+定义~\cite[命题 IV.4.6]{Har77}. 令 $U=\mathbb A^1\setminus\{0,1\}$, 坐标为 $\lambda$, 对应的椭圆曲线族 $\mathcal E\subseteq U\times\mathbb P^2$ 定义一个映射 $U\to\mathcal M_{1,1}$, 它是平展覆盖.
+\end{example}
+\begin{example}[光滑曲线的模叠]\label{src:1.6.7}
+对亏格 $g\geq2$ 的光滑曲线 $C$, 线丛 $\Omega_C^{\otimes3}$ 非常丰沛, 并定义嵌入
+\[
+C\hookrightarrow\mathbb P(\Gamma(C,\Omega_C^{\otimes3}))\cong\mathbb P^{5g-6}.
+\]
+存在 Hilbert 概形 $\operatorname{Hilb}^P(\mathbb P^{5g-6})$(见定理~\bookref{2.1.2}), 参数化 $\mathbb P^{5g-6}$ 中与 $C\subseteq\mathbb P^{5g-6}$ 具有相同 Hilbert 多项式 $P(z)=(6z-1)(g-1)$ 的闭子概形; 并存在局部闭子概形 $H'\subseteq\operatorname{Hilb}^P(\mathbb P^{5g-6})$, 参数化满足 $\Omega_C^{\otimes3}\cong\mathcal O_C(1)$ 的光滑子概形. $H'$ 上的万有子概形定义映射 $H'\to\mathcal M_g$, 它是光滑覆盖(细节见定理~\bookref{4.1.17}), 因此 $\mathcal M_g$ 是代数叠. 我们将在推论~\bookref{4.6.10}~中证明它为 Deligne--Mumford 叠.
+\end{example}
+\begin{example}[向量丛的模叠]\label{src:1.6.8}
+设光滑曲线 $C$ 配备丰沛线丛 $\mathcal O_C(1)$. 对 $C$ 上每个秩为 $r$, 次数为 $d$ 的向量丛 $E$, 当 $m$ 充分大时, 扭转 $E(m)$ 整体生成, 且 $P(m)=h^0(C,E(m))$ 定义 $E$ 的 Hilbert 多项式. 因此, 对 $m\gg0$, 可以将 $E$ 视为商 $\mathcal O_C(-m)^{P(m)}\twoheadrightarrow E$. 存在 Quot 概形 $\operatorname{Quot}^P(\mathcal O_C(-m)^{P(m)})$(见定理~\bookref{2.1.3}), 参数化 Hilbert 多项式为 $P$ 的商. 存在局部闭子概形 $Q'_m\subseteq\operatorname{Quot}^P(\mathcal O_C(-m)^{P(m)})$, 参数化向量丛商 $\pi:\mathcal O_C(-m)^{P(m)}\twoheadrightarrow E$, 使所诱导的映射
+\[
+\Gamma(\pi\otimes\mathcal O_C(m)):\mathbb C^{P(m)}\longrightarrow\Gamma(C,E(m))
+\]
+为同构. $Q'_m$ 上的万有商定义一个光滑映射 $Q'_m\to\cBun_{r,d}(C)$, 而对 $m\gg0$ 的映射族 $\{Q'_m\to\cBun_{r,d}(C)\}$ 定义光滑覆盖. 这表明 $\cBun_{r,d}(C)$ 为代数叠; 细节见定理~\bookref{4.1.23}. 它不是 Deligne--Mumford 叠.
+\end{example}
+
+\subsection{商叠}\label{src:1.6.5-subsection}
+叠的一个最重要的例子, 是由代数群 $G$ 在概形 $X$ 上的作用得到的商叠 $[X/G]$. $[X/G]$ 的几何再简单不过: 它就是 $X$ 的 $G$-等变几何(见表~\bookref{1.6.15}).
+
+正如环面簇提供了概形的具体例子, 商叠提供了代数叠的具体例子, 有助于形成对一般代数叠的几何直观, 同时也为猜想提供丰富的试验对象. 另一方面, 许多代数叠本身就是商叠, 或至少局部为商叠; 商叠所具有的大多数性质, 也可以对许多代数叠建立.
+
+\textit{商预叠.} 给定代数群 $G$ 在概形 $X$ 上的作用, \newterm{商预叠}{quotient prestack} $[X/G]^{\mathrm{pre}}$ 是这样的预叠: 概形 $S$ 上的纤维范畴 $[X/G]^{\mathrm{pre}}(S)$ 是例~\bookref{1.4.6}~中的商群胚(或轨道的模群胚)$[X(S)/G(S)]$. 它不满足叠的粘合公理; 即使作用自由, 由 $S\mapsto X(S)/G(S)$ 定义的商函子 $\Sch\to\Sets$ 也不是层(见习题~\bookref{1.3.38}). 如何将其变成叠?不妨把 $[X/G]^{\mathrm{pre}}$ 在概形 $S$ 上的对象, 不再看成态射 $f:S\to X$, 而看成一个平凡 $G$-丛, 连同到 $X$ 的映射: 
+\[
+\begin{tikzcd}
+G\times S\arrow[r,"\widetilde f"]\arrow[d,"p_2"'] & X\\
+S &
+\end{tikzcd}
+\qquad (g,s)\longmapsto g\cdot f(s).
+\]
+\begin{exercise}[简单]\label{src:1.6.9}
+给定两个映射 $f_1,f_2:S\to X$, 证明满足 $f_2=\alpha\cdot f_1$ 的元素 $\alpha\in G(S)$, 等价于一个平凡 $G$-丛的同构 $G\times S\to G\times S$, 与到 $X$ 的映射 $\widetilde f_1$ 和 $\widetilde f_2$ 相容.
+\end{exercise}
+从这一观点看, 即使 $X$ 为一点, $[X/G]^{\mathrm{pre}}$ 也不是叠就更加清楚了: 给定概形 $S$ 的 Zariski 覆盖 $\{S_i\}$, 平凡 $G$-丛 $G\times S_i\to S_i$ 连同 $S_i\cap S_j$ 上满足上循环条件的同构, 可以粘合成主 $G$-丛 $P\to S$(定义~\bookref{B.1.50}), 但它未必平凡. 这提示我们, 应将商叠的对象定义为主 $G$-丛, 连同到 $X$ 的 $G$-等变映射.
+
+\textit{商叠.} 定义\newterm{商叠}{quotient stack} $[X/G]$ 为 $\Sch/\mathbb C$ 上的范畴, 其在 $\mathbb C$-概形 $S$ 上的对象为图
+\[
+\begin{tikzcd}
+P\arrow[r,"f"]\arrow[d] & X\\
+S &
+\end{tikzcd}
+\]
+其中 $P\to S$ 为主 $G$-丛, $f:P\to X$ 为 $G$-等变态射. 一个态射由如下交换图的数据构成: 
+\[
+\begin{tikzcd}[column sep=large]
+P'\arrow[r,"\phi"]\arrow[rr,bend left=35,"f'"]\arrow[d]\arrow[dr,phantom,"\square"] &
+P\arrow[r,"f"]\arrow[d] & X\\
+S'\arrow[r,"g"] & S &
+\end{tikzcd}
+\]
+其中左方形为 Cartesian 方形. $[X/G]$ 在 $X$ 上有一个对象, 由图
+\[
+\begin{tikzcd}
+G\times X\arrow[r,"\sigma"]\arrow[d,"p_2"'] & X\\
+X &
+\end{tikzcd}
+\]
+给出, 其中 $\sigma$ 为作用映射. 由 $2$-Yoneda 引理(\bookref{3.4.21}), 这定义映射 $X\to[X/G]$. 即使 $G$ 在 $X$ 上的作用不自由, 映射 $X\to[X/G]$ 仍为主 $G$-丛. 不妨停下来体会这一点: 
+\begin{quote}
+\fbox{\parbox{.86\linewidth}{即使 $G$ 在 $X$ 上的作用不自由, 映射 $X\to[X/G]$ 仍是主 $G$-丛.}}
+\end{quote}
+这是使用叠的一大优点. 付出将范畴从概形扩大到代数叠的代价后, 便可以直接从定义构造商 $[X/G]$, 使其成为具有所需性质的``几何空间''.
+\begin{example}[分类叠]\label{src:1.6.10}
+定义代数群 $G$ 的分类叠为主 $G$-丛 $P\to S$ 组成的范畴 $BG:=[\operatorname{Spec}\mathbb C/G]$. 投影 $\operatorname{Spec}\mathbb C\to BG$ 不仅为主 $G$-丛, 而且是\textit{万有}主 $G$-丛. 给定任意其他主 $G$-丛 $P\to S$, 存在唯一映射 $S\to BG$ 和 Cartesian 图
+\[
+\begin{tikzcd}
+P\arrow[r]\arrow[d]\arrow[dr,phantom,"\square"] & \operatorname{Spec}\mathbb C\arrow[d]\\
+S\arrow[r] & BG.
+\end{tikzcd}
+\]
+\end{example}
+\begin{example}[有限群的商]\label{src:1.6.11}
+有限群自由作用的商作为代数空间存在!见推论~\bookref{4.1.14}.
+\end{example}
+\begin{exercise}\label{src:1.6.12}
+商叠 $[X/G]$ 上的万有族是什么?
+\end{exercise}
+模叠常常可以描述为商叠, 利用这些描述可以建立模叠的性质.
+\begin{example}[光滑曲线的模叠作为商]\label{src:1.6.13}
+重新考察例~\bookref{1.6.7}, 可以看到光滑曲线 $C$ 通过 $|\Omega_C^{\otimes3}|$ 给出的嵌入 $C\hookrightarrow\mathbb P^{5g-6}$, 依赖于基的选择 $\Gamma(C,\Omega_C^{\otimes3})\cong\mathbb C^{5g-5}$, 因此仅在相差射影自同构的意义下唯一, 即相差 $\operatorname{PGL}_{5g-5}=\operatorname{Aut}(\mathbb P^{5g-6})$ 的一个元素. 代数群 $\operatorname{PGL}_{5g-5}$ 在参数化光滑三重典范嵌入曲线的子概形 $H'\subset\operatorname{Hilb}^P(\mathbb P^{5g-6})$ 上作用, 且有同构 $\mathcal M_g\cong[H'/\operatorname{PGL}_{5g-6}]$.
+\end{example}
+\begin{example}[向量丛的模叠作为商]\label{src:1.6.14}
+对向量丛的模叠(例~\bookref{1.6.8}), 将向量丛 $E$ 表示为商 $\mathcal O_C(-m)^{P(m)}\twoheadrightarrow E$, 依赖于基的选择 $\Gamma(C,E(m))\cong\mathbb C^{P(m)}$. 代数群 $\operatorname{GL}_{P(m)}$ 在概形 $Q'_m$ 上作用, 且有等同
+\[
+\cBun_{r,d}(C)\cong\bigcup_{m\gg0}[Q'_m/\operatorname{GL}_{P(m)}];
+\]
+见定理~\bookref{4.1.23}.
+\end{example}
+\textit{商叠的几何.} 虽然商叠 $[X/G]$ 的定义看起来抽象, 它的几何却十分熟悉. 下表给出商叠 $[X/G]$ 的几何与 $X$ 的 $G$-等变几何之间的对照. 左边的叠论概念将在后面引入.
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{@{}X X@{}}
+\toprule
+$[X/G]$ 的几何 & $X$ 的 $G$-等变几何\\
+\midrule
+$\mathbb C$-点 $\overline x\in[X/G]$ &
+$\mathbb C$-点 $x\in X$ 的轨道 $Gx$($\overline x$ 为 $x$ 在 $X\to[X/G]$ 下的像)\\
+自同构群 $\operatorname{Aut}(\overline x)$ & 稳定子 $G_x$\\
+函数 $f\in\Gamma([X/G],\mathcal O_{[X/G]})$ & $G$-等变函数 $f\in\Gamma(X,\mathcal O_X)^G$\\
+到概形 $Y$ 的映射 $[X/G]\to Y$ & $G$-等变映射 $X\to Y$\\
+线丛 & $G$-等变线丛(或 $G$-线性化)\\
+拟凝聚层 & $G$-等变拟凝聚层\\
+切空间 $T_{[X/G],\overline x}$ & 轨道的法空间 $T_{X,x}/T_{Gx,x}$\\
+粗模空间 $[X/G]\to Y$ & 几何商 $X\to Y$\\
+良模空间 $[X/G]\to Y$ & 良 GIT 商 $X\to Y$\\
+\bottomrule
+\end{tabularx}
+\caption{$[X/G]$ 的几何与 $X$ 的 $G$-等变几何之间的对照.}\label{src:1.6.15}
+\end{table}

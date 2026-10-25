@@ -1,0 +1,1023 @@
+% ================================================================
+%  第 7 章 泊松求和公式 (The Poisson summation formula)
+%  依据原书 PDF 第 153--176 页译出；编号审计见文件末尾注释
+% ================================================================
+
+\chapter{泊松求和公式}
+
+\epigraph{泊松求和公式把数格点换成数波.}{Fernando Chamizo}
+
+\section{引言}
+
+给定 Schwartz 类 $\mathcal{S}(\R^n)$ 中的函数 $f$，其傅里叶变换为
+\begin{align*}
+  \widehat{f}(\xi)=\int_{\R^{n}}e^{-2\pi i x\cdot\xi}f(x)\,\mathrm{d}x,
+\end{align*}
+由 $f$ 产生周期函数有两种标准方式，即
+\begin{align*}
+  F(x)=\sum_{\nu\in\Z^{n}}f(x+\nu),\qquad
+  G(x)=\sum_{\nu\in\Z^{n}}\widehat{f}(\nu)\,e^{2\pi i\nu\cdot x}.
+\end{align*}
+\newterm{poisson-summation-formula}{泊松求和公式}{Poisson summation formula}正是断言两者相同: $F \equiv G$. 特别地，有恒等式
+\begin{equation}\label{eq:7.1}
+  \sum_{\nu\in\Z^{n}}f(\nu)=\sum_{\nu\in\Z^{n}}\widehat{f}(\nu),
+\end{equation}
+它在从数论到晶体学的许多不同领域都有应用.
+
+泊松求和公式可以推广到 Schwartz 类之外的函数. 例如，到满足估计 $|f(x)| + |\widehat{f}(x)| \lesssim (1 + |x|)^{-n-\varepsilon}$（对某个 $\varepsilon > 0$）的函数. 这是因为此时恒等式
+\begin{align*}
+  \sum_{\nu\in\Z^{n}}f(\nu)=\sum_{\nu\in\Z^{n}}\widehat{f}(\nu)
+\end{align*}
+两端都绝对收敛. 一般地，若一端——比如 $\sum_{\nu} f(\nu)$——有明确的意义（即使 $f$ 不属于 Schwartz 类，但可以被函数 $f_{\varepsilon} \in \mathcal{S}(\R^{n})$ 很好地逼近），则也得到泊松恒等式，其中和 $\sum_{\nu} \widehat{f}(\nu)$ 定义为 $\lim_{\varepsilon \to 0} \sum_{\nu} \widehat{f}_{\varepsilon}(\nu)$.
+
+若 $\delta_x$ 表示点 $x$ 处的 Dirac $\delta$ 函数，则该公式可以改述为: 缓增分布 $\sum_{\nu \in \Z^n} \delta_\nu$ 与其自身的傅里叶变换重合. 在晶体学中这样的分布称为 Dirac 梳，它们在 X 射线衍射方面有有趣的解释: 周期结构产生 Bragg 峰——频率侧的周期结构.
+
+\section{一个逆结果}
+
+若 $A: \R^n \to \R^n$ 是满足 $\det(A) = 1$ 的线性映射，则初等计算给出
+\begin{align*}
+  \widehat{f\circ A}(\xi)=\widehat{f}\bigl((A^{-1})^{\mathsf{T}}\xi\bigr).
+\end{align*}
+特别地，若记 $x_\nu = A\nu$，$y_\nu = (A^{-1})^\top\nu$，则得到``广义''泊松公式
+\begin{equation}\label{eq:7.2}
+  \widehat{\sum_{\nu\in\Z^{n}}\delta_{x_\nu}}=\sum_{\mu\in\Z^{n}}\delta_{y_\mu}.
+\end{equation}
+于是自然要问是否可能存在其他这样的公式. 答案如下.
+
+\begin{theorem}\label{thm:7.1}
+假设 $X = \{x_\nu\}_{\nu \in \Z^n}$ 与 $Y = \{y_\mu\}_{\mu \in \Z^n}$ 是欧氏空间 $\R^n$ 中的两个点集，满足
+\begin{align*}
+  \min_{\nu\neq\nu^{\prime}}\left\|x_{\nu}-x_{\nu^{\prime}}\right\|\geq d,\qquad
+  \min_{\mu\neq\mu^{\prime}}\left\|y_{\mu}-y_{\mu^{\prime}}\right\|\geq d
+\end{align*}
+对某个正常数 $d$ 成立，且满足
+\begin{align*}
+  \widehat{\sum_{\nu\in\Z^{n}}\delta_{x_{\nu}}}=\sum_{\mu\in\Z^{n}}\delta_{y_\mu}.
+\end{align*}
+则存在行列式 $\det(A) = 1$ 的线性映射 $A\colon \R^n \to \R^n$，使
+\begin{align*}
+  x_{\nu}=A\nu,\qquad y_{\mu}=\left(A^{-1}\right)^{\top}\mu,\qquad \nu,\mu\in\Z^{n}.
+\end{align*}
+\end{theorem}
+
+\begin{proof}
+第 1 步. 一族测试函数.
+
+我们将使用支于方体 $Q = \{x = (x^1, x^2, \ldots, x^n) : |x^j| \leq 1\} = [-1, 1]^n$ 的连续非负函数 $\phi$，满足 $\phi(0) = 1$，$\widehat{\phi}(0) > 0$，且对某些常数 $\delta > 0$ 与 $C < \infty$ 有 $0 \leq \widehat{\phi}(\xi) \leq c\prod_{j=1}^n (1 + |\xi^j|)^{-1-\delta}$. 这样的函数的一个例子是
+\begin{align*}
+  \phi(x^{1},\ldots,x^{n})=\prod_{j=1}^{n}(1-|x^{j}|)_{+},
+\end{align*}
+对它,
+\begin{align*}
+  \widehat{\phi}(\xi)=\prod_{j}\left(\frac{\sin\pi\xi^{j}}{\pi\xi^{j}}\right)^{2}.
+\end{align*}
+接着考虑族
+\begin{align*}
+  \phi_{a,b,\varepsilon}(x)=e^{2\pi i a\cdot x}\phi\Big(\frac{x-b}{\varepsilon}\Big),
+\end{align*}
+其中 $a, b \in \R^n$，$\varepsilon$ 是正实数. 有
+\begin{align*}
+  \widehat{\phi_{a,b,\varepsilon}}(\xi)=e^{-2\pi i b\cdot\xi}\;\varepsilon^{n}\;\widehat{\phi}(\varepsilon(\xi-a)).
+\end{align*}
+
+第 2 步. $0 \in X \cap Y$.
+
+鉴于泊松公式的对称特征，只须证明 $0 \in X$. 用反证法.
+
+假设 $0 \notin X$. 则对每个 $\varepsilon < d$，有
+\begin{align*}
+  0=\sum_{\nu}\phi(\varepsilon^{-1}x_{\nu})
+  =\varepsilon^{n}\sum_{\nu\in\Z^{n}}\prod_{l=1}^{n}\left(\frac{\sin\pi\varepsilon y_{\nu}^{l}}{\pi\varepsilon y_{\nu}^{l}}\right)^{2}.
+\end{align*}
+但这是不可能的，因为 $\left(\frac{\sin\pi t}{\pi t}\right)^2$ 只在离散集 $t \in \Z - \{0\}$ 中为零. 因此，不失一般性，可以假设 $x_0 = y_0 = 0$.
+
+第 3 步. 对所有 $\nu, \mu \in \Z^n$,
+\begin{align*}
+  x_{\nu}\cdot y_{\mu}=\sum_{j=1}^{n}x_{\nu}^{j}y_{\mu}^{j}\in\Z.
+\end{align*}
+取 $b = x_\nu$，$a \in \R^n$ 任意，$0 < \varepsilon < \delta$. 由于 $x_\nu$ 是 $\phi(\varepsilon^{-1}(x - x_\nu))$ 支集中 $X$ 的唯一元素，有
+\begin{align*}
+  e^{2\pi i a\cdot x_{\nu}}
+  =\sum_{\mu\in\Z^{n}}e^{-2\pi i(y_{\mu}-a)\cdot x_{\nu}}\varepsilon^{n}\widehat{\phi}(\varepsilon^{-1}(y_{\mu}-a)).
+\end{align*}
+即
+\begin{equation}\label{eq:7.3}
+  1=\varepsilon^{n}\sum_{\mu\in\Z^{n}}\widehat{\phi}(\varepsilon^{-1}(y_{\mu}-a))\,e^{-2\pi i x_{\nu}\cdot y_{\mu}}
+\end{equation}
+对每个 $x_\nu \in X$ 与 $a \in \R^n$ 成立. 特别地，取 $x_0 = 0$，还得到
+\begin{align*}
+  1=\varepsilon^{n}\sum_{\mu\in\Z^{n}}\widehat{\phi}(\varepsilon^{-1}(y_{\mu}-a)).
+\end{align*}
+但由于 $\widehat{\phi} \geq 0$，$\widehat{\phi}(0) = 1$，且 $\widehat{\phi}$ 只在一个可数集上为零，对每个 $\varepsilon > 0$ 与 $a \in \R^n$ 都成立的恒等式 \eqref{eq:7.3} 蕴含 $x_\nu \cdot y_\mu \in \Z$.
+
+第 4 步. 集合 $X$，$Y$ 都不能包含于 $\R^n$ 的一张超平面内.
+
+同样，只须对集合 $X$ 证明，并用反证法. 假设不然；则经适当的旋转 $A$ 后，可以假设 $X$ 包含于超平面 $\{x^n = 0\}$ 内. 设 $f_1$ 与 $f_2$ 是 Schwartz 类中的任意函数，$f_1 \in \mathcal{S}(\R)$，$f_2 \in \mathcal{S}(\R^{n-1})$，使
+\begin{align*}
+  \sum_{\nu\in\Z^{n}}f_{1}(x_{\nu}^{n})f_{2}(x_{\nu}^{1},\ldots,x_{\nu}^{n-1})
+  &=\sum_{\nu\in\Z^{n}}f_{1}(0)f_{2}(x_{\nu}^{1},\ldots,x_{\nu}^{n-1})\\
+  &=\sum_{\mu\in\Z^{n}}\widehat{f_{1}}(y_{\mu}^{n})\widehat{f_{2}}(y_{\mu}^{1},\ldots,y_{\mu}^{n-1}),
+\end{align*}
+而这是不可能的，理由如下: 设 $\chi \in C^\infty(\R)$ 满足 $|t| \leq 1$ 时 $\chi(t) = 0$，$|t| \geq 2$ 时 $\chi(t) = 1$，并取
+\begin{align*}
+  f_{1}^{\varepsilon}(t)=f_{1}(t)\chi(\varepsilon^{-1}t),\qquad
+  f_{1}^{\varepsilon}(0)=0,\qquad \text{对每个 } \varepsilon>0.
+\end{align*}
+则
+\begin{align*}
+  0=\lim_{\varepsilon\rightarrow 0}\sum_{\nu\in\Z^{n}}f_{1}^{\varepsilon}(0)f_{2}(x_{\nu}^{1},\ldots,x_{\nu}^{n-1})
+  =\lim_{\varepsilon\rightarrow 0}\sum_{\mu\in\Z^{n}}\widehat{f_{1}^{\varepsilon}}(y_{\mu}^{n})\widehat{f_{2}}(y_{\mu}^{1},\ldots,y_{\mu}^{n-1}).
+\end{align*}
+即
+\begin{align*}
+  0=\sum_{\mu\in\Z^{n}}\widehat{f_{1}}(y_{\mu}^{n})\widehat{f_{2}}(y_{\mu}^{1},\ldots,y_{\mu}^{n-1})
+\end{align*}
+对每个 $f_1 \in \mathcal{S}(\R)$，$f_2 \in \mathcal{S}(\R^{n-1})$ 成立，这是荒谬的.
+
+第 5 步. 证明的完成.
+
+取 $X$ 中 $n$ 个线性无关的点 $x_{\nu_1}, \ldots, x_{\nu_n}$. 则关系 $y_\mu \cdot x_{\nu_j} \in \Z$，$j = 1, 2, \ldots, n$，蕴含集合 $Y$ 包含于由向量 $x_{\nu_1}, \ldots, x_{\nu_n}$ 生成的格的对偶格之中. 类似地，集合 $X$ 包含于 $\R^n$ 中的某个格.
+
+接着考虑 $X$ 的所有 $n$ 个线性无关向量组，然后选择使行列式绝对值取最小值的一组. 设 $\{x_{\nu_1}, \ldots, x_{\nu_n}\}$ 是这样的组，不失一般性可假设
+\begin{align*}
+  \Delta=\det\begin{pmatrix}
+  x^{1}_{\nu_{1}} & \cdots & x^{n}_{\nu_{1}}\\
+  \vdots & \cdots & \vdots\\
+  x^{1}_{\nu_{n}} & \cdots & x^{n}_{\nu_{n}}
+  \end{pmatrix}>0.
+\end{align*}
+由 $\Delta$ 的最小性，$0$ 是 $X$ 中包含于平行多面体 $\{x = \sum_{j=1}^{n} s_j x_{\nu_j} : 0 \leq |s_j| < 1,\ j = 1, \ldots, n\}$ 中的唯一元素；且存在满足
+\begin{align*}
+  \det A=1,\qquad
+  \begin{cases}
+    A x_{\nu_{1}}=t e_{1}=t(1,0,\ldots,0),\\
+    \vdots\\
+    A x_{\nu_{n}}=t e_{n}=t(0,0,\ldots,1),
+  \end{cases}
+  \qquad t=\Delta^{1/n},
+\end{align*}
+的线性映射 $A$，且 $0$ 是 $A(X) = \{Ax_\nu\}$ 中包含于方体 $Q_t = \{x = (x^1, \ldots, x^n) : |x^j| \leq t\}$ 内的唯一元素.
+
+引入记号 $\bar{x}_\nu = Ax_\nu$，$\bar{y}_\mu = (A^{-1})^\top y_\mu$. 再次用函数 $\phi(u) = \prod_{i=1}^n (1 - |u^j|)_{+}$，可以写
+\begin{align*}
+  1=\sum_{\nu\in\Z^{n}}\phi(t^{-1}\bar{x}_{\nu})
+  =t^{n}\sum_{\mu\in\Z^{n}}\widehat{\phi}(t\bar{y}_{\mu})
+  =t^{n}\left(1+\sum_{\mu\neq 0}\widehat{\phi}(t\bar{y}_{\mu})\right),
+\end{align*}
+由已知的正性 $\widehat{\phi} \geq 0$，得 $0 < t \leq 1$. 此外，对每个 $\nu$ 与 $\mu$ 有 $\bar{x}_{\nu}\cdot\bar{y}_{\mu} \in \Z$. 因此，对每个 $j = 1, \ldots, n$，$te_{j}\cdot\bar{y}_{\mu} \in \Z$，由此可断定 $\bar{y}_{\mu} \in t^{-1}\Z^{n}$.
+
+接着，使用恒等式
+\begin{align*}
+  1=t^{n}\sum_{\mu\in\Z^{n}}\widehat{\phi}(t(\bar{y}_{\mu}-a)),
+\end{align*}
+并在方体 $Q = \left[-1/2, 1/2\right]^n$ 上对 $a$ 积分. 得到
+\begin{align*}
+  1&=\sum_{\mu\in\Z^{n}}t^{n}\int_{-1/2}^{1/2}\cdots\int_{-1/2}^{1/2}
+   \widehat{\phi}(t(\bar{y}_\mu-a))\,\mathrm{d}a^{1}\cdots\mathrm{d}a^{n}\\
+  &=\sum_{\mu\in\Z^{n}}\int_{t((\bar{y}_\mu)^{1}-1/2)}^{t((\bar{y}_\mu)^{1}+1/2)}\cdots
+   \int_{t((\bar{y}_\mu)^{n}-1/2)}^{t((\bar{y}_\mu)^{n}+1/2)}
+   \widehat{\phi}(u^{1},\ldots,u^{n})\,\mathrm{d}u^{1}\cdots\mathrm{d}u^{n}\\
+  &=\sum_{\mu\in\Z^{n}}\int_{\mu^{1}-t/2}^{\mu^{1}+t/2}\cdots\int_{\mu^{n}-t/2}^{\mu^{n}+t/2}
+   \widehat{\phi}(u^{1},\ldots,u^{n})\,\mathrm{d}u^{1}\cdots\mathrm{d}u^{n}
+  =\sum_{\mu\in\Z^{n}}\int_{Q_\mu(t)}\widehat{\phi}(u)\,\mathrm{d}u,
+\end{align*}
+其中 $Q_{\mu}(t) = [\mu^1 - t/2, \mu^1 + t/2) \times \cdots \times [\mu^n - t/2, \mu^n + t/2)$.
+
+为结束证明，注意方体 $Q_{\mu}(t)$ 两两不交，且只在 $t = 1$ 的情形完全覆盖 $\R^n$. 由于 $1 = \phi(0) = \int_{\R^n} \widehat{\phi}(u)\,\mathrm{d}u$，$\widehat{\phi} \geq 0$，且集合 $\{\widehat{\phi}(x) = 0\}$ 测度为零，剩下的唯一可能就是 $t = 1$ 与 $X = \Z^n$.
+\end{proof}
+
+这个证明的起源可追溯到 1986 年，当时我在苏黎世 ETH 听了一场关于准晶体的报告. 令我震惊的是，晶体学家们把定理 7.1 的一个版本视为当然: Bragg 峰（在频率侧）蕴含空间侧的周期性. 于是我问自己，对这样一条基本陈述能否给出一个直接证明.
+
+\section{推广到更一般的系数}
+
+自然还要问: 如果我们的分布给不同的 $\delta$ 以不同的质量，会发生什么? 这些分布能否刻画为周期结构的有限叠加?
+
+下面的定理对这个问题给出肯定的解答，但其证明需要局部紧 Abel 群调和分析的一些有力工具，即 P.~Cohen 对这类群 $G$ 上幂等测度获得的刻画: $\mu * \mu = \mu$，当且仅当 $\supp(\widehat{\mu})$ 属于对偶群 $\widehat{G}$ 的陪集环（即 $\widehat{G}$ 的、包含一切开陪集的最小子集环）.
+
+设集合 $\Lambda = \bigcup_{j=1}^{N} \Lambda_j$ 是 $\R^n$ 子集的有限不交并，且 $\Lambda$ 中任意两个不同点之间的距离有正下界. 我们称这种情形为集合 $\Lambda$ 是强离散的.
+
+给定不同的复数 $\{a_j\}_{j=1,\ldots,N}$，可以考虑缓增分布
+\begin{align*}
+  \mu=\sum_{j=1}^{N}a_{j}\sum_{x\in\Lambda_{j}}\delta_{x}.
+\end{align*}
+假设其傅里叶变换 $\widehat{\mu}$ 也可以表为
+\begin{align*}
+  \widehat{\mu}=\sum_{\alpha}b_{\alpha}\delta_{y_{\alpha}},
+\end{align*}
+且对某个常数 $C > 0$ 满足
+\begin{equation}\label{eq:7.4}
+  \sum_{y_{\alpha}\in Q}|b_{\alpha}|\leq C<\infty,\qquad \text{对每个单位方体 } Q\subset\R^{n}.
+\end{equation}
+则有下面的定理.
+
+\begin{theorem}\label{thm:7.2}
+在上述假设下，每个集合 $\Lambda_j$ 都是 $n$ 维格的有限不交并.
+\end{theorem}
+
+在给出证明之前，先考虑若干辅助引理.
+
+\begin{lemma}\label{lem:7.3}
+设 $\{x_j\} \subset \R^n$ 是 $\R^n$ 的离散子集，其补集包含任意大的球；假设 $\mu = \sum_j a_j \delta_{x_j}$ 是缓增分布，其傅里叶变换 $\widehat{\mu}$ 可以表为 $\widehat{\mu} = \sum_k b_k \delta_{y_k}$，且满足条件 \eqref{eq:7.4}. 则必有 $\mu \equiv 0$.
+\end{lemma}
+
+\begin{proof}
+假设蕴含: 对每个正数 $t$，都能找到与支集 $\{x_j\}$ 不交的球 $B(z_t;t)$. 选取满足 $\supp(\psi) \subset B(0;1)$ 且 $\widehat{\psi}(0) = 1$ 的光滑函数 $\psi$，对固定的 $y_k$ 考虑函数
+\begin{align*}
+  \phi(x)=\exp(2\pi i\,y_{k}\cdot x)\,\psi\left(\frac{x-z_{t}}{t}\right).
+\end{align*}
+有
+\begin{align*}
+  0=\mu(\phi)=\widehat{\mu}(\widehat{\phi})
+  =t^{n}\sum_{\alpha}b_{\alpha}\widehat{\psi}(t(y_{\alpha}-y_{k}))\exp(2\pi i z_{t}\cdot y_{\alpha}),
+\end{align*}
+由此得
+\begin{align*}
+  b_{k}=-\sum_{\alpha\neq k}b_{\alpha}\widehat{\psi}(t(y_{\alpha}-y_{k}))\exp\bigl(2\pi i z_{t}\cdot(y_{\alpha}-y_{k})\bigr).
+\end{align*}
+特别地,
+\begin{align*}
+  |b_{k}|\leq\sum_{\alpha\neq k}|b_{\alpha}|\left|\widehat{\psi}(t(y_{\alpha}-y_{k}))\right|.
+\end{align*}
+令 $t \to \infty$ 取极限，由性质 \eqref{eq:7.4} 得 $b_k = 0$.
+\end{proof}
+
+在给出第二个引理之前，回忆: $\R^n$ 的离散子群都是格；且 $\R^n$ 的子群 $H$ 不离散，当且仅当 $\R^n$ 中 $0$ 的每个邻域都含有 $H$ 的无穷多个元素.
+
+\begin{lemma}\label{lem:7.4}
+设 $A = (x + H) - (x_1 + H_1) - \cdots - (x_r + H_r) \neq \emptyset$ 是强离散集，其中 $H, H_1, \ldots, H_r$ 是 $\R^n$ 的子群. 则 $H$ 是离散群.
+\end{lemma}
+
+\begin{proof}
+对 $r$ 归纳.
+
+情形 $r=1$: $A=(x+H)-(x_{1}+H_{1})\neq\emptyset$.
+
+若 $(x + H) \cap (x_1 + H_1) = \emptyset$，则 $A = x + H$，结论立即成立.
+
+若 $(x + H) \cap (x_1 + H_1) \neq \emptyset$，则存在元素 $h \in H$ 与 $h_1 \in H_1$，使 $x + h = x_1 + h_1$，且有
+\begin{align*}
+  (x+H)\cap(x_{1}+H_{1})=x+h+H\cap H_{1},
+\end{align*}
+即
+\begin{align*}
+  A=x+\left[H-\left(h+H\cap H_{1}\right)\right].
+\end{align*}
+由于 $H$ 是 $H \cap H_1$ 的陪集的不交并，$A$ 离散显然蕴含 $H \cap H_1$ 离散.
+
+假设 $H$ 不离散. 则 $\R^n$ 中以原点为心的每个开球 $B(0; r)$ 必含 $H$ 的无穷多个点. 由于 $h + H \cap H_1$ 离散，$B(0; r) \cap (h + H \cap H_1)$ 是有限集，从而 $A - x$ 在这样的球 $B(0; r)$ 中含无穷多个点. 这与 $A$ 是强离散集的假设相矛盾. （归纳的其余部分留给读者.）
+\end{proof}
+
+\begin{lemma}\label{lem:7.5}
+假设 $\{e_1, \ldots, e_m\}$ 是 $\R^n$ 中线性无关的向量. 则对每个 $r > 0$，集合
+\begin{align*}
+  D_{r}=\{v=k_{1}e_{1}+\cdots+k_{m}e_{m}:d(v,\Z^{n})<r,\ k_{j}\in\Z,\ j=1,\ldots,m\}
+\end{align*}
+不能包含于有限个 $(m-1)$ 维平面之并.
+\end{lemma}
+
+\begin{proof}
+对 $m$ 归纳，并利用 H.~Weyl 关于 $(k\theta_1,\ldots,k\theta_s)$ 模 $1$ 均匀分布的定理——当数 $\{1,\theta_1,\ldots,\theta_s\}$ 在有理数域上线性无关时成立. 注意，若所有向量 $e_j$ 都有有理坐标，引理的结论容易得出. 细节留给读者.
+\end{proof}
+
+\begin{proof}[定理~\ref{thm:7.2} 的证明]
+设 $\psi$ 如引理 7.3 证明中所选，对每个正整数 $M$ 考虑测度
+\begin{align*}
+  \nu_{M}=M^{-n}\psi\left(\frac{\cdot}{M}\right)\cdot\widehat{\mu}
+  =M^{-n}\sum_{\alpha}b_{\alpha}\psi\left(\frac{y_{\alpha}}{M}\right)\delta_{y_{\alpha}}.
+\end{align*}
+则条件 \eqref{eq:7.4} 蕴含: 对每个 $M$，$\nu_M$ 是 $\R^n$ 上总变差有限的测度，且对 $M$ 一致: $\|\nu_M\| \leq c < \infty$.
+
+测度 $\nu_M$ 有自然的延拓，成为 $\R^n$ 的 Bohr 紧化 $\R^n$ 上的有限测度，且总变差一致有界. 因此，由标准的弱星紧性论证，存在子列——仍记作 $\{\nu_M\}$——在弱星拓扑中收敛到一个有限测度 $\bar{\nu}$.
+
+有
+\begin{align*}
+  \widehat{\overline{\nu}}(\xi)
+  &=\lim_{M\to\infty}\widehat{\nu}_{M}(\xi)
+  =\lim_{M\to\infty}\left(M^{-n}\psi\Big(\frac{\cdot}{M}\Big)\cdot\widehat{\mu}\right)^{\wedge}(\xi)
+  =\lim_{M\to\infty}\widehat{\psi}(M\cdot)*\mu(\xi)\\
+  &=\lim_{M\to\infty}\sum_{j=1}^{N}a_{j}\sum_{x\in\Lambda_{j}}\widehat{\psi}(M(\xi-x)).
+\end{align*}
+因此,
+\begin{align*}
+  \widehat{\overline{\nu}}(\xi)=\begin{cases}
+    a_{j}, & \text{若 } \xi\in\Lambda_{j},\\
+    0, & \text{若 } \xi\notin\Lambda.
+  \end{cases}
+\end{align*}
+
+下一步是利用这一事实证明: 对每个集合 $\Lambda_j$，可以找到 Bohr 群 $\R^n$ 上的有限测度 $\mu_j$，满足
+\begin{align*}
+  \widehat{\mu}_{j}(\xi)=1\ \text{若 } \xi\in\Lambda_{j},\qquad
+  \widehat{\mu}_{j}(\xi)=0\ \text{若 } \xi\notin\Lambda_{j}.
+\end{align*}
+我们对集合 $\Lambda_j$ 的个数 $N$ 作归纳证明. 若 $N=1$，结果显然，可取 $\mu_1 = (1/a_1)\bar{\nu}$. 假设结果对 $N-1$ 成立. 考虑测度 $\bar{\nu}_k = \bar{\nu} * \bar{\nu} - a_k\bar{\nu}$. 则
+\begin{align*}
+  \widehat{\overline{\nu}}_{k}(\xi)
+  =\widehat{\overline{\nu}}(\xi)^{2}-a_{k}\widehat{\overline{\nu}}(\xi)
+  =\begin{cases}
+    a_{j}^{2}-a_{k}a_{j}, & \text{若 } \xi\in\Lambda_{j},\ j\neq k,\\
+    0, & \text{若 } \xi\notin\Lambda-\Lambda_{k}.
+  \end{cases}
+\end{align*}
+容易看出存在 $k$ 与 $j$，使
+\begin{align*}
+  a_{j}^{2}-a_{k}a_{j}\neq a_{m}^{2}-a_{k}a_{m},\qquad m\neq j.
+\end{align*}
+由归纳假设，可以找到关于 $\Lambda_j$ 具有所需性质的 $\mu_j$. 则测度 $\lambda = \bar{\nu} - a_j\mu_j$ 的傅里叶变换为
+\begin{align*}
+  \widehat{\lambda}(\xi)=\begin{cases}
+    a_{k}-a_{j}, & \text{若 } \xi\in\Lambda_{k},\ k\neq j,\\
+    0, & \text{若 } \xi\notin\Lambda-\Lambda_{j},
+  \end{cases}
+\end{align*}
+且值 $a_{k}-a_{j}$（$k=1,\ldots,j-1, j+1,\ldots,N$）各不相同. 可以再次用归纳假设，断言所需测度 $\mu_{k}$，$k=1,\ldots,N$，的存在性.
+
+于是，我们具备了应用 Paul Cohen 幂等测度定理的条件，可以断定: 每个 $\Lambda_j$ 属于赋予离散拓扑的群 $\R^n$（即作为 $\R^n$ 的对偶群）的陪集环.
+
+即，每个 $\Lambda_{j}$ 是形如
+\begin{align*}
+  A=\left(x+H\right)-\left(x_{1}+H_{1}\right)-\cdots-\left(x_{r}+H_{r}\right)\neq\emptyset
+\end{align*}
+的集合的有限并；由引理 7.4，知道 $H$ 是 $\R^n$ 的离散子群（按普通拓扑），即格. 此外，存在元素 $h_j \in H_j$，使
+\begin{align*}
+  A=x+\left\{H-\left(h_{1}+H\cap H_{1}\right)-\cdots-\left(h_{r}+H\cap H_{r}\right)\right\}.
+\end{align*}
+可以把这样的集合写成
+\begin{align*}
+  A=x+\left\{\left(y_{1}+K_{1}\right)\cup\cdots\cup\left(y_{s}+K_{s}\right)\right\}-A_{1},
+\end{align*}
+其中 $y_j + K_j$ 是 $\R^n$ 离散子群 $K_j$ 的陪集，$A_1$ 包含于有限个超平面之并.
+
+为看出这一点，只需注意: 在 $\R^n$ 中，若 $G_1$ 是离散群 $G_2$ 的子群，且两者维数相同（作为 $\R^n$ 中的格），则指标 $[G_2 : G_1]$ 必有限，即 $G_2$ 是 $G_1$ 的有限个陪集之并；从而给定 $g \in G_2$，$G_2 - (g + G_1)$ 是 $G_1$ 的有限个陪集之并.
+
+恒等式
+\begin{align*}
+  (X_{1}-Y_{1})\cup(X_{2}-Y_{2})
+  =X_{1}\cup X_{2}-\left\{\left(X_{2}^{c}\cap X_{1}\cap Y_{1}\right)
+  \cup\left(X_{1}^{c}\cap X_{2}\cap Y_{2}\right)
+  \cup\left(Y_{1}\cap Y_{2}\right)\right\},
+\end{align*}
+对一般集合 $X_1, X_2, Y_1, Y_2$ 成立，给出: 每个集合 $\Lambda_j$ 可以写成
+\begin{align*}
+  \Lambda_{j}=\left(x_{1}+H_{1}\right)\cup\cdots\cup\left(x_{s}+H_{s}\right)\cup B_{1}-B_{2},
+\end{align*}
+其中 $H_j$ 是 $\R^n$ 的 $n$ 维离散子群，离散集 $B_1$ 与 $B_2$ 包含于有限个超平面之并.
+
+接着，改变最后的表达式，使格互不相交.
+
+假设 $(x_j + H_j) \cap (x_k + H_k) \neq \emptyset$. 则存在元素 $h_j \in H_j$ 与 $h_k \in H_k$，使 $x_j + h_j = x_k + h_k$，即
+\begin{align*}
+  \left(x_{j}+H_{j}\right)\cap\left(x_{k}+H_{k}\right)&=x_{j}+h_{j}+\left(H_{j}\cap H_{k}\right),\\
+  \left(x_{j}+H_{j}\right)\cup\left(x_{k}+H_{k}\right)&=x_{j}+h_{j}+\left(H_{j}\cup H_{k}\right).
+\end{align*}
+$\Lambda_j$ 强离散的假设蕴含 $H_j \cap H_k$ 的维数为 $n$. 否则，经适当的线性映射 $A$ 后，可以假设 $H_j = \Z^n$ 且
+\begin{align*}
+  H_{k}=\{m_{1}e_{1}+\cdots+m_{n}e_{n}:m_{j}\in\Z\},
+\end{align*}
+其中 $e_j = (\theta_1^j, \ldots, \theta_n^j)$，至少有一个 $\theta_i^j$ 不是有理数. 但此时应用引理 7.5 得到: 集合
+\begin{align*}
+  \{x\in H_{k}:\exists y\in H_{j},\quad 0<d(x,y)<r\}
+\end{align*}
+不能包含于有限个超平面之并，从而对包含于这样的并中的任何集合 $B$，$H_j \cup H_k - B$ 都不能是强离散的. 这与我们关于 $\Lambda_j$ 的假设矛盾.
+
+但若 $H_j \cap H_k \neq \emptyset$ 的维数为 $n$，则 $H_j \cup H_k$ 是 $H_j \cap H_k$ 的有限个陪集的不交并. 有限次应用这一程序，可以把每个集合 $\Lambda_j$ 写成
+\begin{align*}
+  \Lambda_{j}=(x_{1}^{j}+H_{1}^{j})\cup\cdots\cup(x_{s(j)}^{j}+H_{s(j)}^{j})\cup B_{1}^{j}-B_{2}^{j},
+\end{align*}
+其中 $n$ 维格 $x_k^j + H_k^j$ 互不相交，离散集 $B_1^j$ 与 $B_2^j$ 包含于有限个超平面之并.
+
+用集合族
+\begin{align*}
+  \Lambda_{j}^{*}=(x_{1}^{j}+H_{1}^{j})\cup\cdots\cup(x_{s(j)}^{j}+H_{s(j)}^{j}),
+\end{align*}
+定义下面的测度:
+\begin{align*}
+  \mu_{1}=\sum_{j=1}^{N}a_{j}\sum_{x\in\Lambda_{j}^{*}}\delta_{x}.
+\end{align*}
+则泊松求和公式蕴含 $\widehat{\mu}_1$ 是满足条件 \eqref{eq:7.4} 的测度. 此时，$\mu - \mu_1$ 也是傅里叶变换满足 \eqref{eq:7.4} 的测度，但其支集不相对紧——它包含于有限个超平面之并；由引理 7.3 必有 $\mu = \mu_1$，从而对每个 $j = 1, \ldots, N$，$\Lambda_j^* = \Lambda_j$.
+\end{proof}
+
+\section{一个应用: 高斯和的相位问题}
+
+该公式的一个相关而众所周知的应用是\newterm{gaussian-sum}{高斯和}{Gaussian sum}的求值，它在数论的好几章（如二次互反律）中至关重要.
+
+\begin{theorem}\label{thm:7.6}
+对 $N \geq 1$,
+\begin{align*}
+  G(N)=\sum_{n=0}^{N-1}e^{2\pi i n^{2}/N}
+  =\frac{1}{2}\sqrt{N}\left(1+i\right)\left(1+e^{-\pi i N/2}\right),
+\end{align*}
+即
+\begin{align*}
+  G(N)=\begin{cases}
+    \sqrt{N}, & \text{若 } N\equiv 1\pmod{4},\\
+    0, & \text{若 } N\equiv 2\pmod{4},\\
+    i\sqrt{N}, & \text{若 } N\equiv 3\pmod{4},\\
+    (1+i)\sqrt{N}, & \text{若 } N\equiv 0\pmod{4}.
+  \end{cases}
+\end{align*}
+\end{theorem}
+
+\begin{proof}
+对函数
+\begin{align*}
+  f(x)=e^{2\pi i\,x^{2}/N}\,\chi_{[0,N]}(x)
+\end{align*}
+应用泊松求和公式. 则
+\begin{align*}
+  \widehat{f}(k)=\int_{0}^{N}e^{-2\pi i k x}e^{2\pi i x^{2}/N}\,\mathrm{d}x
+  =e^{-\pi i k^{2}N/2}\sqrt{N}
+   \int_{-k\sqrt{N}/2}^{-k\sqrt{N}/2+\sqrt{N}}e^{2\pi i u^{2}}\,\mathrm{d}u,
+\end{align*}
+偶数频率 $k = 2m$ 的和等于
+\begin{align*}
+  \sum_{m}\widehat{f}(2m)
+  =\lim_{M\to\infty}\sqrt{N}\int_{-M}^{M+\sqrt{N}}e^{2\pi i u^{2}}\,\mathrm{d}u
+  =\sqrt{N}\,I,
+\end{align*}
+而奇数频率 $k = 2m + 1$ 的和给出
+\begin{align*}
+  \sum_{m}\widehat{f}(2m+1)=e^{-\pi i N/2}\sqrt{N}\,I.
+\end{align*}
+为结束，注意取 $N = 1$，上面的恒等式给出
+\begin{align*}
+  1=\left(1+e^{-\pi i/2}\right)I,
+\end{align*}
+即 $I = \frac{1}{2}(1 + i)$.
+\end{proof}
+
+在 $N = p$ 为素数时，有 Legendre 符号 $\left(\frac{n}{p}\right)$，定义为: 若 $n$ 是模 $p$ 的二次剩余则为 $+1$，若 $n$ 是二次非剩余则为 $-1$，若 $p \mid n$ 则为 $0$；由此给出恒等式
+\begin{align*}
+  \sum_{n=0}^{N-1}\left(\frac{n}{p}\right)e^{2ni n/p}=\sum_{n=0}^{N-1}e^{2\pi i n^{2}/p},
+\end{align*}
+它将在下面关于所谓高斯分子相位问题的讨论中发挥作用.
+
+结晶分子的空间构型通常通过 X 射线衍射数据获得. 正如 M.~von Laue 首先提出的，当衍射射线的强度被记录在平面屏幕上时，离散点集上出现高峰，揭示晶体的对称性. 标准的解释把衍射峰强度归于电子密度 $\rho$ 的傅里叶变换 $\widehat{\rho}$ 的绝对值. 相位问题要求从 $|\widehat{\rho}|$ 的知识重建 $\rho$. 在某些有趣的情形中，这自然导致适当多项式环中的因式分解问题（见 \cite{b170}）. 例如，若密度是 $\rho = \sum \delta_{n_j}$，其中 $\delta_{n_j}$ 表示放在整数 $n_j$ 处的 Dirac $\delta$ 函数，则当多项式 $\sum x^{n_j}$ 在 $\Z[x]$ 中不可约时，$|\widehat{\rho}|$ 决定 $\rho$（模平移或反射）. 这导致对系数为 $0$ 或 $1$ 的不可约多项式的研究. 在 \cite{b168} 中，提出了这些多项式大多不可约的猜想，并引述了一些相关结果. 另一方面，一般而言，若多项式 $\sum x^{n_j}$ 不可约性不成立，就会缺乏唯一性，表明在该一般性下相位问题不是适定的（第一个非唯一性的实际例子是 1930 年 Pauling 与 Shappell \cite{b169} 在研究方铁锰矿晶体时考虑的）. 一个相当有趣的问题是: 关于 $\rho$ 的哪种``化学''、``几何''或``算术''信息足以确保重建（见 \cite{b160,b170}）.
+
+一维（周期）晶体电子密度的合理模型由 Dirac $\delta$ 函数的无穷和给出（参看 \cite{b158}）:
+\begin{align*}
+  \rho=\sum_{j=1}^{N}b_{j}\sum_{n=-\infty}^{\infty}\delta_{x_{j}+n},
+\end{align*}
+其中 $b_j \in \Z^+$ 是正整数，$0 \leq x_j < 1$.
+
+在此语境中，相位问题是在知道绝对值
+\begin{align*}
+  F(\nu)=\Big|\sum_{j=1}^{N}b_{j}\:e^{2\pi i x_{j}\nu}\Big|,\qquad \nu\in\Z,
+\end{align*}
+的情况下求位置 $\{x_j\}$（模平移或反射 $x'_j = 1 - x_j$）.
+
+下面呈现的结果包含关于高斯和的一个新观察，即粗略地说: 在一类指数和中，高斯和由它们的绝对值所决定.
+
+记号. 用 $e(x)$ 作为 $e^{2\pi i x}$ 的缩写.
+
+\begin{theorem}\label{thm:7.7}
+设 $0 = x_1 < x_2 < \cdots < x_N < 1$ 是实数，假设存在素数 $p$，使和
+\begin{align*}
+  S(m)=\sum_{j=1}^{N}e(m x_{j})
+\end{align*}
+在 $p$ 不整除 $m$ 时有常数模长 $|S(m)| = \Gamma$，在 $p \mid m$ 时有 $|S(m)| = N$. 则对 $1 \leq j \leq N$ 有 $px_j \in \Z$，且
+\begin{align*}
+  S(m)=AT(m)+Be\Big(\frac{mk}{p}\Big)G(m)\quad\text{或}\quad
+  S(m)=AT(m)+Be\Big(\frac{mk}{p}\Big),
+\end{align*}
+其中 $A, B, k \in \Z$，且
+\begin{align*}
+  T(m)=\sum_{n=0}^{p-1}e\Big(\frac{mn}{p}\Big),\qquad
+  G(m)=\sum_{n=1}^{p-1}\Big(\frac{n}{p}\Big)e\Big(\frac{mn}{p}\Big).
+\end{align*}
+\end{theorem}
+
+证明将基于下面的引理.
+
+\begin{lemma}\label{lem:7.8}
+若 $x \in \Q(\zeta)$（$\zeta = e(1/p)$）的所有代数共轭都是等模长的复数，且其辐角相差 $\pi$ 的代数倍数，则
+\begin{align*}
+  x=B\zeta^{k}\sum_{n=1}^{p-1}\left(\frac{n}{p}\right)\zeta^{n}\quad\text{或}\quad
+  x=B\zeta^{k},
+\end{align*}
+其中 $B \in \Q$，$k \in \Z$.
+\end{lemma}
+
+\begin{proof}
+设 $\sigma$ 是扩张 $\Q(\zeta)/\Q$ 的 Galois 群的生成元. 用引理的假设，可以写 $\sigma(x)/x = e(\alpha)$，其中 $\alpha \in \Q$（若 $\alpha \notin \Q$，众所周知 $e(\alpha)$ 不是代数数），即 $\sigma(x)/x = \zeta_b^a$，其中 $\zeta_b = e(1/b)$，$a, b \in \Z^+$，$(a, b) = 1$.
+
+取满足 $a^*a \equiv 1 \pmod b$ 的 $a^*$，得 $\zeta_b = (\zeta_b^a)^{a^*} \in \Q(\zeta)$. 有两种情形:
+
+(i) 若 $p \mid b$，则 $[\Q(\zeta) : \Q(\zeta_b)] = \phi(p)/\phi(b)$ 给出 $b = p$ 或 $b = 2p$.
+
+(ii) 若 $p \nmid b$，则 $\Q(\zeta) = \Q(\zeta, \zeta_b) = \Q(\zeta_{pb})$ 给出 $pb = p$ 或 $pb = 2p$.
+
+因此，$b = 1, 2, p, 2p$，且对某个整数 $l$（$0 \leq l \leq p-1$）有 $\zeta_{b}^{a} = \pm\zeta^{l}$.
+
+假设 $\sigma(\zeta) = \zeta^g$，取满足 $(g - 1)k \equiv l \pmod p$ 的 $k$；则由于 $\sigma(x)/x = \pm\zeta^l$，得
+\begin{align*}
+  \frac{\sigma(\zeta^{-k}x)}{\zeta^{-k}x}=\pm 1,\qquad
+  \frac{\sigma^{2}(\zeta^{-k}x)}{\sigma(\zeta^{-k}x)}=\pm 1.
+\end{align*}
+因此 $\sigma^{2}(\zeta^{-k}x)=\zeta^{-k}x$.
+
+在 $\sigma^{2}$ 下不变的子域是
+\begin{align*}
+  M=\left\{a\bigl(\sigma^{2}(\zeta)+\sigma^{4}(\zeta)+\cdots+\sigma^{p-1}(\zeta)\bigr)
+  +b\bigl(\sigma(\zeta)+\sigma^{3}(\zeta)+\cdots+\sigma^{p-2}(\zeta)\bigr);\ a,b\in\Q\right\},
+\end{align*}
+于是
+\begin{align*}
+  \zeta^{-k}x=a\sum_{n\in\mathcal{R}}\zeta^{n}+b\sum_{n\in\mathcal{N}}\zeta^{n},\qquad a,b\in\Q,
+\end{align*}
+其中 $\mathcal{R}$ 与 $\mathcal{N}$ 分别表示模 $p$ 的二次剩余集与二次非剩余集.
+
+若 $\sigma(\zeta^{-k}x) = \zeta^{-k}x$，则 $\zeta^{-k}x \in \Q$. 若 $\sigma(\zeta^{-k}x) = -\zeta^{-k}x$，则有 $b = -a$，且 $\zeta^{-k}x$ 是一个高斯和的有理数倍.
+\end{proof}
+
+\begin{proof}[定理~\ref{thm:7.7} 的证明]
+恒等式 $|S(p)| = N$ 蕴含 $e(px_1) = e(px_2) = \cdots = e(px_N)$. 由于已固定 $x_1 = 0$，必有 $x_r = n_r/p$，其中 $n_r$ 是整数，$0 \leq n_r < p$. 因此 $x = S(1)$ 满足引理 7.8 的假设，得到
+\begin{align*}
+  S(1)=B\;e\Big(\frac{k}{p}\Big)G(1)\quad\text{或}\quad
+  S(1)=B\;e\Big(\frac{k}{p}\Big).
+\end{align*}
+对与 $p$ 互素的 $m$，在 $\Q(\zeta)$ 中共轭，得到
+\begin{align*}
+  S(m)=B e\Big(\frac{m k}{p}\Big)G(m)\quad\text{或}\quad
+  S(m)=B e\Big(\frac{m k}{p}\Big).
+\end{align*}
+最后，注意 $T(m)$ 为零当且仅当 $p \nmid m$. 因此存在 $A \in \Q$，使
+\begin{align*}
+  S(m)=A T(m)+B e\Big(\frac{m k}{p}\Big)G(m)\quad\text{或}\quad
+  S(m)=A T(m)+B e\Big(\frac{m k}{p}\Big),
+\end{align*}
+对每个 $m \in \Z$ 成立. 比较系数，推出 $A$ 与 $B$ 是整数.
+\end{proof}
+
+\section{数格点（快速概览）}
+
+数出给定区域内部格 $\Z^n$ 的元素个数，是在许多有趣语境中出现的问题. 一个好例子是算术函数
+\begin{align*}
+  r_{n}(k)=\#\{\nu\in\Z^{n}:|\nu|^{2}=k\},
+\end{align*}
+即 $r_n(k)$ 计数半径 $\sqrt{k}$ 的球面上\newterm{lattice-point-problem}{格点}{lattice point}的个数，等价地，计数正整数 $k$ 表为 $n$ 个平方和的表法个数.
+
+当 $n = 2$ 或 $3$ 时，函数 $r_n(k)$ 表现出相当不规则的行为，其值依赖于整数 $k$ 的素因子分解. 但对 $n = 4$，有 Jacobi 得到的``更规则''的公式:
+\begin{align*}
+  r_{4}(k)=8\sum_{m|k}m\ \text{若 } k \text{ 为奇数},\qquad
+  r_{4}(k)=24\sum_{m|k,\ m\ \text{奇}}m\ \text{若 } k \text{ 为偶数}.
+\end{align*}
+对 $n \geq 5$，Hardy 用圆法证明了 \cite{b162} 下列渐近展开:
+\begin{align*}
+  r_{n}(k)=\frac{\pi^{n/2}}{\Gamma(n/2)}k^{n/2-1}
+  \sum_{m=1}^{\infty}\sum_{\substack{h\bmod m\\ (h,m)=1}}
+  \left(\frac{G(h,m)}{m}\right)^{n}e^{-2\pi i h k/m}+O(k^{n/4}),
+\end{align*}
+其中
+\begin{align*}
+  G(h,m)=\sum_{j=1}^{m}e^{2\pi i h j^{2}/k}.
+\end{align*}
+分析中使函数规则化的标准方式是取平均值. 定义
+\begin{align*}
+  R_{n}(x)=\#\{\nu\in\Z^{n}:|\nu|\leq x\}=r_{n}(0)+r_{n}(1)+\cdots+r_{n}([x^{2}]),
+\end{align*}
+在这个特殊情形中，它表示以原点为心、半径 $x > 0$ 的球内部的格点数（这里用标准记号 $[y]$ 表示实数 $y$ 的整数部分）.
+
+归功于 Gauss 的观察是: $R_{n}(x)$ 被球的 $n$ 维体积很好地估计；更精确地,
+\begin{align*}
+  R_{n}(x)=\omega_{n}x^{n}+E_{n}(x),
+\end{align*}
+其中 $\omega_{n}=\frac{\pi^{n/2}}{\Gamma(n/2+1)}$ 是单位球的体积，$E_{n}(x)=O(x^{n-1})$.
+
+找出误差项（或偏差项）$E_n(x)$ 的真实量级（通常为 $O(x^{\alpha})$ 的形式）是数论中的一个杰出问题. 但由于这一主题历史悠久，我们只能述及其若干亮点.
+
+Gauss 所引的估计 $O(x^{n-1})$ 容易由如下事实得出: 作为格方体 $Q_{\nu}$（$|\nu| \leq x$）之并的区域，其体积等于 $R_n(x)$，而其边界介于以原点为心、半径 $x \pm \sqrt{n}$ 的球之间. 然而，用泊松求和公式可以改进这个粗糙的估计:
+\begin{align*}
+  R_{n}(x)
+  &=\sum_{\nu}\chi_{B_{x}(0)}(\nu)
+  =\sum_{\nu}\widehat{\chi_{B_{x}(0)}}(\nu)\\
+  &=\frac{\pi^{n/2}}{\Gamma(n/2+1)}x^{n}
+   +x^{n/2}\sum_{j\geq 1}\frac{r_{n}(j)}{j^{n/4}}J_{n/2}(2\pi x\sqrt{j}),
+\end{align*}
+这就是 Hardy 得到的误差项表达式，其中第二项的级数需要谨慎对待.
+
+标准方法是用光滑磨光代替示性函数 $\chi_{B_x(0)}$，它允许通过分部积分截断给出偏差项的级数. 这可以做得使 Hardy 关于 $r_n(k)$（$n \geq 5$，或在 $n = 4$ 时 Jacobi）的近似公式在泊松公式两边都引入与期望的 $O(x^{n-2+\varepsilon})$，$\varepsilon > 0$ 相符的误差. 最后，对截断的级数，用贝塞尔函数的渐近式连同三角和的著名 Weyl 估计，可以得出: 对 $n \geq 4$，偏差项满足估计
+\begin{align*}
+  E_{n}(x)=O(x^{n-2+\varepsilon}),\qquad \text{对每个 } \varepsilon>0.
+\end{align*}
+事实上，$n > 4$ 的情形是表达式
+\begin{align*}
+  \sum_{k<x^{2}}r_{n}(k)
+  =\sum_{k<x^{2}}\sum_{-\sqrt{k}<\ell<\sqrt{k}}r_{n-1}(k-\ell^{2})
+  =\sum_{|\ell|\leq x}\sum_{k\leq x^{2}-\ell^{2}}r_{n-1}(k)
+\end{align*}
+的推论. 内层求和中的误差项是 $O(x^{n-3+\varepsilon})$，其中主项可以用 Euler--Maclaurin 求和公式得到.
+
+此外，用泊松公式给出的偏差项表达式，容易证明估计
+\begin{align*}
+  \int_{0}^{x}\left|E_{n}(t)\right|^{2}\mathrm{d}t=c_{n}x^{2n-3}+\text{低阶项},
+\end{align*}
+这意味着上面的估计是最优的.
+
+对三维球，Landau 的一个早期结果表明
+\begin{align*}
+  R_{3}(x)-\omega_{3}x^{3}=O(x^{3/2}).
+\end{align*}
+但这已被若干作者改进，其中可举 Chamizo--Iwaniec \cite{b153} 与 Heath-Brown \cite{b163}；目前指数的纪录是 $21/16 + \varepsilon$.
+
+在另一方向，估计偏差项 $L^2$-范数的方法在这里意味着指数 $1$ 不可能达到，这提供了一个界限和一个猜想: 是否对每个 $\varepsilon > 0$ 都有 $E_3(x) = O(x^{1+\varepsilon})$?
+
+对二维圆盘，上述泊松公式应用首先给出的指数 $\alpha$ 是 $\alpha = 2/3$；这由 Sierpiński 与 Voronoi 获得，读者可参阅文献 \cite{b151} 的详细阐述. 用 Weyl 估计可以略微改进这个指数；到目前为止，这一过程在 Kolesnik 的工作 \cite{b159} 中达到顶点，他给出指数 $\alpha = 278/429 + \varepsilon$（对任何 $\varepsilon > 0$）. 在 1980 年代，有 Bombieri--Iwaniec \cite{b148} 与 Iwaniec--Mozzochi \cite{b165} 的结果，他们发展了一种基于 Kloosterman 和估计的新方法. 这一方法被 Huxley（$\alpha = 131/208 + \varepsilon$）与 Bourgain--Watt（$\alpha = 517/824$）所利用，但这些指数与预期的 $\alpha = 1/2 + \varepsilon$ 仍``相距甚远''.
+
+还可以移动圆盘的中心. 给定单位正方形 $Q$ 中的 $y$，考虑圆盘
+\begin{align*}
+  D_{x}(y)=\{w\in\R^{2}:\|w-y\|\leq x\},
+\end{align*}
+并定义
+\begin{align*}
+  E_{2}(x;y)=\sum_{\nu}\chi_{D_{x}(y)}(\nu)-\pi x^{2}
+  =\sum_{\nu\neq 0}\widehat{\chi_{D_{x}(0)}}(\nu)\,e^{2\pi i\nu\cdot y}.
+\end{align*}
+则
+\begin{align*}
+  \int_{Q}\left|E_{2}(x;y)\right|^{2}\mathrm{d}y
+  =\sum_{\nu\neq 0}\left|\widehat{\chi}_{D_{x}}(\nu)\right|^{2}
+  =\frac{x}{\pi^{2}}\sum_{n=1}^{\infty}\frac{(r_{2}(n))^{2}}{n^{3/2}}
+   \cos^{2}\left(2\pi x\sqrt{n}-\frac{3\pi}{4}\right)+O(1).
+\end{align*}
+即，若随机选取一个半径为 $x$ 的圆盘，则其内部所含格点数的期望值是 $\pi x^2$，标准差为 $O(x^{1/2})$.
+
+\section{随机格点问题}
+
+标准（二维）格点问题化归为正图象 $y = g(x)$ 下方的格点计数，其中 $g \in C_N^2$,
+\begin{align*}
+  C_{N}^{2}=\left\{f\in C^{2}([0,N+1]):
+  0<C_{1}/N<-f^{\prime\prime}<C_{2}/N,\ f(0)=f(N+1)=0\right\},
+\end{align*}
+$C_1$ 与 $C_2$ 是常数，$N \in \Z^+$. 众所周知的论证允许得到渐近公式，其中格点误差项由 $g$ 下方的面积与格点数之差给出（实轴上的格点计半个）. 对 Jarník \cite{b166} 旧论证的变体证明 $O(N^{2/3})$ 的界是最优的（见 \cite{b164} 第 1 节）. 在指数和方法经过一个世纪的进展之后，M.~N.~Huxley \cite{b164} 在 $g$ 更强的正则性条件——即三个连续导数——下把这个界改进到 $O(N^{46/73+\varepsilon})$. 但这距离圆情形的 Hardy 猜想 $O(N^{1/2+\varepsilon})$ \cite{b161} 仍很遥远. 有一些证据支持对闭凸曲线的一个推广猜想，由对中心与半径的平均结果支持. 然而，后一类结果并不完全令人满意，因为它们可以理解为对格的平均，而非曲线的真正任意变化. 带着这个想法，并以量子力学 Feynman 路径积分表述为主要动机，我们将证明: 所有弧 $g \in C_N^2$ 上的格点误差项平方的积分与 Hardy 猜想一致，从而对属于 $C_N^2$ 的``大多数弧''，最优的 $O(N^{1/2+\varepsilon})$ 误差界无需进一步的正则性条件即可成立. 这不是第一次把凸区域中数格点的数论问题与量子力学联系起来. 恰恰相反，这一联系早已出现在 H.~Weyl 的开创性工作中: 考虑欧氏空间 $\R^n$ 中的位势 $V$，则 $-\Delta + V$ 的束缚态数目（有时与格点相联系）可以在半经典近似下用相空间体积 $|\{(\xi, x) : |\xi|^2 + V(x) < \infty\}|$ 估计——这一课题将在第 9 章关于多相互作用粒子量子力学 Thomas--Fermi 模型时提及. 另一方面，还有 Ya.~G.~Sinai 的先例，他也曾结合物理的相变模型考虑随机格点问题.
+
+总结上面阐述的思想，我们要赋予 $\int |\Delta(f)|^2\,\mathrm{d}\mu(f)$ 意义，其中 $\mathrm{d}\mu$ 是 $C_N^2$ 上的规范化测度，$\Delta(f)$ 是格点误差函数，由
+\begin{align*}
+  \Delta(f)=\int_{0}^{N+1}f(t)\,\mathrm{d}t-\sum_{i=0}^{N+1}\Big([f(i)]+\frac{1}{2}\Big)
+\end{align*}
+给出. Euler--Maclaurin 求和公式或梯形法则的截断误差公式给出
+\begin{align*}
+  \int_{0}^{N+1}f(t)\,\mathrm{d}t=\sum_{i=0}^{N+1}f(i)+O(1).
+\end{align*}
+因此我们推断，$\int|\Delta(f)|^{2}\,\mathrm{d}\mu(f)$ 的任何合理定义都应与
+\begin{align*}
+  \int|\Delta(x_{1},x_{2},\ldots,x_{N})|^{2}\,\mathrm{d}\mu_{N}(f)
+\end{align*}
+相差一个可忽略的 $O(1)$ 项，其中 $x_{i}=f(i)$,
+\begin{align*}
+  \Delta(x_{1},x_{2},\ldots,x_{N})=\sum_{i=1}^{N}\psi(x_{i}),\qquad
+  \psi(x)=x-[x]-1/2,
+\end{align*}
+而 $\mathrm{d}\mu_{N}$ 分解成 $N$ 个支于竖直切片 $x = x_{1}, \ldots, x = x_{N}$ 的测度之积.
+
+在这个离散设定下，可以说 $C_{N}^{2}$ 是
+\begin{align*}
+  \big\{\big(x_{0},x_{1},\ldots,x_{N+1}\big)\in\R^{N+2}:
+  0<C_{1}/N<-f_{i}^{(2)}<C_{2}/N,\ x_{0}=x_{N+1}=0\big\},
+\end{align*}
+其中 $f_{i}^{(2)}$ 是离散二阶导数,
+\begin{align*}
+  f_{i}^{(2)}=\frac{\left(x_{i+1}-x_{i}\right)-\left(x_{i}-x_{i-1}\right)}{2}.
+\end{align*}
+那么，定义测度 $\mathrm{d}\mu_{N}(f)$ 最自然的方式是对（离散）二阶导数的过大或过小值加以惩罚. 于是考虑
+\begin{equation}\label{eq:7.5}
+  \mathrm{d}\mu_{N}(f)=\mathrm{d}\mu(x_{1},\cdots,x_{N})
+  =K_{N}\prod_{i=1}^{N}\phi\Big(\frac{(x_{i}-x_{i-1})-(x_{i+1}-x_{i})}{2}N\Big)\mathrm{d}x_{i},
+\end{equation}
+其中 $\phi \in C_0^\infty((C_1, C_2))$，$\phi > 0$，$K_N$ 是规范化常数.
+
+\begin{definition}\label{def:7.9}
+我们称积分
+\begin{align*}
+  \mathcal{V}=\int_{\R^{N}}|\Delta(x_{1},x_{2},\ldots,x_{N})|^{2}\,\mathrm{d}\mu_{N}(x_{1},x_{2},\ldots,x_{N})
+\end{align*}
+为全弧方差，其中 $\mathrm{d}\mu_{N}$ 如 \eqref{eq:7.5}，且 $\int\phi = 1$，$K_{N} = (N+1)(N/2)^{N}$.
+\end{definition}
+
+\begin{remark}\label{rem:7.10}
+后面将看到，取这个 $K_N$ 值时，测度实际上是规范化的，即 $\int \mathrm{d}\mu_N = 1$.
+\end{remark}
+
+现在可以陈述主要结果.
+
+\begin{theorem}\label{thm:7.11}
+设 $\mathcal{V}$ 是全弧方差. 则对每个 $\varepsilon > 0$，有
+\begin{align*}
+  \mathcal{V}=O(N^{1+\varepsilon}).
+\end{align*}
+特别地，Hardy 猜想 $|\Delta| = O(N^{1/2+\varepsilon})$ 在 $\mu_N$-测度为零的集合之外成立.
+\end{theorem}
+
+证明的纲要如下. 首先磨光 $\Delta$，得到用某些振荡和表示的解析近似. 其次，在 $\R^N$ 上积分，把全弧方差表为带某些系数的指数和. 最后，估计这些系数以及相应指数和的值.
+
+除已引入的特殊记号外，此后 $\varepsilon$ 表示足够小的正常数（不总是同一个），$O$-常数通常依赖于 $\varepsilon$，且当 $\varepsilon \to 0^+$ 时趋于平凡.
+
+\subsection{磨光过程}
+
+首先磨光函数 $\psi(x)$. 这有几种方式，但这里选择导致有限傅里叶级数的那种是方便的.
+
+\begin{lemma}\label{lem:7.12}
+存在 $\sigma \in C_0^\infty((-1,1))$，使函数
+\begin{align*}
+  S_{\pm}(y)=-\sum_{h=1}^{\infty}\frac{\sin(2\pi h(y\pm\delta))}{\pi h}\sigma\Big(\frac{h}{N^{1/2}}\Big),\qquad
+  \delta=N^{-1/2+\varepsilon},
+\end{align*}
+满足
+\begin{align*}
+  S_{+}(y)+O(\delta)\leq\psi(y)\leq S_{-}(y)+O(\delta).
+\end{align*}
+\end{lemma}
+
+\begin{proof}
+由周期性，可以假设 $y > 2\delta$. 设 $s \in C_0^\infty((-1/2, 1/2))$ 是任何实值非负偶函数，满足 $\|s\|_2 = 1$；然后取 $\sigma = s * s$. 容易证明 $\sigma$ 为偶、紧支于 $(-1, 1)$ 内部，且满足
+\begin{align*}
+  \sigma,\ \widehat{\sigma}\geq 0,\qquad
+  \widehat{\sigma}(x)=O\bigl((1+|x|)^{-1/(2\varepsilon)}\bigr),\qquad
+  \sigma(0)=\int\widehat{\sigma}(x)\,\mathrm{d}x=1.
+\end{align*}
+考虑 $N^{1/2}\widehat{\sigma}(N^{1/2}x)$ 与区间 $[-y \mp \delta, y \pm \delta]$ 示性函数的卷积，记作 $p_y^\pm$. 则有
+\begin{align*}
+  p_{y}^{\pm}(x)=\int_{I_{\pm}}\widehat{\sigma}(t)\,\mathrm{d}t,\qquad
+  I_{\pm}=[(x-y)N^{1/2}\mp N^{\varepsilon},(x+y)N^{1/2}\pm N^{\varepsilon}].
+\end{align*}
+$\widehat{\sigma}$ 的性质蕴含 $0 \leq p_{y}^{\pm}(x) \leq 1$，且
+\begin{align*}
+  p_{y}^{-}(x)=O\Big(\frac{\delta}{(1+|x|-y)^{2}}\Big)\quad\text{对 } |x|\geq y,
+\end{align*}
+\begin{align*}
+  p_{y}^{+}(x)=1+O\Big(\frac{\delta}{(1+y-|x|)^{2}}\Big)\quad\text{对 } |x|\leq y.
+\end{align*}
+因此
+\begin{align*}
+  \sum_{h=-\infty}^{\infty}p_{y}^{-}(h)+O(\delta)\leq 2[y]+1
+  \leq\sum_{h=-\infty}^{\infty}p_{y}^{+}(h)+O(\delta).
+\end{align*}
+应用泊松求和公式得到
+\begin{equation}\label{eq:7.6}
+  y-\frac{1}{2}\sum_{h=-\infty}^{\infty}\widehat{p_{y}^{+}}(h)+O(\delta)
+  \leq\psi(y)\leq
+  y-\frac{1}{2}\sum_{h=-\infty}^{\infty}\widehat{p_{y}^{-}}(h)+O(\delta).
+\end{equation}
+则 $p_{y}^{\pm}$ 的定义以及卷积与傅里叶变换的性质允许我们推出
+\begin{align*}
+  \widehat{p_{y}^{\pm}}(\xi)=\frac{\sin(2\pi(y\pm\delta)\xi)}{\pi\xi}\;\sigma\Big(\frac{\xi}{N^{1/2}}\Big)\qquad \text{对 } \xi\neq 0,
+\end{align*}
+以及 $\widehat{p_y^\pm}(0) = 2y \pm 2\delta$. 代入 \eqref{eq:7.6}，即得结果.
+\end{proof}
+
+前一结果的一个推论如下.
+
+\begin{lemma}\label{lem:7.13}
+设 $\Delta = \Delta(x_1, \ldots, x_N)$ 如 7.6 节引言中所给. 则
+\begin{align*}
+  |\Delta|^{2}\leq|\Delta_{+}|^{2}+|\Delta_{-}|^{2}+O(N^{1+\varepsilon}),
+\end{align*}
+其中
+\begin{align*}
+  \Delta_{\pm}=\sum_{h=1}^{\infty}\sum_{m=1}^{N}\frac{e\bigl(h x_{m}\pm h\delta\bigr)}{h}\sigma\Big(\frac{h}{N^{1/2}}\Big),\qquad
+  \delta=N^{-1/2+\varepsilon}.
+\end{align*}
+\end{lemma}
+
+\begin{proof}
+由引理 7.12，得到估计
+\begin{align*}
+  \sum_{m=1}^{N}S_{+}(x_{m})+O\left(N\delta\right)\leq\Delta\leq
+  \sum_{m=1}^{N}S_{-}(x_{m})+O\left(N\delta\right).
+\end{align*}
+因此，取绝对值并利用 $\sin(2\pi t) = \operatorname{Im} e(t)$，得到不等式
+\begin{align*}
+  |\Delta|\leq\frac{1}{\pi}\left|\Delta_{+}\right|+\frac{1}{\pi}\left|\Delta_{-}\right|+O\bigl(N^{1/2+\varepsilon}\bigr),
+\end{align*}
+证明由凸性得出.
+\end{proof}
+
+\subsection{指数和}
+
+证明定理 7.11 的下一步是用指数和估计全弧方差. 在这一过程中，需要下面的技术结果.
+
+\begin{lemma}\label{lem:7.14}
+设 $J$ 是 $N \times N$ Jacobi 矩阵
+\begin{align*}
+  J_{i,j}=\begin{cases}
+    1, & \text{若 } i=j,\\
+    -1/2, & \text{若 } |i-j|=1,\\
+    0, & \text{其他},
+  \end{cases}
+\end{align*}
+并设 $(b_{ij})$ 是其逆矩阵 $J^{-1}$. 则
+\begin{align*}
+  \mathrm{(a)}\qquad \det J=\frac{N+1}{2^{N}}.
+\end{align*}
+\begin{align*}
+  b_{l,k}-b_{m,k}=\begin{cases}
+    2k(m-l)/(N+1), & \text{若 } k\leq l\leq m,\\
+    2l-2k(1-(m-l)/(N+1)), & \text{若 } l\leq k\leq m,\\
+    2(m-l)(1-k/(N+1)), & \text{若 } l\leq m\leq k.
+  \end{cases}
+\end{align*}
+\end{lemma}
+
+\begin{proof}
+初等论证证明，作为 $N$ 的函数，行列式的值——记作 $d_{N}$——满足递推公式
+\begin{align*}
+  d_{N+2}=d_{N+1}-\frac{1}{4}d_{N},\qquad d_{1}=1,\ d_{2}=\frac{3}{4},
+\end{align*}
+(a) 由归纳得出.
+
+另一方面，(b) 是
+\begin{equation}\label{eq:7.7}
+  b_{i,j}=\frac{2\min(i,j)\bigl(N+1-\max(i,j)\bigr)}{N+1}
+\end{equation}
+的直接推论. 这个公式的证明归结为验证
+\begin{align*}
+  \sum_{j}J_{i,j}b_{j,k}=\delta_{i,k}.
+\end{align*}
+若把非正指标对应的系数定义为零，可以把它写成
+\begin{align*}
+  -\frac{1}{2}b_{i-1,k}+b_{i,k}-\frac{1}{2}b_{i+1,k}=\delta_{i,k}.
+\end{align*}
+对 $k = i$，这是
+\begin{align*}
+  -\frac{(i-1)(N+1-i)}{N+1}+\frac{2i(N+1-i)}{N+1}
+  -\frac{i(N+1-i-1)}{N+1}=1,
+\end{align*}
+而对 $k < i$,
+\begin{align*}
+  -\frac{k(N+1-i+1)}{N+1}+\frac{2k(N+1-i)}{N+1}
+  -\frac{k(N+1-i-1)}{N+1}=0.
+\end{align*}
+$k > i$ 的情形由对称性得出. 因此 \eqref{eq:7.7} 成立.
+\end{proof}
+
+\begin{remark}\label{rem:7.15}
+注意 (a) 蕴含 $\int_{\R^N}\mathrm{d}\mu_N = 1$（用变量替换 $\mathbf{y} = J\mathbf{x}$ 与 $\int\phi = 1$ 的事实），即测度 $\mathrm{d}\mu_N$ 是规范化的.
+\end{remark}
+
+\begin{remark}\label{rem:7.16}
+从数值分析的观点看，矩阵 $J$ 出现在二阶导数的近似中，其 Jordan 标准形是已知对象（见 \cite{b157}）. 其特征值公式（与某些算法的稳定性有关）可以用来证明 (a)，整个标准形用来证明 (b)；但两种情形都需要一些辅助的三角恒等式.
+\end{remark}
+
+$\mathrm{d}\mu_{N}$ 中出现的函数 $\phi$ 是``偏心''的，这使其傅里叶变换产生振荡；把非振荡部分分离出来是方便的. 为此，定义
+\begin{align*}
+  \rho(\xi)=e(\alpha\xi)\widehat{\phi}(\xi),\qquad
+  \alpha=\int x\phi(x)\,\mathrm{d}x.
+\end{align*}
+则 $\phi \geq 0$ 与 $\int\phi = 1$ 可以用来证明 $\rho(0) = 1$，$\rho'(0) = 0$，$\rho''(0) < 0$，$|\rho(\xi)| \leq 1$. 于是存在正常数 $0 < C_0 < 1$，使
+\begin{align*}
+  |\rho(x)|\leq\max(1-C_{0}x^{2},1-C_{0}).
+\end{align*}
+结果表明，全弧方差受一个系数与 $\rho$ 相关的指数和的控制. 这些系数正是
+\begin{align*}
+  a_{l,m}(h)=\prod_{k=1}^{N}\rho\Big(\frac{h}{N}(b_{l,k}-b_{m,k})\Big).
+\end{align*}
+指数和的显式形式及其与我们的问题的关系是下面结果的内容.
+
+\begin{proposition}\label{prop:7.17}
+设 $S(M, h)$ 是指数和
+\begin{align*}
+  S(M,h)=\sum_{M\leq l<m<2M}a_{l,m}(h)e\Big(\frac{\alpha h}{N}(l-m)(m+l-N-1)\Big).
+\end{align*}
+则
+\begin{equation}\label{eq:7.8}
+  \mathcal{V}=O\Bigl(N^{1+\varepsilon}
+  +N^{\varepsilon}\sup_{h<N^{1/2}}\sup_{2M<N+1}|S(M,h)|\Bigr).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+由引理 7.13,
+\begin{align*}
+  \mathcal{V}\leq\int_{\R^{N}}|\Delta_{+}|^{2}\,\mathrm{d}\mu_{N}
+  +\int_{\R^{N}}|\Delta_{-}|^{2}\,\mathrm{d}\mu_{N}+O(N^{1+\varepsilon}).
+\end{align*}
+对 $h$ 与 $m$ 作二进细分（注意有 $O(N^{\varepsilon})$ 个二进块），由 Cauchy 不等式得
+\begin{equation}\label{eq:7.9}
+  \int_{\R^{N}}|\Delta_{+}|^{2}\,\mathrm{d}\mu_{N}
+  =O\left(N^{\varepsilon}\sup_{h<N^{1/2}}\sup_{2M<N+1}
+  \int_{\R^{N}}\Big|\sum_{M\leq m<2M}e\left(h x_{m}\right)\Big|^{2}\mathrm{d}\mu_{N}\right).
+\end{equation}
+同样的界适用于 $\int|\Delta_{-}|^{2}\,\mathrm{d}\mu_{N}$；代入 \eqref{eq:7.8}，得
+\begin{align*}
+  \mathcal{V}=O\left(N^{1+\varepsilon}+N^{\varepsilon}\sup_{h<N^{1/2}}\sup_{2M<N+1}
+  \Big|\sum_{M\leq l<m<2M}\int_{\R^{N}}e\bigl(h(x_{l}-x_{m})\bigr)\,\mathrm{d}\mu_{N}\Big|\right).
+\end{align*}
+用 $\mathrm{d}\mu_N$ 的定义、变量替换 $\mathbf{y} = J\mathbf{x}$ 以及引理 7.14(a),
+\begin{equation}\label{eq:7.10}
+  \begin{aligned}
+  \int_{\R^{N}}e\bigl(h(x_{l}-x_{m})\bigr)\,\mathrm{d}\mu_{N}
+  &=K_{N}\int_{\R^{N}}e\bigl(h(x_{l}-x_{m})\bigr)
+   \prod_{k=1}^{N}\phi\bigl((J\mathbf{x})_{k}N\bigr)\,\mathrm{d}x_{k}\\
+  &=\prod_{k=1}^{N}\widehat{\phi}\Big(\frac{h}{N}(b_{lk}-b_{mk})\Big).
+  \end{aligned}
+\end{equation}
+由引理 7.14(b),
+\begin{align*}
+  \sum_{k=1}^{N}(b_{l,k}-b_{m,k})=(m-l)(m+l-N-1),
+\end{align*}
+结果由 \eqref{eq:7.9} 与 \eqref{eq:7.10} 得出.
+\end{proof}
+
+\subsection{证明的结束}
+
+根据最后的命题，界 $S(M, h) = O(N^{1+\varepsilon})$ 足以完成我们主要结果的证明.
+
+\begin{proposition}\label{prop:7.18}
+对 $h \leq N^{1/2}$ 与 $2M \leq N + 1$，有
+\begin{align*}
+  S(M,h)=O(N^{1+\varepsilon}).
+\end{align*}
+\end{proposition}
+
+\begin{proof}
+由于 $|\rho| \leq 1$ 且 $l < m$，有
+\begin{align*}
+  |a_{l,m}(h)|
+  &=\prod_{k=1}^{N}\Big|\rho\Big(\frac{h}{N}(b_{l,k}-b_{m,k})\Big)\Big|\\
+  &\leq\prod_{1\leq k\leq l}\Big|\rho\Big(\frac{h}{N}(b_{l,k}-b_{m,k})\Big)\Big|
+   \cdot\prod_{m\leq k\leq N}\Big|\rho\Big(\frac{h}{N}(b_{l,k}-b_{m,k})\Big)\Big|.
+\end{align*}
+注意不等式
+\begin{align*}
+  |\rho(x)|\leq\max(1-C_{0}x^{2},1-C_{0})
+\end{align*}
+的右端对 $x > 0$ 非增.
+
+因此，若 $m - l > CN^{1/2+\varepsilon}h^{-1}$（$C$ 是足够小的常数），第一个乘积以
+\begin{align*}
+  \prod_{1\leq k\leq l}\max\Big(1-C_{0}\frac{4k^{2}h^{2}(m-l)^{2}}{N^{2}(N+1)^{2}},1-C_{0}\Big)
+  \leq\prod_{1\leq k\leq l}\Big(1-C_{0}^{\prime}\frac{k^{2}}{(N+1)^{3-\varepsilon}}\Big)
+\end{align*}
+为界，第二个乘积以
+\begin{align*}
+  \prod_{m\leq k\leq N}\max\Big(1-4C_{0}\frac{h^{2}(m-l)^{2}}{N^{2}}
+  \Big(1-\frac{k}{N+1}\Big)^{2},1-C_{0}\Big)
+  \leq\prod_{m\leq k\leq N}\Big(1-C_{0}^{\prime}\frac{(N+1-k)^{2}}{(N+1)^{3-\varepsilon}}\Big)
+\end{align*}
+为界. 注意到 $l$ 与 $m$ 属于同一个二进区间，从这两个界推出: 当 $m-l > CN^{1/2+\varepsilon}h^{-1}$ 时，$|a_{l,m}(h)|$ 随 $N$ 指数衰减. 另一方面，满足 $0 < m-l < N^{\varepsilon}$ 的项平凡地贡献 $O(N^{1+\varepsilon})$. 于是有
+\begin{equation}\label{eq:7.11}
+  S(M,h)=S^{*}(M,h)+O(N^{1+\varepsilon}),
+\end{equation}
+其中 $S^*(M,h)$ 是 $S(M,h)$ 限制到 $N^{\varepsilon} \leq m - l \leq CN^{1/2+\varepsilon}h^{-1}$ 的和.
+
+假设 $a_{l,m}(h) \neq 0$，且对 $l < k \leq m$，$\frac{h}{N}(b_{l,k} - b_{m,k})$ 足够小，比如 $O(N^{-\varepsilon/4})$. $a_{l,m}(h)$ 的定义蕴含
+\begin{align*}
+  1+\frac{a_{l+1,m+1}(h)-a_{l,m}(h)}{a_{l,m}(h)}
+  =\frac{a_{l+1,m+1}(h)}{a_{l,m}(h)}
+  =\prod_{k=l+1}^{m}\frac{\rho\bigl(\frac{h}{N}(b_{l+1,k}-b_{m+1,k})\bigr)}
+  {\rho\bigl(\frac{h}{N}(b_{l,k}-b_{m,k})\bigr)}.
+\end{align*}
+由于 $\rho'(0) = 0$ 且 $\rho''$ 有界，对 $x = b_{l,k} - b_{m,k}$，$l < k \leq m$,
+\begin{align*}
+  \frac{\rho\bigl(\frac{h}{N}(x+2)\bigr)}{\rho\bigl(\frac{h}{N}x\bigr)}-1
+  =\frac{\rho\bigl(\frac{h}{N}(x+2)\bigr)-\rho\bigl(\frac{h}{N}x\bigr)-\frac{2h}{N}\rho^{\prime}(0)}
+  {\rho\bigl(\frac{h}{N}x\bigr)}
+  =O\Big(\frac{h^{2}}{N^{2}}x\Big).
+\end{align*}
+因此
+\begin{align*}
+  \log\left(1+\frac{a_{l+1,m+1}(h)-a_{l,m}(h)}{a_{l,m}(h)}\right)
+  =O\Big(\sum_{k=l+1}^{m}\frac{h^{2}}{N^{2}}(m-l)\Big)
+  =O\bigl(N^{-1+\varepsilon}\bigr),
+\end{align*}
+而 $|a_{l,m}(h)| \leq 1$ 蕴含
+\begin{align*}
+  |a_{l+1,m+1}(h)-a_{l,m}(h)|=O(N^{-1+\varepsilon}).
+\end{align*}
+这个公式一般成立，因为若 $a_{l,m}(h) = 0$，则 $a_{l+1,m+1}(h) = 0$，除非对某个 $l < k \leq m$，$\rho\left(\frac{h}{N}(b_{l,k} - b_{m,k})\right)$ 为零. 但此时 Taylor 展开证明 $\frac{h}{N}(b_{l,k} - b_{m,k})$ 不是 $O(N^{-\varepsilon/4})$，从而 $a_{l,m}(h)$ 与 $a_{l+1,m+1}(h)$ 都指数地小（在其定义中至少有 $N^{\varepsilon}$ 项小于 $CN^{-\varepsilon/2}$）. 于是，在 $S^*(M,h)$ 中以新变量 $r = m - l$，$s = m$ 作分部求和，得
+\begin{align*}
+  S^{*}(M,h)=O\Biggl(N^{\varepsilon}\sum_{N^{\varepsilon}\leq r\leq CN^{1/2+\varepsilon}h^{-1}}
+  \sup_{M\leq M^{\prime}<2M}\Big|\sum_{M^{\prime}\leq s<2M}
+  e\Bigl(\frac{2\alpha h}{N}r s\Bigr)\Big|\Biggr).
+\end{align*}
+最内层的和以 $2\min(M, \|2\alpha hrN^{-1}\|^{-1})$ 为界，其中 $\|\cdot\|$ 表示到最近整数的距离. 在 \eqref{eq:7.11} 中作最终代换，可以得出 $S(M, h) = O(N^{1+\varepsilon})$，这正是所要求的结果.
+\end{proof}
+
+% ================================================================
+% 编号审计 (第 7 章):
+%   theorem    thm:7.1  → 定理 7.1   (§7.2，逆结果)
+%   theorem    thm:7.2  → 定理 7.2   (§7.3，一般系数)
+%   lemma      lem:7.3  → 引理 7.3   (§7.3)
+%   lemma      lem:7.4  → 引理 7.4   (§7.3)
+%   lemma      lem:7.5  → 引理 7.5   (§7.3)
+%   theorem    thm:7.6  → 定理 7.6   (§7.4，高斯和)
+%   theorem    thm:7.7  → 定理 7.7   (§7.4，相位问题)
+%   lemma      lem:7.8  → 引理 7.8   (§7.4)
+%   definition def:7.9  → 定义 7.9   (§7.6，全弧方差)
+%   remark     rem:7.10 → 注 7.10    (§7.6)
+%   theorem    thm:7.11 → 定理 7.11  (§7.6)
+%   lemma      lem:7.12 → 引理 7.12  (§7.6.1，磨光)
+%   lemma      lem:7.13 → 引理 7.13  (§7.6.1)
+%   lemma      lem:7.14 → 引理 7.14  (§7.6.2，Jacobi 矩阵)
+%   remark     rem:7.15 → 注 7.15    (§7.6.2)
+%   remark     rem:7.16 → 注 7.16    (§7.6.2)
+%   proposition prop:7.17 → 命题 7.17 (§7.6.2)
+%   proposition prop:7.18 → 命题 7.18 (§7.6.3)
+%   公式: eq:7.1 (泊松求和)，eq:7.2 (广义泊松公式)，eq:7.3 (测试恒等式),
+%         eq:7.4 (局部和条件)，eq:7.5 (dμ_N 定义)，eq:7.6 (磨光不等式),
+%         eq:7.7 (b_{i,j} 公式)，eq:7.8 (全弧方差界)，eq:7.9 (Δ+ 估计),
+%         eq:7.10 (积分计算)，eq:7.11 (S 与 S* 关系)
+%   注: 原书 §7.6.2 命题 7.17 证明中"By Lemma 7.8"按原书保留(应为 7.13 的笔误).
+%   \cite 使用: b148 b151 b153 b157 b158 b159 b160 b161 b162 b163 b164
+%               b165 b166 b168 b169 b170
+% ================================================================

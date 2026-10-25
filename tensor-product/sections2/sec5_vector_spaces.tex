@@ -1,0 +1,82 @@
+% sections2/sec5_vector_spaces.tex
+\section{向量空间}
+\label{sec:vector-spaces}
+
+因为所有（非零）向量空间都拥有基，我们在模论中所讨论的一般结果在向量空间背景下变得极为清晰和纯粹.
+
+设 $K$ 为域.域上非零向量空间的张量积决不会发生意外的坍缩：若 $V$ 与 $W$ 为非零 $K$-向量空间，则 $V \otimes_K W \neq 0$，且在基数意义下恒有
+\[
+  \dim_K(V \otimes_K W) = (\dim_K V)(\dim_K W).
+\]
+
+对于任意 $K$-线性映射 $V \xrightarrow{\varphi} V'$ 与 $W \xrightarrow{\psi} W'$，映射 $\varphi \otimes \psi$ 保持同构、满射性，并且由于所有向量空间皆为自由模，\textbf{单射线性映射的张量积恒为单射}（定理~\ref{thm:free-is-flat}）.
+
+\begin{example}\label{ex:subspace-tensor}
+子空间的张量积就是张量积的子空间：若 $V \subset V'$ 且 $W \subset W'$，则典范线性映射 $V \otimes_K W \hookrightarrow V' \otimes_K W'$ 是单射.
+\end{example}
+
+\begin{theorem}\label{thm:subspace-tensor-equality}
+设 $V \subset V'$ 且 $W \subset W'$，其中 $V'$ 与 $W'$ 非零.则 $V \otimes_K W = V' \otimes_K W'$ 当且仅当 $V = V'$ 且 $W = W'$.
+\end{theorem}
+
+\begin{proof}
+由对称性，若 $V \subsetneq V'$，存在线性泛函 $\varphi \in V'^\vee$ 使得 $\varphi|_V = 0$ 但 $\varphi(v'_0) = 1$（某 $v'_0 \in V'$）.取非零 $\psi \in W'^\vee$ 使得 $\psi(w'_0) = 1$.则线性泛函 $v' \otimes w' \mapsto \varphi(v')\psi(w')$ 在 $V \otimes_K W'$ 上恒为零，但在 $v'_0 \otimes w'_0$ 处取值为 $1$.故 $v'_0 \otimes w'_0 \notin V \otimes_K W'$，说明 $V \otimes_K W' \subsetneq V' \otimes_K W'$.
+\end{proof}
+
+当 $V$ 与 $W$ 为有限维空间时，定理~\ref{thm:hom-tensor-hom} 给出典范同构：
+\[
+  \Hom_K(V, V') \otimes_K \Hom_K(W, W') \cong \Hom_K(V \otimes_K W, V' \otimes_K W').
+\]
+取 $V' = W' = K$，即得对偶空间的张量积与张量积对偶的自然同构：
+\begin{equation}
+  V^\vee \otimes_K W^\vee \cong (V \otimes_K W)^\vee, \quad (\varphi \otimes \psi)(v \otimes w) = \varphi(v)\psi(w).
+\end{equation}
+有限维时归纳可得 $(V^\vee)^{\otimes k} \cong (V^{\otimes k})^\vee$.
+
+\begin{theorem}[线性映射张量积的核与像]\label{thm:image-kernel-vector-space}
+设 $V_1 \xrightarrow{\varphi_1} W_1$ 与 $V_2 \xrightarrow{\varphi_2} W_2$ 为线性映射.则
+\[
+  \ker(\varphi_1 \otimes \varphi_2) = \ker \varphi_1 \otimes_K V_2 + V_1 \otimes_K \ker \varphi_2, \quad \operatorname{im}(\varphi_1 \otimes \varphi_2) = \varphi_1(V_1) \otimes_K \varphi_2(V_2).
+\]
+特别地，当 $V_1, V_2 \neq 0$ 时，$\varphi_1 \otimes \varphi_2$ 单当且仅当 $\varphi_1$ 与 $\varphi_2$ 均单；当 $W_1, W_2 \neq 0$ 时，$\varphi_1 \otimes \varphi_2$ 满当且仅当 $\varphi_1$ 与 $\varphi_2$ 均满.
+\end{theorem}
+
+\begin{corollary}\label{cor:subspace-quotient-tensor}
+设 $V \subset V'$ 且 $W \subset W'$.则
+\[
+  (V' \otimes_K W') / (V \otimes_K W' + V' \otimes_K W) \cong (V'/V) \otimes_K (W'/W).
+\]
+\end{corollary}
+
+\begin{theorem}\label{thm:elementary-tensor-zero}
+设 $v_i \in V_i$.则在 $V_1 \otimes_K \dots \otimes_K V_k$ 中 $v_1 \otimes \dots \otimes v_k = 0$ 当且仅当至少有一个 $v_i = 0$.
+\end{theorem}
+
+\begin{proof}
+若每个 $v_i \neq 0$，由线性无关性延拓可知存在 $\varphi_i \in V_i^\vee$ 使得 $\varphi_i(v_i) = 1$.则线性函数 $\varphi_1 \otimes \dots \otimes \varphi_k$ 在 $v_1 \otimes \dots \otimes v_k$ 上取值为 $1 \neq 0$，故该张量非零.
+\end{proof}
+
+\begin{theorem}[简单张量相等的充分必要条件]\label{thm:elementary-tensor-equality}
+设 $v_i, v'_i \in V_i$ 均非零.则在 $V_1 \otimes_K \dots \otimes_K V_k$ 中
+\[
+  v_1 \otimes \dots \otimes v_k = v'_1 \otimes \dots \otimes v'_k
+\]
+当且仅当存在非零标量 $c_1, \dots, c_k \in K$，满足
+\[
+  v_i = c_i v'_i \quad (1 \leq i \leq k) \quad\text{且}\quad c_1 c_2 \dots c_k = 1.
+\]
+\end{theorem}
+
+定理~\ref{thm:elementary-tensor-equality} 具有极具启发性的几何与物理涵义：简单张量 $v_1 \otimes \dots \otimes v_k$ 虽然不能唯一确定各个向量 $v_i$ 本身，但它\textbf{唯一确定了每一个一维子空间（射线方向）$K v_i$}！
+
+在量子力学中，系统的纯态由复 Hilbert 空间中的一维子空间所描述.当组合两个系统时，复合态空间为张量积 $H_1 \otimes_\C H_2$.由简单张量生成的子空间 $\C(v_1 \otimes v_2)$ 唯一分解为各子系统的状态空间 $\C v_1$ 与 $\C v_2$（非纠缠态）；而绝大多数非简单张量所张成的状态则无法拆解为各自独立的子系统状态——这正是量子力学中最本质的核心特征：\newterm{quantum-entanglement}{量子纠缠}{quantum entanglement}（Schr\"odinger \cite{schrodinger}）.
+
+\begin{theorem}[对称群在张量幂上的作用]\label{thm:sym-group-action}
+对置换 $\sigma \in S_k$，存在唯一的线性映射 $P_\sigma \colon V^{\otimes k} \to V^{\otimes k}$，满足
+\[
+  P_\sigma(v_1 \otimes \dots \otimes v_k) = v_{\sigma^{-1}(1)} \otimes \dots \otimes v_{\sigma^{-1}(k)}.
+\]
+映射满足 $P_\sigma \circ P_\tau = P_{\sigma\tau}$；当 $\dim_K V > 1$ 时，$\sigma \mapsto P_\sigma$ 是群 $S_k$ 到 $\mathrm{GL}(V^{\otimes k})$ 的忠实表示.
+\end{theorem}
+
+群 $S_k$ 与一般线性群 $\mathrm{GL}(V)$ 在 $V^{\otimes k}$ 上的作用相互交换：$P_\sigma(g^{\otimes k}(t)) = g^{\otimes k}(P_\sigma(t))$.这一对易关系构成了李群与表示论中著名的\newterm{schur-weyl}{Schur--Weyl 对偶}{Schur-Weyl duality}.满足 $P_\sigma(t) = t$ 的张量称为\termcn{对称张量}；满足 $P_\sigma(t) = (\operatorname{sgn}\sigma)t$ 的张量称为\termcn{反对称张量}.

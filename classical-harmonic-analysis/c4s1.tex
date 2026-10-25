@@ -1,0 +1,349 @@
+% ============ 第4章 §4.1 Hardy-Littlewood极大函数与微分定理(原书 pp.310-319) ============
+\section{Hardy--Littlewood 极大函数与微分定理}\label{sec:4.1}
+\index{Hardy--Littlewood 极大函数}
+\index{Young 不等式}
+\index{Lebesgue 微分定理}
+\index{分布函数}
+\index{覆盖引理}
+
+
+本节中,定义作为调和分析基本工具的 Hardy--Littlewood 极大函数,并考察其性质.
+
+\noindent\textbf{极大函数}\quad 用 $B(x,t)\subset\mathbb{R}^{n}$ 表示以 $x$ 为中心,半径为 $t$ 的开球,用 $|B(x,t)|$ 表示其体积.此时,对局部可积函数 $f \in L_{\mathrm{loc}}^{1}(\mathbb{R}^{n})$,Lebesgue 微分定理
+\begin{equation}
+\lim_{t \to 0}\frac{1}{|B(x,t)|}\int_{B(x,t)}f(y)\dd y = f(x) \quad (\text{a.e. } x \in \mathbb{R}^{n})\tag{4.1.1}
+\label{eq:4.1.1}\end{equation}
+成立.为证明此定理,希望考虑 $\lim_{t\to 0}$ 的代替 $\sup_{t>0}$.在此估计中,无需考虑相消(cancellation),Hardy--Littlewood 极大函数
+\begin{equation}
+\mathcal{M}f(x) := \sup_{t > 0}\frac{1}{|B(x,t)|}\int_{B(x,t)}|f(y)|\dd y\tag{4.1.2}
+\label{eq:4.1.2}\end{equation}
+就是应当研究的目标.
+
+极大函数 $\mathcal{M}f$ 由其定义立即看出满足如下的次线性性:
+\begin{equation}
+\begin{cases}
+\mathcal{M}(f + g)(x) \leq \mathcal{M}f(x) + \mathcal{M}g(x), \\
+\mathcal{M}(cf)(x) = |c|\,\mathcal{M}f(x) \qquad (f, g \in L_{\mathrm{loc}}^{1}(\mathbb{R}^{n}),\ c \in \mathbb{C}).
+\end{cases}\tag{4.1.3}
+\label{eq:4.1.3}\end{equation}
+
+\noindent\textbf{极大函数的可测性}\quad 设 $f \in L_{\mathrm{loc}}^{1}(\mathbb{R}^{n})$.令\footnote{$\chi_{A}(x)$ 表示集合 $A \subset \mathbb{R}^{n}$ 的特征函数,即 $\chi_{A}(x) = 1$($x \in A$),$\chi_{A}(x) = 0$($x \notin A$).}
+\begin{equation*}
+\chi_{t}(x) := \frac{\chi_{B(0,t)}(x)}{|B(0,t)|} \quad (t > 0),
+\end{equation*}
+\begin{equation*}
+f_{t}(x) := (\chi_{t} * |f|)(x) = \int_{\mathbb{R}^{n}}\chi_{t}(x - y)|f(y)|\dd y,
+\end{equation*}
+此时,
+\begin{equation*}
+\mathcal{M}f(x) = \sup_{t > 0}f_{t}(x).
+\end{equation*}
+
+固定 $x$ 时,$f_{t}(x)$ 是 $t > 0$ 的连续函数,故上式右端的上限只要对有理数 $0 < t \in \mathbb{Q}$ 取即可.又固定 $t$ 时,$f_{t}(x)$ 是 $x \in \mathbb{R}^{n}$ 的连续函数.因此,上式右端可由连续函数的可数多个上限表示,从而得到 $\mathcal{M}f$ 的可测性.
+
+\noindent\textbf{分布函数}\quad 为知道函数的相对大小,定义其分布函数.对 $\mathbb{R}^{n}$ 上的可测函数 $g(x)$,其分布函数定义为\footnote{以后,把可测集合 $A \subset \mathbb{R}^{n}$ 的大小(Lebesgue 测度)简记为 $|A|$.}
+\begin{equation}
+\alpha(\lambda) := |\{x \in \mathbb{R}^{n}: |g(x)| > \lambda\}| \quad (\lambda > 0).\tag{4.1.4}
+\label{eq:4.1.4}\end{equation}
+
+用分布函数可以表示 $g \in L^{p}(\mathbb{R}^{n})$ 的范数.
+
+$g \in L^{\infty}$ 时,
+\begin{equation*}
+\|g\|_{\infty} = \inf\{\lambda : \alpha(\lambda) = 0\}.
+\end{equation*}
+
+$g \in L^{p}(\mathbb{R}^{n})$($1 \leq p < \infty$)时,需要稍作计算.首先,将
+\begin{align*}
+\int_{\mathbb{R}^{n}}|g(y)|^{p}\dd y & = p\int_{\mathbb{R}^{n}}\int_{0}^{|g(y)|}\lambda^{p-1}\dd\lambda\dd y \\
+& = p\int_{\mathbb{R}^{n}}\int_{0}^{\infty}\chi_{[0,|g(y)|]}(\lambda)\lambda^{p-1}\dd\lambda\dd y
+\end{align*}
+改写,用 Fubini 定理交换积分顺序,即得
+\begin{equation}
+\int_{\mathbb{R}^{n}}|g(y)|^{p}\dd y = p\int_{0}^{\infty}\alpha(\lambda)\lambda^{p-1}\dd\lambda.\tag{4.1.5}
+\label{eq:4.1.5}\end{equation}
+
+$g \in L^{p}(\mathbb{R}^{n})$ 时,$\alpha(\lambda)$ 可由 $\|g\|_{p}$ 从上估计,即
+\begin{equation}
+\alpha(\lambda) \leq \left(\frac{\|g\|_{p}}{\lambda}\right)^{p}.\tag{4.1.6}
+\label{eq:4.1.6}\end{equation}
+实际上,
+\begin{equation*}
+\lambda^{p}\alpha(\lambda) \leq \int_{\{x: |g(x)| > \lambda\}}|g(y)|^{p}\dd y \leq \|g\|_{p}^{p}.
+\end{equation*}
+
+下面是与极大函数相关的最基本,最重要的定理.作为其推论,得到微分定理.
+
+\begin{theorem}\label{thm:4.1.1}
+以下成立.
+
+(a) 若 $f \in L^{p}(\mathbb{R}^{n})$($1 \leq p \leq \infty$),则 $\mathcal{M}f$ 几乎处处有限.
+
+(b) 若 $f \in L^{1}(\mathbb{R}^{n})$,则
+\begin{equation*}
+|\{x: \mathcal{M}f(x) > \lambda\}| \leq \frac{3^{n}}{\lambda}\|f\|_{L^{1}(\mathbb{R}^{n})} \quad (\lambda > 0).
+\end{equation*}
+
+(c) 若 $f \in L^{p}(\mathbb{R}^{n})$($1 < p \leq \infty$),则
+\begin{equation*}
+\|\mathcal{M}f\|_{L^{p}(\mathbb{R}^{n})} \leq A_{p}\|f\|_{L^{p}(\mathbb{R}^{n})}, \quad A_{p} = 2\left(\frac{3^{n}p}{p-1}\right)^{1/p}.
+\end{equation*}
+
+(a) 的成立在 (b),(c) 成立时是显然的.
+\end{theorem}
+
+\begin{corollary}\label{cor:4.1.2}
+若 $f \in L_{\mathrm{loc}}^{1}(\mathbb{R}^{n})$,则
+\begin{equation*}
+\lim_{t \to 0}\frac{1}{|B(x,t)|}\int_{B(x,t)}f(y)\dd y = f(x) \quad (\text{a.e. } x \in \mathbb{R}^{n})
+\end{equation*}
+成立.
+\end{corollary}
+
+若用 $d\mu(x)$ 表示只在原点放质量 1 的测度,则在极大函数的定义中用 $d\mu(x)$ 替换 $|f(x)|\dd x$ 来定义 $\mathcal{M}\mu(x)$,则
+\begin{equation*}
+\mathcal{M}\mu(x) = \frac{C}{|x|^{n}} \notin L^{1}(\mathbb{R}^{n}),
+\end{equation*}
+\begin{equation*}
+|\{x: \mathcal{M}\mu(x) > \lambda\}| = \frac{C}{\lambda}
+\end{equation*}
+可以算出.因此,在这种情况下 (b) 的估计是最优的.
+
+由于可以选择 $L^{1}(\mathbb{R}^{n})$ 中的函数列 $\{f_{n}\}$ 使得
+\begin{equation*}
+\lim_{n \to \infty}f_{n}(x)\dd x = d\mu(x),
+\end{equation*}
+可知 (b) 的估计是最优的.
+
+\noindent\textbf{覆盖引理}\quad 定理的核心是 (b),其证明基于如下的覆盖引理.
+
+\begin{lemma}\label{lem:4.1.3}
+设 $B_{1} = B(x_{1},t_{1})$,$B_{2} = B(x_{2},t_{2})$,$\ldots$,$B_{N} = B(x_{N},t_{N})$ 是有限个具有有限大小的球构成的族,令
+\begin{equation*}
+E := \bigcup_{j=1}^{N}B_{j}.
+\end{equation*}
+此时,可以从 $\{B_{j}\}$ 中选出互不相交的子族 $B_{j_{1}}, B_{j_{2}}, \ldots, B_{j_{K}}$,使得
+\begin{equation*}
+|E| \leq 3^{n}\sum_{k=1}^{K}|B_{j_{k}}|.
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+首先选取 $B_{j_{1}}$ 为满足
+\begin{equation*}
+t_{j_{1}} = \max\{t_{j}: j = 1, \ldots, N\}
+\end{equation*}
+的球.其次选取 $B_{j_{2}}$ 为满足
+\begin{equation*}
+t_{j_{2}} = \max\{t_{j}: B_{j_{1}} \cap B_{j} = \emptyset\}
+\end{equation*}
+的球.以下归纳地选取 $B_{j_{k}}$ 为满足
+\begin{equation*}
+t_{j_{k}} = \max\{t_{j}: B_{j} \cap B_{j_{l}} = \emptyset \ (l = 1, \ldots, k-1)\}
+\end{equation*}
+的球.
+
+对如此得到的 $B_{j_{1}}, B_{j_{2}}, \ldots, B_{j_{K}}$,任意 $B_{j}$ 都可以由某个 $B_{j_{k}}$ 使得
+\begin{equation}
+B_{j} \subset B(x_{j_{k}}, 3t_{j_{k}})\tag{4.1.7}
+\label{eq:4.1.7}\end{equation}
+成立.实际上,取 $B_{j_{1}}, B_{j_{2}}, \ldots, B_{j_{K}}$ 中第一个与 $B_{j}$ 相交的球为 $B_{j_{k}}$,则
+\begin{equation*}
+t_{j} \leq t_{j_{k}}.
+\end{equation*}
+否则的话,本应选取这个 $B_{j}$ 来代替 $B_{j_{k}}$.因此,由简单的几何可知 \eqref{eq:4.1.7} 成立.
+
+由 \eqref{eq:4.1.7} 得
+\begin{equation*}
+E \subset \bigcup_{k=1}^{K}B(x_{j_{k}}, 3t_{j_{k}}),
+\end{equation*}
+从而
+\begin{equation*}
+|E| \leq \sum_{k=1}^{K}|B(x_{j_{k}}, 3t_{j_{k}})| = 3^{n}\sum_{k=1}^{K}|B_{j_{k}}|.
+\end{equation*}
+\end{proof}
+
+\begin{proof}[定理~\ref{thm:4.1.1} (b) 的证明]
+设 $f \in L^{1}(\mathbb{R}^{n})$,令
+\begin{equation*}
+E_{\lambda} := \{x \in \mathbb{R}^{n}: \mathcal{M}f(x) > \lambda\} \quad (\lambda > 0).
+\end{equation*}
+此时,设 $K \subset E_{\lambda}$ 为任意紧集,对每个 $x \in K$,由极大函数的定义选取球 $B(x, t_{x})$,使得
+\begin{equation}
+\lambda|B(x, t_{x})| < \int_{B(x, t_{x})}|f(y)|\dd y\tag{4.1.8}
+\label{eq:4.1.8}\end{equation}
+成立.
+
+由 $K$ 的紧性,得到满足
+\begin{equation*}
+K \subset \bigcup_{j=1}^{N}B_{j}, \quad B_{j} := B(x_{j}, t_{x_{j}})
+\end{equation*}
+的有限个球构成的族.对此族应用引理~\ref{lem:4.1.3},得
+\begin{equation*}
+|K| \leq 3^{n}\sum_{k=1}^{K}|B_{j_{k}}|, \quad B_{j_{k}} \cap B_{j_{l}} = \emptyset \quad (k \neq l).
+\end{equation*}
+用 \eqref{eq:4.1.8} 估计此右端,得
+\begin{equation*}
+|K| \leq \frac{3^{n}}{\lambda}\sum_{k=1}^{K}\int_{B_{j_{k}}}|f(y)|\dd y \leq \frac{3^{n}}{\lambda}\int_{\mathbb{R}^{n}}|f(y)|\dd y.
+\end{equation*}
+最后一个不等号是由于 $B_{j_{k}}$ 互不相交.
+
+由于 $K \subset E_{\lambda}$ 可以任意选取,
+\begin{equation*}
+|E_{\lambda}| \leq \frac{3^{n}}{\lambda}\|f\|_{L^{1}(\mathbb{R}^{n})}.
+\end{equation*}
+(b) 成立.
+\end{proof}
+
+\begin{proof}[定理~\ref{thm:4.1.1} (c) 的证明]
+显然,
+\begin{equation}
+\|\mathcal{M}f\|_{L^{\infty}(\mathbb{R}^{n})} \leq \|f\|_{L^{\infty}(\mathbb{R}^{n})},\tag{4.1.9}
+\label{eq:4.1.9}\end{equation}
+故设 $f \in L^{p}(\mathbb{R}^{n})$,$1 < p < \infty$ 来证明.
+
+对 $\lambda > 0$,令
+\begin{equation*}
+f_{\lambda}(x) := |f(x)|\chi_{\{y: |f(y)| > \lambda\}}(x),
+\end{equation*}
+则分解为
+\begin{equation*}
+|f(x)| = f_{\lambda}(x) + \{|f(x)| - f_{\lambda}(x)\}.
+\end{equation*}
+
+考虑 $\mathcal{M}$ 的次线性性,可知
+\begin{equation*}
+\{x: \mathcal{M}f(x) > 2\lambda\} \subset \{x: \mathcal{M}f_{\lambda}(x) > \lambda\}.
+\end{equation*}
+注意到若 $f \in L^{p}$ 则 $f_{\lambda} \in L^{1}$,利用这一点,
+\begin{equation}
+\begin{aligned}
+|E_{\lambda}| & = |\{x: \mathcal{M}f(x) > \lambda\}| \\
+& \leq |\{x: \mathcal{M}f_{\lambda/2}(x) > \lambda/2\}| \\
+& \leq \frac{2\cdot 3^{n}}{\lambda}\|f_{\lambda/2}\|_{1} \\
+& = \frac{2\cdot 3^{n}}{\lambda}\int_{\mathbb{R}^{n}}|f(y)|\chi_{\{|f| > \lambda/2\}}(y)\dd y.
+\end{aligned}\tag{4.1.10}
+\label{eq:4.1.10}\end{equation}
+
+想起 \eqref{eq:4.1.5},用 \eqref{eq:4.1.10} 得
+\begin{equation}
+\begin{aligned}
+\int_{\mathbb{R}^{n}}\mathcal{M}f(x)^{p}\dd x & = p\int_{0}^{\infty}\lambda^{p-1}|\{x: \mathcal{M}f(x) > \lambda\}|\dd\lambda \\
+& \leq 2\cdot 3^{n}p\int_{0}^{\infty}\lambda^{p-2}\int_{\mathbb{R}^{n}}|f(y)|\chi_{\{|f| > \lambda/2\}}(y)\dd y\dd\lambda.
+\end{aligned}
+\end{equation}
+交换积分顺序,上式右端的二重积分等于
+\begin{equation*}
+\int_{\mathbb{R}^{n}}|f(y)|\int_{0}^{2|f(y)|}\lambda^{p-2}\dd\lambda\dd y = \frac{2^{p-1}}{p-1}\int_{\mathbb{R}^{n}}|f(y)|^{p}\dd y.
+\end{equation*}
+综合以上全部结果,
+\begin{equation*}
+\|\mathcal{M}f\|_{L^{p}(\mathbb{R}^{n})} \leq 2\left(\frac{3^{n}p}{p-1}\right)^{1/p}\|f\|_{L^{p}(\mathbb{R}^{n})}
+\end{equation*}
+得证.
+\end{proof}
+
+系~\ref{cor:4.1.2} 的证明需要下面的命题,其证明在本节最后给出.
+
+\begin{proposition}\label{prop:4.1.4}
+设 $f \in L^{p}(\mathbb{R}^{n})$($1 \leq p < \infty$),令
+\begin{equation*}
+f_{t}(x) := \frac{1}{|B(x,t)|}\int_{B(x,t)}f(y)\dd y \quad (t > 0).
+\end{equation*}
+此时,
+\begin{equation*}
+\lim_{t \to 0}\|f - f_{t}\|_{L^{p}(\mathbb{R}^{n})} = 0
+\end{equation*}
+成立.
+\end{proposition}
+
+\begin{proof}[系~\ref{cor:4.1.2} 的证明]
+微分是局部操作,故只需对 $f \in L^{1}(\mathbb{R}^{n})$ 证明系即可.此时,由上面的命题,
+\begin{equation*}
+\lim_{t \to 0}\|f - f_{t}\|_{1} = 0,
+\end{equation*}
+故选取子列 $t_{k} \to 0$($k \to \infty$),可以做到
+\begin{equation*}
+\lim_{k \to \infty}f_{t_{k}}(x) = f(x) \quad (\text{a.e. } x \in \mathbb{R}^{n}).
+\end{equation*}
+因此,问题归结为证明对几乎处处 $x \in \mathbb{R}^{n}$,$\lim_{t \to 0}f_{t}(x)$ 存在.
+
+对 $g \in L^{1}(\mathbb{R}^{n})$,其振幅定义为
+\begin{equation}
+\Omega g(x) := \varlimsup_{t \to 0}g_{t}(x) - \varliminf_{t \to 0}g_{t}(x).\tag{4.1.11}
+\label{eq:4.1.11}\end{equation}
+若 $g$ 是支集紧的连续函数,则 $\Omega g(x) \equiv 0$.
+
+容易看出,逐点有
+\begin{equation*}
+\Omega g(x) \leq 2\mathcal{M}g(x).
+\end{equation*}
+因此,$g \in L^{1}(\mathbb{R}^{n})$ 时,由定理~\ref{thm:4.1.1} (b),
+\begin{equation}
+|\{x: \Omega g(x) > \epsilon\}| \leq |\{x: 2\mathcal{M}g(x) > \epsilon\}| \leq \frac{2\cdot 3^{n}}{\epsilon}\|g\|_{1} \quad (\epsilon > 0).\tag{4.1.12}
+\label{eq:4.1.12}\end{equation}
+
+任意 $f \in L^{1}(\mathbb{R}^{n})$ 可以分解为 $f = g + h$,其中 $g$ 是支集紧的连续函数,$h$ 的 $L^{1}$ 范数可以自由地取得任意小.显然,
+\begin{equation*}
+\Omega f(x) \leq \Omega g(x) + \Omega h(x),
+\end{equation*}
+故由上面所确认的事实,
+\begin{equation*}
+\Omega f(x) \leq \Omega h(x).
+\end{equation*}
+由此与 \eqref{eq:4.1.12},
+\begin{equation*}
+|\{x: \Omega f(x) > \epsilon\}| \leq |\{x: \Omega h(x) > \epsilon\}| \leq \frac{2\cdot 3^{n}}{\epsilon}\|h\|_{1} \quad (\epsilon > 0).
+\end{equation*}
+由于 $\|h\|_{1}$ 可以自由设置,上式左端等于 0.因此,对几乎处处 $x \in \mathbb{R}^{n}$ 有 $\Omega f(x) = 0$,即 $\lim_{t \to 0}f_{t}(x)$ 存在,目标系成立.
+\end{proof}
+
+\begin{proof}[命题~\ref{prop:4.1.4} 的证明]
+设 $f \in L^{p}(\mathbb{R}^{n})$($1 \leq p < \infty$).对任意 $\epsilon > 0$,选取支集紧的连续函数 $g$ 和满足
+\begin{equation*}
+\|h\|_{L^{p}(\mathbb{R}^{n})} < \frac{\epsilon}{4}
+\end{equation*}
+的 $h$,分解为 $f = g + h$.考虑线性性,变形为
+\begin{equation*}
+f(x) - f_{t}(x) = \left(g(x) - g_{t}(x)\right) + \left(h(x) - h_{t}(x)\right),
+\end{equation*}
+得
+\begin{equation*}
+\|f - f_{t}\|_{p} \leq \|g - g_{t}\|_{p} + \|h - h_{t}\|_{p}.
+\end{equation*}
+
+由于 $g$ 一致连续,对任意 $D > 0$,选取充分小的 $\delta > 0$,可以做到
+\begin{equation*}
+|g(x) - g(y)| \leq D \quad (|x - y| \leq \delta).
+\end{equation*}
+注意
+\begin{equation*}
+\int_{B(x,t)}\frac{\dd y}{|B(x,t)|} = 1,
+\end{equation*}
+则
+\begin{equation}
+\begin{aligned}
+|g(x) - g_{t}(x)| & = \left|\int_{B(x,t)}\frac{g(x)}{|B(x,t)|}\dd y - \int_{B(x,t)}\frac{g(y)}{|B(x,t)|}\dd y\right| \\
+& \leq \int_{B(x,t)}\frac{|g(x) - g(y)|}{|B(x,t)|}\dd y \\
+& \leq D \quad (t < \delta),
+\end{aligned}
+\end{equation}
+故只要 $D > 0$ 取得充分小,
+\begin{equation*}
+\|g - g_{t}\|_{p} \leq D|\supp(g - g_{t})|^{1/p} \leq \frac{\epsilon}{2} \quad (t < \delta).
+\end{equation*}
+
+又
+\begin{equation*}
+\|h - h_{t}\|_{p} \leq \|h\|_{p} + \|h_{t}\|_{p},
+\end{equation*}
+把 $h_{t}$ 看作卷积,应用 Young 不等式,\footnote{关于 Young 不等式将在下一节说明.}得
+\begin{equation*}
+\|h - h_{t}\|_{p} \leq 2\|h\|_{p} \leq \frac{\epsilon}{2}.
+\end{equation*}
+
+综合以上,
+\begin{equation*}
+\|f - f_{t}\|_{p} \leq \epsilon \quad (t < \delta).
+\end{equation*}
+\end{proof}

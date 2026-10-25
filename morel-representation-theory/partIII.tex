@@ -1,0 +1,1427 @@
+% ============ 第 III 部分: \index{Gelfand-Raikov 定理}Gelfand-Raikov 定理 (The Gelfand-Raikov Theorem) ============
+% 原书 III.1 - III.6 (原书 pp.145-194)
+% 编号: III.2.1 (节级) / III.6.1.1 (子节级, 习题)
+
+本章的目标是证明 Gelfand-Raikov 定理, 它说局部紧群的不可约酉表示分离点 (即若 $G$ 是局部紧群且 $x \in G - \{1\}$, 则存在 $G$ 的不可约酉表示使得 $\pi(x) \neq 1$).
+在本章中, $G$ 是局部紧群, $\mu$ (或直接写``$dx$'') 是 $G$ 上的左 Haar 测度.
+
+\section{\texorpdfstring{$L^{\infty}(G)$}{L-infinity(G)}}
+你可以安全地忽略本节, 假设所有群都是 $\sigma$-紧的.
+我们将在本章更认真地使用 $L^{\infty}(G)$, 并希望它是 $L^1(G)$ 的连续对偶, 但若 $G$ 不是 $\sigma$-紧的这不是真的. 所以我们修改 $L^{\infty}(G)$ 的定义使之成立. 见 {[}11{]} 的第 2.3 节.
+更一般地, 设 $X$ 是局部紧 Hausdorff 拓扑空间, $\mu$ 是正则 Borel 测度. 若对 $X$ 的每个满足 $\mu(F) < +\infty$ 的 Borel 子集 $F$, $E \cap F$ 是 $X$ 的 Borel 子集, 则称 $E \subset X$ \index{局部 Borel 集}局部 Borel (locally Borel). 若 $E$ 局部 Borel, 且对 $X$ 的每个满足 $\mu(F) < +\infty$ 的 Borel 子集 $F$ 有 $\mu(E \cap F) = 0$, 则称 $E$ 局部零 (locally null). 若关于 $X$ 的点的断言在某个\index{局部零子集}局部零子集之外成立, 则称它\index{局部几乎处处}局部几乎处处 (locally almost everywhere) 成立. 我们已经见过: 若对 $\CC$ 的每个 Borel 子集 $A$, 集合 $f^{-1}(A)$ 局部 Borel, 则函数 $f \colon X \to \CC$ 局部可测 (locally measurable). 现在令 $L^{\infty}(X)$ 为局部几乎处处有界的\index{局部可测函数}局部可测函数 $X \to \CC$ 的空间, 商去等价关系: $f \sim g$ 若 $f - g$ 局部几乎处处为零. $L^{\infty}(X)$ 上的范数由
+\[
+\|f\|_{\infty} = \inf\{c \in \R_{\geq 0} \mid |f(x)| \leq c \text{ 局部几乎处处}\}
+\]
+给出.
+
+\section{\index{正定型函数}正定型函数}
+
+\begin{definition}[正定型函数 (function of positive type)]
+\label{def:III.2.1}
+$G$ 上的正定型函数是满足对每个 $f \in L^1(G)$ 有
+\[
+\int_G (f^* * f)(x)\phi(x)\,\dd x \geq 0
+\]
+的函数 $\phi \in L^{\infty}(G)$.
+\end{definition}
+
+注意若 $f \in L^1(G)$ 则 $f^* * f \in L^1(G)$, 所以积分收敛.
+
+\begin{remark}[卷积与正定型]
+\label{rem:III.2.2}
+对每个 $\phi \in L^{\infty}(G)$ 和每个 $f, g \in L^1(G)$,
+\begin{align*}
+\int_G (f^* * g)(x)\phi(x)\,\dd x &= \int_{G \times G}f^*(y)g(y^{-1}x)\phi(x)\,\dd x\,\dd y \\
+&= \int_{G \times G}\Delta(y)^{-1}\overline{f(y^{-1})}g(y^{-1}x)\phi(x)\,\dd x\,\dd y \\
+&= \int_{G \times G}\overline{f(y)}g(yx)\phi(x)\,\dd x\,\dd y \\
+&= \int_{G \times G}\overline{f(y)}g(x)\phi(y^{-1}x)\,\dd x\,\dd y.
+\end{align*}
+\end{remark}
+
+\begin{example}[正定型函数的例子]
+\label{exa:III.2.3}
+\begin{enumerate}
+\item[(1)] $0$ 是正定型函数.
+\item[(2)] 若 $\phi \colon G \to S^1 \subset \CC$ 是 $1$ 维表示 (即对所有 $x, y \in G$ 有 $\phi(xy) = \phi(x)\phi(y)$), 则它是正定型函数. 事实上, 对每个 $f \in L^1(G)$, 由注记 \ref{rem:III.2.2},
+\begin{align*}
+\int_G (f^* * f)(x)\phi(x)\,\dd x &= \int_{G \times G}\overline{f(y)}f(yx)\phi(y^{-1}x)\,\dd x\,\dd y \\
+&= \int_{G \times G}\overline{f(y)}f(x)\phi(y)\phi(x)\,\dd x\,\dd y \\
+&= \Bigl|\int_G \phi(x)f(x)\,\dd x\Bigr|^2 \geq 0.
+\end{align*}
+\end{enumerate}
+我们将在下面的命题 (ii) 中推广第二个例子.
+\end{example}
+
+\begin{proposition}[正定型函数的来源]
+\label{prop:III.2.4}
+\begin{enumerate}
+\item[(i)] 若 $\phi \colon G \to \CC$ 是正定型函数, 则 $\bar{\phi}$ 也是.
+\item[(ii)] 若 $(\pi, V)$ 是 $G$ 的酉表示且 $v \in V$, 则 $\phi \colon G \to \CC$, $x \longmapsto \langle \pi(x)(v), v \rangle$ 是连续正定型函数.
+\item[(iii)] 设 $f \in L^2(G)$, 定义 $\tilde{f} \colon G \to \CC$ 为 $\tilde{f}(x) = \overline{f(x^{-1})}$. 则 $f * \tilde{f}$ 有意义, 在 $L^{\infty}(G)$ 中, 且是正定型函数.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i). 设 $f \in L^1(G)$. 则由注记 \ref{rem:III.2.2},
+\begin{align*}
+\int_G (f^* * f)\bar{\phi}\,\dd\mu &= \overline{\int_{G \times G}\overline{f(y)}f(yx)\phi(x)\,\dd x\,\dd y} \\
+&= \overline{\int_{G \times G}\overline{f(y)}f(yx)\phi(x)\,\dd x\,\dd y} \\
+&= \overline{\int_G (f^* * f)\phi\,\dd\mu} \geq 0.
+\end{align*}
+
+(ii). 函数 $\phi$ 连续, 因为 $G \to V$, $x \longmapsto \pi(x)(v)$ 连续. 让我们证明它是正定型的. 注意对所有 $x, y \in G$,
+\[
+\phi(y^{-1}x) = \langle \pi(y^{-1}x)(v), v \rangle = \langle \pi(x)(v), \pi(y)(v) \rangle.
+\]
+设 $f \in L^1(G)$. 则由注记 \ref{rem:III.2.2},
+\begin{align*}
+\int_G (f^* * f)\phi\,\dd\mu &= \int_{G \times G}\overline{f(x)}f(y)\phi(y^{-1}x)\,\dd x\,\dd y \\
+&= \int_{G \times G}\langle f(x)\pi(x)(v), f(y)\pi(y)(v) \rangle\,\dd x\,\dd y \\
+&= \langle \pi(f)(v), \pi(f)(v) \rangle \geq 0.
+\end{align*}
+
+(iii). 设 $x \in G$. 则定义 $f * \tilde{f}(x)$ 的积分是
+\[
+\int_G f(y)\overline{f(x^{-1}y)}\,\dd y.
+\]
+这个积分收敛, 因为 $f$ 和 $L_xf \colon y \longmapsto f(x^{-1}y)$ 都在 $L^2(G)$ 中 (由 $\mu$ 的左不变性). 又, 由 Cauchy-Schwarz 不等式,
+\[
+|f * \tilde{f}(x)| \leq \|f\|_2\|L_xf\|_2 = \|f\|_2^2.
+\]
+所以 $f * \tilde{f} \in L^{\infty}(G)$.
+让我们证明 $f * \tilde{f}$ 是正定型的. 设 $\pi_L$ 是 $G$ 的左正则表示, 即 $G$ 在 $L^2(G)$ 上由 $\pi_L(x) = L_x$ 给出的酉表示. 则对每个 $x \in G$,
+\[
+\langle \pi_L(x)(f), f \rangle = \int_G f(x^{-1}y)\overline{f(y)}\,\dd y = \int_G \overline{\tilde{f}(y^{-1}x)}f(y)\,\dd y = f * \tilde{f}(x).
+\]
+所以结果由 (ii) 得出.
+\end{proof}
+
+本节的主要结果是上面的例子 (ii) 是仅有的情形.
+
+\begin{theorem}[Gelfand-Raikov 构造]
+\label{thm:III.2.5}
+设 $\phi \colon G \to \CC$ 是正定型函数. 则存在 $G$ 的循环酉表示 $(\pi, V)$ 和 $V$ 的循环向量 $v$ 使得 $\phi(x) = \langle \pi(x)(v), v \rangle$ 局部几乎处处成立.
+而且, 表示 $\pi$ 和向量 $v$ 由 $\phi$ 唯一确定, 意义如下: 若 $(\pi', V')$ 是另一个循环酉表示且 $v' \in V'$ 是循环向量, 满足 $\phi(x) = \langle \pi'(x)(v'), v' \rangle$ 局部几乎处处成立, 则存在 $G$-等变等距 $T \colon V \to V'$ 使得 $T(v) = v'$.
+\end{theorem}
+
+事实上, 我们将在证明中给出 $(\pi, V)$ 的一个相当显式的构造.
+在证明定理之前, 让我们看一些简单推论.
+
+\begin{corollary}[正定型函数的性质]
+\label{cor:III.2.6}
+设 $\phi \colon G \to \CC$ 是正定型函数. 则 $\phi$ 局部几乎处处与某个连续函数一致, $\|\phi\|_{\infty} = \phi(1)$, 且对每个 $x \in G$ 有 $\phi(x^{-1}) = \overline{\phi(x)}$.
+\end{corollary}
+
+\begin{proof}
+第一个结论由命题 \ref{prop:III.2.4}(ii) 得出. 为证明其余结论, 选取 $G$ 的循环酉表示 $(\pi, V)$ 和 $v \in V$ 使得 $\phi(x) = \langle \pi(x)(v), v \rangle$. 则对每个 $x \in G$,
+\[
+|\phi(x)| \leq \|\pi(x)(v)\|\|v\| = \|v\|^2 = \phi(1)
+\]
+且
+\[
+\phi(x^{-1}) = \langle \pi(x^{-1})(v), v \rangle = \langle \pi(x)^*(v), v \rangle = \langle v, \pi(x)(v) \rangle = \overline{\phi(x)}.
+\]
+\end{proof}
+
+现在我们回到定理的证明. 设 $\phi \colon G \to \CC$ 是正定型函数. 在 $L^1(G)$ 上定义 Hermitian 形式 $\langle \cdot, \cdot \rangle_{\phi}$:
+\[
+\langle f, g \rangle_{\phi} = \int_G (g^* * f)\phi = \int_{G \times G}\overline{f(x)}g(y)\phi(y^{-1}x)\,\dd x\,\dd y
+\]
+(见注记 \ref{rem:III.2.2}). 特别地, 显然对所有 $f, g \in L^1(G)$,
+\[
+|\langle f, g \rangle_{\phi}| \leq \|f\|_1\|g\|_1\|\phi\|_{\infty}.
+\]
+由于 $\phi$ 正定型, 有 $\langle f, f \rangle_{\phi} \geq 0$, 即我们刚定义的 Hermitian 形式半正定; 特别地, 对它适用 Cauchy-Schwarz 不等式, 它对所有 $f, g \in L^1(G)$ 给出
+\[
+|\langle f, g \rangle_{\phi}|^2 \leq \langle f, f \rangle_{\phi}\langle g, g \rangle_{\phi}.
+\]
+设 $N$ 是形式 $\langle \cdot, \cdot \rangle_{\phi}$ 的核 (或根), 即 $L^1(G)$ 的正交补, 即满足对每个 $g \in L^1(G)$ 有 $\langle f, g \rangle_{\phi} = 0$ 的 $f \in L^1(G)$ 的空间. 由 Cauchy-Schwarz 不等式, $f \in N$ 当且仅当 $\langle f, f \rangle_{\phi} = 0$. 所以形式 $\langle \cdot, \cdot \rangle_{\phi}$ 在 $L^1(G)/N$ 上定义正定 Hermitian 形式, 仍记为 $\langle \cdot, \cdot \rangle_{\phi}$; 记对应范数为 $\|\cdot\|_{\phi}$. 对每个 $f \in L^1(G)$,
+\[
+\|f + N\|_{\phi}^2 \leq \|\phi\|_{\infty}\|f\|_1^2.
+\]
+设 $V_{\phi}$ 是 $L^1(G)/N$ 对范数 $\|\cdot\|_{\phi}$ 的完备化; 这是希尔伯特空间.
+我们要构造 $G$ 在 $V_{\phi}$ 上的酉作用. 我们已经用算子 $L_x$ 有 $G$ 在 $L^1(G)$ 上的连续表示. 这将魔术般地给出我们的酉表示. 首先注意, 对每个 $f \in L^1(G)$, 映射 $G \to L^1(G)$, $x \longmapsto L_xf$ 对半范数 $\|\cdot\|_{\phi}$ 连续, 因为由刚证明的不等式 $\|\cdot\|_{\phi} \leq \|\phi\|_{\infty}^{1/2}\|\cdot\|_1$.
+让我们证明 $\langle \cdot, \cdot \rangle_{\phi}$ 被 $G$ 的作用不变. 设 $x \in G$, $f, g \in L^1(G)$. 则
+\begin{align*}
+\langle L_xf, L_xg \rangle_{\phi} &= \int_{G \times G}\overline{f(x^{-1}y)}g(x^{-1}z)\phi(z^{-1}y)\,\dd y\,\dd z \\
+&= \int_{G \times G}\overline{f(y)}g(z)\phi((xz)^{-1}(xy))\,\dd y\,\dd z \\
+&= \int_{G \times G}\overline{f(y)}g(z)\phi(z^{-1}y)\,\dd y\,\dd z = \langle f, g \rangle_{\phi}.
+\end{align*}
+特别地, 形式 $\langle \cdot, \cdot \rangle_{\phi}$ 的根 $N$ 是 $L^1(G)$ 的 $G$-不变子空间, 所以我们得到 $G$ 在 $L^1(G)/N$ 上的作用, 它保持 Hermitian 内积, 且由命题 \ref{prop:I.3.1.10} 是连续表示. 我们把这个作用按连续性延拓到 $V_{\phi}$. 这给出 $G$ 在 $V_{\phi}$ 上的酉表示, 记为 $\pi_{\phi}$.
+设 $f, g \in L^1(G)$. 则由例 \ref{exa:I.4.2.7},
+\[
+\pi_{\phi}(f)(g + N) = f * g + N.
+\]
+下面的引理将蕴含定理 \ref{thm:III.2.5} 的第一个结论.
+
+\begin{lemma}[循环向量]
+\label{lem:III.2.7}
+存在 $V_{\phi}$ 的循环向量 $v = v_{\phi}$ 使得:
+\begin{enumerate}
+\item[(i)] 对 $f \in L^1(G)$, 有 $\pi_{\phi}(f)(v) = f + N$;
+\item[(ii)] 在 $G$ 上局部几乎处处有 $\phi(x) = \langle \pi_{\phi}(x)(v), v \rangle_{\phi}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+由 $\pi_{\phi}(f)(g + N)$ ($f, g \in L^1(G)$) 的计算 (见上面), 我们看到 $v$ 应是 $L^1(G)/N$ 中 $*$ 的单位元 (即 $1 \in G$ 处的 Dirac 测度) 的像, 如果这样的单位元存在的话. 一般地它不存在, 但我们可以逼近它, 并希望得到 $L^1(G)/N$ 中的 Cauchy 序列.
+所以设 $(\psi_U)_{U \in \mathcal{U}}$ 是近似单位元 (见定义 \ref{def:I.4.1.7}). 注意 $(\psi_U^*)_{U \in \mathcal{U}}$ 也是近似单位元, 所以由命题 \ref{prop:I.4.1.9}, 对每个 $f \in L^1(G)$ 有 $\psi_U^* * f \xrightarrow[U \to \{1\}]{} f$ ($L^1(G)$ 中). 所以对每个 $f \in L^1(G)$,
+\[
+\langle f, \psi_U \rangle_{\phi} = \int_G (\psi_U^* * f)\phi\,\dd\mu \xrightarrow[U \to \{1\}]{} \int_G f\phi\,\dd\mu.
+\]
+所以 $f \longmapsto \int_G f\phi\,\dd\mu$ 是 $L^1(G)$ 上对 $\|\cdot\|_1$ 和 $\|\cdot\|_{\phi}$ 有界的线性泛函, 其核包含 $N$. 我们可以把这个有界线性泛函下降到 $L^1(G)/N$ 并按连续性延拓到 $V_{\phi}$, 得到 $V_{\phi}$ 上的有界线性泛函, 它必具有 $\langle \cdot, v \rangle_{\phi}$ 的形式 (对某个唯一确定的 $v \in V_{\phi}$), 因为 $V_{\phi}$ 是希尔伯特空间. 由 $v$ 的定义, 对每个 $f \in L^1(G)$,
+\[
+\langle f + N, v \rangle_{\phi} = \int_G f\phi\,\dd\mu,
+\]
+且这确定 $v$, 因为 $L^1(G)$ 的像在 $V_{\phi}$ 中稠密.
+现在我们证明性质 (i) 和 (ii). 设 $f, g \in L^1(G)$. 则
+\begin{align*}
+\langle g, f \rangle_{\phi} &= \int_G (f^* * g)\phi\,\dd\mu \\
+&= \int_{G \times G}\overline{g(x)}f(y)\phi(y^{-1}x)\,\dd x\,\dd y \\
+&= \int_{G \times G}\overline{g(yx)}f(y)\phi(x)\,\dd x\,\dd y \\
+&= \int_{G \times G}f(y)\overline{L_{y^{-1}}g(x)}\phi(x)\,\dd x\,\dd y \\
+&= \int_G f(y)\langle \pi_{\phi}(y^{-1})(g + N), v \rangle_{\phi}\,\dd x \\
+&= \int_G \langle g + N, f(y)\pi_{\phi}(y)(v) \rangle_{\phi}\,\dd x \\
+&= \langle g + N, \pi_{\phi}(f)(v) \rangle_{\phi}.
+\end{align*}
+由于这对每个 $g \in L^1(G)$ 成立且 $L^1(G)$ 的像在 $V_{\phi}$ 中稠密, 得到 $\pi_{\phi}(f)(v) = f + N$. 特别地, $\{\pi_{\phi}(f)(v) \mid f \in L^1(G)\}$ 的张成在 $V_{\phi}$ 中稠密, 所以 $v$ 是循环向量 (由定理 \ref{thm:I.4.2.6}(iii)).
+又, 对 $f \in L^1(G)$, 由刚才证明的:
+\begin{align*}
+\int_G f(x)\langle \pi_{\phi}(x)(v), v \rangle_{\phi}\,\dd x &= \Bigl\langle \int_G f(x)\pi_{\phi}(x)(v)\,\dd x, v \Bigr\rangle_{\phi} \\
+&= \langle \pi_{\phi}(f)(v), v \rangle_{\phi} \\
+&= \langle f + N, v \rangle_{\phi} \\
+&= \int_G f(x)\phi(x)\,\dd x.
+\end{align*}
+由于这对每个 $f \in L^1(G)$ 成立, 它蕴含 $\phi(x) = \langle \pi_{\phi}(x)(v), v \rangle_{\phi}$ 局部几乎处处成立.
+\end{proof}
+
+为完成定理 \ref{thm:III.2.5} 的证明, 我们只需建立下面的引理.
+
+\begin{lemma}[唯一性]
+\label{lem:III.2.8}
+设 $(\pi, V)$ 和 $(\pi', V')$ 是 $G$ 的两个循环酉表示, $v \in V$, $v' \in V'$ 是循环向量, 满足对每个 $x \in G$,
+\[
+\langle \pi(x)(v), v \rangle = \langle \pi'(x)(v'), v' \rangle.
+\]
+则存在 $G$-等变等距 $T \colon V \to V'$ 使得 $T(v) = v'$.
+\end{lemma}
+
+\begin{proof}
+当然, 我们要通过公式 $T(\pi(x)(v)) = \pi'(x)(v')$ (对每个 $x \in G$) 定义 $T \colon V \to V'$. 我们需要使它有意义. 设 $W = \operatorname{Span}\{\pi(x)(v) \mid x \in G\}$. 由 $v$ 循环的假设, 子空间 $W$ 在 $V$ 中稠密. 让我们验证上面的公式定义等距 $T \colon W \to V'$. 设 $x_1, \ldots, x_n \in G$, $\lambda_1, \ldots, \lambda_n \in \CC$. 则
+\begin{align*}
+\Bigl\|\sum_{i=1}^n\lambda_i\pi(x_i)(v)\Bigr\|^2 &= \sum_{i=1}^n\sum_{j=1}^n\lambda_i\bar{\lambda}_j\langle \pi(x_j^{-1}x_i)(v), v \rangle \\
+&= \sum_{i=1}^n\sum_{j=1}^n\lambda_i\bar{\lambda}_j\langle \pi'(x_j^{-1}x_i)(v'), v' \rangle \\
+&= \Bigl\|\sum_{i=1}^n\lambda_i\pi'(x_i)(v')\Bigr\|^2.
+\end{align*}
+特别地, 若 $\sum_{i=1}^n\lambda_i\pi(x_i)(v) = 0$, 则也有 $\sum_{i=1}^n\lambda_i\pi'(x_i)(v') = 0$. 所以可以定义 $T \colon W \to V'$, $T\bigl(\sum_{i=1}^n\lambda_i\pi(x_i)(v)\bigr) = \sum_{i=1}^n\lambda_i\pi'(x_i)(v')$, 且上面的计算表明 $T$ 是等距. 所以 $T$ 连续, 从而可以延拓成连续线性算子 $T \colon V \to V'$, 它仍是等距, 所以单射且像闭. 又, 若 $x \in G$, $w \in W$, 则由 $T$ 的定义 $T(\pi(x)(w)) = \pi'(x)(T(w))$. 由于 $T$ 连续且 $W$ 在 $V$ 中稠密, 这对每个 $w \in V$ 仍成立; 换句话说, $T$ 是 $G$-等变的. 最后, 由 $T$ 的定义 $T(v) = v'$, 所以 $T$ 的像在 $V'$ 中稠密, 从而等于 $V'$.
+\end{proof}
+
+\section{正定型函数与不可约表示}
+
+我们已经看到 $G$ 的循环酉表示 (连同固定的循环向量) 由正定型函数参数化. 下一个自然的问题是``哪些正定型函数对应不可约表示?''
+\begin{definition}[$P$, $P_1$, $P_0$]
+\label{def:III.3.1}
+记 $P(G)$ 或 $P$ 为 $G$ 上连续正定型函数的集合. 这是 $\mathcal{C}_b(G)$ 中的凸锥.\footnote{``锥''意味着它被 $\R_{\geq 0}$ 的元素乘法稳定.}
+设
+\[
+P_1 = \{\phi \in P \mid \|\phi\|_{\infty} = 1\} = \{\phi \in P \mid \phi(1) = 1\}
+\]
+且
+\[
+P_0 = \{\phi \in P \mid \|\phi\|_{\infty} \leq 1\} = \{\phi \in P \mid \phi(1) \leq 1\}.
+\]
+(回忆由推论 \ref{cor:III.2.6}, 对每个 $\phi \in P$ 有 $\|\phi\|_{\infty} = \phi(1)$.)
+则 $P_1$ 和 $P_0$ 是 $\mathcal{C}_b(G)$ 的凸子集. 记 $E(P_1)$ 和 $E(P_0)$ 为它们的端点集.
+\end{definition}
+
+\begin{theorem}[端点与不可约性]
+\label{thm:III.3.2}
+设 $\phi \in P_1$. 则上一节构造的酉表示 $(V_{\phi}, \pi_{\phi})$ 不可约当且仅当 $\phi \in E(P_1)$.
+\end{theorem}
+
+\begin{remark}[纯量倍数]
+\label{rem:III.3.3}
+若 $\phi \in P$, $c \in \R_{>0}$, 则 $\langle \cdot, \cdot \rangle_{c\phi} = c\langle \cdot, \cdot \rangle_{\phi}$, 所以 $V_{c\phi} = V_{\phi}$, $\pi_{c\phi} = \pi_{\phi}$, $v_{c\phi} = v_{\phi}$. (但 $V_{\phi}$ 的恒等不是等距, 因为我们用了两个不同的内积, 即 $\langle \cdot, \cdot \rangle_{\phi}$ 和 $\langle \cdot, \cdot \rangle_{c\phi}$.) 由于 $P$ 的每个非零元 $\phi$ 都具有 $c\phi'$ 的形式 (其中 $c = \phi(1)$, $\phi' \in P_1$ 唯一), 定理回答了本节开头的问题.
+\end{remark}
+
+\begin{remark}[交换群的情形]
+\label{rem:III.3.4}
+若 $G$ 交换, 定理说 $\widehat{G} = E(P_1)$.
+\end{remark}
+
+\begin{proof}
+在此证明中, 记 $V = V_{\phi}$ 的内积和范数为 $\langle \cdot, \cdot \rangle$ 和 $\|\cdot\|$, 记 $\pi = \pi_{\phi}$. (除非这引起混淆.)
+我们首先假设 $\pi$ 不可约. 设 $0 \neq W \subsetneq V$ 是闭 $G$-不变子空间. 由于 $\pi$ 酉, $W^{\perp}$ 也 $G$-不变, 且 $V = W \oplus W^{\perp}$. 设 $v \in V$ 是引理 \ref{lem:III.2.7} 的循环向量. 由于 $v$ 循环, 它不能包含于 $W$ 或 $W^{\perp}$ (否则会有 $W = V$ 或 $W^{\perp} = V$). 所以可以把 $v$ 写成 $v = v_1 + v_2$, 其中 $v_1 \in W$, $v_2 \in W^{\perp}$, $v_1, v_2 \neq 0$. 定义 $\phi_1, \phi_2 \colon G \to \CC$ 为 $\phi_i(x) = \langle \pi(x)(v_i), v_i \rangle$. 则由命题 \ref{prop:III.2.4}(ii), $\phi_1, \phi_2 \in P$, 且有 $\phi = \phi_1 + \phi_2$. 设 $c_1 = \|v_1\|^2$, $c_2 = \|v_2\|^2$; 由勾股定理 $c_1 + c_2 = \|v\|^2 = \phi(1) = 1$, 所以 $c_1, c_2 \in (0, 1)$. 设 $\psi_i = \frac{1}{c_i}\phi_i$ ($i = 1, 2$). 则 $\phi = c_1\psi_1 + c_2\psi_2$, 且 $\psi_1, \psi_2 \in P_1$ (因为 $\psi_1(1) = \psi_2(1) = 1$). 为得出结论 $\phi$ 不是 $P_1$ 的端点, 还需证明 $\psi_1 \neq \psi_2$, 即 $\phi_2$ 不具有 $c\phi_1$ 的形式 (对 $c \in \R_{>0}$).
+设 $c \in \R_{>0}$. 选取 $\varepsilon > 0$ 使得 $\varepsilon < \frac{c\|v_1\|^2}{\|v_2\| + c\|v_1\|}$, 即 $\varepsilon\|v_2\| < c\|v_1\|^2 - \varepsilon c\|v_1\|$. 由于 $v$ 是 $V$ 的循环向量, 可以找到 $x_1, \ldots, x_n \in G$ 和 $a_1, \ldots, a_n \in \CC$ 使得
+\[
+\Bigl\|\sum_{i=1}^n a_i\pi(x_i)(v) - v_1\Bigr\| < \varepsilon.
+\]
+由于 $v = v_1 + v_2$ (其中 $v_1 \in W$, $v_2 \in W^{\perp}$), 且 $W$ 和 $W^{\perp}$ 都被 $G$ 的作用稳定, 对 $x \in G$,
+\[
+\langle \pi(x)(v), v_1 \rangle = \langle \pi(x)(v_1) + \pi(x)(v_2), v_1 \rangle = \langle \pi(x)(v_1), v_1 \rangle.
+\]
+所以
+\begin{align*}
+\Bigl|\sum_{i=1}^n a_i\langle \pi(x_i)(v_1), v_1 \rangle - \langle v_1, v_1 \rangle\Bigr| &= \Bigl|\sum_{i=1}^n a_i\langle \pi(x_i)(v), v_1 \rangle - \langle v_1, v_1 \rangle\Bigr| \\
+&= \Bigl|\Bigl\langle \sum_{i=1}^n a_i\pi(x_i)(v) - v_1, v_1 \Bigr\rangle\Bigr| \\
+&< \varepsilon\|v_1\|,
+\end{align*}
+这蕴含
+\[
+\|v_1\|^2 - \varepsilon\|v_1\| < \Bigl|\sum_{i=1}^n a_i\langle \pi(x_i)(v_1), v_1 \rangle\Bigr| = \Bigl|\sum_{i=1}^n a_i\phi_1(x_i)\Bigr|.
+\]
+另一方面 (利用对每个 $x \in G$ 有 $\langle \pi(x)(v), v_2 \rangle = \langle \pi(x)(v_2), v_2 \rangle$ 这一事实),
+\begin{align*}
+\Bigl|\sum_{i=1}^n a_i\langle \pi(x_i)(v_2), v_2 \rangle\Bigr| &= \Bigl|\Bigl\langle \sum_{i=1}^n a_i\pi(x_i)(v) - v_1, v_2 \Bigr\rangle\Bigr| \\
+&\leq \Bigl\|\sum_{i=1}^n a_i\pi(x_i)(v) - v_1\Bigr\|\|v_2\| \\
+&< \varepsilon\|v_2\| \\
+&< c\|v_1\|^2 - \varepsilon c\|v_1\| \\
+&< c\Bigl|\sum_{i=1}^n a_i\phi_1(x_i)\Bigr|,
+\end{align*}
+即
+\[
+\Bigl|\sum_{i=1}^n a_i\phi_2(x_i)\Bigr| < c\Bigl|\sum_{i=1}^n a_i\phi_1(x_i)\Bigr|.
+\]
+所以我们不能有 $\phi_2 = c\phi_1$. 由于 $c$ 任意, 这完成 $\psi_1 \neq \psi_2$ 的证明, 从而 $\phi$ 不是 $P_1$ 的端点.
+反之, 我们要证明若 $\pi_{\phi}$ 不可约则 $\phi$ 在 $P_1$ 中端点. 假设 $\phi = \phi_1 + \phi_2$, 其中 $\phi_1, \phi_2 \in P$. 对每个 $f \in L^1(G)$,
+\[
+\langle f, f \rangle_{\phi_1} = \langle f, f \rangle_{\phi} - \langle f, f \rangle_{\phi_2} \leq \langle f, f \rangle_{\phi}.
+\]
+特别地, $\langle \cdot, \cdot \rangle_{\phi}$ 的核包含于 $\langle \cdot, \cdot \rangle_{\phi_1}$ 的核, 所以 $L^1(G)$ 的恒等延拓成连续满射 $T \colon V_{\phi} \to V_{\phi_1}$, 且此映射是 $G$-等变的, 因为 $V_{\phi}$ 和 $V_{\phi_1}$ 上的 $G$ 作用都来自 $G$ 在 $L^1(G)$ 上通过左平移的作用. 又, 由于 $v_{\phi}$ (相应地 $v_{\phi_1}$) 只是近似单位元的像在 $V_{\phi}$ (相应地 $V_{\phi_1}$) 中的极限, 算子 $T$ 把 $v_{\phi}$ 送到 $v_{\phi_1}$. 由于 $\Ker T$ 是 $V_{\phi}$ 的 $G$-不变子空间, $(\Ker T)^{\perp}$ 也是, 所以 $T$ 定义 $G$-等变同构 $(\Ker T)^{\perp} \xrightarrow{\sim} V_{\phi_1}$, 从而 $V_{\phi_1}$ 同构于 $V_{\phi}$ 的子表示.
+现在假设 $\pi_{\phi}$ 不可约. 则 $T^*T \in \End(V_{\phi})$ 是 $G$-等变的, 所以由 Schur 引理 (定理 \ref{thm:I.3.4.1}) 对某个 $c \in \CC$ 有 $T^*T = c\,\mathrm{id}_{V_{\phi}}$. 由于 $T(v_{\phi}) = v_{\phi_1}$, 对每个 $x \in G$,
+\begin{align*}
+\phi_1(x) &= \langle \pi_{\phi_1}(x)(v_{\phi_1}), v_{\phi_1} \rangle_{\phi_1} \\
+&= \langle \pi_{\phi_1}(x)(T(v_{\phi})), T(v_{\phi}) \rangle_{\phi_1} \\
+&= \langle T(\pi_{\phi}(x)(v_{\phi})), T(v_{\phi}) \rangle_{\phi_1} \\
+&= \langle T^*T(\pi_{\phi}(x)(v_{\phi})), v_{\phi} \rangle_{\phi} \\
+&= c\phi(x).
+\end{align*}
+由于 $\phi_1$ 和 $\phi$ 正定型, 必有 $c \in \R_{\geq 0}$. 类似地看到 $\phi_2$ 必在 $\R_{\geq 0}\phi$ 中. 所以 $\phi$ 端点.
+\end{proof}
+
+\section{\texorpdfstring{凸集 $P_1$}{凸集 P1}}
+我们在前两节看到 $G$ 的不可约酉表示由 $P_1$ 的端点参数化. 回忆我们试图证明存在足够多的不可约酉表示来分离 $G$ 上的点. 所以我们要证明 $P_1$ 有大量端点. 自然的想法是用 Krein-\index{Milman 定理}Milman 定理 (定理 \ref{thm:B.5.2}, 它说紧凸集是其端点的闭凸包), 但 $P_1$ 一般不紧. 然而, 集合 $P_0$ 凸且弱*紧, 且与 $P_1$ 密切相关; 这足以把 Krein-Milman 定理的结论推广到 $P_1$.
+回忆 $P$ 是 $L^{\infty}(G)$ 的子集. 我们把 $L^{\infty}(G)$ 等同于 $L^1(G)$ 的连续对偶, 并在它及其子集 $P$, $P_0$, $P_1$ 上考虑弱*拓扑. 对 $f \in L^{\infty}(G)$, $f$ 的邻域基由集合 $U_{g_1,\ldots,g_n,c} = \{f' \in L^{\infty}(G) \mid |\int_G (f - f')g_i\,\dd\mu| < c,\, 1 \leq i \leq n\}$ 给出, 其中 $n \in \Z_{\geq 1}$, $g_1, \ldots, g_n \in L^1(G)$, $c > 0$. 本节第二个主要结果是弱*拓扑与 $P_1$ 上的紧收敛拓扑一致.
+
+\begin{theorem}[$E(P_1)$ 的凸包稠密]
+\label{thm:III.4.1}
+$E(P_1)$ 的凸包在 $P_1$ 中对弱*拓扑稠密.
+\end{theorem}
+
+\begin{lemma}[$E(P_0) = E(P_1) \cup \{0\}$]
+\label{lem:III.4.2}
+有 $E(P_0) = E(P_1) \cup \{0\}$.
+\end{lemma}
+
+\begin{proof}
+首先证明 $E(P_1) \cup \{0\}$ 的每个点在 $P_0$ 中端点. 设 $\phi_1, \phi_2 \in P_0$, $c_1, c_2 \in (0, 1)$ 满足 $c_1 + c_2 = 1$. 若 $c_1\phi_1 + c_2\phi_2 = 0$, 则 $0 = c_1\phi_1(1) + c_2\phi_2(1)$, 所以 $\phi_1(1) = \phi_2(1) = 0$, 从而 $\|\phi_1\|_{\infty} = \|\phi_2\|_{\infty} = 0$, 即 $\phi_1 = \phi_2 = 0$. 这证明 $0$ 端点. 假设 $\phi := c_1\phi_1 + c_2\phi_2 \in E(P_1)$. 则 $1 = \phi(1) = c_1\phi_1(1) + \phi_2(1)$, 所以 $\phi_1(1) = \phi_2(1) = 1$, 因此 $\phi_1, \phi_2 \in P_1$; 由于 $\phi$ 在 $P_1$ 中端点, 这蕴含 $\phi_1 = \phi_2$. 所以 $\phi$ 在 $P_0$ 中也端点.
+现在我们证明 $P_0$ 的每个端点都在 $E(P_1) \cup \{0\}$ 中. 设 $\phi \in P_0 - (E(P_1) \cup \{0\})$. 若 $\phi \in P_1$, 则它不端点. 若 $\phi \notin P_1$, 则 $0 < \phi(1) < 1$, 所以 $\phi = (1 - c)0 + c\frac{1}{\phi(1)}\phi$, 其中 $c = \phi(1) \in (0, 1)$ 且 $\frac{1}{\phi(1)}\phi \in P_0$; 这证明 $\phi$ 不端点.
+\end{proof}
+
+\begin{proof}[定理的证明]
+注意定义 $L^{\infty}(G)$ 中 $P$ 的条件是弱*闭条件, 所以 $P$ 是 $L^{\infty}(G)$ 的弱*闭子集. 由于 $P_0$ 是 $P$ 与 $L^{\infty}(G)$ 的闭单位球的交, 它在这个闭单位球中弱*闭, 从而由 Banach-Alaoglu 定理 (定理 \ref{thm:B.4.1}) 弱*紧. 由于 $P_0$ 也凸, Krein-Milman 定理 (定理 \ref{thm:B.5.2}) 说 $E(P_0)$ 的凸包在 $P_0$ 中弱*稠密. 又, 上面的引理说 $E(P_0) = E(P_1) \cup \{0\}$.
+设 $\phi \in P_1$, $U$ 是 $\phi$ 的形如 $\{\psi \in P_1 \mid |\int_G (\phi - \psi)g_i\,\dd\mu| < c,\, 1 \leq i \leq n\}$ ($n \in \Z_{\geq 1}$, $g_1, \ldots, g_n \in L^1(G)$, $c > 0$) 的弱*邻域. 我们要找到 $U$ 中属于 $E(P_1)$ 的凸包的点. 选取 $\varepsilon > 0$ (稍后看它需要多小). 由第一段和 $L^{\infty}(G)$ 中闭球弱*闭 (Hahn-Banach 定理的推论) 的事实, 可以找到 $E(P_1) \cup \{0\}$ 的凸包中的 $\psi$ 使得对每个 $i \in \{1, \ldots, n\}$ 有 $|\int_G (\phi - \psi)g_i\,\dd\mu| < c/2$ 且 $\|\psi\|_{\infty} \geq 1 - \varepsilon$. 把 $\psi$ 写成 $\psi = c_1\psi_1 + \cdots + c_r\psi_r$, 其中 $c_1, \ldots, c_r \in [0, 1]$, $\psi_1, \ldots, \psi_r \in E(P_1)$, $c_1 + \cdots + c_r \leq 1$. 设 $a = \frac{1}{\|\psi\|_{\infty}}$. 则 $a\psi = (ac_1)\psi_1 + \cdots + (ac_r)\psi_r$ 且 $ac_1 + \cdots + ac_r = 1$, 所以 $a\psi$ 在 $E(P_1)$ 的凸包中. 让我们证明 $a\psi \in U$. 若 $i \in \{1, \ldots, n\}$, 则
+\begin{align*}
+\Bigl|\int_G (\phi - a\psi)g_i\,\dd\mu\Bigr| &\leq \Bigl|\int_G (\phi - \psi)g_i\,\dd\mu\Bigr| + \Bigl|\int_G (\psi - a\psi)g_i\,\dd\mu\Bigr| \\
+&< c/2 + |1 - a|\Bigl|\int_G \psi g_i\,\dd\mu\Bigr| \\
+&< c/2 + \varepsilon\Bigl(c/2 + \Bigl|\int_G \phi g_i\,\dd\mu\Bigr|\Bigr).
+\end{align*}
+所以, 若选取 $\varepsilon$ 足够小使得对每个 $i \in \{1, \ldots, n\}$ 有 $\varepsilon\bigl(c/2 + |\int_G \phi g_i\,\dd\mu|\bigr) < c/2$, 函数 $a\psi$ 将在 $U$ 中.
+\end{proof}
+
+由于 $P$ 是空间 $\mathcal{C}(G)$ 的子空间, 我们也可以在 $P$ 上考虑紧收敛拓扑, 即在 $G$ 的紧子集上的收敛拓扑. 若 $\phi \in P$, 则 $\phi$ 在此拓扑下的邻域基由 $\{\psi \in P \mid \sup_{x \in K}|\phi(x) - \psi(x)| < c\}$ 给出, 其中 $K$ 遍历 $G$ 的紧子集, $c$ 遍历正实数.
+
+\begin{theorem}[Raikov 定理]
+\label{thm:III.4.3}
+在 $P$ 的子集 $P_1$ 上, 紧收敛拓扑与弱*拓扑一致.
+\end{theorem}
+
+\begin{remark}[定理不适用于 $P_0$]
+\label{rem:III.4.4}
+此定理推广了习题 \ref{ex:I.5.4.2}(a). (见注记 \ref{rem:III.3.4}.)
+注意定理对 $P_0$ 不成立. 例如, 若 $G = \R$, 则紧收敛拓扑与弱*拓扑在 $\widehat{G} \cup \{0\}$ 上不一致. 例如, 考虑 $\widehat{G}$ 的元素 $\chi_y \colon x \longmapsto e^{ixy}$. 我断言当 $|y| \to +\infty$ 时族 $(\chi_y)_{y \in \R}$ 弱收敛到 $0$. (显然, 它对紧收敛拓扑不收敛到 $0$; 事实上, 它在此拓扑下没有极限.) 回忆这个断言意味着对每个 $f \in L^1(\R)$,
+\[
+\lim_{|y| \to +\infty}\int_{\R}f(x)e^{ixy}\,\dd x = 0.
+\]
+首先假设 $f$ 是紧区间 $[a, b]$ 的特征函数. 则
+\[
+\int_{\R}f(x)e^{ixy}\,\dd y = \frac{1}{y}(e^{iby} - e^{iay}) \xrightarrow[|y| \to +\infty]{} 0.
+\]
+所以, 若 $f$ 是紧区间特征函数的 (有限) 线性组合, 结论仍成立. 现在设 $f$ 是 $L^1(\R)$ 的任意元素, $\varepsilon > 0$. 可以找到紧区间特征函数的线性组合 $g$ 使得 $\|f - g\|_1 \leq \varepsilon$. 由刚才看到的, 还可以找到 $A \in \R$ 使得对 $|y| \geq A$ 有 $|\int_{\R}g(x)e^{ixy}\,\dd y| \leq \varepsilon$. 则若 $|y| \geq A$,
+\begin{align*}
+\Bigl|\int_{\R}f(x)e^{ixy}\,\dd x\Bigr| &\leq \Bigl|\int_{\R}g(x)e^{ixy}\,\dd x\Bigr| + \Bigl|\int_{\R}(f(x) - g(x))e^{ixy}\,\dd x\Bigr| \\
+&\leq \varepsilon + \int_{\R}|f(x) - g(x)|\,\dd x \\
+&\leq 2\varepsilon.
+\end{align*}
+所以 $\int_{\R}f(x)e^{ixy}\,\dd x$ 在 $|y| \to +\infty$ 时收敛到 $0$.
+\end{remark}
+
+\begin{corollary}[紧收敛意义下的稠密性]
+\label{cor:III.4.5}
+$E(P_1)$ 的凸包在 $P_1$ 中对紧收敛拓扑稠密.
+\end{corollary}
+
+\begin{proof}[定理 \ref{thm:III.4.3} 的证明]
+我们首先证明 $P_1$ 上的紧收敛拓扑细于弱*拓扑 (这是较容易的部分). 设 $\phi \in P_1$. 设 $f \in L^1(G)$, $c > 0$, 设 $U = \{\psi \in P_1 \mid \int_G f(\phi - \psi)\,\dd\mu < c\}$. 我们要找到 $\phi$ 在紧收敛拓扑下的邻域包含于 $U$. 设 $K \subset G$ 是紧子集使得 $\int_{G \setminus K}|f|\,\dd\mu < c/3$, 设 $V = \{\psi \in P_1 \mid \sup_{x \in K}|\phi(x) - \psi(x)| \leq \frac{c}{3\|f\|_1 + 1}\}$. 则若 $\psi \in V$,
+\begin{align*}
+\Bigl|\int_G f(\phi - \psi)\,\dd\mu\Bigr| &\leq \Bigl|\int_K f(\phi - \psi)\,\dd\mu\Bigr| + \Bigl|\int_{G \setminus K}f(\phi - \psi)\,\dd\mu\Bigr| \\
+&\leq \|f\|_1\sup_{x \in K}|\phi(x) - \psi(x)| + 2\int_{G \setminus K}|f|\,\dd\mu \\
+&< c
+\end{align*}
+所以 $\psi \in U$ (在第二行我们用 $\|\phi\|_{\infty} = \|\psi\|_{\infty} = 1$ 这一事实).
+现在证明困难的方向, 即 $P_1$ 上的弱*拓扑细于紧收敛拓扑. 设 $\phi \in P_1$, $V = \{\psi \in P_1 \mid \sup_{x \in K}|\phi(x) - \psi(x)| < c\}$, 其中 $K \subset G$ 紧, $c > 0$. 设 $\delta > 0$ 使得 $\delta + 4\sqrt{\delta} < c$. 设 $Q$ 是 $1$ 在 $G$ 中的紧邻域使得
+\[
+\sup_{x \in Q}|\phi(x) - 1| \leq \delta.
+\]
+(这样的 $Q$ 存在, 因为 $\phi$ 连续且 $\phi(1) = 1$.) 由于 $Q$ 包含开集, $\mu(Q) \neq 0$. 设 $f = \frac{1}{\mu(Q)}\mathbb{1}_Q$. 由下面的第一个引理 (应用于 $V = L^1(G)$ 和 $B = P_1$) 和 $G \to L^1(G)$, $x \longmapsto L_{x^{-1}}f$ 连续 (从而 $\{L_{x^{-1}}f \mid x \in K\} \subset L^1(G)$ 紧) 的事实, 可以找到 $P_1$ 中 $\phi$ 的弱*邻域 $U_1$ 使得对每个 $x \in K$ 和每个 $\psi \in U_1$,
+\[
+\Bigl|\int_G (\phi - \psi)L_{x^{-1}}f\Bigr| \leq \delta.
+\]
+则对每个 $x \in K$ 和每个 $\psi \in U_1$,
+\begin{align*}
+|f * \phi(x) - f * \psi(x)| &= \Bigl|\int_G f(xy)(\phi(y^{-1}) - \psi(y^{-1}))\,\dd y\Bigr| \\
+&= \Bigl|\int_G L_{x^{-1}}f(y)(\phi(y) - \psi(y))\,\dd y\Bigr| \quad \text{(见推论 \ref{cor:III.2.6})} \\
+&\leq \delta.
+\end{align*}
+设 $U_2 = \{\psi \in P_1 \mid \int_G (\phi - \psi)f\,\dd\mu < \delta\}$. (这是 $\phi$ 的弱*邻域.) 设 $\psi \in U_1 \cap U_2$. 则
+\begin{align*}
+\Bigl|\int_G (1 - \psi)f\,\dd\mu\Bigr| &\leq \Bigl|\int_G (1 - \phi)f\,\dd\mu\Bigr| + \Bigl|\int_G (\phi - \psi)f\,\dd\mu\Bigr| \\
+&\leq \frac{1}{\mu(Q)}\int_Q (1 - \phi(x))\,\dd x + \delta \\
+&\leq \sup_{x \in Q}|1 - \phi(x)| + \delta \\
+&\leq 2\delta.
+\end{align*}
+另一方面, 对每个 $x \in G$,
+\begin{align*}
+|f * \psi(x) - \psi(x)| &= \Bigl|\frac{1}{\mu(Q)}\int_G \mathbb{1}_Q(y)\psi(y^{-1}x)\,\dd y - \frac{1}{\mu(Q)}\int_Q\psi(x)\,\dd y\Bigr| \\
+&= \Bigl|\frac{1}{\mu(Q)}\int_Q(\psi(y^{-1}x) - \psi(x))\,\dd y\Bigr| \\
+&\leq \frac{1}{\mu(Q)}\int_Q|\psi(y^{-1}x) - \psi(x)|\,\dd y \\
+&\leq \frac{1}{\mu(Q)}\int_Q\sqrt{2(1 - \Re(\psi(y)))}\,\dd y \quad \text{(见下面的第二个引理)} \\
+&\leq \frac{\sqrt{2}}{\mu(Q)}\Bigl(\int_Q(1 - \Re(\psi(y)))\,\dd y\Bigr)^{1/2}\Bigl(\int_Q \,\dd y\Bigr)^{1/2} \quad \text{(Cauchy-Schwarz)} \\
+&\leq \frac{\sqrt{2}}{\sqrt{\mu(Q)}}\Bigl(\int_Q(1 - \psi(y))\,\dd y\Bigr)^{1/2} \\
+&= \sqrt{2}\Bigl(\int_G(1 - \psi)f\,\dd\mu\Bigr)^{1/2}
+\end{align*}
+由于 $\psi \in U_2$, 前面的计算表明这 $\leq \sqrt{2}\sqrt{2\delta} = 2\sqrt{\delta}$. 注意这也适用于 $\psi = \phi$, 因为显然 $\phi \in U_1 \cap U_2$. 把所有这些估计放在一起, 若 $\psi \in U_1 \cap U_2$, $x \in K$, 得到
+\begin{align*}
+|\psi(x) - \phi(x)| &\leq |\psi(x) - f * \psi(x)| + |f * \psi(x) - f * \phi(x)| + |f * \phi(x) - \phi(x)| \\
+&\leq \delta + 4\sqrt{\delta} \\
+&< c.
+\end{align*}
+所以 $U_1 \cap U_2 \subset V$, 我们完成了.
+\end{proof}
+
+\begin{lemma}[有界线性泛函族的拓扑]
+\label{lem:III.4.6}
+设 $V$ 是巴拿赫空间, $B$ 是 $\Hom(V, \CC)$ 的范数有界子集. 则 $B$ 上的紧收敛拓扑 (即在 $V$ 的紧子集上的一致收敛拓扑) 与弱*拓扑一致.
+\end{lemma}
+
+\begin{proof}
+我们要比较 $V$ 上的逐点收敛拓扑 (即弱*拓扑) 与 $V$ 上的紧收敛拓扑. 第二个在 $\Hom(V, \CC)$ 的全体上细于第一个, 所以我们只需证明第一个在 $B$ 上细于第二个.
+设 $T_0 \in B$, $K \subset V$ 紧, $c > 0$. 我们要找到 $B$ 中 $T_0$ 的弱*邻域包含于 $\{T \in B \mid \sup_{x \in K}|T(x) - T_0(x)| < c\}$. 设 $M = \sup_{T \in B}\|T\|_{\mathrm{op}}$ (它有限, 因为 $B$ 有界). 设 $x_1, \ldots, x_n \in K$ 使得 $K$ 包含于以 $x_i$ 为心、半径 $\frac{c}{3M}$ 的开球的并. 设 $T \in B$ 满足对 $i = 1, \ldots, n$ 有 $|(T - T_0)(x_i)| < c/3$ (这定义 $T$ 的弱*邻域). 对每个 $x \in K$, 存在 $i \in \{1, \ldots, n\}$ 使得 $\|x - x_i\| < \frac{c}{3M}$, 然后
+\begin{align*}
+|T(x) - T_0(x)| &\leq |T(x - x_i)| + |(T - T_0)(x_i)| + |T_0(x - x_i)| \\
+&\leq \|T\|_{\mathrm{op}}\|x - x_i\| + c/3 + \|T_0\|_{\mathrm{op}}\|x - x_i\| \\
+&< c/3 + 2M\frac{c}{3M} = c.
+\end{align*}
+所以 $T \in U$.
+\end{proof}
+
+\begin{lemma}[正定型函数的一致连续估计]
+\label{lem:III.4.7}
+设 $\phi \in P_1$. 则对所有 $x, y \in G$,
+\[
+|\phi(x) - \phi(y)|^2 \leq 2 - 2\Re(\phi(yx^{-1})).
+\]
+\end{lemma}
+
+\begin{proof}
+由定理 \ref{thm:III.2.5}, 可以找到 $G$ 的酉表示 $(\pi, V)$ 和 $v \in V$ 使得对每个 $x \in G$ 有 $\phi(x) = \langle \pi(x)(v), v \rangle$. 又, 由于 $\phi(1) = 1$, 有 $\|v\| = 1$. 所以对所有 $x, y \in G$,
+\begin{align*}
+|\phi(x) - \phi(y)|^2 &= |\langle (\pi(x) - \pi(y))(v), v \rangle|^2 \\
+&= |\langle v, (\pi(x^{-1}) - \pi(y^{-1}))(v) \rangle|^2 \\
+&\leq \|(\pi(x^{-1}) - \pi(y^{-1}))(v)\|^2 \\
+&= \|\pi(x^{-1})(v)\|^2 + \|\pi(x^{-1})(v)\|^2 - 2\Re(\langle \pi(x^{-1})(v), \pi(y^{-1})(v) \rangle) \\
+&= 2 - 2\Re(\langle \pi(x^{-1})(v), \pi(y^{-1})(v) \rangle) \\
+&= 2 - 2\Re(\langle \pi(yx^{-1})(v), v \rangle) \\
+&= 2 - 2\Re(\phi(yx^{-1})).
+\end{align*}
+\end{proof}
+
+\section{Gelfand-Raikov 定理}
+
+\begin{theorem}[Gelfand-Raikov 定理]
+\label{thm:III.5.1}
+设 $G$ 是局部紧群. 则对所有满足 $x \neq y$ 的 $x, y \in G$, 存在 $G$ 的不可约酉表示 $\pi$ 使得 $\pi(x) \neq \pi(y)$.
+更精确地, 存在 $G$ 的不可约酉表示 $(\pi, V)$ 和向量 $v \in V$ 使得 $\langle \pi(x)(v), v \rangle \neq \langle \pi(y)(v), v \rangle$.
+\end{theorem}
+
+\begin{proof}
+设 $x, y \in G$. 假设对 $G$ 的每个不可约酉表示 $(\pi, V)$ 和每个 $v \in V$ 都有 $\langle \pi(x)(v), v \rangle = \langle \pi(y)(v), v \rangle$. 由定理 \ref{thm:III.3.2}, 这蕴含对每个 $\phi \in E(P_1)$ 有 $\phi(x) = \phi(y)$, 从而由推论 \ref{cor:III.4.5} (以及 $\{x, y\}$ 是 $G$ 的紧子集这一事实) 对每个 $\phi \in P_1$ 有 $\phi(x) = \phi(y)$, 从而因 $P = \R_{\geq 0} \cdot P_1$ 对每个 $\phi \in P$ 成立.
+设 $\pi_L$ 是 $G$ 的左正则表示, 即 $G$ 在 $L^2(G)$ 上由 $\pi_L(z)(f) = L_zf$ ($z \in G$, $f \in L^2(G)$) 定义的表示. 这是 $G$ 的酉表示, 所以由第一段和命题 \ref{prop:III.2.4}, 对每个 $f \in L^2(G)$ 有 $\langle \pi_L(x)(f), f \rangle = \langle \pi_L(y)(f), f \rangle$. 设 $f_1, f_2 \in L^2(G)$. 则
+\[
+\langle \pi_L(x)(f_1 + f_2), f_1 + f_2 \rangle = \langle \pi_L(x)(f_1), f_1 \rangle + \langle \pi_L(f_2), f_2 \rangle + \langle \pi_L(x)(f_1), f_2 \rangle + \langle \pi_L(x)(f_2), f_1 \rangle
+\]
+且
+\[
+\langle \pi_L(x)(f_1 + if_2), f_1 + if_2 \rangle = \langle \pi_L(x)(f_1), f_1 \rangle + \langle \pi_L(f_2), f_2 \rangle - i\langle \pi_L(x)(f_1), f_2 \rangle + i\langle \pi_L(x)(f_2), f_1 \rangle,
+\]
+所以
+\begin{multline*}
+2\langle \pi_L(x)(f_1), f_2 \rangle = \langle \pi_L(x)(f_1 + f_2), f_1 + f_2 \rangle + i\langle \pi_L(x)(f_1 + if_2), f_1 + if_2 \rangle \\
+- (1 + i)(\langle \pi_L(x)(f_1), f_1 \rangle + \langle \pi_L(x)(f_2), f_2 \rangle).
+\end{multline*}
+对 $\pi_L(y)$ 有类似的恒等式, 这证明
+\[
+\langle \pi_L(x)(f_1), f_2 \rangle = \langle \pi_L(y)(f_1), f_2 \rangle.
+\]
+现在注意
+\begin{align*}
+\langle \pi_L(x)(f_1), f_2 \rangle &= \int_G L_xf_1(z)\overline{f_2(z)}\,\dd z \\
+&= \int_G f_1(x^{-1}z)\overline{f_2(z)}\,\dd z \\
+&= \int_G \overline{f_2(z)}\tilde{f}_1(z^{-1}x)\,\dd z \\
+&= f_2 * \tilde{f}_1(x)
+\end{align*}
+(回忆 $\tilde{f}_1 \in L^2(G)$ 由 $\tilde{f}_1(z) = \overline{f_1(z^{-1})}$ 定义), 所以 $f_2 * \tilde{f}_1(x) = f_2 * \tilde{f}_1(y)$. 此计算也表明 $f_2 * \tilde{f}_1$ 有意义且连续.
+由于 $f \longmapsto \tilde{f}$ 是 $L^2(G)$ 上的对合, 我们推出对所有 $f_1, f_2 \in L^2(G)$ 有 $f_1 * f_2(x) = f_1 * f_2(y)$, 特别地对所有 $f_1, f_2 \in \mathcal{C}_c(G)$ 成立. 设 $f \in \mathcal{C}_c(G)$, $(\psi_U)_{U \in \mathcal{U}}$ 是近似单位元. 则对每个 $U \in \mathcal{U}$ 有 $\psi_U \in \mathcal{C}_c(G)$, 且由命题 \ref{prop:I.4.1.9} (以及 $f$ 一致连续这一事实, 即命题 \ref{prop:I.1.12}), $\psi_U * f \xrightarrow[U \to \{1\}]{} f$ (对 $\|\cdot\|_{\infty}$). 由于对每个 $U \in \mathcal{U}$ 有 $\psi_U * f(x) = \psi_U * f(y)$, 这蕴含 $f(x) = f(y)$. 但此时必有 $x = y$ (由 Urysohn 引理).
+\end{proof}
+
+\section{习题}
+设 $G$ 是拓扑群, $(\pi, V)$ 是 $G$ 的酉表示. $\pi$ 的矩阵系数 (matrix coefficient) 是形如 $x \longmapsto \langle \pi(x)(v), w \rangle$ ($v, w \in V$) 的函数 $G \to \CC$. 注意这些函数都连续.
+还要回忆若 $G$ 局部紧 (且 $\mu$ 是 $G$ 上的左 Haar 测度), 则左正则表示 $\pi_L$ 是 $G$ 在 $L^2(G) := L^2(G, \mu)$ 上由 $\pi_L(x)(f) = L_xf$ ($x \in G$, $f \in L^2(G)$) 给出的表示. 在本节中, 我们直接把 $\pi_L$ 称为 $G$ 的正则表示.
+
+\subsection{正则表示}
+
+\begin{exercise}[离散群的情形]
+\label{ex:III.6.1.1}
+设 $G$ 是离散群, $\phi = \mathbb{1}_{\{1\}}$.
+\begin{enumerate}
+\item[(a)] (1) 证明 $\phi$ 是 $G$ 上的正定型函数.
+\item[(b)] (2) 证明 $V_{\phi}$ 等价于 $G$ 的正则表示.
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 计数测度是 $G$ 上的左 Haar 测度, 所以我们用此测度. 对每个 $f \in L^1(G)$, $\int_G f\phi\,\dd\mu = f(1)$. 所以
+\[
+\int_G (f^* * f)\phi\,\dd\mu = (f^* * f)(1) = \sum_{y \in G}\overline{f(y^{-1})}f(y^{-1}) \in \R_{\geq 0}.
+\]
+(b). 对所有 $f, g \in L^1(G)$,
+\begin{align*}
+\langle f, g \rangle_{\phi} &= \int_G (g^* * f)\phi\,\dd\mu \\
+&= (g^* * f)(1) \\
+&= \sum_{y \in G}\overline{g(y^{-1})}f(y^{-1}) \\
+&= \langle f, g \rangle_{L^2(G)}.
+\end{align*}
+所以 $\langle \cdot, \cdot \rangle_{\phi}$ 的核等于 $\{0\}$, 且希尔伯特空间 $V_{\phi}$ 是 $L^1(G)$ 对范数 $\|\cdot\|_2$ 的完备化, 即 $L^2(G)$. $G$ 在 $V_{\phi}$ 上的作用是按连续性延拓的它在 $L^1(G)$ 上通过左平移的作用, 所以我们得到 $G$ 在 $L^2(G)$ 上通过左平移的作用.
+\end{solution}
+
+\begin{exercise}[正则表示的矩阵系数]
+\label{ex:III.6.1.2}
+设 $G$ 是局部紧群.
+\begin{enumerate}
+\item[(a)] 若 $f, g \in \mathcal{C}_c(G)$, 证明 $f * g \in \mathcal{C}_c(G)$.
+\item[(b)] 证明 $G$ 的正则表示的每个矩阵系数都在无穷远处消失.
+\item[(c)] 假设 $G$ 不紧. 若 $(\pi, V)$ 是 $G$ 的有限维酉表示, 证明它有不在无穷远处消失的矩阵系数.
+\item[(d)] 若 $G$ 不紧, 证明其正则表示没有有限维子表示.\footnote{与 Peter-Weyl 比较.}
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 首先, 我们知道 $f * g$ 存在, 因为 $f$ 和 $g$ 在 $L^1(G)$ 中. 若 $x, x' \in G$, 则
+\[
+|f * g(x) - f * g(x')| = \Bigl|\int_G f(y)(g(y^{-1}x) - g(y^{-1}x'))\,\dd y\Bigr| \leq \|f\|_1\sup_{y \in \operatorname{supp}(f)}|g(y^{-1}x) - g(y^{-1}x')|.
+\]
+由于 $g$ 右一致连续 (见命题 \ref{prop:I.1.12}), 当 $x'$ 趋于 $x$ 时这趋于 $0$, 所以 $f * g$ 连续.
+设 $x \in G$ 使得 $f * g(x) \neq 0$. 有
+\[
+f * g(x) = \int_G f(y)g(y^{-1}x)\,\dd y,
+\]
+所以存在 $y \in \operatorname{supp}(f)$ 使得 $y^{-1}x \in \operatorname{supp}(g)$. 换句话说, $x \in \operatorname{supp}(f)\operatorname{supp}(g)$. 由于 $\operatorname{supp}(f)$ 和 $\operatorname{supp}(g)$ 都紧, 其乘积 $\operatorname{supp}(f)\operatorname{supp}(g)$ 也紧, 所以 $f * g$ 有紧支撑.
+(b). 回忆若 $f \in L^2(G)$, 则定义 $\tilde{f} \colon G \to \CC$ 为 $\tilde{f}(x) = \overline{f(x^{-1})}$.
+$G$ 的左正则表示的每个矩阵系数都具有
+\[
+x \longmapsto \langle L_{x^{-1}}f, g \rangle_{L^2(G)}
+\]
+的形式, 其中 $f, g \in L^2(G)$. 有 (见命题 \ref{prop:III.2.4}(iii))
+\begin{align*}
+\langle L_{x^{-1}}f, g \rangle_{L^2(G)} &= \int_G f(x^{-1}y)\overline{g(y)}\,\dd y \\
+&= \int_G \overline{g(y)}\tilde{f}(y^{-1}x)\,\dd y \\
+&= g * \tilde{f}(x).
+\end{align*}
+而且, 若 $f', g' \in L^2(G)$, 则 (利用 Cauchy-Schwarz 不等式)
+\begin{align*}
+|\langle L_{x^{-1}}f, g \rangle_{L^2(G)} - \langle L_{x^{-1}}f', g \rangle_{L^2(G)}| &\leq \int_G |g(y)||f(x^{-1}y) - f'(x^{-1}y)|\,\dd y \\
+&\leq \|g\|_2\|L_{x^{-1}}(f - f')\|_2 \\
+&= \|g\|_2\|f - f'\|_2
+\end{align*}
+且
+\begin{align*}
+|\langle L_{x^{-1}}f, g \rangle_{L^2(G)} - \langle L_{x^{-1}}f, g' \rangle_{L^2(G)}| &\leq \int_G |g(y) - g'(y)||f(x^{-1}y)|\,\dd y \\
+&\leq \|g - g'\|_2\|L_{x^{-1}}f\|_2 \\
+&= \|g - g'\|_2\|f\|_2.
+\end{align*}
+假设 $f, g \in \mathcal{C}_c(G)$. 则 $g, \tilde{f} \in \mathcal{C}_c(G)$, 所以由 (a), $g * \tilde{f} \in \mathcal{C}_c(G)$, 特别地此函数在无穷远处消失.
+在一般情形, 设 $\varepsilon > 0$, 设 $f', g' \in \mathcal{C}_c(G)$ 满足 $\|f - f'\|_2 \leq \varepsilon$, $\|g - g'\|_2 \leq \varepsilon$. 则由上面的两个不等式, 对每个 $x \in G$,
+\[
+|g * \tilde{f}(x) - g' * \tilde{f}'(x)| \leq \varepsilon(\|f\|_2 + \|g\|_2).
+\]
+但我们刚看到 $g' * \tilde{f}'$ 有紧支撑, 所以存在 $G$ 的紧子集 $K$ 使得对每个 $x \notin K$,
+\[
+|g * \tilde{f}(x)| \leq \varepsilon(\|f\|_2 + \|g\|_2).
+\]
+这证明矩阵系数 $g * \tilde{f}$ 在无穷远处消失.
+(c). 设 $(e_1, \ldots, e_n)$ 是 $V$ 的标准正交基. 对每个 $i \in \{1, \ldots, n\}$, 设 $f_i$ 是矩阵系数 $x \longmapsto \langle \pi(x)(e_1), e_i \rangle$. 则对每个 $x \in G$,
+\[
+\sum_{i=1}^n|f_i(x)|^2 = \sum_{i=1}^n|\langle \pi(x)(e_1), e_i \rangle|^2 = \|\pi(x)(e_1)\|^2 = 1.
+\]
+这证明 $f_i$ 中至少有一个不在无穷远处消失.
+(d). 这直接由 (c) 和 (b) 得出.
+\end{solution}
+
+\subsection{\index{弱包含}弱包含}
+
+设 $G$ 是拓扑群, $(\pi, V)$ 是 $G$ 的酉表示. 若 $v = w$, 则称函数 $G \to \CC$, $x \longmapsto \langle \pi(x)(v), w \rangle$ ($v, w \in V$) 为\index{对角矩阵系数}对角矩阵系数 (diagonal matrix coefficient); 由命题 \ref{prop:III.2.4}, 对角矩阵系数是正定型函数, 我们称它为与 $\pi$ 关联的正定型函数. 若正定型函数具有 $x \longmapsto \langle \pi(x)(v), v \rangle$ ($\|v\| = 1$) 的形式, 则称它\index{规范化矩阵系数}规范化 (normalized). 记 $P(\pi)$ 为与 $\pi$ 关联的正定型函数的集合.
+
+我们很快将看到,\footnote{加参考文献.} 若 $G$ 紧, 则 $G$ 的正则表示包含 $G$ 的所有不可约表示 (它们都有限维); 事实上, 它是其所有不可约子表示的直和的闭包. 另一方面, 若 $G$ 交换, 则其正则表示是所有不可约表示 (它们都 $1$ 维) 的直积分, 尽管若 $G$ 不紧它不包含其中任何一个. 我们不会在这里严格定义直积分, 但将引入一个更弱的包含定义, 对这个定义, 交换局部紧群的不可约表示包含于正则表示, 并开始研究它.
+设 $(\pi, V)$ 和 $(\pi', V')$ 是 $G$ 的酉表示. 若 $P(\pi)$ 包含于 $P(\pi')$ 的元素的有限和的集合对 $G$ 的紧子集上的收敛拓扑的闭包, 则称 $\pi$ 弱包含于 (weakly contained in) $\pi'$, 记 $\pi \prec \pi'$. 换句话说, $\pi \prec \pi'$ 若: 对每个 $v \in V$, 每个紧 $K \subset G$ 和每个 $c > 0$, 存在 $v'_1, \ldots, v'_n \in V'$ 使得
+\[
+\sup_{x \in K}\Bigl|\langle \pi(x)(v), v \rangle - \sum_{i=1}^n\langle \pi'(x)(v'_i), v'_i \rangle\Bigr| < c.
+\]
+
+\begin{exercise}[张量积表示]
+\label{ex:III.6.2.1}
+设 $(\pi_1, V_1)$, $(\pi_2, V_2)$ 是 $G$ 的酉表示.
+\begin{enumerate}
+\item[(a)] 证明代数张量积 $V_1 \otimes_{\CC}V_2$ 有 Hermitian 内积, 由 $\langle v_1 \otimes v_2, w_1 \otimes w_2 \rangle = \langle v_1, w_1 \rangle\langle v_2, w_2 \rangle$ 唯一确定.
+\item[(b)] 记 $V_1 \hat{\otimes}_{\CC}V_2$ 为 $V_1 \otimes_{\CC}V_2$ 对此内积的完备化. 证明公式 $(x, v_1 \otimes v_2) \longmapsto \pi_1(x)(v_1) \otimes \pi_2(x)(v_2)$ 定义 $G$ 在 $V_1 \hat{\otimes}_{\CC}V_2$ 上的酉表示. (这称为张量积表示 (tensor product representation), 通常记为 $\pi_1 \otimes \pi_2$.)
+\item[(c)] 若 $V_1$ 和 $V_2$ 有限维, 证明对每个 $x \in G$,
+\[
+\operatorname{Tr}(\pi_1 \otimes \pi_2(x)) = \operatorname{Tr}(\pi_1(x))\operatorname{Tr}(\pi_2(x)).
+\]
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 由于纯张量张成 $V_1 \otimes_{\CC}V_2$, $V_1 \otimes_{\CC}V_2$ 上至多有一个满足 $B(v_1 \otimes v_2, w_1 \otimes w_2) = \langle v_1, w_1 \rangle\langle v_2, w_2 \rangle$ 的半双线性形式 $B$. 让我们证明这样的形式存在. 设 $w_1 \in V_1$, $w_2 \in V_2$. 则 $V_1 \times V_2 \to \CC$, $(v_1, v_2) \longmapsto \langle v_1, w_1 \rangle\langle v_2, w_2 \rangle$ 是双线性形式, 所以它对应于 $V_1 \otimes_{\CC}V_2$ 上的唯一线性形式, 记为 $B_{w_1,w_2}$. 其次, $V_1 \times V_2$ 上把 $(w_1, w_2)$ 送到反线性形式 $v \longmapsto B_{w_1,w_2}(v)$ 的映射是双线性的, 所以它对应于 $V_1 \otimes_{\CC}V_2$ 上的唯一线性泛函 $T$. 最后, 映射 $B \colon (V_1 \otimes_{\CC}V_2) \times (V_1 \otimes_{\CC}V_2) \to \CC$, $(v, w) \longmapsto T(w)(v)$ 对 $v$ 线性、对 $w$ 反线性, 所以它是半双线性形式, 且由定义它在纯张量上取我们想要的值.
+现在我们证明 $B$ Hermitian, 即对所有 $v, w \in V_1 \otimes_{\CC}V_2$ 有 $B(w, v) = \overline{B(v, w)}$. 由于 $B$ 半双线性, 只需对纯张量 $v$ 和 $w$ 验证此性质, 但此时它由 $V_1$ 和 $V_2$ 的内积的相应性质立即得出.
+最后, 我们证明 $B$ 正定. 设 $v \in V_1 \otimes_{\CC}V_2$, 把 $v$ 写成 $v = \sum_{i=1}^n v_{1,i} \otimes v_{2,i}$, $v_{1,i} \in V_1$, $v_{2,i} \in V_2$. 则 $v$ 在 $V'_1 \otimes_{\CC}V'_2$ 中, 其中 $V'_1 = \operatorname{Span}(v_{1,1}, \ldots, v_{1,n})$, $V'_2 = \operatorname{Span}(v_{2,1}, \ldots, v_{2,n})$. 所以可以用 $V'_1$ 和 $V'_2$ 代替 $V_1$ 和 $V_2$, 从而可以假设 $V_1$ 和 $V_2$ 有限维. 若如此, 设 $(e_1, \ldots, e_r)$ (相应地 $(e'_1, \ldots, e'_s)$) 是 $V_1$ (相应地 $V_2$) 的标准正交基. 则 $(e_i \otimes e'_j)_{1 \leq i \leq r, 1 \leq j \leq s}$ 是 $V_1 \otimes_{\CC}V_2$ 的基, 且由 $V_1 \otimes_{\CC}V_2$ 上 Hermitian 形式 $B$ 的定义显然它是 $B$ 的标准正交基. 但标准正交基的存在迫使形式正定 (若 $v = \sum_{i=1}^r\sum_{j=1}^s a_{ij}e_i \otimes e'_j$, 则 $B(v, v) = \sum_{i,j}|a_{ij}|^2$).
+
+(b). 首先注意若 $v_1 \in V_1$, $v_2 \in V_2$, 则 $\|v_1 \otimes v_2\| = \|v_1\|\|v_2\|$.
+设 $x \in G$. 则映射 $V_1 \times V_2 \to V_1 \otimes_{\CC}V_2$, $(v_1, v_2) \longmapsto \pi_1(x)(v_1) \otimes \pi_2(x)(v_2)$ 双线性, 所以它诱导 $V_1 \otimes_{\CC}V_2$ 到自身的 $\CC$-线性映射 $\pi_1 \otimes \pi_2(x)$. 我们证明此映射等距 (从而连续). 设 $(e_i)_{i \in I}$ (相应地 $(f_j)_{j \in J}$) 是 $V_1$ (相应地 $V_2$) 的 Hilbert 基. 若 $v_1 \in V_1$, $v_2 \in V_2$, 可以把 $v_1$ 写成 $v_1 = \sum_{i \in I}a_ie_i$, $v_2 = \sum_{j \in J}b_jf_j$, 然后由上面的注记, 级数 $\sum_{i,j}a_ib_j e_i \otimes f_j$ 在 $V_1 \otimes_{\CC}V_2$ 中收敛到 $v_1 \otimes v_2$. 由于 $V_1 \otimes_{\CC}V_2$ 的每个元素都是 $v_1 \otimes v_2$ 形式元素的有限和, 这证明 $V_1 \otimes_{\CC}V_2$ 的每个元素 $v$ 都可以写成收敛级数 $\sum_{i \in I, j \in J}a_ib_je_i \otimes f_j$ ($a_i, b_j \in \CC$) 的极限. 则 $\pi_1 \otimes \pi_2(x)(v) = \sum_{i,j}a_ib_j\pi_1(x)(e_i) \otimes \pi_2(x)(f_j)$. 由于族 $(e_i \otimes f_j)$ 和 $(\pi_1(x)(e_i) \otimes \pi_2(x)(f_j))$ 在 $V_1 \otimes_{\CC}V_2$ 中都正交, 得到 $\|v\|^2 = \sum_{i,j}|a_i|^2|b_j|^2 = \|\pi_1 \otimes \pi_2(x)(v)\|^2$.
+由于映射 $\pi_1 \otimes \pi_2(x)$ 连续, 它延拓成 $V_1 \hat{\otimes}_{\CC}V_2$ 的连续自同态, 它也是等距, 仍记为 $\pi_1 \otimes \pi_2(x)$.
+若 $y$ 是 $G$ 的另一个元素, $V_1 \hat{\otimes}_{\CC}V_2$ 的自同态 $\pi_1 \otimes \pi_2(xy)$ 和 $(\pi_1 \otimes \pi_2(x)) \circ (\pi_1 \otimes \pi_2(y))$ 在纯张量上相等, 所以它们相等, 因为纯张量生成 $V_1 \hat{\otimes}_{\CC}V_2$ 的稠密子空间.
+为验证这定义 $G$ 在 $V_1 \hat{\otimes}_{\CC}V_2$ 上的酉表示, 还需验证对每个 $v \in V_1 \hat{\otimes}_{\CC}V_2$, 映射 $G \to V_1 \hat{\otimes}_{\CC}V_2$, $x \longmapsto \pi_1 \otimes \pi_2(x)(v)$ 连续. 这对纯张量 $v$ 成立: 若 $v = v_1 \otimes v_2$, 则对 $x, y \in G$,
+\begin{align*}
+\|(\pi_1 \otimes \pi_2(x) - \pi_1 \otimes \pi_2(y))(v)\| &\leq \|\pi_1(x)(v_1) \otimes (\pi_2(x) - \pi_2(y))(v_2)\| + \|(\pi_1(x) - \pi_1(y))(v_1) \otimes \pi_2(y)(v_2)\| \\
+&= \|v_1\|\|(\pi_2(x) - \pi_2(y))(v_2)\| + \|(\pi_1(x) - \pi_1(y))(v_1)\|\|v_2\|,
+\end{align*}
+这蕴含结果. 所以它对纯张量的有限和仍成立, 然后一个标准的论证表明它对 $V_1 \hat{\otimes}_{\CC}V_2$ 的每个元素成立.
+(c). 设 $(e_1, \ldots, e_n)$ (相应地 $(f_1, \ldots, f_m)$) 是 $V_1$ (相应地 $V_2$) 的标准正交基. 则 $(e_i \otimes f_j)_{1 \leq i \leq n, 1 \leq j \leq m}$ 是 $V_1 \otimes_{\CC}V_2$ 的标准正交基. 设 $x \in G$. 则
+\[
+\operatorname{Tr}(\pi_1(x)) = \sum_{i=1}^n\langle \pi_1(x)(e_i), e_i \rangle
+\]
+且
+\[
+\operatorname{Tr}(\pi_2(x)) = \sum_{j=1}^m\langle \pi_2(x)(f_j), f_j \rangle,
+\]
+所以
+\begin{align*}
+\operatorname{Tr}(\pi_1 \otimes \pi_2(x)) &= \sum_{i=1}^n\sum_{j=1}^m\langle \pi_1 \otimes \pi_2(x)(e_i \otimes f_j), e_i \otimes f_j \rangle \\
+&= \Bigl(\sum_{i=1}^n\langle \pi_1(x)(e_i), e_i \rangle\Bigr)\Bigl(\sum_{j=1}^m\langle \pi_2(x)(f_j), f_j \rangle\Bigr) \\
+&= \operatorname{Tr}(\pi_1(x))\operatorname{Tr}(\pi_2(x)).
+\end{align*}
+\end{solution}
+
+\begin{exercise}[Milman 定理]
+\label{ex:III.6.2.2}
+设 $V$ 是局部凸拓扑 $\CC$-向量空间, $K$ 是 $V$ 的紧凸子集, $F \subset K$ 满足 $K$ 是 $F$ 的凸包的闭包. 证明 $K$ 的每个端点都在 $F$ 的闭包中. (这称为 Milman 定理.)
+\end{exercise}
+
+\begin{solution}
+若 $X \subset V$ 是开凸子集, 则 $X \subset 2X$. 事实上, 若 $p \colon V \to \R_{\geq 0}$ 是 $X$ 的规范函数 (见引理 \ref{lem:B.3.8}), 则 $X = \{v \in V \mid p(v) < 1\}$, 所以
+\[
+X \subset \{v \in V \mid p(v) \leq 1\} \subset \{v \in V \mid p(v) < 2\} = 2X.
+\]
+设 $v$ 是 $K$ 的端点, 假设 $v \notin \overline{F}$. 则可以找到 $V$ 中 $0$ 的凸邻域 $X$ 使得 $X = -X$ 且 $(v + X) \cap \overline{F} = \emptyset$. 用 $\frac{1}{2}X$ 代替 $X$ 后, 可以假设 $(v + X) \cap \overline{F} = \emptyset$.
+由于 $F$ 紧 (作为 $K$ 的闭子集), 可以找到 $x_1, \ldots, x_n \in F$ 使得 $F \subset \bigcup_{i=1}^n(x_i + X)$. 对每个 $i \in \{1, \ldots, n\}$, 设 $K_i$ 是 $F \cap (x_i + X)$ 的凸包的闭包; 这是 $V$ 的紧凸子集 (它紧, 因为它在 $K$ 中闭). 由于 $K$ 是 $F$ 的凸包的闭包, 有 $K \supset K_1 \cup \cdots \cup K_n$, 所以 $K$ 包含 $K_1 \cup \cdots \cup K_n$ 的凸包 $L$. 让我们证明 $K = L$. 由于 $L \supset F$ 且 $L$ 凸, 只需证明 $L$ 紧. 设
+\[
+S = \{(x_1, \ldots, x_n) \in [0,1]^n \mid x_1 + \cdots + x_n = 1\},
+\]
+考虑函数
+\[
+f \colon S \times K_1 \times \cdots \times K_n \to L, \quad ((x_1, \ldots, x_n), v_1, \ldots, v_n) \longmapsto \sum_{i=1}^n x_iv_i.
+\]
+此映射连续, 所以其像紧. 若我们证明此像是凸的, 则它由 $L$ 的定义等于 $L$, 我们就完成了. 所以设 $a = ((x_1, \ldots, x_n), v_1, \ldots, v_n)$ 和 $a' = ((x'_1, \ldots, x'_n), v'_1, \ldots, v'_n)$ 是 $S \times K_1 \times \cdots \times K_n$ 的元素, $t \in [0,1]$. 则
+\[
+tf(a) + (1 - t)f(a') = \sum_{i=1}^n(tx_iv_i + (1 - t)x'_iv'_i)
+\]
+设 $i \in \{1, \ldots, n\}$. 若 $tx_i + (1 - t)x'_i \neq 0$, 令 $y_i = tx_i + (1 - t)x'_i$, $w_i = \frac{1}{y_i}(tx_iv_i + (1 - t)x'_iv'_i)$. 否则令 $w_i = v_i$, $y_i = 0$. 则对每个 $i$ 有 $w_i \in K_i$ (因为 $K_i$ 凸), 对每个 $i$ 有 $y_i \geq 0$, 且
+\[
+\sum_{i=1}^n y_i = t\sum_{i=1}^n x_i + (1 - t)\sum_{i=1}^n x'_i = 1.
+\]
+所以
+\[
+tf(a) + (1 - t)f(a') = f((y_1 \ldots, y_n), w_1, \ldots, w_n)
+\]
+在 $f$ 的像中, 我们完成了.
+现在我们导出矛盾. 由于 $K = L$, 可以把 $v$ 写成 $v = \sum_{i=1}^n t_iv_i$, 其中 $(t_1, \ldots, t_n) \in S$, 对每个 $i$ 有 $v_i \in K_i$. 由于 $v$ 在 $K$ 中端点, 存在 $i \in \{1, \ldots, n\}$ 使得 $v = v_i$. 但此时 $v \in K_i \subset \overline{x_i + X}$ (因为 $K_i$ 包含于 $x_i + X$ 的凸包的闭包, 而这是 $x_i + \overline{X}$, 因为 $X$ 凸). 由于 $x_i \in F$ 且 $X = -X$, 这蕴含 $x_i \in (v + X) \cap F$, 与 $X$ 的选取矛盾.
+\end{solution}
+
+\begin{exercise}[弱包含的判定]
+\label{ex:III.6.2.3}
+设 $(\pi, V)$ 和 $(\pi', V')$ 是 $G$ 的酉表示. 设 $C \subset V$ 使得 $\operatorname{Span}(\pi(x)(v) \mid x \in G, v \in C)$ 在 $V$ 中稠密.\footnote{例如, 若 $V$ 循环, $C$ 可以只包含 $V$ 的一个循环向量.} 假设对每个 $v \in C$, 函数 $x \longmapsto \langle \pi(x)(v), v \rangle$ 在 $P(\pi')$ 的元素的有限和的集合的闭包中 (仍对 $G$ 的紧子集上的收敛拓扑). 本题的目标是证明这蕴含 $\pi \prec \pi'$.
+设 $X$ 是满足如下条件的 $v \in V$ 的集合: $x \longmapsto \langle \pi(x)(v), v \rangle$ 在 $P(\pi')$ 的元素的有限和的集合的闭包中 (对与上面相同的拓扑).
+\begin{enumerate}
+\item[(a)] 证明 $X$ 被所有 $\pi(x)$ ($x \in G$) 稳定, 且被纯量乘法稳定.
+\item[(b)] 若 $v \in X$, $x_1, x_2 \in G$, 证明 $\pi(x_1)(v) + \pi(x_2)(v) \in X$.
+\item[(c)] 证明 $X$ 在 $V$ 中闭.
+\item[(d)] 若 $v \in X$, 证明 $V$ 中包含 $v$ 的最小闭 $G$-不变子空间包含于 $X$.
+\item[(e)] 设 $v_1, v_2 \in X$, 设 $W_1$ (相应地 $W_2$) 是 $V$ 中包含 $v_1$ (相应地 $v_2$) 的最小闭 $G$-不变子空间. 设 $W = W_1 + W_2$, 记 $T \colon W \to W_1^{\perp}$ 为正交投影, 其中 $W_1^{\perp}$ 在 $W$ 中取.
+  \begin{enumerate}
+  \item[(i)] 证明 $T$ 是 $G$-等变的且 $T(W_2)$ 在 $W_1^{\perp}$ 中稠密.
+  \item[(ii)] 证明 $W_1^{\perp} \subset X$.
+  \item[(iii)] 证明 $v_1 + v_2 \in X$. (提示: 用 $T(v_1 + v_2)$ 和 $(v_1 + v_2) - T(v_1 + v_2)$.)
+  \end{enumerate}
+\item[(f)] 证明 $\pi \prec \pi'$.
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 对每个 $v \in V$ (相应地 $v' \in V'$), 记 $\phi_v$ 为矩阵系数 $x \longmapsto \langle \pi(x)(v), v \rangle$ (相应地 $x \longmapsto \langle \pi'(x)(v), v \rangle$). 又记 $\sum P(\pi')$ 为 $P(\pi')$ 的元素的有限和的集合.
+设 $v \in X$, $y \in G$, $\lambda \in \CC$. 我们要证明 $\pi(y)(v)$ 和 $\lambda v$ 在 $X$ 中, 即 $\phi_{\pi(y)(v)}$ 和 $\phi_{\lambda v}$ 在 $\overline{\sum P(\pi')}$ 中. 若 $\lambda = 0$, 对 $\lambda v$ 结论显然 (注意 $0$ 是 $G$ 的每个表示的矩阵系数), 所以可以假设 $\lambda \neq 0$. 设 $K$ 是 $G$ 的紧子集, $\varepsilon > 0$. 选取 $v'_1, \ldots, v'_n$ 使得 $\sup_{x \in K \cup y^{-1}Ky}|\phi_v(x) - \sum_{i=1}^n\phi_{v'_i}(x)| \leq \min(\varepsilon, |\lambda|^{-2}\varepsilon)$. 则对每个 $x \in K$,
+\begin{align*}
+\Bigl|\phi_{\pi(y)v}(x) - \sum_{i=1}^n\phi_{\pi'(y)(v'_i)}(x)\Bigr| &= \Bigl|\langle \pi(xy)(v), \pi(y)(v) \rangle - \sum_{i=1}^n\langle \pi'(xy)(v'_i), \pi'(y)(v'_i) \rangle\Bigr| \\
+&= \Bigl|\langle \pi(y^{-1}xy)(v), v \rangle - \sum_{i=1}^n\langle \pi'(y^{-1}xy)(v'_i), v'_i \rangle\Bigr| \\
+&= \Bigl|\phi_v(y^{-1}xy) - \sum_{i=1}^n\phi_{v'_i}(y^{-1}xy)\Bigr| \\
+&\leq \varepsilon
+\end{align*}
+且
+\[
+\Bigl|\phi_{\lambda v}(x) - \sum_{i=1}^n\phi_{\lambda v'_i}(x)\Bigr| = |\lambda|^2\Bigl|\phi_v(x) - \sum_{i=1}^n\phi_{v'_i}(x)\Bigr| \leq \varepsilon.
+\]
+所以 $\phi_{\pi(y)(v)}$ 和 $\phi_{\lambda v}$ 在 $\overline{\sum P(\pi')}$ 中.
+(b). 设 $v \in X$, $x_1, x_2 \in G$. 对每个 $y \in G$,
+\begin{align*}
+\phi_{\pi(x_1)(v) + \pi(x_2)(v)}(y) &= \langle \pi(y)(\pi(x_1)(v) + \pi(x_2)(v)), \pi(x_1)(v) + \pi(x_2)(v) \rangle \\
+&= \langle \pi(x_1^{-1}yx_1)(v), v \rangle + \langle \pi(x_2^{-1}yx_1)(v), v \rangle + \langle \pi(x_1^{-1}yx_2)(v), v \rangle + \langle \pi(x_2^{-1}yx_2)(v), v \rangle.
+\end{align*}
+换句话说,
+\[
+\phi_{\pi(x_1)(v) + \pi(x_2)(v)} = \sum_{i,j=1}^2 L_{x_i}R_{x_j}\phi_v.
+\]
+设 $K$ 是 $G$ 的紧子集, $\varepsilon > 0$. 选取 $v'_1, \ldots, v'_n \in V'$ 使得
+\[
+\sup_{x \in \bigcup_{i,j=1}^2 x_iKx_j^{-1}}\Bigl|\phi_v(x) - \sum_{i=1}^n\phi_{v'_i}(x)\Bigr| \leq \varepsilon.
+\]
+则由上面的计算 (以及它对函数 $\phi_{v'_i}$ 的类似), 对每个 $x \in K$,
+\[
+\Bigl|\phi_{\pi(x_1)(v) + \pi(x_2)(v)}(x) - \sum_{i=1}^n\phi_{\pi(x_1)(v_i) + \pi(x_2)(v_i)}(x)\Bigr| \leq \varepsilon.
+\]
+这证明 $\phi_{\pi(x_1)(v) + \pi(x_2)(v)}$ 在 $\overline{\sum P(\pi')}$ 中, 即 $\pi(x_1)(v) + \pi(x_2)(v) \in X$.
+(c). 只需证明若对 $P(\pi)$ 用紧收敛拓扑, 则映射 $V \to P(\pi)$, $v \longmapsto \phi_v$ 连续. 设 $v, v' \in V$. 则对每个 $x \in G$,
+\begin{align*}
+|\phi_v(x) - \phi_{v'}(x)| &= |\langle \pi(x)(v), v \rangle - \langle \pi(x)(v'), v' \rangle| \\
+&\leq |\langle \pi(x)(v - v'), v \rangle| + |\langle \pi(x)(v'), v - v' \rangle| \\
+&\leq \|v - v'\|\|v\| + \|v'\|\|v - v'\|.
+\end{align*}
+所以映射 $v \longmapsto \phi_v$ 甚至对 $\|\cdot\|_{\infty}$ 给出的 $P(\pi)$ 上的拓扑连续.
+(d). 设 $v \in X$. 由 (a) 和 (b), 对每个 $n \geq 1$ 和所有 $\lambda_1, \ldots, \lambda_n \in \CC$, $x_1, \ldots, x_n \in G$, 有 $\sum_{i=1}^n\lambda_i\pi(x_i)(v) \in X$. 所以 $V$ 中包含 $v$ 的最小 $G$-不变子空间 (即 $\sum_{x \in G}\pi(x)(\CC v)$) 包含于 $X$. 结论现在由 (c) 得出.
+(e). (i) 由于 $W_1$ 是 $G$-不变的, 算子 $T$ 由引理 \ref{lem:I.3.4.3} 是 $G$-等变的. 由于 $W = W_1 + W_2$, $W_1 + W_2$ 在 $T$ 下的像在 $\Im(T) = W_1^{\perp}$ 中稠密. 由于 $\Ker(T) = W_1$, 有 $T(W_1 + W_2) = T(W_2)$, 所以 $T(W_2)$ 在 $W_1^{\perp}$ 中稠密.
+(ii) 由于 $W = W_1 \oplus W_1^{\perp}$, 推出 $T(W_1^{\perp} \cap W_2) = W_1^{\perp} \cap W_2$ 在 $W_1^{\perp}$ 中稠密. 由于 $W_2 \subset X$, (c) 蕴含 $W_1^{\perp} \subset X$.
+(iii) 令 $v = T(v_1 + v_2)$, $w = v_1 + v_2 - v$. 则 $v \in W_1^{\perp} \subset X$, $w \in \Ker(T) = W_1 \subset X$, 所以 $v, w \in X$. 另一方面, 对每个 $x \in G$,
+\begin{align*}
+\phi_{v_1 + v_2}(x) &= \langle \pi(x)(v_1 + v_2), v_1 + v_2 \rangle \\
+&= \langle \pi(x)(v + w), v + w \rangle \\
+&= \phi_v(x) + \phi_w(x).
+\end{align*}
+由于 $\overline{\sum P(\pi')}$ 被和稳定, 这蕴含 $v_1 + v_2 \in X$.
+(f). 由 (a), (c) 和 (e), 集合 $X$ 是 $V$ 的闭 $G$-不变子空间, 所以由对 $C$ 的假设它等于 $V$. 这意味着 $\pi \prec \pi'$.
+\end{solution}
+
+\begin{exercise}[弱包含与弱*闭包]
+\label{ex:III.6.2.4}
+设 $(\pi, V)$ 和 $(\pi', V')$ 是满足 $\pi \prec \pi'$ 的两个酉表示. 设 $\mathcal{C}$ 是 $L^{\infty}(G)$ 上弱*拓扑中与 $\pi'$ 关联的规范化正定型函数的集合的凸包的闭包.
+\begin{enumerate}
+\item[(a)] 证明与 $\pi$ 关联的每个规范化正定型函数都在 $\mathcal{C}$ 中.
+\item[(b)] 若 $\pi$ 不可约, 证明与 $\pi$ 关联的每个规范化正定型函数都是与 $\pi'$ 关联的规范化正定型函数在 $G$ 的紧子集上的收敛拓扑下的极限. (提示: 习题 \ref{ex:III.6.2.2}.)
+\item[(c)] 若 $\pi$ 是 $G$ 的平凡表示, 证明对每个紧子集 $K \subset G$ 和每个 $c > 0$, 存在 $v' \in V'$ 使得 $\|v'\| = 1$ 且
+\[
+\sup_{x \in K}\|\pi'(x)(v') - v'\| < c.
+\]
+\item[(d)] 反之, 假设对每个紧子集 $K \subset G$ 和每个 $c > 0$, 存在 $v' \in V'$ 使得 $\|v'\| = 1$ 且
+\[
+\sup_{x \in K}\|\pi'(x)(v') - v'\| < c.
+\]
+证明平凡表示弱包含于 $\pi'$.
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 设 $\phi$ 是与 $\pi$ 关联的规范化正定型函数. 设 $f \in L^1(G)$, $\varepsilon > 0$. 我们要找到与 $\pi'$ 关联的规范化正定型函数的凸组合 $\psi$ 使得 $|\int_G f(\phi - \psi)\,\dd\mu| \leq \varepsilon$. 选取 $\delta > 0$; 稍后看它需要多小. 设 $K \ni 1$ 是 $G$ 的紧子集使得 $\int_{G-K}|f|\,\dd\mu \leq \delta$. 由于 $\pi \prec \pi'$, 可以找到 $v_1, \ldots, v_n \in V'$ 使得 $\sup_{x \in K}|\phi(x) - \sum_{i=1}^n\phi_{v_i}(x)| \leq \delta$. 特别地, 在 $1$ 处取值, 得到 $|1 - \sum_{i=1}^n\|v_i\|^2| \leq \delta$. 设 $c_i = \|v_i\|^2$, $c = c_1 + \cdots + c_n$, $\phi_i = \frac{1}{c_i}\phi_{v_i} = \phi_{\frac{1}{\|v_i\|}v_i}$, $\psi = \frac{1}{c}\sum_{i=1}^n\phi_{v_i} = \frac{1}{c}\sum_{i=1}^n c_i\phi_i$. 则 $\phi_1, \ldots, \phi_n$ 是与 $\pi'$ 关联的规范化正定型函数, 且 $\psi$ 是 $\phi_1, \ldots, \phi_n$ 的凸组合. 特别地, $\|\psi\|_{\infty} \leq 1 = \|\phi\|_{\infty}$.
+对每个 $x \in K$,
+\[
+|\phi(x) - \psi(x)| \leq \Bigl|\phi(x) - \sum_{i=1}^n\phi_{v_i}(x)\Bigr| + |1 - c||\psi(x)| \leq 2\delta.
+\]
+所以
+\begin{align*}
+\Bigl|\int_G f(\phi - \psi)\,\dd\mu\Bigr| &\leq \sup_{x \in K}|\phi(x) - \psi(x)|\int_K |f|\,\dd\mu + \sup_{x \in G-K}|\phi(x) - \psi(x)|\int_{G-K}|f|\,\dd\mu \\
+&\leq 2\delta\|f\|_1 + 2\delta.
+\end{align*}
+取 $\delta$ 足够小可使这 $\leq \varepsilon$.
+(b). 设 $F$ 是与 $\pi'$ 关联的规范化正定型函数的集合, $K$ 是其凸包的弱*闭包. 则 $F$ 包含于所有规范化正定型函数的凸集 $P_1$ 中, 所以 $K \subset P_1$. 设 $\phi$ 是与 $\pi$ 关联的规范化正定型函数. 由 (a), $\phi \in K$. 由定理 \ref{thm:III.3.2}, 函数 $\phi$ 在 $P_1$ 中端点, 从而在 $K$ 中也端点. 由习题 \ref{ex:III.6.2.2}, 这蕴含 $\phi$ 在 $F$ 的弱*拓扑闭包中. 但 $F$ 和 $\phi$ 在 $P_1$ 中, 且 $P_1$ 上的弱*拓扑与 $G$ 的紧子集上的收敛拓扑一致 (由 Raikov 定理, 即定理 \ref{thm:III.4.3}), 所以 $\phi$ 也在 $F$ 对 $G$ 的紧子集上的收敛拓扑的闭包中.
+(c). 由于 $\pi$ 是平凡表示, 与 $\pi$ 关联的唯一规范化正定型函数是常值函数 $1$. 由 (c), 存在 $v' \in V'$ 使得 $\|v'\| = 1$ 且
+\[
+\sup_{x \in K}|1 - \langle \pi'(x)(v'), v' \rangle| \leq c^2/3.
+\]
+设 $x \in G$. 则
+\[
+\|\pi'(x)(v') - v'\|^2 = \|\pi'(x)(v')\|^2 + \|v'\|^2 - 2\Re(\langle \pi'(x)(v'), v' \rangle) \leq 2|1 - \langle \pi'(x)(v'), v' \rangle| \leq 2c^2/3,
+\]
+所以
+\[
+\sup_{x \in K}\|\pi'(x)(v') - v'\| < c.
+\]
+(d). 设 $\pi$ 是 $G$ 的平凡表示. 则 $P(\pi)$ 是非负常值函数的集合, 所以为证明 $\pi \prec \pi'$, 只需证明常值函数 $1$ 是 $P(\pi')$ 的元素的有限和的极限 (在 $G$ 的紧子集上的收敛拓扑中). 设 $K$ 是 $G$ 的紧子集, $c > 0$. 选取 $v' \in V'$ 使得 $\|v'\| = 1$ 且 $\sup_{x \in K}\|\pi'(x)(v') - v'\| < c$, 定义 $\phi'$ 为 $\phi'(x) = \langle \pi'(x)(v'), v' \rangle$. 则对每个 $x \in K$,
+\[
+|1 - \phi'(x)| = |\langle v', v' \rangle - \langle \pi'(x)(v'), v' \rangle| = |\langle v' - \pi'(x)(v'), v' \rangle| \leq \|v' - \pi'(x)(v')\| < c.
+\]
+\end{solution}
+
+\begin{exercise}[有限生成离散群]
+\label{ex:III.6.2.5}
+设 $G$ 是有限生成离散群, $S$ 是 $G$ 的有限生成元集. 证明 $G$ 的平凡表示弱包含于 $G$ 的正则表示当且仅当: 对每个 $\varepsilon > 0$, 存在 $f \in L^2(G)$ 使得
+\[
+\sup_{x \in S}\|L_xf - f\|_2 < \varepsilon\|f\|_2.
+\]
+\end{exercise}
+
+\begin{solution}
+我们用习题 \ref{ex:III.6.2.4}(c) 和 (d) 的判定, 它说 $G$ 的平凡表示弱包含于正则表示当且仅当: 对 $G$ 的每个紧 (即有限) 子集 $K$ 和每个 $\varepsilon > 0$, 存在 $f \in L^2(G)$ 使得 $\|f\|_2 = 1$ 且
+\[
+\sup_{x \in K}\|L_xf - f\|_2 < \varepsilon.
+\]
+首先, 由于 $S$ 有限, 立即看到若平凡表示包含于正则表示, 则题设的条件满足.
+反之, 假设题设的条件满足. 设 $K$ 是 $G$ 的有限子集, $\varepsilon > 0$. 设 $T = S \cup S^{-1} \cup \{1\}$. 有 $G = \bigcup_{n \geq 1}T^n$, 因为 $S$ 生成 $G$, 且这是递增并. 由于 $K$ 有限, 存在 $n \geq 1$ 使得 $K \subset T^n$. 由假设, 可以找到 $f \in L^2(G)$ 使得 $\|f\|_2 = 1$ 且
+\[
+\sup_{x \in S}\|L_xf - f\|_2 \leq \frac{1}{n}\varepsilon.
+\]
+我们要证明
+\[
+\sup_{x \in K}\|L_xf - f\|_2 \leq \varepsilon.
+\]
+只需对 $\sup_{x \in T^n}$ 证明. 设 $x \in T^n$, 把 $x$ 写成 $x = x_1\cdots x_n$, 其中 $x_1, \ldots, x_n \in T$. 我们对 $i \in \{1, \ldots, n\}$ 归纳证明 $\|L_{x_1\cdots x_i}f - f\|_2 \leq \frac{i}{n}\varepsilon$. 若 $i = 1$, 要证明 $\|L_{x_1}f - f\|_2 \leq \frac{1}{n}\varepsilon$. 若 $x_1 \in S$, 这由 $f$ 的选取成立; 若 $x_1 = 1$ 显然; 若 $x_1 \in S^{-1}$, 它由
+\[
+\|L_{x_1}f - f\|_2 = \|f - L_{x_1^{-1}}f\|_2
+\]
+得出. 现在假设对 $i \in \{1, \ldots, n-1\}$ 已知结果, 证明对 $i+1$. 有
+\begin{align*}
+\|L_{x_1\cdots x_{i+1}}f - f\|_2 &\leq \|L_{x_1\cdots x_i}(L_{x_{i+1}}f - f)\|_2 + \|L_{x_1\cdots x_i}f - f\|_2 \\
+&= \|L_{x_{i+1}}f - f\|_2 + \|L_{x_1\cdots x_i}f - f\|_2 \\
+&\leq \frac{i}{n}\varepsilon + \frac{1}{n}\varepsilon = \frac{i+1}{n}\varepsilon.
+\end{align*}
+\end{solution}
+
+\begin{exercise}[$G = \Z$ 的情形]
+\label{ex:III.6.2.6}
+设 $G = \Z$. 证明 $G$ 的平凡表示弱包含于 $G$ 的正则表示.
+\end{exercise}
+
+\begin{solution}
+我们应用习题 \ref{ex:III.6.2.5} 的结果, 取 $S = \{1\}$. 所以对每个 $\varepsilon > 0$, 必须找到 $f \in L^2(\Z)$ 使得 $\|f\|_2 = 1$ 且 $\|L_1f - f\|_2 \leq \varepsilon$. 第一个条件说 $\sum_{n \in \Z}|f(n)|^2 = 1$, 第二个条件说 $\sum_{n \in \Z}|f(n-1) - f(n)|^2 \leq \varepsilon^2$. 设 $N \in \Z_{\geq 0}$, 考虑函数 $g_N = \mathbb{1}_{[0,N]} \in L^2(\Z)$. 则 $\|g_N\|_2^2 = N + 1$, 且 $\sum_{n \in \Z}|g(n-1) - g(n)|^2 = 2$. 所以若 $f_N = \frac{1}{\sqrt{N+1}}g_N$, 有 $\|f\|_2 = 1$ 且 $\|L_1f - f\|_2 = \sqrt{\frac{2}{N+1}}$. 取 $N$ 足够大, 看到 $f_N$ 具有所要的性质.
+\end{solution}
+
+\begin{exercise}[$G = \R$ 的情形]
+\label{ex:III.6.2.7}
+设 $G = \R$.
+\begin{enumerate}
+\item[(a)] 证明 $G$ 的平凡表示弱包含于 $G$ 的正则表示.
+\item[(b)] 证明 $G$ 的每个不可约酉表示弱包含于 $G$ 的正则表示.\footnote{我们将在后面看到这对每个交换局部紧群都成立.}\footnote{在哪里?}
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 若 $a, b \in \R$ 满足 $a < b$, 设 $f = (b-a)^{-1/2}\mathbb{1}_{[a,b]}$. 则 $f \in L^2(\R)$ 且 $\|f\|_2 = 1$. 而且, 对每个 $t \in \R$, $L_tf = (b-a)^{-1/2}\mathbb{1}_{[a+t,b+t]}$, 所以
+\[
+\|L_tf - f\|_2^2 \leq \frac{2|t|}{b-a}.
+\]
+设 $K$ 是 $\R$ 的紧子集, $\varepsilon > 0$. 若选取 $a, b \in \R$ 使得 $b - a \geq 2\varepsilon^{-2}\sup_{t \in K}|t|$, 则上面的构造给出 $f \in L^2(\R)$ 使得 $\|f\|_2 = 1$ 且 $\sup_{x \in K}\|L_tf - f\|_2 \leq \varepsilon$. 由习题 \ref{ex:III.6.2.4}(d), $\R$ 的平凡表示包含于其正则表示.
+(b). 由于 $\R$ 交换, 由 Schur 引理 (定理 \ref{thm:I.3.4.1}), 每个不可约酉表示都是 $1$ 维的. 设 $\chi \colon \R \to S^1$ 是这种表示. 设 $K$ 是 $\R$ 的紧子集, $\varepsilon > 0$. 由 (a), 存在 $f \in L^2(\R)$ 使得 $\|f\|_2 = 1$ 且 $\sup_{t \in K}\|L_tf - f\|_2 \leq \varepsilon$. 设 $g = \chi f$. 则对每个 $t \in \R$,
+\[
+\langle L_tg, g \rangle_{L^2(\R)} = \int_{\R}g(x-t)\overline{g(x)}\,\dd x = \chi(t)\langle L_tf, f \rangle_{L^2(\R)},
+\]
+所以
+\[
+|\chi(t) - \langle L_tg, g \rangle_{L^2(\R)}| = |1 - \langle L_tf, f \rangle_{L^2(\R)}| = |\langle f - L_tf, f \rangle_{L^2(\R)}| \leq \|L_tf - f\|_2.
+\]
+所以
+\[
+\sup_{t \in K}|\chi(t) - \langle L_tg, g \rangle_{L^2(\R)}| \leq \varepsilon.
+\]
+这由习题 \ref{ex:III.6.2.4}(d) 蕴含所要的结果.
+\end{solution}
+
+\begin{exercise}[自由群的情形]\index{乒乓引理}
+\label{ex:III.6.2.8}
+设 $G$ 是两个生成元上的 (非交换) 自由群, 赋予离散拓扑. 证明 $G$ 的平凡表示不弱包含于 $G$ 的正则表示.\footnote{应在下一节.}
+\end{exercise}
+
+\begin{solution}
+设 $a, b \in G$ 是 $G$ 的两个生成元, 设 $S = \{1, a, b, a^{-1}, b^{-1}\}$. 有 $G = \bigcup_{n \geq 1}S^n$, 且这是递增并. 假设 $G$ 的平凡表示弱包含于正则表示. 则由习题 \ref{ex:III.6.2.4}(c), 对每个 $n \geq 1$, 存在 $f_n \in L^2(G)$ 使得 $\|f_n\|_2 = 1$ 且
+\[
+\sup_{x \in S^n}\|L_xf_n - f_n\|_2 \leq \frac{1}{n}.
+\]
+设 $g_n = |f_n|^2$. 则 $g_n \in L^1(G)$, $\|g_n\|_1 = 1$, 且对每个 $x \in S^n$, Cauchy-Schwarz 不等式给出
+\[
+\|L_xg_n - g_n\|_1 \leq \|L_xf_n - f_n\|_2\|L_xf_n + f_n\|_2 \leq \frac{2}{n}.
+\]
+对每个 $n \geq 1$, 定义 $L^{\infty}(G)$ 上的连续线性泛函 $\Lambda_n$ 为 $\Lambda_n(\phi) = \sum_{x \in G}g_n(x)\phi(x)$. 则 $\|\Lambda_n\|_{\mathrm{op}} = \|g_n\|_1 = 1$, 所以由 Banach-Alaoglu 定理, $(\Lambda_n)_{n \geq 1}$ 有对 $\Hom(L^{\infty}(G), \CC)$ 上弱*拓扑收敛的子序列 $(\Lambda_{n_k})_{k \geq 0}$. 设 $\Lambda$ 是它的极限. 设 $\phi \in L^{\infty}(G)$. 有
+\[
+\Lambda(\phi) = \lim_{k \to +\infty}\Lambda_{n_k}(\phi).
+\]
+设 $y \in G$. 存在 $n \geq 1$ 使得 $y^{-1} \in S^n$. 则若 $k$ 满足 $n_k \geq n$,
+\begin{align*}
+|\Lambda_{n_k}(L_y\phi) - \Lambda_{n_k}(\phi)| &= \Bigl|\sum_{x \in G}L_{y^{-1}}g_{n_k}(x)\phi(x) - \sum_{x \in G}g_{n_k}(x)\phi(x)\Bigr| \\
+&\leq \|L_{y^{-1}}g_{n_k} - g_{n_k}\|_1\|\phi\|_{\infty} \\
+&\leq \frac{2}{n_k}\|\phi\|_{\infty}.
+\end{align*}
+令 $k \to +\infty$ 取极限, 看到 $\Lambda(L_y\phi) = \Lambda(\phi)$. 又注意 $\Lambda(1) = 1$, 且若 $\phi$ 取非负值则 $\Lambda(\phi) \geq 0$.
+回忆 $G$ 的每个元素都可以唯一地写成 $a$, $b$, $a^{-1}$, $b^{-1}$ 上的既约字. 设 $A$ 是既约表达式以 $a$ 的非零幂开始的 $G$ 的元素集合. 则对每个 $x \in G$, 若 $x \notin A$, 有 $a^{-1}x \in A$, 从而 $x \in aA$. 换句话说, $G = A \cup aA$, 所以 $\mathbb{1}_A + \mathbb{1}_{aA} - \mathbb{1}_G$ 取非负值, 因此
+\[
+\Lambda(\mathbb{1}_A) = \frac{1}{2}(\Lambda(\mathbb{1}_A) + \Lambda(\mathbb{1}_{aA})) \geq \frac{1}{2}\Lambda(\mathbb{1}_G) = \frac{1}{2}.
+\]
+另一方面, 群 $G$ 是子集 $b^nA$, $n \in \Z$ 的不相交并, 所以特别地
+\[
+1 = \Lambda(\mathbb{1}_G) \geq \Lambda(\mathbb{1}_A) + \Lambda(\mathbb{1}_{bA}) + \Lambda(\mathbb{1}_{b^2A}) = 3\Lambda(\mathbb{1}_A),
+\]
+即 $\Lambda(\mathbb{1}_A) \leq \frac{1}{3}$. 所以我们得到矛盾.
+\end{solution}
+
+\begin{exercise}[张量积与弱包含]
+\label{ex:III.6.2.9}
+若 $\pi_1, \pi_2, \pi'_1, \pi'_2$ 是 $G$ 的酉表示且 $\pi_1 \prec \pi'_1$, $\pi_2 \prec \pi'_2$, 证明 $\pi_1 \otimes \pi_2 \prec \pi'_1 \otimes \pi'_2$.
+\end{exercise}
+
+\begin{solution}
+我们使用习题 \ref{ex:III.6.2.3} 解答中对正定型函数 $\phi_v$ 的相同记号. 对 $i = 1, 2$, 记 $V_i$ (相应地 $V'_i$) 为 $\pi_i$ (相应地 $\pi'_i$) 的空间.
+若 $v_1 \in V_1$, $v_2 \in V_2$, 则由 $V_1 \otimes_{\CC}V_2$ 上内积的定义, $\phi_{v_1 \otimes v_2} = \phi_{v_1}\phi_{v_2}$. 对 $V'_1 \otimes_{\CC}V'_2$ 中的纯张量有类似结果. 所以 $\phi_{v_1 \otimes v_2}$ 在 $\overline{\sum P(\pi'_1 \otimes \pi'_2)}$ 中. 由于 $\overline{\sum P(\pi'_1 \otimes \pi'_2)}$ 被有限和稳定, 且 $V_1 \otimes_{\CC}V_2$ 的每个元素都可以写成两两正交纯张量的有限和 (见 (a) 的证明), 这蕴含对 $V_1 \otimes_{\CC}V_2$ 的每个元素 $v$, $\phi_v \in \overline{\sum P(\pi'_1 \otimes \pi'_2)}$. 最后, 我们在 (c) 中证明了映射 $v \longmapsto \phi_v$ 连续, 且 $V_1 \otimes_{\CC}V_2$ 在 $V_1 \hat{\otimes}_{\CC}V_2$ 中稠密, 所以对 $V_1 \hat{\otimes}_{\CC}V_2$ 的每个元素 $v$, $\phi_v \in \overline{\sum P(\pi'_1 \otimes \pi'_2)}$.
+\end{solution}
+
+\begin{exercise}[$G$ 离散时 $\pi \otimes \pi_L$ 的等价]
+\label{ex:III.6.2.10}
+假设 $G$ 离散. 对每个 $x \in G$, 记 $\delta_x \in L^2(G)$ 为 $\{x\}$ 的特征函数.
+设 $(\pi, V)$ 是 $G$ 的酉表示, $(\pi_0, V)$ 是 $G$ 在 $V$ 上的平凡表示 (即对每个 $x \in G$ 有 $\pi_0(x) = \mathrm{id}_V$).
+\begin{enumerate}
+\item[(a)] 证明公式 $v \otimes f \longmapsto \sum_{x \in G}f(x)(\pi(x)^{-1}(v)) \otimes \delta_x$ 给出从 $V \hat{\otimes}_{\CC}L^2(G)$ 到自身的良定义且连续的 $\CC$-线性变换.
+\item[(b)] 证明表示 $\pi \otimes \pi_L$ 和 $\pi_0 \otimes \pi_L$ 等价 (回忆 $\pi_L$ 是 $G$ 的左正则表示).
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 首先, 映射 $V \times L^2(G) \to V \otimes_{\CC}L^2(G)$, $(v, f) \longmapsto \sum_{x \in G}f(x)(\pi(x)^{-1}(v)) \otimes \delta_x$ 双线性, 所以它定义线性映射 $\alpha \colon V \otimes_{\CC}L^2(G) \to V \otimes_{\CC}L^2(G)$. 对每个 $v, v' \in V$ 和 $f, f' \in L^2(G)$, (注意对 $V$ 的元素的每个族 $(v_x)_{x \in G}$, 族 $(v_x \otimes \delta_x)_{x \in G}$ 正交)
+\begin{align*}
+\langle \alpha(v \otimes f), \alpha(v' \otimes f') \rangle &= \sum_{x \in G}f(x)\overline{f'(x)}\langle \pi(x)^{-1}(v), \pi(x)^{-1}(v') \rangle \\
+&= \sum_{x \in G}f(x)\overline{f'(x)}\langle v, v' \rangle \\
+&= \langle v \otimes f, v' \otimes f' \rangle.
+\end{align*}
+利用 $V \otimes_{\CC}L^2(G)$ 的每个元素都可以写成两两正交纯张量的有限和 (见 (a) 的证明) 这一事实, 这蕴含对 $V \otimes_{\CC}L^2(G)$ 的每个元素 $v$ 有 $\|\alpha(v)\| = \|v\|$. 特别地, $\alpha$ 连续, 所以它延拓成 $V \hat{\otimes}_{\CC}L^2(G)$ 的连续自同态, 它仍是等距.
+(b). 我们仍记 (a) 中构造的 $V \hat{\otimes}_{\CC}L^2(G)$ 的自同态为 $\alpha$. 我们证明它是从 $\pi \otimes \pi_L$ 到 $\pi_0 \otimes \pi_L$ 的 $G$-等变映射. 由于纯张量生成 $V \hat{\otimes}_{\CC}L^2(G)$ 的稠密子空间, 只需在纯张量上验证 $G$-等变性. 所以设 $v \in V$, $f \in L^2(G)$, $x \in G$. 有
+\[
+\alpha(\pi \otimes \pi_L(x)(v \otimes f)) = \alpha(\pi(x)(v) \otimes L_xf) = \sum_{y \in G}f(x^{-1}y)\pi(y^{-1}x)(v) \otimes \delta_y.
+\]
+另一方面,
+\begin{align*}
+\pi_0 \otimes \pi_L(x)(\alpha(v \otimes f)) &= \pi_0 \otimes \pi_L(x)\Bigl(\sum_{y \in G}f(y)\pi(y)^{-1}(v) \otimes \delta_y\Bigr) \\
+&= \sum_{y \in G}f(y)\pi(y)^{-1}(v) \otimes L_x\delta_y \\
+&= \sum_{y \in G}f(y)\pi(y)^{-1}(v) \otimes \delta_{xy} \\
+&= \sum_{y \in G}f(x^{-1}z)\pi(z^{-1}x)(v) \otimes \delta_z \\
+&= \alpha(\pi \otimes \pi_L(x)(v \otimes f)).
+\end{align*}
+我们还需验证 $\alpha$ 是向量空间的同构. 这由它有逆 $\beta$ 得出, $\beta$ 由公式 $\beta(v \otimes f) = \sum_{x \in G}f(x)\pi(x)(v) \otimes \delta_x$ 给出. (可以像 (a) 那样验证 $\beta$ 良定义且连续, 然后在纯张量上验证它是 $\alpha$ 的逆, 这是容易的验证.)
+注意 $\pi \otimes \pi_L$ 和 $\pi_0 \otimes \pi_L$ 之间的同构是等距, 所以这些表示有相同的正定型函数.
+\end{solution}
+
+\begin{exercise}[非离散群的情形]
+\label{ex:III.6.2.11}
+把习题 \ref{ex:III.6.2.10}(b) 的结果推广到非离散局部紧群.
+\end{exercise}
+
+\begin{solution}
+设 $(\pi, V)$ 是 $G$ 的酉表示. 记 $V_0$ 为带 $G$ 的平凡作用的 $V$.
+首先我们定义带 $G$ 的酉作用的希尔伯特空间 $L^2(G, V_0)$. (这也常记为 $\mathrm{Ind}^G_{\{1\}}V_0$.) 考虑从 $G$ 到 $V_0$ 的具紧支撑的连续函数空间 $\mathcal{C}_c(G, V_0)$, 带范数 $\|\cdot\|_{\infty}$ (由 $\|f\|_{\infty} = \sup_{x \in G}\|f(x)\|$ 定义). 令 $G$ 通过 $(x, f) \longmapsto L_xf$ ($x \in G$, $f \in \mathcal{C}_c(G, V_0)$) 作用于这个空间. 看命题 \ref{prop:I.1.12}, 看到它的证明可以推广到从 $G$ 到 $V_0$ 的函数, 并表明 $\mathcal{C}_c(G, V_0)$ 的每个元素都左、右一致连续. 特别地, 对每个 $f \in \mathcal{C}_c(G, V_0)$, 映射 $G \to \mathcal{C}_c(G, V_0)$, $x \longmapsto L_xf$ 连续.
+现在在 $\mathcal{C}_c(G, V_0)$ 上定义 Hermitian 半双线性形式:
+\[
+\langle f, g \rangle = \int_G \langle f(x), g(x) \rangle_{V_0}\,\dd x.
+\]
+容易看出这是内积, 且 $G$ 在 $\mathcal{C}_c(G, V_0)$ 上的作用保持此内积, 并对 $\mathcal{C}_c(G, V_0)$ 上由相应范数定义的拓扑在第一个变量 $x \in G$ 上连续. 记 $L^2(G, V_0)$ 为 $\mathcal{C}_c(G, V_0)$ 对 $\langle \cdot, \cdot \rangle$ 的完备化. 这是希尔伯特空间, 我们像 $V_0 = \CC$ 的情形那样证明 $G$ 在 $\mathcal{C}_c(G, V_0)$ 上的作用延拓成 $G$ 在 $L^2(G, V_0)$ 上的酉作用.
+现在我们构造 $G$-等变等距 $V \hat{\otimes}_{\CC}L^2(G) \to L^2(G, V_0)$. 考虑映射 $V \times \mathcal{C}_c(G) \to L^2(G, V_0)$, 把 $(v, f)$ 送到函数 $x \longmapsto f(x)\pi(x^{-1})(v)$. 这是双线性映射, 所以它诱导 $\CC$-线性算子 $\alpha \colon V \otimes_{\CC}\mathcal{C}_c(G) \to L^2(G, V_0)$. 我们验证 $\alpha$ 是 $G$-等变的. 只需在纯张量上验证, 因为它们生成 $V \otimes_{\CC}\mathcal{C}_c(G)$. 若 $y \in G$, $v \in V$, $f \in \mathcal{C}_c(G)$, 则对每个 $x \in G$,
+\[
+\alpha(\pi(y)(v) \otimes L_yf)(y) = f(y^{-1}x)\pi(xy^{-1}v) = L_y(\alpha(v \otimes f))(x).
+\]
+我们还验证 $\alpha$ 保持内积. 如前, 由双线性只需在纯张量上验证. 设 $v, w \in V$, $f, g \in \mathcal{C}_c(G)$. 则
+\begin{align*}
+\langle \alpha(v \otimes f), \alpha(w \otimes g) \rangle &= \int_G \langle f(x)\pi(x)^{-1}(v), g(x)\pi(x)^{-1}(w) \rangle_{V_0}\,\dd x \\
+&= \int_G f(x)\overline{g(x)}\langle v, w \rangle_{V_0}\,\dd x \\
+&= \langle f, g \rangle_{L^2(G)}\langle v, w \rangle_{V_0}.
+\end{align*}
+这蕴含 $\alpha$ 等距, 所以它按连续性延拓成等距 $V \hat{\otimes}_{\CC}L^2(G) \to L^2(G, V_0)$ (我们用 $\mathcal{C}_c(G)$ 在 $L^2(G)$ 中稠密这一事实), 它仍是 $G$-等变的.
+我们以类似 $\alpha$ 的方式定义 $G$-等变等距 $\alpha' \colon V_0 \hat{\otimes}_{\CC}L^2(G) \to L^2(G, V_0)$, 但对 $v \in V_0$ 和 $f \in \mathcal{C}_c(G)$, 取 $\alpha'(v \otimes f)$ 为函数 $x \longmapsto f(x)v$. 证明这确实定义所要的 $G$-等变等距与 $\alpha$ 的情形相同.
+最后, 我们证明 $\alpha$ 和 $\alpha'$ 是同构. 我们已经知道它们单射且像闭 (因为它们是等距), 所以只需证明它们有稠密像.
+设 $(e_i)_{i \in I}$ 是 $V_0$ 的 Hilbert 基. 考虑 $L^2(G, V_0)$ 的如下子空间 $W$: 其元素是具紧支撑的连续函数 $f \colon G \to V_0$, 使得存在 $J \subset I$ 有限满足 $f(G) \subset \operatorname{Span}(e_j, j \in J)$. 让我们证明 $W$ 在 $L^2(G, V_0)$ 中稠密. 只需证明 $W$ 在 $\mathcal{C}_c(G, V_0)$ 中稠密. 设 $f \in \mathcal{C}_c(G, V_0)$. 由于 $f$ 有紧支撑, $V_0$ 的子集 $f(G)$ 紧. 设 $\varepsilon > 0$. 对每个 $x \in K$, 存在 $I$ 的有限子集 $J$ 使得以 $x$ 为心、$\varepsilon$ 为半径的闭球与 $\operatorname{Span}(e_j, j \in J)$ 相交. 由于 $K$ 紧, 它可以被有限多个这样的球覆盖, 所以可以找到 $I$ 的有限子集 $J$ 使得对每个 $x \in K$, $x$ 与 $\operatorname{Span}(e_j, j \in J)$ 的距离 $\leq \varepsilon$. 换句话说, 若 $\pi_J$ 是 $\operatorname{Span}(e_j, j \in J)$ 上的正交投影, 则对每个 $x \in K$ 有 $\|\pi_J(x) - x\| \leq \varepsilon$. 则 $\pi_J \circ f \in W$, 且 $\|f - \pi_J \circ f\|_{\infty} \leq \varepsilon$, 所以 $\|f - \pi_J \circ f\|_2 \leq \operatorname{vol}(\operatorname{supp} f)\varepsilon$. 这证明 $W$ 对 $\mathcal{C}_c(G, V_0)$ 上的两个拓扑 (由 $\|\cdot\|_{\infty}$ 诱导的和由 $\|\cdot\|_2$ 诱导的; 这里只有第二个相关) 都在 $\mathcal{C}_c(G, V_0)$ 中稠密. 为完成, 只需证明 $W$ 包含于 $\alpha$ 和 $\alpha'$ 的像. 设 $f \in W$. 可以找到 $I$ 的有限子集 $J$ 使得 $f(G) \subset \operatorname{Span}(e_j, j \in J)$, 然后 $f(x) = \sum_{j \in J}f_j(x)e_j$, 其中 $f_j \in \mathcal{C}_c(G)$. (只需在 $\operatorname{Span}(e_j, j \in J)$ 的标准正交基 $(e_j)_{j \in J}$ 中取坐标.) 特别地, $f = \alpha'(\sum_{j \in J}e_j \otimes f_j)$, 所以 $f \in \Im(\alpha')$. 这证明 $\alpha'$ 是同构.
+对 $\alpha$, 我们改为考虑 $\mathcal{C}_c(G, V_0)$ 的如下子空间 $W'$: 其元素 $f$ 满足存在 $J \subset I$ 有限使得对每个 $x \in G$, 向量 $\pi(x)(f(x))$ 在 $\operatorname{Span}(e_j, j \in J)$ 中. 我们如前证明 $W'$ 在 $\mathcal{C}_c(G, V_0)$ 中稠密 (对 $\|\cdot\|_{\infty}$ 和 $\|\cdot\|_2$ 两个范数): 设 $f \in \mathcal{C}_c(G, V_0)$, $\varepsilon > 0$. 由于 $f$ 有紧支撑, $V_0$ 的子集 $\{\pi(x)(f(x)) \mid x \in G\}$ 紧, 所以可以找到 $I$ 的有限子集 $J$ 使得对每个 $x \in G$, $\pi(x)(f(x))$ 与 $\operatorname{Span}(e_j, j \in J)$ 的距离至多为 $\varepsilon$. 设 $\pi_J$ 是 $\operatorname{Span}(e_j, j \in J)$ 上的正交投影, 定义 $g \in W'$ 为 $g(x) = \pi(x)^{-1}\circ\pi_J\circ\pi(x)(f(x))$. 对每个 $x \in G$,
+\[
+\|g(x) - f(x)\| = \|\pi(x)(g(x) - f(x))\| = \|\pi_J(\pi(x)(f(x))) - \pi(x)(f(x))\| \leq \varepsilon,
+\]
+所以 $\|g - f\|_{\infty} \leq \varepsilon$, $\|g - f\|_2 \leq \operatorname{vol}(\operatorname{supp} f)\varepsilon$. 最后, 我们证明 $W'$ 包含于 $\alpha$ 的像. 设 $f \in W'$, 定义 $g \in \mathcal{C}_c(G, V_0)$ 为 $g(x) = \pi(x)(f(x))$. 选取 $I$ 的有限子集 $J$ 使得 $g(G) \subset \operatorname{Span}(e_j, j \in J)$, 把 $g$ 写成 $g = \sum_{j \in J}g_je_j$, 其中 $g_j \in \mathcal{C}_c(G)$. 则对每个 $x \in G$,
+\[
+f(x) = \sum_{j \in J}g_j(x)\pi(x)^{-1}(e_j).
+\]
+换句话说, $f = \alpha(\sum_{j \in J}e_j \otimes g_j)$.
+\end{solution}
+
+\begin{exercise}[弱包含与平凡表示]
+\label{ex:III.6.2.12}
+证明下列条件等价:
+\begin{enumerate}
+\item[(i)] $G$ 的平凡表示弱包含于 $\pi_L$.
+\item[(ii)] $G$ 的每个酉表示弱包含于 $\pi_L$.
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(ii)$\Rightarrow$(i) 显然. 所以让我们证明 (i)$\Rightarrow$(ii). 设 $(\pi, V)$ 是 $G$ 的酉表示, $\pi_0$ 是 $G$ 在 $V$ 上的平凡表示, $\mathbf{1}$ 是 $G$ 在 $\CC$ 上的平凡表示. 我们知道 $\mathbf{1} \prec \pi_L$, 所以由习题 \ref{ex:III.6.2.9} 和 \ref{ex:III.6.2.10},
+\[
+\pi \simeq \pi \otimes \mathbf{1} \prec \pi \otimes \pi_L \simeq \pi_0 \otimes \pi_L.
+\]
+像习题 \ref{ex:III.6.2.3} 的解答那样, 对 $G$ 的每个酉表示 $\pi'$, 记 $\overline{\sum P(\pi')}$ 为与 $\pi'$ 关联的正定型函数的有限和的集合的闭包. 让我们证明 $\overline{\sum P(\pi_L)} = \overline{\sum P(\pi_0 \otimes \pi_L)}$, 这将完成证明, 因为我们已经知道 $P(\pi) \subset \overline{\sum P(\pi_0 \otimes \pi_L)}$.
+由于 $\pi_L$ 是 $\pi_0 \otimes \pi_L$ 的子表示 (对每个 $v \in V - \{0\}$, $V \hat{\otimes}_{\CC}L^2(G)$ 的子空间 $\CC v \otimes L^2(G)$ 是 $G$-不变的, 且通过映射 $v \otimes f \longmapsto f$ 等价于表示 $\pi_L$), 有 $P(\pi_L) \subset P(\pi_0 \otimes \pi_L)$, 所以 $\overline{\sum P(\pi_L)} \subset \overline{\sum P(\pi_0 \otimes \pi_L)}$. 反之, 设 $(e_i)_{i \in I}$ 是 $V$ 的标准正交基, $v \in V \hat{\otimes}_{\CC}L^2(G)$. 则可以把 $v$ 写成 $v = \sum_{i \in I}e_i \otimes f_i$, 其中和在 $V \hat{\otimes}_{\CC}L^2(G)$ 中收敛 (即 $\sum_{i \in I}\|f_i\|_2^2$ 收敛). 则对每个 $x \in G$,
+\[
+\langle \pi_0 \otimes \pi_L(x)(v), v \rangle = \sum_{i \in I}\langle L_xf_i, f_i \rangle_{L^2(G)},
+\]
+所以函数 $x \longmapsto \langle \pi_0 \otimes \pi_L(x)(v), v \rangle$ 在 $\overline{\sum P(\pi_L)}$ 中.
+\end{solution}
+
+\subsection{\index{可解群}可解群}
+
+设 $(X, \mu)$ 是测度空间, $E$ 是 $L^{\infty}(X)$ 的包含常值函数且对映射 $\phi \longmapsto \bar{\phi}$ 封闭的闭线性子空间. $E$ 上的\index{平均}平均 (mean) 是满足下列条件的线性泛函 $M \colon E \to \CC$:
+\begin{enumerate}
+\item[(i)] $M(\mathbb{1}_X) = 1$;
+\item[(ii)] 若 $f \geq 0$ (局部) 几乎处处, 则 $M(f) \geq 0$.
+\end{enumerate}
+若 $X = G$ 是局部紧群, 若对每个 $f \in E$ 和每个 $x \in G$ 有 $L_xf \in E$ 且 $M(L_xf) = M(f)$, 则称 $E$ 上的平均 $M$ 是 $G$-不变的 (G-invariant).
+若 $L^{\infty}(G)$ 上存在 \index{$G$-不变平均}$G$-不变平均, 则称群 $G$ 可解 (amenable).
+设 $V$ 是局部凸拓扑向量空间 (见定义 \ref{def:B.3.5}), $K$ 是 $V$ 的凸子集. 若对所有 $v, w \in K$ 和每个 $t \in [0,1]$ 有 $f(tv + (1-t)w) = tf(v) + (1-t)f(w)$, 则称映射 $f \colon K \to K$ 仿射 (affine). 设 $G \times K \to K$, $(x, v) \longmapsto x \cdot v$ 是 $G$ 在 $K$ 上的连续左作用. 若对每个 $x \in G$, 映射 $K \to K$, $v \longmapsto x \cdot v$ 仿射, 则称此作用是\index{仿射作用}仿射作用 (affine action).
+若 $G$ 在局部凸拓扑向量空间的非空紧凸子集上的每个仿射作用都有不动点, 则称群 $G$ 具有\index{不动点性质}不动点性质 (fixed point property).
+注意: 在这一系列习题中 Hahn-Banach 定理是你的朋友. 还有如下事实: 若 $V$ 是拓扑向量空间, 则 $\Hom(V, \CC)$ 上的每个弱*连续线性泛函都具有 $\Lambda \longmapsto \Lambda(v)$ 的形式 (对某个 $v \in V$). (见 Rudin 的书 {[}20{]} 的定理 3.10.)
+
+\begin{exercise}[平均的连续性]
+\label{ex:III.6.3.1}
+\begin{enumerate}
+\item[(a)] 若 $(X, \mu)$ 是测度空间, $E$ 是 $L^{\infty}(X)$ 的包含常值函数的子空间, 证明 $E$ 上的任何平均 $M$ 自动连续 (对由范数 $\|\cdot\|_{\infty}$ 给出的拓扑), 且 $\|M\|_{\mathrm{op}} = 1$.
+\end{enumerate}
+我们现在假设 $G$ 是局部紧群.
+\begin{enumerate}
+\item[(a)] 若 $G$ 紧, 证明 $\mathcal{C}(G)$ 上的左不变平均与 $G$ 上的规范化 Haar 测度自然双射对应.
+\item[(b)] 设 $L^1(G)^{1,+}$ 是满足 $f \geq 0$ 几乎处处且 $\|f\|_1 = 1$ 的 $f \in L^1(G)$ 的凸子集. 我们按通常方式把 $L^1(G)$ 等同于 $L^{\infty}(G)$ 的连续对偶的子空间 (即函数 $f \in L^1(G)$ 对应于 $L^{\infty}(G)$ 上的连续线性泛函 $\phi \longmapsto \int_G f\phi\,\dd\mu$). 证明 $L^{1,+}(G)$ 在 $L^{\infty}(G)$ 上的平均集合中弱*稠密.
+\item[(c)] 设 $\mathrm{UCB}(G)$ 是 $L^{\infty}(G)$ 的由 $G$ 上的左一致连续有界函数组成的子空间. 对每个 $x \in G$, 记 $\delta_x$ 为线性泛函 $\mathcal{C}(G) \to \CC$, $f \longmapsto f(x)$. 证明泛函 $\delta_x$ 的凸组合 (即和 $\sum_{i=1}^n a_i\delta_{x_i}$, 其中 $x_1, \ldots, x_n \in G$, $a_1, \ldots, a_n \in [0,1]$ 且 $a_1 + \cdots + a_n = 1$) 的集合在 $\mathrm{UCB}(G)$ 上的平均集合中弱*稠密.
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 设 $M$ 是 $E$ 上的平均. 设 $\phi \in E$, 假设 $\phi(x)$ 对几乎每个 $x$ 是实数. 有 $\|\phi\|_{\infty}\mathbb{1}_X \in E$, 因为它是常值函数的倍数, 且函数 $\|\phi\|_{\infty}\mathbb{1}_X - \phi$ 和 $\|\phi\|_{\infty}\mathbb{1}_X + \phi$ 几乎处处 $\geq 0$, 所以它们在 $M$ 下的像 $\geq 0$, 即 $M(\phi) \in \R$ 且
+\[
+-\|\phi\|_{\infty} \leq M(\phi) \leq \|\phi\|_{\infty},
+\]
+即 $|M(\phi)| \leq \|\phi\|_{\infty}$.
+现在设 $\phi$ 是 $E$ 的任意元素. 选取 $c \in \CC$ 使得 $|c| = 1$ 且 $M(c\phi) \in \R$. 设 $\phi_1 = \frac{1}{2}(c\phi + \overline{c\phi})$, $\phi_2 = \frac{1}{2i}(c\phi - \overline{c\phi})$. 则 $\phi_1, \phi_2$ 取实值, 且 $c\phi = \phi_1 + i\phi_2$. 有
+\[
+|\phi(x)| = \sqrt{\phi_1(x)^2 + \phi_2(x)^2} \geq \max(|\phi_1(x)|, |\phi_2(x)|)
+\]
+对每个 $x \in X$, 所以 $\|\phi\|_{\infty} \geq \max(\|\phi_1\|_{\infty}, \|\phi_2\|_{\infty})$. 另一方面, $M(c\phi) = M(\phi_1) + iM(\phi_2)$ 且 $M(\phi_1), M(\phi_2) \in \R$, 所以 $M(\phi_2) = 0$, 且
+\[
+|M(\phi)| = |M(c\phi)| = |M(\phi_1)| \leq \|\phi_1\|_{\infty} \leq \|\phi\|_{\infty}.
+\]
+这证明 $M$ 连续且 $\|M\|_{\mathrm{op}} \leq 1$. 由于 $M(\mathbb{1}_X) = 1 = \|\mathbb{1}_X\|_{\infty}$, 有 $\|M\|_{\mathrm{op}} = 1$.
+(b). 这只是 Riesz 表示定理 (定理 \ref{thm:I.2.3}) 和命题 \ref{prop:I.2.6}.
+(c). 设 $M$ 是 $L^{\infty}(G)$ 上的平均的集合. 它显然是 $\Hom(L^{\infty}(G), \CC)$ 的凸子集. 由 (a), 集合 $M$ 包含于 $\Hom(L^{\infty}(G), \CC)$ 的闭单位球. 又, 由于刻画平均的条件对弱*拓扑都闭, 集合 $M$ 在 $\Hom(L^{\infty}(G), \CC)$ 中弱*闭. 所以 $M$ 弱*紧.
+由 $L^1(G)^{1,+}$ 的定义, 对每个 $f \in L^1(G)^{1,+}$, 对应的 $L^{\infty}(G)$ 上的线性形式是 $M$ 的元素. 又注意 $L^1(G)^{1,+}$ 是 $L^1(G)$ 的凸子集, 所以它在 $\Hom(L^{\infty}(G), \CC)$ 中的像是凸的. 设 $M'$ 是这个像的弱*闭包. 有 $M' \subset M$, 所以 $M'$ 凸且弱*紧. 假设 $M' \neq M$. 则由 Hahn-Banach 定理 (第二几何形式), 存在 $M \in M$ 和弱*连续的 $\R$-线性算子 $\Lambda \colon \Hom(L^{\infty}(G), \CC) \to \R$ 使得 $\Lambda(M) > \sup_{M' \in M'}\Lambda(M')$. 注意线性算子 $\Lambda' \colon M' \longmapsto \Lambda(M') + \frac{1}{i}\Lambda(iM')$ 弱*连续且 $\CC$-线性, 所以存在 $\phi \in L^{\infty}(G)$ 使得对每个 $M' \in \Hom(L^{\infty}(G), \CC)$ 有 $\Lambda'(M') = M'(\phi)$, 这给出 $\Lambda(M') = \Re(M'(\phi))$. 则
+\[
+\Re(M(\phi)) > \sup_{f \in L^1(G)^{1,+}}\Re\Bigl(\int_G f\phi\,\dd\mu\Bigr).
+\]
+把 $\phi$ 写成 $\phi = \phi_1 + i\phi_2$, 其中 $\phi_1 = \Re\phi$, $\phi_2 = \Im\phi$. 则
+\[
+M(\phi_1) > \sup_{f \in L^1(G)^{1,+}}\int_G f\phi_1\,\dd\mu
+\]
+(因为由 (a) 的解答, $M(\phi_1), M(\phi_2) \in \R$). 设
+\[
+c = \inf\{d \in \R \mid \phi_1 \leq d\mathbb{1}_G \text{ 局部几乎处处}\}.
+\]
+若 $\phi_1 \leq d\mathbb{1}_G$ 局部几乎处处, 则 $M(\phi_1) \leq M(d\mathbb{1}_G) = d$. 所以 $M(\phi_1) \leq c$. 设 $\delta > 0$ 使得 $M(\phi_1) - \delta > \sup_{f \in L^1(G)^{1,+}}\int_G f\phi_1\,\dd\mu$. 由 $c$ 的定义, 存在 $G$ 的可测子集 $A$ 使得 $\mu(A) > 0$ 且 $\phi_1|_A \geq (c + \delta)\mathbb{1}_A$. 设 $f = \mu(A)^{-1}\mathbb{1}_A$. 则 $f \in L^1(G)^{1,+}$ 且 $\int_G \phi_1f\,\dd\mu \geq c + \delta \geq M(\phi_1) + \delta$, 矛盾.
+(d). 设 $M$ 是 $\mathrm{UCB}(G)$ 上的平均的集合. 我们像 (c) 的解答那样看到 $M$ 是 $\Hom(\mathrm{UCB}(G), \CC)$ 的凸弱*紧子集. 设 $M'$ 是 $\delta_x$ ($x \in G$) 的凸包的弱*闭包; 则 $M' \subset M$, 因为每个 $\delta_x$ 在 $M$ 中. 若 $M' \neq M$, 则由 Hahn-Banach 定理 (第二几何形式), 存在 $M$ 的元素 $M$ 和连续 $\R$-线性泛函 $\Lambda \colon \Hom(\mathrm{UCB}(G), \CC) \to \R$ 使得
+\[
+\Lambda(M) > \sup_{M' \in M'}\Lambda(M').
+\]
+像 (c) 的解答那样, 看到可以找到取实值的函数 $\phi \in \mathrm{UCB}(G)$ 使得对每个 $M' \in M$ 有 $\Lambda(M') = M'(\phi)$. 所以有
+\[
+M(\phi) > \sup_{M' \in M'}M'(\phi) \geq \sup_{x \in G}\delta_x(\phi) = \sup_{x \in G}\phi(x).
+\]
+设 $\delta > 0$ 使得 $M(\phi) - \delta \geq \sup_{x \in G}\phi(x)$. 则 $\phi \leq (M(\phi) - \delta)\mathbb{1}_G$, 从而 $M(\phi) \leq M(\phi) - \delta$, 矛盾.
+\end{solution}
+
+\begin{exercise}[可解群具有不动点性质]
+\label{ex:III.6.3.2}
+设 $G$ 是可解局部紧群. 本题的目标是证明 $G$ 具有不动点性质.
+所以设 $V$ 是局部凸拓扑向量空间, $K$ 是 $V$ 的非空紧凸子集, $G \times K \to K$, $(x, v) \longmapsto x \cdot v$ 是连续仿射作用.
+\begin{enumerate}
+\item[(a)] 证明 $\mathrm{UCB}(G)$ 上存在左不变平均.
+\item[(b)] 固定点 $v_0 \in K$, 定义 $t \colon G \to K$ 为 $t(x) = x \cdot v_0$. 若 $M$ 是 $\mathrm{UCB}(G)$ 上的平均, 证明存在唯一的正则 Borel 测度 $\mu_M$ 使得对每个 $f \in \mathcal{C}(K)$,
+\[
+\int_K f\,\dd\mu_M = M(f \circ t).
+\]
+\item[(c)] 证明积分 $b_M = \int_K v\,\dd\mu_M(v)$ 存在且 $b_M \in K$.
+\item[(d)] 设 $M$ 是所有 $\mathrm{UCB}(G)$ 上的平均的集合, 赋予弱*拓扑 (其中 $\mathrm{UCB}(G)$ 上的拓扑由 $\|\cdot\|_{\infty}$ 给出). 证明对每个连续线性泛函 $\Lambda \colon V \to \CC$, 映射 $M \to K$, $M \longmapsto \Lambda(b_M)$ 连续.
+\item[(e)] 若 $M = \delta_x$ (对某个 $x \in G$), 计算 $b_M$.
+\item[(f)] 证明对每个 $M \in M$ 和每个 $x \in G$, 有 $b_{M \circ L_{x^{-1}}} = x \cdot b_M$. (提示: 习题 \ref{ex:III.6.3.1}(d). 另外, 可以假设向量值积分的形成与连续\index{仿射映射}仿射映射交换这一事实.)\footnote{删掉这个提示?}
+\item[(g)] 证明 $G$ 在 $K$ 上的作用有不动点.
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 只需取 $L^{\infty}(G)$ 上的左不变平均在 $\mathrm{UCB}(G)$ 上的限制.
+(b). 我们首先证明对每个 $f \in \mathcal{C}(K)$, $f \circ t \in \mathrm{UCB}(G)$, 且线性算子 $\mathcal{C}(K) \to \mathrm{UCB}(G)$, $f \longmapsto f \circ t$ 连续. 所以设 $f \in \mathcal{C}(K)$. 注意函数 $t \colon G \to K$ 由假设连续, 所以 $f \circ t$ 连续. 又, 显然有 $\|f \circ t\|_{\infty} \leq \|f\|_{\infty}$. 还需证明 $f \circ t$ 左一致连续. 记 $a \colon G \times K \to K$ 为作用映射. 设 $\varepsilon > 0$. 对每个 $v \in K$, 存在 $a^{-1}(v)$ 的开邻域 $\Omega$ 使得对每个 $(x, w) \in \Omega$ 有 $|f(x \cdot w) - f(v)| < \varepsilon$; 由于 $(1, v) \in a^{-1}(v)$, 可以假设 $\Omega = U_v \times V_v$, 其中 $U_v$ 是 $1$ 在 $G$ 中的开邻域, $V_v$ 是 $v$ 在 $K$ 中的开邻域. 由于 $K$ 紧, 可以找到 $v_1, \ldots, v_n \in K$ 使得 $K = \bigcup_{i=1}^n V_{v_i}$. 设 $U = \bigcap_{i=1}^n U_{v_i}$. 设 $x \in U$, $v \in K$. 则存在 $i \in \{1, \ldots, n\}$ 使得 $v \in V_{v_i}$, 且有
+\[
+|f(x \cdot v) - f(v)| \leq |f(x \cdot v) - f(v_i)| + |f(v_i) - f(1 \cdot v)| < 2\varepsilon.
+\]
+所以对每个 $x \in U$ 和每个 $y \in G$,
+\[
+|f \circ t(xy) - f \circ t(y)| = |f(x \cdot t(y)) - f(t(y))| < 2\varepsilon.
+\]
+这证明 $f \circ t$ 一致连续.
+设 $M$ 是 $\mathrm{UCB}(G)$ 上的平均. 把 $M$ 与连续线性算子 $\mathcal{C}(K) \to \mathrm{UCB}(G)$, $f \longmapsto f \circ t$ 复合, 得到 $\mathcal{C}(K)$ 上的平均. 由 Riesz 表示定理, 存在 $K$ 上唯一的正则 Borel 测度 $\mu_M$ 使得对每个 $f \in \mathcal{C}(K)$ 有 $M(f \circ t) = \int_K f\,\dd\mu_M$.
+(c). 注意 $\mu(K) = \int_K 1\,\dd\mu_M = M(\mathbb{1}_G) = 1$. 函数 $\mathrm{id}_K$ 是 $K$ 上具紧支撑的连续函数, 所以由习题 \ref{ex:I.5.6.2}, 它关于 $\mu_M$ 的积分 $b_M = \int_K v\,\dd\mu_M$ 存在, 且 $\mu(K)^{-1}b_M = b_M$ 在 $K$ 的凸包的闭包中, 即在 $K$ 中.
+(d). 由积分的定义, 对每个 $\Lambda \in \Hom(V, \CC)$ 和 $\mathrm{UCB}(G)$ 上的每个平均 $M$,
+\[
+\Lambda(b_M) = \int_G \Lambda(v)\,\dd\mu_M = M(\Lambda \circ t).
+\]
+这由弱*拓扑的定义对 $M$ 连续.
+(e). 设 $x \in G$, $M = \delta_x$. 则对每个 $f \in \mathcal{C}_f(K)$,
+\[
+\int_K f\,\dd\mu_M = M(f \circ t) = f(x \cdot v_0).
+\]
+取 $f = \mathrm{id}_K$, 得到
+\[
+b_M = \int_K v\,\dd\mu_M = x \cdot v_0.
+\]
+(f). 设 $M$ 是 $\mathrm{UCB}(G)$ 上的平均的集合. 固定 $M \in M$. 设 $x \in G$, $\Lambda \in \Hom(V, \CC)$. 映射 $L_{x^{-1}}$ 把 $\mathrm{UCB}(G)$ 送到自身, 所以 $M \circ L_{x^{-1}}$ 有意义. 对每个 $M \in M$, 利用映射 $K \to K$, $v \longmapsto x \cdot v$ 连续且仿射这一事实, 得到
+\begin{align*}
+\Lambda(x \cdot b_M) &= \Lambda\Bigl(\int_K x \cdot v\,\dd\mu_M\Bigr) = \int_K \Lambda(x \cdot v)\,\dd\mu_M = M(\Lambda(x \cdot t)) \\
+&= M(L_{x^{-1}}(\Lambda \circ t)) \\
+&= \Lambda(b_{M \circ L_{x^{-1}}}).
+\end{align*}
+由于连续线性泛函分离点 (由 Hahn-Banach 定理), 这蕴含 $x \cdot b_M = b_{M \circ L_{x^{-1}}}$.
+(g). 设 $M$ 是不变平均 (由 (a) 存在). 则由 (f), 点 $b_M \in K$ 是 $G$ 作用的不动点.
+\end{solution}
+
+\begin{exercise}[不动点性质蕴含可解性]
+\label{ex:III.6.3.3}
+设 $G$ 是局部紧群, 假设 $G$ 具有不动点性质. 本题的目标是证明 $G$ 可解. (你可能会发现习题 \ref{ex:I.5.6.6} 有用.)
+\begin{enumerate}
+\item[(a)] 设 $M$ 是所有 $\mathrm{UCB}(G)$ 上的平均的集合. 证明这是 $\mathrm{UCB}(G)$ 的连续对偶的非空弱*紧凸子集, 且 $G$ 在 $M$ 上由 $x \cdot M(f) = M(L_{x^{-1}}f)$ ($x \in G$, $M \in M$, $f \in \mathrm{UCB}(G)$) 给出的作用是连续且仿射的. (对 $M$ 上的弱*拓扑.)
+\item[(b)] 证明 $\mathrm{UCB}(G)$ 上存在左不变平均 $m$.\footnote{若 $G$ 是一般拓扑群, 若这样的平均存在则称 $G$ 可解. 我们在本题中证明的其中一件事是: 对局部紧 $G$, 这与另一个定义等价.}\footnote{参考文献}
+\item[(c)] 证明若 $f \in L^1(G)^{1,+}$, $\phi \in \mathrm{UCB}(G)$, 则 $m(f * \phi) = m(\phi)$.
+\item[(d)] 证明若 $f, f' \in L^1(G)^{1,+}$, $\phi \in L^{\infty}(G)$, 则 $m(f * \phi) = m(f' * \phi)$.
+\item[(e)] 设 $f_0 \in L^1(G)^{1,+}$. 证明公式 $\phi \longmapsto m(f_0 * \phi)$ 定义 $L^{\infty}(G)$ 上的平均 $\tilde{m}$, 且对每个 $f \in L^1(G)^{1,+}$ 和每个 $\phi \in L^{\infty}(G)$ 有 $\tilde{m}(f * \phi) = \tilde{m}(\phi)$.
+\end{enumerate}
+设 $E = \prod_{f \in L^1(G)^{1,+}}L^1(G)$. 我们在 $E$ 上考虑两个拓扑:
+\begin{itemize}
+\item $L^1(G)$ 上的弱*拓扑 (通过把 $L^1(G)$ 看作 $L^{\infty}(G)$ 的连续对偶的子空间得到) 的乘积. 我们称之为 $E$ 上的弱拓扑.
+\item $L^1(G)$ 上由范数 $\|\cdot\|_1$ 定义的拓扑的乘积. 我们称之为 $E$ 上的强拓扑.
+\end{itemize}
+\begin{enumerate}
+\item[(a)] 设
+\[
+\Sigma = \{(f * g - g)_{f \in L^1(G)^{1,+}, g \in L^1(G)^{1,+}}\} \subset E.
+\]
+证明 $\Sigma$ 在弱拓扑中的闭包包含 $0$.
+\item[(b)] 证明 $\Sigma$ 在强拓扑中的闭包包含 $0$. (提示: $E$ 上的任何强连续线性泛函 $\Lambda$ 都可以写成 $\Lambda((g_f)_{f \in L^1(G)^{1,+}}) = \sum_{f \in L^1(G)^{1,+}}\int_G g_f\phi_f\,\dd\mu$, 其中 $\phi_f \in L^{\infty}(G)$, 且除有限多个 $f$ 外 $\phi_f = 0$.)
+\item[(c)] 设 $Q \ni 1$ 是 $G$ 的紧子集, $\varepsilon > 0$, $f \in L^1(G)^{1,+}$. 证明存在 $g \in L^1(G)^{1,+}$ 使得
+\[
+\sup_{x \in Q}\|(L_xf) * g - g\|_1 \leq \varepsilon.
+\]
+\item[(d)] 找到函数 $h \in L^1(G)^{1,+}$ 使得
+\[
+\sup_{x \in Q}\|L_xh - h\|_1 \leq 2\varepsilon.
+\]
+\item[(e)] 证明 $L^{\infty}(G)$ 上存在左不变平均. (若你不习惯用网, 可以假设 $G$ $\sigma$-紧, 即紧子集的可数并.)
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 我们已经在习题 \ref{ex:III.6.3.1}(d) 的解答中看到 $M$ 是 $\Hom(\mathrm{UCB}(G), \CC)$ 的弱*紧凸子集, 且 $M$ 非空, 因为它包含所有线性泛函 $\delta_x$ ($x \in G$).
+若 $x \in G$, 同态 $\Lambda \longmapsto \Lambda \circ L_{x^{-1}}$ 从 $\Hom(\mathrm{UCB}(G), \CC)$ 到自身线性, 且显然保持 $M$, 所以它在 $M$ 上的限制仿射.
+还需证明映射 $G \times M \to M$, $(x, M) \longmapsto M \circ L_{x^{-1}}$ 连续. 由于我们在 $M$ 上用弱*拓扑, 这意味着对每个 $\phi \in \mathrm{UCB}(G)$, 映射 $G \times M \to \CC$, $(x, M) \longmapsto M(L_{x^{-1}}\phi)$ 连续. 固定 $\phi \in \mathrm{UCB}(G)$, 设 $\varepsilon > 0$. 由于 $\phi$ 左一致连续, 存在 $1$ 在 $G$ 中的开邻域 $U$ 使得对每个 $y \in U$ 有 $\|L_{y^{-1}}\phi - \phi\|_{\infty} < \varepsilon$. 注意对每个 $y \in U$ 和每个 $x \in G$,
+\[
+\|L_{x^{-1}y^{-1}}\phi - L_{x^{-1}}\phi\|_{\infty} = \|L_{y^{-1}}\phi - \phi\|_{\infty} < \varepsilon.
+\]
+设 $(x, M) \in G \times M$. 设 $V = \{M' \in M \mid |M(L_{x^{-1}}\phi) - M'(L_{x^{-1}}\phi)| < \varepsilon\}$. 这是 $M$ 的弱*邻域, 所以 $Ux \times V$ 是 $(x, M)$ 在 $G \times M$ 中的邻域. 若 $y \in U$, $M' \in V$, 有
+\begin{align*}
+|M(L_{x^{-1}}\phi) - M'(L_{(yx)^{-1}}\phi)| &\leq |M(L_{x^{-1}}\phi) - M'(L_{x^{-1}}\phi)| + |M'(L_{x^{-1}}\phi) - M'(L_{x^{-1}y^{-1}}\phi)| \\
+&< \varepsilon + \|M'\|_{\mathrm{op}}\|L_{x^{-1}}\phi - L_{x^{-1}y^{-1}}\phi\|_{\infty} \\
+&< 2\varepsilon
+\end{align*}
+(用习题 \ref{ex:III.6.3.1}(a) 看到 $\|M'\|_{\mathrm{op}} = 1$). 这证明所要的结果.
+(b). $\mathrm{UCB}(G)$ 上的左不变平均正是 $G$ 在 $M$ 上由 $x \cdot M = M \circ L_{x^{-1}}$ 定义的作用的不动点. 所以这种平均的存在性由 (a) 和 $G$ 具有不动点性质这一事实得出.
+(c). 由习题 \ref{ex:I.5.6.6}, 有 $f * \phi = \int_G f(y)L_y\phi\,\dd y$. 由习题 \ref{ex:I.5.6.6}, $\mathrm{UCB}(G)$ 上的线性泛函 $m$ 连续. 应用积分的定义和 $m$ 的左不变性, 得到
+\[
+m(f * \phi) = \int_G f(y)m(L_y\phi)\,\dd y = \int_G f(y)m(\phi)\,\dd y = m(\phi)\int_G f\,\dd\mu = m(\phi).
+\]
+(d). 设 $(\psi_U)_{U \in \mathcal{U}}$ 是 $G$ 上的近似单位元. 注意对每个 $U \in \mathcal{U}$, $\psi_U \in L^1(G)^{1,+}$. 设 $\phi \in L^{\infty}(G)$, $f, f' \in L^1(G)^{1,+}$. 由习题 \ref{ex:I.5.6.6}(a), 对每个 $U \in \mathcal{U}$ 有 $\psi_U * \phi \in \mathrm{UCB}(G)$, 所以由 (c),
+\[
+m(f * \psi_U * \phi) = m(\psi_U * \phi) = m(f' * \psi_U * \phi).
+\]
+又, 由命题 \ref{prop:I.4.1.9}, $\lim_{U \to \{1\}}f * \psi_U = f$, $\lim_{U \to \{1\}}f' * \psi_U = f'$. 在上面的等式中取 $U \to \{1\}$ 的极限 (忽略中间项), 并利用卷积乘积 $L^1(G) \times L^{\infty}(G) \to \mathrm{UCB}(G)$ 在两个变量中都连续 (由习题 \ref{ex:I.5.6.6}(a) 的解答) 且 $m$ 连续, 得到 $m(f * \phi) = m(f' * \phi)$.
+(e). 映射 $\tilde{m}$ 由习题 \ref{ex:I.5.6.6}(a) 良定义, 且显然 $\CC$-线性. 若 $\phi = \mathbb{1}_G$, 则对每个 $x \in G$,
+\[
+f_0 * \phi(x) = \int_G f_0(y)\,\dd\mu(y) = 1,
+\]
+所以 $\tilde{m}(\phi) = m(\mathbb{1}_G) = 1$. 若 $\phi \geq 0$ 局部几乎处处, 则 $f_0 * \phi \geq 0$ 几乎处处, 所以 $\tilde{m}(\phi) \geq 0$. 这证明 $\tilde{m}$ 是 $L^{\infty}(G)$ 上的平均.
+设 $f \in L^1(G)^{1,+}$, $\phi \in L^{\infty}(G)$. 则
+\[
+\tilde{m}(f * \phi) = m(f * f_0 * \phi) \quad \text{且} \quad \tilde{m}(\phi) = m(f_0 * \phi).
+\]
+由 (d), 为证明它们相等, 只需证明 $f * f_0 \in L^1(G)^{1,+}$. 我们已经知道由命题 \ref{prop:I.4.1.2}, $f * f_0 \in L^1(G)$, 且 $f * f_0 \geq 0$ 几乎处处由定义 $f * f_0$ 的公式显然. 最后,
+\begin{align*}
+\int_G f * f_0(x)\,\dd x &= \int_{G \times G}f(y)f_0(y^{-1}x)\,\dd x\,\dd y = \int_G f(y)\Bigl(\int_G f_0(y^{-1}x)\,\dd x\Bigr)\,\dd y \\
+&= \int_G f(y)\,\dd y = 1.
+\end{align*}
+
+(f). 一个有用的记号: 对每个 $f \in L^1(G)$, 记 $M_f$ 为 $L^{\infty}(G)$ 上的线性泛函 $\phi \longmapsto \int_G f\phi\,\dd\mu$.
+我们要证明如下结论: 对每个 $n \geq 1$, 对所有 $f_1, \ldots, f_n \in L^1(G)^{1,+}$, 若 $U_1, \ldots, U_n$ 是 $\Hom(L^{\infty}(G), \CC)$ 中 $0$ 的弱*邻域, 则存在 $g \in L^1(G)^{1,+}$ 使得对 $i \in \{1, \ldots, n\}$ 有 $M_{f_i * g} - M_g \in U_i$.
+若 $f \in L^1(G)^{1,+}$, 映射 $c_f \colon \Lambda \longmapsto \Lambda(f * (\cdot))$ 从 $\Hom(L^{\infty}(G), \CC)$ 到自身弱*连续 (因为 $\phi \longmapsto f * \phi$ 在 $L^{\infty}(G)$ 上连续, 由习题 \ref{ex:I.5.6.6}(a)). 而且, 若 $\Lambda = M_g$ (其中 $g \in L^1(G)$), 则对每个 $\phi \in L^{\infty}(G)$,
+\begin{align*}
+(c_{f'}\Lambda)(\phi) &= \int_G g(y)(f' * \phi)(y)\,\dd y \\
+&= \int_{G \times G}g(y)\Delta(x)^{-1}\overline{f(x^{-1})}\phi(x^{-1}y)\,\dd x\,\dd y \\
+&= \int_{G \times G}\Delta(x)^{-1}\overline{f(x^{-1})}g(xz)\phi(z)\,\dd x\,\dd z \\
+&= \int_G (f * g)\phi\,\dd\mu \quad \text{(见命题 \ref{prop:I.4.1.3})},
+\end{align*}
+其中 $f' \in L^1(G)$ 由 $f'(x) = \Delta(x)^{-1}\overline{f(x^{-1})}$ 定义. 换句话说, $c_{f'}M_g = M_{f*g}$.
+固定 $n$, $f_1, \ldots, f_n$, $U_1, \ldots, U_n$ 如上. 则 $U := U_1 \cap \cdots \cap U_n$ 是 $\Hom(L^{\infty}(G), \CC)$ 中 $0$ 的弱*邻域. 选取另一个弱*邻域 $V$ 使得 $V = -V$ 且 $V + V \subset U$.
+则 $\tilde{m} + V$ 是 $\tilde{m}$ 的弱*邻域, 所以由习题 \ref{ex:III.6.3.1}(c) 和上一段, 存在 $g \in L^1(G)^{1,+}$ 使得 $M_g - \tilde{m}$ 和所有 $M_{f_i*g} - c_{f'_i}\tilde{m}$ ($1 \leq i \leq n$) 都在 $V$ 中. 注意 $c_{f'_i}\tilde{m} = \tilde{m}$ (由 (e)), 所以对 $1 \leq i \leq n$,
+\[
+M_{f_i*g} - M_g = (M_{f_i*g} - \tilde{m}) + (\tilde{m} - M_g) \in V - V \subset U_i.
+\]
+(g). 注意 $\Sigma$ 是 $E$ 的凸子集. 设 $\bar{\Sigma}$ 是 $\Sigma$ 对强拓扑的闭包. 若 $0 \notin \bar{\Sigma}$, 则由 Hahn-Banach 定理 (第二几何形式), 存在强连续 $\R$-线性泛函 $\Lambda' \colon E \to \R$ 使得 $0 = \Lambda'(0) > \sup_{x \in \Sigma}\Lambda'(x)$. 像习题 \ref{ex:III.6.3.1}(c) 和 (d) 的解答那样, 可以把 $\Lambda'$ 写成 $\Lambda' = \Re\Lambda$, 其中 $\Lambda \colon E \to \CC$ 是强连续 $\CC$-线性泛函 (由 $\Lambda(x) = \Lambda'(x) + \frac{1}{i}\Lambda'(ix)$ 定义).
+现在一个重要的注记是: 由于我们在 $E$ 上用乘积拓扑, 直和 $\bigoplus_{f \in L^1(G)^{1,+}}L^1(G)$ 在 $E$ 中稠密.
+对每个 $f_0 \in L^1(G)^{1,+}$, 考虑线性泛函 $\Lambda_{f_0} \colon L^1(G) \to \CC$, 它是 $\Lambda$ 与包含因子 $f_0$ 进 $\prod_{f \in L^1(G)^{1,+}}L^1(G) = E$ 的复合. 这是 $L^1(G)$ 上的连续线性泛函, 所以存在唯一的 $\phi_{f_0} \in L^{\infty}(G)$ 使得 $\Lambda_{f_0}$ 是对 $\phi_{f_0}$ 的积分.
+现在考虑 $L^1(G)^{1,+}$ 的递增族 $(X_n)_{n \geq 0}$ 使得 $L^1(G)^{1,+} = \bigcup_{n \geq 0}X_n$. 对每个 $x = (g_f)_{f \in L^1(G)^{1,+}} \in E$, 序列 $((g_f)_{f \in X_n})_{n \geq 0}$ 在强拓扑中收敛到 $x$, 所以
+\[
+\Lambda(x) = \lim_{n \to +\infty}\Lambda((g_f)_{f \in X_n}) = \lim_{n \to +\infty}\sum_{f \in X_n}\int_G g_f\phi_f\,\dd\mu = \sum_{f \in L^1(G)^{1,+}}\int_G g_f\phi_f\,\dd\mu.
+\]
+由于和对任何 $(g_f) \in E$ 收敛, 除有限多个 $f \in L^1(G)^{1,+}$ 外必有 $\phi_f = 0$.
+但此时, 若考虑任何满足 $0 > c > \sup_{x \in \Sigma}\Re(\Lambda(x))$ 的实数 $c$, 集合 $\{x \in E \mid \Re(\Lambda(x)) \leq c\}$ 在 $E$ 中弱闭, 所以包含 $\Sigma$ 的弱闭包, 从而由 (f) 包含 $0$, 矛盾.
+(h). 对每个 $x \in Q$, 设 $U_x$ 是 $x$ 在 $G$ 中的邻域使得对 $y \in U_x$ 有 $\|L_yf - L_xf\|_1 \leq \varepsilon/2$. (见命题 \ref{prop:I.3.1.13}.) 由于 $Q$ 紧, 可以找到 $x_1, \ldots, x_n \in Q$ 使得 $Q \subset \bigcup_{i=1}^n U_{x_i}$. 由 (f), 存在 $g \in L^1(G)^{1,+}$ 使得对每个 $i \in \{1, \ldots, n\}$ 有 $\|(L_{x_i}f) * g - g\|_1 \leq \varepsilon/2$.
+让我们证明这个 $g$ 可行. 设 $x \in Q$. 则存在 $i \in \{1, \ldots, n\}$ 使得 $x \in U_{x_i}$, 且有
+\begin{align*}
+\|(L_xf) * g - g\|_1 &\leq \|(L_xf) * g - (L_{x_i}f) * g\|_1 + \|(L_{x_i}f) * g - g\|_1 \\
+&\leq \|L_xf - L_{x_i}f\|_1\|g\|_1 + \|(L_{x_i}f) * g - g\|_1 \\
+&\leq \varepsilon.
+\end{align*}
+(第二个等式用命题 \ref{prop:I.4.1.2}).
+(i). 设 $h = f * g$. 有 $h \in L^1(G)^{1,+}$ (见 (e) 的解答), 且由于 $1 \in Q$, 对每个 $x \in Q$,
+\[
+\|L_xh - h\|_1 \leq \|L_xh - g\|_1 + \|g - h\|_1 \leq \|(L_xf) * g - g\|_1 + \|(L_1f) * g - g\|_1 \leq 2\varepsilon.
+\]
+(j). 假设 $G$ $\sigma$-紧, 写 $G = \bigcup_{n \geq 0}Q_n$, 其中每个 $Q_n$ 是 $G$ 的包含 $1$ 的紧子集. 对每个 $n \in \Z_{\geq 0}$, 由 (h) 可以找到函数 $h_n \in L^1(G)^{1,+}$ 使得 $\sup_{x \in Q_n}\|L_xh_n - h_n\|_1 \leq 2^{-n}$. 序列 $(M_{h_n})_{n \geq 0}$ 是 $L^{\infty}(G)$ 上的平均的弱*紧子集 (我们在习题 \ref{ex:III.6.3.1}(c) 中看到这个集合弱*紧) 的元素, 所以它有收敛子序列, 可以假设它收敛. 设 $M = \lim_{n \geq 0}M_{h_n}$. 我们证明 $M$ 左不变. 设 $x \in G$. 则对 $n \gg 0$ 有 $x^{-1} \in Q_n$, 所以对每个 $\phi \in L^{\infty}(G)$,
+\begin{align*}
+M(L_x\phi) &= \lim_{n \to +\infty}M_{h_n}(L_x\phi) \\
+&= \lim_{n \to +\infty}\int_G h_n(y)\phi(x^{-1}y)\,\dd y \\
+&= \lim_{n \to +\infty}\int_G h_n(xy)\phi(y)\,\dd y \\
+&= \lim_{n \to +\infty}\int_G L_{x^{-1}}h_n\phi\,\dd\mu,
+\end{align*}
+且
+\begin{align*}
+|M(L_x\phi) - M(\phi)| &= \Bigl|\lim_{n \to +\infty}\int_G (L_{x^{-1}}h_n - h_n)\phi\,\dd\mu\Bigr| \\
+&\leq \lim_{n \to +\infty}\|L_{x^{-1}}h_n - h_n\|_1\|\phi\|_{\infty} \\
+&= 0,
+\end{align*}
+即 $M(L_x\phi) = M(\phi)$.
+假设 $G$ 不 $\sigma$-紧. 则写 $G = \bigcup_{Q \in \mathcal{Q}}Q$, 其中 $\mathcal{Q}$ 是 $G$ 的紧子集族, 使得若 $Q_1, Q_2 \in \mathcal{Q}$ 则 $Q_1 \cup Q_2 \in \mathcal{Q}$. 即 $\mathcal{Q}$ 对由包含给出的序关系是定向集. 对每个 $Q \in \mathcal{Q}$, 由 (i) 可以找到函数 $h_Q \in L^1(G)^{1,+}$ 使得 $\sup_{x \in Q}\|L_xh_Q - h_Q\|_1 \leq (1 + \mu(Q))^{-1}$. 若 $G$ 不紧, 则 $\mu(G) = +\infty$, 所以 $\lim_{Q \in \mathcal{Q}}(1 + \mu(Q))^{-1} = 0$. 设 $M$ 是 $(M_{h_Q})_{Q \in \mathcal{Q}}$ 的弱*极限点, 它存在, 因为 $L^{\infty}(G)$ 上的平均集合弱*紧. 则我们完全像上面那样看到 $M$ 左不变.
+\end{solution}
+
+\begin{exercise}[可解性与平凡表示的弱包含]
+\label{ex:III.6.3.4}
+设 $G$ 是局部紧群. 回忆习题 \ref{ex:III.6.2.4}.
+\begin{enumerate}
+\item[(a)] 若 $G$ 可解, 证明平凡表示弱包含于 $G$ 的左正则表示. (提示: 对所有 $a, b \in \R_{\geq 0}$, 有 $|a - b|^2 \leq |a^2 - b^2|$.)
+\item[(b)] 若平凡表示弱包含于 $G$ 的左正则表示, 证明 $G$ 可解. (提示: 对所有 $a, b \in \CC$, 证明 $||a|^2 - |b|^2| \leq |a + b||a - b|$.)
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 让我们先证明提示中的不等式. 设 $a, b \in \R_{\geq 0}$. 可以假设 $a \geq b$. 则
+\[
+|a - b|^2 = (a - b)^2 = a^2 + b^2 - 2ab \leq a^2 + b^2 - 2b^2 = a^2 - b^2 = |a^2 - b^2|.
+\]
+假设 $G$ 可解. 设 $K$ 是 $G$ 的紧子集, $c > 0$. 由习题 \ref{ex:III.6.3.3}(i), 存在 $h \in L^1(G)^{1,+}$ 使得 $\sup_{x \in K}\|L_xh - h\|_1 < c^2$. 设 $f = \sqrt{h}$. 则由上面的不等式, 对每个 $x \in K$,
+\begin{align*}
+\|L_xf - f\|_2^2 &= \int_G |f(x^{-1}y) - f(y)|^2\,\dd y \\
+&\leq \int_G |h(x^{-1}y) - h(y)|\,\dd y \\
+&= \|L_xh - h\|_1 \\
+&< c^2,
+\end{align*}
+所以 $\|L_xf - f\|_2 < c$.
+由习题 \ref{ex:III.6.2.4}(d), 这蕴含 $G$ 的平凡表示弱包含于正则表示.
+(b). 我们验证习题 \ref{ex:III.6.3.3}(i) 的结果成立, 即对 $G$ 的每个紧子集 $Q$ 和每个 $\varepsilon > 0$, 存在 $h \in L^1(G)^{1,+}$ 使得 $\sup_{x \in Q}\|L_xh - h\|_1 \leq \varepsilon$. 事实上, 我们已在习题 \ref{ex:III.6.3.3}(j) 中看到这蕴含 $L^{\infty}(G)$ 上存在左不变平均.
+设 $Q$ 是 $G$ 的紧子集, $\varepsilon > 0$. 由习题 \ref{ex:III.6.2.4}(c), 存在 $f \in L^2(G)$ 使得 $\|f\|_2 = 1$ 且 $\sup_{x \in Q}\|L_xf - f\|_2 \leq \varepsilon/2$. 设 $h = |f|^2$. 则 $\|h\|_1 = \|f\|_2^2 = 1$, 所以 $h \in L^1(G)^{1,+}$. 注意对所有 $a, b \in \CC$, 由三角不等式有 $|a^2 - b^2| \geq ||a|^2 - |b|^2|$, 所以
+\[
+|a + b|^2|a - b|^2 = (a^2 - b^2)(\overline{a^2 - b^2}) = |a^2 - b^2|^2 \geq ||a|^2 - |b|^2|^2.
+\]
+现在, 若 $x \in Q$, 得到
+\begin{align*}
+\|L_xh - h\|_1 &= \int_G ||L_xf(y)|^2 - |f(y)|^2|\,\dd y \\
+&\leq \int_G (|L_xf(y) + f(y)|)|L_xf(y) - f(y)|\,\dd y \\
+&\leq \|L_xf - f\|_2\|L_xf + f\|_2 \quad \text{(Cauchy-Schwarz)} \\
+&\leq \varepsilon
+\end{align*}
+(因为 $\|L_xf + f\|_2 \leq \|L_xf\|_2 + \|f\|_2 = 2\|f\|_2 = 2$).
+\end{solution}
+
+\begin{exercise}[交换局部紧群的可解性]
+\label{ex:III.6.3.5}
+设 $G$ 是交换局部紧群. 本题的目标是证明 $G$ 具有不动点性质 (从而是可解的).
+设 $V$ 是局部凸拓扑向量空间, $K$ 是 $V$ 的非空紧凸子集, $G \times K \to K$, $(x, v) \longmapsto x \cdot v$ 是 $G$ 在 $K$ 上的仿射作用.
+对每个 $n \in \Z_{\geq 0}$ 和每个 $x \in G$, 定义连续仿射映射 $A_n(x) \colon K \to K$:
+\[
+A_n(x)(v) = \frac{1}{n+1}\sum_{i=0}^n x^i \cdot v.
+\]
+设 $\mathcal{G}$ 是所有 $A_n(x)$ ($n \geq 0$, $x \in G$) 生成的 $K \to K$ 的连续仿射映射的半群. (即其元素是态射 $A_n(x)$ 的有限复合的半群, 其中半群运算就是映射 $K \to K$ 的复合.)
+\begin{enumerate}
+\item[(a)] 设 $v \in \bigcap_{\gamma \in \mathcal{G}}\gamma(K)$. 证明 $v$ 是 $G$ 作用的不动点. (提示: 对 $V$ 上的每个连续线性泛函 $\Lambda$ 和每个 $x \in G$, 证明 $\Lambda(v) = \Lambda(x \cdot v)$.)
+\item[(b)] 对所有 $\gamma_1, \ldots, \gamma_n \in \mathcal{G}$, 证明 $\bigcap_{i=1}^n\gamma_i(K) \neq \emptyset$.
+\item[(c)] 证明 $G$ 在 $K$ 中有不动点.
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 设 $x \in G$. 设 $\Lambda$ 是 $V$ 上的连续线性泛函. 由于 $K$ 紧, $C := \sup_{w \in K}|\Lambda(w)| < +\infty$. 若 $n \geq 0$, 有 $v \in A_n(x)(K)$, 所以存在 $w \in K$ 使得 $v = A_n(x)(w)$. 由于 $G$ 的作用仿射, 这蕴含
+\[
+x \cdot v = \frac{1}{n+1}\sum_{i=0}^n x^{i+1} \cdot w,
+\]
+所以 $v - x \cdot v = \frac{1}{n+1}(w - x^{n+1} \cdot w)$, 从而 $|\Lambda(v - x \cdot v)| \leq \frac{2C}{n+1}$. 由于这对每个 $n \geq 0$ 成立, 有 $|\Lambda(v) - \Lambda(x \cdot v)| = 0$, 即 $\Lambda(v) = \Lambda(x \cdot v)$. 由于 $V$ 上的连续线性泛函分离点, 最终得到 $x \cdot v = v$.
+(b). 注意若 $x, y \in G$, $n, m \in \Z_{\geq 0}$, 则对每个 $v \in K$,
+\begin{align*}
+A_n(x) \circ A_m(y)(v) &= \frac{1}{n+1}\sum_{i=1}^n x^i \cdot A_m(y)(v) \\
+&= \frac{1}{(n+1)(m+1)}\sum_{i=0}^n\sum_{j=0}^m x^i \cdot (y^j \cdot v) \\
+&= \frac{1}{(n+1)(m+1)}\sum_{i=0}^n\sum_{j=0}^m y^j \cdot (x^i \cdot v) \quad \text{(因为 } G \text{ 交换)} \\
+&= A_m(y) \circ A_n(x)(v).
+\end{align*}
+这蕴含半群 $\mathcal{G}$ 交换.
+现在设 $\gamma_1, \ldots, \gamma_n \in \mathcal{G}$. 则对每个 $i \in \{1, \ldots, n\}$,
+\[
+\gamma_i(K) \supset \gamma_i(\gamma_1 \circ \cdots \circ \gamma_{i-1} \circ \cdots \circ \gamma_n(K)) = \gamma_1 \circ \cdots \circ \gamma_n(K).
+\]
+所以
+\[
+\bigcap_{i=1}^n\gamma_i(K) \supset \gamma_1 \circ \cdots \circ \gamma_n(K) \neq \emptyset.
+\]
+(c). 由于 $K$ 紧且每个 $\gamma \in \mathcal{G}$ 连续, 对每个 $\gamma \in \mathcal{G}$, $K$ 的子集 $\gamma(K)$ 紧, 从而在 $K$ 中闭. 由 (b), 族 $(\gamma(K))_{\gamma \in \mathcal{G}}$ 有有限交性质. 由 $K$ 的紧性, $\bigcap_{\gamma \in \mathcal{G}}\gamma(K) \neq \emptyset$. 由 (a), 此交的每个点都是 $G$ 在 $K$ 上的不动点.
+\end{solution}
+
+\begin{exercise}[$\Z$ 上的不变概率测度]
+\label{ex:III.6.3.6}
+\begin{enumerate}
+\item[(a)] 设 $P(\Z)$ 是 $\Z$ 的子集的集合. 证明 $\Z$ 上存在有限可加左不变概率测度, 即满足下列条件的函数 $\mu \colon P(\Z) \to \R_{\geq 0}$:
+\begin{enumerate}
+\item[(i)] 若 $A_1, \ldots, A_n \in P(\Z)$ 满足对 $i \neq j$ 有 $A_i \cap A_j = \emptyset$, 则 $\mu(A_1 \cup \cdots \cup A_n) = \mu(A_1) + \cdots + \mu(A_n)$.
+\item[(ii)] $\mu(\Z) = 1$.
+\item[(iii)] 对每个 $A \in P(\Z)$ 和 $n \in \Z$, 有 $\mu(n + A) = \mu(A)$.
+\end{enumerate}
+\item[(b)] (a) 的测度唯一吗? (提示: 你需要某种相当显式的方法来构造 $\Z$ 上的不变平均. 例如你可以试着利用 $L^{\infty}(\Z) \to \CC$, $(x_k)_{k \in \Z} \longmapsto \frac{1}{2k+1}\sum_{k=-n}^n x_k$ 的 (非不变) 平均序列 $M_n$.)
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 由于 $\Z$ 是交换局部紧群, 由习题 \ref{ex:III.6.3.3} 和 \ref{ex:III.6.3.5} 它可解. 这意味着 $L^{\infty}(\Z)$ 上存在左不变平均 $M$. 定义 $\mu$ 为 $\mu(A) = M(\mathbb{1}_A)$; 由平均的定义, 此函数取 $\R_{\geq 0}$ 中的值. 则 $\mu$ 满足 (i), 因为 $M$ 线性; 满足 (ii), 因为 $M(1) = 1$; 满足 (iii), 因为 $M$ 左不变.
+反之, 注意题设中 $\mu$ 的存在蕴含不变平均的存在.
+(b). 不唯一.
+设 $V = L^{\infty}(\Z)$, 考虑线性泛函族 $M_n \colon L^{\infty}(\Z) \to \CC$:
+\[
+M_n((x_k)_{k \in \Z}) = \frac{1}{2n+1}\sum_{k=-n}^n x_k,
+\]
+其中 $n \in \N$. 对 $V$ 的每个元素 $x$ 有 $|M_n(x)| \leq \|x\|_{\infty}$, 所以 $M_n$ 连续. 又, 由定义显然 $M_n$ 是平均. 若 $a \in \Z$, 则对 $V$ 的每个元素 $x$ 和每个 $n \in \N$,
+\[
+|M_n(L_ax) - M_n(x)| \leq \frac{2|a|}{2n+1}\|x\|_{\infty}.
+\]
+所以, 若能使序列 $(M_n)_{n \geq 0}$ 在 $\Hom(V, \CC)$ 的弱*拓扑中收敛, 则其极限将是不变平均, 且它将定义如 (a) 的不变有限可加概率测度. 我们总可以用 Banach-Alaoglu 定理找到 $(M_n)_{n \geq 0}$ 的收敛子序列, 但我们还想证明可以得到两个不同的极限.
+考虑 $V$ 的元素 $x = (x_n)_{n \in \Z}$: 对 $n \leq 0$ 取 $x_n = 0$; 若 $2k \leq n \leq 2^{k+1} - 1$ ($k \in \Z_{\geq 0}$), 取 $x_n = (-1)^k$. 则若 $n = 2^k - 1$ ($k \geq 0$),
+\[
+\sum_{r=-n}^n x_r = \sum_{s=0}^{k-1}(-1)^s2^s = \frac{1 - (-2)^k}{3},
+\]
+所以
+\[
+M_n(x) = \frac{1 - (-2)^k}{3(2^{k+1} - 1)}.
+\]
+特别地, 序列 $(M_{2^{2l}-1}(x))_{l \geq 0}$ 收敛到 $-\frac{1}{6}$, 序列 $(M_{2^{2l+1}-1}(x))_{l \geq 0}$ 收敛到 $\frac{1}{6}$.
+由 Banach-Alaoglu 定理,\footnote{参考文献 ?} 序列 $(M_{2^{2l}-1})_{l \geq 0}$ 和 $(M_{2^{2l+1}-1})_{l \geq 0}$ 都有弱*极限点, 记为 $M$ 和 $M'$. $M$ 和 $M'$ 都是 $V$ 上的左不变平均, 但由上面的计算 $M(x) = -\frac{1}{6}$, $M'(x) = \frac{1}{6}$, 所以 $M \neq M'$.
+\end{solution}
+
+\begin{exercise}[$\SL_2(\R)$ 不可解]
+\label{ex:III.6.3.7}
+\begin{enumerate}
+\item[(a)] 设 $G$ 是作用于集合 $X$ 的群. 假设有 $G$ 的子群 $G_1$, $G_2$ 和 $X$ 的子集 $X_1$, $X_2$ 满足:
+\begin{itemize}
+\item 集合 $X_1$ 和 $X_2$ 非空, 且 $X_1 \neq X_2$;
+\item 对每个 $x \in G_1 - \{1\}$, 有 $x \cdot X_1 \subset X_2$;
+\item 对每个 $x \in G_2 - \{1\}$, 有 $x \cdot X_2 \subset X_1$;
+\item $G_2$ 的基数至少为 $3$.
+\end{itemize}
+证明不可能有等式 $1 = h_1\cdots h_n$, 其中对奇数 $i$, $h_i \in G_1 - \{1\}$; 对偶数 $i$, $h_i \in G_2 - \{1\}$; $n \geq 1$.
+\item[(b)] 设 $a_1, a_2 \in \CC$ 满足 $|a_1| \geq 2$, $|a_2| \geq 2$. 定义 $x, y \in \SL_2(\CC)$ 为
+\[
+x = \begin{pmatrix} 1 & a_1 \\ 0 & 1 \end{pmatrix}, \qquad y = \begin{pmatrix} 1 & 0 \\ a_2 & 1 \end{pmatrix}.
+\]
+证明由 $x$ 和 $y$ 生成的 $\SL_2(\CC)$ 的子群同构于两个生成元上的自由群. (提示: 令 $\SL_2(\CC)$ 按通常方式作用于 $\CC^2$. 看子集 $\{(z_1, z_2) \in \CC^2 \mid |z_1| > |z_2|\}$ 和 $\{(z_1, z_2) \in \CC^2 \mid |z_1| < |z_2|\}$.)
+\item[(c)] 设 $G = \SL_2(\R)$, 赋予离散拓扑. 证明 $G$ 不可解.
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 若 $G_1 = \{1\}$, 结果显然. 所以可以假设 $G_1 \neq \{1\}$.
+假设有 $1 = h_1\cdots h_n$, 其中对奇数 $i$, $h_i \in G_1 - \{1\}$; 对偶数 $i$, $h_i \in G_2 - \{1\}$; $n \geq 1$.
+我们首先假设 $n$ 偶. 由于 $|G_2| \geq 3$, 可以找到 $h \in G_2 - \{1\}$ 使得 $h \neq h_n$. 注意 $1 = hh^{-1} = hh_1\cdots(h_nh^{-1})$, 其中 $h_nh^{-1} \in G_2 - \{1\}$. 设 $g \in G_1 - \{1\}$. 也有 $1 = gg^{-1} = ghh_1\cdots(h_nh^{-1})g^{-1}$. 所以对每个 $x \in X_2$,
+\[
+x = hh_1\cdots h_{n-1}(h_nh^{-1})(x) \in X_1,
+\]
+所以 $X_2 \subset X_1$. 另一方面, 对每个 $y \in X_1$,
+\[
+y = ghh_1\cdots(h_nh^{-1})g^{-1}(y) \in X_2,
+\]
+所以 $X_1 \subset X_2$. 这与 $X_1 \neq X_2$ 矛盾.
+现在假设 $n$ 奇. 设 $h \in G_2 - \{1\}$. 则 $1 = hh^{-1} = hh_1\cdots h_nh^{-1}$. 所以对每个 $x \in X_2$,
+\[
+x = hh^{-1} = hh_1\cdots h_nh^{-1}(x) \in X_1,
+\]
+所以 $X_2 \subset X_1$. 另一方面, 对每个 $y \in X_1$,
+\[
+y = h_1\cdots h_n(y) \in X_2,
+\]
+所以 $X_1 \subset X_2$. 同样, 这与 $X_1 \neq X_2$ 矛盾.
+(b). 我们想把 (a) 应用于 $X = \CC^2$, $X_1 = \{(z_1, z_2) \in \CC^2 \mid |z_1| < |z_2|\}$, $X_2 = \{(z_1, z_2) \in \CC^2 \mid |z_1| > |z_2|\}$, $G_1 = \langle x \rangle$, $G_2 = \langle y \rangle$. 我们必须验证这些子集和子群满足 (a) 的条件.
+设 $g \in G_1 - \{1\}$, $(z_1, z_2) \in X_1$. 有 $g = x^n$ (其中 $n \in \Z - \{0\}$), 所以 $g = \begin{pmatrix} 1 & na_1 \\ 0 & 1 \end{pmatrix}$, 且 $g \cdot (z_1, z_2) = (z_1 + na_1z_2, z_2)$. 所以
+\[
+|z_1 + na_1z_2| \geq |n||a_1||z_2| - |z_1| \geq 2|z_2| - |z_1| > |z_2|,
+\]
+即 $g \cdot (z_1, z_2) \in X_2$. (我们用 $|n| \geq 1$ 这一事实.) 对 $g \in G_2 - \{1\}$ 和 $(z_1, z_2) \in X_2$ 证明 $g \cdot (z_1, z_2) \in X_1$ 类似.
+设 $G$ 是由 $x$ 和 $y$ 生成的 $\SL_2(\CC)$ 的子群, $F$ 是生成元 $a$ 和 $b$ 上的自由群. 有满射群同态 $\phi \colon F \to G$, 把 $F$ 的元素 $a^{n_1}b^{m_1}\cdots a^{n_r}b^{m_r}$ ($r \geq 0$, $n_1, m_1, \ldots, n_r, m_r \in \Z$) 送到 $x^{n_1}y^{m_1}\cdots x^{n_r}y^{m_r} \in G$. 我们要验证 $\phi$ 单射. 这意味着它的核平凡, 即它把 $F$ 中的既约字送到 $G$ 的非平凡元素. 但这个性质正是 (a) 的结论.
+(c). 假设 $G$ 可解. 则由习题 \ref{ex:III.6.3.4}, $G$ 在 $\CC$ 上的平凡表示 $\mathbf{1}$ 包含于其正则表示 $\pi_L$. 设 $H$ 是 $G$ 的子群. 由弱包含的定义立即得到 $H$ 的表示 $\mathbf{1}|_H$ (它就是 $H$ 的平凡表示) 弱包含于 $\pi_L|_H$. 设 $\pi$ 是 $H$ 的正则表示, 让我们证明 $\pi_L|_H$ 弱包含于 $\pi$. 这将蕴含 $H$ 的平凡表示包含于其正则表示.
+设 $(x_i)_{i \in I}$ 是商 $H\backslash G$ 的代表系; 有 $G = \bigsqcup_{i \in I}Hx_i$. 设 $\phi$ 是与 $\pi_L|_H$ 关联的正定型函数. 这意味着存在 $f \in L^2(G)$ 使得对每个 $x \in H$,
+\[
+\phi(x) = \langle L_xf, f \rangle_{L^2(G)}.
+\]
+对每个 $i \in I$, 设 $f_i = f|_{Hx_i} \in L^2(G)$. 则级数 $\sum_{i \in I}f_i$ 在 $L^2(G)$ 中收敛到 $f$, 且若 $i \neq j$, 对每个 $x \in H$ 有 $\langle L_xf_i, f_j \rangle_{L^2(G)} = 0$ (因为 $L_xf_i$ 和 $f_j$ 有不相交的支撑). 特别地, $\|f\|_2^2 = \sum_{i \in I}\|f_i\|_2^2$. 所以对每个 $x \in H$,
+\[
+\phi(x) = \sum_{i \in I}\langle L_xf_i, f_i \rangle_{L^2(G)},
+\]
+且这个和在 $x \in H$ 上一致收敛 (因为 $|\langle L_xf_i, f_i \rangle_{L^2(G)}| \leq \|f_i\|_2^2$).
+对每个 $i \in I$, 定义 $g_i \in L^2(H)$ 为 $g_i(y) = f_i(yx_i)$. 则对每个 $x \in H$ 有 $\langle L_xg_i, g_i \rangle_{L^2(H)} = \langle L_xf_i, f_i \rangle_{L^2(G)}$. 所以我们已经把 $\phi$ 写成 $H$ 的正则表示关联的正定型函数的有限和的极限, 这正是我们想要的.
+总之, 我们证明了: 若 $G$ 可解, 则对 $G$ 的每个子群 $H$, $H$ 的平凡表示包含于其正则表示 (即 $H$ 也可解). 注意到目前为止我们只用 $G$ 离散这一事实.
+现在若 $G = \SL_2(\R)$, (b) 说 $G$ 有同构于两个生成元上的自由群的子群 $H$ (只需在 (b) 中取 $a_1, a_2 \in \R$). 则上面的结果与习题 \ref{ex:III.6.2.8} 矛盾.
+\end{solution}

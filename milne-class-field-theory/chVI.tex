@@ -1,0 +1,793 @@
+% ============================================================
+% 第六章  L-级数与素数的密度
+% 源: Milne CFT v4.03, Chapter VI (书页 p.183--197)
+% OCR: 行 6797--7441; 脚注 1--3 从原书 PDF 恢复
+% 勘误: CFT 官网勘误表无本章条目.
+% 标签前缀: vi.  本章无跨节编号公式
+% ============================================================
+\chapter{L-级数与素数的密度}\label{ch:VI}
+\index{ljishu@L-级数(L-series)}\index{sulixiang@素理想(prime ideal)!midu@密度(density)}
+
+Euler 用初等形式的 Riemann zeta 函数证明了素数有无穷多个. 为了证明素数在模 $m$ 的各个算术级数中均匀分布, Dirichlet 给 $(\Z/m\Z)^{\times}$ 的特征附加了 $L$-级数 (视作实变量的函数). Riemann 开创了把 Riemann zeta 函数当作复变量函数来研究的方法. 本章中, 我们将 (遵循 Weber) 把 Dirichlet 的方法推广到研究素理想在射线类群各个类中的分布. 除射线类群的定义外, 本章独立于前面各章.
+
+本章需要用到一点复分析. 回顾: 幂级数 $1+z+\frac{z^2}{2!}+\cdots$ 对所有 $z\in\CC$ 收敛到一个全纯函数, 该函数记作 $e^z$. 对每个正实数 $n$ 与复数 $z$, 定义 $n^z=e^{(\log n)z}$, 其中 $\log$ 是自然对数 (函数 $\R_{>0}\to\R$, 为 $e^r$ 的反函数).
+
+\section{Dirichlet 级数与 Euler 乘积}\label{sec:VI.1}
+
+\textbf{Dirichlet 级数} (Dirichlet series) 是形如
+\[
+f(s)=\sum_{n\ge1}\frac{a(n)}{n^{s}}\qquad a(n)\in\CC,\quad s=\sigma+it\in\CC
+\]
+的级数. 属于数域 $K$ 的 \textbf{Euler 乘积} (Euler product) 是形如
+\[
+g(s)=\prod_{\mathfrak{p}}\frac{1}{(1-\theta_{1}(\mathfrak{p})\Nm\mathfrak{p}^{-s})\cdots(1-\theta_{d}(\mathfrak{p})\Nm\mathfrak{p}^{-s})},\quad\theta_{i}(\mathfrak{p})\in\CC,\quad s\in\CC
+\]
+的乘积, 其中 $\mathfrak{p}$ 跑遍 $\mathcal{O}_K$ 的除有限多个之外的全部素理想.
+
+\begin{example}\label{ex:vi.1.1}
+(a) Riemann zeta 函数是
+\[
+\zeta(s)=\sum_{n\ge1}\frac{1}{n^{s}}=\prod_{p}\frac{1}{1-p^{-s}}.
+\]
+众所周知, $\zeta(s)$ 的性态, 特别是在临界带 $0\le\Re(s)\le1$ 中的性态, 与素数的分布有关.
+
+(b) Dedekind zeta 函数. 对每个数域 $K$,
+\[
+\zeta_K(s)=\sum_{\mathfrak{a}\ge0}\frac{1}{\Nm\mathfrak{a}^{s}}=\prod_{\mathfrak{p}}\frac{1}{1-\Nm\mathfrak{p}^{-s}}.
+\]
+这里 $\Nm\mathfrak{a}=(\mathcal{O}_K:\mathfrak{a})$. 和式跑遍 $\mathcal{O}_K$ 中的整理想, 乘积跑遍 $\mathcal{O}_K$ 中的素理想.
+
+(c) \textbf{Dirichlet 特征} (Dirichlet character) 是同态\footnote{当 $K=\Q$ 且 $\mathfrak{m}=\infty(m)$, 从而 $C_{\mathfrak{m}}=(\Z/m\Z)^{\times}$ 时, 这些特征与 $L$-级数由 Dirichlet 引入; 对一般的射线类群, 它们由 Weber 引入. 一些作者 (有时也包括本书作者本人) 把术语 ``Dirichlet 特征''与``Dirichlet $L$-级数''限制于 $K=\Q$ 的情形, 而把更一般的对象称为``Weber 特征''与``Weber $L$-级数''. Dirichlet 用字母 $L$ 表示他的 $L$-函数, 这个字母沿用至今.}
+\[
+\chi\colon I^{\mathfrak{m}}\to\CC^{\times}
+\]
+其核包含 $i(K_{\mathfrak{m},1})$ (对某个模 $\mathfrak{m}$), 即 $\chi$ 是射线类群 $C_{\mathfrak{m}}$ 的特征. 对这样的特征, 相应的 Dirichlet $L$-级数是
+\[
+L(s,\chi)=\sum_{\substack{\mathfrak{a}\subset\mathcal{O}_{K},\\(\mathfrak{m},\mathfrak{a})=1}}\frac{\chi(\mathfrak{a})}{\Nm\mathfrak{a}^{s}}=\prod_{(\mathfrak{m},\mathfrak{p})=1}\frac{1}{1-\chi(\mathfrak{p})\Nm\mathfrak{p}^{-s}}.
+\]
+
+(d) \textbf{Hecke 特征} (Hecke character, 或 Gr\"ossen character) 是连续同态
+\[
+\psi:\mathbb{I}_K/K^{\times}\to\CC^{\times}
+\]
+其像包含于单位圆周. 若它在 $\mathbb{I}_K$ 于无限素处的单位分支上取值 $1$, 则它经过某个 $C_{\mathfrak{m}}$ 分解, 从而是 Dirichlet 特征; 反之, Dirichlet 特征定义一个具有离散像的 Hecke 特征. Hecke 特征在某个 $\prod_{v\notin S}U_v$ ($S$ 为包含无限素的素的有限集) 上取值 $1$, 相应的 Hecke $L$-级数是
+\[
+{\cal L}_{S}(s,\psi)=\prod_{v\not\in S}\frac{1}{1-\psi(\pi_{v})\Nm\mathfrak{p}_{v}^{-s}},
+\]
+其中 $\pi_v$ 是一个 idèle, 其 $v$-分量为一个素元, 其余分量为 $1$.
+
+(e) 设 $L$ 为 $K$ 的有限 Galois 扩张, Galois 群为 $G$. 设 $V$ 是 $\CC$ 上的有限维向量空间,
+\[
+\rho:G\to\mathrm{GL}(V)
+\]
+是 $G$ 到 $V$ 的线性自同构群的同态. 我们称 $\rho$ 为 $G$ 的一个 (有限维)\textbf{表示} (representation). $\rho$ 的迹 (trace) 是把 $\sigma$ 映到自同构 $\rho(\sigma)$ 的迹的映射. 对 $\sigma\in G$, 令
+\[
+P_{\sigma}(T)\overset{\mathrm{def}}{=}\det(1-\rho(\sigma)T\mid V)=\prod_{i=1}^{\dim V}(1-a_{i}(\sigma)T),\qquad a_{i}\in\CC,
+\]
+这是 $\rho(\sigma)$ 的特征多项式. 由于 $P_{\sigma}(T)$ 只依赖于 $\sigma$ 的共轭类, 对每个在 $L$ 中不分歧的 $K$ 的素 $\mathfrak{p}$, 可定义 $P_{\mathfrak{p}}(T)$ 为 $(\mathfrak{P},L/K)$ 的特征多项式, 其中 $\mathfrak{P}$ 是 $L$ 中位于 $\mathfrak{p}$ 之上的任一素理想. 附加到 $\rho$ 上的 \textbf{Artin $L$-级数} (Artin $L$-series) 是
+\[
+L(s,\rho)=\prod_{\mathfrak{p}}\frac{1}{P_{\mathfrak{p}}(\Nm\mathfrak{p}^{-s})}=\prod_{\mathfrak{p}}\frac{1}{(1-a_{1}(\mathfrak{p})\Nm\mathfrak{p}^{-s})\cdots(1-a_{\dim V}(\mathfrak{p})\Nm\mathfrak{p}^{-s})}
+\]
+(乘积跑遍 $K$ 的全部不分歧素; $a_i(\mathfrak{p})=a_i((\mathfrak{P},L/K))$).
+\end{example}
+
+\section{收敛性结果}\label{sec:VI.2}
+
+我们来研究 Dirichlet 级数与 Euler 乘积的初等解析性质.
+
+\subsection*{Dirichlet 级数}
+
+\begin{proposition}\label{prop:vi.2.1}
+设
+\[
+f(s)=\sum_{n\ge1}\frac{a(n)}{n^{s}}.
+\]
+令 $S(x)=\sum_{n\le x}a(n)$, 并设存在正常数 $a$ 与 $b$, 使得对所有充分大的 $x$ 有 $|S(x)|\le ax^{b}$. 则级数 $f(s)$ 在
+\[
+D(b,\delta,\varepsilon)=\{\Re(s)\ge b+\delta,\quad|\arg(s-b)|\le\frac{\pi}{2}-\varepsilon\}
+\]
+上对一切 $\delta,\varepsilon>0$ 一致收敛, 且它收敛到半平面 $\Re(s)>b$ 上的一个解析函数.
+\end{proposition}
+
+\begin{proof}
+由于每个满足 $\Re(s)>b$ 的点 $s$ 都有形如 $D(b,\delta,\varepsilon)$ 的邻域, 断言的第二部分由第一部分推出. 为证第一部分, 我们使用一致收敛的 Cauchy 准则. 对充分大的整数 $n_1<n_2$,
+\begin{align*}
+\left|\sum_{n=n_{1}}^{n_{2}}\frac{a(n)}{n^{s}}\right|
+&=\left|\sum_{n_{1}}^{n_{2}}\frac{S(n)-S(n-1)}{n^{s}}\right|\\
+&=\left|\sum_{n_{1}}^{n_{2}}\frac{S(n)}{n^{s}}-\sum_{n_{1}-1}^{n_{2}-1}\frac{S(n)}{(n+1)^{s}}\right|\\
+&=\left|\frac{S(n_{2})}{n_{2}^{s}}-\frac{S(n_{1}-1)}{n_{1}^{s}}+\sum_{n_{1}}^{n_{2}-1}S(n)\left(\frac{1}{n^{s}}-\frac{1}{(n+1)^{s}}\right)\right|\\
+&\le\frac{|S(n_{2})|}{n_{2}^{\sigma}}+\frac{|S(n_{1}-1)|}{n_{1}^{\sigma}}+\sum_{n_{1}}^{n_{2}-1}|S(n)|\left|s\int_{n}^{n+1}\frac{dt}{t^{s+1}}\right|\\
+&\le\frac{a}{n_{2}^{\sigma-b}}+\frac{a}{n_{1}^{\sigma-b}}+\sum_{n_{1}}^{n_{2}-1}|s|an^{b}\left|\int_{n}^{n+1}\frac{dt}{t^{s+1}}\right|\\
+&\le\frac{2a}{n_{1}^{\sigma-b}}+|s|a\sum_{n_{1}}^{n_{2}-1}\left|\int_{n}^{n+1}\frac{t^{b}\,dt}{t^{s+1}}\right|\\
+&\le\frac{2a}{n_{1}^{\sigma-b}}+|s|a\int_{n_{1}}^{\infty}\frac{dt}{t^{\sigma+1-b}}\\
+&\le\frac{2a}{n_{1}^{\sigma-b}}-\frac{|s|a}{\sigma-b}\cdot\frac{1}{t^{\sigma-b}}\bigg|_{n_{1}}^{\infty}\\
+&\le\frac{2a}{n_{1}^{\sigma-b}}+\frac{|s|a}{(\sigma-b)n_{1}^{\sigma-b}}.
+\end{align*}
+但对 $s\in D(b,\delta,\varepsilon)$,
+\[
+\frac{|s|}{\sigma-b}=\frac{|s-b+b|}{\sigma-b}\le\frac{|s-b|}{\sigma-b}+\frac{b}{\sigma-b}=\frac{1}{\cos\theta}+\frac{b}{\sigma-b}\le\frac{1}{\cos\theta}+\frac{b}{\delta},
+\]
+其中 $\theta=\arg(s-b)$. 由于 $|\theta|\le\frac{\pi}{2}-\varepsilon$, $\frac{1}{\cos\theta}$ 被某个数 $M$ 界住, 于是
+\[
+\left|\sum_{n=n_{1}}^{n_{2}}\frac{a(n)}{n^{s}}\right|\le\frac{2a}{n_{1}^{\sigma-b}}+\frac{(M+\frac{b}{\delta})a}{n_{1}^{\sigma-b}}.
+\]
+上式右端当 $n_1\to\infty$ 时趋于零, 故可应用 Cauchy 准则推知 $f(s)$ 一致收敛.
+\end{proof}
+
+\begin{remark}\label{rem:vi.2.2}
+(a) 对 Dirichlet 级数 $\zeta(s)$, $S(x)$ 为 $[x]$, 故 $\zeta(s)$ 的级数对 $\Re(s)>1$ 收敛. 对 $\zeta_K(s)$, $S(x)$ 是数值范数 $\le x$ 的整理想的个数. 显然 $S(x)$ 有限, 而实际上 (见下文 \ref{prop:vi.2.8}) $S(x)\le Cx$. 因此 $\zeta_K$ (以及 $L(s,\chi)$) 的级数对 $\Re(s)>1$ 收敛. (也可以直接证明 Euler 乘积对 $\Re(s)>1$ 收敛, 从而推出 Dirichlet 级数收敛; 见 \cite{FrohlichTaylor1991}, VIII, 2.2.)
+
+(b) 设 $f(s)=\sum\frac{a(n)}{n^{s}}$ 是满足 $a(n)\ge0$ 的 Dirichlet 级数. 若 $f(s)$ 对所有 $\Re(s)>b$ 的 $s$ 收敛, 但对任何 $\varepsilon>0$ 都不在半平面 $\{s\mid\Re(s)>b-\varepsilon\}$ 上收敛, 则当实数 $s$ 从右侧趋于 $1$ 时 $f(s)\to\infty$, 也就是说, $f(s)$ 的收敛域受到实轴上一个奇点的限制. (见 \cite{Serre1970}, III, 2.3.) 例如, $\zeta(s)$ 的级数在任何半平面 $\Re(s)>1-\varepsilon$ ($\varepsilon>0$) 上都不收敛, 而我们将会看到, $\zeta(s)$ 在 $s=1$ 处确实有极点.
+\end{remark}
+
+\begin{lemma}\label{lem:vi.2.3}
+zeta 函数 $\zeta(s)$ 可解析延拓为 $\Re(s)>0$ 上的亚纯函数, 其唯一 (可能的) 极点在 $s=1$ 处.
+\end{lemma}
+
+\begin{proof}
+定义
+\[
+\zeta_{2}(s)=1-\frac{1}{2^{s}}+\frac{1}{3^{s}}-\frac{1}{4^{s}}+\cdots
+\]
+对这一 Dirichlet 级数, $S(x)$ 为 $0$ 或 $1$, 故 $\zeta_2(s)$ 对 $\Re(s)>0$ 解析. 注意
+\[
+\left(1+\frac{1}{2^{s}}+\frac{1}{3^{s}}+\frac{1}{4^{s}}+\cdots\right)-2\left(\frac{1}{2^{s}}+\frac{1}{4^{s}}+\frac{1}{6^{s}}+\cdots\right)=1-\frac{1}{2^{s}}+\frac{1}{3^{s}}-\frac{1}{4^{s}}+\cdots,
+\]
+即
+\[
+\zeta(s)-\frac{2}{2^{s}}\zeta(s)=\zeta_{2}(s),
+\]
+亦即
+\[
+\zeta(s)=\frac{\zeta_{2}(s)}{1-2^{1-s}}.
+\]
+于是 $\zeta(s)$ 在 $\Re(s)>0$ 上解析, 可能的极点只在 $2^{s-1}=1$ 处. 但
+\[
+2^{s-1}=1\iff e^{(\log 2)(s-1)}=1\iff(\log 2)(s-1)=2k\pi i,
+\]
+故 $\zeta(s)$ 除可能在
+\[
+s=1+\frac{2k\pi i}{\log 2},\quad k\in\Z
+\]
+处外解析. 实际上, 唯一可能的极点是 $s=1$. 为此, 定义
+\[
+\zeta_{3}(s)=1+\frac{1}{2^{s}}-\frac{2}{3^{s}}+\frac{1}{4^{s}}+\frac{1}{5^{s}}-\frac{2}{6^{s}}+\cdots
+\]
+并观察 (如同对 $\zeta_2(s)$ 那样) $\zeta_3(s)$ 对 $\Re(s)>0$ 解析, 且
+\[
+\zeta(s)=\frac{\zeta_{3}(s)}{1-3^{1-s}}.
+\]
+因此 $\zeta(s)$ 对 $\Re(s)>0$ 解析, 可能的极点只在
+\[
+s=1+\frac{2k\pi i}{\log 3},\quad k\in\Z
+\]
+处. 于是, 在 $\zeta(s)$ 的极点处必须有
+\[
+\frac{2k\pi i}{\log 2}=\frac{2k'\pi i}{\log 3},
+\]
+即
+\[
+2^{k'}=3^{k},\qquad k,k'\in\Z.
+\]
+由唯一分解, 这仅当 $k=0=k'$ 时才可能.
+\end{proof}
+
+\begin{lemma}\label{lem:vi.2.4}
+对实数 $s>1$,
+\[
+\frac{1}{s-1}\le\zeta(s)\le 1+\frac{1}{s-1}.
+\]
+因此 $\zeta(s)$ 在 $s=1$ 处有留数为 $1$ 的单极点, 即
+\[
+\zeta(s)=\frac{1}{s-1}+\text{在 $1$ 附近全纯的函数}.
+\]
+\end{lemma}
+
+\begin{proof}
+固定实数 $s>1$. 考察 $y=x^{-s}$ 的图象即知
+\[
+\int_{1}^{\infty}x^{-s}\,dx\le\zeta(s)\le 1+\int_{1}^{\infty}x^{-s}\,dx.
+\]
+而
+\[
+\int_{1}^{\infty}x^{-s}\,dx=\left.\frac{x^{1-s}}{1-s}\right|_{1}^{\infty}=\frac{1}{s-1},
+\]
+这就给出了不等式. 由于 $\zeta(s)$ 在 $s=1$ 附近亚纯, 在 $s=1$ 附近有
+\[
+\zeta(s)=\frac{c}{(s-1)^{m}}+\frac{g(s)}{(s-1)^{m-1}},
+\]
+其中 $m\in\N$, $c\in\CC$, $g(s)$ 在 $s=1$ 附近全纯. 上述不等式蕴含 $m=1$ 且 $c=1$.
+\end{proof}
+
+\begin{proposition}\label{prop:vi.2.5}
+设 $f(s)$ 为一 Dirichlet 级数, 且存在实常数 $C$ 与 $b<1$, 使得
+\[
+|S(n)-a_{0}n|\le Cn^{b}.
+\]
+则 $f(s)$ 可延拓为 $\Re(s)>b$ 上的亚纯函数, 在 $s=1$ 处有留数为 $a_0$ 的单极点, 即在 $s=1$ 附近
+\[
+f(s)=\frac{a_{0}}{s-1}+\text{全纯函数}.
+\]
+\end{proposition}
+
+\begin{proof}
+对 Dirichlet 级数 $f(s)-a_0\zeta(s)$, 有 $|S(n)|\le Cn^{b}$, 故 $f(s)-a_0\zeta(s)$ 对 $\Re(s)>b$ 收敛.
+\end{proof}
+
+\subsection*{Euler 乘积}
+
+回顾: 无穷乘积 $\prod_{n=1}^{\infty}(1+b_n)$ ($b_n\in\CC$, $b_n\ne-1$) 称为\textbf{收敛}的 (convergent), 如果部分乘积序列
+\[
+\Pi_{m}=\prod_{n=1}^{m}(1+b_{n})
+\]
+收敛到一个非零值. 此外, 若 $\prod_{n=1}^{\infty}1+|b_{n}|$ 收敛, 则称该乘积\textbf{绝对收敛} (absolutely convergent). 绝对收敛的乘积必收敛, 且此时乘积的任何重排都 (绝对) 收敛到同一个值.
+
+\begin{lemma}\label{lem:vi.2.6}
+乘积 $\prod_{1}^{\infty}1+b_n$ 绝对收敛当且仅当级数 $\sum b_n$ 绝对收敛.
+\end{lemma}
+
+\begin{proof}
+不妨设 $b_n\ge0$ 对所有 $n$ 成立. 此时 $\Pi_m\overset{\text{def}}{=}\prod_1^m 1+b_n$ 与 $\Sigma_m\overset{\text{def}}{=}\sum_1^m b_n$ 都是单调递增序列. 由于 $\Pi_m\ge\Sigma_m$, 显然若 $\Pi_m$ 收敛则 $\Sigma_m$ 也收敛. 反之, 注意
+\[
+e^{\Sigma_{m}}=\prod_{i=1}^{m}e^{b_{i}}\ge\prod_{i=1}^{m}(1+b_{i})=\Pi_{m},
+\]
+故若序列 $\Sigma_m$ 收敛, 则序列 $\Pi_m$ 有上界, 从而也收敛.
+\end{proof}
+
+回顾: 有限和的乘积, 比如
+\[
+\left(\sum_{i=1}^{l}a_{i}\right)\left(\sum_{i=1}^{m}b_{i}\right)\left(\sum_{i=1}^{n}c_{i}\right)
+\]
+是一个和
+\[
+\sum_{\substack{1\le i\le l\\1\le j\le m\\1\le k\le n}}a_{i}b_{j}c_{k},
+\]
+其中每一项恰好由从每个和式中各取一项相乘而成. 又回顾
+\[
+\frac{1}{1-t}=1+t+t^{2}+\cdots,\qquad|t|<1.
+\]
+于是 (至少形式上)
+\begin{align*}
+\prod_{p}\frac{1}{1-p^{-s}}&=(1+2^{-s}+(2^{2})^{-s}+\cdots)(1+3^{-s}+(3^{2})^{-s}+\cdots)(1+5^{-s}+(5^{2})^{-s}+\cdots)\cdots\\
+&=\sum n^{-s},
+\end{align*}
+因为每个正整数都能以唯一的方式写成素数幂的乘积. 这个恒等式有时被称为唯一分解的解析形式. 现在我们证明一个更一般的结果.
+
+\begin{proposition}\label{prop:vi.2.7}
+设 $\chi$ 是数域 $K$ 的 Dirichlet 特征. 对所有满足 $\Re(s)>1$ 的 $s$, Euler 乘积 $\prod_{\mathfrak{p}\nmid\mathfrak{m}}\frac{1}{1-\chi(\mathfrak{p})\Nm\mathfrak{p}^{-s}}$ 收敛到 $L(s,\chi)$.
+\end{proposition}
+
+\begin{proof}
+对 $\Re(s)>1$,
+\[
+\frac{1}{1-\chi(\mathfrak{p})\Nm\mathfrak{p}^{-s}}=1+\frac{\chi(\mathfrak{p})}{\Nm\mathfrak{p}^{s}}+\frac{\chi(\mathfrak{p}^{2})}{(\Nm\mathfrak{p}^{2})^{s}}+\cdots.
+\]
+现在
+\[
+\prod_{\substack{(\mathfrak{p},\mathfrak{m})=1\\ \Nm\mathfrak{p}\le t_{0}}}\frac{1}{1-\chi(\mathfrak{p})\Nm\mathfrak{p}^{-s}}=\sum\frac{\chi(\mathfrak{a})}{\Nm(\mathfrak{a})^{s}},
+\]
+其中右端的和跑遍所有能表示为数值范数 $\le t_0$ 的素理想之乘积的整理想. 当 $t_0\to\infty$ 时, 右端 (绝对) 收敛到 $L(s,\chi)$. 因此该无穷乘积收敛, 且其值为 $L(s,\chi)$.
+\end{proof}
+
+\subsection*{部分 zeta 函数; 留数公式}
+
+设 $K$ 为数域, $\mathfrak{m}$ 为一个模. 对 $C_{\mathfrak{m}}\overset{\mathrm{def}}{=}I^{\mathfrak{m}}/i(K_{\mathfrak{m},1})$ 中的每个类 $\mathfrak{k}$, 定义\textbf{部分 zeta 函数} (partial zeta function)
+\[
+\zeta(s,\mathfrak{k})=\sum_{\mathfrak{a}\ge0,\ \mathfrak{a}\in\mathfrak{k}}\frac{1}{\Nm\mathfrak{a}^{s}}\qquad(\text{对 $\mathfrak{k}$ 中的整理想求和}).
+\]
+注意: 对 $C_{\mathfrak{m}}$ 的每个特征 $\chi$,
+\[
+L(s,\chi)=\sum_{\mathfrak{k}\in C_{\mathfrak{m}}}\chi(\mathfrak{k})\zeta(s,\mathfrak{k}).
+\]
+特别地,
+\[
+\zeta_K(s)=\sum_{\mathfrak{k}\in C_{\mathfrak{m}}}\zeta(s,\mathfrak{k}).
+\]
+因此, 知道 $\zeta(s,\mathfrak{k})$ 就会为我们提供关于 $L(s,\chi)$ 与 $\zeta_K(s)$ 的信息.
+
+令
+\[
+S(x,\mathfrak{k})=\left|\left\{\mathfrak{a}\in\mathfrak{k}\mid\mathfrak{a}\ \text{为整理想},\ \Nm\mathfrak{a}\le x\right\}\right|,
+\]
+即它是 Dirichlet 级数 $\zeta(s,\mathfrak{k})$ 的 $S(x)$. 回顾 (ANT, 第 5 章, p.~87): 存在同态
+\[
+l\colon U\to\R^{r+s},\quad u\mapsto(\log|\sigma_{1}(u)|,\ldots,2\log|\sigma_{r+s}(u)|),
+\]
+其核为 $U$ 的挠子群, 其像是一个 $r+s-1$ 维的格. \textbf{regulator} (调整子) $\mathrm{reg}(K)$ 定义为该格的基本平行多面体的体积. 令 $U_{\mathfrak{m},1}=U\cap K_{\mathfrak{m},1}$. 则 $U_{\mathfrak{m},1}$ 在 $U$ 中指数有限, 我们定义 $\mathrm{reg}(\mathfrak{m})$ 为 $l(U_{\mathfrak{m},1})$ 的基本平行多面体的体积. 于是
+\[
+\mathrm{reg}(\mathfrak{m})=\mathrm{reg}(K)\,(U:U_{\mathfrak{m},1}).
+\]
+
+\begin{proposition}\label{prop:vi.2.8}
+对所有 $x\ge1$,
+\[
+|S(x,\mathfrak{k})-g_{\mathfrak{m}}x|\le Cx^{1-\frac{1}{d}},\quad g_{\mathfrak{m}}=\frac{2^{r}(2\pi)^{s}\,\mathrm{reg}(\mathfrak{m})}{w_{\mathfrak{m}}\Nm(\mathfrak{m})|\Delta_{K/\Q}|^{\frac{1}{2}}},\quad d=[K:\Q],
+\]
+其中
+\begin{align*}
+r&=\text{实素的个数},\\
+s&=\text{复素的个数},\\
+w_{\mathfrak{m}}&=\text{$K_{\mathfrak{m},1}$ 中 $1$ 的根的个数},\\
+\Nm(\mathfrak{m})&=\Nm(\mathfrak{m}_{0})\,2^{r_{0}},
+\end{align*}
+$r_0$ 为 $\mathfrak{m}$ 中实素的个数, 而 $\Delta_{K/\Q}$ 为 $K/\Q$ 的判别式.
+\end{proposition}
+
+\begin{proof}
+首先证明存在整理想 $\mathfrak{b}_0\in\mathfrak{t}^{-1}$. 则对每个整的 $\mathfrak{a}\in\mathfrak{t}$, 有 $\mathfrak{a}\mathfrak{b}_0=(\alpha)$, 其中 $\alpha\in\mathcal{O}_K$. 此时 $S(x,\mathfrak{t})$ 就是满足 $\alpha\in\mathfrak{b}_0\cap K_{\mathfrak{m},1}$ 且 $|\Nm(\alpha)|\le x\Nm(\mathfrak{b}_0)$ 的主理想 $(\alpha)$ 的个数. 下面只需计数. 所用技巧与单位定理证明中的类似; 细节见 \cite{Lang1970}, VI.3, 定理 3. (\cite{Janusz1996}, IV.2.11 中证明了一个稍弱的结果.)
+\end{proof}
+
+\begin{corollary}\label{cor:vi.2.9}
+部分 zeta 函数 $\zeta(s,\mathfrak{k})$ 在 $\Re(s)>1-\frac{1}{d}$ 上解析, 除 $s=1$ 处一个留数为 $g_{\mathfrak{m}}$ 的单极点外.
+\end{corollary}
+
+\begin{proof}
+应用命题 \ref{prop:vi.2.5}.
+\end{proof}
+
+注意 $g_{\mathfrak{m}}$ 不依赖于类 $\mathfrak{k}$.
+
+\begin{lemma}\label{lem:vi.2.10}
+设 $A$ 为有限 Abel 群, $\chi:A\to\CC^{\times}$ 为非平凡特征 (即不把每个元素都映到 $1$ 的同态). 则
+\[
+\sum_{a\in A}\chi(a)=0.
+\]
+\end{lemma}
+
+\begin{proof}
+由于 $\chi$ 非平凡, 存在 $b\in A$ 使得 $\chi(b)\ne1$. 但
+\[
+\sum_{a\in A}\chi(a)=\sum_{a\in A}\chi(ab)=\Bigl(\sum_{a}\chi(a)\Bigr)\chi(b),
+\]
+故
+\[
+\bigl(\chi(b)-1\bigr)\sum_{a}\chi(a)=0,
+\]
+从而 $\sum_{a}\chi(a)=0$.
+\end{proof}
+
+\begin{corollary}\label{cor:vi.2.11}
+若 $\chi$ 不是平凡特征, 则 $L(s,\chi)$ 在 $\Re(s)>1-\frac{1}{d}$ 上解析.
+\end{corollary}
+
+\begin{proof}
+在 $s=1$ 附近,
+\[
+L(s,\chi)=\sum_{\mathfrak{k}\in C_{\mathfrak{m}}}\chi(\mathfrak{k})\cdot\zeta(s,\mathfrak{k})=\frac{\sum_{\mathfrak{k}\in C_{\mathfrak{m}}}\chi(\mathfrak{k})\,g_{\mathfrak{m}}}{s-1}+\text{全纯函数},
+\]
+而引理表明第一项为零.
+\end{proof}
+
+以后我们将看到 $L(1,\chi)\ne0$.
+
+\begin{corollary}\label{cor:vi.2.12}
+Dedekind zeta 函数 $\zeta_K(s)$ 在 $\Re(s)>1-\frac{1}{d}$ 上解析, 除 $s=1$ 处一个单极点外, 该极点的留数为
+\[
+\frac{2^{r}(2\pi)^{s}\,\mathrm{reg}(K)}{w_{K}|\Delta|^{\frac{1}{2}}}\,h_{K}.
+\]
+\end{corollary}
+
+\begin{proof}
+回顾 $\zeta_K(s)=\sum_{\mathfrak{k}\in C_K}\zeta(s,\mathfrak{k})$.
+\end{proof}
+
+\begin{example}\label{ex:vi.2.13}
+(a) 对 $K=\Q$, 上面的公式化为 $1=\frac{2}{2}$.
+
+(b) 对 $K=\Q[\sqrt{d}]$, 公式化为
+\[
+\lim_{s\to1}(s-1)\zeta_{K}(s)=
+\begin{cases}
+\dfrac{2\log(u)}{\Delta^{\frac{1}{2}}}\,h_{K}, & u>1\ \text{为一个基本单位},\ d>0,\\[2ex]
+\dfrac{2\pi}{w_{K}|\Delta|^{\frac{1}{2}}}\,h_{K}, & d<0.
+\end{cases}
+\]
+可以求出左端表达式的闭公式, 由此得到类数的一个非常简单的表达式. 回顾: $K/\Q$ 的 Artin 映射可以视为一个特征 $\chi\colon I^S\to\{\pm1\}$, 其中 $S$ 是在 $K$ 中分歧的素的集合. 我们不把它看作理想上的映射, 而是看作正整数上的映射, 并规定: 若 $m$ 被某个在 $K$ 中分歧的素数整除, 则 $\chi(m)=0$, 以此把它延拓到所有正整数上. 于是 $\chi$ 现在是正整数集上的乘性映射, 取值
+\[
+\chi(p)=
+\begin{cases}
+1 & \text{若 $p$ 在 $K$ 中分裂},\\
+-1 & \text{若 $p$ 在 $K$ 中保持素},\\
+0 & \text{若 $p$ 在 $K$ 中分歧}.
+\end{cases}
+\]
+对判别式 $<-4$ 的虚二次域, 公式化为
+\[
+h_{K}=\frac{1}{2-\chi(2)}\sum_{\substack{(x,\Delta)=1\\ 0<x<|\Delta|/2}}\chi(x).
+\]
+例如, 若 $K=\Q[\sqrt{-5}]$, 则 $|\Delta|=20$, 且
+\[
+h=\frac{1}{2-0}\bigl(\chi(1)+\chi(3)+\chi(7)+\chi(9)\bigr)=\frac{4}{2}=2,
+\]
+因为 $2$ 分歧, 而
+\[
+-5\equiv1\equiv1^{2}\bmod 3,\qquad -5\equiv2\equiv3^{2}\bmod 7.
+\]
+更多细节见 \cite{BorevichShafarevich1966}, 第 5 章, 第 4 节.
+\end{example}
+
+\section{在扩张中分裂的素理想的密度}\label{sec:VI.3}
+
+对 $K$ 的素理想集 $T$, 定义 $\zeta_{K,T}(s)=\prod_{\mathfrak{p}\in T}\frac{1}{1-\Nm\mathfrak{p}^{-s}}$. 若 $\zeta_{K,T}(s)$ 的某个正整数次幂 $\zeta_{K,T}(s)^{n}$ 可延拓为 $1$ 的一个邻域上的亚纯函数, 且在 $1$ 处有 $m$ 阶极点, 则称\footnote{仿照 \cite{Marcus1977}, p.~188; 或第 2 版 p.~134.} $T$ 具有\textbf{极密度} (polar density) $\delta(T)=m/n$.
+
+\begin{proposition}\label{prop:vi.3.1}
+(a) $K$ 的全部素理想之集具有极密度 $1$.
+
+(b) 任何 (具有极密度的) 集合的极密度都 $\ge0$.
+
+(c) 设 $T$ 是 $T_1$ 与 $T_2$ 的不交并. 若 $T$, $T_1$, $T_2$ 中任意两个具有极密度, 则第三个也具有, 且 $\delta(T)=\delta(T_1)+\delta(T_2)$.
+
+(d) 若 $T\subset T'$, 则 (当两者都有定义时) $\delta(T)\le\delta(T')$.
+
+(e) 有限集的密度为零.
+\end{proposition}
+
+\begin{proof}
+(a) 我们知道 $\zeta_K(s)$ 本身可延拓到 $1$ 的邻域, 且在 $1$ 处有单极点.
+
+(b) 称 $T$ 具有负密度, 即是说 $\zeta_{K,T}(s)$ 在 $s=1$ 的邻域内全纯且在该点为零. 但 $\zeta_{K,T}(1)=\prod_{\mathfrak{p}\in T}\frac{1}{1-\mathfrak{p}^{-1}}>0$.
+
+(c) 显然
+\[
+\zeta_{K,T}(s)=\zeta_{K,T_{1}}(s)\cdot\zeta_{K,T_{2}}(s).
+\]
+比方说, 设 $\zeta_{K,T}(s)^{m}$ 与 $\zeta_{K,T_{1}}(s)^{m_{1}}$ 可延拓为 $1$ 的邻域上的亚纯函数, 分别在 $1$ 处有 $n$ 阶与 $n_1$ 阶极点. 则
+\[
+\zeta_{K,T_{2}}(s)^{mm_{1}}=\zeta_{K,T}(s)^{mm_{1}}/\zeta_{K,T_{1}}(s)^{mm_{1}}
+\]
+可延拓为 $1$ 的邻域上的亚纯函数, 且在 $1$ 处有 $m_1n-mn_1$ 阶极点. 因此
+\[
+\delta(T_{2})=\frac{m_{1}n}{mm_{1}}-\frac{mn_{1}}{mm_{1}}=\delta(T)-\delta(T_{2}).
+\]
+
+(d) 结合 (c) 与 (b).
+
+(e) 显然.
+\end{proof}
+
+\begin{proposition}\label{prop:vi.3.2}
+若 $T$ 不含数值范数为素数 (属于 $\Z$) 的素理想, 则 $\delta(T)=0$.
+\end{proposition}
+
+\begin{proof}
+对 $\mathfrak{p}\in T$, $\Nm\mathfrak{p}=p^{f}$, 其中 $f\ge2$. 此外, 对给定的 $p$, 位于其上的 $K$ 的素理想至多 $[K:\Q]$ 个. 因此 $\zeta_{K,T}(s)$ 可分解为 $\prod_{i=1}^{d}g_{i}(s)$, 即 $d$ 个关于素数的无穷乘积之积, 其中每个 $g_i(s)$ 的因子或为 $1$, 或为 $\frac{1}{1-p^{-fs}}$ ($f\ge2$) 的形状. 对每个 $i$, $g_{i}(1)\le\sum_{n>0}n^{-2}=\zeta(2)$. 因此 $g_i(s)$ 在 $1$ 处全纯.
+\end{proof}
+
+\begin{corollary}\label{cor:vi.3.3}
+设 $T_1$ 与 $T_2$ 为 $K$ 中素理想的集合. 若二者仅相差数值范数不是素数的素理想, 且其中一者具有极密度, 则另一者亦然, 且两者的密度相等.
+\end{corollary}
+
+\begin{theorem}\label{thm:vi.3.4}
+设 $L$ 为 $K$ 的有限扩张, $M$ 为其 Galois 闭包. 则在 $L$ 中完全分裂的 $K$ 的素理想之集具有密度 $1/[M:K]$.
+\end{theorem}
+
+\begin{proof}
+$K$ 的素理想 $\mathfrak{p}$ 在 $L$ 中完全分裂当且仅当它在 $M$ 中完全分裂.\footnote{这里解释一下``素在扩张 $L$ 中完全分裂当且仅当在其 Galois 闭包中完全分裂''这一说法. 若素在 $L$ 中完全分裂, 则它在 $L$ 的每个共轭 $L'$ 中也完全分裂, 于是问题化为: 若素在两个域 $L$ 与 $L'$ 中都完全分裂, 则它在它们的复合中完全分裂. 这一点容易得到 (例如) 由下述判别法: $K$ 的素 $\mathfrak{p}$ 在 $L$ 中完全分裂当且仅当 $L\otimes_{K}K_{\mathfrak{p}}$ 是 $K_{\mathfrak{p}}$ 的若干拷贝之积 (复合 $LL'$ 是 $L\otimes_{K}L'$ 的直因子).} 因此, 只需在 $L$ 为 $K$ 的 Galois 扩张的假设下证明本定理. 设 $S$ 为在 $L$ 中完全分裂的 $K$ 的素理想之集, $T$ 为 $L$ 中位于 $S$ 的素理想之上的素理想之集. 对应于每个 $\mathfrak{p}\in S$, 恰有 $[L:K]$ 个素理想 $\mathfrak{P}\in T$, 且对其中每个都有 $\Nm_{L/K}\mathfrak{P}=\mathfrak{p}$, 从而 $\Nm\mathfrak{P}=\Nm\mathfrak{p}$. 于是 $\zeta_{L,T}(s)=\zeta_{K,S}(s)^{[L:K]}$. 但 $T$ 包含 $L$ 中每个在 $L/K$ 内不分歧且 $\Nm\mathfrak{P}=p$ 为有理素数的素理想. 因此 $T$ 与 $L$ 的全部素理想之集仅相差一个极密度为 $0$ 的集合, 从而 $T$ 具有密度 $1$. 这蕴含 $\zeta_{K,S}(s)$ 具有标志着 $S$ 的密度为 $1/[L:K]$ 的性质.
+\end{proof}
+
+\begin{corollary}\label{cor:vi.3.5}
+若 $f(X)\in K[X]$ 对除有限多个之外的所有素理想 $\mathfrak{p}$ 都模 $\mathfrak{p}$ 分解为一次因式之积, 则 $f$ 在 $K$ 中分解为一次因式之积.
+\end{corollary}
+
+\begin{proof}
+对 $f$ 的分裂域应用该定理.
+\end{proof}
+
+\begin{corollary}[Bauer 1916]\label{cor:vi.3.6}
+对数域 $K$ 的 Galois 扩张 $L$ 与 $M$,
+\[
+L\subset M\iff\operatorname{Spl}(L)\supset\operatorname{Spl}(M).
+\]
+因此
+\[
+L=M\iff\operatorname{Spl}(L)=\operatorname{Spl}(M),
+\]
+且
+\[
+L\mapsto\operatorname{Spl}(L)
+\]
+是从 $K$ 的有限 Galois 扩张之集 (含于某个固定的代数闭包) 到 $\{\mathfrak{p}\subset\mathcal{O}_K\}$ 的子集之集的单射.
+\end{corollary}
+
+\begin{proof}
+证明见定理 \ref{thm:v.3.25} 的证明.
+\end{proof}
+
+\begin{example}\label{ex:vi.3.7}
+设 $f(X)$ 为三次不可约多项式. 使 $f(X)$ 模 $\mathfrak{p}$ 分裂的素 $\mathfrak{p}$ 之集的密度为 $1/3$ 或 $1/6$, 视 $f(X)$ 的 Galois 群为 $C_3$ 还是 $S_3$ 而定.
+\end{example}
+
+\begin{corollary}\label{cor:vi.3.8}
+对每个 Abel 扩张 $L/K$ 与每个包含在 $L$ 中分歧的素的有限素集 $S\supset S_{\infty}$, Artin 映射 $\psi_{L/K}\colon I^{S}\to\Gal(L/K)$ 是满射.
+\end{corollary}
+
+\begin{proof}
+设 $H$ 为 $\psi_{L/K}$ 的像. 对所有 $\mathfrak{p}\notin S$, $(\mathfrak{p},L^{H}/K)=(\mathfrak{p},L/K)|_{L^{H}}=1$, 这蕴含 $\mathfrak{p}$ 在 $L^{H}$ 中分裂. 于是除有限多个之外的全部素理想都在 $L^{H}$ 中分裂, 从而 $[L^{H}:K]=1$.
+\end{proof}
+
+\section{算术级数中素理想的密度}\label{sec:VI.4}
+
+设 $f(s)$ 与 $g(s)$ 是两个 (至少) 对实数 $s>1$ 有定义的函数. 若 $f(s)-g(s)$ 在
+\[
+1<s<1+\varepsilon\qquad(\text{$s$ 为实数, 某个 }\varepsilon>0)
+\]
+上有界, 则记
+\[
+f(s)\sim g(s)\qquad\text{当 }s\downarrow 1.
+\]
+注意
+\[
+f(s)\sim\delta\log\frac{1}{s-1}\qquad\text{当 }s\downarrow 1
+\]
+蕴含
+\[
+\lim_{s\downarrow1}\frac{f(s)}{\log\frac{1}{s-1}}=\delta.
+\]
+当 $f(s)$ 与 $g(s)$ 都在 $s=1$ 的邻域内全纯 (可能除 $s=1$ 处有极点) 时,
+\[
+f(s)\sim g(s)\qquad\text{当 }s\downarrow 1
+\]
+当且仅当 $f(s)$ 与 $g(s)$ 相差一个在 $1$ 的邻域内全纯的函数.
+
+设 $T$ 为 $K$ 的一个素集. 若存在 $\delta$ 使得
+\[
+\sum_{\mathfrak{p}\in T}\frac{1}{\Nm\mathfrak{p}^{s}}\sim\delta\log\frac{1}{s-1}\qquad\text{当 }s\downarrow 1,
+\]
+则称 $T$ 具有 \textbf{Dirichlet 密度} (Dirichlet density) $\delta$.
+
+若极限
+\[
+\lim_{x\to\infty}\frac{\#\{\mathfrak{p}\in T\mid\Nm\mathfrak{p}\le x\}}{\#\{\mathfrak{p}\mid\Nm\mathfrak{p}\le x\}}
+\]
+存在, 则称之为 $T$ 的\textbf{自然密度} (natural density).
+
+\begin{proposition}\label{prop:vi.4.1}
+(a) 若极密度存在, 则 Dirichlet 密度也存在, 且两者相等.
+
+(b) 若自然密度存在, 则 Dirichlet 密度也存在, 且两者相等.
+\end{proposition}
+
+\begin{proof}
+(a) 若 $T$ 有极密度 $m/n$, 则
+\[
+\zeta_{K,T}(s)^{n}=\frac{a}{(s-1)^{m}}+\frac{g(s)}{(s-1)^{m-1}},
+\]
+其中 $g(s)$ 在 $s=1$ 附近全纯. 此外 $a>0$, 因为对实数 $s>1$ 有 $\zeta_{K,T}(s)>0$. 取对数 (并应用引理\ref{lem:vi.4.3}) 得
+\[
+n\sum_{T}\frac{1}{\Nm\mathfrak{p}^{s}}\sim m\log\frac{1}{s-1}\qquad\text{当 }s\downarrow 1,
+\]
+这表明 $T$ 有 Dirichlet 密度 $m/n$.
+
+(b) 见 \cite{Goldstein1971}, p.~252.
+\end{proof}
+
+\begin{remark}\label{rem:vi.4.2}
+(a) 一个集合 $T$ 可以有 Dirichlet 密度而没有自然密度. 例如, 设 $T$ 为 (十进制下) 首位数字是 $1$ 的素数之集. 则 $T$ 没有自然密度, 但其 Dirichlet 密度为 $\log_{10}(2)=0.3010300\ldots$ (结论见 \cite{Serre1970}, VI, 4.5). 因此, 断言一个素数集有自然密度 $\delta$ 比断言它有 Dirichlet 密度 $\delta$ 更强. 本讲义中计算密度的所有集合其实都具有自然密度, 但我们不对此证明.
+
+(b) 由定义, 极密度是有理数. 因此, 每个具有非有理自然密度的集合都没有极密度.
+\end{remark}
+
+回顾: 指数函数
+\[
+e^{z}=\sum\frac{z^{n}}{n!}=e^{x}(\cos y+i\sin y),\quad z=x+iy
+\]
+定义了一个从
+\[
+\{z\in\CC\mid-\pi<\Im(z)<\pi\}
+\]
+到 $\CC$ 中负实轴的补集
+\[
+\{z\in\R\mid z\le0\}\text{ 在 $\CC$ 中的补集}
+\]
+的同构, 按定义其逆就是对数函数 $\log$ 的 (主支). 用这个定义,
+\[
+\log z=\log|z|+i\arg z,
+\]
+其中右端的 $\log$ 是微积分课程中定义的函数, 且 $-\pi<\arg z<\pi$. 用这个定义,
+\[
+\log\frac{1}{1-z}=z+\frac{z^{2}}{2}+\frac{z^{3}}{3}+\cdots,\qquad|z|<1.
+\]
+
+\begin{lemma}\label{lem:vi.4.3}
+设 $u_1,u_2,\ldots$ 是一个不小于 $2$ 的实数序列, 使得
+\[
+f(s)\overset{\mathrm{def}}{=}\prod_{j=1}^{\infty}\frac{1}{1-u_{j}^{-s}}
+\]
+在每个区域 $D(1,\delta,\varepsilon)$ ($\delta,\varepsilon>0$) 上一致收敛. 则
+\[
+\log f(s)\sim\sum\frac{1}{u_{j}^{s}}\qquad\text{当 }s\downarrow 1.
+\]
+\end{lemma}
+
+\begin{proof}
+我们有
+\begin{align*}
+\log f(s)&=\sum_{j=1}^{\infty}\log\frac{1}{1-u_{j}^{-s}}\\
+&=\sum_{j}\sum_{m=1}^{\infty}\frac{1}{mu_{j}^{sm}}\\
+&=\sum_{j}\frac{1}{u_{j}^{s}}+\sum_{j}\sum_{m=2}^{\infty}\frac{1}{mu_{j}^{sm}}\\
+&=\sum_{j}\frac{1}{u_{j}^{s}}+g(s),
+\end{align*}
+其中
+\[
+|g(s)|\le\sum_{j=1}^{\infty}\sum_{m=2}^{\infty}\left|\frac{1}{mu_{j}^{sm}}\right|=\sum_{j=1}^{\infty}\sum_{m=2}^{\infty}\frac{1}{mu_{j}^{m\sigma}},\qquad\sigma=\Re(s).
+\]
+利用 ($u\ge2$, $\sigma>1$)
+\[
+\sum_{m=2}^{\infty}\frac{1}{mu^{m\sigma}}\le\sum_{m=2}^{\infty}\frac{1}{2}\left(\frac{1}{u^{\sigma}}\right)^{m}=\frac{1}{2}\left(\frac{1}{1-u^{-\sigma}}-u^{-\sigma}-1\right)=\frac{1}{2}\cdot\frac{u^{-2\sigma}}{1-u^{-\sigma}}<\frac{1}{u^{2\sigma}}
+\]
+来估计内层和. 于是
+\[
+|g(s)|\le f(2\sigma).
+\]
+由于 $f(s)$ 对 $\Re(s)>1$ 全纯, $f(2s)$ 对 $\Re(s)>\frac{1}{2}$ 全纯, 故当 $\sigma\downarrow 1$ 时 $g(\sigma)$ 有界.
+\end{proof}
+
+\begin{proposition}\label{prop:vi.4.4}
+(a) $K$ 的全部素理想之集的 Dirichlet 密度为 $1$.
+
+(b) 任何 (具有 Dirichlet 密度的) 集合的 Dirichlet 密度都 $\ge0$.
+
+(c) 若 $T$ 有限, 则 $\delta(T)=0$.
+
+(d) 设 $T$ 是 $T_1$ 与 $T_2$ 的不交并. 若 $\delta(T_1)$, $\delta(T_2)$, $\delta(T)$ 中任意两个有定义, 则第三个也有定义, 且 $\delta(T)=\delta(T_1)+\delta(T_2)$.
+
+(e) 若 $T\subset T'$, 则 (设两者都有定义) $\delta(T)\le\delta(T')$.
+\end{proposition}
+
+\begin{proof}
+(a) 全部素理想之集甚至具有极密度 $1$.
+
+(b) 对实数 $s>0$, $\frac{1}{\Nm\mathfrak{p}^{s}}>0$; 而对 $s=1+\varepsilon$, $\log\frac{1}{s-1}=-\log\varepsilon$ 在 $0<\varepsilon<1$ 时为正.
+
+(c) 当 $T$ 有限时, $\sum_{\mathfrak{p}\in T}\frac{1}{\Nm\mathfrak{p}^{s}}$ 对所有 $s$ 全纯, 从而在任一点附近有界.
+
+(d) 显然, 对 $\Re(s)>1$,
+\[
+\sum_{\mathfrak{p}\in T}\frac{1}{\Nm\mathfrak{p}^{s}}=\sum_{\mathfrak{p}\in T_{1}}\frac{1}{\Nm\mathfrak{p}^{s}}+\sum_{\mathfrak{p}\in T_{2}}\frac{1}{\Nm\mathfrak{p}^{s}}.
+\]
+因此, 比方说若
+\[
+\sum_{\mathfrak{p}\in T_{1}}\frac{1}{\Nm\mathfrak{p}^{s}}\sim\delta_{1}\log\frac{1}{s-1},\qquad\sum_{\mathfrak{p}\in T_{2}}\frac{1}{\Nm\mathfrak{p}^{s}}\sim\delta_{2}\log\frac{1}{s-1},
+\]
+则
+\[
+\sum_{\mathfrak{p}\in T}\frac{1}{\Nm\mathfrak{p}^{s}}\sim(\delta_{1}+\delta_{2})\log\frac{1}{s-1}.
+\]
+
+(e) 若 $\delta(T)$ 与 $\delta(T')$ 都存在, 则 $\delta(T'\setminus T)$ 也存在, 且
+\[
+\delta(T')-\delta(T)\overset{(c)}{=}\delta(T'\setminus T)\overset{(a)}{\ge}0.
+\]
+\end{proof}
+
+\begin{proposition}\label{prop:vi.4.5}
+设 $T$ 为 $K$ 中在 $\Q$ 上次数为 $1$ 的素理想之集, 即满足剩余类次数 $f(\mathfrak{p}/p)=1$ 的素理想. 则 $\delta(T)=1$.
+\end{proposition}
+
+\begin{proof}
+$T$ 的补集具有极密度 $1$ (命题 \ref{prop:vi.3.2}).
+\end{proof}
+
+\begin{corollary}\label{cor:vi.4.6}
+设 $T$ 如命题 \ref{prop:vi.4.5} 所设. 对每个具有 Dirichlet 密度的 $K$ 的素集 $S$,
+\[
+\delta(T\cap S)=\delta(S).
+\]
+\end{corollary}
+
+\begin{proof}
+$T$ 的补集 $T'$ 的密度为 $0$, 由此易得 $\delta(S\cap T')=0$. 由于 $S$ 是 $S\cap T$ 与 $S\cap T'$ 的不交并, 这蕴含 $\delta(S\cap T)$ 有定义且等于 $\delta(S)$.
+\end{proof}
+
+\begin{lemma}\label{lem:vi.4.7}
+设 $A$ 为有限 Abel 群, $a\in A$. 则
+\[
+\sum_{\chi\in A^{\vee}}\chi(a)=0
+\]
+这里 $A^{\vee}$ 是 $A$ 的特征群, 即 $A^{\vee}=\Hom(A,\CC^{\times})$.
+\end{lemma}
+
+\begin{proof}
+若 $a=1$, 则对所有 $\chi$ 有 $\chi(a)=1$, 故由 $A^{\vee}$ 与 $A$ 有相同个数的元素 (它事实上 (非典范地) 同构于 $A$) 即得结论. 若 $a\ne1$, 则存在特征 $\chi_1$ 使得 $\chi_1(a)\ne1$. 于是
+\[
+\sum_{\chi\in A^{\vee}}\chi(a)=\sum_{\chi\in A^{\vee}}(\chi_{1}\chi)(a)=\sum_{\chi\in A^{\vee}}\chi_{1}(a)\chi(a)=\chi_{1}(a)\sum_{\chi\in A^{\vee}}\chi(a).
+\]
+由于 $\chi_1(a)\ne1$, 这蕴含 $\sum_{\chi\in A^{\vee}}\chi(a)=0$.
+
+另一种做法: 借助同构
+\[
+a\mapsto(\chi\mapsto\chi(a))\colon A\to(A^{\vee})^{\vee}
+\]
+把 $A$ 与 $A^{\vee\vee}$ 等同, 然后应用引理\ref{lem:vi.2.10}.
+\end{proof}
+
+\begin{theorem}\label{thm:vi.4.8}
+设 $\mathfrak{m}$ 为 $K$ 的模, $H$ 为 $\mathfrak{m}$ 的一个同余子群:
+\[
+I^{\mathfrak{m}}\supset H\supset i(K_{\mathfrak{m},1}).
+\]
+则
+\[
+\delta(\{\mathfrak{p}\in H\})=
+\begin{cases}
+1/(I^{S(\mathfrak{m})}:H) & \text{若 $L(1,\chi)$ 对 $I^{S(\mathfrak{m})}/H$ 的所有特征 $\chi\ne\chi_0$ 都非零};\\
+0 & \text{否则}.
+\end{cases}
+\]
+\end{theorem}
+
+\begin{proof}
+设 $\chi$ 是 $I^{\mathfrak{m}}$ 的在 $H$ 上平凡的特征, 并令
+\[
+L(s,\chi)=\prod_{\mathfrak{p}\nmid\mathfrak{m}}\frac{1}{1-\chi(\mathfrak{p})\Nm\mathfrak{p}^{-s}}.
+\]
+则引理\ref{lem:vi.4.3} 证明中的论证表明
+\[
+\log L(s,\chi)-\sum_{\mathfrak{p}\nmid\mathfrak{m}}\frac{\chi(\mathfrak{p})}{\Nm\mathfrak{p}^{s}}
+\]
+在 $\Re(s)>\frac{1}{2}$ 上全纯. 特别地,
+\[
+\log(L(s,\chi))\sim\sum_{\mathfrak{p}\nmid\mathfrak{m}}\frac{\chi(\mathfrak{p})}{\Nm\mathfrak{p}^{s}}\qquad\text{当 }s\downarrow 1.
+\]
+但 (见引理\ref{lem:vi.4.7})
+\[
+\sum_{\chi}\chi(\mathfrak{p})=
+\begin{cases}
+h & \mathfrak{p}\in H,\\
+0 & \mathfrak{p}\notin H,
+\end{cases}
+\]
+故对全体 $\chi$ 求和得
+\[
+\sum_{\chi}\log L(s,\chi)\sim h\sum_{\mathfrak{p}\in H}\frac{1}{\Nm\mathfrak{p}^{s}}\qquad\text{当 }s\downarrow 1.
+\]
+若 $\chi\ne\chi_0$, 则 $L(s,\chi)$ 在 $s=1$ 附近全纯, 设 $L(s,\chi)=(s-1)^{m(\chi)}g(s)$, 其中 $m(\chi)\ge0$, $g(1)\ne0$. 于是
+\[
+\log L(s,\chi)\sim m(\chi)\log(s-1)=-m(\chi)\log\frac{1}{s-1}.
+\]
+若 $\chi=\chi_0$, 则 $L(s,\chi)=\zeta_K(s)/\prod_{\mathfrak{p}\mid\mathfrak{m}}\frac{1}{1-\Nm\mathfrak{p}^{-s}}$, 故
+\[
+\log L(s,\chi_{0})\sim\log\zeta_{K}(s)\sim\log\frac{1}{s-1}\qquad\text{当 }s\downarrow 1.
+\]
+合并这些结果, 得
+\[
+h\sum_{\mathfrak{p}\in H}\Nm\mathfrak{p}^{-s}\sim\Bigl(1-\sum_{\chi\ne\chi_{0}}m(\chi)\Bigr)\log\frac{1}{s-1},
+\]
+从而
+\[
+\delta(\{\mathfrak{p}\in H\})=\frac{1-\sum_{\chi\ne\chi_{0}}m(\chi)}{h}.
+\]
+这表明: 若 $L(1,\chi)\ne0$ 对所有 $\chi\ne\chi_0$ 成立, 则 $\delta(\{\mathfrak{p}\in H\})=\frac{1}{h}$; 否则 $\delta(\{\mathfrak{p}\in H\})=0$ (且至多有一个 $L(s,\chi)$ 在 $s=1$ 处有零点, 并且只能是单零点).
+\end{proof}
+
+\subsection*{第二个不等式}
+
+\begin{theorem}\label{thm:vi.4.9}
+对 $K$ 的每个 Galois 扩张 $L$ 与每个模 $\mathfrak{m}$,
+\[
+\bigl(I^{S(\mathfrak{m})}:i(K_{\mathfrak{m},1})\cdot\Nm(I_{L}^{S(\mathfrak{m})})\bigr)\le[L:K].
+\]
+\end{theorem}
+
+\begin{proof}
+令 $H=\Nm_{L/K}I_{L}^{\mathfrak{m}}\cdot i(K_{\mathfrak{m},1})$. 由定理 \ref{thm:vi.4.8} 知, $\delta(\{\mathfrak{p}\in H\})=1/(I^{S(\mathfrak{m})}:H)$ 或 $0$, 且前一种情形恰好在对 $I^{S(\mathfrak{m})}/H$ 的所有非平凡特征 $\chi$ 都有 $L(1,\chi)\ne0$ 时发生.
+
+若 $\mathfrak{p}$ 在 $L$ 中分解, 即对所有 $\mathfrak{P}|\mathfrak{p}$ 有 $f(\mathfrak{P}/\mathfrak{p})=1$, 则 $\mathfrak{p}$ 是 $\mathcal{O}_L$ 中位于其上的任一素理想的范, 从而 $\{\mathfrak{p}\in H\}$ 包含在 $L$ 中分裂的素理想之集. 于是定理 \ref{thm:vi.3.4} 表明
+\[
+\delta(\{\mathfrak{p}\in H\})\ge[L:K]^{-1}\ne0.
+\]
+合并两方面结论, 我们得到:
+(a) $\delta(\{\mathfrak{p}\in H\})\ne0$;
+(b) 对 $I^{S(\mathfrak{m})}/H$ 的所有非平凡特征 $\chi$, $L(1,\chi)\ne0$;
+(c) $(I^{S(\mathfrak{m})}:H)=\delta(\{\mathfrak{p}\in H\})^{-1}\le[L:K]$.
+\end{proof}
+
+\begin{corollary}\label{cor:vi.4.10}
+设 $\chi$ 为 $C_{\mathfrak{m}}$ 的非平凡特征, 并设存在 $K$ 的 Galois 扩张 $L$ 使得 $\Nm_{L/K}C_{\mathfrak{m},L}\subset\Ker(\chi)$. 则 $L(1,\chi)\ne0$.
+\end{corollary}
+
+\begin{proof}
+这在定理的证明过程中已经得到.
+\end{proof}
+
+存在定理 (第 \ref{ch:V} 章, 定理 \ref{thm:v.3.6}) 蕴含: 该推论的条件对所有 $\chi$ 都满足. 不用类域论也能证明 $L(1,\chi)\ne0$, 但此处我们更愿意回到类域论. Chebotarev 定理的证明将在第 \ref{ch:VIII} 章完成.

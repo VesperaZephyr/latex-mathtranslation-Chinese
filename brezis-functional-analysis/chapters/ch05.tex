@@ -1,0 +1,1538 @@
+% chapters/ch05.tex
+% 第~
+\ref{chap:5}~章 \index{Hilbertkongjian@Hilbert 空间 (Hilbert space)}
+Hilbert 空间
+% 源: 原书 PDF 第 140--165 页 (印刷页 131--156)
+
+\chapter{Hilbert 空间}
+\label{chap:5}
+
+\section{定义与初等性质. \index{daotujishangdetouying@到凸集上的投影 (projection on convex set)}
+到闭凸集上的投影}
+\label{sec:5.1}
+
+\begin{definition}
+设 $H$ 为向量空间.\index{biaoliangji@标量积 (scalar product)}
+\emph{标量积} $(u,v)$ 是 $H\times H$ 上取值于 $\R$ 的双线性
+形式 (即由 $H\times H$ 到 $\R$ 的, 对两个变量都线性的映射), 使得
+\begin{align*}
+(u,v)&=(v,u) &&\forall u,v\in H\quad(\text{对称性}),\\
+(u,u)&\ge0 &&\forall u\in H\quad(\text{正性}),\\
+(u,u)&\ne0 &&\forall u\ne0\quad(\text{确定性}).
+\end{align*}
+\end{definition}
+
+我们回忆, 标量积满足 Cauchy--Schwarz 不等式
+\begin{equation*}
+\abs{(u,v)}\le(u,u)^{1/2}(v,v)^{1/2}\quad\forall u,v\in H.
+\end{equation*}
+[记住下面一点有时是有用的: Cauchy--Schwarz 不等式的证明并不需要假设
+$(u,u)\ne0\ \forall u\ne0$.] 由 Cauchy--Schwarz 不等式推出, 量
+\begin{equation*}
+\boxed{\abs{u}=(u,u)^{1/2}}
+\end{equation*}
+是一个范数——我们将常用 $\abs{\cdot}$ (而不是 $\norm{\cdot}$) 表示由标量积
+导出的范数.事实上, 我们有
+\begin{equation*}
+\abs{u+v}^2=(u+v,u+v)=\abs{u}^2+(u,v)+(v,u)+\abs{v}^2
+\le\abs{u}^2+2\abs{u}\abs{v}+\abs{v}^2,
+\end{equation*}
+从而 $\abs{u+v}\le\abs{u}+\abs{v}$.
+
+我们回忆\index{pingxingsibianxingfaze@平行四边形法则 (parallelogram law)}
+经典的\emph{平行四边形法则}:
+\begin{equation}
+\abs{\frac{a+b}{2}}^2+\abs{\frac{a-b}{2}}^2
+=\frac12\bigl(\abs{a}^2+\abs{b}^2\bigr)\quad\forall a,b\in H.
+\label{eq:5.1}
+\end{equation}
+
+\begin{definition}
+\emph{Hilbert 空间}是赋以一个标量积的向量空间 $H$, 使得 $H$ 关于范数
+$\abs{\cdot}$ 完备.
+\end{definition}
+
+下文 $H$ 总表示一个 Hilbert 空间.
+
+\runin{基本例子.}
+赋以标量积
+\begin{equation*}
+(u,v)=\int_\Omega u(x)v(x)\,d\mu
+\end{equation*}
+的 $L^2(\Omega)$ 是 Hilbert 空间.特别地, $\ell^2$ 是 Hilbert 空间.第~
+\ref{chap:8}~章与
+第~
+\ref{chap:9}~章中研究的 Sobolev 空间 $H^1$ 是 Hilbert 空间的另一个例子; 它以
+$L^2(\Omega)$ 为``模型''.
+
+\begin{keyproposition}
+\label{prop:5.1}
+$H$ 一致凸, 从而自反.
+\end{keyproposition}
+
+\begin{proof}
+设 $\varepsilon>0$, $u,v\in H$ 满足 $\abs{u}\le1$, $\abs{v}\le1$ 且
+$\abs{u-v}>\varepsilon$.由平行四边形法则有
+\begin{equation*}
+\abs{\frac{u+v}{2}}^2<1-\frac{\varepsilon^2}{4}
+\quad\text{从而}\quad
+\abs{\frac{u+v}{2}}<1-\delta,
+\quad\text{其中}\ \delta=1-\Bigl(1-\frac{\varepsilon^2}{4}\Bigr)^{1/2}>0.
+\end{equation*}
+\end{proof}
+
+\begin{keytheorem}[到闭凸集上的投影]
+\label{thm:5.2}
+设 $K\subset H$ 为非空闭凸集.则对每个 $f\in H$ 存在唯一的元素 $u\in K$,
+使得
+\begin{equation}
+\abs{f-u}=\min_{v\in K}\abs{f-v}=\dist(f,K).
+\label{eq:5.2}
+\end{equation}
+此外, $u$ 由下述性质\emph{刻画}:
+\begin{equation}
+u\in K\quad\text{且}\quad(f-u,v-u)\le0\quad\forall v\in K.
+\label{eq:5.3}
+\end{equation}
+\end{keytheorem}
+
+\begin{notation}
+上述元素 $u$ 称为 $f$ 在 $K$ 上的\emph{投影}, 记作
+\begin{equation*}
+\boxed{u=P_Kf.}
+\end{equation*}
+\end{notation}
+
+不等式 \eqref{eq:5.3} 说的是: 向量 $\overrightarrow{uf}$ 与任一向量
+$\overrightarrow{uv}$ ($v\in K$) 的标量积 $\le0$, 即这两个向量所成的角
+$\theta\ge\pi/2$; 见图  \ref{fig:4}.
+
+\begin{figure}[tbp]
+	\centering
+	\begin{tikzpicture}[scale=1.0]
+		\draw[thick] (0,0) ellipse (2.4 and 1.2);
+		\coordinate (u) at (1.62,0.88);
+		\coordinate (v) at (-0.35,0.88);
+		\coordinate (f) at (2.95,1.78);
+		\draw[-{Stealth[length=2mm]}] (u) -- (v);
+		\draw[-{Stealth[length=2mm]}] (u) -- (f);
+		\fill (u) circle (1.3pt);
+		\draw (u) ++(34:0.62) arc[start angle=34, end angle=180, radius=0.62];
+		\node at ($(u)+(107:0.95)$) {$\theta$};
+		\node at (-0.55,-0.35) {$K$};
+		\node[right] at (u) {$u=P_Kf$};
+		\node[above left] at (v) {$v$};
+		\node[right] at (f) {$f$};
+	\end{tikzpicture}
+	\caption{}
+	\label{fig:4}
+\end{figure}
+
+\begin{proof}
+\emph{(a) 存在性.} 我们将给出两个不同的证明:
+
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 函数 $\varphi(v)=\abs{f-v}$ 凸, 连续, 且
+	      $\lim_{\abs{v}\to\infty}\varphi(v)=+\infty$.由于 $H$ 自反, 由推论
+	       \ref{cor:3.23} 推出 $\varphi$ 在 $K$ 上达到最小值.
+	\item 第二个证明\emph{不}依赖自反空间与一致凸空间的理论.它是直接的论证.
+	      设 $(v_n)$ 为 \eqref{eq:5.2} 的\emph{极小化序列}, 即 $v_n\in K$ 且
+	      \begin{equation*}
+	      d_n=\abs{f-v_n}\to d=\inf_{v\in K}\abs{f-v}.
+	      \end{equation*}
+	      我们断言 $(v_n)$ 是 Cauchy 序列.事实上, 对
+	      $a=f-v_n$, $b=f-v_m$ 应用平行四边形法则, 得到
+	      \begin{equation*}
+	      \abs{f-\frac{v_n+v_m}{2}}^2+\abs{\frac{v_n-v_m}{2}}^2
+	      =\frac12\bigl(d_n^2+d_m^2\bigr).
+	      \end{equation*}
+	      但 $\dfrac{v_n+v_m}{2}\in K$, 从而
+	      $\abs{f-\frac{v_n+v_m}{2}}\ge d$.由此推出
+	      \begin{equation*}
+	      \abs{\frac{v_n-v_m}{2}}^2\le\frac12\bigl(d_n^2+d_m^2\bigr)-d^2
+	      \quad\text{且}\quad\lim_{m,n\to\infty}\abs{v_n-v_m}=0.
+	      \end{equation*}
+	      因此序列 $(v_n)$ 收敛于某个极限 $u\in K$, 且 $d=\abs{f-u}$.
+\end{enumerate}
+
+\emph{(b) \eqref{eq:5.2} 与 \eqref{eq:5.3} 的等价性.} 假设 $u\in K$ 满足 \eqref{eq:5.2}, 并设 $w\in K$.我们有
+\begin{equation*}
+v=(1-t)u+tw\in K\quad\forall t\in[0,1],
+\end{equation*}
+从而
+\begin{equation*}
+\abs{f-u}\le\abs{f-[(1-t)u+tw]}=\abs{(f-u)-t(w-u)}.
+\end{equation*}
+因此
+\begin{equation*}
+\abs{f-u}^2\le\abs{f-u}^2-2t(f-u,w-u)+t^2\abs{w-u}^2,
+\end{equation*}
+这蕴含 $2(f-u,w-u)\le t\abs{w-u}^2\ \forall t\in(0,1]$.令 $t\to0$ 即得 \eqref{eq:5.3}.
+
+反之, 假设 $u$ 满足 \eqref{eq:5.3}.则我们有
+\begin{equation*}
+\abs{u-f}^2-\abs{v-f}^2=2(f-u,v-u)-\abs{u-v}^2\le0\quad\forall v\in K;
+\end{equation*}
+这蕴含 \eqref{eq:5.2}.
+
+\emph{(c) 唯一性.} 假设 $u_1$ 与 $u_2$ 满足 \eqref{eq:5.3}.我们有
+\begin{align}
+(f-u_1,v-u_1)&\le0\quad\forall v\in K,\label{eq:5.4}\\
+(f-u_2,v-u_2)&\le0\quad\forall v\in K.\label{eq:5.5}
+\end{align}
+在 \eqref{eq:5.4} 中取 $v=u_2$, 在 \eqref{eq:5.5} 中取 $v=u_1$, 并把相应的两个不等式相加, 得到
+$\abs{u_1-u_2}^2\le0$.
+\end{proof}
+
+\begin{remark}
+\label{rem:5.1}
+极小化问题与不等式组相联系, 这并不令人意外.让我们回忆一个熟知的例子.
+设 $F:\R\to\R$ 为可微函数, 并设 $u\in[0,1]$ 是 $F$ 在 $[0,1]$ 上达到最小值的
+点.则或者 $u\in(0,1)$ 且 $F'(u)=0$, 或者 $u=0$ 且 $F'(u)\le0$, 或者 $u=1$
+且 $F'(u)=1$.这三种情形可概括为: $u\in[0,1]$ 且
+$F'(u)(v-u)\le0\ \forall v\in[0,1]$; 另见习题 5.10.
+% 原书此处印作 "u = 1 and F'(u) = 1", 与极小性不符 (应为 F'(u) >= 0 或
+% F'(u) <= 0 的端情形). 两份 OCR 与 PDF 文本层一致, 属原书排印之误.
+% 依技能规范: 保留原样并记录, 不擅自更正. 见《项目交接文档》"原书疑似错误".
+\end{remark}
+
+\begin{remark}
+\label{rem:5.2}
+设 $K\subset E$ 为一致凸 Banach 空间 $E$ 中的非空闭凸集.则对每个 $f\in E$
+存在唯一的元素 $u\in E$, 使得
+\begin{equation*}
+\norm{f-u}=\min_{v\in K}\norm{f-v}=\dist(f,K);
+\end{equation*}
+见习题 3.32.
+\end{remark}
+
+\begin{proposition}
+\label{prop:5.3}
+设 $K\subset H$ 为非空闭凸集.则 $P_K$ 不增大距离, 即
+\begin{equation*}
+\abs{P_Kf_1-P_Kf_2}\le\abs{f_1-f_2}\quad\forall f_1,f_2\in H.
+\end{equation*}
+\end{proposition}
+
+\begin{proof}
+令 $u_1=P_Kf_1$, $u_2=P_Kf_2$.我们有
+\begin{align}
+(f_1-u_1,v-u_1)&\le0\quad\forall v\in K,\label{eq:5.6}\\
+(f_2-u_2,v-u_2)&\le0\quad\forall v\in K.\label{eq:5.7}
+\end{align}
+在 \eqref{eq:5.6} 中取 $v=u_2$, 在 \eqref{eq:5.5} 中取 $v=u_1$, 并把相应的两个不等式相加, 得到
+\begin{equation*}
+\abs{u_1-u_2}^2\le(f_1-f_2,u_1-u_2).
+\end{equation*}
+由此推出 $\abs{u_1-u_2}\le\abs{f_1-f_2}$.
+% 原书此处印作 "v = u1 in (5)", 应为 (7). 依技能规范保留原样并记录.
+\end{proof}
+
+\begin{corollary}
+\label{cor:5.4}
+假设 $M\subset H$ 为闭线性子空间.设 $f\in H$.则 $u=P_Mf$ 由下式刻画:
+\begin{equation}
+\boxed{u\in M\quad\text{且}\quad(f-u,v)=0\quad\forall v\in M.}
+\label{eq:5.8}
+\end{equation}
+此外, $P_M$ 是线性算子, 称为\emph{正交投影}.
+\end{corollary}
+
+\begin{proof}
+由 \eqref{eq:5.3} 我们有
+\begin{equation*}
+(f-u,v-u)\le0\quad\forall v\in M,
+\end{equation*}
+从而
+\begin{equation*}
+(f-u,tv-u)\le0\quad\forall v\in M,\ \forall t\in\R.
+\end{equation*}
+由此推出 \eqref{eq:5.8} 成立.
+
+反之, 若 $u$ 满足 \eqref{eq:5.8}, 则我们有
+\begin{equation*}
+(f-u,v-u)=0\quad\forall v\in M.
+\end{equation*}
+$P_M$ 的线性性是显然的.
+\end{proof}
+\section{Hilbert 空间的对偶空间}
+\label{sec:5.2}
+
+在 Hilbert 空间中, 写出连续线性泛函是非常容易的.任取 $f\in H$; 则映射
+$u\mapsto(f,u)$ 是 $H$ 上的连续线性泛函.一个值得注意的事实是: $H$ 上的
+\emph{一切}连续线性泛函都以这种方式得到:
+
+\index{RieszFrchetbiaoshidingli@Riesz--Fréchet 表示定理 (Riesz--Frechet representation theorem)}
+\begin{keytheorem}[Riesz--Fréchet 表示定理]
+\label{thm:5.5}
+给定任一 $\varphi\in H^\star$, 存在唯一的 $f\in H$, 使得
+\begin{equation*}
+\dual{\varphi}{u}=(f,u)\quad\forall u\in H.
+\end{equation*}
+此外,
+\begin{equation*}
+\abs{f}=\norm{\varphi}_{H^\star}.
+\end{equation*}
+\end{keytheorem}
+
+\begin{proof}
+我们再一次给出两个证明:
+
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 第一个证明与定理  \ref{thm:4.11} 的证明几乎完全相同.考虑如下定义的
+	      映射 $T:H\to H^\star$: 给定任一 $f\in H$, 映射 $u\mapsto(f,u)$ 是
+	      $H$ 上的连续线性泛函.它定义了 $H^\star$ 中的一个元素, 记作 $Tf$,
+	      使得
+	      \begin{equation*}
+	      \dual{Tf}{u}=(f,u)\quad\forall u\in H.
+	      \end{equation*}
+	      显然 $\norm{Tf}_{H^\star}=\abs{f}$.于是 $T$ 是由 $H$ \emph{到}
+	      $T(H)$ (它是 $H^\star$ 的闭子空间) 上的线性等距.为完成证明, 只须
+	      证明 $T(H)$ 在 $H^\star$ 中稠密.假设 $h$ 是 $H^\star$ 上的连续线性
+	      泛函, 且它在 $T(H)$ 上为零.由于 $H$ 自反, $h$ 属于 $H$ 且满足
+	      $\dual{Tf}{h}=0\ \forall f\in H$.由此推出 $(f,h)=0\ \forall f\in H$,
+	      从而 $h=0$.
+	\item 第二个证明是更直接的论证, 它避免了任何对自反性的使用.令
+	      $M=\varphi^{-1}(\{0\})$, 于是 $M$ 是 $H$ 的闭子空间.我们总可以假设
+	      $M\ne H$ (否则 $\varphi\equiv0$, 定理  \ref{thm:5.5} 的结论是显然的
+	      ——只须取 $f=0$).我们断言: 存在某个元素 $g\in H$, 使得
+	      \begin{equation*}
+	      \abs{g}=1\quad\text{且}\quad(g,v)=0\quad\forall v\in M
+	      \quad(\text{从而}\ g\notin M).
+	      \end{equation*}
+	      事实上, 取 $g_0\in H$ 且 $g_0\notin M$.令 $g_1=P_Mg_0$.则
+	      \begin{equation*}
+	      g=(g_0-g_1)/\abs{g_0-g_1}
+	      \end{equation*}
+	      具有所需性质.
+
+	      给定任一 $u\in H$, 令
+	      \begin{equation*}
+	      v=u-\lambda g\quad\text{其中}\
+	      \lambda=\frac{\dual{\varphi}{u}}{\dual{\varphi}{g}}.
+	      \end{equation*}
+	      注意 $v$ 是有定义的, 因为 $\dual{\varphi}{g}\ne0$; 此外 $v\in M$,
+	      因为 $\dual{\varphi}{v}=0$.由此推出 $(g,v)=0$, 即
+	      \begin{equation*}
+	      \dual{\varphi}{u}=\dual{\varphi}{g}(g,u)\quad\forall u\in H,
+	      \end{equation*}
+	      取 $f=\dual{\varphi}{g}g$ 即完成证明.
+\end{enumerate}
+\end{proof}
+
+\begin{keyremark}
+\label{rem:5.3}
+\emph{$H$ 与 $H^\star$: 等同还是不等同? 三元组 $V\subset H\subset V^\star$.}
+定理  \ref{thm:5.5} 断言存在由 $H$ 到 $H^\star$ 上的一个典范等距.因此把
+$H$ 与 $H^\star$ 等同起来是``合理的''.我们将\emph{常常}这样做, 但\emph{并非
+总是}这样做.下面是一个典型的, 在许多应用中出现的, 应当谨慎对待等同的情形.
+设 $H$ 是带有标量积 $(\ ,\ )$ 与相应范数 $\abs{\cdot}$ 的 Hilbert 空间.设
+$V\subset H$ 是 $H$ 中的稠密线性子空间.设 $V$ 有自己的范数 $\norm{\cdot}$,
+且 $V$ 关于 $\norm{\cdot}$ 是 Banach 空间.设嵌入 $V\subset H$ 连续, 即
+\begin{equation*}
+\abs{v}\le C\norm{v}\quad\forall v\in V.
+\end{equation*}
+[例如 $H=L^2(0,1)$, $V=L^p(0,1)$ 且 $p>2$, 或 $V=C([0,1])$.]
+
+存在一个典范映射 $T:H^\star\to V^\star$, 它不过是把 $H$ 上的连续线性泛函
+$\varphi$ 限制到 $V$ 上, 即
+\begin{equation*}
+\dual{T\varphi}{v}_{V^\star,V}=\dual{\varphi}{v}_{H^\star,H}.
+\end{equation*}
+容易看出 $T$ 具有下述性质:
+\begin{enumerate}[label=(\roman*), leftmargin=2.6em, itemsep=0.1em]
+	\item $\norm{T\varphi}_{V^\star}\le C\abs{\varphi}_{H^\star}
+	      \quad\forall\varphi\in H^\star$,
+	\item $T$ 是单射,
+	\item 若 $V$ 自反, 则 $R(T)$ 在 $V^\star$ 中稠密.\footnote{然而一般说来
+	      $T$ \emph{不是}满射.}
+\end{enumerate}
+
+把 $H^\star$ 与 $H$ 等同起来, 并把 $T$ 看作由 $H^\star$ 到 $V^\star$ 的典范
+嵌入, 通常写作
+\begin{equation}
+\boxed{V\subset H\simeq H^\star\subset V^\star,}
+\label{eq:5.9}
+\end{equation}
+其中一切嵌入都连续且稠密 (只要 $V$ 自反).人们说 $H$ 是\emph{枢轴空间}.
+注意标量积 $\dual{\cdot}{\cdot}_{V^\star,V}$ 与 $(\ ,\ )$ 只要都有意义就
+一致, 即
+\begin{equation*}
+\dual{f}{v}_{V^\star,V}=(f,v)\quad\forall f\in H,\ \forall v\in V.
+\end{equation*}
+\end{keyremark}
+
+如果 $V$ 本身是带有自己的标量积 $((\ ,\ ))$ 的 Hilbert 空间, 而该标量积与
+范数 $\norm{\cdot}$ 相对应, 则情形变得更微妙.当然, 我们可以借助
+$((\ ,\ ))$ 把 $V$ 与 $V^\star$ 等同起来.然而 \eqref{eq:5.9} 就变得荒谬了.这表明
+不能同时把 $V$ 与 $H$ 同它们的对偶空间等同起来: 必须作出选择.通常的习惯是
+把 $H^\star$ 与 $H$ 等同, 写出 \eqref{eq:5.9}, 而不把 $V^\star$ 与 $V$ 等同 [自然, 仍
+存在由 $V$ 到 $V^\star$ 的等距, 但它不被看作恒等映射].下面是一个极有启发的
+例子.
+
+令
+\begin{equation*}
+H=\ell^2=\Bigl\{u=(u_n)_{n\ge1};\ \sum_{n=1}^\infty u_n^2<\infty\Bigr\},
+\end{equation*}
+赋以标量积 $(u,v)=\sum_{n=1}^\infty u_nv_n$.
+
+令
+\begin{equation*}
+V=\Bigl\{u=(u_n)_{n\ge1};\ \sum_{n=1}^\infty n^2u_n^2<\infty\Bigr\},
+\end{equation*}
+赋以标量积 $((u,v))=\sum_{n=1}^\infty n^2u_nv_n$.
+
+显然 $V\subset H$ 且嵌入连续, 并且 $V$ 在 $H$ 中稠密.这里我们把 $H^\star$ 与
+$H$ 等同, 而把 $V^\star$ 与空间
+\begin{equation*}
+V^\star=\Bigl\{f=(f_n)_{n\ge1};\ \sum_{n=1}^\infty\frac{1}{n^2}f_n^2
+<\infty\Bigr\}
+\end{equation*}
+等同, 它比 $H$ 大.标量积 $\dual{\cdot}{\cdot}_{V^\star,V}$ 由
+\begin{equation*}
+\dual{f}{v}_{V^\star,V}=\sum_{n=1}^\infty f_nv_n
+\end{equation*}
+给出, 而 Riesz--Fréchet 同构 $T:V\to V^\star$ 由
+\begin{equation*}
+u=(u_n)_{n\ge1}\mapsto Tu=(n^2u_n)_{n\ge1}
+\end{equation*}
+给出.
+
+\begin{remark}
+\label{rem:5.4}
+不借助一致凸空间的理论, 也容易证明 Hilbert 空间自反.只须两次使用
+Riesz--Fréchet 同构 (先由 $H$ 到 $H^\star$, 再由 $H^\star$ 到 $H^{\star\star}$).
+\end{remark}
+
+\begin{remark}
+\label{rem:5.5}
+设 $H$ 是与它的对偶空间 $H^\star$ 等同的 Hilbert 空间.设 $M$ 为 $H$ 的
+子空间.我们已经在 \S\ref{sec:1.3} 中把 $M^\perp$ 定义为 $H^\star$ 的子空间.现在可以
+把它看作 $H$ 的子空间, 即
+\begin{equation*}
+M^\perp=\{u\in H;\ (u,v)=0\ \forall v\in M\}.
+\end{equation*}
+显然有 $M\cap M^\perp=\{0\}$.此外, 若 $M$ 闭, 则还有
+$M+M^\perp=H$.事实上, 每个 $f\in H$ 都可以写成
+\begin{equation*}
+f=(P_Mf)+(f-P_Mf)
+\end{equation*}
+而 $f-P_Mf\in M^\perp$; 更确切地说, $f-P_Mf=P_{M^\perp}f$.
+
+由此推出, 在 Hilbert 空间中每个闭子空间都有补空间 (\S\ref{sec:2.4} 意义下).
+\end{remark}
+\section{\index{Stampacchiadingli@Stampacchia 定理 (Stampacchia theorem)}
+Stampacchia 定理与 \index{LaxMilgramdingli@Lax--Milgram 定理 (Lax--Milgram theorem)}
+Lax--Milgram 定理}
+\label{sec:5.3}
+
+\begin{definition}
+称双线性形式 $a:H\times H\to\R$ 为
+\begin{enumerate}[label=(\roman*), leftmargin=2.6em, itemsep=0.25em]
+	\item \emph{连续}的, 如果存在常数 $C$, 使得
+	      \begin{equation*}
+	      \abs{a(u,v)}\le C\abs{u}\abs{v}\quad\forall u,v\in H;
+	      \end{equation*}
+	\item \emph{强制}的, 如果存在常数 $\alpha>0$, 使得
+	      \begin{equation*}
+	      a(v,v)\ge\alpha\abs{v}^2\quad\forall v\in H.
+	      \end{equation*}
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[Stampacchia]
+\label{thm:5.6}
+假设 $a(u,v)$ 是 $H$ 上的连续强制双线性形式.设 $K\subset H$ 为非空闭凸子集.
+则对任意给定的 $\varphi\in H^\star$, 存在唯一的元素 $u\in K$, 使得
+\begin{equation}
+a(u,v-u)\ge\dual{\varphi}{v-u}\quad\forall v\in K.
+\label{eq:5.10}
+\end{equation}
+此外, 若 $a$ 对称, 则 $u$ 由下述性质刻画:
+\begin{equation}
+\boxed{u\in K\quad\text{且}\quad
+\frac12a(u,u)-\dual{\varphi}{u}
+=\min_{v\in K}\Bigl\{\frac12a(v,v)-\dual{\varphi}{v}\Bigr\}.}
+\label{eq:5.11}
+\end{equation}
+\end{theorem}
+
+定理  \ref{thm:5.6} 的证明依赖于下面这个非常经典的结果.
+
+\begin{keytheorem}[Banach 不动点定理——压缩映射原理]
+\label{thm:5.7}
+设 $X$ 为非空完备度量空间, $S:X\to X$ 为严格压缩, 即
+\begin{equation*}
+d(Sv_1,Sv_2)\le k\,d(v_1,v_2)\quad\forall v_1,v_2\in X,\ \text{其中}\ k<1.
+\end{equation*}
+则 $S$ 有唯一不动点, $u=Su$.
+\end{keytheorem}
+
+证明见例如 T.~M.~Apostol \bref{Apostol}{1}, G.~Choquet \bref{Choquet}{1}, A.~Friedman \bref{Friedman}{3}.
+
+\begin{proof}[定理 \ref{thm:5.6}]
+由 Riesz--Fréchet 表示定理 (定理  \ref{thm:5.5}) 我们知道, 存在唯一的 $f\in H$,
+使得
+\begin{equation*}
+\dual{\varphi}{v}=(f,v)\quad\forall v\in H.
+\end{equation*}
+另一方面, 若固定 $u\in H$, 则映射 $v\mapsto a(u,v)$ 是 $H$ 上的连续线性泛函.
+再一次使用 Riesz--Fréchet 表示定理, 我们找到 $H$ 中某个唯一的元素, 记作
+$Au$, 使得 $a(u,v)=(Au,v)\ \forall v\in H$.显然 $A$ 是由 $H$ 到 $H$ 的线性
+算子, 满足
+\begin{align}
+\abs{Au}&\le C\abs{u}\quad\forall u\in H,\label{eq:5.12}\\
+(Au,u)&\ge\alpha\abs{u}^2\quad\forall u\in H.\label{eq:5.13}
+\end{align}
+问题 \eqref{eq:5.10} 归结为寻找某个 $u\in K$, 使得
+\begin{equation}
+(Au,v-u)\ge(f,v-u)\quad\forall v\in K.
+\label{eq:5.14}
+\end{equation}
+设 $\rho>0$ 为常数 (稍后确定).注意 \eqref{eq:5.14} 等价于
+\begin{equation}
+(\rho f-\rho Au+u-u,v-u)\le0\quad\forall v\in K,
+\label{eq:5.15}
+\end{equation}
+即
+\begin{equation*}
+u=P_K(\rho f-\rho Au+u).
+\end{equation*}
+对每个 $v\in K$, 令 $Sv=P_K(\rho f-\rho Av+v)$.我们断言: 若 $\rho>0$ 选得
+适当, 则 $S$ 是严格压缩.事实上, 由于 $P_K$ 不增大距离 (见命题  \ref{prop:5.3}),
+我们有
+\begin{equation*}
+\abs{Sv_1-Sv_2}\le\abs{(v_1-v_2)-\rho(Av_1-Av_2)},
+\end{equation*}
+从而
+\begin{align*}
+\abs{Sv_1-Sv_2}^2
+&=\abs{v_1-v_2}^2-2\rho(Av_1-Av_2,v_1-v_2)+\rho^2\abs{Av_1-Av_2}^2\\
+&\le\abs{v_1-v_2}^2\bigl(1-2\rho\alpha+\rho^2C^2\bigr).
+\end{align*}
+选取 $\rho>0$ 使得 $k^2=1-2\rho\alpha+\rho^2C^2<1$ (即
+$0<\rho<2\alpha/C^2$), 即知 $S$ 有唯一不动点.\footnote{若须数值地计算该不动点,
+则取 $\rho=\alpha/C^2$ 是有益的, 这样可使 $k$ 最小, 从而加速 $S$ 的迭代的收敛.}
+
+现在假设形式 $a(u,v)$ 也是对称的.则 $a(u,v)$ 在 $H$ 上定义了一个新的标量积;
+相应的范数 $a(u,u)^{1/2}$ 与原范数 $\abs{u}$ 等价.由此推出 $H$ 关于这个新标量积
+也是 Hilbert 空间.利用 Riesz--Fréchet 定理, 我们现在可以借助新的标量积来表示
+泛函 $\varphi$, 即存在某个唯一的元素 $g\in H$, 使得
+\begin{equation*}
+\dual{\varphi}{v}=a(g,v)\quad\forall v\in H.
+\end{equation*}
+问题 \eqref{eq:5.10} 归结为寻找某个 $u\in K$, 使得
+\begin{equation}
+a(g-u,v-u)\le0\quad\forall v\in K.
+\label{eq:5.16}
+\end{equation}
+\\eqref{eq:5.16} 的解是一位老朋友: $u$ 不过是 $g$ 关于新标量积 $a$ 在 $K$ 上的投影.我们还
+知道 (由定理  \ref{thm:5.2}) $u$ 是 $K$ 中使
+\begin{equation*}
+\min_{v\in K}a(g-v,g-v)^{1/2}
+\end{equation*}
+达到的唯一元素.这相当于在 $K$ 上极小化函数
+\begin{equation*}
+v\mapsto a(g-v,g-v)=a(v,v)-2a(g,v)+a(g,g)
+=a(v,v)-2\dual{\varphi}{v}+a(g,g),
+\end{equation*}
+或等价地极小化函数
+\begin{equation*}
+v\mapsto\frac12a(v,v)-\dual{\varphi}{v}.
+\end{equation*}
+\end{proof}
+
+\begin{remark}
+\label{rem:5.6}
+容易验证: 若 $a(u,v)$ 是满足
+\begin{equation*}
+a(v,v)\ge0\quad\forall v\in H
+\end{equation*}
+的双线性形式, 则函数 $v\mapsto a(v,v)$ 凸.
+\end{remark}
+
+\begin{keycorollary}[Lax--Milgram]
+\label{cor:5.8}
+假设 $a(u,v)$ 是 $H$ 上的连续强制双线性形式.则对任意给定的
+$\varphi\in H^\star$, 存在唯一的元素 $u\in H$, 使得
+\begin{equation}
+a(u,v)=\dual{\varphi}{v}\quad\forall v\in H.
+\label{eq:5.17}
+\end{equation}
+此外, 若 $a$ 对称, 则 $u$ 由下述性质刻画:
+\begin{equation}
+\boxed{u\in H\quad\text{且}\quad
+\frac12a(u,u)-\dual{\varphi}{u}
+=\min_{v\in H}\Bigl\{\frac12a(v,v)-\dual{\varphi}{v}\Bigr\}.}
+\label{eq:5.18}
+\end{equation}
+\end{keycorollary}
+
+\begin{proof}
+在定理  \ref{thm:5.6} 中取 $K=H$, 并仿照推论  \ref{cor:5.4} 的证明进行论证.
+\end{proof}
+
+\begin{remark}
+\label{rem:5.7}
+Lax--Milgram 定理是求解线性椭圆型偏微分方程的一个非常简单而有效的工具 (见
+第~
+\ref{chap:8}~章与第~
+\ref{chap:9}~章).注意方程 \eqref{eq:5.17} 与极小化问题 \eqref{eq:5.18} 之间的联系是很有意思的.
+当这类问题在力学或物理学中出现时, 它们往往有自然的解释: 最小作用量原理, 能量的极小化, 等等.用变分法的语言来说, \eqref{eq:5.17} 是与极小化问题 \eqref{eq:5.18} 相联系的
+Euler 方程.粗略地说, \eqref{eq:5.17} 说的是``$F'(u)=0$'', 其中 $F$ 是函数
+$F(v)=\frac12a(v,v)-\dual{\varphi}{v}$.
+\end{remark}
+
+\begin{remark}
+\label{rem:5.8}
+有一个直接而初等的论证可以证明 \eqref{eq:5.17} 有唯一解.事实上, 这相当于证明
+\begin{equation*}
+\forall f\in H\ \ \exists u\in H\ \text{唯一, 使得}\ Au=f,
+\end{equation*}
+即 $A$ 是由 $H$ 到 $H$ 上的双射.这是下述事实的平凡推论:
+\begin{enumerate}[label=(\alph*), leftmargin=2.2em, itemsep=0.2em]
+	\item $A$ 是单射 (因为 $A$ 强制),
+	\item $R(A)$ 闭, 因为 $\alpha\abs{v}\le\abs{Av}\ \forall v\in H$
+	      (强制性的推论),
+	\item $R(A)$ 稠密; 事实上, 假设 $v\in H$ 满足
+	      \begin{equation*}
+	      (Au,v)=0\quad\forall u\in H,
+	      \end{equation*}
+	      则 $v=0$.
+\end{enumerate}
+\end{remark}
+
+\section{Hilbert 和. 正交基}
+\label{sec:5.4}
+
+\begin{definition}
+设 $(E_n)_{n\ge1}$ 为 $H$ 的一列闭子空间.若
+\begin{enumerate}[label=(\alph*), leftmargin=2.2em, itemsep=0.25em]
+	\item 空间 $E_n$ 两两正交, 即
+	      \begin{equation*}
+	      (u,v)=0\quad\forall u\in E_n,\ \forall v\in E_m,\ m\ne n,
+	      \end{equation*}
+	\item 由 $\bigcup_{n=1}^\infty E_n$ 张成的线性空间在 $H$ 中稠密,\footnote{由
+	      $E_n$ 张成的线性空间按代数意义理解, 即属于诸空间 $(E_n)$ 的元素的有
+	      限线性组合.}
+\end{enumerate}
+则说 $H$ 是诸 $E_n$ 的\emph{Hilbert 和}, 并记作 $H=\bigoplus_nE_n$.
+\end{definition}
+
+\begin{keytheorem}
+\label{thm:5.9}
+假设 $H$ 是诸 $E_n$ 的 Hilbert 和.给定 $u\in H$, 令
+\begin{equation*}
+u_n=P_{E_n}u\quad\text{及}\quad S_n=\sum_{k=1}^n u_k.
+\end{equation*}
+则我们有
+\begin{equation}
+\lim_{n\to\infty}S_n=u
+\label{eq:5.19}
+\end{equation}
+以及
+\begin{equation}
+\sum_{k=1}^\infty\abs{u_k}^2=\abs{u}^2
+\quad(\text{Bessel--Parseval 恒等式}).
+\label{eq:5.20}
+\end{equation}
+\end{keytheorem}
+
+使用下述引理是方便的.
+
+\begin{lemma}
+\label{lem:5.1}
+假设 $(v_n)$ 为 $H$ 中任一序列, 使得
+\begin{align}
+(v_m,v_n)&=0\quad\forall m\ne n,\label{eq:5.21}\\
+\sum_{k=1}^\infty\abs{v_k}^2&<\infty.\label{eq:5.22}
+\end{align}
+令
+\begin{equation*}
+S_n=\sum_{k=1}^n v_k.
+\end{equation*}
+则
+\begin{equation*}
+S=\lim_{n\to\infty}S_n
+\end{equation*}
+存在, 并且
+\begin{equation}
+\abs{S}^2=\sum_{k=1}^\infty\abs{v_k}^2.
+\label{eq:5.23}
+\end{equation}
+\end{lemma}
+
+\begin{proof}[引理 \ref{lem:5.1}]
+注意对 $m>n$ 有
+\begin{equation*}
+\abs{S_m-S_n}^2=\sum_{k=n+1}^m\abs{v_k}^2.
+\end{equation*}
+由此推出 $S_n$ 是 Cauchy 序列, 从而 $S=\lim_{n\to\infty}S_n$ 存在.另一方面,
+我们有
+\begin{equation*}
+\abs{S_n}^2=\sum_{k=1}^n\abs{v_k}^2.
+\end{equation*}
+令 $n\to\infty$ 即得 \eqref{eq:5.23}.
+\end{proof}
+
+\begin{proof}[定理 \ref{thm:5.9}]
+由于 $u_n=P_{E_n}u$, 我们有 (由 \eqref{eq:5.8})
+\begin{equation}
+(u-u_n,v)=0\quad\forall v\in E_n,
+\label{eq:5.24}
+\end{equation}
+特别地,
+\begin{equation*}
+(u,u_n)=\abs{u_n}^2.
+\end{equation*}
+把这些等式相加, 得到
+\begin{equation*}
+(u,S_n)=\sum_{k=1}^n\abs{u_k}^2.
+\end{equation*}
+但我们还有
+\begin{equation}
+\sum_{k=1}^n\abs{u_k}^2=\abs{S_n}^2,
+\label{eq:5.25}
+\end{equation}
+从而得到
+\begin{equation*}
+(u,S_n)=\abs{S_n}^2.
+\end{equation*}
+由此推出 $\abs{S_n}\le\abs{u}$, 因此 $\sum_{k=1}^n\abs{u_k}^2\le\abs{u}^2$.
+
+于是我们可以应用引理  \ref{lem:5.1}, 断言 $S=\lim_{n\to\infty}S_n$ 存在.让我们
+\emph{不}假设 (b) 而确定 $S$.设 $F$ 为由诸 $E_n$ 张成的线性空间.我们断言
+\begin{equation}
+S=P_{\overline{F}}u.
+\label{eq:5.26}
+\end{equation}
+事实上, 我们有
+\begin{equation*}
+(u-S_n,v)=0\quad\forall v\in E_m,\ m\le n
+\end{equation*}
+(只须写出 $u-S_n=(u-u_m)-\sum_{k\ne m}u_k$).令 $n\to\infty$ 得到
+\begin{equation*}
+(u-S,v)=0\quad\forall v\in E_m,\ \forall m,
+\end{equation*}
+从而
+\begin{equation*}
+(u-S,v)=0\quad\forall v\in F,
+\end{equation*}
+这蕴含
+\begin{equation*}
+(u-S,v)=0\quad\forall v\in\overline{F}.
+\end{equation*}
+另一方面, $S_n\in F\ \forall n$, 而取极限得 $S\in\overline{F}$.这就证明了 \eqref{eq:5.26}.
+当然, 若 (b) 成立, 则 $\overline{F}=H$, 从而 $S=u$.在 \eqref{eq:5.25} 中令
+$n\to\infty$ 取极限, 即得 \eqref{eq:5.20}.
+\end{proof}
+
+\begin{definition}
+称 $H$ 中的序列 $(e_n)_{n\ge1}$ 为 $H$ 的\emph{正交基} (或\emph{Hilbert
+基},\footnote{不要与代数 (= Hamel) 基混淆; 后者是 $H$ 中的族 $(e_i)_{i\in I}$,
+使得每个 $u\in H$ 都能唯一地写成诸 $e_i$ 的有限线性组合 (见习题 1.5).}或
+在没有混淆时简称为\emph{基}\footnote{有些作者说 $(e_n)$ 是完全正交系.}), 如果
+它满足下述性质:
+\begin{enumerate}[label=(\roman*), leftmargin=2.6em, itemsep=0.2em]
+	\item $\abs{e_n}=1\ \forall n$ 且 $(e_m,e_n)=0\ \forall m\ne n$,
+	\item 由诸 $e_n$ 张成的线性空间在 $H$ 中稠密.
+\end{enumerate}
+\end{definition}
+
+\begin{keycorollary}
+\label{cor:5.10}
+设 $(e_n)$ 为正交基.则对每个 $u\in H$, 我们有
+\begin{equation*}
+u=\sum_{k=1}^\infty(u,e_k)e_k,
+\quad\text{即}\quad u=\lim_{n\to\infty}\sum_{k=1}^n(u,e_k)e_k
+\end{equation*}
+以及
+\begin{equation*}
+\abs{u}^2=\sum_{k=1}^\infty\abs{(u,e_k)}^2.
+\end{equation*}
+反之, 给定任一序列 $(\alpha_n)\in\ell^2$, 级数 $\sum_{k=1}^\infty\alpha_ke_k$
+收敛到某个元素 $u\in H$, 使得 $(u,e_k)=\alpha_k\ \forall k$ 且
+$\abs{u}^2=\sum_{k=1}^\infty\alpha_k^2$.
+\end{keycorollary}
+
+\begin{proof}
+注意 $H$ 是诸空间 $E_n=\R e_n$ 的 Hilbert 和, 且 $P_{E_n}u=(u,e_n)e_n$.
+使用定理  \ref{thm:5.9} 与引理  \ref{lem:5.1}.
+\end{proof}
+
+\begin{remark}
+\label{rem:5.9}
+一般说来, 定理  \ref{thm:5.9} 中的级数 $\sum u_k$ 与推论  \ref{cor:5.10} 中的
+级数 $\sum(u,e_k)e_k$ \emph{不是}绝对收敛的, 即可能出现
+$\sum_{k=1}^\infty\abs{u_k}=\infty$ 或
+$\sum_{k=1}^\infty\abs{(u,e_k)}=\infty$.
+\end{remark}
+
+\begin{keytheorem}
+\label{thm:5.11}
+每个可分 Hilbert 空间都有正交基.
+\end{keytheorem}
+
+\begin{proof}
+设 $(v_n)$ 为 $H$ 的可数稠密子集.用 $F_k$ 表示由
+$\{v_1,v_2,\dots,v_k\}$ 张成的线性空间.序列 $(F_k)$ 是有限维空间的不减序列,
+使得 $\bigcup_{k=1}^\infty F_k$ 在 $H$ 中稠密.在 $F_1$ 中任取一个单位向量
+$e_1$.若 $F_2\ne F_1$, 则在 $F_2$ 中存在某个向量 $e_2$, 使得 $\{e_1,e_2\}$ 是
+$F_2$ 的正交基.重复同样的构造, 即得 $H$ 的一个正交基.
+\end{proof}
+
+\begin{remark}
+\label{rem:5.10}
+定理  \ref{thm:5.11} 与推论  \ref{cor:5.10} 合起来表明: 一切可分 Hilbert 空间都
+与空间 $\ell^2$ 同构且等距.尽管这个结果看似惊人, 考虑诸如 $L^2(\Omega)$
+(或 Sobolev 空间 $H^1(\Omega)$ 等) 这样的其他 Hilbert 空间仍然是十分重要的.
+原因是: 许多很好的线性 (或非线性) 算子, 一旦用基写出来, 可能显得很可怕.
+\end{remark}
+
+\begin{remark}
+\label{rem:5.11}
+若 $H$ 是不可分的 Hilbert 空间——这是一种相当不寻常的情形——则仍可 (借助
+Zorn 引理) 证明不可数正交基 $(e_i)_{i\in I}$ 的存在性; 见例如 W.~Rudin
+\bref{Rudin}{2}, A.~E.~Taylor--D.~C.~Lay \bref{TaylorLay}{1}, G.~B.~Folland \bref{Folland}{2}, G.~Choquet \bref{Choquet}{1}.
+\end{remark}
+\section*{第 5 章评注}
+\addcontentsline{toc}{section}{第 5 章评注}
+\markright{第 5 章评注}
+
+\cmtitem{1. Hilbert 空间的刻画.}
+有时知道一个给定的范数 $\norm{\cdot}$ 在向量空间 $E$ 上是否为 Hilbert 范数
+是有用的, 即是否存在 $E$ 上的标量积 $(\ ,\ )$, 使得
+$\norm{u}=(u,u)^{1/2}\ \forall u\in E$.已知若干种判别准则:
+
+\begin{cmtlettertheorem}{a}{Fréchet--von Neumann--Jordan}
+\label{thm:5.12}
+假设范数 $\norm{\cdot}$ 满足平行四边形法则 \eqref{eq:5.1}.则 $\norm{\cdot}$ 是 Hilbert
+范数.
+\end{cmtlettertheorem}
+
+证明见 K.~Yosida \bref{Yosida}{1} 或习题 5.1.
+
+\begin{cmtlettertheorem}{b}{Kakutani}
+\label{thm:5.13}
+假设 $E$ 是 $\dim E\ge3$ 的赋范空间.假设每个二维子空间 $F$ 都有一个范数为
+1 的投影算子 (即存在有界线性投影算子 $P:E\to F$, 使得 $Pu=u\ \forall u\in F$
+且 $\norm{P}\le1$).\footnote{我们指出, 每个一维子空间总有范数为 1 的投影算子.
+(使用 Hahn--Banach 定理.)}则 $\norm{\cdot}$ 是 Hilbert 范数.
+\end{cmtlettertheorem}
+
+\begin{cmtlettertheorem}{c}{de Figueiredo--Karlovitz}
+\label{thm:5.14}
+设 $E$ 是 $\dim E\ge3$ 的赋范空间.考虑单位球上的径向投影, 即
+\begin{equation*}
+Tu=\begin{cases}
+u & \text{若}\ \norm{u}\le1,\\
+u/\norm{u} & \text{若}\ \norm{u}>1.
+\end{cases}
+\end{equation*}
+假设\footnote{可以证明, 在任意赋范空间中, $T$ 满足
+$\norm{Tu-Tv}\le2\norm{u-v}\ \forall u,v\in E$, 且常数 2 不能改进;
+见习题 5.6.}
+\begin{equation*}
+\norm{Tu-Tv}\le\norm{u-v}\quad\forall u,v\in E.
+\end{equation*}
+则 $\norm{\cdot}$ 是 Hilbert 范数.
+\end{cmtlettertheorem}
+
+最后, 让我们回忆一个已经提到过的结果 (注记 2.8).
+
+\begin{cmtlettertheorem}{d}{Lindenstrauss--Tzafriri}
+\label{thm:5.15}
+假设 $E$ 是 Banach 空间, 使得每个闭子空间都有补空间.\footnote{这等价于说
+每个闭子空间都有一个有界投影算子 $P$.注意这里——与定理  \ref{thm:5.13}
+相反——我们不假设 $\norm{P}\le1$.}则 $E$ 可 Hilbert 化, 即存在一个等价的
+Hilbert 范数.
+\end{cmtlettertheorem}
+
+\cmtitem{2. 变分不等式.}
+Stampacchia 定理是变分不等式理论的出发点 (见例如
+D.~Kinderlehrer--G.~Stampacchia \bref{KinderlehrerStampacchia}{1}), 该理论在
+力学与物理学 (见例如 G.~Duvaut--J.~L.~Lions \bref{DuvautLions}{1}), 自由边界
+值问题 (见例如 C.~Baiocchi--A.~Capelo \bref{BaiocchiCapelo}{1} 与
+A.~Friedman \bref{Friedman}{4}), 最优控制 (见例如 J.-L.~Lions
+\bref{Lions}{2} 与 V.~Barbu \bref{Barbu}{2}), 随机控制 (见
+A.~Bensoussan--J.-L.~Lions \bref{BensoussanLions}{1}) 中有大量应用.
+
+\cmtitem{3. 与单调算子相联系的非线性方程.}
+Stampacchia 定理与 Lax--Milgram 定理可以推广到某些类非线性算子.例如,
+让我们提到下述结果.
+
+\begin{theorem}[Minty--Browder]
+\label{thm:5.16}
+设 $E$ 为自反 Banach 空间.设 $A:E\to E^\star$ 为连续非线性映射, 使得
+\begin{equation*}
+\dual{Av_1-Av_2}{v_1-v_2}>0\quad\forall v_1,v_2\in E,\ v_1\ne v_2,
+\end{equation*}
+且
+\begin{equation*}
+\lim_{\norm{v}\to\infty}\frac{\dual{Av}{v}}{\norm{v}}=\infty.
+\end{equation*}
+则对每个 $f\in E^\star$ 存在方程 $Au=f$ 的唯一解 $u\in E$.
+\end{theorem}
+
+有兴趣的读者可在 F.~Browder \bref{Browder}{1} 与 J.-L.~Lions
+\bref{Lions}{3} 中找到定理  \ref{thm:5.16} 的证明以及许多推广与应用; 另见
+问题 31.
+
+\cmtitem{4. 特殊的正交基. Fourier 级数. 小波.}
+在第~
+\ref{chap:6}~章中我们将介绍一种构造正交基的非常有力的方法, 即取紧自伴算子的
+特征向量.在实践中, 人们常常使用 $L^2(\Omega)$ 的由微分算子的特征函数组成的
+特殊基 (见 \S\ref{sec:8.6} 与 \S\ref{sec:9.8}).由
+\begin{equation*}
+e_n(x)=\sqrt{2/\pi}\sin nx,\quad n\ge1,
+\end{equation*}
+或
+\begin{equation*}
+e_n(x)=\sqrt{2/\pi}\cos nx,\quad n\ge0,
+\end{equation*}
+定义的 $L^2(0,\pi)$ 上的正交基很受喜爱, 因为它导致 Fourier 级数与调和分析
+——一个本身就很重要的领域; 见例如 J.~M.~Ash \bref{Ash}{1}, H.~Dym--H.~P.~McKean \bref{DymMcKean}{1}, Y.~Katznelson
+\bref{Katznelson}{1}, C.~S.~Rees--S.~M.~Shah--C.~V.~Stanojevic
+\bref{ReesShahStanojevic}{1}.
+
+这里有一个使分析学家困惑了数十年的问题.给定 $u\in L^2(0,\pi)$, 考虑它的
+Fourier 级数 $S_n=\sum_{k=1}^n(u,e_k)e_k$.已知 (见推论  \ref{cor:5.10})
+$S_n\to u$ 在 $L^2(0,\pi)$ 中.由此推出子列 $S_{n_k}\to u$ 在 $(0,\pi)$ 上
+几乎处处 (见定理  \ref{thm:4.9}).但是否可以说整个序列 $S_n\to u$ 在
+$(0,\pi)$ 上几乎处处? 答案由下述非常深刻的结果给出:
+
+\begin{theorem}[Carleson]
+\label{thm:5.17}
+若 $u\in L^2(0,\pi)$, 则 $S_n\to u$ 几乎处处.
+\end{theorem}
+
+$L^2(0,1)$ 或 $L^2(\R)$ 的其他经典基与 Bessel, Legendre, Hermite, Laguerre, Chebyshev, Jacobi 等人的名字相联系.我们把有兴趣的读者引向
+R.~Courant--D.~Hilbert \bref{CourantHilbert}{1} 第 1 卷以及
+R.~Dautray--J.-L.~Lions \bref{DautrayLions}{1} 第 VIII 章; 另见第~
+\ref{chap:8}~章末尾的
+评注 (Sturm--Liouville 算子的谱性质).近来, 由阶梯函数组成的 $L^2(0,1)$ 的
+Haar 基与 Walsh 基也引起了很大兴趣; 见例如习题 5.31, 5.32, G.~Alexits
+\bref{Alexits}{1}, H.~F.~Harmuth \bref{Harmuth}{1}.
+
+小波理论提供了一种非常重要而优美的新型基.它是分解函数, 信号, 语音, 图像等的
+有力工具.有兴趣的读者可以查阅 Y.~Meyer \bref{Meyer}{1}, \bref{Meyer}{2}, \bref{Meyer}{3}, R.~Coifman 与 Y.~Meyer \bref{CoifmanMeyer}{1}, I.~Daubechies \bref{Daubechies}{1}, G.~David \bref{David}{1}, C.~K.~Chui \bref{Chui}{1}, M.~B.~Ruskai 等 \bref{RuskaiEtAl}{1}, J.~J.~Benedetto--M.~W.~Frazier \bref{BenedettoFrazier}{1}, G.~Kaiser
+\bref{Kaiser}{1}, J.~P.~Kahane--P.~G.~Lemarié-Rieusset
+\bref{KahaneLemarie}{1}, S.~Mallat \bref{Mallat}{1}, G.~Bachman--L.~Narici--E.~Beckenstein \bref{BachmanNariciBeckenstein}{1}, T.~F.~Chan--J.~Shen \bref{ChanShen}{1}, P.~Wojtaszczyk \bref{Wojtaszczyk}{1}, E.~Hernandez--G.~Weiss \bref{HernandezWeiss}{1} 等人的近著及其中的参考文献.
+
+\cmtitem{5. Banach 空间中的 Schauder 基.}
+设 $E$ 为 Banach 空间.称序列 $(e_n)_{n\ge1}$ 为\emph{Schauder 基}, 如果对每个
+$u\in E$ 存在唯一的序列 $(\alpha_n)_{n\ge1}\subset\R$, 使得
+$u=\sum_{k=1}^\infty\alpha_ke_k$ (即
+$u=\lim_{n\to\infty}\sum_{k=1}^n\alpha_ke_k$).这样的基在 Banach 空间的几何
+理论中起着重要作用 (见例如 B.~Beauzamy \bref{Beauzamy}{1}, J.~Lindenstrauss--L.~Tzafriri \bref{LindenstraussTzafriri}{2}, J.~Diestel \bref{Diestel}{2}, R.~C.~James \bref{James}{2}).分析中使用的
+一切经典 (可分) Banach 空间都有 Schauder 基 (见例如 I.~Singer
+\bref{Singer}{1}).这一事实使 Banach 猜测每个可分 Banach 空间都有基.经过
+数十年徒劳的努力之后, P.~Enflo \bref{Enflo}{1} 发现了反例.甚至可以在
+$\ell^p$ ($1<p<\infty$, $p\ne2$) 中构造没有 Schauder 基的闭子空间 (见
+J.~Lindenstrauss--L.~Tzafriri \bref{LindenstraussTzafriri}{2}).A.~Szankowski
+\bref{Szankowski}{1} 发现了另一个惊人的例子: 当 $H$ 为无限维可分 Hilbert
+空间时, $\mathcal{L}(H)$ (配以通常的范数) 没有 Schauder 基.在第~
+\ref{chap:6}~章中我们
+将看到, 关于紧算子的一个相关问题也有否定的答案.
+\section*{第 5 章习题}
+\addcontentsline{toc}{section}{第 5 章习题}
+\markright{第 5 章习题}
+
+下文 $H$ 总表示赋以标量积 $(\ ,\ )$ 及相应范数 $\abs{\cdot}$ 的 Hilbert 空间.
+
+\begin{exercise}[平行四边形法则.]
+\label{exer:5.1}
+假设 $E$ 是赋以范数 $\norm{\cdot}$ 的向量空间, 该范数满足平行四边形法则, 即
+\begin{equation*}
+\norm{a+b}^2+\norm{a-b}^2=2\bigl(\norm{a}^2+\norm{b}^2\bigr)
+\quad\forall a,b\in E.
+\end{equation*}
+我们的目的是证明由
+\begin{equation*}
+(u,v)=\frac12\bigl(\norm{u+v}^2-\norm{u}^2-\norm{v}^2\bigr),
+\quad u,v\in E,
+\end{equation*}
+定义的量是标量积, 且 $(u,u)=\norm{u}^2$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证
+	      \begin{equation*}
+	      (u,v)=(v,u),\quad(-u,v)=-(u,v)\quad\text{且}\quad(u,2v)=2(u,v)
+	      \quad\forall u,v\in E.
+	      \end{equation*}
+	\item 证明
+	      \begin{equation*}
+	      (u+v,w)=(u,w)+(v,w)\quad\forall u,v,w\in E.
+	      \end{equation*}
+	      [提示: 依次对 (i) $a=u$, $b=v$; (ii) $a=u+w$, $b=v+w$;
+	      (iii) $a=u+v+w$, $b=w$ 使用平行四边形法则.]
+	\item 证明 $(\lambda u,v)=\lambda(u,v)\ \forall\lambda\in\R,\ \forall u,v\in E$.
+
+	      [提示: 先考虑 $\lambda\in\N$ 的情形, 再考虑 $\lambda\in\Q$, 最后
+	      考虑 $\lambda\in\R$.]
+	\item 作出结论.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[当 $p\ne2$ 时 $L^p$ 不是 Hilbert 空间.]
+\label{exer:5.2}
+设 $\Omega$ 为测度空间, 并假设存在可测集 $A\subset\Omega$, 使得
+$0<\abs{A}<\abs{\Omega}$.
+
+证明: 对任意 $1\le p\le\infty$, $p\ne2$, 范数 $\norm{\cdot}_p$ 都不满足
+平行四边形法则.
+
+[提示: 使用支集互不相交的函数.]
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.3}
+设 $(u_n)$ 为 $H$ 中的序列, $(t_n)$ 为 $(0,\infty)$ 中的序列, 使得
+\begin{equation*}
+(t_nu_n-t_mu_m,u_n-u_m)\le0\quad\forall m,n.
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 假设序列 $(t_n)$ 不减 (可能无界).证明序列 $(u_n)$ 收敛.
+
+	      [提示: 证明序列 $(\abs{u_n})$ 不增.]
+	\item 假设序列 $(t_n)$ 不增.证明下述二者必居其一:
+	      \begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.1em]
+	      	\item 或者 $\abs{u_n}\to\infty$,
+	      	\item 或者 $(u_n)$ 收敛.
+	      \end{enumerate}
+	      若 $t_n\to t>0$, 证明 $(u_n)$ 收敛; 而若 $t_n\to0$, 证明情形 (i)
+	      与 (ii) 都可能出现.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.4}
+设 $K\subset H$ 为非空闭凸集.设 $f\in H$, $u=P_Kf$.证明
+\begin{equation*}
+\abs{v-u}^2\le\abs{v-f}^2-\abs{u-f}^2\quad\forall v\in K.
+\end{equation*}
+由此推出
+\begin{equation*}
+\abs{v-u}\le\abs{v-f}\quad\forall v\in K.
+\end{equation*}
+给出几何解释.
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.5}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 设 $(K_n)$ 为 $H$ 中不增的闭凸集序列, 使得
+	      $\bigcap_nK_n\ne\emptyset$.证明对每个 $f\in H$, 序列
+	      $u_n=P_{K_n}f$ (强) 收敛到一个极限, 并确定该极限.
+	\item 设 $(K_n)$ 为 $H$ 中不增的非空闭凸集序列.证明对每个 $f\in H$,
+	      序列 $u_n=P_{K_n}f$ (强) 收敛到一个极限, 并确定该极限.
+
+	      设 $\varphi:H\to\R$ 为下方有界的连续函数.证明序列
+	      $\alpha_n=\inf_{K_n}\varphi$ 收敛, 并确定该极限.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[到单位球上的径向投影.]
+\label{exer:5.6}
+设 $E$ 为赋以范数 $\norm{\cdot}$ 的向量空间.令
+\begin{equation*}
+Tu=\begin{cases}
+u & \text{若}\ \norm{u}\le1,\\
+u/\norm{u} & \text{若}\ \norm{u}>1.
+\end{cases}
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明 $\norm{Tu-Tv}\le2\norm{u-v}\quad\forall u,v\in E$.
+	\item 证明一般说来常数 2 不能改进.
+
+	      [提示: 取 $E=\R^2$, 范数 $\norm{u}=\abs{u_1}+\abs{u_2}$.]
+	\item 若 $\norm{\cdot}$ 是 Hilbert 范数, 情形如何?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[到凸锥上的投影.]
+\label{exer:5.7}
+设 $K\subset H$ 为顶点在原点的凸锥, 即
+\begin{equation*}
+0\in K\quad\text{且}\quad\lambda u+\mu v\in K
+\quad\forall\lambda,\mu>0,\ \forall u,v\in K;
+\end{equation*}
+此外假设 $K$ 闭.
+
+给定 $f\in H$, 证明 $u=P_Kf$ 由下述性质刻画:
+\begin{equation*}
+u\in K,\quad(f-u,v)\le0\quad\forall v\in K,\quad\text{且}\quad(f-u,u)=0.
+\end{equation*}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.8}
+设 $\Omega$ 为测度空间, $h:\Omega\to[0,+\infty)$ 为可测函数.令
+\begin{equation*}
+K=\{u\in L^2(\Omega);\ \abs{u(x)}\le h(x)\ \text{a.e. 在}\ \Omega\ \text{上}\}.
+\end{equation*}
+验证 $K$ 是 $H=L^2(\Omega)$ 中的非空闭凸集.确定 $P_K$.
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.9}
+设 $A\subset H$ 与 $B\subset H$ 为两个非空闭凸集, 使得 $A\cap B=\emptyset$ 且
+$B$ 有界.令
+\begin{equation*}
+C=A-B.
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明 $C$ 闭且凸.
+	\item 令 $u=P_C0$, 并把 $u$ 写成 $u=a_0-b_0$, 其中 $a_0\in A$, $b_0\in B$ (这是可能的, 因为 $u\in C$).证明
+	      $\abs{a_0-b_0}=\dist(A,B)=\inf_{a\in A,b\in B}\abs{a-b}$.
+	      确定 $P_Ab_0$ 与 $P_Ba_0$.
+	\item 设 $a_1\in A$, $b_1\in B$ 是另一对使得
+	      $\abs{a_1-b_1}=\dist(A,B)$ 的元素.证明 $u=a_1-b_1$.
+	      画出一些图形, 其中对 $[a_0,b_0]$ 唯一 (相应地, 不唯一).
+	\item 对 Hilbert 空间的情形, 给出 Hahn--Banach 定理第二几何形式的一个
+	      简单证明.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.10}
+设 $F:H\to\R$ 为 $C^1$ 类凸函数.设 $K\subset H$ 凸, $u\in H$.证明下述性质
+等价:
+\begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.15em]
+	\item $F(u)\le F(v)\quad\forall v\in K$,
+	\item $(F'(u),v-u)\ge0\quad\forall v\in K$.
+\end{enumerate}
+例: $F(v)=\abs{v-f}^2$, 其中 $f\in H$ 给定.
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.11}
+设 $M\subset H$ 为不化为 $\{0\}$ 的闭线性子空间.设 $f\in H$, $f\notin M^\perp$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明
+	      \begin{equation*}
+	      m=\inf_{\substack{u\in M\\\abs{u}=1}}(f,u)
+	      \end{equation*}
+	      被唯一地达到.
+	\item 设 $\varphi_1,\varphi_2,\varphi_3\in H$ 给定, $E$ 表示由
+	      $\{\varphi_1,\varphi_2,\varphi_3\}$ 张成的线性空间.在下列情形确定
+	      $m$:
+	      \begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.1em]
+	      	\item $M=E$,
+	      	\item $M=E^\perp$.
+	      \end{enumerate}
+	\item 考察 $H=L^2(0,1)$, $\varphi_1(t)=t$, $\varphi_2(t)=t^2$, $\varphi_3(t)=t^3$ 的情形.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[预 Hilbert 空间的完备化.]
+\label{exer:5.12}
+设 $E$ 为赋以标量积 $(\ ,\ )$ 的向量空间.不假设 $E$ 关于范数
+$\abs{u}=(u,u)^{1/2}$ 完备 ($E$ 称为\emph{预 Hilbert 空间}).
+
+回忆对偶空间 $E^\star$ 赋以对偶范数 $\norm{f}_{E^\star}$ 后是完备的.设
+$T:E\to E^\star$ 为如下定义的映射:
+\begin{equation*}
+\dual{Tu}{v}_{E^\star,E}=(u,v)\quad\forall u,v\in E.
+\end{equation*}
+验证 $T$ 是线性等距.$T$ 是满射吗?
+
+我们的目的是证明 $R(T)$ 在 $E^\star$ 中稠密, 且 $\norm{\cdot}_{E^\star}$ 是
+Hilbert 范数.
+
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 把 $E$ 的标量积转移到 $R(T)$ 上, 并把它延拓到 $\overline{R(T)}$.
+	      所得的标量积记作 $((f,g))$, 其中 $f,g\in\overline{R(T)}$.
+
+	      验证相应的范数 $((f,f))^{1/2}$ 在 $R(T)$ 上与
+	      $\norm{f}_{E^\star}$ 一致.证明
+	      \begin{equation*}
+	      \dual{f}{v}=((f,Tv))\quad\forall v\in E,\ \forall f\in R(T).
+	      \end{equation*}
+	\item 证明 $\overline{R(T)}=E^\star$.
+
+	      [提示: 给定 $f\in E^\star$, 把 $f$ 转移为 $\overline{R(T)}$ 上的
+	      线性泛函, 并使用 $\overline{R(T)}$ 中的 Riesz--Fréchet 表示定理.]
+
+	      由此推出 $E^\star$ 关于范数 $\norm{\cdot}_{E^\star}$ 是 Hilbert
+	      空间.
+	\item 作出结论: $E$ 的完备化可以等同于 $E^\star$.(完备化的定义见例如
+	      A.~Friedman \bref{Friedman}{3}.)
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.13}
+设 $E$ 为赋以范数 $\norm{\cdot}_E$ 的向量空间.对偶范数记作
+$\norm{\cdot}_{E^\star}$.回忆 (\emph{多值}) 对偶映射定义为
+\begin{equation*}
+F(u)=\{f\in E^\star;\ \norm{f}_{E^\star}=\norm{u}_E
+\ \text{且}\ \dual{f}{u}=\norm{u}_E^2\}.
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 假设 $F$ 满足下述性质:
+	      \begin{equation*}
+	      F(u)+F(v)\subset F(u+v)\quad\forall u,v\in E.
+	      \end{equation*}
+	      证明范数 $\norm{\cdot}_E$ 由某个标量积导出.
+
+	      [提示: 使用习题 5.1.]
+	\item 反之, 若范数 $\norm{\cdot}_E$ 由某个标量积导出, 关于 $F$ 能说些
+	      什么?
+
+	      [提示: 使用习题 5.12 与 1.1.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.14}
+设 $a:H\times H\to\R$ 为双线性连续形式, 使得
+\begin{equation*}
+a(v,v)\ge0\quad\forall v\in H.
+\end{equation*}
+证明函数 $v\mapsto F(v)=a(v,v)$ 凸, 属于 $C^1$ 类, 并确定它的微分.
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.15}
+设 $G\subset H$ 为 Hilbert 空间 $H$ 的线性子空间; $G$ 赋以 $H$ 的范数.设
+$F$ 为 Banach 空间.设 $S:G\to F$ 为有界线性算子.证明存在有界线性算子
+$T:H\to F$, 它延拓 $S$, 且使得
+\begin{equation*}
+\norm{T}_{\mathcal{L}(H,F)}=\norm{S}_{\mathcal{L}(G,F)}.
+\end{equation*}
+\end{exercise}
+
+\begin{exercise}[三元组 $V\subset H\subset V^\star$.]
+\label{exer:5.16}
+设 $H$ 为赋以标量积 $(\ ,\ )$ 及相应范数 $\abs{\cdot}$ 的 Hilbert 空间.设
+$V\subset H$ 为在 $V$ 中稠密的线性子空间.
+% 原书此处印作 "dense in V", 按上下文 (并与 5.2 节注记 3 的同一表述对照)
+% 应为 "dense in H". 依技能规范保留原样并记录, 不擅自更正.
+假设 $V$ 有自己的范数
+$\norm{\cdot}$, 且 $V$ 关于 $\norm{\cdot}$ 是 Banach 空间.还假设嵌入
+$V\subset H$ 连续, 即 $\abs{v}\le C\norm{v}\ \forall v\in V$.考虑由
+\begin{equation*}
+\dual{Tu}{v}_{V^\star,V}=(u,v)\quad\forall u\in H,\ \forall v\in V
+\end{equation*}
+定义的算子 $T:H\to V^\star$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明 $\norm{Tu}_{V^\star}\le C\abs{u}\ \forall u\in H$.
+	\item 证明 $T$ 是单射.
+	\item 证明若 $V$ 自反, 则 $R(T)$ 在 $V^\star$ 中稠密.
+	\item 给定 $f\in V^\star$, 证明 $f\in R(T)$ 当且仅当存在常数 $a\ge0$,
+	      使得 $\abs{\dual{f}{v}_{V^\star,V}}\le a\abs{v}\ \forall v\in V$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.17}
+设 $M,N\subset H$ 为两个闭线性子空间.假设
+$(u,v)=0\ \forall u\in M,\ \forall v\in N$.证明 $M+N$ 闭.
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.18}
+设 $E$ 为 Banach 空间, $H$ 为 Hilbert 空间.设
+$T\in\mathcal{L}(E,H)$.证明下述性质等价:
+\begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.15em]
+	\item $T$ 有左逆,
+	\item 存在常数 $C$, 使得 $\norm{u}\le C\abs{Tu}\ \forall u\in E$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.19}
+设 $(u_n)$ 为 $H$ 中的序列, 使得 $u_n\weakto u$ 弱收敛.假设
+$\limsup\abs{u_n}\le\abs{u}$.不依赖命题  \ref{prop:3.32} 证明
+$u_n\to u$ 强收敛.
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.20}
+假设 $S\in\mathcal{L}(H)$ 满足 $(Su,u)\ge0\ \forall u\in H$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明 $N(S)=R(S)^\perp$.
+	\item 证明对每个 $t>0$, $I+tS$ 是双射.
+	\item 证明
+	      \begin{equation*}
+	      \lim_{t\to+\infty}(I+tS)^{-1}f=P_{N(S)}f\quad\forall f\in H.
+	      \end{equation*}
+	      [提示: 有两种方法:
+	      \begin{enumerate}[label=(\alph*), leftmargin=2.2em, itemsep=0.1em]
+	      	\item 分别考虑 $f\in N(S)$ 与 $f\in R(S)$ 的情形.
+	      	\item 使用弱收敛.
+	      \end{enumerate}]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[线性压缩的迭代. Kakutani--Yosida 遍历定理.]
+\label{exer:5.21}
+设 $T\in\mathcal{L}(H)$ 满足 $\norm{T}\le1$.给定 $f\in H$ 与整数 $n\ge1$,
+令
+\begin{equation*}
+\sigma_n(f)=\frac1n\bigl(f+Tf+T^2f+\cdots+T^{n-1}f\bigr)
+\end{equation*}
+以及
+\begin{equation*}
+\mu_n(f)=\Bigl(\frac{I+T}{2}\Bigr)^nf.
+\end{equation*}
+我们的目的是证明
+\begin{equation*}
+\lim_{n\to\infty}\sigma_n(f)=\lim_{n\to\infty}\mu_n(f)=P_{N(I-T)}f.
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证 $N(I-T)=R(I-T)^\perp$.
+	\item 假设 $f\in R(I-T)$.证明存在常数 $C$, 使得
+	      $\abs{\sigma_n(f)}\le C/n\ \forall n\ge1$.
+	\item 由此推出: 对每个 $f\in H$, 有
+	      \begin{equation*}
+	      \lim_{n\to\infty}\sigma_n(f)=P_{N(I-T)}f.
+	      \end{equation*}
+	\item 令 $S=\frac12(I+T)$.证明
+	      \begin{equation}
+	      \abs{u-Su}^2+\abs{Su}^2\le\abs{u}^2\quad\forall u\in H.
+	      \tag{1}
+	      \end{equation}
+	      由此推出
+	      \begin{equation*}
+	      \sum_{i=0}^\infty\abs{S^iu-S^{i+1}u}^2\le\abs{u}^2\quad\forall u\in H
+	      \end{equation*}
+	      以及
+	      \begin{equation*}
+	      \abs{S^n(u-Su)}\le\frac{\abs{u}}{\sqrt{n+1}}
+	      \quad\forall u\in H,\ \forall n\ge1.
+	      \end{equation*}
+	\item 假设 $f\in R(I-T)$.证明存在常数 $C$, 使得
+	      $\abs{\mu_n(f)}\le C/\sqrt{n}\ \forall n\ge1$.
+	\item 由此推出: 对每个 $f\in H$, 有
+	      \begin{equation*}
+	      \lim_{n\to\infty}\mu_n(f)=P_{N(I-T)}f.
+	      \end{equation*}
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.22}
+设 $C\subset H$ 为非空闭凸集, $T:C\to C$ 为非线性压缩, 即
+\begin{equation*}
+\abs{Tu-Tv}\le\abs{u-v}\quad\forall u,v\in C.
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 设 $(u_n)$ 为 $C$ 中的序列, 使得
+	      \begin{equation*}
+	      u_n\weakto u\ \text{弱收敛}\quad\text{且}\quad(u_n-Tu_n)\to f
+	      \ \text{强收敛}.
+	      \end{equation*}
+	      证明 $u-Tu=f$.
+
+	      [提示: 先考虑 $C=H$ 的情形, 并使用不等式
+	      $((u-Tu)-(v-Tv),u-v)\ge0\ \forall u,v$.]
+	\item 由此推出: 若 $C$ 有界且 $T(C)\subset C$, 则 $T$ 有不动点.
+
+	      [提示: 考虑 $T_\varepsilon u=(1-\varepsilon)Tu+\varepsilon a$,
+	      其中 $a\in C$ 固定, $\varepsilon>0$, $\varepsilon\to0$.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Zarantonello 不等式.]
+\label{exer:5.23}
+设 $T:H\to H$ 为 (非线性) 压缩.假设 $\alpha_1,\alpha_2,\dots,\alpha_n\in\R$
+满足 $\alpha_i\ge0\ \forall i$ 且 $\sum_{i=1}^n\alpha_i=1$.假设
+$u_1,u_2,\dots,u_n\in H$, 并令
+\begin{equation*}
+\sigma=\sum_{i=1}^n\alpha_iu_i.
+\end{equation*}
+证明
+\begin{equation*}
+\abs{T\sigma-\sum_{i=1}^n\alpha_iTu_i}^2
+\le\frac12\sum_{i,j=1}^n\alpha_i\alpha_j
+\bigl(\abs{u_i-u_j}^2-\abs{Tu_i-Tu_j}^2\bigr).
+\end{equation*}
+[提示: 写出
+\begin{equation*}
+\abs{T\sigma-\sum_{i=1}^n\alpha_iTu_i}^2
+=\sum_{i,j=1}^n\alpha_i\alpha_j(T\sigma-Tu_i,T\sigma-Tu_j),
+\end{equation*}
+并使用恒等式 $(a,b)=\frac12\bigl(\abs{a}^2+\abs{b}^2-\abs{a-b}^2\bigr)$.]
+
+当 $T$ 是等距 (即 $\abs{Tu-Tv}=\abs{u-v}\ \forall u,v\in H$) 时能推出什么?
+\end{exercise}
+
+\begin{exercise}[Banach--Saks 性质.]
+\label{exer:5.24}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 假设 $(u_n)$ 为 $H$ 中的序列, 使得 $u_n\weakto0$ 弱收敛.用归纳法
+	      构造子列 $(u_{n_j})$, 使得 $u_{n_1}=u_1$ 且
+	      \begin{equation*}
+	      \abs{(u_{n_j},u_{n_k})}\le\frac1k
+	      \quad\forall k\ge2,\ \forall j=1,2,\dots,k-1.
+	      \end{equation*}
+	      由此推出: 由 $\sigma_p=\frac1p\sum_{j=1}^pu_{n_j}$ 定义的序列
+	      $(\sigma_p)$ 当 $p\to\infty$ 时强收敛于 0.
+
+	      [提示: 估计 $\abs{\sigma_p}^2$.]
+	\item 假设 $(u_n)$ 为 $H$ 中的有界序列.证明存在子列 $(u_{n_j})$, 使得
+	      序列 $\sigma_p=\frac1p\sum_{j=1}^pu_{n_j}$ 当 $p\to\infty$ 时强
+	      收敛到一个极限.
+
+	      与推论  \ref{cor:3.8} 及习题 3.4 比较.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Opial 引理的若干变体.]
+\label{exer:5.25}
+设 $K\subset H$ 为非空闭凸集.设 $(u_n)$ 为 $H$ 中的序列, 使得对每个
+$v\in K$, 序列 $(\abs{u_n-v})$ 不增.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证序列 $(\dist(u_n,K))$ 不增.
+	\item 证明序列 $(P_Ku_n)$ 强收敛到一个极限, 记作 $\ell$.
+
+	      [提示: 使用习题 5.4.]
+	\item 这里假设序列 $(u_n)$ 具有性质
+	      \begin{equation*}
+	      \text{(P)}\qquad
+	      \begin{cases}
+	      \text{每当某个子列 }(u_{n_k})\text{ 弱收敛到某个极限 }u\in H\text{ 时,}\\
+	      \text{都有 }u\in K.
+	      \end{cases}
+	      \end{equation*}
+	      证明 $u_n\weakto\ell$ 弱收敛.
+	\item 这里假设 $\bigcup_{\lambda>0}\lambda(K-K)=H$.证明存在某个 $u\in H$,
+	      使得 $u_n\weakto u$ 弱收敛且 $P_Ku=\ell$.
+	\item 这里假设 $\Int K\ne\emptyset$.证明存在某个 $u\in H$, 使得
+	      $u_n\to u$ 强收敛.
+
+	      [提示: 先考虑 $K$ 是单位球的情形, 再考虑一般情形.]
+	\item 令 $\sigma_n=\frac1n(u_1+u_2+\cdots+u_n)$, 并假设序列 $(\sigma_n)$
+	      满足性质 (P).证明 $\sigma_n\weakto\ell$ 弱收敛.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.26}
+假设 $(e_n)$ 是 $H$ 的正交基.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证 $e_n\weakto0$ 弱收敛.
+
+	      设 $(a_n)$ 为 $\R$ 中的有界序列, 令
+	      $u_n=\frac1n\sum_{i=1}^na_ie_i$.
+	\item 证明 $\abs{u_n}\to0$.
+	\item 证明 $\sqrt{n}\,u_n\weakto0$ 弱收敛.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.27}
+设 $D\subset H$ 为子集, 使得由 $D$ 张成的线性空间在 $H$ 中稠密.设
+$(E_n)_{n\ge1}$ 为 $H$ 中两两正交的闭子空间序列.假设
+\begin{equation*}
+\sum_{n=1}^\infty\abs{P_{E_n}u}^2=\abs{u}^2\quad\forall u\in D.
+\end{equation*}
+证明 $H$ 是诸 $E_n$ 的 Hilbert 和.
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.28}
+假设 $H$ 可分.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 设 $V\subset H$ 为在 $H$ 中稠密的线性子空间.证明 $V$ 包含 $H$ 的
+	      一个正交基.
+	\item 设 $(e_n)_{n\ge1}$ 为 $H$ 中的正交序列, 即 $(e_i,e_j)=\delta_{ij}$.
+	      证明存在 $H$ 的一个正交基, 它包含 $\bigcup_{n=1}^\infty\{e_n\}$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Grothendieck 的一个引理.]
+\label{exer:5.29}
+设 $\Omega$ 为 $\abs{\Omega}<\infty$ 的测度空间.设 $E$ 为 $L^p(\Omega)$
+($1\le p<\infty$) 的闭子空间.假设 $E\subset L^\infty(\Omega)$.我们的目的
+是证明 $\dim E<\infty$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明存在常数 $C$, 使得
+	      \begin{equation*}
+	      \norm{u}_\infty\le C\norm{u}_p\quad\forall u\in E.
+	      \end{equation*}
+	      [提示: 使用推论~
+\ref{cor:2.8}.]
+	\item 证明存在常数 $M$, 使得
+	      \begin{equation*}
+	      \norm{u}_\infty\le M\norm{u}_2\quad\forall u\in E.
+	      \end{equation*}
+	      [提示: 区分 $1\le p\le2$ 与 $2<p<\infty$ 两种情形.]
+	\item 由此推出 $E$ 是 $L^2(\Omega)$ 的闭子空间.
+
+	      下文假设 $\dim E=\infty$.设 $(e_n)_{n\ge1}$ 为 $E$ (赋以 $L^2$
+	      标量积) 中的正交序列.
+	\item 固定任一整数 $k\ge1$.证明存在零测集 $\omega\subset\Omega$, 使得
+	      \begin{equation*}
+	      \Bigl|\sum_{i=1}^k\alpha_ie_i(x)\Bigr|
+	      \le M\Bigl(\sum_{i=1}^k\alpha_i^2\Bigr)^{1/2}
+	      \quad\forall x\in\Omega\setminus\omega,\
+	      \forall\alpha=(\alpha_1,\alpha_2,\dots,\alpha_k)\in\R^k.
+	      \end{equation*}
+	      [提示: 先考虑 $\alpha\in\Q^k$ 的情形.]
+	\item 由此推出 $\sum_{i=1}^k\abs{e_i(x)}^2\le M^2
+	      \ \forall x\in\Omega\setminus\omega$.
+	\item 作出结论.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:5.30}
+设 $(e_n)_{n\ge1}$ 为 $H=L^2(0,1)$ 中的正交序列.设 $p(t)$ 为 $H$ 中给定
+的函数.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明对每个 $t\in[0,1]$, 有
+	      \begin{equation}
+	      \sum_{n=1}^\infty\Bigl|\int_0^tp(s)e_n(s)\,ds\Bigr|^2
+	      \le\int_0^t\abs{p(s)}^2\,ds.
+	      \tag{1}
+	      \end{equation}
+	\item 由此推出
+	      \begin{equation}
+	      \sum_{n=1}^\infty\int_0^1\Bigl|\int_0^tp(s)e_n(s)\,ds\Bigr|^2dt
+	      \le\int_0^1\abs{p(t)}^2(1-t)\,dt.
+	      \tag{2}
+	      \end{equation}
+	\item 现在假设 $(e_n)_{n\ge1}$ 是 $H$ 的正交基.证明 (1) 与 (2) 变成
+	      等式.
+	\item 反之, 假设 (2) 中等号成立, 且 $p(t)\ne0$ 几乎处处.证明
+	      $(e_n)_{n\ge1}$ 是正交基.
+\end{enumerate}
+例: $p\equiv1$.
+\end{exercise}
+
+\begin{exercise}[Haar 基.]
+\label{exer:5.31}
+给定整数 $n\ge1$, 把它写成 $n=k+2^p$, 其中 $p\ge0$, $k\ge0$ 是由条件
+$k\le2^p-1$ 唯一确定的整数.考虑由下式定义在 $(0,1)$ 上的函数
+\begin{equation*}
+\varphi_n(t)=\begin{cases}
+2^{p/2} & \text{若}\ k2^{-p}<t<\bigl(k+\frac12\bigr)2^{-p},\\
+-2^{p/2} & \text{若}\ \bigl(k+\frac12\bigr)2^{-p}<t<(k+1)2^{-p},\\
+0 & \text{其他情形}.
+\end{cases}
+\end{equation*}
+令 $\varphi_0\equiv1$, 证明 $(\varphi_n)_{n\ge0}$ 是 $L^2(0,1)$ 的正交基.
+\end{exercise}
+
+\begin{exercise}[Rademacher 系与 Walsh 基.]
+\label{exer:5.32}
+对每个整数 $i\ge0$, 考虑由 $r_i(t)=(-1)^{[2^it]}$ 定义在 $(0,1)$ 上的
+函数 $r_i(t)$ (如通常那样, $[x]$ 表示不超过 $x$ 的最大整数).
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证 $(r_i)_{i\ge0}$ 是 $L^2(0,1)$ 中的正交序列 (称为
+	      \emph{Rademacher 系}).
+	\item $(r_i)_{i\ge0}$ 是正交基吗?
+
+	      [提示: 考虑函数 $u=r_1r_2$.]
+	\item 给定整数 $n\ge0$, 考虑它的二进制表示
+	      $n=\sum_{i=0}^\ell\alpha_i2^i$, 其中 $\alpha_i\in\{0,1\}$.令
+	      \begin{equation*}
+	      w_n(t)=\prod_{i=0}^\ell r_{i+1}(t)^{\alpha_i}.
+	      \end{equation*}
+	      证明 $(w_n)_{n\ge0}$ 是 $L^2(0,1)$ 的正交基 (称为
+	      \emph{Walsh 基}).注意 $(r_i)_{i\ge0}$ 是 $(w_n)_{n\ge0}$ 的
+	      子集.
+\end{enumerate}
+\end{exercise}

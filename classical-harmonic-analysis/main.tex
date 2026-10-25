@@ -1,0 +1,80 @@
+% ============ ``古典调和分析''中文翻译 LaTeX 重排版 ============
+% 原书:藪田公三・佐藤圓治・田中仁・宮地晶彦・中路貴彦
+%      ``古典調和解析''(解析学百科 I),朝倉書店,2008
+% 模板:AJbook.cls(李文威``代数学方法''书系模板,见 templates 说明)
+% 结构:前言 + 第 1-4 章(每章末附参考文献)+ 索引
+%
+% 编号体系(原书约定,AJbook.cls 默认行为即符合):
+%   - 章:第一章,第二章...(中文数字,见 titles-setup.tex)
+%   - 节:1.1,1.2...(章.节,book 类默认,每章重置)
+%   - 小节:1.2.1,1.2.2...(章.节.小节)
+%   - 定理/定义/命题/引理/推论/例:共用一个计数器,按节编号(定理 1.1.4,定义 1.3.1,例 1.1.10)
+%   - 公式:按节编号(式 (1.2.7))
+%   - 注/注意:不编号(用 remarknonum 环境)
+\documentclass[geometry=a4, fontsetup=font-setup-open.tex, titlesetup=titles-setup, coverpage=cover]{AJbook}
+
+% ============ 宏包 ============
+\usepackage{mycommand}      % 常用数学命令(\dd \R \Z \Q \CC \e \ii 等)
+\usepackage{myarrows}       % 可伸缩箭头
+\usepackage{chngcntr}       % \numberwithin
+\usepackage{imakeidx}
+\usepackage{hyperref}
+\usetikzlibrary{calc}          % 封面坐标计算
+
+% ============ 编号体系 ============
+\numberwithin{equation}{section}   % 公式按节编号 (1.2.7)
+
+% 编号的``注意''环境:原书``注意''与定理共享计数器并编号(如 注意1.4.2,注意3.1.43)
+% AJbook.cls 在 \AtBeginDocument 中定义定理类环境(theorem 计数器),
+% 故此处也须用 \AtBeginDocument,且先切回 plain 样式(类 hook 末尾是 nonumberplain)
+\AtBeginDocument{%
+  \theoremstyle{plain}%
+  \newtheorem{note}[theorem]{注意}%
+  \theoremstyle{nonumberplain}%
+  \newtheorem{remarknonum}{注}%
+}
+
+% ============ 超链接 ============
+\hypersetup{
+    pdfauthor={薮田公三, 佐藤圓治, 田中仁, 宮地晶彦, 中路貴彦},
+    pdftitle={古典调和分析(解析学百科 I)},
+    pdfsubject={调和分析},
+    bookmarksnumbered=true
+}
+
+% ============ 自定义命令 ============
+\newcommand{\C}{\mathbb{C}}        % 复数域(mycommand 用 \CC)
+\newcommand{\Fourier}{\mathcal{F}} % Fourier 变换
+\newcommand{\Hilbert}{\mathcal{H}} % Hilbert 变换
+\newcommand{\esssup}{\operatorname{ess\,sup}}
+\newcommand{\diam}{\operatorname{diam}}
+
+% 参考文献:保留正文手动 \section*{参考文献} 标题,抑制 thebibliography 自动生成的章标题
+\makeatletter
+\patchcmd{\thebibliography}{\chapter*{\bibname}}{}{}{}
+\makeatother
+
+% 索引
+\makeindex
+
+% 全局断行弹性:消除边界性 Overfull(与 Gelbart 项目同款)
+\emergencystretch=3em
+
+% ============ 文档开始 ============
+\begin{document}
+\frontmatter        % 封面(cover.tex) + 目录(模板自动处理,罗马页码)
+
+% 前言(原书まえがき)
+\input{preface}
+
+\mainmatter         % 正文(阿拉伯页码从 1 开始)
+
+\input{chapter01}
+\input{chapter02}
+\input{chapter03}
+\input{chapter04}
+
+% 索引
+\printindex
+
+\end{document}

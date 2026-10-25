@@ -1,0 +1,245 @@
+\begingroup
+\raggedbottom
+\setlength{\emergencystretch}{2em}
+\section{完备化, Hensel 化与 Artin 逼近}\label{src:B.5}
+\begin{epigraph}
+但那时, 我仿佛被一股灵感笼罩, 能够即兴给出可信的回答, 作出奇迹般的幸运猜测. 唯独数学例外, 连上帝也无法让我弄懂它.
+\epigraphauthor{Gabriel García Márquez, \textit{活着为了讲述}}
+\end{epigraph}
+在回顾完备局部环, Hensel 局部环和严格 Hensel 局部环的性质后, 我们将讨论 Artin 逼近 (定理 \bookref{B.5.18}). 粗略地说, 它断言: 对于有限型概形 $S$ 及其一点 $s$, 定义在局部环的完备化 $\widehat{\mathcal O}_{S,s}$ 上的每个代数对象, 都可以用定义在剩余域平凡的平展邻域 $(S',s')\to(S,s)$ 上的对象来逼近. 虽然 Artin 逼近很难证明 (我们也不在这里证明它!), 但其陈述至少很容易理解, 并能帮助我们思考平展映射. 它是模理论中从局部到整体论证的基本工具, 但通常可以用更直接而概念性较弱的方法避免使用它.
+
+\subsection{完备环}\label{src:B.5.1-subsection}
+\begin{definition}\label{src:B.5.1}
+若自然映射
+\begin{equation}\label{src:B.5.2}
+R\longrightarrow\varprojlim_n R/I^n
+\end{equation}
+为同构, 则称环 $R$ 关于理想 $I$ \newterm{完备}{complete}. $R$ 关于理想 $I$ 的\newterm{完备化}{completion} 定义为
+\[
+\widehat R=\varprojlim_n R/I^n.
+\]
+更一般地, 若 $M\to\varprojlim_n M/I^nM$ 为同构, 则称 $R$-模 $M$ 完备, 并将 $M$ 的完备化定义为 $\widehat M=\varprojlim_n M/I^nM$.
+\end{definition}
+最重要的情形是 $I=\mathfrak m\subseteq R$ 为极大理想.
+\begin{caution}\label{src:B.5.3}
+当 $R$ 非 Noether 时, 局部环的完备化甚至可能不完备; 见 \cite[Tag 05JC]{SP}. 文献中的 ``完备'' 有时仅指 \bookeqref{B.5.2} 的满射性, 而 ``\textit{分离}'' (\textup{separated}) 指其单射性, 即 $\bigcap_n I^n=0$.
+\end{caution}
+Artin--Rees 引理在建立完备 Noether 局部环的基本性质时起着重要作用.
+\begin{lemma}[Artin--Rees 引理]\label{src:B.5.4}
+设 $R$ 为 Noether 环, $I\subseteq R$ 为理想, $M$ 为有限生成 $A$-模, 且 $M=M_0\supseteq M_1\supseteq M_2\supseteq\cdots$ 为\newterm{稳定 $I$-滤过}{stable $I$-filtration} (即当 $n\gg0$ 时 $IM_n=M_{n+1}$). 若 $M'\subseteq M$ 为子模, 则 $M'=M'\cap M_0\supseteq M'\cap M_1\supseteq\cdots$ 为稳定 $I$-滤过. 特别地, 存在整数 $k$, 使得对所有 $n\geq k$ 都有
+\[
+M'\cap(I^nM)=I^{n-k}(M'\cap(I^kM)).
+\]
+\end{lemma}
+\begin{proof}
+见 \cite[命题 $10.9$ 及推论 $10.10$]{AM69} 和 \cite[引理 $5.1$]{Eis95}.
+\end{proof}
+\begin{proposition}[完备 Noether 局部环的性质]\label{src:B.5.5}
+设 $(R,\mathfrak m)$ 为 Noether 局部环.
+\begin{enumerate}[(1)]
+\item $\widehat R$ 为完备 Noether 局部环, 其极大理想为 $\widehat{\mathfrak m}=\mathfrak m\widehat R=\mathfrak m\otimes_R\widehat R$;
+\item $\widehat{\mathfrak m^n}=\widehat{\mathfrak m}^{\,n}$, 且 $\mathfrak m^n/\mathfrak m^{n+1}=\widehat{\mathfrak m}^{\,n}/\widehat{\mathfrak m}^{\,n+1}$;
+\item $R\to\widehat R$ 忠实平坦;
+\item 对有限生成 $R$-模 $M$, 有 $\widehat M=M\otimes_R\widehat R$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+见 \cite[命题 $10.13$--$10.16$]{AM69}.
+\end{proof}
+下面给出 Nakayama 引理的若干变体, 它们对完备局部环成立, 而不需要有限生成假设.
+\begin{lemma}[完备 Nakayama 引理]\label{src:B.5.6}
+\begin{enumerate}[(1)]
+\item 若 $(A,\mathfrak m)$ 为完备 Noether 局部环, $M$ 为 (可能不是有限生成的) $A$-模, 满足 $\bigcap_k\mathfrak m^kM=0$, 且 $m_1,\ldots,m_n\in M$ 生成 $M/\mathfrak mM$, 则 $m_1,\ldots,m_n$ 也生成 $M$.
+\item 若 $(A,\mathfrak m_A)$ 为局部环, $M\to N$ 为 $A$-模同态, 且 $M/\mathfrak m_AM\to N/\mathfrak m_AN$ 满射, 则 $\widehat M\to\widehat N$ 满射.
+\item 设 $(A,\mathfrak m_A)\to(B,\mathfrak m_B)$ 为完备 Noether 局部环之间的局部同态, 满足 $A/\mathfrak m_A\cong B/\mathfrak m_B$. 若 $\mathfrak m_A/\mathfrak m_A^2\to\mathfrak m_B/\mathfrak m_B^2$ 满射, 则 $A\to B$ 也满射. 若还有 $A=B$, 则 $A\to B$ 为同构.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+关于 (1) 和 (2), 见 \cite[习题 $7.2$]{Eis95} 和 \cite[Tag 0315]{SP}. 为证明 (3), 由 (2) 可知包含映射 $\mathfrak m_AB\hookrightarrow\mathfrak m_A$ 满射. 因此 $\mathfrak m_AB=\mathfrak m_A$, 且 $B$ 作为 $A$-模关于 $\mathfrak m_A$ 完备. 由于 $A/\mathfrak m_A\to B/\mathfrak m_B$ 满射, 再次应用 (2) 即知 $A\to B$ 满射. 最后一个断言来自如下事实: Noether 环的满射自同态为同构.
+\end{proof}
+\begin{theorem}[Cohen 结构定理]\label{src:B.5.7}
+若 $(R,\mathfrak m)$ 为包含一个域的完备 Noether 局部环, 则
+\[
+R\cong(R/\mathfrak m)[[y_1,\ldots,y_r]]/J.
+\]
+若 $R$ 还正则, 则 $R\cong(R/\mathfrak m)[[y_1,\ldots,y_r]]$.
+\end{theorem}
+\begin{proof}
+见 \cite[定理 $7.7$]{Eis95} 和 \cite[Tags 032A 及 0C0S]{SP}.
+\end{proof}
+
+\subsection{Hensel 局部环与严格 Hensel 局部环}\label{src:B.5.2-subsection}
+设 $(R,\mathfrak m)$ 为剩余域为 $\kappa$ 的局部环. 我们将 $a\in R$ (相应地, $f\in R[x]$) 的像记为 $\overline a\in\kappa$ (相应地, $\overline f\in\kappa[x]$). 若 $f\in R[t]$, 则将其导数记为 $f'\in R[t]$. 注意 $\overline{f'}=\overline f'$.
+\begin{definition}\label{src:B.5.8}
+设 $(R,\mathfrak m)$ 为剩余域为 $\kappa$ 的局部环.
+\begin{enumerate}[(1)]
+\item 若对每个首一多项式 $f\in R[t]$, $\overline f$ 的每个满足 $\overline f'(\alpha_0)\neq0$ 的根 $\alpha_0\in\kappa$ 都可以提升为 $f$ 的根 $\alpha\in R$, 则称 $R$ 为\newterm{Hensel 环}{henselian ring}.
+\item 若 $R$ 为 Hensel 环且 $\kappa$ 可分闭, 则称 $R$ 为\newterm{严格 Hensel 环}{strictly henselian ring}.
+\end{enumerate}
+\end{definition}
+Hensel 引理断言, 每个完备离散赋值环 $R$, 例如 $\mathbb Z_p$, 都是 Hensel 环.
+\begin{proposition}[Hensel 性的等价条件]\label{src:B.5.9}
+对于剩余域为 $\kappa$ 的局部环 $(R,\mathfrak m)$, 下列条件等价:
+\begin{enumerate}[(1)]
+\item $R$ 为 Hensel 环;
+\item 对每个多项式 $f\in R[t]$, 每个满足 $\gcd(g_0,h_0)=1$ 的分解 $\overline f=g_0h_0$ 都可以提升为分解 $f=gh$, 其中 $\overline g=g_0$, $\overline h=h_0$;
+\item 每个有限 $R$-代数都是有限个在 $R$ 上有限的局部环之积;
+\item 每个拟有限 $R$-代数 $A$ 都同构于积 $A\cong B\times C$, 其中 $B$ 在 $R$ 上有限, 且 $C\otimes_R\kappa=0$;
+\item 对每个平展环同态 $\phi:R\to A$ 和满足 $\phi^{-1}(\mathfrak p)=\mathfrak m$, $\kappa=\kappa(\mathfrak p)$ 的素理想 $\mathfrak p\subseteq A$, 都存在唯一满足 $s^{-1}(\mathfrak m)=\mathfrak p$ 的截面 $s:A\to R$.
+\end{enumerate}
+此外, $R$ 为严格 Hensel 环, 当且仅当对每个平展环同态 $\phi:R\to A$ 和满足 $\phi^{-1}(\mathfrak p)=\mathfrak m$ 的素理想 $\mathfrak p\subseteq A$, 都存在唯一满足 $s^{-1}(\mathfrak m)=\mathfrak p$ 的截面 $s:A\to R$.
+\end{proposition}
+\begin{proof}
+见 \cite[$\mathrm{IV}.18.5.11$]{EGA}, \cite[定理 $\mathrm{I}.4.2$]{Mil80} 和 \cite[Tag 04GG]{SP}.
+\end{proof}
+\newpage
+\begin{proposition}\label{src:B.5.10}
+设 $(R,\mathfrak m)$ 为剩余域为 $\kappa$ 的 Hensel (相应地, 严格 Hensel) 局部环.
+\begin{enumerate}[(1)]
+\item 每个有限 $R$-代数都是有限 Hensel 局部 (相应地, 严格 Hensel) $R$-代数之积.
+\item 每个完备局部环都是 Hensel 环.
+\item 函子 $A\mapsto A\otimes_R\kappa$ 给出有限平展 $A$-代数范畴与有限平展 $\kappa$-代数范畴之间的等价.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+见 \cite[$\mathrm{IV}.18.5.10$--$18.5.15$]{EGA}, \cite[$4.3$--$4.5$]{Mil80} 和 \cite[Tag 04GE]{SP}.
+\end{proof}
+\begin{remark}\label{src:B.5.11}
+虽然本书不使用这一概念, 但更一般的 \newterm{Hensel 对}{henselian pair} 有时很有用. 由概形 $X$ 及闭子概形 $X_0\subseteq X$ 构成的对 $(X,X_0)$ 称为 Hensel 对, 若每个有限态射 $f:U\to X$ 都诱导双射 $\mathrm{ClOpen}(U)\to\mathrm{ClOpen}(f^{-1}(X_0))$, 将 $U$ 的开闭子概形与 $f^{-1}(X_0)$ 的开闭子概形对应起来. 若 $(R,\mathfrak m)$ 为 Hensel 局部环, 则由命题 \bookref{B.5.9}(3), $(\Spec R,\Spec(R/\mathfrak m))$ 为 Hensel 对. 更多讨论及等价条件见 \cite[$\mathrm{IV}.18.5.5$]{EGA} 或 \cite[Tag 09XD]{SP}.
+\end{remark}
+
+\subsection{Hensel 化与严格 Hensel 化}\label{src:B.5.3-subsection}
+\begin{definition}\label{src:B.5.12}
+设 $(R,\mathfrak m)$ 为剩余域为 $\kappa$ 的局部环. $R$ 的 \newterm{Hensel 化}{henselization} 是一个取值于 Hensel 局部环 $R^h$ 的局部同态 $R\to R^h$, 使得每个其他取值于 Hensel 局部环的局部同态 $R\to A$ 都唯一地通过 $R\to R^h$ 分解.
+
+给定可分闭包 $\kappa\to\kappa^s$, $R$ 关于 $\kappa\to\kappa^s$ 的\newterm{严格 Hensel 化}{strict henselization} 是一个取值于严格 Hensel 局部环 $(R^{\mathrm{sh}},\mathfrak m^{\mathrm{sh}})$ 的局部同态 $R\to R^{\mathrm{sh}}$, 它在剩余域上诱导 $\kappa\to\kappa^s$, 并且每个其他取值于严格 Hensel 局部环 $(A,\mathfrak m_A)$ 的局部同态 $R\to A$ 都通过 $R\to R^{\mathrm{sh}}$ 分解, 此分解由剩余域的包含映射 $R^{\mathrm{sh}}/\mathfrak m^{\mathrm{sh}}\to A/\mathfrak m_A$ 唯一确定.
+\end{definition}
+\begin{proposition}\label{src:B.5.13}
+设 $(R,\mathfrak m_R)$ 为局部环. Hensel 化 $R\to R^h$ (相应地, 严格 Hensel 化 $R\to R^{\mathrm{sh}}$) 存在, 且可构造为 $\operatorname{colim}A$, 其中余极限取遍所有满足 $R/\mathfrak m_R\cong A/\mathfrak m_A$ 的平展局部 $R$-代数 $A$ (相应地, 取遍图 $R\to A\to(R/\mathfrak m_R)^s$, 其中 $(R/\mathfrak m_R)^s$ 为 $R/\mathfrak m_R$ 的一个固定可分闭包, $A$ 为平展局部 $R$-代数). 此外,
+\begin{enumerate}[(1)]
+\item $R^h$ 和 $R^{\mathrm{sh}}$ 的剩余域分别为 $R/\mathfrak m_R$ 和 $(R/\mathfrak m_R)^s$;
+\item 映射 $R\to R^h$ 和 $R\to R^{\mathrm{sh}}$ 为忠实平坦的局部环同态;
+\item 若 $R$ 为 Noether 环, 则 $R^h$ 和 $R^{\mathrm{sh}}$ 也如此.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+见 \cite[$\mathrm{IV}.18.5$--$18.8$]{EGA}, \cite[$\mathrm{I}.4$]{Mil80} 和 \cite[Tags 0BSK 及 07QL]{SP}.
+\end{proof}
+对于概形 $X$ 及一点 $x\in X$, 选定可分闭包 $\kappa(x)\to\kappa^s$ 后, Hensel 化 $\mathcal O^h_{X,x}$ 和严格 Hensel 化 $\mathcal O^{\mathrm{sh}}_{X,x}$ 分别为 $\Gamma(U,\mathcal O_U)$ 在下列图上的余极限:
+\[
+\begin{tikzcd}[column sep=2.2em,row sep=2em]
+\Spec\kappa(x)\arrow[r]\arrow[dr,"x"']&U\arrow[d,"\text{平展}"]\\
+&X
+\end{tikzcd}
+\qquad\text{和}\qquad
+\begin{tikzcd}[column sep=2.2em,row sep=2em]
+\Spec\kappa(x)^s\arrow[r]\arrow[d]&U\arrow[d,"\text{平展}"]\\
+\Spec\kappa(x)\arrow[r,"x"']&X,
+\end{tikzcd}
+\]
+其中 $U\to X$ 平展. 我们可以将 $\mathcal O^h_{X,x}$ 和 $\mathcal O^{\mathrm{sh}}_{X,x}$ 视为平展拓扑中的局部环.
+
+\subsection{Néron--Popescu 消奇}\label{src:B.5.4-subsection}
+Artin 逼近 (\bookref{B.5.18}) 与 Néron--Popescu 消奇 (\bookref{B.5.15}) 密切相关, 后者同样是一个深刻而强大的定理. 我们不尝试证明 Néron--Popescu 消奇, 但会说明如何由它推出 Artin 逼近.
+\begin{definition}\label{src:B.5.14}
+Noether 环之间的环同态 $A\to B$ 称为\newterm{几何正则}{geometrically regular}, 若 $A\to B$ 平坦, 且对于每个素理想 $\mathfrak p\subseteq A$ 及每个有限域扩张 $\kappa(\mathfrak p)\to\kappa'$ (其中 $\kappa(\mathfrak p)=A_{\mathfrak p}/\mathfrak p$), 纤维 $B\otimes_A\kappa'$ 都正则.
+\end{definition}
+若 $A\to B$ 为有限型, 则 $A\to B$ 几何正则, 当且仅当 $\Spec B\to\Spec A$ 光滑 (定理 \bookref{A.3.1}). 一个 $\Bbbk$-代数 $B$ 几何正则, 当且仅当对每个域扩张 (等价地, 对每个有限纯不可分扩张) $\Bbbk\to\Bbbk'$, $A\otimes_{\Bbbk}\Bbbk'$ 都正则; 见 \cite[$\mathrm{IV}_2.6.7.8$]{EGA}, \cite[定理 $23.7$]{Mat89} 或 \cite[Tag 0381]{SP}. 注意, 一个域扩张可分, 当且仅当它几何正则.
+\begin{theorem}[Néron--Popescu 消奇]\label{src:B.5.15}
+Noether 环之间的同态 $A\to B$ 几何正则, 当且仅当存在有向集 $\Lambda$ 上由光滑 $A$-代数构成的有向系 $B_\lambda$, 使得 $B=\operatorname{colim}B_{\lambda\in\Lambda}$.
+\end{theorem}
+\begin{proof}
+在离散赋值环的情形, 这一结果由 Néron 在 \cite{Nér64} 中证明; 一般情形由 Popescu 在 \cite{Pop85,Pop86,Pop90} 中证明. 关于这一结果的介绍, 推荐参阅 \cite{Swa98} 和 \cite[Tag 07GC]{SP}.
+\end{proof}
+\begin{definition}\label{src:B.5.16}
+若同态 $A\to\widehat A$ 几何正则, 则称 Noether 局部环 $A$ 为 \textit{$G$-环} (\textup{$G$-ring})\index{G-ring@$G$-环\quad $G$-ring|hyperpage}.
+\end{definition}
+优良概形的定义性质之一是其局部环均为 $G$-环. 幸运的是, 代数几何中我们关心的大多数局部环都是 $G$-环.
+\begin{theorem}\label{src:B.5.17}
+域或 $\mathbb Z$ 上的有限生成代数的局部化为 $G$-环.
+\end{theorem}
+\begin{proof}
+虽然比 Néron--Popescu 消奇容易得多, 这一结果的证明仍需一番工夫. 见 \cite[$\mathrm{IV}.7.4.4$]{EGA} 或 \cite[Tag 07PX]{SP}.
+\end{proof}
+
+\subsection{Artin 逼近}\label{src:B.5.5-subsection}
+回顾定义 \bookref{A.1.4}, 若对 $S$ 上所有逆系 $\{\Spec A_\lambda\}$ 都有 $\operatorname{colim}F(A_\lambda)\xrightarrow{\sim}F(\operatorname{colim}A_\lambda)$, 则称反变函子 $F:\Sch/S\to\Sets$ \newterm{保持极限}{limit preserving} (或\textit{局部有限呈示}). 当 $F$ 由 $X$ 表示时, 这等价于 $X\to S$ 局部有限呈示.
+\begin{theorem}[Artin 逼近]\label{src:B.5.18}
+设 $S$ 为概形, $s\in S$ 为一点, 使得 $\mathcal O_{S,s}$ 为 $G$-环 (定义 \bookref{B.5.16}); 例如 $S$ 为域或 $\mathbb Z$ 上的有限型概形. 设
+\[
+F:\Sch/S\longrightarrow\Sets
+\]
+为保持极限的反变函子, 且 $\widehat\xi\in F(\Spec\widehat{\mathcal O}_{S,s})$. 对每个整数 $N\geq0$, 都存在满足 $\kappa(s)=\kappa(s')$ 的平展态射 $(S',s')\to(S,s)$ 以及对象 $\xi'\in F(S')$, 使得 $\widehat\xi$ 与 $\xi'$ 在 $\Spec(\mathcal O_{S,s}/\mathfrak m_s^{N+1})$ 上的限制相等.
+\end{theorem}
+由于有同一化 $\mathcal O_{S,s}/\mathfrak m_s^{N+1}\cong\mathcal O_{S',s'}/\mathfrak m_{s'}^{N+1}$, $\xi'$ 在 $\Spec(\mathcal O_{S,s}/\mathfrak m_s^{N+1})$ 上的限制是良定义的. 一般而言, 不可能找到恰好限制为 $\widehat\xi$ 的 $\xi'\in F(S')$, 甚至不能使 $\xi'$ 与 $\widehat\xi$ 在 $\Spec\mathcal O_{S,s}/\mathfrak m_s^{n+1}$ 上的限制对所有 $n\geq0$ 都相等. 例如, 考虑 $F=\mathrm{Mor}(-,\mathbb A^1)$ 以及一个非代数幂级数 $\widehat\xi\in\widehat{\mathcal O}_{\mathbb A^1,0}$.
+\begin{proof}
+这一结果最初在 \cite[推论 $2.2$]{Art69a} 中证明, 其中 $S$ 为域或优良 Dedekind 整环上的有限型概形. 关于优良 Hensel 离散赋值环情形的易读介绍, 我们还推荐 \cite[\S$3.6$]{BLR90}. 我们只证明如何由 Néron--Popescu 消奇 (\bookref{B.5.15}) 推出 Artin 逼近. 由 Néron--Popescu 消奇, 可以将 $\widehat{\mathcal O}_{S,s}=\operatorname{colim}_{\lambda\in\Lambda}B_\lambda$ 写成光滑 $\mathcal O_{S,s}$-代数的有向余极限. 由于 $F$ 保持极限, 存在 $\lambda\in\Lambda$, 分解 $\mathcal O_{S,s}\to B_\lambda\to\widehat{\mathcal O}_{S,s}$ 以及元素 $\xi_\lambda\in F(\Spec B_\lambda)$, 其在 $F(\Spec\widehat{\mathcal O}_{S,s})$ 中的限制为 $\widehat\xi$. 令 $B=B_\lambda$, $\xi=\xi_\lambda$, 则有交换图
+\[
+\begin{tikzcd}[column sep=2.6em,row sep=2.1em]
+\Spec\widehat{\mathcal O}_{S,s}\arrow[r,"g"]\arrow[rr,bend left=24,"\widehat\xi"]\arrow[dr]&\Spec B\arrow[r,"\xi"]\arrow[d]&F\\
+&\Spec\mathcal O_{S,s}&
+\end{tikzcd}
+\]
+其中 $\Spec B\to\Spec\mathcal O_{S,s}$ 光滑. 我们断言可以找到交换图
+\begin{equation}\label{src:B.5.19}
+\begin{tikzcd}[column sep=3em,row sep=2em]
+S'\arrow[r,hook]\arrow[dr]&\Spec B\arrow[d]\\
+&\Spec\mathcal O_{S,s}
+\end{tikzcd}
+\end{equation}
+其中 $S'\hookrightarrow\Spec B$ 为闭浸入, $(S',s')\to(\Spec\mathcal O_{S,s},s)$ 平展且满足 $\kappa(s)=\kappa(s')$, 使得 $\Spec\mathcal O_{S,s}/\mathfrak m_s^{N+1}\to S'\to\Spec B$ 等于 $g:\Spec\widehat{\mathcal O}_{S,s}\to\Spec B$ 的限制.\setcounter{footnote}{4}\footnote{逼近就在这一步发生. 不可能找到平展映射 $S'\to\Spec B\to\Spec\mathcal O_{S,s}$, 使得 $\Spec\widehat{\mathcal O}_{S,s}\to S'\to\Spec B$ 等于 $g$.}
+为此, 由于 $\Omega_{B/\mathcal O_{S,s}}$ 为局部自由 $B$-模, 将 $\Spec B$ 替换为 $g(s)$ 的一个仿射开邻域后, 可以假设 $\Omega_{B/\mathcal O_{S,s}}$ 自由, 基为 $db_1,\ldots,db_r$. 这诱导由 $x_i\mapsto b_i$ 定义的同态 $\mathcal O_{S,s}[x_1,\ldots,x_r]\to B$, 并给出分解
+\[
+\Spec B\longrightarrow\mathbb A^r_{\mathcal O_{S,s}}\longrightarrow\Spec\mathcal O_{S,s},
+\]
+使得 $\Spec B\to\mathbb A^r_{\mathcal O_{S,s}}$ 平展. 选取下列复合映射的一个提升
+\[
+\begin{tikzcd}[column sep=1.8em,row sep=2em]
+&&&\mathcal O_{S,s}\arrow[d]\\
+\mathcal O_{S,s}[x_1,\ldots,x_r]\arrow[r]\arrow[rrru,dashed]&B\arrow[r]&\widehat{\mathcal O}_{S,s}\arrow[r]&\mathcal O_{S,s}/\mathfrak m_s^{N+1}
+\end{tikzcd}
+\]
+便定义了截面 $s:\Spec\mathcal O_{S,s}\to\mathbb A^r_{\mathcal O_{S,s}}$, 我们将 $S'$ 定义为纤维积
+\[
+\begin{tikzcd}[column sep=3em,row sep=2.1em]
+S'\arrow[r]\arrow[d,hook]\arrow[dr,phantom,"\square" description]&\Spec\mathcal O_{S,s}\arrow[d,hook,"s"]\\
+\Spec B\arrow[r]&\mathbb A^r_{\mathcal O_{S,s}}.
+\end{tikzcd}
+\]
+这就给出了所需的图 \bookeqref{B.5.19}, 且复合映射 $\xi':S'\to\Spec B\xrightarrow{\xi}F$ 为一个与 $\widehat\xi$ 到 $N$ 阶一致的元素. 最后, 使用极限方法将平展映射 $(S',s')\to(\Spec\mathcal O_{S,s},s)$ 和元素 $\xi'\in F(S')$ ``展布'' 为平展映射 $(S'',s'')\to(S,s)$ 及元素 $\xi''\in F(S'')$. 假设 $S=\Spec A$ 仿射, 并写成 $\mathcal O_{S,s}=\operatorname{colim}_{g\notin\mathfrak m_s}A_g$, 则可用命题 \bookref{B.3.3}, \bookref{B.3.5} 和 \bookref{B.3.7} (或直接论证) 构造 $g\notin\mathfrak m_s$ 及平展仿射态射 $S''\to\Spec A_g$, 使得 $S''\times_{A_g}A_{\mathfrak m_s}\cong S'$. 由于 $F$ 保持极限, 且 $\Gamma(S',\mathcal O_{S'})=\operatorname{colim}_{h\notin\mathfrak m_s}\Gamma(S''_h,\mathcal O_{S''_h})$, 将 $g$ 替换为某个 $h\notin\mathfrak m_s$ 对应的 $hg$ 后, 可以找到限制为 $\xi'$ 的元素 $\xi''\in F(S'')$, 特别地, 它与 $\widehat\xi$ 到 $N$ 阶一致.
+\end{proof}
+\newpage
+\begin{exercise}[其他表述]\label{src:B.5.20}
+设 $(A,\mathfrak m)$ 为 Hensel 局部 $G$-环.
+\begin{enumerate}[(1)]
+\item 设 $f_1,\ldots,f_m\in A[x_1,\ldots,x_n]$, 且 $\widehat a=(\widehat a_1,\ldots,\widehat a_n)\in\widehat A^{\oplus n}$ 为一个解. 证明, 对每个 $N\geq0$, 都存在解 $a=(a_1,\ldots,a_n)\in A^{\oplus n}$, 使得 $a\cong\widehat a\bmod\mathfrak m^{N+1}$.
+
+\textit{提示:} 将 Artin 逼近应用于表示 $\Spec A[x_1,\ldots,x_n]/(f_1,\ldots,f_m)$ 的函子.
+\item 证明 (1) 推出 Artin 逼近.
+
+\textit{提示:} 利用 $F$ 保持极限, 找到有限生成 $A$-子代数 $B\subseteq\widehat{\mathcal O}_{S,s}$ 以及限制为 $\widehat\xi$ 的元素 $\xi\in F(B)$.
+\end{enumerate}
+\end{exercise}
+
+\subsection{Artin 逼近的第一个应用}\label{src:B.5.6-subsection}
+两个带点概形若具有同构的完备化, 则具有同构的平展邻域.
+\begin{corollary}\label{src:B.5.21}
+设 $X$ 和 $Y$ 为概形 $S$ 上的有限型概形, $s\in S$ 为一点, 使得 $\mathcal O_{S,s}$ 为 $G$-环. 若 $x\in X$ 和 $y\in Y$ 为 $s$ 上方的点, 且 $\widehat{\mathcal O}_{X,x}$ 和 $\widehat{\mathcal O}_{Y,y}$ 作为 $\mathcal O_S$-代数同构, 则存在平展态射
+\[
+\begin{tikzcd}[column sep=2.6em,row sep=2em]
+&(U,u)\arrow[dl]\arrow[dr]&\\
+(X,x)&&(Y,y)
+\end{tikzcd}
+\]
+满足 $\kappa(x)=\kappa(u)=\kappa(y)$.
+\end{corollary}
+\begin{proof}
+函子
+\[
+F:\Sch/X\longrightarrow\Sets,\qquad(T\to X)\longmapsto\mathrm{Mor}_S(T,Y)
+\]
+保持极限, 因为它可以与可表函子 $\mathrm{Mor}_X(-,Y\times_SX)$ 同一化. 同构 $\widehat{\mathcal O}_{X,x}\cong\widehat{\mathcal O}_{Y,y}$ 给出 $F(\Spec\widehat{\mathcal O}_{X,x})$ 的一个元素. 取 $N=1$ 应用 Artin 逼近, 得到满足 $\kappa(x)=\kappa(u)$ 的平展映射 $(U,u)\to(X,x)$ 以及映射 $(U,u)\to(Y,y)$, 使得 $\mathcal O_{Y,y}/\mathfrak m_y^2\to\mathcal O_{U,u}/\mathfrak m_u^2$ 为同构. 由于 $\widehat{\mathcal O}_{U,u}$ 抽象地同构于 $\widehat{\mathcal O}_{Y,y}$, 完备 Nakayama 引理 (\bookref{B.5.6}(3)) 蕴含 $\widehat{\mathcal O}_{Y,y}\to\widehat{\mathcal O}_{U,u}$ 为同构. 这进一步蕴含 $U\to Y$ 在 $u$ 处平展, 将 $U$ 替换为 $u$ 的一个开邻域后即得所述结论. 另见 \cite[Tag 0CAV]{SP}.
+\end{proof}
+若 $\phi:\widehat{\mathcal O}_{Y,y}\xrightarrow{\sim}\widehat{\mathcal O}_{X,x}$ 为指定的同构, 则并不总能找到平展邻域 $(U,u)\to(X,x)$ 和 $(U,u)\to(Y,y)$, 使得复合映射 $\widehat{\mathcal O}_{Y,y}\cong\widehat{\mathcal O}_{U,u}\cong\widehat{\mathcal O}_{X,x}$ 等于 $\phi$.
+\par\clearpage
+\endgroup

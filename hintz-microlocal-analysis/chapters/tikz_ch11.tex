@@ -1,0 +1,316 @@
+% chapters/tikz_ch11.tex - 第 11 章全部 7 幅插图的高精度原生 TikZ 矢量代码
+
+% 1. 图 11.1: de Sitter 时空中的三个光锥
+\newcommand{\drawFigElevenOne}{%
+\begin{tikzpicture}[scale=1.15, >=Stealth]
+    % 外层圆柱底面与顶面 (r = 2)
+    \draw[thick] (-3.6, 0) arc (180:360:3.6 and 1.0);
+    \draw[thick, dashed] (-3.6, 0) arc (180:0:3.6 and 1.0);
+    \draw[thick] (-3.6, 1.8) arc (180:360:3.6 and 1.0);
+    \draw[thick] (-3.6, 1.8) arc (180:0:3.6 and 1.0);
+    \draw[thick] (-3.6, 0) -- (-3.6, 1.8);
+    \draw[thick] (3.6, 0) -- (3.6, 1.8);
+    \node[right] at (3.6, 0.9) {$r = 2$};
+
+    % 内层虚线圆柱 (视界 r = 1)
+    \draw[dashed, gray!80!black] (-1.8, 0.45) arc (180:360:1.8 and 0.5);
+    \draw[dashed, gray!80!black] (-1.8, 0.45) arc (180:0:1.8 and 0.5);
+    \draw[dashed, gray!80!black] (-1.8, 1.65) arc (180:360:1.8 and 0.5);
+    \draw[dashed, gray!80!black] (-1.8, 1.65) arc (180:0:1.8 and 0.5);
+    \draw[dashed, gray!80!black] (-1.8, 0.45) -- (-1.8, 1.65);
+    \draw[dashed, gray!80!black] (1.8, 0.45) -- (1.8, 1.65);
+    \node[above right, scale=0.9] at (1.6, 1.7) {$\overline{\mathcal{H}}^+$};
+
+    % 1. 中间光锥 (r = 0, 位于中心对称轴上)
+    \begin{scope}[shift={(0, 0.9)}]
+        \draw[thick, red!70!black] (0, 0) -- (-0.35, 0.45);
+        \draw[thick, red!70!black] (0, 0) -- (0.35, 0.45);
+        \draw[thick, red!70!black] (0, 0.45) ellipse (0.35 and 0.1);
+        \draw[thick, red!70!black] (0, 0) -- (-0.35, -0.45);
+        \draw[thick, red!70!black] (0, 0) -- (0.35, -0.45);
+        \draw[thick, red!70!black, dashed] (-0.35, -0.45) arc (180:0:0.35 and 0.1);
+        \draw[thick, red!70!black] (-0.35, -0.45) arc (180:360:0.35 and 0.1);
+    \end{scope}
+
+    % 2. 视界处光锥 (r = 1, 右侧相切微倾)
+    \begin{scope}[shift={(1.8, 0.9)}]
+        \draw[thick, red!70!black] (0, 0) -- (-0.35, 0.42);
+        \draw[thick, red!70!black] (0, 0) -- (0.50, 0.42);
+        \draw[thick, red!70!black, rotate=15] (0.05, 0.42) ellipse (0.42 and 0.12);
+        \draw[thick, red!70!black] (0, 0) -- (-0.35, -0.42);
+        \draw[thick, red!70!black] (0, 0) -- (0.15, -0.42);
+        \draw[thick, red!70!black, dashed] (-0.35, -0.42) arc (180:0:0.25 and 0.08);
+        \draw[thick, red!70!black] (-0.35, -0.42) arc (180:360:0.25 and 0.08);
+    \end{scope}
+
+    % 3. 外部光锥 (r > 1, 左侧严重向外倾倒)
+    \begin{scope}[shift={(-2.5, 0.9)}]
+        \draw[thick, red!70!black] (0, 0) -- (-0.65, 0.35);
+        \draw[thick, red!70!black] (0, 0) -- (0.25, 0.35);
+        \draw[thick, red!70!black, rotate=-25] (-0.25, 0.38) ellipse (0.45 and 0.12);
+        \draw[thick, red!70!black] (0, 0) -- (-0.1, -0.4);
+        \draw[thick, red!70!black] (0, 0) -- (0.4, -0.4);
+        \draw[thick, red!70!black, dashed] (-0.1, -0.4) arc (180:0:0.25 and 0.08);
+        \draw[thick, red!70!black] (-0.1, -0.4) arc (180:360:0.25 and 0.08);
+    \end{scope}
+\end{tikzpicture}%
+}
+
+% 2. 图 11.2: 对偶光锥截面
+\newcommand{\drawFigElevenTwo}{%
+\begin{tikzpicture}[scale=1.05, >=Stealth]
+    % 左图: x = 0
+    \begin{scope}[shift={(-3.8, 0)}]
+        % 绿色切面 T*_x X
+        \draw[green!60!black, thick, dashed] (-2.2, -0.4) -- (1.4, -0.4) -- (2.2, 0.8) -- (-1.4, 0.8) -- cycle;
+        \node[green!50!black, left] at (-2.2, -0.4) {$T_x^* X$};
+
+        % 红色仿射平面 -dt + T*_x X
+        \draw[red!60!black, dashed] (-2.2, -1.0) -- (1.4, -1.0) -- (2.2, 0.2) -- (-1.4, 0.2) -- cycle;
+        \node[red!60!black, right] at (1.4, -1.0) {$-\dd t + T_x^* X$};
+
+        % 双光锥 (蓝色虚线)
+        \draw[blue!60!black, densely dashed] (0, 0) -- (-1.2, 1.2);
+        \draw[blue!60!black, densely dashed] (0, 0) -- (1.2, 1.2);
+        \draw[blue!60!black, densely dashed] (0, 1.2) ellipse (1.2 and 0.3);
+        \draw[blue!60!black, densely dashed] (0, 0) -- (-1.2, -1.2);
+        \draw[blue!60!black, densely dashed] (0, 0) -- (1.2, -1.2);
+        \draw[blue!60!black, densely dashed] (0, -1.2) ellipse (1.2 and 0.3);
+
+        % 顶点
+        \draw[fill=white, draw=green!60!black] (0, 0) circle (0.07);
+        \node[blue!60!black, above left] at (-1.0, 1.0) {$\Sigma_-^\circ$};
+        \node[blue!60!black, below left] at (-1.0, -1.0) {$\Sigma_+^\circ$};
+
+        % 截线 \Sigma^\circ_{1, +} (红棕色粗虚椭圆)
+        \draw[red!70!black, very thick, dashed] (0, -0.55) ellipse (0.55 and 0.16);
+        \node[red!70!black, above right] at (0.4, -0.55) {$\Sigma_{1, +}^\circ$};
+    \end{scope}
+
+    % 右图: |x| > 1
+    \begin{scope}[shift={(3.4, 0)}]
+        % 绿色切面 T*_x X
+        \draw[green!60!black, thick, dashed] (-2.4, -0.4) -- (1.2, -0.4) -- (2.4, 0.8) -- (-1.2, 0.8) -- cycle;
+        
+        % 红色仿射平面 -dt + T*_x X
+        \draw[red!60!black, dashed] (-2.4, -1.0) -- (1.2, -1.0) -- (2.4, 0.2) -- (-1.2, 0.2) -- cycle;
+
+        % 倾斜双光锥 (蓝色点线)
+        \draw[blue!60!black, densely dashed] (0, 0) -- (0.8, 1.8);
+        \draw[blue!60!black, densely dashed] (0, 0) -- (-1.5, 0.6);
+        \draw[blue!60!black, densely dashed, rotate=30] (0.8, 1.4) ellipse (1.3 and 0.35);
+        \draw[blue!60!black, densely dashed] (0, 0) -- (-0.8, -1.8);
+        \draw[blue!60!black, densely dashed] (0, 0) -- (1.5, -0.6);
+        \draw[blue!60!black, densely dashed, rotate=30] (-0.8, -1.4) ellipse (1.3 and 0.35);
+
+        \node[blue!60!black, above] at (0.7, 1.7) {$\Sigma_-^\circ$};
+        \node[blue!60!black, below] at (0.8, -1.6) {$\Sigma_+^\circ$};
+
+        % 截线 \Sigma^\circ_{0, \pm} (绿色粗实线)
+        \draw[green!50!black, line width=1.5pt] (-1.8, -0.2) -- (1.8, 0.6);
+        \draw[green!50!black, line width=1.5pt] (-0.6, 0.6) -- (0.6, -0.2);
+        \node[green!50!black, left] at (-1.8, -0.2) {$\Sigma_{0, +}^\circ$};
+        \node[green!50!black, above] at (1.8, 0.6) {$\Sigma_{0, -}^\circ$};
+
+        % 截线 \Sigma^\circ_{1, \pm} (红棕色双曲线分支)
+        \draw[red!70!black, line width=1.4pt] (-0.35, -0.9) to[out=40, in=-40] (-0.35, -0.3);
+        \draw[red!70!black, line width=1.4pt] (1.15, -0.7) to[out=140, in=-140] (1.15, -0.1);
+        
+        \node[red!70!black, below left] at (-0.2, -0.7) {$\Sigma_{1, +}^\circ$};
+        \node[red!70!black, above right] at (1.0, -0.2) {$\Sigma_{1, -}^\circ$};
+
+        % 坐标轴
+        \draw[->] (0.1, -0.8) -- (0.8, -0.8) node[below] {$\xi_r$};
+        \draw[->] (1.1, -0.5) -- (1.4, -0.2) node[right] {$\xi_\theta$};
+    \end{scope}
+\end{tikzpicture}%
+}
+
+% 3. 图 11.3: 纤维无穷远处重标度 Hamilton 流
+\newcommand{\drawFigElevenThree}{%
+\begin{tikzpicture}[scale=1.1, >=Stealth]
+    % 柱面轮廓 (S* X)
+    \draw[thick] (-2.2, -1.6) arc (-90:90:0.7 and 1.6);
+    \draw[thick, dashed] (-2.2, 1.6) arc (90:270:0.7 and 1.6);
+    \draw[dashed, gray!70!black] (0.8, 1.6) arc (90:270:0.7 and 1.6);
+    \draw[dashed, gray!70!black] (0.8, -1.6) arc (-90:90:0.7 and 1.6);
+    \draw[thick] (2.8, -1.6) arc (-90:90:0.7 and 1.6);
+    \draw[thick, dashed] (2.8, 1.6) arc (90:270:0.7 and 1.6);
+    \draw[thick] (-2.2, 1.6) -- (2.8, 1.6);
+    \draw[thick] (-2.2, -1.6) -- (2.8, -1.6);
+
+    \node[above] at (-1.0, 1.6) {$S^* X$};
+    \node[above] at (0.8, 1.6) {$r = 1$};
+    \node[above] at (2.8, 1.6) {$r = 2$};
+
+    % 左侧坐标系
+    \begin{scope}[shift={(-3.4, 0)}]
+        \draw[->] (0, -0.8) -- (0, 0.9) node[left] {$r^{-1}\xi_\theta$};
+        \draw[->] (-0.5, -0.4) -- (0.5, 0.4) node[below right] {$\xi_r$};
+    \end{scope}
+
+    % 红色特征集与 Hamilton 流 (\Sigma_{\sigma, +})
+    \draw[red!70!black, very thick] (-0.3, -1.1) to[out=25, in=200] (0.8, -0.6) to[out=20, in=190] (2.4, -0.9);
+    \fill[red!70!black] (-0.3, -1.1) circle (0.08) node[below left] {$\mathcal{R}_+$};
+    \draw[->, red!70!black, very thick] (0.4, -0.75) -- (0.6, -0.68) node[below=2pt] {$\mathsf{H}_\sigma$};
+    \node[red!70!black, below] at (1.8, -1.65) {$\Sigma_{\sigma, +} \cap S^* X$};
+
+    % 绿色特征集与 Hamilton 流 (\Sigma_{\sigma, -})
+    \draw[green!60!black, very thick] (0.5, 0.8) to[out=15, in=190] (2.8, 0.4);
+    \fill[green!60!black] (0.5, 0.8) circle (0.08) node[left] {$\mathcal{R}_-$};
+    \draw[green!60!black, dashed, very thick] (0.5, 0.8) to[out=200, in=100] (1.3, -1.5);
+    \draw[->, green!60!black, very thick] (1.4, 0.65) -- (1.1, 0.72) node[below] {$-\mathsf{H}_\sigma$};
+    \node[green!60!black, right] at (2.4, -0.3) {$\Sigma_{\sigma, -} \cap S^* X$};
+\end{tikzpicture}%
+}
+
+% 4. 图 11.4: \Sigma_1 的两个分支
+\newcommand{\drawFigElevenFour}{%
+\begin{tikzpicture}[scale=1.1, >=Stealth]
+    % 柱面轮廓 (\overline{T^*} X)
+    \draw[thick] (-2.2, -1.6) arc (-90:90:0.7 and 1.6);
+    \draw[thick, dashed] (-2.2, 1.6) arc (90:270:0.7 and 1.6);
+    \draw[dashed, gray!70!black] (0.8, 1.6) arc (90:270:0.7 and 1.6);
+    \draw[dashed, gray!70!black] (0.8, -1.6) arc (-90:90:0.7 and 1.6);
+    \draw[thick] (2.8, -1.6) arc (-90:90:0.7 and 1.6);
+    \draw[thick, dashed] (2.8, 1.6) arc (90:270:0.7 and 1.6);
+    \draw[thick] (-2.2, 1.6) -- (2.8, 1.6);
+    \draw[thick] (-2.2, -1.6) -- (2.8, -1.6);
+
+    \node[above] at (-1.0, 1.6) {$\overline{T^*} X$};
+    \node[above] at (0.8, 1.6) {$r = 1$};
+    \node[above] at (2.8, 1.6) {$r = 2$};
+
+    % 左侧坐标系
+    \begin{scope}[shift={(-3.4, 0)}]
+        \draw[->] (0, -0.8) -- (0, 0.9) node[left] {$r^{-1}\xi_\theta$};
+        \draw[->] (-0.5, -0.4) -- (0.5, 0.4) node[below right] {$\xi_r$};
+    \end{scope}
+
+    % 后方绿色曲面 \Sigma_{1, -} (生活在 r >= 1)
+    \fill[green!20, opacity=0.4] (0.8, 0.7) to[out=20, in=180] (2.8, 1.3) -- (2.8, -0.3) to[out=180, in=-20] (0.8, 0.7) -- cycle;
+    \foreach \y in {-0.2, 0.1, 0.4, 0.7, 1.0} {
+        \draw[green!60!black, thin] (0.8, 0.7) to[out=20, in=180] (2.8, \y+0.2);
+    }
+    \draw[green!60!black, thick] (0.8, 0.7) to[out=20, in=180] (2.8, 1.3);
+    \draw[green!60!black, thick] (0.8, 0.7) to[out=-20, in=180] (2.8, -0.3);
+    \node[green!60!black, above] at (1.2, 1.3) {$\Sigma_{1, -}$};
+
+    % 前方红色曲面 \Sigma_{1, +} (未来分支，喇叭口展开)
+    \fill[red!20, opacity=0.4] (-0.2, -0.8) to[out=20, in=190] (2.2, 0.9) to[out=260, in=60] (2.0, -1.5) to[out=170, in=-20] (-0.2, -0.8) -- cycle;
+    \foreach \t in {-0.7, -0.4, -0.1, 0.2, 0.5} {
+        \draw[red!60!black, thin] (-0.2, -0.8) to[out=20+\t*15, in=180] (2.1+\t*0.2, \t*0.8-0.3);
+    }
+    \draw[red!70!black, very thick] (-0.2, -0.8) to[out=35, in=190] (2.2, 0.9);
+    \draw[red!70!black, very thick] (-0.2, -0.8) to[out=-25, in=170] (2.0, -1.5);
+    \node[red!70!black, below] at (-0.2, -1.4) {$\Sigma_{1, +}$};
+
+    % 径向集点 R_+, R_-
+    \fill[red!70!black] (-0.2, -0.8) circle (0.09) node[left] {$\mathcal{R}_+$};
+    \fill[green!60!black] (0.8, 0.7) circle (0.09) node[left] {$\mathcal{R}_-$};
+    \draw[->, red!70!black, thick] (0.5, -0.5) -- (0.9, -0.35);
+    \draw[->, green!60!black, thick] (1.8, 0.45) -- (1.3, 0.55);
+\end{tikzpicture}%
+}
+
+% 5. 图 11.5: 复频率平面中的无谐振区域
+\newcommand{\drawFigElevenFive}{%
+\begin{tikzpicture}[scale=1.1, >=Stealth]
+    % 阴影无谐振区域
+    \fill[gray!20] (-3.8, 1.4) rectangle (3.8, 2.4);
+    \fill[gray!20] (-3.8, -1.4) rectangle (-1.6, 1.4);
+    \fill[gray!20] (1.6, -1.4) rectangle (3.8, 1.4);
+
+    % 虚线边界
+    \draw[thick, dashed] (-3.8, 1.4) -- (3.8, 1.4) node[right] {$\operatorname{Im}\sigma = C \gg 1$};
+    \draw[thick, dashed] (-3.8, -1.4) -- (3.8, -1.4) node[right] {$\operatorname{Im}\sigma = -\alpha_+$};
+    \draw[thick, dashed] (-1.6, -1.4) -- (-1.6, 1.4);
+    \draw[thick, dashed] (1.6, -1.4) -- (1.6, 1.4);
+
+    % 坐标轴
+    \draw[->] (-3.8, 0) -- (4.0, 0) node[right] {$\operatorname{Re}\sigma$};
+    \draw[->] (0, -2.0) -- (0, 2.6) node[above] {$\operatorname{Im}\sigma$};
+
+    % 区域文字说明
+    \node at (1.8, 1.9) {$\operatorname{Im}\sigma > C$};
+    \node at (-2.7, -0.3) {$|\operatorname{Re}\sigma| \gg 1$};
+
+    % 散射谐振极点 (叉号)
+    \foreach \x/\y in {-0.7/0.5, 0.7/0.5, 0/0, -0.8/-0.6, 0.8/-0.6, -0.4/-0.9, 0.3/-0.9, -1.8/-1.7, -0.9/-1.9, 1.1/-1.9, 2.5/-1.7} {
+        \node at (\x, \y) {$\times$};
+    }
+\end{tikzpicture}%
+}
+
+% 6. 图 11.6: 围道积分与留数演算
+\newcommand{\drawFigElevenSix}{%
+\begin{tikzpicture}[scale=1.15, >=Stealth]
+    % 阴影矩形 \mathcal{R}_R
+    \fill[gray!25] (-1.8, -1.2) rectangle (1.8, 0.8);
+    \node[above left] at (0, 0.2) {$\mathcal{R}_R$};
+
+    % 坐标轴
+    \draw[->] (-3.0, 0) -- (3.0, 0) node[right] {$\operatorname{Re}\sigma$};
+    \draw[->] (0, -1.8) -- (0, 1.4) node[above] {$\operatorname{Im}\sigma$};
+
+    % 围道线 (蓝色)
+    \draw[blue!70!black, thick] (-3.0, 0.8) -- (3.0, 0.8);
+    \node[blue!70!black, above] at (-2.0, 0.8) {$\gamma_R^-$};
+    \node[blue!70!black, above] at (2.0, 0.8) {$\gamma_R^+$};
+    \node[right] at (0, 0.9) {$-\alpha_-$};
+
+    \draw[blue!70!black, thick, ->] (-1.8, 0.8) -- (-1.8, -0.2);
+    \draw[blue!70!black, thick] (-1.8, -0.2) -- (-1.8, -1.2);
+    \node[blue!70!black, left] at (-1.8, -0.5) {$\gamma_{R, |}^-$};
+
+    \draw[blue!70!black, thick, ->] (1.8, -1.2) -- (1.8, -0.2);
+    \draw[blue!70!black, thick] (1.8, -0.2) -- (1.8, 0.8);
+    \node[blue!70!black, right] at (1.8, -0.5) {$\gamma_{R, |}^+$};
+
+    \draw[blue!70!black, thick, ->] (-1.8, -1.2) -- (0, -1.2);
+    \draw[blue!70!black, thick] (0, -1.2) -- (1.8, -1.2);
+    \node[blue!70!black, below] at (0, -1.2) {$\gamma_R^0$};
+    \node[right] at (0, -1.35) {$-\alpha_+$};
+
+    \node[above left] at (-1.8, 0) {$-R$};
+    \node[above right] at (1.8, 0) {$R$};
+
+    \node at (-0.9, -0.4) {$\times$};
+    \node at (0.8, -0.4) {$\times$};
+    \node[below] at (0.8, -0.4) {$\sigma_j$};
+\end{tikzpicture}%
+}
+
+% 7. 图 11.7: 时空容许区域 \Omega
+\newcommand{\drawFigElevenSeven}{%
+\begin{tikzpicture}[scale=1.15, >=Stealth]
+    % 阴影梯形区域 \Omega
+    \fill[gray!30] (-3.8, -1.5) -- (-1.5, 0) -- (1.5, 0) -- (3.8, -1.5) -- cycle;
+
+    % 顶部水平线 (tau = 0)
+    \draw[thick] (-4.5, 0) -- (4.5, 0) node[right] {$X$};
+    \node[above] at (0, 0) {$(0, 0)$};
+    \draw (0, 0.1) -- (0, -0.1);
+
+    % 刻度 |X| = 2
+    \draw (-1.5, 0.1) -- (-1.5, -0.1) node[above=4pt] {$|X| = 2$};
+    \draw (1.5, 0.1) -- (1.5, -0.1) node[above=4pt] {$|X| = 2$};
+
+    % 向下竖轴 tau
+    \draw[->] (0, 0) -- (0, -2.2) node[right] {$\tau$};
+
+    % 梯形斜边 (|X| = 2 + 2\tau)
+    \draw[thick] (-3.8, -1.5) -- (-1.5, 0);
+    \draw[thick] (1.5, 0) -- (3.8, -1.5);
+    \node[above right] at (2.5, -0.9) {$|X| = 2 + 2\tau$};
+
+    % 底边 tau = 1 (虚线)
+    \draw[dashed] (-4.5, -1.5) -- (4.5, -1.5) node[right] {$\tau = 1$};
+
+    % 内部射线 (视界 |X| = 2\tau)
+    \draw[dashed] (0, 0) -- (-2.3, -2.0) node[left] {$|X| = 2\tau$};
+    \draw[dashed] (0, 0) -- (2.3, -2.0) node[below] {$\overline{\mathcal{H}}^+$};
+
+    \node at (-1.3, -0.5) {$\Omega$};
+\end{tikzpicture}%
+}

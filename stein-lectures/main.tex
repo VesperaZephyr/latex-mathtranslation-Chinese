@@ -1,0 +1,1066 @@
+% !TeX program = xelatex
+% ================================================================
+% 《傅里叶分析中的振动积分》(Oscillatory Integrals in Fourier Analysis)
+% 作者：E. M. Stein（普林斯顿大学）
+% 原载 Proceedings of Symposia in Pure Mathematics, Vol. 35, Part 1 (1979),
+% "Harmonic Analysis in Euclidean Spaces", 第 307-355 页.
+% 中文译本 —— 基于数译(mathtranslations.org)排版模板 mathtranslation.cls
+% 使用 XeLaTeX 编译两次以上（生成目录、交叉引用、术语索引页码）.
+% ================================================================
+\documentclass[
+  BookTitleCN={傅里叶分析中的振动积分},
+  BookTitleEN={Oscillatory Integrals in Fourier Analysis},
+  OriginalAuthor={E.~M. Stein},
+  OriginalEdition={Proc. Sympos. Pure Math. 35, Part~1},
+  OriginalPublisher={American Mathematical Society},
+  OriginalYear={1979},
+  Translator={翻译及重排},
+  ModelUsed={Codex CLI},
+  Biblatex=false,
+  TranslationDate={2026年8月27日}
+]{mathtranslation}
+
+\usepackage{chngcntr}
+
+% 允许版心稍微拉伸以避免孤立过宽行（不影响数学正确性）
+\setlength{\emergencystretch}{3em}
+
+% ---------- 编号体系（与原文一致） ----------
+\numberwithin{equation}{chapter}   % ctexbook 下章为一级标题，公式随章编号：(1.1),(2.1),...
+% 命题、定理、引理全文连续编号（原文：命题 1-6、定理 1-10、引理 1-2）
+\counterwithout{proposition}{section}
+\counterwithout{theorem}{section}
+\counterwithout{lemma}{section}
+\counterwithout{corollary}{section}
+
+% 原文中的推论、注，以及 §7 中未编号的命题与推论均不编号
+\newtheorem*{proposition*}{命题}
+\newtheorem*{corollary*}{推论}
+\newtheorem*{remark*}{注}
+\AtEndEnvironment{remark*}{\envenddiamond}
+
+% 参考文献标题使用中文（ctexbook 下 thebibliography 默认标题）
+\renewcommand{\bibname}{参考文献}
+
+% 常用记号
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+\begin{document}
+
+\makecover
+
+\makecontents
+
+\clearpage
+\chapter*{引言}
+\addcontentsline{toc}{chapter}{引言}
+
+
+\noindent \newterm{oscint}{振动积分}{oscillatory integral}以这样或那样的形式，从一开始就是调和分析这门学科的一个本质组成部分.除了\newterm{ft}{傅里叶变换}{Fourier transform}本身作为一种振动积分这一显而易见的事实之外，我们只需回想 Fourier 的原始著作（1822）中 Bessel 函数的出现，Airy（1838）、Stokes（1850）与 Lipschitz（1859）的早期著作中与此类函数相关的渐近性的研究，Riemann 在 1854 年\footnote{在其关于三角级数的论文的第~XIII~节中.}运用\newterm{statphase}{平稳相位法}{method of stationary phase}求某些傅里叶变换的渐近性，以及所有这些思想在数论中的应用——这些应用由 Voronoi（1904）、Hardy（1915）、van der Corput（1922）等在本世纪头四分之一世纪所开创.
+
+鉴于这段漫长的历史，一个有趣的事实是，直到相对较近的时期（1967）人们才意识到傅里叶变换的\newterm{restrict}{限制性定理}{restriction theorem}的可能性，而且上述渐近性与微分理论之间的关系又等了十年才浮出水面！
+
+这些讲座的目的是对这部分理论作一概述，同时描述一些新的结果.我们发现把讨论分为{\termfont 第一类}振动积分与{\termfont 第二类}振动积分是方便的.两者之间的主要区别在于：对于第一类，我们研究的是当参数趋于无穷时仅一个函数的行为；而对于第二类，我们处理的是一个在其核中带有振动因子的算子的有界性.然而，这种区分不必被逐字理解，因为有时这些不同类型的积分会融合在一起.
+
+我们首先考虑第一类振动积分中或多或少标准的事实，先是一维情形，然后是 $n$ 维情形.接着，作为第一个应用，我们处理光滑曲面承载测度在 $\R^n$ 上的傅里叶变换的若干估计.这自然把我们引向限制性定理.（微分定理是另一个应用，此处不予讨论；但这些是 Wainger 讲座 \cite{ref32} 的主题.\footnote{原书误印为引文 [3]，实际指参考文献 \cite{ref32}（本论文集第~357--374~页 Stephen Wainger 的讲座）.}）
+
+接下来我们讨论在沿曲线的 Hilbert 变换及其推广的理论中出现的（第一类）振动积分.然后我们转向第二类振动积分，它们由 Heisenberg 群上的扭卷积以及 Radon 奇异积分理论所启发.最后我们回到限制性定理以及由它们产生的第二类振动积分；这些算子和 Bochner--Riesz 可和性密切相关.
+
+\footnotetext{读者会注意到，这次综述中还有若干相关主题没有触及.其中最主要的是在双曲型方程及其推广——即所谓``Fourier 积分算子''一类的解中出现的振动积分.关于这一主题的精彩引论，参见 \cite{ref1} 第~4~章.}
+
+\chapter{第一类振动积分，\texorpdfstring{$n=1$}{n = 1}}
+
+\noindent 我们关心的是积分
+\[
+  I(\lambda) = \int_{a}^{b} e^{i\lambda\phi(x)}\psi(x)\,\mathrm{d}x
+\]
+当 $\lambda$ 为大正数时的行为，其中 $\phi$ 是实值光滑函数（即``\newterm{phase}{相位}{phase}''），而 $\psi$ 是复值且光滑的；通常——但不总是——假设 $\psi$ 在 $(a,b)$ 中具有紧支集.
+
+关于 $I(\lambda)$ 的基本事实可以用三个原理来表述.
+
+\begin{enumerate}
+  \item[（a）] \textbf{局部化：} $I(\lambda)$ 的渐近行为由 $\phi'(x)=0$ 的那些点确定（假设 $\psi$ 在 $(a,b)$ 中具有紧支集）.更精确地，
+\end{enumerate}
+
+\begin{proposition}\label{prop:1}
+  设 $\psi\in C_0^\infty(a,b)$，且对 $[a,b]$ 中的 $x$ 有 $\phi'(x)\neq0$.则当 $\lambda\to\infty$ 时，对每个 $N\geq0$ 有 $I(\lambda)=O(\lambda^{-N})$.
+\end{proposition}
+
+\begin{proof}
+  证明非常简单.令 $D$ 表示微分算子 $Df=\frac{1}{i\lambda\phi'(x)}\frac{\mathrm{d}}{\mathrm{d}x}$，并令 ${}^{t}\!D$ 表示它的转置，即 ${}^{t}\!Df=\frac{\mathrm{d}}{\mathrm{d}x}\left(\frac{f}{i\lambda\phi'}\right)$.于是显然对每个 $N$ 有 $D^{N}(e^{i\lambda\phi})=e^{i\lambda\phi}$，分部积分给出
+  \[
+    \int e^{i\lambda\phi}\psi\,\mathrm{d}x = \int D^{N}(e^{i\lambda\phi})\psi\,\mathrm{d}x = (-1)^{N}\int e^{i\lambda\phi}({}^{t}D)^{N}\psi\,\mathrm{d}x .
+  \]
+  于是显然 $|I(\lambda)|\leq A_{N}\lambda^{-N}$，命题得证.
+\end{proof}
+
+\begin{enumerate}
+  \item[（b）] \textbf{缩放：} 假设我们只知道对某个固定的 $k$，$\left|\frac{\mathrm{d}^{k}\phi(x)}{\mathrm{d}x^{k}}\right|\geq1$，并且希望得到对 $\int_{a}^{b}e^{i\lambda\phi(x)}\,\mathrm{d}x$ 的一个与 $a$、$b$ 无关的估计.于是简单的缩放论证表明，这个积分唯一可能的估计是 $O(\lambda^{-1/k})$.这一事实确乎成立，可追溯到 van der Corput.
+\end{enumerate}
+
+\begin{proposition}\label{prop:2}
+  设 $\phi$ 在 $[a,b]$ 中实值且光滑.若 $|\phi^{(k)}(x)|\geq1$，则
+  \begin{equation}
+    \left|\int_{a}^{b}e^{i\lambda\phi(x)}\,\mathrm{d}x\right|\leq c_{k}\lambda^{-1/k} \label{eq:1.1}
+  \end{equation}
+  在下述情形下成立：
+  \begin{enumerate}
+    \item[（i）] $k\geq2$；
+    \item[（ii）] 或 $k=1$，若另外还假定 $\phi'(x)$ 是单调的.
+  \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+  我们先证明（ii）.我们有
+  \[
+    \int_{a}^{b}e^{i\lambda\phi}\,\mathrm{d}x = \int_{a}^{b}D(e^{i\lambda\phi})\,\mathrm{d}x = -\int_{a}^{b}e^{i\lambda\phi}\,{}^{t}\!D(1)\,\mathrm{d}x + \frac{1}{i\lambda\phi'}e^{i\lambda\phi}\Bigg|_{a}^{b}
+  \]
+  边界项被 $2/\lambda$ 所控制，而
+  \[
+    \left|\int_{a}^{b}e^{i\lambda\phi}\,{}^{t}\!D(1)\,\mathrm{d}x\right| = \left|\int_{a}^{b}e^{i\lambda\phi}\frac{1}{i\lambda}\frac{\mathrm{d}}{\mathrm{d}x}\left(\frac{1}{\phi'}\right)\mathrm{d}x\right| \leq \frac{1}{\lambda}\int_{a}^{b}\left|\frac{\mathrm{d}}{\mathrm{d}x}\frac{1}{\phi'}\right| = \frac{1}{\lambda}\left|\int_{a}^{b}\frac{\mathrm{d}}{\mathrm{d}x}\left(\frac{1}{\phi'}\right)\mathrm{d}x\right|
+  \]
+  这里用到 $\phi'$ 的单调性.最后一个表达式等于 $\frac{1}{\lambda}\left|\frac{1}{\phi'(b)}-\frac{1}{\phi'(a)}\right|$，被 $2/\lambda$ 控制.这就以 $c_1=4$ 得到了所要求的结论.
+
+  现在我们对 $k$ 用归纳法证明（i）.假设 $k$ 的情形已知，并且（必要时取复共轭）假定 $\phi^{(k+1)}(x)\geq1$.令 $x=c$ 为 $[a,b]$ 中使 $|\phi^{(k)}(x)|$ 取到最小值的点.若 $\phi^{(k)}(c)=0$，则当 $k=1$ 时在区间 $(c-\delta,c+\delta)$ 之外有 $|\phi^{(k)}(x)|\geq\delta$（当然 $\phi'(x)$ 单调）.写出
+  \[
+    \int_{a}^{b} = \int_{a}^{c-\delta} + \int_{c-\delta}^{c+\delta} + \int_{c+\delta}^{b} .
+  \]
+  由前一种情形
+  \[
+    \left|\int_{a}^{c-\delta}e^{i\lambda\phi}\,\mathrm{d}x\right|\leq c_{k}/(\lambda\delta)^{1/k}, \qquad \left|\int_{c+\delta}^{b}e^{i\lambda\phi}\,\mathrm{d}x\right|\leq c_{k}/(\lambda\delta)^{1/k} .
+  \]
+  然而显然
+  \[
+    \left|\int_{c-\delta}^{c+\delta}e^{i\lambda\phi}\,\mathrm{d}x\right|\leq 2\delta .
+  \]
+  因此
+  \[
+    \left|\int_{a}^{b}e^{i\lambda\phi}\,\mathrm{d}x\right|\leq \frac{2c_{k}}{(\lambda\delta)^{1/k}} + 2\delta .
+  \]
+  若 $\phi^{(k)}(c)\neq0$，从而 $c$ 是 $[a,b]$ 的一个端点，类似的论证表明 $c_{k}/(\lambda\delta)^{1/k}+\delta$ 是该积分的一个上界.无论哪种情形，只要取 $\delta=\lambda^{-1/(k+1)}$，$k+1$ 的情形即随之成立，这就证明了\eqref{eq:1.1}，其中 $c_{k+1}=2c_{k}+2$.
+\end{proof}
+
+\begin{corollary*}\label{cor:1}
+  在命题~\ref{prop:2} 对 $\phi$ 的假定之下，我们可以得出结论：
+  \begin{equation}
+    \left|\int_{a}^{b}e^{i\lambda\phi(x)}\psi(x)\,\mathrm{d}x\right|\leq c_{k}\lambda^{-1/k}\left[|\psi(b)| + \int_{a}^{b}|\psi'(x)|\,\mathrm{d}x\right]. \label{eq:1.2}
+  \end{equation}
+\end{corollary*}
+
+\noindent 这由\eqref{eq:1.1}通过分部积分一个如下形式的估计而得到：
+\[
+  \left|\int_{a}^{\bar{x}}e^{i\lambda\phi(x)}\,\mathrm{d}x\right|\leq c_{k}\lambda^{-1/k},\quad\text{对 }a\leq\bar{x}\leq b .
+\]
+
+\begin{enumerate}
+  \item[（c）] \textbf{渐近：} 我们已知 $\int_{a}^{b}e^{i\lambda\phi(x)}\psi(x)\,\mathrm{d}x$ 的行为由 $\phi'(x_0)=0$ 的那些点 $x_0$ 确定（$\phi$ 的``临界''点）.假设 $\psi$ 的支集小到只包含 $\phi$ 的一个临界点，那么渐近展开的性质取决于使 $\phi^{(k)}(x_0)\neq0$ 的最小的 $k$，并且以 $\lambda$ 的幂次的形式给出，其方式与命题~\ref{prop:2} 一致.
+\end{enumerate}
+
+\begin{proposition}\label{prop:3}
+  设 $\phi$ 实值且光滑，$k\geq2$，且 $\phi(x_0)=\phi'(x_0)=\cdots=\phi^{(k-1)}(x_0)=0$，而 $\phi^{(k)}(x_0)\neq0$.若 $\psi\in C_0^\infty$ 且 $\psi$ 的支集是 $x_0$ 的充分小的邻域，则
+  \begin{equation}
+    I(\lambda)=\int e^{i\lambda\phi(x)}\psi(x)\,\mathrm{d}x \sim \lambda^{-1/k}\sum_{j=0}^{\infty}a_{j}\lambda^{-j/k}, \label{eq:1.3}
+  \end{equation}
+  其意义是：对任意非负整数 $N$ 与 $r$，
+  \begin{equation}
+    \left(\frac{\mathrm{d}}{\mathrm{d}\lambda}\right)^{r}\left[I(\lambda)-\sum_{j=0}^{N}a_{j}\lambda^{-j/k}\right]=O(\lambda^{-(N+1)/k-r})\quad\text{当 }\lambda\to\infty . \tag{$1.3'$}\label{eq:1.3prime}
+  \end{equation}
+\end{proposition}
+
+\begin{remark*}
+  当 $k$ 为偶数时，对奇数 $j$ 有 $a_{j}=0$.
+\end{remark*}
+
+\noindent 我们将给出 $k=2$ 时该命题的证明.分三步.
+
+\textbf{第 1 步.} 这是如下观察：
+\begin{equation}\label{eq:1.4}
+  \int_{-\infty}^{\infty}e^{i\lambda x^{2}}x^{\ell}e^{-x^{2}}\,\mathrm{d}x \sim \lambda^{-1/2-\ell/2}\sum_{j=0}^{\infty}c_{j}^{(\ell)}\lambda^{-j}
+\end{equation}
+其中 $\ell$ 是非负整数；当 $\ell$ 为奇数时该积分消失.事实上，\eqref{eq:1.4}的左端是 $\int_{-\infty}^{\infty}e^{-(1-i\lambda)x^{2}}x^{\ell}\,\mathrm{d}x$，通过变量替换它等于 $(1-i\lambda)^{-1/2-\ell/2}\int_{-\infty}^{\infty}e^{-x^{2}}x^{\ell}\,\mathrm{d}x$.但是当 $\lambda>0$ 时，$(1-i\lambda)^{-1/2-\ell/2}=\lambda^{-1/2-\ell/2}(1/\lambda-i)^{-1/2-\ell/2}$，这里我们在沿负半轴开缝的平面中固定了 $z^{-1/2-\ell/2}$ 的主分支.$(w-i)^{-1/2-\ell/2}$ 的幂级数展开（它对 $|w|<1$ 成立）随后给出所求的渐近展开\eqref{eq:1.4}.
+
+\textbf{第 2 步.} 接下来观察到，若 $\eta\in C_0^\infty$ 且 $\ell$ 是非负整数，则
+\begin{equation}\label{eq:1.5}
+  \left|\int_{-\infty}^{\infty}e^{i\lambda x^{2}}x^{\ell}\eta(x)\,\mathrm{d}x\right|\leq A\lambda^{-1/2-\ell/2} .
+\end{equation}
+为证明此式，令 $a$ 是一个 $C^\infty$ 函数，满足 $|x|\leq1$ 时 $a(x)=1$，$|x|\geq2$ 时 $a(x)=0$，并写出
+\[
+  \int e^{i\lambda x^{2}}x^{\ell}\eta(x)\,\mathrm{d}x = \int e^{i\lambda x^{2}}x^{\ell}\eta(x)a(x/\varepsilon)\,\mathrm{d}x + \int e^{i\lambda x^{2}}x^{\ell}\eta(x)(1-a(x/\varepsilon))\,\mathrm{d}x .
+\]
+第一个积分被 $C\varepsilon^{\ell+1}$ 控制.第二个积分可写成
+\[
+  \int e^{i\lambda x^{2}}({}^{t}D)^{N}[x^{\ell}\eta(x)(1-a(x/\varepsilon))]\,\mathrm{d}x
+\]
+其中 ${}^{t}\!Df=\frac{1}{2i\lambda}\frac{\mathrm{d}}{\mathrm{d}x}\left(\frac{f}{x}\right)$.简单计算表明该项被
+\[
+  \frac{C_N}{\lambda^N}\int_{|x|\geq\varepsilon}|x|^{\ell-2N}\,\mathrm{d}x = C_N'\lambda^{-N}\varepsilon^{\ell-2N+1}
+\]
+所控制（若 $\ell-2N<-1$）.综上，\eqref{eq:1.5}中的积分受控于 $C_N''\{\varepsilon^{\ell+1}+\lambda^{-N}\varepsilon^{\ell-2N+1}\}$，只要取 $\varepsilon=\lambda^{-1/2}$（其中 $N>\frac{\ell+1}{2}$），即可得出结论\eqref{eq:1.5}.
+
+类似（但更简单）的分部积分论证还表明：
+\begin{equation}\label{eq:1.6}
+  \int e^{i\lambda x^{2}}\xi(x)\,\mathrm{d}x = O(\lambda^{-N}),\quad\text{对每个 }N\geq0,\ \text{只要 }\xi\in\mathscr{S}\ \text{且 }\xi\text{ 在原点附近消失} .
+\end{equation}
+
+\textbf{第 3 步.} 我们首先在 $\phi(x)=x^{2}$ 的情形证明该命题.为此写出
+\[
+  \int e^{i\lambda\phi(x)}\psi(x)\,\mathrm{d}x = \int e^{i\lambda x^{2}}e^{-x^{2}}\left(e^{x^{2}}\psi(x)\right)\tilde\psi(x)\,\mathrm{d}x
+\]
+其中 $\tilde\psi$ 是一个在 $\psi$ 的支集上恒为 $1$ 的 $C_0^\infty$ 函数.现在对每个 $N$，写出 Taylor 展开
+\[
+  e^{x^{2}}\psi(x) = \sum_{j=0}^{N}b_{j}x^{j} + x^{N+1}R_{N}(x) = P(x) + x^{N+1}R_{N}(x)
+\]
+代入上式得到三项：
+\begin{align*}
+  \text{(a)}&\ \sum_{j=0}^{N}b_{j}\int_{-\infty}^{\infty}e^{i\lambda x^{2}}e^{-x^{2}}x^{j}\,\mathrm{d}x,\\
+  \text{(b)}&\ \int_{-\infty}^{\infty}e^{i\lambda x^{2}}x^{N+1}R_{N}(x)e^{-x^{2}}\tilde\psi(x)\,\mathrm{d}x,\\
+  \text{(c)}&\ \int_{-\infty}^{\infty}e^{i\lambda x^{2}}P(x)e^{-x^{2}}(1-\tilde\psi(x))\,\mathrm{d}x .
+\end{align*}
+对（a）用\eqref{eq:1.4}；对（b）用\eqref{eq:1.5}；对（c）用\eqref{eq:1.6}.于是容易看出它们的组合给出 $\int e^{i\lambda x^{2}}\psi(x)\,\mathrm{d}x$ 的所求渐近展开.
+
+现在考虑 $k=2$ 的一般情形.此时可写 $\phi(x)=c(x-x_0)^{2}+O(x-x_0)^{3}$，其中 $c\neq0$，并令 $\phi(x)=c(x-x_0)^{2}[1+\varepsilon(x)]$，这里 $\varepsilon$ 是一个光滑函数且 $\varepsilon=O(x-x_0)$，从而当 $x$ 充分接近 $x_0$ 时 $[1+\varepsilon(x)]>0$.此外，当 $x\neq x_0$ 但 $x$ 充分接近 $x_0$ 时 $\phi'(x)\neq0$.现在我们固定 $x_0$ 的这样一个邻域，并令 $y=(x-x_0)(1+\varepsilon(x))^{1/2}$.于是映射 $x\mapsto y$ 是 $x_0$ 的该邻域到 $y=0$ 的某个邻域的微分同胚，并且当然有 $cy^{2}=\phi(x)$.因此
+\[
+  \int e^{i\lambda\phi(x)}\psi(x)\,\mathrm{d}x = \int e^{i\lambda cy^{2}}\tilde\psi(y)\,\mathrm{d}y
+\]
+其中若 $\psi$ 的支集落在我所固定的 $x_0$ 的邻域内，则 $\tilde\psi\in C_0^\infty$.展开式\eqref{eq:1.3}（对 $k=2$）进而作为前面已处理特例的推论而得到证明.
+
+\noindent\textbf{注：}
+\begin{enumerate}
+  \item[（1）] 更高阶 $k$ 的证明类似，且基于如下事实：
+  \[
+    \int_0^\infty e^{i\lambda x^{k}}e^{-x^k}x^{\ell}\,\mathrm{d}x = c_{k,\ell}(1-i\lambda)^{-(1+\ell)/k} .
+  \]
+  \item[（2）] 在渐近展开\eqref{eq:1.3}中出现的每个常数 $a_{j}$ 只依赖于 $\phi$ 与 $\psi$ 在 $x_0$ 处的有限多个导数.例如当 $k=2$ 时，$a_{0}=\sqrt{\pi}(-i\phi''(x_0))^{-1/2}\psi(x_0)$.类似地，\eqref{eq:1.3prime}中出现的界依赖于 $\phi$ 与 $\psi$ 在 $\psi$ 的支集上有限多个导数的上界、$\psi$ 的支集大小，以及对 $\phi^{(k)}(x_0)$ 的一个下界.
+\end{enumerate}
+
+\noindent\textbf{参考文献提示：} 读者可参见 Erd\'elyi \cite{ref8} 第~II~章，其中可找到古典文献的进一步引文.
+
+\chapter{第一类振动积分，\texorpdfstring{$n\geq2$}{n >= 2}}
+
+\noindent 上述结果中只有一部分在 $n\geq2$ 时有类似物，但命题~\ref{prop:1} 的推广是简单的.沿用上面的术语，我们说：若定义在 $\R^n$ 中某点 $x_0$ 的邻域内的相位函数 $\phi$ 满足 $(\nabla\phi)(x_0)=0$，则 $x_0$ 是 $\phi$ 的一个\newterm{crit}{临界点}{critical point}.
+
+\begin{proposition}\label{prop:4}
+  设 $\psi\in C_0^\infty(\R^n)$，且 $\phi$ 是光滑实值函数，在 $\psi$ 的支集中没有临界点.则
+  \[
+    I(\lambda)=\int_{\R^n} e^{i\lambda\phi(x)}\psi(x)\,\mathrm{d}x = O(\lambda^{-N}),\quad\text{当 }\lambda\to\infty,\ \text{对每个 }N\geq0 .
+  \]
+\end{proposition}
+
+\begin{proof}
+  对 $\psi$ 支集中的每个 $x_0$，存在单位向量 $\xi$ 和一个以 $x_0$ 为中心的小球 $B(x_0)$，使得对 $x\in B(x_0)$ 有 $(\xi,\nabla_x)\phi(x)\geq c>0$.把积分 $\int e^{i\lambda\phi(x)}\psi(x)\,\mathrm{d}x$ 分解为有限和
+  \[
+    \sum_{j}\int e^{i\lambda\phi(x)}\psi_{j}(x)\,\mathrm{d}x,
+  \]
+  其中每个 $\psi_{j}$ 是 $C^\infty$ 的，并在这些小球之一中具有紧支集.于是只需证明这些积分中每一个的相应估计.现在选取坐标系 $x_1,x_2,\cdots,x_n$，使 $x_1$ 沿 $\xi$ 方向.则
+  \[
+    \int e^{i\lambda\phi(x)}\psi_{j}(x)\,\mathrm{d}x = \int\left(\int e^{i\lambda\phi(x_1,\cdots,x_n)}\psi_{j}(x_1,\cdots,x_n)\,\mathrm{d}x_1\right)\mathrm{d}x_2,\cdots,\mathrm{d}x_n .
+  \]
+  但由命题~\ref{prop:1}，内层积分是 $O(\lambda^{-N})$，于是所求结论随之成立.
+\end{proof}
+
+\noindent 对于缩放原理（命题~\ref{prop:2}），我们只能陈述一个弱类似物；然而它在下面的讨论中是有用的.
+
+\begin{proposition}\label{prop:5}
+  设 $\psi\in C_0^\infty$，$\phi$ 实值，且对某个多重指标 $a$、$|a|>0$，有
+  \[
+    \left|\left(\frac{\partial}{\partial x}\right)^{a}\phi(x)\right|\geq1
+  \]
+  在 $\psi$ 的支集上处处成立.则
+  \begin{equation}
+    \left|\int_{\R^n}e^{i\lambda\phi(x)}\psi(x)\,\mathrm{d}x\right|\leq c_{k}(\phi)\cdot\lambda^{-1/k}\left(\|\psi\|_{L^\infty}+\|\nabla\psi\|_{L^{1}}\right), \label{eq:2.1}
+  \end{equation}
+  其中 $k=|a|$，且常数 $c_{k}(\phi)$ 与 $\lambda$ 和 $\psi$ 无关，并在 $\phi$ 的 $C^{k+1}$ 范数保持有界时保持有界.
+\end{proposition}
+
+\begin{proof}
+  考虑 $\R^n$ 中 $k$ 次齐次多项式的实线性空间.令 $d(k,n)$ 表示其维数.当然 $\{x^{a_i}\}_{|a|=k}$ 是该空间的一组基.然而不难看出存在 $d(k,n)$ 个单位向量 $\xi^{(1)},\xi^{(2)},\cdots,\xi^{(d(k,n))}$，使得齐次多项式 $(\xi^{(j)}\cdot x)^{k}$，$j=1,\cdots,d(k,n)$，给出另一组基.这意味着：若
+  \[
+    \left|\frac{\partial^{a}\phi(x^{0})}{\partial x^{a}}\right|\geq1
+  \]
+  对某个 $|a|=k$ 成立，则存在单位向量 $\xi=\xi(x^{0})$，使得
+  \[
+    \left|(\xi,\nabla_{x})^{k}\phi(x^{0})\right|\geq a_{k},\quad\text{其中 }a_{k}>0 .
+  \]
+  此外由于可假定 $\phi$ 的 $C^{k+1}$ 范数有界，我们还可推出：只要 $x\in B(x_0)$，就有 $|(\xi,\nabla_x)^{k}\phi(x)|\geq a_{k}/2$，其中 $B$ 是以 $x$ 为中心的固定半径的球.（$B$ 的半径可以取为 $\phi$ 的 $C^{k+1}$ 范数的某个小倍数.）接下来选取 $\R^n$ 的这样一个由固定半径的球组成的适当覆盖，以及相应的单位分解 $1=\sum_{j}\eta_{j}(x)$，$0\leq\eta_{j}\leq1$，$\sum_{j}|\nabla\eta_{j}|\leq b_{k}$，且每个 $\eta_{j}$ 支集在某个小球内.于是
+  \[
+    \int e^{i\lambda\phi}\psi\,\mathrm{d}x = \sum_{j}\int e^{i\lambda\phi}\psi\eta_{j}\,\mathrm{d}x = \sum_{j}\int e^{i\lambda\phi}\psi_{j}\,\mathrm{d}x .
+  \]
+  为估计 $\int e^{i\lambda\phi}\psi_{j}\,\mathrm{d}x$（其中 $\xi$ 如上确定），选取坐标系使 $x_1$ 沿 $\xi$ 方向.则
+  \[
+    \int e^{i\lambda\phi}\psi_{j}\,\mathrm{d}x = \int\left(\int e^{i\lambda\phi(x_1,\cdots,x_n)}\tilde\psi_{j}(x_1,\cdots,x_n)\,\mathrm{d}x_1\right)\mathrm{d}x_2,\cdots,\mathrm{d}x_n .
+  \]
+  对内层积分我们援引\eqref{eq:1.2}，得到形如
+  \[
+    c_{k}a_{k}^{-1/k}\lambda^{-1/k}\left\{\left(\int\left|\frac{\partial\eta_{j}}{\partial x_1}(x_1,\cdots,x_n)\right|\mathrm{d}x_1\right)\|\psi\|_{L^\infty}+\int\left|\frac{\partial\psi}{\partial x_1}(x_1,\cdots,x_n)\right|\mathrm{d}x_1\right\}
+  \]
+  的估计.最后对其余变量作积分，即得\eqref{eq:2.1}.
+\end{proof}
+
+\begin{remark*}
+  注意在 $\R^{2}$ 中，若 $\phi(x)=x_1x_2$，上述命题给出的衰减阶不会好于 $\lambda^{-1/2}$，而下面命题的渐近性表明真实阶是 $\lambda^{-1}$.
+\end{remark*}
+
+\noindent 让我们暂时回到一维情形.若 $\phi$ 在 $x_0$ 有一个临界点，且 $\phi'$ 在 $x_0$ 处不无穷阶消失，则在光滑变量替换之后，$\phi$ 可被变换到简单的标准形式 $\tilde\phi$，其中对 $x$ 接近 $0$ 有 $\tilde\phi(x)=\pm x^{k}$.这在更高维中没有类似物，除去 $k=1$ 以及对应于 $k=2$ 的一个特殊情形.我们现在转向后一情形的渐近性.
+
+\noindent 设 $\phi$ 在 $x^{0}$ 有一个临界点.若对称 $n\times n$ 矩阵 $\left\{\frac{\partial^{2}\phi(x^{0})}{\partial x_i\partial x_j}\right\}$ 可逆，则称该临界点是\newterm{nondeg}{非退化}{non-degenerate}的.利用 Taylor 展开容易看出：若 $x^{0}$ 是非退化临界点，则事实上它是一个孤立临界点.
+
+\begin{proposition}\label{prop:6}
+  设 $\phi(x^{0})=0$，且 $\phi$ 在 $x^{0}$ 有一个非退化临界点.若 $\psi\in C_0^\infty$ 且 $\psi$ 的支集是 $x^{0}$ 的充分小的邻域，则
+  \begin{equation}
+    \int_{\R^n}e^{i\lambda\phi(x)}\psi(x)\,\mathrm{d}x \sim \lambda^{-n/2}\sum_{j=0}^{\infty}a_{j}\lambda^{-j},\quad\text{当 }\lambda\to\infty, \label{eq:2.2}
+  \end{equation}
+  其中渐近性在\eqref{eq:1.3}与\eqref{eq:1.3prime}的意义下成立.
+\end{proposition}
+
+\noindent\textbf{注.} 同样地，渐近展开中出现的每个常数 $a_{j}$ 只依赖于 $\phi$ 与 $\psi$ 在 $x^{0}$ 处的有限多个导数值.于是例如 $a_{0}=\left(\pi^{n/2}\prod_{j=1}^{n}(-i\mu_j)^{-1/2}\right)\cdot\psi(x_0)$，其中 $\mu_1,\mu_2,\cdots,\mu_n$ 是矩阵 $\left\{\frac{1}{2}\frac{\partial^{2}\phi(x^{0})}{\partial x_j\partial x_k}\right\}$ 的特征值.类似地，误差项中出现的每个界只依赖于 $\phi$ 与 $\psi$ 在 $\psi$ 的支集上有限多个导数的上界、$\psi$ 的支集大小，以及对 $\det\left\{\frac{\partial^{2}\phi(x^{0})}{\partial x_j\partial x_k}\right\}$ 的一个下界.
+
+\begin{proof}
+  该命题的证明与命题~\ref{prop:3} 的证明遵循同一模式.首先，令 $Q(x)$ 表示由 $Q(x)=x_1^{2}+x_2^{2}+\cdots+x_m^{2}-x_{m+1}^{2}-\cdots-x_n^{2}$ 给出的单位二次型，其中 $0\leq m\leq n$，$m$ 固定.\eqref{eq:1.4}的类似物是
+  \begin{equation}
+    \int_{\R^n}e^{i\lambda Q(x)}e^{-|x|^{2}}x^{\ell}\,\mathrm{d}x \sim \lambda^{-n/2-|\ell|/2}\sum_{j=0}^{\infty}c_{j}(m,\ell)\lambda^{-j}, \label{eq:2.3}
+  \end{equation}
+  其中 $\ell=(\ell_1,\cdots,\ell_n)$ 是多重指标，$|\ell|=\ell_1+\ell_2+\cdots+\ell_n$，且 $x^{\ell}=x_1^{\ell_1}\cdots x_n^{\ell_n}$；还要注意若某个 $\ell_j$ 为奇数，则\eqref{eq:2.3}恒为零.为证明\eqref{eq:2.3}，把它写成乘积
+  \[
+    \prod_{j=1}^{n}\left(\int_{-\infty}^{\infty}e^{\pm i\lambda x^{2}}e^{-x^{2}}x^{\ell_j}\,\mathrm{d}x\right) = \prod_{j=1}^{n}\left(\int_{-\infty}^{\infty}e^{-x^{2}}x^{\ell_j}\,\mathrm{d}x\right)(1\mp i\lambda)^{-1/2-\ell_j/2},
+  \]
+  并把函数 $\prod_{j=1}^{n}(1/\lambda\mp i)^{-1/2-\ell_j/2}$（对大 $\lambda$）展开为 $1/\lambda$ 的幂级数.
+
+  \eqref{eq:1.5}的类似物是如下陈述：
+  \begin{equation}
+    \left|\int_{\R^n}e^{i\lambda Q(x)}x^{\ell}\eta(x)\,\mathrm{d}x\right|\leq A\lambda^{-n/2-|\ell|/2},\quad\text{若 }\eta\in C_0^\infty(\R^n). \label{eq:2.4}
+  \end{equation}
+  为证明它，考虑由 $\Gamma_j=\{x\mid |x_j|^{2}\geq\frac{1}{2n}|x|^{2}\}$ 定义的双侧锥 $\Gamma_j$，以及较小的锥 $\Gamma_j^{0}=\{x\mid |x_j|^{2}\geq\frac{1}{n}|x|^{2}\}$.于是由于 $\bigcup_{j=1}^{n}\Gamma_j^{0}=\R^n$，我们可以找到函数 $\Omega_j$，$j=1,\cdots,n$，每个都是 $0$ 次齐次、在原点之外 $C^\infty$，使得 $1=\sum_{j=1}^{n}\Omega_{j}(x)$ 且 $\Omega_{j}$ 支集在 $\Gamma_j$ 中.于是我们可以写
+  \[
+    \int e^{i\lambda Q(x)}x^{\ell}\eta(x)\,\mathrm{d}x = \sum_{j}\int e^{i\lambda Q(x)}x^{\ell}\eta(x)\Omega_{j}(x)\,\mathrm{d}x .
+  \]
+  在锥 $\Gamma_j$ 中，通过
+  \[
+    D_{j}e^{i\lambda Q(x)}=e^{i\lambda Q(x)},\qquad D_{j}(f)=\frac{1}{\pm i\lambda x_j}\frac{\partial f}{\partial x_j}
+  \]
+  来分部积分.这与如下事实相结合：在 $\Gamma_j$ 中 $|x_j|>\frac{1}{\sqrt{2n}}|x|$，且 $|({}^{t}D_{j})^{N}\Omega_{j}(x)|\leq C_{N}\lambda^{-N}|x|^{-2N}$，使得我们可以仿照\eqref{eq:1.5}的证明来完成\eqref{eq:2.4}的证明.
+
+  一个类似的论证还表明：每当 $\xi\in\mathscr{S}$ 且 $\xi$ 在原点附近消失，则
+  \begin{equation}
+    \int e^{i\lambda Q(x)}\xi(x)\,\mathrm{d}x = O(\lambda^{-N}),\quad\text{对每个 }N\geq0 . \label{eq:2.5}
+  \end{equation}
+  然后我们像先前一样把\eqref{eq:2.3}、\eqref{eq:2.4}与\eqref{eq:2.5}结合起来，在 $\phi(x)=Q(x)$ 这一特殊情形得到渐近公式\eqref{eq:2.2}.
+
+  为过渡到一般情形，我们幸运地可以援引 Morse 引理所保证的变量替换：由于 $\phi(x^{0})=0$、$(\nabla\phi)(x^{0})=0$，且临界点被设为非退化，于是存在 $x$ 空间中 $x^{0}$ 的充分小邻域到 $y$ 空间的微分同胚，在该同胚下 $\phi$ 被变换为 $y_1^{2}+y_2^{2}+\cdots+y_m^{2}-y_{m+1}^{2}-\cdots-y_n^{2}$.注意指标 $m$ 与对应于 $\left\{\frac{1}{2}\frac{\partial^{2}\phi(x^{0})}{\partial x_j\partial x_k}\right\}$ 的型的指标相同.
+\end{proof}
+
+\noindent\textbf{参考文献提示.} Morse 引理的证明参见 Milnor \cite{ref20}，第~2~节.
+\chapter{傅里叶变换的曲面承载测度}
+
+\noindent 令 $S$ 表示 $\R^n$ 中一个光滑 $m$ 维子流形（不必闭）.我们用 $d\sigma$ 表示 $S$ 上由 $\R^n$ 中 Lebesgue 测度诱导的测度，并固定一个函数 $\psi\in C_0^\infty(\R^n)$.现在考虑 $\R^n$ 上的有限 Borel 测度 $d\mu=\psi(x)\,d\sigma$，它当然支撑在 $S$ 上.我们要处理的问题是：求出 $\mu$ 的傅里叶变换在无穷远处的估计，即 $\widehat{d\mu}(\xi)$.我们分两种情形来考虑这一问题.
+
+\textbf{（1）} 首先设 $\dim S=n-1$，且 $S$ 在每一点都具有非零\newterm{gauss}{Gauss 曲率}{Gaussian curvature}.我们指的是如下意义：令 $x^{0}$ 是 $S$ 的任意一点，并对底空间 $\R^n$ 作旋转和平移，使 $x^{0}$ 移到原点，且 $S$ 在 $x^{0}$ 处的切平面成为超平面 $x_n=0$.于是在原点附近（即在 $x^{0}$ 附近），曲面 $S$ 可以表示为图 $x_n=\phi(x_1,\cdots,x_{n-1})$，其中 $\phi\in C^\infty$，$\phi(0)=0$，$(\nabla\phi)(0)=0$.现在考虑 $(n-1)\times(n-1)$ 矩阵 $\left\{\frac{1}{2}\frac{\partial^{2}\phi(0)}{\partial x_j\partial x_k}\right\}_{1\leq j,k\leq n-1}$.它的特征值 $\mu_1,\cdots,\mu_{n-1}$ 称为 $S$ 在 $x^{0}$ 处的\newterm{princur}{主曲率}{principal curvature}，而其乘积 $\left(=\det\frac{1}{2}\frac{\partial^{2}\phi(0)}{\partial x_j\partial x_k}\right)$ 就是 $x^{0}$ 处的 Gauss 曲率.
+
+\begin{theorem}\label{thm:1}
+  设 $S$ 是 $\R^n$ 中一条光滑超曲面，在每一点 Gauss 曲率非零，且如上令 $d\mu=\psi\,d\sigma$.则
+  \begin{equation}
+    |\widehat{d\mu}(\xi)|\leq A|\xi|^{-(n-1)/2}. \label{eq:3.1}
+  \end{equation}
+\end{theorem}
+
+\begin{proof}
+  在应用上面的命题~\ref{prop:6} 时，暂时把记号改为 $n$ 换成 $n+1$ 较为方便.现在由 $\psi$ 的支集的紧性（并且当曲面表示为图 $x_{n+1}=\phi(x_1,\cdots,x_n)$ 时，$d\sigma=\sqrt{1+|\nabla\phi|^{2}}\,dx_1,\cdots,dx_n$），我们可以把问题归结为证明
+  \begin{equation}
+    \left|\int_{\R^n}e^{i\lambda\Phi(x,\eta)}\tilde\psi(x)\,\mathrm{d}x\right|\leq A\lambda^{-n/2}, \label{eq:3.2}
+  \end{equation}
+  其中 $\Phi(x,\eta)=x_1\eta_1+x_2\eta_2+\cdots+x_n\eta_n+\phi(x_1,\cdots,x_n)\eta_{n+1}$，$\xi=\lambda(\eta_1,\cdots,\eta_{n+1})$，$\sum_{j=1}^{n+1}\eta_j^{2}=1$，$\lambda>0$；此外 $\phi(0)=(\nabla\phi)(0)=0$，$\det\left(\frac{\partial^{2}\phi(0)}{\partial x_j\partial x_k}\right)\neq0$，且 $\tilde\psi$ 的支集是原点的充分小的邻域.
+
+  我们把对单位向量 $\eta$ 的讨论分为三种情形：
+  \begin{align*}
+    1^{\circ}&\ \text{当 }\eta\text{ 充分接近``北极'' }\eta_{N}=(0,\cdots,0,1),\\
+    2^{\circ}&\ \text{当 }\eta\text{ 充分接近``南极'' }\eta_{-N}=(0,\cdots,0,-1),\\
+    3^{\circ}&\ \text{单位球面上的其余部分.}
+  \end{align*}
+  首先考虑 $1^{\circ}$.函数 $\Phi(x,\eta)$ 具有性质 $(\nabla_{x}\Phi)(0,\eta_{N})=0$.我们要证明：对每个充分接近 $\eta_{N}$ 的 $\eta$，存在（唯一的）$x=x(\eta)$，使得 $(\nabla_{x})\Phi(x(\eta),\eta)=0$.后者是一组 $n$ 个方程，可由隐函数定理求出所要的解，这要求我们验证 Jacobi 行列式 $\det((\nabla_{x}\nabla_{x}\Phi)(0,\eta_{N}))\neq0$；而这当然是曲率非零的假设.注意若 $\eta_{N}$ 的 $\eta$-邻域充分小，则 $\det\left(\frac{\partial^{2}\Phi(x(\eta),\eta)}{\partial x_j\partial x_k}\right)\neq0$，所以只要 $\tilde\psi$ 的支集充分小，我们便可援引命题~\ref{prop:6}（取 $x^{0}=x(\eta)$）.这就在 $\eta$ 属于区域 $1^{\circ}$ 时证明了\eqref{eq:3.2}.$\eta$ 属于 $2^{\circ}$ 时证明相同.于是我们来到区域 $3^{\circ}$.由于 $\Phi(x,\eta)=\sum_{j=1}^{n}x_j\eta_j+\phi(x)\eta_{n+1}$，故 $\nabla_{x}\Phi(x,\eta)=(\eta_1,\cdots,\eta_n)+\eta_{n+1}(\nabla\phi)(x)$.然而 $(\eta_1^{2}+\cdots+\eta_n^{2})^{1/2}\geq c>0$，因为 $\eta$ 属于 $3^{\circ}$ 且当 $x\to0$ 时 $\nabla\phi(x)=O(x)$；于是若 $\tilde\psi$ 的支集是原点的充分小的邻域，就有 $|\nabla_{x}\Phi(x,\eta)|\geq c'>0$.故对 $3^{\circ}$ 中的 $\eta$ 我们可以用命题~\ref{prop:4}，得出结论：\eqref{eq:3.2}的左端实际上对每个 $N$ 是 $O(\lambda^{-N})$.定理~\ref{thm:1} 的证明由此完成.
+\end{proof}
+
+\begin{remark*}
+  我们只用了渐近公式\eqref{eq:2.2}的一个特殊推论，即当 $N=r=0$ 时与\eqref{eq:1.5}类似的``余项估计''.若用其完整公式，则可得到 $\widehat{d\mu}(\xi)$ 的渐近展开；其主项可用 Gauss 曲率显式表示，此处 $x\in S$ 的法线方向为 $\xi$ 或 $-\xi$.
+\end{remark*}
+
+\textbf{（2）} 我们现在在更广的框架下考虑这一问题.此时 $S$ 将是光滑 $m$ 维子流形，$1\leq m\leq n-1$，并且我们对曲率非零的假设将被更一般的假设所代替：在每一点，$S$ 与任何超平面至多有有限阶接触.我们称这样的子流形为\newterm{finotype}{有限型}{of finite type}.
+
+（这些与多复变量中的有限型域有一些类似之处，后者在 Nagel 的讲座 \cite{ref21} 中亦有讨论.）我们所需的精确定义如下.我们假定在给定点的充分小邻域内考虑 $S$，并把 $S$ 写成映射 $\phi:\R^{m}\to\R^{n}$ 的像，该映射定义在 $\R^{m}$ 中原点的一个邻域 $U$ 上.（为得到光滑嵌入的 $S$，还应假定向量 $\frac{\partial\phi}{\partial x_1},\frac{\partial\phi}{\partial x_2},\cdots,\frac{\partial\phi}{\partial x_m}$ 对每个 $x$ 线性无关，但我们不需要这一假设.）现在固定任意一点 $x^{0}\in U\subset\R^{m}$ 和 $\R^{n}$ 中任意单位向量 $\eta$.我们假定当 $x\to x^{0}$ 时函数 $(\phi(x)-\phi(x^{0}))\cdot\eta$ 不无穷阶消失.换言之，对每个 $x^{0}\in U$ 和每个单位向量 $\eta$，存在多重指标 $\alpha$（$1\leq|\alpha|$），使得
+\[
+  \left(\frac{\partial}{\partial x}\right)^{\alpha}(\phi(x)\cdot\eta)\Big|_{x=x^{0}}\neq0 .
+\]
+注意若 $(x,\eta')$ 充分接近 $(x^{0},\eta)$，则同样有 $\left(\frac{\partial}{\partial x}\right)^{\alpha}(\phi(x)\cdot\eta')\neq0$.使对每个单位向量 $\eta$ 都有存在 $|\alpha|\leq k$ 满足 $\left(\frac{\partial}{\partial x}\right)^{\alpha}(\phi(x)\cdot\eta)\big|_{x=x^{0}}\neq0$ 的最小整数 $k$，称为 $\phi$ 在 $x^{0}$ 处的\textbf{型}（type）.若 $U_{1}$ 是 $U$ 中的紧子集，则 $\phi$ 在 $U_{1}$ 上的型定义为 $x^{0}\in U_{1}$ 处的型的最小上界.
+
+\begin{theorem}\label{thm:2}
+  设 $S$ 是 $\R^n$ 中一条光滑 $m$ 维流形，且为有限型.令 $d\mu=\psi\,d\sigma$，其中 $\psi\in C_0^\infty(\R^{m})$.则
+  \begin{equation}
+    |\widehat{d\mu}(\xi)|\leq A|\xi|^{-\varepsilon},\quad\text{对某个 }\varepsilon>0, \label{eq:3.3}
+  \end{equation}
+  事实上可取 $\varepsilon=1/k$，其中 $k$ 是 $S$ 在 $\psi$ 的支集内的型.
+\end{theorem}
+
+\begin{proof}
+  通过适当的单位分解，我们把问题归结为证明
+  \[
+    \int_{\R^{m}}e^{i\phi(x)\cdot\xi}\tilde\psi(x)\,\mathrm{d}x = O(|\xi|^{-1/k})
+  \]
+  其中 $\phi$ 如上描述，且 $\tilde\psi$ 的支集充分小.现在可写 $\xi=\lambda\eta$，$|\eta|=1$，$\lambda>0$.于是我们知道存在一个 $\alpha$，$|\alpha|\leq k$，使得只要 $x$ 在 $\tilde\psi$ 的支集内（一旦支集大小选得足够小），就有 $\left(\frac{\partial}{\partial x}\right)^{\alpha}\phi(x)\cdot\eta\neq0$.因此结论\eqref{eq:3.3}由命题~\ref{prop:5} 的\eqref{eq:2.1}推出.
+\end{proof}
+
+\noindent\textbf{参考文献提示.} 定理~\ref{thm:1} 的更精确形式（注中提到）可追溯到 Hlawka \cite{ref14}，另见 Herz \cite{ref13}、Littman \cite{ref18}、Randol \cite{ref25} 与 H\"ormander \cite{ref16}.当 $S$ 是不包含在任何仿射超平面中的实解析子流形时，它按如上定义即为有限型；对这类实解析 $S$，\eqref{eq:3.3}型估计由 Bj\"ork \cite{ref2} 证明.
+\chapter{傅里叶变换的限制性定理}
+
+\noindent $L^{p}(\R^{n})$（$1<p\leq2$）中函数的傅里叶变换，最自然地应理解为（经由 Hausdorff--Young 定理）一个 $L^{p'}$ 函数，因此乍一看它只在几乎处处意义下定义.这一印象在 $p=2$ 的情形得到进一步支持：此时傅里叶变换显然在任意给定零 Lebesgue 测度集上可以是完全任意的.因此下面这一事实值得一提：只要 $n\geq2$ 且 $S$ 是 $\R^{n}$ 的一个子流形（具有某种适当的``曲率''），就存在 $p_{0}=p(S)$，$p_{0}>1$，使得 $L^{p}$（$1\leq p\leq p_{0}$）中每个函数的傅里叶变换都可限制到 $S$ 上（即对 $S$ 上诱导测度而言）.让我们把它说清楚.
+
+\noindent 设 $S$ 是 $\R^{n}$ 中给定的光滑子流形，$d\sigma$ 是其诱导的 Lebesgue 测度.我们说 $S$ 具有 $L^{p}$ 限制性，若存在 $q=q(p)$，使得不等式
+\begin{equation}
+  \left(\int_{S_{0}}|\hat{f}(\xi)|^{q}\,d\sigma(\xi)\right)^{1/q}\leq A_{p,q}(S_{0})\|f\|_{p} \label{eq:4.1}
+\end{equation}
+对每个 $f\in\mathcal{S}$ 成立，这里只要 $S_{0}$ 是 $S$ 中在 $S$ 内具有紧闭包的开子集即可.（$\mathcal{S}$ 表 Schwartz 函数类.）
+
+\begin{theorem}\label{thm:3}
+  设 $S$ 是 $\R^{n}$ 中具有非零 Gauss 曲率的光滑超曲面.则限制性\eqref{eq:4.1}对 $1\leq p\leq\frac{2n+2}{n+3}$（取 $q=2$）成立.
+\end{theorem}
+
+\begin{proof}
+  设 $\psi\geq0$ 且 $\psi\in C_0^\infty$.只需证明不等式
+  \begin{equation}
+    \left(\int_{\R^{n}}|\hat{f}(\xi)|^{2}\psi(\xi)\,d\sigma(\xi)\right)^{1/2}\leq A\|f\|_{L^{p_{0}}} \label{eq:4.2}
+  \end{equation}
+  对 $p_{0}=\frac{2n+2}{n+3}$ 和 $f\in\mathcal{S}$ 成立；$1\leq p\leq p_{0}$ 的情形将随后由插值得到.\footnote{事实上，插值论证表明我们可以取 $q$，使得\eqref{eq:4.1}以 $q=(n+1)p'$ 成立，这是 $p$ 与 $q$ 之间的最优关系.} 用足够多的小的开集覆盖 $\psi$ 的支集，就足以证明\eqref{eq:4.2}在如下情形成立：经过适当的坐标旋转和平移后，曲面 $S$（在 $\psi$ 的支集内）可表示为图 $\xi_{n}=\phi(\xi_{1},\cdots,\xi_{n-1})$.现在取 $d_{\mu}=\psi\,d_{\sigma}$，我们有
+  \[
+    \int|\hat{f}(\xi)|^{2}\,d\mu = \int\hat{f}(\xi)\overline{\hat{f}(\xi)}\,d\mu = \int T(f)(x)\overline{f(x)}\,\mathrm{d}x
+  \]
+  其中 $(Tf)(x)=(f*K)(x)$，且
+  \[
+    K(x)=\int e^{-2\pi i x\cdot\xi}\,d\mu(\xi) .
+  \]
+  于是\eqref{eq:4.2}由 H\"older 不等式推出，只要我们能证明
+  \begin{equation}
+    \|T(f)\|_{p_{0}'}\leq A\|f\|_{p_{0}}, \label{eq:4.3}
+  \end{equation}
+  其中 $p_{0}'$ 是 $p_{0}$ 的对偶指数.
+
+  为证明\eqref{eq:4.3}，考虑函数 $K_{S}$（最初对 $\operatorname{Re}(s)>0$ 定义）：
+  \begin{equation}
+    K_{S}(x) = \frac{e^{s^{2}}}{\Gamma(s/2)}\int_{\R^{n}}e^{-2\pi i x\cdot\xi}|\xi_{n}-\phi(\xi')|^{-1+s}\eta(\xi_{n}-\phi(\xi'))\tilde\psi(\xi')\,d\xi . \label{eq:4.4}
+  \end{equation}
+  这里我们把 $(\xi_{1},\cdots,\xi_{n-1})$ 简记为 $\xi'$；取 $\tilde\psi(\xi')=\psi(\xi')(1+|\nabla\phi(\xi')|^{2})^{1/2}$，使得 $\tilde\psi(\xi')\,d\xi'=d\mu$；又 $\eta$ 是一个在原点附近等于 $1$ 的 $C_{0}^{\infty}(\R)$ 函数.
+
+  上述积分中变量替换 $\xi_{n}\to\xi_{n}+\phi(\xi')$ 表明它等于
+  \[
+    \zeta_{s}(x_{n})\int_{\R^{n-1}}e^{-2\pi i(x'\cdot\xi'+x_{n}\phi(\xi'))}\tilde\psi(\xi')\,d\xi' = \zeta_{s}(x_{n})K(x),
+  \]
+  其中
+  \[
+    \zeta_{s}(x_{n}) = \frac{e^{s^{2}}}{\Gamma(s/2)}\int_{-\infty}^{\infty}e^{-2\pi i x_{n}\xi_{n}}|\xi_{n}|^{-1+s}\eta(\xi_{n})\,\mathrm{d}\xi_{n} .
+  \]
+  众所周知 $\zeta_{S}$ 在 $s$ 上有解析延拓且为整函数；又 $\zeta_{0}\equiv1$；并且当 $|x_{n}|\geq1$ 且 $s$ 的实部保持有界时，$|\zeta_{S}(x_{n})|\leq c|x_{n}|^{-\operatorname{Re}(s)}$.由这些事实推得，$K_{S}$ 可解析延拓为整函数 $s$（其值是关于 $x_{1},\cdots,x_{n}$ 的光滑函数，至多多项式增长）.还可得出结论
+  \begin{enumerate}
+    \item[（a）] $K_{0}(x)=K(x)$；
+    \item[（b）] $|K_{-n/2+it}(x)|\leq A$，对所有 $x\in\R^{n}$ 与所有实 $t$；
+    \item[（c）] $|\hat{K}_{1+it}(\xi)|\leq A$，对所有 $\xi\in\R^{n}$ 与所有实 $t$.
+  \end{enumerate}
+  事实上（c）由初始定义\eqref{eq:4.4}立即得到，而（b）由定理~\ref{thm:1} 推出.
+
+  现在考虑算子组成的解析族 $T_{S}$，由 $T_{S}(f)=f*K_{S}$ 定义.由（b）得
+  \begin{equation}
+    \|T_{-n/2+it}(f)\|_{L^{\infty}}\leq A\|f\|_{L^{1}},\quad\text{所有实 }t, \label{eq:4.5}
+  \end{equation}
+  由（c）与 Plancherel 定理得
+  \begin{equation}
+    \|T_{1+it}(f)\|_{L^{2}}\leq A\|f\|_{L^{2}},\quad\text{所有实 }t . \label{eq:4.6}
+  \end{equation}
+  应用算子的一个已知凸性性质（参见 \cite{ref28}）即得 $\|T_{0}(f)\|_{L^{p_{0}'}}\leq A\|f\|_{L^{p_{0}}}$，其中 $p_{0}=\frac{2n+2}{n+3}$，定理~\ref{thm:3} 的证明就此完成.
+\end{proof}
+
+\noindent\textbf{注：}
+\begin{enumerate}
+  \item[（i）] 对具有非零 Gauss 曲率的超曲面而言，该定理在如下意义下是最佳的：只就\eqref{eq:4.1}取 $q\geq2$ 的形式而言.若 $q$ 不被要求 $\geq2$，则可能猜想，对这类超曲面，限制定理在更宽的范围 $1\leq p<2n/(n+1)$ 内成立.这在 $n=2$ 时已知为真（另见下面第~7~节）.
+  \item[（ii）] 对只有 $k$ 个主曲率非零的超曲面，Greenleaf \cite{ref12} 已证明，相应的结果在 $1\leq p\leq\frac{2(k+2)}{k+4}$ 时成立，这给出了定理~\ref{thm:3} 的推广.
+  \item[（iii）] 在 $\dim(S)=1$（即曲线）的情形，有一系列结果推广了上面提到的 $n=2$ 情形的知识.详见下面引用的文献.
+\end{enumerate}
+
+\noindent 当然，若我们面对给定的子流形 $S$，想知道限制得以成立的指数 $p$ 与 $q$（若存在）会更有意思.这一问题因如下事实而突出：相当一般的子流形 $S$（即第~3~节所描述意义下的有限型子流形）具有限制性：
+
+\begin{theorem}\label{thm:4}
+  设 $S$ 是 $\R^{n}$ 中有限型光滑 $m$ 维子流形.则存在 $p_{0}=p_{0}(S)$，$1<p_{0}$，使得 $S$ 具有 $L^{p}$ 限制性\eqref{eq:4.1}，其中 $q=2$，且 $1\leq p\leq p_{0}$.（事实上若 $S$ 的型为 $k$，可取 $p_{0}=2nk/(2nk-1)$.）
+\end{theorem}
+
+\begin{corollary*}
+  设 $S$ 是实解析的，且不位于任何仿射超平面中.则 $S$ 对 $1\leq p\leq p_{0}$ 具有 $L^{p}$ 限制性，其中某个 $p_{0}>1$.
+\end{corollary*}
+
+\begin{proof}
+  如上面所见，只需证明\eqref{eq:4.3}.但 $Tf=f*K$，且 $K(x)=\widehat{d\mu}(-x)$，定理~\ref{thm:2} 告诉我们 $|K(x)|\leq A|x|^{-1/k}$.于是根据分数次积分定理（参见 \cite{ref26} 第~V~章），我们得到\eqref{eq:4.3}，其中 $\frac{1}{p_{0}'}=\frac{1}{p_{0}}-\frac{\alpha}{n}$，$\alpha=n-1/k$，而这一指数间的关系正是 $p_{0}=\frac{2nk}{2nk-1}$.$\square$
+\end{proof}
+
+\noindent\textbf{进一步的文献评述.} 最初的限制定理可追溯到 1967 年，但未发表.$n=2$ 时的精确结果由 C.~Fefferman 与作者本人观察到，本质上可在 \cite{ref9} 中找到；另见 Zygmund \cite{ref33}.进一步的结果在 Thomas \cite{ref30}、\cite{ref31}、Strichartz \cite{ref29}、Prestini \cite{ref24}、Christ \cite{ref4} 与 Drury \cite{ref7} 中.
+\chapter{与奇异积分相关的第一类振动积分}
+
+\noindent 在沿曲线的 Hilbert 变换理论中用到的一个关键振动积分如下：
+\begin{equation}
+  \operatorname{p.v.}\int_{-\infty}^{\infty}e^{iP_{a}(t)}\,\frac{\mathrm{d}t}{t}, \label{eq:5.1}
+\end{equation}
+其中 $P_{a}(t)$ 是 $t$ 的次数为 $d$ 的实多项式，$P_{a}(t)=\sum_{j=0}^{d}a_{j}t^{j}$.Wainger 与作者在 \cite{ref27} 中证明了：该积分有界，且界只依赖于次数 $d$，与系数 $a_{0},a_{1},\cdots,a_{d}$ 无关.这类积分的相关性可参考 Wainger 的讲座 \cite{ref32} 从而更好地理解.我们这里感兴趣的是给出这一结果的一个 $n$ 维推广.我们把它表述如下.令 $K(x)$ 是次数为 $-n$ 的齐次函数；再设 $|K(x)|\leq A|x|^{-n}$（即 $K$ 在单位球面上有界）；此外，我们假定通常的消去性质：$\int_{|x'|=1}K(x')\,d\sigma(x')=0$.令 $P(x)=\sum_{|a|\leq d}a_{a}x^{a}$ 是任意次数为 $d$ 的实多项式.
+
+\begin{theorem}\label{thm:5}
+  \begin{equation}
+    \operatorname{p.v.}\left|\int_{\R^{n}}e^{iP(x)}K(x)\,\mathrm{d}x\right|\leq A_{d} \label{eq:5.2}
+  \end{equation}
+  其中界 $A_{d}$ 只依赖于 $K$ 与 $d$，而不依赖于系数 $a_{a}$.
+\end{theorem}
+
+\noindent Nagel 与 Wainger 观察到：若 $K$ 为奇函数，则可从一维形式\eqref{eq:5.1}通过旋转法（过渡到极坐标）证明\eqref{eq:5.2}.为处理一般情形，我们需要两个引理.
+
+\noindent 令 $P_{a}(t)=\sum_{j=1}^{d}a_{j}t^{j}$ 表示 $\R^{1}$ 上的一个实多项式，并记 $P_{b}(t)=\sum_{j=1}^{d}b_{j}t^{j}$.
+
+\begin{lemma}\label{lem:1}
+  \begin{equation}
+    \left|\int_{\varepsilon}^{\infty}\left(e^{iP_{a}(t)}-e^{iP_{b}(t)}\right)\frac{\mathrm{d}t}{t}\right|\leq A_{d}'\left(1+\sum_{j=1}^{d}\left|\log\left|\frac{a_{j}}{b_{j}}\right|\right|\right), \label{eq:5.3}
+  \end{equation}
+  其中 $A_{d}'$ 与 $\{a_{j}\}$、$\{b_{j}\}$ 及 $\varepsilon>0$ 无关.
+\end{lemma}
+
+\begin{lemma}\label{lem:2}
+  令 $P(x)=\sum_{|\alpha|=d}a_{\alpha}x^{\alpha}$ 是 $\R^{n}$ 上次数为 $d$ 的齐次多项式.记
+  \[
+    m_{P}=\int_{|x'|=1}|P(x')|\,d\sigma(x') .
+  \]
+  则
+  \begin{equation}
+    \int_{|x'|=1}\left|\log\left(\left|\frac{P(x')}{m_{P}}\right|\right)\right|d\sigma(x')\leq B_{d}, \label{eq:5.4}
+  \end{equation}
+  其中 $B_{d}$ 与 $P$ 无关.\footnote{当然在写\eqref{eq:5.4}时我们假定 $P$ 不恒为零，即 $m_{P}>0$.}
+\end{lemma}
+
+\noindent 若愿意，可以给引理~\ref{lem:2} 一个初等（但复杂）的证明.然而更有趣的是把它作为 $\R^{n}$ 中多项式的一个一般性质（与\newterm{bmo}{有界平均振动}{bounded mean oscillation}函数类有关）的推论.这一性质可陈述如下.众所周知函数 $\log|x|$ 属于 B.M.O.，这通常是该理论中讨论的第一个例子.因此下面这一自然推广似乎被忽视了，这一点令人惊讶.
+
+\begin{theorem}\label{thm:6}
+  令 $P(x)$ 是 $\R^{n}$ 中次数 $\leq d$ 的任意多项式.则 $\log|P(x)|$ 属于 B.M.O.，且此外
+  \[
+    \|\log|P(x)|\|_{\mathrm{BMO}}\leq B_{d},
+  \]
+  其中 $B_{d}$ 只依赖于 $d$，而不另行依赖于 $P$.
+\end{theorem}
+
+\noindent 定理~\ref{thm:6} 与引理~\ref{lem:2} 的证明将在附录中给出.我们现在转而证明引理~\ref{lem:1}.我们对 $d$ 用归纳法.$d=1$ 的情形，即估计
+\[
+  \left|\int_{\varepsilon}^{\infty}\left(e^{iat}-e^{ibt}\right)\frac{\mathrm{d}t}{t}\right|\leq A\left(1+\left|\log\left|\frac{a}{b}\right|\right|\right)
+\]
+是经典的.现在假设\eqref{eq:5.3}对次数为 $d-1$ 的多项式成立，并注意：若把 $t$ 换成 $\delta t$（$\delta\neq0$），我们要证的估计\eqref{eq:5.3}不变.于是可假定 $b_{d}=1$ 且 $|a_{d}|\leq1$.现在写
+\[
+  \int_{\varepsilon'}^{\infty}\left(e^{iP_{a}(t)}-e^{iP_{b}(t)}\right)\frac{\mathrm{d}t}{t} = \int_{\varepsilon'}^{1} + \int_{1}^{\infty},
+\]
+并分别处理这两个积分.（若 $\varepsilon'>1$，则只有 $\int_{\varepsilon'}^{\infty}$，且该积分与 $\int_{1}^{\infty}$ 一样估计.）考虑第二个积分.它等于
+\[
+  \int_{1}^{\infty}e^{iP_{a}(t)}\frac{\mathrm{d}t}{t} - \int_{1}^{\infty}e^{iP_{b}(t)}\frac{\mathrm{d}t}{t} .
+\]
+由于 $b_{d}=1$，我们看到 $(d/dt)^{d}P_{b}(t)=d!$，因此由第~1~节命题~\ref{prop:2} 的推论，
+\[
+  \left|\int_{1}^{\infty}e^{iP_{b}(t)}\frac{\mathrm{d}t}{t}\right|\leq c_{d} .
+\]
+接着，作变量替换 $t\to|a_{d}|^{-1/d}t$，积分 $\int_{1}^{\infty}e^{iP_{a}(t)}\frac{\mathrm{d}t}{t}$ 变为
+\[
+  \int_{|a_{d}|^{1/d}}^{\infty}e^{i\widetilde{P}_{a}(t)}\,\frac{\mathrm{d}t}{t} = \int_{|a_{d}|^{1/d}}^{1} + \int_{1}^{\infty}
+\]
+其中 $\widetilde{P}_{a}(t)$ 是次数为 $d$ 的多项式，且 $t^{d}$ 的系数为 $1$.同样地
+\[
+  \left|\int_{1}^{\infty}e^{i\widetilde{P}_{a}(t)}\frac{\mathrm{d}t}{t}\right|\leq c_{d},
+\]
+而
+\[
+  \left|\int_{|a_{d}|^{1/d}}^{1}\right|\leq\int_{|a_{d}|^{1/d}}^{1}\frac{\mathrm{d}t}{t}=\log\left|\frac{1}{|a_d|^{1/d}}\right|=\frac{1}{d}\left|\log\left|\frac{b_{d}}{a_{d}}\right|\right|
+\]
+因为 $b_{d}=1$.接下来
+\[
+  \int_{\varepsilon'}^{1}\left(e^{iP_{a}(t)}-e^{iP_{b}(t)}\right)\frac{\mathrm{d}t}{t} = \int_{\varepsilon'}^{1}\left(e^{iQ_{a}(t)}-e^{iQ_{b}(t)}\right)\frac{\mathrm{d}t}{t} + O\left(\int_{\varepsilon'}^{1}\mathrm{d}t\right),
+\]
+其中
+\[
+  Q_{a}(t)=\sum_{j=1}^{d-1}a_{j}t^{j},\qquad Q_{b}(t)=\sum_{j=1}^{d-1}b_{j}t^{j},
+\]
+因为 $|P_{a}(t)-Q_{a}(t)|\leq|t|$ 且 $|P_{b}(t)-Q_{b}(t)|\leq|t|$.然而由归纳假设（对 $\varepsilon'=\varepsilon$、$\varepsilon=1$ 和 $d-1$ 用\eqref{eq:5.3}），
+\[
+  \left|\int_{\varepsilon'}^{1}\left(e^{iQ_{a}(t)}-e^{iQ_{b}(t)}\right)\frac{\mathrm{d}t}{t}\right|\leq A_{d-1}'\left(1+\sum_{j=1}^{d-1}\left|\log\left|\frac{a_{j}}{b_{j}}\right|\right|\right).
+\]
+把所有这些项合起来，即证明了\eqref{eq:5.3}.
+
+\noindent 有了引理~\ref{lem:1} 与引理~\ref{lem:2}，我们现在可以证明定理~\ref{thm:5}.可假定 $\mathbf{P}(x)=\sum_{|\alpha|\leq d}a_{\alpha}x^{\alpha}$ 没有常数项，并利用极坐标 $x=tx'$（$t>0$，$|x'|=1$），写出 $\mathbf{P}(x)=\sum_{j=1}^{d}\mathbf{P}_{j}(x')t^{j}$，其中 $\mathbf{P}_{j}(x')$ 是次数为 $j$ 的齐次多项式在单位球面上的限制.再令 $m_{j}=\int_{|x'|=1}|\mathbf{P}_{j}(x')|\,d\sigma(x)$，并把 $\mathbf{K}(x)=t^{-n}\Omega(x')$ 写出，其中 $\Omega$ 有界且 $\int_{|x'|=1}\Omega(x')\,d\sigma(x')=0$.于是要证\eqref{eq:5.2}只需证明
+\[
+  \left|\int_{\varepsilon_{1}\leq|x|\leq\varepsilon_{2}}e^{iP(x)}K(x)\,\mathrm{d}x\right|\leq A_{d},
+\]
+其中 $A_{d}$ 与 $\varepsilon_{1}$、$\varepsilon_{2}$ 及 $P$ 无关.上述积分可写为
+\[
+  \int_{|x'|=1}\left(\int_{\varepsilon_{1}}^{\varepsilon_{2}}e^{i\sum_{j}P_{j}(x')t^{j}}\,\frac{\mathrm{d}t}{t}\right)\Omega(x')\,d\sigma(x') .
+\]
+由于 $\Omega$ 的均值为零，此积分可改写为
+\[
+  \int_{|x'|=1}\left(\int_{\varepsilon_{1}}^{\varepsilon_{2}}\left[\exp\left(i\sum_{j}P_{j}(x')t^{j}\right)-\exp\left(i\sum_{j}m_{j}t^{j}\right)\right]\frac{\mathrm{d}t}{t}\right)\Omega(x')\,d\sigma(x') .
+\]
+然而由引理~\ref{lem:1}，内层积分以
+\[
+  A_{d}'\left(1+\sum_{j=1}^{d}\left|\log\left|\frac{P_{j}(x')}{m_{j}}\right|\right|\right)
+\]
+为界，于是援引引理~\ref{lem:2} 即得
+\[
+  \int_{|x'|=1}\left|\int_{\varepsilon_{1}}^{\varepsilon_{2}}\exp\left(i\sum_{j}P_{j}(x')t^{j}\right)-\exp\left(i\sum_{j}m_{j}t^{j}\right)\frac{\mathrm{d}t}{t}\right|(\sup|\Omega(x')|)\,d\sigma(x')\leq A_{d},
+\]
+这证明了\eqref{eq:5.2}与定理~\ref{thm:5}.
+\chapter{第二类振动积分：与 Heisenberg 群相关的一个例子}
+
+\noindent 为说明对这一例子的兴趣，我们来回顾 Heisenberg 群 $H^{m}$ 的定义.$H^{m}$ 的底空间是 $\C^{m}\times\R$，即 $H^{m}=\{(z,t)\}$，其中 $z\in\C^{m}$，$t\in\R$；其乘法为 $(z,t)(w,s)=(z+w,\,t+s+\langle z,w\rangle)$，其中 $\langle z,w\rangle=2\operatorname{Im}\sum_{j=1}^{m}z_{j}\overline{w}_{j}$，$z=(z_{j})$，$w=(w_{j})$.在 Heisenberg 群上可以考虑两种类型的伸缩以及相应的拟距离.第一种是通常的伸缩 $(z,t)\to(\rho z,\rho t)$（$\rho>0$），其度量可用通常距离来定义.第二种是伸缩 $(z,t)\to(\rho z,\rho^{2}t)$，相应的（自原点起的）拟距离则是 $(|z|^{4}+t^{2})^{1/4}$.后一种伸缩与度量和如下事实密切相关：把 Heisenberg 群实现为广义上半空间的边界，后者与 $\C^{n+1}$ 中的单位球全纯等价.这一观点及相关推广在 Nagel 的讲座 \cite{ref21} 中有详细阐述.
+
+在当前背景下，若考虑与把 $H^{m}$ 视为 $\R^{2m+1}$ 时的通常位势论相关的表达式，则第一种伸缩及其对应度量是合适的.然而这两种冲突的伸缩（及相应度量）出现在例如 $\bar{\partial}u=f$ 的解中.（这一点例如在 Krantz 的讲座 \cite{ref17} 中可见，其中在 Henkin 公式里，核由若干函数的乘积组成，这些函数分属上面两种齐次性.\footnote{特别是 \cite{ref17} 第~6~节中出现的项 $A_{1}$ 与 $A_{2}$.}）其他这类表达式出现在 $\bar{\partial}$-Neumann 问题解的显式公式中（见 \cite{ref1} 第~7~章）.
+
+现在考虑 Heisenberg 群上同时显示这两种齐次性的最简单算子.其典型例子是
+\begin{equation}
+  Tf = f*K, \label{eq:6.1}
+\end{equation}
+其中卷积关于 Heisenberg 群而言，而核 $K$ 是如下形式的分布
+\begin{equation}
+  K(z,t) = L(z)\delta(t). \label{eq:6.2}
+\end{equation}
+$L(z)$ 是 $\C^{m}=\R^{2m}$ 中标准的 Calder\'on--Zygmund 核，即 $L(\rho z)=\rho^{-2m}L(z)$，$L$ 在原点之外光滑，且在单位球面上均值为零.这里 $\delta(t)$ 是 $t$ 变量中的 Dirac 函数，在显然意义下是齐次的：$\delta(\rho t)=\rho^{-1}\delta(t)$.于是 $K$ 关于标准伸缩是 $-2m-1$ 次齐次的，同时关于另一种伸缩是 $-2m-2$ 次齐次的；在这两种情形，次数都是临界次数.
+
+接下来我们要证明算子\eqref{eq:6.1}在 $L^{2}(H^{m})$ 上有界.最有效的方法是在 $t$ 变量中作傅里叶变换.这归结为如下问题：证明由
+\begin{equation}
+  (T_{\lambda})(F)(z)=\int_{\C^{m}}L(z-w)e^{i\lambda\langle z,w\rangle}F(w)\,\mathrm{d}w \label{eq:6.3}
+\end{equation}
+定义的算子族 $T_{\lambda}$（其中 $\langle z,w\rangle$ 是乘法法则中出现的反对称型）在 $\C^{m}$ 上的 $L^{2}$ 中一致有界，即对 $-\infty<\lambda<\infty$ 一致.\footnote{进一步的细节参见 Mauceri、Picardello 与 Ricci \cite{ref19}，以及 Geller 与 Stein \cite{ref11}\footnote{原书此处误引为 [10]，实际指参考文献 \cite{ref11}（Geller 与 Stein 关于 Heisenberg 群上算子的论文）.}与 Phong 与 Stein \cite{ref22}、\cite{ref23}.}
+
+现在改变记号，令 $2m=n$，$L=K$，$-\lambda\langle\cdot,\cdot\rangle=B(\cdot,\cdot)$，$F=f$.于是算子 $T_{\lambda}$ 具有形式
+\begin{equation}
+  (Tf)(x)=\int_{\R^{n}}K(x-y)e^{iB(x,y)}f(y)\,\mathrm{d}y. \label{eq:6.4}
+\end{equation}
+我们假定 $B$ 是实双线性型，但不假定 $B$ 一定反对称，也不假定 $K$ 是 $-n$ 次齐次的.
+
+\begin{theorem}\label{thm:7}
+  设 $K$ 是 $-\mu$ 次齐次的（$0\leq\mu\leq n$），在原点之外光滑，且当 $\mu=n$ 时均值为零.
+  \begin{enumerate}
+    \item[（a）] 若 $B$ 非退化，则由\eqref{eq:6.4}给出的算子 $T$ 在 $L^{2}(\R^{n})$ 到自身上有界，对 $0\leq\mu\leq n$；当 $1<p<\infty$ 时，算子 $T$ 在 $L^{p}(\R^{n})$ 到自身上有界，若 $\left|\frac{1}{2}-\frac{1}{p}\right|\leq\frac{\mu}{2n}$.
+    \item[（b）] 若去掉 $B$ 非退化的假设但要求 $\mu=n$，则 $T$ 在 $L^{p}(\R^{n})$ 到自身上有界，对 $1<p<\infty$.此时 $T$ 的界可取为与 $B$ 无关.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  我们只给出证明的要点，细节、进一步的变化与应用留给下面引用到的论文.首先考虑断言（a）当 $n/2<\mu\leq n$ 时的 $L^{2}$ 部分.设 $\eta$ 是一个 $C_0^\infty$ 函数，$|x|\leq1/2$ 时 $\eta(x)=1$，$|x|\geq1$ 时 $\eta(x)=0$.写 $T=T_{0}+T_{\infty}$，其中 $T_{0}$ 按\eqref{eq:6.4}定义，但把 $K$ 换成 $K_{0}=\eta K$；$T_{\infty}$ 把 $K$ 换成 $K_{\infty}=(1-\eta)K$.
+
+  首先注意：由于 $K_{0}(x-y)$ 支集于 $|x-y|\leq1$，估计 $|x|\leq1$ 球内的 $T_{0}(f)(x)$ 只涉及 $|y|\leq2$ 球内的 $f(y)$.我们断言
+  \begin{equation}
+    \int_{|x|\leq1}|T_{0}(f)(x)|^{2}\,\mathrm{d}x\leq A\int_{|y|\leq2}|f(y)|^{2}\,\mathrm{d}y . \label{eq:6.5}
+  \end{equation}
+  事实上当 $|x|\leq1$ 时，
+  \[
+    \begin{split}
+      &\left|\int K_{0}(x-y)e^{iB(x,y)}f(y)\,\mathrm{d}y-\int K_{0}(x-y)e^{iB(y,y)}f(y)\,\mathrm{d}y\right|\\
+      &\qquad\leq c\int_{|x-y|\leq1}|x-y|^{-\mu+1}|f(y)|\,\mathrm{d}y,
+    \end{split}
+  \]
+  于是 $f\mapsto f*K_{0}$ 的 $L^{2}$ 理论（仅在 $\mu=n$ 时非平凡）证明了\eqref{eq:6.5}.
+
+  虽然\eqref{eq:6.4}型算子不是平移不变的，但它们满足
+  \begin{equation}
+    \tau_{-h}T\tau_{h}f=e^{iB(h,h)}e^{iB(x,h)}T(e^{iB(h,\cdot)}f(\cdot)), \label{eq:6.6}
+  \end{equation}
+  其中 $\tau_{h}(f)(x)=f(x-h)$.把它用于 $T_{0}$，给出\eqref{eq:6.5}的如下推广：
+  \[
+    \int_{|x-h|\leq1}|T_{0}(f)(x)|^{2}\,\mathrm{d}x\leq A\int_{|y-h|\leq2}|f(y)|^{2}\,\mathrm{d}y,
+  \]
+  再对 $h$ 积分，得到
+  \[
+    \int_{\R^{n}}|T_{0}(f)(x)|^{2}\,\mathrm{d}x\leq A2^{n}\int_{\R^{n}}|f(y)|^{2}\,\mathrm{d}y .
+  \]
+
+  现在转向证明
+  \[
+    \int_{\R^{n}}|T_{\infty}f(x)|^{2}\,\mathrm{d}x\leq A\int_{\R^{n}}|f(x)|^{2}\,\mathrm{d}x .
+  \]
+  这将通过证明算子 $T_{\infty}^{*}T_{\infty}$ 的相应结果来完成.该算子的核 $L$ 由
+  \[
+    L(x,y)=\int e^{-iB(z,x-y)}\overline{K}_{\infty}(z-x)K_{\infty}(z-y)\,\mathrm{d}z
+  \]
+  给出.由于 $K_{\infty}\in L^{2}(\R^{n})$（此处用到了 $n/2<\mu$ 的假设），Schwarz 不等式推出
+  \[
+    |L(x,y)|\leq A .
+  \]
+  接下来在 $L(x,y)$ 的定义中分部积分，用 $(D_{z})^{N}e^{-iB(z,x-y)}=e^{-iB(z,x-y)}$，其中 $D_{z}=i(a,\nabla_{z})/|x-y|$，$a=B^{-1}\left(\frac{x-y}{|x-y|}\right)$，而 $B$ 表示使 $B(x,y)=(Bx,y)$ 的矩阵.结果是 $|L(x,y)|\leq A_{N}|x-y|^{-N}$，对每个 $N\geq0$，因此
+  \begin{equation}
+    |L(x,y)|\leq A_{N}(1+|x-y|)^{-N},\quad N\geq0 . \label{eq:6.7}
+  \end{equation}
+  这表明 $L$ 是 $L^{2}$ 上有界算子的核，从而证明了 $T_{\infty}^{*}T_{\infty}$ 的有界性，进而证明了 $T_{\infty}$ 的有界性.$0\leq\mu\leq n/2$ 时（定理（a）部分中）的 $L^{2}$ 有界性，以及 $\mu=n$ 但 $B$ 不假定非退化时的 $L^{2}$ 有界性，都是上述论证的细化.
+
+  我们现在描述证明前面（a）、（b）中所列 $L^{p}$ 不等式的主要思路.我们需要 BMO（以及 $H^{1}$）的一个推广，这本身可能就很有意思.设 $E=\{e_{Q}\}$ 是从 $\R^{n}$ 中全体立方体 $Q$ 的集合到 $\R^{n}$ 上复值函数的映射，使得
+  \[
+    |e_{Q}(x)|=\chi_{Q}(x),\quad\text{对所有 }x,
+  \]
+  其中 $\chi_{Q}$ 表示立方体 $Q$ 的特征函数.我们定义``$E$-原子''为函数 $a$，满足对某个立方体 $Q$：
+  \begin{enumerate}
+    \item[（i）] $a$ 支集于 $Q$；
+    \item[（ii）] $|a(x)|\leq1/|Q|$；
+    \item[（iii）] $\int a(x)\overline{e_{Q}}(x)\,\mathrm{d}x=0$.
+  \end{enumerate}
+  空间 $H_{E}^{1}$ 于是定义为 $\{f\mid f=\sum\lambda_{j}a_{j},\ \text{每个 }a_{j}\text{ 是 }E\text{-原子，且 }\sum|\lambda_{j}|<\infty\}$.类似地，函数 $f_{E}^{\#}$ 定义为
+  \begin{equation}
+    f_{E}^{\#}(x)=\sup_{x\in Q}\frac{1}{|Q|}\int_{Q}|f-f_{Q}^{E}|\,\mathrm{d}x, \label{eq:6.8}
+  \end{equation}
+  其中
+  \[
+    f_{Q}^{E}=\frac{e_{Q}}{|Q|}\int_{Q}f\overline{e_{Q}}\,\mathrm{d}y,
+  \]
+  并取 $\mathrm{BMO}_{E}=\{f\mid f_{E}^{\#}\in L^{\infty}\}$.
+
+  关于标准 $H^{1}$ 与 BMO 空间的一些基本事实\footnote{标准情形当然出现于 $e_{Q}=\chi_{Q}$（对所有 $Q$）时.}对 $H_{E}^{1}$ 与 $\mathrm{BMO}_{E}$ 仍然成立，有时这些事实不费任何代价就得到.其中一个例子是如下断言：设 $f\in L^{p_{0}}$，$1\leq p\leq p_{0}<\infty$，且 $f_{E}^{\#}\in L^{p}$.则 $f\in L^{p}$ 且
+  \begin{equation}
+    \|f\|_{L^{p}}\leq A_{p}\|f_{E}^{\#}\|_{L^{p}}. \label{eq:6.9}
+  \end{equation}
+  要证此式，我们只需注意到 $(|f|)^{\#}\leq2f_{E}^{\#}$，并对标准的 $\#$ 函数使用结果（见 \cite{ref10}）.
+
+  这一切的意义在于：对\eqref{eq:6.4}形式的算子，存在自然联系的 $H_{E}^{1}$ 与 $\mathrm{BMO}_{E}$ 理论，它由如下选取给出：
+  \begin{equation}
+    e_{Q}(x)=e^{-iB(x,c_{Q})}, \label{eq:6.10}
+  \end{equation}
+  其中 $c_{Q}$ 是立方体 $Q$ 的中心.$L^{p}$ 理论中的基本步骤（除了经由\eqref{eq:6.9}的适当插值外）是证明：当 $\mu=n$ 时算子 $T$ 把 $L^{\infty}$ 映到 $\mathrm{BMO}_{E}$.我们给出情形（a）的证明.可假定 $\|f\|_{L^{\infty}}\leq1$，并首先设 $Q$ 是以原点为中心的立方体.于是我们必须证明存在常数 $\gamma_{Q}$，使得
+  \begin{equation}
+    \frac{1}{|Q|}\int_{Q}|Tf-\gamma_{Q}|\,\mathrm{d}x\leq A . \label{eq:6.11}
+  \end{equation}
+  以另一点（比如 $c_{Q}$）为中心的立方体所对应的不等式，则由平移公式\eqref{eq:6.6}推出（这也是我们如此定义 $e_{Q}$ 的原因）.转向\eqref{eq:6.11}，论证与标准情形（例如见 Coifman 的讲座 \cite{ref5} 或 \cite{ref9}）不完全相同，因为我们必须把 $f$ 分成三部分，以顾及 $e^{iB(x,y)}$ 的振荡.设 $Q=Q_{\delta}$ 的边长为 $\delta$，则写 $f=f_{1}+f_{2}+f_{3}$，其中
+  \[
+    f_{1}=f\ \text{于 }Q_{2\delta},\ f_{1}=0\ \text{别处},
+  \]
+  \[
+    f_{2}=f\ \text{于 }{}^cQ_{2\delta}\cap Q_{\delta^{-1}},\ f_{2}=0\ \text{别处},
+  \]
+  \[
+    f_{3}=f\ \text{于 }{}^cQ_{2\delta}\cap{}^cQ_{\delta^{-1}},\ f_{3}=0\ \text{别处} .
+  \]
+  （注意 $f_{2}$ 仅在 $\delta\leq\sqrt{2}/2$ 时出现.）我们有 $F=T(f)=F_{1}+F_{2}+F_{3}$，其中 $F_{j}=T(f_{j})$.对 $F_{1}$，我们作通常的估计，用到 $T$ 在 $L^{2}$ 上有界这一事实.接下来注意
+  \[
+    |K(x-y)e^{iB(x,y)}-K(-y)|\leq c\delta\left[\frac{1}{|y|^{n+1}}+\frac{1}{|y|^{n-1}}\right],
+  \]
+  若 $x\in Q_{\delta}$ 且 $y\in{}^cQ_{2\delta}$.于是若 $\gamma_{Q}=\int K(-y)f_{2}(y)\,\mathrm{d}y$，则对 $x\in Q_{\delta}$，
+  \[
+    |F_{2}(x)-\gamma_{Q}|\leq A\left\{\delta\int_{{}^{c}Q_{2\delta}}\frac{\mathrm{d}y}{|y|^{n+1}}+\delta\int_{Q_{\delta^{-1}}}\frac{\mathrm{d}y}{|y|^{n-1}}\right\}\leq A' .
+  \]
+  最后
+  \begin{align*}
+    F_{3}(x)&=\int K(x-y)e^{iB(x,y)}f_{3}(y)\,\mathrm{d}y\\
+    &=\int(K(x-y)-K(-y))e^{iB(x,y)}f_{3}(y)\,\mathrm{d}y+\int K(-y)f_{3}(y)e^{iB(x,y)}\,\mathrm{d}y\\
+    &=F_{3}^{1}+F_{3}^{2}.
+  \end{align*}
+  对 $F_{3}^{1}$ 我们又作标准估计；对 $F_{3}^{2}$ 我们用 Plancherel 公式（因为我们假设了 $B(x,y)$ 非退化，故可这样做）.结果是
+  \[
+    \int_{Q}|F_{3}^{2}(x)|^{2}\,\mathrm{d}x\leq\int_{\R^{n}}|F_{3}^{2}(x)|^{2}\,\mathrm{d}x=A\int_{\R^{n}}|K(-y)f_{3}(y)|^{2}\,\mathrm{d}y\leq A'\int_{{}^{c}Q_{\delta^{-1}}}\frac{\mathrm{d}y}{|y|^{2n}}=A\delta^{n}.
+  \]
+  把这些估计合起来即证明了\eqref{eq:6.11}，从而证明 $T$ 把 $L^{\infty}$ 映到 $\mathrm{BMO}_{E}$.
+\end{proof}
+
+\noindent 现在陈述该定理的一个推广，它也包含定理~\ref{thm:5}（第~5~节）所给出的振动积分结果.设 $\mathbf{P}(x,y)$ 是 $\R^{n}\times\R^{n}$ 上总次数为 $d$ 的实多项式.考虑算子
+\begin{equation}
+  (Tf)(x)=\operatorname{p.v.}\int_{\R^{n}}e^{iP(x,y)}K(x-y)f(y)\,\mathrm{d}y, \label{eq:6.12}
+\end{equation}
+其中 $K$ 是 $-n$ 次齐次、在原点之外光滑且均值为零的.
+
+\begin{theorem}\label{thm:8}
+  由\eqref{eq:6.12}给出的算子 $T$ 在 $L^{2}(\R^{n})$ 到自身上有界，且其界可取得只依赖于 $K$ 与 $P$ 的次数，此外与 $P$ 无关.
+\end{theorem}
+
+\noindent 这是与 F.~Ricci 合作最近获得的结果.证明部分地基于证明定理~\ref{thm:5} 与定理~\ref{thm:7} 所用的思想之综合.这一结果还有许多变体，我们现在陈述其中一些：
+\begin{enumerate}
+  \item[（i）] 还可证明\eqref{eq:6.12}的算子在 $L^{p}$（$1<p<\infty$）上有界.
+  \item[（ii）] 给定 $p$，$1<p<\infty$，则存在 $\varepsilon=\varepsilon(p,d)$，使得若 $K$ 是 $-\mu$ 次齐次的，且 $n-\varepsilon\leq\mu\leq n$，则 $T$ 仍在 $L^{p}$ 上有界.然而此时界可能依赖于 $P$，并且还需假定 $P(x,y)$ 不是形如 $P(x,y)=P_{0}(x)+P_{1}(y)$ 的项.
+  \item[（iii）] 可把\eqref{eq:6.12}中的 $K(x-y)$ 换成更一般的``Calder\'on--Zygmund 核''$K(x,y)$，即一个分布，使得 $P\equiv0$ 时该算子在 $L^{2}$ 上有界，并且此外（当 $x\neq y$ 时）是一个函数，满足 $|K(x,y)|\leq A|x-y|^{-n}$，$|\nabla_{x}K(x,y)|+|\nabla_{y}K(x,y)|\leq A|x-y|^{-n-1}$.
+\end{enumerate}
+
+\noindent\textbf{参考文献提示.} 定理~\ref{thm:7} 的详细证明、其他变体以及应用，参见上面引用到的论文 \cite{ref19}、\cite{ref22}、\cite{ref23} 等.
+
+\chapter{与限制性定理和 Bochner--Riesz 可和性相关的进一步振动积分}
+
+\noindent 我们已经看到，若 $S$ 是 $\R^{n}$ 中 Gauss 曲率非零的一个超曲面，则
+\[
+  \int_{S}e^{ix\cdot\xi}\psi(x)\,d\sigma(x)=O(|\xi|^{-(n-1)/2}),\quad\text{当 }\xi\to\infty
+\]
+只要 $\psi\in C_0^\infty$；这是一个典型的第一类振动积分.当我们把 $C_0^\infty$ 函数 $\psi$ 换成一个 $L^{r}$ 函数 $f$，并考虑所得的关于 $f$ 的线性算子时，就过渡到了一个第二类振动积分.易知所得的算子事实上是第~4~节所考虑的限制算子的对偶.因此由定理~\ref{thm:3} 我们可以断言该算子事实上是从 $L^{2}(d\sigma)$ 到 $L^{p'}(\R^{n})$ 有界的，其中 $p'$ 是 $\frac{2n+2}{n+3}$ 的对偶指数.现在我们描述在 $n=2$ 时能得到的更精确结果.
+
+我们固定一条曲线 $t\to\gamma(t)=(t,\gamma_{2}(t))$，$0\leq t\leq1$，位于 $\R^{2}$ 中，$\gamma(t)\in\C^{2}$，且具有非零曲率，即 $|\gamma_{2}''(t)|\geq c>0$.考虑变换 $T$，它把区间 $[0,1]$ 上的函数映射到 $\R^{2}$ 上的函数：
+\begin{equation}
+  (Tf)(\xi)=\int_{0}^{1}e^{i\xi\cdot\gamma(t)}f(t)\,\mathrm{d}t . \label{eq:7.1}
+\end{equation}
+
+\begin{theorem}\label{thm:9}
+  在上述假设之下，$T$ 从 $L^{p}[0,1]$ 到 $L^{q}(\R^{2})$ 有界，只要 $\frac{3}{q}+\frac{1}{p}=1$ 且 $1\leq p<4$.
+\end{theorem}
+
+\noindent（注意当 $p\to4$ 时，在上面的 $p$、$q$ 关系中 $q\to4$.）
+
+\begin{proof}
+  写出
+  \begin{equation}
+    F(\xi)=((Tf)(\xi))^{2}=\int_{0}^{1}\int_{0}^{1}e^{i\xi\cdot(\gamma(s)+\gamma(t))}f(s)f(t)\,\mathrm{d}s\,\mathrm{d}t, \label{eq:7.2}
+  \end{equation}
+  并试图对 $F$ 应用 Plancherel 定理（更确切地说，Hausdorff--Young 不等式）.为此把上述积分按 $t>s$ 或 $t\leq s$ 分成两个本质上相等的部分，这把 $[0,1]\times[0,1]$ 分成两个区域 $R_{1}$ 与 $R_{2}$ 的并.然后考虑由 $x=\gamma(s)+\gamma(t)$（即 $x_{1}=s+t$，$x_{2}=\gamma_{2}(s)+\gamma_{2}(t)$）给出的映射 $R_{1}\to\R^{2}$.基于我们的假设，容易验证该映射是一一的，且其 Jacobi 行列式 $J$ 满足 $|J|=|\gamma_{2}'(s)-\gamma_{2}'(t)|\geq c|s-t|$.因此
+  \begin{equation}
+    \int_{R_{1}}e^{i\xi\cdot(\gamma(s)+\gamma(t))}f(s)f(t)\,\mathrm{d}s\,\mathrm{d}t=\int_{\R^{2}}e^{i\xi\cdot x}f(x_{1},x_{2})\,\mathrm{d}x_{1}\,\mathrm{d}x_{2}, \label{eq:7.3}
+  \end{equation}
+  其中 $f(x_{1},x_{2})=f(s)f(t)|J|^{-1}$.
+
+  于是若用 $F_{1}(\xi)$ 表示\eqref{eq:7.3}中出现的量，则只要 $1\leq r\leq2$ 且 $1/r'+1/r=1$，我们便有
+  \begin{equation}
+    \|F_{1}\|_{L^{r'}(\R^{2})}\leq c\|f\|_{L^{r}(\R^{2})} . \label{eq:7.4}
+  \end{equation}
+  然而
+  \begin{align*}
+    \|f\|_{L^{r}(\R^{2})}^{r} &= \iint|f(x_{1},x_{2})|^{r}\,\mathrm{d}x_{1}\,\mathrm{d}x_{2}\\
+    &= \int|f(s)|^{r}|f(t)|^{r}|J|^{1-r}\,\mathrm{d}s\,\mathrm{d}t\\
+    &\leq c\int|f(s)|^{r}|f(t)|^{r}|s-t|^{1-r}\,\mathrm{d}s\,\mathrm{d}t .
+  \end{align*}
+  为估计最后一个积分，我们需要援引如下形式的一维分数次积分定理：
+  \[
+    \int g(s)g(t)(s-t)^{-1+\alpha}\,\mathrm{d}s\,\mathrm{d}t\leq A\|g\|_{u},\qquad \frac{2}{u}-1=\alpha,\ 0<\alpha<1 .
+  \]
+  于是取 $g(t)=|f(t)|^{r}$，则当 $p=ur$ 时 $\|g\|_{u}=\|f\|_{p}^{r}$.再固定 $\alpha$，使 $-1+\alpha=1-r$，则 $\frac{3-r}{2}=\frac{1}{u}$，且 $p=\frac{2r}{3-r}$.限制 $0<\alpha$ 成为 $r<2$，取 $q=2r'$，由\eqref{eq:7.4}得
+  \[
+    \|F_{1}\|_{L^{r'}(\R^{2})}\leq c'\left(\int_{0}^{1}|f(t)|^{p}\,\mathrm{d}t\right)^{2/p},
+  \]
+  对 $F_{2}(\xi)$——它是\eqref{eq:7.4}的类似物，但取在 $R_{2}$ 上——也有类似的估计.由于 $F=F_{1}+F_{2}$ 且 $F=(Tf)^{2}$，我们得到
+  \[
+    \|T(f)\|_{L^{q}(\R^{2})}\leq A\|f\|_{L^{p}[0,1]} .
+  \]
+  注意 $\frac{3}{q}=\frac{3}{2r'}=\frac{3r-3}{2r}=1-\frac{1}{p}$，所以 $\frac{3}{q}+\frac{1}{p}=1$，且限制 $1\leq r<2$ 等价于 $1\leq p=\frac{2r}{3-r}<4$.定理~\ref{thm:9} 因此得证.
+\end{proof}
+
+\noindent 显然傅里叶变换的不等式在上述论证中起关键作用.若想推广定理~\ref{thm:9}，自然要寻找傅里叶变换的 $L^{2}$ 有界性与 Hausdorff--Young 定理的相应推广.沿着这条线的一个结果如下.
+
+\noindent 考虑依赖于参数 $\lambda$（$\lambda>0$）的算子族 $T$，由
+\[
+  T_{\lambda}(f)(\xi)=\int_{\R^{n}}e^{i\lambda\Phi(x,\xi)}\psi(x,\xi)f(x)\,\mathrm{d}x
+\]
+定义，其中 $\psi$ 是固定的 $C_{0}^{\infty}(\R^{n}\times\R^{n})$ 截断函数；$\Phi$ 是实值 $C^{\infty}$ 相位函数，我们假定它满足其 Hessian 非退化，即
+\setcounter{equation}{5}
+\begin{equation}
+  \det\left(\frac{\partial^{2}\Phi(x,\xi)}{\partial x_{i}\partial\xi_{j}}\right)\neq0 . \label{eq:7.6}
+\end{equation}
+
+\begin{proposition*}
+  \begin{equation}
+    \|T_{\lambda}(f)\|_{L^{2}(\R^{n})}\leq A\lambda^{-n/2}\|f\|_{L^{2}(\R^{n})} . \label{eq:7.7}
+  \end{equation}
+\end{proposition*}
+
+\begin{corollary*}
+  \begin{equation}
+    \|T_{\lambda}(f)\|_{L^{p'}(\R^{n})}\leq A\lambda^{-n/p'}\|f\|_{L^{p}(\R^{n})}, \label{eq:7.8}
+  \end{equation}
+  其中 $1\leq p\leq2$，且 $1/p+1/p'=1$.
+\end{corollary*}
+
+\begin{remark*}
+  $T_{\lambda}$ 对任意固定 $\lambda$ 的有界性是平凡的，但有趣的是当 $\lambda\to\infty$ 时范数的衰减.这一衰减与 $\Phi(x,\xi)$ 为双线性（且非退化）的特殊情形一致；在该情形令 $\lambda\to\infty$，即恢复傅里叶变换通常的 $(L^{p},L^{p'})$ 不等式.还要注意推论由命题通过 M.~Riesz 凸性定理推出.
+\end{remark*}
+
+\begin{proof}
+  为证\eqref{eq:7.7}，我们照定理~\ref{thm:7} 证明的方式论证；与对 $T_{\infty}$ 的处理一样，只需证明 $T_{\lambda}^{*}T_{\lambda}$ 的算子范数以 $A\lambda^{-n}$ 为界.此算子的核是函数 $K_{\lambda}(\xi,\eta)$，由
+  \begin{equation}
+    K_{\lambda}(\xi,\eta)=\int_{\R^{n}}e^{i\lambda(\Phi(x,\eta)-\Phi(x,\xi))}\psi(x,\eta)\overline{\psi(x,\xi)}\,\mathrm{d}x \label{eq:7.9}
+  \end{equation}
+  给出.由于
+  \[
+    \Delta(x,\xi,\eta)=(a,\nabla_{x})[\Phi(x,\eta)-\Phi(x,\xi)]=\left(\frac{\partial^{2}\Phi}{\partial x\partial\xi}a,\ \eta-\xi\right)+O|\eta-\xi|^{2},
+  \]
+  我们可以找到 $a=(a_{1},\cdots,a_{n})$，使得 $a_{j}$ 光滑地依赖于 $x$，且在 $K_{\lambda}(\xi,\eta)$ 的支集上 $|\Delta(x,\xi,\eta)|\geq c|\xi-\eta|$.令 $D_{x}=\frac{1}{i\lambda\Delta}(a,\nabla_{x})$.于是由于 $(D_{x})^{N}e^{i\lambda(\Phi(x,\eta)-\Phi(x,\xi))}=e^{i\lambda(\Phi(x,\eta)-\Phi(x,\xi))}$，我们可在\eqref{eq:7.9}中分部积分 $N$ 次，得到
+  \begin{equation}
+    |K_{\lambda}(\xi,\eta)|\leq A_{N}(1+\lambda|\xi-\eta|)^{-N},\quad N\geq0 . \label{eq:7.10}
+  \end{equation}
+  取 $N=n+1$，由\eqref{eq:7.10}即知以 $K_{\lambda}$ 为核的算子 $T_{\lambda}^{*}T_{\lambda}$ 的范数以 $A\lambda^{-n}$ 为界，命题得证.
+\end{proof}
+
+\noindent 现在我们来表述形如
+\begin{equation}
+  (T_{\lambda}f)(\xi)=\int_{\R^{n-1}}e^{i\lambda\Phi(t,\xi)}\psi(t,\xi)f(t)\,\mathrm{d}t,\qquad\xi\in\R^{n}, \label{eq:7.11}
+\end{equation}
+的振动积分的若干定理，它们将推广限制性定理（上面的定理~\ref{thm:9} 以及第~4~节的定理~\ref{thm:3}），并给 Bochner--Riesz 可和性以结果.
+
+注意\eqref{eq:7.11}是把 $\R^{n-1}$ 上的函数映射到 $\R^{n}$ 上的函数.对实相位函数 $\Phi$ 的基本假设如下：对每个固定的 $(t^{0},\xi^{0})$，考虑相关的双线性型 $\mathbf{B}(u,v)=(v,\nabla_{t})(u,\nabla_{\xi})(\Phi)(t^{0},\xi^{0})$，其中 $u\in\R^{n-1}$，$v\in\R^{n}$.我们的第一个假设是
+\begin{equation}\tag{$7.12\mathrm{a}$}\label{eq:7.12a}
+  \mathbf{B}\text{ 的秩为 }n-1 .
+\end{equation}
+于是存在（本质上唯一的）$\bar{u}\in\R^{n}$，$|\bar{u}|=1$，使得标量函数 $t\mapsto(\bar{u},\nabla_{\xi}\Phi(t,\xi))$ 在 $(t^{0},\xi^{0})$ 处有一个临界点.我们还假定该临界点是非退化的，即假定如下 $(n-1)\times(n-1)$ 行列式非零：
+\begin{equation}\tag{$7.12\mathrm{b}$}\label{eq:7.12b}
+  \det\left(\nabla_{t}^{2}(\bar{u},\nabla_{\xi}\Phi)\right)(t^{0},\xi^{0})\neq0 .
+\end{equation}
+这些假设将假定在 $\psi(t,\xi)$ 的支集内所有 $(t^{0},\xi^{0})$ 处成立，其中 $\psi$ 是 $C_{0}^{\infty}(\R^{n-1}\times\R^{n})$ 中一个固定函数.
+
+\setcounter{equation}{12}
+\begin{theorem}\label{thm:10}
+  在上述假设之下，算子\eqref{eq:7.11}满足
+  \begin{equation}
+    \|T_{\lambda}(f)\|_{q}\leq A\lambda^{-n/q}\|f\|_{p} \label{eq:7.13}
+  \end{equation}
+  其中 $q=\frac{n-1}{n+1}\,p'$，$\frac{1}{p}+\frac{1}{p'}=1$，且
+  \begin{enumerate}
+    \item[（a）] 当 $n=2$ 时，若 $1\leq p<4$；
+    \item[（b）] 当 $n\geq3$ 时，若 $1\leq p\leq2$.
+  \end{enumerate}
+\end{theorem}
+
+\noindent\textbf{注：}
+（1）当 $\Phi(t,\xi)=t_{1}\xi_{1}+t_{2}\xi_{2}+\cdots+t_{n-1}\xi_{n-1}+\phi(t_{1},\cdots,t_{n-1})\cdot\xi_{n}$ 且 $(\nabla\phi)(0)=0$ 时，\eqref{eq:7.12a}在原点附近等价于图 $t_{n}=\phi(t_{1},\cdots,t_{n-1})$ 的 Gauss 曲率非零.若把\eqref{eq:7.13}的结果应用于 $\lambda\to\infty$，则不难从（a）恢复定理~\ref{thm:9}，从（b）恢复定理~\ref{thm:3}.
+
+（2）部分（a）的证明与上面给定理~\ref{thm:9} 的证明同法，只需把\eqref{eq:7.8}用作 Hausdorff--Young 定理的替代；进一步的细节以及与 Bochner--Riesz 可和性的关系可见 Carleson--Sj\"olin \cite{ref3} 与 H\"ormander \cite{ref15} 的论文.由于部分（b）此前尚未出现，我们将概述其证明.这也可作为我们所讨论的许多概念的一次良好回顾.
+
+\begin{proof}[部分（b）的证明]
+  只需证明 $p=2$ 的情形，因为 $p=1$ 的情形是平凡的，其余情形由插值得到.现在 $p=2$ 的情形由对偶等价于如下陈述：
+  \begin{equation}
+    \|T_{\lambda}^{*}(F)\|_{L^{2}(\R^{n-1})}\leq A\lambda^{-n/r'}\|F\|_{L^{r}(\R^{n})} \label{eq:7.14}
+  \end{equation}
+  其中 $r=\frac{2(n+1)}{n+3}$，且
+  \[
+    (T_{\lambda}^{*})(F)(t)=\int_{\R^{n}}e^{-i\lambda\Phi(t,\xi)}\overline{\psi(t,\xi)}F(\xi)\,\mathrm{d}\xi,\qquad t\in\R^{n-1} .
+  \]
+  我们可以计算
+  \[
+    \int_{\R^{n-1}}T_{\lambda}^{*}(F)\overline{T_{\lambda}^{*}(F)}\,\mathrm{d}t
+  \]
+  并写成
+  \[
+    \int_{\R^{n}\times\R^{n}}K_{\lambda}(\xi,\eta)F(\xi)\overline{F}(\eta)\,\mathrm{d}\xi\,\mathrm{d}\eta,
+  \]
+  其中
+  \begin{equation}
+    K_{\lambda}(\xi,\eta)=\int_{\R^{n-1}}e^{i\lambda(\Phi(t,\eta)-\Phi(t,\xi))}\psi(t,\eta)\overline{\psi}(t,\xi)\,\mathrm{d}t . \label{eq:7.15}
+  \end{equation}
+  因此只需看到 $K_{\lambda}$ 是从 $L^{r}(\R^{n})$ 到 $L^{r'}(\R^{n})$ 的有界算子的核，且范数不超过 $A\lambda^{-2n/r'}$.
+
+  由于对 $\Phi$ 的假设，我们可以构造 $\R^{n}\times\R^{n}$ 上的一个相位函数 $\widetilde{\Phi}$，使得下述成立：把 $x\in\R^{n}$ 写成 $(t,x_{n})$，其中 $t=(x_{1},\cdots,x_{n-1})\in\R^{n-1}$.我们要构造的 $\widetilde{\Phi}$ 满足：
+  \begin{enumerate}
+    \item[（i）] $\widetilde{\Phi}(x,\xi)=\Phi(t,\xi)+\Phi_{0}(\xi)x_{n}$；
+    \item[（ii）] $n\times n$ 矩阵 $\nabla_{x}\nabla_{\xi}\widetilde{\Phi}$ 的行列式非零.
+  \end{enumerate}
+  事实上由假设\eqref{eq:7.12a}，$\nabla_{t}\nabla_{\xi}\Phi$ 的秩已经为 $n-1$，所以我们只需选取 $\Phi_{0}(\xi)$ 使 $(u,\nabla_{\xi})\Phi_{0}(\xi)\neq0$，从而把 $\nabla_{x}\nabla_{\xi}\widetilde{\Phi}$ 的秩提高到 $n$.
+
+  现在，同第~4~节定理~\ref{thm:3} 的证明一样，我们构造由
+  \[
+    K_{\lambda}^{s}(\xi,\eta)=\frac{e^{s^{2}}}{\Gamma(s/2)}\int_{\R^{n}}e^{i\lambda(\widetilde{\Phi}(x,\eta)-\widetilde{\Phi}(x,\xi))}\psi(t,\eta)\overline{\psi}(t,\xi)|x_{n}|^{-1+s}\nu(x_{n})\,\mathrm{d}x,
+  \]
+  定义的 $K_{\lambda}^{s}$，其中 $\mathrm{d}x=\mathrm{d}t\,\mathrm{d}x_{n}$，$\nu$ 是一个在原点附近等于 $1$ 的 $C_{0}^{\infty}$ 函数.我们容易验证
+  \begin{equation}
+    K_{\lambda}^{0}(\xi,\eta)=K_{\lambda}(\xi,\eta), \label{eq:7.16}
+  \end{equation}
+  因为当 $x=(t,0)$ 时 $\widetilde{\Phi}(x,\xi)=\Phi(t,\xi)$.接下来
+  \begin{equation}
+    K_{\lambda}^{1+it}\ \text{是从 }L^{2}(\R^{n})\text{ 到自身的核，其范数}\leq A\lambda^{-n/2} . \label{eq:7.17}
+  \end{equation}
+  这由应用上面命题的估计\eqref{eq:7.7}并使用 $\widetilde{\Phi}(x,\xi)$ 的 Hessian 非退化性而得到.最后我们断言
+  \begin{equation}
+    |K_{\lambda}^{-n/2+1/2+it}(\xi,\eta)|\leq A . \label{eq:7.18}
+  \end{equation}
+  为见此事，把 $K_{\lambda}^{s}(\xi,\eta)$ 写成 $K_{\lambda}(\xi,\eta)\hat{\nu}_{s}(\lambda(\Phi_{0}(\eta)-\Phi_{0}(\xi)))$，其中
+  \[
+    \hat{\nu}_{s}(u)=\frac{e^{s^{2}}}{\Gamma(s/2)}\int_{-\infty}^{\infty}e^{ix_{n}u}\nu(x_{n})|x_{n}|^{-1+s}\,\mathrm{d}x_{n} .
+  \]
+  于是由于 $|\hat{\nu}_{-n/2+1/2+it}(u)|\leq c|u|^{n/2-1/2}$（当 $u\to\infty$），我们看到：要证\eqref{eq:7.18}，只需证明
+  \begin{equation}
+    |K_{\lambda}(\xi,\eta)|\leq A(\lambda|\eta-\xi|)^{-n/2+1/2} . \label{eq:7.19}
+  \end{equation}
+  在证明由\eqref{eq:7.15}给出的 $K_{\lambda}$ 的这一估计时，可假定被积函数支集于给定点 $t=t_{0}$ 的充分小邻域内（否则可把它写成有限多个这样的项之和）.当我们写 $\Phi(t,\eta)-\Phi(t,\xi)=(\nabla_{\xi}\Phi)(t,\eta)\cdot(\eta-\xi)+O(|\eta-\xi|^{2})$ 时，我们看到有两类情形，如同第~3~节定理~\ref{thm:1} 的证明：$1^{\circ}$ 当方向 $\eta-\xi$ 或 $\xi-\eta$ 接近由条件\eqref{eq:7.12b}出发的临界方向 $u$ 时；$2^{\circ}$ 相反的情形.在第一种情形，我们用平稳相位法（即第~2~节命题~\ref{prop:6}）得到\eqref{eq:7.19}.在第二种情形，由命题~\ref{prop:4}，我们实际得到对每个 $N\geq0$ 的 $O(\lambda|\eta-\xi|)^{-N}$ 作为估计.这就完成了\eqref{eq:7.18}的证明，并表明 $K_{\lambda}^{-n/2+1/2+it}$ 是从 $L^{1}(\R^{n})$ 到 $L^{\infty}(\R^{n})$ 的有界算子的核，且界关于 $\lambda$ 一致.定理的证明随后由插值定理（如同定理~\ref{thm:3} 的证明）完成.
+\end{proof}
+\chapter{附录}
+
+\noindent 这里我们证明第~5~节所述引理~\ref{lem:2} 与定理~\ref{thm:6}.首先令 $\mathcal{P}_{d}$ 表示 $\R^{n}$ 中次数 $\leq d$ 的多项式所成的线性空间.我们断言存在常数 $A_{d}$，使得
+\begin{equation}
+  \left(\frac{1}{|Q|}\int_{Q}|P(x)|^{2}\,\mathrm{d}x\right)^{1/2}\leq A_{d}\frac{1}{|Q|}\int_{Q}|P(x)|\,\mathrm{d}x \label{eq:8.1}
+\end{equation}
+对所有 $P\in\mathcal{P}_{d}$ 与所有立方体 $Q$ 成立.
+
+空间 $\mathcal{P}_{d}$ 在平移与伸缩下不变，因此稍加思索可知：要证对所有 $P\in\mathcal{P}_{d}$ 的\eqref{eq:8.1}，只需对 $Q=Q_{0}$（以原点为中心的单位立方体）证之.然而 $\left(\int_{Q_{0}}|P(x)|^{2}\,\mathrm{d}x\right)^{1/2}$ 与 $\int_{Q_{0}}|P(x)|\,\mathrm{d}x$ 是有限维空间 $\mathcal{P}_{d}$ 上的两个（等价的）范数，所以\eqref{eq:8.1}对 $Q=Q_{0}$ 成立，进而对一般 $Q$ 成立.
+
+现在众所周知（例如见 \cite{ref6}），满足``反 H\"older''不等式的函数属于权空间 $A_{\infty}$.考察这一事实的证明，可得到一个 $r=r(d)$（$0<r<\infty$）和一个常数 $C_{d}$，使得
+\begin{equation}
+  \left(\frac{1}{|Q|}\int_{Q}|P(x)|\,\mathrm{d}x\right)\cdot\left(\frac{1}{|Q|}\int_{Q}|P(x)|^{-r}\,\mathrm{d}x\right)^{1/r}\leq C_{d} \label{eq:8.2}
+\end{equation}
+对所有立方体 $Q$ 成立.
+
+由\eqref{eq:8.2}与 Jensen 不等式，定理~\ref{thm:6} 容易推出.现在假定 $P$ 是 $d$ 次齐次的.还要注意：由于\eqref{eq:8.2}成立，若我们以条件 $m_{P}=\int_{|x|=1}|P(x)|\,d\sigma(x)=1$ 归一化 $P$，则可推出
+\begin{equation}
+  \int_{|x|=1}|P(x)|^{-r}\,d\sigma(x)\leq c_{d}' . \label{eq:8.3}
+  \end{equation}
+然而当 $u>0$ 时，$|\log u|=\log^{+}u+\log^{+}\frac{1}{u}\leq u+\frac{1}{r}u^{-r}$.因此当 $m_{P}=1$ 时，\eqref{eq:8.3}推出\eqref{eq:5.4}，于是该结果一般地也成立.
+
+\bigskip
+\begin{flushright}
+  \textbf{E. M. Stein}\\
+  数学系\\
+  Princeton 大学\\
+  Princeton, New Jersey 08544
+\end{flushright}
+
+% 参考文献标题由 \thebibliography（本类已为其补页眉/目录/书签）自行生成,
+% 与 "引言" 同款无编号章样式;这里不再手写标题,以免叠印.
+\begin{thebibliography}{33}
+\bibitem{ref1} M. Beals, C. Fefferman, and R. Grossman, ``Strictly pseudo-convex domains,'' Bull. A.M.S. \textbf{8} (1983), 125--322.
+\bibitem{ref2} J. E. Bj\"orck, ``On Fourier transforms of smooth measures carried by real-analytic submanifolds of $\R^{n}$,'' preprint 1973.
+\bibitem{ref3} L. Carleson and P. Sj\"olin, ``Oscillatory integrals and a multiplier problem for the disc,'' Studia Math. \textbf{44} (1972), 287--299.
+\bibitem{ref4} M. Christ, ``On the restriction of the Fourier transform to curves,'' Trans. Amer. Math. Soc. \textbf{287} (1985), 223--238.
+\bibitem{ref5} R. Coifman and Y. Meyer, in these proceedings.
+\bibitem{ref6} R. Coifman and C. Fefferman, ``Weighted norm inequalities for maximal functions and singular integrals,'' Studia Math. \textbf{51} (1979), 241--250.
+\bibitem{ref7} S. Drury, ``Restrictions of Fourier transforms to curves,'' preprint.
+\bibitem{ref8} A. Erd\'elyi, ``Asymptotics Expansions,'' 1956, Dover Publication.
+\bibitem{ref9} C. Fefferman, ``Inequalities for strongly singular convolution operators,'' Acta Math. \textbf{124} (1970), 9--36.
+\bibitem{ref10} C. Fefferman and E. M. Stein, ``$H^{p}$ spaces of several variables,'' Acta Math. \textbf{129} (1972), 137--193.
+\bibitem{ref11} D. Geller and E. M. Stein, ``Estimates for singular convolution operators on the Heisenberg group,'' Math. Ann. \textbf{267} (1984), 1--15.
+\bibitem{ref12} A. Greenleaf, ``Principal curvature in harmonic analysis,'' Ind. Univer. Math. J. \textbf{30} (1981), 519--537.
+\bibitem{ref13} C. S. Herz, ``Fourier transforms related to convex sets,'' Ann. of Math. \textbf{75} (1962), 81--92.
+\bibitem{ref14} E. Hlawka, ``\"Uber Integrale auf konvexen K\"orper. I,'' Monatsh. Math. \textbf{54} (1950), 1--36.
+\bibitem{ref15} L. H\"ormander, ``Oscillatory integrals and multipliers on $FL^{p}$,'' Ark. Mat. \textbf{11} (1973), 1--11.
+\bibitem{ref16} \hspace{0.5em}\rule[0.4ex]{1.4em}{0.4pt}, ``The analysis of linear partial differential operators. I,'' 1983, Springer Verlag.
+\bibitem{ref17} S. Krantz, ``Integral formulas in complex analysis,'' in these proceedings.
+\bibitem{ref18} W. Littman, ``Fourier transforms of surface-carried measures and differentiability of surface averages,'' Bull. A.M.S. \textbf{69} (1963), 766--770.
+\bibitem{ref19} G. Mauceri, M. A. Picardello, and F. Ricci, ``Twisted convolutions, Hardy spaces, and H\"ormander multipliers,'' Supp. Rend. Cir. Mat-Palermo \textbf{1} (1981), 191--202.
+\bibitem{ref20} J. Milnor, ``Morse Theory,'' Annals of Math. Study \#51, 1963, Princeton University Press.
+\bibitem{ref21} A. Nagel, ``Vector fields and nonisotropic metrics,'' in these proceedings.
+\bibitem{ref22} D. H. Phong and E. M. Stein, ``Singular integrals related to the Radon transform and boundary value problems,'' Proc. Nat. Acad. Sci. USA \textbf{80} (1983), 7697--7701.
+\bibitem{ref23} \hspace{0.5em}\rule[0.4ex]{1.4em}{0.4pt}, ``Hilbert integrals, singular integrals, and Radon transforms,'' preprint.
+\bibitem{ref24} E. Prestini, ``Restriction theorems for the Fourier transform to some manifolds in $\R^{n}$ in Harmonic analysis in Euclidean spaces,'' Proc. Symp. in Pure Math. \textbf{35}, part 1 (1979), 101--109.
+\bibitem{ref25} B. Randol, ``On the asymptotic behaviour of the Fourier transform of the indicator function of a convex set,'' Trans. Amer. Math. Soc. \textbf{139} (1969), 279--285.
+\bibitem{ref26} E. M. Stein, ``Singular integrals and differentiability properties of functions,'' 1970, Princeton University Press.
+\bibitem{ref27} E. M. Stein and S. Wainger, ``The estimation of an integral arising in multiplier transformations,'' Studia Math. \textbf{35} (1970), 101--104.
+\bibitem{ref28} E. M. Stein and G. Weiss, ``Introduction to Fourier analysis on Euclidean spaces,'' 1971, Princeton University Press.
+\bibitem{ref29} R. S. Strichartz, ``Restrictions of Fourier transforms to quadratic surfaces and decay of solutions of wave equations,'' Duke Math. J. \textbf{44} (1977), 705--713.
+\bibitem{ref30} P. A. Tomas, ``A restriction theorem for the Fourier transform,'' Bull. A.M.S. \textbf{81} (1975), 477--478.
+\bibitem{ref31} \hspace{0.5em}\rule[0.4ex]{1.4em}{0.4pt}, ``Restriction theorems for the Fourier transform in Harmonic Analysis in Euclidean spaces,'' Proc. Symp. in Pure Math. \textbf{35}, part 1 (1979), 111--114.
+\bibitem{ref32} S. Wainger, ``Averages and singular integrals over lower dimensional sets,'' in these proceedings.
+\bibitem{ref33} A. Zygmund, ``On Fourier coefficients and transforms of functions of two variables,'' Studia Math. \textbf{50} (1974), 189--201.
+\end{thebibliography}
+
+% 术语索引排版：重定义为无编号章（带目录书签），避免在无 \appendix 模式下被自动编号为“第 N 章”。
+\renewcommand{\printterminology}{%
+  \cleardoublepage
+  \phantomsection
+  \chapter*{术语索引}%
+  \addcontentsline{toc}{chapter}{术语索引}%
+  \vspace{0.5cm}%
+  \begingroup
+  \renewcommand{\arraystretch}{1.28}%
+  \begin{longtable}{%
+      >{\raggedright\arraybackslash}p{0.28\textwidth}%
+      >{\raggedright\arraybackslash}p{0.49\textwidth}%
+      >{\centering\arraybackslash}p{0.12\textwidth}}
+    \toprule
+    {\headfont 中文术语} & {\headfont 英文术语} & {\headfont 页码} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    {\headfont 中文术语} & {\headfont 英文术语} & {\headfont 页码} \\
+    \midrule
+    \endhead
+    \MTTermList
+    \bottomrule
+  \end{longtable}%
+  \endgroup
+}
+
+\printterminology
+
+\end{document}
+
+

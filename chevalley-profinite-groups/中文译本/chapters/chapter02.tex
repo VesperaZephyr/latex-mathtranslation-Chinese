@@ -1,0 +1,570 @@
+% !TeX root = ../main.tex
+% 第 2 章 有限与无限的 Galois 理论 （原书 CHAPTER 2, Finite and infinite Galois Theory, 印刷页 13-22 / PDF 页 15-24）
+
+\chapter{有限与无限的 Galois 理论}
+\label{ch:2}
+
+% 原书小节号为 "节.小节"，1.2.1 等三级标题不带章前缀
+\renewcommand{\thesubsubsection}{\thesection.\arabic{subsection}.\arabic{subsubsection}}
+% 有序列表标签照原书样式 (1)(2)...
+\renewcommand{\labelenumi}{(\arabic{enumi})}
+
+本章首先给出经典 Galois 理论的概要，特别是有限扩张情形的 Galois 理论基本定理. 然后，我们为 Galois 群赋予一个特定的拓扑，以便陈述并证明无限扩张情形的基本定理.
+
+\section{Galois 理论回顾}
+
+本节中，$\mathbb{K}$、$\mathbb{L}$ 与 $\mathbb{E}$ 恒表示域.
+
+\subsection{一些预备知识}
+
+\begin{definition}\label{c2-def-1-1}
+设 $\mathbb{L}$ 是域 $\mathbb{K}$ 的扩张. 若 $\mathbb{L}$ 的每个元素都在 $\mathbb{K}$ 上代数，则称 $\mathbb{L}$ 在 $\mathbb{K}$ 上是\emph{代数的}.
+\end{definition}
+
+\begin{example}\label{c2-ex-1-2}
+考虑含 $q$ 个元素的有限域 $\mathbb{F}_q$，其中 $q=p^{k}$，$p$ 为素数. 我们回忆：$\mathbb{F}_q$ 的一切有限扩张的阶都是 $q$ 的幂（见 \cite[Thm~5.1]{lang02a} 与 \cite[Corollary~5.2]{lang02a}）.
+\end{example}
+
+\begin{definition}\label{c2-def-1-3}
+设 $\mathbb{E}$ 与 $\mathbb{L}$ 是 $\mathbb{K}$ 的两个扩张. 从 $\mathbb{L}$ 到 $\mathbb{E}$ 的 \emph{$\mathbb{K}$-同态}是指满足 $\sigma|_{\mathbb{K}}=\mathrm{Id}_{\mathbb{K}}$ 的同态 $\sigma:\mathbb{L}\to\mathbb{E}$.
+\end{definition}
+
+\begin{definition}\label{c2-def-1-4}
+设 $G$ 是域 $\mathbb{L}$ 的全部自同态所成群的子群. 我们定义
+\[
+\mathbb{L}^{G}=\{\alpha\in\mathbb{L}\mid \sigma(\alpha)=\alpha,\ \forall\sigma\in G\}.
+\]
+这是 $\mathbb{L}$ 的子域，称为 $G$ 的\emph{固定域}.
+\end{definition}
+
+\subsection{正规扩张与可分扩张}
+
+\subsubsection{正规扩张}
+
+\begin{theorem}\label{c2-thm-1-1}
+设 $\mathbb{L}$ 是包含在 $\mathbb{K}$ 的某个代数闭包 $\overline{\mathbb{K}}$ 中的 $\mathbb{K}$ 的代数扩张. 则以下条件等价：
+\begin{enumerate}
+    \item $\mathbb{L}$ 是 $\mathbb{K}[X]$ 中一族非常数多项式的\newterm{c2-splitting-field}{分裂域}{splitting field}；
+    \item 对每个 $\mathbb{K}$-同态 $\sigma:\mathbb{L}\to\overline{\mathbb{K}}$，都有 $\sigma(\mathbb{L})=\mathbb{L}$；
+    \item $\mathbb{K}[X]$ 中每个在 $\mathbb{L}$ 中有根的多项式，其全部根都在 $\mathbb{L}$ 中，即它在 $\mathbb{K}$ 中分解为一次因式.\footnote{原文即如此（作 $\mathbb{K}$）；按上下文应理解为在 $\mathbb{L}$（或 $\overline{\mathbb{K}}$）中分解.}
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+该定理的证明可参见 \cite[Chapter~5, \S3]{lang02a}.
+\end{proof}
+
+\begin{definition}\label{c2-def-1-5}
+若 $\mathbb{K}$ 的代数扩张 $\mathbb{L}$ 满足前述定理中的某一条性质，则称 $\mathbb{L}$ 为 $\mathbb{K}$ 的\newterm{c2-normal-extension}{正规扩张}{normal extension}.
+\end{definition}
+
+\begin{examples}\label{c2-ex-1-6}
+\
+\begin{itemize}
+    \item 若 $[\mathbb{L}:\mathbb{K}]=2$，则 $\mathbb{L}$ 在 $\mathbb{K}$ 上正规. 事实上，取 $\alpha\in\mathbb{L}\setminus\mathbb{K}$，$\alpha$ 在 $\mathbb{K}$ 上的极小多项式可写成 $f(X)=X^{2}+cX+d$. 于是 $-c+\alpha\in\mathbb{L}$ 就是 $f$ 的另一个根.
+    \item 扩张 $\mathbb{Q}\subset\mathbb{Q}[\sqrt{2}]$ 是正规的. 但扩张 $\mathbb{Q}\subset\mathbb{Q}[\sqrt[3]{2}]$ 不是正规的（$X^{3}-2$ 在 $\mathbb{Q}[\sqrt[3]{2}]$ 中不分解）.
+\end{itemize}
+\end{examples}
+
+\subsubsection{可分扩张}
+
+\begin{definition}\label{c2-def-1-7}
+不可约多项式 $f\in\mathbb{K}[X]$ 称为\emph{可分的}，若它没有重根.
+\end{definition}
+
+\begin{definition}\label{c2-def-1-8}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的扩张.
+
+若 $\alpha\in\mathbb{L}$ 在 $\mathbb{K}$ 上代数且 $\min(\alpha,\mathbb{K})$ 是可分的，则称 $\alpha$ 在 $\mathbb{K}$ 上\emph{可分}.
+
+若每个 $\alpha\in\mathbb{E}$\footnote{原文即如此（作 $\mathbb{E}$）；按上下文应为 $\mathbb{L}$.}都在 $\mathbb{K}$ 上可分，则称 $\mathbb{L}$ 为 $\mathbb{K}$ 的\newterm{c2-separable}{可分扩张}{separable extension}.
+\end{definition}
+
+\begin{remark}\label{c2-rem-1-9}
+下面是可分扩张的一个显式刻画：
+
+若 $\mathbb{K}[X]$ 中每个在 $\mathbb{L}$ 中有根的不可约多项式都是可分的，则 $\mathbb{L}$ 在 $\mathbb{K}$ 上代数且可分.
+\end{remark}
+
+\begin{examples}\label{c2-ex-1-10}
+\
+\begin{itemize}
+    \item 若 $\operatorname{char}(\mathbb{K})=0$，则 $\mathbb{K}$ 的每个代数扩张都可分.
+    \item 若 $\mathbb{K}$ 有限，则 $\mathbb{K}$ 的每个代数扩张都可分.
+    \item 考虑素数域 $\mathbb{F}_p$ 与 $X^{p}-t$ 的一个根 $\alpha$. 则 $\mathbb{F}_p[\alpha]\cong\mathbb{F}_p[X]/(X^{p}-t)$ 不是 $\mathbb{F}_p$ 的可分扩张，因为 $\alpha$ 不可分（$\alpha$ 在 $\mathbb{K}$\footnote{原文即如此（作 $\mathbb{K}$）；按上下文应为 $\mathbb{F}_p$.}上的极小多项式为 $X^{p}-t=(X-\alpha)^{p}$）.
+\end{itemize}
+\end{examples}
+
+\begin{definition}\label{c2-def-1-11}
+设 $\overline{\mathbb{K}}$ 是 $\mathbb{K}$ 的代数闭包. $\mathbb{K}$ 在 $\overline{\mathbb{K}}$ 中的\emph{可分闭包}是指 $\overline{\mathbb{K}}$ 中包含 $\mathbb{K}$ 的一切有限可分扩张的最小子域.
+
+我们将 $\mathbb{K}$ 在其某个代数闭包 $\overline{\mathbb{K}}$ 中的可分闭包记作 $\mathbb{K}_s$.
+\end{definition}
+
+\begin{remark}\label{c2-rem-1-12}
+换言之，$\mathbb{K}$ 的可分闭包就是包含在 $\overline{\mathbb{K}}$ 中的 $\mathbb{K}$ 的一切有限可分扩张之并.
+\end{remark}
+
+下面介绍可分次数与不可分次数，后文将用到它们.
+
+\begin{definition}\label{c2-def-1-13}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的有限扩张，$\overline{\mathbb{K}}$ 是 $\mathbb{K}$ 的代数闭包. $\mathbb{L}$ 在 $\mathbb{K}$ 上的\emph{可分次数}记作 $[\mathbb{L}:\mathbb{K}]_s$，是指包含同态 $i:\mathbb{K}\to\overline{\mathbb{K}}$ 到 $\mathbb{L}$ 上的扩张的个数.
+
+我们必须验证这一概念是良定义的，即 $[\mathbb{L}:\mathbb{K}]_s$ 与 $\overline{\mathbb{K}}$ 的选取无关. 这一点在 \cite[\S4, Chapter~V]{lang02a} 中完成.
+\end{definition}
+
+\begin{proposition}\label{c2-prop-1-2}
+设 $\mathbb{E}$ 是 $\mathbb{K}$ 的有限扩张，$\mathbb{L}$ 是 $\mathbb{E}$ 的有限扩张. 则
+\[
+[\mathbb{L}:\mathbb{K}]_s=[\mathbb{L}:\mathbb{E}]_s\cdot[\mathbb{E}:\mathbb{K}]_s
+\]
+\end{proposition}
+
+\begin{proof}
+参照 \cite[Theorem~4.1, \S1, Chapter~V]{lang02a} 即得证明.
+\end{proof}
+
+\begin{proposition}\label{c2-prop-1-3}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的有限扩张. 则可分次数 $[\mathbb{L}:\mathbb{K}]_s$ 整除次数 $[\mathbb{L}:\mathbb{K}]$. 此外，若特征为 $0$，则商为 $1$；若特征为素数 $p>0$，则商为 $p$ 的幂.
+\end{proposition}
+
+\begin{definition}\label{c2-def-1-14}
+若 $\mathbb{L}$ 是 $\mathbb{K}$ 的有限扩张，我们称商
+\[
+\frac{[\mathbb{L}:\mathbb{K}]}{[\mathbb{L}:\mathbb{K}]_s}
+\]
+为\emph{不可分次数}，记作 $[\mathbb{L}:\mathbb{K}]_i$.
+\end{definition}
+
+\subsection{Galois 扩张}
+
+\begin{definition}\label{c2-def-1-15}
+若 $\mathbb{L}$ 是 $\mathbb{K}$ 的代数扩张、正规扩张且可分扩张，则称 $\mathbb{L}$ 为 $\mathbb{K}$ 的\newterm{c2-galois-extension}{Galois 扩张}{Galois extension}.
+\end{definition}
+
+\begin{remark}\label{c2-rem-1-16}
+\
+\begin{itemize}
+    \item 我们可以更明确地描述 Galois 扩张：
+
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的 Galois 扩张，$f$ 是 $\mathbb{K}[X]$ 中一个 $m$ 次不可约多项式. 若 $f$ 在 $\mathbb{L}$ 中有根，则 $f$ 在 $\mathbb{L}$ 中有 $m$ 个不同的根. 于是，$\mathbb{L}$ 是 Galois 扩张当且仅当：对每个 $\alpha\in\mathbb{L}$，$\alpha$ 在 $\mathbb{K}$ 上的极小多项式在 $\mathbb{L}$ 中有 $[\mathbb{K}[\alpha]:\mathbb{K}]$ 个不同的根.
+    \item 在 Galois 扩张的定义中，我们不要求扩张的次数有限. 后文若无特别说明，Galois 扩张可以是有限的也可以是无限的.
+\end{itemize}
+\end{remark}
+
+\begin{example}\label{c2-ex-1-17}
+考虑素数域 $\mathbb{F}_p$ 的扩张 $\mathbb{F}_{p^{n}}$. 由构造，$\mathbb{F}_{p^{n}}\cong\mathbb{F}_p/f_n(X)$\footnote{原文即如此；应理解为 $\mathbb{F}_p[X]/(f_n(X))$，且断言"$f_n$ 不可约"仅当 $n=1$ 时成立.}，其中 $f_n(X)=X^{p^{n}}-X$ 是 $\mathbb{F}_p$ 上的不可约多项式（见 \cite[Theorem~5.1, \S5, Chapter~V]{lang02a}）. 于是 $\mathbb{F}_{p^{n}}$ 的每个元素都是多项式 $f_n(X)$ 的根，换言之 $\mathbb{F}_{p^{n}}$ 是多项式 $f_n(X)$ 的分裂域. 故 $\mathbb{F}_{p^{n}}$ 是 $\mathbb{F}_p$ 的 Galois 扩张.
+\end{example}
+
+下面这条命题在后文中会经常用到.
+
+\begin{proposition}\label{c2-prop-1-4}
+若 $\mathbb{L}$ 是 $\mathbb{K}$ 的 Galois 扩张（有限或无限），则 $\mathbb{L}$ 对任何中间域 $\mathbb{E}$（即 $\mathbb{K}\subseteq\mathbb{E}\subseteq\mathbb{L}$）都是 Galois 扩张.
+\end{proposition}
+
+\begin{proof}
+设 $f$ 是 $\mathbb{E}[X]$ 中在 $\mathbb{L}$ 中有根 $\alpha$ 的不可约多项式. 由于代数性是传递的，可取 $g=\min(\alpha,\mathbb{K})\in\mathbb{K}[X]$，即 $\alpha$ 在 $\mathbb{K}$ 上的极小多项式. $\mathbb{K}$\footnote{原文两处即如此（作 $\mathbb{K}$）；按上下文均应为 $\mathbb{L}$.}的正规性蕴含 $g$ 在 $\mathbb{L}[X]$ 中分解，$\mathbb{K}$ 的可分性蕴含 $g$ 在 $\mathbb{L}$ 中有不同的根（因为 $g$ 在 $\mathbb{L}$ 中有根 $\alpha$）.
+
+由于 $f$ 整除 $g$（在 $\mathbb{E}[X]$ 中），$f$ 也必在 $\mathbb{L}[X]$ 中分解为互异的一次因式.
+\end{proof}
+
+\subsection{Galois 群与 Galois 理论基本定理}
+
+本节将特别给出有限情形的 Galois 理论基本定理.
+
+\begin{definition}\label{c2-def-1-18}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的代数扩张，有限或无限. $\mathbb{L}$ 在 $\mathbb{K}$ 上的\newterm{c2-galois-group}{Galois 群}{Galois group}记作 $\operatorname{Gal}(\mathbb{L},\mathbb{K})$，是 $\mathbb{L}$ 的全部 $\mathbb{K}$-同态构成的集合.
+\end{definition}
+
+\begin{definition}\label{c2-def-1-19}
+若 Galois 扩张 $\mathbb{L}$（$\mathbb{K}$ 上）的 Galois 群是阿贝尔群（相应地：循环群），则称该扩张为阿贝尔（相应地：循环）扩张.
+\end{definition}
+
+下面的例子给出一个 Galois 扩张，并且它为我们理解 Galois 理论主定理提供直觉.
+
+\begin{example}\label{c2-ex-1-20}
+考虑域 $\mathbb{Q}$ 及其扩张 $\mathbb{Q}[\sqrt[3]{2},\omega]$，其中 $\omega=e^{\frac{2i\pi}{3}}=-\dfrac{1}{2}+i\dfrac{\sqrt{3}}{2}$. 我们定义
+\[
+\begin{aligned}
+\sigma:\mathbb{Q}[\sqrt[3]{2},\omega]&\longrightarrow\mathbb{Q}[\sqrt[3]{2},\omega]\\
+\sqrt[3]{2}&\longmapsto\omega\sqrt[3]{2}\\
+\omega&\longmapsto\omega
+\end{aligned}
+\qquad\text{和}\qquad
+\begin{aligned}
+\tau:\mathbb{Q}[\sqrt[3]{2},\omega]&\longrightarrow\mathbb{Q}[\sqrt[3]{2},\omega]\\
+\sqrt[3]{2}&\longmapsto\sqrt[3]{2}\\
+\omega&\longmapsto\omega^{2}=\overline{\omega}.
+\end{aligned}
+\]
+于是可以证明 $\{\mathrm{Id}_{\mathbb{Q}[\sqrt[3]{2},\omega]},\sigma,\sigma^{2},\tau,\tau\sigma,\tau\sigma^{2}\}=\operatorname{Gal}(\mathbb{Q}[\sqrt[3]{2},\omega],\mathbb{Q})$. 从而 $|\operatorname{Gal}(\mathbb{Q}[\sqrt[3]{2},\omega],\mathbb{Q})|=6=[\mathbb{Q}[\sqrt[3]{2},\omega]:\mathbb{Q}]$. （注意 $\mathbb{Q}[\sqrt[3]{2},\omega]$ 是 $\mathbb{Q}$ 的正规扩张.）
+\end{example}
+
+\begin{theorem}\label{c2-thm-1-5}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的有限 Galois 扩张，令 $G=\operatorname{Gal}(\mathbb{L},\mathbb{K})$. 存在双对应
+\[
+\{H\mid H\leq G\ \text{子群}\}\leftrightarrow\{\mathbb{E}\mid \mathbb{K}\subseteq\mathbb{E}\subseteq\mathbb{L}\ \text{中间域}\}.
+\]
+更确切地，映射 $H\mapsto\mathbb{L}^{H}$ 与 $\mathbb{E}\mapsto\operatorname{Gal}(\mathbb{L},\mathbb{E})$ 是 $G$ 的子集全体与 $\mathbb{L}$、$\mathbb{K}$ 之间中间域全体之间的互逆双射. 此外，
+\begin{enumerate}
+    \item 设 $H_{1},H_{2}\leq G$，则 $H_{1}\supseteq H_{2}$ 当且仅当 $\mathbb{L}^{H_{1}}\subseteq\mathbb{L}^{H_{2}}$；
+    \item 指数等于次数：$[H_{1}:H_{2}]=[\mathbb{E}^{H_{2}}:\mathbb{E}^{H_{1}}]$；
+    \item 若 $H$ 是 $G$ 的子群且 $\sigma\in G$，则 $\mathbb{L}^{\sigma H\sigma^{-1}}=\sigma(\mathbb{L}^{H})$. 反之，若 $\mathbb{E}$ 是中间域，则 $\operatorname{Gal}(\mathbb{L},\sigma\mathbb{E})=\sigma\operatorname{Gal}(\mathbb{L},\mathbb{E})\sigma^{-1}$；
+    \item 设 $\mathbb{E}_{1},\mathbb{E}_{2}$ 是中间域，则
+    \[
+    \operatorname{Gal}(\mathbb{L},\mathbb{E}_{1}\mathbb{E}_{2})=\operatorname{Gal}(\mathbb{L},\mathbb{E}_{1})\cap\operatorname{Gal}(\mathbb{L},\mathbb{E}_{2}).
+    \]
+    \item $\mathbb{E}$ 是 $\mathbb{K}$ 的 Galois 扩张当且仅当 $\operatorname{Gal}(\mathbb{L},\mathbb{E})$ 是 $G$ 的正规子群，并且此时有
+    \[
+    \operatorname{Gal}(\mathbb{E},\mathbb{K})\cong G/\operatorname{Gal}(\mathbb{L},\mathbb{E}).
+    \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+该定理的证明可参见 \cite[Chapter~3]{mil08} 或 \cite[\S1, Chapter~IV]{lang02a}.
+\end{proof}
+
+\begin{remark}\label{c2-rem-1-21}
+对无限 Galois 扩张，该定理一般不成立. 因此我们将为 Galois 群配备一个拓扑，以获得对有限与无限 Galois 扩张都成立的定理.
+\end{remark}
+
+\section{Galois 群上的 Krull 拓扑}
+
+如前所述，Galois 理论主定理对无限 Galois 扩张并不成立. 然而，为 Galois 群赋予拓扑后，我们将得到类似的结果. Krull 拓扑是 Galois 群上最自然的（非平凡）拓扑，且具有许多有趣的性质.
+
+注意，本节对域扩张的次数不作任何限制.
+
+\subsection{预备命题}
+
+本节的目的是在 Galois 群上定义一个拓扑，为此我们要用到一些命题和引理.
+
+\begin{lemma}\label{c2-lem-2-1}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的 Galois 扩张，$\mathbb{M}$ 是中间域，即 $\mathbb{K}\subseteq\mathbb{M}\subseteq\mathbb{L}$. 则从 $\mathbb{M}$ 到 $\mathbb{L}$ 的每个 $\mathbb{K}$-同态都可扩张为从 $\mathbb{L}$ 到 $\mathbb{L}$ 的 $\mathbb{K}$-自同构.
+\end{lemma}
+
+\begin{proof}
+见 \cite[Chapter~7]{mil08}.
+\end{proof}
+
+\begin{lemma}\label{c2-lem-2-2}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的 Galois 扩张. 对每个满足 $\mathbb{K}\subseteq\mathbb{E}\subseteq\mathbb{L}$ 的 $\mathbb{K}$ 的有限 Galois 扩张 $\mathbb{E}$，映射
+\[
+\begin{aligned}
+\operatorname{Gal}(\mathbb{L},\mathbb{K})&\longrightarrow\operatorname{Gal}(\mathbb{E},\mathbb{K})\\
+\sigma&\longmapsto\sigma|_{\mathbb{E}}
+\end{aligned}
+\]
+是满射.
+\end{lemma}
+
+\begin{proof}
+设 $\sigma\in\operatorname{Gal}(\mathbb{E},\mathbb{K})$，则 $\sigma$ 是从 $\mathbb{L}$ 到 $\mathbb{E}$\footnote{原文即如此；按上下文应为从 $\mathbb{E}$ 到 $\mathbb{L}$ 的 $\mathbb{K}$-同态.}的 $\mathbb{K}$-同态. 于是由\autoref{c2-lem-2-1}，$\sigma$ 可扩张为从 $\mathbb{L}$ 到 $\mathbb{L}$ 的 $\mathbb{K}$-自同构（它就是原像）.
+\end{proof}
+
+\begin{notation}\label{c2-not-2-1}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的 Galois 扩张. 以 $\mathcal{F}_{\mathbb{L}}$ 记满足 $\mathbb{K}\subseteq\mathbb{E}\subseteq\mathbb{L}$ 的 $\mathbb{K}$ 的一切有限 Galois 扩张 $\mathbb{E}$ 构成的族.
+\end{notation}
+
+\begin{remark}\label{c2-rem-2-2}
+注意，若 $\mathbb{L}$ 是 $\mathbb{K}$ 的 Galois 扩张（即使无限），也有
+\[
+\mathbb{L}=\bigcup_{\mathbb{E}\in\mathcal{F}_{\mathbb{L}}}\mathbb{E}.
+\]
+\end{remark}
+
+\begin{lemma}\label{c2-lem-2-3}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的 Galois 扩张，$\mathbb{M}$ 是中间域. 则
+\[
+\mathbb{L}^{\operatorname{Gal}(\mathbb{L},\mathbb{M})}=\mathbb{M}.
+\]
+\end{lemma}
+
+\begin{proof}
+由固定域的定义，显然有 $\mathbb{M}\subseteq\mathbb{L}^{\operatorname{Gal}(\mathbb{L},\mathbb{M})}$.
+
+下面证反包含：
+
+设 $\alpha\in\mathbb{L}^{\operatorname{Gal}(\mathbb{L},\mathbb{M})}$. 则 $\operatorname{Gal}(\mathbb{L},\mathbb{M})$ 的定义蕴含对一切 $\sigma\in\operatorname{Gal}(\mathbb{L},\mathbb{M})$ 有 $\sigma(\alpha)=\alpha$. 由于 $\mathbb{L}$ 是有限中间 Galois 扩张之并，存在这样一个扩张 $\mathbb{E}$ 使得 $\alpha\in\mathbb{E}$. 于是由\autoref{c2-lem-2-2}，映射
+\[
+\operatorname{Gal}(\mathbb{L},\mathbb{M})\to\operatorname{Gal}(\mathbb{E},\mathbb{M}):\sigma\mapsto\sigma|_{\mathbb{E}}
+\]
+是满射. 从而对一切 $\sigma\in\operatorname{Gal}(\mathbb{E},\mathbb{M})$ 有 $\sigma(\alpha)=\alpha$. 再利用有限扩张情形的定理\autoref{c2-thm-1-5}，即得 $\alpha\in\mathbb{E}^{\operatorname{Gal}(\mathbb{E},\mathbb{M})}=\mathbb{M}$.
+\end{proof}
+
+\begin{proposition}\label{c2-prop-2-4}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的 Galois 扩张. 若 $\mathbb{E}$ 是 $\mathbb{K}$ 的有限中间 Galois 扩张，则 $\operatorname{Gal}(\mathbb{L},\mathbb{E})$ 在 $\operatorname{Gal}(\mathbb{L},\mathbb{K})$ 中正规，且 $\operatorname{Gal}(\mathbb{L},\mathbb{K})/\operatorname{Gal}(\mathbb{L},\mathbb{E})=\operatorname{Gal}(\mathbb{E},\mathbb{K})$.
+\end{proposition}
+
+\begin{proof}
+取 $\mathbb{E}'\in\mathcal{F}_{\mathbb{L}}$ 使得 $\mathbb{K}\subseteq\mathbb{E}\subseteq\mathbb{E}'\subseteq\mathbb{L}$. 由\autoref{c2-thm-1-5}，因 $\mathbb{E}'$ 是 $\mathbb{K}$ 的有限扩张，有 $\operatorname{Gal}(\mathbb{E}',\mathbb{E})\triangleleft\operatorname{Gal}(\mathbb{E}',\mathbb{K})$. 由\autoref{c2-rem-2-2}，也有 $\operatorname{Gal}(\mathbb{L},\mathbb{E})\triangleleft\operatorname{Gal}(\mathbb{L},\mathbb{K})$.
+
+现在设有 $\xi\in\mathbb{E}$ 与 $\sigma\in\operatorname{Gal}(\mathbb{L},\mathbb{K})$ 使得 $\sigma(\xi)\notin\mathbb{E}$. 由\autoref{c2-lem-2-3}，存在 $\gamma\in\operatorname{Gal}(\mathbb{L},\mathbb{E})$ 使得 $\gamma\sigma(\xi)\neq\sigma(\xi)$，这意味着 $\sigma^{-1}\gamma\sigma(\xi)\neq\xi$. 我们已证 $\operatorname{Gal}(\mathbb{L},\mathbb{E})\triangleleft\operatorname{Gal}(\mathbb{L},\mathbb{K})$，于是存在 $\widetilde{\gamma}\in\operatorname{Gal}(\mathbb{L},\mathbb{E})$ 使得 $\widetilde{\gamma}=\sigma^{-1}\gamma\sigma$. 但这样 $\widetilde{\gamma}(\xi)\neq\xi$，与 $\operatorname{Gal}(\mathbb{L},\mathbb{E})$ 固定 $\mathbb{E}$ 矛盾.
+
+这就证明了 $\sigma(\xi)\in\mathbb{E}$ 对一切 $\xi\in\mathbb{E}$ 与一切 $\sigma\in\operatorname{Gal}(\mathbb{L},\mathbb{K})$ 成立. 于是 $\sigma|_{\mathbb{E}}$ 是 $\mathbb{E}$ 的自同构.
+
+设 $[\tau],[\eta]\in\operatorname{Gal}(\mathbb{L},\mathbb{K})/\operatorname{Gal}(\mathbb{L},\mathbb{E})$，则
+\[
+\begin{aligned}
+\tau\equiv\eta\ &\Leftrightarrow\ \tau\operatorname{Gal}(\mathbb{L},\mathbb{E})=\eta\operatorname{Gal}(\mathbb{L},\mathbb{E})\\
+&\Leftrightarrow\ \tau=\eta\gamma\ \text{with }\gamma\in\operatorname{Gal}(\mathbb{L},\mathbb{E})\\
+&\Leftrightarrow\ \eta^{-1}\tau=\gamma\ \text{with }\gamma\in\operatorname{Gal}(\mathbb{L},\mathbb{E})\\
+&\Leftrightarrow\ \eta^{-1}\tau|_{\mathbb{E}}=\mathrm{id}_{\mathbb{E}}\\
+&\Leftrightarrow\ \eta|_{\mathbb{E}}=\tau|_{\mathbb{E}}.
+\end{aligned}
+\]
+这就证明了 $\operatorname{Gal}(\mathbb{L},\mathbb{K})/\operatorname{Gal}(\mathbb{L},\mathbb{E})\cong\{\sigma|_{\mathbb{E}}\mid\forall\sigma\in\operatorname{Gal}(\mathbb{L},\mathbb{K})\}$. 而右端正是 $\mathbb{E}$ 中固定 $\mathbb{K}$ 的自同构之集，即 $\operatorname{Gal}(\mathbb{E},\mathbb{K})$.
+\end{proof}
+
+\subsection{定义}
+
+回忆 $\mathcal{F}_{\mathbb{L}}$ 是满足 $\mathbb{K}\subseteq\mathbb{E}\subseteq\mathbb{L}$ 的 $\mathbb{K}$ 的一切有限 Galois 扩张 $\mathbb{E}$ 构成的族.
+
+\begin{definition}\label{c2-def-2-3}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的 Galois 扩张，$G=\operatorname{Gal}(\mathbb{L},\mathbb{K})$. 考虑有限指数正规子集的全体 $\mathcal{S}=\{\operatorname{Gal}(\mathbb{L},\mathbb{E})\mid\mathbb{E}\in\mathcal{F}_{\mathbb{L}}\}$. 由 $\mathcal{S}$ 作为 $G$ 的单位元邻域基所定义的拓扑，称为 $G$ 的\newterm{c2-krull-topology}{Krull 拓扑}{Krull topology}.
+\end{definition}
+
+\begin{proposition}\label{c2-prop-2-5}
+Krull 拓扑是良定义的，即按定义取 $\mathcal{S}$，则 $G$ 上存在唯一的拓扑群结构，使 $\mathcal{S}$ 构成单位元的邻域基. 于是 $G:=\operatorname{Gal}(\mathbb{L},\mathbb{K})$ 配备 Krull 拓扑后是拓扑群. 此外，$\mathcal{S}$ 的元素都是开正规子群.
+\end{proposition}
+
+\begin{proof}
+我们验证族 $\mathcal{S}$ 满足第 $1$ 章\autoref{c1-prop-3-1}的断言 (1)--(4).
+\begin{enumerate}
+    \item 设 $\operatorname{Gal}(\mathbb{L},\mathbb{E})$ 与 $\operatorname{Gal}(\mathbb{L},\mathbb{E}')$ 是 $\mathcal{S}$ 的元素. 由\autoref{c2-thm-1-5}，有
+    \[
+    \operatorname{Gal}(\mathbb{L},\mathbb{E}\mathbb{E}')=\operatorname{Gal}(\mathbb{L},\mathbb{E})\cap\operatorname{Gal}(\mathbb{L},\mathbb{E}').
+    \]
+    而 $\operatorname{Gal}(\mathbb{L},\mathbb{E}\mathbb{E}')$ 是 $\mathcal{S}$ 的元素，因为\autoref{c2-thm-1-5}保证扩张 $\mathbb{E}\mathbb{E}'$ 在 $\mathbb{K}$ 上有限且 Galois.
+    \item 设 $\operatorname{Gal}(\mathbb{L},\mathbb{E})\in\mathcal{S}$，则 $\operatorname{Gal}(\mathbb{L},\mathbb{E})\operatorname{Gal}(\mathbb{L},\mathbb{E})\subseteq\operatorname{Gal}(\mathbb{L},\mathbb{E})$，因为它是一个群.
+    \item 设 $\operatorname{Gal}(\mathbb{L},\mathbb{E})\in\mathcal{S}$，则 $\operatorname{Gal}(\mathbb{L},\mathbb{E})^{-1}\subseteq\operatorname{Gal}(\mathbb{L},\mathbb{E})$，因为它是一个群.
+    \item 设 $\operatorname{Gal}(\mathbb{L},\mathbb{E})\in\mathcal{S}$ 且 $\sigma\in G$. 我们在\autoref{c2-prop-2-4}中已证 $\operatorname{Gal}(\mathbb{L},\mathbb{E})\triangleleft G$，从而 $\operatorname{Gal}(\mathbb{L},\mathbb{E})=\sigma\operatorname{Gal}(\mathbb{L},\mathbb{E})\sigma^{-1}$.
+\end{enumerate}
+\end{proof}
+
+\begin{remark}\label{c2-rem-2-4}
+若 $\mathbb{L}$ 是 $\mathbb{K}$ 的有限 Galois 扩张，则 $\operatorname{Gal}(\mathbb{L},\mathbb{K})$ 的 Krull 拓扑是离散拓扑.
+\end{remark}
+
+\begin{remark}\label{c2-rem-2-5}
+从今以后，若无特别说明，我们总认为 Galois 群配备 Krull 拓扑.
+\end{remark}
+
+\subsection{性质}
+
+\begin{theorem}\label{c2-thm-2-6}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的 Galois 扩张，令 $G=\operatorname{Gal}(\mathbb{L},\mathbb{K})$. 则配备 Krull 拓扑的群 $G$ 是
+\begin{enumerate}
+    \item Hausdorff 的，
+    \item 紧致的，
+    \item 全不连通的
+\end{enumerate}
+拓扑群.
+\end{theorem}
+
+\begin{proof}
+\begin{enumerate}
+    \item 我们要证：对一切 $\sigma,\tau\in G$ 且 $\sigma\neq\tau$，存在 $\sigma$ 与 $\tau$ 的邻域 $U$ 与 $V$，使得 $\sigma\in U$、$\tau\in V$ 且 $U\cap V=\emptyset$.
+
+    首先注意
+    \[
+    \bigcap_{U\in\mathcal{S}}U=\bigcap_{\mathbb{E}\in\mathcal{F}_{\mathbb{L}}}\operatorname{Gal}(\mathbb{E},\mathbb{K})=1
+    \]\footnote{左端交集跑遍 $\mathcal{S}$，故中间一项原文即如此（作 $\operatorname{Gal}(\mathbb{E},\mathbb{K})$）；按上下文应为 $\operatorname{Gal}(\mathbb{L},\mathbb{E})$.}
+    （这可由\autoref{c2-rem-2-2}推出）.
+
+    于是，若 $\sigma,\tau\in G$ 且 $\sigma\neq\tau$，则 $\sigma^{-1}\tau\neq 1$，从而（利用上式）存在 $U_{0}\in\mathcal{S}$ 使得 $\sigma^{-1}\tau\notin U_{0}$. 这样 $\tau\notin\sigma U_{0}$，即 $\tau U_{0}\cap\sigma U_{0}=\emptyset$（$G$ 是群）.
+    \item 我们用 Tychonoff 定理证明紧致性. 为此构造同态
+    \[
+    h:G\to\prod_{\mathbb{E}\in\mathcal{F}_{\mathbb{L}}}\operatorname{Gal}(\mathbb{E},\mathbb{K})=:P
+    \]
+    定义为
+    \[
+    h(\sigma)=\prod_{\mathbb{E}\in\mathcal{F}_{\mathbb{L}}}\sigma|_{\mathbb{E}}.
+    \]
+    注意 $P$ 是紧致的. 事实上，每个 $\operatorname{Gal}(\mathbb{E},\mathbb{K})$ 都是离散有限群，从而紧致，于是由 Tychonoff 定理（见 \cite[Theorem~37.3]{mun75}），$P$ 作为紧致空间之积是紧致的. 如果我们证明 $h$ 是单射、连续且到 $h(G)$ 上是开映射，就得到 $G$ 与 $h(G)$ 之间的同胚（见 \cite[Theorem~26.6]{mun75}）. 进而，若再证明 $h(G)$ 是 $P$ 的闭子集（这蕴含 $h(G)$ 紧致），即得 $G$ 紧致.
+
+    \textbf{单射性：}设 $\sigma\in G$ 满足 $h(\sigma)=1$. 这就是说对每个 $\mathbb{E}\in\mathcal{F}_{\mathbb{L}}$，$\sigma|_{\mathbb{E}}$ 都是恒等映射. 但已知 $\mathbb{L}=\bigcup_{\mathbb{E}\in\mathcal{F}_{\mathbb{L}}}\mathbb{E}$，故 $\sigma=1$.
+
+    \textbf{连续性：}考虑复合
+    \[
+    G\xrightarrow{\ h\ }P\xrightarrow{\ \pi_{\mathbb{E}}\ }\operatorname{Gal}(\mathbb{E},\mathbb{K}),
+    \]
+    其中 $\pi_{\mathbb{E}}$ 是典范投影. 要证 $h$ 连续，只需证明对一切 $\mathbb{E}\in\mathcal{F}_{\mathbb{L}}$，$\pi_{\mathbb{E}}\circ h$ 连续. 由于我们处理的是拓扑群，只需在 $1$ 处验证：
+    \[
+    (\pi_{\mathbb{E}}h)^{-1}(\{1\})=\operatorname{Gal}(\mathbb{L},\mathbb{E})\in\mathcal{S}.
+    \]
+    注意 $\{1\}$ 在 $P$ 中是开集，因为它在每个 $\operatorname{Gal}(\mathbb{E},\mathbb{K})$ 中都是开集（$\operatorname{Gal}(\mathbb{E},\mathbb{K})$ 有限）.
+
+    \textbf{开映射：}设 $\mathbb{E}\in\mathcal{F}_{\mathbb{L}}$，则
+    \[
+    h(\operatorname{Gal}(\mathbb{L},\mathbb{E}))=h(G)\cap\big(\prod_{\substack{\mathbb{E}'\neq\mathbb{E}\\ \mathbb{E}'\in\mathcal{F}_{\mathbb{L}}}}\operatorname{Gal}(\mathbb{E}',\mathbb{K})\times\{1\}\big),
+    \]
+    这是 $h(G)$ 中的开集.
+
+    \textbf{$h(G)$ 闭：}对每对满足 $\mathbb{E}_{2}\subseteq\mathbb{E}_{1}$ 的 $\mathbb{E}_{1},\mathbb{E}_{2}\in\mathcal{F}_{\mathbb{L}}$，定义 $M_{\mathbb{E}_{1}|\mathbb{E}_{2}}:=\{\Sigma\in P\mid \pi_{\mathbb{E}_{1}}(\Sigma)|_{\mathbb{E}_{2}}=\pi_{\mathbb{E}_{2}}(\Sigma)\}$. 我们先证 $M_{\mathbb{E}_{1}|\mathbb{E}_{2}}$ 在 $P$ 中闭. 由于 $\mathbb{E}_{2}$ 是 $\mathbb{K}$ 的有限扩张，可设 $\operatorname{Gal}(\mathbb{E}_{2},\mathbb{K})=\{f_{1},\ldots,f_{r}\}$. 以 $S_{i}$ 记 $f_{i}$ 到 $\mathbb{E}_{1}$ 的扩张之集. 于是
+    \[
+    M_{\mathbb{E}_{1}|\mathbb{E}_{2}}=\bigcup_{i=1}^{r}\big(\prod_{\substack{\mathbb{E}\neq\mathbb{E}_{1},\mathbb{E}_{2}\\ \mathbb{E}\in\mathcal{F}_{\mathbb{L}}}}\operatorname{Gal}(\mathbb{E},\mathbb{K})\times S_{i}\times\{f_{i}\}\big).
+    \]
+    有限并中的每个集合都是闭集（作为闭集之积），故 $M_{\mathbb{E}_{1}|\mathbb{E}_{2}}$ 闭.
+
+    我们有
+    \[
+    h(G)\subseteq\bigcap_{\mathbb{E}_{1}\supseteq\mathbb{E}_{2}}M_{\mathbb{E}_{1}|\mathbb{E}_{2}}
+    \]
+    若能证明反包含，就得 $h(G)$ 在 $P$ 中闭. 现在，若 $\Sigma\in\bigcap_{\mathbb{E}_{1}\supseteq\mathbb{E}_{2}}M_{\mathbb{E}_{1}|\mathbb{E}_{2}}$，当 $x\in\mathbb{E}$ 时定义 $\sigma(x)=\pi_{\mathbb{E}}(\Sigma)(x)$，这就给出一个自同构 $\sigma:\mathbb{L}\to\mathbb{L}$. 由 $\Sigma\in\cap M_{\mathbb{E}_{1}|\mathbb{E}_{2}}$（并利用\autoref{c2-rem-2-2}），这样的 $\sigma$ 是良定义的. 我们有 $h(\sigma)=\prod_{\mathbb{E}\in\mathcal{F}_{\mathbb{L}}}\pi_{\mathbb{E}}(\Sigma)$，从而
+    \[
+    h(G)\supseteq\bigcap_{\mathbb{E}_{1}\supseteq\mathbb{E}_{2}}M_{\mathbb{E}_{1}|\mathbb{E}_{2}},
+    \]
+    故 $h(G)$ 闭.
+    \item 由于我们处理的是拓扑群，只需证明 $1$ 的连通分支 $H$ 等于 $\{1\}$.
+
+    对每个 $U\in\mathcal{S}$，定义 $U_{H}:=U\cap H$. 因 $1\in U$，有 $U_{H}\neq\emptyset$；又因 $U$ 开，$U_{H}$ 在 $H$ 中开. 再定义
+    \[
+    V_{H}=\bigcup_{x\in H\setminus U_{H}}xU_{H}.
+    \]
+    于是 $V_{H}$ 在 $H$ 中开，因为每个 $xU_{H}$ 都是开集. 我们还有 $U_{H}\cap V_{H}=\emptyset$ 且 $H=U_{H}\cup V_{H}$. 但 $H$ 是连通的，故必有 $V_{H}=\emptyset$；否则 $U_{H}|V_{H}$ 就是 $H$ 的一个分离. 这意味着 $U_{H}=H$，即对一切 $U\in\mathcal{S}$ 有 $U\cap H=H$. 从而
+    \[
+    H\subseteq\bigcap_{U\in\mathcal{S}}U=\{1\},
+    \]
+    即 $H=\{1\}$.
+\end{enumerate}
+\end{proof}
+
+\section{无限 Galois 理论的基本定理}
+
+本节要把有限扩张情形的 Galois 理论主定理推广开来，为此我们还将推广一些命题和引理.
+
+\subsection{一些必要的命题}
+
+第一条命题是\autoref{c2-lem-2-2}的推广，但此时我们是在拓扑群的框架下工作.
+
+\begin{proposition}\label{c2-prop-3-1}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的 Galois 扩张. 对每个满足 $\mathbb{K}\subseteq\mathbb{E}\subseteq\mathbb{L}$ 的 $\mathbb{K}$ 的有限 Galois 扩张 $\mathbb{E}$，映射
+\[
+\begin{aligned}
+r:\operatorname{Gal}(\mathbb{L},\mathbb{K})&\longrightarrow\operatorname{Gal}(\mathbb{E},\mathbb{K})\\
+\sigma&\longmapsto\sigma|_{\mathbb{E}}
+\end{aligned}
+\]
+是连续满射.
+\end{proposition}
+
+\begin{proof}
+\autoref{c2-lem-2-2}已证该映射是满射.
+
+我们证明单位元 $1_{\operatorname{Gal}(\mathbb{E},\mathbb{K})}$ 的原像在 $\operatorname{Gal}(\mathbb{L},\mathbb{K})$ 中开（拓扑群是均匀的，这就足够了）. 而 $r^{-1}(\{1_{\operatorname{Gal}(\mathbb{E},\mathbb{K})}\})=\operatorname{Gal}(\mathbb{L},\mathbb{E})$，由 Krull 拓扑的定义它是开集.
+\end{proof}
+
+\begin{proposition}\label{c2-prop-3-2}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的 Galois 扩张，记 $G:=\operatorname{Gal}(\mathbb{L},\mathbb{K})$. 则以下断言成立.
+\begin{enumerate}
+    \item 对每个中间域 $\mathbb{M}$（即 $\mathbb{K}\subseteq\mathbb{M}\subseteq\mathbb{L}$），$\mathbb{L}$ 在 $\mathbb{M}$ 上是 Galois 扩张. 此外，$\operatorname{Gal}(\mathbb{L},\mathbb{M})$ 在 $G$ 中闭，且 $\mathbb{L}^{\operatorname{Gal}(\mathbb{L},\mathbb{M})}=\mathbb{M}$.
+    \item 对 $G$ 的每个子群 $H$，$\operatorname{Gal}(\mathbb{L},\mathbb{L}^{H})$ 是 $H$ 的拓扑闭包.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\begin{enumerate}
+    \item 第一条断言蕴含于\autoref{c2-prop-1-4}.
+
+    以 $\mathcal{F}_{\mathbb{M}}$ 记满足 $\mathbb{K}\subseteq\mathbb{E}\subseteq\mathbb{M}$ 的 $\mathbb{K}$ 的一切有限 Galois 扩张 $\mathbb{E}$ 构成的族. 则 $\mathbb{M}$ 是 $\mathcal{F}_{\mathbb{M}}$ 中一切元素之并，这意味着
+    \[
+    \operatorname{Gal}(\mathbb{L},\mathbb{M})=\cap_{\mathbb{E}\in\mathcal{F}_{\mathbb{M}}}\operatorname{Gal}(\mathbb{L},\mathbb{E}).
+    \]
+    而各 $\operatorname{Gal}(\mathbb{L},\mathbb{E})$ 都是 $G$ 的开子群，因而也是闭的（见第 $1$ 章\autoref{c1-prop-4-4}(2) 与\autoref{c2-thm-2-6}）. 于是 $\operatorname{Gal}(\mathbb{L},\mathbb{M})$ 作为闭集之交是闭的.
+
+    \autoref{c2-lem-2-3}蕴含最后一条断言.
+    \item 我们有 $H\subseteq\operatorname{Gal}(\mathbb{L},\mathbb{L}^{H})$，但 $\operatorname{Gal}(\mathbb{L},\mathbb{L}^{H})$ 是闭的，故 $\overline{H}\subseteq\operatorname{Gal}(\mathbb{L},\mathbb{L}^{H})$.
+
+    现在设 $\sigma\in G\setminus\overline{H}$，则存在 $\mathbb{E}\in\mathcal{F}_{\mathbb{L}}$ 使得 $\sigma\operatorname{Gal}(\mathbb{L},\mathbb{E})\cap H=\emptyset$. 于是 $\sigma\notin H\operatorname{Gal}(\mathbb{L},\mathbb{E})$. 由于 $\sigma$ 不能写成 $\sigma=h\tau$（其中 $h\in H$、$\tau\in\operatorname{Gal}(\mathbb{L},\mathbb{E})$；否则将有 $\sigma(\alpha)=h(\alpha)$ 对一切 $\alpha\in\mathbb{E}$ 成立），故存在 $\alpha\in\mathbb{E}$ 使得 $H$ 固定 $\alpha$（$\Rightarrow\alpha\in\mathbb{L}^{H}$）但 $\sigma(\alpha)\neq\alpha$. 这意味着 $\sigma\notin\operatorname{Gal}(\mathbb{L},\mathbb{L}^{H})$.
+
+    从而 $\operatorname{Gal}(\mathbb{L},\mathbb{L}^{H})\subseteq\overline{H}$.
+\end{enumerate}
+\end{proof}
+
+\subsection{主定理}
+
+下面证明一个与有限 Galois 扩张的主定理（见\autoref{c2-thm-1-5}）类似的定理.
+
+\begin{theorem}\label{c2-thm-3-3}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 上的 Galois 扩张，$G$ 为其 Galois 群. 存在双射
+\[
+\{H\mid H\ \text{为}\ G\ \text{的闭子群}\}\leftrightarrow\{\mathbb{M}\ \text{中间域}\mid\mathbb{K}\subseteq\mathbb{M}\subseteq\mathbb{L}\}
+\]
+它由映射 $H\mapsto\mathbb{L}^{H}$（把闭子群映到它的固定域）与 $\mathbb{M}\mapsto\operatorname{Gal}(\mathbb{L},\mathbb{M})$（把中间域映到它的 Galois 群）给出. 此外，
+\begin{enumerate}
+    \item 若 $H_{1}$ 与 $H_{2}$ 是 $G$ 的两个闭子群，则 $H_{1}\supseteq H_{2}$ 当且仅当 $\mathbb{L}^{H_{1}}\subseteq\mathbb{L}^{H_{2}}$.
+    \item $G$ 的闭子群 $H$ 是开集当且仅当 $\mathbb{L}^{H}$ 在 $\mathbb{K}$ 上的次数有限. 此时 $[G:H]=[\mathbb{L}^{H}:\mathbb{K}]$，即指数与次数一致.
+    \item 对每个元素 $\sigma\in G$ 与 $G$ 的每个子群 $H$，有 $\mathbb{L}^{\sigma H\sigma^{-1}}=\sigma(\mathbb{L}^{H})$；若 $\mathbb{M}$ 是中间域，则 $\operatorname{Gal}(\mathbb{L},\sigma\mathbb{M})=\sigma\operatorname{Gal}(\mathbb{L},\mathbb{M})\sigma^{-1}$.
+    \item 若 $H$ 是 $G$ 的闭子群，则下述等价成立：
+
+    $H$ 正规当且仅当 $\mathbb{L}^{H}$ 在 $\mathbb{K}$ 上是 Galois 扩张. 此时 $\operatorname{Gal}(\mathbb{L}^{H},\mathbb{K})\cong G/H$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+要证第一条断言，只需证明映射 $H\mapsto\mathbb{L}^{H}$ 与 $\mathbb{M}\mapsto\operatorname{Gal}(\mathbb{L},\mathbb{M})$ 互为逆映射. 先设 $H$ 是 $G$ 的闭子群，则 $\mathbb{L}$ 在 $\mathbb{L}^{H}$ 上是 Galois 扩张且 $\operatorname{Gal}(\mathbb{L},\mathbb{L}^{H})=H$（见\autoref{c2-prop-3-2}）. 反之，若 $\mathbb{M}$ 是中间域，则 $\operatorname{Gal}(\mathbb{L},\mathbb{M})$ 是 $G$ 的闭子群且 $\mathbb{L}^{\operatorname{Gal}(\mathbb{L},\mathbb{M})}=\mathbb{M}$（见\autoref{c2-prop-3-2}(1)）.
+\begin{enumerate}
+    \item 设 $H_{1},H_{2}$ 是 $G$ 的闭子群，由定义即有
+    \[
+    H_{2}\subseteq H_{1}\Rightarrow\mathbb{L}^{H_{1}}\subseteq\mathbb{L}^{H_{2}}\Rightarrow\operatorname{Gal}(\mathbb{L},\mathbb{L}^{H_{1}})\supseteq\operatorname{Gal}(\mathbb{L},\mathbb{L}^{H_{2}})
+    \]
+    于是 $\operatorname{Gal}(\mathbb{L},\mathbb{L}^{H_{i}})=H_{i}$ 蕴含结论.
+    \item 由第 $1$ 章\autoref{c1-prop-4-4}，$H$ 是 $G$ 的闭子群且指数有限蕴含 $H$ 开. 反之用同一条命题，若 $H$ 是 $G$ 的开子群，则 $H$ 闭且指数有限（回忆 $G$ 紧致——见\autoref{c2-thm-2-6}）.
+
+    现在设 $H$ 闭且指数有限. 考虑连续映射
+    \[
+    \begin{aligned}
+    r:\operatorname{Gal}(\mathbb{L},\mathbb{K})&\longrightarrow\operatorname{Hom}_{\mathbb{K}}(\mathbb{L}^{H},\mathbb{K})\\
+    \sigma&\longmapsto\sigma|_{\mathbb{L}^{H}}.
+    \end{aligned}
+    \]
+    显然 $\ker(r)=\operatorname{Gal}(\mathbb{L},\mathbb{L}^{H})$ 且 $\operatorname{im}(r)=\operatorname{Hom}_{\mathbb{K}}(\mathbb{L}^{H},\mathbb{K})$（最后一条断言应用\autoref{c2-lem-2-1}）. 于是由群的第一同构定理，
+    \[
+    \operatorname{Gal}(\mathbb{L},\mathbb{K})/\ker(r)\cong\operatorname{Hom}_{\mathbb{K}}(\mathbb{L}^{H},\mathbb{K}),
+    \]
+    等价地
+    \[
+    G/H\cong\operatorname{Hom}_{\mathbb{K}}(\mathbb{L}^{H},\mathbb{K}).
+    \]
+    \item 设 $\mathbb{M}$ 是中间域，$H=\operatorname{Gal}(\mathbb{L},\mathbb{M})$. 若 $\sigma\in G$，我们要证 $\sigma H\sigma^{-1}\leftrightarrow\sigma\mathbb{M}$.
+
+    为此，设 $\tau\in G$、$\alpha\in\mathbb{L}$. 则 $\tau(\alpha)=\alpha$ 当且仅当 $\sigma\tau\sigma^{-1}(\sigma(\alpha))=\sigma(\alpha)$. 于是 $\operatorname{Gal}(\mathbb{L},\sigma\mathbb{M})=\sigma\operatorname{Gal}(\mathbb{L},\mathbb{M})\sigma^{-1}$. 且 $\sigma(\mathbb{L}^{H})=\sigma\mathbb{M}=\mathbb{L}^{\sigma H\sigma^{-1}}$.
+    \item 设 $\mathbb{M}$ 是中间域，$H=\operatorname{Gal}(\mathbb{L},\mathbb{M})$. 由 (3)，$H$ 在 $G$ 中正规当且仅当 $\mathbb{M}$ 在 $G$ 的自然作用下不变. 后一条断言等价于说 $\mathbb{M}$ 是 $\mathbb{K}$ 的在 $G$ 下不变的一族有限扩张之并. 而这利用\autoref{c2-thm-1-5}的第 (3) 条，正相当于要求这些有限扩张都在 $\mathbb{K}$ 上 Galois. 于是 $\mathbb{M}$ 是 Galois 的.
+
+    而同构则由 (2) 推出.
+\end{enumerate}
+\end{proof}
+
+下面这个例子说明：若去掉拓扑条件，主定理就不成立.
+
+\begin{example}\label{c2-ex-3-1}
+考虑素数域 $\mathbb{F}_p$ 及其代数闭包 $\overline{\mathbb{F}}_p$. 注意 $\overline{\mathbb{F}}_p$ 是 $\mathbb{F}_p$ 的 Galois 扩张. 由于 $\overline{\mathbb{F}}_p$ 必须包含一切形如 $X^{p^{n}}-X$（$n\geq 1$）的多项式的根，有 $\mathbb{F}_{p^{n}}\subseteq\overline{\mathbb{F}}_p$. 又 $\overline{\mathbb{F}}_p$ 可写成中间有限扩张之并，故必有 $\overline{\mathbb{F}}_p=\cup_{n\geq 1}\mathbb{F}_{p^{n}}$.
+
+现在考虑 $G=\operatorname{Gal}(\overline{\mathbb{F}}_p,\mathbb{F}_p)$. 以 $\varphi$ 记 Frobenius 自同构，即
+\[
+\varphi:\overline{\mathbb{F}}_p\to\overline{\mathbb{F}}_p:\alpha\mapsto\alpha^{p}.
+\]
+由于 $\mathbb{F}_p^{*}$ 是 $p-1$ 阶循环群，对每个 $\alpha\in\mathbb{F}_p$ 有 $\varphi(\alpha)=\alpha$. 故 $\varphi\in G$.
+
+定义 $H=\langle\varphi\rangle$，即由 $\varphi$ 的一切方幂生成的 $G$ 的子群. 下面证明关于 $H$ 的两条引人注目的断言.
+\begin{enumerate}
+    \item $H\neq G$
+
+    为此要在 $G$ 中找到一个不属于 $H$ 的元素 $\tau$.
+
+    我们先证：存在 $\mathbb{F}_p$ 的无限中间扩张 $\mathbb{M}$，使得 $\mathbb{F}_p\subsetneq\mathbb{M}\subsetneq\overline{\mathbb{F}}_p$. 考虑 $\mathbb{M}=\cup_{n\geq 0}\mathbb{F}_{p^{2n}}$，显然 $\mathbb{M}$ 是无限扩张（因为对一切 $n\geq 0$ 有 $\mathbb{F}_{p^{2n}}\subseteq\mathbb{M}$），且 $\mathbb{M}$ 在 $\mathbb{F}_p$ 上 Galois（因为它是 Galois 扩张之并）.
+
+    下面再证 $\mathbb{M}\neq\overline{\mathbb{F}}_p$. 为此考虑 $\mathbb{F}_{p^{3}}$，显然 $[\mathbb{F}_{p^{3}}:\mathbb{F}_p]=3$ 且 $\mathbb{F}_{p^{3}}\subseteq\overline{\mathbb{F}}_p$，但 $\mathbb{F}_{p^{3}}\nsubseteq\mathbb{M}$. 事实上，若设 $\mathbb{F}_{p^{3}}=\mathbb{F}_p[\alpha]$ 且 $\alpha\in\mathbb{M}$，则对某个 $n\geq 0$ 有 $\alpha\in\mathbb{F}_{p^{2n}}$，从而 $\mathbb{F}_3$\footnote{原文即如此；按上下文应为 $\mathbb{F}_{p^{3}}$.}$\subseteq\mathbb{F}_{p^{2n}}$. 但这样对扩张用次数公式就有：
+    \[
+    2^{n}=[\mathbb{F}_{p^{2n}}:\mathbb{F}_p]=[\mathbb{F}_{p^{2n}}:\mathbb{F}_{p^{3}}][\mathbb{F}_{p^{3}}:\mathbb{F}_p]=[\mathbb{F}_{p^{2n}}:\mathbb{F}_{p^{3}}]\cdot 3,
+    \]
+    这是矛盾. 故 $\mathbb{F}_p\subsetneq\mathbb{M}\subsetneq\overline{\mathbb{F}}_p$.
+
+    现在由\autoref{c2-prop-1-4}，$\overline{\mathbb{F}}_p$ 在 $\mathbb{M}$ 上是 Galois 扩张. 取 $\tau\in\operatorname{Gal}(\overline{\mathbb{F}}_p,\mathbb{M})\setminus\{\mathrm{Id}\}\subseteq G$. 若假设 $H=G$，则存在 $n\geq 1$ 使得 $\tau=\varphi^{n}$. 于是 $\varphi^{n}$ 固定 $\mathbb{M}$，故 $\mathbb{M}\subseteq\mathbb{F}_{p^{n}}$. 但 $\mathbb{M}$ 是无限的，矛盾.
+    \item $\mathbb{F}_p^{H}=\overline{\mathbb{F}}_p$\footnote{原文即如此（横线在右端）；按上下文，此处及末行的固定域记号应为 $\overline{\mathbb{F}}_p^{\,H}=\mathbb{F}_p$ 与 $\mathbb{F}_p=\overline{\mathbb{F}}_p^{\,G}$.}
+
+    由定义 $\mathbb{F}_p^{H}\subseteq\overline{\mathbb{F}}_p$，故只需证反包含. 设 $\alpha\in\overline{\mathbb{F}}_p$，则 $\alpha\in\mathbb{F}_{p^{n}}$ 对某个 $n\geq 1$ 成立. 这意味着 $\alpha^{p^{n}}-\alpha=0$（见\autoref{c2-ex-1-17}）. 于是 $\alpha^{p^{n}}=\alpha$，从而 $\varphi^{n}(\alpha)=\alpha$. 故 $\alpha\in\mathbb{F}_p^{H}$.
+\end{enumerate}
+我们得出结论：$H$ 与 $G$ 是两个不同的群，但它们的固定域相同，因为 $\overline{\mathbb{F}}_p=\mathbb{F}_p^{G}$. 这与定理矛盾，除非 $G$ 是 $H$ 的拓扑闭包.
+\end{example}

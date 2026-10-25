@@ -1,0 +1,2030 @@
+% ============ 第二章 II: 群的上同调 ============
+% 源: J.S. Milne, Class Field Theory (v4.03), Chapter II, pp. 51--71
+% 翻译自 OCR 草稿 J.S. Milne - Class Field Theory.pdf_by_PaddleOCR-VL-1.6.md (行 2093--3783)
+% 编号约定见 main.tex: 定理类环境按"节.序号"编号, 全部共享 theorem 计数器.
+%   §1 中 1.6/1.7/1.8/1.9 为叙述性条目(非定理环境), 故在 rem:1.10 前 \setcounter{theorem}{9}.
+%   §2 中 2.1/2.2/2.3/2.4 为叙述性条目, 故在 rem:2.5 前 \setcounter{theorem}{4}.
+%   附录 A 改用 \renewcommand{\thetheorem}{A.\arabic{theorem}}.
+
+% 本章局部使用的算子宏 (若已在别处定义则跳过, 不冲突)
+\providecommand{\Res}{\operatorname{Res}}
+\providecommand{\Cor}{\operatorname{Cor}}
+\providecommand{\Inf}{\operatorname{Inf}}
+\providecommand{\Ver}{\operatorname{Ver}}
+\providecommand{\Coker}{\operatorname{Coker}}
+\providecommand{\Ab}{\mathsf{Ab}}      % 交换群范畴
+\providecommand{\Mod}{\mathsf{Mod}}    % 模范畴
+
+\chapter{群的上同调}\label{ch:II}\index{qundeshangtongdiao@群的上同调(cohomology of groups)}
+
+我们暂离数论, 来做一点同调代数. 在本章末尾的一个附录中, 我们回顾导出函子的一般理论.
+
+\section{上同调}\label{sec:II.1}\index{shangtongdiao@上同调(cohomology)}
+
+\subsection{\texorpdfstring{$G$}{G}-模的范畴}
+
+设 $G$ 为一个群. 一个 \emph{$G$-模}是一个交换群 $M$ 连同映射
+\[
+ (g,m)\mapsto g m\colon G\times M\to M
+\]
+使得对所有 $g,g'\in G$, $m,m'\in M$ 有
+\begin{enumerate}[(a)]
+\item $g(m+m')=g m+g m'$;
+\item $(gg')(m)=g(g'm)$, $1m=m$.
+\end{enumerate}
+等价地, 一个 $G$-模是一个交换群 $M$ 连同群同态 $G\to\operatorname{Aut}(M)$. 我们也说 $G$ \emph{作用在} $M$ 上, 并说作用是\emph{平凡的}如果对所有 $g\in G$, $m\in M$ 有 $gm=m$.
+
+一个\emph{$G$-模同态}(或 $G$-同态)是一个映射 $\alpha\colon M\to N$ 使得
+\begin{enumerate}[(a)]
+\item $\alpha(m+m')=\alpha(m)+\alpha(m')$ (即 $\alpha$ 是交换群的同态);
+\item $\alpha(gm)=g(\alpha(m))$ 对所有 $g\in G$, $m\in M$.
+\end{enumerate}
+我们记 $\operatorname{Hom}_G(M,N)$ 为 $G$-同态 $M\to N$ 的集合.
+
+\begin{remark}\label{rem:ii.1.1}
+$G$ 的\emph{群代数} $\Z[G]$ 是以 $G$ 的元素为基的自由交换群, 其乘法由 $G$ 上的群律给出. 于是 $\Z[G]$ 的元素是有限和
+\[
+ \sum_i n_i g_i,\qquad n_i\in\Z,\quad g_i\in G,
+\]
+并且
+\[
+ \Bigl(\sum_i n_i g_i\Bigr)\Bigl(\sum_j n_j' g_j'\Bigr)=\sum_{i,j} n_i n_j'(g_i g_j').
+\]
+一个交换群 $M$ 上的 $G$-模结构唯一地扩张为一个 $\Z[G]$-模结构, 而一个交换群同态是 $G$-模同态当且仅当它是 $\Z[G]$-模同态. 因此 $G$-模范畴 $\Mod_G$ 可以等同于环 $\Z[G]$ 上的模范畴. 特别地, $\Mod_G$ 是一个 Abel 范畴.
+\end{remark}
+
+如果 $M$ 和 $N$ 是 $G$-模, 那么同态集合 $\operatorname{Hom}(M,N)$ (把 $M$ 和 $N$ 只看作交换群) 带如下结构成为一个 $G$-模:
+\begin{equation*}
+ (\varphi+\varphi')(m)=\varphi(m)+\varphi'(m),\qquad (g\varphi)(m)=g(\varphi(g^{-1}m)).\tag{11}
+\end{equation*}
+
+\subsubsection*{诱导模}
+
+对 $H$-模 $M$, 我们定义 $\Ind_H^G(M)$ 为满足 $\varphi(hg)=h\varphi(g)$ 对所有 $h\in H$ 的映射 (不必是同态) $\varphi\colon G\to M$ 的集合. 于是 $\Ind_H^G(M)$ 成为一个 $G$-模, 其运算为
+\begin{equation*}
+ (\varphi+\varphi')(x)=\varphi(x)+\varphi'(x),\qquad (g\varphi)(x)=\varphi(xg).\tag{12}
+\end{equation*}
+一个 $H$-模同态 $\alpha\colon M\to M'$ 定义 $G$-模同态
+\[
+ \varphi\mapsto \alpha\circ\varphi\colon \Ind_H^G(M)\to \Ind_H^G(M').
+\]
+
+\begin{lemma}\label{lem:ii.1.2}
+\begin{enumerate}[(a)]
+\item 对每个 $G$-模 $M$ 与 $H$-模 $N$,
+\[
+ \operatorname{Hom}_G(M,\Ind_H^G(N))\simeq \operatorname{Hom}_H(M,N).
+\]
+\item 函子
+\[
+ \Ind_H^G\colon \Mod_H\to \Mod_G
+\]
+是正合的.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) 给定 $G$-同态 $\alpha\colon M\to \Ind_H^G(N)$, 我们定义映射 $\beta\colon M\to N$ 为
+\[
+ \beta(m)=\alpha(m)(1_G),
+\]
+其中 $1_G$ 是 $G$ 的单位元. 对每个 $g\in G$,
+\[
+ \beta(gm)\stackrel{\mathrm{def}}{=}(\alpha(gm))(1_G)=(g(\alpha(m)))(1_G)\stackrel{(12)}{=}\alpha(m)(g).
+\]
+因为 $\alpha(m)\in \Ind_H^G(N)$, 当 $g\in H$ 时 $\alpha(m)(g)=g(\alpha(m)(1_G))=g(\beta(m))$. 因此 $\beta$ 是一个 $H$-同态 $M\to N$.
+
+反之, 给定 $H$-同态 $\beta\colon M\to N$, 我们定义 $\alpha$ 为映射 $M\to \Ind_H^G(N)$, 满足 $\alpha(m)(g)=\beta(gm)$. 则 $\alpha$ 是一个 $G$-同态.
+
+由于映射 $\alpha\mapsto\beta$ 与 $\beta\mapsto\alpha$ 互逆, 二者都是同构.
+
+(b) 给定正合列
+\[
+ 0\to M\to N\to P\to 0,
+\]
+我们必须证明
+\[
+ 0\to \Ind_H^G M\to \Ind_H^G N\to \Ind_H^G P\to 0
+\]
+正合. 除最后一项外这是显然的. 取 $H$ 在 $G$ 中的右陪集代表系 $S$, 即 $G=\coprod_{s\in S}Hs$, 并设 $\varphi\in \Ind_H^G(P)$. 对每个 $s\in S$, 取一个映到 $P$ 中 $\varphi(s)$ 的 $n(s)\in N$, 并定义 $\tilde\varphi(hs)=h\cdot n(s)$. 则 $\tilde\varphi\in \Ind_H^G(N)$ 且映到 $\varphi$.
+\end{proof}
+
+设 $\phi$ 为映射 $\Ind_H^G(N)\to N$, $\varphi\mapsto \varphi(1_G)$; 这是一个 $H$-同态, 引理表明 $(\Ind_H^G(N),\phi)$ 具有如下泛性质: 对任何从 $G$-模 $M$ 到 $N$ 的 $H$-同态 $\beta$, 存在唯一的 $G$-同态 $\alpha\colon M\to \Ind_H^G(N)$ 使得 $\phi\circ\alpha=\beta$:
+\[
+\begin{tikzcd}
+	M && {\Ind_H^G(N)} \\
+	&& N
+	\arrow["\alpha"{description}, from=1-1, to=1-3]
+	\arrow["\beta"'{pos=0.4}, curve={height=18pt}, from=1-1, to=2-3]
+	\arrow["\phi", from=1-3, to=2-3]
+\end{tikzcd}
+\]
+(其中 $\alpha$ 为 $G$-映射, 而 $\phi$ 与 $\beta$ 为 $H$-映射).
+当 $H=\{1\}$ 时, 一个 $H$-模不过是一个交换群. 此时我们从记号 $\Ind_H^G$ 中略去 $H$. 于是
+\[
+ \Ind^G(M_0)=\{\varphi\colon G\to M_0\}\quad(\text{映射, 不必是同态})=\operatorname{Hom}(\Z[G],M_0)\quad(\text{交换群的同态}).
+\]
+一个 $G$-模称为\emph{诱导的}, 如果它同构于某个交换群 $M_0$ 的 $\Ind^G(M_0)$.
+
+\begin{remark}\label{rem:ii.1.3}
+设 $G$ 为有限群.
+\begin{enumerate}[(a)]
+\item 一个 $G$-模 $M$ 是诱导的当且仅当存在 $M$ 的子交换群 $M_0$ 使得
+\[
+ M=\bigoplus_{g\in G} g M_0\qquad(\text{交换群的直接和}),
+\]
+此时有 $G$-模的同构
+\[
+ \varphi\mapsto \sum_{g\in G} g\otimes \varphi(g^{-1})\colon \Ind^G(M_0)\to \Z[G]\otimes_\Z M_0.
+\]
+这里 $\Z[G]\otimes_\Z M_0$ 带如下 $G$-结构: $g(z\otimes m)=gz\otimes m$.
+\item 设 $H$ 为 $G$ 的子群. 一个诱导 $G$-模在视为 $H$-模时也是诱导的: 取 $H$ 在 $G$ 中的右陪集代表系 $S$, 即 $G=\coprod_{s\in S}Hs$; 若 $M=\bigoplus_{g\in G}gM_0$, 则 $M=\bigoplus_{h\in H}hM_1$, 其中 $M_1=\bigoplus_{s\in S}sM_0$.
+\item 设 $M$ 为 $G$-模, $M_0$ 为视为交换群的 $M$. 则
+\[
+ \pi\colon \Ind^G(M_0)\to M,\qquad \varphi\mapsto \sum_{g\in G} g\varphi(g^{-1})
+\]
+是一个满 $G$-模同态. 它对应于映射
+\[
+ \Z[G]\otimes M_0\to M,\qquad \Bigl(\sum n_g g\Bigr)\otimes m\mapsto \sum n_g g m.
+\]
+\end{enumerate}
+\end{remark}
+
+\begin{remark}\label{rem:ii.1.4}
+设 $M$ 和 $N$ 为 $G$-模. 则规则
+\[
+ g(m\otimes n)=gm\otimes gn
+\]
+在 $M\otimes_\Z N$ 上定义了一个 $G$-模结构. 设 $M_0$ 为视为交换群的 $M$. 则 $\Z[G]\otimes_\Z M=\Z[G]\otimes_\Z M_0$ 作为交换群, 但它们的 $G$-模结构不对应. 然而容易验证, 把 $g\otimes m$ 映到 $g\otimes gm$ 的映射 $\Z[G]\otimes_\Z M_0\to \Z[G]\otimes_\Z M$ 是一个 $G$-模同构.
+\end{remark}
+
+\subsubsection*{内射 $G$-模}
+
+一个 $G$-模 $I$ 称为\emph{内射的}, 如果从一个 $G$-模的子模到它的每个 $G$-同态都扩张到整个模上, 等价地, 如果 $\operatorname{Hom}_G(\cdot,I)$ 是一个正合函子.
+
+\begin{proposition}\label{prop:ii.1.5}
+范畴 $\Mod_G$ 有足够多的内射对象, 即每个 $G$-模 $M$ 都可以嵌入一个内射 $G$-模 $I$ 中: $M\hookrightarrow I$.
+\end{proposition}
+
+\begin{proof}
+当 $G=\{1\}$ 时, $\Mod_G$ 就是交换群范畴, 这由附录 (\ref{prop:ii.A.4}) 证得. 现在设 $M$ 为 $G$-模, $M_0$ 为视为交换群的 $M$. 我们可以把 $M_0$ 嵌入一个内射交换群, 比如 $M_0\hookrightarrow I$. 应用函子 $\Ind^G$, 我们得到 $G$-模的含入 $\Ind^G(M_0)\hookrightarrow \Ind^G(I)$. 又存在 $G$-模的含入 $M\hookrightarrow \Ind^G(M_0)$, 把 $m$ 送到函数 $g\mapsto g m$. 把这些映射复合, 我们得到内射同态 $M\hookrightarrow \Ind^G(I)$, 故只需证明 $\Ind^G(I)$ 是一个内射 $G$-模; 但自然同构
+\[
+ \operatorname{Hom}_{\Mod_G}(M,\Ind^G(I))\simeq \operatorname{Hom}_{\Ab}(M,I)
+\]
+表明 $\operatorname{Hom}_{\Mod_G}(-,\Ind^G(I))$ 是正合的.
+\end{proof}
+
+\noindent\phantomsection\hypertarget{item:ii.1.6}{}\textbf{1.6} 第零个群 $H^0(G,M)=M^G$, 因为
+\[
+ 0\to M^G\to I^{0G}\xrightarrow{d^0} I^{1G}
+\]
+正合, 而 $H^0(G,M)\stackrel{\mathrm{def}}{=}\dfrac{\Ker(d^0)}{\Im(d^{-1})}=\Ker(d^0)$.
+
+\noindent\phantomsection\hypertarget{item:ii.1.7}{}\textbf{1.7} 如果 $I$ 是内射 $G$-模, 那么对所有 $r>0$ 有 $H^r(G,I)=0$, 因为
+\[
+ 0\to I\to I\to 0\to\cdots
+\]
+是 $I$ 的一个内射分解.
+
+\noindent\phantomsection\hypertarget{item:ii.1.8}{}\textbf{1.8} 设 $M\to I^\bullet$ 与 $N\to J^\bullet$ 为 $G$-模 $M$ 与 $N$ 的内射分解. 任何 $G$-模同态 $\alpha\colon M\to N$ 都扩张为一个复形的映射
+\[
+ \begin{tikzcd}
+ M \ar[r] \ar[d, "\alpha"'] & I^\bullet \ar[d, "\alpha^\bullet"] \\
+ N \ar[r] & J^\bullet.
+ \end{tikzcd}
+\]
+并且同态
+\[
+ H^r(\alpha^\bullet)\colon H^r(I^\bullet)\to H^r(J^\bullet)
+\]
+与 $\alpha^\bullet$ 的选取无关. 将此陈述用于恒等映射 $\id\colon M\to M$, 我们看到群 $H^r(G,M)$ 的定义是良定的 (到一个良定的同构). 一般 $\alpha$ 的情形的陈述则表明 $M\mapsto H^r(G,M)$ 是从 $G$-模范畴到交换群范畴的一个函子.
+
+\phantomsection\hypertarget{item:ii.1.9}{}\subsubsection*{1.9 短正合列}
+
+一个 $G$-模的短正合列
+\[
+ 0\to M'\to M\to M''\to 0
+\]
+产生一个长正合列
+\[
+ 0\to H^0(G,M')\to\cdots\to H^r(G,M)\to H^r(G,M'')\xrightarrow{\delta^r} H^{r+1}(G,M')\to\cdots
+\]
+而且对应
+\[
+ \text{短正合列}\mapsto\text{长正合列}
+\]
+是函子性的, 即一个短正合列的态射诱导一个长正合列的态射 (见 \ref{prop:ii.A.11}).
+
+% 1.6/1.7/1.8 为叙述性条目, 1.9 为子节标题, 均不占定理计数器; 调至 9 使下一条显示为 1.10
+\setcounter{theorem}{9}
+\begin{remark}\label{rem:ii.1.10}
+函子族 $(H^r(G,\cdot))_{r\ge 0}$ 与边缘同态 $\delta^r$ 由性质 (\hyperlink{item:ii.1.6}{1.6}, \hyperlink{item:ii.1.7}{1.7}, \hyperlink{item:ii.1.9}{1.9}) 唯一确定.
+\end{remark}
+
+\subsubsection*{Shapiro 引理}
+
+设 $M$ 为 $G$-模, 并把 $\Z$ 视为带平凡作用的 $G$-模: 对所有 $g\in G$, $m\in\Z$ 有 $gm=m$. 一个同态 $\alpha\colon \Z\to M$ 由 $\alpha(1)$ 唯一确定, 而 $m\in M$ 是某个 $G$-同态 $\Z\to M$ 下 $1$ 的像当且仅当它被 $G$ 固定. 因此
+\begin{equation*}
+ \operatorname{Hom}_G(\Z,M)\simeq M^G.\tag{13}
+\end{equation*}
+
+\begin{proposition}[Shapiro 引理]\label{prop:ii.1.11}
+设 $H$ 为 $G$ 的子群. 对每个 $H$-模 $N$, 存在典范同构
+\[
+ H^r(G,\Ind_H^G(N))\to H^r(H,N)
+\]
+对所有 $r\ge 0$.
+\end{proposition}
+
+\begin{proof}
+当 $r=0$ 时, 该同构是复合
+\begin{equation*}
+ N^H\overset{(13)}{\simeq}\operatorname{Hom}_H(\Z,N)\overset{(\ref{lem:ii.1.2})}{\simeq}\operatorname{Hom}_G(\Z,\Ind_H^G(N))\overset{(13)}{\simeq}\Ind_H^G(N)^G.\tag{14}
+\end{equation*}
+现在取 $N$ 的一个内射分解 $N\to I^\bullet$. 应用函子 $\Ind_H^G$, 我们得到 $G$-模 $\Ind_H^G(N)$ 的一个内射分解 $\Ind_H^G(N)\to \Ind_H^G(I^\bullet)$, 因为函子 $\Ind_H^G$ 正合 (\ref{lem:ii.1.2}) 且保持内射性 (\ref{prop:ii.1.5} 的证明). 于是
+\[
+ H^r(G,\Ind_H^G(N))=H^r((\Ind_H^G(I^\bullet))^G)\stackrel{(14)}{\simeq} H^r(I^{\bullet H})=H^r(H,N).
+\]
+\end{proof}
+
+\begin{corollary}\label{cor:ii.1.12}
+如果 $M$ 是一个诱导 $G$-模, 那么对所有 $r>0$ 有 $H^r(G,M)=0$.
+\end{corollary}
+
+\begin{proof}
+如果 $M=\Ind^G(M_0)$, 则
+\[
+ H^r(G,M)\simeq H^r(\{1\},M_0)=0\quad\text{对 }r>0.
+\]
+\end{proof}
+
+\begin{remark}\label{rem:ii.1.13}
+考虑一个 $G$-模的正合列
+\[
+ 0\to M\to J\to N\to 0.
+\]
+如果对所有 $r>0$ 有 $H^r(G,J)=0$, 那么上同调列变成正合列
+\[
+ 0\to M^G\to J^G\to N^G\to H^1(G,M)\to 0
+\]
+以及一族同构
+\[
+ H^r(G,N)\xrightarrow{\approx} H^{r+1}(G,M),\quad r\ge 1.
+\]
+例如, 设 $M$ 为 $G$-模, $M_*$ 为诱导模 $\Ind^G(M_0)$, 其中 $M_0$ 是视为交换群的 $M$. 如 (\ref{prop:ii.1.5}) 证明中所注, $M$ 可以等同于 $M_*$ 中形如 $g\mapsto gm$ ($m\in M$) 的映射组成的 $G$-子模. 设 $M_\dagger=M_*/M$. 把上述注记用于序列
+\begin{equation*}
+ 0\to M\to M_*\to M_\dagger\to 0
+\tag{15}\label{eqn:ii.1.15}
+\end{equation*}
+我们得到
+\[
+ H^r(G,M_\dagger)\simeq H^{r+1}(G,M),\quad\text{所有 }r\ge 1.
+\]
+更一般地, 一个正合列
+\[
+ 0\to M\to J^1\to\cdots\to J^s\to N\to 0
+\]
+若对所有 $r,i>0$ 有 $H^r(G,J^i)=0$, 则定义同构
+\[
+ H^r(G,N)\xrightarrow{\simeq} H^{r+s}(G,M),\quad\text{所有 }r\ge 1.
+\]
+要证明它, 把该序列拆成短正合列
+\[
+ \begin{aligned}
+ &0\to M\to J^1\to N^1\to 0\\
+ &0\to N^1\to J^2\to N^2\to 0\\
+ &\cdots\\
+ &0\to N^{s-1}\to J^s\to N\to 0
+ \end{aligned}
+\]
+并注意到我们有同构
+\[
+ H^r(G,N)\simeq H^{r+1}(G,N^{s-1})\simeq H^{r+2}(G,N^{s-2})\simeq\cdots.
+\]
+\end{remark}
+
+\begin{remark}\label{rem:ii.1.14}
+设
+\[
+ 0\to M\xrightarrow{\varepsilon} J^0\xrightarrow{d^0} J^1\xrightarrow{d^1} J^2\to\cdots
+\]
+为一个正合列, 使得对所有 $s>0$ 与所有 $r$ 有 $H^s(G,J^r)=0$. 那么
+\[
+ H^r(G,M)=H^r(J^{\bullet G}).
+\]
+此注记适用于每个由诱导模给出的 $M$ 的分解.
+\end{remark}
+
+\subsubsection*{用上链描述上同调群}
+
+设 $P_r$ ($r\ge 0$) 为以 $G$ 的元素组成的 $(r+1)$-元组 $(g_0,\ldots,g_r)$ 为基的自由 $\Z$-模, 带如下 $G$-作用:
+\[
+ g(g_0,\ldots,g_r)=(gg_0,\ldots,gg_r).
+\]
+注意 $P_r$ 作为 $\Z[G]$-模也是自由的, 以 $\{(1,g_1,\ldots,g_r)\mid g_i\in G\}$ 为基. 定义同态 $d_r\colon P_r\to P_{r-1}$ 为
+\[
+ d_r(g_0,\ldots,g_r)=\sum_{i=0}^r (-1)^i (g_0,\ldots,\widehat{g_i},\ldots,g_r),
+\]
+其中符号 $\hat{\cdot}$ 表示略去 $\cdot$. 令 $P_\bullet$ 为
+\[
+ \cdots\to P_r\xrightarrow{d_r} P_{r-1}\to\cdots\to P_0,
+\]
+容易验证 $d_{r-1}\circ d_r=0$, 故这是一个复形. 设 $\varepsilon$ 为把每个基元送到 $1$ 的映射 $P_0\to\Z$.
+
+\begin{lemma}\label{lem:ii.1.15}
+复形 $P_\bullet\xrightarrow{\varepsilon}\Z\to 0$ 正合.
+\end{lemma}
+
+\begin{proof}
+取一个元素 $o\in G$, 定义 $k_r\colon P_r\to P_{r+1}$ 为
+\[
+ k_r(g_0,\ldots,g_r)=(o,g_0,\ldots,g_r).
+\]
+容易验证 $d_{r+1}\circ k_r+k_{r-1}\circ d_r=1$. 因此若 $d_r(x)=0$, 则 $x=d_{r+1}(k_r(x))$.
+\end{proof}
+
+\begin{proposition}\label{prop:ii.1.16}
+对每个 $G$-模 $M$,
+\[
+ H^r(G,M)\simeq H^r(\operatorname{Hom}_G(P_\bullet,M)).
+\]
+\end{proposition}
+
+\begin{proof}
+这由 $P_\bullet\to\Z$ 是 $\Z$ 的一个投射分解这一事实推出 —— 见例 \ref{ex:ii.A.14}.
+\end{proof}
+
+$\operatorname{Hom}(P_r,M)$ 中的一个元素可以等同于一个函数 $\varphi\colon G^{r+1}\to M$, 而 $\varphi$ 被 $G$ 固定当且仅当
+\[
+ \varphi(gg_0,\ldots,gg_r)=g(\varphi(g_0,\ldots,g_r))\quad\text{对所有 }g,g_0,\ldots,g_r\in G.
+\]
+因此 $\operatorname{Hom}_G(P_r,M)$ 可以等同于满足此条件的 $\varphi$ 的集合 $\widetilde C^r(G,M)$. 这样的 $\varphi$ 称为 $G$ 在 $M$ 中取值的\emph{齐次 $r$-上链}. 由 $d_{r+1}$ 诱导的边缘映射 $\widetilde d^r\colon \widetilde C^r(G,M)\to \widetilde C^{r+1}(G,M)$ 为
+\[
+ (\widetilde d^r\varphi)(g_0,\ldots,g_{r+1})=\sum_{i=0}^{r+1}(-1)^i\varphi(g_0,\ldots,\widehat{g_i},\ldots,g_{r+1}).
+\]
+命题\ref{prop:ii.1.16} 表明
+\[
+ H^r(G,M)\simeq \frac{\Ker(\widetilde d^r)}{\Im(\widetilde d^{r-1})}.
+\]
+一个齐次上链 $\varphi\colon G^{r+1}\to M$ 由它在元素 $(1,g_1,g_1g_2,\ldots,g_1\cdots g_r)$ 上的值决定. 因此我们引出由所有映射 $\varphi\colon G^r\to M$ 组成的\emph{非齐次 $r$-上链}群 $C^r(G,M)$. 我们令 $G^0=\{1\}$, 于是 $C^0(G,M)=M$. 定义
+\[
+ d^r\colon C^r(G,M)\to C^{r+1}(G,M)
+\]
+为 (对 $(d^r\varphi)(g_1,\cdots,g_{r+1})=$)
+\[
+ g_1\varphi(g_2,\ldots,g_{r+1})+\sum_{j=1}^r (-1)^j\varphi(g_1,\ldots,g_jg_{j+1},\ldots,g_{r+1})+(-1)^{r+1}\varphi(g_1,\ldots,g_r).
+\]
+定义
+\[
+ Z^r(G,M)=\Ker(d^r)\qquad(r\text{-上循环群})
+\]
+与
+\[
+ B^r(G,M)=\Im(d^{r-1})\qquad(r\text{-上边界群}).
+\]
+
+\begin{proposition}\label{prop:ii.1.17}
+映射序列
+\[
+ C^0(G,M)\xrightarrow{d^0} C^1(G,M)\xrightarrow{d^1}\cdots\xrightarrow{d^{r-1}} C^r(G,M)\xrightarrow{d^r} C^{r+1}(G,M)\to\cdots
+\]
+是一个复形, 即 $d^r\circ d^{r-1}=0$, 并且存在典范同构
+\[
+ H^r(G,M)\simeq \frac{Z^r(G,M)}{B^r(G,M)}.
+\]
+\end{proposition}
+
+\begin{proof}
+对 $\varphi\in\widetilde C^r(G,M)$, 定义
+\[
+ \varphi'(g_1,\ldots,g_r)=\varphi(1,g_1,g_1g_2,\ldots,g_1\cdots g_r).
+\]
+则 $\varphi\mapsto\varphi'$ 是一个双射 $\widetilde C^r(G,M)\to C^r(G,M)$, 把 $\widetilde C^\bullet(G,M)$ 中的边缘映射变成 $C^\bullet(G,M)$ 中的边缘映射.
+\end{proof}
+
+\begin{example}\label{ex:ii.1.18}
+\begin{enumerate}[(a)]
+\item 一个映射 $\varphi\colon G\to M$ 称为\emph{交叉同态}, 如果
+\[
+ \varphi(\sigma\tau)=\sigma\varphi(\tau)+\varphi(\sigma),\quad\text{所有 }\sigma,\tau\in G.
+\]
+注意此条件蕴含对 $G$ 的单位元 $e$ 有
+\[
+ \varphi(e)=\varphi(ee)=e\varphi(e)+\varphi(e)=2\varphi(e),
+\]
+从而 $\varphi(e)=0$. 对每个 $m\in M$, 映射 $\sigma\mapsto \sigma m-m$ 是一个交叉同态 —— 称为\emph{主交叉同态}. 由该命题,
+\[
+ H^1(G,M)=\frac{\{\text{交叉同态 }G\to M\}}{\{\text{主交叉同态}\}}.
+\]
+如果 $G$ 在 $M$ 上的作用是平凡的, 那么交叉同态就是同态, 而主交叉同态为零. 于是此时
+\begin{equation*}
+ H^1(G,M)\simeq \operatorname{Hom}(G,M).\tag{16}
+\end{equation*}
+\item 设 $M$ 为一个交换群 (其合成律写作乘法). $G$ 被 $M$ 的扩张是一个群的正合列
+\[
+ 1\to M\to E\xrightarrow{\pi} G\to 1.
+\]
+我们设
+\[
+ \sigma m=s(\sigma)\cdot m\cdot s(\sigma)^{-1},\quad \sigma\in G,\ m\in M,
+\]
+其中 $s(\sigma)$ 是 $E$ 中映到 $\sigma$ 的任一元素. 因为 $M$ 交换, $\sigma m$ 只依赖于 $\sigma$, 这在 $G$ 上定义了一个作用. 注意
+\[
+ s(\sigma)\cdot m=\sigma m\cdot s(\sigma),\quad\text{所有 }\sigma\in G,\ m\in M.
+\]
+现在取 $\pi$ 的一个截面 $s$, 即一个映射 (不必是同态) $s\colon G\to E$ 使得 $\pi\circ s=\id$. 则 $s(\sigma)s(\sigma')$ 与 $s(\sigma\sigma')$ 都映到 $\sigma\sigma'\in G$, 故它们相差一个元素 $\varphi(\sigma,\sigma')\in M$:
+\[
+ s(\sigma)s(\sigma')=\varphi(\sigma,\sigma')\cdot s(\sigma\sigma').
+\]
+由
+\[
+ s(\sigma)(s(\sigma')s(\sigma''))=(s(\sigma)s(\sigma'))s(\sigma'')
+\]
+我们推出
+\[
+ \sigma\varphi(\sigma',\sigma'')\cdot\varphi(\sigma,\sigma'\sigma'')=\varphi(\sigma,\sigma')\cdot\varphi(\sigma\sigma',\sigma''),
+\]
+即 $\varphi\in Z^2(G,M)$. 如果 $s$ 换成另一个截面, $\varphi$ 换成一个上同调的上循环, 因此 $\varphi$ 在 $H^2(G,M)$ 中的类与 $s$ 的选取无关. 每个这样的 $\varphi$ 都来自一个扩张. 这样, $H^2(G,M)$ 分类带有固定 $G$ 在 $M$ 上作用的、$G$ 被 $M$ 的扩张的同构类.
+\end{enumerate}
+\end{example}
+
+\begin{remark}\label{rem:ii.1.19}
+设 $G$ 为一个群, $M$ 为一个 $G$-模. 对 $m\in M$, 令 $\varphi_m\colon G\to M$ 为常值映射 $\sigma\mapsto m$. 则
+\[
+ (d^1\varphi_m)(\sigma,\tau)=\sigma m-m+m=\sigma m.
+\]
+特别地, $(d^1\varphi_m)(1,1)=m$. 因此 $H^2(G,M)$ 中的每个类都由一个满足 $\varphi(1,1)=0$ 的 $2$-上循环 $\varphi$ 表示. 这样的 $2$-上循环称为\emph{规范化}的.
+\end{remark}
+
+\begin{example}\label{ex:ii.1.20}
+设 $\varphi\colon G\to M$ 为一个交叉同态. 对每个 $\sigma\in G$,
+\[
+ \begin{aligned}
+ \varphi(\sigma^2)&=\sigma\varphi(\sigma)+\varphi(\sigma)\\
+ \varphi(\sigma^3)&=\varphi(\sigma\cdot\sigma^2)=\sigma^2\varphi(\sigma)+\sigma\varphi(\sigma)+\varphi(\sigma)\\
+ &\cdots
+ \end{aligned}
+\]
+\[
+ \varphi(\sigma^f)=\sigma^{f-1}\varphi(\sigma)+\cdots+\sigma\varphi(\sigma)+\varphi(\sigma).
+\]
+因此, 如果 $G$ 是由 $\sigma$ 生成的 $f$ 阶循环群, 那么一个交叉同态 $\varphi$ 由它在 $\sigma$ 上的值 (记为 $m$) 决定, 而 $m$ 满足方程
+\begin{equation*}
+ \sigma^{f-1}m+\cdots+\sigma m+m=0.\tag{17}
+\end{equation*}
+反之, 如果 $m\in M$ 满足 (17), 那么公式 $\varphi(\sigma^i)=\sigma^{i-1}m+\cdots+\sigma m+m$ 定义了一个交叉同态 $\varphi\colon G\to M$, 并且
+\[
+ \varphi\text{ 是主交叉同态}\iff m=\sigma x-x\text{ 对某个 }x\in M.
+\]
+定义映射
+\[
+ \begin{aligned}
+ &\Nm_G\colon M\to M,\quad m\mapsto \sum_{\sigma\in G}\sigma m\\
+ &\sigma-1\colon M\to M,\quad m\mapsto \sigma m-m.
+ \end{aligned}
+\]
+于是, 对有限阶循环群 $G$, 我们已证明选取 $G$ 的一个生成元 $\sigma$ 决定了一个同构
+\[
+ \varphi\mapsto\varphi(\sigma)\colon H^1(G,M)\to \frac{\Ker(\Nm_G)}{(\sigma-1)M}.
+\]
+\end{example}
+
+\begin{remark}\label{rem:ii.1.21}
+设
+\[
+ 0\to M\to N\to P\to 0
+\]
+为 $G$-模的正合列. 边缘映射
+\[
+ \delta^r\colon H^r(G,P)\to H^{r+1}(G,M)
+\]
+有如下描述: 设 $\gamma\in H^r(G,P)$ 由 $r$-上循环 $\varphi\colon G^r\to P$ 表示; 因为 $N$ 满射到 $P$, 存在一个提升 $\varphi$ 的 $r$-上链 $\tilde\varphi\colon G^r\to N$; 因为 $d\varphi=0$, $d\tilde\varphi$ 取值于 $M$ —— 它就是表示 $\delta^r\gamma$ 的上循环.
+\end{remark}
+
+\subsubsection*{$L$ 与 $L^\times$ 的上同调}
+
+设 $L$ 为域 $K$ 的有限 Galois 扩张, $G=\Gal(L/K)$. 则 $L$ (视为加法群) 与 $L^\times$ 都是 $G$-模.
+
+\begin{proposition}\label{prop:ii.1.22}
+设 $L/K$ 为 Galois 群 $G$ 的有限 Galois 扩张. 则 $H^1(G,L^\times)=0$.
+\end{proposition}
+
+\begin{proof}
+设 $\varphi\colon G\to L^\times$ 为一个交叉同态. 用乘法记号, 这意味着
+\[
+ \varphi(\sigma\tau)=\sigma\varphi(\tau)\cdot\varphi(\sigma),\quad \sigma,\tau\in G,
+\]
+而我们要找一个 $c\in L^\times$ 使得 $\varphi(\sigma)=\sigma c/c$. 对 $a\in L^\times$, 令
+\[
+ b=\sum_{\sigma\in G}\varphi(\sigma)\cdot\sigma a.
+\]
+假设 $b\neq 0$. 则
+\[
+ \tau b=\sum_\sigma\tau\varphi(\sigma)\cdot\tau\sigma a=\sum_\sigma\varphi(\tau)^{-1}\varphi(\tau\sigma)\tau\sigma a=\varphi(\tau)^{-1}b.
+\]
+于是
+\[
+ \varphi(\tau)=b/\tau b=\tau(b^{-1})/b^{-1},
+\]
+这表明 $\varphi$ 是主交叉同态.
+
+余下只需证明存在使 $b\neq 0$ 的 $a$. 回顾 (FT, 5.14, Dedekind 关于特征独立的定理): 设 $L$ 为域, $H$ 为群; 则每个不同的同态 $H\to L^\times$ 的有限族 $\{f_i\}$ 在 $L$ 上线性无关, 即
+\[
+ \sum a_i\, f_i(\alpha)=0\quad\text{对所有 }\alpha\in H\ \Longrightarrow\ a_1=a_2=\cdots=a_n=0.
+\]
+当我们把它用于同态 $\sigma\colon L^\times\to L^\times$ ($\sigma\in G$) 时, 我们发现 $\sum_\sigma\varphi(\sigma)\sigma$ 不是零映射, 因此存在使 $b\neq 0$ 的 $a$.
+\end{proof}
+
+\begin{corollary}\label{cor:ii.1.23}
+设 $L/K$ 为循环扩张, $\sigma$ 生成 $\Gal(L/K)$. 如果 $\Nm_{L/K}a=1$, 那么 $a$ 具有形式 $\dfrac{\sigma b}{b}$.
+\end{corollary}
+
+\begin{proof}
+我们有 $0=H^1(G,L^\times)=\Ker(\Nm_G)/(\sigma-1)L^\times$.
+\end{proof}
+
+\begin{proposition}\label{prop:ii.1.24}
+设 $L/K$ 为 Galois 群 $G$ 的有限 Galois 扩张. 则对所有 $r>0$ 有 $H^r(G,L)=0$.
+\end{proposition}
+
+\begin{proof}
+回顾 (FT, 5.18, 正规基定理): 存在 $\alpha\in L$ 使得 $\{\sigma\alpha\mid \sigma\in G\}$ 是 $L$ 作为 $K$-向量空间的一组基 (这种形式的一组基称为\emph{正规}的).
+
+一个正规基 $(\sigma\alpha)_{\sigma\in G}$ 定义一个 $G$-模同构
+\[
+ \sum_{\sigma\in G} a_\sigma\sigma\mapsto \sum_{\sigma\in G} a_\sigma\sigma\alpha\colon K[G]\to L.
+\]
+但 $K[G]=\Ind_{\{1\}}^G K$, 因此 $H^r(G,L)\simeq H^r(\{1\},K)=0$ 对 $r>0$ (Shapiro 引理, \ref{prop:ii.1.11}).
+\end{proof}
+
+\subsubsection*{乘积的上同调}
+
+一个 $G$-模的乘积 $M=\prod_i M_i$ 在对角作用下成为 $G$-模:
+\[
+ \sigma(\ldots,m_i,\ldots)=(\ldots,\sigma m_i,\ldots).
+\]
+
+\begin{proposition}\label{prop:ii.1.25}
+对所有的 $G$-模族 $(M_i)_i$,
+\[
+ H^r\Bigl(G,\prod_i M_i\Bigr)\simeq \prod_i H^r(G,M_i).
+\]
+\end{proposition}
+
+\begin{proof}
+交换群正合列的乘积仍正合. 由此推出内射 $G$-模的乘积 $I=\prod I_i$ 仍是内射的, 因为
+\[
+ \operatorname{Hom}_G(\cdot,I)\simeq \prod_i \operatorname{Hom}_G(\cdot,I_i)
+\]
+正合. 设 $M_i\to I_i^\bullet$ 为 $M_i$ 的内射分解. 则 $\prod M_i\to\prod I_i^\bullet$ 是 $\prod M_i$ 的内射分解, 且
+\[
+ \begin{array}{r}
+ H^r(G,\prod_i M_i)\simeq H^r((\prod_i I_i^{\bullet})^G)\simeq H^r(\prod_i (I_i^{\bullet G}))\simeq \prod_i H^r(I_i^{\bullet G})\simeq \prod_i H^r(G,M_i).
+ \end{array}
+\]
+特别地, 对任何 $G$-模 $M$, $N$,
+\[
+ H^r(G,M\oplus N)=H^r(G,M)\oplus H^r(G,N).
+\]
+这也可以通过注意到说一个模 $P$ 是模 $M$ 与 $N$ 的直和意味着某些映射及这些映射之间的关系存在 (见第 \ref{sec:II.3} 节, 本书 p.\pageref{sec:II.3}) 来证明. 这些映射与关系在我们应用加性函子 $H^r(G,\cdot)$ 时保持.
+\end{proof}
+
+\begin{remark}\label{rem:ii.1.26}
+任意交换群的逆极限的构造不是正合的. 因此一般地, 不能指望上同调与逆极限交换.
+\end{remark}
+
+\subsubsection*{上同调群的函子性质}
+
+设 $M$ 与 $M'$ 分别为 $G$ 与 $G'$ 模. 同态
+\[
+ \alpha\colon G'\to G,\qquad \beta\colon M\to M'
+\]
+称为\emph{相容的}, 如果
+\[
+ \beta(\alpha(g)m)=g(\beta(m)).
+\]
+它们定义映射
+\[
+ C^\bullet(G,M)\to C^\bullet(G',M'),\quad \varphi\mapsto \beta\circ\varphi\circ\alpha^r,
+\]
+从而定义同态
+\[
+ H^r(G,M)\to H^r(G',M').
+\]
+
+\begin{example}\label{ex:ii.1.27}
+\begin{enumerate}[(a)]
+\item 设 $H$ 为 $G$ 的子群. 对每个 $H$-模 $M$, 映射
+\[
+ \varphi\mapsto\varphi(1_G)\colon \Ind_H^G(M)\to M
+\]
+与含入 $H\hookrightarrow G$ 相容, 而它诱导的同态
+\[
+ H^r(G,\Ind_H^G(M))\to H^r(H,M)
+\]
+就是 Shapiro 引理\ref{prop:ii.1.11} 中的同构. 要证明这两个同构一致, 先对 $r=0$ 验证, 再用维数移位 (II, \ref{rem:ii.1.28}) 推广到所有 $r$.
+\item 设 $H$ 为 $G$ 的子群. 令 $\alpha$ 为含入 $H\hookrightarrow G$, $\beta$ 为在 $G$-模 $M$ 上的恒等映射. 此时我们得到\emph{限制}同态
+\[
+ \Res\colon H^r(G,M)\to H^r(H,M).
+\]
+它们也可如下构造: 设 $M\to \Ind_H^G(M)$ 为把 $m$ 送到映射 $g\mapsto gm$ 的同态; 它在上同调上定义的同态与 Shapiro 引理中的同构的复合
+\[
+ H^r(G,M)\to H^r(G,\Ind_H^G(M))\xrightarrow{\simeq} H^r(H,M)
+\]
+就是限制映射.
+\item 设 $H$ 为 $G$ 的正规子群, 令 $\alpha$ 为商映射 $G\to G/H$, $\beta$ 为含入 $M^H\hookrightarrow M$. 此时我们得到\emph{膨胀}同态
+\[
+ \Inf\colon H^r(G/H,M^H)\to H^r(G,M).
+\]
+\item 对任何 $g_0\in G$, 同态 $\alpha\colon G\to G$, $\sigma\mapsto g_0\sigma g_0^{-1}$, 与 $\beta\colon M\to M$, $m\mapsto g_0^{-1}m$, 是相容的. 我断言它们定义的同态
+\[
+ H^r(G,M)\to H^r(G,M)
+\]
+都是恒等映射. 对 $r=0$, 该同态是
+\[
+ m\mapsto g_0^{-1}m\colon M^G\to M^G,
+\]
+这显然是恒等映射. 设 $r>0$ 且已知对 $r-1$ 成立. 由正合列 \ref{eqn:ii.1.15} (本书 p.\pageref{eqn:ii.1.15})
+\[
+ 0\to M\to M_*\to M_\dagger\to 0,
+\]
+其中 $M_*=\Ind^G(M_0)$, 我们得到一个有正合行的图表
+\[
+ \begin{tikzcd}
+ H^{r-1}(G,M_*) \ar[r] \ar[d] & H^{r-1}(G,M_\dagger) \ar[r] \ar[d] & H^r(G,M) \ar[r] \ar[d] & 0 \\
+ H^{r-1}(G,M_*) \ar[r] & H^{r-1}(G,M_\dagger) \ar[r] & H^r(G,M) \ar[r] & 0.
+ \end{tikzcd}
+\]
+右边的 $0$ 来自 $M_*$ 是诱导模. 竖直映射是由这对 $(\alpha,\beta)$ (对不同模) 定义的. 容易验证图表交换. 由归纳, 中间的竖直映射是恒等映射, 从而第三个也是.
+\end{enumerate}
+\end{example}
+
+\begin{remark}\label{rem:ii.1.28}
+\begin{enumerate}[(a)]
+\item (d) 中的证明方法称为\emph{维数移位}.
+\item 设 $H$ 为 $G$ 的正规子群. 对每个 $G$-模 $M$, (d) 中的做法给出 $G$ 在 $H^r(H,M)$ 上的一个作用, 上述结果表明它经过 $G/H$.
+\end{enumerate}
+\end{remark}
+
+\begin{example}\label{ex:ii.1.29}
+我们还需要一个上同调群的函子映射. 设 $H$ 为 $G$ 的有限指数子群, $S$ 为 $H$ 在 $G$ 中的左陪集代表系, $G=\coprod_{s\in S}sH$. 设 $M$ 为 $G$-模. 对每个 $m\in M^H$,
+\[
+ \Nm_{G/H}m\stackrel{\mathrm{def}}{=}\sum_{s\in S}sm
+\]
+与 $S$ 的选取无关, 且被 $G$ 固定. 因此 $\Nm_{G/H}$ 是一个同态 $M^H\to M^G$.
+
+这可以如下扩张为一个\emph{余限制}同态\footnote{余限制同态也称为转移映射.}\index{yuxianzhitonghui@余限制同态(corestriction homomorphism)}
+\[
+ \Cor\colon H^r(H,M)\to H^r(G,M)
+\]
+对所有 $r$: 对每个 $G$-模 $M$, 存在一个典范的 $G$-模同态
+\[
+ \varphi\mapsto \sum_{s\in S}s\varphi(s^{-1})\colon \Ind_H^G M\to M;
+\]
+它在上同调上定义的映射与 Shapiro 引理中的同构复合, 给出 $\Cor$,
+\[
+ H^r(H,M)\xrightarrow{\simeq} H^r(G,\Ind_H^G M)\to H^r(G,M).
+\]
+\end{example}
+
+\begin{proposition}\label{prop:ii.1.30}
+设 $H$ 为 $G$ 的有限指数子群. 复合
+\[
+ \Cor\circ \Res\colon H^r(G,M)\to H^r(G,M)
+\]
+是乘以 $(G:H)$.
+\end{proposition}
+
+\begin{proof}
+对 $m\in M$, 令 $\varphi_m$ 为映射 $g\mapsto gm\colon G\to M$. 则 $\Cor\circ\Res$ 是由如下复合在上同调上定义的映射:
+\[
+ M\to \Ind_H^G(M)\to M,\quad m\mapsto \varphi_m\mapsto \sum_s s\varphi_m(s^{-1})=\sum_s m=(G:H)m.
+\]
+\end{proof}
+
+\begin{corollary}\label{cor:ii.1.31}
+如果 $(G:1)=m$, 那么对所有 $r>0$ 有 $mH^r(G,M)=0$.
+\end{corollary}
+
+\begin{proof}
+由该命题, 乘以 $m$ 经过 $H^r(\{1\},M)=0$ 分解:
+\[
+ H^r(G,M)\xrightarrow{\Res} H^r(\{1\},M)\xrightarrow{\Cor} H^r(G,M).
+\]
+\end{proof}
+
+\begin{corollary}\label{cor:ii.1.32}
+如果 $G$ 有限且 $M$ 作为交换群是有限生成的, 那么 $H^r(G,M)$ 有限.
+\end{corollary}
+
+\begin{proof}
+从上同调群作为上循环模上边界群的描述清楚地看出 $H^r(G,M)$ 作为交换群是有限生成的, 而我们已经看到它被 $(G:1)$ 零化. 因此它是有限的.
+\end{proof}
+
+对交换群 $A$ 与素数 $p$, $A$ 的 $p$-主分量 $A(p)$ 是由所有被 $p$ 的某个幂零化的元素组成的子群.
+
+\begin{corollary}\label{cor:ii.1.33}
+设 $G$ 为有限群, $G_p$ 为其 Sylow $p$-子群. 对每个 $G$-模 $M$, 限制映射
+\[
+ \Res\colon H^r(G,M)\to H^r(G_p,M)
+\]
+在 $H^r(G,M)$ 的 $p$-主分量上是单射.
+\end{corollary}
+
+\begin{proof}
+复合
+\[
+ \Cor\circ\Res\colon H^r(G,M)\to H^r(G_p,M)\to H^r(G,M)
+\]
+是乘以 $(G:G_p)$, 它不被 $p$ 整除, 因此在 $H^r(G,M)$ 的 $p$-主分量上是单射.
+\end{proof}
+
+\subsubsection*{膨胀--限制正合列}
+
+\begin{proposition}\label{prop:ii.1.34}
+设 $H$ 为 $G$ 的正规子群, $M$ 为 $G$-模. 设 $r$ 为 $>0$ 的整数. 如果对所有满足 $0<j<r$ 的 $j$ 有 $H^j(H,M)=0$, 那么序列
+\[
+ 0\to H^r(G/H,M^H)\xrightarrow{\Inf} H^r(G,M)\xrightarrow{\Res} H^r(H,M)
+\]
+正合.
+\end{proposition}
+
+\begin{proof}
+我们先对 $r=1$ 证明. 此时对 $H^j(H,M)$ 的假设是空真的. 设 $\varphi\colon G\to M$ 为一个交叉同态, 其在 $H$ 上的限制是主交叉同态, 即 $\varphi(h)=hm_0-m_0$. 定义 $\varphi'(g)=\varphi(g)-(gm_0-m_0)$. 则 $\varphi'$ 在 $H^1(G,M)$ 中表示同一类, 但现在对所有 $h\in H$ 有 $\varphi'(h)=0$, 因此 $\varphi'$ 由 $G/H\to M$ 的一个交叉同态"膨胀"而来.
+
+我们证明 $\varphi'$ 取值于 $M^H$. 因为 $\varphi'$ 是交叉同态且对 $h\in H$ 有 $\varphi'(h)=0$, 我们有
+\[
+ \varphi'(hg)=h\varphi'(g)+\varphi'(h)=h\varphi'(g)
+\]
+以及
+\[
+ \varphi'(gh)=g\varphi'(h)+\varphi'(g)=\varphi'(g).
+\]
+第二个方程说 $\varphi'$ 在 $H$ 的左陪集上为常数. 因为 $H$ 正规, 左陪集与右陪集相同, 故 $\varphi'$ 在右陪集上也为常数. 由于 $hg$ 与 $g$ 在同一个右陪集 $Hg$ 中, 我们有 $\varphi'(hg)=\varphi'(g)$. 与第一个方程结合给出 $h\varphi'(g)=\varphi'(g)$, 即 $\varphi'(g)\in M^H$.
+
+我们已证明 $\varphi'$ 由 $G/H\to M^H$ 的一个交叉同态"膨胀"而来, 这就证明了在 $H^1(G,M)$ 处的正合性. 在 $H^1(G/H,M^H)$ 处的正合性容易证明.
+
+现在假设 $r>1$ 且命题对 $r-1$ 成立. 考虑正合列 \ref{eqn:ii.1.15} (本书 p.\pageref{eqn:ii.1.15}),
+\[
+ 0\to M\to M_*\to M_\dagger\to 0.
+\]
+则
+\[
+ H^j(H,M_\dagger)\simeq H^{j+1}(H,M),\quad j>0,
+\]
+故对 $0<j<r-1$ 有 $H^j(H,M_\dagger)=0$. 由归纳, 序列
+\[
+ 0\to H^{r-1}(G/H,M_\dagger^H)\xrightarrow{\Inf} H^{r-1}(G,M_\dagger)\xrightarrow{\Res} H^{r-1}(H,M_\dagger)
+\]
+正合, 而它同构于序列
+\[
+ 0\to H^r(G/H,M^H)\xrightarrow{\Inf} H^r(G,M)\xrightarrow{\Res} H^r(H,M).
+\]
+\end{proof}
+
+\begin{remark}\label{rem:ii.1.35}
+\begin{enumerate}[(a)]
+\item 稍加努力, 可以把该序列扩张为
+\[
+ \begin{aligned}
+ 0\to &H^1(G/H,M^H)\xrightarrow{\Inf} H^1(G,M)\xrightarrow{\Res} H^1(H,M)^{G/H}\to\\
+ &H^2(G/H,M^H)\xrightarrow{\Inf} H^2(G,M)^*\to H^1(G/H,H^1(H,M))\to H^3(G/H,M^H),
+ \end{aligned}
+\]
+其中 $H^2(G,M)^*=\Ker(\Res\colon H^2(G,M)\to H^2(H,M))$. 见 Dekimpe, Hartl, and Wauters, J. Algebra 369 (2012), 70--95.
+\item 对专家而言, Hochschild--Serre (或 Lyndon) 谱序列形如
+\[
+ H^i(G/H,H^j(H,M))\Rightarrow H^{i+j}(G,M);
+\]
+这里 $G/H$ 如 (\ref{rem:ii.1.28}b) 中所述作用在 $H^j(H,M)$ 上. 可以由此序列读出一个正合列
+\[
+ 0\to H^1(G/H,M^H)\xrightarrow{\Inf} H^1(G,M)\xrightarrow{\Res} H^1(H,M).
+\]
+假设 $H^i(H,M)=0$ 对 $0<i<r$ 迫使谱序列的 $r$ 行消失, 并允许把 $1$ 换成 $r$ 读出同一序列.
+\end{enumerate}
+\end{remark}
+
+\begin{example}\label{ex:ii.1.36}
+设 $\Omega\supset L$ 为 $K$ 的 Galois 扩张. 则 $H\stackrel{\mathrm{def}}{=}\Gal(\Omega/L)$ 是 $G\stackrel{\mathrm{def}}{=}\Gal(\Omega/K)$ 的正规子群. 由命题\ref{prop:ii.1.22}, $H^1(H,\Omega^\times)=0$, 故存在正合列
+\[
+ 0\to H^2(G/H,L^\times)\to H^2(G,\Omega^\times)\to H^2(H,\Omega^\times).
+\]
+一个不涉及维数移位而直接证明此序列正合的方法可见 \cite{Artin1951}, 6.4.
+\end{example}
+
+\subsubsection*{杯积}
+
+\begin{lemma}\label{lem:ii.1.37}
+正合列 \ref{eqn:ii.1.15} (本书 p.\pageref{eqn:ii.1.15}),
+\[
+ 0\to M\to M_*\to M_\dagger\to 0
+\]
+作为交换群序列是分裂的, 即 $M_*\approx M\oplus M_\dagger$ (作为交换群).
+\end{lemma}
+
+\begin{proof}
+回忆 $M_*$ 由映射 $\varphi\colon G\to M$ 组成, 而该序列中的第一个同态把 $M$ 的元素 $m$ 送到 $\varphi_m$, 其中 $\varphi_m(g)=gm$. 对 $\varphi\in M_*$, 令 $s(\varphi)=\varphi(1_G)$. 则 $s$ 是一个交换群同态 $M_*\to M$ 满足 $s(\varphi_m)=m$, 于是
+\[
+ M_*\simeq \Ker(1-s)\oplus \Ker(s)\simeq M\oplus M_\dagger
+\]
+作为交换群.
+\end{proof}
+
+设 $G$ 为一个群. 对 $G$-模 $M$ 与 $N$, 我们记 $M\otimes N$ 为 $M\otimes_\Z N$ 视为带如下作用的 $G$-模:
+\[
+ g(m\otimes n)=gm\otimes gn,\quad g\in G,\ m\in M,\ n\in N.
+\]
+
+\begin{proposition}\label{prop:ii.1.38}
+存在唯一的一族双加性配对
+\[
+ (m,n)\mapsto m\cup n\colon H^r(G,M)\times H^s(G,N)\to H^{r+s}(G,M\otimes N),
+\]
+对所有 $G$-模 $M$, $N$ 与所有整数 $r,s\ge 0$ 定义, 满足如下条件:
+\begin{enumerate}[(a)]
+\item 当两边视为 $(M,N)$ 上的协变双函子时, 这些映射成为函子态射;
+\item 当 $r=s=0$ 时, 该配对是
+\[
+ (m,n)\mapsto m\otimes n\colon M^G\otimes N^G\to (M\otimes N)^G;
+\]
+\item 如果 $0\to M'\to M\to M''\to 0$ 是 $G$-模的正合列使得
+\[
+ 0\to M'\otimes N\to M\otimes N\to M''\otimes N\to 0
+\]
+正合, 那么
+\[
+ (\delta m'')\cup n=\delta(m''\cup n),\quad m''\in H^r(G,M''),\ n\in H^s(G,N).
+\]
+这里 $\delta$ 表示连接同态 $H^r(G,M'')\to H^{r+1}(G,M')$ 或 $H^{r+s}(G,M''\otimes N)\to H^{r+s+1}(G,M'\otimes N)$.
+\item 如果 $0\to N'\to N\to N''\to 0$ 是 $G$-模的正合列使得
+\[
+ 0\to M\otimes N'\to M\otimes N\to M\otimes N''\to 0
+\]
+正合, 那么
+\[
+ m\cup \delta n''=(-1)^r\delta(m\cup n''),\quad m\in H^r(G,M),\ n''\in H^s(G,N'').
+\]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+唯一性用维数移位证明, 关键的一点是, 因为序列 (15) 作为交换群序列是分裂正合的 (见 \ref{lem:ii.1.37}), 它在与 $G$-模作 $\Z$ 张量积后仍正合. 对存在性, 我们证明如下定义的配对具有所需性质: 设 $m\in H^r(G,M)$ 与 $n\in H^s(G,N)$ 由 (非齐次) 上循环 $\varphi$ 与 $\psi$ 表示; 则 $m\cup n$ 由如下上循环表示:
+\[
+ (g_1,\ldots,g_{r+s})\mapsto \varphi(g_1,\ldots,g_r)\otimes g_1\cdots g_r\psi(g_{r+1},\cdots,g_{r+s}).
+\]
+把细节写清需要好几页, 但证明并不困难.
+\end{proof}
+
+\begin{proposition}\label{prop:ii.1.39}
+如下公式成立:
+\begin{enumerate}[(a)]
+\item $(x\cup y)\cup z=x\cup (y\cup z)$ (在 $H^{r+s+t}(G,M\otimes N\otimes P)$ 中);
+\item $x\cup y=(-1)^{rs}y\cup x$ 若 $x\in H^r(G,M)$, $y\in H^s(G,N)$ (我们等同 $M\otimes N$ 与 $N\otimes M$);
+\item $\Res(x\cup y)=\Res(x)\cup \Res(y)$;
+\item $\Cor(x\cup \Res y)=\Cor(x)\cup y$;
+\item $\Inf(x\cup y)=\Inf(x)\cup \Inf(y)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+在每种情形, 先验证当 $x,y,\ldots$ 次数为 $0$ 时的公式, 再用维数移位推出一般情形. 例如, (d) 的详细证明见 \cite{AtiyahWall1967}, 命题 9. 对 (e), 见 \cite{Weiss1969}, 4-3-9.
+\end{proof}
+
+一个配对
+\begin{equation*}
+ x,y\mapsto (x,y)\colon M\times N\to P\tag{18}
+\end{equation*}
+使得
+\[
+ g(x,y)=(gx,gy),\quad\text{所有 }g\in G,
+\]
+定义一个 $G$-模同态
+\[
+ M\otimes N\to P,
+\]
+从而定义映射
+\[
+ H^r(G,M\otimes N)\to H^r(G,P).
+\]
+杯积配对与这些映射的复合, 即配对
+\[
+ H^r(G,M)\times H^s(G,N)\to H^{r+s}(G,P),
+\]
+将被称为由 (18) 定义的\emph{杯积配对}.
+
+\section{同调}\label{sec:II.2}\index{tongdaoqu@同调群(homology group)}
+
+\subsubsection*{同调群的定义}
+
+对 $G$-模 $M$, 令 $M_G$ 为 $M$ 上 $G$ 作用平凡的最大商群. 于是 $M_G$ 是 $M$ 模去由
+\[
+ \{gm-m\mid g\in G,\ m\in M\}
+\]
+生成的子群所得的商. 注意这是 $M^G$ 的对偶概念, $M^G$ 是 $M$ 上 $G$ 作用平凡的最大子对象. 上同调群的定义对偶地给出同调群.
+
+详言之, 函子
+\[
+ M\mapsto M_G\colon \Mod_G\to \Ab
+\]
+是右正合的, 即如果
+\[
+ 0\to M'\to M\to M''\to 0
+\]
+正合, 那么
+\[
+ M_G'\to M_G\to M_G''\to 0
+\]
+正合. 这可以直接验证, 或者由注意到从 $M$ 到 $M_G$ 等于与 $\Z[G]/I_G$ 作张量积看出, 其中 $I_G$ 是增广理想
+\[
+ \Ker\Bigl(\sum n_g g\mapsto \sum n_g\colon \Z[G]\to\Z\Bigr).
+\]
+一个 Abel 范畴中的对象 $P$ 称为\emph{投射的}, 如果对任意对象 $N$ 与商对象 $M$, 每个态射 $P\to M$ 都提升为一个态射 $P\to N$. 例如, 每个自由 $\Z[G]$-模作为 $\Z[G]$-模 (等价地, $G$-模) 是投射的.
+
+设 $M$ 为 $G$-模. 设 $(m_i)_{i\in I}$ 是 $M$ 作为 $\Z[G]$-模的一族生成元, $\Z[G]^{(I)}$ 是以 $I$ 为指标集的 $\Z[G]$ 的拷贝的直和. 映射 $\sum_{i\in I}\gamma_i\mapsto \sum \gamma_i m_i$ 是一个满 $G$-同态 $\Z[G]^{(I)}\to M$. 这表明每个 $G$-模都是一个自由 $G$-模的商, 因此范畴 $\Mod_G$ 有足够多的投射对象.
+
+设 $M$ 为 $G$-模. 取 $M$ 的一个投射分解
+\[
+ \cdots\longrightarrow P_2\xrightarrow{d_2} P_1\xrightarrow{d_1} P_0\xrightarrow{d_0} M\longrightarrow 0.
+\]
+复形
+\[
+ \cdots\longrightarrow (P_2)_G\xrightarrow{d_2} (P_1)_G\xrightarrow{d_1} (P_0)_G\longrightarrow 0
+\]
+未必正合, 我们令
+\[
+ H_r(G,M)=\frac{\Ker(d_r)}{\Im(d_{r+1})}.
+\]
+这些群有如下基本性质.
+
+\noindent\phantomsection\hypertarget{item:ii.2.1}{}\textbf{2.1} 第零个群 $H_0(G,M)=M_G$, 因为
+\[
+ P_{1G}\to P_{0G}\to M_G\to 0
+\]
+正合.
+
+\noindent\phantomsection\hypertarget{item:ii.2.2}{}\textbf{2.2} 如果 $P$ 是投射 $G$-模, 那么对所有 $r>0$ 有 $H_r(G,P)=0$, 因为
+\[
+ \cdots\to 0\to P\to P\to 0
+\]
+是 $P$ 的一个投射分解.
+
+\noindent\phantomsection\hypertarget{item:ii.2.3}{}\textbf{2.3} 设 $P_\bullet\to M$ 与 $Q_\bullet\to N$ 为 $G$-模 $M$ 与 $N$ 的投射分解. 任何 $G$-模同态 $\alpha\colon M\to N$ 都扩张为一个复形的态射
+\[
+ \begin{tikzcd}
+ P_\bullet \ar[r] \ar[d, "\alpha_\bullet"'] & M \ar[d, "\alpha"] \\
+ Q_\bullet \ar[r] & N
+ \end{tikzcd}
+\]
+并且同态
+\[
+ H_r(\alpha_\bullet)\colon H_r(P_\bullet)\to H_r(Q_\bullet)
+\]
+与 $\alpha_\bullet$ 的选取无关. 当我们把此陈述用于恒等映射 $\id\colon M\to M$ 时, 我们发现群 $H_r(G,M)$ 的定义是良定的 (到一个良定的同构). 一般 $\alpha$ 的情形的陈述则表明 $M\mapsto H_r(G,M)$ 是从 $G$-模范畴到交换群范畴的一个函子.
+
+\phantomsection\hypertarget{item:ii.2.4}{}\subsubsection*{2.4 短正合列}
+
+一个 $G$-模的短正合列
+\[
+ 0\to M'\to M\to M''\to 0
+\]
+产生一个长正合列
+\[
+ \cdots\to H_r(G,M)\to H_r(G,M'')\xrightarrow{\delta_r} H_{r-1}(G,M')\to\cdots\to H_0(G,M'')\to 0.
+\]
+而且对应
+\[
+ \text{短正合列}\mapsto\text{长正合列}
+\]
+是函子性的, 即一个短正合列的态射诱导一个长正合列的态射.
+
+% 2.1/2.2/2.3 为叙述性条目, 2.4 为子节标题, 均不占定理计数器; 调至 4 使下一条显示为 2.5
+\setcounter{theorem}{4}
+\begin{remark}\label{rem:ii.2.5}
+函子族 $(H_r(G,\cdot))_{r\ge 0}$ 与边缘映射 $\delta_r$ 由性质 (\hyperlink{item:ii.2.1}{2.1}, \hyperlink{item:ii.2.2}{2.2}, \hyperlink{item:ii.2.4}{2.4}) 唯一确定.
+\end{remark}
+
+正如上同调的情形, 也可以把 $H_r(G,M)$ 明确描述为 $r$-循环群模去 $r$-边界子群 —— 见本章后面的参考文献.
+
+\subsubsection*{群 $H_1(G,\Z)$}
+
+只用上面列出的同调群的性质, 我们将计算 $H_1(G,\Z)$.
+
+增广映射是
+\[
+ \Z[G]\to\Z,\quad \sum n_g g\mapsto \sum n_g.
+\]
+它的核称为\emph{增广理想} $I_G$. 显然 $I_G$ 是以 $\{g-1\mid g\in G,\ g\neq 1\}$ 为基的自由 $\Z$-子模, 因此
+\[
+ M/I_G M=M_G\stackrel{(\hyperlink{item:ii.2.1}{2.1})}{\simeq} H_0(G,M).
+\]
+考虑正合 (增广) 序列:
+\begin{equation*}
+ 0\to I_G\to \Z[G]\to\Z\to 0.\tag{19}
+\end{equation*}
+$G$-模 $\Z[G]$ 是投射的 (因为它是自由 $\Z[G]$-模), 故 $H_1(G,\Z[G])=0$. 因此我们得一族同调群的正合列
+\[
+ 0\to H_1(G,\Z)\to I_G/I_G^2\to \Z[G]/I_G\to\Z\to 0.
+\]
+中间的映射由含入 $I_G\hookrightarrow \Z[G]$ 诱导, 故为零. 因此该序列表明
+\begin{equation*}
+ H_1(G,\Z)\xrightarrow{\simeq} I_G/I_G^2\tag{20}
+\end{equation*}
+以及
+\[
+ \Z[G]_G\xrightarrow{\simeq}\Z,
+\]
+即 $\Z$ 是 $\Z[G]$ 上 $G$ 作用平凡的最大商群. 注意 $I_G^2\stackrel{\mathrm{def}}{=}I_G\cdot I_G$ 是 $\Z[G]$ 的由形如
+\[
+ (g-1)(g'-1),\quad g,g'\in G
+\]
+的元素生成的 $\Z$-子模.
+
+\begin{lemma}\label{lem:ii.2.6}
+设 $G^c$ 为 $G$ 的换位子子群, 于是 $G/G^c$ 是 $G$ 的最大交换商 $G^{\mathrm{ab}}$. 则映射 $g\mapsto (g-1)+I_G^2$ 诱导一个同构
+\begin{equation*}
+ \frac{G}{G^c}\to \frac{I_G}{I_G^2}.\tag{21}
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+考虑映射
+\[
+ g\mapsto (g-1)+I_G^2\colon G\to I_G/I_G^2.
+\]
+这是一个同态, 因为
+\[
+ \begin{aligned}
+ gg'-1&=(g-1)(g'-1)+(g-1)+(g'-1)\\
+ &\equiv (g-1)+(g'-1)\bmod I_G^2.
+ \end{aligned}
+\]
+因为 $I_G/I_G^2$ 交换, 该映射经过 $G^{\mathrm{ab}}$. 为证明它是同构, 我们构造逆. 回忆 $I_G$ 以元素 $g-1$ 为基自由生成. 考虑同态 $I_G\to G^{\mathrm{ab}}$ 把 $g-1$ 映到 $g$ 的类. 由恒等式
+\[
+ (g-1)(g'-1)=(gg'-1)-(g-1)-(g'-1)
+\]
+我们看到 $(g-1)(g'-1)$ 映到 $1$. 因为 $I_G^2$ 由这种形式的元素生成, 这表明该映射经过 $I_G/I_G^2$. 我们构造的两个映射互逆.
+\end{proof}
+
+\begin{proposition}\label{prop:ii.2.7}
+存在一个典范同构
+\[
+ H_1(G,\Z)\simeq G^{\mathrm{ab}}.
+\]
+\end{proposition}
+
+\begin{proof}
+把同构 (20) 与 (21) 的逆复合.
+\end{proof}
+
+\begin{aside}\label{as:ii.2.8}
+对任何群 $G$, 存在一个拓扑空间 $BG$, 称为 $G$ 的\emph{分类空间}, 使得 $G=\pi_1(BG)$ 且对所有 $r$ 有 $H_r(BG,\Z)=H_r(G,\Z)$ (\cite{Rosenberg1994}, 5.1.16, 5.1.27). 用 $BG$ 的术语, 该命题简单地说就是 $H_1(BG,\Z)\simeq \pi_1(BG)^{\mathrm{ab}}$.
+\end{aside}
+
+\section{Tate 群}\label{sec:II.3}\index{tateshangtongqun@Tate 上同调群(Tate cohomology group)}
+
+本节中 $G$ 始终为有限群.
+
+对 $G$-模 $M$, \emph{范数映射} $\Nm_G\colon M\to M$ 定义为
+\[
+ m\mapsto \sum_{g\in G} g m.
+\]
+设 $g'\in G$. 当 $g$ 跑遍 $G$ 的元素时, $g'g$ 与 $gg'$ 也跑遍 $G$ 的元素, 故 $g'(\Nm_G(m))=\Nm_G(m)=\Nm_G(g'm)$. 因此
+\[
+ \Im(\Nm_G)\subset M^G,\qquad I_G M\subset \Ker(\Nm_G).
+\]
+于是我们得到一个交换的正合图表.
+\[
+ 0\longrightarrow \Ker(\Nm_G)/I_G M\longrightarrow M/I_G M\longrightarrow M^G\longrightarrow M^G/\Nm_G(M)\longrightarrow 0.
+\]
+因为 $H_0(G,M)=M/I_G M$ 且 $H^0(G,M)=M^G$, 此图底行可改写为
+\[
+ 0\to \Ker(\Nm_G)/I_G M\to H_0(G,M)\xrightarrow{\Nm_G} H^0(G,M)\to M^G/\Nm_G(M)\to 0.
+\]
+Tate 定义
+\[
+ H_T^r(G,M)=
+ \begin{cases}
+ H^r(G,M) & r>0\\
+ M^G/\Nm_G(M) & r=0\\
+ \Ker(\Nm_G)/I_G M & r=-1\\
+ H_{-r-1}(G,M) & r<-1.
+ \end{cases}
+\]
+于是该正合列现在变成
+\[
+ 0\to H_T^{-1}(G,M)\to H_0(G,M)\xrightarrow{\Nm_G} H^0(G,M)\to H_T^0(G,M)\to 0.
+\]
+群 $H_T^r(G,M)$ 称为\emph{Tate 上同调群}. 常把 $H_T^r(G,M)$ 记作 $\hat H^r(G,M)$. 因为不会引起歧义, 当 $r>0$ 时我们有时略去下标 $T$.
+
+对任何 $G$-模的短正合列
+\[
+ 0\to M'\to M\to M''\to 0
+\]
+我们得到一个图表 (见下页图片). 对图的中部应用扩张蛇形引理 (\ref{lem:ii.A.1}), 我们得到一个 (很) 长的正合列
+\begin{equation*}
+ \begin{aligned}
+ &\cdots\to H_T^r(G,M')\to H_T^r(G,M)\to H_T^r(G,M'')\xrightarrow{\delta} H_T^{r+1}(G,M)\to\cdots\\
+ &(-\infty<r<\infty).
+ \end{aligned}\tag{22}
+\end{equation*}
+
+\begin{proposition}\label{prop:ii.3.1}
+如果 $M$ 是诱导的, 那么对所有 $r\in\Z$ 有 $H_T^r(G,M)=0$.
+\end{proposition}
+
+\begin{proof}
+对 $r>0$, 这在 (\ref{cor:ii.1.12}) 中已证.
+
+情形 $r=0$. 回忆 (\ref{rem:ii.1.3}) $M\simeq \Z[G]\otimes_\Z X$ 对某个交换群 $X$, 因此 $M$ 的元素 $m$ 可唯一写成 $m=\sum_g(g\otimes x_g)$ 且 $x_g\in X$. 如果 $m$ 被 $g'\in G$ 固定, 则 $\sum_g(g'g\otimes x_g)=\sum_g(g\otimes x_g)$; 特别地,\footnote{这里 $e$ 是 $G$ 的单位元.} $g'\otimes x_e=g'\otimes x_{g'}$, 即 $x_e=x_{g'}$. 因此若 $m\in M^G$, 则对所有 $g\in G$ 有 $x_g=x_e$, 且 $m=(\sum_g g)\otimes x_e=\Nm_G(e\otimes x_e)$.
+
+情形 $r=-1$. 如果 $\Nm_G(\sum_g g\otimes x_g)=0$, 则 $\sum_g x_g=0$, 于是
+\[
+ \sum_g(g\otimes x_g)=\sum_g((g-1)\otimes x_g)\in I_G M.
+\]
+
+情形 $r<-1$. 设 $M=\Z[G]\otimes_\Z X$. 把 $X$ 写成一个自由交换群 $X_0$ 的商 $X_0\to X$. 该映射的核也将是一个自由交换群,\footnote{我们用到了: 自由交换群的每个子群都是自由交换群. Darij Grinberg 指出, 这一事实绝非平凡 (且是非构造性的), 而且可以避免使用它.} 于是我们有一个正合列
+\[
+ 0\to X_1\to X_0\to X\to 0
+\]
+其中 $X_0$ 与 $X_1$ 为自由交换群. 把它与 $\Z[G]$ 作张量积, 我们得到一个 $\Z[G]$-模的正合列
+\begin{equation*}
+ 0\to M_1\to M_0\to M\to 0.\tag{23}
+\end{equation*}
+现在
+\[
+ H_T^r(G,M_0)=0=H_T^r(G,M_1)
+\]
+对 $r<-1$ 成立 (因为 $M_0$ 与 $M_1$ 是自由 $\Z[G]$-模), 对 $r\ge -1$ 也成立 (因为 $M_0$ 与 $M_1$ 是诱导模). (23) 的 (很) 长正合列现在表明对所有 $r$ 有 $H_T^r(G,M)=0$.
+\end{proof}
+
+我们知道 \ref{eqn:ii.1.15} (本书 p.\pageref{eqn:ii.1.15}), 每个 $G$-模 $M$ 都是一个诱导模的子模. 它也是一个诱导 $G$-模的商, 因为把增广序列 (19) 与 $M$ 作张量积, 我们得到一个 $G$-模的正合列
+\[
+ 0\to M'\to \Z[G]\otimes_\Z M\to M\to 0.
+\]
+这允许我们在两个方向上都用维数移位证明结果. 利用它, 可以把我们对群 $H^r(G,M)$ ($r\ge 0$) 证明的大部分结果推广到所有 $r$. 例如, Shapiro 引理及其推论都成立, 并且我们在 (\ref{ex:ii.1.27}) 与 (\ref{ex:ii.1.29}) 中定义的限制与余限制映射推广到所有 Tate 上同调群. 具体地说, 存在典范同态.\footnote{然而, 膨胀映射 $\Inf\colon H_T^r(G/H,M^H)\to H_T^r(G,M)$ ($H$ 为 $G$ 的正规子群) 只对 $r\ge 1$ 有定义:}\index{xianzhitonghui@限制同态(restriction homomorphism)}\index{yuxianzhitonghui@余限制同态(corestriction homomorphism)}
+\[
+ \Res\colon H_T^r(G,M)\to H_T^r(H,M)\quad(H\text{ 为 }G\text{ 的子群});
+\]
+\[
+ \Cor\colon H_T^r(H,M)\to H_T^r(G,M)\quad(H\text{ 为 }G\text{ 的子群}).
+\]
+复合 $\Res\circ\Cor$ 仍是乘以 $(G:H)$. 因为对所有 $r$ 有 $H_T^r(\{1\},M)=0$, (\ref{prop:ii.1.30}) 证明中的论证表明 $H_T^r(G,M)$ 被 $|G|$ 零化.
+
+注意
+\[
+ H_T^{-2}(G,\Z)=H_1(G,\Z)\simeq G/G^c.
+\]
+
+\begin{proposition}\label{prop:ii.3.2}
+设 $H$ 为 $G$ 的子群.
+\begin{enumerate}[(a)]
+\item 映射 $\Cor\colon H_T^{-2}(H,\Z)\to H_T^{-2}(G,\Z)$ 对应于由含入 $H\hookrightarrow G$ 诱导的映射 $H/H^c\to G/G^c$.
+\item 映射 $\Res\colon H_T^{-2}(G,\Z)\to H_T^{-2}(H,\Z)$ 对应于\emph{转移}映射 $G/G^c\to H/H^c$ (V, \ref{prop:v.3.18}).
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+见 \cite{Weiss1969}, 3-5-5, 3-5-7. 我将在笔记的未来版本中加入证明.
+\end{proof}
+
+对所有群 $H_T^r(G,M)$ 有一个统一的明确描述. 事实上, 存在一个 $G$-模的明确复形 $L_\bullet$ (双向无限), 使得
+\[
+ H_T^r(G,M)=H^r(\operatorname{Hom}_G(L_\bullet,M)).
+\]
+对 $r>0$ 这直接导出上面我们用非齐次上循环与上边界给出的 $H^r(G,M)$ 的描述. 见 \cite{Weiss1969}, 第 I 章.
+
+\subsubsection*{杯积}
+
+当群 $G$ 有限时, 杯积以唯一的方式推广到所有上同调群, 并具有同样的属性列表. 见 \cite{Weiss1969}, 第 IV 章. 笔记的未来版本将包含我们需要的全部属性的完整列表 (但不包含证明, 它们冗长但不难).
+
+\bigskip
+
+我们首先计算 $\Q$, $\Z$ 与 $\Q/\Z$ 视为带平凡作用的 $G$-模时的上同调.
+
+\begin{lemma}\label{lem:ii.3.3}
+对每个有限群 $G$,
+\begin{enumerate}[(a)]
+\item 对所有 $r\in\Z$ 有 $H_T^r(G,\Q)=0$;
+\item $H_T^0(G,\Z)=\Z/(G:1)\Z$ 且 $H^1(G,\Z)=0$;
+\item 存在一个典范同构
+\[
+ \Hom(G,\Q/\Z)\to H^2(G,\Z).
+\]
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) 群 $\Q$ 唯一可除, 即对所有非零整数 $m$, 乘以 $m\colon \Q\to\Q$ 是同构. 因此映射 $H_T^r(m)\colon H_T^r(G,\Q)\to H_T^r(G,\Q)$ (也是乘以 $m$) 是同构. 当我们取 $m=(G:1)$ 时, 发现乘以 $m$ 在 $H_T^r(G,\Q)$ 上既为零 (见 \ref{prop:ii.1.30}) 又是同构, 这只有在 $H_T^r(G,\Q)=0$ 时才可能.
+
+(b) 因为 $G$ 平凡地作用在 $\Z$ 上, $\Z^G=\Z$ 且范数映射是乘以 $(G:1)$. 故 $H_T^0(G,\Z)=\Z/(G:1)\Z$. 此外 $H^1(G,\Z)=\Hom(G,\Z)$ (见 \ref{ex:ii.1.18}a), 但因为 $\Z$ 无挠, 所有同态 $G\to\Z$ 都为零.
+
+(c) 序列
+\[
+ 0\to\Z\to\Q\to\Q/\Z\to 0
+\]
+的上同调列是一个正合列
+\[
+ \begin{tikzcd}[column sep=small]
+ H^1(G,\Q)\ar[r]\ar[d,equal] & H^1(G,\Q/\Z)\ar[r]\ar[d,equal] & H^2(G,\Z)\ar[r] & H^2(G,\Q)\ar[d,equal]\\
+ 0 & \Hom(G,\Q/\Z) & & 0
+ \end{tikzcd}
+\]
+\end{proof}
+
+设 $G$ 为 $m$ 阶有限循环群, 生成元为 $\sigma$. 那么由定义,
+\[
+ H_T^0(G,M)=\frac{\Ker(\sigma-1)}{\Im(\Nm_G)},\qquad H_T^{-1}(G,M)=\frac{\Ker(\Nm_G)}{\Im(\sigma-1)}.
+\]
+回忆在 (\ref{ex:ii.1.20}) 中我们证明了 $H^1(G,M)$ 同构于与 $H_T^{-1}(G,M)$ 相同的群. 事实上, 有限循环群的上同调群以 $2$ 为周期.
+
+\begin{proposition}\label{prop:ii.3.4}
+设 $G$ 为有限阶循环群. 选取 $G$ 的一个生成元决定同构
+\[
+ H_T^r(G,M)\xrightarrow{\simeq} H_T^{r+2}(G,M)
+\]
+对所有 $G$-模 $M$ 与所有 $r\in\Z$.
+\end{proposition}
+
+\begin{proof}
+设 $\sigma$ 生成 $G$. 则序列
+\[
+ 0\to \Z\xrightarrow{m\mapsto \sum_{g\in G} g m} \Z[G]\xrightarrow{\sigma-1} \Z[G]\xrightarrow{\sigma^i\mapsto 1} \Z\to 0
+\]
+正合. 因为该序列中的群与 $\Z[G]\to\Z$ 的核 $I_G$ 都是自由 $\Z$-模, 该序列与 $M$ 作张量积后仍正合. 于是
+\[
+ 0\to M\to \Z[G]\otimes_\Z M\to \Z[G]\otimes_\Z M\to M\to 0
+\]
+是一个 $G$-模的正合列. 回忆 (\ref{rem:ii.1.4}) $\Z[G]\otimes_\Z M\approx \Z[G]\otimes_\Z M_0$, 其中 $M_0$ 是视为交换群的 $M$, 因此由 (\ref{prop:ii.3.1}) 对所有 $r$ 有 $H_T^r(G,\Z[G]\otimes_\Z M)=0$. 于是 (见 \ref{rem:ii.1.13}) 该序列定义同构
+\[
+ H_T^r(G,M)\xrightarrow{\simeq} H_T^{r+2}(G,M)
+\]
+对所有 $r$.
+\end{proof}
+
+\begin{remark}\label{rem:ii.3.5}
+设 $\gamma$ 为 $H^2(G,\Z)$ 中对应于同构 $H^2(G,\Z)\simeq \Hom(G,\Q/\Z)$ 下把所选生成元 $\sigma$ 送到 $1/m$ 的映射的元素. 则映射 $H_T^r(G,M)\to H_T^{r+2}(G,M)$ 为 $x\mapsto x\cup\gamma$. 在未来版本中我将证明此结论. Serre, Local Fields, VIII, \S 4 给出如下提示: "周期同构由与 $\gamma$ 的杯积给出: 例如这由 Cartan--Eilenberg (Homological Algebra) p. 252 给出的杯积公式推出." 另见 \cite{Weiss1969}, 4-5-10.
+\end{remark}
+
+设 $G$ 为有限循环群, $M$ 为 $G$-模. 当上同调群 $H^r(G,M)$ 有限时, 我们定义 $M$ 的\emph{Herbrand 商}\index{herbandshang@Herbrand 商(Herbrand quotient)}为
+\[
+ h(M)=\frac{|H_T^0(G,M)|}{|H_T^1(G,M)|}.
+\]
+
+\begin{proposition}\label{prop:ii.3.6}
+设 $0\to M'\to M\to M''\to 0$ 为 $G$-模的正合列. 如果 Herbrand 商 $h(M')$, $h(M)$, $h(M'')$ 中有两个有定义, 那么第三个也有定义, 且
+\[
+ h(M)=h(M')h(M'').
+\]
+\end{proposition}
+
+\begin{proof}
+我们可以如下截断 (很) 长的正合上同调列:
+\[
+ 0\to K\to H_T^0(M')\to H_T^0(M)\to H_T^0(M'')\to H^1(M')\to H^1(M)\to H^1(M'')\to K'\to 0,
+\]
+其中
+\[
+ K=\Coker(H_T^{-1}(M)\to H_T^{-1}(M''))\approx \Coker(H^1(M)\to H^1(M''))=K'.
+\]
+第一个陈述现在显然, 第二个由下一个引理推出.
+\end{proof}
+
+\begin{lemma}\label{lem:ii.3.7}
+设
+\[
+ 0\to A_0\to A_1\to\cdots\to A_r\to 0
+\]
+为有限群的一个正合列. 则
+\[
+ \frac{|A_0|\cdot |A_2|\cdots\cdot}{|A_1|\cdot |A_3|\cdots\cdot}=1.
+\]
+\end{lemma}
+
+\begin{proof}
+对短正合列, 即 $r=2$, 这是显然的, 但每个正合列都可拆成短正合列,
+\[
+ \begin{aligned}
+ 0\to A_0\to A_1\to C_1\to 0\\
+ 0\to C_1\to A_2\to C_2\to 0\\
+ \cdots\\
+ 0\to C_{r-1}\to A_{r-1}\to A_r\to 0.
+ \end{aligned}
+\]
+这里 $C_i=\Coker(A_{i-1}\to A_i)=\Ker(A_{i+1}\to A_{i+2})$. 从这些序列我们发现
+\[
+ 1=\frac{|A_0|\cdot |C_1|}{|A_1|}=\frac{|A_0|\cdot |A_2|}{|A_1|\cdot |C_2|}=\cdots.
+\]
+\end{proof}
+
+\begin{proposition}\label{prop:ii.3.8}
+如果 $M$ 是有限模, 那么 $h(M)=1$.
+\end{proposition}
+
+\begin{proof}
+考虑正合列
+\[
+ 0\to M^G\to M\xrightarrow{g-1} M\to M_G\to 0
+\]
+与
+\[
+ 0\to H_T^{-1}(M)\to M_G\xrightarrow{\Nm_G} M^G\to H_T^0(M)\to 0,
+\]
+其中 $g$ 是 $G$ 的任意生成元. 由第一个序列我们发现 $M^G$ 与 $M_G$ 有相同的阶, 再由第二个序列得 $H_T^{-1}(M)$ 与 $H_T^0(M)$ 有相同的阶.
+\end{proof}
+
+\begin{corollary}\label{cor:ii.3.9}
+设 $\alpha\colon M\to N$ 为一个有有限核与有限余核的 $G$-模同态. 如果 $h(M)$ 或 $h(N)$ 有定义, 那么另一个也有定义, 且它们相等.
+\end{corollary}
+
+\begin{proof}
+假设 $h(N)$ 有定义, 考虑正合列:
+\[
+ 0\to \alpha(M)\to N\to \Coker(\alpha)\to 0,
+\]
+\[
+ 0\to \Ker(\alpha)\to M\to \alpha(M)\to 0.
+\]
+由第一个序列我们发现 $h(\alpha M)$ 有定义且等于 $h(N)$, 由第二个序列发现 $h(M)$ 有定义且等于 $h(\alpha M)$.
+\end{proof}
+
+\subsubsection*{Tate 定理}
+
+在本节的余下部分, 所有上同调群都是 Tate 群, 因此除了主要陈述外我们略去下标 $T$.
+
+\begin{theorem}\label{thm:ii.3.10}
+设 $G$ 为有限群, $M$ 为 $G$-模. 如果
+\[
+ H^1(H,M)=0=H^2(H,M)
+\]
+对所有 $G$ 的子群 $H$ 成立, 那么对所有 $r\in\Z$ 有 $H_T^r(G,M)=0$.
+\end{theorem}
+
+\begin{proof}
+如果 $G$ 循环, 这由上同调的周期性推出.
+
+现在假设 $G$ 可解. 我们将用对 $G$ 的阶的归纳来证明此情形.
+
+因为 $G$ 可解, 它包含一个真正规子群 $H$ 使得 $G/H$ 循环. 因为 $H$ 的阶小于 $G$ 的阶, 且对 $(H,M)$ 满足定理的假设, 对所有 $r$ 有 $H^r(H,M)=0$. 因此 (见 \ref{prop:ii.1.34}) 我们拥有正合列
+\begin{equation*}
+ 0\to H^r(G/H,M^H)\to H^r(G,M)\to H^r(H,M)\tag{$*$}
+\end{equation*}
+对所有 $r\ge 1$. 因为 $H^1(G,M)=0=H^2(G,M)$, 有 $H^1(G/H,M^H)=H^2(G/H,M^H)=0$, 而因为 $G/H$ 循环, 这表明对所有 $r$ 有 $H^r(G/H,M^H)=0$. 因此序列 (*) 表明对所有 $r>0$ 有 $H^r(G,M)=0$. 我们接着证明 $H^0(G,M)=0$. 设 $x\in M^G$. 因为 $H^0(G/H,M^H)=0$, 存在 $y\in M^H$ 使得 $\Nm_{G/H}(y)=x$, 而因为 $H^0(H,M)=0$, 存在 $z\in M$ 使得 $\Nm_H(z)=y$. 现在
+\[
+ \Nm_G(z)=(\Nm_{G/H}\circ \Nm_H)(z)=x.
+\]
+于是我们现在知道对所有 $r\ge 0$ 有 $H^r(G,M)=0$.
+
+为了进一步推进, 我们使用由增广序列 (19) 与 $M$ 作张量积得到的精确序列
+\[
+ 0\to M'\to \Z[G]\otimes_\Z M\to M\to 0.
+\]
+回忆
+\[
+ \Z[G]\otimes_\Z M\overset{1.4}{\simeq}\Z[G]\otimes_\Z M_0\overset{1.3}{\simeq}\Ind^G(M_0)
+\]
+是诱导的, 因此对所有 $r$ 与所有 $G$ 的子群 $H$ 有 $H^r(H,\Z[G]\otimes_\Z M)=0$. 于是
+\[
+ H^r(H,M)\simeq H^{r+1}(H,M')
+\]
+对所有 $r$ 与所有 $H$. 特别地, $M'$ 满足定理的假设, 故 (由已证部分) 对所有 $r\ge 0$ 有 $H^r(G,M')=0$. 特别地,
+\[
+ 0=H^0(G,M')=H^{-1}(G,M).
+\]
+重复此论证给出 $H^{-2}(G,M)=0$, 等等. 这证明了 $G$ 可解时的定理.
+
+现在考虑任意有限群 $G$ 的情形. 如果 $G$ 与 $M$ 满足定理的假设, 那么 $G_p$ 与 $M$ 也满足, 其中 $G_p$ 是一个 Sylow $p$-子群; 由于 $G_p$ 是 $p$-群 (从而可解), 前面的论证给出对所有 $r$ 有 $H_T^r(G_p,M)=0$. 对 $r>0$, 这表明 (见 \ref{cor:ii.1.33}) $H^r(G,M)$ 的 $p$-主分量对所有 $p$ 为零, 从而 $H^r(G,M)=0$. 对 $r=0$: 设 $x\in M^G$. 由 $H_T^0(G_p,M)=M^{G_p}/\Nm_{G_p}(M)=0$ 知 $x=\Nm_{G_p}(z)$ (某个 $z\in M$), 于是 $[G:G_p]\cdot x=\Nm_G(z)\in\Nm_G(M)$, 即 $[G:G_p]$ 零化 $H_T^0(G,M)$; 对所有素数 $p$ 取遍, 各 $[G:G_p]$ 无公共素因子, 故 $H_T^0(G,M)=0$. 对 $r<0$, 用维数移位: 由正合列 $0\to M'\to\Z[G]\otimes_\Z M\to M\to 0$ 及 $\Z[G]\otimes_\Z M$ 的 Tate 群在所有次数为零, 得 $H_T^r(G,M)\simeq H_T^{r+1}(G,M')$ 对所有 $r$ 成立, 且 $M'$ 及其逐次移位得到的模仍满足定理假设, 于是 $r<0$ 的情形归结为已证的 $r=0$ 情形. 这表明对所有 $r$ 有 $H_T^r(G,M)=0$.\erratum{原书此段对一切 $r$ 直接引用 1.33; 但该 Sylow 归约仅对 $r>0$ 有效, 而维数移位论证还需要 $r=0$ 的情形. 依 Milne errata (K. Kedlaya) 补正如上.}
+\end{proof}
+
+\begin{theorem}[Tate 定理]\label{thm:ii.3.11}
+设 $G$ 为有限群, $C$ 为 $G$-模. 假设对所有 $G$ 的子群 $H$ (包括 $H=G$)，
+\begin{enumerate}[(a)]
+\item $H^1(H,C)=0$, 且
+\item $H^2(H,C)$ 是一个阶等于 $(H:1)$ 的循环群.
+\end{enumerate}
+那么对所有 $r$, 存在同构
+\[
+ H_T^r(G,\Z)\to H_T^{r+2}(G,C)
+\]
+只依赖于选取 $H^2(G,C)$ 的一个生成元.
+\end{theorem}
+
+\begin{proof}
+选取 $H^2(G,C)$ 的一个生成元 $\gamma$. 因为 $\Cor\circ\Res=(G:H)$, 对任何子群 $H$ 有 $\Res(\gamma)$ 生成 $H^2(H,C)$.
+
+设 $\varphi$ 为表示 $\gamma$ 的一个上循环. 定义 $C(\varphi)$ 为 $C$ 与以符号 $x_\sigma$ 为基的自由交换群的直接和, 每个 $\sigma\in G$, $\sigma\neq 1$, 并把 $G$ 在 $C$ 上的作用扩张为在 $C(\varphi)$ 上的作用, 规定
+\[
+ \sigma x_\tau=x_{\sigma\tau}-x_\sigma+\varphi(\sigma,\tau).
+\]
+符号 "$x_1$" 应解释为 $\varphi(1,1)$. 这确实定义了 $G$ 在 $C(\varphi)$ 上的一个作用, 因为
+\[
+ \rho\sigma x_\tau=x_{\rho\sigma\tau}-x_{\rho\sigma}+\varphi(\rho\sigma,\tau),
+\]
+而
+\[
+ \begin{aligned}
+ \rho(\sigma x_\tau)&=\rho(x_{\sigma\tau}-x_\sigma+\varphi(\sigma,\tau))\\
+ &=x_{\rho\sigma\tau}-x_\rho+\varphi(\rho,\sigma\tau)-(x_{\rho\sigma}-x_\rho+\varphi(\rho,\sigma))+\rho\varphi(\sigma,\tau).
+ \end{aligned}
+\]
+它们一致是因为 $\varphi$ 满足上循环条件
+\[
+ \rho\varphi(\sigma,\tau)+\varphi(\rho,\sigma\tau)=\varphi(\rho\sigma,\tau)+\varphi(\rho,\sigma).
+\]
+注意 $\varphi$ 是 $1$-上链 $\sigma\mapsto x_\sigma$ 的上边界, 因此 $\gamma$ 在 $H^2(G,C(\varphi))$ 中映到零. 为此原因, $C(\varphi)$ 称为 $\gamma$ 的\emph{分裂模}.
+
+我们先证明这些假设蕴含
+\[
+ H^1(H,C(\varphi))=0=H^2(H,C(\varphi))
+\]
+对所有 $G$ 的子群 $H$.
+
+回忆我们有一个正合列
+\[
+ 0\to I_G\to \Z[G]\to\Z\to 0,
+\]
+其中 $I_G$ 是以元素 $\sigma-1$ ($\sigma\in G$, $\sigma\neq 1$) 为基的自由交换群. 因为 $\Z[G]$ 是诱导的, 对所有 $r$ 有 $H^r(H,\Z[G])=0$, 于是
+\[
+ \begin{array}{r l}
+ H^1(H,I_G) & \simeq H^0(H,\Z)\simeq \Z/(H:1)\Z,\\
+ H^2(H,I_G) & \simeq H^1(H,\Z)=0.
+ \end{array}
+\]
+定义 $\alpha$ 为加性映射 $C(\varphi)\to \Z[G]$, 使得
+\[
+ \begin{aligned}
+ \alpha(c)&=0\quad\text{对所有 }c\in C,\\
+ \alpha(x_\sigma)&=\sigma-1.
+ \end{aligned}
+\]
+显然,
+\[
+ 0\to C\to C(\varphi)\xrightarrow{\alpha} I_G\to 0
+\]
+是一个 $G$-模的正合列. 它的上同调列读为
+\[
+ 0\to H^1(H,C(\varphi))\to H^1(H,I_G)\to H^2(H,C)\xrightarrow{0} H^2(H,C(\varphi))\to 0.
+\]
+两端的零来自 $H^1(H,C)=0$ 与 $H^2(H,I_G)=0$. 映射 $H^2(H,C)\to H^2(H,C(\varphi))$ 为零, 因为 $H^2(H,C)$ 由 $\Res(\gamma)$ 生成, 而它映到 $\gamma$ 在 $H^2(G,C(\varphi))$ 中像的限制, 即零. 因此 $H^1(H,I_G)\to H^2(H,C)$ 是满射, 从而是同构 (因为两个群有相同的阶). 它的核与余核, 即 $H^1(H,C(\varphi))$ 与 $H^2(H,C(\varphi))$, 因此都为零.
+
+我们从定理\ref{thm:ii.3.10} 推出对所有 $r$ 有 $H^r(H,C(\varphi))=0$. 把两个短正合列拼接起来, 我们得到一个正合列
+\begin{equation*}
+ 0\to C\to C(\varphi)\to \Z[G]\to\Z\to 0\tag{24}
+\end{equation*}
+具有性质: 对所有 $r$ 有 $H^r(G,C(\varphi))=0=H^r(G,\Z[G])$. 因此双边缘映射是一个同构 (\ref{rem:ii.1.13})
+\[
+ H^r(G,\Z)\to H^{r+2}(G,C).
+\]
+\end{proof}
+
+\begin{remark}\label{rem:ii.3.12}
+如果 $M$ 是一个满足 $\Tor_1^\Z(M,C)=0$ 的 $G$-模, 例如如果 $M$ 或 $C$ 作为 $\Z$-模无挠, 那么可以把上面的四项序列与 $M$ 作张量积并得到同构
+\[
+ H_T^r(G,M)\to H_T^{r+2}(G,M\otimes C).
+\]
+\end{remark}
+
+\begin{remark}\label{rem:ii.3.13}
+映射 $H_T^r(G,\Z)\to H_T^{r+2}(G,C)$ 是与所选元素 $\gamma\in H^2(G,C)$ 的杯积.
+\end{remark}
+
+\begin{example}\label{ex:ii.3.14}
+设 $K$ 为一个局部域. 我们将证明对任何有限 Galois 扩张 $L/K$ (Galois 群 $G$), $H^2(G,L^\times)$ 是一个阶为 $[L:K]$ 的循环群, 带一个典范生成元 $u_{L/K}$. 因为已知 $H^1(G,L^\times)=0$ (Hilbert 定理 90), Tate 定理表明与 $u_{L/K}$ 的杯积是一个同构
+\[
+ G^{\mathrm{ab}}=H_T^{-2}(G,\Z)\to H_T^0(G,L^\times)=K^\times/\Nm\, L^\times.
+\]
+逆同构 $K^\times/\Nm L^\times\xrightarrow{\simeq} G^{\mathrm{ab}}$ 是\emph{局部 Artin 映射}. 整体 Artin 映射可由类似论证得到.
+\end{example}
+
+\section{Profinite 群的上同调}\label{sec:II.4}\index{profinitequn@profinite 群(profinite group)}\index{galoisqun@Galois 群(Galois group)}
+
+\subsubsection*{正向极限}
+
+一个偏序集 $(I,\le)$ 称为\emph{有向的}, 如果对 $I$ 中任意两个元素 $i$ 与 $j$, 存在 $k$ 使得 $i,j\le k$. 假设对有向集 $(I,\le)$ 中每个元素 $i$ 我们有一个集合 $A_i$, 且对每条不等式 $i\le j$ 我们有一个映射 $\alpha_{ji}\colon A_i\to A_j$. 如果
+\begin{enumerate}[(a)]
+\item 对所有 $i\in I$ 有 $\alpha_{ii}=\id$;
+\item 每当 $i\le j\le k$ 有 $\alpha_{kj}\circ\alpha_{ji}=\alpha_{ki}$,
+\end{enumerate}
+那么该族 $(A_i,\alpha_{ji})$ 称为一个\emph{正向系统}. 在 $A_i$ 的无交并 $\coprod A_i$ 上引入等价关系: $a_i\in A_i$ 与 $a_j\in A_j$ 相关当且仅当对某个 $k\ge i,j$ 有 $\alpha_{ki}(a_i)=\alpha_{kj}(a_j)$. 相应的商集称为 $A_i$ 的\emph{正向极限} (相对于 $\alpha_{ji}$):
+\[
+ A=\varinjlim A_i.
+\]
+对每个 $i$ 有一个典范映射
+\[
+ \alpha_i\colon A_i\to A,
+\]
+具有如下性质:
+\begin{enumerate}[(a)]
+\item 对 $j\ge i$ 有 $\alpha_i=\alpha_j\circ\alpha_{ji}$;
+\item $\alpha_i(a_i)=\alpha_j(a_j)\iff$ 对某个 $k\ge i,j$ 有 $\alpha_{ki}(a_i)=\alpha_{kj}(a_j)$;
+\item $A=\bigcup \alpha_i(A_i)$.
+\end{enumerate}
+系统 $(A,\alpha_i)$ 有如下泛性质: 设 $T$ 为集合, $(\beta_i)$ ($\beta_i\colon A_i\to T$) 为一族映射使得对 $i\le j$ 有 $\beta_i=\beta_j\circ\alpha_{ji}$; 则存在唯一映射 $\beta\colon A\to T$ 使得对所有 $i$ 有 $\beta_i=\beta\circ\alpha_i$.
+
+如果 $A_i$ 是交换群且 $\alpha_{ij}$ 是同态, 那么 $A$ 有唯一的交换群结构使得 $\alpha_i$ 是同态.
+
+\begin{lemma}\label{lem:ii.4.1}
+对任何正合列的正向系统
+\[
+ A_i\to B_i\to C_i,
+\]
+序列
+\[
+ \varinjlim A_i\to \varinjlim B_i\to \varinjlim C_i
+\]
+仍正合. 因此正向极限的构造与上同调在复合形中的计算交换.
+\end{lemma}
+
+\begin{proof}
+留作读者练习.
+\end{proof}
+
+\subsubsection*{Profinite 群}
+
+设 $G$ 为一个 profinite 群. 这意味着 $G$ 是一个紧拓扑群\footnote{按照 Bourbaki, 我要求紧空间是 Hausdorff 的.}, 其开正规子群构成 $1$ 处的邻域的基本系. 注意每个开子群指数有限 (因为它的陪集覆盖 $G$). 例如, 带离散拓扑的有限群是 profinite 的, 且每个离散 profinite 群有限. 一个 Galois 群 $G=\Gal(L/K)$ 是一个 profinite 群 —— 开子群恰好是固定 $L$ 中 $K$ 的某个有限扩张的那些 —— 且每个 profinite 群都作为某个 Galois 群出现. 对 profinite 群, 我们用拓扑来修正上同调群的概念.
+
+首先, 我们只考虑那些使得映射
+\[
+ G\times M\to M
+\]
+连续的 $G$-模, 其中 $M$ 赋予离散拓扑, 即每个子集都开的拓扑. 等价条件:
+\begin{itemize}
+\item $M=\bigcup M^H$, $H$ 跑遍 $G$ 的开子群;
+\item $M$ 中任何元素的稳定子群在 $G$ 中开.
+\end{itemize}
+满足这些条件的模称为\emph{离散 $G$-模}.
+
+离散 $G$-模构成一个有足够多内射对象的 Abel 范畴, 因此我们可以像前面一样通过取内射分解来定义上同调群 $H_{\mathrm{cts}}^r(G,M)$ ($r\ge 0$). 此外, 这些群可以用\emph{连续上链}计算: 对 $r\ge 0$, 设 $C_{\mathrm{cts}}^r(G,M)$ 为连续映射 $G^r\to M$ 的群, 并如前面一样定义 $d^r\colon C_{\mathrm{cts}}^r(G,M)\to C_{\mathrm{cts}}^{r+1}(G,M)$; 则
+\[
+ H_{\mathrm{cts}}^r(G,M)=\frac{Z_{\mathrm{cts}}^r(G,M)}{B_{\mathrm{cts}}^r(G,M)},
+\]
+其中 $Z_{\mathrm{cts}}^r(G,M)=\Ker(d^r)$, $B_{\mathrm{cts}}^r(G,M)=\Im(d^{r-1})$.
+
+设 $\varphi\colon G^r\to M$ 为一个连续 $r$-上链. 则 $\varphi(G^r)$ 紧 (因为 $G^r$ 紧) 且离散 (因为 $M$ 离散), 因此有限, 从而包含于某个开正规子群 $H_0$ 的 $M^{H_0}$ 中. $\varphi(G^r)$ 中每点 $m$ 的逆像 $\varphi^{-1}(m)$ 开, 因此包含某个开正规子群 $H(m)$ 的 $H(m)^r$ 的一个平移. 令 $H_1=\bigcap_{m\in\varphi(G^r)}H(m)$.\footnote{这个群可能不够小, 不足以使 $\varphi$ 经过 $(G/H_1)^r$ 分解. 取而代之, 对 $G^r$ 的每个点, 取包含该点且完全含于 $\varphi$ 的一个纤维中的某个开正规子群的一个平移. 这样我们便得到 $G^r$ 的一个开覆盖, 由于 $G^r$ 紧, 它可以替换为一个有限子覆盖. 现在令 $H_1$ 为所有其平移在该子覆盖中出现的子群的交.} 这又是 $G$ 的一个开子群, 且 $\varphi$ 经过 $(G/H_1)^r$. 令 $H=H_0\cap H_1$. 则 $\varphi$ 由 $G/H$ 上一个在 $M^H$ 中取值的 $r$-上循环膨胀而来. 换言之, 映射
+\[
+ \varinjlim C^r(G/H,M^H)\to C_{\mathrm{cts}}^r(G,M)
+\]
+是满射. 不难看到它也是单射. 因为过渡到正向极限与 kernel 和 cokernel 的构造交换, 从而与上同调的构造交换, 我们得到如下命题:
+
+\begin{proposition}\label{prop:ii.4.2}
+映射 $\Inf\colon H^r(G/H,M^H)\to H_{\mathrm{cts}}^r(G,M)$ 把 $H_{\mathrm{cts}}^r(G,M)$ 实现为群 $H^r(G/H,M^H)$ 当 $H$ 跑遍 $G$ 的开正规子群时的正向极限:
+\[
+ \varinjlim H^r(G/H,M^H)=H_{\mathrm{cts}}^r(G,M).
+\]
+\end{proposition}
+
+确切地说, 该陈述意味着 $H_{\mathrm{cts}}^r(G,M)$ 的每个元素都由一个群 $H^r(G/H,M^H)$ 中的元素膨胀而来, 且如果 $a\in H^r(G/H,M^H)$ 与 $a'\in H^r(G/H',M^{H'})$ 在 $H_{\mathrm{cts}}^r(G,M)$ 中映到同一元素, 那么对某个包含于 $H\cap H'$ 的开子群 $H''$ 它们在 $H^r(G/H'',M^{H''})$ 中映到同一元素.
+
+\begin{corollary}\label{cor:ii.4.3}
+对每个 profinite 群 $G$ 与离散 $G$-模 $M$, 对所有 $r>0$ 有 $H^r(G,M)$ 是一个挠群.
+\end{corollary}
+
+\begin{proof}
+每个群 $H^r(G/H,M^H)$ ($r>0$) 是挠群 (见 \ref{cor:ii.1.31}).
+\end{proof}
+
+关于 $r\ge 0$ 的上同调群 $H^r(G,M)$ 的大部分理论对由连续上链定义的群仍成立. 例如, 如果 $H$ 是 $G$ 的闭子群, 则存在映射 $\Inf$, $\Res$ 与 $\Cor$ (最后一个要求 $H$ 指数有限), 并且存在杯积映射.
+
+今后, 所有上同调群都将用连续上链定义 (并略去下标 cts). 实际上, 这意味着要么 $G$ 是无限 profinite 群, 此时取连续上链是有关系的; 要么 $G$ 有限, 此时则无关 (且群对所有 $r\in\Z$ 有定义).
+
+\begin{proposition}\label{prop:ii.4.4}
+设 $G$ 为 profinite 群, $M$ 为离散 $G$-模. 如果 $M=\varinjlim M_i$, 其中 $M_i\subset M$, 那么 $H^r(G,M)=\varinjlim H^r(G,M_i)$.
+\end{proposition}
+
+\begin{proof}
+因为 $G$ 紧而 $M$ 离散, 任何 $r$-上链 $f\colon G^r\to M$ 的像有限. 因为 $M_i$ 形成 $M$ 的子模的一个有向系 (即给定 $M_i$ 与 $M_j$, 存在同时包含二者的 $M_k$) 且 $M=\bigcup M_i$, $M$ 的每个有限子集都包含于某个 $M_i$. 由此可知 $C^r(G,M)=\varinjlim C^r(G,M_i)$, 于是引理\ref{lem:ii.4.1} 表明
+\[
+ H^r(C^\bullet(G,M))=\varinjlim H^r(C^\bullet(G,M_i)).
+\]
+\end{proof}
+
+\begin{aside}\label{as:ii.4.5}
+(给专家的.) 设 $G$ 为 profinite 群, 令 $M(G)$ 为所有 $G$-模的范畴, $C(G)$ 为离散 $G$-模的范畴. 则 $C(G)$ 是 $M(G)$ 的全子范畴. 此外, 存在一个函子
+\[
+ M\mapsto M^*\stackrel{\mathrm{def}}{=}\bigcup_{H\text{ 在 }G\text{ 中开}} M^H\colon \mathsf{M}(G)\to \mathsf{C}(G).
+\]
+显然,
+\[
+ \operatorname{Hom}_G(M,N^*)=\operatorname{Hom}_G(M,N)
+\]
+对离散 $G$-模 $M$. 含入函子 $i\colon \mathsf{C}(G)\to \mathsf{M}(G)$ 正合, 但不保持内射性 —— 因此一般地 $H^r(G,M)\neq H^r(G,iM)$. 另一方面, $M\mapsto M^*$ 保持内射性, 但只是左正合的 —— 因此 $\mathsf{C}(M)$ 有足够多的内射对象. 再次有 $H^r(G,M)\neq H^r(G,M^*)$ (然而存在一个谱序列……).
+\end{aside}
+
+\begin{NOTES}
+在 1930 年代中期, Hurewicz 证明了"非球面空间" $X$ 的同调群只依赖于该空间的基本群 $\pi$. 因此可以把空间的同调群 $H_r(X,\Z)$ 视为群 $\pi$ 的同调群 $H_r(\pi,\Z)$. 直到 1940 年代中期, Hopf, Eckmann, Eilenberg, MacLane, Freudenthal 及其他人才给出群 $G$ 的同调群与上同调群的纯代数定义. 这时人们发现 $H^1$ 与交叉同态模主交叉同态一致, $H^2$ 与"因子集"的同构类群一致, 后者早就被引入 (例如 I. Schur, Über die Darstellung der endlichen…, 1904; O. Schreier, Über die Erweiterungen von Gruppen, 1926; R. Brauer, Über Zusammenhänge…, 1926). 更多历史见 \cite{MacLane1978}.
+
+我们对 Tate 定理的证明遵循 Tate 的原始证明 (\cite{Tate1952}). 那时还没有 Tate 群的公开说明, 因此 Tate 只对 $r\ge 0$ 证明他的定理, 但以一个神秘的承诺结尾: 要把结果推广到负的 $r$ 并重新得到 Artin 映射. Tate 上同调群的构造在 \cite{CartanEilenberg1956} 中首次发表, 遵循 Tate 的想法.
+
+前三节内容的优秀来源是 \cite{Serre1962}, 第 3 部分. \cite{AtiyahWall1967} 中有同一内容的稍简版本. 另见 \cite{Iyanaga1975}, 第 I 章, 与 \cite{Weiss1969}. 对 profinite 群的上同调, 见 \cite{Serre1964} 与 \cite{Shatz1972}.
+
+对上同调在类域论中起源的讨论, 见 \sx{857593}.
+\end{NOTES}
+
+\phantomsection
+\section*{A 附录: 若干同调代数}\label{sec:II.A}\addcontentsline{toc}{section}{A 附录: 若干同调代数}\index{tongdaodaishu@同调代数(homological algebra)}\index{daochuhanshu@导出函子(derived functor)}
+
+Ça me semble extrêmement plaisant de ficher comme ça beaucoup de choses, pas drôles quand on les prend séparément, sous le grand chapeau des foncteurs dérivés.
+
+Grothendieck, 给 Serre 的信, 18.2.1955.\footnote{依我看, 把形形色色单独拿出来看并无多少趣味的东西, 统统塞进导出函子这顶大帽子底下, 是件极为愉快的事.}
+
+% 附录中定理按 A.x 编号
+\renewcommand{\thetheorem}{A.\arabic{theorem}}
+\setcounter{theorem}{0}
+
+\subsubsection*{若干正合列}\footnote{基于 F. Lemmermeyer, \emph{The Snake Lemma}.}
+
+\begin{lemma}[扩张蛇形引理]\label{lem:ii.A.1}
+下述交换图导出长正合列 (蛇形):
+\[
+\begin{tikzcd}[column sep=small, row sep=small]
+ 0 \ar[r] & \Ker f \ar[r] & \Ker a \ar[r] \ar[d, hook] & \Ker b \ar[r] \ar[d, hook] & \Ker c \ar[d, hook] \ar[dddll, bend left=55] & & \\
+ & & A \ar[r, "f"] \ar[d, "a"'] & B \ar[r] \ar[d, "b"'] & C \ar[r] \ar[d, "c"'] & 0 & \\
+ & 0 \ar[r] & A' \ar[r] \ar[d] & B' \ar[r, "g'"] \ar[d] & C' \ar[d] & & \\
+ & & \Coker a \ar[r] & \Coker b \ar[r] & \Coker c \ar[r] & \Coker g' \ar[r] & 0
+\end{tikzcd}
+\]
+即长正合列 (蛇形)
+\[
+ 0\to \Ker f\to \Ker a\to \Ker b\to \Ker c\to \Coker a\to \Coker b\to \Coker c\to \Coker g'\to 0.
+\]
+\end{lemma}
+
+\begin{proof}
+除首尾两项外这是标准的. 一个小图表追踪表明 $\Ker f\subset \Ker a$, 由此得到在 $\Ker a$ 处的正合性. 在 $\Coker g'$ 处的正合性的证明同样直接.
+\end{proof}
+
+\begin{lemma}[核--余核引理]\label{lem:ii.A.2}
+每对同态
+\[
+ A\xrightarrow{f} B\xrightarrow{g} C
+\]
+的交换群产生一个正合列
+\[
+ 0\to \Ker f\to \Ker(g\circ f)\xrightarrow{f} \Ker g\to \Coker f\to \Coker(g\circ f)\to \Coker g\to 0.
+\]
+\end{lemma}
+
+\begin{proof}
+把扩张蛇形引理应用于
+\[
+ \begin{tikzcd}
+ & A \ar[r, "f"] \ar[d, "g\circ f"'] & B \ar[r] \ar[d, "g"'] & \Coker(f) \ar[r] \ar[d] & 0 \\
+ 0 \ar[r] & C \ar[r, "\mathrm{id}"'] & C \ar[r] & 0 &
+ \end{tikzcd}
+\]
+\end{proof}
+
+\subsubsection*{范畴论的语言}
+
+一个范畴 $\mathsf{C}$ 由一个非空的对象类 $\operatorname{ob}(\mathsf{C})$, 对每对对象 $A,B$ 一个集合 $\Hom(A,B)$ (称为从 $A$ 到 $B$ 的态射集合), 以及对每个三元组对象 $A,B,C$ 一个映射
+\[
+ (\alpha,\beta)\mapsto \beta\circ\alpha\colon \Hom(A,B)\times \Hom(B,C)\to \Hom(A,C)
+\]
+组成, 满足如下条件:
+\begin{enumerate}[(a)]
+\item 态射的复合结合;
+\item 对每个对象 $A$, $\Hom(A,A)$ 有一个元素 $\id_A$, 它是复合的左, 右单位元.
+\end{enumerate}
+要理解集合 $\Hom(A,B)$ 互不相交, 因此一个态射决定它的源与目标.
+
+一个\emph{协变函子} $F\colon \mathsf{C}\to \mathsf{D}$ 是一个"映射", 它把 $\mathsf{C}$ 的每个对象 $A$ 附到一个 $\mathsf{D}$ 的对象 $F(A)$, 把每个态射 $\alpha\colon A\to B$ 附到一个态射 $F(\alpha)\colon F(A)\to F(B)$, 并保持态射的复合: 若 $\alpha\colon A\to B$, $\beta\colon B\to C$, 则 $F(\alpha\circ\beta)=F(\alpha)\circ F(\beta)$; 此外 $F(\id_A)=\id_{F(A)}$.
+
+一个函子 $F\colon \mathsf{C}\to \mathsf{D}$ 是函子 $G\colon \mathsf{D}\to \mathsf{C}$ 的\emph{左伴随}, 如果存在自然同构
+\[
+ \operatorname{Hom}_{\mathsf{D}}(F(A),B)\simeq \operatorname{Hom}_{\mathsf{C}}(A,G(B)).
+\]
+如果集合 $\Hom(A,B)$ 被赋予交换群的结构使得复合映射是双加性的, 且 $\mathsf{C}$ 中每个有限对象族都有直和, 那么 $\mathsf{C}$ (连同这些结构) 称为一个\emph{加性范畴}. 说 $A$ 与 $B$ 容许一个直和意味着在 $\mathsf{C}$ 中存在一个对象 $A\oplus B$ 与映射 $i_A\colon A\to A\oplus B$, $i_B\colon B\to A\oplus B$, $p_A\colon A\oplus B\to A$, $p_B\colon A\oplus B\to B$ 使得:
+\[
+ \begin{aligned}
+ p_A\circ i_A&=\id_A & p_B\circ i_B&=\id_B\\
+ p_A\circ i_B&=0 & p_B\circ i_A&=0
+ \end{aligned}
+\]
+\[
+ i_A p_A+i_B p_B=1_{A\oplus B}.
+\]
+设 $\mathsf{C}$ 为一个加性范畴. 一个序列
+\[
+ 0\to A\to B\xrightarrow{\alpha} C
+\]
+正合, 如果对所有对象 $T$ 交换群序列
+\[
+ 0\to \Hom(T,A)\to \Hom(T,B)\to \Hom(T,C)
+\]
+正合. 一个序列
+\[
+ A\xrightarrow{\beta} B\to C\to 0
+\]
+正合, 如果对所有对象 $T$ 交换群序列
+\[
+ 0\to \Hom(C,T)\to \Hom(B,T)\to \Hom(A,T)
+\]
+正合. 当第一个序列正合时, $A$ 称为 $\alpha$ 的\emph{核}; 当第二个序列正合时, $C$ 称为 $\beta$ 的\emph{余核}.
+
+一个态射 $A\to B$ 称为\emph{单的} (或单态射), 如果 $0\to A\to B$ 正合. 类似地, 它称为\emph{满的} (或满态射), 如果 $A\to B\to 0$ 正合.
+
+设 $\mathsf{C}$ 为一个加性范畴, 其中每个态射都有核与余核. 设 $\alpha\colon A\to B$ 为一个态射. $\alpha$ 的余核 $B\to C$ 的核称为 $\alpha$ 的\emph{像}, 而 $\alpha$ 的核的余核称为 $\alpha$ 的\emph{余像}. 存在一个从 $\alpha$ 的余像到像的典范映射, 如果它总是同构, 那么 $\mathsf{C}$ 称为一个\emph{Abel 范畴}.\footnote{如果你对这一段感到困惑, sx2263197 或许会有所帮助.}
+
+加性范畴之间的函子将假定是加性的, 即映射 $\Hom(A,B)\to \Hom(F(A),F(B))$ 是交换群同态. 这样的函子称为\emph{正合的}, 如果它把正合列映到正合列.
+
+例如, 对每个环 $R$, $R$-模的范畴是一个 Abel 范畴; 且对每个拓扑空间 $X$, $X$ 上交换群层范畴是一个 Abel 范畴.
+
+在本节余下部分, $\mathsf{C}$ 将是一个 Abel 范畴. 就本课程而言, 读者取 $\mathsf{C}$ 为环上的模范畴 (例如群环 $\Z[G]$ 上的模范畴) 不会损失什么.
+
+\subsubsection*{内射对象}
+
+设 $\mathsf{C}$ 为一个 Abel 范畴. $\mathsf{C}$ 的一个对象 $I$ 是\emph{内射的}, 如果 $\operatorname{Hom}(\cdot,I)$ 是一个正合函子, 即如果
+\[
+ 0\to A\to B\to C\to 0
+\]
+在 $\mathsf{C}$ 中正合蕴含
+\[
+ 0\to \Hom(C,I)\to \Hom(B,I)\to \Hom(A,I)\to 0
+\]
+正合. 最后一个序列除在 $\Hom(A,I)$ 处外自动正合, 因此说 $I$ 内射意味着: 每当 $A$ 是 $B$ 的子对象, 每个同态 $A\to I$ 都扩张到 $B$.
+
+一个 Abel 范畴 $\mathsf{C}$ 称为\emph{有足够多的内射对象}, 如果每个对象都容许一个嵌入内射对象的单同态.
+
+\begin{proposition}\label{prop:ii.A.3}
+主理想整环 $R$ 上的模 $M$ 是内射的当且仅当它是可除的, 即映射 $x\mapsto rx$ 对所有 $r\in R$, $r\neq 0$ 是满射.
+\end{proposition}
+
+\begin{proof}
+内射 $\Longrightarrow$ 可除: 设 $m\in M$, $r$ 为 $R$ 的非零元素. 映射 $x\mapsto rx\colon R\to R$ 是单的, 而 $x\mapsto xm\colon R\to M$ 到 $R$ 的每个扩张都将 $1$ 送到满足 $rm'=m$ 的元素 $m'$.
+
+可除 $\Longrightarrow$ 内射: 假设 $M$ 可除, 考虑同态 $\alpha\colon A\to M$, 其中 $A$ 是 $B$ 的子模. 把 Zorn 引理用于满足如下条件的对 $(A',\alpha')$ 的集合: $A'$ 是包含 $A$ 的 $B$ 的子模且 $\alpha'$ 把 $\alpha$ 扩张到 $A'$, 我们得到一个极大的这样的对 $(A_1,\alpha_1)$. 如果 $A_1\neq B$, 则存在 $b\in B\setminus A_1$, 我们定义 $I=\{r\in R\mid rb\in A_1\}$. 因为 $M$ 可除, 映射 $r\mapsto \alpha_1(rb)\colon I\to M$ 扩张到 $R$\footnote{目前这一点留作读者的练习.}, 但这蕴含 $\alpha_1$ 扩张到 $A_1+Rb$, 与 $(A_1,\alpha_1)$ 的极大性矛盾.
+\end{proof}
+
+因此, 当 $R$ 为主理想整环时, 内射模的每个商都是内射的, 例如 $K/R$, 其中 $K$ 是 $R$ 的分式域. 特别地, $\Q/\Z$ 是一个内射交换群.
+
+\begin{proposition}\label{prop:ii.A.4}
+主理想整环 $R$ 上的模范畴有足够多的内射对象.
+\end{proposition}
+
+\begin{proof}
+把 $M$ 写成自由 $R$-模 $F$ 的商 $M\approx F/N$, 并考虑正合交换图表,
+\[
+\begin{tikzcd}[column sep=small, row sep=small]
+	& & 0 & 0 \\
+	0 & N & F & M & 0 \\
+	0 & N & {F\otimes_R K} & {(F\otimes_R K)/N} & 0 \\
+	& 0 & 0 & 0
+	\arrow[from=1-3, to=2-3]
+	\arrow[from=1-4, to=2-4]
+	\arrow[from=2-1, to=2-2]
+	\arrow[from=2-2, to=2-3]
+	\arrow[from=2-3, to=2-4]
+	\arrow[from=2-4, to=2-5]
+	\arrow[equal, from=2-2, to=3-2]
+	\arrow[from=2-3, to=3-3]
+	\arrow[from=2-4, to=3-4]
+	\arrow[from=3-1, to=3-2]
+	\arrow[from=3-2, to=3-3]
+	\arrow[from=3-3, to=3-4]
+	\arrow[from=3-4, to=3-5]
+	\arrow[from=3-2, to=4-2]
+	\arrow[from=3-3, to=4-3]
+	\arrow[from=3-4, to=4-4]
+\end{tikzcd}
+\]
+因为 $F\to F\otimes_R K$ 是单射且 $F\otimes_R K$ 是内射对象, 映射 $M\to (F\otimes_R K)/N$ 是 $M$ 嵌入一个内射 $R$-模的单同态.
+\end{proof}
+
+对交换群, 该命题也可如下证明: 对交换群 $M$, 令 $M^\vee=\Hom(M,\Q/\Z)$; 取一个自由交换群 $F$ 满射到 $M^\vee$, $F\to M^\vee$; 则 $M\hookrightarrow M^{\vee\vee}\hookrightarrow F^\vee$, 且 $F^\vee$ 内射.
+
+\begin{proposition}\label{prop:ii.A.5}
+一个容许正合左伴随的函子保持内射对象.
+\end{proposition}
+
+\begin{proof}
+设 $F'$ 为函子 $F\colon \mathsf{C}\to \mathsf{D}$ 的正合左伴随. 对 $\mathsf{C}$ 中每个内射对象 $I$, 函子 $\operatorname{Hom}_{\mathsf{D}}(\cdot,F(I))$ 同构于函子 $\operatorname{Hom}_{\mathsf{C}}(F'(\cdot),I)$, 后者正合, 因为它是两个正合函子 $F'$ 与 $\operatorname{Hom}_{\mathsf{C}}(\cdot,I)$ 的复合.
+\end{proof}
+
+\subsubsection*{右导出函子}
+
+设 $\mathsf{C}$ 为一个有足够多内射对象的 Abel 范畴, $F\colon \mathsf{C}\to \mathsf{D}$ 为从一个 Abel 范畴到另一个 Abel 范畴的左正合函子. 于是 $\mathsf{C}$ 中的一个短正合列
+\[
+ 0\to M'\to M\to M''\to 0
+\]
+产生 $\mathsf{D}$ 中的一个正合列
+\[
+ 0\to F(M')\to F(M)\to F(M'').
+\]
+导出函子理论提供把这个最后的序列自然扩张为一个长正合列.
+
+设 $M$ 为 $\mathsf{C}$ 的一个对象. $M$ 的一个\emph{分解}是一个长正合列
+\[
+ 0\to M\to I^0\xrightarrow{d^0} I^1\to\cdots\to I^r\xrightarrow{d^r} I^{r+1}\to\cdots.
+\]
+如果 $I^r$ 是 $\mathsf{C}$ 的内射对象, 则称为\emph{内射分解}. 我们有时把这个复形记为 $M\to I^\bullet$.
+
+\begin{lemma}\label{lem:ii.A.6}
+一个对象 $M$ 的内射分解 $M\to I^\bullet$ 存在; 且如果 $M\to J^\bullet$ 是第二个内射分解, 则存在从 $M\to I^\bullet$ 到 $M\to J^\bullet$ 的一个态射, 即存在一个交换图表,
+\[
+ \begin{tikzcd}
+ 0 \ar[r] & M \ar[r] \ar[d, no head, double] & I^0 \ar[r] \ar[d] & I^1 \ar[r] \ar[d] & \cdots \\
+ 0 \ar[r] & M \ar[r] & J^0 \ar[r] & J^1 \ar[r] & \cdots
+ \end{tikzcd}
+\]
+\end{lemma}
+
+\begin{proof}
+由假设, 存在一个单同态
+\[
+ 0\to M\to I^0
+\]
+其中 $I^0$ 内射. 令 $B^1$ 为该映射的余核. 再次, 存在一个单同态
+\[
+ 0\to B^1\to I^1
+\]
+其中 $I^1$ 内射. 现在
+\[
+ 0\to M\to I^0\to I^1
+\]
+正合. 令 $B^2=\Coker(B^1\to I^1)$, 并如此继续.
+
+类似地, 可以用内射对象的定义一步步构造分解的态射.
+\end{proof}
+
+对一个对象 $M$ 应用左正合函子 $F$ 到它的内射分解 $M\to I^\bullet$, 我们得到一个复形
+\[
+ F(I^\bullet)\colon F(I^0)\to F(I^1)\to\cdots\to F(I^r)\xrightarrow{F(d^r)} F(I^{r+1})\to\cdots
+\]
+它未必仍正合, 因此上同调群
+\[
+ H^r(F(I^\bullet))\stackrel{\mathrm{def}}{=}\frac{\Ker(F(d^r))}{\Im(F(d^{r-1}))}
+\]
+可能非零.
+
+\begin{remark}\label{rem:ii.A.7}
+因为 $F$ 左正合, 序列
+\[
+ 0\to F(M)\to F(I^0)\xrightarrow{d^0} F(I^1)
+\]
+正合. 因此
+\[
+ H^0(F(I^\bullet))\stackrel{\mathrm{def}}{=}\Ker(d^0)=F(M).
+\]
+\end{remark}
+
+\begin{proposition}\label{prop:ii.A.8}
+设 $M\to I^\bullet$ 与 $N\to J^\bullet$ 为 $\mathsf{C}$ 中对象 $M$ 与 $N$ 的内射分解. 每个态射 $\alpha\colon M\to N$ 都扩张为一个复形的映射
+\[
+ \begin{tikzcd}
+ M \ar[r] \ar[d, "\alpha"'] & I^\bullet \ar[d, "\alpha^\bullet"] \\
+ N \ar[r] & J^\bullet.
+ \end{tikzcd}
+\]
+对每个左正合函子 $F$, 态射
+\[
+ H^r(F(\alpha^\bullet))\colon H^r(F(I^\bullet))\to H^r(F(J^\bullet))
+\]
+与 $\alpha^\bullet$ 的选取无关.
+\end{proposition}
+
+我们在下面讨论证明.
+
+该命题用于恒等态射 $M\to M$ 表明对象 $H^r(F(I^\bullet))$ 的定义到一个良定的同构是良定的: 给定 $M$ 的两个内射分解 $M\to I^\bullet$ 与 $M\to J^\bullet$, 存在扩张恒等映射的态射 $\alpha^\bullet\colon I^\bullet\to J^\bullet$, 它定义的映射 $H^r(F(I^\bullet))\to H^r(F(J^\bullet))$ 是同构且与 $\alpha^\bullet$ 的选取无关. 现在对每个 $\mathsf{C}$ 的对象 $M$, 我们选取一个内射分解 $M\to I^\bullet$, 并定义
+\[
+ (R^rF)(M)=H^r(F(I^\bullet)).
+\]
+一个态射 $\alpha\colon M\to N$ 产生一个良定的态射 $(R^rF)(M)\to (R^rF)(N)$, 这些映射使 $R^rF$ 成为一个函子. 它们称为 $F$ 的\emph{右导出函子}.
+
+下面两个引理证明了比该命题稍精确一些的结论.
+
+\begin{lemma}\label{lem:ii.A.9}
+设 $M\to I^\bullet$ 与 $N\to J^\bullet$ 为 $\mathsf{C}$ 中对象 $M$ 与 $N$ 的分解. 如果 $N\to J^\bullet$ 是一个内射分解, 那么每个态射 $\alpha\colon M\to N$ 都扩张为一个复形的态射
+\[
+ \begin{tikzcd}
+ M \ar[r] \ar[d] & I^\bullet \ar[d] \\
+ N \ar[r] & J^\bullet
+ \end{tikzcd}
+\]
+\end{lemma}
+
+\begin{proof}
+\cite{BucurDeleanu1968}, 7.5.
+\end{proof}
+
+两个复形态射 $\alpha^\bullet,\beta^\bullet\colon I^\bullet\to J^\bullet$ 称为\emph{同伦的}, 如果存在一族态射 $k^r\colon I^r\to J^{r-1}$ (一个同伦) 使得对所有 $r$,
+\[
+ \alpha^r-\beta^r=d^{r-1}\circ k^r+k^{r+1}\circ d^r.
+\]
+注意对每个 $x\in Z^r(I^\bullet)\stackrel{\mathrm{def}}{=}\Ker(d^r)$,
+\[
+ \alpha^r(x)-\beta^r(x)=d^{r-1}(k^r(x))\in \Im(d^{r-1})\stackrel{\mathrm{def}}{=}B^r(J^\bullet).
+\]
+因此 $\alpha^r(x)$ 与 $\beta^r(x)$ 在 $H^r(J^\bullet)$ 中有相同的像, 故同伦的态射在上同调上定义相同的态射.
+
+\begin{lemma}\label{lem:ii.A.10}
+设 $M\to I^\bullet$ 为 $M$ 的一个分解, $N\to J^\bullet$ 为 $N$ 的一个内射分解. 把态射 $M\to N$ 扩张到 $I^\bullet\to J^\bullet$ 的任何两个扩张 $\alpha^\bullet$ 与 $\beta^\bullet$ 都同伦.
+\end{lemma}
+
+\noindent 证明. 见 \cite{BucurDeleanu1968}, 7.5.
+
+这推出命题 \ref{prop:ii.A.8} 的第二个陈述, 因为族 $(F(k^r))$ 是从 $F(\alpha^\bullet)$ 到 $F(\beta^\bullet)$ 的一个同伦.
+
+\begin{proposition}\label{prop:ii.A.11}
+一个短正合列
+\[
+ 0\to A\to B\to C\to 0
+\]
+在 $\mathsf{C}$ 中产生一个长正合列
+\begin{align*}
+ 0\to F(A)\to F(B)\to F(C)\to R^1F(A)\to\cdots\\
+ \cdots\to R^rF(A)\to R^rF(B)\to R^rF(C)\to\cdots
+ \end{align*}
+且长正合列与短正合列的对应是函子性的.
+\end{proposition}
+
+第二个条件意味着一个交换图表
+\[
+ \begin{tikzcd}
+ 0 \ar[r] & A \ar[r] \ar[d] & B \ar[r] \ar[d] & C \ar[r] \ar[d] & 0 \\
+ 0 \ar[r] & A' \ar[r] & B' \ar[r] & C' \ar[r] & 0
+ \end{tikzcd}
+\]
+产生一个交换图表
+\[
+ \begin{tikzcd}
+ \cdots \ar[r] & R^{r-1}F(C) \ar[r] \ar[d] & R^rF(A) \ar[r] \ar[d] & R^rF(B) \ar[r] \ar[d] & R^rF(C) \ar[r] \ar[d] & \cdots \\
+ \cdots \ar[r] & R^{r-1}F(C') \ar[r] & R^rF(A') \ar[r] & R^rF(B') \ar[r] & R^rF(C') \ar[r] & \cdots
+ \end{tikzcd}
+\]
+
+对该命题的证明, 见 \cite{BucurDeleanu1968}, 7.6.
+
+\begin{remark}\label{rem:ii.A.12}
+$F$ 的右导出函子由如下三个性质唯一确定 (到一个唯一的函子同构):
+\begin{enumerate}[(a)]
+\item $R^0F=F$;
+\item 当 $I$ 内射且 $r>0$ 时 $R^rF(I)=0$;
+\item (\ref{prop:ii.A.11}) 中的性质.
+\end{enumerate}
+\end{remark}
+
+\subsubsection*{变体}
+
+通过反转某些箭头的方向, 可以得到上面某些定义的变体, 例如投射对象, 左导出函子, 等等.
+
+\subsubsection*{Ext 群}
+
+设 $\mathsf{C}$ 为一个 Abel 范畴.
+
+设 $A\in\mathsf{C}$. 如果 $\mathsf{C}$ 有足够多的内射对象, 那么我们可以定义左正合函子 $\Hom(A,\cdot)$ 的右导出函子. 记第 $r$ 个右导出函子为 $\operatorname{Ext}^r(A,\cdot)$. 要计算 $\operatorname{Ext}^r(A,B)$, 我们取 $B$ 的一个内射分解 $B\to I^\bullet$, 并令
+\[
+ \operatorname{Ext}^r(A,B)=H^r(\Hom(A,I^\bullet)).
+\]
+设 $B\in\mathsf{C}$. 如果 $\mathsf{C}$ 有足够多的投射对象, 那么我们可以定义左正合反变函子 $\Hom(\cdot,B)$ 的右导出函子. 记第 $r$ 个右导出函子为 $\operatorname{Ext}^r(\cdot,B)$. 要计算 $\operatorname{Ext}^r(A,B)$, 我们取 $A$ 的一个投射分解 $P_\bullet\to A$, 并令
+\[
+ \operatorname{Ext}^r(A,B)=H^r(\Hom(P_\bullet,B)).
+\]
+
+\begin{proposition}\label{prop:ii.A.13}
+如果 $\mathsf{C}$ 有足够多的内射对象与足够多的投射对象, 那么 $\operatorname{Ext}^r(A,B)$ 的两个定义一致.
+\end{proposition}
+
+\begin{proof}
+我们用投射定义 $\operatorname{Ext}^r$, 并证明它们具有刻画 $\Hom(A,\cdot)$ 的右导出函子的性质.
+
+首先, 显然 $\operatorname{Ext}^0(A,B)=\Hom(A,B)$.
+
+说 $I$ 内射意味着 $\Hom(\cdot,I)$ 正合. 因此 $\Hom(P_\bullet,I)$ 正合, 于是
+\[
+ \operatorname{Ext}^r(A,I)\stackrel{\mathrm{def}}{=}H^r(\Hom(P_\bullet,I))=0.
+\]
+最后, 如果
+\[
+ 0\to B'\to B\to B''\to 0
+\]
+正合, 那么因为 $P_\bullet\to A$ 是由投射对象给出的 $A$ 的分解, 复形序列
+\[
+ 0\to \Hom(P_\bullet,B')\to \Hom(P_\bullet,B)\to \Hom(P_\bullet,B'')\to 0
+\]
+正合. 用一个标准程序, 我们从中得到一个长正合列
+\[
+ \cdots\to H^r(\Hom(P_\bullet,B'))\to H^r(\Hom(P_\bullet,B))\to H^r(\Hom(P_\bullet,B''))\to\cdots.
+\]
+\end{proof}
+
+\begin{example}\label{ex:ii.A.14}
+设 $G$ 为一个群. 则 $\Mod_G$ 既有足够多的内射对象也有足够多的投射对象. 对每个 $G$-模 $M$, $\Hom_G(\Z,M)=M^G$, 因此函子 $\Hom(\Z,\cdot)$ 与 $H^0(G,\cdot)$ 一致. 于是它们的右导出函子也一致:
+\[
+ \operatorname{Ext}_G^r(\Z,M)\simeq H^r(G,M).
+\]
+最后一个命题允许我们通过取 $\Z$ 的投射分解 $P_\bullet\to\Z$ 并令
+\begin{equation*}
+ H^r(G,M)=H^r(\Hom_G(P_\bullet,M))\tag{25}
+\end{equation*}
+来计算这些群.
+\end{example}
+
+\begin{remark}\label{rem:ii.A.15}
+采用公式 (25) 作为 $H^r(G,M)$ 的定义会稍微缩短本章的叙述. 这是 Atiyah and Wall (1967) 采取的方法, 但它不是自然的定义.
+\end{remark}
+
+\subsubsection*{参考文献}
+
+对导出函子的一般概念, 见 \cite{BucurDeleanu1968} 的第 7 章.
+
+% 恢复定理计数器为 节.序号 格式, 供后续章节使用
+\renewcommand{\thetheorem}{\thesection.\arabic{theorem}}

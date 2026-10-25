@@ -1,0 +1,325 @@
+% ============ 第5章 §5.4 Fourier 变换 (原书 pp.111-117) ============
+
+\section{Fourier 变换}\label{sec:5.4}
+\index{G@Gaussian}
+
+\index{S@Schwartz 分布的 Fourier 变换}
+
+\index{F@Fourier 逆变换}
+
+\index{F@Fourier 变换}
+
+\index{P@Plancherel 定理}
+
+\index{R@Riemann--Lebesgue 定理}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+引入 Schwartz 函数 $\mathcal{S}(\mathbb{R}^{n})$ 与 Schwartz 分布 $\mathcal{S}'(\mathbb{R}^{n})$ 的一个动机, 是能够很好地控制 Fourier 变换. 即, Fourier 变换在这些函数空间中是封闭的 (自足). 这里定义 Fourier 变换, 并实际证明 Fourier 变换在 $\mathcal{S}(\mathbb{R}^{n})$, $\mathcal{S}'(\mathbb{R}^{n})$ 中成为同构.
+
+\begin{definition}[Fourier 变换, Fourier 逆变换]\label{def:5.4}
+对可积函数 f, 连续函数 $\mathcal{F}f$, $\mathcal{F}^{-1}f$ 定义为
+\[
+\begin{aligned}
+\mathcal{F}f(\xi) &\equiv (2\pi)^{-\frac{n}{2}}\int_{\mathbb{R}^{n}}f(x)e^{-ix \cdot \xi}\dd x \quad (\xi \in \mathbb{R}^{n}), \\
+\mathcal{F}^{-1}f(x) &\equiv (2\pi)^{-\frac{n}{2}}\int_{\mathbb{R}^{n}}f(\xi)e^{ix \cdot \xi}\dd \xi \quad (x \in \mathbb{R}^{n}).
+\end{aligned}
+\]
+将函数 f 对应到 $\mathcal{F}f$ 的算子 $\mathcal{F}$ 称为 Fourier 变换, 将函数 f 对应到 $\mathcal{F}^{-1}f$ 的算子 $\mathcal{F}^{-1}$ 称为 Fourier 逆变换.
+\end{definition}
+
+$\mathcal{F}f$, $\mathcal{F}^{-1}f$ 实际上成为连续函数这一点将在定理~\ref{thm:5.6} 中证明, 先看几个例子.
+
+\begin{example}\label{exa:5.11}
+设 n = 1.
+
+(1) 计算 $\chi_{[-1,1]}$ 的 Fourier 变换. 当 $\xi \neq 0$ 时,
+\begin{align*}
+\mathcal{F}\chi_{[-1,1]}(\xi) &= \frac{1}{\sqrt{2\pi}}\int_{\mathbb{R}}\chi_{[-1,1]}(x)e^{-ix\xi}\dd x \\
+&= \frac{1}{\sqrt{2\pi}}\int_{-1}^{1}e^{-ix\xi}\dd x \\
+&= \frac{1}{\sqrt{2\pi}}\left[\frac{e^{-ix\xi}}{-i\xi}\right]_{-1}^{1} \\
+&= \frac{2\sin\xi}{\sqrt{2\pi}\xi}.
+\end{align*}
+当 $\xi = 0$ 时,
+\[
+\mathcal{F}\chi_{[-1,1]}(\xi) = \frac{1}{\sqrt{2\pi}}\int_{\mathbb{R}}\chi_{[-1,1]}(x)\dd x = \frac{1}{\sqrt{2\pi}}\int_{-1}^{1}\dd x = \sqrt{\frac{2}{\pi}}.
+\]
+或者, $\xi = 0$ 的情形也可以考虑为 $\xi \neq 0$ 的情形在 $\xi \to 0$ 时的极限.
+
+(2) 计算 Gaussian $E(x) = e^{-\frac{1}{2}x^{2}}$ 的 Fourier 变换. 使用复分析, 但省略与复分析相关的细节. 设 $\xi \in \mathbb{R}$, 由定义,
+\[
+\mathcal{F}E(\xi) = \frac{1}{\sqrt{2\pi}}\int_{\mathbb{R}}e^{-\frac{1}{2}x^{2}-ix\xi}\dd x = \frac{1}{\sqrt{2\pi}}\int_{\mathbb{R}}e^{-\frac{1}{2}(x-i\xi)^{2}-\frac{1}{2}\xi^{2}}\dd x.
+\]
+因此, 使用复积分 (由 Cauchy 积分定理),
+\[
+\mathcal{F}E(\xi) = \frac{1}{\sqrt{2\pi}}\int_{\mathbb{R}}e^{-\frac{1}{2}x^{2}-\frac{1}{2}\xi^{2}}\dd x = E(\xi).
+\]
+\end{example}
+
+利用可积函数 F 的积分的平移不变性
+\[
+\int_{\mathbb{R}^{n}}F(x+a)\dd x = \int_{\mathbb{R}^{n}}F(x)\dd x
+\]
+计算卷积的 Fourier 变换. 通过 Fourier 变换, 卷积被变换为乘积.
+
+\begin{theorem}\label{thm:5.4}
+设 $f, g \in L^{1}(\mathbb{R}^{n})$. 此时, 对 $\xi \in \mathbb{R}^{n}$, $\mathcal{F}[f*g](\xi) = (2\pi)^{\frac{n}{2}}\mathcal{F}f(\xi)\mathcal{F}g(\xi)$ 成立.
+\end{theorem}
+
+\begin{proof}
+左边是
+\[
+(2\pi)^{-\frac{n}{2}}\int_{\mathbb{R}^{n}}e^{-ix\xi}\left(\int_{\mathbb{R}^{n}}f(y)g(x-y)\dd y\right)\dd x.
+\]
+确认可以交换积分顺序, 再进一步变形.
+\begin{align*}
+&\int\int_{\mathbb{R}^{n} \times \mathbb{R}^{n}}|f(x-y)g(y)e^{-i\xi x}|\dd x\dd y \\
+&= \int\int_{\mathbb{R}^{n} \times \mathbb{R}^{n}}|f(x-y)g(y)|\dd x\dd y \\
+&= \int_{\mathbb{R}^{n}}\left(\int_{\mathbb{R}^{n}}|f(x-y)g(y)|\dd x\right)\dd y \\
+&= \int_{\mathbb{R}^{n}}|g(y)|\left(\int_{\mathbb{R}^{n}}|f(x-y)|\dd x\right)\dd y.
+\end{align*}
+这里, 为了得到第2个等号, 使用了被积函数是正的这一点. 由积分的平移不变性,
+\begin{align*}
+&\int\int_{\mathbb{R}^{n} \times \mathbb{R}^{n}}|f(x-y)g(y)e^{-i\xi x}|\dd x\dd y \\
+&= \int_{\mathbb{R}^{n}}|g(y)|\left(\int_{\mathbb{R}^{n}}|f(x)|\dd x\right)\dd y \\
+&= \|f\|_{L^{1}}\|g\|_{L^{1}} < \infty.
+\end{align*}
+因此, 可以改写为
+\begin{align*}
+\mathcal{F}[f*g](\xi) &= \frac{1}{(2\pi)^{\frac{n}{2}}}\int_{\mathbb{R}^{n}}\left(\int_{\mathbb{R}^{n}}f(x-y)g(y)e^{-i\xi x}\dd y\right)\dd x \\
+&= \frac{1}{(2\pi)^{\frac{n}{2}}}\int_{\mathbb{R}^{n}}\left(\int_{\mathbb{R}^{n}}f(x-y)g(y)e^{-i\xi x}\dd x\right)\dd y.
+\end{align*}
+作变量替换 x - y = z,
+\[
+\mathcal{F}[f*g](\xi) = \frac{1}{(2\pi)^{\frac{n}{2}}}\int_{\mathbb{R}^{n}}\left(\int_{\mathbb{R}^{n}}f(z)g(y)e^{-i\xi \cdot (z+y)}\dd z\right)\dd y.
+\]
+分解累次积分, 就得到 $\mathcal{F}[f*g](\xi) = (2\pi)^{\frac{n}{2}}\mathcal{F}f(\xi)\mathcal{F}g(\xi)$.
+\end{proof}
+
+由积分号下求导的公式, 下面的事是显然的. 预定在定理~\ref{thm:5.6} 中说明 $\mathcal{F}$, $\mathcal{F}^{-1}$ 将 $L^{1}(\mathbb{R}^{n})$ 移到 $L^{\infty}(\mathbb{R}^{n})$, 这里确认 $\mathcal{F}$, $\mathcal{F}^{-1}$ 将作为 $L^{1}(\mathbb{R}^{n})$ 的子集的 $\mathcal{S}(\mathbb{R}^{n})$ 移到 $\mathcal{S}(\mathbb{R}^{n})$.
+
+\begin{theorem}[Fourier 变换对运算的变换]\label{thm:5.5}
+对 $\varphi \in \mathcal{S}(\mathbb{R}^{n})$, 微分与单项式乘法之间的关系式
+\begin{equation}\tag{5.7}
+\mathcal{F}\left[\frac{\partial\varphi}{\partial x_{j}}\right](\xi) = i\xi_{j}\mathcal{F}\varphi(\xi),
+\label{eq:5.7}
+\end{equation}
+\begin{equation}\tag{5.8}
+\mathcal{F}[x_{j}\varphi](\xi) = i\frac{\partial[\mathcal{F}\varphi]}{\partial\xi_{j}}(\xi)
+\label{eq:5.8}
+\end{equation}
+成立. 并且, 对任意 $\alpha, \beta \in \mathbb{N}_{0}^{n}$, 存在 $C_{\alpha,\beta}, N_{\alpha,\beta} > 0$, 各点估计
+\begin{equation}\tag{5.9}
+|\xi^{\alpha}\partial^{\beta}\mathcal{F}\varphi(\xi)| \leq C_{\alpha,\beta}p_{N_{\alpha,\beta}}(\varphi)
+\label{eq:5.9}
+\end{equation}
+成立. 特别地, Fourier 变换与 Fourier 逆变换是从 $\mathcal{S}(\mathbb{R}^{n})$ 到自身的连续映射.
+\end{theorem}
+
+\begin{proof}
+使用定理~\ref{thm:2.13}, 例~\ref{exa:5.4} 与 $\partial_{j}e^{-ix \cdot \xi} = -i\xi_{j}e^{-ix \cdot \xi}$. 省略细节, 作为练习题~\ref{exer:5.9} 处理, 省略证明.
+\end{proof}
+
+作为定理~\ref{thm:5.5} 的应用, 证明 Riemann--Lebesgue 定理.
+
+\begin{theorem}[Riemann--Lebesgue 定理]\label{thm:5.6}
+设 $f \in L^{1}(\mathbb{R}^{n})$.
+(1) $\mathcal{F}f \in L^{\infty}(\mathbb{R}^{n})$, 且 $\|\mathcal{F}f\|_{L^{\infty}} \leq (2\pi)^{-\frac{n}{2}}\|f\|_{L^{1}}$ 成立.
+(2) $\mathcal{F}f$ 连续.
+(3) $\lim_{\xi \to \infty}\mathcal{F}f(\xi) = 0$ 成立.
+\end{theorem}
+
+\begin{proof}
+(1) 由积分的三角不等式显然. 实际上, 设 $\xi \in \mathbb{R}^{n}$,
+\begin{align*}
+|\mathcal{F}f(\xi)| &= \left|(2\pi)^{-\frac{n}{2}}\int_{\mathbb{R}^{n}}f(x)e^{-ix \cdot \xi}\dd x\right| \\
+&\leq (2\pi)^{-\frac{n}{2}}\int_{\mathbb{R}^{n}}|f(x)e^{-ix \cdot \xi}|\dd x \\
+&= (2\pi)^{-\frac{n}{2}}\|f\|_{L^{1}}
+\end{align*}
+所以.
+
+(2) 取 $f_{j} \in \mathcal{S}(\mathbb{R}^{n})$ 使得在 $L^{1}(\mathbb{R}^{n})$ 的拓扑中 $f_{j} \to f$. 于是, 当 $j \to \infty$ 时, $\|\mathcal{F}f - \mathcal{F}f_{j}\|_{L^{\infty}} \leq (2\pi)^{-\frac{n}{2}}\|f - f_{j}\|_{L^{1}} \to 0$, 所以 $\mathcal{F}f$ 可以表示为连续函数列 $\{\mathcal{F}f_{j}\}_{j=1}^{\infty}$ 的一致收敛极限. 因此, $\mathcal{F}f$ 连续.
+
+(3) 在上述中, $\mathcal{F}f_{j}(\xi)$ 在 $\xi \to \infty$ 时收敛于 0. 因此, 由刚才证明的一致收敛性, 该性质遗传给函数 $\mathcal{F}f$.
+\end{proof}
+
+下面转入 Fourier 逆变换的考察. 虽然简单, 但下面的公式是 Fourier 逆变换的关键.
+
+\begin{theorem}[Fourier 变换的基本公式]\label{thm:5.7}
+对 $\varphi, \psi \in \mathcal{S}(\mathbb{R}^{n})$,
+\begin{equation}\tag{5.10}
+\int_{\mathbb{R}^{n}}\varphi(x)\mathcal{F}\psi(x)\dd x = \int_{\mathbb{R}^{n}}\mathcal{F}\varphi(\xi)\psi(\xi)\dd \xi
+\label{eq:5.10}
+\end{equation}
+成立.
+\end{theorem}
+
+\begin{proof}
+写下两边, 由 Fubini 定理可知两边一致于 $(2\pi)^{-\frac{n}{2}}\int_{\mathbb{R}^{n}}\int_{\mathbb{R}^{n}}\varphi(x)\psi(\xi)e^{-ix \cdot \xi}\dd x\dd \xi$.
+\end{proof}
+
+用定理~\ref{thm:5.7} 证明 $\mathcal{F}$ 与 $\mathcal{F}^{-1}$ 互为逆变换.
+
+\begin{theorem}[Fourier 变换的逆公式]\label{thm:5.8}
+对所有 $\varphi \in \mathcal{S}(\mathbb{R}^{n})$, $\mathcal{F}^{-1}[\mathcal{F}\varphi] = \mathcal{F}[\mathcal{F}^{-1}\varphi] = \varphi$ 成立.
+\end{theorem}
+
+\begin{proof}
+由于 $\mathcal{F}[\mathcal{F}^{-1}\varphi] = \varphi$ 的证明也相同, 只证明 $\mathcal{F}^{-1}[\mathcal{F}\varphi] = \varphi$. 使用例~\ref{exa:5.11} 中考虑的 $E(x) \equiv \exp\left(-\frac{1}{2}|x|^{2}\right)$. 对 $x \in \mathbb{R}^{n}$, $t > 0$, 令 $E_{t}(x) \equiv E(tx)$, $x \in \mathbb{R}^{n}$. 关于一元函数,
+\[
+\int_{\mathbb{R}}E(\sqrt{2}s)\dd s = \sqrt{\pi}
+\]
+成立这一点是已知的. 通过变量替换,
+\[
+\int_{\mathbb{R}}E(x)\dd x = \sqrt{2\pi}
+\]
+被导出. 多用 Fubini 定理,
+\[
+\int_{\mathbb{R}^{n}}e^{-\frac{1}{2}|x|^{2}}\dd x = \sqrt{(2\pi)^{n}}.
+\]
+再次通过变量替换,
+\begin{align}
+\int_{\mathbb{R}^{n}}t^{-n}E\left(\frac{\xi}{t}\right)\dd \xi &= \int_{\mathbb{R}^{n}}t^{-n}\exp\left(-\frac{|\xi|^{2}}{2t^{2}}\right)\dd \xi \nonumber \\
+&= \int_{\mathbb{R}^{n}}\exp\left(-2^{-1}|\xi|^{2}\right)\dd \xi \nonumber \\
+&= \sqrt{(2\pi)^{n}}. \tag{5.11}
+\label{eq:5.11}
+\end{align}
+成立.
+
+此时, 由定理~\ref{thm:5.7},
+\begin{equation}\tag{5.12}
+\int_{\mathbb{R}^{n}}\mathcal{F}E_{t}(\xi)\varphi(\xi)\dd \xi = \int_{\mathbb{R}^{n}}\mathcal{F}\varphi(x)E_{t}(x)\dd x.
+\label{eq:5.12}
+\end{equation}
+Gaussian $E(x) \equiv \exp\left(-\frac{1}{2}|x|^{2}\right)$ 的 Fourier 变换仍是 Gaussian E, 所以作缩放变换得到 $\mathcal{F}E_{t}(\xi) = t^{-n}E\left(\frac{\xi}{t}\right)$. 将其代入式~\eqref{eq:5.12},
+\begin{equation}\tag{5.13}
+\int_{\mathbb{R}^{n}}t^{-n}E\left(\frac{\xi}{t}\right)\varphi(\xi)\dd \xi = \int_{\mathbb{R}^{n}}\mathcal{F}\varphi(x)E(tx)\dd x.
+\label{eq:5.13}
+\end{equation}
+于是, 减去 $\varphi(0)$, 考察
+\begin{align*}
+&(2\pi)^{-\frac{n}{2}}\int_{\mathbb{R}^{n}}t^{-n}E\left(\frac{\xi}{t}\right)\varphi(\xi)\dd \xi - \varphi(0) \\
+&= (2\pi)^{-\frac{n}{2}}\int_{\mathbb{R}^{n}}t^{-n}E\left(\frac{\xi}{t}\right)(\varphi(\xi) - \varphi(0))\dd \xi \\
+&= (2\pi)^{-\frac{n}{2}}\int_{\mathbb{R}^{n}}E(\xi)(\varphi(t\xi) - \varphi(0))\dd \xi.
+\end{align*}
+由于对 $\xi \in \mathbb{R}^{n}$ 与 $t > 0$,
+\[
+|E(\xi)(\varphi(t\xi) - \varphi(0))| \leq 2E(\xi)\|\varphi\|_{L^{\infty}}
+\]
+成立, 由 Lebesgue 收敛定理, 当 $t \downarrow 0$ 时它收敛于 0. 因此, 由 $|E(t\cdot)\mathcal{F}\varphi| \leq |\mathcal{F}\varphi|$,
+\begin{equation}\tag{5.14}
+\varphi(0) = \lim_{t \downarrow 0}\int_{\mathbb{R}^{n}}\mathcal{F}\varphi(x)E(tx)\dd x = (2\pi)^{-\frac{n}{2}}\int_{\mathbb{R}^{n}}\mathcal{F}\varphi(\xi)\dd \xi
+\label{eq:5.14}
+\end{equation}
+得到. 式~\eqref{eq:5.14} 是对 x = 0 的逆变换公式.
+
+用这个式~\eqref{eq:5.14} 完成定理~\ref{thm:5.8} 的证明. 设 $x \in \mathbb{R}^{n}$. 首先, 用平移, 由式~\eqref{eq:5.14} 得到 $\varphi(x) = (2\pi)^{-\frac{n}{2}}\int_{\mathbb{R}^{n}}\mathcal{F}[\varphi(\cdot + x)](\xi)\dd \xi$. 使用 $\mathcal{F}[\varphi(\cdot + x)](\xi) = \mathcal{F}\varphi(\xi)e^{ix \cdot \xi}$,
+\[
+\varphi(x) = (2\pi)^{-\frac{n}{2}}\int_{\mathbb{R}^{n}}\mathcal{F}\varphi(\xi)e^{ix \cdot \xi}\dd \xi = \mathcal{F}^{-1}[\mathcal{F}\varphi](x)
+\]
+得到.
+\end{proof}
+
+以定理~\ref{thm:5.7} 为基础定义 Schwartz 分布的 Fourier 变换. 想要定义 $f \in \mathcal{S}'(\mathbb{R}^{n})$ 的 Fourier 变换 $\mathcal{F}f \in \mathcal{S}'(\mathbb{R}^{n})$, 所以重要的是 $\mathcal{F}f \in \mathcal{S}'(\mathbb{R}^{n})$ 将 $\varphi \in \mathcal{S}(\mathbb{R}^{n})$ 映射到什么. 在式~\eqref{eq:5.15} 中将其具体化.
+
+\begin{definition}[Schwartz 分布的 Fourier 变换]\label{def:5.5}
+将 $f \in \mathcal{S}'(\mathbb{R}^{n})$ 的 Fourier 变换 $\mathcal{F}f \in \mathcal{S}'(\mathbb{R}^{n})$ 定义为
+\begin{equation}\tag{5.15}
+\langle\mathcal{F}f, \varphi\rangle \equiv \langle f, \mathcal{F}\varphi\rangle, \varphi \in \mathcal{S}(\mathbb{R}^{n}).
+\label{eq:5.15}
+\end{equation}
+\end{definition}
+
+Fourier 变换是从 $\mathcal{S}'(\mathbb{R}^{n})$ 到自身的连续线性同构映射, 这一点由定义显然. (作为练习题~\ref{exer:5.7}, 省略验证.)
+
+现在, 证明主张 Fourier 变换是 $L^{2}$ 的酉变换的 Plancherel 定理. 该公式是定理~\ref{thm:5.7}, \ref{thm:5.8} 的系.
+
+\begin{theorem}[Plancherel 定理]\label{thm:5.9}
+设 $\varphi, \psi \in \mathcal{S}(\mathbb{R}^{n})$, 则
+\begin{equation}\tag{5.16}
+\int_{\mathbb{R}^{n}}\mathcal{F}\varphi(x)\overline{\mathcal{F}\psi(x)}\dd x = \int_{\mathbb{R}^{n}}\varphi(x)\overline{\psi(x)}\dd x
+\label{eq:5.16}
+\end{equation}
+成立.
+\end{theorem}
+
+\begin{proof}
+只需证明将式~\eqref{eq:5.16} 右边的 $\psi$ 替换为 $\overline{\mathcal{F}\psi}$ 后得到的等式. Fourier 变换与取共轭的运算通过
+\begin{equation}\tag{5.17}
+\mathcal{F}[\overline{\mathcal{F}\psi}] = \mathcal{F}\mathcal{F}^{-1}[\overline{\psi}] = \overline{\psi}
+\label{eq:5.17}
+\end{equation}
+相联系. 由定理~\ref{thm:5.7} 与式~\eqref{eq:5.17}, 式~\eqref{eq:5.16} 显然.
+\end{proof}
+
+由于 $C_{\mathrm{c}}^{\infty}(\mathbb{R}^{n})$, 从而 $\mathcal{S}(\mathbb{R}^{n})$ 在 $L^{2}(\mathbb{R}^{n})$ 中稠密, 由定理~\ref{thm:2.23} 与定理~\ref{thm:5.9}, $\mathcal{F}$ 被扩张为 $L^{2}(\mathbb{R}^{n})$ 的酉算子. 此时, 定理~\ref{thm:5.4} 对 $f \in L^{1}(\mathbb{R}^{n})$, $g \in L^{2}(\mathbb{R}^{n})$ 成立.
+
+已经说过 Fourier 变换是分析数学变换的便利工具, 这里重新考察 Hilbert 变换.
+
+\begin{example}\label{exa:5.12}
+Hilbert 变换是由
+\[
+Hf(x) = \lim_{\varepsilon \downarrow 0}\int_{|y| > \varepsilon}\frac{f(x-y)}{y}\dd y
+\]
+给出的变换. 令
+\[
+H_{\varepsilon}f(x) = \int_{|y| > \varepsilon}\frac{f(x-y)}{y}\dd y,
+\]
+通过分析这个极限得到了种种结论. 特别是 $L^{2}(\mathbb{R})$ 中的 Hilbert 变换是
+\[
+L^{2}(\mathbb{R}) \ni f \mapsto H_{\varepsilon}f = \chi_{\mathbb{R}\setminus(-\varepsilon, \varepsilon)}(\cdot)\cdot^{-1} * f \in L^{2}(\mathbb{R})
+\]
+在 $\varepsilon \to 0$ 时 $L^{2}(\mathbb{R})$ 中的极限, 但设 $f \in C_{\mathrm{c}}^{\infty}(\mathbb{R})$, 则
+\begin{align*}
+\mathcal{F}[H_{\varepsilon}f] &= \lim_{R \to \infty}\mathcal{F}[\chi_{(-R,R)\setminus(-\varepsilon, \varepsilon)}(\cdot)\cdot^{-1} * f] \\
+&= \sqrt{2\pi}\lim_{R \to \infty}\mathcal{F}[\chi_{(-R,R)\setminus(-\varepsilon, \varepsilon)}(\cdot)\cdot^{-1}] \cdot \mathcal{F}f
+\end{align*}
+可以表示. 这里,
+\[
+\mathcal{F}[\chi_{(-R,R)\setminus(-\varepsilon, \varepsilon)}(\cdot)\cdot^{-1}](t) = -2i\int_{\varepsilon}^{R}\frac{\sin(ts)}{s}\dd s
+\]
+但这里出现的右边的积分关于 t, $\varepsilon$, R 有界, 所以 (作为练习题~\ref{exer:5.8}, 省略验证.) 处于可以对
+\[
+-2i\mathcal{F}f \cdot \int_{\varepsilon}^{R}\frac{\sin(\cdot s)}{s}\dd s
+\]
+的 $L^{2}$-范数使用 Lebesgue 收敛定理的状况, 其结果是, 可以证明 $H_{\varepsilon}f$ 在 $L^{2}(\mathbb{R})$ 的拓扑中收敛于某个函数 Hf.
+\end{example}
+
+\begin{exercise}\label{exer:5.7}
+证明 Fourier 变换是从 $\mathcal{S}'(\mathbb{R}^{n})$ 到自身的连续线性同构映射.
+\end{exercise}
+
+\begin{exercise}\label{exer:5.8}
+求给出 $f(R) = \int_{0}^{R}\frac{\sin s}{s}\dd s$ 的最大值的 R. 并且, 用这一点证明
+\[
+\sup_{t, \varepsilon, R > 0}\left|\int_{\varepsilon}^{R}\frac{\sin(ts)}{s}\dd s\right| < \infty.
+\]
+\end{exercise}
+
+\begin{exercise}\label{exer:5.9}
+证明定理~\ref{thm:5.5}.
+\end{exercise}
+
+\begin{exercise}\label{exer:5.10}
+设 O(n) 为 n 次正交矩阵全体构成的集合. 即, 设 E 为单位矩阵, 各 $A \in \mathrm{O}(n)$ 满足 $AA^{t} = A^{t}A = E$. 回答下面的问题.
+
+(1) 对 $f \in L^{1}(\mathbb{R}^{n})$, $A \in \mathrm{O}(n)$, 证明 $\mathcal{F}[f(A\cdot)](\xi) = \mathcal{F}f(A^{-1}\xi)$.
+
+(2) 设函数 u 是在 $\mathbb{R}^{n} \setminus \{0\}$ 上定义的 $C^{\infty}$ 级函数. 假设对 $A \in \mathrm{O}(n)$, $x \in \mathbb{R}^{n} \setminus \{0\}$ 满足 $u(x) = u(Ax)$. 对 $k \in \mathbb{N}$, 函数 $\|\nabla^{k}u\|: \mathbb{R}^{n} \setminus \{0\} \to [0, \infty)$ 定义为
+\begin{align*}
+\|\nabla^{k}u\| &= \left(\sum_{\alpha \in \{1, 2, \ldots, n\}^{k}}|\partial^{\alpha}u|^{2}\right)^{\frac{1}{2}} \\
+&= \left(\sum_{j_{1}=1}^{n}\sum_{j_{2}=1}^{n}\cdots\sum_{j_{k}=1}^{n}\left(\frac{\partial}{\partial x_{j_{1}}}\frac{\partial}{\partial x_{j_{2}}}\cdots\frac{\partial}{\partial x_{j_{k}}}u\right)^{2}\right)^{1/2}.
+\end{align*}
+此时, 证明对 $A \in \mathrm{O}(n)$ 与 $x \in \mathbb{R}^{n} \setminus \{0\}$ 满足 $\|\nabla^{k}u\|(x) = \|\nabla^{k}u\|(Ax)$.
+\end{exercise}

@@ -1,0 +1,1355 @@
+% ==== part06b 第 6 章:第 5-8 节 ====
+% 源: MinerU_latex_lecture nots.tex 9904-12106(第 5 节起;pdf_text.txt 8153-9833,PDF 第 150-179 页)
+% 术语: 新术语(中文=英文):
+%   二进立方体=dyadic cube; 父立方体=parent cube; 子立方体=child cube;
+%   消没条件=cancellation condition; 平方函数=square function;
+%   Rademacher 函数=Rademacher functions; 反向 Hölder 不等式=reverse Hölder inequality;
+%   反向 Minkowski 不等式=reverse Minkowski inequality; 主曲率=principal curvature;
+%   Stein 算子=Stein operator; Knapp 反例=Knapp counterexample;
+%   演化算子=evolution operator; 双线性形式=bilinear form; 三线性形式=trilinear form;
+%   混合范数=mixed norm; 相空间=phase space; 投影不相交=projectionally disjoint;
+%   Zygmund 类=Zygmund class; 解析插值=analytic interpolation; 帽=cap;
+%   延拓算子=extension operator; Riesz 位势=Riesz potentials; 主值分布=principal value distribution
+% REFS: 跨章引用(正文暂用纯文本,待统一解析):
+%   - 第 6 章第 5 节 "Corollary 2.7"(Lebesgue 微分定理)→ 目标: 第 2 章推论 2.7
+%   - 第 6 章第 5 节 "Theorem 2.4"(极大函数弱 L1 性质)→ 目标: 第 2 章定理 2.4
+%   - 第 6 章第 8 节 "Stein interpolation theorem, Thm. 1.8" → 目标: 第 1 章定理 1.8【已核对: 新 OCR 确认原书引 Theorem 1.8(见 md 3211/4839 行), 但译本第 1 章(part01)无此编号, 待人工定位标签】
+%   - 第 6 章第 8 节 "the mixed norm notation defined in section 7"(疑为"第 5 节"之误)→ 目标: 第 6 章第 5 节
+%   - 第 6 章第 5 节 "the Trichotomy Formula"(三分公式,第 6 章第 4 节 (240) 附近)→ 目标: 第 6 章第 4 节
+%   - "性质 LP1-LP6"(Littlewood-Paley 投影性质,第 5 章/第 6 章前部定义)→ 目标: part06a 相关部分
+%   - 例 2 中 "see (??)" 为原书破损引用(Laplace 方程基本解公式)→ 目标: 第 1 章对应公式
+%   - 文献引用保持原样: [Kl-Rodn3], [Ge-S], [K-T], [?]
+% FOOTNOTE: 脚注 7(例 2)、8 与 9(定理 6.11 证明)、10(问题 3)、11(问题 6)已按 pdf_text.txt 对应页补全并翻译.
+% 编号说明:
+%   - 公式 (246)-(306) 顺次自动编号.(254a)-(254e) 为原书同一编号下的五个子式,无法用自动编号
+%     表达,采用五个 \[ \] 显示内 \tag{254a}...\tag{254e}(\[ \] 不推进计数器;指南"禁止
+%     \tag"在本特例下无法满足,否则后续编号整体偏移,同 partgf1 先例);五式之后用
+%     \stepcounter{equation} 手动推进一次(占去编号 254),使下一式从 (255) 开始.
+%   - 第 7 节问题 1-8 原书显示为 "Problem 1."..."Problem 8."(无节前缀,与共享计数器显示的
+%     "7.x" 不同),故用加粗段落 \textbf{问题 N.} 手工编号,不使用 problem 环境.
+%   - 第 8 节 "8.13. First proof: analytic interpolation" 正文 "According to Remark 8.12 and
+%     Remark 8.4" 照原样保留(8.12 实为小节,原书如此写法).
+%   - 引理 6.7 证明中 dist(Q_x, δΩ)、dist(Q*, δΩ) 的 δΩ 按 ∂Ω 处理(与引理陈述一致,原书笔误).
+%   - n=2 情形 "||Sf||³_{L⁶(R²)} = ... ≃ A^{1/2}||f||³_{L²(S²)}" 中 S² 疑为 S¹ 之误,照原书保留.
+%   - 命题 6.18 源文件/原书均有(任务清单未列),照译.
+% ====
+
+\section{一个尖锐的迹定理}
+
+本节我们给出 LP 理论的另一个应用:Besov 空间中的迹定理的一个更强版本, 见 \cite{kl-rodn3}.
+
+为简单起见, 设 $I = [0, 1]$, 考虑 $I \times \mathbb{R}^2$.我们将使用\newterm{mixed-norm}{混合范数}{mixed norm}记号:
+\begin{align*}
+\|f\|_{L^q_t L^p_x} &= \left(\int_0^1 \|f(t, \cdot)\|^q_{L^p_x(\mathbb{R}^2)} \mathrm{d}t\right)^{\frac{1}{q}} \\
+\|f\|_{L^p_x L^q_t} &= \left(\int_{\mathbb{R}^2} \|f(\cdot, x)\|^p_{L^q_t(I)} \mathrm{d}x\right)^{\frac{1}{p}}
+\end{align*}
+当 $p = \infty$ 或 $q = \infty$ 时作显然的修改.
+
+我们将得到下述迹型估计:
+\begin{equation}
+\left\| \int_I |\partial_t f|^2 \mathrm{d}t \right\|_{B_{2, 1}^{1}} \lesssim \|f\|^2_{H^2(I \times \mathbb{R}^2)}\label{eq:c6-246}
+\end{equation}
+
+我们注意到
+\[
+\|g\|_{B_{2, 1}^{1}} \lesssim \|\nabla g\|_{B_{2, 1}^{0}} + \|g\|_{L^2}
+\]
+
+因此, \eqref{eq:c6-246} 由下面的"尖锐双线性迹"定理推出.
+
+\begin{theorem}\label{thm:c6-5.1}
+对 $I \times \mathbb{R}^2$ 上任意光滑标量函数 $g, h$, 有
+\begin{equation}
+\left\| \int_I \partial_t g \cdot h\, \mathrm{d}t \right\|_{B_{2, 1}^{0}} \lesssim \|g\|_{H^1(I \times \mathbb{R}^2)} \cdot \|h\|_{H^1(I \times \mathbb{R}^2)}\label{eq:c6-247}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+立刻可见:
+\[
+\begin{array}{rcl}
+\left\| \int_I \partial_t g \cdot h\, \mathrm{d}t \right\|_{B_{2, 1}^{0}} &=& \sum_{k \geq 0} \left\| P_k \int_0^1 \partial_t g \cdot h\, \mathrm{d}t \right\|_{L_x^2} + \left\| P_{<0} \int_0^1 \partial_t g \cdot h\, \mathrm{d}t \right\|_{L_x^2} \\
+&\lesssim& \sum_{k \geq 0} \left\| P_k \int_0^1 \partial_t g \cdot h\, \mathrm{d}t \right\|_{L_x^2}
+\end{array}
+\]
+
+然后我们将 $g$ 与 $h$ 按 $x$ 分解:$g = \sum_k P_k g = \sum_k g_k$, $h = \sum_k P_k h = \sum_k h_k$.于是可以把 $P_k \int_0^1 (\partial_t g \cdot h)$ 分解为 $A_k + B_k + C_k + D_k$, 其中
+\begin{align*}
+A_k &= P_k \int_0^1 (\partial_t g)_{<k} \cdot h_{\geq k} \\
+B_k &= P_k \int_0^1 (\partial_t g)_{\geq k} \cdot h_{<k} \\
+C_k &= P_k \int_0^1 (\partial_t g)_{<k} \cdot h_{<k} \\
+D_k &= P_k \int_0^1 (\partial_t g)_{\geq k} \cdot h_{\geq k}
+\end{align*}
+
+如同三分公式中那样, $C_k$ 本质上为零(有限个例外项可以归入 $A_k$、$B_k$ 或 $D_k$).
+
+我们现在简要勾勒如何估计 $A_k$、$B_k$、$D_k$, 细节留待补全.注意 $P_k$ 平凡地与积分 $\int_0^1 \mathrm{d}t$ 以及任何偏导数 $\partial_t$ 交换.
+
+为估计 $A_k$, 注意到我们可以写出(利用 LP2):
+\[
+\|A_k\|_{L_x^2} \lesssim \sum_{k' < k \leq k''} \int_0^1 \|(\partial_t g)_{k'} \cdot h_{k''}\|_{L_x^2} \mathrm{d}t
+\]
+
+然后我们可以用 Bernstein 不等式 LP4 与作用在 $h$ 上的性质 LP3 提取出幂 $2^{k'-k''}$.把 $2^{k'-k''}$ 写成 $2^{(k'-k)/2 + (k-k'')/2}$, 利用 LP1, 并对 $k$ 求和, 可以得到:
+\[
+\sum_{k \geq 0} \|A_k\|_{L_t^\infty L_x^2} \lesssim \|\partial_t g\|_{L_t^\infty L_x^2} \cdot \|\nabla h\|_{L_t^\infty L_x^2}
+\]
+
+为估计 $D_k = P_k \int_0^1 (\partial_t g)_{\geq k} \cdot h_{\geq k}$, 写
+\[
+D_k = D_k^1 + D_k^2 = \sum_{k \leq k' \leq k''} P_k \int_0^1 (\partial_t g)_{k'} \cdot h_{k''} + \sum_{k \leq k' \leq k''} P_k \int_0^1 (\partial_t g)_{k''} \cdot h_{k'}
+\]
+
+$D_k^1$ 可以直接估计, 无需分部积分.用 LP4 与 LP3 写出
+\[
+\|D_k^1\|_{L_x^2} \lesssim 2^{k-k'} \|\partial_t g\|_{L_t^2 L_x^2} \cdot \|\nabla h\|_{L_t^2 L_x^2}
+\]
+然后对 $k$ 求和并利用 LP1 得到:
+\[
+\sum_{k \geq 0} \|D_k^1\|_{L_x^2} \lesssim \|\partial_t g\|_{L_t^2 L_x^2} \cdot \|\nabla h\|_{L_t^2 L_x^2}
+\]
+
+为估计 $D_k^2$, 我们用分部积分把 $\partial_t$ 从高频的 $g_{k''}$ 转移到低频的 $h_{k'}$.分部积分之后, 把所得结果与 $D_k^1$ 完全同样地处理.因此, 我们只需估计边界项:$\|I_k(1) - I_k(0)\|_{L_x^2} \lesssim \|I_k\|_{L_t^\infty L_x^2}$, 其中
+\[
+I_k = \sum_{k \leq k' < k''} P_k (g_{k''} \cdot h_{k'})
+\]
+
+我们用下面的引理来完成:
+
+\begin{lemma}\label{lem:c6-5.2}
+对任意 $k, k', k''$, 有
+\[
+\|P_k (g_{k'} \cdot h_{k''})\| \lesssim 2^{-\frac{1}{4}(|k'-k| + |k''-k|)} \|g_{k'}\| \|h_{k''}\|
+\]
+\end{lemma}
+
+利用此引理, 我们分部积分并像 $D_k^1$ 那样估计 $D_k^2$, 再加上边界项, 最终得到:
+\[
+\sum_k \|D_k^2\|_{L_x^2} \lesssim \|g\|_{H^1} \cdot \|h\|_{H^1}
+\]
+
+现在我们类似地分解来估计 $B_k$:$B_k = \sum_{k' < k \leq k''} P_k \int_0^1 (\partial_t g)_{k''} \cdot h_{k'}$.同上, 我们分部积分并用引理估计边界项 $J_k = \sum_{k' < k < k''} P_k (g_{k''}) \cdot h_{k'})$.然后不难经过整理并对 $k$ 求和得到
+\[
+\sum_k \|B_k\|_{L_x^2} \lesssim \|g\|_{H^1} \cdot \|h\|_{H^1}
+\]
+
+综合对 $A_k$、$B_k$ 与 $D_k$ 的所有估计, 即完成定理的证明.
+\end{proof}
+
+剩下只需证明上面帮助我们估计边界项的引理.不深入全部细节, 这是通过考虑三种情形完成的:
+\[
+k' \geq k'' \geq k, \qquad k' \geq k > k'', \qquad k > k' \geq k''
+\]
+我们注意到第三种("低-低")情形不可能出现.另外两种情形用 LP3 与下面这个(简单的)微积分不等式来界定:
+\begin{equation}
+\|f\|_{L_t^\infty L_x^2} \lesssim \|\partial_t f\|_{L_t^2 L_x^2}^{\frac{1}{2}} \cdot \|f\|_{L_t^2 L_x^2}^{\frac{1}{2}} + \|f\|_{L_t^2 L_x^2}\label{eq:c6-248}
+\end{equation}
+用 \eqref{eq:c6-248} 与 LP3 估计 $\|P_k(g_{k'} \cdot h_{k''})\|_{L_t^\infty L_x^2}$ 即得引理中的估计.
+
+\textbf{习题.} 补全上面定理证明中缺失的步骤.
+
+\section{Calderon-Zygmund 理论}
+
+下面的 $L^2$ 恒等式
+\[
+\sum_{i, j=1}^n \|\partial_i \partial_j u\|^2_{L^2} = \|\Delta u\|^2_{L^2}.
+\]
+对任意 $u \in \mathcal{C}_0^\infty(\mathbb{R}^n)$ 都可通过分部积分容易地建立, 见下文 \eqref{eq:c6-252}.于是,
+\begin{equation}
+\|\partial^2 u\|_{L^2} \lesssim \|\Delta u\|_{L^2}\label{eq:c6-249}
+\end{equation}
+
+自然会问, 这样的估计对其他的 $L^p$ 范数是否仍然成立.事实证明, 该问题可以归结为研究一类非常重要的线性算子——称为 Calderon-Zygmund 算子——的 $L^p$ 有界性.
+
+\begin{definition}[Calderon-Zygmund 算子]\label{def:c6-6.1}
+作用在 $L^2(\mathbb{R}^n)$ 上的线性算子 $T$ 称为 Calderon-Zygmund 算子, 如果:
+\begin{enumerate}
+\item $T$ 从 $L^2$ 到 $L^2$ 有界.
+\item 存在一个可测核 $k$, 使得对每个具有紧支集的 $f \in L^2$ 以及 $x \notin \operatorname{supp} f$, 有
+\[
+Tf(x) = \int_{\mathbb{R}^n} k(x-y) f(y) \mathrm{d}y,
+\]
+其中积分在 $\operatorname{supp} f$ 的补集中对一切 $x$ 绝对收敛.
+\item 存在常数 $C > 1$ 与 $A > 0$, 使得
+\begin{equation}
+\int_{|x| \geq C|y|} |k(x-y) - k(x)| \mathrm{d}x \leq A, \label{eq:c6-250}
+\end{equation}
+对 $y$ 一致成立.为简单起见, 可以取 $C = 2$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}\label{prop:c6-6.2}
+假设核 $k(x)$ 对一切 $x \neq 0$ 满足
+\begin{equation}
+|k(x)| \lesssim |x|^{-n}, \qquad |\partial k(x)| \lesssim |x|^{-n-1}\label{eq:c6-251}
+\end{equation}
+则 $k$ 满足消没条件 \eqref{eq:c6-250}.
+\end{proposition}
+
+\textbf{习题.} 证明该命题.
+
+\textbf{例 1.} Hilbert 变换 $Hf(x) = \int e^{ix \cdot \xi} \operatorname{sign} \xi\, \hat{f}(\xi) \mathrm{d}\xi$.由 Plancherel 定理容易验证 $H$ 是 $L^2$ 上的有界线性算子.另一方面, 我们知道 $\operatorname{sign} \xi$ 的逆 傅里叶变换与主值分布 $\operatorname{pv}(1/x)$ 成正比.因此, 若 $x \notin \operatorname{supp} f$, 则
+\[
+Hf(x) = c \int_{-\infty}^{+\infty} \frac{1}{x-y} f(y) \mathrm{d}y.
+\]
+容易验证核 $k(x) = \frac{1}{x}$ 满足上面的条件 3.
+
+\textbf{例 2.} 考虑 $\mathbb{R}^n$($n \geq 3$)中的方程 $\Delta u = f$, 其中 $f$ 光滑且具紧支集.回忆(见 (??)), 任何在 $\infty$ 处消失\footnote{在 $n = 2$ 的情形, 指任何一阶导数在 $\infty$ 处消失的解.}的解 $u$ 都可以表示为 $u = K_n * f$, 其中 $K_n(x) = c_n |x|^{2-n}$.于是, 若 $x \notin \operatorname{supp} f$, 就可以在积分号下求导, 得到
+\[
+\partial_i \partial_j u = \partial_i \partial_j K_n * f = \int_{\mathbb{R}^n} \partial_i \partial_j K_n (x-y) f(y) \mathrm{d}y.
+\]
+容易验证核 $k(x) = \partial_i \partial_j K_n(x)$ 满足条件 3.为证明算子
+\[
+R_{ij} f(x) = \int_{\mathbb{R}^n} \partial_i \partial_j K_n (x-y) f(y) \mathrm{d}y
+\]
+是 Calderon-Zygmund 算子, 只剩下 $L^2$ 有界性需要验证.这容易由方程 $\Delta u = f$ 推出.事实上, $u = K_n * f$ 是该方程在 $\infty$ 处消失的唯一解.此外, $|u(x)| \lesssim |x|^{2-n}$, $|\partial u(x)| \lesssim |x|^{1-n}$, 且 $R_{ij} f = \partial_i \partial_j u(x)$.于是我们可以在下面的表达式中分部积分,
+\begin{equation}
+\begin{array}{rcl}
+\int_{\mathbb{R}^n} |f(x)|^2 \mathrm{d}x &=& \int_{\mathbb{R}^n} \Delta u(x) \Delta u(x) \mathrm{d}x = \sum_{i, j=1}^n \int_{\mathbb{R}^n} |\partial_i \partial_j u(x)|^2 \mathrm{d}x \\
+&=& \sum_{i, j=1}^n \int_{\mathbb{R}^n} |R_{ij} f(x)|^2 \mathrm{d}x
+\end{array}\label{eq:c6-252}
+\end{equation}
+因此对每一对 $1 \leq i, j \leq n$,
+\[
+\|R_{ij} f\|_{L^2} \leq \|f\|_{L^2}.
+\]
+于是算子 $R_{ij}$ 是 Calderon-Zygmund 的.我们将示意地写 $R_{ij} = \partial_i \partial_j (-\Delta)^{-1}$.
+
+\begin{theorem}\label{thm:c6-6.3}
+Calderon-Zygmund 算子从 $L^1$ 有界地映入弱 $L^1$.
+\end{theorem}
+
+作为推论我们得到,
+
+\begin{corollary}\label{cor:c6-6.4}
+Calderon-Zygmund 算子对任意 $1 < p < \infty$ 从 $L^p$ 有界地映入 $L^p$.一般地, 它们对 $p = 1$ 与 $p = \infty$ 不有界.
+\end{corollary}
+
+\begin{proof}
+对 $1 < p < 2$, $L^p$ 上的有界性由弱 $L^1$ 与 $L^2$ 有界性经 Marcinkiewicz 插值得到.$p > 2$ 的情形由对偶性从如下事实得出:核为 $k(x)$ 的 Calderon-Zygmund 算子的对偶, 是核为 $k(-x)$ 的 Calderon-Zygmund 算子.更精确地说, 若 $f, g$ 具有不相交的支集, 则
+\[
+\int_{\mathbb{R}^n} Tf(x) g(x) \mathrm{d}x = \int_{\mathbb{R}^n} \int_{\mathbb{R}^n} k(x-y) f(y) g(x) \mathrm{d}x = \int_{\mathbb{R}^n} f(y) T^* g(y) \mathrm{d}y
+\]
+其中
+\[
+T^* g(y) = \int_{\mathbb{R}^n} k(-y+x) g(x) \mathrm{d}x, \qquad \forall y \notin \operatorname{supp} g.
+\]
+另一方面, $\|T^* f\|_{L^2} = \|Tf\|_{L^2} \lesssim \|f\|_{L^2}$.因此 $T^*$ 确实是 CZ 算子.现在, 利用 $L^p$ 与 $L^{p'}$ 之间的对偶性($1/p + 1/p' = 1$)以及 $T^*$ 对 $p' \leq 2$ 的 $L^{p'}$ 有界性,
+\[
+\begin{array}{ll}
+\|Tf\|_{L^p} &= \sup_{\|g\|_{L^{p'}} \leq 1} \left|\int_{\mathbb{R}^n} Tf(x) g(x) \mathrm{d}x\right| = \sup_{\|g\|_{L^{p'}} \leq 1} \left|\int_{\mathbb{R}^n} f(x) T^* g(x) \mathrm{d}x\right| \\
+&= \sup_{\|g\|_{L^{p'}} \leq 1} \|f\|_{L^p} \cdot \|T^* g\|_{L^{p'}} \lesssim \|f\|_{L^p}.
+\end{array}
+\]
+\end{proof}
+
+我们将在下面两个小节中证明主\thmref{thm:c6-6.3}.
+
+\mtsubsec{Calderon-Zygmund 分解}
+
+在导言中研究 Laplace 算子时, 我们发现, 对 $f \in \mathcal{C}_0^\infty$, 若 $\int f(x) \mathrm{d}x = 0$, 则 $\Delta^{-1}(f)$ 在 $f$ 的支集之外迅速衰减.这一事实在物理上很重要:它解释了为什么我们必须把手"接触"一个物体才能移动它, 尽管众所周知, 当存在正负电荷的聚集时, 同样的电磁力可以在远得多的距离上移动物体.我们还发现, 与振荡相关的一个特殊行为对 CZO($\Delta^{-1}$ 本身不是其例, 但它的近亲 Riesz 位势是)的分析相当重要.因此, 我们接下来用一节来讨论把一般函数分解为一部分有界、其余部分振荡且在物理上局部化的方法, 这个分解将使我们能够证明\thmref{thm:c6-6.3}.
+
+\begin{definition}[二进立方体]\label{def:c6-6.6}
+我们把 $\mathbb{R}^n$ 中的\newterm{dyadic-cube}{二进立方体}{dyadic cube}定义为形如
+\[
+Q = [2^k a_1, 2^k(a_1+1)] \times \cdots \times [2^k a_n, 2^k(a_n+1)],
+\]
+的立方体 $Q$, 其中 $k, a_1, \ldots, a_n \in \mathbb{Z}$.此时我们说 $\operatorname{size}(Q) = 2^k$.若 $Q$ 是一个二进立方体, 则它的父立方体是唯一满足 $Q \subset Q^*$ 且 $\operatorname{size}(Q^*) = 2 \operatorname{size}(Q)$ 的二进立方体 $Q^*$, 并称 $Q$ 是 $Q^*$ 的子立方体.
+\end{definition}
+
+\begin{lemma}[Whitney 分解]\label{lem:c6-6.7}
+$\mathbb{R}^n$ 中任何真开集 $\Omega$ 都可以被一族互不相交的二进立方体 $\mathcal{Q} = \{Q\}$ 覆盖:
+\[
+\Omega = \cup_{Q \in \mathcal{Q}} Q,
+\]
+其中每个立方体 $Q \in \mathcal{Q}$ 满足性质
+\begin{equation}
+\operatorname{size}(Q) \approx \operatorname{dist}(Q, \partial \Omega).\label{eq:c6-253}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+对每个 $x \in \Omega$, 记 $Q_x$ 为包含 $x$ 的、满足性质 $\operatorname{dist}(Q_x, \partial \Omega) > \operatorname{size}(Q_x)$ 的最大二进立方体.若 $Q^*$ 表示 $Q_x$ 的父立方体, 则 $\operatorname{dist}(Q^*, \partial \Omega) \leq \operatorname{size}(Q^*)$.由三角不等式得
+\[
+\operatorname{dist}(Q_x, \partial \Omega) \leq \sqrt{n}\, \operatorname{size}(Q_x) + \operatorname{dist}(Q^*, \partial \Omega) \leq (\sqrt{n} + 2) \operatorname{size}(Q_x).
+\]
+因此, $Q_x$ 满足 \eqref{eq:c6-253}.若 $y \in Q_x$, 则由 $Q_x$ 与 $Q_y$ 的极大性, 必有 $Q_y = Q_x$.因此, 族 $\mathcal{Q} = \{Q_x\}_{x \in \Omega}$ 由互不相交的立方体组成并覆盖 $\Omega$.
+\end{proof}
+
+\begin{proposition}[Calderon--Zygmund 分解]\label{prop:c6-6.8}
+设 $f \in L^1(\mathbb{R}^n)$, $\alpha > 0$.则可以找到可数族互不相交的二进立方体 $\mathcal{Q} = \{Q\}$ 以及一个分解 $f = g + \sum_{Q \in \mathcal{Q}} b_Q$, 使得:
+\begin{equation}
+\|g\|_{L^\infty} \lesssim \alpha, \tag{254a}\label{eq:c6-254a}
+\end{equation}
+\begin{equation}
+\operatorname{supp} b_Q \subseteq Q, \tag{254b}\label{eq:c6-254b}
+\end{equation}
+\begin{equation}
+\int b_Q (x) \mathrm{d}x = 0, \tag{254c}\label{eq:c6-254c}
+\end{equation}
+\begin{equation}
+\|b_Q\|_{L^1} \lesssim \alpha |Q|, \tag{254d}\label{eq:c6-254d}
+\end{equation}
+\begin{equation}
+\sum_Q |Q| \lesssim \frac{1}{\alpha} \|f\|_{L^1}.\tag{254e}\label{eq:c6-254e}
+\end{equation}
+\stepcounter{equation}% (254a)-(254e) 占原书编号 254,手动推进使下一式从 (255) 开始
+\end{proposition}
+
+\begin{remark*}
+注意在上面的 $\alpha, g, b_Q$ 与 $f$ 都具有相同的量纲, 因此这些关于 $g$ 与 $b_Q$ 的大小和支集的估计, 是唯一可能的、量纲上仍然正确的估计.
+\end{remark*}
+
+\begin{proof}
+设 $\mathcal{Q}$ 是开集 $\Omega = \{\mathcal{M} f(x) > \alpha\}$ 的 Whitney 分解, 如\lemref{lem:c6-6.7} 所述.对每个 $Q$, 定义 $f_Q = |Q|^{-1} \int_Q f(x) \mathrm{d}x$.令
+\[
+g(x) = \left\{ \begin{array}{ll} f(x), & \text{若 } x \notin \Omega, \\ f_Q, & \text{若 } x \in Q, \end{array} \right.
+\]
+并令 $b_Q(x) = \chi_Q(x) (f(x) - f_Q)$, 其中 $\chi_Q$ 是立方体 $Q$ 的特征函数.当然我们有 $f = g + \sum_Q b_Q$.由 \eqref{eq:c6-253} 推出的重要性质是:每个立方体 $Q$ 都包含在一个球 $B$ 内, 该球并不完全包含在 $\Omega$ 中, 且 $|Q| \approx |B|$.设 $x \in B \setminus \Omega$, 有
+\begin{equation}
+|f_Q| \leq \frac{1}{|Q|} \int_Q |f(y)| \mathrm{d}y \lesssim \frac{1}{|B|} \int_B |f(y)| \mathrm{d}y \leq \mathcal{M} f(x) \leq \alpha.\label{eq:c6-255}
+\end{equation}
+
+我们现在来验证这个分解具有所要求的性质.对 $\Omega$ 外几乎处处 $x$, 由 Lebesgue 微分定理(推论 2.7), 有 $|g(x)| \leq \mathcal{M} f(x) \leq \alpha$.当 $x \in \Omega$ 时, 由 \eqref{eq:c6-255} 得 $g(x) \lesssim \alpha$.因此 \eqref{eq:c6-254a} 成立.性质 \eqref{eq:c6-254b} 与 \eqref{eq:c6-254c} 是 $b_Q$ 定义的直接推论.性质 \eqref{eq:c6-254d} 由 \eqref{eq:c6-255} 推出.最后, \eqref{eq:c6-254e} 正是定理 2.4 中证明的 $\mathcal{M} f$ 的弱 $L^1$ 性质.
+\end{proof}
+\mtsubsec{\thmref{thm:c6-6.3} 的证明}
+
+考虑 $f \in L^1$ 与 $\alpha > 0$.设 $f = g + \sum_Q b_Q = g + b$ 是按\propref{prop:c6-6.8} 给出的 $f$ 的 Calderon-Zygmund 分解.由于
+\[
+\{|Tf(x)| > \alpha\} \subseteq \{|Tg(x)| > \alpha/2\} \cup (\{|Tb(x)| > \alpha/2\})
+\]
+并且根据 \eqref{eq:c6-254e}, 只需分别证明
+\begin{equation}
+|\{|Tg(x)| > \alpha/2\}| \lesssim \frac{1}{\alpha} \|f\|_{L^1}, \label{eq:c6-256}
+\end{equation}
+\begin{equation}
+|\{|Tb(x)| > \alpha/2\}| \lesssim \frac{1}{\alpha} \|f\|_{L^1}\label{eq:c6-257}
+\end{equation}
+
+估计 \eqref{eq:c6-256} 由 Chebyshev 不等式、$T$ 在 $L^2$ 上的有界性以及 $g$ 的一致界得出:
+\[
+\begin{array}{l}
+|\{|Tg(x)| > \alpha/2\}| \lesssim \frac{1}{\alpha^2} \|Tg\|^2_{L^2} \lesssim \frac{1}{\alpha^2} \|g\|^2_{L^2} \lesssim \frac{1}{\alpha} \|g\|_{L^1} \leq \\
+\qquad \leq \frac{1}{\alpha} \left(\|f\|_{L^1} + \sum_Q \|b_Q\|_{L^1}\right) \lesssim \frac{1}{\alpha} \|f\|_{L^1} + \sum_Q |Q| \lesssim \frac{1}{\alpha} \|f\|_{L^1}.
+\end{array}
+\]
+
+剩下要推出 \eqref{eq:c6-257}.由于族 $\mathcal{Q}$ 是可数的, 我们记它的成员为 $Q_j$, $j \in \mathbb{N}$.对每个 $Q_j$, 设 $y_{(j)}$ 为其中心, 取 $\hat{Q}_j$ 为具有相同中心、但各边按 $2n^{1/2}$ 扩张的立方体, 使得对 $\hat{Q}_j$ 补集中的一切 $x$,
+\[
+|x - y_{(j)}| \geq 2 \max_{y \in Q_j} |y - y_{(j)}|
+\]
+
+设 $\Omega = \cup_j \hat{Q}_j$, $F$ 为其补集.记 $b_j = b_{Q_j}$.由于 $\int b_j \mathrm{d}y = 0$, 对 $x \in F$ 写
+\[
+T(b_j)(x) = \int_{Q_j} \left(k(x-y) - k(x - y_{(j)})\right) b_j(y) \mathrm{d}y,
+\]
+或者, 由于立方体 $Q_j$ 互不相交,
+\[
+T(b_j)(x) = \int_{Q_j} \left(k(x-y) - k(x - y_{(j)})\right) b(y) \mathrm{d}y,
+\]
+
+于是, 根据 \eqref{eq:c6-250},
+\[
+\begin{array}{rcl}
+\int_F |T(b)(x)| \mathrm{d}x &\leq& \sum_j \int_F |T(b)(x)| \mathrm{d}x \lesssim \sum_j \int_{x \in \mathbb{R}^n \setminus \hat{Q}_j} \int_{y \in Q_j} |k(x-y) - k(x - y_{(j)})|\, |b(y)|, \\
+&=& \sum_j \int_{y \in Q_j} |b_j(y)| \int_{x \in \mathbb{R}^n \setminus \hat{Q}_j} |k(x-y) - k(x - y_{(j)})| \\
+&\leq& \sum_j \int_{y \in Q_j} |b(y)| \int_{x \in \mathbb{R}^n \setminus \{\hat{Q}_j - y_{(j)}\}} |k(x - (y - y_j)) - k(x)| \\
+&\lesssim& \sum_j \int_{y \in Q_j} |b(y)| \int_{|x| \geq 2|(y - y_j)|} |k(x - (y - y_j)) - k(x)| \\
+&\lesssim& A \sum_j \int_{y \in Q_j} |b(y)| \lesssim \|f\|_{L^1}
+\end{array}
+\]
+
+因此,
+\[
+|\{x \in F: |Tb(x)| > \alpha/2\}| \lesssim \alpha^{-1} \|f\|_{L^1}
+\]
+
+另一方面, $F$ 的补集(即 $\Omega = \cup \hat{Q}_j$)的测度也可控:
+\[
+|\Omega| \leq \sum_j |\hat{Q}_j| \lesssim \sum_j |Q_j| \lesssim \alpha^{-1} \|f\|_{L^1}.
+\]
+
+因此,
+\[
+\left|\left\{x \in \mathbb{R}^n: |Tb(x)| > \alpha/2\right\}\right| \lesssim \alpha^{-1} \|f\|_{L^1}
+\]
+如所愿.
+
+\mtsubsec{Michlin-Hörmander 定理}
+
+一类重要的 CZ 算子可以通过 Fourier 乘子算子来定义.回忆这些算子由 傅里叶变换定义:
+\begin{equation}
+\widehat{Tf}(\xi) = m(\xi) \hat{f}(\xi), \label{eq:c6-258}
+\end{equation}
+其中 $m$ 是一个有界函数, 称为乘子.我们可以把这些算子看作卷积算子 $Tf = k * f$, 其中 $\hat{k} = m$.自然会问, Fourier 乘子算子何时给出一个 CZ 算子.既然我们知道 CZO 会赋予一个均值零的局部化函数额外的衰减, 我们应当预期乘子 $m$ 应该离原点相当远.这正是下面定理的内容.
+
+\begin{theorem}\label{thm:c6-6.11}
+设 $l > n/2$.假设 $m$ 是 $\widehat{\mathbb{R}}^n \setminus 0$ 上 $C^l$ 类的 Fourier 乘子, 满足
+\[
+|\partial_\xi^\alpha m(\xi)| \lesssim |\xi|^{-|\alpha|}, \qquad \forall \xi \in \widehat{\mathbb{R}}^n \setminus 0
+\]
+对每个满足 $|\alpha| \leq l$ 的多重指标 $\alpha$ 成立.则由 \eqref{eq:c6-258} 定义的算子是一个 Calderon-Zygmund 算子.
+\end{theorem}
+
+\begin{proof}
+考虑与 LP 投影中所用相同的二进单位分解:
+\[
+1 = \sum_{\lambda \in 2^{\mathbb{Z}}} \chi_\lambda(\xi) \qquad \text{对} \quad \xi \in \mathbb{R}^n \setminus 0,
+\]
+由 $\chi \in C_0^\infty$ 生成, 其中 $\operatorname{supp} \chi \subseteq \{1/2 \leq |\xi| \leq 2\}$, 且 $\chi_\lambda(\xi) = \chi(\xi/\lambda)$.
+
+把 $m$ 分解为二进片, $m = \sum_\lambda m_\lambda$, 其中 $m_\lambda = \chi_\lambda m$.由于 $|\partial^\gamma m(\xi)| \lesssim |\xi|^{-|\gamma|}$ 且 $\chi(\xi)$ 的所有导数有界,
+\begin{equation}
+|\partial_\xi^\alpha m_\lambda(\xi)| \leq \sum_{|\beta| + |\gamma| \leq |\alpha|} |\partial^\beta \chi_\lambda\, |\xi|^{-\gamma}| \lesssim \sum_{|\beta| + |\gamma| \leq |\alpha|} \lambda^{-|\beta|} \lambda^{-|\gamma|} \approx \lambda^{-|\alpha|}.\label{eq:c6-259}
+\end{equation}
+
+设 $k_\lambda$ 是 $m_\lambda$ 的逆 傅里叶变换.由于 $m_\lambda$ 具有紧支集, $k_\lambda$ 是光滑函数.此外, 对任何整数 $N$, 有\footnote{回忆:由分部积分, 有 $|F_\xi^{-1} f(x)| \leq |x|^{-N} \|\partial^N f\|_{L^1}$.}
+\[
+|k_\lambda(x)| \lesssim |x|^{-N} \|\partial^N m_\lambda\|_{L^1} \lesssim |x|^{-N} \lambda^{n-N}.
+\]
+
+现在取 $N > n$ 并对 $\lambda \in 2^{\mathbb{Z}}$ 求和.注意到 $\sum_\lambda k_\lambda$ 收敛到 $\mathbb{R}^n \setminus 0$ 上一个良定义的可测函数 $k$, 容易看出 $k$ 满足\defref{def:c6-6.1} 的性质 2.
+
+$T$ 在 $L^2$ 上的有界性直接由 $m$ 在 $\widehat{\mathbb{R}}^n$ 上的有界性得出.
+
+对 $0 \leq j \leq l$, 由 Plancherel 定理与 \eqref{eq:c6-259} 得
+\[
+\int |x|^{2j} |k_\lambda(x)|^2 \mathrm{d}x \simeq \sum_{|\alpha| = j} \int |\partial_\xi^\alpha m_\lambda(\xi)|^2 \mathrm{d}\xi \lesssim \lambda^{n-2j}.
+\]
+
+设 $R > 0$, 用 $j = 0$ 的情形我们发现
+\begin{equation}
+\int_{|x| \leq R} |k_\lambda(x)| \mathrm{d}x \lesssim \left(\int |k_\lambda(x)|^2 \mathrm{d}x\right)^{1/2} R^{n/2} \lesssim (\lambda R)^{n/2}, \label{eq:c6-260}
+\end{equation}
+而用 $j = l$ 的情形我们发现
+\begin{equation}
+\int_{|x| \geq R} |k_\lambda(x)| \mathrm{d}x \lesssim \left(\int |x|^{2l} |k_\lambda(x)|^2 \mathrm{d}x\right)^{1/2} \left(\int_{|x| > R} \frac{\mathrm{d}x}{|x|^{2l}}\right)^{1/2} \lesssim (\lambda R)^{n/2 - l}.\label{eq:c6-261}
+\end{equation}
+
+若取 $R = 1/\lambda$, 把 \eqref{eq:c6-260} 与 \eqref{eq:c6-261} 相加, 得 $\|k_\lambda\|_{L^1} \lesssim 1$ 对 $\lambda$ 一致成立.我们可以对 $\partial k_\lambda$ 应用同样的过程, 其符号为 $\xi m_\lambda \approx \lambda m_\lambda$, 以证明 $\|\partial k_\lambda\|_{L^1} \lesssim \lambda$.于是,
+\begin{equation}
+\int_{|x| \gg |y|} |k_\lambda(x-y) - k_\lambda(x)| \mathrm{d}x \leq \int \int_0^{|y|} |\partial k_\lambda (x - t y/|y|)| \mathrm{d}t \mathrm{d}x\label{eq:c6-262}
+\end{equation}
+\begin{equation}
+= |y| \cdot \|\partial k_\lambda\|_{L^1} \lesssim \lambda |y|, \label{eq:c6-263}
+\end{equation}
+而且, 由 \eqref{eq:c6-261},
+\begin{equation}
+\int_{|x| \gg |y|} |k_\lambda(x-y) - k_\lambda(x)| \mathrm{d}x \leq 2 \int_{|x| \geq |y|} |k_\lambda(x)| \mathrm{d}x \lesssim (\lambda |y|)^{n/2 - l}.\label{eq:c6-264}
+\end{equation}
+
+当 $\lambda |y| \leq 1$ 时用 \eqref{eq:c6-262}, 当 $\lambda |y| > 1$ 时用 \eqref{eq:c6-264}, 对 $\lambda$ 求和, 得\footnote{这里我们使用了二进记号下几何级数的如下求和性质:对 $\alpha > 0$, 有 $\sum_{\lambda \leq L} \lambda^\alpha \simeq L^\alpha$ 与 $\sum_{\lambda \geq L} \lambda^{-\alpha} \simeq L^{-\alpha}$.}
+\[
+\int_{|x| \gg |y|} |k(x-y) - k(x)| \mathrm{d}x \lesssim |y| \sum_{\lambda \leq |y|^{-1}} \lambda + |y|^{n/2 - l} \sum_{\lambda > |y|^{-1}} \lambda^{n/2 - l} \lesssim 1.
+\]
+如所愿.
+\end{proof}
+
+\textbf{习题.} 设 $\phi \in \mathcal{C}_0^\infty(\mathbb{C})$, $f$ 是不齐次 Cauchy-Riemann 方程 $\frac{\partial f}{\partial \bar{z}} = \phi$ 的、在无穷远处衰减的解.证明对 $1 < p < \infty$ 有估计
+\[
+\|\partial f\|_{L^p} \lesssim \|\phi\|_{L^p}
+\]
+
+\mtsubsec{平方函数估计}
+
+我们回忆平方函数的性质 LP6:
+\[
+Sf = \left(\sum_k |P_k f|^2\right)^{1/2},
+\]
+
+\begin{theorem}[Littlewood--Paley]\label{thm:c6-6.13}
+我们有
+\begin{equation}
+\|f\|_{L^p} \lesssim \|Sf\|_{L^p} \lesssim \|f\|_{L^p}\label{eq:c6-265}
+\end{equation}
+对所有 $1 < p < \infty$ 成立.
+\end{theorem}
+
+我们给出这个估计的两个证明.
+
+\begin{proof}[第一个证明]
+首先我们用对偶论证证明 \eqref{eq:c6-265} 中的第一个不等式由第二个推出.事实上, 利用 Plancherel 定理、事实 $P_k P_{k'} = 0$(除非 $k \sim k'$)以及 Cauchy-Schwarz 不等式, 我们得到
+\[
+\begin{array}{lll}
+\int f(x) g(x) \mathrm{d}x &\simeq& \int \sum_{k \approx k'} P_k f(x) P_{k'} g(x) \mathrm{d}x \\
+&\lesssim& \int \left(\sum_k |P_k f(x)|^2\right)^{1/2} \left(\sum_{k'} |P_{k'} g(x)|^2\right)^{1/2} \mathrm{d}x \leq \\
+&\lesssim& \|Sf\|_{L^p} \|Sg\|_{L^{p'}} \lesssim \|Sf\|_{L^p} \|g\|_{L^{p'}}.
+\end{array}
+\]
+\eqref{eq:c6-265} 中的左端不等式现在通过对所有满足 $\|g\|_{L^{p'}} = 1$ 的 $g$ 取上确界得出.
+
+为证明 \eqref{eq:c6-265} 中的右端不等式, 我们需要引入 Rademacher 函数 $r_k(t)$, 它们定义在 $\mathbb{R}$ 上:对每个 $k \geq 0$, $k \in \mathbb{Z}$, 以及 $t \in \mathbb{R}$, 令 $r_k(t) = r_0(2^k t)$, 其中 $r_0(t)$ 是周期函数, $r_0(t+1) = r_0(t)$, 满足 $0 \leq t < 1/2$ 时 $r_0(t) = 1$, $1/2 \leq t < 1$ 时 $r_0(t) = -1$.这些 Rademacher 函数在 $L^2[0, 1]$ 中构成正交序列, 并且构成一列独立同分布的随机变量.我们所需的基本性质是:Rademacher 函数的线性组合的 $L^p$ 范数等价于其系数的 $l^2$ 范数.
+
+\begin{lemma}\label{lem:c6-6.14}
+给定满足 $\sum_{k=0}^{\infty} a_k^2 < \infty$ 的实数序列 $\{a_k\}$, 定义
+\[
+F(t) = \sum_{k=0}^{\infty} a_k r_k(t).
+\]
+则 $F \in L^2([0, 1])$, 且 $\|F\|_{L^2} = (\sum_{k=0}^{\infty} a_k^2)^{1/2}$.此外, 对 $1 < p < \infty$, 有 $F \in L^p([0, 1])$, 并且存在常数 $A_p$ 使得
+\[
+A_p^{-1} \|F\|_{L^p} \leq \|F\|_{L^2} \leq A_p \|F\|_{L^p}.
+\]
+\end{lemma}
+
+此引理的证明见 Stein, [?, 附录 D].
+
+定义算子 $T_t$ 如下:
+\[
+T_t f = \sum_{k=0}^{\infty} r_k(t) P_k f
+\]
+
+显然 $T_t$ 是以 $m_t(\xi) = \sum_k r_k(t) \chi(2^{-k}\xi)$ 为符号的 Fourier 乘子算子, 其中 $\chi$ 是用于定义 LP 投影的光滑截断函数.对 $\xi \neq 0$, 定义 $m_t(\xi)$ 的和式中至多只有三项非零.于是我们可以容易地验证 $m_t$ 满足\thmref{thm:c6-6.11} 的条件.即
+\[
+|\partial_\xi^\alpha m_t(\xi)| \leq C_\alpha |\xi|^{-|\alpha|},
+\]
+其中常数 $C_\alpha$ 与 $t$ 无关.因此, 由 Calderon-Zygmund 理论(特别是\corref{cor:c6-6.4}), 有:
+\[
+\|T_t f\|_{L^p} \lesssim \|f\|_{L^p}
+\]
+于是,
+\[
+\left(\int_0^1 \|T_t f\|^p_{L^p} \mathrm{d}t\right)^{1/p} \lesssim \|f\|_{L^p}
+\]
+
+此外, 我们可以用\lemref{lem:c6-6.14} 看到:
+\[
+\begin{array}{ll}
+\int_0^1 \|T_t f\|^p_{L^p} \mathrm{d}t &= \int_0^1 \int_{\mathbb{R}} \left|\sum_k r_k(t) (P_k f)(x)\right|^p \mathrm{d}x \mathrm{d}t \\
+&\gtrsim \int_{\mathbb{R}} \left(\sum_k |(P_k f)(x)|^2\right)^{p/2} \mathrm{d}x
+\end{array}
+\]
+
+于是综合我们的结果得到:
+\[
+\|Sf\|_{L^p} \lesssim \|f\|_{L^p}
+\]
+
+(注意这个论证只在单维情形 $n = 1$ 证明了定理.不过, 它可以像 Stein 的《Singular Integrals》第 IV 章第 5 节那样推广到 $\mathbb{R}^n$.)
+\end{proof}
+
+\begin{proof}[第二个证明]
+我们回忆向量值函数的定义:
+\[
+\mathbf{S} f(x) = (P_k f(x))_{k \in \mathbb{Z}}.
+\]
+显然, 若 $f \in \mathcal{S}(\mathbb{R}^n)$, 则对每个 $x \in \mathbb{R}^n$, $\mathbf{S} f(x) \in l^2$, 且 $Sf(x) = |\mathbf{S} f(x)|$ 表示 $\mathbf{S} f(x)$ 的 $l^2$ 范数.我们断言
+\[
+\mathbf{S} f(x) = \int \mathbf{K}(x-y) f(y) \mathrm{d}y
+\]
+是一个 $l^2$ 值的 Calderon-Zygmund 算子, 其 $l^2$ 值核定义为
+\[
+\mathbf{K}(x) = (K_k(x))_{k \in \mathbb{Z}}, \qquad K_k(x) = 2^{nk} \hat{\chi}(2^k x)
+\]
+记
+\[
+|\mathbf{K}(x)| = \left(\sum_k |K_k(x)|^2\right)^{1/2}, \qquad |\partial \mathbf{K}(x)| = \left(\sum_k |\partial K_k(x)|^2\right)^{1/2}
+\]
+我们容易验证条件 \eqref{eq:c6-251} 的 $l^2$ 值版本成立,
+\begin{equation}
+|\mathbf{K}(x)| \lesssim |x|^{-n}, \qquad |\partial \mathbf{K}(x)| \lesssim |x|^{-(n+1)}, \qquad \text{对} \quad x \neq 0.\label{eq:c6-266}
+\end{equation}
+另一方面,
+\[
+\|\mathbf{S} f\|_{L^2} := \|Sf\|_{L^2} \lesssim \|f\|_{L^2}.
+\]
+因此 $\mathbf{S}$ 确实是一个 $l^2$ 值的 C-Z 算子, 从而, 根据\thmref{thm:c6-6.3} 及其推论的直接推广, 我们推得
+\[
+\|\mathbf{S} f\|_{L^p} := \||\mathbf{S} f|\|_{L^p} = \|Sf\|_{L^p} \lesssim \|f\|_{L^p}
+\]
+根据我们定理第一个证明的开头, 我们还推得
+\[
+\|f\|_{L^p} \lesssim \|Sf\|_{L^p}.
+\]
+\end{proof}
+
+注意, 根据\thmref{thm:c6-6.13}, $|\sum_k P_k f| \approx (\sum_k |P_k f|^2)^{1/2}$.一个更一般的原理断言:若一列函数 $f_1, f_2, \ldots, f_k, \ldots$ 以不同的速率振荡, 即任意两个相位不同, 则
+\[
+\left|\sum_k f_k\right| \approx \left(\sum_k |f_k|^2\right)^{1/2}
+\]
+
+性质 LP6 与\thmref{thm:c6-6.13} 的如下版本对与 $P_k$ 相似的 LP 投影 $\tilde{P}_k \sim P_k$ 也成立.更精确地说,
+\begin{equation}
+\left\|\left(\sum_k |\tilde{P}_k f|^2\right)^{1/2}\right\|_{L^p} \lesssim \|f\|_{L^p}, \qquad 1 < p < \infty.\label{eq:c6-267}
+\end{equation}
+这可以用与 $\|Sf\|_{L^p} \lesssim \|f\|_{L^p}$ 相同的方式证明:引入 $l^2$ 值算子 $\tilde{\mathbf{S}} f = (\tilde{P}_k f)_{k \in \mathbb{Z}}$, 并完全按照\thmref{thm:c6-6.13} 第二个证明的过程进行.给定一个 $l^2$ 值向量函数 $\mathbf{g} = (g_k)_{k \in \mathbb{Z}}$, 注意到
+\[
+\langle \tilde{\mathbf{S}} f, \mathbf{g} \rangle = \int_{\mathbb{R}^n} \tilde{\mathbf{S}} f(x) \cdot \bar{\mathbf{g}}(x) \mathrm{d}x = \int_{\mathbb{R}^n} \sum_k \tilde{P}_k f(x) \overline{g_k}(x) \mathrm{d}x = \int_{\mathbb{R}^n} f(x) \overline{\sum_k \tilde{P}_k g_k (x)} \mathrm{d}x
+\]
+于是,
+\begin{equation}
+\tilde{\mathbf{S}}^* \mathbf{g} = \sum_k \tilde{P}_k g_k\label{eq:c6-268}
+\end{equation}
+因此, 与 \eqref{eq:c6-267} 对偶的估计具有形式 $\|\tilde{\mathbf{S}}^* \mathbf{g}\|_{L^{p'}} \lesssim \|\mathbf{g}\|_{L^{p'}}$, 其中 $1/p + 1/p' = 1$.换言之,
+\begin{equation}
+\left\|\sum_k \tilde{P}_k g_k\right\|_{L^p} \lesssim \left\|\left(\sum_k |g_k|^2\right)^{1/2}\right\|_{L^p}, \qquad 1 < p < \infty.\label{eq:c6-269}
+\end{equation}
+
+下面是\thmref{thm:c6-6.13} 的一个容易的推论.
+
+\begin{corollary}\label{cor:c6-6.15}
+对 $2 \leq p < \infty$, 有
+\begin{equation}
+\|f\|^2_{L^p} \lesssim \sum_{k \in \mathbb{Z}} \|P_k f\|^2_{L^p}.\label{eq:c6-270}
+\end{equation}
+对 $1 < p \leq 2$, 有
+\begin{equation}
+\sum_{k \in \mathbb{Z}} \|P_k f\|^2_{L^p} \lesssim \|f\|^2_{L^p}.\label{eq:c6-271}
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+回忆 $Sf(x)^2 := \sum_{k \in \mathbb{Z}} |P_k f|^2$.若 $p/2 \geq 1$, 根据 LP6 与 Minkowski 不等式, 有
+\[
+\|f\|^2_{L^p} \lesssim \|Sf\|^2_{L^p} = \left\|\sum_k |P_k f|^2\right\|_{L^{p/2}} \leq \sum_k \left\||P_k f|^2\right\|_{L^{p/2}} = \sum_k \|P_k f\|^2_{L^p}.
+\]
+若 $p/2 \leq 1$, 我们改而使用反向 Minkowski 不等式,
+\[
+\|f\|^2_{L^p} \gtrsim \left\|\sum_k |P_k f|^2\right\|_{L^{p/2}} \geq \sum_k \left\||P_k f|^2\right\|_{L^{p/2}} = \sum_k \|P_k f\|^2_{L^p}.
+\]
+\end{proof}
+
+我们在这里使用的反向 Minkowski 不等式断言:对 $0 < q \leq 1$ 和一列正函数 $(f_k)_{k \in \mathbb{Z}}$,
+\begin{equation}
+\left\|\sum_k |f_k|\right\|_{L^q} \geq \sum_k \|f_k\|_{L^q}.\label{eq:c6-272}
+\end{equation}
+
+我们简要勾画 \eqref{eq:c6-272} 的证明;它可以在许多书中找到(例如 Garling 的《Inequalities》或 DiBenedetto 的《Real Analysis》, 我们这里采用的正是这个特定证明).
+
+一种方法是先证明一个反向 Hölder 不等式:对 $0 < p < 1$, $q < 0$, $\frac{1}{p} + \frac{1}{q} = 1$, $f \in L^p$, $g \in L^q$, 有
+\[
+\int |fg| \geq \|f\|_{L^p} \|g\|_{L^q}.
+\]
+这可以容易地通过写出 $\|f\|_{L^p} = \left(\int \frac{|fg|^p}{|g|^p}\right)^{1/p}$, 并对指数 $\tilde{p} = 1/p > 1$ 与 $\tilde{q} = 1/(1-p) > 1$ 应用通常的 Hölder 不等式来证明.
+
+有了这个, 两项的反向 Minkowski 不等式($\||f| + |g|\|_{L^q} \geq \|f\|_{L^q} + \|g\|_{L^q}$, $0 < q \leq 1$)如下推出(写 $\frac{1}{q'} = 1 - \frac{1}{q}$):
+\[
+\begin{array}{rcl}
+\||f| + |g|\|^q_{L^q} &=& \int (|f| + |g|)^{q-1} (|f| + |g|) \\
+&\geq& \left(\int (|f| + |g|)^{(q-1)q'}\right)^{1/q'} (\|f\|_{L^q} + \|g\|_{L^q}) \\
+&\geq& \||f| + |g|\|^{q-1}_{L^q} (\|f\|_{L^q} + \|g\|_{L^q})
+\end{array}
+\]
+
+\mtsubsec{$W^{s, p}$ Sobolev 空间}
+
+我们回忆已经定义的函数的 $W^{s, p}$ 范数:
+\[
+\|f\|_{W^{s, p}} = \sum_{j=0}^s \|\partial^j f\|_{L^p}
+\]
+我们断言下面的事实:
+
+\begin{lemma}\label{lem:c6-6.17}
+对任何 $j \geq 0$, $1 < p < \infty$, 有
+\[
+\|\partial^j f\|_{L^p} \approx \left\|\left(\sum_k |2^{jk} P_k f|^2\right)^{1/2}\right\|_{L^p}
+\]
+\end{lemma}
+
+\begin{proof}
+我们先写
+\[
+\|\partial^j f\|_{L^p} \lesssim \left\|\sum_k \partial^j P_k f\right\|_{L^p}
+\]
+如同性质 LP5 的证明中那样, 我们可以把 $\nabla^j P_k f$ 表示为 $\nabla^j P_k f = 2^{jk} \tilde{P}_k P_k f$, 其中 $\tilde{P}_k$ 与 $P_k$ 相似.于是, 利用估计 \eqref{eq:c6-269},
+\[
+\|\partial^j f\|_{L^p} \lesssim \left\|\sum_k 2^{jk} \tilde{P}_k P_k f\right\|_{L^p} \lesssim \left\|\left(\sum_k |2^{jk} P_k f|^2\right)^{1/2}\right\|_{L^p}.
+\]
+另一方面, 我们也可以对某个其他的相似 LP 投影写 $2^{jk} P_k f = \tilde{P}_k \partial^j f$.于是, 根据 \eqref{eq:c6-267},
+\[
+\left\|\left(\sum_k |2^{jk} P_k f|^2\right)^{1/2}\right\|_{L^p} \lesssim \left\|\left(\sum_k |\tilde{P}_k \partial^j f|^2\right)^{1/2}\right\|_{L^p} \lesssim \|\partial^j f\|_{L^p}
+\]
+\end{proof}
+
+利用该引理, 我们现在可以找到使用 LP 投影的等价定义:
+
+\begin{proposition}\label{prop:c6-6.18}
+对任何 $1 < p < \infty$ 与任何 $s \in \mathbb{N}$, 有
+\begin{equation}
+\|f\|_{W^{s, p}} \approx \left\|\sum_k (1 + 2^k)^s P_k f\right\|_{L^p}.\label{eq:c6-273}
+\end{equation}
+此外, 对齐次 $W^{s, p}$ 范数 $\|f\|_{\dot{W}^{s, p}} = \|\partial^s f\|_{L^p}$,
+\begin{equation}
+\|f\|_{\dot{W}^{s, p}} \approx \left\|\sum_k 2^{ks} P_k f\right\|_{L^p}.\label{eq:c6-274}
+\end{equation}
+\end{proposition}
+
+注意 \eqref{eq:c6-273} 与 \eqref{eq:c6-274} 右端的表达式对每个 $s \in \mathbb{R}$ 都有意义.因此我们可以把 $W^{s, p}$ 与 $\dot{W}^{s, p}$ 空间的定义推广到一切实数 $s$.
+
+齐次 Sobolev 范数 $\|\cdot\|_{\dot{W}^{s, p}}$ 的另外一些刻画可以用下面的事实给出:
+
+\begin{proposition}\label{prop:c6-6.19}
+对 $2 \leq p < \infty$ 与任何 $s$, 有
+\begin{equation}
+\left(\sum_k 2^{kps} \|P_k f\|^p_{L^p}\right)^{1/p} \lesssim \|f\|_{\dot{W}^{s, p}} \lesssim \left(\sum_k 2^{2ks} \|P_k f\|^2_{L^p}\right)^{1/2}.\label{eq:c6-275}
+\end{equation}
+对 $1 < p \leq 2$ 与 $s \in \mathbb{R}$, 有
+\begin{equation}
+\left(\sum_k 2^{2ks} \|P_k f\|^2_{L^p}\right)^{1/2} \lesssim \|f\|_{\dot{W}^{s, p}} \lesssim \left(\sum_k 2^{kps} \|P_k f\|^p_{L^p}\right)^{1/p}.\label{eq:c6-276}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+若 $p/2 \geq 1$, 由\thmref{thm:c6-6.13} 与 Minkowski 不等式, 有
+\[
+\|f\|^2_{L^p} \lesssim \left\|\sum_k |P_k f|^2\right\|_{L^{p/2}} \leq \sum_k \left\||P_k f|^2\right\|_{L^{p/2}} = \sum_k \|P_k f\|^2_{L^p}.
+\]
+若 $p/2 \leq 1$, 由\thmref{thm:c6-6.13} 与反向 Minkowski 不等式, 有
+\[
+\|f\|^2_{L^p} \gtrsim \left\|\sum_k |P_k f|^2\right\|_{L^{p/2}} \geq \sum_k \left\||P_k f|^2\right\|_{L^{p/2}} = \sum_k \|P_k f\|^2_{L^p}.
+\]
+其余细节显然可以补全.
+\end{proof}
+\section{问题}
+
+\noindent\textbf{问题 1.}~[$\mathbb{R}$ 中的分布]
+
+设 $f(z)$ 是区域 $D_+ = \{z \in \mathbb{C}: 0 < \Im(z) < \epsilon\}$ 中的解析函数, 满足对一切 $z \in D$ 有 $|f(z)| \lesssim |\Im(z)|^{-N}$.证明存在一个分布 $f_+ = f(\cdot + i0)$, 使得对每个 $\phi \in \mathcal{C}_0^\infty(\mathbb{R}^n)$,
+\[
+\lim_{y \to 0, y > 0} \int_{\mathbb{R}} f(x + iy) \phi(x) \mathrm{d}x = \langle f_+, \phi \rangle,
+\]
+类似地, 对定义在 $D_- = \{z \in \mathbb{C}: -\epsilon < \Im(z) < 0\}$ 上的解析函数, 我们可以定义分布 $f_- = f(\cdot - i0)$,
+\[
+\lim_{y \to 0, y < 0} \int_{\mathbb{R}} f(x + iy) \phi(x) \mathrm{d}x = \langle f_-, \phi \rangle
+\]
+这特别地在 $f = \frac{1}{z} = \frac{1}{x + iy}$ 时定义了分布 $(x + i0)^{-1}$ 与 $(x - i0)^{-1}$.证明公式
+\[
+(x + i0)^{-1} - (x - i0)^{-1} = -2\pi i \delta_0(x).
+\]
+再证明
+\[
+(x + i0)^{-1} = x^{-1} - i\pi \delta_0(x)
+\]
+其中 $\frac{1}{x}$ 是正文中定义的主值分布.
+
+\noindent\textbf{问题 2.}~[基本解] 考虑 $\mathbb{R}^3$ 中的算子 $Lu = \Delta u + u$.求 $Lu = 0$ 的所有球对称解.证明
+\[
+K(x) = -\frac{\cos |x|}{4\pi |x|}
+\]
+是 $L$ 的基本解.
+
+\noindent\textbf{问题 3.}~[初值问题] 考虑 $\mathbb{R} \times \mathbb{R}^n$ 中下列四个演化方程的初值问题:
+\begin{equation}
+\partial_t u = \Delta u, \qquad u(0, x) = f(x)\label{eq:c6-277}
+\end{equation}
+\begin{equation}
+\partial_t u = i\Delta u, \qquad u(0, x) = f(x)\label{eq:c6-278}
+\end{equation}
+\begin{equation}
+\partial_t^2 u = \Delta u, \qquad u(0, x) = f(x), \quad \partial_t u(0, x) = g(x)\label{eq:c6-279}
+\end{equation}
+\begin{equation}
+\partial_t^2 u = -\Delta u, \qquad u(0, x) = f(x), \quad \partial_t u(0, x) = g(x)\label{eq:c6-280}
+\end{equation}
+在每种情形下, 用 傅里叶变换方法写出解.换言之, 对每个方程取 傅里叶变换, 令
+\[
+\hat{u}(t, \xi) = \int e^{-ix \cdot \xi} u(t, x) \mathrm{d}x
+\]
+并解所得的关于 $t$ 的微分方程.比较最后两个方程的结果.证明 \eqref{eq:c6-279} 对一切 $f, g \in \mathcal{S}(\mathbb{R}^n)$ 都有解, 而 \eqref{eq:c6-280} 没有.不过要证明:如果我们只给定 $u(0, x) = f$(这是 $\mathbb{R}^{n+1}$ 中 Laplace 算子 $\partial_t^2 + \Delta$ 的 Dirichlet 问题), 则对一切函数 $f \in \mathcal{S}(\mathbb{R}^n)$, 该问题都有唯一解 $u$, 且当 $|t| + |x| \to \infty$ 时 $u$ 衰减到零.在所有情形下, 把所得的解表示为作用于初值(在物理空间中)的积分算子\footnote{你将需要执行逆 傅里叶变换, $u(t, x) = \mathcal{F}^{-1} \hat{u}(t, \xi)$.对波动方程, 一般来说这更困难, 但你可以在维数 $n = 3$ 时做到.}.
+
+\noindent\textbf{问题 4.}~[延拓算子] 设 $H$ 是 $\mathbb{R}^n$ 中的半空间 $x_n > 0$, $1 \leq p \leq \infty$.证明存在一个延拓算子, 即有界线性算子 $E: W^{1, p}(H) \to W^{1, p}(\mathbb{R}^n)$, 使得对所有 $u \in W^{1, p}(H)$, 在 $H$ 中几乎处处有 $Eu = u$, 且
+\[
+\|Eu\|_{W^{1, p}(\mathbb{R}^n)} \lesssim \|u\|_{W^{1, p}(H)}.
+\]
+把结果推广到任何 $s \in \mathbb{N}$.你能把结果推广到任意区域 $U \subset \mathbb{R}^n$ 吗?具有光滑边界的区域呢?
+
+\noindent\textbf{问题 5.}~[圆周上的分布与 Fourier 分析] 圆周 $\mathbb{R}/\mathbb{Z}$ 上的光滑函数是 $\mathbb{R}$ 上满足 1-周期性的光滑函数
+\[
+f(x + k) = f(x), \quad k \in \mathbb{Z}
+\]
+圆周有一个离散的频率空间 $m \in \widehat{(\mathbb{R}/\mathbb{Z})} = \mathbb{Z}$, 对应于函数 $x \mapsto e^{2\pi i m x}$.频率空间的离散性与圆周的紧性密切相关.圆周上的 Schwartz 函数就是光滑函数;$\mathbb{Z}$ 上的 Schwartz 函数是在无穷远处比任何多项式都更快衰减的函数.
+
+\begin{enumerate}
+\renewcommand{\labelenumi}{\alph{enumi}.}
+\item 我们定义周期函数的 傅里叶变换 $\hat{f}(m) = \int_0^1 f(x) e^{-2\pi i m x}$.证明光滑函数在圆周上的 Fourier 反演公式
+\[
+f(x) = \sum_{m \in \mathbb{Z}} \hat{f}(m) e^{2\pi i m x}
+\]
+并推出 Plancherel 公式 $\langle f, g \rangle = \langle \hat{f}, \hat{g} \rangle$.
+\item 我们把圆周上的分布 $u$ 定义为某个 $k$ 的 $\mathcal{C}^k(\mathbb{R}/\mathbb{Z})$ 的对偶中的元素, 即对某个 $k, C$ 以及所有 $\phi \in \mathcal{C}^\infty(\mathbb{R}/\mathbb{Z})$, 有 $|\langle u, \phi \rangle| \leq C \|\phi\|_{C^k}$.圆周具有光滑结构, 因此可以表述微分算子的基本解的概念(圆周上的群结构也使得卷积有意义)——但并非总能找到这样的解.证明算子 $\frac{d}{dx}$ 在圆周上没有基本解 $u$.换言之, 不存在满足 $\frac{du}{dx} = \delta(x)$ 的分布 $u$, 其意义是
+\[
+\langle \frac{du}{dx}, \phi \rangle \equiv -\langle u, \frac{d\phi}{dx} \rangle = \phi(0), \quad \phi \in \mathcal{C}^\infty(\mathbb{R}/\mathbb{Z})
+\]
+证明这一点有很多方法.你能同时在物理空间和频率空间中看到这一点吗?如果我们把向量场 $\frac{d}{dx}$ 换成另一个不消失的向量场 $\tilde{D} = \psi \frac{d}{dx}$, 其中 $\psi \in \mathcal{C}^\infty(\mathbb{R}/\mathbb{Z})$ 是不消失的光滑函数, 会怎么样?
+\end{enumerate}
+
+\noindent\textbf{问题 6.}~[迹定理] 设 $\mathbb{R}^{n-1}$ 是 $\mathbb{R}^n$ 中的超平面, 例如 $x_n = 0$.对任何 $f \in \mathcal{S}(\mathbb{R}^n)$, 记 $Rf$ 为 $f$ 到 $\mathbb{R}^{n-1}$ 的限制.
+
+\begin{enumerate}
+\renewcommand{\labelenumi}{\roman{enumi}.}
+\item 证明:对任何 $s > \frac{1}{2}$,
+\begin{equation}
+\|Rf\|_{L^2(\mathbb{R}^{n-1})} \lesssim \|f\|_{H^s(\mathbb{R}^n)}\label{eq:c6-281}
+\end{equation}
+\item 证明该结果对 $s \leq 1/2$ 不成立.不过要证明, 对一切 $s > 0$, 下面的尖锐迹定理成立:
+\begin{equation}
+\|Rf\|_{H^s(\mathbb{R}^{n-1})} \lesssim \|f\|_{H^{s+1/2}(\mathbb{R}^n)}\label{eq:c6-282}
+\end{equation}
+\item 证明:若 $f$ 的 Fourier 支集在球 $|\xi| \lesssim 2^k$ 中(对某个整数 $k$), 则对所有 $1 \leq p \leq \infty$ 与 $s > 1/p$,
+\[
+\|f\|_{L^p(\mathbb{R}^{n-1})} \lesssim 2^{k/p} \|f\|_{W^{s, p}(\mathbb{R}^n)}
+\]
+你能由此推出一个用 $L^p$ 范数表述的、推广 \eqref{eq:c6-281} 的迹结果吗?\eqref{eq:c6-282} 呢?
+\item 设 $H$ 是半空间 $x_n > 0$.根据上面的考虑, 我们可以谈论 $W^{1, p}(H)$ 中函数到超平面 $x_n = 0$ 的迹(证明这一点!).证明:函数 $f \in W^{1, p}(H)$ 属于 $W_0^{1, p}(H)$\footnote{回忆 $W_0^{1, p}(H)$ 是 $\mathcal{C}_0^\infty(H)$ 在 $W^{1, p}(H)$ 中的闭包.}当且仅当它到 $x_n = 0$ 的迹为零.
+\end{enumerate}
+
+\noindent\textbf{问题 7.}~[Littlewood-Paley] 考虑空间 $\Lambda_\gamma = C^{0, \gamma}(\mathbb{R}^n)$, 其范数为
+\[
+\|f\|_{\Lambda_\gamma} = \|f\|_{L^\infty(\mathbb{R}^n)} + \sup_{x \neq y \in \mathbb{R}^n} \frac{|u(x) - u(y)|}{|x - y|^\gamma}
+\]
+\begin{enumerate}
+\renewcommand{\labelenumi}{\roman{enumi}.}
+\item 证明, 用 Littlewood-Paley 投影 $P_k$, 有
+\[
+\|f\|_{\Lambda^\gamma} \approx \|P_{\leq 0} f\|_{L^\infty} + \sup_{k > 0} 2^{k\gamma} \|P_k f\|_{L^p}
+\]
+\item 定义 Zygmund 类 $\Lambda_*$, 其范数为
+\[
+\|f\|_{\Lambda^*} = \|f\|_{L^\infty} + \sup_{x \in \mathbb{R}^n, 0 \leq h \leq 1} \frac{|f(x+h) + f(x-h) - 2f(x)|}{h}
+\]
+证明
+\[
+\|f\|_{\Lambda_*} \approx \|P_{\leq 0} f\|_{L^\infty} + \sup_{k > 0} 2^k \|P_k f\|_{L^p}.
+\]
+\item 证明 Besov 空间 $B^s = H^{s, 1}$, $s > 0$ 中的乘积估计
+\[
+\|fg\|_{B^s} \lesssim \|f\|_{L^\infty} \|g\|_{B^s} + \|g\|_{L^\infty} \|f\|_{B^s}
+\]
+\end{enumerate}
+
+\noindent\textbf{问题 8.}~自己阅读关于 Calderon-Zygmund 算子的那一节.说明该理论如何推广到取值于给定 Hilbert 空间(如 $l^2$)的算子.
+\section{限制定理}
+
+众所周知, 当 $f \in L^1(\mathbb{R}^n)$ 时, 它的 傅里叶变换 $\hat{f}$ 是有界连续函数, 因此 $\hat{f}$ 到任何超曲面上的限制都是完全良定义的.另一方面, 若 $f \in L^2(\mathbb{R}^n)$, 则 $\hat{f}$ 可以是 $L^2$ 中的任何函数, 因此它只在几乎处处有定义, 而在像超曲面这样的零测集上完全任意.
+
+当 $f$ 属于某个 $1 < p < 2$ 的 $L^p$ 时, 能否给 $\hat{f}$ 到光滑超曲面 $S$ 的限制赋予意义?这是现代 Fourier 分析中的一个基本问题, 我们将看到, 它最终与波动方程解的正则性性质密切相关.
+
+若取 $S$ 为超平面, 我们立刻看到答案是否定的.事实上, 设 $f(x_1, x') = u(x_1) v(x')$, $\hat{f}(\xi_1, \xi') = \hat{u}(\xi_1) \hat{v}(\xi')$, 其中 $x_1, \xi_1 \in \mathbb{R}$, $x', \xi' \in \mathbb{R}^{n-1}$.$\hat{f}$ 到超平面 $\xi_1 = 0$ 上的限制仅在 $\hat{u}(0) = \int u(x) \mathrm{d}x$ 良定义时才有定义.对任何 $p > 1$, 总能找到 $u \in L^p(\mathbb{R})$ 使得 $\int u \mathrm{d}x$ 没有意义.我们推断, 当 $p > 1$ 时, 傅里叶变换在超平面上的限制无法定义.
+
+如果我们考虑具有非零曲率的超曲面, 答案就不同了.为简单起见, 我们考虑球面的模型情形.
+
+\mtsubsec{Stein-Tomas 定理}
+
+下面这类结果最初由 Stein 证明, 然后由 Tomas 推广, 并再次由 Stein 给出最终形式.
+
+\begin{theorem}[Stein--Tomas]\label{thm:c6-8.2}
+设 $\mathbb{S} = \mathbb{S}^{n-1}$ 是 $\mathbb{R}^n$ 中的标准单位球面, $\mathrm{d}\sigma$ 是其标准体积元.设 $f \in L^p(\mathbb{R}^n)$, 其中
+\[
+1 \leq p \leq \frac{2(n+1)}{n+3}.
+\]
+则 $\mathcal{R} f = \hat{f}\big|_{\mathbb{S}} \in L^2(\mathbb{S})$, 且
+\[
+\|\mathcal{R} f\|_{L^2(\mathbb{S})} \lesssim \|f\|_{L^p(\mathbb{R}^n)}.
+\]
+\end{theorem}
+
+这个定理有一个等价的对偶表述.定义\newterm{stein-operator}{Stein 算子}{Stein operator}为 Fourier 限制算子 $\mathcal{R} f = \hat{f}\big|_{\mathbb{S}}$ 的对偶,
+\[
+\mathcal{S} g(x) = \mathcal{R}^* g(x) = \int_{\mathbb{S}} e^{ix \cdot \xi} g(\xi) \mathrm{d}\sigma_\xi \simeq (g \mathrm{d}\sigma)^\vee (x),
+\]
+其中 $g$ 现在是定义在球面上的函数.
+
+\begin{theorem}\label{thm:c6-8.3}
+设 $f \in L^2(\mathbb{S})$, 且
+\[
+\frac{2(n+1)}{n-1} \leq p \leq \infty.
+\]
+则 $\mathcal{S} f \in L^p(\mathbb{R}^n)$, 且
+\begin{equation}
+\|\mathcal{S} f\|_{L^p(\mathbb{R}^n)} \lesssim \|f\|_{L^2(\mathbb{S})}.\label{eq:c6-283}
+\end{equation}
+\end{theorem}
+
+\begin{remark}\label{rem:c6-8.4}
+只需对 $p = p_* = 2(n+1)/(n-1)$ 证明\thmref{thm:c6-8.3}.事实上, 对 $p > p_*$, 由 Sobolev 不等式有
+\[
+\|\mathcal{S} f\|_{L^p} \lesssim \|D^s \mathcal{S} f\|_{L^{p_*}}
+\]
+其中 $s = n(1/p_* - 1/p) > 0$, $(D^s u)^\wedge (\xi) = |\xi|^s \hat{u}(\xi)$.但这里
+\[
+D^s \mathcal{S} f = \mathcal{S}(|\cdot|^s f) = \mathcal{S} f.
+\]
+因此, 如果我们能在 $p = p_*$ 时证明定理, 则
+\[
+\|\mathcal{S} f\|_{L^p} \lesssim \|\mathcal{S} f\|_{L^{p_*}} \lesssim \|f\|_{L^2(\mathbb{S})}
+\]
+\end{remark}
+
+\begin{remark}\label{rem:c6-8.5}
+如果用 $\mathrm{d}\mu = \psi \mathrm{d}\sigma$($\psi \in C_0^\infty(\mathbb{R}^n)$)替换 $\mathrm{d}\sigma$, 结果仍然成立, 因为定理推出
+\[
+\|(f \mathrm{d}\mu)^\vee\|_{L^p} \lesssim \|f \psi\|_{L^2(\mathbb{S})} \lesssim \|f\|_{L^2(\mathbb{S})}.
+\]
+此外, 利用单位分解, 只需对 $\boldsymbol{S} f = (f \mathrm{d}\mu)^\vee$(其中 $\mathrm{d}\mu = \psi \mathrm{d}\sigma$, $\psi \in C_0^\infty(\mathbb{R}^n)$ 的支集在球面某点的小邻域内)证明\thmref{thm:c6-8.3}.虽然这是显然的, 但我们可以局部化限制估计这一事实非常重要, 正如我们将来会看到的那样.
+\end{remark}
+
+\mtsubsec{Knapp 反例}
+
+根据下面的反例([?]), \thmref{thm:c6-8.3} 的结果对任何 $p < p_*$ 都不成立.
+
+对某个小的 $\delta > 0$, 定义\newterm{phase-space}{相空间}{phase space}中的区域
+\[
+D = \left\{\xi \in \mathbb{R}^n: |\xi_1 - 1| < \delta^2, |\xi'| < \delta\right\}.
+\]
+现在令 $f = \chi_{\mathbb{S} \cap D}$ 为帽 $\mathbb{S} \cap D$ 的特征函数, 则
+\[
+\|f\|_{L^2(\mathbb{S})} = |\mathbb{S} \cap D|^{1/2} \sim \delta^{(n-1)/2}.
+\]
+我们可以写
+\[
+\mathcal{S} f(x) = e^{ix_1} \int_{\mathbb{S} \cap D} e^{i\phi(x, \xi)} \mathrm{d}\sigma_\xi,
+\]
+其中相位 $\phi(x, \xi) = x_1(\xi_1 - 1) + x' \cdot \xi'$.于是可以固定物理空间中的一个区域,
+\[
+R = \left\{x \in \mathbb{R}^n: |x_1| < \frac{\pi}{6} \delta^{-2}, |x'| < \frac{\pi}{6} \delta^{-1}\right\},
+\]
+使得对 $x \in R$ 与 $\xi \in D$, 有 $|\phi(x, \xi)| \le \pi/3$, 因此, 当 $x \in R$ 时,
+\[
+|\mathcal{S} f(x)| \geq \operatorname{Re}\left(e^{-ix_1} \mathcal{S} f(x)\right) = \int_{\mathbb{S} \cap D} \cos(\phi(x, \xi)) \mathrm{d}\sigma_\xi \geq \frac{1}{2} |\mathbb{S} \cap D|.
+\]
+这推出
+\[
+\frac{\|\mathcal{S} f\|_{L^p}}{\|f\|_{L^2}} \gtrsim |\mathbb{S} \cap D|^{1/2} |R|^{1/p} \sim \delta^{\frac{n-1}{2} - \frac{n+1}{p}}.
+\]
+对小的 $\delta$, 形如 \eqref{eq:c6-283} 的估计必然要求
+\[
+\frac{n-1}{2} - \frac{n+1}{p} \geq 0
+\]
+这只有在 $p \geq p_* = 2(n+1)/(n-1)$ 时才可能成立.
+
+这个例子提示, 算子 $\mathcal{S}$ 的结构中存在着某种抛物型标度性质, 它来自球面的非零曲率.
+
+\mtsubsec{曲率的重要性}
+
+如果我们把标准球面 $\mathbb{S}^{n-1}$ 换成具有非零 Gauss 曲率的紧超曲面 $H \subset \mathbb{R}^n$, 限制定理及其对偶仍然成立.非零 Gauss 曲率的重要性由下面的结果说明.
+
+\begin{lemma}\label{lem:c6-8.8}
+设 $H \subset \mathbb{R}^n$ 是带非零 Gauss 曲率(即所有主曲率都不为零)与体积元 $\mathrm{d}\sigma$ 的紧超曲面.则对任何光滑函数 $\psi$, 有
+\begin{equation}
+|(\psi \mathrm{d}\sigma)^\vee (x)| \lesssim (1 + |x|)^{-\frac{n-1}{2}}\label{eq:c6-284}
+\end{equation}
+若恰好有一个主曲率为零, 则我们有
+\[
+|(\psi \mathrm{d}\sigma)^\vee (x)| \lesssim (1 + |x|)^{-\frac{n-2}{2}}
+\]
+\end{lemma}
+
+\begin{proof}
+一般的证明基于稳定相方法, 见 Stein 的《Harmonic Analysis》一书.对标准球面 $H = \mathbb{S}^{n-1}$ 与奇数 $n$ 的特殊情形, 可以通过极坐标直接计算来证明.
+\end{proof}
+
+\textbf{习题.} 对 $\mathbb{S}^2 \subset \mathbb{R}^3$ 证明该引理.
+
+\begin{remark}\label{rem:c6-8.9}
+另一个有趣的观察把这些限制定理与偏微分方程联系起来.事实上, 若 $u = \mathrm{d}\sigma^\vee * f$, 则 $u$ 是线性椭圆方程
+\[
+\Delta u + u = 0,
+\]
+的解, 这只要取 傅里叶变换就可以容易地看到:
+\[
+\mathcal{F}(u + \Delta u)(\xi) \simeq (1 - |\xi|^2) \delta(1 - |\xi|) \hat{f}(\xi) = 0.
+\]
+其中 $\delta$ 是 Dirac 分布.
+\end{remark}
+
+\mtsubsec{$TT^*$ 原理}
+
+下面这个简单的泛函分析结果在限制与 Strichartz 型估计中起重要作用.设 $B$ 是 Banach 空间, 记 $B'$ 为其对偶.设 $H$ 是带内积 $\langle \cdot, \cdot \rangle$ 的 Hilbert 空间.考虑线性算子 $T: H \to B'$.由于我们可以把 $H$ 与其对偶等同, 我们可以把 $T$ 看作算子 $T^*: B \to H$ 的伴随, 后者由下式定义:
+\[
+\langle h, T^*(x) \rangle = Th(x).
+\]
+实际上, 当 $B$ 自反时, $T^*$ 是 $T$ 的伴随, 但为了我们的目的, 我们将继续称 $T^*$ 为 $T$ 的伴随.
+
+$TT^*$ 原理断言 $T$ 的有界性与 $TT^*$ 的有界性等价.更精确地说, 我们有:
+
+\begin{proposition}\label{prop:c6-8.11}
+下面的陈述是等价的:
+\begin{enumerate}
+\renewcommand{\labelenumi}{(\roman{enumi})}
+\item $T: H \to B'$ 有界且 $\|T\| = M$;
+\item $T^*: B \to H$ 有界且 $\|T^*\| = M$;
+\item $TT^*: B \to B'$ 有界且 $\|TT^*\| = M^2$;
+\item 双线性形式 $(x, y) \mapsto \langle T^* x, T^* y \rangle$ 在 $B \times B$ 上有界, 范数为 $M^2$.
+\end{enumerate}
+\end{proposition}
+
+证明是泛函分析中的一个标准练习.
+
+
+\mtsubsec{限制定理的 $TT^*$ 表述}
+
+Stein 算子的 $TT^*$ 表述对应于与球面上测度的(逆)傅里叶变换做卷积.形式上, 我们有
+\[
+SS^* f(x) = S\mathcal{R} f(x) = \int_{\mathbb{S}} e^{ix \cdot \xi} \hat{f}(\xi) \mathrm{d}\sigma_\xi = \int_{\mathbb{R}^n} \int_{\mathbb{S}} e^{i(x-y) \cdot \xi} \mathrm{d}\sigma_\xi f(y) \mathrm{d}y = \mathrm{d}\sigma^\vee * f(x).
+\]
+于是我们被引向限制定理的如下等价形式,
+\begin{equation}
+\|\mathrm{d}\sigma^\vee * f\|_{L^p(\mathbb{R}^n)} \lesssim \|f\|_{L^{p'}(\mathbb{R}^n)}, \label{eq:c6-285}
+\end{equation}
+对 $p \geq p^*$ 成立.
+
+对\thmref{thm:c6-8.3} 可以给出三个不同的证明.我们将勾勒基于解析插值的第一个证明.这本质上是 Stein 与 Tomas 的原始证明.第二个证明基于引入一个时间参数并把 $\boldsymbol{S} f$ 看作演化算子, 它使我们能把限制定理视为一个更一般框架的一部分, 该框架包含各种带常系数的线性偏微分方程的 Strichartz 估计.最后, 第三个方法只适用于特定的指数, 它将使我们能够与双线性估计联系起来.
+
+\mtsubsec{第一个证明:解析插值}
+
+根据注 8.12 与\remref{rem:c6-8.4}, 只需证明 $\boldsymbol{U} f = \mathrm{d}\sigma^\vee * f$ 满足
+\begin{equation}
+\|Uf\|_{L^{p_*}(\mathbb{R}^n)} \lesssim \|f\|_{L^{p_*'}(\mathbb{R}^n)}, \label{eq:c6-286}
+\end{equation}
+其中 $p_* = 2(n+1)/(n-1)$, $p_*' = 2(n+1)/(n+3)$.
+
+一般来说, 直接得到 $L^{p'} - L^p$ 估计通常非常复杂, 除了 $p$ 是像 $p = 4, 6$ 这样的好指数(这只发生在 $n = 2$ 或 $n = 3$)的情形外, 我们不知道任何直接证明.我们更习惯于 $L^2 - L^2$ 型估计(Plancherel 定理在其中是强大的工具), 或 $L^1 - L^\infty$ 型估计, 因为振荡积分的逐点衰减估计可以由稳定相方法得到.这提示对 $L^p$ 空间使用某种插值理论.但是, 对算子 $U$ 的 $L^2 - L^2$ 估计被 Knapp 反例排除, 而 $L^\infty - L^1$ 估计太琐碎, 不能回答我们的问题.正是在这里, Stein 插值定理(定理 1.8)显示出它的威力, 因为它允许我们从其他(合理的)不同于 $U$ 的算子的 $L^2 - L^2$ 与 $L^\infty - L^1$ 估计得到 $U$ 的 $L^{p'} - L^p$ 估计.
+
+我们将通过构造一族卷积算子 $U_z f = \mu_z^\vee * f$ 来实现这一点, 其中 $\mu_z$ 是依赖于 $z$ 的解析分布.参数 $z$ 本质上将反映分布 $\mu_z$ 的齐次度.为此, 自然地把我们的目标放在 $z = -1$, 要求 $U_{-1} = U$ 或 $\mu_{-1} = \mathrm{d}\sigma$, 因为 $\mathrm{d}\sigma$ 可以写成球面上一个 delta 分布(它是 $-1$ 次齐次的)的回拉:
+\[
+\mathrm{d}\sigma \simeq \delta(1 - |\xi|) \mathrm{d}\xi.
+\]
+
+若 $\mu_z$ 与一个有界函数一致, 则 $U_z$ 的 $L^2 - L^2$ 估计将成立;事实上, 由 Plancherel 定理, 有
+\begin{equation}
+\|U_z f\|_{L^2} \simeq \|(U_z f)^\wedge\|_{L^2} \simeq \|\mu_z \cdot \hat{f}\|_{L^2} \lesssim \|\mu_z\|_{L^\infty} \|f\|_{L^2}.\label{eq:c6-287}
+\end{equation}
+要使 $\mu_z(\xi)$ 有界, 我们必须要求 $\mu_z(\xi)$ 本质上是 0 次齐次的, 即当 $z$ 位于直线 $\mathrm{Re}(z) = 0$ 上时.
+
+相反, 当 $\mu_z^\vee$ 与一个有界函数一致时, $U_z$ 的 $L^1 - L^\infty$ 估计将成立, 因为我们直接有
+\begin{equation}
+\|U_z f\|_{L^\infty} \lesssim \|\mu_z^\vee\|_{L^\infty} \|f\|_{L^1}.\label{eq:c6-288}
+\end{equation}
+为了从 \eqref{eq:c6-287} 与 \eqref{eq:c6-288} 的解析插值得到 \eqref{eq:c6-286}, 我们希望后者发生在直线 $\mathrm{Re}(z) = a$ 上, 其中 $a$ 的选择使得
+\[
+-1 = \theta a + (1-\theta) 0, \qquad \frac{1}{p_*} = \frac{\theta}{\infty} + \frac{1-\theta}{2}, \qquad \frac{1}{p_*'} = \frac{\theta}{1} + \frac{1-\theta}{2},
+\]
+而这恰好发生在 $\mathrm{Re}(z) = a = -(n+1)/2$ 时.
+
+这个论证引向我们将要使用的 Stein 解析插值定理的精确版本.
+
+\begin{proposition}\label{prop:c6-8.14}
+设 $U_z$ 是满足下列条件的线性算子解析族:
+\begin{enumerate}
+\renewcommand{\labelenumi}{(\roman{enumi})}
+\item $U_{-1} = U$;
+\item $\|U_z f\|_{L^2} \lesssim \|f\|_{L^2}$, 在直线 $\mathrm{Re}(z) = 0$ 上一致;
+\item $\|U_z f\|_{L^\infty} \lesssim \|f\|_{L^1}$, 在直线 $\mathrm{Re}(z) = -(n+1)/2$ 上一致.
+\end{enumerate}
+则由此推出
+\[
+\|Uf\|_{L^{p_*}} \lesssim \|f\|_{L^{p_*'}}.
+\]
+\end{proposition}
+
+
+上面的讨论表明, 当我们把 $U_z f$ 写成卷积 $\mu_z^\vee * f$ 时, 只要 $\mu_z$ 是满足如下条件的解析分布族, 命题的假设就得到满足:
+
+(i') $\mu_{-1} = \mathrm{d}\sigma$;
+
+(ii') $\mu_z(\xi)$ 与一个有界函数一致, 在直线 $\mathrm{Re}(z) = 0$ 上一致有界;
+
+(iii') $\mu_z^\vee(x)$ 与一个有界函数一致, 在直线 $\mathrm{Re}(z) = -(n+1)/2$ 上一致有界.
+
+于是剩下要定义分布 $\mu_z$ 并验证这些性质.
+
+受恒等式 $\delta = \chi_+^{-1}$ 与 $\mathrm{d}\sigma_\xi \simeq \delta(1 - |\xi|)$ 的启发, 我们定义分布族
+\begin{equation}
+\mu_z(\xi) = e^{z^2} \chi_+^z (1 - |\xi|) \psi(|\xi|), \label{eq:c6-289}
+\end{equation}
+其中 $\psi \in C_0^\infty(\mathbb{R})$ 是支集在 1 的小邻域(比如 $[1/2, 3/2]$)内的截断函数, 且 $\psi(1) = 1$.
+
+我们回忆齐次分布 $\chi_+^z$, 当 $\mathrm{Re}(z) > -1$ 时, 它们与函数一致:
+\[
+\chi_+^z(t) = \left\{ \begin{array}{ll} t^z / \Gamma(z+1) & \text{若 } t \geq 0, \\ 0 & \text{若 } t < 0, \end{array} \right.
+\]
+其中 Gamma 函数定义为 $\Gamma(z+1) = \int_0^\infty t^z e^{-t} \mathrm{d}t$.由恒等式 $\Gamma(z+1) = z\Gamma(z)$, 推出
+\begin{equation}
+\frac{\mathrm{d}}{\mathrm{d}t} \chi_+^z(t) = \chi_+^{z-1}(t).\label{eq:c6-290}
+\end{equation}
+利用这个公式, 通过反复分部积分, $\chi_+^z$ 可以对所有 $z \in \mathbb{C}$ 解析延拓.为此我们首先注意到, 对 $\mathrm{Re}(z) > -1$ 与 $\phi \in C_0^\infty$, 有
+\[
+\int \chi_+^z(t) \phi(t) \mathrm{d}t = -\int \chi_+^{z+1}(t) \phi'(t) \mathrm{d}t = \cdots = (-1)^m \int \chi_+^{z+m}(t) \phi^{(m)}(t) \mathrm{d}t.
+\]
+因此, 分部积分足够多次后, 当 $\mathrm{Re}(z) > -1 - m$ 时(对任何 $m$, 从而对所有 $z$), 我们可以使 $\int \chi_+^z \phi \mathrm{d}t$ 有意义.要看到 $\chi_+^{-1} = \delta$, 只需一次分部积分, 事实上
+\[
+\int \chi_+^{-1} \phi \mathrm{d}t = -\frac{1}{\Gamma(1)} \int_0^\infty \phi'(t) \mathrm{d}t = \phi(0).
+\]
+关于 $\chi_+^z$ 与分布理论的更多信息, 可以查阅 Gel'fand 与 Shilov 的著作 \cite{ge-s} 或 Hörmander \cite{ho}.
+
+$\mu_z$ 定义中的因子 $e^{z^2}$ 是为了保证我们的算子对大的 $\Im(z)$ 一致有界;事实上, 当 $\Im(z) \to \infty$ 时, $e^{z^2}$ 在带形区域 $-(n+1)/2 \leq \mathrm{Re}(z) \leq 0$ 上一致地指数衰减.这使得下面各个不等式中的常数可以按 $b = \Im(z)$ 多项式增长.
+
+显然 $\mu_{-1} \simeq \delta(1 - |\xi|) \psi(|\xi|) \simeq \mathrm{d}\sigma$.这验证了 (i').
+
+条件 (ii') 立即可验证, 因为当 $\mathrm{Re}(z) = 0$ 时, $\chi_+^{-z}$ 总是一个有界函数.条件 (iii') 将由稳定相论证推出, 更一般地我们有:
+
+\begin{proposition}\label{prop:c6-8.15}
+\begin{equation}
+|\mu_z^\vee(x)| \lesssim (1 + |x|)^{-\mathrm{Re}(z) - 1 - \frac{n-1}{2}}.\label{eq:c6-291}
+\end{equation}
+\end{proposition}
+
+\mtsubsec{第二个证明:演化算子方法}
+
+在本节中, 我们对 $f$ 作如下假设:
+\begin{equation}
+f \in C^\infty(\mathbb{S}), \qquad \operatorname{supp} f \subset \{\xi_1 > 1/2\}.\label{eq:c6-292}
+\end{equation}
+
+在这个假设下, 我们可以把 $x_1 = t$ 重新标记为时间参数, 并把 $\boldsymbol{S} f$ 重写为
+\[
+\begin{array}{c}
+\mathcal{S} f(t, x') = \int_{|\xi'| < \sqrt{3}/2} e^{it\sqrt{1 - |\xi'|^2}} e^{ix' \cdot \xi'} f(\sqrt{1 - |\xi'|^2}, \xi') \frac{\mathrm{d}\xi'}{\sqrt{1 - |\xi'|^2}} \\
+= \int e^{it\sqrt{1 - |\xi'|^2}} e^{ix' \cdot \xi'} \beta(|\xi'|) g(\xi') \mathrm{d}\xi'.
+\end{array}
+\]
+其中 $\beta \in C_0^\infty$ 的支集在 $|\xi'| < 1$ 内, 且 $g(\xi') = f(\sqrt{1 - |\xi'|^2}, \xi')/\sqrt{1 - |\xi'|^2}$.注意到
+\[
+\int |g(\xi')|^2 \mathrm{d}\xi' = \int_{\mathbb{S}} \frac{|f(\xi)|^2}{|\xi_1|^2} \mathrm{d}\sigma_\xi \simeq \|f\|^2_{L^2(\mathbb{S})}
+\]
+由关于 $f$ 支集的假设得出.
+
+\begin{theorem}\label{thm:c6-8.17}
+设 $\beta \in C_0^\infty(\mathbf{R}^{n-1})$ 的支集在单位球 $\{\xi \in \mathbf{R}^{n-1}: |\xi| < 1\}$ 内, 考虑算子
+\[
+Tg(t, x) = \int_{\mathbf{R}^{n-1}} e^{it\sqrt{1 - |\xi|^2}} e^{ix \cdot \xi} \beta(\xi) g(\xi) \mathrm{d}\xi, \qquad t \in \mathbf{R}, x \in \mathbf{R}^{n-1}.
+\]
+设 $q, r$ 是满足下列条件的 Lebesgue 指数:
+\begin{equation}
+0 \leq \frac{2}{q} \leq \min\{1, \gamma(r)\}, \label{eq:c6-293}
+\end{equation}
+\begin{equation}
+\left(\frac{2}{q}, \gamma(r)\right) \neq (1, 1), \label{eq:c6-294}
+\end{equation}
+其中 $\gamma(r) = (n-1)(1/2 - 1/r)$.则对一切 $g \in C_0^\infty(\mathbf{R}^{n-1})$, 下面的估计成立:
+\begin{equation}
+\|Tg\|_{L^q_t L^r_x(\mathbf{R} \times \mathbf{R}^{n-1})} \lesssim \|g\|_{L^2(\mathbf{R}^{n-1})}.\label{eq:c6-295}
+\end{equation}
+其中我们使用第 7 节定义的混合范数记号.
+
+由\remref{rem:c6-8.5}, \thmref{thm:c6-8.3} 由特殊情形 $q = r = 2\frac{n+1}{n-1}$ 推出.
+\end{theorem}
+
+\begin{remark}\label{rem:c6-8.18}
+当 $q \geq 2$ 时, 我们可以再次运行 Knapp 例子来证明条件 \eqref{eq:c6-293} 的必要性.事实上, 设 $D \subset \mathbb{R}^{n-1}$ 是由 $|\xi| \leq \delta$ 定义的圆盘, $\delta > 0$ 足够小, 取 $g = \chi_D$ 为 $D$ 的特征函数.我们写
+\[
+Tg(t, x) = e^{it} \int_D e^{it(\sqrt{1 - |\xi|^2} - 1)} e^{ix \cdot \xi} \beta(\xi) \mathrm{d}\xi
+\]
+并注意到, 对 $|t| \leq \delta^{-2}$ 与 $|x| \leq \delta^{-1}$, 存在固定的常数 $c > 0$ 使得 $|Tg(t, x)| \geq c$.事实上, 这容易由 $|\xi| \le \delta$ 与 $|\sqrt{1 - |\xi|^2} - 1| \lesssim \delta^2$ 推出.因此, 若 \eqref{eq:c6-295} 成立, 则对一切足够小的 $\delta > 0$, 必有
+\[
+c \delta^{-\frac{2}{q}} \delta^{-\frac{n-1}{r}} \lesssim \|Tg\|_{L^q_t L^r_x} \lesssim \|\chi_D\|_{L^2} \lesssim \delta^{-\frac{n-1}{2}}
+\]
+由此推出 \eqref{eq:c6-293}, $q \geq 2$.
+\end{remark}
+
+\begin{remark}\label{rem:c6-8.19}
+当 $n \neq 3$ 时, 由于 Keel 与 Tao 的一个著名结果 \cite{k-t}(《Endpoint Strichartz Inequalities》), 端点限制 \eqref{eq:c6-294} 可以被去掉.\eqref{eq:c6-293} 中隐含的另一个限制 $q \geq 2$ 将在下一章讨论.
+\end{remark}
+
+我们从计算 $T^*$ 与 $TT^*$ 开始:
+\[
+\begin{array}{l}
+\langle T^* F, g \rangle = \langle F, Tg \rangle = \iint F\, \overline{Tg}\, \mathrm{d}t \mathrm{d}x = \\
+\qquad = \iint F(t, x) \int e^{-it\sqrt{1 - |\xi|^2}} e^{-ix \cdot \xi} \overline{\beta(\xi) g(\xi)} \mathrm{d}\xi \mathrm{d}t \mathrm{d}x = \\
+\qquad = \int \overline{g(\xi) \beta(\xi)} \left(\iint e^{-it\sqrt{1 - |\xi|^2}} e^{-ix \cdot \xi} F(t, x) \mathrm{d}t \mathrm{d}x\right) \mathrm{d}\xi.
+\end{array}
+\]
+因此
+\[
+T^* F(\xi) = \overline{\beta(\xi)} \iint e^{-it\sqrt{1 - |\xi|^2}} e^{-ix \cdot \xi} F(t, x) \mathrm{d}t \mathrm{d}x,
+\]
+且
+\[
+\begin{array}{rl}
+& TT^* F(t, x) = \int e^{it\sqrt{1 - |\xi|^2}} e^{ix \cdot \xi} \beta(\xi) T^* F(\xi) \mathrm{d}\xi \\
+& \qquad = \iint e^{i(t-s)\sqrt{1 - |\xi|^2}} e^{ix \cdot \xi} |\beta(\xi)|^2 \hat{F}(s, \xi) \mathrm{d}\xi \mathrm{d}s,
+\end{array}
+\]
+其中 $\hat{F}(s, \xi) = \int e^{-ix \cdot \xi} F(s, x) \mathrm{d}x$.如果我们引入算子族
+\[
+U(t) f(x) = \int e^{it\sqrt{1 - |\xi|^2}} e^{ix \cdot \xi} |\beta(\xi)|^2 \hat{f}(\xi) \mathrm{d}\xi,
+\]
+我们可以把 $TT^*$ 写为卷积算子,
+\begin{equation}
+TT^* F(t, \cdot) = \int U(t-s) F(s, \cdot) \mathrm{d}s.\label{eq:c6-296}
+\end{equation}
+
+由\propref{prop:c6-8.11}, 要证明 $T$ 是从 $L^q_t L^r_x(\mathbf{R}^n)$ 到 $L^2(\mathbf{R}^{n-1})$ 的有界算子, 只需证明 $TT^*$ 是从 $L^{q'}_t L^{r'}_x(\mathbf{R}^n)$ 到 $L^q_t L^r_x(\mathbf{R}^n)$ 的有界算子.
+
+我们将首先证明关于 $U(t)$ 的一个估计:
+
+\begin{proposition}\label{prop:c6-8.20}
+设 $2 \leq r \leq \infty$, $\gamma(r) = (n-1)(1/2 - 1/r)$.则 $U(t)$ 满足估计
+\begin{equation}
+\|U(t) f\|_{L^r(\mathbf{R}^{n-1})} \lesssim (1 + |t|)^{-\gamma(r)} \|f\|_{L^{r'}(\mathbf{R}^{n-1})}.\label{eq:c6-297}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+一旦我们证明了两个极端情形 $r = 2$ 与 $r = \infty$,
+\begin{equation}
+\|U(t) f\|_{L^2(\mathbf{R}^{n-1})} \lesssim \|f\|_{L^2(\mathbf{R}^{n-1})}\label{eq:c6-298}
+\end{equation}
+\begin{equation}
+\|U(t) f\|_{L^\infty(\mathbf{R}^{n-1})} \lesssim (1 + |t|)^{-(n-1)/2} \|f\|_{L^1(\mathbf{R}^{n-1})}\label{eq:c6-299}
+\end{equation}
+该估计就由标准的 Riesz 插值定理得出.
+
+我们利用 Plancherel 公式立即得到 \eqref{eq:c6-298}, 因为
+\[
+(U(t) f)^\wedge (\xi) \simeq e^{it\sqrt{1 - |\xi|^2}} |\beta(\xi)|^2 \hat{f}(\xi).
+\]
+
+为证明 \eqref{eq:c6-299}, 我们写
+\[
+U(t) f(x) = \int K_t (x-y) f(y) \mathrm{d}y,
+\]
+其中
+\[
+\begin{array}{rl}
+& K_t(x) = \int e^{ix \cdot \xi} e^{it\sqrt{1 - |\xi|^2}} |\beta(\xi)|^2 \mathrm{d}\xi \\
+& \quad \simeq \iint e^{ix \cdot \xi} e^{it\tau} \delta(1 - \tau^2 - |\xi|^2) \sqrt{1 - |\xi|^2}\, |\beta(\xi)|^2 \mathrm{d}\tau \mathrm{d}\xi \\
+& \quad \simeq \iint e^{i(t, x) \cdot (\tau, \xi)} \delta(1 - |(\tau, \xi)|) \beta_1(\tau, \xi) \mathrm{d}\tau \mathrm{d}\xi, \qquad (\beta_1(\tau, \xi) = \tau |\beta(\xi)|^2), \\
+& \quad = (\beta_1 \mathrm{d}\sigma_{n-1})^\vee (t, x).
+\end{array}
+\]
+因此 $K_t$ 正是支集在球面 $\mathbb{S}^{n-1}$ 上的一个测度的 傅里叶变换, 对它有衰减估计
+\[
+|K_t(x)| \lesssim (1 + |t| + |x|)^{-(n-1)/2},
+\]
+这推出 \eqref{eq:c6-299}.
+\end{proof}
+
+接下来我们把\propref{prop:c6-8.20} 应用于 \eqref{eq:c6-296},
+\begin{equation}
+\|TT^* F(t, \cdot)\|_{L^r_x} \lesssim \int \frac{1}{(1 + |t-s|)^{\gamma(r)}} \|F(s, \cdot)\|_{L^{r'}_x} \mathrm{d}s.\label{eq:c6-300}
+\end{equation}
+
+最后, 我们能够应用 Hardy-Littlewood-Sobolev 不等式, 若 $0 < \gamma(r) < 1$, 则得到
+\[
+\|TT^* F\|_{L^q_t L^r_x} \lesssim \|F\|_{L^{q'}_t L^{r'}_x},
+\]
+当 $-\gamma(r) + 1 + 1/q = 1/q'$, 从而 $\gamma(r) = 2/q$ 时成立.因此, 我们在 $0 < \gamma(r) = 2/q < 1$ 的情形证明了\thmref{thm:c6-8.17}.
+
+另一方面, 若 $q = 2$ 且 $\gamma(r) > 1$, 由 \eqref{eq:c6-300},
+\[
+\|TT^* F\|_{L^2_t L^r_x} \lesssim \|F\|_{L^2_t L^{r'}_x},
+\]
+应用标准的 Hausdorff-Young 不等式即可.
+
+最后, 若 $2/q < 1$ 且 $\gamma(r) > 2/q$, 结果由 $\gamma(r) = 2/q$ 的情形利用 Sobolev 不等式得出.
+
+\mtsubsec{第三个证明:双线性形式($n = 2$ 与 $n = 3$)}
+
+我们现在给出证明球面限制定理的另一个方法, 它适用于特殊情形 $n = 2$, $p = 6$ 或 $n = 3$, $p = 4$.其思想是:当 $p$ 是偶整数时, 限制定理可以看作一个多重线性形式的 $L^2$ 估计, 而该形式通过 傅里叶变换具有卷积结构, 提供某种光滑化效应.下面给出的证明是所谓双线性/三线性估计的根源, 后者在现代非线性波动方程与色散方程理论中起根本作用.
+
+让我们先看 $n = 3$ 的情形.我们考虑 Stein 算子 $\boldsymbol{S} f = (f \mathrm{d}\sigma)^\vee$, 并利用事实 $(Sf \cdot Sf)^\wedge \simeq (f \mathrm{d}\sigma) * (f \mathrm{d}\sigma)$.设 $B(f, g) = Sf \cdot Sg$, 则 $\boldsymbol{S} f$ 的 $L^4$ 估计对应于 $B(f, f)$ 的 $L^2$ 估计.我们有
+\[
+\hat{B}(f, g)(\xi) \simeq (f \mathrm{d}\sigma) * (g \mathrm{d}\sigma)(\xi) = \int_{\mathbf{R}^3} \delta(1 - |\xi - \eta|) \delta(1 - |\eta|) f(\xi - \eta) g(\eta) \mathrm{d}\eta,
+\]
+并对测度 $\delta(1 - |\xi - \eta|) \delta(1 - |\eta|) \mathrm{d}\eta$ 应用 Cauchy-Schwarz, 我们得到
+\[
+|\hat{B}(f, g)(\xi)|^2 \leq \hat{B}(1, 1)(\xi) \hat{B}(|f|^2, |g|^2)(\xi).
+\]
+对 $\xi$ 积分, 我们得到
+\begin{equation}
+\|B(f, g)\|^2_{L^2(\mathbf{R}^3)} \lesssim A \|f\|^2_{L^2(\mathbb{S}^2)} \|g\|^2_{L^2(\mathbb{S}^2)}, \label{eq:c6-301}
+\end{equation}
+其中
+\begin{equation}
+A = \sup_\xi |\hat{B}(1, 1)(\xi)| = \sup_\xi \int \delta(1 - |\xi - \eta|) \delta(1 - |\eta|) \mathrm{d}\eta.\label{eq:c6-302}
+\end{equation}
+
+因此, 在这种情形下证明定理只需验证 $A$ 有限.对 $A(\xi) = \hat{B}(1, 1)(\xi)$ 作显式计算是有用的.对任何维数 $n \geq 2$, 有:
+
+\begin{lemma}\label{lem:c6-8.22}
+\begin{equation}
+A(\xi) = \int_{\mathbf{R}^n} \delta(1 - |\xi - \eta|) \delta(1 - |\eta|) \mathrm{d}\eta \simeq \frac{1}{|\xi|} \left(4 - |\xi|^2\right)_+^{\frac{n-3}{2}}.\label{eq:c6-303}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+\[
+\begin{array}{c}
+A(\xi) = \int \delta(1 - |\xi - \eta|) \delta(1 - |\eta|) \mathrm{d}\eta \simeq \int_{|\eta| = 1} \delta(1 - |\xi - \eta|^2) \mathrm{d}\sigma_\eta = \\
+= \int_{|\eta| = 1} \delta(|\xi|^2 - 2\xi \cdot \eta) \mathrm{d}\sigma_\eta \simeq \frac{1}{|\xi|} \int_{|\eta| = 1} \delta\left(\frac{|\xi|}{2} - \frac{\xi}{|\xi|} \cdot \eta\right) \mathrm{d}\sigma_\eta.
+\end{array}
+\]
+由旋转对称性, 我们可以假设 $\boldsymbol{\xi} = (|\xi|, 0, \ldots, 0)$, 于是
+\[
+\begin{array}{rcl}
+A(\xi) &\simeq& \frac{1}{|\xi|} \int_0^\pi \delta\left(\frac{|\xi|}{2} - \cos\theta\right) (\sin\theta)^{n-2} \mathrm{d}\theta = \\
+&=& \frac{1}{|\xi|} \int_{-1}^1 \delta\left(\frac{|\xi|}{2} - u\right) (1 - u^2)^{\frac{n-3}{2}} \mathrm{d}u = \frac{1}{|\xi|} \left(1 - \frac{|\xi|^2}{4}\right)^{\frac{n-3}{2}},
+\end{array}
+\]
+当 $|\xi|/2 \in [-1, 1]$ 时成立.
+\end{proof}
+
+当 $n = 3$ 时, $A(\xi) \simeq 1/|\xi|$ 只在 $\xi = 0$ 处奇异, 但我们可以通过假设 $f$ 与 $g$ 的支集在 $\mathbb{S}^2$ 中某点的小邻域内来避免这个困难(回忆不失一般性, 我们可以把估计局部化到球面上的一个小帽上).于是 \eqref{eq:c6-302} 中的上确界只需对一切 $\xi \in \operatorname{supp}(f) + \operatorname{supp}(g)$ 取, 而这是一个远离 0 的有界集合.因此我们可以在 \eqref{eq:c6-302} 中限制 $|\xi| \ge C > 0$, 奇异性消失, 留下 $A < \infty$.
+
+由双线性形式 $B(f, g)$ 的 $L^2$ 估计 \eqref{eq:c6-301}, 推出 Stein 算子 $\mathcal{S} f$ 的 $L^4$ 估计:
+\[
+\|\mathcal{S} f\|^2_{L^4(\mathbf{R}^3)} = \|B(f, f)\|_{L^2} \simeq A^{1/2} \|f\|^2_{L^2(\mathbb{S}^2)},
+\]
+其中假设 $f$ 的支集在球面上的一个小帽内.
+
+在 $n = 2$ 的情形, 我们要的是 $\boldsymbol{S} f$ 的 $L^6$ 估计.由于 $6 = 3 \times 2$, 我们可以尝试用三线性形式重复同样的计算, $T(f, g, h) = Sf \cdot Sg \cdot Sh$, 并利用事实 $\|Sf\|^3_{L^6} = \|T(f, f, f)\|_{L^2}$.我们有
+\[
+\begin{array}{l}
+\hat{T}(f, g, h)(\xi) \simeq (f \mathrm{d}\sigma) * (g \mathrm{d}\sigma) * (h \mathrm{d}\sigma)(\xi) = \\
+\qquad = \iint_{\mathbb{R}^2 \times \mathbb{R}^2} \delta(1 - |\xi - \eta - \zeta|) \delta(1 - |\eta|) \delta(1 - |\zeta|) f(\xi - \eta) g(\eta) h(\zeta) \mathrm{d}\eta \mathrm{d}\zeta,
+\end{array}
+\]
+并对测度 $\delta(1 - |\xi - \eta|) \delta(1 - |\eta|) \delta(1 - |\zeta|) \mathrm{d}\eta \mathrm{d}\zeta$ 应用 Cauchy-Schwarz, 我们得到
+\[
+|\hat{T}(f, g, h)(\xi)|^2 \leq \hat{T}(1, 1, 1)(\xi) \hat{T}(|f|^2, |g|^2, |h|^2)(\xi).
+\]
+对 $\xi$ 积分, 我们得到
+\begin{equation}
+\|T(f, g, h)\|^2_{L^2(\mathbb{R}^2)} \lesssim A \|f\|^2_{L^2(\mathbb{S}^1)} \|g\|^2_{L^2(\mathbb{S}^1)} \|h\|^2_{L^2(\mathbb{S}^1)}, \label{eq:c6-304}
+\end{equation}
+其中
+\begin{equation}
+A = \sup_\xi |\hat{T}(1, 1, 1)(\xi)| = \sup_\xi \iint \delta(1 - |\xi - \eta|) \delta(1 - |\eta|) \delta(1 - |\zeta|) \mathrm{d}\eta \mathrm{d}\zeta.\label{eq:c6-305}
+\end{equation}
+
+卷积结构允许我们把 $\xi$ 限制在集合 $\operatorname{supp} f + \operatorname{supp} g + \operatorname{supp} h$ 上, 如果我们假设 $f, g, h$ 的支集在球面的一个小帽内, 就可以假设 $1 \leq |\xi| \leq 3$.利用\lemref{lem:c6-8.22}, 我们可以计算 $T(1, 1, 1)$ 并证明 $A$ 有界,
+\[
+\begin{array}{rl}
+& T(1, 1, 1)(\xi) = \int B(1, 1)(\xi - \zeta) \delta(1 - |\zeta|) \mathrm{d}\zeta \sim \\
+& \qquad \sim \int_{|\xi - \zeta| < 2} \frac{\delta(1 - |\zeta|)}{(4 - |\xi - \zeta|^2)^{1/2}} \mathrm{d}\zeta = \int_{|\xi - \zeta| < 2}^{\zeta \in \mathbb{S}^1} \frac{\mathrm{d}\sigma_\zeta}{(3 - 2\xi \cdot \zeta + |\xi|^2)^{1/2}} \simeq \\
+& \qquad \simeq \int_{a(\xi)}^1 \frac{\mathrm{d}a}{(3 - |\xi|^2 + 2|\xi| a)^{1/2} (1 - a^2)^{1/2}} \sim \int_{a(\xi)}^1 \frac{\mathrm{d}a}{(a - a(\xi))^{1/2} (1 - a)^{1/2}} \simeq 1,
+\end{array}
+\]
+其中 $a(\xi) = -\frac{3 - |\xi|^2}{2|\xi|}$.由三线性形式 $T(f, g, h)$ 的 $L^2$ 估计 \eqref{eq:c6-304}, 推出 Stein 算子 $\mathcal{S} f$ 的 $L^6$ 估计:
+\[
+\|\mathcal{S} f\|^3_{L^6(\mathbb{R}^2)} = \|T(f, f, f)\|_{L^2} \simeq A^{1/2} \|f\|^3_{L^2(\mathbb{S}^2)}.
+\]
+
+我们也可以尝试对 $n = 2$ 重复双线性论证.如前, 对 $B(f, g) = Sf \cdot Sg$, 有
+\[
+|\hat{B}(f, g)(\xi)|^2 \leq \hat{B}(1, 1)(\xi) \hat{B}(|f|^2, |g|^2)(\xi).
+\]
+对 $\xi$ 积分, 并利用\lemref{lem:c6-8.22} 计算 $\hat{B}(1, 1)$,
+\[
+\|B(f, g)\|^2_{L^2(\mathbb{R}^2)} \lesssim \iint \frac{\delta(1 - |\xi - \eta|) \delta(1 - |\eta|)}{|\xi| (4 - |\xi|^2)^{1/2}} |f(\xi - \eta)|^2 |g(\eta)|^2 \mathrm{d}\eta \mathrm{d}\xi.
+\]
+作变量替换 $\xi \to \zeta = \xi - \eta$, 注意到当 $|\eta| = |\zeta| = 1$ 时, 有
+\[
+\begin{array}{c}
+|\xi| = |\eta + \zeta| \simeq (1 + \eta \cdot \zeta)^{1/2}, \\
+(4 - |\xi|^2)^{1/2} = (4 - |\eta + \zeta|^2)^{1/2} \simeq (1 - \eta \cdot \zeta)^{1/2},
+\end{array}
+\]
+因此
+\begin{equation}
+\|B(f, g)\|^2_{L^2(\mathbb{R}^2)} \lesssim \iint_{\mathbb{S}^1 \times \mathbb{S}^1} \frac{|f(\zeta)|^2 |g(\eta)|^2}{(1 - (\eta \cdot \zeta)^2)^{1/2}} \mathrm{d}\sigma_\eta \mathrm{d}\sigma_\zeta.\label{eq:c6-306}
+\end{equation}
+
+这是一个有趣的公式.注意, 如果 $f$ 与 $g$ 在 $\mathbb{S}^1$ 上的支集投影不相交, 即不含同一方向上的点, 则量 $1 - (\eta \cdot \zeta)^2$ 有正的下界, 此时我们得到双线性限制估计
+\[
+\|B(f, g)\|_{L^2(\mathbb{R}^2)} \lesssim \|f\|_{L^2(\mathbb{S}^1)} \|g\|_{L^2(\mathbb{S}^1)}.
+\]
+
+我们还可以考虑其他类型的双线性形式, 它们具有特殊的结构, 可以消去分母中的奇异性.例如取 $Q(f, g) = \partial_1 Sf \partial_2 Sg - \partial_2 Sf \partial_1 Sg$, 则取 傅里叶变换并如前进行, 我们看到
+\[
+\begin{array}{rcl}
+\|Q(f, g)\|^2_{L^2(\mathbb{R}^2)} &\lesssim& \iint_{\mathbb{S}^1 \times \mathbb{S}^1} \frac{|\eta_1 \zeta_2 - \eta_2 \zeta_1|^2}{(1 - (\eta \cdot \zeta)^2)^{1/2}} |f(\zeta)|^2 |g(\eta)|^2 \mathrm{d}\sigma_\eta \mathrm{d}\sigma_\zeta \\
+&\lesssim& \|f\|^2_{L^2(\mathbb{S}^1)} \|g\|^2_{L^2(\mathbb{S}^1)},
+\end{array}
+\]
+因为我们有恒等式 $|\eta_1 \zeta_2 - \eta_2 \zeta_1|^2 = 1 - (\eta \cdot \zeta)^2 \leq 1$.

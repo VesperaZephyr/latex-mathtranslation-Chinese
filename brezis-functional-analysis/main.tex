@@ -1,0 +1,348 @@
+% !TEX program = xelatex
+%
+% Brezis《泛函分析、Sobolev 空间与偏微分方程》中译本
+% 原书: Haim Brezis, Functional Analysis, Sobolev Spaces and
+%       Partial Differential Equations, Universitext, Springer, 2011.
+% 模板: 李文威《代数学方法》AJbook.cls (lww 模板)
+%
+% 编译: bash _build.sh   (xelatex x2 -> texindy -> xelatex)
+% 本译本不使用 biblatex/biber, 理由见《数学译本制作规范》§6.
+
+\documentclass[
+	11pt,
+	geometry=a4,
+	coverpage=cover,
+	fontsetup=font-setup-open,
+	titlesetup=titles-setup,
+]{AJbook}
+
+% ==================== 类未加载的宏包 ====================
+\usepackage{mycommand}      % \R \CC \Z \N \Q \norm \Ker \Image \supp \lrangle 等
+\usepackage{myarrows}       % 可伸缩箭头 (依赖 tikz-cd)
+\usepackage{tikz-cd}        % 交换图
+\usepackage{mathrsfs}       % \mathscr
+\usepackage{enumitem}       % 列表间距与自定义标签
+\usepackage{xurl}           % 长 URL 折行
+\usepackage{hologo}         % \hologo{XeLaTeX}
+\usepackage{chngcntr}       % \counterwithout (图全书连续编号)
+\usepackage{caption}        % 图题注格式 (原书 "Fig. 3")
+\usepackage{longtable}      % 跨页表格 (符号表)
+\usetikzlibrary{arrows.meta,calc,positioning,decorations.markings,patterns,shapes.geometric}
+
+\setcounter{MaxMatrixCols}{20}
+\setlength{\emergencystretch}{2.5em}
+
+% ==================== 函数分析专用记号 ====================
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\inner}[2]{\left(#1,#2\right)}          % Hilbert 内积
+\newcommand{\dual}[2]{\left\langle #1,#2\right\rangle} % 对偶配对
+\newcommand{\weakto}{\rightharpoonup}                % 弱收敛
+\newcommand{\weakstar}{\overset{*}{\rightharpoonup}} % 弱*收敛
+% "弱*" 中的星号必须紧贴"弱"字: xeCJK 默认在汉字与数学之间插胶,
+% 直接用 弱$^\star$ 会印成 "弱 ⋆ 拓扑". 此处局部关掉 CJK 胶.
+\newcommand{\wstar}{\texorpdfstring{{\xeCJKsetup{CJKecglue={}}弱$^\star$}}{弱*}}
+\newcommand{\embeds}{\hookrightarrow}                % 连续嵌入
+\newcommand{\embedsd}{\hookrightarrow\joinrel\relbar\joinrel\rightarrow} % 紧嵌入
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\esssup}{ess\,sup}
+\DeclareMathOperator{\essinf}{ess\,inf}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\osc}{osc}
+\DeclareMathOperator{\ind}{ind}      % Fredholm 指标 (第 6 章评注)
+\newcommand{\defeq}{\coloneqq}
+
+% 原书专用的算子记号
+\DeclareMathOperator{\Lip}{Lip}
+\newcommand{\LL}{\mathcal{L}}          % 有界线性算子空间
+\newcommand{\KK}{\mathcal{K}}          % 紧算子空间
+\newcommand{\Cc}{C_c}
+\newcommand{\Ccinf}{C_c^\infty}
+\newcommand{\Wmp}{W^{m,p}}
+\newcommand{\Wonep}{W_0^{1,p}}
+\newcommand{\Wone}{W^{1,p}}
+
+% ==================== 编号体系 (严格保真原书体例) ====================
+% 原书体例:
+%   Theorem / Proposition / Corollary 共用一个按章连续计数器: 1.1, 1.2, ...
+%   Lemma 独立按章编号: Lemma 1.1, 1.2, ...
+%   Remark 独立按章编号, 章内不带小数点: Remark 1, 2, ...
+%   Example 独立按章编号, 章内不带小数点: Example 1, 2, ...
+%   Definition 无编号, 行内粗体 "Definition." 起头
+%   公式按章从 (1) 重新开始, 章内连续
+%   习题 1.1--1.27 按章编号, 编号外加方框
+%   图全书连续 Fig. 1--9
+%   解答按习题号, 解答内公式 (S1), (S2), ... 每题重新开始
+%   Problem 全书连续 1--51
+%
+% 原书另有 "•" 起头的重点结论 (Theorem/Proposition/Corollary/Lemma/Remark 各有),
+% 圆点排在标题行左侧, 编号照常递增. 用一个可选参数控制是否加圆点.
+
+\newcounter{cstmt}[chapter]   % 定理/命题/推论共用
+\renewcommand{\thecstmt}{\thechapter.\arabic{cstmt}}
+\newcounter{clemma}[chapter]
+\renewcommand{\theclemma}{\thechapter.\arabic{clemma}}
+\newcounter{cremark}[chapter]
+\renewcommand{\thecremark}{\arabic{cremark}}
+% 例: 按节重新编号 (原书 §3.2 有例 1、2, §3.7 又从例 1 开始)
+\newcounter{cexample}[section]
+\renewcommand{\thecexample}{\arabic{cexample}}
+
+% 星号标记的结论: 原书把 "⋆" 紧贴在 "Theorem" 前, 不插入空隙.
+% xeCJK 默认在汉字与数学间加胶, 故局部关掉.
+
+\newcommand{\cstmtStar}[1]{{\xeCJKsetup{CJKecglue={}}$\star$#1}}
+
+\newcommand{\cstmtHead}[2]{%
+	\par\addvspace{2mm}%
+	\noindent{\sffamily\bfseries\thmheiti #1}%
+	\ifstrempty{#2}{}{\enspace(#2)}%
+	{\sffamily\bfseries\thmheiti .}%
+	\enspace\ignorespaces
+}
+\newcommand{\cstmtTail}{\par\addvspace{2mm}}
+
+% 类在它自己的 \AtBeginDocument 里用 ntheorem 建了 theorem/definition/remark/example 等,
+% 那个钩子比本文件注册得早, 所以本文件的钩子后执行, 此时环境已存在, 用 \renewenvironment 接管.
+\AtBeginDocument{%
+	% 无编号定义: "定义" + 空格 + 宋体正文
+	\renewenvironment{definition}{%
+		\par\addvspace{2mm}\noindent
+		{\sffamily\bfseries\thmheiti 定义.}\enspace\songti\ignorespaces
+	}{\cstmtTail}%
+	% 定理/命题/推论: 共用计数器, 楷体正文, 可选圆点/星号
+	\renewenvironment{theorem}[1][]{\refstepcounter{cstmt}\cstmtHead{定理~\thecstmt}{#1}\kaishu}{\cstmtTail}%
+	\renewenvironment{proposition}[1][]{\refstepcounter{cstmt}\cstmtHead{命题~\thecstmt}{#1}\kaishu}{\cstmtTail}%
+	\renewenvironment{corollary}[1][]{\refstepcounter{cstmt}\cstmtHead{推论~\thecstmt}{#1}\kaishu}{\cstmtTail}%
+	\newenvironment{keytheorem}[1][]{\refstepcounter{cstmt}\cstmtHead{\textbullet\enspace 定理~\thecstmt}{#1}\kaishu}{\cstmtTail}%
+	\newenvironment{keyproposition}[1][]{\refstepcounter{cstmt}\cstmtHead{\textbullet\enspace 命题~\thecstmt}{#1}\kaishu}{\cstmtTail}%
+	\newenvironment{keycorollary}[1][]{\refstepcounter{cstmt}\cstmtHead{\textbullet\enspace 推论~\thecstmt}{#1}\kaishu}{\cstmtTail}%
+	\newenvironment{startheorem}[1][]{\refstepcounter{cstmt}\cstmtHead{\cstmtStar{定理~\thecstmt}}{#1}\kaishu}{\cstmtTail}%
+	\newenvironment{starproposition}[1][]{\refstepcounter{cstmt}\cstmtHead{\cstmtStar{命题~\thecstmt}}{#1}\kaishu}{\cstmtTail}%
+	\newenvironment{starcorollary}[1][]{\refstepcounter{cstmt}\cstmtHead{\cstmtStar{推论~\thecstmt}}{#1}\kaishu}{\cstmtTail}%
+	% 引理: 独立计数器
+	\renewenvironment{lemma}[1][]{\refstepcounter{clemma}\cstmtHead{引理~\theclemma}{#1}\kaishu}{\cstmtTail}%
+	\newenvironment{keylemma}[1][]{\refstepcounter{clemma}\cstmtHead{\textbullet\enspace 引理~\theclemma}{#1}\kaishu}{\cstmtTail}%
+	\newenvironment{starlemma}[1][]{\refstepcounter{clemma}\cstmtHead{\cstmtStar{引理~\theclemma}}{#1}\kaishu}{\cstmtTail}%
+	% 注记 / 例: 独立计数器, 章内无小数点, 宋体正文
+	\renewenvironment{remark}[1][]{\refstepcounter{cremark}\cstmtHead{注记~\thecremark}{#1}\songti}{\cstmtTail}%
+	\newenvironment{keyremark}[1][]{\refstepcounter{cremark}\cstmtHead{\textbullet\enspace 注记~\thecremark}{#1}\songti}{\cstmtTail}%
+	\newenvironment{starremark}[1][]{\refstepcounter{cremark}\cstmtHead{\cstmtStar{注记~\thecremark}}{#1}\songti}{\cstmtTail}%
+	\renewenvironment{example}[1][]{\refstepcounter{cexample}\cstmtHead{例~\thecexample}{#1}\songti}{\cstmtTail}%
+	\newenvironment{starexample}[1][]{\refstepcounter{cexample}\cstmtHead{\cstmtStar{例~\thecexample}}{#1}\songti}{\cstmtTail}%
+	% 原书用 "Notation." 起头的行内小节, 与 Definition 同级
+	\newenvironment{notation}{%
+		\par\addvspace{2mm}\noindent
+		{\sffamily\bfseries\thmheiti 记号.}\enspace\songti\ignorespaces
+	}{\cstmtTail}%
+	% 每章末尾 "Comments on Chapter N" 内的带号粗体小标题 ("1. Generalizations...")
+	% 原书有两种排法: 带小标题的 (第 1 章) 编号单独成行, 其后另起小标题;
+	% 不带小标题的 (第 2、3 章) 编号与正文同行. 分别用 \cmtitem 与 \cmtnum.
+	\newcommand{\cmtitem}[1]{%
+		\par\addvspace{0.7\baselineskip}\noindent
+		{\sffamily\bfseries #1}\par\nobreak\addvspace{0.25\baselineskip}\noindent\ignorespaces
+	}%
+	\newcommand{\cmtnum}[1]{%
+		\par\addvspace{0.7\baselineskip}\noindent
+		{\sffamily\bfseries #1}\enspace\ignorespaces
+	}%
+	% 其下的字母小标题 "(a) The Krein--Milman theorem."
+	\newcommand{\cmtsub}[1]{%
+		\par\addvspace{0.45\baselineskip}\noindent
+		{\sffamily\bfseries #1}\par\nobreak\addvspace{0.15\baselineskip}\noindent\ignorespaces
+	}%
+	% 评注里 "字母 + 结论" 同行起排的情形 ("(a) Theorem 5.12 (...)." 第 5 章评注 1):
+	% 字母排在定理编号之前, 不另起一行.
+	\newenvironment{cmtlettertheorem}[2]{%
+		\refstepcounter{cstmt}%
+		\par\addvspace{2mm}\noindent
+		{\sffamily\bfseries\thmheiti (#1)\enspace 定理~\thecstmt}%
+		\ifstrempty{#2}{}{\enspace(#2)}%
+		{\sffamily\bfseries\thmheiti .}\enspace\kaishu\ignorespaces
+	}{\cstmtTail}%
+		% 证明环境 (统一黑体标题 + 空心方格证毕符号 \openbox)
+		\renewenvironment{proof}[1][]{%
+			\par\addvspace{2mm}\noindent
+			{\sffamily\bfseries\thmheiti 证明\ifstrempty{#1}{}{~(#1)}.}%
+			\enspace\ignorespaces
+		}{%
+			\hfill\openbox\par\addvspace{2mm}%
+		}%
+		% 超链接锚点唯一化 (同一编号在不同章重复时必须区分)
+	\renewcommand{\theHcstmt}{\thechapter.\arabic{cstmt}}%
+	\renewcommand{\theHclemma}{\thechapter.\arabic{clemma}}%
+	\renewcommand{\theHcremark}{\thechapter.\arabic{cremark}}%
+	\renewcommand{\theHcexample}{\thechapter.\thesection.\arabic{cexample}}%
+	\renewcommand{\theHequation}{\thechapter.\arabic{equation}}%
+}
+
+% 公式: 按章从 (1) 重新开始, 章内连续
+% \counterwithin* 只重置计数器, 不改写 \theequation, 故显示仍为 (1)(2)...
+\counterwithin*{equation}{chapter}
+\renewcommand{\theequation}{\arabic{equation}}
+
+% 脚注: 原书每章从 1 重新编号 (第 1 章 1--7, 第 3 章 1--3 ...)
+\counterwithin*{footnote}{chapter}
+% 原书脚注: 编号上标后留一个空隙再接正文, 续行齐左边界 (无悬挂缩进).
+\makeatletter
+\renewcommand\@makefntext[1]{\noindent\@makefnmark\enspace #1}
+\makeatother
+
+% 带星号的节: 原书把 "⋆" 印在节号之前 (⋆2.4 ...), 但目录与天眉不带星号.
+% 做法: 给节标题的编号前缀加一个可开关的星号; 星号不进入 \thesection,
+% 因此 \addcontentsline 与 \sectionmark 都取不到它.
+\newcommand{\AJsecstar}{}
+\titleformat{name=\section}
+	{\filleft\normalfont\sffamily\bfseries\CJKfamily{sectionfont}}
+	{}
+	{0mm}
+	{ \settowidth{\BoxTtlwidth}{\Huge \AJsecstar\thesection \hspace{0.7em} \Large #1}
+		\ifdim \BoxTtlwidth < \textwidth
+			\MakeSectBox{\Huge \AJsecstar\thesection \hspace{0.7em} \Large #1}\vskip-18pt%
+		\else
+			\Huge \underline{\AJsecstar\thesection} \hspace{0.7em} \Large #1%
+		\fi }
+	[\gdef\AJsecstar{}]
+\newcommand{\starsection}[1]{\gdef\AJsecstar{$\star$}\section{#1}}
+
+% 原书的行内粗体小标题 ("Definition of the adjoint A*." / "Examples" 等)
+\newcommand{\runin}[1]{%
+	\par\addvspace{2mm}\noindent{\sffamily\bfseries #1}\enspace\ignorespaces
+}
+
+% 图: 全书连续编号
+% 原书题注形如 "Fig. 3"(编号前有 "Fig." 前缀), 故题注用 "图 3" 而非 "图3".
+\counterwithout{figure}{chapter}
+\renewcommand{\thefigure}{\arabic{figure}}
+\AtBeginDocument{\renewcommand{\theHfigure}{\arabic{figure}}}
+\DeclareCaptionLabelFormat{brezisfig}{图~#2}
+\captionsetup[figure]{labelformat=brezisfig, labelsep=quad}
+
+% ==================== 习题 / 解答 / 问题 ====================
+% 习题: 章.序, 编号外加方框 (原书体例)
+% 类在 \AtBeginDocument 里用 ntheorem 定义了 exercise (共用 theorem 计数器);
+% 本文件注册的钩子晚于类, 因此在这里解除并重建.
+\AtBeginDocument{%
+	\let\exercise\relax \let\endexercise\relax
+}
+\newcounter{brexer}[chapter]
+\renewcommand{\thebrexer}{\thechapter.\arabic{brexer}}
+\providecommand{\theHexer}{}
+\renewcommand{\theHexer}{\thechapter.\arabic{brexer}}
+\makeatletter
+\AtBeginDocument{%
+	\newenvironment{exercise}[1][]{%
+		\par\medskip\noindent
+		\refstepcounter{brexer}%
+		\hypertarget{exer:\thebrexer}{}%
+		\@ifundefined{r@hassol:\thebrexer}{%
+			\fbox{\small\bfseries\thebrexer}%
+		}{%
+			\hyperlink{sol:\thebrexer}{\fbox{\small\bfseries\thebrexer}}%
+		}%
+		\ifstrempty{#1}{\enspace\ignorespaces}%
+			{\enspace{\itshape #1}\par\nobreak\ignorespaces}%
+	}{\par\medskip}%
+}
+
+% 解答: 与习题同号, 但不重复占计数器. 双向超链接回原题
+\newcommand{\solutionhead}[1]{%
+	\par\addvspace{0.8\baselineskip}%
+	\noindent\hypertarget{sol:#1}{}%
+	\label{hassol:#1}%
+	\hyperlink{exer:#1}{{\sffamily\bfseries #1}}%
+	\par\nobreak\addvspace{0.2\baselineskip}%
+}
+
+% 解答内的公式: (S1), (S2), ... 每题重新开始
+\newcounter{sequation}
+\renewcommand{\thesequation}{S\arabic{sequation}}
+\newcommand{\resetsequation}{\setcounter{sequation}{0}}
+
+% Problem: 全书连续, 双向超链接到部分问题解答
+\newcounter{bproblem}
+\renewcommand{\thebproblem}{\arabic{bproblem}}
+\newenvironment{problem}[1][]{%
+	\par\bigskip\noindent
+	\refstepcounter{bproblem}%
+	\hypertarget{prob:\thebproblem}{}%
+	\@ifundefined{r@hassolprob:\thebproblem}{%
+		{\sffamily\bfseries 问题~\thebproblem}%
+	}{%
+		\hyperlink{solprob:\thebproblem}{{\sffamily\bfseries 问题~\thebproblem}}%
+	}%
+	\ifstrempty{#1}{}{\quad(#1)}%
+	\par\nobreak\smallskip\noindent\ignorespaces
+}{\par\bigskip}
+
+% 问题解答标题: 设置锚点 solprob:N 与标记 hassolprob:N,
+% 点击标题文字可跳回正文原题 prob:N
+\newcommand{\problemsolutionhead}[1]{%
+	\par\addvspace{0.8\baselineskip}%
+	\noindent\hypertarget{solprob:#1}{}%
+	\label{hassolprob:#1}%
+	\hyperlink{prob:#1}{{\sffamily\bfseries 问题~#1}}%
+	\par\nobreak\addvspace{0.2\baselineskip}%
+}
+\makeatother
+
+% ==================== 参考文献 (原书体例, 不用 biblatex) ====================
+% 原书: 按作者分组, 组内 [1] [2] 编号, 正文写 "J. Diestel [1, Chapter 1]".
+% \bref{Key}{n}             -> 可点击 [n]
+% \brefcite{Key}{n}{后缀}    -> 可点击 [n 后缀]
+\newcommand{\bref}[2]{\hyperlink{ref:#1-#2}{[#2]}}
+\newcommand{\brefcite}[3]{\hyperlink{ref:#1-#2}{[#2#3]}}
+\newcommand{\brefentry}[3]{%
+	\par\addvspace{0.35\baselineskip}%
+	\noindent\hypertarget{ref:#1-#2}{}\hangindent=1.5em\hangafter=1
+	#3~\bref{#1}{#2}\par
+}
+
+% ==================== 索引 ====================
+\usepackage[xindy, noautomatic]{imakeidx}
+\makeindex[program=truexindy, title={名词索引暨英汉对照}, columns=2, intoc=true,%
+	options=-M texindy -I xelatex -C utf8]
+
+% ==================== 超链接 ====================
+\usepackage[bookmarksnumbered=true,hyperindex=true]{hyperref}
+\hypersetup{
+	pdfauthor={Haim Brezis},
+	pdftitle={泛函分析、Sobolev 空间与偏微分方程},
+	pdfsubject={Functional Analysis, Sobolev Spaces and Partial Differential Equations},
+	colorlinks=true,
+	linkcolor=blue,
+	citecolor=red,
+	urlcolor=teal
+}
+
+\begin{document}
+
+\frontmatter
+\include{chapters/frontmatter}
+
+\mainmatter
+\include{chapters/ch01}
+\include{chapters/ch02}
+\include{chapters/ch03}
+\include{chapters/ch04}
+\include{chapters/ch05}
+\include{chapters/ch06}
+\include{chapters/ch07}
+\include{chapters/ch08}
+\include{chapters/ch09}
+\include{chapters/ch10}
+\include{chapters/ch11}
+
+\backmatter
+\include{chapters/solutions}
+\include{chapters/problems}
+\include{chapters/partial_solutions}
+\include{chapters/notation}
+\include{chapters/references}
+
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{名词索引}
+\printindex
+
+\end{document}

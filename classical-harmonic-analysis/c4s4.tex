@@ -1,0 +1,235 @@
+% ============ 第4章 §4.4 驻相法(原书 pp.330-336) ============
+\section{驻相法}\label{sec:4.4}
+\index{驻相法}
+\index{Van der Corput 引理}
+\index{Morse 引理}
+
+
+本节所讨论的驻相法,是数量地把握 Fourier 变换的振荡衰减的一种手段.该方法重要且应用范围广泛,但由于是强烈依赖于函数光滑性信息的方法,在关于函数的定量估计问题中,还需要进一步的手段.
+
+设 $a \in C_{0}^{\infty}(\mathbb{R}^{n})$.对实值函数 $\phi \in C^{\infty}(\mathbb{R}^{n})$,令
+\begin{equation*}
+I(\lambda) := \left|\int_{\mathbb{R}^{n}}e^{i\lambda\phi(x)}a(x)\dd x\right| \quad (\lambda > 1).
+\end{equation*}
+估计 $I(\lambda)$ 是本节的目标.
+
+若 $\phi(x) \not\equiv C$(常数),则当 $\lambda \to \infty$ 时上式右端的被积函数剧烈振荡,其积分值变小.问题在于对其大小的估计.
+
+\begin{theorem}\label{thm:4.4.1}
+若 $\phi$ 满足
+\begin{equation*}
+|\nabla\phi(x)| \geq c > 0 \quad (x \in \supp a),
+\end{equation*}
+则对任意 $\lambda > 1$,$N = 1, 2, \ldots$,成立如下估计:
+\begin{equation}
+I(\lambda) = \left|\int_{\mathbb{R}^{n}}e^{i\lambda\phi(x)}a(x)\dd x\right| \leq C_{N}\lambda^{-N}.\tag{4.4.1}
+\label{eq:4.4.1}\end{equation}
+\end{theorem}
+
+\begin{proof}
+对任意 $x \in \supp a$,选取单位向量 $\nu_{x} \in S^{n-1}$ 与 $r_{x} > 0$,使得
+\begin{equation*}
+\nu_{x}\cdot\nabla\phi(y) \geq c/2 \quad (y \in B(x, r_{x})).
+\end{equation*}
+由于 $\supp a$ 紧,由此可由有限个 $\alpha_{j} \in C_{0}^{\infty}$,$\nu_{j} \in S^{n-1}$ 做到
+\begin{equation*}
+\sum_{j=1}^{J}\alpha_{j}(y) = 1 \quad (y \in \supp a), \quad \nu_{j}\cdot\nabla\phi(y) \geq c/2 \quad (y \in \supp\alpha_{j}).
+\end{equation*}
+为证明,令 $a_{j}(x) = \alpha_{j}(x)a(x)$,只要证明
+\begin{equation*}
+\left|\int e^{i\lambda\phi(x)}a_{j}(x)\dd x\right| \leq C_{N}\lambda^{-N}
+\end{equation*}
+即可.必要时变换坐标,设 $\nu_{j} = (1, 0, \ldots, 0)$,可假设
+\begin{equation*}
+|(\partial/\partial x_{1})\phi(x)| \geq c/2 \quad (x \in \supp\alpha_{j}).
+\end{equation*}
+
+由于
+\begin{equation*}
+(\partial/\partial x_{1})e^{i\lambda\phi(x)} = e^{i\lambda\phi(x)}i\lambda(\partial/\partial x_{1})\phi(x),
+\end{equation*}
+有
+\begin{equation}
+\begin{aligned}
+\int e^{i\lambda\phi(x)}a_{j}(x)\dd x & = \int(\partial/\partial x_{1})e^{i\lambda\phi(x)}\cdot\frac{a_{j}(x)}{i\lambda(\partial/\partial x_{1})\phi(x)}\dd x \\
+& = -\frac{1}{i\lambda}\int e^{i\lambda\phi(x)}(\partial/\partial x_{1})\frac{a_{j}(x)}{(\partial/\partial x_{1})\phi(x)}\dd x.
+\end{aligned}
+\end{equation}
+这里,令
+\begin{equation*}
+L^{*}(x, D) := (\partial/\partial x_{1})\frac{1}{(\partial/\partial x_{1})\phi(x)},
+\end{equation*}
+则进一步
+\begin{equation*}
+\int e^{i\lambda\phi(x)}L^{*}(x, D)a_{j}(x)\dd x = -\frac{1}{i\lambda}\int e^{i\lambda\phi(x)}L^{*}(x, D)^{2}a_{j}(x)\dd x.
+\end{equation*}
+这样依次重复 $N$ 次,
+\begin{equation*}
+\int e^{i\lambda\phi(x)}a_{j}(x)\dd x = \left(-\frac{1}{i\lambda}\right)^{N}\int e^{i\lambda\phi(x)}L^{*}(x, D)^{N}a_{j}(x)\dd x.
+\end{equation*}
+对两边取绝对值,到达目标.
+\end{proof}
+
+即使在某个 $x \in \supp a$ 处 $\nabla\phi(x) = 0$,若还有关于 $\phi$ 的导数的信息,仍可估计 $I(\lambda)$.称此为驻相法.以下,将
+\begin{equation*}
+\left((\partial^{2}/\partial x_{j}\partial x_{k})\phi(x)\right) := \left(\begin{array}{ccc}
+(\partial^{2}/\partial x_{1}\partial x_{1})\phi(x) & \ldots & (\partial^{2}/\partial x_{1}\partial x_{n})\phi(x) \\
+\vdots & \ddots & \vdots \\
+(\partial^{2}/\partial x_{n}\partial x_{1})\phi(x) & \ldots & (\partial^{2}/\partial x_{n}\partial x_{n})\phi(x)
+\end{array}\right)
+\end{equation*}
+表示.
+
+\begin{theorem}\label{thm:4.4.2}
+若 $\phi$ 满足
+\begin{equation*}
+\phi(0) = 0, \quad \nabla\phi(0) = 0, \quad \nabla\phi(x) \neq 0 \quad (x \in \supp a \setminus \{0\}),
+\end{equation*}
+并且满足
+\begin{equation*}
+\det\left((\partial^{2}/\partial x_{j}\partial x_{k})\phi(x)\right) \neq 0 \quad (x = 0),
+\end{equation*}
+则成立如下估计:
+\begin{equation}
+I(\lambda) = \left|\int_{\mathbb{R}^{n}}e^{i\lambda\phi(x)}a(x)\dd x\right| \leq C\lambda^{-n/2}.\tag{4.4.2}
+\label{eq:4.4.2}\end{equation}
+
+以下贯穿本节证明此定理.
+\end{theorem}
+
+\noindent\textbf{先从一维情形开始}\quad 以一维情形更一般的形式来证明.
+
+\begin{lemma}[Van der Corput]\label{lem:4.4.3}
+若 $\phi$ 满足
+\begin{equation*}
+\phi(0) = 0, \quad (\dd/\dd x)\phi(0) = 0, \quad (\dd/\dd x)\phi(x) \neq 0 \quad (x \in \supp a \setminus \{0\}),
+\end{equation*}
+并且满足
+\begin{equation*}
+(\dd^{2}/\dd x^{2})\phi(0) \neq 0,
+\end{equation*}
+则成立如下估计:
+\begin{equation}
+I_{k}(\lambda) := \left|\int_{0}^{\infty}e^{i\lambda\phi(x)}x^{k}a(x)\dd x\right| \leq C\lambda^{-1/2-k/2} \quad (k = 0, 1, \ldots).\tag{4.4.3}
+\label{eq:4.4.3}\end{equation}
+\end{lemma}
+
+\begin{proof}
+由条件,$\phi$ 表为
+\begin{equation*}
+\phi(x) = x^{2}\phi_{1}(x), \quad \phi_{1}(0) \neq 0.
+\end{equation*}
+选取 $\rho \in C^{\infty}$ 满足
+\begin{equation*}
+\rho(x) = \begin{cases} 1 & (x < 1) \\ 0 & (x > 2) \end{cases}
+\end{equation*}
+利用它,对 $\delta > 0$,
+\begin{equation}
+\begin{aligned}
+I_{k}(\lambda) & = \left|\int_{0}^{\infty}e^{i\lambda\phi(x)}x^{k}a(x)\dd x\right| \\
+& \leq \left|\int_{0}^{\infty}e^{i\lambda\phi(x)}x^{k}a(x)\rho(x/\delta)\dd x\right| + \left|\int_{0}^{\infty}e^{i\lambda\phi(x)}x^{k}a(x)(1 - \rho(x/\delta))\dd x\right| \\
+& =: \mathrm{I} + \mathrm{II}.
+\end{aligned}
+\end{equation}
+
+对 $\mathrm{I}$ 取被积函数的绝对值,可估计为
+\begin{equation*}
+\mathrm{I} \leq C\int_{0}^{2\delta}x^{k}\dd x = C'\delta^{1+k}.
+\end{equation*}
+
+对 $\mathrm{II}$,与定理~\ref{thm:4.4.1} 的证明同样,令 $L^{*}(x, D) := (\dd/\dd x)\frac{1}{\phi'(x)}$,
+\begin{equation*}
+\mathrm{II} = \frac{1}{\lambda^{N}}\left|\int_{0}^{\infty}e^{i\lambda\phi(x)}L^{*}(x, D)^{N}\left(x^{k}a(x)(1 - \rho(x/\delta))\right)\dd x\right|
+\end{equation*}
+可以算出.由 $|\phi'(x)| \geq Cx$ 以及乘积的微分公式,上式右端被积函数的绝对值可由 $C(x^{k-2N} + x^{k-N}\delta^{-N})$ 估计.因此,若 $N \geq k + 2$,
+\begin{equation*}
+\mathrm{II} \leq C\lambda^{-N}\delta^{1+k-2N}.
+\end{equation*}
+
+合并两个估计,
+\begin{equation*}
+I_{k}(\lambda) \leq C\left(\delta^{1+k} + \lambda^{-N}\delta^{1+k-2N}\right).
+\end{equation*}
+取使右端两项相等的 $\delta = \lambda^{-1/2}$,
+\begin{equation*}
+I_{k}(\lambda) \leq C\lambda^{-1/2-k/2}.
+\end{equation*}
+\end{proof}
+
+\noindent\textbf{高维情形}\quad 首先令
+\begin{equation*}
+Q(x) := \frac{1}{2}\left(x_{1}^{2} + \ldots + x_{j}^{2} - x_{j+1}^{2} - \ldots - x_{n}^{2}\right),
+\end{equation*}
+试探性地考虑 $\phi(x) = Q(x)$ 的情形.$Q(x)$ 显然满足定理的条件.于是用归纳法估计
+\begin{equation*}
+\left|\int_{\mathbb{R}^{n}}e^{i\lambda Q(x)}a(x)\dd x\right|.
+\end{equation*}
+
+令
+\begin{equation*}
+x = (x_{1}, x'), \quad Q'(x') = Q(x) - x_{1}^{2}/2,
+\end{equation*}
+改写为
+\begin{equation*}
+\int_{\mathbb{R}^{n}}e^{i\lambda Q(x)}a(x)\dd x = \int_{-\infty}^{\infty}e^{i\lambda x_{1}^{2}/2}\left\{\int_{\mathbb{R}^{n-1}}e^{i\lambda Q'(x')}a(x)\dd x'\right\}\dd x_{1}.
+\end{equation*}
+此右端 $\{\ \}$ 的部分,关于 $x_{1}$ 的导数,其大小总可以由 $C\lambda^{-(n-1)/2}$ 从上估计(使用了归纳法假设).因此,想起一维情形的证明,可知
+\begin{equation*}
+\left|\int_{\mathbb{R}^{n}}e^{i\lambda Q(x)}a(x)\dd x\right| \leq C\lambda^{-n/2}
+\end{equation*}
+成立.
+
+一般情形通过适当的坐标变换归结为 $\phi(x) = Q(x)$ 的形式.保证这一点的就是下面的 Morse 引理.
+
+\begin{lemma}[Morse]\label{lem:4.4.4}
+若 $\phi$ 满足
+\begin{equation*}
+\phi(0) = 0, \quad \nabla\phi(0) = 0, \quad \det\left((\partial^{2}/\partial x_{j}\partial x_{k})\phi(x)\right) \neq 0 \quad (x = 0),
+\end{equation*}
+则在 $x = 0$ 的某个邻域内存在光滑坐标变换 $x \to \tilde{x}$,使得
+\begin{equation*}
+\phi(x) = \frac{1}{2}\left(\tilde{x}_{1}^{2} + \ldots + \tilde{x}_{j}^{2} - \tilde{x}_{j+1}^{2} - \tilde{x}_{n}^{2}\right).
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+必要时用线性变换变换坐标,在 $x = 0$ 处可假设
+\begin{equation*}
+\left((\partial^{2}/\partial x_{j}\partial x_{k})\phi(x)\right) = \left(\begin{array}{cccccc}
+1 & & & & & 0 \\
+& \ddots & & & & \\
+& & 1 & & & \\
+& & & -1 & & \\
+& & & & \ddots & \\
+0 & & & & & -1
+\end{array}\right).
+\end{equation*}
+此时,在 $x = 0$ 处
+\begin{equation*}
+(\partial/\partial x_{1})\phi(x) = 0, \quad (\partial^{2}/\partial x_{1}^{2})\phi(x) = 1,
+\end{equation*}
+故由隐函数定理,在 $x = 0$ 的某个邻域内存在光滑函数 $X_{1}(x')$ 使得
+\begin{equation}
+(\partial/\partial x_{1})\phi(X_{1}(x'), x') = 0\tag{4.4.4}
+\label{eq:4.4.4}\end{equation}
+成立.现在令 $y_{1} = x_{1} - X_{1}(x')$,变换
+\begin{equation*}
+x = (x_{1}, x') \to (y_{1}, x'),
+\end{equation*}
+则这是光滑坐标变换.将 $\phi(x) = \phi(y_{1} + X_{1}(x'), x')$ 的右端在 $y_{1} = 0$ 处 Taylor 展开,考虑 \eqref{eq:4.4.4},
+\begin{equation}
+\begin{aligned}
+\phi(x) & = \phi(X_{1}(x'), x') + (\partial/\partial x_{1})\phi(X_{1}(x'), x')y_{1} + c(y_{1}, x')y_{1}^{2}/2 \\
+& = \phi(X_{1}(x'), x') + c(y_{1}, x')y_{1}^{2}/2 \quad (c \in C^{\infty},\ c(0) = 1).
+\end{aligned}
+\end{equation}
+令 $\tilde{x}_{1} = y_{1}\sqrt{c(y_{1}, x')}$,变换
+\begin{equation*}
+(y_{1}, x') \to (\tilde{x}_{1}, x'),
+\end{equation*}
+这也是光滑坐标变换,且
+\begin{equation*}
+\phi(x) = \tilde{x}_{1}^{2}/2 + \phi(X_{1}(x'), x').
+\end{equation*}
+再考虑 \eqref{eq:4.4.4},对 $\phi(X_{1}(x'), x')$ 同样继续,由归纳法到达结论.
+\end{proof}

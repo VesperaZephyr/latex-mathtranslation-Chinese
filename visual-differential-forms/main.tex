@@ -1,0 +1,186 @@
+% !TeX program = xelatex
+% 《微分形式与流形上的微积分——可视化导引》中文翻译重排版
+% 基于 mathtranslation.cls（数译模板 v3.1）排版
+% 使用 XeLaTeX 连续编译两次以上, 以生成目录、交叉引用与术语索引.
+%
+% 文件依赖：logo.pdf、images/fig/（原书插图）与 tikz 重绘图
+%
+% 编号体系（与原书一致）：
+%   章 = \chapter（第 N 章）；节 = \section（N.M）；小节 = \subsection（N.M.K）
+%   问题 problem [chapter]：问题 X.Y
+%   定理 theorem [chapter]：定理 X.Y
+%   定义 definition [section]：定义 X.M.K
+%   图 figure [chapter]：图 X.Y
+
+\documentclass[
+    BookTitleCN={微分形式与流形上的微积分：可视化导引},
+    BookTitleEN={A Visual Introduction to Differential Forms and Calculus on Manifolds},
+    OriginalAuthor={Jon Pierre Fortney},
+    OriginalEdition={Birkhäuser},
+    OriginalPublisher={Springer Nature},
+    OriginalYear={2018},
+    Translator={Fingolfin},
+    ModelUsed={Qwen-Code},
+    BibStyle=numeric
+]{mathtranslation}
+
+% ---------- 本书专用宏与包 ----------
+\usepackage{stmaryrd}
+\usetikzlibrary{arrows.meta,positioning} % 提供 \longmapsfrom 等箭头符号
+
+% ---------- 参考文献 ----------
+% biblatex 已由类文件加载, 此处只指定资源文件.
+\addbibresource{references.bib}
+
+\emergencystretch=2em
+\hfuzz=3pt % 忽略 3pt 以内的微小溢出（浮点舍入级）
+
+% ================================================================
+%           编号机制：修改模板默认编号, 使之与原书一致
+% ================================================================
+% 原书：问题、定理、引理、推论、命题、注、例按章编号（X.Y）；
+%       定义按节编号（X.M.K）；图按章编号（图 X.Y）.
+% 模板默认全部按节编号, 此处仅调整计数器归属, 不改变正文内容.
+
+\counterwithout{theorem}{section}
+\counterwithin{theorem}{chapter}
+\counterwithout{lemma}{section}
+\counterwithin{lemma}{chapter}
+\counterwithout{corollary}{section}
+\counterwithin{corollary}{chapter}
+\counterwithout{proposition}{section}
+\counterwithin{proposition}{chapter}
+\counterwithout{remark}{section}
+\counterwithin{remark}{chapter}
+\counterwithout{example}{section}
+\counterwithin{example}{chapter}
+\counterwithout{problem}{section}
+\counterwithin{problem}{chapter}
+% definition 保持模板的按节编号：定义 X.M.K
+
+% question 环境：正文中穿插的“问题”(Question), 按章编号.
+\theoremstyle{mtsong}
+\newtheorem{question}{问题}[chapter]
+\crefname{question}{问题}{问题}
+\makeatletter
+\MT@defautorefname{question}{问题}
+\makeatother
+
+% 图按章编号：图 X.Y（ctexbook 默认即按章, 显式声明以明确）
+\counterwithout{figure}{section}
+\counterwithin{figure}{chapter}
+
+% 性质：原书以边注形式出现的带标签命题（如 性质 1、性质 A）.
+% 用法：\begin{property}{1}\label{prop:1} ... \end{property}
+\newenvironment{property}[1]{%
+  \par\medskip
+  \noindent{\songfont\bfseries 性质 #1}：\ignorespaces
+}{%
+  \par\medskip
+}
+
+\begin{document}
+
+% ================================================================
+%                             封面
+% ================================================================
+\makecover
+
+% ================================================================
+%                       译者说明与目录
+% ================================================================
+\frontmatter
+
+\chapter*{译者说明}
+\addcontentsline{toc}{chapter}{译者说明}
+
+本译本依据 Jon Pierre Fortney 著 \textit{A Visual Introduction to Differential Forms and Calculus on Manifolds}（Birkhäuser / Springer Nature, 2018）原书翻译并重新排版.
+
+\begin{itemize}
+  \item 章、节、小节及编号与原书一致：问题、定理按章连续编号（问题 X.Y、定理 X.Y）, 定义按节编号（定义 X.M.K）, 图按章编号（图 X.Y）.
+  \item 原书插图（共 250 余幅）中, 结构简单的示意图以 tikz 重新绘制, 其余采用原书页面高清截图.
+  \item 正文中文使用宋体, 定理类环境使用仿宋, 新术语首次出现时以楷体标示并附英文原词, 文末自动生成术语索引.
+  \item 中文正文除句末使用半角英文句点外, 其余标点统一使用中文标点.
+  \item 交叉引用全部采用 \verb|\label| / \verb|\ref| / \verb|\eqref| 机制, 编号不硬写.
+\end{itemize}
+
+\vspace{0.5cm}
+\hfill \Translator
+
+\hfill \today
+
+\makecontents
+
+% ================================================================
+%                             前言
+% ================================================================
+\chapter*{前言}
+\addcontentsline{toc}{chapter}{前言}
+
+微分形式在数学中虽算不上无处不在, 但也相当常见, 而且在相当广泛的数学领域与应用中扮演着重要角色. 微分形式及其在流形上的积分, 是攻克数学与物理学中众多高阶课题所必需掌握的基础材料. 一些高年级本科教材和大量研究生教材都包含微分形式的章节, 但这类章节的意图通常只是为全书其余部分提供计算工具, 而非帮助学生真正清晰地理解微分形式本身. 此外, 微分形式通常并不出现在本科数学或物理的标准课程中, 这使得学生很难有机会对它们形成深刻而直观的感受. 本书的两大目标之一, 正是针对典型本科数学与物理课程中的这一空白, 予以补足和纠正.
+
+此外, 数学专业本科生正是在大二、大三期间, 从高中和低年级本科课程中常见的那种以具体计算为基础的科目, 向高年级本科与研究生课程中常见的抽象主题过渡. 对许多本科生而言, 这是一段棘手而充满挑战的时期, 大多数本科专业的专业流失率也正是在这一时期达到最高. 而且, 虽然许多本科数学培养方案设有数学结构或数学证明入门课程, 但也有不少方案并未设置. 而仅仅一门旨在帮助学生从微积分的具体计算过渡到理论数学抽象概念的课程, 往往是不够的；大多数学生需要更多支持来完成这一过渡. 本书的第二个目标, 正是帮助学生在数学上走向更抽象、更成熟的思维方式.
+
+因此, 本书的目标读者相当广泛. 从所涵盖主题的角度看, 本书完全适合一门现代几何课程；特别是适合帮助学生在欧几里得/双曲/椭圆几何与微分几何之间完成跨越的课程, 也可用于微分几何两学期序列的第一学期. 它同样适合作为一门高级微积分课程, 帮助学生向流形上的微积分与分析过渡. 此外, 它也适合本科物理培养方案, 尤其是偏理论方向或物理学荣誉课程；可用于物理中的几何课程. 最后, 从这一角度看, 对于任何进入需要透彻掌握微分形式的领域、又发觉自身缺乏相应基础的研究生而言, 本书也是一本完美的参考书. 虽然研究生并非目标读者, 但他们可以相当快地阅读并领会这些思想, 从而在攻克更深入的材料之前, 对微分形式的基本性质获得相当深刻的理解.
+
+但从帮助本科生向抽象数学过渡的角度看, 本书对任何大二或大三的数学专业本科生都完全适用. 其数学先修要求很轻：一门向量微积分课程就完全足够, 线性代数中少量必要的内容已在导论章中涵盖. 不过, 本书经过精心撰写, 为本科生提供了向抽象数学过渡所必需的支架. 事实上, 本书内容与学生已经熟悉的向量微积分相互咬合, 这使其成为帮助学生过渡到高阶课题与抽象思维方式的绝佳场景. 因此, 本书非常适合作为大二或大三课程, 其目的正是帮助学生向高年级数学课程过渡.
+
+为此, 我采用了多种相互补充的教学方法, 以期对微分形式本身以及一般意义上的抽象数学, 提供一个循序渐进而又扎实的导引. 首先, 我花了大量精力逐步构建基本思想与概念, 使定义出现时不会显得凭空而来；我在``如何''与``为何''上花费的笔墨, 比大多数微积分后数学书籍通常的篇幅更多. 此外, 本书完成的两个主要证明（广义 Stokes 定理与 Poincaré 引理）都进行得非常缓慢而细致, 提供了比通常更多的细节. 其次, 本书力图尽可能解释并帮助读者建立与微分形式相关的几何直觉. 为此, 全书配有 250 余幅插图. 这些图像在帮助学生理解与可视化所讨论的概念方面发挥着关键作用, 是全书论述不可分割的一部分. 第三, 学生能受益于从多个角度反复看到同一思想被呈现与解释；重复有助于学习与内化思想. 书中不少较为重要的主题既在 $\mathbb{R}^n$ 的背景下讨论, 也在更抽象的流形背景下讨论. 此外, 许多主题既从可视化/几何的角度讨论, 也从计算的角度讨论. 最后, 全书正文中穿插着 200 余道习题, 章末另有约 200 道习题. 章末问题主要是计算性的, 意在帮助学生熟悉并熟练运用符号与概念. 穿插于正文的问题从琐碎到富有挑战性不等, 意在让学生真正投入阅读、吸收基本思想, 并仔细而批判性地审视书中计算的各个步骤. 综合来看, 这些问题不仅让学生对材料获得更深的理解, 也让他们对自己的能力建立信心, 并内化必不可少的符号与思想.
+
+将所有这些教学策略综合起来, 得到的论述在外行看来有时可能显得不必要地冗长, 但本书基于我自己在学习和教学中的经验与反思, 完全是面向数学新手学生撰写的. 我希望读者真正理解并内化这些思想, 对数学获得更深入、更准确的认知, 并看到这门学科令人惊叹的内在联系；我希望读者合上书时, 感到自己真正掌握了一门知识体系, 而非仅仅学会了一堆互不关联的事实.
+
+在一学期的课程中通读全书, 对大多数学生来说可能要求过高, 但根据课程的整体侧重, 可以有许多不同的路径贯穿全书. 以下是我认为最合适的几条：
+
+\begin{enumerate}
+  \item 适合学季制学校或研讨班课程：$1$（可选）、$2$、$3$、$4$、$6$、$7$、$9$（可选）.
+  \item 侧重微分形式与几何：$1$（可选）、$2$--$9$、$10$（可选）、$11$、附录 B$1$--$2$（可选）.
+  \item 侧重物理：$1$（可选）、$2$--$7$、$9$、$11$、$12$、附录 A（可选）、附录 B$3$--$5$（可选）.
+  \item 侧重向抽象数学的过渡：$1$（可选）、$2$--$4$、$6$--$11$.
+  \item 高阶学生或作为微分几何高阶序列的第一门课：$1$（可选）、$2$--$11$、附录 A（可选）、附录 B（可选）.
+\end{enumerate}
+
+需要提醒一句：关于张量的附录 A 是为了给外微分的整体公式提供证明而收录的, 我认为本书必须给出这一证明, 而它依赖于 Lie 导数. 然而, 从教学角度看, 附录 A 可能过于简练, 缺乏作为张量的一般性导引所需的足够例子, 至少对于想覆盖单纯定义与基本恒等式以外内容的读者而言如此. 教师在决定是否将这一附录纳入课堂时应牢记这一点.
+
+最后, 我要向 Ahmed Matar 和 Ron Noval 表示诚挚的谢意, 感谢他们所有宝贵的评论与建议. 此外, 我还要感谢我的朋友 Rene Hinojosa 一直以来的鼓励与支持.
+
+\begin{flushright}
+阿联酋迪拜 \hfill Jon Pierre Fortney\\
+$2018$ 年 $5$ 月
+\end{flushright}
+
+\vspace{2cm}
+
+% ================================================================
+%                             正文
+% ================================================================
+\mainmatter
+
+\input{chapters/ch01}
+\input{chapters/ch02}
+\input{chapters/ch03}
+\input{chapters/ch04}
+\input{chapters/ch05}
+\input{chapters/ch06}
+\input{chapters/ch07}
+\input{chapters/ch08}
+\input{chapters/ch09}
+\input{chapters/ch10}
+\input{chapters/ch11}
+\input{chapters/ch12}
+
+\appendix
+
+\input{chapters/chA}
+\input{chapters/chB}
+
+% ================================================================
+%                         参考文献
+% ================================================================
+\makebibliography
+
+% ================================================================
+%                       术语索引：全文最后
+% ================================================================
+\printterminology
+
+\end{document}

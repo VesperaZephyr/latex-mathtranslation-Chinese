@@ -1,0 +1,857 @@
+% ==== part08 第 8 章:Strichartz 不等式 ====
+% 源: MinerU_latex_lecture nots.tex 12485-13555 + MinerU_latex_A-非.tex 78-301
+%     (pdf_text.txt 10175-11161, PDF 第 187-204 页)
+% 术语(新增, 键=中文=英文):
+%   strichartz-inequality=Strichartz 不等式=Strichartz inequality;
+%   admissible-wave-pair=容许波对=admissible wave pair;
+%   dispersive-inequality=色散不等式=dispersive inequality;
+%   truncated-cone-operator=截断锥算子=truncated cone operator;
+%   retarded-operator=推迟算子=retarded operator;
+%   endpoint-case=端点情形=endpoint case. 
+%   其余按普通中文书写(可能由其他部分首次引入, 待协调): 限制定理、基本解、能量估计、
+%   二进分解、LP(Littlewood-Paley)投影、光锥/零锥、球对称、自由波、演化算子、
+%   双线性型、Whitney 分解、Hilbert 变换、截断函数、Duhamel 原理、Knapp 反例、
+%   Sobolev 嵌入、Plancherel 公式、Hausdorff--Young 不等式、Hardy--Littlewood--Sobolev 不等式. 
+% REFS(跨章/待解析项):
+%   - 源 12509 "eqrefeq:genwave"(原书破损引用)→ 正文写 "上述方程"(即 (326)-(327)), 待核实;
+%   - 源 12675 "see section on the fundamental solution of □ in R^{3+1}" → 正文写 "见 R^{3+1} 中 □ 的基本解那一节", 所在章待解析;
+%   - 源 12944 "corollary 6.15" → 正文写 "推论 6.15", 目标: 第 6 章(源 10796 行), 待解析;
+%   - 源 13098 "see lemma 8.8" → 正文写 "引理 8.8", 目标: 限制定理部分;【已核对: 译本限制定理部分无编号 8.8 的引理(仅 lemma 0.48/0.56), 原书 Lemma 8.8 在译本中编号待人工确认, 暂保留纯文本】
+%   - 源 13118 "the argument following formula (300)" → 正文写 "公式 (300) 之后的论证", 目标: 限制定理部分, 待解析;
+%   - 源 13054 "We only need to check (??)" → 正文写 "只需验证 (357)", 待核实;
+%   - 源 13300 "due to Hörmander,  [?]" → 正文保留 "[?]", 文献编号破损;
+%   - A-非 97 行 "(see [] and [])"(Christ-Kiselev 文献)→ 正文保留 "[]", 待补文献编号;
+%   - 图 1: 源 images/41a61c93816f45bd38d116772bd400980527b33ed71fd417f933227a865de530.jpg
+%     缺失, 暂以文字占位(REFS: 待补图). 
+% OCR/数学修正(对照 pdf_text.txt, 均按数学含义处理;原书/OCR 疑误处照排并注明):
+%   - 源 12508-12509 波算子: "\Xi = -\partial_t^2 u + \Delta" → "\Box = -\partial_t^2 + \Delta"(去掉多余 u, □ 补回);
+%   - 源 12580 定理 0.32(2) 维数条件 "2/q" → "1/q"(与 (333) 及脚注 2 "γ=1/2" 一致);
+%   - 源 12966 截断函数支集 "1.2 ≤ |ξ| ≤ 2" → "1/2 ≤ |ξ| ≤ 2"(与命题 0.40 及二进环一致);
+%   - 源 13115 γ(r) 定义负号: "γ(r) = -(n-1)/2(1-2/r)" → "γ(r) = (n-1)/2(1-2/r)"
+%     (否则与下文 "0<γ(r)<1" 及 HLS 应用矛盾, 原书笔误);
+%   - 源 13178 定理 0.42 估计 (363) 右端两项均写 ||f||(原书如此, 疑第二项应为 ||g||, 照排未改);
+%   - 源 12994 CC*F: 已核对(新版 PaddleOCR 确认原书用 χ, 译文正文亦用 χ(见 eq:c8-349/353), 一致; 旧源误作 β, 无需改动).
+%   - 源 13082: 已核对(新版 PaddleOCR 确认原书作 χ_μ, 译文正文亦作 χ_μ(见 eq:c8-357 附近), 一致; 旧源误作 β, 无需改动).
+%   - 源 12866 条带 D_T 定义后多余 "2" 为 OCR 噪音, 已删. 
+% 编号说明:
+%   - 第 8 章无节, 所有编号对象显示 "0.x", 共享 theorem 计数器;
+%   - 第一个编号子标题 "0.30.1 齐次波动方程" 用 \mtsubsecn{0.30.1}{...}(不推进计数器), 
+%     其后 \setcounter{mtthm}{30} 使 Definition 0.31 编号正确;
+%   - 带编号子标题 0.36/0.37/0.38/0.44/0.46/0.49/0.54 用 \mtsubsec 自然推进计数器;
+%   - "0.56.1 具有受限核的积分算子" 用 \mtsubsecn{0.56.1}{...}, 其后 \setcounter{mtthm}{56}
+%     保证 Proposition 0.57 编号正确;
+%   - 公式 (326)-(379) 在 (a) 段、(380)-(383) 在 (b) 段, 全部用 equation 环境自动编号, 
+%     与上一部分(part07)结束于 (325) 相接;未编号行间公式用不编号显示公式. 
+%   - 脚注 1-7 全部按 pdf_text.txt 对应页补全并翻译. 
+% ====
+
+\chapter{Strichartz 不等式}
+
+\newterm{strichartz-inequality}{Strichartz 不等式}{Strichartz inequality}是研究线性与非线性波动方程的重要工具. 它们与限制定理密切相关. 本章我们只考虑标准线性波动方程的情形. 然而, 类似的等式对线性色散方程也成立, 如 Schrödinger 方程、线性 KdV 方程等. 
+
+\mtsubsecn{0.30.1}{齐次波动方程}
+
+考虑方程
+\begin{equation}
+\Box u=F, \label{eq:c8-326}
+\end{equation}
+\begin{equation}
+u(0, x)=f(x), \qquad \partial_t u(0, x)=g(x), \label{eq:c8-327}
+\end{equation}
+的解 $u=u(t, x)$, 其中 $t\in\mathbb{R}$, $x\in\mathbb{R}^n$, $\Box$ 为波算子 $\Box=-\partial_t^2+\Delta$. 显然, 上述方程的解可以写成齐次波动方程
+\begin{equation}
+\Box u=0, \label{eq:c8-328}
+\end{equation}
+的解(它在 $t=0$ 时刻满足初始条件 \eqref{eq:c8-327})与纯非齐次波动方程
+\begin{equation}
+\Box u=F, \label{eq:c8-329}
+\end{equation}
+的解(具有零初始数据
+\[
+u(0, x)=0, \qquad \partial_t u(x, 0)=0
+\]
+)的叠加. 
+
+我们用 $W(t)h$ 表示齐次问题 \eqref{eq:c8-328} 的基本解, 即 $u(t, x)=\bigl(W(t)h\bigr)(x)$ 是 \eqref{eq:c8-328} 的满足初始条件
+\[
+u(0, x)=0, \qquad \partial_t u(0, x)=h(x)
+\]
+的唯一解. 由 Duhamel 原理, 非齐次方程的任意解本身也可以写成齐次方程解的叠加, 按如下公式:
+\begin{equation}
+u(t)=\int_0^t W(t-t')F(t')\, \mathrm{d}t', \label{eq:c8-330}
+\end{equation}
+
+在陈述本节的主要结果之前, 我们给出如下定义. 
+
+\setcounter{mtthm}{30}
+
+\begin{definition}\label{def:c8-0.31}
+我们称实数对 $(q, r)$ 为\newterm{admissible-wave-pair}{容许波对}{admissible wave pair}, 如果它们满足条件
+\[
+\begin{array}{rcl}
+q & \geq & 2, \\[2pt]
+\dfrac{2}{q} & \leq & (n-1)\left(\dfrac{1}{2}-\dfrac{1}{r}\right), \\[4pt]
+(q, r, n) & \neq & (2, \infty, 3).
+\end{array}
+\]
+\end{definition}
+
+我们现在准备陈述如下结果. 
+
+\begin{theorem}\label{thm:c8-0.32}
+设 $n\geq2$, 且 $(q, r)$ 是 $r<\infty$ 的波容许对\footnote{当 $r=\infty$ 时, 只要把下面估计左端的空间改为适当的 Besov 空间, 该情形也可以包含进来. }. 
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\item 假设维数条件
+\[
+\frac{1}{q}+\frac{n}{r}=\frac{n}{2}-\gamma .
+\]
+则若 $u$ 以初始条件 \eqref{eq:c8-327} 满足齐次方程 \eqref{eq:c8-328}, 
+\begin{equation}
+\|u\|_{L_t^q L_x^r}+\|u\|_{L_t^\infty\dot{H}_x^\gamma}+\|\partial_t u\|_{L_t^\infty\dot{H}_x^{\gamma-1}}
+\lesssim\|f\|_{\dot{H}^\gamma}+\|g\|_{\dot{H}^{\gamma-1}}\label{eq:c8-331}
+\end{equation}
+\item 假设维数条件
+\[
+\frac{1}{q}+\frac{n}{r}=\frac{n}{2}-\gamma=\frac{1}{q'}+\frac{n}{r'}-2, 
+\]
+其中 $q'$ 是 $q$ 的对偶指数, $r'$ 是 $r$ 的对偶指数\footnote{因此事实上 $\gamma=1/2$. }. 则若 $u$ 以零初始条件满足纯非齐次问题 0.30.1, 那么在有限时间区间 $[0, T]$ 上有:
+\begin{equation}
+\|u\|_{L^q([0, T];L^r)}+\|u\|_{C([0, T];\dot{H}^\gamma)}+\|\partial_t u\|_{C([0, T];\dot{H}^{\gamma-1})}
+\lesssim\|F\|_{L^{q'}([0, T];L^{r'})}\label{eq:c8-332}
+\end{equation}
+\item 对满足维数条件的容许对 $(q_1, r_1)$、$(q_2, r_2)$(其中 $r_1, r_2<\infty$), 我们还有 \eqref{eq:c8-332} 的如下更一般版本:
+\[
+\frac{1}{q_1}+\frac{n}{r_1}=\frac{n}{2}-\gamma=\frac{1}{q_2'}+\frac{n}{r_2'}-2 .
+\]
+则
+\begin{equation}
+\|u\|_{L^{q_1}([0, T];L^{r_1})}+\|u\|_{C([0, T];\dot{H}^\gamma)}+\|\partial_t u\|_{C([0, T];\dot{H}^{\gamma-1})}
+\lesssim\|F\|_{L^{q_2'}([0, T];L^{r_2'})}\label{eq:c8-333}
+\end{equation}
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}\label{rem:c8-0.33}
+对 $n\geq4$, 容许指数的区域对应于平面 $(1/q, 1/r)$ 中以
+$\mathrm{O}=(1/\infty, 1/\infty)$、$\mathrm{E}=(1/\infty, 1/2)$、$\mathrm{P}=\bigl(1/2, \frac{n-3}{2(n-1)}\bigr)$ 与 $\mathrm{Q}=(1/2, 1/\infty)$ 为顶点的四边形 $\mathrm{OEPQ}$. 当 $n=3$ 时, 点 $P$ 与 $Q$ 重合, 区域退化为三角形 $\mathrm{OEQ}$. 当 $n=2$ 时, 我们得到更小的三角形 $\mathrm{OEQ}_2$, 其中 $\mathrm{Q}_2=(1/4, 1/\infty)$. 
+
+对 $n=3$, 三角形区域的边界除端点 $P$ 外全部允许. 对 $n\geq4$, 四边形区域的边界完全允许, 下面我们会指出这一点. 
+
+有趣的情形是线段 $EP$ 上的点以及 $PQ$ 上靠近 $P$ 的点, 因为其余情形都可以利用 Sobolev 嵌入由这些情形推出. 点 $E$ 对应于能量估计. 当 $n=3$ 时, 存在排除点 $P$ 的反例, 而高维情形下 $P$ 的包含性最近由 Keel 与 Tao 获得 \cite{k-t}. 
+\end{remark}
+
+\begin{figure}[htbp]
+\centering
+% 原书图 1:Admissible exponents for n ≥ 4. 源文件引用的图片
+% images/41a61c93816f45bd38d116772bd400980527b33ed71fd417f933227a865de530.jpg 缺失, 
+% 暂以文字占位;若图片可用, 请把下面的 \fbox 替换为
+% \includegraphics[width=0.6\linewidth]{images/41a61c93816f45bd38d116772bd400980527b33ed71fd417f933227a865de530.jpg}
+\fbox{\parbox{0.6\linewidth}{\centering (原书此处为图:$n\geq4$ 时容许指数的四边形区域 $\mathrm{OEPQ}$)}}%
+\caption{$n\geq4$ 时的容许指数}
+\end{figure}
+
+标准 Strichartz 估计\footnote{即 Strichartz 本人实际证明的那个估计. }对应于点 $S=\Bigl(\frac{n-1}{2(n+1)}, \frac{n-1}{2(n+1)}\Bigr)$. 
+
+\begin{remark}\label{rem:c8-0.34}
+我们指出, 尽管\newterm{endpoint-case}{端点情形}{endpoint case} $n=3, q=\infty, r=2$ 被禁止, 估计在球对称情形下仍然成立. 事实上, 设 $\phi$ 是 $\mathbb{R}^{3+1}$ 中齐次波动方程 $\Box\phi=0$ 的、满足初始条件
+\[
+\phi(0, x)=0, \qquad \partial_t\phi(0, x)=f(x)
+\]
+的解, 并假设 $f$ 是球对称的, 即 $f(x)=f(|x|)$. 则
+\begin{equation}
+\int_0^\infty\|\phi(t, \cdot)\|_{L^\infty(\mathbb{R}^3)}^2\, \mathrm{d}t\leq c\|f\|_{L^2}^2.\label{eq:c8-334}
+\end{equation}
+证明是 Hardy--Littlewood 极大定理\footnote{在区域 $r\leq t$ 中这是显然的, 而对 $r\geq t$ 论证是初等的. }的直接推论, 鉴于对球对称的 $f$, 
+\[
+\phi(x, t)=\frac{c}{|x|}\int_{|\, |x|-t\, |}^{|x|+t}\lambda f(\lambda)\, \mathrm{d}\lambda .
+\]
+\end{remark}
+
+\begin{remark}\label{rem:c8-0.35}
+下面给出一个初等例子, 说明端点结果 $n=3, q=\infty, r=2$ 在一般情况下如何因沿零光线的可能集中而失效. 我们下面证明, 存在 $C_0^\infty(\mathbb{R}^3)$ 中的函数序列 $f_n$, 满足 $\|f_n\|_{L^2}=1$, 使得对相应的解 $\phi_n$, 
+\begin{equation}
+\int_0^\infty|\phi_n(t, t, 0, 0)|^2\, \mathrm{d}t\geq n.\label{eq:c8-335}
+\end{equation}
+
+反证, 假设事实上对所有满足 $\|f\|_{L^2}=1$ 的 $f\in C_0^\infty(\mathbb{R}^3)$ 及某个 $\varphi\in\mathcal{S}(\mathbb{R})$, $\varphi\not\equiv0$, 有
+\[
+J:=\int_0^\infty\phi(t, t, 0, 0)\, \varphi(t)\, \mathrm{d}t<C .
+\]
+鉴于公式(见 $\mathbb{R}^{3+1}$ 中 $\Box$ 的基本解那一节)
+\[
+\phi(t, x)=(4\pi)^{-1}t\int_{|\xi|=1}f(x+t\xi)\, \mathrm{d}\xi, 
+\]
+我们发现
+\[
+J=(4\pi)^{-1}\int_{\mathbb{R}^3}|y|^{-1}f_1(y_1+|y|, y_2, y_3)\, \varphi(|y|)\, \mathrm{d}y, 
+\]
+或者, 作变量替换 $z=y+(|y|, 0, 0)$, 
+\[
+J=(4\pi)^{-1}\int_{z_1>0}\frac{1}{z_1}f(z)\, \varphi\!\left(\frac{|z|^2}{2z_1}\right)\mathrm{d}z<c .
+\]
+由于 $f$ 是任意的 $C_0^\infty(\mathbb{R}^3)$ 函数, $\|f\|_{L^2}=1$, 我们必然有
+\[
+z\mapsto\frac{1}{z_1}\, \varphi\!\left(\frac{|z|^2}{2z_1}\right)
+\]
+属于 $L^2(\mathbb{R}_+^3)$, 而当 $\varphi\not\equiv0$ 时这是错误的. 事实上, 
+\[
+\int_{\mathbb{R}_+^3}\frac{1}{z_1^2}\, \varphi^2\!\left(\frac{|z|^2}{2z_1}\right)\mathrm{d}z
+=\int_{\mathbb{R}^3}\frac{1}{(y_1+|y|)|y|}\, \varphi^2(|y|)\, \mathrm{d}y
+=2\pi\int_0^\infty\varphi^2(\lambda)\int_0^\pi\frac{\sin\theta}{1+\cos\theta}\, \mathrm{d}\theta
+\]
+当 $\varphi\not\equiv0$ 时对数发散. 
+\end{remark}
+\mtsubsec{解的 Fourier 表示}
+
+我们可以用 Fourier 方法求解齐次问题 \eqref{eq:c8-328}. 回顾:若我们对空间变量作 傅里叶变换, 初值问题 \eqref{eq:c8-328}、\eqref{eq:c8-327} 就变成一个常微分方程的 Cauchy 问题:
+\[
+\partial_t^2\widehat{u}+|\xi|^2\widehat{u}=0, \qquad
+\widehat{u}(0, \xi)=\widehat{f}(\xi), \qquad
+\partial_t\widehat{u}(0, \xi)=\widehat{g}(\xi), 
+\]
+它可以显式求解:
+\begin{equation}
+\widehat{u}(t, \xi)=\cos(t|\xi|)\, \widehat{f}(\xi)+\sin(t|\xi|)\, \frac{\widehat{g}(\xi)}{|\xi|}\label{eq:c8-336}
+\end{equation}
+于是, 上面定义的基本解 $W(t)h$ 具有形式
+\begin{equation}
+W(t)h(x)=\int_{\mathbb{R}^n}e^{ix\cdot\xi}\, \frac{\sin(t|\xi|)}{|\xi|}\, \widehat{h}(\xi)\, \mathrm{d}\xi .\label{eq:c8-337}
+\end{equation}
+由 Duhamel 原理(见 \eqref{eq:c8-330}), 非齐次方程 $\Box u=F$ 的一般解可以表示为
+\begin{equation}
+u(t)=\partial_t W(t)f+W(t)g+\int_0^t W(t-s)F(s)\, \mathrm{d}s.\label{eq:c8-338}
+\end{equation}
+设 $D=(-\Delta)^{1/2}$ 为 Fourier 空间中符号为 $|\xi|$ 的算子. 注意, 
+\[
+(DW(t))f(x)=(W(t)Df)(x)=\int_{\mathbb{R}^n}e^{ix\cdot\xi}\sin(t|\xi|)\, \widehat{f}(\xi)\, \mathrm{d}\xi .
+\]
+由于 $\sin(t|\xi|)$ 与 $\cos(t|\xi|)$ 有界, 算子 $\partial_t W(t)$ 与 $DW(t)$ 把 $H^s(\mathbb{R}^n)$ 映入自身. 特别地, \eqref{eq:c8-328}、\eqref{eq:c8-327} 的解 $u$ 保持初始数据 $f$ 与 $g$ 的 (Sobolev) 正则性. 更确切地说, 若对某个 $s\in\mathbb{R}$ 有 $f, D^{-1}g\in H^s$, 则 $u(t), D^{-1}\partial_t u(t)\in H^s$ 关于 $t\in\mathbb{R}$ 一致成立. 我们还可以写出
+\[
+\|u\|_{L_t^\infty\dot{H}_x^\gamma}+\|\partial_t u\|_{L_t^\infty\dot{H}_x^{\gamma-1}}\lesssim\|f\|_{\dot{H}^\gamma}+\|g\|_{\dot{H}^{\gamma-1}}, 
+\]
+它给出了估计 \eqref{eq:c8-331} 的容易部分\footnote{另一种基于能量恒等式的推导将在下一小节给出. }. 因此, 要证明 \eqref{eq:c8-331}, 只需证明
+\begin{equation}
+\|u\|_{L_t^q L_x^r}\lesssim\|f\|_{\dot{H}^\gamma}+\|g\|_{\dot{H}^{\gamma-1}}\label{eq:c8-339}
+\end{equation}
+对任意波容许对 $(q, r)$ 成立. 
+
+我们还注意到
+\[
+\partial_t W(t)h(x)=\int_{\mathbb{R}^n}e^{ix\cdot\xi}\cos(t|\xi|)\, \widehat{h}(\xi)\, \mathrm{d}\xi
+\]
+以及
+\[
+D^{-1}W(t)h(x)=\int_{\mathbb{R}^n}e^{ix\cdot\xi}\, \frac{\cos(t|\xi|)}{|\xi|}\, \widehat{h}(\xi)\, \mathrm{d}\xi .
+\]
+我们可以把 \eqref{eq:c8-336} 改写为
+\[
+\widehat{u}(t, \xi)=e^{it|\xi|}\widehat{f}^{+}(\xi)+e^{-it|\xi|}\widehat{f}^{-}(\xi), 
+\]
+其中 $f^{\pm}=\frac{1}{2}\bigl(f\pm D^{-1}g\bigr)$. 由此得 $u=u^{+}+u^{-}$, 其中
+\[
+u^{\pm}=\int e^{i(x\cdot\xi\pm t|\xi|)}\, \widehat{f}_{\pm}(\xi)\, \mathrm{d}\xi .
+\]
+注意, 要证明 \eqref{eq:c8-339} 只需证明
+\begin{equation}
+\|u^{+}\|_{L_t^q L_x^r}\lesssim\|f^{+}\|_{\dot{H}^\gamma}\label{eq:c8-340}
+\end{equation}
+以及对 $f^{-}$ 的类似估计. 
+
+\mtsubsec{能量估计}
+
+我们将通过分部积分为 $\Box u=F$ 的一般解导出一个简单的 $L^2$ 估计. 一切都来自如下简单的代数恒等式:
+\begin{equation}
+-\frac{1}{2}\partial_t\bigl(|\partial_t u|^2+|\nabla u|^2\bigr)+\partial_i(\partial_t u\, \partial_i u)=\partial_t u\cdot F\label{eq:c8-341}
+\end{equation}
+其中 $|\nabla u|^2=\sum_{i=1}^n(\partial_i u)^2$, $\partial_i=\partial_{x^i}$. 关于 $x$ 积分, 并假设 $u$ 及其导数在无穷远处消失\footnote{这可以由波动方程解的有限传播速度性质容易地证明. }, 我们得到
+\[
+\partial_t\int_{\mathbb{R}^n}\bigl((\partial_t u)^2+|\nabla u|^2\bigr)\mathrm{d}x=2\int_{\mathbb{R}^n}\partial_t u\cdot F\, \mathrm{d}x .
+\]
+于是对 $t$ 积分, 
+\[
+\|\partial_t u(t)\|_{L^2}^2+\|\nabla u(t)\|_{L^2}^2
+\leq\|\partial_t u(0)\|_{L^2}^2+\|\nabla u(0)\|_{L^2}^2+2\int_0^t\!\int_{\mathbb{R}^n}\partial_t u\cdot F\, \mathrm{d}x\, \mathrm{d}s, 
+\]
+我们把它改写为(记 $|\partial u|^2=|\partial_t u|^2+|\nabla u|^2$)
+\begin{equation}
+\|\partial u(t)\|_{L^2}^2=\|\partial u(0)\|_{L^2}^2+2\int_0^t\!\int_{\mathbb{R}^n}\partial_t u\cdot F\, \mathrm{d}x\, \mathrm{d}s.\label{eq:c8-342}
+\end{equation}
+特别地, 应用 Hölder 不等式, 
+\[
+\|\partial u(t)\|_{L^2}^2\leq\|\partial u(0)\|_{L^2}^2+2\int_0^t\|\partial_t u(s)\|_{L^2}\, \|F(s)\|_{L^2}\, \mathrm{d}s, 
+\]
+由此我们导出非齐次能量估计
+\begin{equation}
+\sup_{t\in[0, T]}\|\partial u(t)\|_{L^2}\lesssim\|\partial u(0)\|_{L^2}+\int_0^T\|F(s)\|_{L^2}\, \mathrm{d}s\label{eq:c8-343}
+\end{equation}
+现在设 $D^s$ 为算子 $D^s=(-\Delta)^{s/2}$, 其在 Fourier 空间中的符号为 $|\xi|^s$. 由于 $D^s$ 与 $\Box$ 交换, 我们容易推出
+\[
+\|\partial D^s u(t)\|_{L^2}^2=\|\partial D^s u(0)\|_{L^2}^2+2\int_{\mathbb{R}^n}\partial_t D^s u\cdot D^s F\, \mathrm{d}x .
+\]
+利用关于 $x$ 变量的 Plancherel 公式, 我们可以写出
+\[
+\int_{\mathbb{R}^n}\partial_t D^s u\cdot D^s F\, \mathrm{d}x=\int_{\mathbb{R}^n}\partial_t D^{2s}u\cdot F\, \mathrm{d}x, 
+\]
+因此, 由 Hölder 不等式, 在条带 $\mathcal{D}_T=[0, T]\times\mathbb{R}^n$ 上, 
+\[
+\sup_{t\in[0, T]}\|\partial D^s u(t)\|_{L^2}^2
+\leq\|\partial D^s u(0)\|_{L^2}^2+2\|D^{2s}\partial_t u\|_{L_t^q L_x^r(\mathcal{D}_T)}\, \|F\|_{L_t^{q'} L_x^{r'}(\mathcal{D}_T)} .
+\]
+取 $s=-1$, 我们推得
+\[
+\sup_{t\in[0, T]}\|\partial D^{-1/2}u(t)\|_{L^2}^2
+\leq\|\partial D^{-1/2}u(0)\|_{L^2}^2+2\|D^{-1}\partial_t u\|_{L_t^q L_x^r(\mathcal{D}_T)}\, \|F\|_{L_t^{q'} L_x^{r'}(\mathcal{D}_T)} .
+\]
+我们把这个能量估计应用于具有零初始条件的非齐次问题 0.30.1 的解. 我们还假设维数条件
+\[
+\frac{1}{q}+\frac{n}{r}=\frac{n}{2}-\gamma=\frac{1}{q'}+\frac{n}{r'}-2
+\]
+成立. 这蕴含 $\gamma=\frac{1}{2}$. 于是我们有
+\[
+\sup_{t\in[0, T]}\|\partial D^{-1/2}u(t)\|_{L^2}^2
+\leq 2\|D^{-1}\partial_t u\|_{L_t^q L_x^r(\mathcal{D}_T)}\, \|F\|_{L_t^{q'} L_x^{r'}(\mathcal{D}_T)} .
+\]
+暂时假设我们能证明估计
+\begin{equation}
+\|D^{-1}\partial_t u\|_{L_t^q L_x^r(\mathcal{D}_T)}\lesssim\|F\|_{L_t^{q'} L_x^{r'}(\mathcal{D}_T)}\label{eq:c8-344}
+\end{equation}
+则
+\[
+\sup_{t\in[0, T]}\|\partial D^{-1/2}u(t)\|_{L^2}\lesssim\|F\|_{L_t^{q'} L_x^{r'}(\mathcal{D}_T)}, 
+\]
+它等价于
+\[
+\sup_{t\in[0, T]}\Bigl(\|u(t)\|_{\dot{H}^\gamma}+\|\partial_t u\|_{\dot{H}^{\gamma-1}}\Bigr)\lesssim\|F\|_{L^{q'}([0, T];L^{r'})}, 
+\]
+从而证明了估计 \eqref{eq:c8-332} 的一半. 因此非齐次估计 \eqref{eq:c8-332} 归结为证明
+\begin{equation}
+\|u\|_{L^q([0, T];L^r)}+\|D^{-1}\partial_t u\|_{L^q([0, T];L^r)}\lesssim\|F\|_{L^{q'}([0, T];L^{r'})}\label{eq:c8-345}
+\end{equation}
+
+\mtsubsec{齐次情形}
+
+本节我们证明估计 \eqref{eq:c8-340}, 从而完成\thmref{thm:c8-0.32} 的齐次 Strichartz 估计的证明. 利用时空 傅里叶变换, 即对 $t$ 与 $x$ 都作 傅里叶变换, 
+\begin{equation}
+\widetilde{u}_{+}(\tau, \xi)=\delta(\tau-|\xi|)\, \widehat{f}_{+}(\xi), \qquad
+\widetilde{u}_{-}(\tau, \xi)=-\delta(\tau+|\xi|)\, \widehat{f}_{-}(\xi), \label{eq:c8-346}
+\end{equation}
+它们是 $\widetilde{u}$ 的位于前向零锥 $C_{+}=\{\tau=|\xi|\}$ 与后向零锥 $C_{-}=\{\tau=-|\xi|\}$ 上的分量. 因此我们可以从半光锥 $C_{+}$ 或 $C_{-}$ 的限制定理的观点来解释 \eqref{eq:c8-340}. 下面我们证明, 只需对 $\widehat{f}_{+}$ 包含在固定二进片中的情形证明 \eqref{eq:c8-340}. 更确切地说, 略去下标 $+$, 只需证明
+\begin{equation}
+\|u_{k}^{+}\|_{L_t^q L_x^r}\lesssim 2^{k\gamma}\|f_{k}^{+}\|_{L^2}\label{eq:c8-347}
+\end{equation}
+其中 $u^{+}=\sum_{k\in2^{\mathbb{Z}}}u_{k}^{+}$, $u_{k}^{+}=P_k u^{+}$, $f_{k}^{+}=P_k f^{+}$, 而 $P_k$ 是关于空间变量 $x$ 的标准 LP 投影. 
+
+要证明 \eqref{eq:c8-348} 蕴含 \eqref{eq:c8-340} 是高度非平凡的\footnote{若不使用推论 6.15, 我们只能得到右端用 Besov 范数 $\dot{B}_{2, 1}^{\gamma}$ 代替 $\dot{H}^{\gamma}$ 范数的较弱估计. }, 因为我们需要依赖于适用于混合范数 $L_t^q L_x^r$($q$ 与 $r$ 均大于 2)的推论 6.15. 于是
+\[
+\|u^{+}\|_{L_t^q L_x^r}^2\lesssim\sum_{k\in\mathbb{Z}}\|u_{k}^{+}\|_{L_t^q L_x^r}^2\lesssim\sum_{k\in\mathbb{Z}}2^{2k\gamma}\|f_{k}^{+}\|_{L^2}^2\lesssim\|f^{+}\|_{\dot{H}^\gamma}
+\]
+最后我们注意到, 利用一个简单的伸缩论证, \eqref{eq:c8-348} 可由下式推出:
+\begin{equation}
+\|u_{0}^{+}\|_{L_t^q L_x^r}\lesssim\|f_{0}^{+}\|_{L^2}\label{eq:c8-348}
+\end{equation}
+我们现在把\newterm{truncated-cone-operator}{截断锥算子}{truncated cone operator} $C$ 定义为算子
+\begin{equation}
+Cf(t, x)=\int e^{it|\xi|}e^{ix\cdot\xi}\, \chi(\xi)\, \widehat{f}(\xi)\, \mathrm{d}\xi, \label{eq:c8-349}
+\end{equation}
+其中 $\chi$ 是支集在 $1/2\leq|\xi|\leq2$ 中的截断函数, 例如 LP 投影定义中用到的那一种(见 (214)). 算子 $C$ 可以看作 傅里叶变换到截断锥的限制的伴随算子:
+\[
+\widehat{C^{*}F}(\xi)=\overline{\chi(\xi)}\, \widetilde{F}(|\xi|, \xi)
+\]
+估计 \eqref{eq:c8-348} 是如下定理的直接推论. 
+
+\begin{theorem}\label{thm:c8-0.39}
+设 $(q, r)$、$(q_1, r_1)$、$(q_2, r_2)$ 是容许指数对. 则我们有估计
+\begin{equation}
+\|Cf\|_{L_t^q L_x^r}\lesssim\|f\|_{L^2}, \label{eq:c8-350}
+\end{equation}
+以及
+\begin{equation}
+\|CC^{*}F\|_{L_t^{q_1} L_x^{r_1}}\lesssim\|F\|_{L_t^{q_2'} L_x^{r_2'}}.\label{eq:c8-351}
+\end{equation}
+\end{theorem}
+
+把 $C$ 与 $C^{*}$ 复合, 我们得到
+\[
+CC^{*}F(t, x)\simeq\int e^{i[(t-s)|\xi|+(x-y)\cdot\xi]}\, |\beta(\xi)|^2 F(s, y)\, \mathrm{d}s\, \mathrm{d}y\, \mathrm{d}\xi, 
+\]
+它可以改写为卷积
+\begin{equation}
+CC^{*}F(t, \cdot)=\int U(t-s)F(s, \cdot)\, \mathrm{d}s, \label{eq:c8-352}
+\end{equation}
+其中演化算子
+\begin{equation}
+U(t)f(x)=\int e^{i(t|\xi|+x\cdot\xi)}\, |\chi(\xi)|^2\, \widehat{f}(\xi)\, \mathrm{d}\xi .\label{eq:c8-353}
+\end{equation}
+(注意 $U$ 本质上与 $C$ 是同一个算子!)由 $TT^{*}$ 原理, 我们知道估计 \eqref{eq:c8-350} 等价于关于 $CC^{*}$ 的如下估计:
+\begin{equation}
+\|CC^{*}F\|_{L_t^q L_x^r}\lesssim\|F\|_{L_t^{q'} L_x^{r'}}, \label{eq:c8-354}
+\end{equation}
+它也等价于极化形式 \eqref{eq:c8-351}. 因此, 要证明定理只需证明 \eqref{eq:c8-354}. 与上一节限制定理的第二个证明一样, 要证明 \eqref{eq:c8-354}, 我们需要证明演化算子 $U(t)$ 的如下性质. 
+
+\begin{proposition}\label{prop:c8-0.40}
+设 $\chi(\xi)$ 是支集在 $1/2\leq|\xi|\leq2$ 中的固定 $C_0^{\infty}(\mathbb{R}^n)$ 函数, 且
+\begin{equation}
+U(t)f(x)=\int e^{i(t|\xi|+x\cdot\xi)}\, \chi(\xi)\, \widehat{f}(\xi)\, \mathrm{d}\xi .\label{eq:c8-355}
+\end{equation}
+则
+\begin{equation}
+\|U(t)f\|_{L^2}\lesssim C\|f\|_{L^2}\label{eq:c8-356}
+\end{equation}
+\begin{equation}
+\|U(t)f\|_{L^\infty}\lesssim(1+|t|)^{-\frac{n-1}{2}}\|f\|_{L^1}\label{eq:c8-357}
+\end{equation}
+由此插值, 对所有 $2\leq r\leq\infty$, 
+\begin{equation}
+\|U(t)f\|_{L^r}\lesssim(1+|t|)^{-\frac{n-1}{2}\left(1-\frac{2}{r}\right)}\|f\|_{L^{r'}}\label{eq:c8-358}
+\end{equation}
+此外, 若 $\chi=\chi_{\mu}$ 的支集在大小为 $\mu$ 的立方体中, 则 \eqref{eq:c8-357} 可以加强为
+\begin{equation}
+\|U(t)f\|_{L^\infty}\lesssim\mu(1+|t|)^{-\frac{n-1}{2}}\|f\|_{L^1}\label{eq:c8-359}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+我们直接证明更强的版本 \eqref{eq:c8-359}. 我们只需验证 \eqref{eq:c8-357}. 我们写出
+\[
+U(t)f=K_t*f, \qquad K_t(x)=\int e^{i(x\cdot\xi+t|\xi|)}\, \chi_{\mu}(\xi)\, \mathrm{d}\xi .
+\]
+只需证明
+\[
+|K_t(x)|\lesssim\mu\, \frac{1}{1+|t|+|x|}.
+\]
+在区域 $|x|<|t|/2$ 与 $|x|\geq2|t|$ 中, 我们关于算子
+\[
+L=-i\sum_j\frac{x_j+t\, \frac{\xi_j}{|\xi|}}{\bigl|x+t\, \frac{\xi}{|\xi|}\bigr|^2}\, \partial_{\xi_j}
+\]
+分部积分 $k$ 次, 使得 $L\bigl(e^{i(x\cdot\xi+t|\xi|)}\bigr)=e^{i(x\cdot\xi+t|\xi|)}$. 我们还利用简单估计 $|\partial_{\xi}^{\alpha}\chi_{\mu}(\xi)|\lesssim\mu^{-|\alpha|}$ 导出 $|K_t(x)|\lesssim(1+|t|)^{-k}\mu^{n-k}$, 或者, 取 $k=\frac{n-1}{2}$, 
+\[
+|K_t(x)|\lesssim(1+|t|)^{-\frac{n-1}{2}}\mu^{\frac{n+1}{2}}.
+\]
+另一方面, 在区域 $|t|\approx|x|$ 中, 我们写出(其中 $\beta(|\xi|)$ 在 $h_{\mu}$ 的支集上消失)
+\[
+K_t(x)=\int_{1-2\mu}^{1+2\mu}e^{it\lambda}\, \chi(\lambda)\int_{|\xi|=\lambda}e^{ix\cdot\xi}\, h_{\mu}(\xi)\, \mathrm{d}\sigma(\xi)
+\]
+我们现在需要依赖如下估计:
+\begin{equation}
+\sup_{1/2\leq\lambda\leq2}\Bigl|\int_{|\xi|=\lambda}e^{ix\cdot\xi}\, h(\xi)\, \mathrm{d}\sigma(\xi)\Bigr|\lesssim(1+|x|)^{-\frac{n-1}{2}}\label{eq:c8-360}
+\end{equation}
+它容易由上一节讨论的、支集在 $\mathbb{S}^{n-1}$ 上的测度的 傅里叶变换的衰减推出, 见引理 8.8. 因此, 对 $|t|\sim|x|$, 
+\[
+|K_t(x)|\lesssim\mu(1+|x|)^{-\frac{n-1}{2}}\lesssim\mu(1+|t|)^{-\frac{n-1}{2}}, 
+\]
+证毕. 
+\end{proof}
+我们现在准备按照限制定理第二个证明中的同样论证来证明 \eqref{eq:c8-354}. 事实上, 鉴于 \eqref{eq:c8-352} 与 \eqref{eq:c8-358}, 我们导出
+\begin{equation}
+\|CC^{*}F\|_{L_x^r}(t)\lesssim\int_{-\infty}^{+\infty}(1+|t-s|)^{-\gamma(r)}\|F(s)\|_{L_x^{r'}}\, \mathrm{d}s\label{eq:c8-361}
+\end{equation}
+其中 $\gamma(r)=\frac{n-1}{2}\bigl(1-\frac{2}{r}\bigr)$. 我们现在正处于与限制定理第二个证明完全相同的情形, 见\eqref{eq:c6-300} 之后的论证. 若 $0<\gamma(r)<1$, 我们可以应用 Hardy--Littlewood--Sobolev 不等式得到
+\[
+\|CC^{*}F\|_{L_t^q L_x^r}\lesssim\|F\|_{L_t^{q'} L_x^{r'}}, 
+\]
+当 $-\gamma(r)+1+1/q=1/q'$, 从而 $\gamma(r)=2/q$ 时. 这在 $0<\gamma(r)=2/q<1$ 的情形证明了 \eqref{eq:c8-348}, 从而证明了\thmref{thm:c8-0.39}. 若 $q=2$ 且 $\gamma(r)>1$, 由 \eqref{eq:c8-361} 我们有
+\[
+\|CC^{*}F\|_{L_t^2 L_x^r}\lesssim\|F\|_{L_t^2 L_x^{r'}}, 
+\]
+这是应用标准 Hausdorff--Young 不等式得到的. 
+
+最后, 若 $2/q<1$ 且 $\gamma(r)>2/q$, 结果可以由 $\gamma(r)=2/q$ 的情形利用 Sobolev 不等式推出. 由于光锥的一个主曲率消失, 波动方程的 Strichartz 估计并不像可能的那样强. 利用改进的色散估计 \eqref{eq:c8-359}, 我们仍然可以导出更强的结论, 它在应用中非常有用. 
+
+\begin{proposition}\label{prop:c8-0.41}
+设 $0<\mu<1$. 设 $f$ 是 $L^2$ 函数, 其 傅里叶变换的支集在距离原点 1 处、大小为 $\mu$ 的立方体中. 设 $(q, r)$ 是 Strichartz 估计的容许指数对. 则
+\begin{equation}
+\|Cf\|_{L_t^q L_x^r}\lesssim\mu^{\left(\frac{1}{2}-\frac{1}{r}\right)}\|f\|_{L^2}.\label{eq:c8-362}
+\end{equation}
+\end{proposition}
+
+证明基于改进的色散估计 \eqref{eq:c8-359}. 把它与 \eqref{eq:c8-356} 插值, 我们导出
+\[
+\|U(t)f\|_{L^r}\lesssim\mu^{1-\frac{2}{r}}(1+|t|)^{-\frac{n-1}{2}\left(1-\frac{2}{r}\right)}\|f\|_{L^{r'}}
+\]
+证明随后完全如上继续, 导出
+\[
+\|CC^{*}F\|_{L_t^q L_x^r}\lesssim\mu^{1-\frac{2}{r}}\|F\|_{L_t^{q'} L_x^{r'}}, 
+\]
+从而由 $TT^{*}$ 论证, $\|Cf\|_{L_t^q L_x^r}\lesssim\mu^{\left(\frac{1}{2}-\frac{1}{r}\right)}\|f\|_{L^2}$, 证毕. 作为命题的直接推论, 我们得到:
+
+\begin{theorem}\label{thm:c8-0.42}
+考虑 $\Box u=0$ 的一般解, 其数据 $f, g$ 在 Fourier 空间中的支集位于大小为 $\mu$ 的立方体中, 该立方体位于大小为 $\lambda$ 的二进壳中, $\lambda$ 远大于 $\mu$, 比如 $\lambda\geq8\mu$. 则
+\begin{equation}
+\|u\|_{L_t^q L_x^r}\lesssim\mu^{1-\frac{2}{r}}\Bigl(\|f\|_{\dot{H}^\gamma}+\|f\|_{\dot{H}^{\gamma-1}}\Bigr)\label{eq:c8-363}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+证明容易由上面的命题通过伸缩论证推出. 
+\end{proof}
+
+最后, 我们陈述下面另一个结果, 它容易由衰减估计 \eqref{eq:c8-357} 推出. 
+
+\begin{theorem}\label{thm:c8-0.43}
+设 $u$ 是自由波, 即齐次方程 $\Box u=0$ 的、具有初始数据 $(f, g)$ 的解. 则
+\[
+\begin{array}{rcl}
+\|u(t)\|_{L^\infty} & \lesssim & |t|^{-\frac{n-1}{2}}\sum_{\lambda\in2^{\mathbb{Z}}}\Bigl(\lambda^{\frac{n+1}{2}}\|f_{\lambda}\|_{L^1}+\lambda^{\frac{n-1}{2}}\|g_{\lambda}\|_{L^1}\Bigr)\\[4pt]
+& = & |t|^{-\frac{n-1}{2}}\Bigl(\|f\|_{\dot{B}_{1, 1}^{n+1/2}}+\|g\|_{\dot{B}_{1, 1}^{n-1/2}}\Bigr).
+\end{array}
+\]
+\end{theorem}
+
+大 $t$ 时的一致衰减率 $|t|^{-\frac{n-1}{2}}$ 在标准波动方程的非线性扰动研究中起着非常重要的作用. 
+
+\mtsubsec{非齐次 Strichartz 估计}
+
+我们已经把\thmref{thm:c8-0.32} 的非齐次 Strichartz 估计 \eqref{eq:c8-332} 归结为估计 \eqref{eq:c8-345}. 与齐次估计的情形一样, 我们现在可以把 \eqref{eq:c8-345} 归结为 $F$ 的空间 傅里叶变换支集在单位二进环 $1/2\leq|\xi|\leq2$ 中的情形. 此外, 像前面一样把 $u$ 分解为 $\pm$ 两部分, 只需分别对 $u_{+}$ 与 $u_{-}$ 证明估计. 因此我们需要证明
+\begin{equation}
+\|u^{+}\|_{L^q([0, T];L^r)}+\|D^{-1}\partial_t u^{+}\|_{L^q([0, T];L^r)}\lesssim\|F\|_{L^{q'}([0, T];L^{r'})}\label{eq:c8-364}
+\end{equation}
+我们有
+\[
+\begin{array}{rcl}
+u_{+}(t, \cdot) & = & \displaystyle\int_0^t U(t-s)F(s, \cdot)\, \mathrm{d}s\\[6pt]
+D^{-1}\partial_t u_{+}(t, \cdot) & = & \displaystyle\int_0^t \partial_t D^{-1}U(t-s)F(s, \cdot)\, \mathrm{d}s
+\end{array}
+\]
+由于根据二进限制有 $\partial_t D^{-1}U(t)\sim U(t)$, 只需证明关于 $\|u^{+}\|_{L^q([0, T];L^r)}$ 的估计. 显然, $u^{+}$ 与 \eqref{eq:c8-352} 中的 $CC^{*}F$ 只相差积分区间限制到 $[0, t]$. 鉴于此事实, 我们写 $u_{+}=(CC^{*})_R F$. 我们于是被引导到如下定理, 由它得到 \eqref{eq:c8-364}, 从而得到 \eqref{eq:c8-332}. 
+
+\begin{theorem}\label{thm:c8-0.45}
+设 $U(t)$ 如 \eqref{eq:c8-355} 中定义, 并设
+\[
+(CC^{*})_R F(t, \cdot)=\int_0^t U(t-s)F(s, \cdot)\, \mathrm{d}s
+\]
+则对所有容许对 $(q_1, r_1)$、$(q_2, r_2)$, 
+\begin{equation}
+\|(CC^{*})_R F\|_{L_t^{q_1} L_x^{r_1}([0, T]\times\mathbb{R}^n)}\lesssim\|F\|_{L_t^{q_2'} L_x^{r_2'}([0, T]\times\mathbb{R}^n)}\label{eq:c8-365}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+在 $(q_1, r_1)=(q_2, r_2)=(q, r)$ 的情形, 证明是直接的. 事实上, 在这种情形我们只需重复估计 \eqref{eq:c8-354} 的证明, 并把积分的上下限考虑进去. 我们还处理了 $q_1=\infty$, $r_1=2$ 的情形, 见能量估计那一小节. 其余非对角情形要稍微困难一些, 将在本节后面讨论的更一般的抽象框架中处理. 不过我们给出的证明已经覆盖了估计 \eqref{eq:c8-332} 最有趣的情形. 于是我们给出了\thmref{thm:c8-0.32} 前两部分的完整证明. 
+\end{proof}
+
+\mtsubsec{容许条件的必要性}
+
+为了理解 $q$ 与 $r$ 的最优指数范围, 我们在 \eqref{eq:c8-349} 中定义的截断锥算子 $C$ 的背景下考虑 Knapp 反例的类比. 对某个小的 $\delta>0$, 设
+\[
+D=\bigl\{\xi\in\mathbb{R}^n:|\xi_1-1|<1/2, \ |\xi'|<\delta\bigr\}, 
+\]
+并考虑 $f=\chi_D$. 我们有
+\[
+Cf(t, x)=e^{i(t+x_1)}\int_D e^{i[t(|\xi|-\xi_1)+(t+x_1)(\xi_1-1)+x'\cdot\xi']}\, \mathrm{d}\xi, 
+\]
+并注意到
+\[
+|\xi|-\xi_1=\frac{|\xi'|^2}{|\xi|+\xi_1}\lesssim\delta^2 .
+\]
+于是我们可以选择由
+\[
+|t|\lesssim\delta^{-2}, \qquad |t+x_1|\lesssim1, \qquad |x'|\lesssim\delta^{-1}
+\]
+定义的时空区域 $R$, 使得当 $(t, x)\in R$ 且 $\xi\in D$ 时, 最后一个积分内的振荡因子可以当作常数处理. 因此, 对 $(t, x)\in R$ 有 $|Cf(t, x)|\gtrsim|D|$, 并且我们有
+\[
+\frac{\|Cf\|_{L_t^q L_x^r}}{\|f\|_{L^2}}\gtrsim\frac{|D|\, \|\chi_R\|_{L_t^q L_x^r}}{|D|^{1/2}}\sim\delta^{\frac{n-1}{2}-\frac{2}{q}-\frac{n-1}{r}} .
+\]
+在极限 $\delta\to0$ 中, \eqref{eq:c8-354} 形式的估计必然蕴含 $q$ 与 $r$ 满足条件
+\begin{equation}
+\frac{2}{q}\leq(n-1)\left(\frac{1}{2}-\frac{1}{r}\right).\label{eq:c8-366}
+\end{equation}
+对 $q$ 的范围的另一限制, 即 $q\geq2$, 是算子 $CC^{*}$ 在时间平移下不变性的推论. 事实上, 对平移不变的算子, 我们有如下归功于 Hörmander 的一般结果 [?]. 
+
+\begin{proposition}\label{prop:c8-0.47}
+设 $T:L^p(\mathbb{R}^n)\to L^q(\mathbb{R}^n)$ 是一个(非平凡的)线性算子, 它与平移交换, 即 $(Tf)\circ\tau_y=T(f\circ\tau_y)$, 其中 $\tau_y(x)=x+y$, $x, y\in\mathbb{R}^n$. 若 $T$ 从 $L^p$ 到 $L^q$ 有界, 则必然有 $q\geq p$. 
+\end{proposition}
+
+证明基于如下引理. 
+
+\begin{lemma}\label{lem:c8-0.48}
+设 $f\in L^p(\mathbb{R}^n)$, 则
+\[
+\lim_{|y|\to\infty}\|f+f\circ\tau_y\|_{L^p}=2^{1/p}\|f\|_{L^p}.
+\]
+\end{lemma}
+
+\begin{proof}
+对每个 $R>0$ 考虑分解 $f=g_R+h_R$, 其中当 $|x|<R$ 时 $g_R(x)=f(x)$, 当 $|x|\geq R$ 时 $g_R(x)=0$;当 $|x|<R$ 时 $h_R(x)=0$, 当 $|x|\geq R$ 时 $h_R(x)=f(x)$. 则
+\[
+\lim_{R\to\infty}\|g_R\|_{L^p}=\|f\|_{L^p}, \qquad \lim_{R\to\infty}\|h_R\|_{L^p}=0.
+\]
+取 $R=|y|/2$, 有
+\[
+f+f\circ\tau_y=g_R+g_R\circ\tau_y+h_R+h_R\circ\tau_y .
+\]
+函数 $g_R$ 与 $g_R\circ\tau_y$ 的支集不相交, 所以
+\[
+\|g_R+g_R\circ\tau_y\|_{L^p}^p=\|g_R\|_{L^p}^p+\|g_R\circ\tau_y\|_{L^p}^p=2\|g_R\|_{L^p}^p, 
+\]
+而
+\[
+\lim_{|y|\to\infty}\|h_R+h_R\circ\tau_y\|_{L^p}\leq\lim_{|y|\to\infty}2\|h_R\|_{L^p}=0, 
+\]
+因此
+\[
+\lim_{|y|\to\infty}\|f+f\circ\tau_y\|_{L^p}=\lim_{|y|\to\infty}2^{1/p}\|g_R\|_{L^p}=2^{1/p}\|f\|_{L^p}.
+\]
+\end{proof}
+
+\begin{proof}[命题 \ref{prop:c8-0.47} 的证明]
+设 $C>0$ 是估计
+\[
+\|Tf\|_{L^q}\leq C\|f\|_{L^p}, \qquad \forall f\in L^p
+\]
+的最优常数. 则由线性与平移不变性, 
+\[
+\|Tf+(Tf)\circ\tau_y\|_{L^q}\leq C\|f+f\circ\tau_y\|_{L^p}.
+\]
+当 $|y|\to\infty$ 时, 应用引理得到
+\[
+2^{1/q}\|Tf\|_{L^q}\leq C\, 2^{1/p}\|f\|_{L^p}, \qquad \forall f\in L^p .
+\]
+$C$ 的最优性蕴含 $2^{\frac{1}{p}-\frac{1}{q}}\geq1$, 从而 $q\geq p$. 
+\end{proof}
+
+该命题容易推广到向量值 $L^p$ 空间;若我们把 $CC^{*}$ 看作从 $L^{q'}(\mathbb{R};L_x^{r'})$ 到 $L^q(\mathbb{R};L_x^r)$ 的算子, 则必须有 $q\geq q'$, 这就是条件 $q\geq2$. 
+\mtsubsec{一个一般的抽象框架}
+
+事实证明, 上面描述的证明 Strichartz 估计的方法适用于许多其他方程, 如 Schrödinger 方程、KdV 方程等. 因此建立一个适用于所有这些情形的统一框架是值得的. 
+
+设 $(X, \mathrm{d}\mu)$ 是一个测度空间, H 是一个 Hilbert 空间. 考虑一族算子 $(U(t))_{t\in\mathbb{R}}$, $U(t):H\to L^2(X)$, 它描述某个数据在 $H$ 中的系统的演化. 我们假设该演化满足如下两个性质:
+
+\begin{itemize}
+\item 对所有 $t\in\mathbb{R}$ 与 $f\in H$, 我们有能量估计:
+\begin{equation}
+\|U(t)f\|_{L^2(X)}\lesssim\|f\|_H;\label{eq:c8-367}
+\end{equation}
+\item 对所有 $t\neq s$ 与 $g\in L^1(X)$, 我们有\newterm{dispersive-inequality}{色散不等式}{dispersive inequality}:
+\begin{equation}
+\bigl\|U(t)U^{*}(s)g\bigr\|_{L^\infty(X)}\lesssim|t-s|^{-\gamma_0}\|g\|_{L^1(X)}, \label{eq:c8-368}
+\end{equation}
+对某个 $\gamma_0>0$. 
+\end{itemize}
+
+在 \eqref{eq:c8-367} 与 \eqref{eq:c8-368} 之间插值, 我们得到估计
+\begin{equation}
+\bigl\|U(t)U^{*}(s)g\bigr\|_{L^r(X)}\lesssim|t-s|^{-\gamma(r)}\|g\|_{L^{r'}(X)}, \label{eq:c8-369}
+\end{equation}
+对 $r\geq2$, 其中
+\[
+\gamma(r)=\gamma_0\left(1-\frac{2}{r}\right).
+\]
+
+\begin{theorem}\label{thm:c8-0.50}
+若演化算子 $U(t)$ 满足 \eqref{eq:c8-367} 与 \eqref{eq:c8-368}, 则估计
+\begin{equation}
+\|U(t)f\|_{L_t^q L_X^r}\lesssim\|f\|_H, \label{eq:c8-370}
+\end{equation}
+对所有满足
+\begin{equation}
+\frac{2}{q}=\gamma(r), \qquad (q, r, \gamma_0)\neq(2, \infty, 1)\label{eq:c8-371}
+\end{equation}
+的 $q, r\geq2$ 成立. 
+\end{theorem}
+
+\begin{remark}\label{rem:c8-0.51}
+这种形式的 Strichartz 不等式适用于线性色散方程, 如 Schrödinger 方程. 
+\end{remark}
+
+\begin{proof}
+若我们考虑由 $Tf(t, x)=(U(t)f)(x)$ 定义的算子 $T:H\to L_t^q L_X^r$, 则容易验证 $T$ 的对偶是算子 $T^{*}:L_t^{q'} L_X^{r'}\to H$, 由 $T^{*}F=\int U^{*}(s)F(s, \cdot)\, \mathrm{d}s$ 给出. 由 $TT^{*}$ 方法, \eqref{eq:c8-370} 等价于估计
+\begin{equation}
+\Bigl\|\int U(t)U^{*}(s)F(s)\, \mathrm{d}s\Bigr\|_{L_t^q L_X^r}\lesssim\|F\|_{L_t^{q'} L_X^{r'}}.\label{eq:c8-372}
+\end{equation}
+由对偶性与对称性考虑, 这又等价于
+\begin{equation}
+|B(F, G)|\lesssim\|F\|_{L_t^{q'} L_X^{r'}}\, \|G\|_{L_t^{q'} L_X^{r'}}, \label{eq:c8-373}
+\end{equation}
+其中 $B(F, G)$ 是双线性型
+\begin{equation}
+B(F, G)=\iint_{s<t}\bigl\langle U^{*}(t)F(t), U^{*}(s)G(s)\bigr\rangle\, \mathrm{d}t\, \mathrm{d}s.\label{eq:c8-374}
+\end{equation}
+由 \eqref{eq:c8-369} 的双线性版本, 我们有
+\begin{equation}
+|B(F, G)|\lesssim\iint\frac{\|F(t)\|_{L^{r'}}\|G(s)\|_{L^{r'}}}{|t-s|^{\gamma(r)}}\, \mathrm{d}s\, \mathrm{d}t.\label{eq:c8-375}
+\end{equation}
+若 $\gamma(r)<1$, 我们可以应用 Hardy--Littlewood--Sobolev 不等式得到 \eqref{eq:c8-373}. 这完成了 $q=2/\gamma(r)>2$ 情形的证明. 
+
+端点情形, 即 $\gamma(r)=2/q=1$ 的情形, 在 $r<\infty$ 时是允许的. 其证明将在下一节描述. 
+\end{proof}
+
+\begin{remark}\label{rem:c8-0.52}
+若我们把色散条件 \eqref{eq:c8-368} 加强为
+\begin{equation}
+\bigl\|U(t)U^{*}(s)g\bigr\|_{L^\infty(X)}\lesssim(1+|t-s|)^{-\gamma_0}\|g\|_{L^1(X)}, \label{eq:c8-376}
+\end{equation}
+则 \eqref{eq:c8-375} 可以改进为
+\begin{equation}
+|B(F, G)|\lesssim\iint\frac{\|F(t)\|_{L^{r'}}\|G(s)\|_{L^{r'}}}{(1+|t-s|)^{\gamma(r)}}\, \mathrm{d}s\, \mathrm{d}t.\label{eq:c8-377}
+\end{equation}
+现在我们可以从 Young 不等式得到 \eqref{eq:c8-373}, 当 $2/q=1/p$ 且 $(1+|t|)^{-\gamma(r)}\in L^p(\mathbb{R})$, 即 $\gamma(r)p>1$ 时. 因此, \eqref{eq:c8-376} 使我们能把\thmref{thm:c8-0.50} 中的 Strichartz 估计 \eqref{eq:c8-370} 推广到范围
+\begin{equation}
+\frac{2}{q}\leq\gamma(r), \qquad (q, r, \gamma_0)\neq(2, \infty, 1).\label{eq:c8-378}
+\end{equation}
+这种情形适用于线性波动方程. 
+\end{remark}
+
+\begin{remark}\label{rem:c8-0.53}
+我们注意到, 这个抽象表述中的对象具有自然的伸缩. 更确切地说, \thmref{thm:c8-0.50} 中的估计 \eqref{eq:c8-370} 在如下定义的尺度变换下不变:
+\begin{equation}
+U(t)\leftarrow U(t/\lambda), \quad U^{*}(s)\leftarrow U^{*}(s/\lambda), \quad \mathrm{d}\mu\leftarrow\lambda^{\gamma_0}\, \mathrm{d}\mu, \quad \langle f, g\rangle_H\leftarrow\lambda^{\gamma_0}\langle f, g\rangle_H.\label{eq:c8-379}
+\end{equation}
+我们还可以考虑端点情形
+\[
+q=2, \qquad r=\frac{2\gamma_0}{\gamma_0-1}, \qquad \gamma_0>1.
+\]
+事实上, 这比之前的非端点情形更困难, 需要比插值 \eqref{eq:c8-369} 给出的单参数族更好的双参数估计. 这个证明已在前面提到的 Keel--Tao 的论文 \emph{Endpoint Strichartz Estimates} 中给出. 我们在此略去. 
+\end{remark}
+
+\mtsubsec{非齐次估计}
+
+说一个算子 $T$ 把 Hilbert 空间 $H$ 映入 $L_t^q L_X^r$, 等价于说它的对偶 $T^{*}$ 把 $L_t^{q'} L_X^{r'}$ 映入 H, 也等价于说 $TT^{*}$ 算子把 $L_t^{q'} L_X^{r'}$ 映入 $L_t^q L_X^r$. 若对 $(q, r)$ 允许在容许指数集 $E$ 中变化, 我们可以把 $TT^{*}$ 看作与不同指数对相关联的两个算子的复合. 由此可知, $TT^{*}$ 实际上满足更大的一组映射性质, 因为它把 $L_t^{\widetilde{q}'} L_X^{\widetilde{r}'}$ 映入 $L_t^q L_X^r$, 对任意两对 $(q, r)$、$(\widetilde{q}, \widetilde{r})\in E$. 
+
+上一小节定义的算子 $Tf(t)=U(t)f$ 可以看作某个齐次的、平移不变的线性演化方程的解. 对应的非齐次问题的解, 利用 Duhamel 原理, 将由\newterm{retarded-operator}{推迟算子}{retarded operator}表示:
+\[
+RF(t)=\int_{s<t}U(t)U^{*}(s)F(s)\, \mathrm{d}s .
+\]
+注意, 算子 $R$ 与 $TT^{*}$ 算子非常相似, 后者由
+\[
+TT^{*}F(t)=\int U(t)U^{*}(s)F(s)\, \mathrm{d}s
+\]
+给出. 
+
+然而, R 的定义中 $s<t$ 的限制破坏了 $TT^{*}$ 的复合结构. 幸运的是, 我们上面导出的 $TT^{*}$ 的所有映射性质都可以转移到 R. 
+
+\begin{theorem}\label{thm:c8-0.55}
+算子 $R$ 把 $L_t^{\widetilde{q}'} L_X^{\widetilde{r}'}$ 映入 $L_t^q L_X^r$, 对任意两对 $(q, r)$、$(\widetilde{q}, \widetilde{r})$, 只要 Strichartz 估计 \eqref{eq:c8-370} 成立. 
+\end{theorem}
+
+\begin{proof}
+首先注意, 在\thmref{thm:c8-0.50} 的证明中, 我们实际上证明了对角情形 $(q, r)=(\widetilde{q}, \widetilde{r})$. 事实上, \eqref{eq:c8-374} 中定义的双线性型可以写成 $B(F, G)=\iint R(F)\cdot G\, \mathrm{d}x\, \mathrm{d}t$, 而 \eqref{eq:c8-373} 是 $R$ 的映射性质的对偶表述. 
+
+满足 $\frac{1}{q}+\frac{1}{\widetilde{q}}<1$ 的非对角情形由 $TT^{*}$ 的映射性质推出, 利用 Christ 与 Kiselev 关于积分算子的一般论证(见 [] 与 []), 我们在下面的\propref{prop:c8-0.57} 中总结它. 
+
+剩下要考虑 $q=\widetilde{q}=2$ 且 $r\neq\widetilde{r}$ 的情形, 假设演化 $U(t)$ 满足更强的色散不等式 \eqref{eq:c8-376}, 其中 $\gamma_0>1$. 由于我们已经证明了 $r=\widetilde{r}$ 的情形, 由插值只需考虑极端情形:$r=r_{*}=\frac{2\gamma_0}{\gamma_0-1}$, $\widetilde{r}=\infty$, 并证明
+\[
+|B(F, G)|\lesssim\|F\|_{L_t^2 L_X^{r_{*}'}}\, \|G\|_{L_t^2 L_X^1}.
+\]
+这个估计通过把 $B(F, G)$ 分解为二进片 $B=\sum_{\lambda\in2^{\mathbb{Z}}}B_{\lambda}$ 得到, 其中
+\begin{equation}
+B_{\lambda}(F, G)=\iint_{\lambda/2\leq|t-s|\leq2\lambda}\bigl\langle U^{*}(t)F(t), U^{*}(s)G(s)\bigr\rangle\, \mathrm{d}t\, \mathrm{d}s, \label{eq:c8-380}
+\end{equation}
+所需的结论立即由下面的引理推出. 
+\end{proof}
+
+\begin{lemma}\label{lem:c8-0.56}
+设 $B_{\lambda}(F, G)$ 是 \eqref{eq:c8-380} 中定义的双线性型. 则存在 $\varepsilon>0$ 使得
+\[
+|B_{\lambda}(F, G)|\lesssim\min\bigl\{\lambda, \lambda^{-1}\bigr\}^{\varepsilon}\, \|F\|_{L_t^2 L_X^{r_{*}'}}\, \|G\|_{L_t^2 L_X^1}.
+\]
+\end{lemma}
+
+\begin{proof}
+我们可以假设 $F$ 与 $G$ 支集在长度 $O(\lambda)$ 的不相交时间区间上, 彼此相距 $O(\lambda)$. 则 $B_{\lambda}(F, G)=\langle T^{*}F, T^{*}G\rangle_H$. 我们用能量估计来界定 $\|T^{*}F\|_H$, 用 $q=2$、$r=\infty$ 的 Strichartz 估计来界定 $\|T^{*}G\|_H$, 于是
+\[
+|B_{\lambda}(F, G)|\lesssim\|F\|_{L_t^1 L_X^2}\, \|G\|_{L_t^2 L_X^1}.
+\]
+然后我们应用 Hölder 不等式, 并利用关于 $F$ 支集的假设, 得到
+\[
+|B_{\lambda}(F, G)|\lesssim\lambda^{1/2}\|F\|_{L_t^2 L_X^2}\, \|G\|_{L_t^2 L_X^1}.
+\]
+我们还可以写出 $B_{\lambda}(F, G)=\iiint F(t)\cdot U(t)U^{*}(s)G(s)\, \mathrm{d}x\, \mathrm{d}s\, \mathrm{d}t$, 并利用色散不等式, 
+\[
+|B_{\lambda}(F, G)|\lesssim(1+\lambda)^{-\gamma_0}\|F\|_{L_t^1 L_X^1}\, \|G\|_{L_t^1 L_X^1}.
+\]
+再次应用 Hölder 不等式, 并利用关于 $F$ 与 $G$ 支集的假设, 得到
+\[
+|B_{\lambda}(F, G)|\lesssim\frac{\lambda}{(1+\lambda)^{\gamma_0}}\, \|F\|_{L_t^2 L_X^1}\, \|G\|_{L_t^2 L_X^1}.
+\]
+因此, $B_{\lambda}$ 在 $L_t^2 L_X^2\times L_t^2 L_X^1$ 上有界, 常数为 $\lambda^{1/2}$;在 $L_t^2 L_X^1\times L_t^2 L_X^1$ 上有界, 常数为 $\frac{\lambda}{(1+\lambda)^{\gamma_0}}$. 通过 $L^p$ 空间的标准插值, 我们得到 $B_{\lambda}$ 在 $L_t^2 L_X^{r_{*}'}\times L_t^2 L_X^1$ 上有界, 常数为 $C_{\lambda}$, 其中
+\[
+C_{\lambda}=\lambda^{\theta/2}\left(\frac{\lambda}{(1+\lambda)^{\gamma_0}}\right)^{1-\theta}, \qquad
+\frac{1}{r_{*}'}=\frac{\theta}{2}+\frac{1-\theta}{1}, \qquad
+r_{*}=\frac{2\gamma_0}{\gamma_0-1}.
+\]
+化简表达式, 我们发现
+\[
+C_{\lambda}=\frac{\lambda^{\frac{\gamma_0+1}{2\gamma_0}}}{1+\lambda}\lesssim\min\bigl\{\lambda, \lambda^{-1}\bigr\}^{\varepsilon}, 
+\]
+其中
+\[
+\varepsilon=\min\left\{\frac{\gamma_0+1}{2\gamma_0}, \ 1-\frac{\gamma_0+1}{2\gamma_0}\right\}
+=\frac{\gamma_0-1}{2\gamma_0}=\frac{1}{r_{*}}>0 .
+\]
+\end{proof}
+
+\mtsubsecn{0.56.1}{具有受限核的积分算子}
+
+在本小节中, 我们给出上面提到的 Christ--Kiselev 结果的自包含阐述. 考虑具有可测核 $K(s, t)$ 的积分算子
+\[
+Tf(t)=\int_{\mathbb{R}}K(s, t)f(s)\, \mathrm{d}s, 
+\]
+以及与核 $K(s, t)\chi(s<t)$ 相关联的受限版本
+\[
+Rf(t)=\int_{s<t}K(s, t)f(s)\, \mathrm{d}s .
+\]
+若 $T$ 把 $L^p$ 映入 $L^q$, 且 $1\leq p<q\leq\infty$, 则 $R$ 也把 $L^p$ 映入 $L^q$. 这个事实的等价表述由下面的命题给出. 
+
+\setcounter{mtthm}{56}
+
+\begin{proposition}\label{prop:c8-0.57}
+设 $K(s, t)$ 是 $\mathbb{R}\times\mathbb{R}$ 上的可测函数. 设 $B(f, g)$ 是以 $K$ 为核的双线性型, 
+\[
+B(f, g)=\iint K(s, t)f(s)g(t)\, \mathrm{d}s\, \mathrm{d}t, 
+\]
+并设 $\widetilde{B}(f, g)$ 是核限制在区域 $s<t$ 上的双线性型, 
+\[
+\widetilde{B}(f, g)=\iint_{s<t}K(s, t)f(s)g(t)\, \mathrm{d}s\, \mathrm{d}t .
+\]
+设 $p, q\geq1$, 满足条件
+\begin{equation}
+\frac{1}{p}+\frac{1}{q}>1.\label{eq:c8-381}
+\end{equation}
+若 $B$ 在 $L^p\times L^q$ 上有界, 
+\[
+|B(f, g)|\lesssim\|f\|_{L^p}\|g\|_{L^q}, 
+\]
+则 $\widetilde{B}$ 也在 $L^p\times L^q$ 上有界, 
+\[
+\bigl|\widetilde{B}(f, g)\bigr|\lesssim\|f\|_{L^p}\|g\|_{L^q}.
+\]
+\end{proposition}
+
+\begin{remark}\label{rem:c8-0.58}
+有些情形不允许条件 \eqref{eq:c8-381} 取等号. 例如考虑 Hilbert 变换的情形, 它对应于核 $K(s, t)=\frac{1}{s-t}$, 且 $p=q=2$. 
+\end{remark}
+
+\begin{proof}
+设 $f\in L^p$, $g\in L^q$, 且 $\|f\|_{L^p}=\|g\|_{L^q}=1$. 
+
+定义 $F(t)=\int_{s<t}|f(s)|^p\, \mathrm{d}s$. F 是连续非降函数, 把 $[-\infty, +\infty]$ 映到 $[0, 1]$ 上. 特别地, $I=[a, b]\subset[0, 1]$ 型区间的原像也是同型区间, $F^{-1}(I)=[A, B]$, 其中 $F(A)=a$, $F(B)=b$, 且 $\int_A^B|f(s)|^p\, \mathrm{d}s=F(B)-F(A)=b-a$. 因此
+\begin{equation}
+\|f\|_{L^p(F^{-1}(I))}=|I|^{1/p}.\label{eq:c8-382}
+\end{equation}
+
+现在考虑集合 $\Omega=\{(x, y)\in\mathbb{R}^2:x<y\}$ 的 Whitney 分解, 把它分解为不相交的二进正方形, 如\lemref{lem:c6-6.7}, $\Omega=\cup_Q Q$, 其中每个正方形 $Q=I\times J$ 具有性质
+\begin{equation}
+\operatorname{dist}(I, J)\approx|I|=|J|=\lambda, \label{eq:c8-383}
+\end{equation}
+对某个二进值 $\lambda$. 若我们只看覆盖三角形 $\Omega\cap[0, 1]^2$ 所需的那些正方形, 则 $\lambda\leq1/2$. 
+
+注意 $s<t$ 蕴含或者 $F(s)<F(t)$, 或者 $f$ 在区间 $[s, t]$ 上几乎处处等于 0. 因此我们可以写出
+\[
+\widetilde{B}(f, g)=\iint_{F(s)<F(t)}K(s, t)f(s)g(t)\, \mathrm{d}s\, \mathrm{d}t
+=\sum_Q B\bigl(\chi_{F^{-1}(I)}f, \chi_{F^{-1}(J)}g\bigr).
+\]
+利用 $B$ 在 $L^p\times L^q$ 上的有界性, 我们得到
+\[
+\bigl|\widetilde{B}(f, g)\bigr|\lesssim\sum_Q\|f\|_{L^p(F^{-1}(I))}\, \|g\|_{L^q(F^{-1}(J))}.
+\]
+现在我们利用 \eqref{eq:c8-382}、\eqref{eq:c8-383} 以及如下事实:对每个给定的二进区间 J, 使得 $I\times J$ 是 Ω 分解中一个正方形的区间 $I$ 的数目被一个普适常数界定. 因此
+\[
+\bigl|\widetilde{B}(f, g)\bigr|\lesssim\sum_{\lambda\leq1/2}\lambda^{\frac{1}{p}}\sum_{|J|=\lambda}\|g\|_{L^q(F^{-1}(J))}.
+\]
+接下来, 我们对长度为 $\lambda$ 的二进区间 $J$ 的求和应用 Hölder 不等式;由于 $[0, 1]$ 中有 $\lambda^{-1}$ 个这样的区间, 我们有
+\[
+\bigl|\widetilde{B}(f, g)\bigr|\lesssim\sum_{\lambda\leq1/2}\lambda^{\frac{1}{p}}\lambda^{-\frac{1}{q'}}\|g\|_{L^q}
+=\sum_{\lambda\leq1/2}\lambda^{\frac{1}{p}+\frac{1}{q}-1}\lesssim1 .
+\]
+\end{proof}

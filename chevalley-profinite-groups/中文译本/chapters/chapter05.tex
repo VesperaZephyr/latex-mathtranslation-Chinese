@@ -1,0 +1,727 @@
+% !TeX root = ../main.tex
+% 第 5 章 Galois 上同调 （原书 CHAPTER 5, Galois Cohomology, 印刷页 45-56）
+
+\chapter{Galois 上同调}
+\label{ch:5}
+
+本章为投射有限群定义上同调群，注意我们将采用与前一章略有不同的定义. 最后，我们陈述并证明 Hilbert 第 $90$ 定理的各种形式.
+
+\section{上同调群}
+
+处理投射有限群意味着我们必须考虑拓扑. 因此我们定义离散模与特定的上同调群.
+
+\subsection{离散 \texorpdfstring{$G$}{G}-模}
+\label{c5-sub-1-1}
+
+\begin{definition}\label{c5-def-1-1}
+设 $(G,\cdot)$ 是一个投射有限群. 一个\newterm{c5-discrete-gmodule}{离散 $G$-模}{discrete $G$-module}（或简称 $G$-模，若不会引起混淆）是指赋予离散拓扑且 $G$ 在其上连续作用的阿贝尔群 $(A,+)$. 这就是说，$G$-模是一个阿贝尔群 $A$，配有连续映射 $G\times A\to A:(g,a)\mapsto g\cdot a$（其中 $G\times A$ 赋予乘积拓扑），满足：
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item $(g_1g_2)\cdot(a)=g_1\cdot(g_2\cdot a)$；
+    \item $g\cdot(a+b)=g\cdot a+g\cdot b$；
+    \item $1_G\cdot a=a$；
+\end{enumerate}
+对一切 $a,b\in A$ 与 $g_1,g_2,g\in G$ 成立.
+\end{definition}
+
+\begin{remark}\label{c5-rem-1-2}
+若 $G$ 是有限群，则一切 $G$-模都是离散 $G$-模.
+\end{remark}
+
+\begin{proposition}\label{c5-prop-1-1}
+设 $G$ 是投射有限群，$A$ 是阿贝尔群. 设 $G\times A\to A$ 是 $G$ 在 $A$ 上的一个作用，满足\autoref{c5-def-1-1} 的条件 (1)、(2) 与 (3). 则下列各条等价：
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item $G\times A\to A$ 连续；
+    \item 对每个 $a\in A$，$a$ 的稳定子 $U_a=\{g\in G\mid g\cdot a=a\}$ 是 $G$ 的开子群；
+    \item $A=\bigcup_U A^U$，其中 $U$ 取遍 $G$ 的全体开子群，且
+    \[
+    A^U=\{a\in A\mid g\cdot a=a\ \forall\, g\in U\}.
+    \]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+记 $f:G\times A\to A$ 为 $G$ 在 $A$ 上的作用.
+
+(1) $\Rightarrow$ (2)：考虑限制 $f_a:G\times\{a\}\to A$，因 $f$ 连续，它是连续映射. 于是 $U_a=f_a^{-1}(\{a\})$ 作为开集的原像是开集（注意 $A$ 赋予离散拓扑）.
+
+(2) $\Rightarrow$ (3)：显然 $\bigcup_U A^U\subseteq A$. 设 $a\in A$，则 $a$ 属于 $A^{U_a}$. 而 $U_a$ 是 $G$ 的开子群，故得结论.
+
+(3) $\Rightarrow$ (1)：我们证明对每个 $a\in A$，$f^{-1}(\{a\})$ 是 $G$ 的开子群. 于是若 $a\in A$，则 $a$ 属于某个 $A^U$，其中 $U$ 是 $G$ 的开子群. 这意味着对一切 $g\in U$ 有 $g\cdot a=a$. 从而
+\[
+1_G\times\{a\}\in U\times\{a\}\subseteq f^{-1}(\{a\}).
+\]
+因此 $f^{-1}(\{a\})$ 是开集，因为 $G\times A$ 是拓扑群且 $U\times\{a\}$ 是开集（见\autoref{c1-prop-4-4}）.
+\end{proof}
+
+下面是离散 $G$-模的一些例子.
+
+\begin{examples}\label{c5-ex-1-3}
+\
+\begin{itemize}
+    \item 对任意投射有限群 $G$ 与任意阿贝尔群 $A$，我们可定义作用
+    \[
+    G\times A\to A:(g,a)\mapsto a.
+    \]
+    此作用称为 $A$ 上的\emph{平凡作用}. 而 $A$ 是一个 $G$-模，称为\emph{平凡 $G$-模}.
+    \item 设 $\mathbb{L}$ 与 $\mathbb{K}$ 是域，且 $\mathbb{L}$ 是 $\mathbb{K}$ 的 Galois 扩张. 回忆 $\mathrm{Gal}(\mathbb{L},\mathbb{K})$ 是投射有限群. 考虑阿贝尔群 $(\mathbb{L},+)$ 与作用
+    \[
+    G\times\mathbb{L}\to\mathbb{L}:(\sigma,\alpha)\mapsto\sigma(\alpha).
+    \]
+    则 $(\mathbb{L},+)$（有时记作 $\mathbb{L}^+$）是离散 $G$-模. 赋予同样的作用，$(\mathbb{L}^*,\cdot)$ 以及 $\mathbb{L}$ 中全体单位根构成的群（对乘法）也是离散 $G$-模.
+\end{itemize}
+\end{examples}
+
+\begin{definition}\label{c5-def-1-4}
+设 $G$ 是投射有限群，$A$、$B$ 是两个离散 $G$-模. 一个 $G$-同态或 $G$-映射 $\varphi:A\to B$ 是指满足下式的群同态
+\[
+\varphi(g\cdot a)=g\cdot\varphi(a),
+\]
+对一切 $g\in G$ 与一切 $a\in A$ 成立.
+\end{definition}
+
+\begin{remark}\label{c5-rem-1-5}
+离散 $G$-模与 $G$-映射构成的类是一个阿贝尔范畴，记作 $\mathscr{M}_G$.
+\end{remark}
+
+\subsection{上同调群的定义}
+\label{c5-sub-1-2}
+
+设 $G$ 是投射有限群. 对每个 $n\in\mathbb{N}$，以 $G^n$ 记 $G$ 的 $n$ 个副本的笛卡尔积.
+
+考虑一个离散 $G$-模 $A$. 我们令
+\[
+C^n_c(G,A):=\{f:G^n\to A\mid f\ \text{连续}\}.
+\]
+注意 $C^n_c(G,A)$ 对加法构成阿贝尔群（因为 $A$ 是阿贝尔群）. 它称为 $n$-\emph{上链}群. 此外 $C^0_c(G,A)$ 同构于 $A$（作为从 $0$ 到 $A$ 的映射群）.
+
+对每个 $n\geq 1$ 定义群同态
+\[
+d_{n+1}:C^n_c(G,A)\to C^{n+1}_c(G,A),
+\]
+使得
+\[
+\begin{aligned}
+(d_{n+1}f)(g_1,\ldots,g_{n+1})=\ &g_1\cdot f(g_2,\ldots,g_{n+1})\\
++\ &\sum_{i=1}^{n}(-1)^i f(g_1,\ldots,g_ig_{i+1},\ldots,g_{n+1})\\
++\ &(-1)^{n+1}f(g_1,\ldots,g_n),
+\end{aligned}
+\]
+对一切 $f\in C^n_c(G,A)$ 与一切 $(g_1,\ldots,g_{n+1})\in G^{n+1}$ 成立. 对 $n=0$，我们定义同态
+\[
+d_0:C^0_c(G,A)\to C^1_c(G,A),
+\]
+使得
+\[
+(d_0a)(g)=g\cdot a-a,
+\]
+对一切 $a\in A$ 与一切 $g\in G$ 成立. 映射 $d_n$ 称为\emph{上边缘算子}.
+
+\begin{lemma}\label{c5-lem-1-2}
+对每个 $n\geq 0$，$d_n$ 是群同态，并且还有 $d_{n+1}\circ d_n=0$.
+\end{lemma}
+
+\begin{proof}
+证明可参见 \cite[Chapter~2, \S2.2]{bur04}.
+\end{proof}
+
+\begin{remark}\label{c5-rem-1-6}
+此引理蕴含映射 $d_n$ 是某个上链复形的微分
+\[
+\overline{C}_c(G,A):=(C^n_c(G,A),d_n).
+\]
+\end{remark}
+
+\begin{definition}\label{c5-def-1-7}
+设 $G$ 是投射有限群，$A$ 是离散 $G$-模.
+\begin{itemize}
+    \item 称 $G$ 的 $n$-\newterm{c5-cocycle}{上闭链}{cocycle}群为 $Z^n_c:=\ker(d_n)$，称 $G$ 的 $n$-上边缘群为 $B^n_c(G,A):=\operatorname{im}d_{n-1}$. \autoref{c5-lem-1-2} 蕴含 $B^n_c(G,A)$ 是 $Z^n_c(G,A)$ 的子群.
+    \item 我们定义 $G$ 关于系数 $A$ 的第 $n$ 个\newterm{c5-continuous-cohomology}{（连续）上同调群}{(continuous) cohomology group}为群
+    \[
+    H^n_c(G,A):=Z^n_c(G,A)/B^n_c(G,A).
+    \]
+\end{itemize}
+\end{definition}
+
+\begin{remark}\label{c5-rem-1-8}
+当 $A$ 仅仅是一个 $G$-模而不要求上链连续时，我们也可构造上同调. 构造方式相同. 此时 $G$ 关于系数 $A$ 的上同调群记作 $H^n_c(G,A)$\footnote{原文即如此；此处应为 $H^n(G,A)$——$H^n_c$ 已被用于连续上同调，否则下文所谓记号上不存在歧义即不成立.}. 可以证明这一上同调群的定义与第 $4$ 章的一致，即记号上不存在歧义. 当 $G$ 是离散群时，连续性假设自动满足. 这意味着 $H^n_c(G,A)=H^n(G,A)$. 于是我们也可使用第 $4$ 章中给出的性质.
+\end{remark}
+
+\section{低维上同调群的解释}
+
+设 $G$ 是投射有限群，$A$ 是离散 $G$-模. 我们研究小 $n\in\mathbb{N}$ 时的上同调群 $H^n_c(G,A)$.
+
+\subsection{平凡情形}
+\label{c5-sub-2-1}
+
+对 $n=0$，我们有
+\[
+H^0_c(G,A)\cong Z^0_c(G,A)=\{a\in A\mid d_0(a)=0\}=\{a\in A\mid g\cdot a-a=0\ \forall\, g\in G\}.
+\]
+于是 $H^0_c(G,A)$ 同构于 $A^G$，即 $A$ 中在 $G$ 作用下保持不变的元素之集.
+
+\subsection{第一上同调群}
+\label{c5-sub-2-2}
+
+现在我们考虑 $n=1$. 如前所定义 $H^1_c(G,A)=Z^1_c(G,A)/B^1_c(G,A)$. $1$-上闭链群可明确描述为
+\[
+\begin{aligned}
+Z^1_c(G,A)=\ &\{f:G\to A\ \text{连续}\mid d_1(f)=0\}\\
+=\ &\{f:G\to A\ \text{连续}\mid f(g_1g_2)=g_1\cdot f(g_2)+f(g_1),\ \forall\, g_1,g_2\in G\}.
+\end{aligned}
+\]
+而 $1$-上边缘群为
+\[
+\begin{aligned}
+B^1_c(G,A)=\ &\{f:G\to A\ \text{连续}\mid \exists\, a\in A\ \text{使得}\ d_0(a)=f\}\\
+=\ &\{f:G\to A\ \text{连续}\mid \exists\, a\in A\ \text{使得}\ f(g)=g\cdot a-a,\ \forall\, g\in G\}.
+\end{aligned}
+\]
+$Z^1_c(G,A)$ 与 $B^1_c(G,A)$ 中的元素分别称为连续\newterm{c5-crossed-homomorphism}{交叉同态}{crossed homomorphism}与\newterm{c5-principal-crossed}{主交叉同态}{principal crossed homomorphism}.
+
+\begin{example}\label{c5-ex-2-1}
+若 $G$ 在 $A$ 上平凡作用，则 $H^1_c(G,A)$ 是从 $G$ 到 $A$ 的全体连续群同态构成的群.
+\end{example}
+
+\subsection{第二上同调群}
+\label{c5-sub-2-3}
+
+对 $n=2$，$H^2_c(G,A)=Z^2_c(G,A)/B^2_c(G,A)$，其中
+\[
+\begin{aligned}
+Z^2_c(G,A)=\ &\{f:G\times G\to A\ \text{连续}\mid d_2(f)=0\}\\
+=\ &\{f:G\times G\to A\ \text{连续}\mid g_1f(g_2,g_3)+f(g_1,g_2g_3)=f(g_1g_2,g_3)+f(g_1,g_2),\\
+&\hspace{4em}\forall\, g_1,g_2,g_3\in G\},
+\end{aligned}
+\]
+且
+\[
+\begin{aligned}
+B^2_c(G,A)=\ &\{f:G\times G\to A\ \text{连续}\mid \exists\,\varphi\in C^1_c(G,A)\ \text{使得}\ f=d_1(\varphi)\}\\
+=\ &\{f:G\times G\to A\ \text{连续}\mid \exists\,\varphi\in C^1_c(G,A)\ \text{使得}\\
+&\hspace{2em}f(g_1,g_2)=g_1\varphi(g_2)-\varphi(g_1g_2)+\varphi(g_1),\ \forall\, g_1,g_2\in G\}.
+\end{aligned}
+\]
+$Z^2_c(G,A)$ 中的元素称为连续因子集.
+
+\section{上同调群的函子性质}
+
+\subsection{相容映射}
+\label{c5-sub-3-1}
+
+\subsubsection{定义}
+
+\begin{definition}\label{c5-def-3-1}
+设 $G$ 与 $G'$ 是两个投射有限群. 设 $A\in\mathscr{M}_G$ 且 $A'\in\mathscr{M}_{G'}$. 考虑投射有限群的连续同态 $\varphi:G\to G'$ 与群同态 $\psi:A'\to A$. 若
+\[
+\psi(\varphi(g)\cdot a')=g\cdot f(a'),\footnote{原文即如此；此处 $f$ 应为 $\psi$.}
+\]
+对一切 $g\in G$ 与一切 $a'\in A'$ 成立，则称 $\psi$ 与 $\varphi$ 是\emph{相容映射}.
+
+这等价于要求：当 $A'$ 视为带有作用 $g\cdot a'=\varphi(g)\cdot a'$（对每个 $a'\in A'$ 与 $g\in G$）的 $G$-模时，$\psi$ 是一个 $G$-映射.
+\end{definition}
+
+\begin{example}\label{c5-ex-3-2}
+设 $\mathbb{L}$ 与 $\mathbb{E}$ 是 $\mathbb{K}$ 的 Galois 扩张，且 $\mathbb{K}\subseteq\mathbb{E}\subseteq\mathbb{L}$. 我们考虑限制
+\[
+\pi:\mathrm{Gal}(\mathbb{L},\mathbb{K})\to\mathrm{Gal}(\mathbb{E},\mathbb{K}),
+\]
+与单射
+\[
+i:\mathbb{E}^*\hookrightarrow\mathbb{L}^*.
+\]
+则这两个映射相容.
+\end{example}
+
+\begin{lemma}\label{c5-lem-3-1}
+设 $\varphi$ 与 $\psi$ 是如\autoref{c5-def-3-1} 中的相容映射. 它们在 $n$-上链群（对 $n\geq 0$）上诱导出同态
+\[
+(\varphi,\psi):C^n_c(G',A')\to C^n_c(G,A)
+\]
+定义为
+\[
+[(\varphi,\psi)(f)](g_1,\ldots,g_n)=\psi[f(\varphi(g_1),\ldots,\varphi(g_n))].
+\]
+特别地，$(\varphi,\\psi)$ 是上链复形之间的映射，即下图对 $n\geq 0$ 交换：
+\[
+\begin{tikzcd}
+\cdots \arrow[r, "d_n"] & C^n_c(G',A') \arrow[r, "d_{n+1}"] \arrow[d, "{(\varphi,\psi)}"'] & C^{n+1}_c(G',A') \arrow[d, "{(\varphi,\psi)}"'] \arrow[r] & \cdots \\
+\cdots \arrow[r, "d_n"] & C^n_c(G,A) \arrow[r, "d_{n+1}"] & C^{n+1}_c(G,A) \arrow[r] & \cdots
+\end{tikzcd}
+\]
+\end{lemma}
+
+\begin{proof}
+通过直接计算即可轻易验证此引理.
+\end{proof}
+
+\begin{corollary}\label{c5-cor-3-2}
+若 $\varphi$、$\psi$ 是如\autoref{c5-def-3-1} 中的相容映射，则 $(\varphi,\psi)$ 在上同调群上诱导出同态，记作
+\[
+(\varphi,\psi):H^n_c(G',A')\to H^n_c(G,A).
+\]
+\end{corollary}
+
+\begin{proof}
+利用上述图的交换性.
+\end{proof}
+
+\subsubsection{相容映射的函子性质}
+
+设 $G_i$（$i=1,2,3$）是投射有限群，$A_i\in\mathscr{M}_{G_i}$. 考虑连续群同态
+\[
+G_1\xrightarrow{\ \varphi_1\ }G_2\xrightarrow{\ \varphi_2\ }G_3
+\]
+与群同态
+\[
+A_1\xleftarrow{\ \psi_1\ }A_2\xleftarrow{\ \psi_2\ }A_3.
+\]
+其中 $\varphi_1$、$\psi_1$ 是相容映射，$\varphi_2$、$\psi_2$ 亦然. 它们诱导出两个群同态
+\[
+\begin{aligned}
+(\varphi_1,\psi_1):H^n_c(G_2,A_2)\ &\to\ H^n_c(G_1,A_1)\\
+(\varphi_2,\psi_2):H^n_c(G_3,A_3)\ &\to\ H^n_c(G_2,A_2).
+\end{aligned}
+\]
+于是 $\varphi_1\circ\varphi_2$\footnote{原文即如此；按各映射的定义域，$\varphi_1\circ\varphi_2$ 与 $\psi_2\circ\psi_1$ 无定义，应为 $\varphi_2\circ\varphi_1$ 与 $\psi_1\circ\psi_2$. 下式右端原文写作 $(\varphi_2\circ\varphi_1,\psi_1\circ\psi_2)$，无误.} 与 $\psi_2\circ\psi_1$ 相容，且
+\[
+(\varphi_1,\psi_1)\circ(\varphi_2,\psi_2)=(\varphi_2\circ\varphi_1,\psi_1\circ\psi_2).
+\]
+此外，若 $\varphi$ 是 $G$ 的恒等映射，$\psi$ 是 $A$ 的恒等映射，则 $(\varphi,\psi)$ 是 $H^n_c(G,A)$ 的恒等映射.
+
+于是，对每个投射有限群 $G$ 与每个 $n\geq 0$，$H^n_c(G,-)$ 是从 $\mathscr{M}_G$ 到 $\mathscr{A}$ 的协变函子.
+
+\subsection{正向极限}
+\label{c5-sub-3-2}
+
+我们定义正向极限，以便考虑 $G$-模的正向极限. 这将有助于描述上同调群的极限.
+
+\begin{definition}\label{c5-def-3-3}
+设 $I$ 是有向集，$\mathscr{C}$ 是一个范畴. 由 $I$ 指标化的 $\mathscr{C}$ 中对象的一个\emph{正向系} $(X_i,f_{ij})_I$ 由一族对象 $\{X_i\mid i\in I\}$ 与一族 $\mathscr{C}$ 中的态射 $\{f_{ij}:X_i\to X_j\mid i,j\in I,\,i\leq j\}$ 构成，且满足
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item 对一切 $i\in I$，$f_{ii}$ 是 $X_i$ 上的恒等映射；
+    \item 对一切 $i\leq j\leq k\in I$，$f_{jk}\circ f_{ij}=f_{ik}$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition}\label{c5-def-3-4}
+若 $Y$ 是 $\mathscr{C}$ 的一个对象，我们称 $\mathscr{C}$ 的一族态射 $\{\psi_i:X_i\to Y\}_{i\in I}$ 是\emph{相容的}，若对每个 $i\leq j\in I$ 有 $\psi_j\circ f_{ij}=\psi_i$，即下图交换：
+\[
+\begin{tikzcd}
+& Y & \\
+X_i \arrow[ur,"\psi_i"'] \arrow[rr,"f_{ij}"'] & & X_j. \arrow[ul,"\psi_j"']
+\end{tikzcd}
+\]
+\end{definition}
+
+\begin{definition}\label{c5-def-3-5}
+$(X,\varphi_i)$ 称为 $\mathscr{C}$ 中对象的一个正向系 $(X_i,f_{ij})_I$ 的\emph{余极限}，若 $X$ 配有相容族 $\{\varphi_i:X_i\to X\}_{i\in I}$，且满足下列泛性质：对每个对象 $Y$ 与每个相容族 $\{\psi_i:X_i\to Y\}_{i\in I}$，存在唯一的 $\mathscr{C}$ 中态射 $\theta:Y\to X$\footnote{原文即如此；按图示与余极限的泛性质，此处应为 $\theta:X\to Y$.}，使得下图对一切 $i\leq j\in I$ 交换：
+\[
+\begin{tikzcd}
+& Y & \\
+X_i \arrow[ur,"\psi_i"'] \arrow[dr,"\varphi_i"'] \arrow[rr,"f_{ij}"'] & & X_j \arrow[ul,"\psi_j"'] \arrow[dl,"\varphi_j"'] \\
+& X \arrow[uu,dashed,"{\exists!\,\theta}"'] &
+\end{tikzcd}
+\]
+\end{definition}
+
+\begin{proposition}\label{c5-prop-3-3}
+正向极限在同构意义下唯一.
+\end{proposition}
+
+\begin{proof}
+与\autoref{c3-prop-1-1} 的证明类似.
+\end{proof}
+
+\begin{notation}\label{c5-not-3-6}
+由于不再有歧义，我们以 $\varinjlim_I X_i$ 记 $(X_i,f_{ij})_I$ 的正向极限.
+\end{notation}
+
+我们在第 $3$ 章中已经看到，当处于拓扑空间范畴时，极限（或逆极限）有一个特殊的刻画. 现在我们给出群范畴（及群同态）中正向极限的这样一个刻画.
+
+\begin{proposition}\label{c5-prop-3-4}
+设 $(X_i,f_{ij})_I$ 是一个群的正向系. 考虑集合 $Z=\coprod_I X_i$（$X_i$ 的不交并）并定义等价关系 $\sim$，使得 $(x_i,i)\sim(x_j,j)$ 当且仅当 $i,j\in I$ 且 $x_i\in X_i$、$x_j\in X_j$，并且存在 $k\in I$ 满足 $i,j\leq k$ 与 $f_{ik}(x_i)=f_{jk}(x_j)$. 则 $\varinjlim_I X_i\cong Z/\!\sim$.
+\end{proposition}
+
+\begin{proof}
+容易看出 $\sim$ 是等价关系. 我们定义态射
+\[
+\varphi_i:X_i\to Z/\!\sim,
+\]
+它由包含映射 $\iota:X_i\to Z:x_i\mapsto(x_i,i)$ 诱导. 按构造，$\{\varphi_i:X_i\to Z/\!\sim\}$ 是相容系.
+
+考虑另一个群 $Y$ 与相容族 $\{\psi_i:X_i\to Y\}_{i\in I}$. 我们定义
+\[
+\theta:Z\to Y:(x_i,i)\mapsto\psi_i(x_i).
+\]
+设 $(x_i,i),(x_j,j)\in Z$ 且 $(x_i,i)\sim(x_j,j)$. 我们要证明 $\theta((x_i,i))=\theta((x_j,j))$. 但 $(x_i,i)\sim(x_j,j)$ 蕴含存在 $k\in I$ 满足 $i,j\leq k$ 与 $f_{ik}(x_i)=f_{jk}(x_j)$. 于是
+\[
+\begin{aligned}
+\theta((x_i,i))&=\psi_i(x_i)\\
+&=\psi_k(f_{ik}(x_i))\\
+&=\psi_k(f_{jk}(x_j))\\
+&=\psi_j(x_j)=\theta((x_j,j)).
+\end{aligned}
+\]
+因此可定义 $\widetilde{\theta}:Z/\!\sim\ \to Y$. 此外显然有 $\widetilde{\theta}\circ\varphi_i=\psi_i$ 对每个 $i\in I$ 成立，且 $\widetilde{\theta}$ 唯一. 于是 $Z/\!\sim$ 是 $(X_i,f_{ij})_I$ 的正向极限.
+\end{proof}
+
+\subsection{极限的上同调群的性质}
+\label{c5-sub-3-3}
+
+现在我们考虑一个有向指标集 $(I,\leq)$ 与两个系：投射有限群的逆系 $(G_i,\varphi_{ij})_I$ 与阿贝尔群的正向系 $(A_i,\lambda_{ij})$（定义见\autoref{c5-sub-3-2}），使得对每个 $i\in I$ 有 $A_i\in\mathscr{M}_{G_i}$，且对 $i\leq j$，$\varphi_{ij}$ 与 $\lambda_{ij}$ 是相容映射. 这诱导出一个正向系 $(H^n_c(G_i,A_i),(\varphi_{ij},\lambda_{ij}))_I$.
+
+我们记 $G:=\varprojlim_I G_i$ 与 $A:=\varinjlim_I G_i$\footnote{原文即如此；此处应为 $A:=\varinjlim_I A_i$.}，并有典范态射
+\[
+\begin{aligned}
+\pi_i:G\ &\to\ G_i\\
+\lambda_i:A_i\ &\to\ A.
+\end{aligned}
+\]
+
+\begin{lemma}\label{c5-lem-3-5}
+$A$ 可通过下列作用视为 $G$-模：对 $a\in A$ 与 $g\in G$，取 $i\in I$ 与 $a_i\in A_i$ 使得 $\lambda_i(a_i)=a$. 然后定义
+\[
+g\cdot a=\lambda_i((\pi_i(g))\cdot a_i).
+\]
+此作用定义良好且连续.
+\end{lemma}
+
+\begin{proof}
+我们先证明此作用与 $i\in I$ 的选取无关. 回忆
+\[
+A\cong\coprod_I A_i/\!\sim,
+\]
+其中 $\alpha_i\sim\alpha_j\Leftrightarrow$ $\alpha_i\in A_i$、$\alpha_j\in A_j$ 且存在 $k\in I$ 满足 $i,j\leq k$ 与 $\lambda_{ik}(\alpha_i)=\lambda_{jk}(\alpha_j)$. 因此设 $i,j\in I$，$a_i,a_j$ 分别属于 $A_i,A_j$，使得 $\lambda_j(a_j)=a$ 且 $\lambda_i(a_i)=a$. 因 $I$ 是有向集，存在 $k\in I$ 满足 $i,j\leq k$. 于是，利用逆极限的性质以及 $\pi_{ik}$ 与 $\lambda_{ik}$ 的相容性，
+\[
+\begin{aligned}
+\lambda_{ik}[(\pi_i(g))\cdot a_i]&=\lambda_{ik}[(\pi_{ik}(\pi_k(g)))\cdot a_i]\\
+&=\pi_k(g)\cdot\lambda_{ik}(a_i).
+\end{aligned}
+\]
+同理 $\lambda_{jk}[(\pi_j(g))\cdot a_j]=\pi_k(g)\cdot\lambda_{jk}(a_j)$. 而由正向极限的定义，
+\[
+\lambda_k(\lambda_{ik}(a_i))=\lambda_i(a_i)=a=\lambda_j(a_j)=\lambda_k(\lambda_{jk}(a_j)).
+\]
+因 $\lambda_k$ 单射，$\lambda_{ik}(a_i)=\lambda_{jk}(a_j)$. 这意味着
+\[
+\lambda_{ik}[(\pi_i(g))\cdot a_i]=\lambda_{jk}[(\pi_j(g))\cdot a_j].
+\]
+从而
+\[
+\lambda_i[(\pi_i(g))\cdot a_i]=\lambda_j[(\pi_j(g))\cdot a_j].
+\]
+现在容易看出此作用作为连续映射的复合是连续的.
+\end{proof}
+
+\begin{theorem}\label{c5-thm-3-6}
+若 $G_i$ 与 $A_i$ 如上，则对每个 $n\geq 0$，
+\[
+H^n_c(G,A)\cong\varinjlim_I H^n_c(G_i,A_i).
+\]
+\end{theorem}
+
+\begin{proof}
+可以证明 $\varinjlim$ 在阿贝尔群范畴 $\mathscr{A}$ 中是正合函子（如\autoref{c3-prop-2-12}）. 这意味着
+\[
+\varinjlim_I H^n_c(G_i,A_i)\cong H^n_c(\varinjlim_I\overline{C}(G_i,A_i))
+\]
+其中上链复形 $\overline{C}(G_i,A_i)$ 由诱导映射
+\[
+\overline{\lambda}_{ij}=(\pi_{ij},\lambda_{ij}):\overline{C}(G_i,A_i)\to\overline{C}(G_j,A_j)
+\]
+\begin{sloppypar}
+对每个 $i\leq j$（见\autoref{c5-sub-3-1}）构成一个正向系. 于是，要证明本命题，我们只需找一个从 $\varinjlim_I C^n_c(G_i,A_i)$ 到 $C^n_c(G,A)$ 且与 $d_n$ 交换的同构. 定义
+\end{sloppypar}
+\[
+\begin{aligned}
+\varphi_i:C^n_c(G_i,A_i)\ &\to\ C^n_c(G,A)\\
+f\ &\mapsto\ \varphi_i(f):=\lambda_i\circ f\circ\pi_i.
+\end{aligned}
+\]
+注意对每个满足 $i\leq j$ 的 $i,j\in I$，有 $\varphi_j\circ\overline{\lambda}_{ij}=\varphi_i$，事实上
+\[
+\begin{aligned}
+\varphi_j\circ\overline{\lambda}_{ij}(f)&=\varphi_j(\lambda_{ij}\circ f\circ\pi_{ij})\\
+&=\lambda_j\circ\lambda_{ij}\circ f\circ\pi_{ij}\circ\pi_j\\
+&=\lambda_i\circ f\circ\pi_i\\
+&=\varphi_i(f),
+\end{aligned}
+\]
+对每个 $f\in C^n_c(G_i,A_i)$. 于是 $\varphi_i$ 诱导出一个态射
+\[
+\varphi:\varinjlim_I C^n_c(G_i,A_i)\to C^n_c(G,A),
+\]
+因为 $\{\varphi_i:C^n_c(G_i,A_i)\to C^n_c(G,A)\}_I$ 是相容族（见\autoref{c5-sub-3-2} 中正向极限的定义）.
+
+容易看出 $\varphi$ 与上边缘算子 $d_k$（$k\geq 0$）交换.
+
+\emph{$\varphi$ 是单射：}设 $f\in\varinjlim_I C^n_c(G_i,A_i)$ 使得 $\varphi(f)=0$. 取 $i_0\in I$ 与 $f_{i_0}\in C^n_c(G_i,A_i)$\footnote{原文即如此；应为 $C^n_c(G_{i_0},A_{i_0})$.} 使得 $\overline{\lambda}_{i_0}(f_{i_0})=f$. 现在记
+\begin{equation}\label{c5-eq-2}
+f_j:=\overline{\lambda}_{i_0 j}(f_{i_0}),
+\end{equation}
+对所有 $j\leq i_0$，这特别蕴含
+\begin{equation}\label{c5-eq-3}
+\overline{\lambda}_j(f_j)=f,
+\end{equation}
+而可推出 $0=\varphi(f)=\lambda_j\circ f_j\circ\pi_j$ 对所有 $j\leq i_0$ 成立\footnote{原文即如此；此处两处 $j\leq i_0$ 应为 $j\geq i_0$——$\overline{\lambda}_{i_0 j}$ 仅对 $i_0\leq j$ 有定义，且下文即取 $j\geq i_0$.}.\ 我们定义
+\[
+X_j:=\{g_j=(g_{j1},\ldots,g_{jn})\in G_j^n\mid f_j(g_j)\neq 0\}.
+\]
+然而，我们只需证明存在某个 $j\geq i_0$ 使得 $X_j=\emptyset$（$\Rightarrow f_j=0$），这将推出 $f=0$（因为 \eqref{c5-eq-2} 与 \eqref{c5-eq-3} —— 见\autoref{c5-sub-3-2}）.
+
+显然有
+\[
+G_j^n\subseteq\bigcup_{a\in A_j}f_j^{-1}(\{a\}),
+\]
+但由于 $f_j$ 是连续映射，$A_j$ 是离散 $G$-模且 $G_j^n$ 是紧致群（作为紧致的乘积），$f_j$ 只取有限多个值. 于是 $X_j$ 是闭集（作为有限个闭空间的并）从而紧致（作为 $G_j^n$ 的子群）.
+
+考虑 $i_0\leq i\leq j$ 并设 $g_j\in X_j$，则
+\[
+\begin{aligned}
+0\neq f_j(g_j)&=(\overline{\lambda}_{ij}(f_i))(g_j)\\
+&=\lambda_{ij}\circ f_i\circ\pi_{ij}(g_j),
+\end{aligned}
+\]
+而我们有 $f_i\circ\pi_{ij}(g_j)\neq 0$. 这意味着 $\pi_{ij}(g_j)\in X_i$. 于是对每个 $i_0\leq i\leq j$ 有 $\pi_{ij}(X_j)\subseteq X_i$，此外 $\{X_i,\pi_{ij}\}_{i\leq i_0}$ 是紧致空间的逆系. 显然对 $g=(g_1\ldots,g_n)\in\varprojlim_{i\leq i_0}X_i\subseteq G^n$，有 $\varphi(f)(g)\neq 0$. 故 $\varprojlim_{i\leq i_0}X_i=\emptyset$. 现在利用 \cite[Proposition~8, \S9, Chapter~1]{bou71}，我们得到存在某个 $i\geq i_0$ 使得 $X_i=\emptyset$.
+
+\emph{$\varphi$ 是满射：}设 $f\in C^n_c(G,A)$. 我们要找一个连续映射 $f_i:G_i^n$，使得对某个 $i\in I$ 有 $f=\varphi_i(f_i)=\lambda_i\circ f_i\circ\pi_i$. 如前所述，$f$ 连续、$A$ 离散且 $G^n$ 紧致蕴含 $f$ 只取有限多个值. 设 $f(G^n)=\{a_1,\ldots,a_q\}\subseteq A$. 于是存在 $i_0\in I$ 使得 $\lambda_{i_0}A_{i_0}\supseteq f(G^n)$.
+
+考虑 $U_1$ 为 $G$ 的一个正规子群，使得 $f$ 在 $G^n$ 中 $U_1^n$ 的陪集上为常数. 由于 $\{\pi_l^{-1}(U_l)\mid U_l$ 是 $G$ 的正规子群$\}$ 是 $G$ 中 $1$ 的一个开邻域基（见第 3 章\autoref{c3-thm-2-5} 与\autoref{c3-cor-2-6}\footnote{原文作 ``see proposition and corollary 2.6 in chapter 3''；按第 3 章的实际编号，此处应指定理 2.5 与推论 2.6.}），存在 $G_i$ 的一个正规子群 $U_i$ 使得 $U_1\supseteq U:=\pi_i^{-1}(U_i)$ 对某个 $i\geq i_0$ 成立. 注意 $i\geq i_0$ 蕴含
+\begin{equation}\label{c5-eq-4}
+f(G^n)\subseteq\lambda_{i_0}(A_{i_0})=\lambda_i\circ\lambda_{i_0 i}(A_{i_0})\subseteq\lambda_i(A_i).
+\end{equation}
+于是
+\[
+f=\overline{f}\circ p,
+\]
+其中 $p:G^n\to G^n/U^n$ 是典范投影，而 $\overline{f}:G^n/U^n\to A$ 定义为 $f(gU^n)=f(g)$（由 $U$ 的构造知定义良好）. 注意
+\begin{equation}\label{c5-eq-5}
+\operatorname{im}(\overline{f})\subseteq\operatorname{im}(f).
+\end{equation}
+反之 $\pi_i$ 诱导出单射 $\pi_i':G^n/U^n\to G_i^n/U_i^n$（单射性来自 $\pi_i(U^n)\subseteq U_i^n$）. 确切地说，对每个 $\tilde{g}\in G^n$，$\pi_i'(\tilde{g}U^n)=p_i\circ\pi_i(\tilde{g})$，这意味着 $\pi_i'\circ p=p_i\circ\pi_i$.
+
+设 $\overline{f}_i:G_i^n/U_i^n\to A_i$ 是任意满足 $\lambda_i\circ\overline{f}_i\circ\pi_i'=\overline{f}$ 的映射，即使得下图交换的映射：
+\[
+\begin{tikzcd}
+G^n/U^n \arrow[r,"\overline{f}"] \arrow[d,"\pi_i'"'] & A \\
+G_i^n/U_i^n \arrow[r,dashed,"\overline{f}_i"'] & A_i \arrow[u,"\lambda_i"']
+\end{tikzcd}
+\]
+由 \eqref{c5-eq-4}、\eqref{c5-eq-5} 及逆极限的定义，这样的映射总是存在. 此外 $\overline{f}_i$ 连续，因为 $A$ 离散、$\overline{f}$ 连续且 $\pi_i'$ 是开映射.
+
+现在定义 $f_i=\overline{f}_i\circ p_i$，其中 $p_i:G_i^n\to G_i^n/U_i^n$ 是典范投影. $f_i$ 作为连续映射的复合显然连续，而且
+\[
+\begin{aligned}
+\lambda_i\circ f_i\circ\pi_i&=\lambda_i\circ\overline{f}_i\circ p_i\circ\pi_i\\
+&=\lambda_i\circ\overline{f}_i\circ\pi_i'\circ p\\
+&=\overline{f}\circ p=f.
+\end{aligned}
+\]
+\end{proof}
+
+\begin{example}\label{c5-ex-3-7}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的 Galois 扩张. 回忆 $\mathcal{F}$ 是所有满足 $\mathbb{K}\subseteq\mathbb{E}\subseteq\mathbb{L}$ 且 $\mathbb{E}$ 是 $\mathbb{K}$ 的有限 Galois 扩张的中间域 $\mathbb{E}$ 之集. 回忆
+\[
+\mathrm{Gal}(\mathbb{L},\mathbb{K})=\varprojlim_{\mathcal{F}}\mathrm{Gal}(\mathbb{E},\mathbb{K}).
+\]
+我们通过在 $\mathcal{F}$ 上赋予包含偏序并考虑平凡包含 $f_{ij}:\mathbb{E}_i^+\hookrightarrow\mathbb{E}_j^+$（当 $\mathbb{E}_i^+\subseteq\mathbb{E}_j^+$ 时）来定义正向系 $(\mathbb{E},f)_{\mathcal{F}}$. 于是我们要证明 $\mathbb{L}^+\cong\varinjlim_{\mathcal{F}}\mathbb{E}^+\cong\coprod_{\mathbb{E}\in\mathcal{F}}\mathbb{E}^+/\!\sim$（见\autoref{c5-sub-3-2}）. 我们定义
+\[
+\begin{aligned}
+\varphi:\coprod_{\mathbb{E}\in\mathcal{F}}\mathbb{E}^+\ &\to\ \mathbb{L}^+\\
+\overline{(\alpha,\mathbb{E})}\ &\mapsto\ \alpha,
+\end{aligned}
+\]
+其中 $\overline{(\alpha,\mathbb{E})}$ 表示 $(\alpha,\mathbb{E})$ 关于关系 $\sim$ 的等价类. 验证此映射定义良好、单且满是容易的（利用 $\mathbb{L}=\cup_{\mathcal{F}}\mathbb{E}$）. 于是，利用前面的\autoref{c5-thm-3-6}，我们有
+\[
+H^n_c(\mathrm{Gal}(\mathbb{L},\mathbb{K}),\mathbb{L}^+)\cong\varinjlim_{\mathcal{F}}H^n_c(\mathrm{Gal}(\mathbb{E},\mathbb{K}),\mathbb{E}^+).
+\]
+对乘法群 $\mathbb{L}^*$ 而非 $\mathbb{L}^+$，可证明同样的结论.
+\end{example}
+
+\section{\texorpdfstring{Hilbert 第 $90$ 定理}{Hilbert 第 90 定理}}
+
+\newterm{c5-hilbert90}{Hilbert 第 $90$ 定理}{Hilbert's Theorem 90}原本是关于数域的循环扩张的定理，但它有许多推广. 该定理得名于它是 David Hilbert 一部著名著作《Zahlbericht》（发表于 $1897$ 年）中的第 $90$ 个定理，尽管该定理有时被归于 Kummer. 后来它于 $1919$ 年由 Andreas Speiser 推广. 不过这一结果也已知出自 Emmy Noether. 我们将讨论这一定理的各种形式. 我们的参考文献是 \cite{lor98}.
+
+在本节中，我们记 $H^n(G,A)$ 以代替 $H^n_c(G,A)$，从而简化记号.
+
+\subsection{原始的 Hilbert 第 \texorpdfstring{$90$}{90} 定理}
+\label{c5-sub-4-1}
+
+为陈述 Hilbert 定理，我们必须定义域扩张的范. 相关内容在 \cite[\S5, Chapter~VI]{lang02a} 中有详细讨论.
+
+\begin{definition}\label{c5-def-4-1}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的有限扩张. 设 $[\mathbb{L}:\mathbb{K}]_s=r$，且当特征为素数 $p>0$ 时 $[\mathbb{L}:\mathbb{K}]_i=p^\mu$，否则为 $1$.
+
+设 $\sigma_1,\ldots\sigma_r$ 是 $\mathbb{L}$ 在 $\mathbb{K}$ 的一个代数闭包 $\overline{\mathbb{K}}$ 中的不同嵌入. 若 $\alpha$ 是 $\mathbb{L}$ 的一个元素，我们从 $\mathbb{E}$\footnote{原文即如此；应为"从 $\mathbb{L}$ 到 $\mathbb{K}$".} 到 $\mathbb{K}$ 定义其\newterm{c5-norm-map}{范}{norm}为
+\[
+N_{\mathbb{L}|\mathbb{K}}(\alpha)=N_{\mathbb{K}}^{\mathbb{L}}(\alpha)=\prod_{n=1}^{r}\sigma_n(\alpha^{p^\mu})=\Bigl(\prod_{n=1}^{r}\sigma_n(\alpha)\Bigr)^{[\mathbb{L}:\mathbb{K}]_i}.
+\]
+\end{definition}
+
+我们给出若干性质而不加证明.
+
+\begin{proposition}\label{c5-prop-4-1}
+若 $\mathbb{L}$ 在 $\mathbb{K}$ 上可分，则有
+\[
+N_{\mathbb{K}}^{\mathbb{L}}(\alpha)=\prod_{\sigma}\sigma(\alpha)
+\]
+其中乘积取遍 $\mathbb{L}$ 在 $\overline{\mathbb{K}}$ 中在 $\mathbb{K}$ 上的不同嵌入.
+\end{proposition}
+
+\begin{proposition}\label{c5-prop-4-2}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的有限扩张. 则范是从 $\mathbb{L}^*$ 到 $\mathbb{K}^*$ 的乘法同态.
+\end{proposition}
+
+\begin{theorem}\label{c5-thm-4-3}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的循环 Galois 扩张，其 Galois 群为 $G=\mathrm{Gal}(\mathbb{L},\mathbb{K})$，且 $[\mathbb{L}:\mathbb{K}]=n$. 设 $\sigma$ 是 $G$ 的一个生成元，即 $G=<\sigma>$. 设 $\beta\in\mathbb{L}$. 范 $N_{\mathbb{K}}^{\mathbb{L}}(\beta)=N(\beta)$ 等于 $1$ 当且仅当存在 $\alpha\in\mathbb{L}^*$ 使得
+\[
+\beta=\frac{\alpha}{\sigma(\alpha)}.
+\]
+\end{theorem}
+
+\begin{proof}
+先假设存在这样的 $\alpha$. 则 $N(\beta)=\frac{N(\alpha)}{N(\sigma(\alpha))}$. 但由于 $N(.)$ 是对 $G$ 中所有自同构取的乘积，作用 $\sigma$ 只是将这些自同构置换. 于是 $N(\sigma(\alpha))=N(\alpha)$，即 $N(\beta)=1$.
+
+再假设 $N(\beta)=1$. 我们考虑映射
+\[
+id+\beta\sigma+\beta\sigma(\beta)\sigma^2+\ldots+\beta\sigma(\beta)\ldots\sigma^{n-2}(\beta)\sigma^{n-1}.
+\]
+各项互不相同，故可应用 Artin 定理（见 \cite[Theorem~4.1, \S4, Chapter~VI]{lang02a}）. 于是上述映射在 $\mathbb{L}$ 上不恒为零，即存在 $\theta\in\mathbb{L}$ 与 $\alpha\in\mathbb{L}^*$ 使得
+\[
+\alpha=\theta+\beta\sigma(\theta)+\beta\sigma(\beta)\sigma^2(\theta)+\ldots+\beta\sigma(\beta)\ldots\sigma^{n-2}(\beta)\sigma^{n-1}(\theta).
+\]
+于是
+\[
+\beta\sigma(\alpha)=\beta\sigma(\theta)+\beta\sigma(\beta)\sigma^2(\theta)+\ldots+\beta\sigma(\beta)\ldots\sigma^{n-1}(\beta)\sigma^n(\theta),
+\]
+但由于 $1=N(\beta)=\beta\sigma(\beta)\ldots\sigma^{n-1}(\beta)$，且 $\sigma^n(\theta)=\theta$，我们得到
+\[
+\beta\sigma(\alpha)=\alpha.
+\]
+这就完成了证明.
+\end{proof}
+
+这就是 Hilbert 的"第 $90$ 定理". 不过 Hilbert 原本有一些限制：域 $\mathbb{K}$ 被假定为数域，且扩张的次数为素数.
+
+\subsection{另一种表述}
+\label{c5-sub-4-2}
+
+考虑 $\mathbb{L}$ 是域 $\mathbb{K}$ 的 Galois 扩张及其 Galois 群 $G$. 对 $\alpha\in\mathbb{L}$ 与 $\sigma\in G$ 我们使用记号 $\alpha^\sigma=\sigma(\alpha)$，并使用指数记号，即对 $\alpha\in\mathbb{L}$ 与 $\tau,\sigma\in G$ 有 $\alpha^{\tau+\sigma}=\tau(\alpha)\circ\sigma(\alpha)$.
+
+设 $A$ 是 $G$-模 $\mathbb{L}^*$. 我们以 $A^{1-G}$ 记由形如 $\alpha^{1-\sigma}$（或 $\alpha/\sigma(\alpha)$，$\alpha\in A$、$\sigma\in G$）的元素生成的 $A$ 的子群. 我们记 ${}_N A$ 为范映射 $N:\mathbb{L}^*\to\mathbb{L}^*$ 的核. 于是我们有
+\[
+A^{1-G}\subseteq{}_N A,
+\]
+因为 $N(\alpha^\sigma)=N(\alpha)$（见范的定义）. 接下来我们可定义商
+\[
+H^{-1}(G,A)={}_N A/A^{1-G}.
+\]
+对任意 $\sigma,\tau\in A$ 与每个 $\alpha\in A$，我们有
+\[
+a^{1-\sigma\tau}=a^{1-\sigma+\sigma-\sigma\tau}=a^{1-\sigma}(a^\sigma)^{1-\tau}\in A^{1-\sigma}A^{1-\tau}.
+\]
+于是，当 $G$ 是以 $\sigma$ 为生成元的循环群时，我们有
+\[
+A^{1-G}=A^{1-\sigma}.
+\]
+从而 Hilbert 第 $90$ 定理可表述为
+
+\begin{theorem}\label{c5-thm-4-4}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的有限循环扩张，其 Galois 群为 $G$. 则 $H^{-1}(G,\mathbb{K}^*)=1$.
+\end{theorem}
+
+我们现在寻找这一表述与前面给出的上同调群之间的相似之处. 回忆 $1$-闭链群 $Z^1(G,\mathbb{K}^*)$ 可明确描述为满足下式的映射 $f:G\to\mathbb{K}^*$ 之集
+\[
+f(\tau\sigma)=\tau(f(\sigma))f(\tau)=f(\sigma)^\tau f(\tau).
+\]
+若设 $G$ 是以 $\sigma$ 为生成元的循环群，则 $f$ 可由 $\sigma$ 的像来确定. 事实上，记 $\xi=f(\sigma)$，则
+\begin{equation}\label{c5-eq-6}
+f(\sigma^i)=f(\sigma)^{\sigma^{i-1}}f(\sigma^{i-1})=\xi^{1+\sigma+\sigma^2+\ldots+\sigma^{i-1}},
+\end{equation}
+对每个 $i\in\mathbb{N}$ 成立. 此外，$N(\xi)=\xi^{1+\sigma+\ldots\sigma^{n-1}}=f(\sigma^n)=1$. 注意满足 $f(\sigma)=\alpha^{1-\sigma}$ 的态射 $f:G\to A$ 恰是 $B^1(G,A)$ 的元素. 于是，若考虑映射
+\[
+\varphi:H^1(G,A)\to H^{-1}(G,A):f\mapsto\xi=f(\sigma),
+\]
+我们得到一个单群同态（群的第一同构定理）.
+
+现在设 $\xi\in A$ 且 $N(\xi)=1$，我们利用\eqref{c5-eq-6} 构造映射 $f:G\to A$. 于是此映射定义良好且属于 $Z^1(G,A)$. 这意味着当 $G$ 为循环群时我们有同构
+\[
+H^1(G,A)\cong H^{-1}(G,A).
+\]
+故上述定理等价于
+
+\begin{theorem}\label{c5-thm-4-5}
+设 $\mathbb{L}$ 是 $\mathbb{K}$ 的有限循环扩张，其 Galois 群为 $G$. 则 $H^1(G,\mathbb{K}^*)=1$.
+\end{theorem}
+
+\subsection{Hilbert 第 \texorpdfstring{$90$}{90} 定理的推广}
+\label{c5-sub-4-3}
+
+我们在此给出 Hilbert 第 $90$ 定理最一般的形式之一. 不过，该定理还有其他一些形式，其中一个可在 \cite{sch02} 中找到. 我们不在本项目中介绍这一形式，因为它需要许多新的概念.
+
+\begin{theorem}\label{c5-thm-4-6}
+设 $\mathbb{L}$ 是域 $\mathbb{K}$ 的 Galois 扩张，则 $H^1(\mathrm{Gal}(\mathbb{L},\mathbb{K}),\mathbb{L}^*)=0$.
+\end{theorem}
+
+\begin{proof}
+利用\autoref{c5-thm-3-6}，只需在 $\mathbb{L}$ 是 $\mathbb{K}$ 的有限扩张的情形证明本定理. 此时 $\mathrm{Gal}(\mathbb{L},\mathbb{K})$ 是离散群，故上同调群不存在歧义.
+
+回忆 $H^1(\mathrm{Gal}(\mathbb{L},\mathbb{K}),\mathbb{L}^*)=Z^1(\mathrm{Gal}(\mathbb{L},\mathbb{K}),\mathbb{L}^*)/B^1(\mathrm{Gal}(\mathbb{L},\mathbb{K}),\mathbb{L}^*)$，这意味着我们只需证明
+\[
+Z^1(\mathrm{Gal}(\mathbb{L},\mathbb{K}),\mathbb{L}^*)\subseteq B^1(\mathrm{Gal}(\mathbb{L},\mathbb{K}),\mathbb{L}^*).
+\]
+注意对每个 $f\in B^1(\mathrm{Gal}(\mathbb{L},\mathbb{K}),\mathbb{L}^*)$，存在 $\alpha\in\mathbb{L}^*$ 使得 $f=d_0(\alpha)$. 于是 $f$ 是 $\mathrm{Gal}(\mathbb{L},\mathbb{K})$ 与 $\mathbb{L}^*$ 之间的一个态射，使得
+\[
+f(\sigma)=\sigma(\alpha)\alpha^{-1}
+\]
+对每个 $\sigma\in\mathrm{Gal}(\mathbb{L},\mathbb{K})$ 成立（注意这与\autoref{c5-sub-2-2} 中的表达式等价，只是采用乘法记号）.
+
+设 $g\in Z^1(\mathrm{Gal}(\mathbb{L},\mathbb{K}),\mathbb{L}^*)$. 这意味着 $d_1(g)=0$，于是对每个 $\sigma,\tau\in\mathrm{Gal}(\mathbb{L},\mathbb{K})$
+\[
+1_{\mathbb{L}}=d_1(g)(\sigma,\tau)=\sigma g(\tau)\cdot g(\sigma\tau)^{-1}\cdot g(\sigma),
+\]
+从而
+\begin{equation}\label{c5-eq-7}
+g(\sigma\tau)=\sigma g(\tau)\cdot g(\sigma).
+\end{equation}
+对 $\alpha\in\mathbb{L}^*$ 定义
+\[
+A(\alpha)=\sum_{\sigma\in\mathrm{Gal}(\mathbb{L},\mathbb{K})}g(\sigma)\sigma(\alpha).
+\]
+由于 $\mathrm{Gal}(\mathbb{L},\mathbb{K})$ 的所有自同构互不相同，它们是线性无关的（Galois 理论的结果）. 于是存在 $\alpha\in\mathbb{L}^*$ 使得 $A(\alpha)\neq 0$，记 $A(\alpha)=\beta$.
+
+对每个 $\sigma\in\mathrm{Gal}(\mathbb{L},\mathbb{K})$ 我们有
+\[
+\sigma(\beta)=\sum_{\tau\in\mathrm{Gal}(\mathbb{L},\mathbb{K})}\sigma(g(\tau))\sigma\tau(\alpha)
+\]
+两边乘以 $g(\sigma)\in\mathbb{L}^*$：
+\[
+\begin{aligned}
+g(\sigma)\cdot\sigma(\beta)&=\sum_{\tau\in\mathrm{Gal}(\mathbb{L},\mathbb{K})}g(\sigma)\sigma(g(\tau))\sigma\tau(\alpha)\\
+&\overset{?}{=}\sum_{\tau\in\mathrm{Gal}(\mathbb{L},\mathbb{K})}g(\sigma\tau)\sigma\tau(\alpha)
+\end{aligned}
+\]
+现在这最后一个和等于 $\beta$，因为 $\sigma\tau$ 取遍 $\mathrm{Gal}(\mathbb{L},\mathbb{K})$. 将上式改写，我们得到
+\[
+g(\sigma)=\sigma(\beta^{-1})(\beta^{-1})^{-1}
+\]
+对每个 $\sigma\in\mathrm{Gal}(\mathbb{L},\mathbb{K})$ 成立. 于是 $g\in B^1(\mathrm{Gal}(\mathbb{L},\mathbb{K}),\mathbb{L}^*)$.
+\end{proof}
+
+接下来是一个与上述定理相关的定理.
+
+\begin{theorem}\label{c5-thm-4-7}
+设 $\mathbb{L}$ 是域 $\mathbb{K}$ 的 Galois 扩张，则对每个 $n\geq 1$，$H^n(\mathrm{Gal}(\mathbb{L},\mathbb{K}),\mathbb{L}^+)=0$.
+\end{theorem}
+
+\begin{proof}
+利用\autoref{c5-thm-3-6}，只需在 $\mathbb{L}$ 是 $\mathbb{K}$ 的有限扩张的情形证明本定理. 接下来，我们回忆正规基定理（见 \cite[Theorem~13.1, \S13, Chapter~VI]{lang02a}），即存在 $\theta\in\mathbb{L}$ 使得
+\[
+\{\sigma(\theta)\mid\sigma\in\mathrm{Gal}(\mathbb{L},\mathbb{K})\}
+\]
+是 $\mathbb{L}^+$ 作为 $\mathbb{K}$-向量空间的一组基. 这等价于
+\[
+\mathbb{L}^+=\bigoplus_{\sigma\in G}\mathbb{K}^+\sigma(\theta).
+\]
+而此直和同构于 $K[G]\cong\operatorname{Hom}_{\mathbb{Z}}(\mathbb{Z}G,\mathbb{K}^+)$，即 $\mathbb{L}^+$ 是一个诱导 $\mathbb{Z}G$-模. 于是由\autoref{c4-prop-5-3}，对一切 $n\geq 0$ 有 $H^n(G,\mathbb{L}^+)=\{0\}$.
+\end{proof}

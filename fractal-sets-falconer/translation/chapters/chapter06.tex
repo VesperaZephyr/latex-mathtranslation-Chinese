@@ -1,0 +1,615 @@
+% !TeX root = ../main.tex
+% 第 6 章 投影性质 (对应原书 pp. 75--94)
+
+\chapter{投影性质}\label{chap:6}
+
+\section{引言}
+
+本章建立如下\newterm{projection}{投影}{projection}性质的结果：若 $E$ 是平面中的 $s$-集，则 $E$ 到几乎全部方向的直线上的正交投影具有维数 $t$，其中当 $s\leq 1$ 时 $t=s$，当 $s\geq 1$ 时 $t=1$.更一般地，若 $\Pi$ 是 $\mathbb{R}^n$ 的 $k$ 维子空间，$\operatorname{proj}_{\Pi}$ 表示从 $\mathbb{R}^n$ 到 $\Pi$ 上的\newterm{orthogonal-projection}{正交投影}{orthogonal projection}，我们用 $E$ 的 Hausdorff 测度来估计 $\operatorname{proj}_{\Pi}E$ 的 Hausdorff 测度.下一条引理给出一个方向上显然的不等式.
+
+\begin{lemma}\label{lem:6.1}
+设 $E$ 是 $\mathbb{R}^n$ 的任意子集，$\Pi$ 是任意子空间.则
+\[
+  \mathcal{H}^{s}(\operatorname{proj}_{\Pi}E)\leq\mathcal{H}^{s}(E).
+\]
+\end{lemma}
+
+\begin{proof}
+投影映射不增大距离，即 $|\operatorname{proj}_{\Pi}(x)-\operatorname{proj}_{\Pi}(y)|\leq|x-y|$（$x,y\in E$），故本引理是\cref{lem:1.8} 的直接推论.
+\end{proof}
+
+本章的主要部分关心相反方向的估计.这些工作自然地分为一般情形与特殊情形.对一般的 $s$-集 $E$，我们不再沿用 \textcite{marstrand1954a} 原先的几何证明，而是采用一种涉及集合容量的途径.在 $E$ 是 $s$ 为整数的 $s$-集这一特殊情形，结果呈现出微妙的平衡：当 $E$ 正则与 $E$ 非正则时会出现截然不同的现象，此时我们遵循 \textcite{besicovitch1939} 的几何方法.
+
+\section{Hausdorff 测度与容量}
+
+本节把分析中两个表面上极不相同的思想联系起来，同时也为研究 $s$-集的正交投影铺路.
+
+集合的容量的思想最初为处理静电问题而发展.这一理论在被称为\newterm{potential-theory}{位势论}{potential theory}的数学分支中被推广到更普遍的吸引定律，早期的大量工作表述于 \textcite{frostman1935} 的著名论文之中.（更近的论述见 \textcites{taylor1961,carleson1967,haymankennedy1976,hille1973}.）事实证明，集合的 Hausdorff 维数与其容量是相关的，在研究维数性质时使用后者有时更为方便.
+
+Borel 测度 $\mu$ 的\newterm{support}{支集}{support}（有时写作 $\operatorname{supp}\mu$）定义为使 $\int f\,\mathrm{d}\mu=0$ 对每个在 $S$ 上为零的连续函数 $f$ 成立的最小闭集 $S$；直观上可以把支集看作 $\mu$ 集中于其上的集合.
+
+为便于以后引用，我们引述把测度与线性泛函等同起来的著名的 Riesz 表示定理的一个适当版本.（完整的论述见 \textcite{kingmantaylor1966}（9.5 节）或 \textcite{rudin1970}（第 2 章）.）设 $S$ 是 $\mathbb{R}^n$ 的紧子集.若 $\mathscr{F}$ 是 $S$ 上连续函数的空间，则称 $\psi:\mathscr{F}\to\mathbb{R}$ 为 $\mathscr{F}$ 上的\newterm{positive-linear-functional}{正线性泛函}{functional, positive linear}，如果
+\[
+  \psi(\lambda_1 f_1+\lambda_2 f_2)=\lambda_1\psi(f_1)+\lambda_2\psi(f_2)
+  \qquad(\lambda_1,\lambda_2\in\mathbb{R},\ f_1,f_2\in\mathscr{F})
+\]
+且
+\[
+  \psi(f)\geq 0\qquad\text{若 } f(x)\geq 0\ \text{对一切}\ x\in S.
+\]
+显然，对 $S$ 上任何有限 Borel 测度 $\mu$，映射 $\psi(f)=\int_S f\,\mathrm{d}\mu$ 是 $\mathscr{F}$ 上的正线性泛函.Riesz 表示定理告诉我们逆命题也成立.
+
+\begin{theorem}[\newterm{riesz-representation-theorem}{Riesz 表示定理}{Reisz representation theorem}]\label{thm:6.2}
+设 $S$ 是 $\mathbb{R}^n$ 的紧子集，$\psi$ 是 $S$ 上连续函数空间 $\mathscr{F}$ 上的正线性泛函.则存在由 $S$ 支撑的 Borel 测度 $\mu$，$\mu(S)<\infty$，使
+\[
+  \psi(f)=\int_S f\,\mathrm{d}\mu
+\]
+对一切 $f\in\mathscr{F}$ 成立.
+\end{theorem}
+
+$\mathbb{R}^n$ 上具有紧支集且 $0<\mu(\mathbb{R}^n)<\infty$ 的 Borel 测度 $\mu$ 称为\newterm{mass distribution}{质量分布}{mass distribution}.由质量分布 $\mu$ 产生的在点 $x$ 处的 \newterm{t-potential}{$t$-位势}{t-potential}定义为
+\[
+  \phi_t(x)=\int\frac{\mathrm{d}\mu(y)}{|x-y|^{t}}.
+\]
+$\mu$ 的 \newterm{t-energy}{$t$-能量}{t-energy}由
+\begin{equation}\label{eq:6.1}
+  I_t(\mu)=\int\phi_t(x)\,\mathrm{d}\mu(x)=\iint\frac{\mathrm{d}\mu(x)\,\mathrm{d}\mu(y)}{|x-y|^{t}}
+\end{equation}
+给出.若 $E$ 是 $\mathbb{R}^n$ 的紧子集，$E$ 的 $t$-\newterm{t-capacity}{容量}{t-capacity}记作 $C_t(E)$，定义为
+\begin{equation}\label{eq:6.2}
+  C_t(E)=\sup_{\mu}\Bigl\{\frac{1}{I_t(\mu)}:\ E\ \text{支撑}\ \mu\ \text{且}\ \mu(E)=1\Bigr\}.
+\end{equation}
+（注意位势与能量可能为无穷；我们采用约定 $1/\infty=0$.）对 $\mathbb{R}^n$ 的任意子集 $E$，定义
+\begin{equation}\label{eq:6.3}
+  C_t(E)=\sup\{C_t(F):F\ \text{紧},\ F\subset E\}.
+\end{equation}
+
+一些作者给出稍有不同的容量定义，不过这类定义在下述重要意义下等价：具有零容量的集合相同.位势论的一个基本结果是 \eqref{eq:6.2} 等价于
+\[
+  C_t(E)=\sup_{\mu:\,\mu(E)=1}\Bigl(\sup_{x\in\operatorname{supp}\mu}\{\mu\ \text{在}\ x\ \text{处的}\ t\text{-位势}\}\Bigr)^{-1}.
+\]
+此外，这些不同的界都可以取到.这里我们不需要这类结果；细节包含在例如 \textcite{haymankennedy1976} 之中.
+
+显然若 $E\subset E'$，则对任意 $t$ 有 $C_t(E)\leq C_t(E')$.又若 $\mu$ 是满足 $I_t(\mu)=\infty$ 的任何质量分布，则对任意 $s>t$ 有 $I_s(\mu)=\infty$.于是若 $C_t(E)=0$，则当 $s>t$ 时 $C_s(E)=0$.
+
+由定义我们注意到下述基本事实：$C_t(E)>0$ 当且仅当存在支集含于 $E$ 中且 $I_t(\mu)<\infty$ 的质量分布 $\mu$.
+
+\begin{lemma}\label{lem:6.3}
+设 $E$ 是 $\mathbb{R}^n$ 中满足 $\mathcal{H}^s(E)<\infty$ 的紧子集.设 $\mu$ 是由 $E$ 支撑的质量分布，并令
+\[
+  F_0=\Bigl\{x\in E:\varlimsup_{r\to 0}\mu\bigl(B_r(x)\bigr)/r^{s}=0\Bigr\}.
+\]
+则 $\mu(F_0)=0$.
+\end{lemma}
+
+\begin{proof}
+固定 $\alpha,\rho>0$，令
+\[
+  F=\{x\in E:\mu(B_r(x))/r^{s}<\alpha\ \text{对一切}\ r\leq\rho\}.
+\]
+若 $\{U_i\}$ 是 $F$ 的任意 $\delta$-覆盖，$\delta\leq\rho$，则设每个 $U_i$ 都含有 $F$ 的某个点，便存在圆心在 $F$ 中的球 $\{B_i\}$ 使 $|B_i|\leq 2|U_i|\leq 2\rho$ 且对每个 $i$ 有 $U_i\subset B_i$.于是
+\[
+  \mu(F)\leq\sum_{i}\mu(B_i)<2^{-s}\alpha\sum_{i}|B_i|^{s}\leq\alpha\sum_{i}|U_i|^{s}.
+\]
+这对任意 $\delta$-覆盖 $\{U_i\}$ 成立，故 $\mu(F)\leq\alpha\mathcal{H}^s_\delta(F)$，从而 $\mu(F)\leq\alpha\mathcal{H}^s(F)\leq\alpha\mathcal{H}^s(E)$.由于 $\rho$ 与 $\alpha$ 可以任意小，故 $\mu(F_0)=0$.
+\end{proof}
+
+现在我们得到 Hausdorff 测度与容量之间的基本关系.\cref{thm:6.4}(a) 由 \textcite{frostman1935} 用一种可比较网测度的早期版本证明，另见 \textcite{wallin1969}.(b) 归功于 \textcite{erdosgillis1937}，并被 \textcite{ugaheri1942} 与 \textcite{kametani1945} 进一步推广.
+
+\begin{theorem}\label{thm:6.4}
+设 $E$ 是 $\mathbb{R}^n$ 的子集.
+
+(a) 若 $E$ 是满足 $C_t(E)=0$ 的 Souslin 集，则对一切 $s>t$ 有 $\mathcal{H}^s(E)=0$.
+
+(b) 若 $\mathcal{H}^s(E)<\infty$，则 $C_s(E)=0$.
+\end{theorem}
+
+\begin{proof}
+(a) 设 $E$ 是满足 $\mathcal{H}^s(E)>0$ 的 Souslin 集.我们通过构造一个由 $E$ 的紧子集支撑且 $I_t(\mu)<\infty$ 的质量分布 $\mu$，证明当 $t<s$ 时 $C_t(E)>0$.
+
+由\cref{thm:5.6}(b)，存在紧集 $F\subset E$，$0<\mathcal{H}^s(F)<\infty$，使得对某个常数 $b$ 有
+\[
+  \mathcal{H}^{s}\bigl(B_r(x)\cap F\bigr)\leq br^{s}\qquad(x\in\mathbb{R}^n,\ r<1).
+\]
+令 $\mu$ 为 $\mathcal{H}^s$ 在 $F$ 上的限制，则 $\mu$ 是由 $F$ 支撑的质量分布.取 $x\in\mathbb{R}^n$，令
+\begin{equation}\label{eq:6.4}
+  m(r)=\mu\bigl(B_r(x)\bigr)=\mathcal{H}^{s}\bigl(B_r(x)\cap F\bigr)\leq br^{s}\qquad(r\leq 1).
+\end{equation}
+于是
+\[
+\begin{aligned}
+  \phi_t(x)
+  &=\int_{|x-y|\leq 1}\frac{\mathrm{d}\mu(y)}{|x-y|^{t}}+\int_{|x-y|>1}\frac{\mathrm{d}\mu(y)}{|x-y|^{t}}\\
+  &\leq\int_{0}^{1}r^{-t}\,\mathrm{d}m(r)+\mu(\mathbb{R}^n)\\
+  &=[r^{-t}m(r)]_{0+}^{1}+t\int_{0}^{1}r^{-(t+1)}m(r)\,\mathrm{d}r+\mu(\mathbb{R}^n)\\
+  &\leq b+bt\int_{0}^{1}r^{s-t-1}\,\mathrm{d}r+\mu(\mathbb{R}^n)\\
+  &=b\bigl(1+t/(s-t)\bigr)+\mathcal{H}^{s}(F),
+\end{aligned}
+\]
+其中作了分部积分并用了 \eqref{eq:6.4}.于是 $\phi_t(x)$ 在 $\mathbb{R}^n$ 上一致有界，故
+\[
+  I_t(\mu)=\int\phi_t(x)\,\mathrm{d}\mu(x)<\infty,
+\]
+如所需.
+
+(b) 由 \eqref{eq:6.3}，只需对 $E$ 为紧集的情形证明.设 $\mu$ 是由 $E$ 支撑的任何质量分布；我们证明 $I_s(\mu)=\infty$.令
+\[
+  E_0=\Bigl\{x\in E:\varlimsup_{r\to 0}\mu(B_r(x))/r^{s}>0\Bigr\}.
+\]
+若 $x\in E_0$，则可找到递减于 $0$ 的序列 $\{r_i\}$ 使
+\[
+  \mu\bigl(B_{r_i}(x)\bigr)\geq\varepsilon r_i^{s}
+\]
+对某个 $\varepsilon>0$ 成立.除非 $\mu(\{x\})>0$（此时显然 $I_s(\mu)=\infty$），由 $\mu$ 的连续性存在 $q_i$ 使 $0<q_i<r_i$ 且
+\[
+  \mu(A_i)\geq\frac{1}{2}\varepsilon r_i^{s}\qquad(i=1,2,\ldots),
+\]
+其中 $A_i$ 是环形区域 $B_{r_i}(x)\setminus B_{q_i}(x)$.必要时取子列，可设对一切 $i$ 有 $r_{i+1}<q_i$，使 $\{A_i\}$ 两两不交.于是当 $x\in E_0$ 时
+\[
+  \phi_s(x)=\int\frac{\mathrm{d}\mu(y)}{|x-y|^{s}}
+  \geq\sum_{i}\int_{A_i}\frac{\mathrm{d}\mu(y)}{|x-y|^{s}}
+  \geq\sum_{i=1}^{\infty}\frac{1}{2}\varepsilon r_i^{s}r_i^{-s}=\infty.
+\]
+由\cref{lem:6.3}，Borel 集 $E_0$ 包含 $E$ 的 $\mu$-几乎所有的点，故 $\mu(E_0)>0$，从而
+\[
+  I_s(\mu)=\int\phi_s(x)\,\mathrm{d}\mu(x)=\infty.
+\]
+由于这对由 $E$ 支撑的任何质量分布 $\mu$ 都成立，故 $C_s(E)=0$.
+\end{proof}
+
+\begin{corollary}\label{cor:6.5}
+若 $E$ 是 $\mathbb{R}^n$ 的 Souslin 子集，则
+\[
+  \dim E=\inf\{t:C_t(E)=0\}=\sup\{t:C_t(E)>0\}.
+\]
+\end{corollary}
+
+\begin{proof}
+由于当 $s<\dim E$ 时 $\mathcal{H}^s(E)=\infty$，当 $s>\dim E$ 时 $\mathcal{H}^s(E)=0$（见 \eqref{eq:1.14}），推论立即得到.
+\end{proof}
+
+\cref{cor:6.5} 常以下列形式使用：
+
+\begin{corollary}\label{cor:6.6}
+设 $E$ 是 $\mathbb{R}^n$ 的 Souslin 子集.
+
+(a) 若对某个由 $E$ 支撑的质量分布 $\mu$ 有 $I_t(\mu)<\infty$，则 $t\leq\dim E$.
+
+(b) 若 $t<\dim E$，则存在支集含于 $E$ 中的质量分布 $\mu$ 使 $I_t(\mu)<\infty$.
+\end{corollary}
+
+注意，Hausdorff 测度与容量并非完全等价的概念.若 $\dim E=t$，$C_t(E)$ 与 $\mathcal{H}^t(E)$ 的相对大小有种种可能；一些例子见 \textcite{garnett1970} 或 \textcite{mattila1984c}.
+
+如今，Fourier 变换在位势论中起着至关重要的作用（变换理论的一般论述见 \textcite{rudin1973}）.这里我们只需要定义，以及 Plancherel 关于平方可积函数的变换结果的一个推论.若 $f$ 与 $\mu$ 分别是 $\mathbb{R}$ 上的可积函数与质量分布，它们的（$1$ 维）\newterm{fourier-transforms}{Fourier 变换}{Fourier transforms}为
+\[
+  \left.
+  \begin{aligned}
+    \hat{f}(p)&=(2\pi)^{-\frac{1}{2}}\int f(u)\,\mathrm{e}^{\mathrm{i}up}\,\mathrm{d}u,\\
+    \hat{\mu}(p)&=(2\pi)^{-\frac{1}{2}}\int\mathrm{e}^{\mathrm{i}up}\,\mathrm{d}\mu(u).
+  \end{aligned}
+  \right\}\qquad(p\in\mathbb{R})
+\]
+一个初等结果（\newterm{riemann-lebesgue-lemma}{Riemann--Lebesgue 引理}{Riemann-Lebesgue lemma}）断言 $\hat{f}$ 与 $\hat{\mu}$ 是有界连续函数.
+
+\begin{lemma}\label{lem:6.7}
+设 $\mu$ 是 $\mathbb{R}$ 上满足
+\[
+  0<\int|\hat{\mu}(p)|^{2}\,\mathrm{d}p<\infty
+\]
+的质量分布.则 $\mu$ 的支集具有正勒贝格测度.
+\end{lemma}
+
+\begin{proof}
+\newterm{plancherels-theorem}{Plancherel 定理}{Plancherel's theorem}断言平方可积的 Fourier 变换对应于平方可积的函数.于是 $\mu$ 是这样的 Borel 测度：对任何在某个有界区间之外为零的连续函数 $f$，
+\begin{equation}\label{eq:6.5}
+  \int f(u)\,\mathrm{d}\mu(u)=\int f(u)g(u)\,\mathrm{d}u,
+\end{equation}
+其中 $g$ 是满足
+\begin{equation}\label{eq:6.6}
+  0<\int|\hat{\mu}(p)|^{2}\,\mathrm{d}p=\int|g(u)|^{2}\,\mathrm{d}u
+\end{equation}
+的 Borel 可测函数.若 $\mu$ 由一个勒贝格测度为零的紧集支撑，\eqref{eq:6.5} 将蕴含 $g(u)=0$ 对几乎所有的 $u$ 成立，由 \eqref{eq:6.6} 这是不可能的.
+\end{proof}
+
+\section{任意维数集合的投影性质}
+
+现在证明关于一般维数集合投影的最重要的结果.这类结果最先由 \textcite{marstrand1954a} 直接证明（未用容量）.这里给出的位势论证明本质上属于 \textcite{kaufman1968}.为使基本思想不至被记号淹没，我们在二维情形给出证明，并稍后提及推广.此时 $\operatorname{proj}_{\theta}$ 表示从 $\mathbb{R}^2$ 到 $L_{\theta}$（过原点且与某固定轴成角 $\theta$ 的直线）上的正交投影.$L_{\theta}$ 的子集上的 $1$ 维勒贝格测度按显然的方式记作 $\mathscr{L}^1$.这里``几乎所有的 $\theta$''指按勒贝格测度.
+
+\begin{theorem}\label{thm:6.8}
+设 $E$ 是 $\mathbb{R}^2$ 中 $\dim E=s$ 的 Souslin 子集.
+
+(a) 若 $s\leq 1$，则对几乎所有的 $\theta\in[0,\pi)$ 有 $\dim(\operatorname{proj}_{\theta}E)=s$.
+
+(b) 若 $s>1$，则对几乎所有的 $\theta\in[0,\pi)$ 有 $\mathscr{L}^1(\operatorname{proj}_{\theta}E)>0$.
+\end{theorem}
+
+\begin{proof}
+(a) 由\cref{lem:6.1}，对一切 $\theta$ 有 $\dim(\operatorname{proj}_{\theta}E)\leq s$.若 $t<s<1$，则用\cref{cor:6.6}(b) 可选取支集含于 $E$ 的紧子集中的质量分布 $\mu$ 使 $I_t(\mu)<\infty$.映射 $f\mapsto\int f(x\cdot\theta)\,\mathrm{d}\mu(x)$ 是正线性泛函，故由 Riesz 表示定理（\cref{thm:6.2}），对每个 $\theta$ 可找到 $\mathbb{R}$ 上的质量分布 $\mu_\theta$，使对连续函数 $f$ 有
+\begin{equation}\label{eq:6.7}
+  \int f(u)\,\mathrm{d}\mu_\theta(u)=\int f(x\cdot\theta)\,\mathrm{d}\mu(x).
+\end{equation}
+（这里 $\boldsymbol{\theta}$ 表示方向 $\theta$ 的单位向量，``$\cdot$''为通常的数量积，$x$ 视为从原点到 $x$ 的向量.）利用积分的单调收敛定理作通常的逼近，\eqref{eq:6.7} 对任何非负可测函数成立.把 $u\in\mathbb{R}$ 等同于 $L_{\theta}$ 上的点 $u\boldsymbol{\theta}$，便可把 $\mu_\theta$ 视为 $L_{\theta}$ 上的质量分布，其支集含于 $\operatorname{proj}_{\theta}E$.现在
+\[
+  I_t(\mu_\theta)
+  =\iint\frac{\mathrm{d}\mu_\theta(u)\,\mathrm{d}\mu_\theta(v)}{|u-v|^{t}}
+  =\iint\frac{\mathrm{d}\mu(x)\,\mathrm{d}\mu(y)}{|x\cdot\boldsymbol{\theta}-y\cdot\boldsymbol{\theta}|^{t}}
+  =\iint\frac{\mathrm{d}\mu(x)\,\mathrm{d}\mu(y)}{|(x-y)\cdot\boldsymbol{\theta}|^{t}}.
+\]
+对 $[0,\pi)\times\mathbb{R}^2\times\mathbb{R}^2$ 应用 Fubini 定理，可见 $I_t(\mu_\theta)$ 是 $\theta$ 的可测函数，且
+\[
+  \int_{0}^{\pi}I_t(\mu_\theta)\,\mathrm{d}\theta
+  =c\iint\frac{\mathrm{d}\mu(x)\,\mathrm{d}\mu(y)}{|x-y|^{t}}
+  =c\,I_t(\mu)<\infty,
+\]
+其中 $c=\int_{0}^{\pi}|\boldsymbol{\theta}\cdot\boldsymbol{\tau}|^{-t}\,\mathrm{d}\theta<\infty$（因为 $t<1$，且该积分与单位向量 $\boldsymbol{\tau}$ 无关）.于是对几乎所有的 $\theta$ 有 $I_t(\mu_\theta)<\infty$，故由\cref{cor:6.6}(a) 得 $\dim(\operatorname{proj}_{\theta}E)\geq t$.这对一切 $t<s$ 成立，故对几乎所有的 $\theta$ 有 $\dim(\operatorname{proj}_{\theta}E)=s$.
+
+(b) 若 $s>1$，则由\cref{cor:6.6}(b)，存在由 $E$ 支撑且 $I_1(\mu)<\infty$ 的质量分布 $\mu$.与 (a) 的证明一样，用 \eqref{eq:6.7} 定义 $L_\theta$ 上的质量分布 $\mu_\theta$，但这次我们考察测度 $\mu_\theta$ 的 Fourier 变换 $\hat{\mu}_\theta$.由 \eqref{eq:6.7},
+\begin{align*}
+  |\hat{\mu}_\theta(p)|^{2}
+  &=\frac{1}{2\pi}\int\mathrm{e}^{\mathrm{i}up}\,\mathrm{d}\mu_\theta(u)\int\mathrm{e}^{-\mathrm{i}vp}\,\mathrm{d}\mu_\theta(v)\\
+  &=\frac{1}{2\pi}\iint\mathrm{e}^{\mathrm{i}(u-v)p}\,\mathrm{d}\mu_\theta(u)\,\mathrm{d}\mu_\theta(v)
+  =\frac{1}{2\pi}\iint\mathrm{e}^{\mathrm{i}p(x-y)\cdot\boldsymbol{\theta}}\,\mathrm{d}\mu(x)\,\mathrm{d}\mu(y).
+\end{align*}
+于是
+\[
+  |\hat{\mu}_\theta(p)|^{2}+|\hat{\mu}_{\theta+\pi}(p)|^{2}
+  =\frac{1}{\pi}\iint\cos\bigl(p(x-y)\cdot\boldsymbol{\theta}\bigr)\,\mathrm{d}\mu(x)\,\mathrm{d}\mu(y),
+\]
+从而
+\[
+  \int_{0}^{2\pi}|\hat{\mu}_\theta(p)|^{2}\,\mathrm{d}\theta
+  =\frac{1}{2\pi}\int_{0}^{2\pi}\iint\cos\bigl(p|x-y|\cos\theta\bigr)\,\mathrm{d}\mu(x)\,\mathrm{d}\mu(y)\,\mathrm{d}\theta,
+\]
+因为该定积分同样与 $x-y$ 的辐角无关.于是利用 Fubini 定理与 Bessel 函数的定义 $J_0(u)=(2\pi)^{-1}\int_{0}^{2\pi}\cos(u\cos\theta)\,\mathrm{d}\theta$，得
+\[
+  \int_{0}^{2\pi}|\hat{\mu}_\theta(p)|^{2}\,\mathrm{d}\theta
+  =\iint J_0\bigl(p|x-y|\bigr)\,\mathrm{d}\mu(x)\,\mathrm{d}\mu(y).
+\]
+（Bessel 函数的详细理论见 \textcite{watson1966}.）若 $0<m<\infty$，Fubini 定理给出
+\[
+\begin{aligned}
+  \int_{-m}^{m}\int_{0}^{2\pi}|\hat{\mu}_\theta(p)|^{2}\,\mathrm{d}\theta\,\mathrm{d}p
+  &=\iint\int_{-m}^{m}J_0\bigl(p|x-y|\bigr)\,\mathrm{d}p\,\mathrm{d}\mu(x)\,\mathrm{d}\mu(y)\\
+  &=\iint\int_{u=-m|x-y|}^{m|x-y|}J_0(u)\,\frac{1}{|x-y|}\,\mathrm{d}u\,\mathrm{d}\mu(x)\,\mathrm{d}\mu(y)\\
+  &\leq b\iint_{\mathbb{R}}\frac{\mathrm{d}\mu(x)\,\mathrm{d}\mu(y)}{|x-y|}
+  =b\,I_1(\mu),
+\end{aligned}
+\]
+其中 $b$ 与 $m$ 无关.（反常 Riemann 积分 $\int_{-\infty}^{\infty}J_0(u)\,\mathrm{d}u$ 收敛，故定积分 $\int_{-m}^{m}J_0(u)\,\mathrm{d}u$ 当 $m$ 变化时一致有界.）
+
+令 $m\to\infty$ 并再次利用 Fubini 定理（容易看出 $\hat{\mu}_\theta(p)$ 关于 $\theta$ 与 $p$ 都连续），得
+\[
+  \int_{0}^{2\pi}\int_{-\infty}^{\infty}|\hat{\mu}_\theta(p)|^{2}\,\mathrm{d}p\,\mathrm{d}\theta\leq b\,I_1(\mu)<\infty,
+\]
+故对 $[0,\pi)$ 中几乎所有的 $\theta$ 有 $\int_{-\infty}^{\infty}|\hat{\mu}_\theta(p)|^{2}\,\mathrm{d}p<\infty$.由\cref{lem:6.7}，对任何这样的 $\theta$，$\mu_\theta$ 的支集具有正勒贝格测度.而 $\mu_\theta$ 的支集正是 $\mu$ 的支集的投影（紧集的投影是紧集），它含于 Souslin 集 $\operatorname{proj}_{\theta}E$ 之中.
+
+因此对几乎所有的 $\theta$，$\operatorname{proj}_{\theta}E$ 可测且具有正勒贝格测度.
+\end{proof}
+
+\cref{thm:6.8} 依投影子空间的维数而有许多高维类似物.记 $G_{n,k}$ 为由 $\mathbb{R}^n$ 的所有 $k$ 维子空间构成的 \newterm{grassmann-manifold}{Grassmann 流形}{Grassmann manifold}.$G_{n,k}$ 可以自然地赋予一个规范化的旋转不变测度；当我们说``几乎所有的 $\Pi\in G_{n,k}$''时即指关于该测度.
+
+Kaufman 的方法（使用高维 Fourier 变换）与 Marstrand 的方法（\citeyear{marstrand1954a}）都可毫无困难地推广，见 \textcite{mattila1975b}.
+
+\begin{theorem}\label{thm:6.9}
+设 $E$ 是 $\mathbb{R}^n$ 中 $\dim E=s$ 的 Souslin 子集.
+
+(a) 若 $s\leq k$，则对几乎所有的 $\Pi\in G_{n,k}$ 有 $\dim(\operatorname{proj}_{\Pi}E)=s$.
+
+(b) 若 $s>k$，则对几乎所有的 $\Pi\in G_{n,k}$，$\operatorname{proj}_{\Pi}E$ 具有正的 $k$ 维勒贝格测度.
+\end{theorem}
+
+得到这类定理的另一种方法是积分投影到子空间上的测度的 Fourier 变换，利用测度 $\mu$ 的能量以其 $n$ 维 Fourier 变换表示的重要表达式
+\begin{equation}\label{eq:6.8}
+  I_t(\mu)=c\int_{\mathbb{R}^n}\frac{|\hat{\mu}(p)|^{2}}{|p|^{n-t}}\,\mathrm{d}p,
+\end{equation}
+其中 $c$ 只依赖于 $n$ 与 $t$.形式上这个等式是变换理论中卷积定理的推论，但严格的推导需要一些细心（见 \textcite{carleson1967}，第 23 页）.\textcite{falconer1982} 用这样的方法得到了\cref{thm:6.8,thm:6.9} 中例外集的 Hausdorff 维数的非平凡上界.（\newterm{exceptional-set}{例外集}{exceptional set}是指使定理结论不成立的 $\theta$（相应地 $\Pi$）的集合.）Kaufman 的原始证明与 \textcite{mattila1975b} 的推广给出了例外集大小的其他信息.\textcite{kaufmanmattila1975} 的文章给出了 $\mathbb{R}^n$ 中例外集可以大到可能的最大程度的例子，见\cref{thm:8.17}.
+
+\textcite{mattila1975b,falconer1982} 的近期工作以容量而非 Hausdorff 测度表述，因此比上述结果稍更一般.
+
+Marstrand（\citeyear{marstrand1954a}）对投影定理的原始表述包含一个有时有用的变式，它可以经调整适用于所讨论的任何结果.若 $E$ 是 $\mathbb{R}^2$ 中 $s>1$ 的 $s$-集，则对几乎所有的 $\theta$，不仅 $\operatorname{proj}_{\theta}E$ 具有正勒贝格测度，而且若 $F$ 是 $E$ 的满足 $\mathcal{H}^s(F)>0$ 的任何 Souslin 子集，则 $\operatorname{proj}_{\theta}F$ 具有正勒贝格测度.换言之，$\theta$ 的例外集不依赖于所选的子集 $F$.
+
+\textcite{mattila1975b} 版本的\cref{thm:6.9}(b) 有更强的结论：若 $\dim E>k$，则对几乎所有的 $\Pi\in G_{n,k}$ 有 $\int_{u\in\Pi}\mathcal{H}^0\bigl(E\cap\operatorname{proj}_{\Pi}^{-1}u\bigr)\,\mathrm{d}u=\infty$（$\mathcal{H}^0$ 就是数一数集合中点的个数）.该文的另一个推论是：若 $0<t<\dim E-k$，则对几乎所有的 $\Pi\in G_{n,k}$，使 $\mathcal{H}^t\bigl(E\cap\operatorname{proj}_{\Pi}^{-1}u\bigr)=\infty$ 的 $u\in\Pi$ 之集具有正的 $\mathcal{H}^k$-测度.
+
+Davies（\citeyear{davies1979,davies1982}） 最近利用\newterm{continuum-hypothesis}{连续统假设}{continuum hypothesis}证明，这些结果对仅仅是\newterm{essentially-s-dimensional}{``本质 $s$ 维''}{essentially $s$-dimensional}的集合不成立.他构造了一个不能表示为维数小于 $2$ 的集合的可数并的集合，但其到几乎每条直线上的投影勒贝格测度为零.
+
+\section{整数维数集合的投影性质}
+
+本节在某种意义上承接\cref{chap:3}，讨论 $s$ 为整数时 $s$-集 $E$ 的投影.我们把证明限于 $E$ 是平面的线性可测子集的情形；高维类似物的分析要复杂得多.
+
+整数维数的正则集与非正则集的投影行为有强烈的对照.$\mathbb{R}^2$ 中的正则 $1$-集在几乎所有的方向上投影成正的 $1$ 维测度集合，而非正则 $1$-集在几乎所有的方向上投影成零测度集合.
+
+正则集容易处理.与之前一样，$\operatorname{proj}_{\theta}$ 表示到与某轴成角 $\theta$ 的直线 $L_{\theta}$ 上的正交投影.
+
+\begin{theorem}\label{thm:6.10}
+设 $E$ 是 $\mathbb{R}^2$ 中的正则 $1$-集.则除至多一个 $\theta$ 值外，对一切 $\theta$ 有 $\mathscr{L}^1(\operatorname{proj}_{\theta}E)>0$.
+\end{theorem}
+
+\begin{proof}
+由\cref{thm:3.25}，正则 $1$-集由可求长曲线的可数并的可测子集与一个零测集组成，故只需对 $E$ 是含于可求长曲线 $\Gamma$ 中的 $1$-集的情形证明.
+
+设 $x$ 是 $E$ 中同时为 $E$ 与 $\Gamma$ 的正则点的一点.则给定 $\varepsilon>0$，可找到 $r$ 使
+\[
+  \mathcal{H}^{1}\bigl(E\cap B_r(x)\bigr)>(1-\varepsilon^{2})2r
+  \quad\text{与}\quad
+  \mathcal{H}^{1}\bigl(\Gamma\cap B_r(x)\bigr)<(1+\varepsilon)2r
+\]
+同时成立，从而
+\[
+  \mathcal{H}^{1}\bigl(E\cap B_r(x)\bigr)>(1-\varepsilon)\mathcal{H}^{1}\bigl(\Gamma\cap B_r(x)\bigr),
+\]
+进而
+\[
+  \mathcal{H}^{1}\bigl((\Gamma\setminus E)\cap B_r(x)\bigr)<\varepsilon\,\mathcal{H}^{1}\bigl(\Gamma\cap B_r(x)\bigr).
+\]
+由于 $\Gamma\cap B_r(x)$ 由至多可数多条不交弧组成，且 $\Gamma$ 可求长，可选取弧 $\Gamma_0\subset\Gamma\cap B_r(x)$ 使
+\[
+  \mathcal{H}^{1}(\Gamma_0\setminus E)<\varepsilon\,\mathcal{H}^{1}(\Gamma_0)<2\varepsilon|y-z|,
+\]
+其中 $y$ 与 $z$ 是 $\Gamma_0$ 的端点.设 $L_{\theta}$ 为与 $[y,z]$ 成角 $\phi$ 的直线，其中 $\cos\phi>2\varepsilon$.则投影到 $L_\theta$ 上并用\cref{lem:6.1},
+\[
+  \mathscr{L}^{1}(\operatorname{proj}_{\theta}E)
+  >|y-z|\cos\phi-\mathscr{L}^{1}\bigl(\operatorname{proj}_{\theta}(\Gamma_0\setminus E)\bigr)
+  \geq|y-z|\cos\phi-\mathcal{H}^{1}(\Gamma_0\setminus E)
+  >|y-z|(\cos\phi-2\varepsilon)>0.
+\]
+于是除包含在长度为 $2\sin^{-1}2\varepsilon$ 的区间内（对一切 $\varepsilon>0$）的方向集 $\theta$ 之外，$\mathscr{L}^1(\operatorname{proj}_{\theta}E)>0$，即至多除一个方向外成立.
+\end{proof}
+
+可以证明比上述结果更具定量性质的结果.例如，$\mathbb{R}^2$ 中正则 $1$-集 $E$ 的 $\mathcal{H}^1$-测度可以通过把 $E\cap L$ 中的点数沿平面内所有直线 $L$ 积分而求得，其中直线之集被赋予适当的不变测度.这类思想是\newterm{integral-geometry}{积分几何}{integral geometry}的基础；有兴趣的读者可参阅 \textcite{santalo1976} 或 \textcite{federer1969} 了解进一步细节.
+
+我们转向平面中不规则 $1$-集的投影.Gillis（\citeyear{gillis1934a,gillis1936a}） 证明：在不规则 $1$-集 $E$ 中几乎所有的 $x$ 处，对几乎所有的 $\theta$ 有 $\lim_{r\to 0}\mathscr{L}^1\bigl(\operatorname{proj}_{\theta}(E\cap B_r(x))\bigr)/\mathcal{H}^1\bigl(E\cap B_r(x)\bigr)=0$；而 \textcite{besicovitch1939} 证明了自然的结果：对几乎所有的 $\theta$ 有 $\mathscr{L}^1(\operatorname{proj}_{\theta}E)=0$.证明的出发点是不规则 $1$-集几乎处处没有切线（\cref{cor:3.30}）.在整个证明中，$I$ 与 $J$ 表示 $[0,\pi)$ 中的方向区间.遵循 Besicovitch，我们从三个定义开始.
+
+若方向 $\theta$ 满足：过 $x$ 沿方向 $\theta$ 的直线 $L_{\theta}(x)$ 在 $x$ 的每个邻域内都与 $E$ 相交无穷多次，则称 $\theta$ 是 $E$ 在点 $x\in E$ 处的\newterm{condensation direction}{第一类凝聚方向}{condensation direction}.
+
+给定 $x\in E$ 与正数 $\rho,\varepsilon,m$，如下定义 $[0,\pi)$ 的子集 $T(x,\rho,\varepsilon,m)$：$\theta\in T(x,\rho,\varepsilon,m)$ 当且仅当存在 $r$（$0<r<\rho$）与某个开区间 $I$（$\theta\in I\subset[0,\pi)$，$|I|<\varepsilon$）使得
+\begin{equation}\label{eq:6.9}
+  \frac{\mathcal{H}^{1}\bigl(E\cap C_r(x,I)\bigr)}{r}\geq m|I|.
+\end{equation}
+（$C_r(x,I)$ 表示由 $B_r(x)$ 中位于某条 $L_\theta(x)$（$\theta\in I$）上的点构成的双扇形.）注意，若 $E$ 不规则，则 $\mathcal{H}^1\bigl(E\cap C_r(x,I)\bigr)$ 关于 $r$ 连续，由此容易看出 $T(x,\rho,\varepsilon,m)$ 是 $[0,\pi)$ 的勒贝格可测子集.
+
+若 $\theta\in T$，其中
+\begin{equation}\label{eq:6.10}
+  T=\bigcap_{\rho>0}\ \bigcap_{\varepsilon>0}\ \bigcap_{0<m<\infty}T(x,\rho,\varepsilon,m),
+\end{equation}
+则称方向 $\theta$ 是 $E$ 在点 $x\in E$ 处的第二类凝聚方向.
+
+若 $[0,\pi)$ 中几乎所有的 $\theta$（按勒贝格测度）都是 $E$ 在 $x$ 处的凝聚方向，则称 $x$ 为 $E$ 的一个\newterm{point of radiation}{辐射点}{radiation, point of}.
+
+Besicovitch 关于不规则集投影的定理的证明关键包含在下一条引理中，它依赖于勒贝格密度定理的一个精巧应用.
+
+\begin{lemma}\label{lem:6.11}
+设 $E$ 是平面中的闭不规则 $1$-集.则 $E$ 的几乎所有的点都是辐射点.
+\end{lemma}
+
+\begin{proof}
+由\cref{cor:3.30} 知，对 $\mathcal{H}^1$-几乎所有的 $x\in E$ 及任意区间 $I\subset[0,\pi)$，
+\begin{equation}\label{eq:6.11}
+  \varlimsup_{r\to 0}\frac{\mathcal{H}^{1}\bigl(E\cap C_r(x,I)\bigr)}{2r}>\frac{1}{20}|I|.
+\end{equation}
+固定这样一个点 $x$；我们证明 $x$ 是 $E$ 的辐射点.
+
+首先注意 $x$ 处第一类凝聚方向的集合 $S$ 是 $[0,\pi)$ 的勒贝格可测子集.事实上，若 $S(r)$ 是使 $L_\theta(x)\cap B_r(x)$ 含有 $E$ 中异于 $x$ 的点的 $\theta$ 之集，则 $S(r)$ 是闭集 $\{\theta:\text{存在}\ y\in L_\theta\ \text{使}\ \delta\leq|x-y|\leq r\}$ 对正有理数 $\delta$ 取并所得，故 $S(r)$ 是 Borel 集.而 $S=\bigcap_{j=1}^{\infty}S(1/j)$，故 $S$ 也是 Borel 集，从而勒贝格可测.
+
+我们的目的是证明：若 $\rho,\varepsilon,m$ 为正，则对几乎所有的 $\theta\notin S$ 有 $\theta\in T(x,\rho,\varepsilon,m)$.设 $\theta\in[0,\pi)$ 是使 $S$ 的勒贝格密度 $\lim_{r\to 0}\mathscr{L}^1\bigl(S\cap[\theta-r,\theta+r]\bigr)/2r$ 为零的方向.（此处 $\mathscr{L}^1$ 是 $[0,\pi)$ 上的勒贝格测度.）由勒贝格定理（\cref{thm:1.13}），这对几乎所有的 $\theta\notin S$ 成立.于是对一切包含 $\theta$ 的充分小区间 $I\subset[0,\pi)$，
+\begin{equation}\label{eq:6.12}
+  \mathscr{L}^{1}(S\cap I)<\frac{|I|}{20m}.
+\end{equation}
+设 $I$ 是任一这样的区间，$0<|I|<\varepsilon$.由于当 $r\to 0$ 时 $S(r)\searrow S$，存在 $\rho_1\leq\rho$ 使当 $r<\rho_1$ 时
+\begin{equation}\label{eq:6.13}
+  \mathscr{L}^{1}\bigl(S(r)\cap I\bigr)<\frac{|I|}{20m}.
+\end{equation}
+利用 \eqref{eq:6.11} 选取 $r<\rho_1$ 使
+\begin{equation}\label{eq:6.14}
+  \mathcal{H}^{1}\bigl(E\cap C_r(x,I)\bigr)>\frac{2r|I|}{20}.
+\end{equation}
+如果碰巧
+\begin{equation}\label{eq:6.15}
+  \mathcal{H}^{1}\bigl(E\cap C_r(x,I)\bigr)>mr|I|,
+\end{equation}
+则由定义 $\theta\in T(x,\rho,\varepsilon,m)$.否则，由 \eqref{eq:6.13} 与勒贝格测度的定义，存在不交区间的可数族 $\{I_i\}$ 使
+\begin{equation}\label{eq:6.16}
+  S(r)\cap I\subset\bigcup_{1}^{\infty}I_i
+\end{equation}
+且
+\begin{equation}\label{eq:6.17}
+  \mathscr{L}^{1}\Bigl(\bigcup_{1}^{\infty}I_i\Bigr)<\frac{|I|}{20m}.
+\end{equation}
+令 $Q$ 为使
+\begin{equation}\label{eq:6.18}
+  \mathcal{H}^{1}\bigl(E\cap C_r(x,I_i)\bigr)>mr|I_i|
+\end{equation}
+成立的指标 $i$ 之集.由 \eqref{eq:6.17},
+\begin{equation}\label{eq:6.19}
+  \sum_{i\notin Q}\mathcal{H}^{1}\bigl(E\cap C_r(x,I_i)\bigr)
+  \leq mr\,\mathscr{L}^{1}\Bigl(\bigcup_{i\notin Q}I_i\Bigr)
+  <\frac{r|I|}{20}.
+\end{equation}
+但 $E\cap C_r(x,I)$ 的点都位于方向 $\theta\in S(r)\cap I$ 的直线 $L_\theta(x)$ 上，故由 \eqref{eq:6.16},
+\[
+  \bigcup_{i=1}^{\infty}\bigl(E\cap C_r(x,I_i)\bigr)\supset E\cap C_r\bigl(x,S(r)\cap I\bigr)\supset E\cap C_r(x,I).
+\]
+于是由 \eqref{eq:6.19} 与 \eqref{eq:6.14},
+\begin{equation}\label{eq:6.20}
+  \sum_{i\in Q}\mathcal{H}^{1}\bigl(E\cap C_r(x,I_i)\bigr)
+  =\sum_{i=1}^{\infty}\mathcal{H}^{1}\bigl(E\cap C_r(x,I_i)\bigr)
+  -\sum_{i\notin Q}\mathcal{H}^{1}\bigl(E\cap C_r(x,I_i)\bigr)
+  >\mathcal{H}^{1}\bigl(E\cap C_r(x,I)\bigr)-\frac{r|I|}{20}
+  >\frac{r|I|}{20}.
+\end{equation}
+利用 \eqref{eq:6.18} 可知，通过扩张与合并区间 $\{I_i\}_{i\in Q}$ 的过程，可以得到不交开区间族 $\{J_j\}_{1}^{\infty}$ 使
+\[
+  J=\bigcup_{j=1}^{\infty}J_j\supset\bigcup_{i\in Q}I_i
+\]
+且
+\begin{equation}\label{eq:6.21}
+  \mathcal{H}^{1}\bigl(E\cap C_r(x,J_j)\bigr)=mr|J_j|\qquad(j=1,2,\ldots);
+\end{equation}
+由于假定 \eqref{eq:6.15} 不成立，可以使 $J\subset I$.由 \eqref{eq:6.20} 与 \eqref{eq:6.21},
+\[
+  \mathscr{L}^{1}(J)=\sum_{j}|J_j|>\frac{|I|}{20m}.
+\]
+若 $\theta'\in J$，则 $\theta'\in J_j$ 对某个 $j$ 成立，故由 \eqref{eq:6.21}，$\theta'\in T(x,\rho,\varepsilon,m)$.于是 $J\subset T(x,\rho,\varepsilon,m)\cap I$，故
+\[
+  \mathscr{L}^{1}\bigl(T(x,\rho,\varepsilon,m)\cap I\bigr)>\frac{|I|}{20m}.
+\]
+这对一切包含 $\theta$ 的充分小区间成立，于是我们证明了：对几乎所有的 $\theta\notin S$，要么 $\theta\in T(x,\rho,\varepsilon,m)$，要么 $T(x,\rho,\varepsilon,m)$ 在 $\theta$ 处的下勒贝格密度至少为 $1/(20m)$.由勒贝格密度定理（\cref{thm:1.13}），$T(x,\rho,\varepsilon,m)$ 的勒贝格密度在其补集的几乎所有的点处为零，故几乎所有的 $\theta\notin S$ 都属于 $T(x,\rho,\varepsilon,m)$.
+
+这对一切 $\rho,\varepsilon,m$ 的值成立，而 \eqref{eq:6.10} 中的交可以取为可数的（因为 $T(x,\rho,\varepsilon,m)$ 随 $\rho,\varepsilon$ 减小与 $m$ 增大而减小），于是我们得出：几乎所有的 $\theta\notin S$ 属于 $T$.引理证毕.
+\end{proof}
+
+对证明的第二段稍作修改，\cref{lem:6.11} 对任何不规则 $1$-集 $E$ 都成立，不过我们不需要用到这一点.
+
+\cref{lem:6.11} 能否加强为``$E$ 的几乎所有的点都是第二类辐射点''（即几乎所有的方向都是第二类凝聚方向），尚属未知.
+
+现在考虑由要求 $(\mathcal{H}^1\times\mathscr{L}^1)(A\times B)=\mathcal{H}^1(A)\mathscr{L}^1(B)$（对 Borel 集 $A$ 与 $B$）所定义的 $E\times[0,\pi)$ 上的乘积测度 $\mathcal{H}^1\times\mathscr{L}^1$.设 $G_1$ 与 $G_2$ 为由
+\[
+  G_i=\{(x,\theta):\theta\ \text{是}\ E\ \text{在}\ x\ \text{处的第}\ i\ \text{类凝聚方向}\}\qquad(i=1,2)
+\]
+给出的子集.
+
+\begin{lemma}\label{lem:6.12}
+若 $E$ 是闭不规则 $1$-集，则 $G_1$ 与 $G_2$ 是 $E\times[0,\pi)$ 的 Borel 子集，从而是 $(\mathcal{H}^1\times\mathscr{L}^1)$-可测的.
+\end{lemma}
+
+\begin{proof}
+(a) 对 $0<r<\rho$ 写
+\[
+  G_{r,\rho}=\{(x,\theta):x\in E\ \text{且}\ r\leq|x-y|\leq\rho\ \text{对某个}\ y\in E\cap L_\theta(x)\}.
+\]
+则由于 $E$ 闭，$G_{r,\rho}$ 是闭集.由于 $G_{r,\rho}$ 随 $r$ 减小而增大、随 $\rho$ 减小而减小，
+\[
+  G_1=\bigcap_{\rho>0}\Bigl[\bigcup_{r\leq\rho}G_{r,\rho}\Bigr]
+\]
+是 Borel 集.
+
+(b) 由于 $E$ 不规则，$\mathcal{H}^1\bigl(E\cap C_r(x,I)\bigr)$ 关于 $x,r$ 与 $I$ 连续.于是若按与 $T(x,\rho,\varepsilon,m)$ 相同的方式定义 $T'(x,\rho,\varepsilon,m)$ 但把 \eqref{eq:6.9} 中的不等号改为严格的，则 $\{(x,\theta):\theta\in T'(x,\rho,\varepsilon,m)\}$ 是 $E\times[0,\pi)$ 中的开集.但
+\[
+  G_2=\bigcap_{\rho>0}\ \bigcap_{\varepsilon>0}\ \bigcap_{0<m<\infty}\{(x,\theta):\theta\in T'(x,\rho,\varepsilon,m)\}.
+\]
+（由于 $T(x,\rho,\varepsilon,m)$ 关于 $m$ 单调，这里可以写 $T'$ 而不写 $T$.）这些交可以对 $\rho,\varepsilon,m$ 的有理值取，故 $G_2$ 是 Borel 集.
+\end{proof}
+
+现在可以推出投影定理了.
+
+\begin{theorem}\label{thm:6.13}
+设 $E$ 是 $\mathbb{R}^2$ 中的不规则 $1$-集.则
+\[
+  \mathscr{L}^{1}(\operatorname{proj}_{\theta}E)=0\qquad\text{对几乎所有的}\ \theta\in[0,\pi).
+\]
+\end{theorem}
+
+\begin{proof}
+先设 $E$ 是紧集.由\cref{lem:6.12}，集合 $G=G_1\cup G_2$ 是 $E\times[0,\pi)$ 的 $(\mathcal{H}^1\times\mathscr{L}^1)$-可测子集，且由\cref{lem:6.11}，
+\[
+  \mathscr{L}^{1}\{\theta:(x,\theta)\in G\}=\pi
+\]
+对几乎所有的 $x\in E$ 成立.Fubini 定理的条件满足，于是我们得出：对 $\mathscr{L}^1$-几乎所有的 $\theta\in[0,\pi)$，$(x,\theta)\in G$ 对 $\mathcal{H}^1$-几乎所有的 $x\in E$ 成立.设 $\theta$ 是这样一个方向，使 $\theta$ 对几乎所有的 $x$ 都是凝聚方向，并设 $L_\phi$ 为过原点且垂直于 $\theta$ 的直线（即 $\phi=\theta+\frac{1}{2}\pi\ (\mathrm{mod}\ \pi)$）.我们断言 $E$ 到这条直线上的投影勒贝格测度为零.
+
+令 $E=E_0\cup E_1\cup E_2$，其中 $\mathcal{H}^1(E_0)=0$，而 $E_i$（$i=1,2$）是使 $\theta$ 为其第 $i$ 类凝聚方向的 $E$ 中的点之集.则：
+
+(a) 由\cref{lem:6.1}，$\mathscr{L}^1(\operatorname{proj}_{\phi}E_0)=0$.
+
+(b) 对 $E_1$ 我们用集合 Descartes 积的\cref{thm:5.8}.若 $x\in E_1$，则 $L_\theta(x)$ 与 $E$ 相交无穷多点，即 $\mathcal{H}^0\bigl(L_\theta(x)\cap E\bigr)=\infty$.把 $\mathbb{R}^2$ 视为乘积 $L_\phi\times L_\theta$ 并在 $s=1$、$t=0$ 时应用\cref{thm:5.8}，对任意大的 $c$ 有
+\[
+  \infty>\mathcal{H}^{1}(E_1)\geq bc\,\mathcal{H}^{1}(\operatorname{proj}_{\phi}E_1),
+\]
+从而 $\mathscr{L}^1(\operatorname{proj}_{\phi}E_1)=\mathcal{H}^1(\operatorname{proj}_{\phi}E_1)=0$.
+
+(c) 设 $m$ 为任意正数，并设 $\mathcal{V}$ 为由 $L_\phi$ 的子区间构成的类
+\[
+  \mathcal{V}=\{J:\mathcal{H}^{1}\{x\in E:\operatorname{proj}_{\phi}x\in J\}>m|J|\}.
+\]
+于是利用 \eqref{eq:6.9}、$E_2$ 的定义，并注意到若 $\theta\in I$，则 $C_r(x,I)$ 可以被包进一个宽度小于 $|I|r$、一对边沿方向 $\theta$ 的矩形之中，可知 $\mathcal{V}$ 是 $\operatorname{proj}_{\phi}E_2$ 的一个 Vitali 覆盖.由 Vitali 定理（\cref{thm:1.10}(b)），给定 $\varepsilon>0$，存在 $\mathcal{V}$ 中的不交区间 $\{J_i\}$ 使
+\[
+  \mathscr{L}^{1}(\operatorname{proj}_{\phi}E_2)\leq\sum|J_i|+\varepsilon\leq\frac{1}{m}\mathcal{H}^{1}(E)+\varepsilon.
+\]
+于是由于 $1/m$ 与 $\varepsilon$ 可以任意小，
+\[
+  \mathscr{L}^{1}(\operatorname{proj}_{\phi}E_2)=0.
+\]
+把 (a)--(c) 合并，$\mathscr{L}^1(\operatorname{proj}_{\phi}E)=0$，这对几乎所有的 $\phi$ 成立.最后，若 $E$ 是任意可测 $1$-集，则利用 $\mathcal{H}^1$ 的正则性可写 $E=F\cup G$，其中 $F$ 紧且 $\mathcal{H}^1(G)<\delta$.我们已经证明对几乎所有的 $\theta$ 有 $\mathscr{L}^1(\operatorname{proj}_{\theta}F)=0$，故由\cref{lem:6.1}，
+\[
+  \mathscr{L}^{1}(\operatorname{proj}_{\theta}E)=\mathscr{L}^{1}(\operatorname{proj}_{\theta}G)\leq\mathcal{H}^{1}(G)<\delta.
+\]
+但 $\delta$ 可以任意小，故对几乎所有的 $\theta\in[0,\pi)$ 有 $\mathscr{L}^1(\operatorname{proj}_{\theta}E)=0$.\footnote{原书此句印作 $\mathscr{H}^1(\operatorname{proj}_{\theta}E)=0$；由上文（用 \cref{lem:6.1} 以 $\mathcal{H}^1(G)$ 控制投影测度）可知应为 $\mathscr{L}^1$ 之误印.——译者注.}
+\end{proof}
+
+下一条推论为判定不规则 $1$-集提供了一个非常有用的判据.
+
+\begin{corollary}\label{cor:6.14}
+$\mathbb{R}^2$ 中的 $1$-集 $E$ 是不规则的，当且仅当它在两个不同方向上的投影勒贝格测度为零.
+\end{corollary}
+
+\begin{proof}
+若 $E$ 不规则，则由\cref{thm:6.13} 当然可以找到两个使投影 $\mathscr{L}^1$-测度为零的方向.另一方面，若 $E$ 有正线性测度的正则部分，则由\cref{thm:6.10}，它投影成正 $\mathscr{L}^1$-测度的集合.
+\end{proof}
+
+鉴于\cref{thm:6.13}，人们自然会问：$1$-集能否在所有方向上都投影成零测度集合.\textcite{besicovitch1928a}（第 3 章）的下述构造表明这是可能的；\textcite{morgan1935} 描述了另一种这样的构造.
+
+\begin{theorem}\label{thm:6.15}
+$\mathbb{R}^2$ 中存在（具有正 $\mathcal{H}^1$-测度的）到每条直线上的投影 $\mathscr{L}^1$-测度均为零的 $1$-集.
+\end{theorem}
+
+\begin{proof}
+设 $k\geq 2$ 为整数，并设 $r$ 为使 $1/k>2\pi/r$ 的最小整数.设 $\phi$ 为角 $2\pi/r$.设 $P$ 是边长为 $a$ 与 $a/2k$、内角为 $\frac{1}{2}(\pi\pm\phi)$ 的平行四边形.我们描述一列操作，把 $P$ 换成由许多与 $P$ 相似的小平行四边形组成的子集.
+
+首先在 $P$ 内放入 $2k$ 个与 $P$ 相似的平行四边形：较短边长为 $a/(2k)^2$、等距地排在 $P$ 的较长边上，较长边长为 $a/2k$、与 $P$ 的较长边成角 $\frac{1}{2}(\pi-\phi)$.对每个新的平行四边形做完全同样的操作，得到 $(2k)^2$ 个与 $P$ 相似但相对 $P$ 倾斜角 $\phi$、边长为 $a/(2k)^2$ 与 $a/(2k)^3$ 的平行四边形，见图~\ref{fig:6.1}.记这些平行四边形之并为 $P_1$，并记把 $P$ 换成子集 $P_1$ 的操作为 $T$.我们注意，组成 $P_1$ 的平行四边形的较长边长度之和为 $a$，而且
+\[
+  \mathscr{L}^{1}(\operatorname{proj}_{\theta}P_1)\leq a/k\qquad\text{若}\ 0\leq\theta\leq\phi,
+\]
+其中角 $\theta$ 从 $P$ 的基线方向量起.现在对组成 $P_1$ 的每个平行四边形施行操作 $T$，得到由 $(2k)^4$ 个与 $P$ 相似、相对 $P$ 倾斜角 $2\phi$、较长边长为 $a/(2k)^4$ 的平行四边形组成的子集 $P_2$.由构造，当 $\phi\leq\theta\leq 2\phi$ 时 $\mathscr{L}^1(\operatorname{proj}_{\theta}P_2)\leq a/k$；由于 $P_2\subset P_1$，这对 $0\leq\theta\leq 2\phi$ 也成立.
+
+如此继续，对组成 $P_{j-1}$ 的平行四边形施行操作 $T$ 得到 $P_j$（$j=2,\ldots,r$），它是每个都相对 $P$ 倾斜角 $j\phi$ 的平行四边形之并.由于 $\phi=2\pi/r$，组成 $P_r$ 的 $(2k)^{2r}$ 个平行四边形都与 $P$ 位似（相似且同样地放置）.这些平行四边形的底边长度之和为 $a$，而且对 $0\leq\theta\leq 2\pi$ 有 $\mathscr{L}^1(\operatorname{proj}_{\theta}P_r)\leq a/k$.记把 $P$ 换成按此方式构造的子集 $P_r$ 的操作为 $T_k$.
+
+接下来定义一个相伴的操作 $U_k$，它把长度为 $a$ 的线段 $S_0$ 换成大量的平行线段.如前，设 $r$ 是使 $1/k>2\pi/r=\phi$ 的最小整数，并以线段 $S_0$ 为底、以 $a$ 与 $a/2k$ 为边、内角为 $\frac{1}{2}(\pi\pm\phi)$ 竖起平行四边形 $P$.对 $P$ 施行操作 $T_k$ 得到集合 $P_r=Q$，并设 $S$ 为组成 $Q$ 的平行四边形的底线之集.由平行四边形的相应性质可得：$S$ 由总长度为 $a$ 的 $(2k)^{2r}$ 条线段组成，并且 $S$ 在一切方向上投影成至多 $a/k$ 测度的集合.令 $U_k$ 为把线段 $S_0$ 换成线段集 $S$ 的操作.
+
+最后，设 $\{k_j\}$ 是趋于无穷的整数列.取平面上的一条单位线段，对其施行操作 $U_{k_1}$ 得到由线段组成的集合 $S_1$，并以 $Q_1$ 记由相应平行四边形构成的集合.如此继续得到线段集 $S_j$ 与相应的平行四边形集 $Q_j$，其中 $S_j$ 是对 $S_{j-1}$ 中每条线段施行操作 $U_{k_j}$ 所得线段的总体.
+
+令 $E=\bigcap_{j=1}^{\infty}Q_j$.则 $E$ 具有所需的性质：由于对一切 $\theta$ 有 $\mathscr{L}^1(\operatorname{proj}_{\theta}Q_j)\leq 1/k_j$，当然对一切 $\theta$ 有 $\mathscr{L}^1(\operatorname{proj}_{\theta}E)=0$.为看出 Borel 集 $E$ 是 $1$-集，首先注意由于对任意大的 $m$，$E$ 可以用 $m$ 个直径至多为 $2/m$ 的平行四边形覆盖，故 $\mathcal{H}^1(E)\leq 2$.若 $\{V_i\}$ 是 $E$ 的由开凸集构成的覆盖，则由紧性论证，对某个 $j$ 有 $Q_j\subset\bigcup_i V_i$.由构造，$Q_j$ 中与 $V_i$ 相交的平行四边形的底边长度之和至多为 $3|V_i|$，故 $\frac{1}{3}\leq\sum|V_i|$.从而 $\frac{1}{3}\leq\mathcal{H}^1(E)$，$E$ 是 $1$-集.（事实上 $\mathcal{H}^1(E)=2^{-\frac{1}{2}}$.）
+\end{proof}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{fig6-1.png}
+  \caption{\cref{thm:6.15} 证明中的平行四边形构造}
+  \label{fig:6.1}
+\end{figure}
+
+\textcite{gillis1936b} 证明\cref{thm:6.15} 中描述的集合也从平面上的每一点投影成（角）测度为零的集合.
+
+我们已经见过至少在两个方向上投影成单位区间的不规则 $1$-集（\cref{thm:3.32}）.\textcite{marstrand1954a} 证明了不规则 $1$-集可以在一维的 $\theta$ 集上具有 $\mathscr{L}^1(\operatorname{proj}_{\theta}E)>0$，改进了 \textcite{gillis1934a} 更早的结果.这样的集合将在\cref{thm:8.17} 中描述.
+
+下面的\cref{thm:6.16,thm:6.17} 是\cref{thm:6.10,thm:6.13} 到高维的自然推广：
+
+\begin{theorem}\label{thm:6.16}
+设 $E$ 是 $\mathbb{R}^n$ 中的正则 $k$-集，$k$ 为整数.则对几乎所有的 $\Pi\in G_{n,k}$ 有 $\mathscr{L}^k(\operatorname{proj}_{\Pi}E)>0$.
+\end{theorem}
+
+\begin{theorem}\label{thm:6.17}
+设 $E$ 是 $\mathbb{R}^n$ 中的不规则 $k$-集，$k$ 为整数.则对几乎所有的 $\Pi\in G_{n,k}$ 有 $\mathscr{L}^k(\operatorname{proj}_{\Pi}E)=0$.
+\end{theorem}
+
+这两个定理由 \textcite{federer1947} 在其浩繁的文章中（对一般 Hausdorff 测度）证明.$n$ 维 $s$-集结构的许多工作都依赖这些投影结果，一个更简单的证明将是文献中非常有价值的补充.
+
+\section{进一步的变式}
+
+我们简述本章所述思想的若干变式.
+
+首先，回顾\newterm{projective-transformation}{射影变换}{projective transformation}的思想.给定平面内任意直线 $L$，可以找到平面向其添加无穷远直线后的扩张上的射影双射 $\psi_L$，把无穷远点映到 $L$ 上.映射 $\psi_L$ 把直线变为直线，并且除被映到无穷远直线上的点外是局部解析的.于是，若 $\operatorname{proj}_x$ 表示从点 $x$ 出发的投影（即把 $y$ 映到从 $x$ 出发过 $y$ 的半射线与以 $x$ 为心的单位圆的交点的映射），则可以在 $\psi_L$ 下变换\cref{thm:6.8,thm:6.10,thm:6.13}，得到关于从直线 $L$ 上的点出发的投影的结果.例如，变换\cref{thm:6.8}(a) 可见：若 $E$ 是 $\dim E=s\leq 1$ 的平面 Souslin 集，则对每条直线 $L$，$\dim(\operatorname{proj}_x E)=s$（作为单位圆的子集）对几乎所有的 $x\in L$ 成立，从而（取一族平行线的完备组）对几乎所有的 $x\in\mathbb{R}^2$ 成立.
+
+\textcite{marstrand1954a}（第 6 节）以展示 $s$-集局部结构的方式考察了集合与过其点的直线的交.他证明了：若 $E$ 是 $s>1$ 的平面 $s$-集，则过 $E$ 的几乎每一点的几乎每条直线与 $E$ 交成维数 $s-1$ 且 $\mathcal{H}^{s-1}$-测度有限的集合.\textcite{mattila1975b} 以自然的方式把它推广到高维，并在后来的文章（\citeyear{mattila1981}）中把其中一些结果以容量表述.
+
+也可以考虑 $s$-集与曲线（而非直线）的\newterm{intersection}{交}{intersection}.例如，若 $f$ 是 Lipschitz 函数使 $f^{-1}(x)$ 是曲线或曲面，则可以得到形如
+\[
+  \int\mathcal{H}^{s}\bigl(E\cap f^{-1}(x)\bigr)\,\mathrm{d}\mathcal{H}^{t}(x)\leq c\,\mathcal{H}^{s+t}(E)
+\]
+的不等式；见 \textcite{federer1969}，容量类似物见 \textcites{mattila1984a,mattila1984b}.若 $\Gamma$ 是曲线，$E$ 是 $s>1$ 的平面 $s$-集，则对正测度的刚体运动 $\sigma$ 有 $\dim\bigl(E\cap\sigma(\Gamma)\bigr)=s-1$.\textcite{mattila1984a} 还描述了高维类似物，并证明至少在维数上这类结果对不规则集的全等拷贝的交不成立.另一方面，若 $E$ 本身可求长，我们就得到 \textcite{federer1969} 或 \textcite{santalo1976} 中所述的经典积分几何的结果.\textcite{mattila1982} 还研究了 $E$ 是自相似集（见 8.3~节）时的这些思想.在这一非常特殊的情形，$E$ 与曲线或曲面的交的维数表现出惊人的一致性.
+
+\begin{exercises}
+\item 证明容量是次可加的，即对 $E,E'\subset\mathbb{R}^n$ 有 $C_t(E\cup E')\leq C_t(E)+C_t(E')$.举一个例子说明即使 $E$ 与 $E'$ 是不交的 Borel 集等号也未必成立，从而 $C_t$ 不是 Borel 测度.
+\item 设 $\Gamma$ 是 $\mathbb{R}^2$ 中的可求长曲线.设 $n(t,\theta)$ 表示 $\Gamma$ 与方向为 $\theta$、距原点距离为 $t$ 的直线的交点个数.得到积分几何的 \newterm{poincares-formula}{Poincaré 公式}{Poincare's formula}：
+\[
+  \mathscr{L}(\Gamma)=\frac{1}{2}\int_{\theta=0}^{\pi}\int_{t=-\infty}^{\infty}n(t,\theta)\,\mathrm{d}t\,\mathrm{d}\theta.
+\]
+\item 用显然的方式把单位正方形分成 $k^2$ 个边长为 $1/k$（$k\geq 3$）的小正方形.在阵列的每一列中给一个正方形着阴影，使这些正方形的中心不共线.用 Cantor 型过程构造集合 $E$：反复把每个着阴影的正方形换成整个图形的相似拷贝并取极限集.证明 $E$ 是不规则 $1$-集.
+\end{exercises}

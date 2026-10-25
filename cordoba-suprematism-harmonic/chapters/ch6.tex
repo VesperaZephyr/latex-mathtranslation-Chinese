@@ -1,0 +1,1279 @@
+% ================================================================
+%  第 6 章 混合范数空间上的球乘子 (The ball multiplier on mixed norm spaces)
+%  依据原书 PDF 第 123--150 页译出；编号审计见文件末尾注释
+% ================================================================
+
+\chapter{混合范数空间上的球乘子}
+
+\epigraph{这些是我的空间. 若你不喜欢它们……嗯, 我还有别的.}{(化用 Groucho Marx)}
+
+\section{引言}
+
+如前一章, 设 $\widehat{Tf}(\xi) = \chi_B(\xi)\widehat{f}(\xi)$ 是 $\R^n$ 中单位球 $B$ 的示性函数给出的Fourier乘子算子.
+
+本章的主要目的是: 若把 $L^p(\R^n)$ 换成\newterm{mixed-norm-space}{混合范数空间}{mixed norm space} $L^p_{\mathrm{rad}}L^2_{\mathrm{ang}}(\R^n)$——其中 $L^p$-范数取在径向变量上, $L^2$-范数作用于角向部分——则 $T$ 在临界区间 $2n/(n+1) < p < 2n/(n-1)$ 内的有界性证明成立；即
+\begin{align*}
+  T\ \text{在 } L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})\ \text{上有界, 当且仅当 } \frac{2n}{n+1}<p<\frac{2n}{n-1},
+\end{align*}
+其中 $L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})$ 中的范数由积分
+\begin{align*}
+  \Big(\int_{0}^{\infty}\Big(\int_{S^{n-1}}|f(r\theta)|^{2}\,\mathrm{d}\sigma(\theta)\Big)^{p/2}r^{n-1}\,\mathrm{d}r\Big)^{1/p}
+\end{align*}
+给出, $\mathrm{d}\sigma$ 是单位球面上的均匀测度, $r > 0$ 与 $\theta \in S^{n-1}$ 是 $\R^n$ 中的极坐标. 这将是定理 6.2 的内容.
+
+$L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})$ 是 Banach 空间, 其范数在旋转下不变, 但在平移下不变性不成立. Schwartz 空间 $\mathcal{S}(\R^{n})$ 在其中稠密且连续嵌入, 并有对偶关系
+\begin{align*}
+  \bigl(L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})\bigr)^{*}=L_{\mathrm{rad}}^{q}L_{\mathrm{ang}}^{2}(\R^{n}),\qquad 1/p+1/q=1,\ 1<p,q<\infty,
+\end{align*}
+以及包含关系
+\begin{align*}
+  L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})\subset L^{p}(\R^{n})\ \text{若 } p\leq 2,\qquad
+  L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})\supset L^{p}(\R^{n})\ \text{若 } p\geq 2.
+\end{align*}
+
+\section{贝塞尔函数的估计}
+
+$L^2(\R^n)$ 分解为Fourier变换下不变、与球调和函数相联系的子空间这一众所周知的分解将是关键；而在本章中, 贝塞尔函数十分要紧. 因此, 为完整起见, 在本节描述它们的主要性质是方便的. 幸好, 这一任务有极好的参考文献, 即 \cite{b16} 与 \cite{b147}.
+
+设
+\begin{align*}
+  \widehat{F}(\xi)=\int F(x)\exp(-2\pi i x\cdot\xi)\,\mathrm{d}x
+\end{align*}
+是欧氏空间 $\R^n$ 中的Fourier变换；在径向函数 $F(x) = f(|x|)$ 的情形, 它化为众所周知之公式:
+\begin{equation}\label{eq:6.1}
+  \widehat{F}(\xi)=2\pi|\xi|^{-(n-2)/2}\int_{0}^{\infty}f(s)J_{(n-2)/2}(2\pi|\xi|s)s^{n/2}\,\mathrm{d}s.
+\end{equation}
+这里 $J_{\nu}$ 表示 $\nu$ 阶第一类\newterm{bessel-function}{贝塞尔函数}{Bessel function}, 由
+\begin{equation}\label{eq:6.2}
+  \begin{aligned}
+  J_{\nu}(x)
+  &=\frac{1}{\pi}\int_{0}^{\pi}\cos(\nu t-x\sin t)\,\mathrm{d}t
+   -\frac{\sin\pi\nu}{\pi}\int_{0}^{\infty}e^{-\nu t-x\sinh t}\,\mathrm{d}t\\
+  &=\frac{1}{\pi}\operatorname{Re}\int_{0}^{\pi}e^{i(\nu t-x\sin t)}\,\mathrm{d}t
+   +O\Big(\frac{1}{x+\nu}\Big),\qquad x\in(0,\infty)
+  \end{aligned}
+\end{equation}
+给出(见 \cite{b147}, 第 176 页, 公式 4). 它满足二阶微分方程
+\begin{equation}\label{eq:6.3}
+  x^{2}J_{\nu}^{\prime\prime}(x)+x J_{\nu}^{\prime}(x)+\left(x^{2}-\nu^{2}\right)J_{\nu}(x)=0,
+\end{equation}
+并容许展开
+\begin{align*}
+  J_{\nu}(x)=\sum_{m=0}^{\infty}\frac{(-1)^{m}(x/2)^{\nu+2m}}{\Gamma(\nu+m+1)}
+  \sim\frac{(x/2)^{\nu}}{\Gamma(\nu+1)}(1+\Theta),\qquad x\rightarrow 0,
+\end{align*}
+其中 $|\Theta| \leq e^{x^2/4-1}/(\nu+1)$；以及
+\begin{align*}
+  J_{\nu}(x)\sim\Big(\frac{2}{\pi x}\Big)^{1/2}\cos\Big(x-\frac{\nu\pi}{2}-\frac{\pi}{4}\Big),\qquad x\to\infty.
+\end{align*}
+我们还有下面两个重要恒等式:
+
+(a) Hankel 反演公式:
+\begin{align*}
+  \int_{0}^{\infty}J_{\nu}(s r)\,J_{\nu}(t r)\,r\,\mathrm{d}r=\delta(s-t),\qquad \text{在分布意义下}.
+\end{align*}
+
+(b) Mellin 变换:
+\begin{align*}
+  M J_{\nu}(s)=\int_{0}^{\infty}t^{-is}J_{\nu}(t)\frac{\mathrm{d}t}{t}
+  =\frac{2^{-is}\Gamma\bigl((\nu-is)/2\bigr)}{(\nu+is)\,\Gamma\bigl((\nu+is)/2\bigr)}.
+\end{align*}
+
+文献 \cite{b16} 与 \cite{b147} 含有以上所有陈述的证明, 以及若干对贝塞尔函数阶一致估计的相关结果. 一般而言, 在``临界区间'' $\nu/2 \leq x \leq 3\nu/2$ 之外找到这些估计是容易的部分, 但在临界区间内部需要相当细致的分析.
+
+不失一般性, 可设 $\nu > 0$. 注意, 若 $0 < x < \nu/2$, 则振荡积分 \eqref{eq:6.2} 的相位之导数等于 $\nu - x\cos(t) \geq \nu/2$, 由此得估计 $|J_\nu(x)| \leq 1/\nu$.
+
+在 $x > 3\nu/2$ 的情形, 相位的临界点是 $\xi = \cos^{-1}(\nu/x)$, 相位在该点的二阶导数等于 $x\sin(\xi) = x\sqrt{1 - \nu^2/x^2}$, 它大于或等于 $\sqrt{5}x/3$.
+
+因此, 对 $\delta \leq 1$, 在区间 $(\xi - \delta, \xi + \delta)$ 内部的点处, 相位的二阶导数大于 $x/3$. 另一方面, 在该区间之外, 一阶导数大于 $x\delta$. 于是我们处于可以应用 van der Corput 估计的条件之下, 取 $\delta = 1/\sqrt{x}$, 得到不等式: 当 $x > 3\nu/2$ 时 $|J_\nu(x)| \lesssim 1/\sqrt{x}$.
+
+\begin{theorem}\label{thm:6.1}
+下列估计成立:
+\begin{align*}
+  &\int_{\nu/2}^{3\nu/2}|J_{\nu}(x)|^{p}\,\mathrm{d}x
+  \lesssim\begin{cases}
+    \nu^{(1-p)/3}, & \text{若 } p>4,\\
+    \nu^{-1}\log\nu, & \text{若 } p=4,\\
+    \nu^{1-p/2}, & \text{若 } 1\leq p<4,
+  \end{cases}
+  \qquad\text{以及}\\
+  &\sup_{\substack{x\geq 0\\ \nu\ \text{整数}}}
+  \left|\int_{0}^{x}J_{\nu}(t)\,\mathrm{d}t\right|\leq C<\infty.
+\end{align*}
+\end{theorem}
+
+\begin{proof}
+在区域 $\nu + k\nu^{1/3} \leq x \leq \nu + 2k\nu^{1/3}$($k \leq \frac{1}{4}\nu^{2/3}$)中, 临界点是 $\xi = \cos^{-1}(\nu/x)$, 相位的二阶导数等于 $x\sin\xi = x\sqrt{1 - \nu^2/x^2} \geq k^{1/2}\nu^{2/3}$. 还要注意, 若 $x$ 不包含于区间 $(\xi - \delta, \xi + \delta)$($\delta$ 与 $k$ 无关地足够小), 则相位导数的绝对值大于 $k^{1/2}\nu^{2/3}\delta$. 因此 $|J_\nu(x)| \lesssim k^{-1/4}\nu^{-1/3}$.
+
+其次在区域 $\nu - 2k\nu^{1/3} \leq x \leq \nu - k\nu^{1/3}$($k \leq \frac{1}{4}\nu^{2/3}$)中寻找估计. 这里相位的导数等于 $\nu - x\cos t$, 恒为正；其二阶导数为 $x\sin(t)$. 因此, 一阶导数在 $t = 0$ 处取得最小值 $\nu - x$, 从而 $|J_\nu(x)| \leq k^{-1}\nu^{-1/3}$.
+
+上述两个估计给出定理的第一部分.
+
+为证明整数阶贝塞尔函数有界一致的原函数集, 注意对 $\nu = 1, 2, 3, \ldots$ 有
+\begin{align*}
+  J_{\nu}(x)=\frac{1}{2\pi}\int_{-\pi/2}^{\pi/2}e^{i(\nu\theta-x\sin\theta)}\,\mathrm{d}\theta
+  +(-1)^{\nu}\frac{1}{2\pi}\int_{-\pi/2}^{\pi/2}e^{i(\nu\theta+x\sin\theta)}\,\mathrm{d}\theta.
+\end{align*}
+两个振荡积分用同样的工具处理, 即驻相法与 van der Corput 估计；但第一个更复杂, 因为第二个中相位的导数恒大于 $\nu$, 这简化了计算. 因此, 下面只讨论第一个积分估计的细节.
+
+有
+\begin{align*}
+  \int_{0}^{x}\int_{-\pi/2}^{\pi/2}e^{i(\nu\theta-t\sin\theta)}\,\mathrm{d}\theta\,\mathrm{d}t
+  &=\mathrm{p.v.}\int_{-\pi/2}^{\pi/2}e^{i\nu\theta}\frac{i}{\sin\theta}\left[e^{-ix\sin\theta}-1\right]\mathrm{d}\theta\\
+  &=-i\,\mathrm{p.v.}\int_{-\pi/4}^{\pi/4}\frac{e^{i\nu\theta}}{\sin\theta}\,\mathrm{d}\theta
+   +i\,\mathrm{p.v.}\int_{-\pi/4}^{\pi/4}\frac{e^{i(\nu\theta-x\sin\theta)}}{\sin\theta}\,\mathrm{d}\theta
+   +O(1),
+\end{align*}
+对 $\nu$ 与 $x > 0$ 一致成立；以及
+\begin{align*}
+  \mathrm{p.v.}\int_{-\pi/4}^{\pi/4}\frac{e^{i\nu\theta}}{\sin\theta}\,\mathrm{d}\theta
+  =\mathrm{p.v.}\int_{-1/\nu}^{1/\nu}\frac{e^{i\nu\theta}-1}{\sin\theta}\,\mathrm{d}\theta
+  +\mathrm{p.v.}\int_{1/\nu\leq|\theta|\leq\pi/4}\frac{e^{i\nu\theta}}{\sin\theta}\,\mathrm{d}\theta,
+\end{align*}
+由此得
+\begin{align*}
+  \mathrm{p.v.}\Big|\int_{-\pi/4}^{\pi/4}\frac{e^{i\nu\theta}}{\sin\theta}\,\mathrm{d}\theta\Big|
+  \lesssim 1+\nu\sup_{\alpha}\Big|\int_{1/\nu}^{\alpha}e^{i\nu\theta}\,\mathrm{d}\theta\Big|,
+\end{align*}
+它对 $x$ 与 $\nu$ 一致有界.
+
+为估计另一项, 首先考虑区域 $x \leq \nu$. 此时振荡积分的相位单调, 一阶导数等于 $\nu - x\cos(\theta) > \nu - x > 0$, 而其三阶导数 $\nu\cos\theta$ 大于 $\sqrt{2}x/2$.
+
+于是 van der Corput 估计给出在区域 $x^{-1/3} < |\theta| < \pi/4$ 或 $1/(\nu - x) < |\theta| < \pi/4$ 上振荡积分的一致估计.
+
+即, 记 $m = \min(x^{-1/3}, 1/(\nu - x))$, 由于
+\begin{align*}
+  |e^{i(\nu\theta-x\sin\theta)}-1|\lesssim|\nu-x|\,|\theta|+x|\theta|^{3},
+\end{align*}
+得到
+\begin{align*}
+  \left|\mathrm{p.v.}\int_{-m}^{m}\frac{e^{i(\nu\theta-x\sin\theta)}}{\sin\theta}\,\mathrm{d}\theta\right|<\infty
+\end{align*}
+在区域 $0 < x < \nu$ 中一致.
+
+对其余区域, 写 $x = \nu + k\nu^{1/3}$, $k > 0$, 并注意相位的三阶导数 $x\cos(\theta)$ 大于 $\sqrt{2}\nu/2$. 因此 van der Corput 估计给出
+\begin{align*}
+  \Big|\int_{x^{-1/3}}^{\pi/4}\frac{e^{i(\nu\theta-x\sin\theta)}}{\sin\theta}\,\mathrm{d}\theta\Big|
+  \lesssim\frac{x^{1/3}}{\nu^{1/3}}\lesssim 1.
+\end{align*}
+其次注意, $|\theta| < x^{-1/3}$ 蕴含
+\begin{align*}
+  |e^{i(\nu\theta-x\sin\theta)}-1|\lesssim(|\theta|\,|\nu-x|+x|\theta|^{3}).
+\end{align*}
+现在定义集合 $U$, $V$ 与 $W$ 如下:
+\begin{align*}
+  U=\{|{\theta}|\leq x^{-1/3}\},\qquad
+  V=\{|{\theta}|\leq x^{-1/3}/k\},\qquad
+  W=U-V.
+\end{align*}
+有
+\begin{align*}
+  \left|\mathrm{p.v.}\int_{U}\frac{e^{i(\nu\theta-x\sin\theta)}}{\sin\theta}\,\mathrm{d}\theta\right|
+  \leq\left|\mathrm{p.v.}\int_{V}\frac{e^{i(\nu\theta-x\sin\theta)}}{\sin\theta}\,\mathrm{d}\theta\right|
+  +\left|\mathrm{p.v.}\int_{W}\frac{e^{i(\nu\theta-x\sin\theta)}}{\sin\theta}\,\mathrm{d}\theta\right|.
+\end{align*}
+接着把 $V$ 上的积分写成
+\begin{align*}
+  \int_{V}\frac{e^{i(\nu\theta-x\sin\theta)}-1}{\sin\theta}\,\mathrm{d}\theta,
+\end{align*}
+并注意被积函数的绝对值受
+\begin{align*}
+  \frac{\nu|\theta|^{3}+k|\theta|\nu^{1/3}}{|\sin\theta|}
+\end{align*}
+控制. 因此该积分对 $x$, $k$ 与 $\nu$ 一致有界.
+
+最后估计 $W$ 上的积分. 在那里有
+\begin{align*}
+  e^{i(\nu\theta-x\sin\theta)}=e^{ik\theta x^{1/3}}\bigl(1+O(x|\theta|^{3})\bigr),
+\end{align*}
+且由于 $\int_{W}\frac{O(x|\theta|^{3})}{|\sin\theta|}\,\mathrm{d}\theta$ 显然对 $k$ 与 $\nu$ 一致有界, 剩下的振荡项是
+\begin{align*}
+  \int_{W}\frac{e^{ik\theta x^{1/3}}}{\sin\theta}\,\mathrm{d}\theta.
+\end{align*}
+再注意到在 $W$ 中函数 $1/\sin\theta$ 单调, 且以
+\begin{align*}
+  \frac{1}{\sin(1/(kx^{1/3}))}
+\end{align*}
+为界, 而积分
+\begin{align*}
+  \int_{\beta}^{\alpha}e^{i k\theta x^{1/3}}\,\mathrm{d}\theta
+\end{align*}
+以 $1/(kx^{1/3})$ 为界、与 $\alpha$ 无关, 由此即可结束证明.
+\end{proof}
+
+\section{\texorpdfstring{混合范数空间 $L^p_{\mathrm{rad}}L^2_{\mathrm{ang}}(\R^n)$ 上的圆盘乘子}{混合范数空间 𝐿ᵖ_{𝑟𝑎𝑑}𝐿²_{𝑎𝑛𝑔}(ℝⁿ) 上的圆盘乘子}}
+
+用本章引言中的同样记号, 对速降光滑函数 $f$ 考虑
+\begin{align*}
+  \widehat{Tf}(\xi)=\chi_{B}(\xi)\widehat{f}(\xi),
+\end{align*}
+其中 $B$ 是 $\R^n$($n \geq 2$)中的单位球.
+
+\begin{theorem}\label{thm:6.2}
+算子 $T$ 在 $L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})$ 上有界, 当且仅当 $2n/(n+1) < p < 2n/(n-1)$.
+\end{theorem}
+
+这一定理的证明最初给出于 \cite{b134}(另见 \cite{b139} 的独立证明, 以及 \cite{b133} 的加权版本).
+
+``仅当''部分容易: 取 $f$ 为某个 $C^\infty$-函数——$\widehat{f}$ 满足 $|\xi| \leq 1$ 时 $f \equiv 1$, $|\xi| \geq 2$ 时 $f \equiv 0$——的Fourier逆变换. 则
+\begin{align*}
+  T f(x)=C_{n}\left|x\right|^{-n}J_{n/2}(2\pi|x|),
+\end{align*}
+它属于 $L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})$, 当且仅当 $p > 2n/(n+1)$. 另一个界 $p < 2n/(n-1)$ 由对偶得出.
+
+给定 $f \in \mathcal{S}(\R^n)$, 它有展开
+\begin{align*}
+  f(x)=\sum_{k,\ell}f_{k}^{\ell}(|x|)Y_{k}^{\ell}\Bigl(\frac{x}{|x|}\Bigr),
+\end{align*}
+其中函数 $f_k^\ell$ 定义于 $[0, \infty)$, $\{Y_k^\ell\}$ 是 $\R^n$ 中 $k$ 次球调和多项式构成的 $d_k$ 维空间的正交规范基. 这里指标 $k$ 取非负整数值, 而对每个 $k$, 指标 $\ell$ 取值于区间
+\begin{align*}
+  1\leq\ell\leq d_{k}=\binom{n+k-1}{k}-\binom{n+k-3}{k-2}.
+\end{align*}
+众所周知(见 \cite{b14}), Fourier变换保持这个展开:
+\begin{align*}
+  \widehat{f}(\xi)=\sum_{k,\ell}i^{k}F_{k}^{\ell}(|\xi|)Y_{k}^{\ell}\Bigl(\frac{\xi}{|\xi|}\Bigr),
+\end{align*}
+其中
+\begin{align*}
+  F_{k}^{\ell}(r)=r^{-n/2+1}\int_{0}^{\infty}f_{k}^{\ell}(s)s^{n/2}J_{k-1+n/2}(r s)\,\mathrm{d}s.
+\end{align*}
+
+继续定理的证明, 注意
+\begin{align*}
+  T f(x)=\sum_{k=0}^{\infty}T_{k}^{n}f_{k}^{\ell}(|x|)Y_{k}^{\ell}\Big(\frac{x}{|x|}\Big),
+\end{align*}
+其中 $T_{k}^{n}$ 是由公式
+\begin{align*}
+  T_{k}^{n}f(t)=\left(-1\right)^{k}t^{-\left(n-1\right)/2}\int_{0}^{\infty}f(r)r^{\left(n-1\right)/2}K_{k-1+n/2}(t,r)\,\mathrm{d}r
+\end{align*}
+给出的积分算子, 而
+\begin{align*}
+  K_{\nu}(t,r)=\sqrt{t r}\int_{0}^{1}J_{\nu}(r s)J_{\nu}(t s)\,s\,\mathrm{d}s.
+\end{align*}
+让我们开始解码这些核. 考虑贝塞尔函数满足的常微分方程 \eqref{eq:6.3}:
+\begin{align*}
+  x^{2}J_{\nu}^{\prime\prime}(x)+x J_{\nu}^{\prime}(x)+\left(x^{2}-\nu^{2}\right)J_{\nu}(x)=0,
+\end{align*}
+用函数
+\begin{align*}
+  \mathcal{U}_{r}(s)=\sqrt{r s}J_{\nu}(r s),\qquad
+  q_{r}(s)=\frac{1}{4}s^{-2}+r^{2}-\nu^{2}s^{2}
+\end{align*}
+表示, 它变为
+\begin{align*}
+  \mathcal{U}_{r}^{\prime\prime}(s)+q_{r}(s)\mathcal{U}_{r}(s)=0.
+\end{align*}
+则
+\begin{align*}
+  (t^{2}-r^{2})\sqrt{rt}\int_{0}^{1}J_{\nu}(rs)J_{\nu}(st)\,s\,\mathrm{d}s
+  &=\int_{0}^{1}(q_{r}(s)-q_{t}(s))\mathcal{U}_{r}(s)\mathcal{U}_{t}(s)\,\mathrm{d}s\\
+  &=\int_{0}^{1}\left(\mathcal{U}_{r}(s)\mathcal{U}_{t}^{\prime\prime}(s)-\mathcal{U}_{r}^{\prime\prime}(s)\mathcal{U}_{t}(s)\right)\mathrm{d}s\\
+  &=\mathcal{U}_{r}(1)\mathcal{U}_{t}^{\prime}(1)-\mathcal{U}_{r}^{\prime}(1)\mathcal{U}_{t}(1).
+\end{align*}
+于是,
+\begin{align*}
+  K_{\nu}(t,r)
+  &=\sqrt{rt}\ \frac{t J_{\nu}^{\prime}(t)J_{\nu}(r)-r J_{\nu}^{\prime}(r)J_{\nu}(t)}{t^{2}-r^{2}}\\
+  &=\frac{\sqrt{t}J_{\nu}^{\prime}(t)J_{\nu}(r)\sqrt{r}}{2(t-r)}
+   +\frac{\sqrt{t}J_{\nu}^{\prime}(t)J_{\nu}(r)\sqrt{r}}{2(t+r)}
+   +\frac{\sqrt{t}J_{\nu}(t)J_{\nu}^{\prime}(r)\sqrt{r}}{2(r-t)}
+   +\frac{\sqrt{t}J_{\nu}(t)J_{\nu}^{\prime}(r)\sqrt{r}}{2(r+t)}\\
+  &=\sum_{j=1}^{4}K_{\nu}^{j}(t,r).
+\end{align*}
+这样我们得到四族积分算子:
+\begin{align*}
+  K_{\nu}^{j}f(t)=\int_{0}^{\infty}K_{\nu}^{j}(t,r)f(r)\,\mathrm{d}r,\qquad j=1,\ldots,4.
+\end{align*}
+然而, 考虑到贝塞尔函数的渐近式(见 \cite{b147}, 第 199 页),
+\begin{align*}
+  J_{\nu}(z)\sim\Big(\frac{2}{\pi z}\Big)^{1/2}\Bigg[&
+  \cos\Big(z-\frac{2\nu+1}{4}\pi\Big)\sum_{m=0}^{\infty}\frac{(-1)^{m}(\nu,2m)}{(2z)^{2m}}\\
+  &-\sin\Big(z-\frac{2\nu+1}{4}\pi\Big)\sum_{m=0}^{\infty}\frac{(-1)^{m}(\nu,2m+1)}{(2z)^{2m+1}}\Bigg],
+\end{align*}
+其中
+\begin{align*}
+  \left(\nu,k\right)=\frac{\Gamma\left(\nu+k+1/2\right)}{k!\;\Gamma\left(\nu-k+1/2\right)},
+\end{align*}
+可以启发式地推断: 核 $j = 1$ 与 $j = 3$ 对应于希尔伯特变换, 而情形 $j = 2$ 与 $j = 4$ 奇异程度较低, 产生 Hardy 积分算子. 由于贝塞尔函数的阶 $\nu$ 在增大, 上述渐近估计不能靠蛮力产生一致界, 在临界区间 $\nu/2 \leq r \leq 2\nu$ 内需要下面引理的更精细分析.
+
+\begin{lemma}\label{lem:6.3}
+下列估计对 $\nu \geq 1$ 一致成立:
+
+(i)
+\begin{align*}
+  |J_{\nu}(r)|\lesssim\frac{1}{r^{1/2}},\qquad
+  |J_{\nu}^{\prime}(r)|\lesssim\frac{1}{r^{1/2}},\qquad r\geq\frac{3}{2}\nu.
+\end{align*}
+
+(ii)
+\begin{align*}
+  |J_{\nu}(r)|\lesssim\frac{1}{1+\nu},\qquad
+  |J_{\nu}^{\prime}(r)|\lesssim\frac{1}{(1+\nu)^{2}},\qquad r\leq\frac{3}{2}\nu.
+\end{align*}
+
+(iii)
+\begin{align*}
+  |J_{\nu}(\nu+\rho\nu^{1/3})|\lesssim\frac{1}{\rho^{1/4}\;\nu^{1/3}},\qquad
+  |J_{\nu}^{\prime}(\nu+\rho\nu^{1/3})|\lesssim\frac{\rho^{1/4}}{\nu^{2/3}},
+\end{align*}
+当 $1\leq\rho<\frac{1}{2}\nu^{2/3}$ 时.
+
+(iv)
+\begin{align*}
+  |J_{\nu}(\nu-\rho\nu^{1/3})|\lesssim\frac{1}{\rho\;\nu^{1/3}},\qquad
+  |J_{\nu}^{\prime}(\nu-\rho\nu^{1/3})|\lesssim\frac{1}{\rho^{2}\;\nu^{2/3}},
+\end{align*}
+当 $1\leq\rho<\nu^{2/3}$ 时.
+\end{lemma}
+
+作为对读者的提示, 我们勾画 (iii) 的证明. 驻相法、van der Corput 估计与分部积分允许我们控制 $J_{\nu}(x)$ 在临界区间 $\nu/2 \leq x \leq 2\nu$ 内的大小. 有
+\begin{align*}
+  J_{\nu}(x)=\operatorname{Re}\frac{1}{\pi}\int_{0}^{\pi}e^{i(\nu t-x\sin t)}\,\mathrm{d}t+O\Big(\frac{1}{\nu}\Big)
+  =\operatorname{Re}\frac{1}{\pi}\int_{0}^{\pi}e^{ix(\theta t-\sin t)}\,\mathrm{d}t+O\Big(\frac{1}{\nu}\Big),
+\end{align*}
+其中 $\theta = \nu/x \approx \nu/(\nu + \rho\nu^{1/3}) \approx 1 - \rho\nu^{-2/3}$. 临界点对应
+\begin{align*}
+  \frac{\mathrm{d}}{\mathrm{d}t}(\theta t-\sin t)=0,
+\end{align*}
+即 $t_{\theta} = \cos^{-1}\theta$. 则
+\begin{align*}
+  \frac{\mathrm{d}^{2}}{\mathrm{d}t^{2}}(\theta t-\sin t)\Big|_{t=t_{\theta}}
+  =\sqrt{1-\theta^{2}}\approx\sqrt{2\rho\nu^{-2/3}}\approx\rho^{1/2}\nu^{-1/3}.
+\end{align*}
+因此, 驻相法给出
+\begin{align*}
+  |J_{\nu}(x)|\lesssim\frac{1}{\sqrt{x}}\cdot\frac{1}{\sqrt{\rho^{1/2}\nu^{-1/3}}}
+  \lesssim\frac{1}{\rho^{1/4}\nu^{1/3}},
+\end{align*}
+因为 $x \approx \nu + \rho\nu^{1/3}$ 且 $\rho < \nu^{2/3}$. 其他情形由类似论证得出(见 \cite{b130,b131,b147}).
+
+在定理 6.2 的证明中, 我们将得到形如 $\sqrt{t}J'_{\nu}(t)J_{\nu}(r)\sqrt{r}$ 的核, 从而可以利用其中隐藏的额外衰减来实现这些估计.
+
+\begin{proposition}\label{prop:6.4}
+给定 $4/3 < p < 4$, 存在有限常数 $C_p$, 使对 $j = 1,2,3,4$, 任何函数 $\nu\colon \N \to \R_+$ 以及每个速降光滑函数序列 $\{g_\ell\}$,
+\begin{align*}
+  \int_{0}^{\infty}\Big(\sum_{\ell}|K_{\nu(\ell)}^{j}g_{\ell}(r)|^{2}\Big)^{p/2}\mathrm{d}r
+  \leq C_{p}\int_{0}^{\infty}\Big(\sum_{\ell}|g_{\ell}(r)|^{2}\Big)^{p/2}\mathrm{d}r.
+\end{align*}
+\end{proposition}
+
+\begin{proof}
+我们将考虑核为
+\begin{align*}
+  K_{\nu}^{1}(t,r)=\frac{\sqrt{t}J_{\nu}^{\prime}(t)J_{\nu}(r)\sqrt{r}}{2(t-r)}
+\end{align*}
+的算子 $K_{\nu}^{1}$. $K_{\nu}^{3}$ 的估计将作为对偶的结果得出；情形 $K_{\nu}^{2}$ 与 $K_{\nu}^{4}$ 奇异程度较低, 较容易处理, 细节留给读者.
+
+固定 $\nu > 0$, 考虑分划
+\begin{align*}
+  [0,\infty)=[0,\nu/2)\cup[\nu/2,2\nu)\cup[2\nu,\infty)=I_{0}^{\nu}\cup I_{c}^{\nu}\cup I_{\infty}^{\nu},
+\end{align*}
+以及核的相应分裂. 用 $T_{\alpha,\beta}^{\nu}$ 表示核为
+\begin{align*}
+  \chi_{I_{\alpha}^{\nu}}(t)K_{\nu}^{1}(t,r)\chi_{I_{\beta}^{\nu}}(r),\qquad \alpha,\beta=0,c,\infty,
+\end{align*}
+的积分算子. 考虑四种情形.
+
+情形 1. $\alpha, \beta = 0, \infty$, 或 $\{\alpha, \beta\} = \{0, c\}$.
+
+情形 $\alpha, \beta = 0, \infty$ 较容易, 因为在 $I_0^\nu \cup I_\infty^\nu$ 中 $\sqrt{t}J_\nu'(t)$ 与 $\sqrt{t}J_\nu(t)$ 都一致有界, 命题中的估计化归为希尔伯特变换的一个众所周知的不等式.
+
+类似地, 当 $\alpha = 0$, $\beta = c$, 或 $\alpha = c$, $\beta = 0$ 时, 有
+\begin{align*}
+  \sup_{t\in I_{0}^{\nu}}\left|\sqrt{t}J_{\nu}^{\prime}(t)\right|\sup_{r\in I_{c}^{\nu}}\left|\sqrt{r}J_{\nu}(r)\right|
+  +\sup_{t\in I_{0}^{\nu}}\left|\sqrt{t}J_{\nu}(t)\right|\sup_{r\in I_{c}^{\nu}}\left|\sqrt{r}J_{\nu}^{\prime}(r)\right|\lesssim 1
+\end{align*}
+对 $\nu$ 一致成立(引理 6.3).
+
+情形 2. $\alpha = c$, $\beta = \infty$.
+
+通过集合
+\begin{align*}
+  G_{\tau}^{+}=[\nu+\tau\nu^{1/3},\nu+(\tau+1)\nu^{1/3}),\qquad
+  G_{\tau}^{-}=[\nu-(\tau+1)\nu^{1/3},\nu-\tau\nu^{1/3}),
+\end{align*}
+($\tau = 0, 1, 2, \ldots, \left[\frac{1}{2}\nu^{2/3}\right]$)考虑区间 $I_{c}^{\nu}$ 的分划.
+
+有
+\begin{align*}
+  &\sum_{\tau}\chi_{G^{+}_{\tau}}(t)\left|\sqrt{t}J^{\prime}_{\nu}(t)\right|
+   \left|\int_{2\nu}^{\infty}\frac{\sqrt{r}J_{\nu}(r)}{t-r}f(r)\chi_{I^{\nu}_{\infty}}(r)\,\mathrm{d}r\right|\\
+  &\quad+\sum_{\tau}\chi_{G^{-}_{\tau}}(t)\left|\sqrt{t}J^{\prime}_{\nu}(t)\right|
+   \left|\int_{2\nu}^{\infty}\frac{\sqrt{r}J_{\nu}(r)}{t-r}f(r)\chi_{I^{\nu}_{\infty}}(r)\,\mathrm{d}r\right|\\
+  &\quad\lesssim\nu^{-1/6}\sum_{\tau}(\tau^{1/4}\chi_{G^{+}_{\tau}}(t)+\tau^{-2}\chi_{G^{-}_{\tau}}(t))
+   \left|H\bigl(f(r)\sqrt{r}J_{\nu}(r)\chi_{I^{\nu}_{\infty}}(r)\bigr)(t)\right|\\
+  &\quad\lesssim\left|H\bigl(f(r)\sqrt{r}J_{\nu}(r)\chi_{I^{\nu}_{\infty}}(r)\bigr)(t)\right|
+  =\left|H\bigl(f(r)\theta_{\nu}(r)\bigr)(t)\right|,
+\end{align*}
+其中 $\theta_\nu(r) = \left|\sqrt{r}J_\nu(r)\chi_{I_\infty^\nu}(r)\right| \lesssim 1$ 对 $\nu$ 一致.
+
+情形 3. $\alpha = \infty$, $\beta = c$.
+
+由于 $r \geq \frac{3}{2}\nu$ 时 $|\sqrt{r}J_{\nu}(r)| \lesssim 1$ 对 $\nu$ 一致, 该区域对应的估计部分平凡化.
+
+对其余部分, 用前一情形的记号, 有
+\begin{align*}
+  \chi_{[2\nu,\infty)}(t)\Big(\sum_{\tau}\frac{1}{|\nu|}\int_{G^{+}_{\tau}}\frac{|f(r)|}{(1+\tau)^{1/4}\nu^{1/3}}\,\mathrm{d}r
+  +\sum_{\tau}\frac{1}{|\nu|}\int_{G^{-}_{\tau}}\frac{|f(r)|}{(1+\tau)\nu^{1/3}}\,\mathrm{d}r\Big)
+  \lesssim\chi_{[2\nu,\infty)}(t)Mf(t),
+\end{align*}
+其中如前, $M$ 表示 Hardy--Littlewood 极大函数.
+
+把情形 1、2 与 3 的所有估计合在一起, 得
+\begin{align*}
+  \int_{0}^{\infty}\Big|\sum_{\ell}|T^{\nu}_{\alpha,\beta}f_{\ell}|^{2}\Big|^{p/2}
+  &\lesssim\int_{0}^{\infty}\Big|\sum_{\ell}|H(f_{\ell}\theta_{\nu})|^{2}\Big|^{p/2}
+  +\int_{0}^{\infty}\Big|\sum_{\ell}|M(f_{\ell})|^{2}\Big|^{p/2}\\
+  &\lesssim\int_{0}^{\infty}\Big|\sum_{\ell}|f_{\ell}|^{2}\Big|^{p/2}.
+\end{align*}
+
+情形 4. $\alpha = c$, $\beta = c$.
+
+修改分裂是方便的；对固定的 $\nu$ 定义
+\begin{align*}
+  I_{k}^{+}=[\nu+2^{k}\nu^{1/3},\nu+2^{k+1}\nu^{1/3}),\qquad
+  I_{k}^{-}=[\nu-2^{k+1}\nu^{1/3},\nu-2^{k}\nu^{1/3}),
+\end{align*}
+其中 $0 \leq k \leq \left[\frac{2}{3}\log_2 \nu\right]$, 且 $I_0 = \left[\nu - \nu^{1/3}, \nu + \nu^{1/3}\right)$. 再定义
+\begin{align*}
+  I^{+}=\bigcup_{k}I_{k}^{+},\qquad
+  I^{-}=\Big(\bigcup_{k}I_{k}^{-}\Big)\cup I_{0}.
+\end{align*}
+于是有核
+\begin{align*}
+  \chi_{I^{\pm}}(t)\ \frac{\sqrt{t}\,J_{\nu}^{\prime}(t)\,J_{\nu}(r)\,\sqrt{r}}{t-r}\ \chi_{I^{\pm}}(r).
+\end{align*}
+再一次考虑引理 6.3 的估计, 显然最危险的是 $++$ 项. 因此, 下面给出该项的证明细节, 其余三种作为练习留下.
+
+为估计核为 $\chi_{I^{+}}(t)K_{\nu}^{1}(t,r)\chi_{I^{+}}(r)$ 的算子对函数 $f_{\ell}$ 在点 $t \in I_{k}^{+}$ 处的作用, 把积分分成三部分:
+\begin{align*}
+  A_{k}(t)=\chi_{I_{k}^{+}}(t)\int\sum_{j\leq k-1}K_{\nu}^{1}(t,r)\chi_{I_{j}^{+}}(r)f_{\ell}(r)\,\mathrm{d}r,
+\end{align*}
+\begin{align*}
+  B_{k}(t)=\chi_{I_{k}^{+}}(t)\int\sum_{j\geq k+1}K_{\nu}^{1}(t,r)\chi_{I_{j}^{+}}(r)f_{\ell}(r)\,\mathrm{d}r,
+\end{align*}
+\begin{align*}
+  C_{k}(t)=\chi_{I_{k}^{+}}(t)\int K_{\nu}^{1}(t,r)\chi_{I_{k}^{+}}(r)f_{\ell}(r)\,\mathrm{d}r.
+\end{align*}
+
+首先估计 $A$. 有
+\begin{align*}
+  \left|A_{k}(t)\right|
+  &\lesssim\sum_{j\leq k-1}\left|\sqrt{t}J_{\nu}^{\prime}(t)\right|\left|\int_{I_{j}^{+}}\frac{\sqrt{r}J_{\nu}(r)}{t-r}f_{\ell}(r)\,\mathrm{d}r\right|\\
+  &\lesssim\sum_{j\leq k-1}2^{-3k/4}\int_{I_{j}^{+}}\left|J_{\nu}(r)f_{\ell}(r)\right|\mathrm{d}r,
+\end{align*}
+由此得
+\begin{align*}
+  \left|A_{k}(t)\right|
+  &\lesssim 2^{-3k/4}\int_{\nu}^{\nu+2^{k}\nu^{1/3}}\left|f_{\ell}(r)\right|\sum_{j\leq k-1}\frac{2^{-j/4}}{\nu^{1/3}}\chi_{I_{j}^{+}}(r)\,\mathrm{d}r\\
+  &\lesssim 2^{-3k/4}\nu^{-1/3}\Big(\int_{\nu}^{\nu+2^{k}\nu^{1/3}}\left|f_{\ell}(r)\right|^{s}\,\mathrm{d}r\Big)^{1/s}
+   \Big(\sum_{j<k-1}2^{-js'/4}2^{j}\nu^{1/3}\Big)^{1/s'},
+\end{align*}
+其中 $s$ 与 $s'$ 是共轭 Hölder 指数. 注意若 $s > 4/3$, 则 $s' < 4$, 且
+\begin{align*}
+  \Big(\sum_{j\leq k-1}2^{j(1-s'/4)}\Big)^{1/s'}\approx 2^{k(1-s'/4)/s'},
+\end{align*}
+因此,
+\begin{align*}
+  |A_{k}(t)|\lesssim\left(2^{-k}\nu^{-1/3}\int_{\nu}^{\nu+2^{k}\nu^{1/3}}|f_{\ell}(r)|^{s}\,\mathrm{d}r\right)^{1/s}
+  \lesssim\left(M f_{\ell}^{s}(t)\right)^{1/s},\qquad s>\frac{4}{3}.
+\end{align*}
+
+其次估计 $B$:
+\begin{align*}
+  \left|B_{k}(t)\right|
+  &\lesssim\sum_{j\geq k+1}\left|\sqrt{t}J_{\nu}^{\prime}(t)\right|\left|\int_{I_{j}^{+}}\frac{\sqrt{r}J_{\nu}(r)}{t-r}f_{\ell}(r)\,\mathrm{d}r\right|\\
+  &\lesssim\sum_{j\geq k+1}\nu\frac{2^{k/4}}{\nu^{2/3}}\frac{1}{2^{j}\nu^{1/3}}\int_{I_{j}^{+}}\left|f_{\ell}(r)\right|\frac{2^{-j/4}}{\nu^{1/3}}\,\mathrm{d}r,
+\end{align*}
+由此得
+\begin{align*}
+  |B_{k}(t)|\lesssim\sum_{j\geq k+1}2^{-|j-k|/4}\frac{1}{2^{j}\nu^{1/3}}
+  \int_{\nu+2^{j}\nu^{1/3}}^{\nu+2^{j+1}\nu^{1/3}}|f_{\ell}(r)|\,\mathrm{d}r
+  \lesssim M f(t),
+\end{align*}
+其中多次应用了引理 6.3 的估计.
+
+最后需要控制对角项 $C$:
+\begin{align*}
+  C_{k}(t)=\sqrt{t}J_{\nu}^{\prime}(t)\,H\bigl(\chi_{I_{k}^{+}}(r)f_{\ell}(r)\sqrt{r}J_{\nu}(r)\bigr)(t)\chi_{I_{k}^{+}}(t).
+\end{align*}
+有
+\begin{align*}
+  \Big(\sum_{k}|C_{k}(t)|^{2}\Big)^{1/2}
+  &\leq\Big(\sum_{k}|\chi_{I_{k}^{+}}(t)\nu^{-1/6}2^{k/4}
+   H\bigl(\chi_{I_{k}^{+}}(r)f_{\ell}(r)\sqrt{r}J_{\nu}(r)\bigr)(t)|^{2}\Big)^{1/2}\\
+  &\leq\Big(\sum_{k}|H\bigl(\chi_{I_{k}^{+}}(r)f_{\ell}(r)\nu^{-1/6}2^{k/4}\sqrt{r}J_{\nu}(r)\bigr)(t)|^{2}\Big)^{1/2}\\
+  &=\Big(\sum_{k}|H\bigl(\chi_{I_{k}^{+}}(r)f_{\ell}(r)\theta_{\nu}^{k}(r)\bigr)(t)|^{2}\Big)^{1/2},
+\end{align*}
+其中 $|\theta_{\nu}^{k}(r)| \lesssim 1$ 对 $\nu$ 与 $k$ 一致.
+
+即, 对每个 $\alpha$ 与 $\beta$, 得到了逐点估计
+\begin{align*}
+  \Big(\sum_{\ell}|T_{\alpha\beta}f_{\ell}|^{2}\Big)^{1/2}
+  \lesssim&\Big(\sum_{\ell}|H(f_{\ell}\cdot\theta_{\nu})|^{2}\Big)^{1/2}
+  +\Big(\sum_{\ell}|M f_{\ell}^{s}|^{2/s}\Big)^{1/2}\\
+  &+\Big(\sum_{\ell}\sum_{k}|H(f_{\ell}\cdot\theta_{\nu}^{k}\cdot\chi_{I_{k}^{+}})|^{2}\Big)^{1/2}
+\end{align*}
+对 $s > 4/3$ 成立, 其中函数 $\theta^{\nu}$ 与 $\theta_{k}^{\nu}$ 一致有界.
+
+于是可以借助希尔伯特变换与 Hardy--Littlewood 极大函数的一些众所周知的估计(见 \cite{b4,b139,b141})来结束命题的证明, 即
+\begin{align*}
+  &\int\Big(\sum_{\ell}|H f_{\ell}(x)|^{s}\Big)^{p/s}\omega(x)\,\mathrm{d}x
+  +\int\Big(\sum_{\ell}|M f_{\ell}(x)|^{s}\Big)^{p/s}\omega(x)\,\mathrm{d}x\\
+  &\qquad\lesssim C_{p,s}(\omega)\int\Big(\sum_{\ell}|f_{\ell}(x)|^{s}\Big)^{p/s}\omega(x)\,\mathrm{d}x,
+\end{align*}
+只要权重 $\omega$ 属于类 $A_{p}$, 即
+\begin{align*}
+  \sup_{I}\left(\frac{1}{|I|}\int_{I}\omega\right)
+  \left(\frac{1}{|I|}\int_{I}\omega^{-1/(p-1)}\right)^{p-1}=|\omega|_{p}<\infty.
+\end{align*}
+此外, 上面的常数 $C_{p,s}(\omega)$ 只依赖于 $p$, $s$ 与 $|\omega|_{p}$.
+\end{proof}
+
+\begin{proof}[定理~\ref{thm:6.2} 的证明]
+注意, 为证明定理, 只须证明下列不等式:
+\begin{equation}\label{eq:6.4}
+  \int_{0}^{\infty}\Big|\sum_{\ell}|K_{\nu}g_{\ell}(r)|^{2}\Big|^{p/2}r^{(n-1)(1-p/2)}\,\mathrm{d}r
+  \lesssim\int_{0}^{\infty}\Big|\sum_{\ell}|g_{\ell}(r)|^{2}\Big|^{p/2}r^{(n-1)(1-p/2)}\,\mathrm{d}r,
+\end{equation}
+只要 $2n/(n+1) < p < 2n/(n-1)$.
+
+但这将是命题 6.4 连同关于类 $A_{p}$ 权重的一些观察的推论. 由于 $|x|^\beta \in A_p$ 当且仅当 $-1 < \beta < p - 1$, 可以得出 $|x|^{(n-1)(1-p/2)} \in A_p$ 当且仅当 $2n/(n+1) < p < 2n/(n-1)$. 此外, 若 $2 \leq p < 2n/(n-1)$, 则对每个 $q \geq 1$ 有 $|x|^{(n-1)(1-p/2)} \in A_q$. 然而, 在区间 $2n/(n+1) < p \leq 2$ 中, 在假设 $s < 4$($1/s + 1/s' = 1$)下有 $|x|^{-p/s' + (n-1)(1-p/2)} \in A_{p/s}$.
+
+不等式 \eqref{eq:6.4} 中对应临界区间的部分,
+\begin{align*}
+  K_{\nu}^{c}(t,r)=\chi_{I_{c}^{\nu}}(t)\frac{\sqrt{t}J_{\nu}^{\prime}(t)J_{\nu}(r)\sqrt{r}}{t-r}\chi_{I_{c}^{\nu}}(r),
+\end{align*}
+是命题 6.4 的直接推论, 理由如下:
+\begin{align*}
+  \int_{0}^{\infty}\Big(\sum_{\ell}|K_{\nu}^{c} g_{\ell}(t)|^{2}\Big)^{p/2}t^{\alpha}\,\mathrm{d}t
+  &\lesssim\sum_{n=0}^{\infty}2^{n\alpha}\int_{2^{n-1}}^{2^{n+1}}
+   \Big(\sum_{\ell:\nu\sim 2^{n}}\left|K_{\nu}^{c} g_{\ell}(t)\right|^{2}\Big)^{p/2}\mathrm{d}t\\
+  &\lesssim\sum_{n=0}^{\infty}2^{n\alpha}\int_{0}^{\infty}
+   \Big(\sum_{\ell:\nu\sim 2^{n}}|g_{\ell}(t)|^{2}\chi_{I_{c}^{\nu}}(t)\Big)^{p/2}\mathrm{d}t\\
+  &\lesssim\sum_{n=0}^{\infty}\int_{2^{n-1}}^{2^{n+1}}
+   \Big(\sum_{\ell:\nu\sim 2^{n}}|g_{\ell}(t)|^{2}\Big)^{p/2}t^{\alpha}\,\mathrm{d}t\\
+  &\lesssim\int_{0}^{\infty}\Big(\sum_{\ell}|g_{\ell}(t)|^{2}\Big)^{p/2}t^{\alpha}\,\mathrm{d}t,
+\end{align*}
+取 $\alpha = (n - 1)(1 - p/2)$ 即得结果.
+
+其余项可以类似地控制, 除了一项需要额外论证, 即
+\begin{align*}
+  \chi_{I_{\infty}^{\nu}}(t)K_{\nu}(t,r)\chi_{I_{c}^{\nu}}(r).
+\end{align*}
+情形 $2 \leq p < 2n/(n-1)$ 容易, 因为此时对 $4/3 < s < p$ 有 $|x|^{(n-1)(1-p/2)} \in A_{p/s}$, 并有估计
+\begin{align*}
+  \int_{0}^{\infty}&\Big(\sum_{\ell}|K_{\nu}g_{\ell}(x)|^{2}\Big)^{p/2}x^{(n-1)(1-p/2)}\,\mathrm{d}x\\
+  &\lesssim\int_{0}^{\infty}\Big(\sum_{\ell}\left|M(g_{\ell}^{s})(x)\right|^{2/s}\Big)^{p/2}x^{(n-1)(1-p/2)}\,\mathrm{d}x\\
+  &\lesssim\int_{0}^{\infty}\Big(\sum_{\ell}|g_{\ell}(x)|^{2}\Big)^{p/2}x^{(n-1)(1-p/2)}\,\mathrm{d}x.
+\end{align*}
+
+为处理情形 $2n/(n+1) < p \leq 2$, 注意对 $t \geq 3\nu$, 有
+\begin{align*}
+  \Big|\int_{0}^{\infty}K_{\nu}^{1}(t,r)g_{\ell}(r)\chi_{I_{c}^{\nu}}(r)\,\mathrm{d}r\Big|
+  &\lesssim\frac{1}{t}\int_{I_{c}^{\nu}}\sqrt{r}\left|J_{\nu}(r)\right|\left|g_{\ell}(r)\right|\mathrm{d}r\\
+  &\lesssim\frac{1}{t}\Big(\int_{I_{c}^{\nu}}\left|g_{\ell}(r)\right|^{s}\mathrm{d}r\Big)^{1/s}\nu^{1/s'}
+  \lesssim\left(\frac{\nu}{t}\right)^{1/s'}(Mg_{\ell}^{s}(t))^{1/s}
+\end{align*}
+对 $s > 4/3$ 成立. 则得到积分
+\begin{align*}
+  \int_{0}^{\infty}\Big(\sum_{\ell}\Big(\frac{\nu}{t}\Big)^{2/s'}(M g_{\ell}^{s}(t))^{2/s}\Big)^{p/2}t^{(n-1)(1-p/2)}\,\mathrm{d}t,
+\end{align*}
+且由于 $-1 < -p/s' + (n - 1)(1 - p/2) < p/s - 1$, 有
+\begin{align*}
+  \left|t\right|^{-p/s'+(n-1)(1-p/2)}\in A_{p/s},
+\end{align*}
+使我们可以得到完成证明所需的估计:
+\begin{align*}
+  \int_{0}^{\infty}\Big(\sum_{\ell}&\Big(\frac{\nu}{t}\Big)^{2/s'}(Mg_{\ell}^{s}(t))^{2/s}\Big)^{p/2}t^{(n-1)(1-p/2)}\,\mathrm{d}t\\
+  &\lesssim\int_{0}^{\infty}\Big(\sum_{\ell}\nu^{2/s'}|g_{\ell}(t)|^{2}\chi_{I_{c}^{\nu}}(t)\Big)^{p/2}
+   t^{-p/s'+(n-1)(1-p/2)}\,\mathrm{d}t\\
+  &\lesssim\int_{0}^{\infty}\Big(\sum_{\ell}|g_{\ell}(t)|^{2}\Big)^{p/2}t^{(n-1)(1-p/2)}\,\mathrm{d}t.
+\end{align*}
+\end{proof}
+
+\section{\texorpdfstring{$L^p_{\mathrm{rad}}L^2_{\mathrm{ang}}(\R^n)$ 上Fourier变换的限制性质}{𝐿ᵖ_{𝑟𝑎𝑑}𝐿²_{𝑎𝑛𝑔}(ℝⁿ) 上Fourier变换的限制性质}}
+
+用与上述类似的那些方法, 可以得到下面的限制定理.
+
+\begin{theorem}\label{thm:6.5}
+在 $\R^n$($n \geq 2$)中, 给定 $1 \leq p < 2n/(n+1)$, 存在有限常数 $C_{p,n}$, 使
+\begin{align*}
+  \|\widehat{f}\|_{L^{2}(S^{n-1})}\leq C_{p,n}\|f\|_{L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})}
+\end{align*}
+对每个速降光滑函数 $f$ 成立.
+\end{theorem}
+
+注意, 区间 $1 \leq p < 2n/(n+1)$ 大于对应 Stein--Tomas 定理 \cite{b1,b13,b128} 的区间 $1 \leq p < 2(n+1)/(n+3)$:
+\begin{align*}
+  \|\widehat{f}\|_{L^{2}(S^{n-1})}\lesssim\|f\|_{L^{p}(\R^{n})}.
+\end{align*}
+
+上述限制估计的证明将通过对偶, 由相应的扩张估计得到:
+\begin{align*}
+  \|\widehat{f\,\mathrm{d}\sigma}\|_{L_{\mathrm{rad}}^{q}L_{\mathrm{ang}}^{2}(\R^{n})}
+  \lesssim_{q,n}\|f\|_{L^{2}(S^{n-1})},\qquad q>\frac{2n}{n-1}.
+\end{align*}
+取 $f(\theta) \equiv 1$, 容易检验上述估计在 $q \leq 2n/(n-1)$ 时不能成立, 这正说明区间 $1 \leq p < 2n/(n+1)$ 在定理陈述中是精确的.
+
+给定 $f \in L^2(S^{n-1})$, 有展开 $f = \sum_k a_k Y_k$, 其中 $Y_k$ 是 $k$ 次球调和函数, 规范化为 $\|Y_k\|_{L^2(S^{n-1})} = 1$. 于是可以援引公式
+\begin{equation}\label{eq:6.5}
+  \widehat{Y_{k}\,\mathrm{d}\sigma}(\xi)
+  =2\pi i^{k}\left|\xi\right|^{1-n/2}J_{k-1+n/2}(2\pi|\xi|)Y_{k}\Big(\frac{\xi}{\left|\xi\right|}\Big).
+\end{equation}
+
+\begin{proof}[定理~\ref{thm:6.5} 的证明]
+如前所述, 任何 $f \in L^2(S^{n-1})$ 都可以写成 $f = \sum_k a_k Y_k$ 的形式, 其中 $Y_k$ 是 $k$ 次的规范化调和多项式；且只须证明下列不等式:
+\begin{align*}
+  \Big(\int_{0}^{\infty}\Big(\sum_{k}|a_{k}|^{2}|J_{k-1+n/2}(r)|^{2}\Big)^{q/2}
+  r^{(1-n/2)q+n-1}\,\mathrm{d}r\Big)^{1/q}
+  \lesssim_{q}\Big(\sum_{k}|a_{k}|^{2}\Big)^{1/2}
+\end{align*}
+对每个 $q > 2n/(n - 1)$ 成立.
+
+由于 $0 \leq r \leq 1$ 时 $|J_{\nu}(r)| \lesssim r^{\nu}$, 该区间对上述积分的贡献平凡化. 现对固定的 $M = 2^m$($m = 0,1,\ldots$)考虑如上但限制于 $M \leq r \leq 2M$ 的积分 $I_M$.
+
+首先考虑 $n = 2$ 的情形. 则
+\begin{align*}
+  I_{M}&=\int_{M}^{2M}\Big(\sum_{k}|a_{k}|^{2}\left|J_{k}(r)\right|^{2}\Big)^{q/2}r\,\mathrm{d}r\\
+  &=\int_{M}^{2M}\Big(\sum_{k<M/2}\Big)^{q/2}r\,\mathrm{d}r
+   +\int_{M}^{2M}\Big(\sum_{M/2\leq k\leq 4M}\Big)^{q/2}r\,\mathrm{d}r
+   +\int_{M}^{2M}\Big(\sum_{k>4M}\Big)^{q/2}r\,\mathrm{d}r\\
+  &=I_{M}^{1}+I_{M}^{2}+I_{M}^{3}.
+\end{align*}
+为估计 $I_M^1$, 注意当 $k \leq M/2 \leq r/2$ 时, $|J_k(r)| \lesssim 1/r^{1/2}$ 对 $k$ 一致. 因此,
+\begin{align*}
+  I_{M}^{1}\lesssim\int_{M}^{2M}\Big(\sum_{k<M/2}|a_{k}|^{2}\Big)^{q/2}r^{-q/2+1}\,\mathrm{d}r
+  \lesssim M^{(4-q)/2}\Big(\sum|a_{k}|^{2}\Big)^{q/2}.
+\end{align*}
+关于 $I_M^3$, 有 $k > 4M \geq 2r$ 与 $|J_k(r)| \lesssim 1/k$, 由此得
+\begin{align*}
+  I_{M}^{3}\lesssim\int_{M}^{2M}\Big(\sum_{k>4M}k^{-2}|a_{k}|^{2}\Big)^{q/2}r\,\mathrm{d}r
+  \lesssim M^{2-q}\Big(\sum|a_{k}|^{2}\Big)^{q/2}.
+\end{align*}
+最后, 写
+\begin{align*}
+  I_{M}^{2}\lesssim\sum_{\alpha}\int_{G_{\alpha}}\Big(\sum_{M/2\leq k\leq 4M}|a_{k}|^{2}|J_{k}(r)|^{2}\Big)^{q/2}r\,\mathrm{d}r,
+\end{align*}
+其中
+\begin{align*}
+  G_{\alpha}=\left[\frac{M}{2}+\alpha M^{1/3},\ \frac{M}{2}+(\alpha+1)M^{1/3}\right]
+\end{align*}
+是实直线上的区间, $\alpha = 0, 1, 2, \ldots, \left[\frac{3}{2}M^{2/3}\right]$. 再定义
+\begin{align*}
+  A_{\alpha}=\sum_{k\in G_{\alpha}}|a_{k}|^{2}.
+\end{align*}
+则
+\begin{align*}
+  I_{M}^{2}
+  &\leq\sum_{\beta}\int_{G_{\beta}}\Big(\sum_{\alpha\leq\beta}
+   A_{\alpha}\Big(\frac{1}{(|\alpha-\beta|+1)^{1/4}M^{1/3}}\Big)^{2}\Big)^{q/2}r\,\mathrm{d}r\\
+  &\quad+\sum_{\beta}\int_{G_{\beta}}\Big(\sum_{\alpha\geq\beta}
+   A_{\alpha}\Big(\frac{1}{(|\alpha-\beta|+1)M^{1/3}}\Big)^{2}\Big)^{q/2}r\,\mathrm{d}r\\
+  &=I_{M}^{2,1}+I_{M}^{2,2},
+\end{align*}
+且
+\begin{align*}
+  I_{M}^{2,1}
+  &\lesssim\sum_{\beta\leq\frac{3}{2}M^{2/3}}
+   \Big(\sum_{\alpha\leq\beta}\frac{A_{\alpha}}{(|\alpha-\beta|+1)^{1/2}}\Big)^{q/2}M^{(4-q)/3}
+  \lesssim M^{(4-q)/3}\Big(\sum_{\gamma}A_{\gamma}^{s}\Big)^{q/2s}\\
+  &\lesssim M^{(4-q)/3}\Big(\sum_{\gamma}A_{\gamma}\Big)^{q/2}
+  \lesssim M^{(4-q)/3}\Big(\sum_{k}|a_{k}|^{2}\Big)^{q/2},
+\end{align*}
+其中取 $2/q = 1/s - 1/2$, 并用到了 $q > 4$ 的事实.
+
+项 $I_{M}^{2,2}$ 由同样论证控制. 于是, 当 $n = 2$ 且 $q > 4$ 时, 把上述所有估计对二进区间 $[M, 2M]$, $M = 2^{m}$, 相加, 得
+\begin{align*}
+  \sum_{m}\left(2^{m(4-q)/2}+2^{m(4-q)/3}\right)\Big(\sum_{k}|a_{k}|^{2}\Big)^{q/2}
+  \lesssim\Big(\sum_{k}|a_{k}|^{2}\Big)^{q/2},
+\end{align*}
+该情形的定理得证.
+
+在一般情形 $n \geq 2$ 中, 需要估计
+\begin{align*}
+  \Big(\int_{2^{m}}^{2^{m+1}}\Big(\sum_{k}|a_{k}|^{2}|J_{k-1+n/2}(r)|^{2}\Big)^{q/2}
+  r^{(1-n/2)q+n-1}\,\mathrm{d}r\Big)^{1/q},
+\end{align*}
+用前面的论证, 它被
+\begin{align*}
+  \lesssim 2^{m(n-2)(-q/2+1)}\left(2^{m(4-q)/2}+2^{m(4-q)/3}\right)\Big(\sum_{k}|a_{k}|^{2}\Big)^{q/2}
+\end{align*}
+控制. 最后, 只须注意对 $q > 2n/(n - 1)$, 2 的幂中所得指数为负.
+\end{proof}
+
+\section{\texorpdfstring{$L^p_{\mathrm{rad}}L^2_{\mathrm{ang}}(\R^n)$ 中的奇异积分}{𝐿ᵖ_{𝑟𝑎𝑑}𝐿²_{𝑎𝑛𝑔}(ℝⁿ) 中的奇异积分}}
+
+鉴于空间 $L_{\mathrm{rad}}^pL_{\mathrm{ang}}^2(\R^n)$ 对圆盘乘子的重要性, 揭示 Calderón--Zygmund 奇异积分与 $\R^n$ 中方向希尔伯特变换在它们上面的作用是有趣的.
+
+考虑奇异积分算子
+\begin{align*}
+  S f(x)=\mathrm{p.v.}\int_{\R^{n}}f(x-y)\frac{\Omega(y)}{|y|^{n}}\,\mathrm{d}y,
+\end{align*}
+其中 $\Omega$ 足够光滑、$0$ 次齐次, 且有零均值:
+\begin{align*}
+  \int_{S^{n-1}}\Omega(y)\,\mathrm{d}\sigma(y)=0.
+\end{align*}
+
+\begin{theorem}\label{thm:6.6}
+算子 $S$ 扩张为从 $L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})$ 到自身的、当 $1 < p < \infty$ 时有界的算子.
+\end{theorem}
+
+\begin{proof}
+只须在 $2 \leq p < \infty$ 时证明定理, 因为 $1 < p \leq 2$ 的情形将随后由对偶得出.
+
+给定 $f \in L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})$ 与 $g \in \mathcal{S}(\R)$, 考虑
+\begin{align*}
+  I(f,g)=\int_{0}^{\infty}\int_{S^{n-1}}\left|S f(r,\theta)\right|^{2}g(r)r^{n-1}\,\mathrm{d}\sigma(\theta)\,\mathrm{d}r
+  =\int_{\R^{n}}\left|S f(x)\right|^{2}g(|x|)\,\mathrm{d}x.
+\end{align*}
+由 \cite{b84}, 有
+\begin{align*}
+  I(f,g)\lesssim_{s}\int_{\R^{n}}\left|f(x)\right|^{2}\left(M g^{s}(x)\right)^{1/s}\mathrm{d}x
+\end{align*}
+对 $1 < s < \infty$ 成立, 其中 $Mg^{s}$ 表示 Hardy--Littlewood 极大算子作用于函数 $g^{s}(x) = (g(|x|))^{s}$. 但
+\begin{align*}
+  Mg^{s}(x)=\sup_{x\in B}\frac{1}{|B|}\int_{B}g^{s}(y)\,\mathrm{d}y
+\end{align*}
+也是径向的. 于是
+\begin{align*}
+  I(f,g)
+  &\lesssim_{s}\int_{0}^{\infty}\int_{S^{n-1}}|f(r,\theta)|^{2}\left(Mg^{s}(r)\right)^{1/s}r^{n-1}\,\mathrm{d}\sigma(\theta)\,\mathrm{d}r\\
+  &\lesssim_{s}\|f\|_{L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})}
+   \Big(\int_{0}^{\infty}(Mg^{s}(r))^{q/s}r^{n-1}\,\mathrm{d}r\Big)^{1/q},
+\end{align*}
+只要 $1 < s < q$, 其中 $2/p + 1/q = 1$.
+
+对所有满足 $\int_{0}^{\infty} g^{q}(r)r^{n-1}\,\mathrm{d}r \leq 1$ 的这样的 $g$ 取上确界, 即结束证明.
+\end{proof}
+
+上面的定理多少是人们可能预期的结果, 但下面的定理或许更令人惊讶. 考虑方向 $\omega \in S^{n-1}$ 上的希尔伯特变换 $H_\omega$, 定义于 \eqref{eq:5.2}.
+
+\begin{theorem}\label{thm:6.7}
+算子 $H_\omega$ 在 $L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})$ 上有界, 当且仅当 $2n/(n+1) < p < 2n/(n-1)$.
+\end{theorem}
+
+\begin{proof}
+由旋转对称性, 只须对 $\omega = e_n = (0, 0, \ldots, 1)$ 证明结论.
+
+为看``仅当''部分, 取 $f$ 为单位方体的示性函数, 并注意
+\begin{align*}
+  |H_{e_{n}}f(x_{1},x_{2},\ldots,x_{n-1},y)|\gtrsim\frac{1}{|y|}
+\end{align*}
+对 $|x_j| \leq 1/2$, $j = 1, 2, \ldots, n - 1$ 与 $|y| \geq 2$ 成立.
+
+则一个初等计算给出不等式
+\begin{align*}
+  \int_{0}^{\infty}\int_{S^{n-1}}\left(|H_{e_{n}}f(r,\theta)|^{2}\,\mathrm{d}\sigma(\theta)\right)^{p/2}r^{n-1}\,\mathrm{d}r
+  &\geq\int_{2}^{\infty}\Big(\Big(\frac{1}{r}\Big)^{2}\frac{1}{r^{n-1}}\Big)^{p/2}r^{n-1}\,\mathrm{d}r\\
+  &=\int_{2}^{\infty}r^{n-p(n+1)/2}\frac{\mathrm{d}r}{r},
+\end{align*}
+因此 $H_{e_n}$ 的有界性蕴含 $p > 2n/(n+1)$. 同样, 另一个界 $p < 2n/(n-1)$ 由对偶得出.
+
+为证明``当''部分, 首先注意 $L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})$ 范数在膨胀下表现良好: 若
+\begin{align*}
+  f_{\delta}(x)=f(\delta x),
+\end{align*}
+则
+\begin{align*}
+  \left\|f_{\delta}\right\|_{L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})}
+  =\delta^{-n/p}\left\|f\right\|_{L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})},
+\end{align*}
+并且在乘以特征标 $e^{ix\cdot\eta}$ 之下保持不变.
+
+因此, 若 $\widehat{T_R f}(\xi) = \chi_{B_R}(\xi)\widehat{f}(\xi)$, 其中 $B_R$ 是半径为 $R$ 的球, 则有
+\begin{align*}
+  T_{R}f(x)=T_{1}f_{1/R}(R x),
+\end{align*}
+由此产生估计
+\begin{align*}
+  \left\|T_{R}f\right\|_{L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})}
+  &=R^{-n/p}\left\|T_{1}f_{1/R}\right\|_{L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})}
+  \lesssim R^{-n/p}\left\|f_{1/R}\right\|_{L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})}\\
+  &\lesssim\left\|f\right\|_{L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})}
+\end{align*}
+对 $R > 0$ 一致, 只要 $2n/(n+1) < p < 2n/(n-1)$.
+
+其次考虑对应希尔伯特变换 $H_{\omega}$ 的乘子 $i\,\operatorname{sign}(\xi\cdot\omega)$, 并注意它的有界性性质等价于由超平面 $\{\xi : \xi\cdot\omega \leq t\}$ 给出的Fourier乘子的有界性性质.
+
+给定函数 $f$(选取使它的Fourier变换 $\widehat{f}$ 具有紧支集), 表达式
+\begin{align*}
+  e^{-2\pi i x\cdot\xi_{k}}T_{R_{k}}\bigl(e^{2\pi i y\cdot\xi_{k}}f(y)\bigr)(x)
+\end{align*}
+对应由以 $\xi_{k}$ 为心、半径 $R_{k}$ 的球的示性函数给出的Fourier乘子. 选取适当的点列 $\xi_{k}$ 与半径列 $R_{k}$, 可以写
+\begin{align*}
+  \chi_{\{\xi\cdot\omega\leq 0\}}(\xi)\widehat{f}(\xi)
+  =\lim_{k\to\infty}\chi_{\|\xi-\xi_{k}\|\leq R_{k}}(\xi)\widehat{f}(\xi).
+\end{align*}
+于是控制收敛定理, 连同 $T_{R_k}$ 在区间 $2n/(n+1) < p < 2n/(n-1)$ 内于 $L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})$ 上的一致界, 使我们能结束证明.
+\end{proof}
+
+\begin{proof}[定理~\ref{thm:6.7} 的另一个证明]
+从积分
+\begin{align*}
+  I(f,g)=\int_{0}^{\infty}\int_{S^{n-1}}\left|H_{\omega}f(r,\theta)\right|^{2}g(r)r^{n-1}\,\mathrm{d}\sigma(\theta)\,\mathrm{d}r
+\end{align*}
+开始. 有
+\begin{align*}
+  I(f,g)=\int_{\R^{n}}|H_{\omega}f(x)|^{2}g(|x|)\,\mathrm{d}x
+  \lesssim_{s}\int_{\R^{n}}|f(x)|^{2}\left(M_{\omega}g^{s}(x)\right)^{1/s}\mathrm{d}x,
+\end{align*}
+其中 $M_{\omega}$ 表示沿 $\omega$ 方向的一维 Hardy--Littlewood 极大函数, $s > 1$.
+
+由于 $g^{s}(x) = g^{s}(|x|)$ 是径向的, 可以考虑它的普适 Kakeya 极大函数, 定义为
+\begin{equation}\label{eq:6.6}
+  \mathcal{U}f(x)=\sup_{\substack{a,b>0\\ \omega\in S^{n-1}}}\frac{1}{a+b}\int_{-a}^{b}\left|f(x+t\omega)\right|\mathrm{d}t,
+\end{equation}
+得到上界
+\begin{align*}
+  I(f,g)\lesssim_{s}\int_{\R^{n}}|f(x)|^{2}\left(\mathcal{U}g^{s}(x)\right)^{1/s}\mathrm{d}x,
+\end{align*}
+从而
+\begin{align*}
+  I(f,g)
+  &\lesssim_{s}\Big(\int_{0}^{\infty}\int_{S^{n-1}}\left(|f(r,\theta)|^{2}\,\mathrm{d}\sigma(\theta)\right)^{p/2}r^{n-1}\,\mathrm{d}r\Big)^{2/p}
+   \Big(\int_{\R^{n}}(\mathcal{U}g^{s}(x))^{q/s}\,\mathrm{d}x\Big)^{1/q},
+\end{align*}
+其中 $2/p + 1/q = 1$. 为结束, 利用 $\mathcal{U}$ 限于径向函数时在 $L^p(\R^n)$($p > n$)上有界这一事实 \cite{b132}: 注意 $2n/(n+1) < p < 2n/(n-1)$ 给出
+\begin{align*}
+  \frac{1}{q}=1-\frac{2}{p}<1-\frac{n-1}{n}=\frac{1}{n}.
+\end{align*}
+因此, 给定 $q > n$, 选取 $s > 1$ 使 $q/s > n$, 得到
+\begin{align*}
+  \int_{\R^{n}}(\mathcal{U}g^{s}(x))^{q/s}\,\mathrm{d}x
+  \lesssim_{s}\int_{\R^{n}}|g(x)|^{q}\,\mathrm{d}x
+  =\int_{0}^{\infty}|g(r)|^{q}r^{n-1}\,\mathrm{d}r,
+\end{align*}
+它正与 $\|f\|_{L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})}$ 一致.
+\end{proof}
+
+\begin{corollary}[Meyer 引理]\label{cor:6.8}
+给定 $\{\theta_j\}$——$\R^n$ 中方向的可数族——以及相应的方向希尔伯特变换 $H_j f = H_{\theta_j} f$, 下列不等式成立:
+\begin{align*}
+  \Big\|\Big(\sum_{j}|H_{j}f_{j}|^{2}\Big)^{1/2}\Big\|_{L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})}
+  \lesssim\Big\|\Big(\sum_{j}|f_{j}|^{2}\Big)^{1/2}\Big\|_{L_{\mathrm{rad}}^{p}L_{\mathrm{ang}}^{2}(\R^{n})},
+\end{align*}
+其中 $2n/(n+1) < p < 2n/(n-1)$.
+\end{corollary}
+
+\begin{proof}
+再一次, 只须在 $2 \leq p < 2n/(n-1)$ 时证明, 然后对偶覆盖其他情形.
+
+给定 $g \in \mathcal{S}(\R)$, 考虑积分
+\begin{align*}
+  \sum_{j}\int_{0}^{\infty}\int_{S^{n-1}}\left|H_{j}f_{j}(r,\theta)\right|^{2}g(r)r^{n-1}\,\mathrm{d}\sigma(\theta)\,\mathrm{d}r
+  =\sum_{j}\int_{\R^{n}}\left|H_{j}f_{j}(x)\right|^{2}g(|x|)\,\mathrm{d}x,
+\end{align*}
+即
+\begin{align*}
+  \lesssim_{s}\sum_{j}\int_{\R^{n}}|f_{j}(x)|^{2}\left(\mathcal{U}g^{s}(x)\right)^{1/s}\mathrm{d}x,
+\end{align*}
+然后
+\begin{align*}
+  \lesssim_{s}\Big|\int_{0}^{\infty}\int_{S^{n-1}}\Big(\Big|\sum_{j}f_{j}(r,\theta)\Big|^{2}\,\mathrm{d}\sigma(\theta)\Big)^{p/2}r^{n-1}\,\mathrm{d}r\Big|^{2/p}
+  \Big|\int_{\R^{n}}(\mathcal{U}g^{s}(x))^{q/s}\,\mathrm{d}x\Big|^{1/q}.
+\end{align*}
+证明以定理\ref{thm:6.7} 中给出的同样理由进行.
+\end{proof}
+
+本节以用旧技巧给出普适 Kakeya 极大函数在径向函数上有界性的一个新证明作结.
+
+与这些问题相关的是 $\R^n$ 中向量场相伴的极大函数. 给定连续方向场 $v(x)$ 与正实值函数 $p(x)$, 考虑
+\begin{align*}
+  M_{v}f(x)=\sup_{0<r,t<p(x)}\frac{1}{r+t}\int_{-r}^{t}\left|f(x+sv(x))\right|\mathrm{d}s.
+\end{align*}
+一如微分理论中的惯例, 这些极大算子的行为给出 Lebesgue 微分定理的定量版本. 一般而言问题相当困难, 但 E.~Stein 与 S.~Wainger \cite{b126} 创建了一个理论, 给出有界性的充分条件.
+
+然而, 对我们的讨论, 下面三个例子特别相关:
+
+\begin{enumerate}
+\item[(1)] $v(x) = x/\|x\|$, $p(x) = \infty$. 此时 $M$ 在 $L^p(\R^n)$ 上有界, 当且仅当 $p > n$.
+\item[(2)] $v(x) = x/\|x\|$, $p(x) = \frac{1}{2}\|x\|$. 此时 $M$ 是弱型 $(1, 1)$ 的.
+\item[(3)] 在 $\R^2$ 中, $v(x,y) = (-y,x)/\|(x,y)\|$, $p(x) = \infty$. 此时 $M$ 在 $L^p(\R^2)$($1 < p < \infty$)上有界.
+\end{enumerate}
+
+(1) 的证明使用极坐标, 连同 $p > n$ 时 $|x|^{n-1}$ 是 $\R^n$ 中 $A_p$ 权重的事实:
+\begin{align*}
+  \int_{\R^{n}}|Mf(x)|^{p}\,\mathrm{d}x
+  &=\int_{S^{n-1}}\int_{0}^\infty|Mf(r,\theta)|^{p}r^{n-1}\,\mathrm{d}r\,\mathrm{d}\sigma(\theta)\\
+  &\lesssim_{p}\int_{S^{n-1}}\int_{0}^\infty|f(r,\theta)|^{p}r^{n-1}\,\mathrm{d}r\,\mathrm{d}\sigma(\theta),
+\end{align*}
+只要 $p > n$. (2) 的证明作为练习留给读者.
+
+关于 (3), 在把 $\R^2$ 与 $\C$ 等同的 $\R^2$ 中考虑变量替换 $w = \log z$, 它把直线 $\rho e^{i\theta}(1 + ir)$, $r \in \R$, 映为曲线 $\Gamma: \log\rho + i\theta + \log(1 + ir)$. 但 $\Gamma$ 是把固定曲线 $w = \log(1 + ir)$ 平移到点 $\log\rho + i\theta$ 的结果. 因此, 在 $w$-平面中, 极大函数实现为
+\begin{align*}
+  \widetilde{M}g(w)=\sup_{t,r>0}\frac{1}{r+t}\int_{-r}^{t}\left|g(w+\gamma(s))\right|\mathrm{d}s,
+\end{align*}
+其中 $\gamma(s) = \log(1 + is)$. 在这个设定下, 可以应用 E.~Stein 与 S.~Wainger \cite{b126} 的结果结束证明.
+
+向量场 (3) 的结果可以推广到高维, 如果我们把注意力限于径向函数: 此时可以对位置向量 $x$ 取任何垂直方向, 而不改变极大函数在那里的值.
+
+即, 考虑乘积结构 $\R^n = \R \times \R^{n-1}$, 在点 $(x_1, x_2, \ldots, x_n)$ 处极大函数的求值可以看作其 $(n-1)$ 维版本作用于切片 $\{x_1\} \times \R^{n-1}$ 的求值. 于是归纳论证连同 Fubini 定理给出对每个 $p > 1$ 的有界性.
+
+我们对 $\mathcal{U}$ 的证明将仿照这两个极端例子 (1) 与 (3), 并用 $\R^n$ 中平行多面体的几何处理中间情形.
+
+在 $\R^n$($n \geq 2$)中, 普适 Kakeya 极大函数 \eqref{eq:6.6} 在每个 $L^p(\R^n)$($1 \leq p < \infty$)上无界, 适当的 Kakeya 集论证即可说明. 然而, 作用于径向函数 $f$ 时, 有:
+
+\begin{proposition}\label{prop:6.9}
+若 $p > n$ 且 $f$ 径向, 则 $\|\mathcal{U}f\|_{p} \lesssim \|f\|_{p}$.
+\end{proposition}
+
+\begin{proof}
+固定径向函数 $f$ 与正数 $\lambda > 0$, 考虑集合
+\begin{align*}
+  E_{\lambda}=\{x:\mathcal{U}f(x)>\lambda\}.
+\end{align*}
+给定 $x \in E_\lambda$, 存在方向集 $\Gamma_x \subset S^{n-1}$, 使
+\begin{align*}
+  \mathcal{U}f(x)=\sup_{\substack{a,b>0\\ \omega\in S^{n-1}}}\frac{1}{a+b}\int_{-a}^{b}\left|f(x+t\omega)\right|\mathrm{d}t\geq\lambda
+\end{align*}
+对每个 $\omega \in \Gamma_x$ 成立. 显然, 若 $\|x\| = \|y\|$, 则 $\Gamma_x$ 与 $\Gamma_y$ 在旋转后重合. 此外, 对给定的 $x$ 与 $\omega \in \Gamma_x$, 我们将选取满足上述不等式、且其和 $a + b$ 尽可能大的 $a$ 与 $b$. 然后, 在所有这样的 $\omega \in S^{n-1}$, $a$ 与 $b$ 中, 选出使线段 $\{x + s\omega : -a \leq s \leq b\}$ 在径向方向的投影最大者.
+
+利用径向对称性, 并经一些初等几何考虑, 集合 $E_{\lambda}$ 包含在``几乎不交''的环之并中,
+\begin{align*}
+  E_{\lambda}=\bigcup_{j}\{R_{j}^{1}\leq|x|\leq R_{j}^{2}\}=\bigcup_{j}C_{j},
+\end{align*}
+满足下列性质:
+
+(1) 对每个环 $C_j$, 存在方向 $\omega_j$, 使 $|f|$ 在方向 $\omega_j$ 的线段——始于球面 $\|x\| = R_j^1$ 上某点, 终于球面 $\|y\| = R_j^2$ 上某点——上的平均等于给定值 $\lambda$.
+
+(2) 若 $|k - j| \geq 2$, 则 $C_j \cap C_k = \emptyset$.
+
+显然, 为估计 $E_\lambda = \{\mathcal{U}f > \lambda\}$ 的大小, 只须独立地控制该集合包含于每个环 $C_j$ 中的部分.
+
+区分两类环:
+
+(i) 薄壳: $\{R \leq |x| \leq R + \Delta : \Delta < \tfrac{1}{2}R\}$.
+
+(ii) 厚壳: $\{R \leq |x| \leq R + \Delta : \Delta \geq \frac{1}{2}R\}$.
+
+在两种情形(薄或厚)中, 固定两个极点 $N$ 与 $S$(北与南), 以估计 $E_{\lambda}$ 在赤道附近的部分. 由径向对称性, 可以选取方向 $\omega$, 使从壳上每个点出发的射线与 $NS$ 轴相交；我们还可以约定, 在两条可能的射线中, 选中的那条指向北.
+
+对厚环 $C$, 其体积与 $(\Delta + R)^n$ 相当. 因此需要证明不等式
+\begin{align*}
+  \left(\Delta+R\right)^{n}\lesssim_{p}\frac{1}{\lambda^{p}}\int_{C}\left|f(x)\right|^{p}\,\mathrm{d}x,\qquad p>n.
+\end{align*}
+注意, 对球面 $\|x\| = R + \Delta$ 上每个点, 我们被给定一条直线段 $L_x$: 始于 $x$, 终于内球面 $\|y\| = R$；与某个球面 $\|y\| = R_0 \leq R$ 相切；且满足
+\begin{itemize}
+\item $|f|$ 在 $L_{x}$ 上的平均等于 $\lambda$；
+\item 直线 $L_{x}$ 与 $NS$ 轴相交.
+\end{itemize}
+同样, 给定固定径向函数 $f$, 可以把线段 $L_x$ 加粗(加上某个小的正数 $\varepsilon$)成为半径为 $\varepsilon$ 的管, 使得 $|f|$ 在该管中的平均大于(比如)$\lambda/2$.
+
+接着用一族这样的管覆盖 $E_\lambda$(或其靠近赤道的固定部分), 但在外球面 $\|x\| = R + \Delta$ 上保持两两不交. 即, 我们得到了所谓管丛(brush)构型: 它们与 $NS$ 轴相交, 且在壳的外球面上互不相交.
+
+记这些管的族为 $\{T_\nu^\varepsilon\}_\nu$, 考虑它们的重叠函数 $\sum_\nu \chi_{T_\nu^\varepsilon}(x)$. 一些初等几何考虑(``刷论证'')给出下列估计:
+\begin{equation}\label{eq:6.7}
+  \left|\left\{\sum_{\nu}\chi_{T_{\nu}^{\varepsilon}}(x)\geq d>0\right\}\right|
+  \lesssim\frac{(\Delta+R)^{n}}{d^{n/(n-1)}}.
+\end{equation}
+于是
+\begin{align*}
+  |C|
+  &\lesssim\sum_{\nu}|T_{\nu}^{\varepsilon}|
+  \lesssim\frac{1}{\lambda}\sum_{\nu}\int_{T_{\nu}^{\varepsilon}}|f(x)|\,\mathrm{d}x
+  \leq\frac{1}{\lambda}\int|f(x)|\sum_{\nu}\chi_{T_{\nu}^{\varepsilon}}(x)\,\mathrm{d}x\\
+  &\leq\frac{1}{\lambda}\|f\|_{p}\left\|\sum_{\nu}\chi_{T_{\nu}^{\varepsilon}}\right\|_{q}
+  \lesssim\frac{1}{\lambda}\|f\|_{p}|C|^{1/q},
+\end{align*}
+其中 $1/p + 1/q = 1$, 只要 $q < n/(n - 1)$(等价地 $p > n$), 由此即可结束证明.
+
+初等几何考虑如下.
+
+(1) 对赤道 $S^{n-2}$ 中的每个 $\theta$, 考虑由 $\theta$ 与 $NS$ 轴确定的二维平面 $H_\theta$, 以及加宽的带 $H_\theta^\varepsilon = \{x : \dist(x, H_\theta) \leq \varepsilon/2\}$. 在 $S^{n-2}$ 中适当选取 $\varepsilon$-间距的点 $\{\theta_j\}$, 可以假设集合 $H^\varepsilon_{\theta_j} \cap \{|x| = R + \Delta\}$ 两两不交, 且其并覆盖 $\{|x| = R + \Delta\}$. 则在 $|x| < R + \Delta$ 处它们的重叠容易控制: 在距离 $R_0 < r < R + \Delta$ 处, 有
+\begin{align*}
+  \sum_{j}\chi_{H_{\theta_{j}}^{\varepsilon}}(x)\lesssim\left(\frac{\Delta+R}{r}\right)^{n-2}.
+\end{align*}
+于是, 管族 $\{T_\nu^\varepsilon\}$ 按包含关系 $T_\nu^\varepsilon \subset H_{\theta_i}^\varepsilon$ 分成不交的类.
+
+(2) $H_{\theta_j}^{\varepsilon}$ 内的管在切向内球面 $\|x\| = R_0 \leq R$ 处相遇, 产生一族丛构型(即在 $R_0$ 处共点的管集), 使得 $H_{\theta_j}^{\varepsilon}$ 内每根管至多属于其中两个丛. 于是它们的重叠函数由初等计算(``丛论证'')容易控制:
+\begin{align*}
+  \sum_{T_{\nu}^{\varepsilon}\subset H_{\theta_{j}}^{\varepsilon}}\chi_{T_{\nu}^{\varepsilon}}(x)\lesssim\frac{\Delta+R}{r},
+\end{align*}
+当 $R_0 < |x| = r < R + \Delta$ 时.
+
+这两个估计合在一起表明, 在球面 $|x|=r$($R_0<r<R+\Delta$)上, 重叠以 $(R+\Delta)^{n-1}/r^{n-1}$ 为界, 对 $\varepsilon>0$ 一致. 即, 得到 \eqref{eq:6.7}.
+
+为处理薄壳, 我们以同样方式进行, 但这里的估计容易化归到每个平面 $H_{\theta}$. 即只须考虑二维情形, 并注意 $\varepsilon$-矩形 $R_{\theta,j}^{\varepsilon}$ 排成不交的丛族, 满足重叠估计
+\begin{align*}
+  \left|\left\{\sum\chi_{R_{\theta,j}^{\varepsilon}}(x)\geq d\right\}\right|\lesssim\frac{\Delta R}{d^{2}},
+\end{align*}
+由此得
+\begin{align*}
+  \int_{S^{n-2}}\left|\left\{\sum\chi_{R_{\theta,j}^{\varepsilon}}(x)\geq d\right\}\right|R^{n-2}\,\mathrm{d}\theta
+  \lesssim\frac{\Delta R^{n-1}}{d^{2}}.
+\end{align*}
+\end{proof}
+
+\section{杂论: 一维积分不等式}
+
+下面将考虑几个一维积分不等式, 其证明却依赖于贝塞尔函数的某些性质(见 6.2 节)以及 $\R^n$ 中径向函数Fourier变换的公式 \eqref{eq:6.1}.
+
+\begin{theorem}\label{thm:6.10}
+对实直线上每个可测函数 $f$, 下列估计成立:
+\begin{align*}
+  \Big\{\int\Big[\int|f(s)||s|^{n/2}\min(|s/t|,|t/s|)^{(n-2)/2}\,\mathrm{d}s\Big]^{q}
+  t^{n+q-1-(qn/2)}\,\mathrm{d}t\Big\}^{1/q}
+  \leq C(p,n)\Big(\int|f(r)|^{p}r^{n-1}\,\mathrm{d}r\Big)^{1/p},
+\end{align*}
+其中 $C(p,n)$ 是(与 $f$ 无关的)普适有限常数, $n \geq 3$ 是整数, $1 < p < n/2$, $1/q = 1/p - 2/n$.
+\end{theorem}
+
+注意, 只须证明函数 $f$ 非负、积分在 $[0, \infty]$ 上进行的特殊情形.
+
+\begin{proof}[定理~\ref{thm:6.10} 的证明]
+对 $\nu > 0$, 考虑函数
+\begin{align*}
+  G_{\nu}(t)=\int_{0}^{\infty}J_{\nu}(t s)J_{\nu}(s)\frac{\mathrm{d}s}{s},
+\end{align*}
+并注意 $G_{\nu}(t) = G_{\nu}(1/t)$. 众所周知该积分可以显式求值, 等于 $\frac{1}{2\nu}\min(t,1/t)^{\nu}$.
+
+然而, 为完整起见, 我们将给出两个论证来支持上述恒等式.
+
+(1) 注意对 $t > 0$, 有
+\begin{align*}
+  \int_{0}^{\infty}J_{\nu}(t r)r^{-is}\frac{\mathrm{d}r}{r}
+  =t^{is}\int_{0}^{\infty}J_{\nu}(r)r^{-is}\frac{\mathrm{d}r}{r}
+  =t^{is}M J_{\nu}(s),
+\end{align*}
+并对 Mellin 变换应用 Parseval 定理:
+\begin{align*}
+  G_{\nu}(t)
+  &=\frac{1}{2\pi}\int_{-\infty}^{\infty}e^{is\log t}\left|MJ_{\nu}(s)\right|^{2}\,\mathrm{d}s
+  =\frac{1}{2\pi}\int_{-\infty}^{\infty}e^{is\log t}\frac{1}{\nu^{2}+s^{2}}\,\mathrm{d}s\\
+  &=\frac{1}{2\nu}\left[\min\left(t,\frac{1}{t}\right)\right]^{\nu}.
+\end{align*}
+
+(2) 连续函数 $G_{\nu}$ 在区域 $(0,1) \cup (1,\infty)$ 内部满足微分方程
+\begin{align*}
+  t^{2}\frac{\mathrm{d}^{2}y(t)}{\mathrm{d}t^{2}}+t\frac{\mathrm{d}y(t)}{\mathrm{d}t}-\nu^{2}y(t)=0,
+\end{align*}
+这是贝塞尔函数满足的微分方程连同 Hankel 反演公式的推论.
+
+由于 $G_{\nu}(0) = 0$, $G_{\nu}(1) = \int_{0}^{\infty} r^{-1}(J_{\nu}(r))^2\,\mathrm{d}r = 1/(2\nu)$, 由唯一性它必与另一个解 $\frac{1}{2\nu}[\min(t,1/t)]^\nu$ 重合.
+
+接着, 给定(如定理 6.10 假设中的)$f$, 考虑定义于 $\R^n$ 上的 $F(x) = f(|x|)$, 以及 $\widehat{F}(\xi) = g(|\xi|)$, 其中
+\begin{align*}
+  g(r)=2\pi r^{-(n-2)/2}\int_{0}^{\infty}f(s)J_{(n-2)/2}(2\pi r s)s^{n/2}\,\mathrm{d}s,
+\end{align*}
+并应用($n \geq 3$ 的)Riesz 位势:
+\begin{align*}
+  \widehat{I^{2}F}(\xi)=|\xi|^{-2}g(|\xi|).
+\end{align*}
+记
+\begin{align*}
+  h(|x|):=I^{2}F(x),
+\end{align*}
+有
+\begin{align*}
+  h(t)
+  &=4\pi^{2}t^{-(n-2)/2}\int_{0}^{\infty}r^{-(n-2)/2-2}
+   \Big(\int_{0}^{\infty}f(s)J_{(n-2)/2}(2\pi r s)s^{n/2}\,\mathrm{d}s\Big)
+   J_{(n-2)/2}(2\pi r t)\,r^{n/2}\,\mathrm{d}r\\
+  &=4\pi^{2}t^{-(n-2)/2}\int_{0}^{\infty}f(s)s^{n/2}
+   \Big(\int_{0}^{\infty}J_{(n-2)/2}(2\pi r s)J_{(n-2)/2}(2\pi r t)\frac{\mathrm{d}r}{r}\Big)\mathrm{d}s\\
+  &=\frac{2\pi^{2}}{\nu}t^{-(n-2)/2}\int_{0}^{\infty}f(s)s^{n/2}
+   \min\Big(\frac{s}{t},\frac{t}{s}\Big)^{(n-2)/2}\mathrm{d}s.
+\end{align*}
+定理由 $\R^n$ 中 Riesz 位势的众所周知估计得出, 见 \cite{b12}, 即
+\begin{align*}
+  \|I^{2}F\|_{q}\lesssim\|F\|_{p},\qquad
+  \frac{1}{q}=\frac{1}{p}-\frac{2}{n},\quad 1<p<\frac{n}{2}.
+\end{align*}
+\end{proof}
+
+如前所述, 定理 6.10 的证明依赖于高维Fourier分析的估计. 然而, 作为一维结果, 自然要问一个严格一维的证明, 它更可能揭示向非整数值参数 $n$ 的推广.
+
+定理 6.10 的一些例子如下.
+
+(a) 对 $n = 3$, $p = 4/3$, $q = 12$,
+\begin{align*}
+  \Big[\int_{0}^{\infty}\Big(\int_{0}^{\infty}f(s)\,s^{3/2}\min\bigl((s/t),(t/s)\bigr)^{1/2}\,\mathrm{d}s\Big)^{12}t^{-4}\,\mathrm{d}t\Big]^{1/12}
+  \lesssim\Big[\int_{0}^{\infty}f(r)^{4/3}r\,\mathrm{d}r\Big]^{3/4}.
+\end{align*}
+
+(b) 对 $n = 4$, $p = 6/5$, $q = 3$,
+\begin{align*}
+  \Big[\int_{0}^{\infty}\Big(\int_{0}^{\infty}f(s)\,s^{2}\min(s/t,t/s)\,\mathrm{d}s\Big)^{3}\,\mathrm{d}t\Big]^{1/3}
+  \lesssim\Big[\int_{0}^{\infty}f(r)^{6/5}r^{3}\,\mathrm{d}r\Big]^{5/6}.
+\end{align*}
+
+(c) 对 $n = 6$, $p = 2$, $q = 6$,
+\begin{align*}
+  \Big[\int_{0}^{\infty}\Big(\int_{0}^{\infty}f(s)\,s^{3}\min(s/t,t/s)^{2}\,\mathrm{d}s\Big)^{6}t^{-7}\,\mathrm{d}t\Big]^{1/6}
+  \lesssim\Big[\int_{0}^{\infty}f(r)^{2}r^{5}\,\mathrm{d}r\Big]^{1/2}.
+\end{align*}
+
+\section{赋格曲: 带限函数}
+
+本章引入的、在混合范数空间上估计球乘子的方法, 受到关于\newterm{band-limited-function}{带限函数}{band-limited function}的相关工作 \cite{b131,b130} 的启发.
+
+在那里研究了级数 $\sum_{n=0}^{\infty} \lambda_n b_n(x)$ 的收敛性, 其中 $\{b_n(x)\}$ 是长球面波函数, 因其在通信理论中的相关性以及它们在测不准原理表述中的作用, 已有若干作者 \cite{b143,b137,b138,b142} 考虑过它们.
+
+即, 在通信理论中考虑同一信号及其频谱不可能同时受限这一事实.
+
+给定时间区间 $[-T, +T]$ 与频率区间 $[-\Omega, +\Omega]$, 我们可以问: 总能量 $\|f\|_2 = 1$ 的信号 $f(t)$ 中, 使
+\begin{align*}
+  \tau^{2}=\int_{-T}^{T}|f(t)|^{2}\,\mathrm{d}t,\qquad
+  \omega^{2}=\int_{-\Omega}^{\Omega}|\widehat{f}(\xi)|^{2}\,\mathrm{d}\xi
+\end{align*}
+尽可能接近 $1$ 者是什么, 其中 $\widehat{f}(\xi) = \int e^{-2\pi i x\xi}f(x)\,\mathrm{d}x$ 表示Fourier变换.
+
+$\tau = 1$ 意味着信号限于时段 $|t| \leq T$, 即 $f$ 是时间受限的.
+
+$\omega = 1$ 意味着其功率谱限于频带 $|\xi| \leq \Omega$, 即 $f$ 是带限的.
+
+关于Fourier变换的一个众所周知的事实是, $\tau$ 与 $\omega$ 不可能同时等于 $1$. 在 \cite{b137,b138} 中, Landau 与 Pollak 证明了: 对应于信号 $f$($\|f\|_2 = 1$)的数对 $(\tau, \omega)$ 描述由不等式
+\begin{align*}
+  \cos^{-1}(\tau)+\cos^{-1}(\omega)\geq\cos^{-1}\sqrt{\lambda_{0}},\qquad 0\leq\tau\leq 1,\ 0\leq\omega\leq 1,
+\end{align*}
+定义的平面区域, 其中
+\begin{align*}
+  \lambda_{0}=\sup\Big\{\int_{-T}^{T}|f(t)|^{2}\,\mathrm{d}t:
+  f\in L^{2}(\R),\ \|f\|_{2}=1,\ \supp(\widehat{f})\subset[-\Omega,+\Omega]\Big\}
+\end{align*}
+(附带约定: 若 $\tau$ 或 $\omega = 1$($=0$), 则另一个 $> 0$($< 1$)).
+
+另一个函数 $b_n(x)$ 扮演重要角色的相关结果是所谓的维数定理. 粗略地说, 它说: 带限到区间 $[-\Omega, +\Omega]$ 且``集中''在 $[-T, +T]$ 中的信号集具有维数 $4\Omega T$. Landau, Pollak 与 Slepian 给出了这一定理的精确陈述, 它在信号理论中有明确的应用.
+
+在这些结果的证明中, 算子
+\begin{align*}
+  P f(x)=\int_{-T}^{T}\frac{\sin 2\pi\Omega(x-t)}{\pi(x-t)}f(t)\,\mathrm{d}t
+\end{align*}
+很自然地出现. 它是正算子, 由标准理论, 它有一族可数特征值: $1 > \lambda_0 > \lambda_1 > \cdots$, 递减到 $0$. 相伴的规范化特征函数族就是 $b_n$. 函数 $b_n$ 可以取为实值, 且它们在带限函数空间中构成完备正交规范系:
+\begin{align*}
+  B_{2}(\Omega)=\left\{f\in L^{2}(\R):\supp(\widehat{f})\subset[-\Omega,+\Omega]\right\}.
+\end{align*}
+此外, 族 $\{\lambda^{-1/2}b_n(x)\chi_{[-T,+T]}(x)\}$ 在时间受限函数空间——即 $L^2[-T,+T]$——中也构成完备正交规范系. 关于这些陈述的进一步信息包含在上述 Landau、Pollak 与 Slepian 的文章中.
+
+若我们把积分归一化到区间 $[-1,+1]$ 并取 $c = 2\pi\Omega T$, 则相应算子 $P$ 作用于 $L^{2}[-1,+1]$ 的特征函数正是下列 Sturm--Liouville 问题的特征函数:
+\begin{equation}\label{eq:6.8}
+  \left(1-x^{2}\right)y^{\prime\prime}-2xy^{\prime}+\left(\chi-c^{2}x^{2}\right)y=0,
+\end{equation}
+边界条件是解在端点处必须有限或连续. 这个方程出现在用分离变量法、采用长球面坐标研究三维波动方程之时. 这一观点在 \cite{b136} 与 \cite{b144} 中作了展开.
+
+问题 \eqref{eq:6.8} 只对实数 $\chi_n(c)$, $n = 0, 1, 2, \ldots$ 的离散集有解. 若用 $S_n(x)$ 表示相应的特征函数, 它们满足下列关系:
+\begin{align*}
+  2c\pi^{-1}\left[R_{n}(1)\right]^{2}S_{n}(x)=\int_{-1}^{1}\frac{\sin c(x-t)}{\pi(x-t)}S_{n}(t)\,\mathrm{d}t,
+\end{align*}
+以及
+\begin{align*}
+  2i^{n}R_{n}(1)S_{n}(x)=\int_{-1}^{1}e^{icxt}S_{n}(t)\,\mathrm{d}t,
+\end{align*}
+其中 $R_n(t)$ 是 \eqref{eq:6.8} 的解, $\chi = \chi_n(c)$, 规范化使其在无穷远处的行为由 $(1/ct)\cos[ct - (n+1)\pi/2]$ 给出. 显然, 可以把 $S_n(t)$ 延拓为复平面上的整函数.
+
+取
+\begin{align*}
+  \lambda_{n}(c)=\lambda_{n}=2c\pi^{-1}\left[R_{n}(1)\right]^{2},
+\end{align*}
+以及
+\begin{align*}
+  b_{n}(x,c)=b_{n}(x)=\sqrt{\lambda_{n}T^{-1}}\,u_{n}^{-1}S_{n}(xT^{-1}),
+\end{align*}
+其中
+\begin{align*}
+  u_{n}^{2}=\int_{-1}^{1}[S_{n}(t)]^{2}\,\mathrm{d}t,
+\end{align*}
+就找到这些函数 $b_{n}(x)$ 的另一个刻画, 以及它们的正交关系
+\begin{align*}
+  \int_{-T}^{T}b_{n}(t)b_{m}(t)\,\mathrm{d}t=\lambda_{n}\delta_{nm},\qquad
+  \int_{-\infty}^{\infty}b_{n}(t)b_{m}(t)\,\mathrm{d}t=\delta_{nm},
+\end{align*}
+由此得它们也在 $L^2([-T,+T])$ 中构成完备正交系——这容易由函数族 $S_n(x)$ 在 $L^2([-1,+1])$ 上的相应断言推出.
+
+有
+\begin{align*}
+  \widehat{b}_{n}(x)=i^{-n}\sqrt{T\Omega^{-1}\lambda_{n}^{-1}}\;b_{n}\left(T\Omega^{-1}x\right)\chi_{\left[-\Omega,+\Omega\right]}(x),
+\end{align*}
+而 Plancherel 定理表明 $\{b_n\}$ 在 $B_2(\Omega)$ 中构成完备正交规范系, 如前所述.
+
+长球面波函数与``整数加二分之一''阶的贝塞尔函数密切相关. 更具体地, 与球贝塞尔函数
+\begin{align*}
+  j_{n}(x)=\sqrt{(\pi/2)x^{-1}}\,J_{n+1/2}(x),
+\end{align*}
+相关, 它们属于空间 $L^p(\R)$($p > 1$), 其在无穷远处的行为由 $x^{-1}\sin[x - (n\pi)/2]$ 给出. 它们满足正交关系
+\begin{align*}
+  \int_{-\infty}^{\infty}j_{n}(t)j_{m}(t)\,\mathrm{d}t=\pi(2n+1)^{-1}\delta_{nm},
+\end{align*}
+其Fourier变换由
+\begin{align*}
+  \widehat{j}_{n}(x)=(-i)^{n}\pi\,p_{n}(2\pi x)\chi_{\left[-1,+1\right]}(2\pi x),
+\end{align*}
+给出, 其中 $p_n$ 是 $n$ 阶 Legendre 多项式. 这个公式连同 Plancherel 定理表明, 函数族 $\sqrt{(2n+1)\pi^{-1}}\,j_n(x)$ 也在 $B_2(\Omega)$ 中构成完备正交规范系. 问题 \eqref{eq:6.8} 可以视为 Legendre 方程 Sturm--Liouville 问题的扰动, 其解 $S_n(x)$ 可以按规范化的 Legendre 多项式 $q_n(x) = \sqrt{(2n+1)/2}\,p_n(x)$ 展开. 因此, 可以把函数 $b_n(x)$ 用球贝塞尔函数 $j_n(x)$ 表达. 更具体地, 若
+\begin{align*}
+  S_{n}(x)=\sum_{-\left(n-1\right)/2\leq k\leq\infty}d(k,n)\,q_{n+2k}(x),
+\end{align*}
+则
+\begin{align*}
+  b_{n}(x)=\sqrt{2\Omega}\,u_{n}^{-1}
+  \sum_{[(n-1)/2]\leq k\leq\infty}(-1)^{k}d(k,n)\sqrt{2n+4k+1}\;j_{n+2k}(2\pi\Omega x).
+\end{align*}
+在这个级数展开中,``领头''系数是对应 $k = 0$ 的那个. 事实上, 当 $n$ 足够大时, 有渐近式
+\begin{align*}
+  b_{n}(x)\sim\sqrt{(2n+1)\pi^{-1}}\;j_{n}(x)\qquad (\Omega=1/2\pi).
+\end{align*}
+
+在 \cite{b131} 中, 这一理论被推广到 $L^{p}(\R)$($p \neq 2$)的情形, 定义了空间
+\begin{align*}
+  B_{p}(\Omega)=\bigl\{f\in L^{p}(\R):\supp(\widehat{f})\subset[-\Omega,+\Omega]\bigr\},\qquad 1\leq p\leq\infty.
+\end{align*}
+它们是带 $L^p(\R)$ 诱导拓扑的 Banach 空间. 若 $p < q$, 则 $B_p(\Omega) \subseteq B_q(\Omega)$, 且包含连续且稠密. 对每个 $p > 1$ 有 $b_n(x) \in B_p(\Omega)$；若 $\Omega = 1/2\pi$, 则对每个 $n$ 与 $p > 1$ 有 $j_n(x) \in B_p(\Omega)$.
+
+对偶空间 $(B_p(\Omega))^*$ 等于 $B_q(\Omega)$, 其中 $1/p + 1/q = 1$, $1 < p < \infty$, 按标准意义: 即, 给定 $T \in (B_p(\Omega))^*$, 存在唯一的 $g \in B_q(\Omega)$, 使对每个 $f \in B_p(\Omega)$ 有 $T(f) = \langle f, g \rangle$. 还有范数等价: 存在正常数 $A > 0$, 使 $A\|g\|_q \leq \|T\|_{B_p(\Omega)^*} \leq \|g\|_q$(常数 $A$ 的值依赖于希尔伯特变换在 $L^q(\R)$ 上的范数).
+
+给定 $f \in B_p(\Omega)$, 可以考虑其Fourier系数
+\begin{align*}
+  \left\langle f,b_{n}\right\rangle=\int f(x)b_{n}(x)\,\mathrm{d}x,
+\end{align*}
+以及其部分和
+\begin{align*}
+  \sigma_{N}f(x)=\sum_{0\leq n\leq M}\langle f,b_{n}\rangle\,b_{n}(x).
+\end{align*}
+类似地, 给定 $f \in B_p(1/2\pi)$, 可以考虑
+\begin{align*}
+  S_{N}f(x)=\sum_{0\leq n\leq N}(2n+1)\pi^{-1}\left\langle f,j_{n}\right\rangle j_{n}(x).
+\end{align*}
+
+\cite{b131} 中的主要结果如下.
+
+\begin{theorem}\label{thm:6.11}
+(a) 对每个 $f \in B_p(\Omega)$, $\lim_{N \to \infty}\|\sigma_N f - f\|_{L^p(\R)} = 0$, 当且仅当 $4/3 < p < 4$.
+
+(b) $S_N f$ 在 $B_p(1/2\pi)$ 中收敛到 $f$, 当且仅当 $4/3 < p < 4$.
+\end{theorem}
+
+与普通Fourier级数一样, $p \neq 2$ 时部分和在 $L^p$ 中的收敛比 $L^2$ 情形更微妙. 然而, 证明遵循标准策略, 即: 首先证明 $\{b_n\}$(相应地, $\{j_n\}$)的线性组合在 $B_p(\Omega)$(相应地, $B_p(1/(2\pi))$)中稠密；其次证明部分和算子 $\sigma_N$(相应地, $S_N$)一致有界. 第一部分容易, 证明的核心在第二部分.
+
+所涉核为
+\begin{align*}
+  K_{N}(x,y)=\sum_{n=0}^{N}b_{n}(x)b_{n}(y),\qquad
+  H_{N}(x,y)=\sum_{n=0}^{N}(2n+1)j_{n}(x)j_{n}(y).
+\end{align*}
+然后, 经过一定量的操作与解码, 所求的部分和算子的一致有界性化归为核为
+\begin{align*}
+  \frac{\sqrt{x}J_{\nu}^{\prime}(x)J_{\nu}(y)\sqrt{y}}{x-y}
+\end{align*}
+的算子对 $\nu \geq 0$ 一致的有界性.
+
+但这些正是前几节在混合范数空间 $L_{\mathrm{rad}}^{p}(L_{\mathrm{ang}}^{2})$ 上分析球乘子时所涉及的核.
+
+% ================================================================
+% 编号审计 (第 6 章):
+%   theorem     thm:6.1  → 定理 6.1   (§6.2, 贝塞尔函数估计)
+%   theorem     thm:6.2  → 定理 6.2   (§6.3, 圆盘乘子)
+%   lemma       lem:6.3  → 引理 6.3   (§6.3)
+%   proposition prop:6.4 → 命题 6.4   (§6.3)
+%   theorem     thm:6.5  → 定理 6.5   (§6.4, 限制性质)
+%   theorem     thm:6.6  → 定理 6.6   (§6.5, 奇异积分)
+%   theorem     thm:6.7  → 定理\ref{thm:6.7}   (§6.5, 方向 Hilbert 变换)
+%   corollary   cor:6.8  → 推论 6.8 (Meyer 引理) (§6.5)
+%   proposition prop:6.9 → 命题 6.9   (§6.5, 普适 Kakeya 极大函数)
+%   theorem     thm:6.10 → 定理 6.10  (§6.6, 一维积分不等式)
+%   theorem     thm:6.11 → 定理 6.11  (§6.7, 部分和收敛)
+%   公式: eq:6.1 (径向 Fourier 变换), eq:6.2 (J_ν 振荡积分表示),
+%         eq:6.3 (Bessel 微分方程), eq:6.4 (定理 6.2 证明中的关键不等式),
+%         eq:6.5 (Ŷ_k dσ 公式), eq:6.6 (普适 Kakeya 极大函数),
+%         eq:6.7 (刷重叠估计), eq:6.8 (Sturm–Liouville 问题)
+%   \cite 使用: b1 b4 b12 b13 b14 b16 b84 b126 b128 b130 b131 b132 b133
+%               b134 b136 b137 b138 b139 b141 b142 b143 b144 b147
+% ================================================================

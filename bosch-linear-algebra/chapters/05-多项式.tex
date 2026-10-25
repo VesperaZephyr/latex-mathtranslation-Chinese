@@ -1,0 +1,927 @@
+% 第 5 章 多项式 (Polynome)
+\chapter{多项式}\index{duoxiangshi@多项式(Polynom)}
+
+\section*{预备说明}
+
+对一个维数 $n < \infty$ 的 $K$-向量空间 $V$, 自同态 $\tau \colon V \longrightarrow V$ 构成一个环 $\operatorname{End}_K(V)$, 它按定理~\mtref{thm:3.3.2} 作为 $K$-向量空间具有维数 $n^2$.因此, 若对 $V$ 的一个自同态 $\tau$ 考察其幂 $\tau^{n^2}, \ldots, \tau^0 = \mathrm{id}$, 则这些幂线性相关.于是在 $\operatorname{End}_K(V)$ 中存在形如
+
+\begin{equation}
+\tau^{r} + c_{1}\tau^{r-1} + \cdots + c_{r} = 0 \tag{$(*)$}
+\end{equation}
+
+的方程, 其中 $c_i \in K$ 为常数, $r \leq n^2$ 为自然数, 而且如更精确的考虑后面将表明的, 总能选取 $r \leq n$.因此这是系数取自 $K$ 的 $r$ 次方程, 即所谓 $\tau$ 在 $K$ 上的\emph{代数方程}(\textup{algebraische Gleichung})\index{daishufangcheng@代数方程(algebraische Gleichung)}.此方程可以选为线性的(即 $r = 1$), 当且仅当 $\tau$ 是恒等的数量倍, 所以一般将成立 $r > 1$.不过, 代数方程理论已不再属于线性代数, 它在主题上更属于今天通常称为"代数"的领域.
+
+然而, 类型 $(*)$ 的方程对我们的目的非常重要, 因为人们已能从其中读出相应的自同态 $\tau$ 的结构的一些宝贵信息.所有这一切我们将在第 6 章自同态\emph{标准形理论}(\textup{Normalformtheorie})\index{biaozhunxinglilun@标准形理论(Normalformtheorie)}中仔细研究.不过, 为此需要关于这类方程,尤其是关于相应的多项式
+
+\begin{equation}
+t^{r} + c_{1}t^{r-1} + \cdots + c_{r} \tag{($**$)}
+\end{equation}
+
+的一些基础知识, 其中与 $(*)$ 相应的多项式 $(**)$ 表示一个表达式, 在其中把 $\tau$ 换成了一个所谓变量 $t$, 后者在需要时可取不同的值.
+
+在本章中我们将特别考察由一个给定域 $K$ 中的系数构成的一切多项式所成的环, 并证明它在\emph{整除性}(\textup{Teilbarkeit})\index{zhengchuxing@整除性(Teilbarkeit)}质方面与整数环 $\mathbb{Z}$ 有极大的\emph{相似}(\textup{ähnlich})\index{xiangsi@相似(ähnlich)}性.例如, 我们将为\emph{多项式环}(\textup{Polynomring})\index{duoxiangshihuan@多项式环(Polynomring)}推导\emph{素因子分解}(\textup{Primfaktorzerlegung})\index{suyinzifenjie@素因子分解(Primfaktorzerlegung)}的唯一性定理.
+
+\section{环}\index{huan@环(Ring)}\label{sec:5.1}
+
+在 \ref{sec:3.3} 节我们已经考察过环, 即对自然数 $n \in \mathbb{N}$ 考察域 $K$ 上的矩阵环 $K^{n \times n}$, 以及对 $K$-向量空间 $V$ 考察自同态环 $\operatorname{End}_K(V)$.为了更准确地描述 $K^{n \times n}$ 或 $\operatorname{End}_K(V)$ 中元素的性质, 使用所谓多项式环是合适的.因此我们想先汇集一些关于环的一般知识, 其中我们原则上只限于带单位元的环.所以下面每当说到一个环时, 总是指定义~\mtref{def:3.3.1} 意义下带单位元的环.换句话说, 我们将用下述环的定义来工作:
+
+\begin{definition}[环]\label{def:5.1.1}\index{huan@环(Ring)}
+带两个运算"$+$"(加法)与"$\cdot$"(乘法)的集合 $R$ 称为环, 如果下列条件满足:
+\begin{enumerate}
+\item[(i)] $R$ 关于加法是阿贝尔群.
+\item[(ii)] 乘法是结合的, 即对 $a, b, c \in R$ 有 $(a \cdot b) \cdot c = a \cdot (b \cdot c)$.
+\item[(iii)] $R$ 中存在单位元, 即存在元素 $1 \in R$, 使得 $1 \cdot a = a = a \cdot 1$ 对一切 $a \in R$ 成立.
+\item[(iv)] 加法与乘法满足分配律, 即对 $a, b, c \in R$ 有
+\[
+a \cdot (b + c) = a \cdot b + a \cdot c, \qquad (a + b) \cdot c = a \cdot c + b \cdot c\text{.}
+\]
+\end{enumerate}
+\end{definition}
+
+环 $R$ 称为交换的, 如果乘法是交换的.
+
+显然, 环的单位元 $1$ 由其定义性质唯一确定.交换环的一个常见例子是整数环 $\mathbb{Z}$.此外, 每个域, 因而特别是 $\mathbb{Q}$, $\mathbb{R}$ 或 $\mathbb{C}$, 都是交换环.如同 \ref{sec:3.3} 节中已经定义的, 环 $R$ 的元素 $a$ 称为单位, 如果存在元素 $b \in R$ 使得 $ab = ba = 1$.$R$ 的一切单位组成的集合 $R^*$ 关于乘法构成一个群.对 $1 \neq 0$ 有 $R^* \subset R - \{0\}$, 而这通常是一个真包含.更准确地说, 等式 $R^* = R - \{0\}$ 等价于 $R$ 是域这一条件, 至少当把 $R$ 假定为交换环时如此.环的一个平凡例子是所谓零环 $0$.它只由一个元素 $0$ 组成, 带运算 $0 + 0 = 0$ 与 $0 \cdot 0 = 0$.这里元素 $0$ 同时是零元与单位元, 所以我们可以写 $1 = 0$.零环是使此等式成立的唯一环.
+
+矩阵环 $K^{n \times n}$(域 $K$ 上)以及 $K$-向量空间 $V$ 的自同态环 $\operatorname{End}_K(V)$ 对 $n \geq 2$ 或 $\dim_K V \geq 2$ 都是非交换环; 参见 \ref{sec:3.3} 节.作为另一例子, 对一个环 $R$ 可以把它 $n$ 次笛卡儿积 $R^n$ 看作环, 只要把加法与乘法逐分量地定义:
+
+\[
+\begin{array}{l}
+(\alpha_1, \ldots, \alpha_n) + (\beta_1, \ldots, \beta_n) = (\alpha_1 + \beta_1, \ldots, \alpha_n + \beta_n), \\
+(\alpha_1, \ldots, \alpha_n) \cdot (\beta_1, \ldots, \beta_n) = (\alpha_1 \cdot \beta_1, \ldots, \alpha_n \cdot \beta_n)\text{.}
+\end{array}
+\]
+
+此时 $0 = (0, \ldots, 0)$ 是零元, $1 = (1, \ldots, 1)$ 是单位元.在 $R \neq 0$ 且 $n \geq 2$ 的情形, 等式
+
+\[
+(1, 0, \ldots, 0) \cdot (0, \ldots, 0, 1) = (0, \ldots, 0)
+\]
+
+表明这个环含有非平凡零因子.这里, 环的元素 $a$ 称为零因子, 如果存在此环的一个元素 $b \neq 0$ 使得 $a \cdot b = 0$ 或 $b \cdot a = 0$.带 $1 \neq 0$ 的交换环 $R$ 称为\emph{整环}(\textup{Integritätsring})\index{zhenghuan@整环(Integritätsring)}, 如果 $R$ 不含非平凡零因子, 即对 $a, b \in R - \{0\}$ 恒有 $a \cdot b \neq 0$.
+
+作为重要例子, 我们现在要在一个变量的交换环 $R$ 上构造多项式环 $R[T]$.为了阐明意图, 我们先以朴素的方式进行, 把 $R[T]$ 解释为所有形如 $\sum_{i = 0}^{m} a_i T^i$ 的形式和的集合, 其中系数 $a_i \in R$, 上界 $m \in \mathbb{N}$ 可变.若把这些表达式"照常"相加与相乘, 就看出 $R[T]$ 是交换环.此时把 $T$ 设想为一个"变量"或"一般"的量, 需要时可以为它代入例如来自 $R$ 的元素.重要的是, 在这样一个代入过程中, $R[T]$ 中的加法与乘法转到 $R$ 的相应运算.因此人们以与"具体的"量(例如来自 $R$ 的量)同样的方式对 $T$ 进行计算.
+
+多项式环 $R[T]$ 现在还应以更精确的方式构造.我们设 $\widetilde{R[T]} = R^{(\mathbb{N})}$, 并把它理解为所有序列 $(a_i)_{i \in \mathbb{N}}$(元素 $a_i \in R$)的集合, 其中对几乎所有 $i \in \mathbb{N}$ 有 $a_i = 0$, 也就是说除有限多个例外, 对一切 $i \in \mathbb{N}$ 成立.此类序列的加法与乘法用公式
+
+\[
+(a_i)_{i \in \mathbb{N}} + (b_i)_{i \in \mathbb{N}} := (a_i + b_i)_{i \in \mathbb{N}}, \qquad
+(a_i)_{i \in \mathbb{N}} \cdot (b_i)_{i \in \mathbb{N}} := (c_i)_{i \in \mathbb{N}}
+\]
+
+定义, 其中
+
+\[
+c_i := \sum_{\mu + \nu = i} a_\mu b_\nu = \sum_{\mu = 0}^{i} a_\mu b_{i - \mu}\text{.}
+\]
+
+利用 $R$ 的环性质容易验算, $R^{(\mathbb{N})}$ 带这些运算构成一个(带单位元的)交换环.零元由序列 $0 = (0, 0, \ldots)$ 给出, 单位元由序列 $1 = (1, 0, 0, \ldots)$ 给出.
+
+我们只以乘法结合律为例进行验算.对 $(a_i)_i, (b_i)_i, (c_i)_i \in R^{(\mathbb{N})}$ 有
+
+\[
+\begin{aligned}
+\bigl((a_i)_i \cdot (b_i)_i\bigr) \cdot (c_i)_i
+&= \Bigl(\sum_{\lambda + \mu = i} a_\lambda b_\mu\Bigr)_i \cdot (c_i)_i
+ = \Bigl(\sum_{\kappa + \nu = i} \Bigl(\sum_{\lambda + \mu = \kappa} a_\lambda b_\mu\Bigr) c_\nu\Bigr)_i
+ = \Bigl(\sum_{\lambda + \mu + \nu = i} a_\lambda b_\mu c_\nu\Bigr)_i, \\
+(a_i)_i \cdot \bigl((b_i)_i \cdot (c_i)_i\bigr)
+&= (a_i)_i \cdot \Bigl(\sum_{\mu + \nu = i} b_\mu c_\nu\Bigr)_i
+ = \Bigl(\sum_{\lambda + \kappa = i} a_\lambda \Bigl(\sum_{\mu + \nu = \kappa} b_\mu c_\nu\Bigr)\Bigr)_i
+ = \Bigl(\sum_{\lambda + \mu + \nu = i} a_\lambda b_\mu c_\nu\Bigr)_i\text{.}
+\end{aligned}
+\]
+
+为了最终把 $R^{(\mathbb{N})}$ 的元素照常写成多项式, 即形如 $\sum_{i = 0}^{< \infty} a_i T^i$ 的表达式, 考察元素
+
+\[
+T = (0, 1, 0, \ldots) \in R^{(\mathbb{N})}\text{.}
+\]
+
+对 $n \in \mathbb{N}$ 有 $T^n = (\delta_{in})_{i \in \mathbb{N}}$, 其中这对 $n = 0$ 也正确, 这基于我们关于空乘积的约定.现在若把 $R$ 的元素 $a$ 与相应的元素 $(a, 0, 0, \ldots) \in R^{(\mathbb{N})}$ 等同, 则此等同与 $R$ 和 $R^{(\mathbb{N})}$ 中的运算相容.因此我们可以把 $R$ 说成是 $R^{(\mathbb{N})}$ 的"子环".$R^{(\mathbb{N})}$ 的元素 $f = (a_i)_{i \in \mathbb{N}}$ 于是可以写成关于 $T$ 的,系数来自 $R$ 的多项式, 即写成
+
+\[
+f = (a_i)_{i \in \mathbb{N}} = \sum_{i \in \mathbb{N}} (a_i \delta_{ij})_{j \in \mathbb{N}} = \sum_{i \in \mathbb{N}} a_i (\delta_{ij})_{j \in \mathbb{N}} = \sum_{i \in \mathbb{N}} a_i T^i,
+\]
+
+其中在表示 $f = \sum_{i \in \mathbb{N}} a_i T^i$ 中系数 $a_i \in R$ 各自由 $f$ 唯一确定; 称 $a_i$ 为 $f$ 的\emph{次数}(\textup{Grad})\index{cishu@次数(Grad)} $i$ 的系数.
+
+从今以后, 我们对刚构造的多项式环一律使用记号 $R[T]$, 并把其元素写成 $\sum_{i \in \mathbb{N}} a_i T^i$ 的形式, 系数 $a_i \in R$(当然, 代替 $T$ 也可以用其他字母来标记变量).这里总是默然假定, 系数 $a_i$ 对几乎所有指标 $i \in \mathbb{N}$ 都消失, 因此上述和式总作为有限和有意义.$R[T]$ 中的加法与乘法于是由熟知的公式
+
+\[
+\Bigl(\sum_{i \in \mathbb{N}} a_i T^i\Bigr) + \Bigl(\sum_{i \in \mathbb{N}} b_i T^i\Bigr) = \sum_{i \in \mathbb{N}} (a_i + b_i) T^i,
+\]
+
+\[
+\Bigl(\sum_{i \in \mathbb{N}} a_i T^i\Bigr) \cdot \Bigl(\sum_{i \in \mathbb{N}} b_i T^i\Bigr) = \sum_{i \in \mathbb{N}} \Bigl(\sum_{\mu + \nu = i} a_\mu b_\nu\Bigr) T^i
+\]
+
+来描述.
+
+若对一个多项式 $f = \sum_{i \in \mathbb{N}} a_i T^i \in R[T]$ 已知某个满足 $a_i = 0$(对 $i > n$)的 $n \in \mathbb{N}$, 那么也可以写 $f = \sum_{i = 0}^{n} a_i T^i$.若再有 $a_n \neq 0$, 则称 $a_n$ 为 $f$ 的\emph{首项系数}(\textup{höchster Koeffizient})\index{shouxiangxishu@首项系数(höchster Koeffizient)}, 并把 $n$ 称为 $f$ 的次数, $n = \operatorname{grad} f$.每个非平凡多项式 $f \in R[T]$ 都有确定好的次数.此外还采用如下约定: 给零多项式 $0$ 指定次数 $- \infty$.
+
+\begin{theorem}\label{thm:5.1.2}
+设 $R$ 是交换环, $R[T]$ 是 $R$ 上的一元多项式环.则对 $f, g \in R[T]$ 有
+
+\[
+\operatorname{grad}(f + g) \leq \max\{\operatorname{grad} f, \operatorname{grad} g\}, \qquad
+\operatorname{grad}(f \cdot g) \leq \operatorname{grad} f + \operatorname{grad} g\text{.}
+\]
+
+若 $R$ 是整环, 则甚至有
+
+\[
+\operatorname{grad}(f \cdot g) = \operatorname{grad} f + \operatorname{grad} g\text{.}
+\]
+\end{theorem}
+
+\begin{proof}
+若 $f$ 或 $g$ 是零多项式, 断言可无困难地验证.因此我们可以假定 $f$ 与 $g$ 非平凡, 即 $m = \operatorname{grad} f \geq 0$ 且 $n = \operatorname{grad} g \geq 0$.设例如 $f = \sum a_i T^i$, $g = \sum b_i T^i$.则对 $i > m$ 有 $a_i = 0$, 对 $i > n$ 有 $b_i = 0$, 从而对 $i > \max\{m, n\}$ 有 $a_i + b_i = 0$, 即 $\operatorname{grad}(f + g) \leq \max\{m, n\}$.类似地看出, 对 $i > m + n$ 有 $\sum_{\mu + \nu = i} a_\mu b_\nu = 0$, 这意味着 $\operatorname{grad}(f \cdot g) \leq m + n$.特别地,
+
+\[
+a_m b_n = \sum_{\mu + \nu = m + n} a_\mu b_\nu
+\]
+
+是 $f \cdot g$ 中次数 $m + n$ 的系数, 因而只要它不消失, 就是首项系数.现在若 $R$ 是整环, 则由 $a_m \neq 0 \neq b_n$ 有 $a_m b_n \neq 0$, 并看出 $\operatorname{grad}(f \cdot g) = m + n$.
+\end{proof}
+
+\begin{corollary}\label{cor:5.1.3}
+若 $R$ 是整环, 则多项式环 $R[T]$ 也是整环.
+\end{corollary}
+
+\begin{proof}
+设 $f, g \in R[T]$ 是两个非平凡多项式.则 $\operatorname{grad} f \geq 0$, $\operatorname{grad} g \geq 0$, 从而由定理~\mtref{thm:5.1.2} 有 $\operatorname{grad}(f \cdot g) = \operatorname{grad} f + \operatorname{grad} g \geq 0$.这表示 $f \cdot g \neq 0$, 即 $R[T]$ 是整环.
+\end{proof}
+
+下面我们要为多项式环 $R[T]$ 的变量 $T$ 代入特殊的值.为此, 除环的同态外, 考察所谓代数及其同态是有用的.
+
+\begin{definition}[\emph{环同态}\index{huantongtai@环同态(Ringhomomorphismus)}]\label{def:5.1.4}\index{huantongtai@环同态(Ringhomomorphismus)}
+环 $R, R'$ 之间的映射 $\varphi \colon R \longrightarrow R'$ 称为同态, 更准确地说环同态, 如果满足:
+\begin{enumerate}
+\item[(i)] 对 $a, b \in R$ 有 $\varphi(a + b) = \varphi(a) + \varphi(b)$;
+\item[(ii)] 对 $a, b \in R$ 有 $\varphi(a \cdot b) = \varphi(a) \cdot \varphi(b)$;
+\item[(iii)] $\varphi(1_R) = 1_{R'}$, 即 $\varphi$ 把单位元 $1_R \in R$ 映到单位元 $1_{R'} \in R'$.
+\end{enumerate}
+\end{definition}
+
+与向量空间同态的情形一样, 若 $\varphi$ 单射,满射或双射, 就分别称之为单同态,满同态或同构.此外, 同态 $\varphi \colon R \longrightarrow R$ 也称为 $R$ 的自同态, 而当它是同构时也称为自同构.
+
+\begin{definition}[$R$-代数]\label{def:5.1.5}\index{daishu@代数(Algebra; R-Algebra)}
+设 $R$ 是交换环.一个 $R$-代数由一个(不一定是交换的)环 $A$ 与一个环同态 $\varphi \colon R \longrightarrow A$ 组成, 使得 $\varphi(R)$ 的一切元素与 $A$ 的元素可交换, 即对一切 $r \in R$, $a \in A$ 有 $\varphi(r)a = a\varphi(r)$.
+\end{definition}
+
+人们常常直接说 $A$ 是 $R$-代数, 而不明确提及同态 $\varphi \colon R \longrightarrow A$.相应地, 对元素 $r \in R$, $a \in A$, 用 $r \cdot a$ 代替 $\varphi(r) \cdot a$, 此时定义同态 $R \longrightarrow A$ 由 $r \longmapsto r \cdot 1_A$ 给出.若此同态不是单射, 那么绝不可再写 $r$ 来代替 $r \cdot 1_A$, 因为那时不可能把 $R$ 的元素 $r$ 与其像 $r \cdot 1_A \in A$ 等同.例如 $R$ 与多项式环 $R[T]$ 都以自然的方式是 $R$-代数, 只要分别考虑恒等映射 $R \longrightarrow R$ 或包含映射 $R \longrightarrow R[T]$.此外, 对域 $K$ 上的向量空间 $V$, 映射
+
+\[
+K \longrightarrow \operatorname{End}_K(V), \quad \alpha \longmapsto \alpha \cdot \mathrm{id}_V,
+\]
+
+把自同态环 $\operatorname{End}_K(V)$ 定义成 $K$-代数.相应地, 对 $n \in \mathbb{N} - \{0\}$, 矩阵环 $K^{n \times n}$ 在映射
+
+\[
+K \longrightarrow K^{n \times n}, \quad \alpha \longmapsto \alpha \cdot E_n,
+\]
+
+之下是 $K$-代数, 其中 $E_n$ 表示 $K^{n \times n}$ 中的单位矩阵.
+
+若 $A$ 是 $R$-代数, 则除环 $A$ 的加法与乘法外, 还可以考察用 $R$ 中元素的所谓外乘法
+
+\[
+R \times A \longrightarrow A, \quad (r, a) \longmapsto r \cdot a\text{.}
+\]
+
+此乘法满足例如定义~\mtref{def:1.4.1} 中对向量空间的数量乘法所要求的那些性质.事实上, 在 $K = R$ 是域的情形, $A$ 在外乘法之下成为 $K$-向量空间, 其中对 $\operatorname{End}_K(V)$ 与 $K^{n \times n}$ 我们分别得到以前考察过的 $K$-向量空间结构.此外要指出, 外乘法与 $A$ 上的内乘法相容, 即对 $r \in R$, $a, b \in A$ 有
+
+\[
+r \cdot (a \cdot b) = (r \cdot a) \cdot b = a \cdot (r \cdot b)\text{.}
+\]
+
+$R$-代数之间的同态以自然的方式解释为环同态, 它还要尊重与 $R$ 的外乘法:
+
+\begin{definition}[$R$-代数同态]\label{def:5.1.6}
+设 $A, B$ 是交换环 $R$ 上的代数.$R$-代数同态 $\varphi \colon A \longrightarrow B$ 是环同态, 使得对一切 $r \in R$, $a \in A$ 有 $\varphi(ra) = r\varphi(a)$.
+\end{definition}
+
+若 $R \longrightarrow A$ 与 $R \longrightarrow B$ 是所考察 $R$-代数的定义同态, 则环同态 $\varphi \colon A \longrightarrow B$ 是 $R$-代数同态, 当且仅当图
+
+\begin{center}
+\begin{tikzcd}[column sep = small, row sep = small]
+& R \arrow{dl} \arrow{dr} & \\
+A \arrow{rr}{\varphi} & & B
+\end{tikzcd}
+\end{center}
+
+交换.
+
+\begin{theorem}\label{thm:5.1.7}\index{dairutongtai@代入同态(Einsetzungshomomorphismus)}
+设 $R$ 是交换环, $R[T]$ 是 $R$ 上的一元多项式环, $A$ 是任意 $R$-代数.则对每个 $t \in A$ 存在唯一确定的 $R$-代数同态 $\varPhi \colon R[T] \longrightarrow A$, 满足 $\varPhi(T) = t$.它由
+
+\[
+\sum_{i \in \mathbb{N}} a_i T^i \longmapsto \sum_{i \in \mathbb{N}} a_i t^i
+\]
+
+描述, 或采用启发式的写法, 由
+
+\[
+f \longmapsto f(t)
+\]
+
+描述, 其中特别地对 $f, g \in R[T]$ 有
+
+\[
+(f + g)(t) = f(t) + g(t), \qquad (f \cdot g)(t) = f(t) \cdot g(t)\text{.}
+\]
+
+称 $\varPhi$ 为\emph{代入同态}(\textup{Einsetzungshomomorphismus})\index{dairutongtai@代入同态(Einsetzungshomomorphismus)}, 它把 $t$ 代替 $T$ 代入.
+\end{theorem}
+
+\begin{proof}
+若 $\varPhi$ 是所要求类型的 $R$-代数同态, 则对 $\sum_{i \in \mathbb{N}} a_i T^i \in R[T]$ 有
+
+\[
+\varPhi\Bigl(\sum_{i \in \mathbb{N}} a_i T^i\Bigr) = \sum_{i \in \mathbb{N}} \varPhi(a_i T^i) = \sum_{i \in \mathbb{N}} a_i \varPhi(T)^i = \sum_{i \in \mathbb{N}} a_i t^i\text{.}
+\]
+
+这表示 $\varPhi$ 的唯一性.为证存在性, 用
+
+\[
+\varPhi\Bigl(\sum_{i \in \mathbb{N}} a_i T^i\Bigr) = \sum_{i \in \mathbb{N}} a_i t^i
+\]
+
+来定义 $\varPhi$.于是立即看出 $\varPhi$ 是 $R$-代数同态.例如, $\varPhi$ 与乘法的相容性由下列计算得出:
+
+\[
+\begin{aligned}
+\varPhi\Bigl(\sum_{i \in \mathbb{N}} a_i T^i \cdot \sum_{i \in \mathbb{N}} b_i T^i\Bigr)
+&= \varPhi\Bigl(\sum_{i \in \mathbb{N}} \Bigl(\sum_{\mu + \nu = i} a_\mu b_\nu\Bigr) T^i\Bigr)
+ = \sum_{i \in \mathbb{N}} \Bigl(\sum_{\mu + \nu = i} a_\mu b_\nu\Bigr) t^i \\
+&= \sum_{i \in \mathbb{N}} \sum_{\mu + \nu = i} (a_\mu t^\mu)(b_\nu t^\nu)
+ = \Bigl(\sum_{i \in \mathbb{N}} a_i t^i\Bigr) \cdot \Bigl(\sum_{i \in \mathbb{N}} b_i t^i\Bigr) \\
+&= \varPhi\Bigl(\sum_{i \in \mathbb{N}} a_i T^i\Bigr) \cdot \varPhi\Bigl(\sum_{i \in \mathbb{N}} b_i T^i\Bigr)\text{.}
+\end{aligned}
+\]
+
+这里要注意, 我们利用了 $t$ 与 $A$ 中(像的)系数 $b_i$ 的可交换性.
+\end{proof}
+
+例如, 若把 $K$-向量空间 $V$ 的自同态环 $A = \operatorname{End}_K(V)$ 看作 $K$-代数, 则对每个自同态 $\tau \colon V \longrightarrow V$ 可以考察 $K$-代数同态
+
+\[
+\varPhi_\tau \colon K[T] \longrightarrow \operatorname{End}_K(V), \qquad \sum_{i \in \mathbb{N}} a_i T^i \longmapsto \sum_{i \in \mathbb{N}} a_i \tau^i,
+\]
+
+它把自同态 $\tau$ 代替 $T$ 代入.这里 $\tau^i$ 自然解释为 $\tau$ 与自身的 $i$ 重复合 $\tau \circ \cdots \circ \tau$, 而多项式 $\sum_{i \in \mathbb{N}} a_i T^i \in K[T]$ 在 $\varPhi_\tau$ 下的像是一个自同态
+
+\[
+\sum_{i \in \mathbb{N}} a_i \tau^i \colon V \longrightarrow V, \quad v \longmapsto \sum_{i \in \mathbb{N}} a_i \tau^i(v)\text{.}
+\]
+
+我们将特别用同态 $\varPhi_\tau$ 来定义 $\tau$ 的所谓\emph{最小多项式}(\textup{Minimalpolynom})\index{zuixiaoduoxiangshi@最小多项式(Minimalpolynom)}; 参见定理~\mtref{thm:6.2.9} 与定义~\mtref{def:6.2.10}.代替向量空间的自同态环, 自然也可以考察矩阵环 $K^{n \times n}$.对每个矩阵 $C \in K^{n \times n}$ 于是得到一个 $K$-代数同态
+
+\[
+\varPhi_C \colon K[T] \longrightarrow K^{n \times n}, \quad \sum_{i \in \mathbb{N}} a_i T^i \longmapsto \sum_{i \in \mathbb{N}} a_i C^i,
+\]
+
+它把 $C$ 代替 $T$ 代入.
+
+我们再考察一个例子.设 $K$ 是域, $\operatorname{Abb}(K, K)$ 是一切映射 $K \longrightarrow K$ 的集合, 或换句话说, 是 $K$ 上一切 $K$ 值函数的集合.于是对每个多项式 $f \in K[T]$ 可以把相应的多项式函数 $t \longmapsto f(t)$ 看作 $\operatorname{Abb}(K, K)$ 的元素.它把元素 $t \in K$ 对应于值 $f(t) \in K$, 后者是把 $t$ 代替 $T$ 代入 $f$ 得到的.这样得到一个映射
+
+\[
+\varPsi \colon K[T] \longrightarrow \operatorname{Abb}(K, K), \qquad f \longmapsto \bigl(t \longmapsto f(t)\bigr),
+\]
+
+下面我们要把它解释为 $K$-代数同态.为了把 $A = \operatorname{Abb}(K, K)$ 解释为 $K$-代数, 考察 $K$ 值函数的通常加法与乘法, 由
+
+\[
+p + q \colon K \longrightarrow K, \quad t \longmapsto p(t) + q(t), \qquad
+p \cdot q \colon K \longrightarrow K, \quad t \longmapsto p(t) \cdot q(t)
+\]
+
+给出.带这些运算, $A$ 是交换环, 其中零函数 $0$ 是零元, 恒等于 $1$ 的函数 $1_A$ 是单位元.对 $\alpha \in K$ 还可以把元素 $p \in A$ 的 $\alpha$ 倍定义为
+
+\[
+\alpha \cdot p \colon K \longrightarrow K, \quad t \longmapsto \alpha \cdot (p(t))\text{.}
+\]
+
+在此意义下,
+
+\[
+K \longrightarrow A, \quad \alpha \longmapsto \alpha \cdot 1_A
+\]
+
+是环同态, 它使 $A$ 成为 $K$-代数.由定理~\mtref{thm:5.1.7} 容易推出, 给多项式 $f \in K[T]$ 配上相应的多项式函数 $t \longmapsto f(t)$ 的映射 $\varPsi$ 确实是 $K$-代数同态.若更一般地不用 $K$ 而用一个交换环 $R$ 作基础, 同样成立.$\varPsi$ 的同态性质特别表明, 人们以与把具体值 $t$ 代替 $T$ 时同样的方式对元素 $T$ 进行计算.这证明了把 $T$ 称为"变量"的正当性.
+
+若域 $K$ 含有无穷多个元素, 则映射 $\varPsi$ 是单射, 如我们后面从推论~\mtref{cor:5.3.2} 所能读出的.于是可以把 $K[T]$ 的多项式与其相应的多项式函数 $K \longrightarrow K$ 等同.然而对有限域 $K = \{\alpha_1, \ldots, \alpha_q\}$, 例如
+
+\[
+f = (T - \alpha_1) \cdots (T - \alpha_q) \in K[T]
+\]
+
+是非平凡多项式, 其相应的多项式函数 $K \longrightarrow K$ 恒等于零, 因而 $\varPsi(f) = 0$.所以映射 $\varPsi$ 一般不单射, 而这正是我们不把多项式定义为具体函数,而定义为借助一个"变量"的形式表达式的原因之一.
+
+下面我们还要引入环的\emph{理想}(\textup{Ideal})\index{lixiang@理想(Ideal)}与子环, 这是与环同态有关的两个概念.
+
+\begin{definition}[子环]\label{def:5.1.8}\index{zihuan@子环(Unterring)}
+设 $R$ 是一个(带单位元的)环.$R$ 的子环由子集 $S \subset R$ 组成, 使得:
+\begin{enumerate}
+\item[(i)] 由 $a, b \in S$ 推出 $a - b, a \cdot b \in S$;
+\item[(ii)] $1 \in S$.
+\end{enumerate}
+\end{definition}
+
+于是 $S$ 带由 $R$ 诱导的运算本身又是一个环, 而包含映射 $S \longrightarrow R$ 是环同态.容易看出, 环同态 $\varphi \colon R \longrightarrow R'$ 的像 $\varphi(R)$ 总是 $R'$ 的子环.
+
+\begin{definition}[理想]\label{def:5.1.9}\index{lixiang@理想(Ideal)}
+设 $R$ 是环.子集 $\mathfrak{a} \subset R$ 称为理想, 如果满足:
+\begin{enumerate}
+\item[(i)] $\mathfrak{a}$ 是 $R$ 的加法子群, 即 $\mathfrak{a} \neq \varnothing$, 且由 $a, b \in \mathfrak{a}$ 推出 $a - b \in \mathfrak{a}$;
+\item[(ii)] 由 $a \in \mathfrak{a}$, $r \in R$ 推出 $ra, ar \in \mathfrak{a}$.
+\end{enumerate}
+\end{definition}
+
+容易验算, 对每个环同态 $\varphi \colon R \longrightarrow R'$, 核
+
+\[
+\ker \varphi = \{a \in R;\; \varphi(a) = 0\}
+\]
+
+是理想, 其中 $\varphi$ 是单射, 当且仅当 $\ker \varphi$ 是\emph{零理想}(\textup{Nullideal})\index{linglixiang@零理想(Nullideal)}, 即只由零元组成.若 $R$ 是任意环, 则对与 $R$ 的一切其余元素可交换的元素 $a \in R$, 可以考察由它生成的\emph{主理想}(\textup{Hauptideal})\index{zhulixiang@主理想(Hauptideal)}
+
+\[
+(a) = Ra = \{ra;\; r \in R\}\text{.}
+\]
+
+特别地, 对 $R = \mathbb{Z}$, 理想 $(2)$ 由一切偶数组成, 理想 $(12)$ 由一切被 $12$ 整除的数组成.每个环中都有所谓平凡理想, 即\emph{单位理想}(\textup{Einheitsideal})\index{danweilixiang@单位理想(Einheitsideal)} $(1) = R$ 与零理想 $(0)$, 后者通常用 $0$ 表示.一个域除平凡理想外没有其他理想.反过来可以证明, 一个恰好含有两个理想的交换环是一个域.
+
+若 $\mathfrak{a}$ 是环 $R$ 的理想, 则可以类似 \ref{sec:2.2} 节那样构造\emph{商环}(\textup{Quotientenring})\index{shanghuan@商环(Quotientenring)}(即\emph{剩余类环}(\textup{Restklassenring})\index{shengyuleihuan@剩余类环(Restklassenring)}) $R/\mathfrak{a}$.由于用这种方式可以得到有趣的环甚至域, 我们在这里简要地讨论这一构造.在 $R$ 上定义一个关系"$\sim$", 办法是对 $a, b \in R$ 规定:
+
+\[
+a \sim b \Longleftrightarrow a - b \in \mathfrak{a}\text{.}
+\]
+
+不难看出"$\sim$"是等价关系.对 $a \in R$ 有 $a \sim a$, 因为 $a - a = 0 \in \mathfrak{a}$, 故该关系是自反的.若还有 $a \sim b$, 则推出 $a - b \in \mathfrak{a}$, 从而也有 $b - a = -(a - b) \in \mathfrak{a}$.后者意味着 $b \sim a$, 于是得到"$\sim$"的对称性.最后, 为证传递性, 对元素 $a, b, c \in R$ 假定 $a \sim b$ 且 $b \sim c$.则有 $a - b, b - c \in \mathfrak{a}$, 并得到
+
+\[
+a - c = (a - b) + (b - c) \in \mathfrak{a},
+\]
+
+即 $a \sim c$.因此"$\sim$"是等价关系, 于是可以对元素 $a \in R$ 构成相应的等价类
+
+\[
+[a] := \{b \in R;\; b \sim a\} = a + \mathfrak{a},
+\]
+
+其中 $a + \mathfrak{a}$ 应理解为 $a$ 关于 $\mathfrak{a}$ 的陪集, 即一切形如 $a + a'$(其中 $a' \in \mathfrak{a}$)的和组成的集合.由定理~\mtref{thm:2.2.4}, 两个等价类 $[a], [b]$ 或不相交或(在 $a \sim b$ 的情形)相同.特别是, $R$ 是一切等价类的不交并.
+
+现在用 $R/\mathfrak{a}$ 表示一切关于 $\mathfrak{a}$ 的陪集组成的集合.为了把 $R/\mathfrak{a}$ 做成环, 定义如下运算:
+
+\[
+[a] + [b] = [a + b], \qquad [a] \cdot [b] = [a \cdot b]\text{.}
+\]
+
+这里要验证, 类 $[a + b]$ 或 $[a \cdot b]$ 不依赖于所考察类 $[a], [b]$ 的代表元 $a$ 与 $b$ 的选择.设例如 $[a] = [a']$ 且 $[b] = [b']$.则 $a - a', b - b' \in \mathfrak{a}$, 从而
+
+\[
+(a + b) - (a' + b') \in \mathfrak{a}, \qquad ab - a'b' = a(b - b') + (a - a')b' \in \mathfrak{a},
+\]
+
+即 $a + b \sim a' + b'$ 与 $ab \sim a'b'$.因此 $R/\mathfrak{a}$ 中的加法与乘法是良定义的, 并且由 $R$ 的环性质立即看出 $R/\mathfrak{a}$ 也是环, 且使得映射
+
+\[
+\pi \colon R \longrightarrow R/\mathfrak{a}, \quad a \longmapsto [a]
+\]
+
+是以 $\mathfrak{a}$ 为核的满射环同态.称 $R/\mathfrak{a}$ 为 $R$ 关于 $\mathfrak{a}$ 的剩余类环或商环.与定理~\mtref{thm:2.2.8} 类似, 有下述同态定理:
+
+\begin{theorem}[环的同态定理]\label{thm:5.1.10}\index{tongtaidingli@同态定理(Homomorphiesatz)}
+设 $\varphi \colon R \longrightarrow R'$ 是环同态, $\mathfrak{a} \subset R$ 是满足 $\mathfrak{a} \subset \ker \varphi$ 的理想, $\pi \colon R \longrightarrow R/\mathfrak{a}$ 是自然投影.则存在唯一确定的环同态 $\overline{\varphi} \colon R/\mathfrak{a} \longrightarrow R'$, 使得图
+
+\begin{center}
+\begin{tikzcd}[column sep = small, row sep = small]
+& R \arrow[swap]{dl}{\pi} \arrow{dr}{\varphi} & \\
+R/\mathfrak{a} \arrow[swap]{rr}{\overline{\varphi}} & & R'
+\end{tikzcd}
+\end{center}
+
+交换.这里 $\overline{\varphi}$ 是单射, 当且仅当 $\mathfrak{a} = \ker \varphi$, 而且是满射, 当且仅当 $\varphi$ 是满射.
+\end{theorem}
+
+\begin{proof}
+由于可以照搬定理~\mtref{thm:2.2.8} 中的论证, 我们这里从简, 只讨论 $\overline{\varphi}$ 的定义.为了对元素 $\bar{a} \in R/\mathfrak{a}$ 定义 $\overline{\varphi}(\bar{a})$, 选取一个 $\pi$-原像 $a \in R$, 并设 $\overline{\varphi}(\bar{a}) = \varphi(a)$.这里自然要验证, 元素 $\varphi(a)$ 不依赖于 $\bar{a}$ 的 $\pi$-原像 $a$ 的选择.后者由条件 $\mathfrak{a} \subset \ker \varphi$ 推出.
+\end{proof}
+
+\aufgaben
+
+设 $R$ 总是一个交换环.
+
+\noindent\textbf{习题 1.} 对元素 $t \in R$ 考察同态 $\varPhi \colon R[T] \longrightarrow R$, $f \longmapsto f(t)$, 它把 $t$ 代替变量 $T$ 代入.证明 (AT 340):
+
+\[
+\ker \varPhi = R[T] \cdot (T - t)\text{.}
+\]
+
+(提示: 通过考察把 $T$ 换成 $T + t$ 的代入同态 $R[T] \longrightarrow R[T]$, 化归到 $t = 0$ 的情形.)
+
+\medskip
+\noindent\textbf{习题 2.} 设 $V$ 是域 $K$ 上的非平凡向量空间.对自同态 $\varphi \in \operatorname{End}_K(V)$ 考察代入同态 $\varPhi \colon K[T] \longrightarrow \operatorname{End}_K(V)$, 它把 $\varphi$ 代替 $T$ 代入.在 $\varphi = \mathrm{id}$ 与 $\varphi = 0$ 的情形确定 $\ker \varPhi$.(AT 341)
+
+\medskip
+\noindent\textbf{习题 3.} 用 $R^{\mathbb{N}}$ 表示一切由元素 $a_i \in R$ 组成的序列 $(a_i)_{i \in \mathbb{N}}$ 的集合.
+\begin{enumerate}
+\item[(i)] 用与 $R$ 上一元多项式环的情形相同的公式, 在 $R^{\mathbb{N}}$ 上(代替 $R^{(\mathbb{N})}$)定义环的结构.这个环记作 $R[[T]]$, 称为 $R$ 上的一元\emph{形式幂级数}(\textup{formale Potenzreihen})\index{xingshimijishu@形式幂级数(formale Potenzreihen)}环.其元素可以表示为无穷级数 $\sum_{i = 0}^{\infty} a_i T^i$.
+\item[(ii)] 设 $q \in R[[T]] \cdot T$.证明 $\sum_{n = 0}^{\infty} q^n$ 给出 $R[[T]]$ 中一个良定义的元素 $f$, 且有 $f \cdot (1 - q) = 1$.
+\item[(iii)] 确定 $R[[T]]$ 中一切单位组成的群.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{习题 4.} 设 $\mathfrak{a}, \mathfrak{b} \subset R$ 是理想.证明下列 $R$ 的子集又构成理想:
+\begin{enumerate}
+\item[(i)] $\mathfrak{a} + \mathfrak{b} = \{a + b;\; a \in \mathfrak{a}, b \in \mathfrak{b}\}$;
+\item[(ii)] $\mathfrak{a} \cdot \mathfrak{b}$ 是一切形如 $a \cdot b$($a \in \mathfrak{a}$, $b \in \mathfrak{b}$)的乘积的有限和组成的集合;
+\item[(iii)] $\mathfrak{a} \cap \mathfrak{b}$.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{习题 5.} 证明 $R$ 是域, 当且仅当 $R$ 恰好有两个不同的理想.
+
+\medskip
+\noindent\textbf{习题 6.} 对理想 $\mathfrak{a} \subset R$ 证明, 一切满足"存在 $n \in \mathbb{N}$ 使 $a^n \in \mathfrak{a}$"的元素 $a \in R$ 组成的集合仍构成 $R$ 的理想.它记作 $\operatorname{rad} \mathfrak{a}$, 称为 $\mathfrak{a}$ 的\emph{幂零根}(\textup{Nilradikal})\index{milinggen@幂零根(Nilradikal)}.(AT 343)
+
+\medskip
+\noindent\textbf{习题 7.} 对 $R$ 中元素的一族 $(a_i)_{i \in I}$ 证明:
+\begin{enumerate}
+\item[(i)] 存在包含一切 $a_i$($i \in I$)的最小理想 $\mathfrak{a} \subset R$;
+\item[(ii)] $\mathfrak{a} = \{\sum_{i \in I} r_i a_i;\; r_i \in R, \ \text{对几乎所有 } i \in I \ \text{有} \ r_i = 0\}$.
+\end{enumerate}
+称 $\mathfrak{a}$ 为由元素 $a_i$, $i \in I$, 在 $R$ 中\emph{生成的理想}(\textup{erzeugtes Ideal})\index{shengchengdelixiang@生成的理想(erzeugtes Ideal)}.
+
+\medskip
+\noindent\textbf{习题 8.} (同构定理) 设 $\mathfrak{a} \subset \mathfrak{b} \subset R$ 是理想.证明:
+\begin{enumerate}
+\item[(i)] 典则映射 $\mathfrak{b} \subset R \longrightarrow R/\mathfrak{a}$ 以 $\mathfrak{a}$ 为核, 并诱导单射 $\mathfrak{b}/\mathfrak{a} \longrightarrow R/\mathfrak{a}$, 其中先把 $\mathfrak{b}/\mathfrak{a}$ 解释为一切形如 $b + \mathfrak{a}$($b \in \mathfrak{b}$)的剩余类组成的集合.进一步可以把 $\mathfrak{b}/\mathfrak{a}$ 与其在 $R/\mathfrak{a}$ 中的像等同, 并看作 $R/\mathfrak{a}$ 中的理想.
+\item[(ii)] 投影 $R \longrightarrow R/\mathfrak{b}$ 穿过 $R/\mathfrak{a}$ 分解, 即可以写成复合 $R \longrightarrow R/\mathfrak{a} \longrightarrow R/\mathfrak{b}$, 其中一个是环同态 $\bar{f}$, 另一个是典则投影 $\pi$.
+\item[(iii)] $\bar{f}$ 以 $\mathfrak{b}/\mathfrak{a}$ 为核, 并诱导同构
+\[
+(R/\mathfrak{a})/(\mathfrak{b}/\mathfrak{a}) \xrightarrow{\sim} R/\mathfrak{b}\text{.}
+\]
+\end{enumerate}
+
+\section{整环中的整除性}\index{zhengchuxing@整除性(Teilbarkeit)}\label{sec:5.2}
+
+在本节中, 一切环都假定为整环, 因而特别是交换的.我们本质上关心的是域 $K$ 上的一元多项式环 $K[T]$, 想为它推导整除性与因子分解的断言.但具有完全类似性质的整数环 $\mathbb{Z}$ 也应加以考察.在两个环中基本的是\emph{带余除法}(\textup{Division mit Rest})\index{daiyuchufa@带余除法(Division mit Rest)}, 我们尤其想用它来推导多项式环中素因子分解的唯一性定理.首先回顾这一方法, 其中假定整数环 $\mathbb{Z}$ 中的带余除法是众所周知的.
+
+\begin{theorem}\label{thm:5.2.1}
+对满足 $b > 0$ 的 $a, b \in \mathbb{Z}$, 存在唯一确定的数 $q, r \in \mathbb{Z}$ 使
+
+\[
+a = qb + r, \qquad 0 \leq r < b\text{.}
+\]
+\end{theorem}
+
+\begin{theorem}\label{thm:5.2.2}
+对系数来自域 $K$ 的多项式 $f, g \in K[T]$, $g \neq 0$, 存在唯一确定的多项式 $q, r \in K[T]$ 使
+
+\[
+f = qg + r, \qquad \operatorname{grad} r < \operatorname{grad} g\text{.}
+\]
+\end{theorem}
+
+\begin{proof}
+我们以存在性断言开始.对 $\operatorname{grad} f < \operatorname{grad} g$, 用 $q = 0$ 与 $r = f$ 平凡地得到所要求的分解.另一方面, 若
+
+\[
+m = \operatorname{grad} f \geq \operatorname{grad} g = n,
+\]
+
+则设 $a$(相应地 $b$)是 $f$(相应地 $g$)的首项系数, 并令
+
+\[
+q_1 := \frac{a}{b} \cdot T^{m - n}, \qquad f_1 := f - q_1 g\text{.}
+\]
+
+则按定理~\mtref{thm:5.1.2} 有
+
+\[
+\operatorname{grad}(q_1 g) = \operatorname{grad} q_1 + \operatorname{grad} g = (m - n) + n = m = \operatorname{grad} f,
+\]
+
+且 $q_1 g$ 与 $f$ 的首项系数相同.特别是得到
+
+\[
+f = q_1 g + f_1, \qquad \operatorname{grad} f_1 < \operatorname{grad} f\text{.}
+\]
+
+在 $\operatorname{grad} f_1 < \operatorname{grad} g$ 的情形, 用 $q = q_1$ 与 $r = f_1$ 得到所要求的分解.但如果 $\operatorname{grad} f_1 \geq \operatorname{grad} g$, 则可按刚才描述的方法继续, 找到分解
+
+\[
+f_1 = q_2 g + f_2, \qquad \operatorname{grad} f_2 < \operatorname{grad} f_1,
+\]
+
+等等.经过有限多步终于达到分解
+
+\[
+f_{k - 1} = q_k g + f_k
+\]
+
+且 $\operatorname{grad} f_k < \operatorname{grad} g$.于是
+
+\[
+f = (q_1 + \cdots + q_k) g + f_k
+\]
+
+是 $f$ 的所要求的分解.
+
+为了也推出唯一性断言, 考察分解
+
+\[
+f = qg + r = q'g + r',
+\]
+
+其中 $\operatorname{grad} r$, $\operatorname{grad} r' < \operatorname{grad} g$.于是有
+
+\[
+0 = (q - q')g + (r - r'), \quad \text{即} \quad (q - q')g = r' - r\text{.}
+\]
+
+若现在 $q - q' \neq 0$, 则 $\operatorname{grad}(q - q') \geq 0$, 从而按定理~\mtref{thm:5.1.2}
+
+\[
+\operatorname{grad}\bigl((q - q')g\bigr) = \operatorname{grad}(q - q') + \operatorname{grad} g \geq \operatorname{grad} g\text{.}
+\]
+
+但另一方面又有
+
+\[
+\operatorname{grad}(r' - r) \leq \max\{\operatorname{grad} r', \operatorname{grad} r\} < \operatorname{grad} g,
+\]
+
+这与前面的估计矛盾.故 $q = q'$, 从而 $r = r'$.
+\end{proof}
+
+可以进行像定理~\mtref{thm:5.2.1} 或定理~\mtref{thm:5.2.2} 中那样的除法的环称为\emph{欧几里得环}(\textup{euklidischer Ring})\index{oujilidehuan@欧几里得环(euklidischer Ring)}, 更准确地说:
+
+\begin{definition}[欧几里得环]\label{def:5.2.3}\index{oujilidehuan@欧几里得环(euklidischer Ring)}
+整环 $R$ 称为欧几里得环, 如果存在一个映射 $\delta \colon R - \{0\} \longrightarrow \mathbb{N}$(所谓\emph{次数函数}(\textup{Gradfunktion})\index{cishuhanshu@次数函数(Gradfunktion)})具有下列性质: 对 $a, b \in R$, $b \neq 0$, 分别存在(不一定是唯一确定的)元素 $q, r \in R$, 使 $a = qb + r$, 且 $r = 0$ 或 $\delta(r) < \delta(b)$.
+\end{definition}
+
+因此我们可以确定:
+
+\begin{corollary}\label{cor:5.2.4}
+整数环 $\mathbb{Z}$ 与域 $K$ 上的多项式环 $K[T]$ 都是欧几里得环.第一种情形取绝对值,第二种情形取多项式的通常次数作为次数函数.
+\end{corollary}
+
+\begin{definition}[\emph{主理想环}\index{zhulixianghuan@主理想环(Hauptidealring)}]\label{def:5.2.5}\index{zhulixianghuan@主理想环(Hauptidealring)}
+整环 $R$ 称为主理想环, 如果每个理想 $\mathfrak{a} \subset R$ 都是主理想, 即具有 $\mathfrak{a} = (a)$($a \in R$)的形式.
+\end{definition}
+
+\begin{theorem}\label{thm:5.2.6}
+设 $R$ 是欧几里得环.则 $R$ 也是主理想环.
+\end{theorem}
+
+\begin{proof}
+设 $\mathfrak{a} \subset R$ 是理想.为证 $\mathfrak{a}$ 是主理想, 可以假定 $\mathfrak{a} \neq 0$, 因为否则有 $\mathfrak{a} = 0 = (0)$.现在取一个使"次数"$\delta(a)$ 最小的元素 $a \in \mathfrak{a} - \{0\}$.我们断言此时 $\mathfrak{a} = (a)$.自然有 $(a) \subset \mathfrak{a}$.为证相反的包含, 选取元素 $a' \in \mathfrak{a}$.由于 $R$ 是欧几里得环, 存在元素 $q, r \in R$ 使 $a' = qa + r$, 其中 $r$ 或消失或满足 $\delta(r) < \delta(a)$.但现在有 $r = a' - qa \in \mathfrak{a}$, 所以由 $a$ 的选取必有 $r = 0$, 从而 $a' = qa \in (a)$.因此 $\mathfrak{a} \subset (a)$, 总起来有 $\mathfrak{a} = (a)$, 故 $R$ 是主理想环.
+\end{proof}
+
+\begin{corollary}\label{cor:5.2.7}
+整数环 $\mathbb{Z}$ 与域 $K$ 上的多项式环 $K[T]$ 都是主理想环.
+\end{corollary}
+
+下面我们要引入整环中的整除概念.
+
+\begin{definition}\label{def:5.2.8}\index{zhengchu@整除(a teilt b; Teiler)}
+设 $a, b$ 是整环 $R$ 的元素.
+\begin{enumerate}
+\item[(i)] 称 $a$ 整除 $b$, 或 $a$ 是 $b$ 的因子, 记作 $a \mid b$, 如果存在 $c \in R$ 使 $ac = b$.若 $a$ 不是 $b$ 的因子, 则写 $a \nmid b$.
+\item[(ii)] $a$ 与 $b$ 称为\emph{相伴的}(\textup{assoziiertes Element; assoziiert})\index{xiangbande@相伴的(assoziiertes Element; assoziiert)}, 如果存在单位 $e \in R^*$ 使 $ae = b$.
+\end{enumerate}
+\end{definition}
+
+因此 $a$ 是 $b$ 的因子, 当且仅当 $b \in (a)$, 即 $(b) \subset (a)$.例如在 $K[T]$ 中 $T + 1$ 整除多项式 $T^2 - 1$, 并且若 $a$ 与 $b$ 相伴, 则同时有 $a \mid b$ 与 $b \mid a$.更准确地说:
+
+\begin{remark}\label{rem:5.2.9}
+对整环 $R$ 的元素 $a, b$, 下列条件等价:
+\begin{enumerate}
+\item[(i)] $a \mid b$ 且 $b \mid a$;
+\item[(ii)] $(a) = (b)$;
+\item[(iii)] $a$ 与 $b$ 相伴.
+\end{enumerate}
+\end{remark}
+
+\begin{proof}
+我们只证明由 (ii) 推出 (iii), 其余蕴含关系都可以由定义~\mtref{def:5.2.8} 直接验证得出.设 $(a) = (b)$.则存在元素 $c, d \in R$ 使 $ac = b$ 与 $a = bd$.由此推出 $a = bd = acd$, 即 $a \cdot (1 - cd) = 0$.若现在 $a \neq 0$, 则因 $R$ 是整环有 $cd = 1$, 于是 $c, d$ 是 $R$ 中的单位.因此 $a$ 与 $b$ 相伴.在 $a = 0$ 的情形也同理, 因为那时特别是 $b = ac = 0$.
+\end{proof}
+
+\begin{definition}[\emph{不可约}\index{bukeyue@不可约(irreduzibel; irreduzibles Element)}与\emph{素元}\index{suyuan@素元(Primelement)}]\label{def:5.2.10}\index{bukeyue@不可约(irreduzibel; irreduzibles Element)}\index{suyuan@素元(Primelement)}
+设 $R$ 是整环, $p \in R$ 是一个既不是单位又不为零的元素.
+\begin{enumerate}
+\item[(i)] 若从等式 $p = ab$($a, b \in R$)恒推出 $a$ 或 $b$ 是 $R$ 中的单位, 则称 $p$ 不可约.否则称 $p$ 可约.
+\item[(ii)] 若从 $p \mid ab$($a, b \in R$)恒推出 $p \mid a$ 或 $p \mid b$, 或按等价的说法, 从 $ab \in (p)$ 恒推出 $a \in (p)$ 或 $b \in (p)$, 则称 $p$ 为素元.
+\end{enumerate}
+\end{definition}
+
+于是 $p$ 不可约, 当且仅当从关系 $p \in (a)$($a \in R$)推出 $(a) = (p)$ 或 $(a) = R$.此外, 用归纳法看出, 素元 $p \in R$ 整除 $R$ 中元素的一个乘积 $a_1 \cdots a_r$, 当且仅当它整除某个因子 $a_i$.
+
+\begin{remark}\label{rem:5.2.11}
+设 $R$ 是整环.则 $R$ 的每个素元都不可约.
+\end{remark}
+
+\begin{proof}
+设 $p \in R$ 是素元, $a, b \in R$ 满足 $p = ab$.则 $p$ 整除乘积 $ab$, 于是 $p$ 整除两个因子之一, 例如 $p \mid a$, 即存在等式 $a = pc$, 其中 $c \in R$.把它代入 $p = ab$, 得到 $p = pcb$, 即 $p(1 - cb) = 0$.由于 $R$ 是整环且 $p$ 非零, 由此得 $cb = 1$, 即 $b$ 是单位.故 $p$ 不可约.我们本也可以利用关系 $a \mid p$(因 $p = ab$)与 $p \mid a$, 由注记~\mtref{rem:5.2.9} 推出 $a$ 与 $p$ 相伴.
+\end{proof}
+
+我们将立刻证明, 在主理想环中注记~\mtref{rem:5.2.11} 的逆命题也成立.特别地, 此后我们就可以把 $\mathbb{Z}$ 中的素数(通常定义为\emph{不可约元}(\textup{irreduzibles Element})\index{bukeyueyuan@不可约元(irreduzibles Element)}素)也称为素元.
+
+\begin{theorem}\label{thm:5.2.12}
+设 $R$ 是主理想环, $p \in R$ 非零且不是单位.则下列条件等价:
+\begin{enumerate}
+\item[(i)] $p$ 不可约;
+\item[(ii)] $p$ 是素元.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+只需证明蕴含 (i) $\Longrightarrow$ (ii).设 $p \in R$ 是不可约元素, 并对两个元素 $a, b \in R$ 设 $p \mid ab$ 且 $p \nmid a$.为证 $p \mid b$, 考察
+
+\[
+Ra + Rp := \{ra + sp;\; r, s \in R\}
+\]
+
+作为 $R$ 中的理想, 其中理想的定义性质容易验证; 参见 \ref{sec:5.1} 节习题 7.由关于 $R$ 的假设, $Ra + Rp$ 是主理想, 例如 $Ra + Rp = Rd$.特别是 $a, p \in Rd$, 从而 $d \mid a$, $d \mid p$.但 $p$ 不可约.因此由 $d \mid p$(即由等式 $p = cd$)推出 $c$ 或 $d$ 是单位.若 $c$ 是单位, 则可写 $d = c^{-1}p$, 由 $d \mid a$ 得到 $p \mid a$, 与 $p \nmid a$ 矛盾.故只剩 $d$ 是单位的情形, 即 $Ra + Rp = R$, 乘以 $b$ 后得等式 $Rab + Rpb = Rb$.于是存在 $r, s \in R$ 使 $rab + spb = b$.因 $p \mid ab$, 由此如愿得到 $p \mid b$.
+\end{proof}
+
+\begin{corollary}\label{cor:5.2.13}
+在主理想环 $R$ 中, 每个不是单位的元素 $a \in R - \{0\}$ 都可以写成素元的有限乘积.
+\end{corollary}
+
+\begin{proof}
+由于 $R$ 的每个不可约元素已经是素的, 只需构造一个到不可约元素中的因子分解.设 $a \in R - \{0\}$ 不是单位.我们间接进行, 假定 $a$ 不能写成不可约元素的有限乘积.则 $a$ 可约, 于是可以把 $a$ 写成 $R$ 中两个非单位的乘积 $a = a_1 a_1'$.由于 $a$ 没有到不可约元素中的有限因子分解, 两个因子 $a_1, a_1'$ 中至少一个也有同样情形, 例如 $a_1$, 于是又可以写 $a_1 = a_2 a_2'$, 其中 $a_2, a_2'$ 是 $R$ 中两个非单位.如此继续, 得到一个元素序列
+
+\[
+a = a_0, a_1, a_2, \ldots \in R,
+\]
+
+使得 $a_{i + 1}$ 各是 $a_i$ 的因子, 但不与 $a_i$ 相伴.换句话说, 得到理想的上升序列
+
+\[
+(a) = (a_0) \subsetneq (a_1) \subsetneq (a_2) \subsetneq \cdots,
+\]
+
+其中按注记~\mtref{rem:5.2.9} 这里各自是真包含.现在容易验证, 理想上升序列的并仍构成理想.于是可以通过
+
+\[
+\mathfrak{b} = \bigcup_{i = 0}^{\infty} (a_i)
+\]
+
+定义 $R$ 中的理想, 而且由于 $R$ 是主理想环, 它是主理想.故存在元素 $b \in \mathfrak{b}$ 使 $\mathfrak{b} = (b)$.由 $\mathfrak{b}$ 的定义, 存在指标 $i_0 \in \mathbb{N}$ 使 $b \in (a_{i_0})$, 于是对 $i \geq i_0$ 有
+
+\[
+\mathfrak{b} = (b) \subset (a_{i_0}) \subset (a_i) \subset \mathfrak{b},
+\]
+
+即 $(a_{i_0}) = (a_i)$(对 $i \geq i_0$), 与理想链 $(a_i)$ 严格上升矛盾.
+\end{proof}
+
+下面我们要证明, 到素元中的因子分解本质上是唯一的.
+
+\begin{lemma}\label{lem:5.2.14}
+在整环 $R$ 中设有方程
+
+\[
+p_1 \cdot \ldots \cdot p_r = q_1 \cdot \ldots \cdot q_s,
+\]
+
+其中 $p_1, \ldots, p_r \in R$ 是素元, $q_1, \ldots, q_s \in R$ 是不可约元素.则 $r = s$, 并且在对 $q_1, \ldots, q_s$ 重新编号后, 存在单位 $\varepsilon_1, \ldots, \varepsilon_r \in R^*$ 使 $q_i = \varepsilon_i p_i$, $i = 1, \ldots, r$, 即 $p_i$ 各与 $q_i$ 相伴.
+\end{lemma}
+
+\begin{proof}
+由 $p_1 \cdot \ldots \cdot p_r = q_1 \cdot \ldots \cdot q_s$ 特别是 $p_1 \mid q_1 \cdots q_s$.由于 $p_1$ 是素元, 存在 $i$ 使 $p_1 \mid q_i$, 通过对 $q_1, \ldots, q_s$ 重新编号可以假定 $i = 1$, 即 $p_1 \mid q_1$.于是有等式 $q_1 = \varepsilon_1 p_1$, 其中由 $q_1$ 的不可约性, $\varepsilon_1$ 是单位.由于我们处在整环中, 由此得
+
+\[
+p_2 \cdot \ldots \cdot p_r = \varepsilon_1 q_2 \cdot \ldots \cdot q_s\text{.}
+\]
+
+用同样方式证明 $p_2$ 与 $q_2, \ldots, q_s$ 中的某个元素相伴, 等等.因此可以把 $q_1, \ldots, q_s$ 重新编号, 使得 $p_i$($i = 1, \ldots, r$)各与 $q_i$ 相伴.特别是 $r \leq s$.在方程 $p_1 \cdot \ldots \cdot p_r = q_1 \cdot \ldots \cdot q_s$ 中"约去"一切 $p_i$ 后, 剩下一个类型
+
+\[
+1 = q_{r + 1} \cdot \ldots \cdot q_s
+\]
+
+的方程, 它表明体系 $q_{r + 1}, \ldots, q_s$ 由单位组成.由于所有 $q_i$ 同时不可约, 不可能是单位, 该体系为空, 故 $r = s$.
+\end{proof}
+
+我们说在整环 $R$ 中素因子分解的唯一性定理成立, 或者说 $R$ 是\emph{因子分解唯一的}(\textup{faktoriell; faktorieller Ring})\index{yinzifenjieweiyide@因子分解唯一的(faktoriell; faktorieller Ring)}, 如果每个非单位 $a \in R - \{0\}$ 都可以写成 $R$ 中素元的乘积.按引理~\mtref{lem:5.2.14}, 这样的 $a$ 的因子分解(本质上)是唯一的.再使用每个素元按注记~\mtref{rem:5.2.11} 是不可约的这一事实, 就可以用引理~\mtref{lem:5.2.14} 断定, 在因子分解唯一的环中, 每个非零非单位都可以(本质上)唯一地写成不可约元素的乘积.此外还可以证明, 反过来, 后一性质在整环中蕴含其因子分解唯一性.但我们不想再深入证明, 而只想用新的说法重述推论~\mtref{cor:5.2.13}.
+
+\begin{theorem}\label{thm:5.2.15}
+每个主理想环都是因子分解唯一的, 因而特别是整数环 $\mathbb{Z}$ 与域 $K$ 上的一元多项式环 $K[T]$.
+\end{theorem}
+
+在因子分解唯一的环 $R$ 中可以进一步标准化素因子分解, 办法是在每个相伴素元的类中选取一个, 并由此考察一切素元的一个代表系 $P \subset R$.于是可以假定, 在素因子分解中, 除单位外只出现素元 $p \in P$, 而且可以进一步把相同素因子合并为幂.这样每个元素 $a \in R - \{0\}$ 都有形如
+
+\[
+a = \varepsilon \prod_{p \in P} p^{\mu_p(a)}
+\]
+
+的素因子分解, 其中 $\varepsilon \in R^*$ 是单位, $\mu_p(a) \in \mathbb{N}$ 是指数, 后者对几乎所有 $p \in P$ 都是平凡的.素因子分解的唯一性此时表示, $\varepsilon$ 与诸 $\mu_p(a)$ 各自由 $a$ 唯一确定.此外立即看出, 对元素 $a, b \in R - \{0\}$, 整除条件 $a \mid b$ 成立, 当且仅当对一切 $p \in P$ 有 $\mu_p(a) \leq \mu_p(b)$.
+
+在 $\mathbb{Z}$ 中只有单位 $1$ 与 $-1$, 习惯上把 $P$ 定义为一切正素元的体系.相反, 在域 $K$ 上的多项式环 $K[T]$ 中, 按定理~\mtref{thm:5.1.2}, 单位群由一切非平凡常数多项式组成, 因而与 $K$ 的单位群 $K^*$ 相同.因此每个\emph{素多项式}(\textup{Primpolynom})\index{suduoxiangshi@素多项式(Primpolynom)}都有唯一相伴的素多项式是首一的, 即以 $1$ 为首项系数, 并把 $P$ 定义为一切首一素多项式的体系.
+
+照常, 对两个非零元素 $a, b \in R$ 的素因子分解
+
+\[
+a = \varepsilon \prod_{p \in P} p^{\mu_p(a)}, \qquad b = \delta \prod_{p \in P} p^{\mu_p(b)},
+\]
+
+可以定义\emph{最大公因子}(\textup{größter gemeinsamer Teiler; ggT})\index{zuidagongyinzi@最大公因子(größter gemeinsamer Teiler; ggT)}
+
+\[
+\operatorname{ggT}(a, b) = \prod_{p \in P} p^{\min(\mu_p(a), \mu_p(b))}\text{.}
+\]
+
+这是 $a$ 与 $b$ 的一个公因子 $d$, 具有如下特征性质: 由 $t \mid a$ 与 $t \mid b$ 恒推出 $t \mid d$.
+
+相应地, 对 $a$ 与 $b$ 可以考察\emph{最小公倍数}(\textup{kleinstes gemeinsames Vielfaches; kgV})\index{zuixiaogongbeishu@最小公倍数(kleinstes gemeinsames Vielfaches; kgV)}
+
+\[
+\operatorname{kgV}(a, b) = \prod_{p \in P} p^{\max(\mu_p(a), \mu_p(b))}\text{.}
+\]
+
+这是 $a$ 与 $b$ 的一个公倍数 $v$, 使得 $a$ 与 $b$ 的每个其他公倍数也是 $v$ 的倍数.不过要注意, 元素 $\operatorname{ggT}(a, b)$ 与 $\operatorname{kgV}(a, b)$ 只精确到单位地良定义, 因为它们除 $a$ 与 $b$ 外还依赖于 $P$ 的特殊选取.
+
+在主理想环中, 两个元素 $a, b \in R$ 的最大公因子可以用理想理论来刻画, 这常常是有用的.为此考察
+
+\[
+Ra + Rb := \{ra + sb;\; r, s \in R\}
+\]
+
+作为 $R$ 中的理想, 即按 \ref{sec:5.1} 节习题 7 由 $a$ 与 $b$ 在 $R$ 中生成的理想.
+
+\begin{theorem}\label{thm:5.2.16}
+设 $a, b$ 是主理想环 $R$ 的两个非零元素.对最大公因子 $d = \operatorname{ggT}(a, b)$ 有
+
+\[
+Ra + Rb = Rd\text{.}
+\]
+
+特别是, 存在等式 $ra + sb = d$, 其中 $r, s \in R$, 而它们必然是互素的, 即满足 $\operatorname{ggT}(r, s) = 1$.
+\end{theorem}
+
+\begin{proof}
+理想 $Ra + Rb \subset R$ 是主理想, 例如 $Ra + Rb = Rd'$.则由 $a, b \in Rd'$ 推出 $d'$ 是 $a, b$ 的公因子, 从而也是 $d$ 的因子.另一方面, 由 $Ra + Rb = Rd'$ 存在类型 $ra + sb = d'$ 的等式, 其中 $r, s \in R$ 为某些元素.这表明 $a, b$ 的每个公因子也是 $d'$ 的因子.特别是 $d \mid d'$.
+
+连同 $d' \mid d$, 按注记~\mtref{rem:5.2.9} 推出 $d$ 与 $d'$ 相伴.因此如所断言 $Ra + Rb = Rd$, 并有类型 $ra + sb = d$ 的等式.后者表明, $a, b$ 的每个公因子乘以 $\operatorname{ggT}(r, s)$ 都给出 $d$ 的一个因子.但这只有在 $\operatorname{ggT}(r, s) = 1$ 的情形才可能.
+\end{proof}
+
+最后我们还要从定理~\mtref{thm:5.2.16} 推出主理想环中素元的一个特殊性质.
+
+\begin{corollary}\label{cor:5.2.17}
+设 $R$ 是主理想环, $p \in R - \{0\}$.则下列条件等价:
+\begin{enumerate}
+\item[(i)] $p$ 是素元;
+\item[(ii)] 剩余类环 $R/(p)$ 是域.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+首先设 $p$ 是素元.特别是 $p$ 不是单位, 从而 $R/(p)$ 不是零环.为看出 $R/(p)$ 是域, 选取 $\bar{a} \in R/(p) - \{0\}$.要证明存在 $\bar{b} \in R/(p)$ 使 $\bar{b} \cdot \bar{a} = 1$, 或按等价的说法, 对 $a \in R - (p)$ 存在形如
+
+\[
+ba + rp = 1
+\]
+
+的等式, 其中 $b, r \in R$.后者由定理~\mtref{thm:5.2.16} 推出, 因为 $a$ 与 $p$ 显然互素.
+
+另一方面, 若 $p$ 不是素元, 则 $p$ 或是单位, 或存在非零非单位 $a, b \in R$ 使 $p \nmid a$, $p \nmid b$ 且 $p \mid ab$.在第一种情形剩余类环 $R/(p)$ 是零环.在第二种情形, 剩余类 $\bar{a}, \bar{b} \in R/(p)$ 非零, 但满足 $\bar{a} \cdot \bar{b} = 0$.因此在两种情形 $R/(p)$ 都不是整环, 从而特别不是域.
+\end{proof}
+
+作为应用看到, 对 $p \in \mathbb{Z}$, 剩余类环 $\mathbb{Z}/p\mathbb{Z}$ 是域, 当且仅当 $p$ 是素数.特别是, 对素数 $p \in \mathbb{N}$, $\mathbb{F}_p = \mathbb{Z}/p\mathbb{Z}$ 是含 $p$ 个元素的域.
+
+同样推出, 对域 $K$ 与多项式 $f \in K[T]$, 剩余类环 $K[T]/(f)$ 是域, 当且仅当 $f$ 是素的.例如在 $\mathbb{R}[T]$ 中, 多项式 $T - 1$ 与 $T^2 + 1$ 不可约, 因而也是素的.这里用定理~\mtref{thm:5.1.2} 中关于乘积的次数公式即可断定, 对域 $K$, $K[T]$ 中一个多项式只要次数为 $1$ 就已不可约, 或者只要次数为 $2$ 且在 $K$ 中无零点也不可约.此外有
+
+\[
+\mathbb{R}[T]/(T - 1) \simeq \mathbb{R}, \qquad \mathbb{R}[T]/(T^2 + 1) \simeq \mathbb{C},
+\]
+
+这可以用同态定理~\mtref{thm:5.1.10} 容易地证明.还可以证明, $\mathbb{R}[T]$ 中的素多项式恰好由一切次数为 $1$ 的多项式与次数为 $2$ 且无零点的多项式组成; 参见 \ref{sec:5.3} 节习题 3.
+
+最后我们还要定义域的所谓特征.若 $K$ 是域, 则存在唯一确定的环同态 $\varphi \colon \mathbb{Z} \longrightarrow K$.它把自然数 $n$ 映到单位元 $1_K \in K$ 的 $n$ 重和 $n \cdot 1_K$, 相应地把 $-n$ 映到 $-(n \cdot 1_K)$.$\varphi$ 的核是 $\mathbb{Z}$ 中的理想, 因而是主理想, 从而由唯一确定的元素 $p \in \mathbb{N}$ 生成.$p$ 或为 $0$, 或是最小的满足 $p \cdot 1_K = 0$ 的正自然数.称 $p$ 为 $K$ 的特征; 它或为 $0$ 或是素数, 这可以像推论~\mtref{cor:5.2.17} 证明的第二部分那样看出.
+
+\aufgaben
+
+\noindent\textbf{习题 1.} 考察下列多项式 $f, g \in \mathbb{R}[T]$, 并分别用 $g$ 除 $f$ 作带余除法:
+\begin{enumerate}
+\item[(i)] $f = T^6 + 3T^4 + T^3 - 2$, $g = T^2 - 2T + 1$;
+\item[(ii)] $f = T^n - 1$, $g = T - 1$, 其中 $n \in \mathbb{N} - \{0\}$;
+\item[(iii)] $f = T^n + T^{n - 1} + \cdots + 1$, $g = T + 1$, 其中 $n \in \mathbb{N} - \{0\}$.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{习题 2.} 设 $a, b$ 是主理想环 $R$ 的非零元素.证明 $Ra \cap Rb = Rv$, 其中 $v = \operatorname{kgV}(a, b)$.
+
+\medskip
+\noindent\textbf{习题 3.} 确定 $\mathbb{Q}$ 的一切子环.(AT 344)
+
+\medskip
+\noindent\textbf{习题 4.} 设 $R$ 是整环, $p \in R - \{0\}$.证明 $p$ 是素的, 当且仅当 $R/(p)$ 是整环.
+
+\medskip
+\noindent\textbf{习题 5.} 确定多项式 $T^4 - 1$ 在多项式环 $\mathbb{R}[T]$ 中的素因子分解.
+
+\medskip
+\noindent\textbf{习题 6.} 证明多项式环 $\mathbb{Z}[T]$ 不是主理想环.(AT 345)
+
+\medskip
+\noindent\textbf{习题 7.} 证明 $\mathbb{Z} + \mathbb{Z}i = \{x + yi \in \mathbb{C};\; x, y \in \mathbb{Z}\}$ 构成复数域的子环, 而且是主理想环.
+
+\medskip
+\noindent\textbf{习题 8.} 证明在 $\mathbb{Z}$ 中存在无穷多个两两不相伴的素元.对域 $K$ 上的多项式环 $K[T]$ 亦然.
+
+\medskip
+\noindent\textbf{习题 9.} 设 $F$ 是特征为 $p$ 的有限域, 其中 $p$ 生成典则环同态 $\mathbb{Z} \longrightarrow \mathbb{F}$ 的核.证明:
+\begin{enumerate}
+\item[(i)] $p$ 是素数;
+\item[(ii)] $\mathbb{F}$ 由 $p^r$ 个元素组成, 其中 $r$ 是适当的自然数.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{习题 10.} 设 $K$ 是域, $A$ 是满足 $\dim_K A < \infty$ 的 $K$-代数.对元素 $a \in A$ 证明: 存在唯一确定的最小次数\emph{首一多项式}(\textup{normiertes Polynom})\index{shouyiduoxiangshi@首一多项式(normiertes Polynom)} $f \in K[T]$ 使 $f(a) = 0$.
+
+\section{多项式的零点}\index{lingdian@零点(Nullstelle)}\label{sec:5.3}
+
+设 $K$ 是域(或更一般地交换环), $A$ 是 $K$-代数.元素 $t \in A$ 称为多项式 $f \in K[T]$ 的零点, 如果 $f(t) = 0$, 即 $f$ 在代入同态 $K[T] \longrightarrow A$(它把 $t$ 代替变量 $T$ 代入, 参见定理~\mtref{thm:5.1.7})下的像是平凡的.举例来说, 考察 $K$-向量空间 $V$ 的自同态环 $A$; 它在环同态 $K \longrightarrow A$, $c \longmapsto c \cdot \mathrm{id}_V$ 之下成为 $K$-代数.对 $\dim_K V > 1$, 容易看出多项式 $T^2 \in K[T]$ 除零元 $0 \in A$ 外还有别的零点, 而且当 $K$ 有无穷多个元素时甚至有无穷多个.因为对自同态 $\varphi \colon V \longrightarrow V$, 方程 $\varphi^2 = 0$ 等价于 $\operatorname{im} \varphi \subset \ker \varphi$.
+
+但我们首先只想关心多项式 $f \in K[T]$ 在 $K$ 中的零点, 并把 $K$ 假定为域.由于 $K$ 无零因子, 此时可以有更强的断言, 例如 $0 \in K$ 是 $T^2 \in K[T]$ 在 $K$ 中的唯一零点.
+
+\begin{theorem}\label{thm:5.3.1}
+设 $\alpha \in K$ 是多项式 $f \in K[T]$ 的零点.则存在多项式 $g \in K[T]$ 使
+
+\[
+f = (T - \alpha) \cdot g,
+\]
+
+其中 $g$ 由此方程唯一确定.
+\end{theorem}
+
+\begin{proof}
+用 $(T - \alpha)$ 对 $f$ 作带余除法, 得等式
+
+\[
+f = (T - \alpha) \cdot g + r
+\]
+
+其中 $r \in K$.把 $\alpha$ 代替 $T$ 代入, 由于 $f(\alpha) = 0$ 立即得 $r = r(\alpha) = 0$, 从而得到所要求的等式 $f = (T - \alpha) \cdot g$.$g$ 的唯一性由 $K$ 或 $K[T]$ 无零因子或带余除法的唯一性推出; 参见定理~\mtref{thm:5.2.2}.
+\end{proof}
+
+\begin{corollary}\label{cor:5.3.2}
+设 $f \in K[T]$, $f \neq 0$.则 $f$ 只有有限多个不同的零点 $\alpha_1, \ldots, \alpha_r \in K$, 其中 $r \leq \operatorname{grad} f$.此外, 存在指数 $n_1, \ldots, n_r \in \mathbb{N} - \{0\}$ 以及一个在 $K$ 中无零点的多项式 $g \in K[T]$, 使
+
+\[
+f = \prod_{i = 1}^{r} (T - \alpha_i)^{n_i} \cdot g\text{.}
+\]
+
+这里诸 $n_i$ 与多项式 $g$ 由 $f$ 唯一确定.
+\end{corollary}
+
+\begin{proof}
+考察形式
+
+\[
+f = \prod_{i = 1}^{r} (T - \alpha_i)^{n_i} \cdot g
+\]
+
+的分解, 其中 $\alpha_1, \ldots, \alpha_r$ 是 $f$ 的两两不同的零点($r$ 可变), $n_i \in \mathbb{N} - \{0\}$ 是指数, $g \in K[T]$ 是多项式.则恒有
+
+\[
+\operatorname{grad} f = \sum_{i = 1}^{r} n_i + \operatorname{grad} g,
+\]
+
+并且可以找到 $\operatorname{grad} g$ 最小的这样的分解.此时 $g$ 如所要求在 $K$ 中无零点, 因为否则按定理~\mtref{thm:5.3.1} 可以从 $g$ 分出一个形如 $T - \alpha$ 的一次因式, 而这会给出一个 $g$ 的次数真正更小的分解.于是看出, 由 $K$ 无零因子, $\alpha_1, \ldots, \alpha_r$ 是 $f$ 的唯一零点, 且 $r \leq \operatorname{grad} f$.
+
+因子 $(T - \alpha_i)$ 不可约, 因而特别是素的.唯一性断言因此容易由 $K[T]$ 中素因子分解的唯一性推出.这里要利用, 在 $g$ 的素因子分解中只能出现次数 $\geq 2$ 的因子, 因为 $g$ 在 $K$ 中无零点.
+\end{proof}
+
+在上述情形中称 $n_i$ 为零点 $\alpha_i$ 的重数.此外, 如果每个非常数多项式 $f \in K[T]$ 在 $K$ 中(至少)有一个零点, 则称域 $K$ 为\emph{代数闭的}(\textup{algebraisch abgeschlossen; algebraisch abgeschlossener Körper})\index{daishubide@代数闭的(algebraisch abgeschlossen; algebraisch abgeschlossener Körper)}.在推论~\mtref{cor:5.3.2} 的分解中此时 $g$ 是常数.因此可以说, 域 $K$ 是代数闭的, 当且仅当每个非常数多项式 $f \in K[T]$ 都可以写成一次因式, 即次数为 $1$ 的多项式的乘积, 或按等价的说法, 当且仅当 $K[T]$ 中的不可约多项式恰好是次数为 $1$ 的多项式.在此联系中, 我们要表述所谓\emph{代数基本定理}(\textup{Fundamentalsatz der Algebra})\index{daishujibendingli@代数基本定理(Fundamentalsatz der Algebra)}.
+
+\begin{bigtheorem}\label{bigthm:5.3.3}\index{daishujibendingli@代数基本定理(Fundamentalsatz der Algebra)}
+复数域 $\mathbb{C}$ 是代数闭的.
+\end{bigtheorem}
+
+证明需要超出线性代数的工具.它通常在复变函数论或代数课程中给出.这里只想补充一个例子: 多项式
+
+\[
+\begin{array}{l}
+T^2 - 2 \in \mathbb{Q}[T], \\
+T^2 + 1 \in \mathbb{R}[T], \\
+T^2 + T + 1 \in \mathbb{F}_2[T]
+\end{array}
+\]
+
+在相应的域中没有零点.由于这是次数为 $2$ 的多项式, 由此推出它们不可约, 因而也是素的.
+
+\aufgaben
+
+\noindent\textbf{习题 1.} 设 $K$ 是域.对多项式 $f = \sum_{i \in \mathbb{N}} a_i T^i \in K[T]$ 用 $f' := \sum_{i > 0} i a_i T^{i - 1}$ 定义其导式, 其中 $i a_i$ 各理解为 $a_i$ 的 $i$ 重和.证明: 元素 $\alpha \in K$ 是 $f$ 的重零点(即阶 $> 1$ 的零点), 当且仅当 $\alpha$ 是 $\operatorname{ggT}(f, f')$ 的零点.
+
+\medskip
+\noindent\textbf{习题 2.} 设 $K$ 是域, $A$ 是 $K$-代数.对多项式 $f, g \in K[T] - \{0\}$ 与 $h = \operatorname{ggT}(f, g)$ 证明: 若 $a \in A$ 是 $f$ 与 $g$ 的公共零点, 则 $a$ 也是 $h$ 的零点.(提示: 利用定理~\mtref{thm:5.2.16} 中描述的最大公因子的刻画.)
+
+\medskip
+\noindent\textbf{习题 3.} 对复数 $\alpha = u + iv \in \mathbb{C}$(实部 $u$, 虚部 $v$)把相应的\emph{共轭复数}(\textup{konjugiert komplexe Zahl})\index{gongefushu@共轭复数(konjugiert komplexe Zahl)}定义为 $\bar{\alpha} = u - iv$.证明首一多项式 $f \in \mathbb{R}[T]$ 是素的, 当且仅当它形如 $f = T - \alpha$($\alpha \in \mathbb{R}$), 或形如 $f = (T - \alpha)(T - \bar{\alpha})$($\alpha \in \mathbb{C} - \mathbb{R}$).(AT 346)(提示: 考察映射 $\mathbb{C} \longrightarrow \mathbb{C}$, $\alpha \longmapsto \bar{\alpha}$, 它具有 $\mathbb{R}$-代数同构的性质, 并把它延拓为 $\mathbb{R}[T]$-代数同构 $\mathbb{C}[T] \longrightarrow \mathbb{C}[T]$.)

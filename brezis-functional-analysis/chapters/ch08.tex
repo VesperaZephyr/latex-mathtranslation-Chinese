@@ -1,0 +1,3552 @@
+% chapters/ch08.tex
+% chapters/ch08.tex
+% 第~
+% \ref{chap:8}~章 Sobolev 空间与一维边值问题的变分表述
+% 源: 原书 PDF 第 208--267 页 (印刷页 201--260)
+
+\chapter{Sobolev 空间与一维边值问题的变分表述}
+\label{chap:8}
+
+\section{动机}
+\label{sec:8.1}
+
+考虑如下问题.给定 $f\in C([a,b])$, 求一个函数 $u$ 满足
+\begin{equation}
+\begin{cases}
+-u''+u=f & \text{在}\ [a,b]\ \text{上},\\
+u(a)=u(b)=0.
+\end{cases}
+\label{eq:8.1}
+\end{equation}
+\eqref{eq:8.1} 的\emph{古典解}——或\emph{强解}——是指满足 \eqref{eq:8.1} 的通常
+意义的 $C^2$ 函数.众所周知, 通过一个非常简单的计算就能显式地解出
+\eqref{eq:8.1}, 但我们回避这一点, 以便在这个初等例子上说明方法.
+
+用 $\varphi\in C^1([a,b])$ 乘 \eqref{eq:8.1} 并分部积分; 我们得到
+\begin{equation}
+\int_a^b u'\varphi'+\int_a^b u\varphi=\int_a^b f\varphi
+\quad\forall\varphi\in C^1([a,b]),\ \varphi(a)=\varphi(b)=0.
+\label{eq:8.2}
+\end{equation}
+注意只要 $u\in C^1([a,b])$, \eqref{eq:8.2} 就有意义 (而 \eqref{eq:8.1} 要求
+$u$ 有二阶导数); 事实上, 只须知道 $u,u'\in L^1(a,b)$, 其中 $u'$ 的意义尚待明确.
+我们 (暂时) 说, 满足 \eqref{eq:8.2} 的 $C^1$ 函数 $u$ 是 \eqref{eq:8.1} 的
+\emph{弱解}.
+
+下面的程序概括了偏微分方程理论中\emph{变分方法}的主要步骤:
+
+\runin{步骤 A.} 明确\emph{弱解}的概念.这涉及 \emph{Sobolev 空间}, 它们是我们的
+\emph{基本工具}.
+
+\runin{步骤 B.} 通过 Lax--Milgram 定理用变分方法建立\emph{弱解的存在性与唯一性}.
+
+\runin{步骤 C.} 证明弱解属于 $C^2$ 类 (例如): 这是一个\emph{正则性}结果.
+
+\runin{步骤 D.} 通过证明任何 $C^2$ 的弱解都是古典解, 从而回到古典解.
+
+完成步骤 D 非常简单.事实上, 设 $u\in C^2([a,b])$, $u(a)=u(b)=0$, 且 $u$ 满足
+\eqref{eq:8.2}.对 \eqref{eq:8.2} 分部积分, 得到
+\begin{equation*}
+\int_a^b(-u''+u-f)\varphi=0
+\quad\forall\varphi\in C^1([a,b]),\ \varphi(a)=\varphi(b)=0,
+\end{equation*}
+从而
+\begin{equation*}
+\int_a^b(-u''+u-f)\varphi=0
+\quad\forall\varphi\in C_c^1((a,b)).
+\end{equation*}
+由此推出 (见推论  \ref{cor:4.24}) $-u''+u=f$ 在 $(a,b)$ 上几乎处处成立, 于是
+在 $[a,b]$ 上处处成立, 因为 $u\in C^2([a,b])$.
+% 原书此处印作 "see Corollary 4.15"; 第~
+% \ref{chap:4}~章并无编号 4.15 的推论, 引理~
+% \ref{lem:8.1} 的证明
+% (印刷页 205) 处又引作 "Corollary 4.24", 所指的显然是同一条 (u 的积分为零 ⇒ u=0
+% a.e.). 依技能规范保留原样并记录, 不擅自更正.
+
+\section{\index{yiweiSobolevkongjian@一维 Sobolev 空间 (Sobolev space in dimension 1)}
+Sobolev 空间 $W^{1,p}(I)$}
+\label{sec:8.2}
+
+设 $I=(a,b)$ 为开区间, 可以无界, 并设 $p\in\R$ 满足 $1\le p\le\infty$.
+
+\begin{definition}
+\emph{Sobolev 空间} $W^{1,p}(I)$\footnote{若无混淆, 我们将写 $W^{1,p}$ 而不写
+$W^{1,p}(I)$, 写 $H^1$ 而不写 $H^1(I)$.} 定义为
+\begin{equation*}
+W^{1,p}(I)=\left\{u\in L^p(I);\ \exists g\in L^p(I)\ \text{使得}\
+\int_I u\varphi'=-\int_I g\varphi\ \ \forall\varphi\in C_c^1(I)\right\}.
+\end{equation*}
+我们记
+\begin{equation*}
+H^1(I)=W^{1,2}(I).
+\end{equation*}
+对 $u\in W^{1,p}(I)$, 我们记\footnote{注意这有意义: 由推论  \ref{cor:4.24},
+$g$ 几乎处处唯一确定.} $u'=g$.
+\end{definition}
+
+\begin{remark}
+\label{rem:8.1}
+在 $W^{1,p}$ 的定义中, 我们称 $\varphi$ 为\emph{检验函数}.我们本来同样可以
+用 $C_c^\infty(I)$ 作为检验函数的类, 因为若 $\varphi\in C_c^1(I)$, 则当 $n$
+足够大时 $\rho_n\star\varphi\in C_c^\infty(I)$, 且 $\rho_n\star\varphi\to\varphi$
+在 $C^1$ 中 (见第~\ref{sec:4.4}~节; 当然, $\varphi$ 在 $I$ 外延拓为 $0$).
+\end{remark}
+
+\begin{remark}
+\label{rem:8.2}
+显然, 若 $u\in C^1(I)\cap L^p(I)$ 且 $u'\in L^p(I)$ (这里 $u'$ 是 $u$ 的通常
+导数), 则 $u\in W^{1,p}(I)$.此外, $u$ 的通常导数与它在 $W^{1,p}$ 意义下的
+导数一致——所以记号是相容的! 特别地, 若 $I$ 有界, 则
+$C^1(\bar I)\subset W^{1,p}(I)$ 对一切 $1\le p\le\infty$ 成立.
+\end{remark}
+
+\runin{例.} 设 $I=(-1,+1)$.作为练习证明下述事实:
+
+\noindent (i) 函数 $u(x)=\abs{x}$ 对每个 $1\le p\le\infty$ 都属于 $W^{1,p}(I)$,
+且 $u'=g$, 其中
+\begin{equation*}
+g(x)=
+\begin{cases}
++1 & \text{若}\ 0<x<1,\\
+-1 & \text{若}\ -1<x<0.
+\end{cases}
+\end{equation*}
+更一般地, $\bar I$ 上连续且在 $\bar I$ 上分段 $C^1$ 的函数对一切
+$1\le p\le\infty$ 都属于 $W^{1,p}(I)$.
+
+\noindent (ii) 上述函数 $g$ 对任何 $1\le p\le\infty$ 都不属于 $W^{1,p}(I)$.
+
+\begin{starremark}
+\label{rem:8.3}
+也可以用分布的语言来定义 $W^{1,p}$ (见 L.~Schwartz \bref{Schwartz}{1} 或
+A.~Knapp \bref{Knapp}{2}).一切函数 $u\in L^p(I)$ 都有分布意义下的导数; 这个
+导数是巨大的分布空间 $\mathcal{D}'(I)$ 中的元素.我们说 $u\in W^{1,p}$, 如果
+这个分布导数恰好落在 $L^p$ 中, 而 $L^p$ 是 $\mathcal{D}'(I)$ 的子空间.当
+$I=\R$ 且 $p=2$ 时, Sobolev 空间也可以用 Fourier 变换来定义; 参见例如
+J.~L.~Lions--E.~Magenes \bref{LionsMagenes}{1}, P.~Malliavin
+\bref{Malliavin}{1}, H.~Triebel \bref{Triebel}{1}, L.~Grafakos
+\bref{Grafakos}{1}.这里不采取这个观点.
+\end{starremark}
+
+\begin{notation}
+空间 $W^{1,p}$ 配以范数
+\begin{equation*}
+\norm{u}_{W^{1,p}}=\norm{u}_{L^p}+\norm{u'}_{L^p},
+\end{equation*}
+有时 (若 $1<p<\infty$) 也配以等价范数
+$(\norm{u}_{L^p}^p+\norm{u'}_{L^p}^p)^{1/p}$.空间 $H^1$ 配以标量积
+\begin{equation*}
+(u,v)_{H^1}=(u,v)_{L^2}+(u',v')_{L^2}=\int_a^b(uv+u'v')
+\end{equation*}
+及相应的范数
+\begin{equation*}
+\norm{u}_{H^1}=(\norm{u}_{L^2}^2+\norm{u'}_{L^2}^2)^{1/2}.
+\end{equation*}
+\end{notation}
+
+\begin{proposition}
+\label{prop:8.1}
+空间 $W^{1,p}$ 对 $1\le p\le\infty$ 是 Banach 空间.当 $1<p<\infty$ 时它自反,\footnote{这个性质是 $W^{1,p}$ 的一大优势.在变分法问题中, $W^{1,p}$ 优于
+$C^1$, 因为后者不自反.极小元的存在性在自反空间中容易建立 (参见例如推论
+ \ref{cor:3.23}).} 当 $1\le p<\infty$ 时可分.空间 $H^1$ 是可分 Hilbert 空间.
+\end{proposition}
+
+\begin{proof}
+\begin{enumerate}[label=(\alph*), leftmargin=2.2em, itemsep=0.3em]
+	\item 设 $(u_n)$ 为 $W^{1,p}$ 中的 Cauchy 序列; 则 $(u_n)$ 与 $(u_n')$ 是
+	      $L^p$ 中的 Cauchy 序列.由此推出 $u_n$ 在 $L^p$ 中收敛到某个极限 $u$,
+	      且 $u_n'$ 在 $L^p$ 中收敛到某个极限 $g$.我们有
+	      \begin{equation*}
+	      \int_I u_n\varphi'=-\int_I u_n'\varphi
+	      \quad\forall\varphi\in C_c^1(I),
+	      \end{equation*}
+	      取极限得
+	      \begin{equation*}
+	      \int_I u\varphi'=-\int_I g\varphi
+	      \quad\forall\varphi\in C_c^1(I).
+	      \end{equation*}
+	      于是 $u\in W^{1,p}$, $u'=g$, 且 $\norm{u_n-u}_{W^{1,p}}\to0$.
+	\item 当 $1<p<\infty$ 时 $W^{1,p}$ 自反.显然, 乘积空间
+	      $E=L^p(I)\times L^p(I)$ 自反.由 $Tu=[u,u']$ 定义的算子
+	      $T:W^{1,p}\to E$ 是从 $W^{1,p}$ 到 $E$ 的等距映射.由于 $W^{1,p}$
+	      是 Banach 空间, $T(W^{1,p})$ 是 $E$ 的闭子空间.由此推出
+	      $T(W^{1,p})$ 自反 (见命题  \ref{prop:3.20}).因此 $W^{1,p}$ 也自反.
+	\item 当 $1\le p<\infty$ 时 $W^{1,p}$ 可分.显然, 乘积空间
+	      $E=L^p(I)\times L^p(I)$ 可分.于是 $T(W^{1,p})$ 也可分 (由命题
+	       \ref{prop:3.25}).因此 $W^{1,p}$ 可分.
+\end{enumerate}
+\end{proof}
+
+\begin{remark}
+\label{rem:8.4}
+记住下面这个事实是方便的, 我们在命题  \ref{prop:8.1} 的证明中已用过它: 设
+$(u_n)$ 为 $W^{1,p}$ 中的序列, 使得 $u_n\to u$ 在 $L^p$ 中且 $(u_n')$ 在
+$L^p$ 中收敛到某个极限; 则 $u\in W^{1,p}$ 且 $\norm{u_n-u}_{W^{1,p}}\to0$.
+事实上, 当 $1<p\le\infty$ 时, 只须知道 $u_n\to u$ 在 $L^p$ 中且
+$\norm{u_n'}_{L^p}$ 保持有界, 便可断言 $u\in W^{1,p}$ (见习题 8.2).
+\end{remark}
+
+粗略地说, $W^{1,p}$ 中的函数是 $L^p$ 函数的原函数.更精确地说, 我们有下述结果:
+
+\begin{theorem}
+\label{thm:8.2}
+设 $u\in W^{1,p}(I)$, $1\le p\le\infty$, $I$ 有界或无界; 则存在函数
+$\tilde u\in C(\bar I)$, 使得
+\begin{equation*}
+u=\tilde u\quad\text{在}\ I\ \text{上几乎处处成立},
+\end{equation*}
+且
+\begin{equation*}
+\tilde u(x)-\tilde u(y)=\int_y^x u'(t)\,dt\quad\forall x,y\in\bar I.
+\end{equation*}
+\end{theorem}
+
+\begin{remark}
+\label{rem:8.5}
+让我们强调定理  \ref{thm:8.2} 的内容.首先注意, 若一个函数 $u$ 属于 $W^{1,p}$,
+则一切满足 $v=u$ 在 $I$ 上几乎处处成立的函数 $v$ 也属于 $W^{1,p}$ (这直接由
+$W^{1,p}$ 的定义得出).定理  \ref{thm:8.2} 断言, 每个 $u\in W^{1,p}$ 在 $\bar I$
+上有一个 (且只有一个) 连续代表元, 即存在 $\bar I$ 上的连续函数属于 $u$ 的等价类
+(若 $v=u$ 几乎处处成立, 则 $v\sim u$).在有用的时候,\footnote{例如, 为了给
+每个 $x\in\bar I$ 处的 $u(x)$ 赋予意义.} 我们用它的连续代表元代替 $u$.为简化
+记号, 我们也把连续代表元写成 $u$.最后我们指出, 性质 ``$u$ 有连续代表元'' 与
+``$u$ 几乎处处连续'' 并不相同.
+\end{remark}
+
+\begin{remark}
+\label{rem:8.6}
+由定理  \ref{thm:8.2} 推出: 若 $u\in W^{1,p}$ 且 $u'\in C(\bar I)$ (即 $u'$ 在
+$\bar I$ 上有连续代表元), 则 $u\in C^1(\bar I)$; 更精确地说,
+$\tilde u\in C^1(\bar I)$, 但如上所述, 我们不再区分 $u$ 与 $\tilde u$.
+\end{remark}
+
+在定理  \ref{thm:8.2} 的证明中我们将用到下述引理:
+
+\begin{lemma}
+\label{lem:8.1}
+设 $f\in L^1_{\mathrm{loc}}(I)$ 满足
+\begin{equation}
+\int_I f\varphi'=0\quad\forall\varphi\in C_c^1(I).
+\label{eq:8.3}
+\end{equation}
+则存在常数 $C$, 使得 $f=C$ 在 $I$ 上几乎处处成立.
+\end{lemma}
+
+\begin{proof}
+固定函数 $\psi\in C_c(I)$, 使得 $\int_I\psi=1$.对任何函数 $w\in C_c(I)$,
+存在 $\varphi\in C_c^1(I)$ 使得
+\begin{equation*}
+\varphi'=w-\left(\int_I w\right)\psi.
+\end{equation*}
+事实上, 函数 $h=w-(\int_I w)\psi$ 连续, 在 $I$ 中具有紧支集, 且
+$\int_I h=0$.因此 $h$ 在 $I$ 中有一个 (唯一的) 具紧支集的原函数.由
+\eqref{eq:8.3} 推出
+\begin{equation*}
+\int_I f\left(w-\left(\int_I w\right)\psi\right)=0
+\quad\forall w\in C_c(I),
+\end{equation*}
+即
+\begin{equation*}
+\int_I\left(f-\left(\int_I f\psi\right)\right)w=0
+\quad\forall w\in C_c(I),
+\end{equation*}
+于是 (由推论  \ref{cor:4.24}) $f-(\int_I f\psi)=0$ 在 $I$ 上几乎处处成立,
+即 $f=C$ 在 $I$ 上几乎处处成立, 其中 $C=\int_I f\psi$.
+\end{proof}
+
+\begin{lemma}
+\label{lem:8.2}
+设 $g\in L^1_{\mathrm{loc}}(I)$; 对固定的 $y_0\in I$, 令
+\begin{equation*}
+v(x)=\int_{y_0}^x g(t)\,dt,\quad x\in I.
+\end{equation*}
+则 $v\in C(I)$ 且
+\begin{equation*}
+\int_I v\varphi'=-\int_I g\varphi\quad\forall\varphi\in C_c^1(I).
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+我们有
+\begin{equation*}
+\begin{aligned}
+\int_I v\varphi'
+&=\int_I\left(\int_{y_0}^x g(t)\,dt\right)\varphi'(x)\,dx\\
+&=-\int_a^{y_0}dx\int_x^{y_0}g(t)\varphi'(x)\,dt
++\int_{y_0}^b dx\int_{y_0}^x g(t)\varphi'(x)\,dt.
+\end{aligned}
+\end{equation*}
+由 Fubini 定理,
+\begin{equation*}
+\begin{aligned}
+\int_I v\varphi'
+&=-\int_a^{y_0}g(t)\,dt\int_a^t\varphi'(x)\,dx
++\int_{y_0}^b g(t)\,dt\int_t^b\varphi'(x)\,dx\\
+&=-\int_I g(t)\varphi(t)\,dt.
+\end{aligned}
+\end{equation*}
+\end{proof}
+
+\begin{proof}[定理 \ref{thm:8.2}]
+固定 $y_0\in I$, 令 $\bar u(x)=\int_{y_0}^x u'(t)\,dt$.由引理  \ref{lem:8.2}
+有
+\begin{equation*}
+\int_I\bar u\varphi'=-\int_I u'\varphi\quad\forall\varphi\in C_c^1(I).
+\end{equation*}
+于是 $\int_I(u-\bar u)\varphi'=0\ \forall\varphi\in C_c^1(I)$.由引理
+ \ref{lem:8.1} 推出 $u-\bar u=C$ 在 $I$ 上几乎处处成立.函数
+$\tilde u(x)=\bar u(x)+C$ 具有所需的性质.
+\end{proof}
+
+\begin{remark}
+\label{rem:8.7}
+引理  \ref{lem:8.2} 表明: 函数 $g\in L^p$ 的原函数 $v$ 属于 $W^{1,p}$, 只要
+我们还知道 $v\in L^p$; 当 $I$ 有界时这总是成立的.
+\end{remark}
+
+\begin{proposition}
+\label{prop:8.3}
+设 $u\in L^p$, $1<p\le\infty$.下述性质等价:
+\begin{enumerate}[label=(\roman*), leftmargin=2.6em, itemsep=0.2em]
+	\item $u\in W^{1,p}$,
+	\item 存在常数 $C$, 使得
+	      \begin{equation*}
+	      \abs{\int_I u\varphi'}\le C\norm{\varphi}_{L^{p'}(I)}
+	      \quad\forall\varphi\in C_c^1(I).
+	      \end{equation*}
+\end{enumerate}
+此外, 在 (ii) 中可以取 $C=\norm{u'}_{L^p(I)}$.
+\end{proposition}
+
+\begin{proof}
+(i) $\Rightarrow$ (ii).这是显然的.
+
+(ii) $\Rightarrow$ (i).线性泛函
+\begin{equation*}
+\varphi\in C_c^1(I)\mapsto\int_I u\varphi'
+\end{equation*}
+定义在 $L^{p'}$ 的一个稠密子空间上 (因为 $p'<\infty$), 且关于 $L^{p'}$ 范数连续.
+因此它延拓为定义在整个 $L^{p'}$ 上的有界线性泛函 $F$ (应用 Hahn--Banach 定理,
+或直接用连续性延拓).由 Riesz 表示定理 (定理  \ref{thm:4.11} 与
+ \ref{thm:4.14}), 存在 $g\in L^p$ 使得
+\begin{equation*}
+\dual{F}{\varphi}=\int_I g\varphi\quad\forall\varphi\in L^{p'}.
+\end{equation*}
+特别地,
+\begin{equation*}
+\int_I u\varphi'=\int_I g\varphi\quad\forall\varphi\in C_c^1(I),
+\end{equation*}
+从而 $u\in W^{1,p}$.
+\end{proof}
+
+\begin{starremark}
+\label{rem:8.8}[绝对连续函数与有界变差函数]
+当 $p=1$ 时, 蕴涵 (i) $\Rightarrow$ (ii) 仍然成立, 但逆命题不成立.为说明这
+一点, 设 $I$ 有界.满足 $p=1$ 的 (i) 的函数, 即 $W^{1,1}(I)$ 中的函数, 称为
+\emph{绝对连续函数}.它们也由下述性质刻画:
+\begin{equation*}
+(AC)\qquad
+\begin{cases}
+\forall\varepsilon>0,\ \exists\delta>0\ \text{使得对每个由互不相交区间}
+\ (a_k,b_k)\subset I\\
+\text{组成的有限序列, 只要}\ \sum\abs{b_k-a_k}<\delta,\ \text{就有}\
+\sum\abs{u(b_k)-u(a_k)}<\varepsilon.
+\end{cases}
+\end{equation*}
+另一方面, 满足 $p=1$ 的 (ii) 的函数称为\emph{有界变差函数}; 这些函数可以用许多
+不同的方式刻画:
+\begin{enumerate}[label=(\alph*), leftmargin=2.2em, itemsep=0.15em]
+	\item 它们是 $I$ 上两个有界单调不减函数 (可以间断) 之差,
+	\item 它们是满足下述性质的函数 $u$:
+	      \begin{equation*}
+	      (BV)\qquad
+	      \begin{cases}
+	      \text{存在常数}\ C\ \text{使得}\\
+	      \sum_{i=0}^{k-1}\abs{u(t_{i+1})-u(t_i)}\le C
+	      \ \text{对}\ I\ \text{中一切}\ t_0<t_1<\cdots<t_k,
+	      \end{cases}
+	      \end{equation*}
+	\item 它们是 $L^1(I)$ 中这样的函数 $u$: 其分布导数是有限测度.
+\end{enumerate}
+注意有界变差函数不必有连续代表元.关于这一课题, 参见例如 E.~Hewitt--
+K.~Stromberg \bref{HewittStromberg}{1}, A.~Kolmogorov--S.~Fomin
+\bref{KolmogorovFomin}{1}, S.~Chae \bref{Chae}{1}, H.~Royden
+\bref{Royden}{1}, G.~Folland \bref{Folland}{2}, G.~Buttazzo--M.~Giaquinta--
+S.~Hildebrandt \bref{ButtazzoGiaquintaHildebrandt}{1}, W.~Rudin
+\bref{Rudin}{2}, R.~Wheeden--A.~Zygmund \bref{WheedenZygmund}{1} 以及
+A.~Knapp \bref{Knapp}{1}.
+\end{starremark}
+\begin{proposition}
+\label{prop:8.4}
+$L^\infty(I)$ 中的函数 $u$ 属于 $W^{1,\infty}(I)$ 当且仅当存在常数 $C$, 使得
+\begin{equation*}
+\abs{u(x)-u(y)}\le C\abs{x-y}\quad\text{对}\ I\ \text{中几乎所有的}\ x,y.
+\end{equation*}
+\end{proposition}
+
+\begin{proof}
+若 $u\in W^{1,\infty}(I)$, 我们可以应用定理  \ref{thm:8.2} 推出
+\begin{equation*}
+\abs{u(x)-u(y)}\le\norm{u'}_{L^\infty}\abs{x-y}
+\quad\text{对}\ I\ \text{中几乎所有的}\ x,y.
+\end{equation*}
+反之, 设 $\varphi\in C_c^1(I)$.对 $h\in\R$, 当 $\abs{h}$ 足够小时, 我们有
+\begin{equation*}
+\int_I[u(x+h)-u(x)]\varphi(x)\,dx=\int_I u(x)[\varphi(x-h)-\varphi(x)]\,dx
+\end{equation*}
+(当 $h$ 小时这些积分有意义, 因为 $\varphi$ 的支集在 $I$ 的某个紧子集中).利用
+关于 $u$ 的假设, 得到
+\begin{equation*}
+\abs{\int_I u(x)[\varphi(x-h)-\varphi(x)]\,dx}\le C\abs{h}\norm{\varphi}_{L^1}.
+\end{equation*}
+除以 $\abs{h}$ 并令 $h\to0$, 我们得到
+\begin{equation*}
+\abs{\int_I u\varphi'}\le C\norm{\varphi}_{L^1}
+\quad\forall\varphi\in C_c^1(I).
+\end{equation*}
+现在可以应用命题  \ref{prop:8.3}, 断言 $u\in W^{1,\infty}$.
+\end{proof}
+
+命题  \ref{prop:8.4} 的 $L^p$ 版本如下:
+
+\begin{proposition}
+\label{prop:8.5}
+设 $u\in L^p(\R)$, $1<p<\infty$.下述性质等价:
+\begin{enumerate}[label=(\roman*), leftmargin=2.6em, itemsep=0.2em]
+	\item $u\in W^{1,p}(\R)$,
+	\item 存在常数 $C$, 使得对一切 $h\in\R$,
+	      \begin{equation*}
+	      \norm{\tau_hu-u}_{L^p(\R)}\le C\abs{h}.
+	      \end{equation*}
+\end{enumerate}
+此外, 在 (ii) 中可以取 $C=\norm{u'}_{L^p(\R)}$.
+
+回忆 $(\tau_hu)(x)=u(x+h)$.
+\end{proposition}
+
+\begin{proof}
+(i) $\Rightarrow$ (ii).(当 $p=1$ 时这个蕴涵也成立.) 由定理  \ref{thm:8.2},
+对 $\R$ 中一切 $x$ 与 $h$,
+\begin{equation*}
+u(x+h)-u(x)=\int_x^{x+h}u'(t)\,dt=h\int_0^1u'(x+sh)\,ds.
+\end{equation*}
+于是
+\begin{equation*}
+\abs{u(x+h)-u(x)}\le\abs{h}\int_0^1\abs{u'(x+sh)}\,ds.
+\end{equation*}
+应用 Hölder 不等式, 得到
+\begin{equation*}
+\abs{u(x+h)-u(x)}^p\le\abs{h}^p\int_0^1\abs{u'(x+sh)}^p\,ds.
+\end{equation*}
+由此推出
+\begin{equation*}
+\begin{aligned}
+\int_\R\abs{u(x+h)-u(x)}^p\,dx
+&\le\abs{h}^p\int_\R dx\int_0^1\abs{u'(x+sh)}^p\,ds\\
+&\le\abs{h}^p\int_0^1ds\int_\R\abs{u'(x+sh)}^p\,dx.
+\end{aligned}
+\end{equation*}
+但当 $0<s<1$ 时,
+\begin{equation*}
+\int_\R\abs{u'(x+sh)}^p\,dx=\int_\R\abs{u'(y)}^p\,dy,
+\end{equation*}
+由此即可推出 (ii).
+
+(ii) $\Rightarrow$ (i).设 $\varphi\in C_c^1(\R)$.对一切 $h\in\R$ 有
+\begin{equation*}
+\int_\R[u(x+h)-u(x)]\varphi(x)\,dx=\int_\R u(x)[\varphi(x-h)-\varphi(x)]\,dx.
+\end{equation*}
+利用 Hölder 不等式与 (ii), 得到
+\begin{equation*}
+\abs{\int_\R[u(x+h)-u(x)]\varphi(x)\,dx}\le C\abs{h}\norm{\varphi}_{L^{p'}(\R)},
+\end{equation*}
+从而
+\begin{equation*}
+\abs{\int_\R u(x)[\varphi(x-h)-\varphi(x)]\,dx}\le C\abs{h}\norm{\varphi}_{L^{p'}(\R)}.
+\end{equation*}
+除以 $\abs{h}$ 并令 $h\to0$, 我们得到
+\begin{equation*}
+\abs{\int_\R u\varphi'}\le C\norm{\varphi}_{L^{p'}(\R)}.
+\end{equation*}
+我们再次应用命题  \ref{prop:8.3}, 断言 $u\in W^{1,p}(\R)$.
+\end{proof}
+
+某些基本的分析运算只对定义在整个 $\R$ 上的函数才有意义 (例如卷积与 Fourier
+变换).因此, 能够把一个函数 $u\in W^{1,p}(I)$ 延拓成函数
+$\bar u\in W^{1,p}(\R)$ 是有用的.\footnote{若把 $u$ 在 $I$ 外延拓为 $0$, 则所得
+函数一般不属于 $W^{1,p}(\R)$ (见注记 \ref{rem:8.5} 与第~\ref{sec:8.3}~节).} 下面的结果
+处理这一点.
+
+\begin{theorem}[延拓算子]
+\label{thm:8.6}
+设 $1\le p\le\infty$.存在有界线性算子 $P:W^{1,p}(I)\to W^{1,p}(\R)$, 称为
+\emph{延拓算子}, 它满足下述性质:
+\begin{enumerate}[label=(\roman*), leftmargin=2.6em, itemsep=0.2em]
+	\item $Pu|_I=u\quad\forall u\in W^{1,p}(I)$,
+	\item $\norm{Pu}_{L^p(\R)}\le C\norm{u}_{L^p(I)}\quad\forall u\in W^{1,p}(I)$,
+	\item $\norm{Pu}_{W^{1,p}(\R)}\le C\norm{u}_{W^{1,p}(I)}\quad\forall u\in W^{1,p}(I)$,
+\end{enumerate}
+其中 $C$ 只依赖于 $\abs{I}\le\infty$.\footnote{在 (ii) 中可取 $C=4$, 在 (iii) 中
+可取 $C=4(1+1/\abs{I})$.}
+\end{theorem}
+
+\begin{proof}
+从 $I=(0,\infty)$ 的情形开始, 我们证明\emph{反射延拓}
+\begin{equation*}
+(Pu)(x)=u^\star(x)=
+\begin{cases}
+u(x) & \text{若}\ x\ge0,\\
+u(-x) & \text{若}\ x<0
+\end{cases}
+\end{equation*}
+可用.显然有
+\begin{equation*}
+\norm{u^\star}_{L^p(\R)}\le2\norm{u}_{L^p(I)}.
+\end{equation*}
+令
+\begin{equation*}
+v(x)=
+\begin{cases}
+u'(x) & \text{若}\ x>0,\\
+-u'(-x) & \text{若}\ x<0,
+\end{cases}
+\end{equation*}
+容易验证 $v\in L^p(\R)$ 且
+\begin{equation*}
+u^\star(x)-u^\star(0)=\int_0^x v(t)\,dt\quad\forall x\in\R.
+\end{equation*}
+由此推出 $u^\star\in W^{1,p}(\R)$ (见注记 \ref{rem:8.7}) 且
+$\norm{u^\star}_{W^{1,p}(\R)}\le2\norm{u}_{W^{1,p}(I)}$.
+
+\begin{figure}[tbp]
+	\centering
+	\begin{tikzpicture}[scale=1.0]
+		\draw[-{Stealth[length=2mm]}] (-0.35,0) -- (7.6,0) node[right] {$x$};
+		\draw[-{Stealth[length=2mm]}] (0,-0.3) -- (0,2.9) node[above] {$\eta$};
+		\draw[thick] (0,2.35) -- (2.7,2.35)
+			.. controls (3.45,2.35) and (3.4,0.35) .. (4.15,0.35)
+			-- (7.2,0.35);
+		\foreach \x/\lab in {0/0, 2.2/{$\frac14$}, 3.55/{$\frac12$}, 4.9/{$\frac34$}, 6.2/{$1$}}
+			\draw (\x,0) -- (\x,-0.09) node[below] {\small \lab};
+		\node[left] at (-0.08,2.35) {\small $1$};
+	\end{tikzpicture}
+	\caption{}
+	\label{fig:5}
+\end{figure}
+现在考虑 $I$ 有界的情形; 不失一般性, 可设 $I=(0,1)$.固定函数
+$\eta\in C^1(\R)$, $0\le\eta\le1$, 使得
+\begin{equation*}
+\eta(x)=
+\begin{cases}
+1 & \text{若}\ x<1/4,\\
+0 & \text{若}\ x>3/4.
+\end{cases}
+\end{equation*}
+见图  \ref{fig:5}.
+
+给定 $(0,1)$ 上的函数 $f$, 令
+\begin{equation*}
+\tilde f(x)=
+\begin{cases}
+f(x) & \text{若}\ 0<x<1,\\
+0 & \text{若}\ x>1.
+\end{cases}
+\end{equation*}
+我们将需要下述引理.
+\end{proof}
+
+
+\begin{lemma}
+\label{lem:8.3}
+设 $u\in W^{1,p}(I)$.则
+\begin{equation*}
+\eta\tilde u\in W^{1,p}(0,\infty)
+\quad\text{且}\quad
+(\eta\tilde u)'=\eta'\tilde u+\eta u'.
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+设 $\varphi\in C_c^1((0,\infty))$; 则
+\begin{equation*}
+\begin{aligned}
+\int_0^\infty\eta\tilde u\varphi'
+&=\int_0^1\eta u\varphi'=\int_0^1u[(\eta\varphi)'-\eta'\varphi]\\
+&=-\int_0^1u'\eta\varphi-\int_0^1u\eta'\varphi
+\qquad\text{因为}\ \eta\varphi\in C_c^1((0,1))\\
+&=-\int_0^\infty(u'\eta+\tilde u\eta')\varphi.
+\end{aligned}
+\end{equation*}
+\end{proof}
+
+\begin{proof}[定理 \ref{thm:8.6}, 续]
+给定 $u\in W^{1,p}(I)$, 写
+\begin{equation*}
+u=\eta u+(1-\eta)u.
+\end{equation*}
+函数 $\eta u$ 先由 $\eta\tilde u$ 延拓到 $(0,\infty)$ (由引理  \ref{lem:8.3}),
+再用反射延拓到 $\R$.这样我们得到函数 $v_1\in W^{1,p}(\R)$, 它延拓 $\eta u$,
+且
+\begin{equation*}
+\norm{v_1}_{L^p(\R)}\le2\norm{u}_{L^p(I)},\qquad
+\norm{v_1}_{W^{1,p}(\R)}\le C\norm{u}_{W^{1,p}(I)}
+\end{equation*}
+(其中 $C$ 依赖于 $\norm{\eta'}_{L^\infty}$).
+
+对 $(1-\eta)u$ 同样处理, 即先把 $(1-\eta)u$ 在 $(-\infty,0)$ 上延拓为 $0$
+从而延拓到 $(-\infty,1)$, 再用反射延拓到 $\R$ (这次关于点 $1$ 而非点 $0$
+反射).这样我们得到函数 $v_2\in W^{1,p}(\R)$, 它延拓 $(1-\eta)u$ 且满足
+\begin{equation*}
+\norm{v_2}_{L^p(\R)}\le2\norm{u}_{L^p(I)},\qquad
+\norm{v_2}_{W^{1,p}(\R)}\le C\norm{u}_{W^{1,p}(I)}.
+\end{equation*}
+于是 $Pu=v_1+v_2$ 满足定理的条件.
+\end{proof}
+
+\index{Poincarbudengshi@Poincaré 不等式 (Poincare inequality)}
+$C^1$ 函数的某些性质对 $W^{1,p}$ 函数仍然成立 (参见例如推论  \ref{cor:8.10} 与
+ \ref{cor:8.11}).借助基于下述结果的稠密性论证来建立这些性质是方便的.
+
+\begin{keytheorem}[稠密性]
+\label{thm:8.7}
+设 $u\in W^{1,p}(I)$, $1\le p<\infty$.则存在 $C_c^\infty(\R)$ 中的序列
+$(u_n)$, 使得 $u_n|_I\to u$ 在 $W^{1,p}(I)$ 中.
+\end{keytheorem}
+
+\begin{remark}
+\label{rem:8.9}
+一般说来, 不存在 $C_c^\infty(I)$ 中的序列 $(u_n)$ 使得 $u_n\to u$ 在
+$W^{1,p}(I)$ 中 (见第~\ref{sec:8.3}~节).这与 $L^p$ 空间形成对照: 回忆对每个函数
+$u\in L^p(I)$, 存在 $C_c^\infty(I)$ 中的序列 $(u_n)$ 使得 $u_n\to u$ 在
+$L^p(I)$ 中 (见推论  \ref{cor:4.23}).
+\end{remark}
+
+\begin{proof}
+我们总可以假设 $I=\R$; 否则用定理  \ref{thm:8.6} 把 $u$ 延拓为
+$W^{1,p}(\R)$ 中的函数.我们使用卷积 (使函数成为 $C^\infty$) 与截断 (使其支集
+紧) 的基本技巧.
+
+\runin{(a) 卷积.} 我们将需要下述引理.
+
+\begin{lemma}
+\label{lem:8.4}
+设 $\rho\in L^1(\R)$, $v\in W^{1,p}(\R)$, $1\le p\le\infty$.则
+$\rho\star v\in W^{1,p}(\R)$ 且 $(\rho\star v)'=\rho\star v'$.
+\end{lemma}
+
+\begin{proof}
+首先设 $\rho$ 有紧支集.我们已经知道 (定理  \ref{thm:4.15})
+$\rho\star v\in L^p(\R)$.设 $\varphi\in C_c^1(\R)$; 由命题  \ref{prop:4.16}
+与  \ref{prop:4.20} 有
+\begin{equation*}
+\int(\rho\star v)\varphi'=\int v(\check\rho\star\varphi')
+=\int v(\check\rho\star\varphi)'=-\int v'(\check\rho\star\varphi)
+=-\int(\rho\star v')\varphi,
+\end{equation*}
+由此推出
+\begin{equation*}
+\rho\star v\in W^{1,p}\quad\text{且}\quad(\rho\star v)'=\rho\star v'.
+\end{equation*}
+若 $\rho$ 没有紧支集, 引入 $C_c(\R)$ 中的序列 $(\rho_n)$ 使得
+$\rho_n\to\rho$ 在 $L^1(\R)$ 中 (见推论  \ref{cor:4.23}).由上述结果, 得到
+\begin{equation*}
+\rho_n\star v\in W^{1,p}(\R)\quad\text{且}\quad
+(\rho_n\star v)'=\rho_n\star v'.
+\end{equation*}
+但 $\rho_n\star v\to\rho\star v$ 在 $L^p(\R)$ 中且
+$\rho_n\star v'\to\rho\star v'$ 在 $L^p(\R)$ 中 (由定理  \ref{thm:4.15}).
+借助注记 \ref{rem:8.4} 我们断言
+\begin{equation*}
+\rho\star v\in W^{1,p}(\R)\quad\text{且}\quad(\rho\star v)'=\rho\star v'.
+\end{equation*}
+\end{proof}
+
+\runin{(b) 截断.} 固定函数 $\zeta\in C_c^\infty(\R)$, 使得 $0\le\zeta\le1$ 且
+\begin{equation*}
+\zeta(x)=
+\begin{cases}
+1 & \text{若}\ \abs{x}<1,\\
+0 & \text{若}\ \abs{x}\ge2.
+\end{cases}
+\end{equation*}
+定义序列
+\begin{equation}
+\zeta_n(x)=\zeta(x/n)\quad n=1,2,\dots.
+\label{eq:8.4}
+\end{equation}
+由控制收敛定理容易推出: 若函数 $f$ 属于 $L^p(\R)$, $1\le p<\infty$, 则
+$\zeta_nf\to f$ 在 $L^p(\R)$ 中.
+
+\runin{(c) 结论.} 选取一列磨光核 $(\rho_n)$.我们断言序列
+$u_n=\zeta_n(\rho_n\star u)$ 在 $W^{1,p}(\R)$ 中收敛到 $u$.首先,
+$\norm{u_n-u}_p\to0$.事实上, 写
+\begin{equation*}
+u_n-u=\zeta_n((\rho_n\star u)-u)+(\zeta_nu-u),
+\end{equation*}
+从而
+\begin{equation*}
+\norm{u_n-u}_p\le\norm{\rho_n\star u-u}_p+\norm{\zeta_nu-u}_p\to0.
+\end{equation*}
+其次, 由引理  \ref{lem:8.4} 有
+\begin{equation*}
+u_n'=\zeta_n'(\rho_n\star u)+\zeta_n(\rho_n\star u').
+\end{equation*}
+因此
+\begin{equation*}
+\begin{aligned}
+\norm{u_n'-u'}_p
+&\le\norm{\zeta_n'(\rho_n\star u)}_p+\norm{\zeta_n(\rho_n\star u')-u'}_p\\
+&\le\frac{C}{n}\norm{u}_p+\norm{\rho_n\star u'-u'}_p+\norm{\zeta_nu'-u'}_p\to0,
+\end{aligned}
+\end{equation*}
+其中 $C=\norm{\zeta'}_\infty$.
+\end{proof}
+
+下一个结果是 Sobolev 不等式 (也称 \emph{Sobolev 嵌入}) 的一个重要原型.
+
+\begin{keytheorem}
+\index{Sobolevqianru@Sobolev 嵌入 (Sobolev embedding)}
+\label{thm:8.8}
+存在常数 $C$ (只依赖于 $\abs{I}\le\infty$), 使得
+\begin{equation}
+\norm{u}_{L^\infty(I)}\le C\norm{u}_{W^{1,p}(I)}
+\quad\forall u\in W^{1,p}(I),\ \forall 1\le p\le\infty.
+\label{eq:8.5}
+\end{equation}
+换言之, $W^{1,p}(I)\subset L^\infty(I)$ 且嵌入连续, 对一切
+$1\le p\le\infty$ 成立.此外, 若 $I$ 有界, 则
+\begin{equation}
+\text{嵌入}\ W^{1,p}(I)\subset C(\bar I)\ \text{对一切}\ 1<p\le\infty\ \text{是紧的},
+\label{eq:8.6}
+\end{equation}
+\begin{equation}
+\text{嵌入}\ W^{1,1}(I)\subset L^q(I)\ \text{对一切}\ 1\le q<\infty\ \text{是紧的}.
+\label{eq:8.7}
+\end{equation}
+\end{keytheorem}
+
+\begin{proof}
+我们首先对 $I=\R$ 证明 \eqref{eq:8.5}; 一般情形则由延拓定理 (定理
+ \ref{thm:8.6}) 推出.设 $v\in C_c^1(\R)$; 若 $1\le p<\infty$, 令
+$G(s)=\abs{s}^{p-1}s$.函数 $w=G(v)$ 属于 $C_c^1(\R)$, 且
+\begin{equation*}
+w'=G'(v)v'=p\abs{v}^{p-1}v'.
+\end{equation*}
+于是对 $x\in\R$ 有
+\begin{equation*}
+G(v(x))=\int_{-\infty}^x p\abs{v(t)}^{p-1}v'(t)\,dt,
+\end{equation*}
+由 Hölder 不等式
+\begin{equation*}
+\abs{v(x)}^p\le p\norm{v}_p^{p-1}\norm{v'}_p,
+\end{equation*}
+由此断言
+\begin{equation}
+\norm{v}_\infty\le C\norm{v}_{W^{1,p}}\quad\forall v\in C_c^1(\R),
+\label{eq:8.8}
+\end{equation}
+其中 $C$ 是普适常数 (与 $p$ 无关).\footnote{注意
+$p^{1/p}\le e^{1/e}\ \forall p\ge1$.}
+
+现在用稠密性论证.设 $u\in W^{1,p}(\R)$; 存在序列
+$(u_n)\subset C_c^1(\R)$ 使得 $u_n\to u$ 在 $W^{1,p}(\R)$ 中 (由定理
+ \ref{thm:8.7}).应用 \eqref{eq:8.8}, 可见 $(u_n)$ 是 $L^\infty(\R)$ 中的
+Cauchy 序列.于是 $u_n\to u$ 在 $L^\infty(\R)$ 中, 我们得到 \eqref{eq:8.5}.
+
+\emph{\eqref{eq:8.6} 的证明.} 设 $H$ 为 $W^{1,p}(I)$ 中的单位球,
+$1<p\le\infty$.对 $u\in H$ 有
+\begin{equation*}
+\abs{u(x)-u(y)}=\abs{\int_y^x u'(t)\,dt}
+\le\norm{u'}_p\abs{x-y}^{1/p'}\le\abs{x-y}^{1/p'}
+\quad\forall x,y\in I.
+\end{equation*}
+于是由 Ascoli--Arzelà 定理 (定理  \ref{thm:4.25}) 知 $H$ 在 $C(\bar I)$ 中的
+闭包紧.
+
+\emph{\eqref{eq:8.7} 的证明.} 设 $H$ 为 $W^{1,1}(I)$ 中的单位球.设 $P$ 为
+定理  \ref{thm:8.6} 中的延拓算子, 令 $F=P(H)$, 于是 $H=F|_I$.我们通过应用
+定理  \ref{thm:4.26} 来证明 $H$ 在 $L^q(I)$ 中的闭包紧 (对一切
+$1\le q<\infty$).显然, $F$ 在 $W^{1,1}(\R)$ 中有界; 因此 $F$ 在 $L^q(\R)$
+中也有界, 因为它在 $L^1(\R)$ 与 $L^\infty(\R)$ 中都有界.现在验证第~
+\ref{chap:4}~章的条件
+\eqref{eq:4.22}, 即
+\begin{equation*}
+\lim_{h\to0}\norm{\tau_hf-f}_q=0\quad\text{对}\ f\in F\ \text{一致}.
+\end{equation*}
+由命题  \ref{prop:8.5}, 对每个 $f\in F$,
+\begin{equation*}
+\norm{\tau_hf-f}_{L^1(\R)}\le\abs{h}\norm{f'}_{L^1(\R)}\le C\abs{h},
+\end{equation*}
+因为 $F$ 是 $W^{1,1}(\R)$ 的有界子集.因此
+\begin{equation*}
+\norm{\tau_hf-f}_{L^q(\R)}^q\le(2\norm{f}_{L^\infty(\R)})^{q-1}
+\norm{\tau_hf-f}_{L^1(\R)}\le C\abs{h},
+\end{equation*}
+从而
+\begin{equation*}
+\norm{\tau_hf-f}_{L^q(\R)}\le C\abs{h}^{1/q},
+\end{equation*}
+其中 $C$ 与 $f$ 无关.由于 $q\ne\infty$, 所需结论随之成立.
+\end{proof}
+
+\begin{remark}
+\label{rem:8.10}
+嵌入 $W^{1,1}(I)\subset C(\bar I)$ 连续, 但从不紧, 即使 $I$ 是有界区间;
+读者应自己给出论证或参见习题 8.2.然而, 若 $(u_n)$ 是 $W^{1,1}(I)$ 中的有界
+序列 ($I$ 有界或无界), 则存在子列 $(u_{n_k})$ 使得 $u_{n_k}(x)$ 对一切 $x\in I$
+收敛 (这是 Helly 选择定理; 参见例如 A.~Kolmogorov--S.~Fomin
+\bref{KolmogorovFomin}{1} 与习题 8.3).当 $I$ 无界且 $1<p\le\infty$ 时, 我们
+知道嵌入 $W^{1,p}(I)\subset L^\infty(I)$ 连续; 这个嵌入从不紧——同样, 请给出
+论证或参见习题 8.4.然而, 若 $(u_n)$ 在 $W^{1,p}(I)$ 中有界,
+$1<p\le\infty$, 则存在子列 $(u_{n_k})$ 与某个 $u\in W^{1,p}(I)$, 使得
+$u_{n_k}\to u$ 在 $L^\infty(J)$ 中, 对 $I$ 的每个有界子集 $J$.
+\end{remark}
+
+\begin{remark}
+\label{rem:8.11}
+设 $I$ 为有界区间, $1\le p\le\infty$, $1\le q\le\infty$.由定理
+ \ref{thm:8.2} 与 \eqref{eq:8.5} 容易证明, 范数
+\begin{equation*}
+|||u|||=\norm{u'}_p+\norm{u}_q
+\end{equation*}
+与 $W^{1,p}(I)$ 的范数等价.
+\end{remark}
+
+\begin{remark}
+\label{rem:8.12}
+设 $I$ 为无界区间.若 $u\in W^{1,p}(I)$, 则 $u\in L^q(I)$ 对一切
+$q\in[p,\infty]$, 因为
+\begin{equation*}
+\int_I\abs{u}^q\le\norm{u}_\infty^{q-p}\norm{u}_p^p.
+\end{equation*}
+但一般说来 $u\notin L^q(I)$ 对 $q\in[1,p)$ (见习题 8.1).
+\end{remark}
+
+\begin{corollary}
+\label{cor:8.9}
+设 $I$ 为无界区间, $u\in W^{1,p}(I)$, $1\le p<\infty$.则
+\begin{equation}
+\lim_{\substack{x\in I\\ \abs{x}\to\infty}}u(x)=0.
+\label{eq:8.9}
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+由定理  \ref{thm:8.7}, 存在 $C_c^1(\R)$ 中的序列 $(u_n)$ 使得
+$u_n|_I\to u$ 在 $W^{1,p}(I)$ 中.由 \eqref{eq:8.5} 推出
+$\norm{u_n-u}_{L^\infty(I)}\to0$.由此得到 \eqref{eq:8.9}.事实上, 给定
+$\varepsilon>0$, 选取 $n$ 足够大使得 $\norm{u_n-u}_{L^\infty(I)}<\varepsilon$.
+当 $\abs{x}$ 足够大时 $u_n(x)=0$ (因为 $u_n\in C_c^1(\R)$), 从而
+$\abs{u(x)}<\varepsilon$.
+\end{proof}
+
+\begin{corollary}[乘积的求导]
+\label{cor:8.10}
+设 $u,v\in W^{1,p}(I)$, $1\le p\le\infty$.\footnote{注意这个结果与
+$L^p$ 函数的性质形成对照: 一般说来, 若 $u,v\in L^p$, 则乘积 $uv$ 不属于
+$L^p$.我们说 $W^{1,p}(I)$ 是一个 Banach 代数.} 则
+\begin{equation}
+uv\in W^{1,p}(I)\quad\text{且}\quad
+(uv)'=u'v+uv'.
+\label{eq:8.10}
+\end{equation}
+此外, 分部积分公式成立:
+\begin{equation}
+\int_y^x u'v=u(x)v(x)-u(y)v(y)-\int_y^x uv'\quad\forall x,y\in\bar I.
+\label{eq:8.11}
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+首先回忆 $u\in L^\infty$ (由定理  \ref{thm:8.8}), 从而 $uv\in L^p$.为证明
+$(uv)'\in L^p$, 我们从 $1\le p<\infty$ 的情形开始.设 $(u_n)$ 与 $(v_n)$ 为
+$C_c^1(\R)$ 中的序列, 使得 $u_n|_I\to u$ 且 $v_n|_I\to v$ 在 $W^{1,p}(I)$
+中.于是 $u_n|_I\to u$ 且 $v_n|_I\to v$ 在 $L^\infty(I)$ 中 (再次由定理
+ \ref{thm:8.8}).由此推出 $u_nv_n|_I\to uv$ 在 $L^\infty(I)$ 中, 也在 $L^p(I)$
+中.我们有
+\begin{equation*}
+(u_nv_n)'=u_n'v_n+u_nv_n'\to u'v+uv'\quad\text{在}\ L^p(I)\ \text{中}.
+\end{equation*}
+再次对序列 $(u_nv_n)$ 应用注记 \ref{rem:8.4}, 我们断言 $uv\in W^{1,p}(I)$
+且 \eqref{eq:8.10} 成立.对 \eqref{eq:8.10} 积分即得 \eqref{eq:8.11}.
+
+现在转向 $p=\infty$ 的情形; 设 $u,v\in W^{1,\infty}(I)$.于是
+$uv\in L^\infty(I)$ 且 $u'v+uv'\in L^\infty(I)$.只须验证
+\begin{equation*}
+\int_I uv\varphi'=-\int_I(u'v+uv')\varphi\quad\forall\varphi\in C_c^1(I).
+\end{equation*}
+为此, 固定有界开区间 $J\subset I$ 使得 $\operatorname{supp}\varphi\subset J$.
+于是 $u,v\in W^{1,p}(J)$ 对一切 $p<\infty$, 且由上述结果知
+\begin{equation*}
+\int_J uv\varphi'=-\int_J(u'v+uv')\varphi,
+\end{equation*}
+即
+\begin{equation*}
+\int_I uv\varphi'=-\int_I(u'v+uv')\varphi.
+\end{equation*}
+\end{proof}
+
+\begin{corollary}[复合的求导]
+\label{cor:8.11}
+设 $G\in C^1(\R)$ 满足\footnote{当 $I$ 有界时 (或当 $I$ 无界但 $p=\infty$ 时)
+这一限制是不必要的.当 $I$ 无界且 $1\le p<\infty$ 时它是本质的.}
+$G(0)=0$, 并设 $u\in W^{1,p}(I)$, $1\le p\le\infty$.则
+\begin{equation*}
+G\circ u\in W^{1,p}(I)\quad\text{且}\quad(G\circ u)'=(G'\circ u)u'.
+\end{equation*}
+\end{corollary}
+
+\begin{proof}
+令 $M=\norm{u}_\infty$.由于 $G(0)=0$, 存在常数 $C$ 使得
+$\abs{G(s)}\le C\abs{s}$ 对一切 $s\in[-M,+M]$.于是 $\abs{G\circ u}\le C\abs{u}$;
+由此推出 $G\circ u\in L^p(I)$.类似地, $(G'\circ u)u'\in L^p(I)$.只须验证
+\begin{equation}
+\int_I(G\circ u)\varphi'=-\int_I(G'\circ u)u'\varphi
+\quad\forall\varphi\in C_c^1(I).
+\label{eq:8.12}
+\end{equation}
+首先设 $1\le p<\infty$.则存在 $C_c^1(\R)$ 中的序列 $(u_n)$ 使得
+$u_n|_I\to u$ 在 $W^{1,p}(I)$ 中, 也在 $L^\infty(I)$ 中.于是
+$(G\circ u_n)|_I\to G\circ u$ 在 $L^\infty(I)$ 中, 且
+$(G'\circ u_n)u_n'|_I\to(G'\circ u)u'$ 在 $L^p(I)$ 中.显然 (由 $C^1$ 函数的
+标准法则) 有
+\begin{equation*}
+\int_I(G\circ u_n)\varphi'=-\int_I(G'\circ u_n)u_n'\varphi
+\quad\forall\varphi\in C_c^1(I),
+\end{equation*}
+由此推出 \eqref{eq:8.12}.对 $p=\infty$ 的情形, 按推论  \ref{cor:8.10} 的证明
+中同样的方式进行.
+\end{proof}
+
+\subsection*{Sobolev 空间 $W^{m,p}$}
+
+\begin{definition}
+给定整数 $m\ge2$ 与实数 $1\le p\le\infty$, 我们用归纳法定义空间
+\begin{equation*}
+W^{m,p}(I)=\{u\in W^{m-1,p}(I);\ u'\in W^{m-1,p}(I)\}.
+\end{equation*}
+我们也记
+\begin{equation*}
+H^m(I)=W^{m,2}(I).
+\end{equation*}
+\end{definition}
+
+容易证明: $u\in W^{m,p}(I)$ 当且仅当存在 $m$ 个函数
+$g_1,g_2,\dots,g_m\in L^p(I)$, 使得
+\begin{equation*}
+\int_I uD^j\varphi=(-1)^j\int_I g_j\varphi
+\quad\forall\varphi\in C_c^\infty(I),\ \forall j=1,2,\dots,m,
+\end{equation*}
+其中 $D^j\varphi$ 表示 $\varphi$ 的第 $j$ 阶导数.当 $u\in W^{m,p}(I)$ 时,
+我们于是可以考虑 $u$ 的逐次导数: $u'=g_1$, $(u')'=g_2$, $\dots$, 直到 $m$
+阶.它们记作 $Du,D^2u,\dots,D^mu$.空间 $W^{m,p}(I)$ 配以范数
+\begin{equation*}
+\norm{u}_{W^{m,p}}=\norm{u}_p+\sum_{\alpha=1}^m\norm{D^\alpha u}_p,
+\end{equation*}
+空间 $H^m(I)$ 配以标量积
+\begin{equation*}
+(u,v)_{H^m}=(u,v)_{L^2}+\sum_{\alpha=1}^m(D^\alpha u,D^\alpha v)_{L^2}
+=\int_I uv+\sum_{\alpha=1}^m\int_I D^\alpha u\,D^\alpha v.
+\end{equation*}
+
+可以证明范数 $\norm{\cdot}_{W^{m,p}}$ 与范数
+\begin{equation*}
+|||u|||=\norm{u}_p+\norm{D^mu}_p
+\end{equation*}
+等价.更精确地说, 可以证明: 对每个整数 $j$, $1\le j\le m-1$, 以及对每个
+$\varepsilon>0$, 存在常数 $C$ (依赖于 $\varepsilon$ 与 $\abs{I}\le\infty$),
+使得
+\begin{equation*}
+\norm{D^ju}_p\le\varepsilon\norm{D^mu}_p+C\norm{u}_p
+\quad\forall u\in W^{m,p}(I)
+\end{equation*}
+(参见例如 R.~Adams \bref{Adams}{1}, 或习题 8.6 中 $\abs{I}<\infty$ 的情形).
+
+读者可以把对 $W^{1,p}$ 证明的一切性质推广到空间 $W^{m,p}$; 例如, 若 $I$ 有界,
+则 $W^{m,p}(I)\subset C^{m-1}(\bar I)$, 嵌入连续 (相应地, 当
+$1<p\le\infty$ 时嵌入紧).
+\section{空间 $W_0^{1,p}$}
+\label{sec:8.3}
+
+\begin{definition}
+给定 $1\le p<\infty$, 用 $W_0^{1,p}(I)$ 表示 $C_c^1(I)$ 在 $W^{1,p}(I)$ 中的
+闭包.\footnote{我们不对 $p=\infty$ 定义 $W_0^{1,p}$.} 令
+\begin{equation*}
+H_0^1(I)=W_0^{1,2}(I).
+\end{equation*}
+空间 $W_0^{1,p}(I)$ 配以 $W^{1,p}(I)$ 的范数, 空间 $H_0^1$ 配以 $H^1$ 的
+标量积.\footnote{若无混淆, 我们常写 $W_0^{1,p}$ 与 $H_0^1$ 而不写
+$W_0^{1,p}(I)$ 与 $H_0^1(I)$.}
+\end{definition}
+
+空间 $W_0^{1,p}$ 是可分 Banach 空间.此外, 当 $p>1$ 时它自反.空间 $H_0^1$
+是可分 Hilbert 空间.
+
+\begin{remark}
+\label{rem:8.13}
+当 $I=\R$ 时, 我们知道 $C_c^1(\R)$ 在 $W^{1,p}(\R)$ 中稠密 (见定理
+ \ref{thm:8.7}), 因此 $W_0^{1,p}(\R)=W^{1,p}(\R)$.
+\end{remark}
+
+\begin{remark}
+\label{rem:8.14}
+利用磨光核序列 $(\rho_n)$, 容易验证下述事实:
+\begin{enumerate}[label=(\roman*), leftmargin=2.6em, itemsep=0.2em]
+	\item $C_c^\infty(I)$ 在 $W_0^{1,p}(I)$ 中稠密.
+	\item 若 $u\in W^{1,p}(I)\cap C_c(I)$, 则 $u\in W_0^{1,p}(I)$.
+\end{enumerate}
+\end{remark}
+
+下一个结果给出 $W_0^{1,p}(I)$ 中函数的基本刻画.
+
+\begin{keytheorem}
+\label{thm:8.12}
+设 $u\in W^{1,p}(I)$.则 $u\in W_0^{1,p}(I)$ 当且仅当 $u=0$ 在 $\partial I$ 上.
+\end{keytheorem}
+
+\begin{remark}
+\label{rem:8.15}
+定理  \ref{thm:8.12} 说明了空间 $W_0^{1,p}(I)$ 所起的中心作用.微分方程 (或
+偏微分方程) 常与边界条件耦合, 即在 $\partial I$ 上规定 $u$ 的值.
+\end{remark}
+
+\begin{proof}
+若 $u\in W_0^{1,p}$, 则存在 $C_c^1(I)$ 中的序列 $(u_n)$ 使得 $u_n\to u$ 在
+$W^{1,p}(I)$ 中.因此 $u_n\to u$ 在 $\bar I$ 上一致, 从而 $u=0$ 在 $\partial I$
+上.
+
+反之, 设 $u\in W^{1,p}(I)$ 满足 $u=0$ 在 $\partial I$ 上.固定任一函数
+$G\in C^1(\R)$, 使得
+\begin{equation*}
+G(t)=
+\begin{cases}
+0 & \text{若}\ \abs{t}\le1,\\
+t & \text{若}\ \abs{t}\ge2,
+\end{cases}
+\qquad\text{且}\qquad
+\abs{G(t)}\le\abs{t}\quad\forall t\in\R.
+\end{equation*}
+令 $u_n=(1/n)G(nu)$, 于是 $u_n\in W^{1,p}(I)$ (由推论  \ref{cor:8.11}).另一方面,
+\begin{equation*}
+\operatorname{supp}u_n\subset\{x\in I;\ \abs{u(x)}\ge1/n\},
+\end{equation*}
+因此 $\operatorname{supp}u_n$ 包含在 $I$ 的某个紧子集中 (利用 $u=0$ 在
+$\partial I$ 上以及当 $\abs{x}\to\infty$, $x\in I$ 时 $u(x)\to0$ 这一事实).
+于是 $u_n\in W_0^{1,p}(I)$ (见注记 \ref{rem:8.14}).最后, 由控制收敛定理容易
+验证 $u_n\to u$ 在 $W^{1,p}(I)$ 中.于是 $u\in W_0^{1,p}(I)$.
+\end{proof}
+
+\begin{remark}
+\label{rem:8.16}
+我们再提一下 $W_0^{1,p}$ 函数的另外两个刻画:
+\begin{enumerate}[label=(\roman*), leftmargin=2.6em, itemsep=0.25em]
+	\item 设 $1\le p<\infty$, $u\in L^p(I)$.定义 $\bar u$ 为
+	      \begin{equation*}
+	      \bar u(x)=
+	      \begin{cases}
+	      u(x) & \text{若}\ x\in I,\\
+	      0 & \text{若}\ x\in\R\setminus I.
+	      \end{cases}
+	      \end{equation*}
+	      则 $u\in W_0^{1,p}(I)$ 当且仅当 $\bar u\in W^{1,p}(\R)$.
+	\item 设 $1<p<\infty$, $u\in L^p(I)$.则 $u$ 属于 $W_0^{1,p}(I)$ 当且仅当
+	      存在常数 $C$, 使得
+	      \begin{equation*}
+	      \abs{\int_I u\varphi'}\le C\norm{\varphi}_{L^{p'}(I)}
+	      \quad\forall\varphi\in C_c^1(\R).
+	      \end{equation*}
+\end{enumerate}
+\end{remark}
+
+\begin{keyproposition}[Poincaré 不等式]
+\label{prop:8.13}
+设 $I$ 为有界区间.则存在常数 $C$ (依赖于 $\abs{I}<\infty$), 使得
+\begin{equation}
+\norm{u}_{W^{1,p}(I)}\le C\norm{u'}_{L^p(I)}\quad\forall u\in W_0^{1,p}(I).
+\label{eq:8.13}
+\end{equation}
+换言之, 在 $W_0^{1,p}$ 上, 量 $\norm{u'}_{L^p(I)}$ 是与 $W^{1,p}$ 范数等价的
+一个范数.
+\end{keyproposition}
+
+\begin{proof}
+设 $u\in W_0^{1,p}(I)$ (其中 $I=(a,b)$).由于 $u(a)=0$, 我们有
+\begin{equation*}
+\abs{u(x)}=\abs{u(x)-u(a)}=\abs{\int_a^x u'(t)\,dt}\le\norm{u'}_{L^1}.
+\end{equation*}
+于是 $\norm{u}_{L^\infty(I)}\le\norm{u'}_{L^1(I)}$, 而 \eqref{eq:8.13} 由
+Hölder 不等式推出.
+\end{proof}
+
+\begin{remark}
+\label{rem:8.17}
+若 $I$ 有界, 则表达式 $(u',v')_{L^2}=\int u'v'$ 定义了 $H_0^1$ 上的一个标量积,
+且相应的范数, 即 $\norm{u'}_{L^2}$, 与 $H^1$ 范数等价.
+\end{remark}
+
+\begin{remark}
+\label{rem:8.18}
+给定整数 $m\ge2$ 与实数 $1\le p<\infty$, 空间 $W_0^{m,p}(I)$ 定义为
+$C_c^m(I)$ 在 $W^{m,p}(I)$ 中的闭包.可以证明 (见习题 8.9)
+\begin{equation*}
+W_0^{m,p}(I)=\{u\in W^{m,p}(I);\ u=Du=\cdots=D^{m-1}u=0
+\ \text{在}\ \partial I\ \text{上}\}.
+\end{equation*}
+必须注意
+\begin{equation*}
+W_0^{2,p}(I)=\{u\in W^{2,p}(I);\ u=Du=0\ \text{在}\ \partial I\ \text{上}\}
+\end{equation*}
+与
+\begin{equation*}
+W^{2,p}(I)\cap W_0^{1,p}(I)=\{u\in W^{2,p}(I);\ u=0\ \text{在}\ \partial I\ \text{上}\}
+\end{equation*}
+之间的区别.
+\end{remark}
+
+\subsection*{$\star$ $W_0^{1,p}(I)$ 的对偶空间}
+
+\begin{notation}
+空间 $W_0^{1,p}(I)$ ($1\le p<\infty$) 的对偶空间记作 $W^{-1,p'}(I)$, 空间
+$H_0^1(I)$ 的对偶空间记作 $H^{-1}(I)$.
+\end{notation}
+
+沿用第~
+\ref{chap:5}~章注记 \ref{rem:5.3} 的做法, 我们把 $L^2$ 与其对偶等同起来, 但不把
+$H_0^1$ 与其对偶等同起来.我们有包含关系
+\begin{equation*}
+H_0^1\subset L^2\subset H^{-1},
+\end{equation*}
+其中这些嵌入连续且稠密 (即值域稠密).
+
+若 $I$ 是有界区间, 我们有
+\begin{equation*}
+W_0^{1,p}\subset L^2\subset W^{-1,p'}\quad\text{对一切}\ 1\le p<\infty,
+\end{equation*}
+嵌入连续 (当 $1<p<\infty$ 时嵌入稠密).
+
+若 $I$ 无界, 我们只有
+\begin{equation*}
+W_0^{1,p}\subset L^2\subset W^{-1,p'}\quad\text{对一切}\ 1\le p\le2,
+\end{equation*}
+嵌入连续 (见注记 \ref{rem:8.12}).
+
+$W^{-1,p'}$ 中的元素可以借助 $L^{p'}$ 中的函数来表示; 确切地说, 我们有下述结果.
+
+\begin{proposition}
+\label{prop:8.14}
+设 $F\in W^{-1,p'}(I)$.则存在两个函数 $f_0,f_1\in L^{p'}(I)$, 使得
+\begin{equation*}
+\dual{F}{u}=\int_I f_0u+\int_I f_1u'\quad\forall u\in W_0^{1,p}(I)
+\end{equation*}
+且
+\begin{equation*}
+\norm{F}_{W^{-1,p'}}=\max\{\norm{f_0}_{p'},\norm{f_1}_{p'}\}.
+\end{equation*}
+当 $I$ 有界时, 可以取 $f_0=0$.
+\end{proposition}
+
+\begin{proof}
+考虑乘积空间 $E=L^p(I)\times L^p(I)$, 配以范数
+$\norm{h}=\norm{h_0}_p+\norm{h_1}_p$, 其中 $h=[h_0,h_1]$.
+
+映射 $T:u\in W_0^{1,p}(I)\mapsto[u,u']\in E$ 是从 $W_0^{1,p}(I)$ 到 $E$ 的
+等距映射.令 $G=T(W_0^{1,p}(I))$, 配以 $E$ 的范数, 并令
+$S=T^{-1}:G\to W_0^{1,p}(I)$.映射 $h\in G\mapsto\dual{F}{Sh}$ 是 $G$ 上的
+连续线性泛函.由 Hahn--Banach 定理, 它可以延拓为 $E$ 上的连续线性泛函
+$\Phi$, 且 $\norm{\Phi}_{E^\star}=\norm{F}$.由 Riesz 表示定理, 我们知道存在
+两个函数 $f_0,f_1\in L^{p'}(I)$, 使得
+\begin{equation*}
+\dual{\Phi}{h}=\int_I f_0h_0+\int_I f_1h_1
+\quad\forall h=[h_0,h_1]\in E.
+\end{equation*}
+容易验证 $\norm{\Phi}_{E^\star}=\max\{\norm{f_0}_{p'},\norm{f_1}_{p'}\}$.
+此外, 我们有
+\begin{equation*}
+\dual{\Phi}{Tu}=\dual{F}{u}=\int_I f_0u+\int_I f_1u'
+\quad\forall u\in W_0^{1,p}.
+\end{equation*}
+当 $I$ 有界时, 空间 $W_0^{1,p}(I)$ 可以配以范数 $\norm{u'}_p$ (见命题
+ \ref{prop:8.13}).我们用 $E=L^p(I)$ 与
+$T:u\in W_0^{1,p}(I)\mapsto u'\in L^p(I)$ 重复同样的论证.
+\end{proof}
+
+\begin{remark}
+\label{rem:8.19}
+函数 $f_0$ 与 $f_1$ 不由 $F$ 唯一确定.
+\end{remark}
+
+\begin{remark}
+\label{rem:8.20}
+元素 $F\in W^{-1,p'}(I)$ 通常与分布 $f_0-f_1'$ 等同起来 (按定义, 分布
+$f_0-f_1'$ 是线性泛函
+$u\mapsto\int_I f_0u+\int_I f_1u'$, 定义在 $C_c^\infty(I)$ 上).
+\end{remark}
+
+\begin{remark}
+\label{rem:8.21}
+命题  \ref{prop:8.14} 的第一个断言对 $W^{1,p}$ ($1\le p<\infty$) 上的连续线性
+泛函也成立, 即 $W^{1,p}$ 上的每个连续线性泛函 $F$ 都可以表示为
+\begin{equation*}
+\dual{F}{u}=\int_I f_0u+\int_I f_1u'\quad\forall u\in W^{1,p},
+\end{equation*}
+其中 $f_0,f_1\in L^{p'}$ 为某两个函数.
+\end{remark}
+
+\section{一些边值问题的例子}
+\label{sec:8.4}
+
+考虑问题
+\begin{equation}
+\begin{cases}
+-u''+u=f & \text{在}\ I=(0,1)\ \text{上},\\
+u(0)=u(1)=0,
+\end{cases}
+\label{eq:8.14}
+\end{equation}
+其中 $f$ 是给定函数 (例如属于 $C(\bar I)$, 或者更一般地属于 $L^2(I)$).边界
+条件 $u(0)=u(1)=0$ 称为 (\emph{齐次}) \emph{Dirichlet 边界条件}.
+
+\begin{definition}
+\eqref{eq:8.14} 的\emph{古典解}是指满足 \eqref{eq:8.14} 的通常意义的
+$C^2(\bar I)$ 函数.\eqref{eq:8.14} 的\emph{弱解}是指满足
+\begin{equation}
+\int_I u'v'+\int_I uv=\int_I fv\quad\forall v\in H_0^1(I)
+\label{eq:8.15}
+\end{equation}
+的函数 $u\in H_0^1(I)$.
+\end{definition}
+
+让我们把 \S \ref{sec:8.1} 中概述的程序``付诸实施'':
+
+\runin{步骤 A.} \emph{每个古典解都是弱解.}由分部积分 (其合理性已在推论
+ \ref{cor:8.10} 中说明) 这是显然的.
+
+\runin{步骤 B.} \emph{弱解的存在性与唯一性.}这就是下述结果的内容.
+
+\begin{keyproposition}
+\label{prop:8.15}
+给定任意 $f\in L^2(I)$, 存在唯一的解 $u\in H_0^1$ 满足 \eqref{eq:8.15}.
+此外, $u$ 由
+\begin{equation*}
+\boxed{\min_{v\in H_0^1}\left\{\frac12\int_I(v'^2+v^2)-\int_I fv\right\}}
+\end{equation*}
+得到; 这就是\emph{Dirichlet 原理}.
+\end{keyproposition}
+
+\begin{proof}
+我们在 Hilbert 空间 $H=H_0^1(I)$ 中对双线性形式
+\begin{equation*}
+a(u,v)=\int_I u'v'+\int_I uv=(u,v)_{H^1}
+\end{equation*}
+以及线性泛函 $\varphi:v\mapsto\int_I fv$ 应用 Lax--Milgram 定理 (推论
+ \ref{cor:5.8}).
+\end{proof}
+
+\begin{remark}
+\label{rem:8.22}
+给定 $F\in H^{-1}(I)$, 由 Riesz--Fréchet 表示定理 (定理  \ref{thm:5.5}) 我们
+知道存在唯一的 $u\in H_0^1(I)$ 使得
+\begin{equation*}
+(u,v)_{H^1}=\dual{F}{v}_{H^{-1},H_0^1}\quad\forall v\in H_0^1.
+\end{equation*}
+映射 $F\mapsto u$ 是从 $H^{-1}$ 到 $H_0^1$ 上的 Riesz--Fréchet 同构.函数 $u$
+与 \eqref{eq:8.14} 在 \eqref{eq:8.15} 意义下的弱解重合.
+\end{remark}
+
+\subsection*{步骤 C 与步骤 D. 弱解的正则性.古典解的复原}
+
+首先注意, 若 $f\in L^2$ 且 $u\in H_0^1$ 是 \eqref{eq:8.14} 的弱解, 则
+$u\in H^2$.事实上, 我们有
+\begin{equation*}
+\int_I u'v'=\int_I(f-u)v\quad\forall v\in C_c^1(I),
+\end{equation*}
+因此 $u'\in H^1$ (由 $H^1$ 的定义以及 $f-u\in L^2$), 即 $u\in H^2$.
+
+此外, 若假设 $f\in C(\bar I)$, 则弱解 $u$ 属于 $C^2(\bar I)$.事实上,
+$(u')'\in C(\bar I)$, 从而 $u'\in C^1(\bar I)$ (见注记 \ref{rem:8.6}).从弱解
+$u\in C^2(\bar I)$ 到古典解的过渡已在 \S \ref{sec:8.1} 中完成.
+
+\begin{remark}
+\label{rem:8.23}
+若 $f\in H^k(I)$, 其中 $k$ 为整数且 $k\ge1$, 则容易验证 (用归纳法)
+\eqref{eq:8.15} 的解 $u$ 属于 $H^{k+2}(I)$.
+\end{remark}
+
+上面描述的方法是极其灵活的, 可以适应大量的问题.我们举出经常遇到的几个
+例子.在每个问题中, 精确地确定函数空间并找出适当的弱表述都是关键.
+
+\begin{example}[非齐次 Dirichlet 条件]
+\label{ex:8.1}
+考虑问题
+\begin{equation}
+\begin{cases}
+-u''+u=f & \text{在}\ I=(0,1)\ \text{上},\\
+u(0)=\alpha,\ u(1)=\beta,
+\end{cases}
+\label{eq:8.16}
+\end{equation}
+其中 $\alpha,\beta\in\R$ 给定, $f$ 是给定函数.
+\end{example}
+
+\begin{keyproposition}
+\label{prop:8.16}
+给定 $\alpha,\beta\in\R$ 与 $f\in L^2(I)$, 存在唯一的函数 $u\in H^2(I)$
+满足 \eqref{eq:8.16}.此外, $u$ 由
+\begin{equation*}
+\min_{\substack{v\in H^1(I)\\ v(0)=\alpha,\ v(1)=\beta}}
+\left\{\frac12\int_I(v'^2+v^2)-\int_I fv\right\}
+\end{equation*}
+得到.若另外 $f\in C(\bar I)$, 则 $u\in C^2(\bar I)$.
+\end{keyproposition}
+
+\begin{proof}
+我们给出两种可能的途径:
+
+\emph{方法 1.} 固定任一光滑函数\footnote{例如取 $u_0$ 为仿射函数.} $u_0$,
+使得 $u_0(0)=\alpha$, $u_0(1)=\beta$.引入新未知函数 $\tilde u=u-u_0$.于是
+$\tilde u$ 满足
+\begin{equation*}
+\begin{cases}
+-\tilde u''+\tilde u=f+u_0''-u_0 & \text{在}\ I\ \text{上},\\
+\tilde u(0)=\tilde u(1)=0.
+\end{cases}
+\end{equation*}
+我们化归为关于 $\tilde u$ 的前一个问题.
+
+\emph{方法 2.} 在空间 $H^1(I)$ 中考虑闭凸集
+\begin{equation*}
+K=\{v\in H^1(I);\ v(0)=\alpha\ \text{且}\ v(1)=\beta\}.
+\end{equation*}
+若 $u$ 是 \eqref{eq:8.16} 的古典解, 则
+\begin{equation*}
+\int_I u'(v-u)'+\int_I u(v-u)=\int_I f(v-u)\quad\forall v\in K.
+\end{equation*}
+特别地,
+\begin{equation}
+\int_I u'(v-u)'+\int_I u(v-u)\ge\int_I f(v-u)\quad\forall v\in K.
+\label{eq:8.17}
+\end{equation}
+我们现在可以引用 Stampacchia 定理 (定理  \ref{thm:5.6}): 存在唯一的函数
+$u\in K$ 满足 \eqref{eq:8.17}, 并且 $u$ 由
+\begin{equation*}
+\min_{v\in K}\left\{\frac12\int_I(v'^2+v^2)-\int_I fv\right\}
+\end{equation*}
+得到.为从 \eqref{eq:8.16} 恢复出古典解, 在 \eqref{eq:8.17} 中取
+$v=u\pm w$, 其中 $w\in H_0^1$, 得到
+\begin{equation*}
+\int_I u'w'+\int_I uw=\int_I fw\quad\forall w\in H_0^1.
+\end{equation*}
+由此推出 (与上面一样) $u\in H^2(I)$.若 $f\in C(\bar I)$, 则与齐次情形相同的
+论证说明 $u\in C^2(\bar I)$.
+\end{proof}
+
+\begin{starexample}[Sturm--Liouville 问题]
+\label{ex:8.2}
+考虑问题
+\begin{equation}
+\begin{cases}
+-(pu')'+qu=f & \text{在}\ I=(0,1)\ \text{上},\\
+u(0)=u(1)=0,
+\end{cases}
+\label{eq:8.18}
+\end{equation}
+其中 $p\in C^1(\bar I)$, $q\in C(\bar I)$, $f\in L^2(I)$ 给定, 且
+\begin{equation*}
+p(x)\ge\alpha>0\quad\forall x\in I.
+\end{equation*}
+若 $u$ 是 \eqref{eq:8.18} 的古典解, 则
+\begin{equation*}
+\int_I pu'v'+\int_I quv=\int_I fv\quad\forall v\in H_0^1(I).
+\end{equation*}
+我们取 $H_0^1(I)$ 作为函数空间, 并取
+\begin{equation*}
+a(u,v)=\int_I pu'v'+\int_I quv
+\end{equation*}
+作为 $H_0^1$ 上的对称连续双线性形式.若 $q\ge0$ 在 $I$ 上, 则由 Poincaré
+不等式 (命题  \ref{prop:8.13}) 这个形式是强制的.于是由 Lax--Milgram 定理,
+存在唯一的 $u\in H_0^1$ 使得
+\begin{equation}
+a(u,v)=\int_I fv\quad\forall v\in H_0^1(I).
+\label{eq:8.19}
+\end{equation}
+此外, $u$ 由
+\begin{equation*}
+\min_{v\in H_0^1(I)}\left\{\frac12\int_I(pv'^2+qv^2)-\int_I fv\right\}
+\end{equation*}
+得到.由 \eqref{eq:8.19} 显然有 $pu'\in H^1$; 于是 (由推论  \ref{cor:8.10})
+$u'=(1/p)(pu')\in H^1$, 从而 $u\in H^2$.最后, 若 $f\in C(\bar I)$, 则
+$pu'\in C^1(\bar I)$, 于是 $u'\in C^1(\bar I)$, 即 $u\in C^2(\bar I)$.步骤 D
+可以照搬, 我们断言 $u$ 是 \eqref{eq:8.18} 的古典解.
+
+现在考虑更一般的问题
+\begin{equation}
+\begin{cases}
+-(pu')'+ru'+qu=f & \text{在}\ I=(0,1)\ \text{上},\\
+u(0)=u(1)=0.
+\end{cases}
+\label{eq:8.20}
+\end{equation}
+关于 $p$, $q$, $f$ 的假设同上, 而 $r\in C(\bar I)$.若 $u$ 是 \eqref{eq:8.20}
+的古典解, 则
+\begin{equation*}
+\int_I pu'v'+\int_I ru'v+\int_I quv=\int_I fv\quad\forall v\in H_0^1.
+\end{equation*}
+我们取 $H_0^1(I)$ 作为函数空间, 并取
+\begin{equation*}
+a(u,v)=\int_I pu'v'+\int_I ru'v+\int_I quv
+\end{equation*}
+作为连续双线性形式.这个形式不是对称的.在某些情形下它是强制的; 例如
+\begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.2em]
+	\item 若 $q\ge1$ 且 $r^2<4\alpha$;
+	\item 或者若 $q\ge1$ 且 $r\in C^1(\bar I)$, $r'\le2$; 这里我们用到
+	      \begin{equation*}
+	      \int rv'v=-\frac12\int r'v^2\quad\forall v\in H_0^1.
+	      \end{equation*}
+\end{enumerate}
+这时可以应用 Lax--Milgram 定理, 但没有与之直接对应的极小化问题.下面是一个
+使我们能恢复对称双线性形式的技巧.引入 $r/p$ 的一个原函数 $R$, 并令
+$\zeta=e^{-R}$.方程 \eqref{eq:8.20} 乘以 $\zeta$ 后可以写成
+\begin{equation*}
+-\zeta pu''-\zeta p'u'+\zeta ru'+\zeta qu=\zeta f,
+\end{equation*}
+或者 (因为 $\zeta'p+\zeta r=0$)
+\begin{equation*}
+-(\zeta pu')'+\zeta qu=\zeta f.
+\end{equation*}
+在 $H_0^1$ 上定义对称连续双线性形式
+\begin{equation*}
+a(u,v)=\int_I\zeta pu'v'+\int_I\zeta quv.
+\end{equation*}
+当 $q\ge0$ 时这个形式是强制的, 于是存在唯一的 $u\in H_0^1$ 使得
+\begin{equation*}
+a(u,v)=\int_I\zeta fv\quad\forall v\in H_0^1.
+\end{equation*}
+此外, $u$ 由
+\begin{equation*}
+\min_{v\in H_0^1(I)}\left\{\frac12\int_I(\zeta pv'^2+\zeta qv^2)
+-\int_I\zeta fv\right\}
+\end{equation*}
+得到.容易验证 $u\in H^2$; 并且若 $f\in C(\bar I)$, 则 $u\in C^2(\bar I)$ 是
+\eqref{eq:8.20} 的古典解.
+\end{starexample}
+
+\begin{example}[齐次 Neumann 条件]
+\label{ex:8.3}
+考虑问题
+\begin{equation}
+\begin{cases}
+-u''+u=f & \text{在}\ I=(0,1)\ \text{上},\\
+u'(0)=u'(1)=0.
+\end{cases}
+\label{eq:8.21}
+\end{equation}
+\end{example}
+
+\begin{keyproposition}
+\label{prop:8.17}
+给定 $f\in L^2(I)$, 存在唯一的函数 $u\in H^2(I)$ 满足 \eqref{eq:8.21}.
+\footnote{注意 $u\in H^2(I)\Rightarrow u\in C^1(\bar I)$, 因此条件
+$u'(0)=u'(1)=0$ 有意义.若只知道 $u\in H^1$, 它就没有意义.}此外, $u$ 由
+\begin{equation*}
+\min_{v\in H^1(I)}\left\{\frac12\int_I(v'^2+v^2)-\int_I fv\right\}
+\end{equation*}
+得到.若另外 $f\in C(\bar I)$, 则 $u\in C^2(\bar I)$.
+\end{keyproposition}
+
+\begin{proof}
+若 $u$ 是 \eqref{eq:8.21} 的古典解, 则
+\begin{equation}
+\int_I u'v'+\int_I uv=\int_I fv\quad\forall v\in H^1(I).
+\label{eq:8.22}
+\end{equation}
+我们取 $H^1(I)$ 作为函数空间: 由于 $u(0)$ 与 $u(1)$ 先验未知, 像上面那样在
+$H_0^1$ 中工作是毫无意义的.我们对双线性形式
+$a(u,v)=\int_I u'v'+\int_I uv$ 与线性泛函 $\varphi:v\mapsto\int_I fv$ 应用
+Lax--Milgram 定理.这样我们得到满足 \eqref{eq:8.22} 的唯一函数
+$u\in H^1(I)$.由 \eqref{eq:8.22} 如上推出 $u\in H^2(I)$.再次利用
+\eqref{eq:8.22}, 我们得到
+\begin{equation}
+\int_I(-u''+u-f)v+u'(1)v(1)-u'(0)v(0)=0\quad\forall v\in H^1(I).
+\label{eq:8.23}
+\end{equation}
+在 \eqref{eq:8.23} 中先取 $v\in H_0^1$, 得到 $-u''+u=f$ 几乎处处成立.回到
+\eqref{eq:8.23}, 剩下
+\begin{equation*}
+u'(1)v(1)-u'(0)v(0)=0\quad\forall v\in H^1(I).
+\end{equation*}
+由于 $v(0)$ 与 $v(1)$ 任意, 我们推出 $u'(0)=u'(1)=0$.
+\end{proof}
+
+\begin{example}[非齐次 Neumann 条件]
+\label{ex:8.4}
+考虑问题
+\begin{equation}
+\begin{cases}
+-u''+u=f & \text{在}\ I=(0,1)\ \text{上},\\
+u'(0)=\alpha,\ u'(1)=\beta,
+\end{cases}
+\label{eq:8.24}
+\end{equation}
+其中 $\alpha,\beta\in\R$ 给定, $f$ 是给定函数.
+\end{example}
+
+\begin{proposition}
+\label{prop:8.18}
+给定任意 $f\in L^2(I)$ 与 $\alpha,\beta\in\R$, 存在唯一的函数 $u\in H^2(I)$
+满足 \eqref{eq:8.24}.此外, $u$ 由
+\begin{equation*}
+\min_{v\in H^1(I)}\left\{\frac12\int_I(v'^2+v^2)-\int_I fv+\alpha v(0)-\beta v(1)\right\}
+\end{equation*}
+得到.若另外 $f\in C(\bar I)$, 则 $u\in C^2(\bar I)$.
+\end{proposition}
+
+\begin{proof}
+若 $u$ 是 \eqref{eq:8.24} 的古典解, 则
+\begin{equation*}
+\int_I u'v'+\int_I uv=\int_I fv-\alpha v(0)+\beta v(1)\quad\forall v\in H^1(I).
+\end{equation*}
+我们取 $H^1(I)$ 作为函数空间, 并对双线性形式
+$a(u,v)=\int_I u'v'+\int_I uv$ 与线性泛函
+\begin{equation*}
+\varphi:v\mapsto\int_I fv-\alpha v(0)+\beta v(1)
+\end{equation*}
+应用 Lax--Milgram 定理.这个线性泛函连续 (由定理  \ref{thm:8.8}).然后照例 3
+的做法证明 $u\in H^2(I)$ 且 $u'(0)=\alpha$, $u'(1)=\beta$.
+\end{proof}
+
+\begin{example}[混合边界条件]
+\label{ex:8.5}
+考虑问题
+\begin{equation}
+\begin{cases}
+-u''+u=f & \text{在}\ I=(0,1)\ \text{上},\\
+u(0)=0,\ u'(1)=0.
+\end{cases}
+\label{eq:8.25}
+\end{equation}
+若 $u$ 是 \eqref{eq:8.25} 的古典解, 则
+\begin{equation}
+\int_I u'v'+\int_I uv=\int_I fv\quad\forall v\in H^1(I)\ \text{且}\ v(0)=0.
+\label{eq:8.26}
+\end{equation}
+适当的空间是
+\begin{equation*}
+H=\{v\in H^1(I);\ v(0)=0\},
+\end{equation*}
+配以 $H^1$ 标量积.其余部分留作习题.
+\end{example}
+
+\begin{example}[Robin 条件, 或``第三类''边界条件]
+\label{ex:8.6}
+考虑问题
+\begin{equation}
+\begin{cases}
+-u''+u=f & \text{在}\ I=(0,1)\ \text{上},\\
+u'(0)=ku(0),\ u(1)=0,
+\end{cases}
+\label{eq:8.27}
+\end{equation}
+其中 $k\in\R$ 给定.\footnote{更一般地, 可以处理边界条件
+$\alpha_0u'(0)+\beta_0u(0)=0$, $\alpha_1u'(1)+\beta_1u(1)=0$, 只要对常数
+$\alpha_0,\beta_0,\alpha_1,\beta_1$ 加适当的条件.}
+
+若 $u$ 是 \eqref{eq:8.27} 的古典解, 则
+\begin{equation*}
+\int_I u'v'+\int_I uv+ku(0)v(0)=\int_I fv
+\quad\forall v\in H^1(I)\ \text{且}\ v(1)=0.
+\end{equation*}
+应用 Lax--Milgram 定理的适当空间是 Hilbert 空间
+\begin{equation*}
+H=\{v\in H^1(I);\ v(1)=0\},
+\end{equation*}
+配以 $H^1$ 标量积.双线性形式
+\begin{equation*}
+a(u,v)=\int_I u'v'+\int_I uv+ku(0)v(0)
+\end{equation*}
+对称且连续.它在 $k\ge0$ 时强制.\footnote{若 $k<0$ 且 $\abs{k}$ 足够小,
+形式 $a(u,v)$ 仍然是强制的.另一方面, 显式计算表明存在某个负的 $k$ 值以及
+(光滑) 函数 $f$, 使得 \eqref{eq:8.27} 无解 (见习题 8.21).}
+\end{example}
+
+\begin{example}[周期边界条件]
+\label{ex:8.7}
+考虑问题
+\begin{equation}
+\begin{cases}
+-u''+u=f & \text{在}\ I=(0,1)\ \text{上},\\
+u(0)=u(1),\ u'(0)=u'(1).
+\end{cases}
+\label{eq:8.28}
+\end{equation}
+若 $u$ 是 \eqref{eq:8.28} 的古典解, 则
+\begin{equation}
+\int_I u'v'+\int_I uv=\int_I fv\quad\forall v\in H^1(I)\ \text{且}\ v(0)=v(1).
+\label{eq:8.29}
+\end{equation}
+应用 Lax--Milgram 定理的适当框架是 Hilbert 空间
+\begin{equation*}
+H=\{v\in H^1(I);\ v(0)=v(1)\},
+\end{equation*}
+配以双线性形式 $a(u,v)=\int_I u'v'+\int_I uv$.当 $f\in L^2(I)$ 时我们得到
+\eqref{eq:8.28} 的一个解 $u\in H^2(I)$.若另外 $f\in C(\bar I)$, 则这个解
+是古典解.
+\end{example}
+
+\begin{example}[$\R$ 上的一个边值问题]
+\label{ex:8.8}
+考虑问题
+\begin{equation}
+\begin{cases}
+-u''+u=f & \text{在}\ \R\ \text{上},\\
+u(x)\to0 & \text{当}\ \abs{x}\to\infty,
+\end{cases}
+\label{eq:8.30}
+\end{equation}
+其中 $f$ 给定于 $L^2(\R)$.\eqref{eq:8.30} 的\emph{古典解}是指满足
+\eqref{eq:8.30} 的通常意义的 $C^2(\R)$ 函数.\eqref{eq:8.30} 的\emph{弱解}
+是指满足
+\begin{equation*}
+\int_\R u'v'+\int_\R uv=\int_\R fv\quad\forall v\in H^1(\R)
+\end{equation*}
+的函数 $u\in H^1(\R)$.
+
+我们首先必须证明任何古典解都是弱解; 让我们先验证 $u\in H^1(\R)$.像定理
+ \ref{thm:8.7} 的证明中那样取截断函数序列 $(\zeta_n)$.用 $\zeta_nu$ 乘
+\eqref{eq:8.30} 并分部积分, 我们得到
+\begin{equation*}
+\int_\R u'(\zeta_nu'+\zeta_n'u)+\int_\R\zeta_nu^2=\int_\R\zeta_nfu,
+\end{equation*}
+由此推出
+\begin{equation}
+\int_\R\zeta_n(u'^2+u^2)=\int_\R\zeta_nfu+\frac12\int_\R\zeta_n''u^2.
+\label{eq:8.31}
+\end{equation}
+但是
+\begin{equation*}
+\frac12\int_\R\zeta_n''u^2\le\frac{C}{n^2}\int_{n<\abs{x}<2n}u^2
+\quad\text{其中}\ C=\norm{\zeta''}_{L^\infty(\R)},
+\end{equation*}
+并且当 $n\to\infty$ 时 $\frac{1}{n^2}\int_{n<\abs{x}<2n}u^2\to0$, 因为
+$u(x)\to0$ ($\abs{x}\to\infty$).把不等式
+\begin{equation*}
+\int_\R\zeta_nfu\le\frac12\int_\R\zeta_nu^2+\frac12\int_\R\zeta_nf^2
+\end{equation*}
+代入 \eqref{eq:8.31}, 我们看到当 $n\to\infty$ 时
+$\int\zeta_n(u'^2+u^2)$ 保持有界, 因此 $u\in H^1(\R)$.
+
+假设 $u$ 是 \eqref{eq:8.30} 的古典解, 我们有
+\begin{equation*}
+\int_\R u'v'+\int_\R uv=\int_\R fv\quad\forall v\in C_c^1(\R).
+\end{equation*}
+由稠密性 (以及 $u\in H^1(\R)$), 这对每个 $v\in H^1(\R)$ 都成立.因此 $u$
+是 \eqref{eq:8.30} 的弱解.
+
+为得到弱解的存在性与唯一性, 只须在 Hilbert 空间 $H^1(\R)$ 中应用
+Lax--Milgram 定理.容易验证弱解 $u$ 属于 $H^2(\R)$, 并且若进一步
+$f\in C(\R)$, 则 $u\in C^2(\R)$.我们断言 (利用推论  \ref{cor:8.9}):
+给定 $f\in L^2(\R)\cap C(\R)$, 问题 \eqref{eq:8.30} 有唯一的古典解 (它
+并且属于 $H^2(\R)$).
+\end{example}
+
+\begin{remark}
+\label{rem:8.24}
+问题
+\begin{equation*}
+\begin{cases}
+-u''=f & \text{在}\ \R\ \text{上},\\
+u(x)\to0 & \text{当}\ \abs{x}\to\infty,
+\end{cases}
+\end{equation*}
+不能用上述技巧处理, 因为双线性形式 $a(u,v)=\int u'v'$ 在 $H^1(\R)$ 中不是
+强制的.事实上, 即使 $f$ 是具紧支集的光滑函数, 这个问题也未必有解 (为什么?).
+\end{remark}
+
+\begin{remark}
+\label{rem:8.25}
+另一方面, 同样的方法适用于问题
+\begin{equation*}
+\begin{cases}
+-u''+u=f & \text{在}\ I=(0,+\infty)\ \text{上},\\
+u(0)=0 & \text{且}\ u(x)\to0\ \text{当}\ x\to+\infty,
+\end{cases}
+\end{equation*}
+其中 $f$ 给定于 $L^2(0,+\infty)$.
+\end{remark}
+
+\section{最大值原理}
+\label{sec:8.5}
+
+下面是一个非常有用, 称为\emph{最大值原理}的性质.
+
+\begin{keytheorem}
+\index{yiweijidazhiyuanli@一维极大值原理 (maximum principle in dimension 1)}
+\label{thm:8.19}
+设 $f\in L^2(I)$, $I=(0,1)$, 并设 $u\in H^2(I)$ 是 Dirichlet 问题
+\begin{equation}
+\begin{cases}
+-u''+u=f & \text{在}\ I\ \text{上},\\
+u(0)=\alpha,\ u(1)=\beta
+\end{cases}
+\label{eq:8.32}
+\end{equation}
+的解.则对每个 $x\in I$,\footnote{$\sup_I f$ 与 $\inf_I f$ 分别指 $f$ 的
+本质上确界 (可能为 $+\infty$) 与本质下确界 (可能为 $-\infty$).回忆
+$\operatorname{ess\,sup}f=\inf\{C;\ f(x)\le C\ \text{a.e.}\}$,
+$\operatorname{ess\,inf}f=-\operatorname{ess\,sup}(-f)$.}
+\begin{equation}
+\min\{\alpha,\beta,\inf_I f\}\le u(x)\le\max\{\alpha,\beta,\sup_I f\}.
+\label{eq:8.33}
+\end{equation}
+\end{keytheorem}
+
+\begin{proof}[(用 Stampacchia 的截断方法)]
+我们有
+\begin{equation}
+\int_I u'v'+\int_I uv=\int_I fv\quad\forall v\in H_0^1(I).
+\label{eq:8.34}
+\end{equation}
+固定任一函数 $G\in C^1(\R)$, 使得
+\begin{enumerate}[label=(\roman*), leftmargin=2.6em, itemsep=0.2em]
+	\item $G$ 在 $(0,+\infty)$ 上严格递增,
+	\item 当 $t\in(-\infty,0]$ 时 $G(t)=0$.
+\end{enumerate}
+令 $K=\max\{\alpha,\beta,\sup_I f\}$, 并假设 $K<\infty$.我们将证明
+$u\le K$ 在 $I$ 上成立.函数 $v=G(u-K)$ 属于 $H^1(I)$, 甚至属于
+$H_0^1(I)$, 因为
+\begin{equation*}
+u(0)-K=\alpha-K\le0\quad\text{且}\quad u(1)-K=\beta-K\le0.
+\end{equation*}
+把 $v$ 代入 \eqref{eq:8.34}, 我们得到
+\begin{equation*}
+\int_I u'^2G'(u-K)+\int_I uG(u-K)=\int_I fG(u-K),
+\end{equation*}
+即
+\begin{equation*}
+\int_I u'^2G'(u-K)+\int_I(u-K)G(u-K)=\int_I(f-K)G(u-K).
+\end{equation*}
+但 $(f-K)\le0$ 且 $G(u-K)\ge0$, 由此推出 $(f-K)G(u-K)\le0$, 于是
+\begin{equation*}
+\int_I(u-K)G(u-K)\le0.
+\end{equation*}
+由于 $tG(t)\ge0$ 对一切 $t\in\R$ 成立, 上述不等式推出
+$(u-K)G(u-K)=0$ 几乎处处成立.于是 $u\le K$ 几乎处处成立, 从而在 $I$ 上
+处处成立, 因为 $u$ 连续.$u$ 的下界可通过把上述上界应用于 $-u$ 得到.
+\end{proof}
+
+\begin{remark}
+\label{rem:8.26}
+当 $f\in C(\bar I)$ 时, $u\in C^2(\bar I)$, 可以用另一种方法建立
+\eqref{eq:8.33}: 最大值原理的\emph{古典方法}.设 $x_0\in\bar I$ 是 $u$ 在
+$\bar I$ 上取到最大值的点.若 $x_0=0$ 或 $x_0=1$, 结论是显然的.否则
+$0<x_0<1$, 于是 $u'(x_0)=0$, $u''(x_0)\le0$.由方程
+\eqref{eq:8.32} 推出
+% 原书此处印作 "From equation (33)"; (33) 是结论不等式, 而 u(x_0)=f(x_0)+u''(x_0)
+% 实际来自方程 (32) (-u''+u=f).依技能规范保留原样并记录, 不擅自更正.
+\begin{equation*}
+u(x_0)=f(x_0)+u''(x_0)\le f(x_0)\le K,
+\end{equation*}
+从而 $u\le K$ 在 $I$ 上成立.
+\end{remark}
+
+下面是定理  \ref{thm:8.19} 的一些直接推论.
+
+\begin{keycorollary}
+\label{cor:8.20}
+设 $u$ 是 \eqref{eq:8.34} 的解.
+\begin{enumerate}[label=(\roman*), leftmargin=2.6em, itemsep=0.25em]
+	\item 若 $u\ge0$ 在 $\partial I$ 上且 $f\ge0$ 在 $I$ 上, 则 $u\ge0$ 在
+	      $I$ 上.
+	\item 若 $u=0$ 在 $\partial I$ 上且 $f\in L^\infty(I)$, 则
+	      $\norm{u}_{L^\infty(I)}\le\norm{f}_{L^\infty(I)}$.
+	\item 若 $f=0$ 在 $I$ 上, 则
+	      $\norm{u}_{L^\infty(I)}\le\norm{u}_{L^\infty(\partial I)}$.
+\end{enumerate}
+\end{keycorollary}
+
+对于 Neumann 条件的情形, 我们有类似的结果.
+
+\begin{proposition}
+\label{prop:8.21}
+设 $f\in L^2(I)$, $I=(0,1)$, 并设 $u\in H^2(I)$ 是问题
+\begin{equation*}
+\begin{cases}
+-u''+u=f & \text{在}\ I\ \text{上},\\
+u'(0)=u'(1)=0
+\end{cases}
+\end{equation*}
+的解.则对每个 $x\in\bar I$,
+\begin{equation}
+\inf_I f\le u(x)\le\sup_I f.
+\label{eq:8.35}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+我们有
+\begin{equation}
+\int_I u'v'+\int_I uv=\int_I fv\quad\forall v\in H^1(I).
+\label{eq:8.36}
+\end{equation}
+取 $K=\sup_I f$ 以及上面同一个函数 $G$, 把 $v=G(u-K)$ 代入
+\eqref{eq:8.36}.然后照定理  \ref{thm:8.19} 的证明进行.
+\end{proof}
+
+\begin{remark}
+\label{rem:8.27}
+若 $f\in C(\bar I)$, 则 $u\in C^2(\bar I)$, 并且可以沿注记 \ref{rem:8.26}
+的思路建立 \eqref{eq:8.35}.注意若 $u$ 在 $\partial I$ 上取到最大值, 比如在
+$0$ 处, 则 $u''(0)\le0$ (把 $u$ 关于 $0$ 向左作反射延拓, 并利用
+$u'(0)=0$ 这一事实).
+\end{remark}
+
+\begin{remark}
+\label{rem:8.28}
+设 $f\in L^2(\R)$, 并设 $u\in H^2(\R)$ 是例 \ref{ex:8.8} 中讨论的问题
+\begin{equation*}
+\begin{cases}
+-u''+u=f & \text{在}\ \R\ \text{上},\\
+u(x)\to0 & \text{当}\ \abs{x}\to\infty
+\end{cases}
+\end{equation*}
+的解.则对一切 $x\in\R$,
+\begin{equation*}
+\inf_\R f\le u(x)\le\sup_\R f.
+\end{equation*}
+\end{remark}
+
+\section{特征函数与谱分解}
+\label{sec:8.6}
+
+下面是基本结果.
+
+\begin{keytheorem}
+\label{thm:8.22}
+设 $p\in C^1(\bar I)$, $I=(0,1)$, 且 $p\ge\alpha>0$ 在 $I$ 上; 设
+$q\in C(\bar I)$.则存在实数序列 $(\lambda_n)$ 与 $L^2(I)$ 的 Hilbert 基
+$(e_n)$, 使得 $e_n\in C^2(\bar I)$ 对一切 $n$ 成立, 且
+\begin{equation}
+\begin{cases}
+-(pe_n')'+qe_n=\lambda_ne_n & \text{在}\ I\ \text{上},\\
+e_n(0)=e_n(1)=0.
+\end{cases}
+\label{eq:8.37}
+\end{equation}
+此外, 当 $n\to+\infty$ 时 $\lambda_n\to+\infty$.
+\end{keytheorem}
+
+我们说 $(\lambda_n)$ 是带 Dirichlet 边界条件的微分算子
+$Au=-(pu')'+qu$ 的\emph{特征值}, $(e_n)$ 是相应的\emph{特征函数}.
+
+\begin{proof}
+我们总可以假设 $q\ge0$, 因为若不然, 取任一常数 $C$ 使得 $q+C\ge0$, 这
+相当于在 \eqref{eq:8.37} 中把 $\lambda_n$ 换成 $\lambda_n+C$.对每个
+$f\in L^2(I)$, 存在唯一的 $u\in H^2(I)\cap H_0^1(I)$ 满足
+\begin{equation}
+\begin{cases}
+-(pu')'+qu=f & \text{在}\ I\ \text{上},\\
+u(0)=u(1)=0.
+\end{cases}
+\label{eq:8.38}
+\end{equation}
+记 $T$ 为映射 $f\mapsto u$, 把它看作从 $L^2(I)$ 到 $L^2(I)$ 的算子.
+\footnote{我们也可以把 $T$ 看作从 $H_0^1$ 到 $H_0^1$ 的算子 (见
+\S\ref{sec:9.8} 注记 28).}我们断言 $T$ 自伴且紧.
+
+首先是紧性.由 \eqref{eq:8.38} 我们有
+\begin{equation*}
+\int_I pu'^2+\int_I qu^2=\int_I fu,
+\end{equation*}
+于是 $\alpha\norm{u'}_{L^2}^2\le\norm{f}_{L^2}\norm{u}_{L^2}$.由此推出
+$\norm{u}_{H^1}\le C\norm{f}_{L^2}$, 其中 $C$ 是只依赖于 $\alpha$ 的常数.
+这可以写成
+\begin{equation*}
+\norm{Tf}_{H^1}\le C\norm{f}_{L^2}\quad\forall f\in L^2(I).
+\end{equation*}
+由于 $H^1(I)$ 到 $L^2(I)$ 的嵌入是紧的 (因为 $I$ 有界), 我们推出 $T$ 是
+从 $L^2(I)$ 到 $L^2(I)$ 的紧算子.
+
+其次, 我们证明 $T$ 自伴, 即
+\begin{equation*}
+\int_I(Tf)g=\int_I f(Tg)\quad\forall f,g\in L^2(I).
+\end{equation*}
+事实上, 令 $u=Tf$ 且 $v=Tg$, 我们有
+\begin{equation}
+-(pu')'+qu=f
+\label{eq:8.39}
+\end{equation}
+以及
+\begin{equation}
+-(pv')'+qv=g.
+\label{eq:8.40}
+\end{equation}
+把 \eqref{eq:8.39} 乘以 $v$, 把 \eqref{eq:8.40} 乘以 $u$, 然后积分, 我们得到
+\begin{equation*}
+\int_I pu'v'+\int_I quv=\int_I fv=\int_I gu,
+\end{equation*}
+这就是所要的结论.
+
+最后, 我们注意
+\begin{equation}
+\int_I(Tf)f=\int_I uf=\int_I pu'^2+qu^2\ge0\quad\forall f\in L^2(I),
+\label{eq:8.41}
+\end{equation}
+并且 $N(T)=\{0\}$, 因为 $Tf=0$ 蕴含 $u=0$, 从而 $f=0$.
+
+应用定理  \ref{thm:6.11}, 我们知道 $L^2(I)$ 有一个由 $T$ 的特征向量组成的
+Hilbert 基 $(e_n)_{n\ge1}$, 相应的特征值为 $(\mu_n)_{n\ge1}$.我们有
+$\mu_n>0$ 对一切 $n$ 成立 (由 \eqref{eq:8.41} 有 $\mu_n\ge0$, 而
+$\mu_n\ne0$, 因为 $N(T)=\{0\}$).我们还知道 $\mu_n\to0$.由
+$Te_n=\mu_ne_n$ 得到
+\begin{equation*}
+-(pe_n')'+qe_n=\lambda_ne_n\quad\text{其中}\ \lambda_n=1/\mu_n,
+\qquad e_n(0)=e_n(1)=0.
+\end{equation*}
+此外, $e_n\in C^2(\bar I)$, 因为 $f=\lambda_ne_n\in C(\bar I)$ (事实上,
+若 $p,q\in C^\infty(\bar I)$, 则 $e_n\in C^\infty(\bar I)$).
+\end{proof}
+
+\begin{example}
+若 $p\equiv1$ 且 $q\equiv0$, 则
+\begin{equation*}
+e_n(x)=\sqrt2\sin(n\pi x)\quad\text{且}\quad\lambda_n=n^2\pi^2,
+\quad n=1,2,\dots.
+\end{equation*}
+\end{example}
+
+\begin{remark}
+\label{rem:8.29}
+对于同一个微分算子, 特征值与特征函数随边界条件而变.作为习题, 试确定
+算子 $Au=-u''$ 在例 \ref{ex:8.3}, \ref{ex:8.5}, \ref{ex:8.6} 与
+\ref{ex:8.7} 的边界条件下的特征值.
+\end{remark}
+
+\begin{remark}
+\label{rem:8.30}
+$I$ 有界这一假设在证明算子 $T$ 的紧性时起本质作用.当 $I$ 无界时, 定理
+ \ref{thm:8.22} 的结论一般不再成立;\footnote{在某些情形下, 对 $p$ 与 $q$
+作适当假设, 定理  \ref{thm:8.22} 的结论在无界区间上仍然成立 (见问题 51).}
+人们反而会遇到非常有趣的连续谱现象——关于这个课题, 可参看例如
+M.~Reed--B.~Simon \bref{ReedSimon}{1}.在习题 8.38 中我们确定算子
+$T:f\mapsto u$ 的特征值与谱, 其中 $u\in H^2(\R)$ 是问题 \eqref{eq:8.30}
+的解: $T$ 是从 $L^2(\R)$ 到自身的自伴有界算子, 但它不紧.
+\end{remark}
+
+\section*{第 8 章评注}
+\addcontentsline{toc}{section}{第 8 章评注}
+
+\cmtitem{1. 一些进一步的不等式.}
+
+让我们举出一些涉及 Sobolev 范数的非常有用的不等式:
+
+(i) \emph{Poincaré--Wirtinger 不等式.}
+
+设 $I$ 为有界区间.给定 $u\in L^2(I)$, 令
+$\bar u=\frac{1}{\abs{I}}\int_I u$ (这是 $u$ 在 $I$ 上的平均值).我们有
+\begin{equation*}
+\norm{u-\bar u}_\infty\le\norm{u'}_1\quad\forall u\in W^{1,1}(I)
+\end{equation*}
+(见问题 47).
+
+(ii) \emph{Hardy 不等式.}
+
+设 $I=(0,1)$, $u\in W_0^{1,p}(I)$, $1<p<\infty$.则函数
+\begin{equation*}
+v(x)=\frac{u(x)}{x(1-x)}
+\end{equation*}
+属于 $L^p(I)$, 并且进一步
+\begin{equation*}
+\norm{v}_p\le C_p\norm{u'}_p\quad\forall u\in W_0^{1,p}(I)
+\end{equation*}
+(见习题 8.8).
+
+(iii) \emph{Gagliardo--Nirenberg 插值不等式.}
+
+设 $I$ 为有界区间, $1\le r\le\infty$, $1\le q\le p\le\infty$.则存在
+常数 $C$ 使得
+\begin{equation}
+\norm{u}_p\le C\norm{u}_q^{1-a}\norm{u}_{W^{1,r}}^a
+\quad\forall u\in W^{1,r}(I),
+\label{eq:8.42}
+\end{equation}
+其中 $0\le a\le1$ 由
+$a(\frac1q-\frac1r+1)=\frac1q-\frac1p$ 定义 (见习题 8.15).特别地, 由
+不等式 \eqref{eq:8.42} 推出, 若 $p<\infty$ (或者甚至 $p=\infty$ 但
+$r>1$), 则
+\begin{equation}
+\forall\varepsilon>0\ \exists C_\varepsilon>0\ \text{使得}\
+\norm{u}_p\le\varepsilon\norm{u}_{W^{1,r}}+C_\varepsilon\norm{u}_q
+\quad\forall u\in W^{1,r}(I).
+\label{eq:8.43}
+\end{equation}
+也可以用直接的``紧性方法''建立 \eqref{eq:8.43}; 见习题 8.5.其它更一般的
+不等式可在 L.~Nirenberg \bref{Nirenberg}{1} 中找到 (另见
+A.~Friedman \bref{Friedman}{2}).特别地, 我们提请注意不等式
+\begin{equation*}
+\norm{u'}_p\le C\norm{u}_{W^{2,r}}^{1/2}\norm{u}_q^{1/2}
+\quad\forall u\in W^{2,r}(I),
+\end{equation*}
+其中 $p$ 是 $q$ 与 $r$ 的调和平均, 即 $\frac1p=\frac12(\frac1q+\frac1r)$.
+
+\cmtitem{2. Hilbert--Schmidt 算子.}
+
+可以证明, 把 $L^2(I)$ 中每个 $f$ 对应到问题
+\begin{equation*}
+\begin{cases}
+-(pu')'+qu=f & \text{在}\ I=(0,1)\ \text{上},\\
+u(0)=u(1)=0
+\end{cases}
+\end{equation*}
+的唯一解 $u$ 的算子 $T:f\mapsto u$ (假设 $p\ge\alpha>0$ 且 $q\ge0$) 是从
+$L^2(I)$ 到 $L^2(I)$ 的 Hilbert--Schmidt 算子; 见习题 8.37.
+
+\cmtitem{3. Sturm--Liouville 算子的谱性质.}
+
+关于有界区间 $I$ 上带 Dirichlet 条件的 Sturm--Liouville 算子
+$Au=-(pu')'+qu$ 的谱性质, 人们知道许多.其中我们提一下:
+\begin{enumerate}[label=(\roman*), leftmargin=2.6em, itemsep=0.25em]
+	\item 每个特征值的重数为 1: 这时说每个特征值是\emph{单}的.
+	\item 若特征值 $(\lambda_n)$ 按递增顺序排列, 则相应于 $\lambda_n$ 的
+	      特征函数 $e_n(x)$ 在 $I$ 上恰有 $(n-1)$ 个零点; 特别地, 第一个
+	      特征函数 $e_1(x)$ 在 $I$ 上保持定号, 通常取 $e_1>0$ 在 $I$ 上.
+	\item 当 $n\to\infty$ 时, 商 $\lambda_n/n^2$ 收敛到一个正的极限.
+\end{enumerate}
+其中一些性质在习题 8.33, 8.42 与问题 49 中讨论.感兴趣的读者还可以查阅
+Weinberger \bref{Weinberger}{1}, M.~Protter--H.~Weinberger
+\bref{ProtterWeinberger}{1}, E.~Coddington--N.~Levinson
+\bref{CoddingtonLevinson}{1}, Ph.~Hartman \bref{Hartman}{1},
+S.~Agmon \bref{Agmon}{1}, R.~Courant--D.~Hilbert \bref{CourantHilbert}{1},
+第 1 卷, E.~Ince \bref{Ince}{1}, Y.~Pinchover--J.~Rubinstein
+\bref{PinchoverRubinstein}{1}, A.~Zettl \bref{Zettl}{1} 以及
+G.~Buttazzo--M.~Giaquinta--S.~Hildebrandt \bref{ButtazzoGiaquintaHildebrandt}{1}.
+
+著名的 Gelfand--Levitan 理论研究一个重要的``反''问题: 仅由 Sturm--Liouville
+算子 $Au=-u''+q(x)u$ 的谱的知识, 能够获取关于函数 $q(x)$ 的哪些信息?
+这个问题因其众多应用而备受关注; 可参看例如 B.~Levitan \bref{Levitan}{1},
+以及第~
+\ref{chap:9}~章评注 13.
+
+\section*{第 8 章习题}
+\addcontentsline{toc}{section}{第 8 章习题}
+\markright{第 8 章习题}
+
+\begin{exercise}
+\label{exer:8.1}
+考虑函数
+\begin{equation*}
+u(x)=(1+x^2)^{-\alpha/2}\bigl(\log(2+x^2)\bigr)^{-1},\quad x\in\R,
+\end{equation*}
+其中 $0<\alpha<1$.验证 $u\in W^{1,p}(\R)$ 对一切 $p\in[1/\alpha,\infty]$
+成立, 而 $u\notin L^q(\R)$ 对一切 $q\in[1,1/\alpha)$ 成立.
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.2}
+设 $I=(0,1)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 假设 $(u_n)$ 是 $W^{1,p}(I)$ 中的有界序列, $1<p\le\infty$.证明
+	      存在子序列 $(u_{n_k})$ 与某个 $u\in W^{1,p}(I)$, 使得
+	      $\norm{u_{n_k}-u}_{L^\infty}\to0$.此外, 若 $1<p<\infty$, 则
+	      $u_{n_k}'\weakto u'$ 在 $L^p(I)$ 中弱收敛; 若 $p=\infty$, 则
+	      $u_{n_k}'\weakstar u'$ 在 $\sigma(L^\infty,L^1)$ 中弱$^\star$收敛.
+	\item 构造 $W^{1,1}(I)$ 中的有界序列 $(u_n)$, 它没有在 $L^\infty(I)$ 中
+	      收敛的子序列.
+\end{enumerate}
+[提示: 考虑由
+\begin{equation*}
+u_n(x)=
+\begin{cases}
+0 & \text{若}\ x\in[0,\tfrac12],\\
+n(x-\tfrac12) & \text{若}\ x\in(\tfrac12,\tfrac12+\tfrac1n),\\
+1 & \text{若}\ x\in[\tfrac12+\tfrac1n,1],
+\end{cases}
+\end{equation*}
+定义的序列 $(u_n)$, 其中 $n\ge2$.]
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.3}
+\emph{Helly 选择定理.}设 $(u_n)$ 是 $W^{1,1}(0,1)$ 中的有界序列.目标是
+证明存在子序列 $(u_{n_k})$, 使得 $u_{n_k}(x)$ 对每个 $x\in[0,1]$ 都收敛到
+一个极限.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明总可以进一步假设
+	      \begin{equation}
+	      \forall n,\ u_n\ \text{在}\ [0,1]\ \text{上单调不减}.
+	      \tag{1}
+	      \end{equation}
+	      [提示: 考虑序列 $v_n(x)=\int_0^x\abs{u_n'(t)}\,dt$ 与
+	      $w_n=v_n-u_n$.]
+\end{enumerate}
+以下假设 (1) 成立.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em, start=2]
+	\item 证明存在子序列 $(u_{n_k})$ 与可测集 $E\subset[0,1]$,
+	      $\abs{E}=0$, 使得对每个 $x\in[0,1]\setminus E$, $u_{n_k}(x)$
+	      收敛到一个极限, 记作 $u(x)$.
+	      [提示: 利用 $W^{1,1}\subset L^1$ 的嵌入是紧的这一事实.]
+	\item 证明 $u$ 在 $[0,1]\setminus E$ 上单调不减, 并推出存在可数集
+	      $D\subset(0,1)$ 与单调不减函数
+	      $\bar u:(0,1)\setminus D\to\R$, 使得
+	      $\bar u(x+0)=\bar u(x-0)$ 对一切 $x\in(0,1)\setminus D$ 成立, 且
+	      $\bar u(x)=u(x)$ 对一切 $x\in(0,1)\setminus(D\cup E)$ 成立.
+	\item 证明 $u_{n_k}(x)\to\bar u(x)$ 对一切 $x\in(0,1)\setminus D$ 成立.
+	\item 从序列 $(u_{n_k})$ 中构造一个对每个 $x\in[0,1]$ 都收敛的子序列.
+	      [提示: 用对角线过程.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.4}
+固定函数 $\phi\in C_c^\infty(\R)$, $\phi\not\equiv0$, 并令
+$u_n(x)=\phi(x+n)$.设 $1\le p\le\infty$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证 $(u_n)$ 在 $W^{1,p}(\R)$ 中有界.
+	\item 证明对任何 $1\le q\le\infty$, 都不存在在 $L^q(\R)$ 中强收敛的
+	      子序列 $(u_{n_k})$.
+	\item 证明对一切 $p\in(1,\infty)$, $u_n\weakto0$ 在 $W^{1,p}(\R)$ 中
+	      弱收敛.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.5}
+设 $p>1$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明对一切 $\varepsilon>0$ 存在 $C=C(\varepsilon,p)$, 使得
+	      \begin{equation}
+	      \norm{u}_{L^\infty(0,1)}\le\varepsilon\norm{u'}_{L^p(0,1)}
+	      +C\norm{u}_{L^1(0,1)}\quad\forall u\in W^{1,p}(0,1).
+	      \tag{1}
+	      \end{equation}
+	      [提示: 取 $X=W^{1,p}(0,1)$, $Y=L^\infty(0,1)$,
+	      $Z=L^1(0,1)$, 应用习题 6.12.]
+	\item 证明当 $p=1$ 时 (1) 不成立.
+	      [提示: 取 $u(x)=x^n$ 并令 $n\to\infty$.]
+	\item 设 $1\le q<\infty$.证明对一切 $\varepsilon>0$ 存在
+	      $C=C(\varepsilon,q)$, 使得
+	      \begin{equation}
+	      \norm{u}_{L^q(0,1)}\le\varepsilon\norm{u'}_{L^1(0,1)}
+	      +C\norm{u}_{L^1(0,1)}\quad\forall u\in W^{1,1}(0,1).
+	      \tag{2}
+	      \end{equation}
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.6}
+设 $I=(0,1)$, $p>1$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证 $W^{2,p}(I)\subset C^1(\bar I)$, 且嵌入是紧的.
+	\item 由此推出: 对一切 $\varepsilon>0$, 存在 $C=C(\varepsilon,p)$, 使得
+	      \begin{equation*}
+	      \norm{u'}_{L^\infty(I)}+\norm{u}_{L^\infty(I)}
+	      \le\varepsilon\norm{u''}_{L^p(I)}+C\norm{u}_{L^1(I)}
+	      \quad\forall u\in W^{2,p}(I).
+	      \end{equation*}
+	\item 设 $1\le q<\infty$.证明对一切 $\varepsilon>0$ 存在
+	      $C=C(\varepsilon,q)$, 使得
+	      \begin{equation*}
+	      \norm{u'}_{L^q(I)}+\norm{u}_{L^\infty(I)}
+	      \le\varepsilon\norm{u''}_{L^1(I)}+C\norm{u}_{L^1(I)}
+	      \quad\forall u\in W^{2,1}(I).
+	      \end{equation*}
+\end{enumerate}
+更一般地, 设 $m\ge2$ 为整数.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em, start=4]
+	\item 证明对一切 $\varepsilon>0$ 存在 $C=C(\varepsilon,m,p)$, 使得
+	      \begin{equation*}
+	      \sum_{j=0}^{m-1}\norm{D^ju}_{L^\infty(I)}
+	      \le\varepsilon\norm{D^mu}_{L^p(I)}+C\norm{u}_{L^1(I)}
+	      \quad\forall u\in W^{m,p}(I).
+	      \end{equation*}
+	\item 设 $1\le q<\infty$.证明对一切 $\varepsilon>0$ 存在
+	      $C=C(\varepsilon,q)$, 使得
+	      \begin{equation*}
+	      \norm{D^{(m-1)}u}_{L^q(I)}
+	      +\sum_{j=0}^{m-2}\norm{D^ju}_{L^\infty(I)}
+	      \le\varepsilon\norm{D^mu}_{L^1(I)}+C\norm{u}_{L^1(I)}
+	      \quad\forall u\in W^{m,1}(I).
+	      \end{equation*}
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.7}
+设 $I=(0,1)$.给定定义在 $I$ 上的函数 $u$, 令
+\begin{equation*}
+\bar u(x)=
+\begin{cases}
+u(x) & \text{若}\ x\in I,\\
+0 & \text{若}\ x\in\R,\ x\notin I.
+\end{cases}
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 假设 $u\in W_0^{1,p}(I)$, $1\le p<\infty$.证明
+	      $\bar u\in W^{1,p}(\R)$.
+	\item 反之, 设 $u\in L^p(I)$, $1\le p<\infty$, 且 $\bar u\in W^{1,p}(\R)$.
+	      证明 $u\in W_0^{1,p}(I)$.
+	\item 设 $u\in L^p(I)$, $1<p<\infty$.证明 $u\in W_0^{1,p}(I)$ 当且仅当
+	      存在常数 $C$, 使得
+	      \begin{equation*}
+	      \abs{\int_\R u\varphi'}\le C\norm{\varphi}_{L^{p'}(\R)}
+	      \quad\forall\varphi\in C_c^1(\R).
+	      \end{equation*}
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.8}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 设 $u\in W^{1,p}(0,1)$, $1<p<\infty$.证明若 $u(0)=0$, 则
+	      $\frac{u(x)}{x}\in L^p(0,1)$ 且
+	      \begin{equation*}
+	      \left\|\frac{u(x)}{x}\right\|_{L^p(0,1)}
+	      \le\frac{p}{p-1}\norm{u'}_{L^p(0,1)}.
+	      \end{equation*}
+	      [提示: 用问题 34 的 C 部分.]
+	\item 反之, 设 $u\in W^{1,p}(0,1)$, $1\le p<\infty$, 且
+	      $\frac{u(x)}{x}\in L^p(0,1)$.证明 $u(0)=0$.
+	      [提示: 用反证法.]
+	\item 设 $u(x)=(1+\abs{\log x})^{-1}$.验证 $u\in W^{1,1}(0,1)$,
+	      $u(0)=0$, 但 $\frac{u(x)}{x}\notin L^1(0,1)$.
+	\item 假设 $u\in W^{1,p}(0,1)$, $1\le p<\infty$, 且 $u(0)=0$.固定任一
+	      函数 $\zeta\in C^\infty(\R)$, 使得 $\zeta(x)=0$ 对一切
+	      $x\in(-\infty,1]$ 成立, 且 $\zeta(x)=1$ 对一切
+	      $x\in[2,+\infty)$ 成立.令 $\zeta_n(x)=\zeta(nx)$,
+	      $u_n(x)=\zeta_n(x)u(x)$, $n=1,2,\dots$.验证
+	      $u_n\in W^{1,p}(0,1)$, 并证明当 $n\to\infty$ 时
+	      $u_n\to u$ 在 $W^{1,p}(0,1)$ 中.
+	      [提示: 分别考虑 $p=1$ 与 $p>1$ 两种情形.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.9}
+令 $I=(0,1)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 设 $u\in W^{2,p}(I)$, $1<p<\infty$.假设 $u(0)=u'(0)=0$.证明
+	      $\frac{u(x)}{x^2}\in L^p(I)$ 且 $\frac{u'(x)}{x}\in L^p(I)$,
+	      并且
+	      \begin{equation}
+	      \left\|\frac{u(x)}{x^2}\right\|_{L^p(I)}
+	      +\left\|\frac{u'(x)}{x}\right\|_{L^p(I)}
+	      \le C_p\norm{u''}_{L^p(I)}.
+	      \tag{1}
+	      \end{equation}
+	      [提示: 参看习题 8.8.]
+	\item 由此推出 $v(x)=\frac{u(x)}{x}\in W^{1,p}(I)$ 且 $v(0)=0$.
+	\item 设 $u$ 如第 1 问.令 $u_n=\zeta_nu$, 其中 $\zeta_n$ 在习题 8.8
+	      第 4 问中定义.验证 $u_n\in W^{2,p}(I)$, 且当 $n\to\infty$ 时
+	      $u_n\to u$ 在 $W^{2,p}(I)$ 中.
+	\item 更一般地, 设 $m\ge1$ 为整数, $1<p<\infty$.假设 $u\in X_m$, 其中
+	      \begin{equation*}
+	      X_m=\{u\in W^{m,p}(I);\ u(0)=Du(0)=\cdots=D^{m-1}u(0)=0\}.
+	      \end{equation*}
+	      证明 $\frac{u(x)}{x^m}\in L^p(I)$ 且 $\frac{u(x)}{x^{m-1}}\in X_1$.
+	      [提示: 对 $m$ 用归纳法.]
+	\item 假设 $u\in X_m$, 证明
+	      \begin{equation*}
+	      v=\frac{D^ju(x)}{x^{m-j-k}}\in X_k
+	      \quad\forall j,k\ \text{为整数},\ j\ge0,\ k\ge1,\ j+k\le m-1.
+	      \end{equation*}
+	\item 设 $u$ 如第 4 问, $\zeta_n$ 如第 3 问.证明
+	      $\zeta_nu\in W^{m,p}(I)$, 且当 $n\to\infty$ 时
+	      $\zeta_nu\to u$ 在 $W^{m,p}(I)$ 中.
+	\item 在 $p>1$ 的情形下给出第~
+\ref{chap:8}~章注记 \ref{rem:8.18} 的一个证明.
+	\item 现在设 $u\in W^{2,1}(I)$, $u(0)=u'(0)=0$.令
+	      \begin{equation*}
+	      v(x)=
+	      \begin{cases}
+	      \frac{u(x)}{x} & \text{若}\ x\in(0,1],\\
+	      0 & \text{若}\ x=0.
+	      \end{cases}
+	      \end{equation*}
+	      验证 $v\in C([0,1])$.证明 $v\in W^{1,1}(I)$.
+	      [提示: 注意
+	      $v'(x)=\frac{1}{x^2}\int_0^xu''(t)t\,dt$.]
+	\item 构造一个函数 $u\in W^{2,1}(I)$ 的例子, 它满足
+	      $u(0)=u'(0)=0$, 但 $\frac{u(x)}{x^2}\notin L^1(I)$ 且
+	      $\frac{u'(x)}{x}\notin L^1(I)$.
+	      [提示: 用习题 8.8 的第 3 问.]
+	\item 设 $u$ 如第 8 问, $\zeta_n$ 如第 3 问.验证
+	      $u_n=\zeta_nu\in W^{2,1}(I)$, 且当 $n\to\infty$ 时
+	      $u_n\to u$ 在 $W^{2,1}(I)$ 中.
+	\item 在 $m=2$, $p=1$ 的情形下给出第~
+\ref{chap:8}~章注记 \ref{rem:8.18} 的一个
+	      证明.
+	\item 把第 8--11 问推广到 $W^{m,1}(I)$, $m\ge2$.
+\end{enumerate}
+[第 8 问的结果及其对 $m\ge2$ 的推广属于 Hernan Castro 与 Hui Wang.]
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.10}
+设 $I=(0,1)$.设 $u\in W^{1,p}(I)$, $1\le p<\infty$.我们的目标是证明
+$u'=0$ 在集合 $E=\{x\in I;\ u(x)=0\}$ 上几乎处处成立.固定函数
+$G\in C^1(\R,\R)$, 使得 $\abs{G(t)}\le1$ 对一切 $t\in\R$ 成立,
+$\abs{G'(t)}\le C$ 对一切 $t\in\R$ 成立 (其中 $C$ 为某常数), 且
+\begin{equation*}
+G(t)=
+\begin{cases}
+1 & \text{若}\ t\ge1,\\
+t & \text{若}\ \abs{t}\le1/2,\\
+-1 & \text{若}\ t\le-1.
+\end{cases}
+\end{equation*}
+令
+\begin{equation*}
+v_n(x)=\frac1nG(nu(x)).
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证当 $n\to\infty$ 时 $\norm{v_n}_{L^\infty(I)}\to0$.
+	\item 证明 $v_n\in W^{1,p}(I)$ 并算出 $v_n'$.
+	\item 由此推出 $\abs{v_n'}$ 被 $L^p(I)$ 中一个固定函数所控制.
+	\item 证明当 $n\to\infty$ 时 $v_n'(x)\to f(x)$ 在 $I$ 上几乎处处成立,
+	      并确定 $f$.
+	      [提示: 分别考虑 $x\in E$ 与 $x\notin E$ 两种情形.]
+	\item 由此推出 $v_n'\to f$ 在 $L^p(I)$ 中.
+	\item 证明 $f=0$ 在 $I$ 上几乎处处成立, 并断言 $u'=0$ 在 $E$ 上几乎
+	      处处成立.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.11}
+设 $F\in C(\R,\R)$, 并假设 $F\in C^1(\R\setminus\{0\})$, 且
+$\abs{F'(t)}\le C$ 对一切 $t\in\R\setminus\{0\}$ 成立 (其中 $C$ 为某常数).
+设 $1\le p<\infty$.目标是证明: 对每个 $u\in W^{1,p}(0,1)$,
+$v=F(u)$ 属于 $W^{1,p}(0,1)$, 且
+\begin{equation*}
+v'(x)=
+\begin{cases}
+F'(u(x))u'(x) & \text{在}\ [u(x)\ne0]\ \text{上几乎处处},\\
+0 & \text{在}\ [u(x)=0]\ \text{上几乎处处}.
+\end{cases}
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 构造 $C^\infty(\R)$ 中的序列 $(F_n)$, 使得
+	      $\norm{F_n'}_{L^\infty(\R)}\le C$ 对一切 $n$ 成立, 且
+	      \begin{equation*}
+	      \begin{cases}
+	      F_n\to F & \text{在}\ \R\ \text{的紧子集上一致},\\
+	      F_n'\to F' & \text{在}\ \R\setminus\{0\}\ \text{的紧子集上一致}.
+	      \end{cases}
+	      \end{equation*}
+	\item 验证 $v_n=F_n(u)\in W^{1,p}(0,1)$, 且 $v_n'=F_n'(u)u'$.
+	\item 证明 $v_n\to v=F(u)$ 在 $C([0,1])$ 中, 且 $v_n'$ 在 $L^p(0,1)$
+	      中收敛到 $f$, 其中
+	      \begin{equation*}
+	      f(x)=
+	      \begin{cases}
+	      F'(u(x))u'(x) & \text{在}\ [u(x)\ne0]\ \text{上几乎处处},\\
+	      0 & \text{在}\ [u(x)=0]\ \text{上几乎处处}.
+	      \end{cases}
+	      \end{equation*}
+	      [提示: 应用控制收敛定理与习题 8.10.]
+	\item 由此推出 $v\in W^{1,p}(0,1)$ 且 $v'=f$.证明
+	      $v_n\to v$ 在 $W^{1,p}(0,1)$ 中.
+	\item 设 $(u_k)$ 是 $W^{1,p}(0,1)$ 中的序列, 使得 $u_k\to u$ 在
+	      $W^{1,p}(0,1)$ 中.证明 $F(u_k)\to F(u)$ 在 $W^{1,p}$ 中.
+	      [提示: 应用定理~
+\ref{thm:4.9} 并过渡到子序列 (仍记作 $u_k$), 可以假设
+	      $u_k'\to u'$ 在 $(0,1)$ 上几乎处处成立, 且
+	      $\abs{u_k'}\le g$ 对一切 $k$ 成立, 其中 $g\in L^p(0,1)$ 为某函数.
+	      令 $w_k=F(u_k)$, 验证 $w_k'\to f$ 在 $(0,1)$ 上几乎处处成立,
+	      其中 $f$ 如第 3 问所定义.由此推出 $w_k\to F(u)$ 在
+	      $W^{1,p}(0,1)$ 中.断言原序列 $F(u_k)$ 收敛到 $F(u)$ 在
+	      $W^{1,p}(0,1)$ 中.]
+	\item 应用: 取 $F(t)=t^+=\max\{t,0\}$.验证
+	      $u^+\in W^{1,p}(0,1)$ 对一切 $u\in W^{1,p}(0,1)$ 成立.算出
+	      $(u^+)'$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.12}
+设 $I=(0,1)$, $1\le p\le\infty$.令
+\begin{equation*}
+B_p=\{u\in W^{1,p}(I);\ \norm{u}_{L^p(I)}+\norm{u'}_{L^p(I)}\le1\}.
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明当 $1<p\le\infty$ 时 $B_p$ 是 $L^p(I)$ 的闭子集; 更确切
+	      地说, $B_p$ 在 $L^p(I)$ 中紧.
+	\item 证明 $B_1$ 不是 $L^1(I)$ 的闭子集.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.13}
+设 $1\le p<\infty$, $u\in W^{1,p}(\R)$.令
+\begin{equation*}
+D_hu(x)=\frac1h\bigl(u(x+h)-u(x)\bigr),\quad x\in\R,\ h>0.
+\end{equation*}
+证明当 $h\to0$ 时 $D_hu\to u'$ 在 $L^p(\R)$ 中.
+[提示: 利用 $C_c^1(\R)$ 在 $W^{1,p}(\R)$ 中稠密这一事实.]
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.14}
+设 $u\in C^1((0,1))$.证明下列条件等价:
+\begin{enumerate}[label=(\alph*), leftmargin=2.4em, itemsep=0.2em]
+	\item $u\in W^{1,1}(0,1)$,
+	\item $u'\in L^1(0,1)$ (其中 $u'$ 表示 $u$ 的通常意义的导数),
+	\item $u\in BV(0,1)$ (关于 $BV$ 的定义见注记 \ref{rem:8.8}).
+\end{enumerate}
+验证函数 $u(x)=x\sin(1/x)$ ($0<x\le1$), $u(0)=0$, 在 $[0,1]$ 上连续,
+但 $u\notin W^{1,1}(0,1)$.
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.15}
+\emph{Gagliardo--Nirenberg 不等式 (第一种形式).}设 $I=(0,1)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 设 $1\le q<\infty$, $1<r\le\infty$.证明
+	      \begin{equation}
+	      \norm{u}_{L^\infty(I)}\le C\norm{u}_{W^{1,r}(I)}^a
+	      \norm{u}_{L^q(I)}^{1-a}\quad\forall u\in W^{1,r}(I)
+	      \tag{1}
+	      \end{equation}
+	      其中 $C=C(q,r)$ 为某常数, 而 $0<a<1$ 由
+	      \begin{equation}
+	      a\left(\frac1q+1-\frac1r\right)=\frac1q
+	      \tag{2}
+	      \end{equation}
+	      定义.
+	      [提示: 先考虑 $u(0)=0$ 的情形, 并写出
+	      $G(u(x))=\int_0^xG'(u(t))u'(t)\,dt$, 其中
+	      $G(t)=\abs{t}^{\alpha-1}t$, $\alpha=\frac1a$.当
+	      $u(0)\ne0$ 时, 把上述不等式应用于 $\zeta u$, 其中
+	      $\zeta\in C^1([0,1])$, $\zeta(0)=0$, 且当 $t\in[\frac12,1]$
+	      时 $\zeta(t)=1$.]
+	\item 设 $1\le q<p<\infty$, $1\le r\le\infty$.证明
+	      \begin{equation}
+	      \norm{u}_{L^p(I)}\le C\norm{u}_{W^{1,r}(I)}^b
+	      \norm{u}_{L^q(I)}^{1-b}\quad\forall u\in W^{1,r}(I)
+	      \tag{3}
+	      \end{equation}
+	      其中 $C=C(p,q,r)$ 为某常数, 而 $0<b<1$ 由
+	      \begin{equation}
+	      b\left(\frac1q+1-\frac1r\right)=\frac1q-\frac1p
+	      \tag{4}
+	      \end{equation}
+	      定义.
+	      [提示: 写出
+	      $\norm{u}_{L^p(I)}^p=\int_I\abs{u}^q\abs{u}^{p-q}
+	      \le\norm{u}_{L^q(I)}^q\norm{u}_{L^\infty}^{p-q}$, 并在
+	      $r>1$ 时使用 (1).]
+	\item 在与第 2 问相同的假设下, 证明
+	      \begin{equation}
+	      \norm{u}_{L^p(I)}\le C\norm{u'}_{L^r(I)}^b
+	      \norm{u}_{L^q(I)}^{1-b}
+	      \quad\forall u\in W^{1,r}(I)\ \text{且}\ \int_Iu=0.
+	      \tag{5}
+	      \end{equation}
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.16}
+设 $E=L^p(0,1)$, $1\le p<\infty$.考虑由
+\begin{equation*}
+D(A)=\{u\in W^{1,p}(0,1),\ u(0)=0\},\qquad Au=u'
+\end{equation*}
+定义的无界算子 $A:D(A)\subset E\to E$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证 $D(A)$ 在 $E$ 中稠密, 且 $A$ 是闭算子 (即 $G(A)$ 在
+	      $E\times E$ 中闭).
+	\item 确定 $R(A)$ 与 $N(A)$.
+	\item 算出 $A^\star$.验证当 $1<p<\infty$ 时 $D(A^\star)$ 在
+	      $E^\star=L^{p'}(0,1)$ 中稠密, 但当 $p=1$ 时 $D(A^\star)$ 在
+	      $E^\star=L^\infty(0,1)$ 中不稠密.
+	\item 对由
+	      \begin{equation*}
+	      D(\tilde A)=W_0^{1,p}(0,1),\qquad \tilde Au=u'
+	      \end{equation*}
+	      定义的算子 $\tilde A$ 回答同样的问题.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.17}
+设 $H=L^2(0,1)$, 并设 $A:D(A)\subset H\to H$ 是由 $Au=u''$ 定义的无界
+算子, 其定义域将在下面明确.在下列各情形下确定 $A^\star$, $D(A^\star)$,
+$N(A)$ 与 $N(A^\star)$:
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item $D(A)=\{u\in H^2(0,1);\ u(0)=u(1)=0\}$.
+	\item $D(A)=H^2(0,1)$.
+	\item $D(A)=\{u\in H^2(0,1);\ u(0)=u(1)=u'(0)=u'(1)=0\}$.
+	\item $D(A)=\{u\in H^2(0,1);\ u(0)=u(1)\}$.
+\end{enumerate}
+对算子 $Au=u''-xu'$ 回答同样的问题.
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.18}
+验证映射 $u\mapsto u(0)$ 是从 $H^1(0,1)$ 到 $\R$ 的连续线性泛函.由此
+推出存在唯一的 $v_0\in H^1(0,1)$, 使得
+\begin{equation*}
+u(0)=\int_0^1(u'v_0'+uv_0)\quad\forall u\in H^1(0,1).
+\end{equation*}
+证明 $v_0$ 是某个带适当边界条件的微分方程的解.显式算出 $v_0$.
+[提示: 考虑 \S \ref{sec:8.4} 中的例 \ref{ex:8.4}.]
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.19}
+设 $H=L^2(0,1)$, 考虑由
+\begin{equation*}
+\varphi(u)=
+\begin{cases}
+\frac12\int_0^1u'^2 & \text{若}\ u\in H^1(0,1),\\
++\infty & \text{若}\ u\in L^2(0,1)\ \text{且}\ u\notin H^1(0,1)
+\end{cases}
+\end{equation*}
+定义的函数 $\varphi:H\to(-\infty,+\infty]$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证 $\varphi$ 凸且下半连续.
+	\item 对每个 $f\in H$ 计算 $\varphi^\star(f)$.
+	      [提示: 先证明若 $\int_0^1f\ne0$, 则
+	      $\varphi^\star(f)=+\infty$.然后假设
+	      $\int_0^1f=0$, 并令 $F(x)=\int_0^xf(t)\,dt$.注意
+	      $\int_0^1fv=-\int_0^1Fv'$ 对一切 $v\in H^1(0,1)$ 成立.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.20}
+令
+\begin{equation*}
+V=\{v\in H^1(0,1);\ v(0)=0\}.
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 给定 $f\in L^2(0,1)$, 使得 $\frac1xf(x)\in L^2(0,1)$, 证明存在
+	      唯一的 $u\in V$ 满足
+	      \begin{equation}
+	      \int_0^1u'(x)v'(x)\,dx+\int_0^1\frac{u(x)v(x)}{x^2}\,dx
+	      =\int_0^1\frac{f(x)v(x)}{x^2}\,dx\quad\forall v\in V.
+	      \tag{1}
+	      \end{equation}
+	      [提示: 用习题 8.8 的第 1 问.]
+	\item 与 (1) 对应的极小化问题是什么?
+\end{enumerate}
+以下假设 $\frac{1}{x^2}f(x)\in L^2(0,1)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em, start=3]
+	\item 在 (1) 中取 $v(x)=\frac{u(x)}{(x+\varepsilon)^2}$, $\varepsilon>0$,
+	      并推出
+	      \begin{equation}
+	      \int_0^1\left|\frac{d}{dx}\left(\frac{u(x)}{x+\varepsilon}\right)
+	      \right|^2dx\le\int_0^1\frac{f(x)}{x^2}\frac{u(x)}{(x+\varepsilon)^2}\,dx.
+	      \tag{2}
+	      \end{equation}
+	\item 证明 $\frac{u(x)}{x^2}\in L^2(0,1)$,
+	      $\frac{u(x)}{x}\in H^1(0,1)$, 且 $\frac{u'(x)}{x}\in L^2(0,1)$.
+	      [提示: 再次使用习题 8.8 的第 1 问, 并令 $\varepsilon\to0$.]
+	\item 由此推出 $u\in H^2(0,1)$, 并且
+	      \begin{equation}
+	      \begin{cases}
+	      -u''(x)+\frac{u(x)}{x^2}=\frac{f(x)}{x^2} & \text{在}\ (0,1)\ \text{上几乎处处},\\
+	      u(0)=u'(0)=0\ \text{且}\ u'(1)=0.
+	      \end{cases}
+	      \tag{3}
+	      \end{equation}
+	\item 反之, 假设函数 $u\in H^2(0,1)$ 满足
+	      $\frac{u(x)}{x^2}\in L^2(0,1)$ 与 (3).证明 (1) 成立.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.21}
+假设 $p\in C^1([0,1])$, $p(x)\ge\alpha>0$ 对一切 $x\in[0,1]$ 成立, 且
+$q\in C([0,1])$, $q(x)\ge0$ 对一切 $x\in[0,1]$ 成立.设 $v_0\in C^2([0,1])$
+是
+\begin{equation}
+\begin{cases}
+-(pv_0')'+qv_0=0 & \text{在}\ [0,1]\ \text{上},\\
+v_0(0)=1,\ v_0(1)=0
+\end{cases}
+\tag{1}
+\end{equation}
+的唯一解.令 $k_0=v_0'(0)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证 $k_0\le-\alpha/p(0)$.
+	      [提示: 用 $v_0$ 乘方程 (1) 并分部积分.利用
+	      $1\le\norm{v_0'}_1\le\norm{v_0'}_2$.]
+\end{enumerate}
+现在研究问题
+\begin{equation}
+\begin{cases}
+-(pu')'+qu=f & \text{在}\ (0,1)\ \text{上},\\
+u'(0)=ku(0),\ u(1)=0,
+\end{cases}
+\tag{2}
+\end{equation}
+其中 $k\in\R$ 固定, $f\in L^2(0,1)$ 给定.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em, start=2]
+	\item 假设 $k=k_0$.证明
+	      \begin{equation*}
+	      [(2)\ \text{有解}\ u\in H^2(0,1)]\iff\left[\int_0^1fv_0=0\right].
+	      \end{equation*}
+	      $u$ 唯一吗?
+	\item 现在假设 $k\ne k_0$.证明对每个 $f\in L^2(0,1)$, 问题 (2) 都有
+	      唯一的解 $u\in H^2(0,1)$.
+	      [提示: 利用习题 8.5, 找常数 $K$, 使得双线性形式
+	      $a(u,v)=\int_0^1(pu'v'+quv+Kuv)+p(0)ku(0)v(0)$ 在 $H^1$ 上
+	      强制.把 (2) 写成 $u=T(f+Ku)$ 的形式, 其中 $T$ 为某个适当的
+	      紧算子.然后应用 Fredholm 二择一定理的断言 (c).]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.22}
+令
+\begin{equation*}
+K=\{\rho\in H^1(0,1);\ \rho\ge0\ \text{在}\ (0,1)\ \text{上},\
+\sqrt\rho\in H^1(0,1)\}.
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 构造一个函数 $\rho\in H^1(0,1)$ 的例子, 它在 $(0,1)$ 上
+	      $\rho\ge0$, 但 $\rho\notin K$.
+	\item 给定 $\rho\in H^1(0,1)$, $\rho\ge0$ 在 $(0,1)$ 上, 令
+	      \begin{equation*}
+	      \mu=
+	      \begin{cases}
+	      \frac12\frac{\rho'}{\sqrt\rho} & \text{在}\ [\rho>0]\ \text{上},\\
+	      0 & \text{在}\ [\rho=0]\ \text{上}.
+	      \end{cases}
+	      \end{equation*}
+	      证明 $\rho\in K\iff\mu\in L^2$, 并且这时 $(\sqrt\rho)'=\mu$.
+	      [提示: 考虑 $\rho_\varepsilon=\rho+\varepsilon$.]
+	\item 证明 $K$ 是以 $0$ 为顶点的凸锥.
+	\item 证明函数 $\rho\in K\mapsto\norm{(\sqrt\rho)'}_{L^2}^2$ 凸.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.23}
+设 $I=(0,1)$, 并固定常数 $k>0$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 给定 $f\in L^1(I)$, 证明存在唯一的 $u\in H_0^1(I)$ 满足
+	      \begin{equation}
+	      \int_Iu'v'+k\int_Iuv=\int_Ifv\quad\forall v\in H_0^1(I).
+	      \tag{1}
+	      \end{equation}
+	\item 证明 $u\in W^{2,1}(I)$.
+	\item 证明
+	      \begin{equation*}
+	      \norm{u}_{L^1(I)}\le\frac1k\norm{f}_{L^1(I)}.
+	      \end{equation*}
+	      [提示: 固定函数 $\gamma\in C^1(\R,\R)$, 使得 $\gamma'(t)\ge0$
+	      对一切 $t\in\R$ 成立, $\gamma(0)=0$, $\gamma(t)=+1$ 对一切
+	      $t\ge1$ 成立, $\gamma(t)=-1$ 对一切 $t\le-1$ 成立.在 (1) 中
+	      取 $v=\gamma(nu)$ 并令 $n\to\infty$.]
+	\item 现在假设 $f\in L^p(I)$, $1<p<\infty$.证明存在与 $k$ 及 $p$
+	      无关的常数 $\delta>0$, 使得
+	      \begin{equation*}
+	      \norm{u}_{L^p(I)}\le\frac{1}{k+\delta/pp'}\norm{f}_{L^p(I)}.
+	      \end{equation*}
+	      [提示: 当 $2\le p<\infty$ 时, 在 (1) 中取
+	      $v=\gamma(u)$, 其中 $\gamma(t)=\abs{t}^{p-1}\operatorname{sign}t$.
+	      当 $1<p<2$ 时, 用对偶性.]
+	\item 证明若 $f\in L^\infty(I)$, 则
+	      \begin{equation*}
+	      \norm{u}_{L^\infty(I)}\le C_k\norm{f}_{L^\infty(I)},
+	      \end{equation*}
+	      并求出最佳常数 $C_k$.
+	      [提示: 显式算出对应于 $f\equiv1$ 的 (1) 的解 $u$.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.24}
+设 $I=(0,1)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明对每个 $\varepsilon>0$ 存在常数 $C_\varepsilon$, 使得
+	      \begin{equation*}
+	      \abs{u(1)}^2\le\varepsilon\norm{u'}_{L^2(I)}^2
+	      +C_\varepsilon\norm{u}_{L^2(I)}^2\quad\forall u\in H^1(I).
+	      \end{equation*}
+	      [提示: 用习题 8.5, 或者直接写出
+	      $u^2(1)=u^2(x)+2\int_x^1u(t)u'(t)\,dt$.]
+	\item 证明若常数 $k>0$ 足够大, 则对每个 $f\in L^2(I)$ 存在唯一的
+	      $u\in H^2(I)$ 满足
+	      \begin{equation}
+	      \begin{cases}
+	      -u''+ku=f & \text{在}\ (0,1)\ \text{上},\\
+	      u'(0)=0\ \text{且}\ u'(1)=u(1).
+	      \end{cases}
+	      \tag{1}
+	      \end{equation}
+	      问题 (1) 的弱表述是什么? 相应的极小化问题是什么?
+	\item 假设 $k$ 足够大.设 $T$ 为算子 $T:f\mapsto u$, 其中 $u$ 是 (1)
+	      的解.证明 $T$ 是 $L^2(I)$ 中的自伴紧算子.
+	\item 由此推出存在 $\R$ 中的序列 $(\lambda_n)$, 满足
+	      $\abs{\lambda_n}\to\infty$, 以及 $C^2(I)$ 中的函数序列 $(u_n)$,
+	      使得 $\norm{u_n}_{L^2(I)}=1$ 且
+	      \begin{equation*}
+	      \begin{cases}
+	      -u_n''=\lambda_nu_n & \text{在}\ (0,1)\ \text{上},\\
+	      u_n'(0)=0\ \text{且}\ u_n'(1)=u_n(1).
+	      \end{cases}
+	      \end{equation*}
+	      证明 $\lambda_n\to+\infty$.
+	\item 设 $\Lambda$ 为一切使存在 $u\not\equiv0$ 满足
+	      \begin{equation*}
+	      \begin{cases}
+	      -u''=\lambda u & \text{在}\ (0,1)\ \text{上},\\
+	      u'(0)=0\ \text{且}\ u'(1)=u(1)
+	      \end{cases}
+	      \end{equation*}
+	      的 $\lambda\in\R$ 的集合.确定 $\Lambda$ 中的正元素.证明 $\Lambda$
+	      中恰有一个负值 (记作 $\lambda_0$).
+	      [提示: 不要试图显式算出 $\Lambda$; 而是利用两条曲线的交点.]
+	\item 当 $k=\abs{\lambda_0}$ 时, 第 2 问中的情形如何?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.25}
+设 $I=(0,2)$, $V=H^1(I)$.考虑双线性形式
+\begin{equation*}
+a(u,v)=\int_0^2u'(t)v'(t)\,dt
++\left(\int_0^1u(t)\,dt\right)\left(\int_0^1v(t)\,dt\right).
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证 $a(u,v)$ 是连续对称双线性形式, 且 $a(u,u)=0$ 蕴含 $u=0$.
+	\item 证明 $a$ 强制.
+	      [提示: 用反证法, 假设存在 $H^1(I)$ 中的序列 $(u_n)$, 使得
+	      $a(u_n,u_n)\to0$ 且 $\norm{u_n}_{H^1}=1$.取子序列
+	      $(u_{n_k})$, 使它在 $H^1(I)$ 中弱收敛且在 $L^2(I)$ 中强收敛到
+	      某个极限 $u$.证明 $u=0$.]
+	\item 由此推出对每个 $f\in L^2(I)$ 存在唯一的 $u\in H^1(I)$ 满足
+	      \begin{equation}
+	      a(u,v)=\int_0^2fv\quad\forall v\in H^1(I).
+	      \tag{1}
+	      \end{equation}
+	      相应的极小化问题是什么?
+	\item 证明 (1) 的解属于 $H^2(I)$ (特别地 $u\in C^1(I)$).确定 $u$
+	      所满足的方程与边界条件.
+	      [提示: 方便的做法是令 $g=(\int_0^1u)\chi$, 其中 $\chi$ 是
+	      $(0,1)$ 的特征函数.]
+	\item 假设 $f\in C(I)$, 设 $u$ 是 (1) 的解.证明对每个 $p<\infty$,
+	      $u$ 属于 $W^{2,p}(I)$.证明 $u\in C^2(I)$ 当且仅当
+	      $\int_If=0$.
+	\item 当 $f$ 为常数时, 显式确定 (1) 的解 $u$.
+	\item 令 $u=Tf$, 其中 $u$ 是 (1) 的解, $f\in L^2(I)$.验证 $T$ 是
+	      从 $L^2(I)$ 到自身的自伴紧算子.
+	\item 研究 $T$ 的特征值.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.26}
+从 Hilbert 空间 $H$ 到自身的具有界线性算子 $S$ 称为\emph{非负}的, 记作
+$S\ge0$, 若
+\begin{equation*}
+(Sf,f)\ge0\quad\forall f\in H.
+\end{equation*}
+令 $I=(0,1)$.假设 $p\in C^1(I)$ 与 $q\in C(I)$ 满足
+\begin{equation*}
+p(x)\ge\alpha>0\quad\text{且}\quad q(x)\ge\alpha>0\quad\forall x\in I.
+\end{equation*}
+回忆给定 $f\in H=L^2(I)$, 方程
+\begin{equation}
+-(pu')'+qu=f\quad\text{在}\ I\ \text{上}
+\tag{1}
+\end{equation}
+带 Dirichlet 边界条件
+\begin{equation}
+u(0)=u(1)=0
+\tag{2}
+\end{equation}
+有唯一的解 $u\in H^2(I)$.这个解记作 $u_D=S_Df$, 其中 $S_D$ 看作从 $H$ 到
+自身的具有界线性算子.类似地, (1) 带 Neumann 边界条件
+\begin{equation}
+u'(0)=u'(1)=0
+\tag{3}
+\end{equation}
+有唯一的解 $u\in H^2(I)$.这个解记作 $u_N=S_Nf$, 其中 $S_N$ 也看作从 $H$
+到自身的具有界线性算子.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明 $S_D\ge0$ 且 $S_N\ge0$.
+	\item 回忆与 Dirichlet 条件及 Neumann 条件相应的极小化原理.由此推出
+	      \begin{equation}
+	      \frac12\int_Ip(u_N')^2+qu_N^2-\int_Ifu_N
+	      \le\frac12\int_Ip(u_D')^2+qu_D^2-\int_Ifu_D.
+	      \tag{4}
+	      \end{equation}
+	      [提示: 利用 $H_0^1\subset H^1$.]
+	\item 证明 $S_N-S_D\ge0$.
+	      [提示: 利用 (4), 并把 (1) 分别乘以 $u_D$ 与 $u_N$.]
+\end{enumerate}
+给定实数 $k\ge0$, 考虑与边界条件
+\begin{equation}
+p(0)u'(0)=ku(0)\quad\text{且}\quad u(1)=0
+\tag{5}
+\end{equation}
+相联系的方程 (1).
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em, start=4]
+	\item 验证问题 (1) 与 (5) 有唯一的解, 记作 $u_k=S_kf$.相应的
+	      极小化原理是什么?
+	\item 证明 $S_k\ge0$.
+	\item 设 $k_1\ge k_2\ge0$.证明 $S_{k_2}-S_{k_1}\ge0$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.27}
+设 $I=(-1,+1)$.考虑 $H_0^1(I)$ 上由
+\begin{equation*}
+a(u,v)=\int_I(u'v'+uv-\lambda u(0)v)
+\end{equation*}
+定义的双线性形式, 其中 $\lambda\in\R$ 固定.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证 $a(u,v)$ 是 $H_0^1(I)$ 上的连续双线性形式.
+	\item 证明若 $\abs{\lambda}<\sqrt2$, 则双线性形式 $a$ 强制.
+	      [提示: 验证 $\abs{u(0)}\le\norm{u'}_{L^2}$ 对一切
+	      $u\in H_0^1(I)$ 成立.]
+	\item 由此推出若 $\abs{\lambda}<\sqrt2$, 则对每个 $f\in L^2(I)$ 存在
+	      唯一的解 $u\in H^2(I)\cap H_0^1(I)$, 满足
+	      \begin{equation}
+	      \begin{cases}
+	      -u''+u-\lambda u(0)=f & \text{在}\ I\ \text{上},\\
+	      u(-1)=u(1)=0.
+	      \end{cases}
+	      \tag{1}
+	      \end{equation}
+	\item 证明存在唯一的值 $\lambda=\lambda_0\in\R$ (要求显式确定), 使得
+	      问题
+	      \begin{equation}
+	      \begin{cases}
+	      -u''+u=\lambda u(0) & \text{在}\ I\ \text{上},\\
+	      u(-1)=u(1)=0
+	      \end{cases}
+	      \tag{2}
+	      \end{equation}
+	      有解 $u\not\equiv0$.
+	      [提示: 方便的做法是引入问题
+	      \begin{equation}
+	      \begin{cases}
+	      -\varphi''+\varphi=1 & \text{在}\ I\ \text{上},\\
+	      \varphi(-1)=\varphi(1)=0
+	      \end{cases}
+	      \tag{3}
+	      \end{equation}
+	      的唯一解 $\varphi$.显式算出 $\varphi$.]
+	\item 证明若 $\lambda\ne\lambda_0$, 则对每个 $f\in L^2(I)$, (1) 都有
+	      唯一的解 $u\in H^2(I)\cap H_0^1(I)$.
+	      [提示: 考虑线性算子 $S:g\mapsto v$, 其中 $g\in L^2(I)$, 而
+	      $v\in H^2(I)\cap H_0^1(I)$ 是问题
+	      \begin{equation}
+	      \begin{cases}
+	      -v''+v=g & \text{在}\ I\ \text{上},\\
+	      v(-1)=v(1)=0
+	      \end{cases}
+	      \tag{4}
+	      \end{equation}
+	      的唯一解.把 (1) 写成 $u-\lambda u(0)\varphi=Sf$.]
+	\item 当 $\lambda=\lambda_0$ 时, 完整分析问题 (1).
+	      [提示: 找出 $Sf$ 所应满足的简单充要条件, 使问题 (1) 有解.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.28}
+设 $H=L^2(0,1)$ 配以其通常的标量积.考虑由
+\begin{equation*}
+(Tf)(x)=x\int_x^1f(t)\,dt+\int_0^xtf(t)\,dt,
+\quad 0\le x\le1,
+\end{equation*}
+定义的算子 $T:H\to H$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证 $T$ 是有界算子.
+	\item 证明 $T$ 是紧算子.
+	\item 证明 $T$ 自伴.
+	\item 证明 $(Tf,f)\ge0$ 对一切 $f\in H$ 成立, 且 $(Tf,f)=0$ 蕴含
+	      $f=0$.
+	\item 令 $u=Tf$.证明 $u\in H^2(0,1)$ 并算出 $u''$.验证
+	      $u(0)=u'(1)=0$.
+	\item 确定 $T$ 的谱与特征值.仔细考察 $\lambda=0$ 的情形.
+\end{enumerate}
+以下令
+\begin{equation*}
+e_k(x)=\sqrt2\sin\left(\left(k+\frac12\right)\pi x\right),
+\quad k=0,1,2,\dots.
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em, start=7]
+	\item 验证 $(e_k)$ 是 $H$ 的标准正交基.
+	      [提示: 用第 6 问.]
+	\item 由此推出由
+	      \begin{equation*}
+	      \tilde e_k(x)=\sqrt2\cos\left(\left(k+\frac12\right)\pi x\right),
+	      \quad k=0,1,2,\dots
+	      \end{equation*}
+	      定义的序列 $(\tilde e_k)$ 也是 $H$ 的标准正交基.
+	      [提示: 考虑 $e_k(1-x)$.]
+\end{enumerate}
+给定 $f\in H$, 用 $(\alpha_k(f))$ 表示 $f$ 在基 $(e_k)$ 中的分量.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em, start=9]
+	\item 计算下列函数的 $\alpha_k(f)$:
+	      \begin{enumerate}[label=(\alph*), leftmargin=2.2em, itemsep=0.2em]
+	      	\item $f_1(x)=\chi_{[a,b]}(x)=
+	      	      \begin{cases}1 & \text{若}\ x\in[a,b],\\
+	      	      0 & \text{若}\ x\notin[a,b],\end{cases}$
+	      	      其中 $0\le a<b\le1$.
+	      	\item $f_2(x)=x$.
+	      	\item $f_3(x)=x^2$.
+	      \end{enumerate}
+\end{enumerate}
+最后, 我们打算利用分量 $\alpha_k(f)$ 来刻画属于 $H^1(0,1)$ 的函数
+$f\in L^2(0,1)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em, start=10]
+	\item 假设 $f\in H^1(0,1)$.证明存在常数 $a\in\R$ (依赖于 $f$),
+	      使得 $(k\alpha_k(f)+a)\in\ell^2$, 即
+	      \begin{equation}
+	      \sum_{k=0}^\infty\abs{k\alpha_k(f)+a}^2<\infty.
+	      \tag{1}
+	      \end{equation}
+	      [提示: 在计算 $\alpha_k(f)$ 时作一次分部积分.]
+	\item 反之, 假设 $f\in L^2(0,1)$, 且对某个 $a\in\R$, (1) 成立.
+	      证明 $f\in H^1(0,1)$.
+	      [提示: 令 $\tilde f=f+\frac{a\pi}{\sqrt2}$, 并令
+	      $\tilde f_n(x)=\sum_{k=0}^{n-1}\alpha_k(\tilde f)e_k(x)$.验证
+	      当 $n\to\infty$ 时 $\norm{\tilde f_n'}_{L^2}$ 保持有界.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.29}
+令
+\begin{equation*}
+a(u,v)=\int_0^1(u'v'+uv)+(u(1)-u(0))(v(1)-v(0))
+\quad\forall u,v\in H^1(0,1).
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证 $a$ 是 $H^1(0,1)$ 上的连续强制双线性形式.
+	\item 由此推出对每个 $f\in L^2(0,1)$, 存在唯一的 $u\in H^2(0,1)$ 满足
+	      \begin{equation}
+	      a(u,v)=\int_0^1fv\quad\forall v\in H^1(0,1).
+	      \tag{1}
+	      \end{equation}
+	\item 验证 $u$ 满足
+	      \begin{equation}
+	      \begin{cases}
+	      -u''+u=f & \text{在}\ (0,1)\ \text{上},\\
+	      u'(0)=u(0)-u(1),\\
+	      u'(1)=u(0)-u(1).
+	      \end{cases}
+	      \tag{2}
+	      \end{equation}
+	      证明 (2) 的任何解 $u\in H^2(0,1)$ 都满足 (1).
+\end{enumerate}
+设 $T:L^2(0,1)\to L^2(0,1)$ 为由 $Tf=u$ 定义的算子.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em, start=4]
+	\item 验证 $T$ 自伴且紧.
+	\item 证明若 $f\ge0$ 在 $(0,1)$ 上几乎处处成立, 则 $u=Tf\ge0$ 在
+	      $(0,1)$ 上.
+	\item 验证 $(Tf,f)_{L^2}\ge0$ 对一切 $f\in L^2(0,1)$ 成立.
+	\item 确定 $\mathrm{EV}(T)$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.30}
+设 $k\in\R$, $k\ne1$, 考虑空间
+\begin{equation*}
+V=\{v\in H^1(0,1);\ v(0)=kv(1)\}
+\end{equation*}
+与双线性形式
+\begin{equation*}
+a(u,v)=\int_0^1(u'v'+uv)
+-\left(\int_0^1u\right)\left(\int_0^1v\right)\quad\forall u,v\in V.
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证 $V$ 是 $H^1(0,1)$ 的闭子空间.以下 $V$ 配以由 $H^1$ 标量积
+	      诱导的 Hilbert 结构.
+	\item 证明 $a$ 是 $V$ 上的连续强制双线性形式.
+	      [提示: 证明存在常数 $C$, 使得
+	      $\norm{v}_{L^\infty(0,1)}\le C\norm{v'}_{L^2(0,1)}$ 对一切
+	      $v\in V$ 成立.]
+	\item 由此推出对每个 $f\in L^2(0,1)$ 存在问题
+	      \begin{equation}
+	      u\in V\quad\text{且}\quad
+	      a(u,v)=\int_0^1fv\quad\forall v\in V
+	      \tag{1}
+	      \end{equation}
+	      的唯一解.
+	\item 证明 (1) 的解 $u$ 属于 $H^2(0,1)$, 并且满足
+	      \begin{equation}
+	      \begin{cases}
+	      -u''+u-\int_0^1u=f & \text{在}\ (0,1)\ \text{上},\\
+	      u(0)=ku(1)\ \text{且}\ u'(1)=ku'(0).
+	      \end{cases}
+	      \tag{2}
+	      \end{equation}
+	\item 反之, 证明任何满足 (2) 的函数 $u\in H^2(0,1)$ 都是 (1) 的解.
+	\item 设 $k_n\in\R$, $k_n\ne1$ 对一切 $n$ 成立, 是收敛到 $k\ne1$ 的
+	      序列.令
+	      \begin{equation*}
+	      V_n=\{v\in H^1(0,1);\ v(0)=k_nv(1)\}.
+	      \end{equation*}
+	      给定 $f\in L^2(0,1)$, 设 $u_n$ 是
+	      \begin{equation}
+	      u_n\in V_n\quad\text{且}\quad
+	      a(u_n,v)=\int_0^1fv\quad\forall v\in V_n
+	      \tag{$1_n$}
+	      \end{equation}
+	      的解.证明当 $n\to\infty$ 时 $u_n\to u$ 在 $H^1(0,1)$ 中, 其中
+	      $u$ 是 (1) 的解.由此推出 $u_n\to u$ 在 $H^2(0,1)$ 中.
+	      [提示: 验证由
+	      \begin{equation*}
+	      u^{(n)}(x)=u(x)+\frac{k-k_n}{k_n-1}u(1)
+	      \end{equation*}
+	      定义的函数 $u^{(n)}$ 属于 $V_n$, 并在 $H^1(0,1)$ 中收敛到 $u$.
+	      证明
+	      $a(u_n-u^{(n)},u_n-u^{(n)})=(k_n-k)u'(0)(u_n(1)-u^{(n)}(1))$.]
+	\item 若 $k_n$ 收敛到 $1$, 序列 $(u_n)$ 的情形如何?
+	\item 考虑由 $Tf=u$ 定义的算子 $T:L^2(0,1)\to L^2(0,1)$, 其中 $u$
+	      是 (1) 的解.证明 $T$ 自伴且紧.研究 $\mathrm{EV}(T)$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.31}
+考虑 $(0,1)$ 上带 Neumann 边界条件 $u'(0)=u'(1)=0$ 的 Sturm--Liouville
+算子 $Au=-u''+u$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 算出 $A$ 的特征值及相应的特征函数.
+	\item 给定 $f\in L^2$ 满足 $\int_0^1f=0$, 设 $u$ 是
+	      \begin{equation*}
+	      \begin{cases}
+	      -u''+u=f & \text{在}\ (0,1)\ \text{上},\\
+	      u'(0)=u'(1)=0
+	      \end{cases}
+	      \end{equation*}
+	      的解.证明
+	      \begin{equation*}
+	      \norm{u}_{L^2(0,1)}\le\frac{1}{(1+\pi^2)}\norm{f}_{L^2(0,1)}.
+	      \end{equation*}
+	      [提示: 应用问题 49 的第 6 问.]
+	\item 设 $(u_n)$ 是由
+	      \begin{equation*}
+	      \begin{cases}
+	      -u_n''+u_n=u_{n-1} & \text{在}\ (0,1)\ \text{上},\\
+	      u_n'(0)=u_n'(1)=0
+	      \end{cases}
+	      \end{equation*}
+	      归纳定义的序列, 从某个 $u_0\in L^2(0,1)$ 出发.证明
+	      \begin{equation*}
+	      \norm{u_n-\bar u_0}_{L^2(0,1)}
+	      \le\frac{1}{(1+\pi^2)^n}\norm{u_0-\bar u_0}_{L^2(0,1)}
+	      \quad\forall n,
+	      \end{equation*}
+	      其中 $\bar u_0=\int_0^1u_0$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.32}
+令
+\begin{equation*}
+V=\{v\in H^1(0,1);\ v(1)=0\}.
+\end{equation*}
+又令
+\begin{equation*}
+H=\{f\ \text{在}\ (0,1)\ \text{上可测, 且}\ xf(x)\in L^2(0,1)\}.
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明 $H$ 配以标量积
+	      \begin{equation*}
+	      (f,g)_H=\int_0^1f(x)g(x)x^2\,dx
+	      \end{equation*}
+	      是 Hilbert 空间.
+	\item 给定 $f\in H$ 与 $\varepsilon>0$, 验证存在唯一的 $u\in V$ 满足
+	      \begin{equation*}
+	      \int_0^1u'(x)v'(x)(x^2+\varepsilon)\,dx
+	      +\int_0^1u(x)v(x)x^2\,dx
+	      =\int_0^1f(x)v(x)x^2\,dx\quad\forall v\in V.
+	      \end{equation*}
+	      这个 $u$ 记作 $u_\varepsilon$.
+	\item 证明 $u_\varepsilon\in H^2(0,1)$, 并且满足
+	      \begin{equation}
+	      \begin{cases}
+	      -((x^2+\varepsilon)u_\varepsilon')'+x^2u_\varepsilon=x^2f
+	      & \text{在}\ (0,1)\ \text{上},\\
+	      u_\varepsilon'(0)=0\ \text{且}\ u_\varepsilon(1)=0.
+	      \end{cases}
+	      \tag{1}
+	      \end{equation}
+	\item 由此推出
+	      \begin{equation}
+	      \abs{u_\varepsilon'(x)}\le\frac1x\int_0^xt\abs{f(t)-u_\varepsilon(t)}\,dt
+	      \quad\forall x\in[0,1].
+	      \tag{2}
+	      \end{equation}
+	\item 证明当 $\varepsilon\to0$ 时, $xu_\varepsilon(x)$ 与
+	      $u_\varepsilon'(x)$ 在 $L^2(0,1)$ 中保持有界.
+	      [提示: 用习题 8.8 的第 1 问.]
+	\item 令 $\varepsilon\to0$ 取极限, 并断言存在唯一的 $u\in V$ 满足
+	      \begin{equation}
+	      \int_0^1(u'(x)v'(x)+u(x)v(x))x^2\,dx
+	      =\int_0^1f(x)v(x)x^2\,dx\quad\forall v\in V.
+	      \tag{3}
+	      \end{equation}
+\end{enumerate}
+考虑由 $Tf=u$ 定义的算子 $T:H\to H$, 其中 $u$ 是 (3) 的解.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em, start=7]
+	\item 验证 $T$ 是从 $H$ 到自身的自伴紧算子.
+	\item 确定 $T$ 的全部特征值.
+	      [提示: 寻找形如 $\frac1x\sin kx$ 的特征函数, 其中 $k$ 取适当的值.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.33}
+\emph{特征值的单性.}考虑 $I=(0,1)$ 上的 Sturm--Liouville 算子
+\begin{equation*}
+Au=-(pu')'+qu,
+\end{equation*}
+其中 $p\in C^1([0,1])$, $p\ge\alpha>0$ 在 $I$ 上, $q\in C([0,1])$.(不作
+进一步的假设; 特别地, 相应的双线性形式
+$a(u,v)=\int_0^1(pu'v'+quv)$ 不必强制.)令
+\begin{equation*}
+N=\{u\in H^2(0,1);\ a(u,v)=0\ \forall v\in H_0^1(0,1)\}.
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明存在唯一的 $U\in N$ 满足 $U(0)=1$ 且 $U'(0)=0$.
+	      [提示: 把方程 $Au=0$ 写成一阶微分方程组, 并应用定理  \ref{thm:7.3}
+	      (Cauchy--Lipschitz--Picard).]
+	\item 证明 $\dim N=2$.
+	      [提示: 考虑满足 $V(0)=0$ 与 $V'(0)=1$ 的唯一 $V\in N$.然后把
+	      任何 $u\in N$ 写成 $u=u(0)U+u'(0)V$.]
+	\item 令 $N_0=\{u\in N;\ u(0)=0\}$.验证 $\dim N_0=1$.
+	\item 令 $N_{00}=\{u\in N;\ u(0)=u(1)=0\}$.证明
+	      \begin{equation*}
+	      \dim N_{00}=1\iff 0\ \text{是}\ A\ \text{带零 Dirichlet 条件的特征值}.
+	      \end{equation*}
+	      否则 $\dim N_{00}=0$.
+	\item 由此推出 $A$ 带零 Dirichlet 条件的一切特征值都是单的.(作为对照,
+	      与周期边界条件相联系的特征值可以有重数 2; 见习题 8.34.)
+	\item 把上述结果推广到把条件 $p\in C^1([0,1])$ 换成 $p\in C([0,1])$,
+	      并把 $N$ 换成
+	      \begin{equation*}
+	      \tilde N=\{u\in H^1(0,1);\ a(u,v)=0\ \forall v\in H_0^1(0,1)\}
+	      \end{equation*}
+	      的情形.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.34}
+考虑问题
+\begin{equation}
+\begin{cases}
+-u''+u=f & \text{在}\ (0,1)\ \text{上},\\
+u(0)=u(1)\ \text{且}\ u'(1)-u'(0)=k,
+\end{cases}
+\tag{1}
+\end{equation}
+其中 $k\in\R$ 与 $f(x)$ 给定.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 求出问题 (1) 的弱表述.
+	\item 证明对每个 $f\in L^2(0,1)$ 与每个 $k\in\R$, (1) 都有唯一的弱解
+	      $u\in H^1(0,1)$.相应的极小化问题是什么?
+	\item 证明弱解 $u$ 属于 $H^2(0,1)$ 且满足 (1).验证若
+	      $f\in C([0,1])$, 则 $u\in C^2([0,1])$.
+	\item 证明若 $f\le0$ 在 $(0,1)$ 上且 $k\le0$, 则 $u\le0$ 在 $(0,1)$ 上.
+	\item 取 $k=0$, 考虑由 $Tf=u$ 定义的算子
+	      $T:L^2(0,1)\to L^2(0,1)$.验证 $T$ 是自伴紧算子.算出 $T$ 的
+	      特征值, 并证明除第一个之外, 每个特征值 $\lambda$ 的重数都是 2
+	      (即 $\dim N(T-\lambda I)=2$).
+\end{enumerate}
+\emph{注.} 注意作为对照, 带 Dirichlet 边界条件 ($u(0)=u(1)=0$) 的
+Sturm--Liouville 算子的每个特征值都是单的 (即相应的特征空间维数为 1).
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.35}
+固定两个函数 $a,b\in C([0,1])$, 考虑问题
+\begin{equation}
+\begin{cases}
+-u''+au'+bu=f & \text{在}\ (0,1)\ \text{上},\\
+u(0)=u(1)=0,
+\end{cases}
+\tag{1}
+\end{equation}
+其中 $f\in L^2(0,1)$.
+
+给定 $g\in L^2(0,1)$, 设 $v\in H^2(0,1)$ 是
+\begin{equation}
+\begin{cases}
+-v''=g & \text{在}\ (0,1)\ \text{上},\\
+v(0)=v(1)=0
+\end{cases}
+\tag{2}
+\end{equation}
+的唯一解.令 $Sg=v$, 于是 $S:L^2(0,1)\to H^2(0,1)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证问题 (1) 等价于
+	      \begin{equation}
+	      \begin{cases}
+	      u\in H^1(0,1),\\
+	      u=S(f-au'-bu).
+	      \end{cases}
+	      \tag{3}
+	      \end{equation}
+\end{enumerate}
+考虑由
+\begin{equation*}
+Tu=-S(au'+bu),\quad u\in H^1(0,1)
+\end{equation*}
+定义的算子 $T:H^1(0,1)\to H^1(0,1)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em, start=2]
+	\item 证明 $T$ 是紧算子.
+	\item 证明问题 (1) 对每个 $f\in L^2(0,1)$ 都有解, 当且仅当 (1) 在
+	      $f=0$ 时唯一的解是 $u=0$.
+	\item 假设 $b\ge0$ 在 $(0,1)$ 上.证明 (1) 在 $f=0$ 时唯一的解是
+	      $u=0$.
+	      [提示: 固定常数 $k>0$, 使得 $k^2-ka-b>0$ 在 $[0,1]$ 上.令
+	      $u_\varepsilon(x)=u(x)+\varepsilon e^{kx}$, $\varepsilon>0$.对
+	      $u_\varepsilon$ 施行最大值原理的``古典方法''; 见第~
+\ref{chap:8}~章注记
+	      \ref{rem:8.26}.由此推出 $u(x)\le\varepsilon e^k$ 对一切
+	      $x\in[0,1]$, 一切 $\varepsilon>0$ 成立.]
+	      断言对每个 $f\in L^2(0,1)$, 问题 (1) 都有唯一的解
+	      $u\in H^2(0,1)$.
+	\item 验证一般情形下 (对 $a$ 与 $b$ 不作任何假设), 问题 (1) 在 $f=0$
+	      时的解空间维数为 0 或 1.若这个维数为 1, 证明问题 (1) 有解当且
+	      仅当 $\int_0^1f\varphi_0=0$ 对某个待定的函数
+	      $\varphi_0\not\equiv0$ 成立.
+	      [提示: 用习题 8.33 与 Fredholm 二择一定理.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.36}
+设 $I=(0,1)$.给定 $I$ 上的两个函数 $f_1,f_2$, 考虑方程组
+\begin{equation}
+\begin{cases}
+-u_1''+u_2=f_1 & \text{在}\ I\ \text{上},\\
+-u_2''-u_1=f_2 & \text{在}\ I\ \text{上},
+\end{cases}
+\tag{1}
+\end{equation}
+其中 $u_1,u_2$ 是未知函数.
+
+\noindent\textbf{-A-}\quad 本部分规定 Dirichlet 条件
+\begin{equation}
+u_1(0)=u_2(0)=u_1(1)=u_2(1)=0.
+\tag{2}
+\end{equation}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 为问题 (1)--(2) 定义适当的弱解概念.证明对每对
+	      $f=[f_1,f_2]\in L^2(I)\times L^2(I)$, 存在唯一的弱解
+	      $u=[u_1,u_2]\in H_0^1(I)\times H_0^1(I)$.
+	\item 验证 $u_1,u_2\in H^2(I)$.
+	\item 证明若 $f=[f_1,f_2]\in C(\bar I)\times C(\bar I)$, 则
+	      $u=[u_1,u_2]\in C^2(\bar I)\times C^2(\bar I)$, 且 $u$ 是
+	      (1)--(2) 的古典解.
+	\item 考虑由 $Tf=u$ 定义的从 $L^2(I)\times L^2(I)$ 到自身的算子
+	      $T$.验证 $T$ 紧.
+	\item 证明 $\mathrm{EV}(T)=\varnothing$.
+	\item $T$ 满射吗? 断言 $\sigma(T)=\{0\}$.
+	\item $T$ 自伴吗? 算出 $T^\star$.
+\end{enumerate}
+
+\noindent\textbf{-B-}\quad 本部分规定 Neumann 条件
+\begin{equation}
+u_1'(0)=u_1'(1)=u_2'(0)=u_2'(1)=0.
+\tag{3}
+\end{equation}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 为问题 (1)--(3) 定义适当的弱解概念.验证 Lax--Milgram 定理
+	      不适用.
+\end{enumerate}
+给定 $\varepsilon>0$, 考虑方程组
+\begin{equation}
+\begin{cases}
+-u_1''+u_2+\varepsilon u_1=f_1 & \text{在}\ I\ \text{上},\\
+-u_2''-u_1+\varepsilon u_2=f_2 & \text{在}\ I\ \text{上}.
+\end{cases}
+\tag{$1_\varepsilon$}
+\end{equation}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em, start=2]
+	\item 证明对每个 $f=[f_1,f_2]\in L^2(I)\times L^2(I)$, 问题
+	      $(1_\varepsilon)$--(3) 都有唯一的弱解
+	      $u_\varepsilon=[u_1^\varepsilon,u_2^\varepsilon]
+	      \in H^1(I)\times H^1(I)$.
+	\item 证明
+	      \begin{equation*}
+	      \norm{u_1^\varepsilon}_{L^2(I)}^2+\norm{u_2^\varepsilon}_{L^2(I)}^2
+	      \le\norm{f_1}_{L^2(I)}^2+\norm{f_2}_{L^2(I)}^2.
+	      \end{equation*}
+	\item 由此推出当 $\varepsilon\to0$ 时,
+	      $u_\varepsilon=[u_1^\varepsilon,u_2^\varepsilon]$ 在
+	      $H^2(I)\times H^2(I)$ 中保持有界.
+	\item 证明对每个 $f=[f_1,f_2]\in L^2(I)\times L^2(I)$, (1)--(3) 都有
+	      唯一的解 $u=[u_1,u_2]\in H^2(I)\times H^2(I)$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.37}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明从 $H^1(0,1)$ 到 $L^2(0,1)$ 的恒等算子是 Hilbert--Schmidt
+	      算子 (见问题 40).
+	      [提示: 写出 $u(x)=u(0)+\int_0^xu'(t)\,dt$, 并应用问题 40 中的
+	      第 A3, A6 与 B4 问.]
+	\item 考虑 Sturm--Liouville 问题
+	      \begin{equation*}
+	      \begin{cases}
+	      -(pu')'+qu=\lambda u & \text{在}\ (0,1)\ \text{上},\\
+	      u(0)=u(1)=0
+	      \end{cases}
+	      \end{equation*}
+	      的特征值 $(\lambda_n)$.回忆在定理  \ref{thm:8.22} 的假设下
+	      $\lambda_n\to+\infty$.于是存在某个整数 $N$, 使得
+	      $\lambda_n>0$ 对一切 $n\ge N$ 成立.证明
+	      \begin{equation*}
+	      \sum_{n=N}^{+\infty}\frac{1}{\lambda_n^2}<\infty.
+	      \end{equation*}
+\end{enumerate}
+\emph{注.} 习题 8.42 描述了一个精确得多的估计.
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.38}
+\emph{具有连续谱的算子的例子.}给定 $f\in L^2(\R)$, 设 $u\in H^1(\R)$ 是
+问题
+\begin{equation*}
+-u''+u=f\quad\text{在}\ \R\ \text{上}
+\end{equation*}
+的唯一 (弱) 解, 其意义为
+\begin{equation*}
+\int_\R u'v'+\int_\R uv=\int_\R fv\quad\forall v\in H^1(\R).
+\end{equation*}
+令 $u=Tf$, 并把 $T$ 看作从 $H=L^2(\R)$ 到自身的具有界线性算子.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证 $T^\star=T$ ($H$ 与其对偶空间等同), 且 $\norm{T}\le1$.
+	\item 证明 $\mathrm{EV}(T)=\varnothing$.$T$ 是紧算子吗?
+	\item 设 $\lambda\in(-\infty,0)$; 验证 $\lambda\in\rho(T)$.
+	\item 设 $\lambda\in(1,+\infty)$; 验证 $\lambda\in\rho(T)$.
+	\item 由此推出 $\sigma(T)\subset[0,1]$.
+	\item $T$ 满射吗? 断言 $0\in\sigma(T)$.
+	\item $(T-I)$ 满射吗? 断言 $1\in\sigma(T)$ 且 $\norm{T}=1$.
+	\item 设 $\lambda\in(0,1)$.$(T-\lambda I)$ 满射吗?
+	\item 断言 $\sigma(T)=[0,1]$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.39}
+给定 $f\in L^2(0,1)$, 考虑由
+\begin{equation*}
+\varphi(v)=\frac12\int_0^1v'^2+\frac14\int_0^1v^4-\int_0^1fv,
+\quad v\in H^1(0,1),
+\end{equation*}
+定义的函数 $\varphi:H^1(0,1)\to\R$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 验证 $\varphi$ 在 $H^1(0,1)$ 上凸且连续.
+	\item 证明当 $\norm{v}_{H^1}\to\infty$ 时 $\varphi(v)\to+\infty$.
+	\item 由此推出存在唯一的 $u\in H^1(0,1)$, 使得
+	      \begin{equation}
+	      \varphi(u)=\min_{v\in H^1(0,1)}\varphi(v).
+	      \tag{1}
+	      \end{equation}
+	\item 证明
+	      \begin{equation}
+	      \int_0^1(u'v'+u^3v)=\int_0^1fv\quad\forall v\in H^1(0,1).
+	      \tag{2}
+	      \end{equation}
+	      [提示: 写出 $\varphi(u)\le\varphi(u+\varepsilon v)$ 对一切
+	      $v\in H^1(0,1)$ 成立, 并显式算出
+	      $\varphi(u+\varepsilon v)$.]
+	\item 证明 $u\in H^2(0,1)$, 且 $u$ 满足
+	      \begin{equation}
+	      \begin{cases}
+	      -u''+u^3=f & \text{在}\ (0,1)\ \text{上几乎处处},\\
+	      u'(0)=u'(1)=0.
+	      \end{cases}
+	      \tag{3}
+	      \end{equation}
+	\item 反之, 证明 (3) 的任何解都满足 (1).由此推出 (3) 有唯一解.
+	\item 证明若 $f\ge0$ 在 $(0,1)$ 上几乎处处成立, 则 $u\ge0$ 在
+	      $(0,1)$ 上.
+	      [提示: 用与 \S \ref{sec:8.5} 相同的技巧.]
+	\item 证明若 $f\in L^\infty(0,1)$, 则
+	      \begin{equation*}
+	      \norm{u}_{L^\infty(0,1)}^3\le\norm{f}_{L^\infty(0,1)}.
+	      \end{equation*}
+	      [提示: 像定理  \ref{thm:8.19} 的证明那样论证, 用
+	      $G(u-K^{1/3})$ 作试验函数, 其中 $K=\norm{f}_{L^\infty}$.]
+	\item 当 $\varphi(v)$ 被
+	      \begin{equation*}
+	      \psi(v)=\frac12\int_0^1v'^2+\frac14v^4(0)-\int_0^1fv,
+	      \quad v\in H^1(0,1)
+	      \end{equation*}
+	      替换时, 情形如何?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.40}
+设 $j\in C^1(\R,\R)$ 是凸函数, 满足
+\begin{equation}
+j(t)\ge\abs{t}-C\quad\forall t\in\R,\ \text{对某个}\ C\in\R,
+\tag{1}
+\end{equation}
+以及
+\begin{equation}
+-1<j'(t)<+1\quad\forall t\in\R.
+\tag{2}
+\end{equation}
+[一个值得记住的好例子是 $j(t)=(1+t^2)^{1/2}$.]
+
+给定 $f\in L^2(0,1)$, 考虑由
+\begin{equation*}
+\varphi(v)=\frac12\int_0^1v'^2+\int_0^1j(v)-\int_0^1fv,
+\quad v\in H^1(0,1),
+\end{equation*}
+定义的函数 $\varphi:H^1(0,1)\to\R$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明若 $\abs{\int_0^1f}>1$, 则
+	      \begin{equation*}
+	      \inf_{v\in H^1(0,1)}\varphi(v)=-\infty.
+	      \end{equation*}
+	      [提示: 取 $v=$ 常数.]
+	\item 证明若 $\abs{\int_0^1f}\le1$, 则
+	      \begin{equation*}
+	      \inf_{v\in H^1(0,1)}\varphi(v)>-\infty.
+	      \end{equation*}
+	      [提示: 写出 $\int_0^1fv=\int_0^1\bar f(v-\bar v)+\bar f\bar v$, 其中
+	      $\bar v=\int_0^1v$, $\bar f=\int_0^1f$, 并使用
+	      Poincaré--Wirtinger 不等式; 见第~
+\ref{chap:8}~章评注 1 与问题 47.]
+	\item 证明若 $\abs{\int_0^1f}<1$, 则
+	      \begin{equation*}
+	      \lim_{\norm{v}_{H^1(0,1)}\to\infty}\varphi(v)=+\infty.
+	      \end{equation*}
+	      由此推出 $\inf_{v\in H^1(0,1)}\varphi(v)$ 可以达到, 并且每个极小
+	      点 $u\in H^1(0,1)$ 都满足
+	      \begin{equation*}
+	      \int_0^1u'w'+\int_0^1j'(u)w=\int_0^1fw\quad\forall w\in H^1(0,1).
+	      \end{equation*}
+	      证明 $u\in H^2(0,1)$, 并且是问题
+	      \begin{equation}
+	      \begin{cases}
+	      -u''+j'(u)=f & \text{在}\ (0,1)\ \text{上},\\
+	      u'(0)=u'(1)=0
+	      \end{cases}
+	      \tag{3}
+	      \end{equation}
+	      的解.
+	\item 假设 $\abs{\int_0^1f}=1$.证明
+	      $\inf_{v\in H^1(0,1)}\varphi(v)$ 不能达到.
+	      [提示: 用反证法.若下确界在某个 $u$ 处达到, 则 $u$ 满足 (3).
+	      在 $(0,1)$ 上积分 (3).]
+	\item 当 $\abs{\int_0^1f}=1$ 时, $\varphi$ 的极小化序列 $(u_n)$ 的
+	      情形如何?
+	      [提示: 证明 $u_n=\bar u_n+(u_n-\bar u_n)$, 其中
+	      $\abs{\bar u_n}\to\infty$, 而当 $n\to\infty$ 时
+	      $\norm{u_n-\bar u_n}_{H^1}\le C$.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.41}
+设 $q\in C([0,1])$, 并假设双线性形式
+\begin{equation*}
+a(u,v)=\int_0^1(u'v'+quv),\quad u,v\in H_0^1(0,1),
+\end{equation*}
+在 $H_0^1(0,1)$ 上强制.空间 $H_0^1(0,1)$ 配以标量积 $a(u,v)$ (现记作
+$(u,v)_H$), 范数 $\abs{u}_H=(u,u)_H^{1/2}$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 证明
+	      \begin{equation}
+	      \alpha=\sup\left\{\int_0^1\abs{u}^4;\ u\in H_0^1(0,1)\
+	      \text{且}\ \abs{u}_H=1\right\}>0
+	      \tag{1}
+	      \end{equation}
+	      可由某个 $u_0$ 达到.
+	      [提示: 考虑在 $H_0^1(0,1)$ 中弱收敛到某个 $u_0$ 的极大化序列
+	      $(u_n)$.验证 $\alpha=\int_0^1\abs{u_0}^4$ 且
+	      $\abs{u_0}_H\le1$.通过引入 $u_0/\abs{u_0}_H$ 证明
+	      $\abs{u_0}_H=1$.]
+	\item 证明可以假设 $u_0\ge0$ 在 $[0,1]$ 上.
+	      [提示: 把 $u_0$ 换成 $\abs{u_0}$, 并应用习题 8.11.]
+	\item 证明 $u_0$ 属于 $H^2(0,1)$, 并且满足
+	      \begin{equation}
+	      \begin{cases}
+	      -u_0''+qu_0=\frac1\alpha u_0^3 & \text{在}\ (0,1)\ \text{上},\\
+	      u_0(0)=u_0(1)=0.
+	      \end{cases}
+	      \tag{2}
+	      \end{equation}
+	      [提示: 写出 $\norm{w_\varepsilon}_{L^4(0,1)}
+	      \le\norm{u_0}_{L^4(0,1)}$, 其中
+	      $w_\varepsilon=\frac{u_0+\varepsilon v}{\abs{u_0+\varepsilon v}_H}$,
+	      $v\in H_0^1(0,1)$, 而 $\varepsilon>0$ 足够小.然后对
+	      $\norm{w_\varepsilon}_{L^4(0,1)}^4$ 与
+	      $\abs{u_0+\varepsilon v}_H^2$ 作 Taylor 展开, 令
+	      $\varepsilon\to0$.]
+	\item 由此推出 $u_0(x)>0$ 对一切 $x\in(0,1)$ 成立.
+	      [提示: 用强最大值原理; 见问题 45.]
+	\item 设 $u_1$ 是 (1) 的任一极大化函数.证明或者
+	      $u_1(x)>0$ 对一切 $x\in(0,1)$ 成立, 或者 $u_1(x)<0$ 对一切
+	      $x\in(0,1)$ 成立.
+	      [提示: 验证 $\abs{u_1(x)}>0$ 对一切 $x\in(0,1)$ 成立.]
+	\item 由此推出问题
+	      \begin{equation}
+	      \begin{cases}
+	      -u''+qu=u^3 & \text{在}\ (0,1)\ \text{上},\\
+	      u>0 & \text{在}\ (0,1)\ \text{上},\\
+	      u(0)=u(1)=0
+	      \end{cases}
+	      \tag{3}
+	      \end{equation}
+	      存在解 $u\in C^2([0,1])$.
+	      [提示: 取 $u=ku_0$, 其中 $k>0$ 为某个适当的常数.]
+	\item 现在假设 $a$ 不强制, 更确切地说, 存在某个
+	      $v_1\in H_0^1(0,1)$, 使得 $v_1\not\equiv0$ 且
+	      $a(v_1,v_1)\le0$.证明问题 (3) 无解.
+	      [提示: 验证 $\lambda_1\le0$, 其中 $\lambda_1$ 是
+	      $Au=-u''+qu$ 的第一个特征值; 然后把 (3) 乘以相应的特征函数
+	      $\varphi_1$.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:8.42}
+\emph{Sturm--Liouville 特征值的渐近行为.}考虑 $I=(0,L)$ 上的算子
+$Av=-v''+a(x)v$, 带零 Dirichlet 条件, 其中 $a\in C([0,L])$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em]
+	\item 用 $(\lambda_n)$ 表示 $A$ 的特征值序列.证明
+	      \begin{equation*}
+	      \left|\lambda_n-\frac{\pi^2n^2}{L^2}\right|
+	      \le\norm{a}_{L^\infty(0,L)}\quad\forall n.
+	      \end{equation*}
+	      [提示: 考虑对应于 $a\equiv0$ 的算子 $A_0$ 的特征值, 并使用
+	      Courant--Fischer 极小极大原理 (见问题 49).]
+\end{enumerate}
+现在考虑一般的 Sturm--Liouville 算子
+\begin{equation*}
+Bu=-(pu')'+qu\quad\text{在}\ (0,1)\ \text{上},
+\end{equation*}
+带零 Dirichlet 条件.假设 $p\in C^2([0,1])$, $p\ge\alpha>0$ 在 $(0,1)$ 上,
+$q\in C([0,1])$.令 $L=\int_0^1p(t)^{-1/2}\,dt$, 并引入新变量
+$x=\int_0^tp(t)^{-1/2}\,dt$, 使得当 $0<t<1$ 时 $0<x<L$.给定函数
+$u\in C^2([0,1])$, 令
+\begin{equation*}
+v(x)=p^{1/4}(t)u(t),\quad 0<t<1.
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.3em, start=2]
+	\item 证明 $u$ 在 $(0,1)$ 上满足 $-(pu')'+qu=\mu u$ 当且仅当 $v$ 在
+	      $(0,L)$ 上满足 $-v''+av=\mu v$, 其中 $a\in C([0,1])$ 只依赖于
+	      $p$ 与 $q$.
+	      [提示: 经过一些繁复的计算后, 证明
+	      $a(x)=q(t)+\frac14p''(t)-\frac{(p'(t))^2}{16p(t)}$.]
+	\item 由此推出算子 $B$ 的特征值 $(\mu_n)$ 满足
+	      \begin{equation*}
+	      \left|\mu_n-\frac{\pi^2n^2}{L^2}\right|\le C.
+	      \end{equation*}
+\end{enumerate}
+\end{exercise}

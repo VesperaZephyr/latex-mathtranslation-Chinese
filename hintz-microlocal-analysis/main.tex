@@ -1,0 +1,168 @@
+% !TEX program = xelatex
+%
+% 《微局部分析导论》中译本 (An Introduction to Microlocal Analysis)
+% 原书: Peter Hintz, An Introduction to Microlocal Analysis,
+%       Graduate Texts in Mathematics, Volume 304,
+%       Springer Nature Switzerland AG, 2025.
+% 模板: 基于李文威《代数学方法》AJbook.cls 模板定制重排.
+%
+% 编译方式: bash _build.sh (或 xelatex -> biber -> splitindex -> texindy -> xelatex x2)
+
+\documentclass[
+	11pt,
+	geometry=a4,
+	coverpage=cover,
+	fontsetup=font-setup-open,
+	titlesetup=titles-setup,
+]{AJbook}
+
+% ==================== 基础数学宏包与字体 ====================
+\usepackage{mycommand}      % 标准数学命令库 (\R, \CC, \Z, \N, \id, \Hom, \Ker, \supp 等)
+\usepackage{myarrows}       % 可伸缩数学箭头
+\usepackage{tikz-cd}        % 交换图与范畴图
+\usepackage{mathrsfs}       % 经典手写花体 (\mathscr{S}, \mathscr{D}' 等)
+\usepackage{enumitem}       % 高灵活度列表环境
+\usepackage{xurl}           % 允许长 URL 在任意字符处折行, 消除参考文献 overfull
+\usepackage{hologo}         % 标志宏包 (\hologo{XeLaTeX} 等)
+\usepackage{chngcntr}       % 计数器从属绑定
+\usetikzlibrary{arrows.meta,calc,positioning,decorations.markings,patterns,shapes.geometric}
+
+% amsmath 矩阵最大列数放宽
+\setcounter{MaxMatrixCols}{20}
+
+% 适度放宽词间距, 避免中文与长行内公式混排产生 Overfull \hbox
+\setlength{\emergencystretch}{2.5em}
+
+% ==================== 微局部分析专属数学算子与记号 ====================
+% 1. 波前集与奇异支集
+\DeclareMathOperator{\WF}{WF}                  % 波前集 (Wave Front Set)
+\DeclareMathOperator{\WFsc}{WF_{sc}}          % 半经典波前集
+\DeclareMathOperator{\WFb}{WF_b}              % b-波前集
+\newcommand{\WFprime}{\operatorname{WF}'}      % 算子本质支集 / 波前集 WF'(A)
+\DeclareMathOperator{\singsupp}{sing\,supp}   % 奇异支集
+
+% 2. 算子类、符号类与量化
+\DeclareMathOperator{\Op}{Op}                  % 标准量化算子 Op(a)
+\newcommand{\Oph}{\operatorname{Op}_h}        % 半经典量化算子 Op_h(a)
+\newcommand{\OpL}{\operatorname{Op}_L}        % 左量化 Op_L(a)
+\newcommand{\OpR}{\operatorname{Op}_R}        % 右量化 Op_R(a)
+\renewcommand{\Char}{\operatorname{Char}}      % 特征集 (Characteristic Set, 覆盖 mycommand 的 char)
+\DeclareMathOperator{\Ell}{Ell}                % 椭圆集 (Elliptic Set)
+\DeclareMathOperator{\Diff}{Diff}              % 微分算子空间 Diff^m(M)
+\DeclareMathOperator{\Diffb}{Diff_b}          % b-微分算子空间
+\DeclareMathOperator{\codim}{codim}            % 余维数
+\DeclareMathOperator{\esupp}{ess\,supp}        % 本质支集
+\DeclareMathOperator{\dist}{dist}              % 距离
+\DeclareMathOperator{\tr}{tr}                  % 迹
+\DeclareMathOperator{\ran}{ran}                % 值域 (Range)
+\DeclareMathOperator{\Real}{Re}                % 实部
+\DeclareMathOperator{\Imag}{Im}                % 虚部
+
+% 3. 微分几何与相空间特定记号 (\dd, \ii, \diag 均已由 mycommand.sty 提供)
+\newcommand{\TstarM}{T^* M}                    % 余切丛
+\newcommand{\TstaroM}{T^* M \setminus o}       % 去零截面余切丛
+\newcommand{\SstarM}{S^* M}                    % 余切球面丛
+\newcommand{\ee}{\mathrm{e}}                   % 自然底数 e
+\newcommand{\defeq}{\coloneqq}                 % 定义为 :=
+
+% 4. 常用函数空间花体缩写
+\newcommand{\Schwartz}{\mathscr{S}}            % Schwartz 快速递减函数空间
+\newcommand{\Distr}{\mathscr{D}'}              % 分布空间
+\newcommand{\TempDistr}{\mathscr{S}'}          % 缓增分布空间
+\newcommand{\SmoothComp}{\mathcal{C}_{\mathrm{c}}^\infty} % 紧支光滑函数
+\newcommand{\Smooth}{\mathcal{C}^\infty}       % 光滑函数
+
+% ==================== 编号体系设置 (严格保真原书 GTM 304 体例) ====================
+% 原书定理类环境按章统排: Definition 2.1, Proposition 2.5, Theorem 2.8...
+% 公式按章统排: (2.1), (2.2)...
+\numberwithin{equation}{chapter}
+\renewcommand{\theequation}{\arabic{chapter}.\arabic{equation}}
+
+% 习题环境: 按章独立编号 (Exercise 2.1, Exercise 2.2...)
+\newcounter{exctr}[chapter]
+\renewcommand{\theexctr}{\arabic{chapter}.\arabic{exctr}}
+\newenvironment{exer}[1][]{%
+	\refstepcounter{exctr}%
+	\par\noindent\textbf{习题~\theexctr}%
+	\ifstrempty{#1}{}{~(#1)}%
+	\textbf{.}\enspace\ignorespaces
+}{\par\medskip}
+
+% 超链接唯一锚点定义
+\AddToHook{begindocument/end}{%
+    \renewcommand{\theHtheorem}{\arabic{chapter}.\arabic{theorem}}%
+    \renewcommand{\theHequation}{\arabic{chapter}.\arabic{equation}}%
+    \renewcommand{\theHexctr}{\arabic{chapter}.\arabic{exctr}}%
+}
+
+% AtBeginDocument 环境名称补充
+\AtBeginDocument{%
+	\theorembodyfont{\kaishu}%
+	\newtheorem{claim}[theorem]{断言}%
+	\theorembodyfont{\songti}%
+	\crefname{exctr}{习题}{习题}%
+	\crefname{exer}{习题}{习题}%
+	\crefname{claim}{断言}{断言}%
+	\renewcommand{\thetheorem}{\arabic{chapter}.\arabic{theorem}}%
+}
+
+% ==================== 参考文献库 (biblatex) ====================
+\addbibresource{references.bib}
+
+% ==================== 索引设置 (imakeidx + splitindex + xindy) ====================
+\usepackage[xindy, splitindex, noautomatic]{imakeidx}
+\makeindex[program=truexindy, title={名词索引暨英汉对照}, columns=2, intoc=true,%
+	options=-M texindy -I xelatex -C utf8]
+\makeindex[name=sym1, program=truexindy, title={符号与记号索引}, columns=3, intoc=true,%
+	options=-M numeric-sort -M latex -M latex-loc-fmts -M makeindex -I xelatex -C utf8]
+
+% ==================== 超链接设置 ====================
+\usepackage[bookmarksnumbered=true,hyperindex=true]{hyperref}
+\hypersetup{
+    pdfauthor={Peter Hintz},
+    pdftitle={微局部分析导论 (An Introduction to Microlocal Analysis)},
+    pdfsubject={偏微分方程与微局部分析 (GTM 304)},
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=red,
+    urlcolor=teal
+}
+
+% ==================== 正文开始 ====================
+\begin{document}
+
+\frontmatter
+
+% 前言与致谢
+\include{chapters/frontmatter}
+
+\mainmatter
+
+% 各章内容 (11 章完整架构)
+\include{chapters/ch01}
+\include{chapters/ch02}
+\include{chapters/ch03}
+\include{chapters/ch04}
+\include{chapters/ch05}
+\include{chapters/ch06}
+\include{chapters/ch07}
+\include{chapters/ch08}
+\include{chapters/ch09}
+\include{chapters/ch10}
+\include{chapters/ch11}
+
+\backmatter
+
+% 参考文献
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{参考文献}
+\nocite{*}
+\printbibliography[title=参考文献]
+
+% 双索引: 符号索引在前, 名词索引在后
+\cleardoublepage
+\printindex[sym1]
+\printindex
+
+\end{document}

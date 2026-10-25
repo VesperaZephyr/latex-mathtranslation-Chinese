@@ -1,0 +1,109 @@
+% ============ 《表示论》中文翻译 LaTeX 重排版 ============
+% 原书: Sophie Morel, MAT 449: Representation Theory (April 26, 2019)
+% 模板: AJbook.cls (李文威\emph{代数学方法}书系模板)
+%       ★ 定理编号规则已按原书修改(见 AJbook.cls): 定理/推论/引理/命题/定义/
+%         例/注记/记号/约定/习题/注意 共享一个计数器, 按节编号
+% 编号体系 (原书约定):
+%   - 章 = 原书部分: I-VI 罗马数字 + 附录 A、B
+%   - 节 = 原书节 (如 I.1, II.3), 编号 \thechapter.\arabic{section}
+%   - 子节 = 原书子节 (如 I.3.1, IV.9.2), 编号 \thesection.\arabic{subsection}
+%   - 定理类: 共享计数器, 编号 N.M 或 N.M.K 与原书一致:
+%       无子节的节: I.1.1  (Definition I.1.1, Remark I.1.13)
+%       有子节的节: I.3.1.1 (Definition I.3.1.1, Exercise I.5.1.1)
+%   - 公式: 原书基本不编号, 少数引用处用显式 \tag{...}
+\documentclass[geometry=a4, fontsetup=font-setup-open.tex, titlesetup=titles-setup, coverpage=cover, CJKthechapter=false]{AJbook}
+
+% ============ 宏包 ============
+\usepackage{mycommand}      % 常用数学命令(\dd \R \Z \Q \CC \e \ii \Hom \End 等)
+\usepackage{myarrows}       % 可伸缩箭头
+\usepackage{amssymb}
+\usepackage{chngcntr}       % \counterwithout
+\usepackage{etoolbox}       % \pretocmd 等
+\usepackage{tikz-cd}        % 交换图
+\usetikzlibrary{calc}       % 封面坐标计算
+\usepackage{imakeidx}
+\usepackage[bookmarksnumbered=true]{hyperref}
+
+% ============ 编号体系 ============
+% 章号: 正文用罗马数字 (I-VI), 附录用字母 (A, B)
+\renewcommand{\thechapter}{\Roman{chapter}}
+\renewcommand{\AJchapterttl}[1]{#1}             % 章号直接显示编号 (I, II, ...)
+
+% 天眉: ``I 拓扑群的表示''. AJbook.cls 在 \AtBeginDocument 里定义 \chaptermark, 故此处覆盖须放在其之后
+\AtBeginDocument{%
+  \renewcommand{\chaptermark}[1]{\markboth{\thechapter\quad #1}{}}%
+}
+
+% 定理编号格式切换 (原书: 每个最底层编号单元内从 1 重新计数):
+%   无子节的节: 编号 I.1.1  (\thetheorem = \thesection.\arabic{theorem})
+%   有子节的节: 编号 I.3.1.1 (\thetheorem = \thesubsection.\arabic{theorem})
+% 通过 titlesetup.tex 中 titleformat 的 after-code 钩子在 \section/\subsection 后自动切换
+% (不能用 \apptocmd: titlesec 的 \section/\subsection 含 \new@ifnextchar, 会破坏参数扫描)
+% 注意: after-code 在 group 内执行, 须用 \gdef 使重定义全局生效
+\newcommand{\AJseccount}{%
+  \gdef\thetheorem{\thesection.\arabic{theorem}}%
+  \gdef\theHtheorem{\thesection.\arabic{theorem}}%
+}
+\newcommand{\AJsubseccount}{%
+  \setcounter{theorem}{0}%
+  \gdef\thetheorem{\thesubsection.\arabic{theorem}}%
+  \gdef\theHtheorem{\thesubsection.\arabic{theorem}}%
+}
+
+% 超链接
+\hypersetup{
+    pdfauthor={Sophie Morel},
+    pdftitle={表示论 (Representation Theory)},
+    pdfsubject={表示论, 拓扑群, 调和分析}
+}
+
+% 索引 (intoc=false: 目录条目由 titlesec 无号章 after-code 添加, 避免重复)
+\makeindex[columns=2, intoc=false, title={索引}]
+
+% 参考文献 (biblatex 由 AJbook.cls 引入, sorting=nyt 与原书字母序一致)
+\addbibresource{refs.bib}
+
+% 全局断行弹性: 消除边界性 Overfull (与 Gelbart/古典调和分析项目同款)
+\emergencystretch=3em
+
+% ============ 文档开始 ============
+\begin{document}
+\frontmatter        % 封面(cover.tex) + 目录(模板自动处理, 罗马页码)
+
+\mainmatter         % 正文(阿拉伯页码从 1 开始)
+
+% 原书部分 I-VI
+\chapter[拓扑群的表示]{拓扑群的表示}
+\input{partI}
+
+\chapter[Gelfand 理论]{Gelfand 理论}
+\input{partII}
+
+\chapter[Gelfand-Raikov 定理]{Gelfand-Raikov 定理}
+\input{partIII}
+
+\chapter[Peter-Weyl 定理]{Peter-Weyl 定理}
+\input{partIV}
+
+\chapter[Gelfand 对]{Gelfand 对}
+\input{partV}
+
+\chapter[Fourier 分析在群上随机游走中的应用]{Fourier 分析在群上随机游走中的应用}
+\input{partVI}
+
+% 附录 A、B (章号切换为字母; 先重置 chapter 计数器使 \Alph 从 A 开始)
+\setcounter{chapter}{0}
+\renewcommand{\thechapter}{\Alph{chapter}}
+\chapter[Urysohn 引理及其推论]{Urysohn 引理及其推论}
+\input{appendixA}
+
+\chapter[赋范向量空间的有用事实]{赋范向量空间的有用事实}
+\input{appendixB}
+
+% 参考文献
+\input{bibliography}
+
+% 索引
+\printindex
+
+\end{document}

@@ -23,9 +23,30 @@ Chinese translation manuscripts.
 
 | 目录 / Directory | 书名 / Title | 原作者 / Authors | 翻译状态 / Status |
 |---|---|---|---|
-| _（待逐项加入）_ | | | |
+| `aluffi-algebra-chapter-0/` | Algebra: Chapter 0 | Paolo Aluffi | 全本翻译完成 |
+| `breuil-emerton/` | Breuil–Emerton (CN) | Breuil, Emerton | 翻译完成 |
+| `brezis-functional-analysis/` | 泛函分析 | H. Brézis | 翻译完成 |
+| `klainerman-lecture-notes-analysis/` | Lecture Notes in Analysis (2011) | Sergiu Klainerman | 翻译完成 |
+| `bochner-riesz-means/` | Lectures on Bochner-Riesz Means | K. M. Davis, Y.-C. Chang | 翻译完成 |
+| `milne-etale-cohomology/` | Lectures on Étale Cohomology | J. S. Milne | 翻译完成 |
+| `bosch-linear-algebra/` | Lineare Algebra | Siegfried Bosch | 翻译完成 |
+| `morel-representation-theory/` | MAT 449 Representation Theory | Sophie Morel | 翻译完成 |
+| `milne-elliptic-curves/` | Elliptic Curves | J. S. Milne | 翻译完成 |
+| `milne-class-field-theory/` | Class Field Theory | J. S. Milne | 翻译完成 |
+| `chevalley-profinite-groups/` | Profinite Groups and Galois Cohomology (thesis) | Rosalie Chevalley | 翻译完成 |
+| `sga/` | Séminaire de Géométrie Algébrique (SGA) | Grothendieck et al. | 翻译完成 |
+| `stacks-and-moduli/` | Stacks and Moduli | — | 翻译完成 |
+| `stein-lectures/` | Stein 讲座 | Elias M. Stein | 翻译完成 |
+| `cordoba-suprematism-harmonic/` | Suprematism in Harmonic Analysis | Antonio Córdoba | 翻译完成 |
+| `tensor-product/` | Tensor Product | — | 翻译完成 |
+| `fractal-sets-falconer/` | The Geometry of Fractal Sets | K. J. Falconer | 翻译完成 |
+| `classical-harmonic-analysis/` | 古典调和分析 | — | 翻译完成 |
+| `minimal-surfaces/` | 极小曲面教程 | — | 翻译完成 |
+| `harmonic-analysis-intro-zeno/` | 调和分析入门——为深入理解函数的性质 | 澤野嘉宏 | 翻译完成 |
+| `hintz-microlocal-analysis/` | An Introduction to Microlocal Analysis (GTM 304) | Peter Hintz | 翻译完成 |
+| `visual-differential-forms/` | A Visual Introduction to Differential Forms and Calculus | — | 翻译完成 |
 
-> 更多译本将逐步加入。/ More translations will be added over time.
+> 更多译本将逐步加入（如张慧星 ODE、收获与播种、代数/数论/几何导引等按计划后续补充）。/ More translations will be added over time.
 
 ## 本地编译 / Building locally
 

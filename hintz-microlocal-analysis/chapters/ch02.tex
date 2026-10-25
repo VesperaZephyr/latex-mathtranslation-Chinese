@@ -1,0 +1,781 @@
+% chapters/ch02.tex - 第 2 章: Schwartz 函数与缓增分布
+
+\chapter{Schwartz 函数与缓增分布}\label{ch:02}
+
+$\R^n$ 上的 Fourier 变换在微局部分析的发展中居于中心地位. Schwartz 快速递减函数与缓增分布为 Fourier 变换提供了最自然的理论舞台; 它们将在第~\ref{sec:2.1}--\ref{sec:2.2}~节中引入. 对我们而言, 最重要的函数空间是以 $L^2$ 为基底的 Sobolev 空间 $H^s(\R^n)$ ($s \in \R$); 这些内容在第~\ref{sec:2.3}~节中回顾. 分布在本书中不仅作为偏微分方程的解出现, 而且还作为线性算子的积分核出现. 著名的 Schwartz 核定理将把 Schwartz 函数映为缓增分布的有界线性算子, 刻画为那些具有缓增分布积分核的算子 (第~\ref{sec:2.4}~节). 微分算子的积分核 (或称 Schwartz 核) 将在第~\ref{sec:2.5}~节中讨论. 半经典对应情形将在第~\ref{sec:2.6}~节中展开.
+
+\section{基本定义}\label{sec:2.1}
+\index{Schwartz kongjian@Schwartz 空间 (Schwartz space)}%
+\index{huanzengfenbu@缓增分布 (tempered distribution)}%
+
+我们记
+\begin{equation}\label{eq:2.1}
+    \N \defeq \{1, 2, 3, \ldots\}, \qquad \N_0 \defeq \{0\} \cup \N.
+\end{equation}
+我们使用标准的多重指标记号: 对于 $x = (x_1, \ldots, x_n) \in \R^n$ 以及 $\alpha = (\alpha_1, \ldots, \alpha_n) \in \N_0^n$, 我们令
+\begin{equation}\label{eq:2.2}
+    x^\alpha \defeq \prod_{j=1}^n x_j^{\alpha_j}, \qquad
+    \partial_x^\alpha \defeq \partial_{x_1}^{\alpha_1} \cdots \partial_{x_n}^{\alpha_n}, \qquad
+    D_x^\alpha \defeq D_{x_1}^{\alpha_1} \cdots D_{x_n}^{\alpha_n}, \qquad
+    D \defeq \frac{1}{\ii} \partial.
+\end{equation}
+在上下文无歧义时, 我们常简写 $D^\alpha \defeq D_x^\alpha$, 以及 $D_j \defeq D_{x_j}$. 我们还记
+\begin{equation}\label{eq:2.3}
+    |\alpha| \defeq \sum_{j=1}^n \alpha_j, \qquad \alpha! \defeq \prod_{j=1}^n \alpha_j!.
+\end{equation}
+对于 $\alpha = (\alpha_1, \ldots, \alpha_n)$ 与 $\beta = (\beta_1, \ldots, \beta_n)$, 若对所有 $j = 1, \ldots, n$ 均有 $\alpha_j \le \beta_j$, 则记 $\alpha \le \beta$; 若其中至少有一个不等式为严格不等式, 则记 $\alpha < \beta$. 此外, 我们还将使用日本括号 (Japanese bracket), 对 $x \in \R^n$ 定义为
+\begin{equation}\label{eq:2.4}
+    \langle x \rangle \defeq \left( 1 + |x|^2 \right)^{1/2}.
+\end{equation}
+
+设 $k \in \N_0$. 对于开子集 $\Omega \subset \R^n$, 我们用 $\mathcal{C}^k(\Omega)$ 表示 $\Omega$ 上 $k$ 次连续可微函数的空间 (不附加强制增长限制), 并记 $\mathcal{C}^\infty(\Omega) \defeq \bigcap_{k \in \N} \mathcal{C}^k(\Omega)$. 用 $\mathcal{C}_b^k(\Omega) \subset \mathcal{C}^k(\Omega)$ 表示所有直至 $k$ 阶导数均有界的函数构成的空间, 并令 $\mathcal{C}_b^\infty(\Omega) \defeq \bigcap_{k \in \N} \mathcal{C}_b^k(\Omega)$. 配备范数
+\begin{equation}\label{eq:2.5}
+    \|u\|_{\mathcal{C}_b^k(\Omega)} \defeq \sup_{x \in \Omega} \max_{|\alpha| \le k} |\partial^\alpha u(x)|,
+\end{equation}
+空间 $\mathcal{C}_b^k(\Omega)$ 是 Banach 空间, 而空间 $\mathcal{C}_b^\infty(\Omega)$ 是 Fréchet 空间. 对于 $k \in \N_0 \cup \{\infty\}$, 我们用 $\mathcal{C}_{\mathrm{c}}^k(\Omega)$ 表示 $\mathcal{C}^k(\Omega)$ 中具有紧支集的元素构成的子空间. 除非另有说明, 全书所有函数均默认为复数值.
+
+\begin{definition}[Schwartz 空间]\label{def:2.1}
+Schwartz 快速递减函数空间 $\Schwartz(\R^n)$ 由所有满足如下条件的函数 $\phi \in \Smooth(\R^n)$ 组成: 对任意 $k \in \N_0$,
+\begin{equation}\label{eq:2.6}
+    \|\phi\|_k \defeq \sup_{x \in \R^n} \max_{|\alpha| + |\beta| \le k} \left| x^\alpha D^\beta \phi(x) \right| < \infty.
+\end{equation}
+\end{definition}
+
+\begin{example}[Schwartz 函数]\label{eg:2.2}
+显然有 $\exp(-|x|^2) \in \Schwartz(\R^n)$. 此外, 我们有稠密包含映射 $\SmoothComp(\R^n) \hookrightarrow \Schwartz(\R^n)$. 回忆存在大量具有紧支集的光滑函数; 事实上, 当 $K \subset U \subset \R^n$, 其中 $K$ 为紧集而 $U$ 为有界开集时, 必定存在 $\phi \in \SmoothComp(\R^n)$ 使得在 $K$ 上 $\phi \equiv 1$, 且在 $\R^n \setminus U$ 上 $\phi \equiv 0$.
+\end{example}
+
+配备可数半范数族 $\|\cdot\|_k$, $\Schwartz(\R^n)$ 成为一个 Fréchet 空间. 直接由定义可知, 如下映射均为连续映射:
+\begin{equation}\label{eq:2.7}
+    \begin{aligned}
+        x_j &\colon \Schwartz(\R^n) \to \Schwartz(\R^n), \qquad \phi \mapsto x_j \phi, \\
+        D_j &\colon \Schwartz(\R^n) \to \Schwartz(\R^n), \qquad \phi \mapsto D_j \phi.
+    \end{aligned}
+\end{equation}
+给定 $a \in \mathcal{C}_b^\infty(\R^n)$, 逐点乘以 $a$ 同样是连续的. 此外, 积分给出连续映射
+\begin{equation}\label{eq:2.8}
+    \int_{\R^n} \colon \Schwartz(\R^n) \to \mathbb{C}.
+\end{equation}
+事实上, 这直接遵循如下估计:
+\begin{equation}\label{eq:2.9}
+    \left| \int_{\R^n} \phi(x) \,\dd x \right| = \left| \int_{\R^n} \langle x \rangle^{-n-1} \langle x \rangle^{n+1} \phi(x) \,\dd x \right| \le C_n \|\phi\|_{n+1}.
+\end{equation}
+其他有用的运算包括逐点乘积
+\begin{equation}\label{eq:2.10}
+    \Schwartz(\R^n) \times \Schwartz(\R^n) \to \Schwartz(\R^n), \qquad (\phi, \psi) \mapsto \phi\psi, \qquad (\phi\psi)(x) = \phi(x)\psi(x),
+\end{equation}
+以及外积 (张量积)
+\begin{equation}\label{eq:2.11}
+    \Schwartz(\R^n) \times \Schwartz(\R^m) \to \Schwartz(\R^{n+m}), \qquad (\phi, \psi) \mapsto \phi \otimes \psi, \qquad (\phi \otimes \psi)(x, y) = \phi(x)\psi(y).
+\end{equation}
+
+\begin{definition}[缓增分布]\label{def:2.3}
+缓增分布空间 $\TempDistr(\R^n)$ 是 $\Schwartz(\R^n)$ 上所有连续线性泛函 $u \colon \Schwartz(\R^n) \to \mathbb{C}$ 构成的空间, 配备弱拓扑: 其半范数族由对 $\phi \in \Schwartz(\R^n)$ 的 $|u|_\phi \defeq |u(\phi)|$ 给出. 我们通常将作用记为 $\langle u, \phi \rangle \defeq u(\phi)$.
+\end{definition}
+
+\begin{example}[$\delta$-分布]\label{eg:2.4}
+Dirac $\delta$-分布定义为 $\langle \delta, \phi \rangle \defeq \phi(0)$. 我们有 $\delta \in \TempDistr(\R^n)$, 因为 $|\langle \delta, \phi \rangle| \le \|\phi\|_0$.
+\end{example}
+
+结合式~\eqref{eq:2.8} 与式~\eqref{eq:2.10}, 我们可以定义连续线性映射
+\begin{equation}\label{eq:2.12}
+    \Schwartz(\R^n) \ni \phi \mapsto T_\phi \in \TempDistr(\R^n), \qquad \langle T_\phi, \psi \rangle \defeq \int_{\R^n} \phi(x)\psi(x) \,\dd x.
+\end{equation}
+
+\begin{proposition}[函数作为分布]\label{prop:2.5}
+映射 $\phi \mapsto T_\phi$ 是单射, 且在弱拓扑下具有稠密的值域.
+\end{proposition}
+
+\begin{proof}
+关于单射性: $\langle T_\phi, \bar{\phi} \rangle = \int_{\R^n} |\phi(x)|^2 \,\dd x = 0$ 显然推出 $\phi = 0$.
+
+为了证明稠密性, 只需证明: 给定 $u \in \TempDistr(\R^n)$ 及 $\phi_1, \ldots, \phi_N \in \Schwartz(\R^n)$ 与任意 $\epsilon > 0$, 存在 $\phi \in \Schwartz(\R^n)$ 使得对所有 $j = 1, \ldots, N$ 均有 $|\langle u, \phi_j \rangle - \langle T_\phi, \phi_j \rangle| < \epsilon$. 在不妨假设 $\phi_j$ 关于 $L^2(\R^n)$ 内积正交归一的前提下, 取 $\phi = \sum_{j=1}^N \langle u, \phi_j \rangle \bar{\phi}_j$, 上述不等式甚至可以取等号成立 (即差为 $0$). 基于磨光子 (mollifier) 的更自然的解析证明见习题~\ref{ex:2.2}.
+\end{proof}
+
+现在, 一方面我们可以通过对偶性将映射~\eqref{eq:2.7} 延拓至 $\TempDistr(\R^n)$: 对于 $u \in \TempDistr(\R^n)$, 我们定义 $x_j u, D_j u \in \TempDistr(\R^n)$ 满足
+\begin{equation}\label{eq:2.13}
+    \langle x_j u, \phi \rangle \defeq \langle u, x_j \phi \rangle, \qquad \langle D_j u, \phi \rangle \defeq \langle u, -D_j \phi \rangle, \qquad \phi \in \Schwartz(\R^n).
+\end{equation}
+另一方面, 当 $u \in \Schwartz(\R^n)$ 时, 分部积分表明 $\langle T_{x_j u}, \phi \rangle = \langle T_u, x_j \phi \rangle$ 以及 $\langle T_{D_j u}, \phi \rangle = \langle T_u, -D_j \phi \rangle$. 换言之, 在 $\Schwartz(\R^n)$ 于 $\TempDistr(\R^n)$ 中的像上, 式~\eqref{eq:2.13} 的定义与 Schwartz 函数通常的乘法和微分完全吻合. 命题~\ref{prop:2.5} 的稠密性随即保证了式~\eqref{eq:2.13} 给出了乘法与微分从 $\Schwartz(\R^n)$ 到 $\TempDistr(\R^n)$ 的唯一连续延拓.
+
+类似地, 通过对偶性并由式~\eqref{eq:2.11} 出发, 逐点乘以一个 Schwartz 函数以唯一方式连续延拓为 $\TempDistr(\R^n)$ 上的连续映射; 更一般地, 对任意属于 $\mathcal{C}_b^\infty(\R^n)$ 的函数, 这一结论同样成立.
+
+下面引入在后续将大幅精细化的核心概念:
+
+\begin{definition}[分布的支集与奇异支集]\label{def:2.6}
+设 $u \in \TempDistr(\R^n)$.
+\begin{enumerate}
+    \item $u$ 的\textbf{支集} $\supp u \subset \R^n$ 定义为如下点集之补集: 所有满足存在 $\chi \in \SmoothComp(\R^n)$ 使得 $\chi(x) \neq 0$ 且 $\chi u = 0$ 的点 $x \in \R^n$ 之集.
+    \item $u$ 的\textbf{奇异支集} $\singsupp u \subset \R^n$ 定义为如下点集之补集: 所有满足存在 $\chi \in \SmoothComp(\R^n)$ 使得 $\chi(x) \neq 0$ 且 $\chi u$ 光滑 (即 $\chi u = T_\phi$, $\phi \in \Schwartz(\R^n)$) 的点 $x \in \R^n$ 之集.
+\end{enumerate}
+\end{definition}
+
+\begin{example}[支集与奇异支集]\label{eg:2.7}
+显然 $\supp \delta = \singsupp \delta = \{0\}$. 对于 $u = \delta + \ee^{-|x|^2}$ 以及 $u = |x|^\alpha \in \TempDistr(\R^n)$ ($\alpha > -n, \alpha \notin \N_0$), 我们有 $\supp u = \R^n$, 但 $\singsupp u = \{0\}$.
+\end{example}
+
+从现在开始, 我们将简化记号, 约定将分布 $T_\phi$ 直接记为 $\phi$.
+
+\section{Fourier 变换及其逆}\label{sec:2.2}
+\index{Fourier bianhuan@Fourier 变换 (Fourier transform)}%
+\index{Plancherel dingli@Plancherel 定理 (Plancherel's theorem)}%
+
+对 $\phi \in \Schwartz(\R^n)$, 我们定义其 Fourier 变换为
+\begin{equation}\label{eq:2.14}
+    (\mathcal{F} \phi)(\xi) = \hat{\phi}(\xi) \defeq \int_{\R^n} \ee^{-\ii x \cdot \xi} \phi(x) \,\dd x, \qquad \xi \in \R^n,
+\end{equation}
+对 $\psi \in \Schwartz(\R^n)$, 定义其逆 Fourier 变换为
+\begin{equation}\label{eq:2.15}
+    (\mathcal{F}^{-1} \psi)(x) \defeq (2\pi)^{-n} \int_{\R^n} \ee^{\ii x \cdot \xi} \psi(\xi) \,\dd\xi, \qquad x \in \R^n.
+\end{equation}
+如同式~\eqref{eq:2.9}, 容易发现 $\|\mathcal{F} \phi\|_0 \le C_n \|\phi\|_{n+1}$ 以及 $\|\mathcal{F}^{-1} \phi\|_0 \le C_n \|\phi\|_{n+1}$. 此外, 借助分部积分直接计算可知:
+\begin{equation}\label{eq:2.16}
+    \begin{aligned}
+        \mathcal{F}(D_{x_j} \phi) &= \xi_j \mathcal{F} \phi, &\qquad \mathcal{F}(x_j \phi) &= -D_{\xi_j} \mathcal{F} \phi, \\
+        \mathcal{F}^{-1}(D_{\xi_j} \phi) &= -x_j \mathcal{F}^{-1} \phi, &\qquad \mathcal{F}^{-1}(\xi_j \phi) &= D_{x_j} \mathcal{F}^{-1} \phi.
+    \end{aligned}
+\end{equation}
+从右往左阅读这些等式表明, 对任意 $k \in \N_0$, 均存在常数 $C_n$ 使得
+\begin{equation}\label{eq:2.17}
+    \|\mathcal{F} \phi\|_k \le C_n \|\phi\|_{k+n+1},
+\end{equation}
+对于 $\mathcal{F}^{-1}$ 亦完全相同. 从而 (逆) Fourier 变换保持 Schwartz 空间不变:
+\begin{equation}\label{eq:2.18}
+    \mathcal{F}, \mathcal{F}^{-1} \colon \Schwartz(\R^n) \to \Schwartz(\R^n).
+\end{equation}
+进一步注意到, 对于 $u, \psi \in \Schwartz(\R^n)$, 由 Fubini 定理可得
+\begin{equation}\label{eq:2.19}
+    \int_{\R^n} (\mathcal{F} u)(\xi) \psi(\xi) \,\dd\xi = \iint_{\R^n \times \R^n} \ee^{-\ii x \cdot \xi} u(x) \psi(\xi) \,\dd x \,\dd\xi = \int_{\R^n} u(x) (\mathcal{F} \psi)(x) \,\dd x,
+\end{equation}
+即 $\langle \mathcal{F} u, \psi \rangle = \langle u, \mathcal{F} \psi \rangle$. 这允许我们通过对偶性将 $\mathcal{F}, \mathcal{F}^{-1}$ 延拓至缓增分布空间:
+\begin{equation}\label{eq:2.20}
+    \mathcal{F}, \mathcal{F}^{-1} \colon \TempDistr(\R^n) \to \TempDistr(\R^n),
+\end{equation}
+且对偶等式~\eqref{eq:2.16} 对所有 $\phi \in \TempDistr(\R^n)$ 依然成立.
+
+我们回顾 $\mathcal{F}$ 与 $\mathcal{F}^{-1}$ 互为逆映射的经典证明:
+
+\begin{theorem}[Fourier 变换及其逆]\label{thm:2.8}
+在 $\Schwartz(\R^n)$ 与 $\TempDistr(\R^n)$ 上, 均有
+\[
+    \mathcal{F} \circ \mathcal{F}^{-1} = \mathcal{F}^{-1} \circ \mathcal{F} = I.
+\]
+\end{theorem}
+
+\begin{proof}
+令 $A \defeq \mathcal{F}^{-1} \mathcal{F} \colon \Schwartz(\R^n) \to \Schwartz(\R^n)$. 由式~\eqref{eq:2.16} 可知,
+\[
+    A D_{x_j} = \mathcal{F}^{-1} \xi_j \mathcal{F} = D_{x_j} A, \qquad A x_j = \mathcal{F}^{-1} (-D_{\xi_j}) \mathcal{F} = x_j A,
+\]
+即算子 $A$ 与所有对 $x_j$ 的微分以及乘以 $x_j$ 的乘法均对易. 给定 $\phi \in \Schwartz(\R^n)$ 与 $x_0 \in \R^n$, 由微积分基本定理可写
+\begin{equation}\label{eq:2.21}
+    \phi(x) = \phi(x_0) + \sum_{j=1}^n \phi_j(x) (x_j - (x_0)_j), \qquad \phi_j(x) \defeq \int_0^1 (\partial_j \phi)(x_0 + t(x - x_0)) \,\dd t.
+\end{equation}
+由于 $\phi_j$ 一般不再属于 Schwartz 空间, 我们选取一个在 $x_0$ 附近恒为 $1$ 的切断函数 $\chi \in \SmoothComp(\R^n)$, 并分解 $\phi(x) = \chi(x) \phi(x) + (1 - \chi(x)) \phi(x)$, 从而
+\begin{equation}\label{eq:2.22}
+    \phi(x) = \chi(x) \phi(x_0) + \sum_{j=1}^n \tilde{\phi}_j(x) (x_j - (x_0)_j), \qquad \tilde{\phi}_j(x) \defeq \chi(x) \phi_j(x) + (1 - \chi(x)) \phi(x) \frac{x_j - (x_0)_j}{|x - x_0|^2}.
+\end{equation}
+由于 $\tilde{\phi}_j \in \Schwartz(\R^n)$, 且 $A$ 与乘以 $(x_j - (x_0)_j)$ 对易, 故
+\[
+    \left( A\bigl(\tilde{\phi}_j(\cdot)(\cdot_j - (x_0)_j)\bigr) \right)(x_0) = \left. \left( (x_j - (x_0)_j) (A \tilde{\phi}_j)(x) \right) \right|_{x = x_0} = 0.
+\]
+因此
+\begin{equation}\label{eq:2.23}
+    (A \phi)(x_0) = \phi(x_0) (A \chi)(x_0).
+\end{equation}
+注意到这里的常数 $(A \chi)(x_0)$ 与 $\phi$ 无关, 且与 $\chi$ 的具体选取亦无关 (因为左端项完全不含 $\chi$).
+
+进一步, 相同的切断函数 $\chi$ 可以用来计算靠近 $x_0$ 的所有点 $x$ 处的 $(A \phi)(x)$; 但在 $\chi^{-1}(1)$ 的内部,
+\begin{equation}\label{eq:2.24}
+    D_{x_j} (A \chi)(x) = A(D_{x_j} \chi)(x) = 0,
+\end{equation}
+其中使用了式~\eqref{eq:2.23} (作用于 $D_{x_j} \chi$). 由此断定必存在某个常数 $c \in \mathbb{C}$ 使得 $A = c I$. 通过显式计算高斯积分
+\begin{equation}\label{eq:2.25}
+    \mathcal{F}(\ee^{-|x|^2})(\xi) = \pi^{n/2} \ee^{-|\xi|^2/4}, \qquad \mathcal{F}^{-1}(\ee^{-|\xi|^2/4})(x) = \pi^{-n/2} \ee^{-|x|^2},
+\end{equation}
+立即验证 $c = 1$. 证明 $\mathcal{F} \mathcal{F}^{-1} = I$ 完全同理.
+\end{proof}
+
+\begin{example}[若干常用 Fourier 变换]\label{eg:2.9}
+\begin{enumerate}
+    \item 我们有 $\langle \mathcal{F} \delta, \psi \rangle = \langle \delta, \mathcal{F} \psi \rangle = \hat{\psi}(0) = \int_{\R^n} \psi(x) \,\dd x = \langle 1, \psi \rangle$, 故 $\mathcal{F} \delta = 1$.
+    \item 由 $\mathcal{F}^{-1} 1 = \delta$ 直接得到 $\mathcal{F} 1 = (2\pi)^n \delta$; 亦可通过 $\langle \mathcal{F} 1, \psi \rangle = \langle 1, \hat{\psi} \rangle = \int_{\R^n} \hat{\psi}(\xi) \,\dd\xi = (2\pi)^n \psi(0)$ 直接验证.
+\end{enumerate}
+\end{example}
+
+缓增分布的 Fourier 变换通常仍只是缓增分布, 但具有紧支集的分布的 Fourier 变换则具有远为优越的正则性.
+
+\begin{definition}[紧支分布空间]\label{def:2.10}
+我们定义
+\begin{equation}\label{eq:2.26}
+    \mathscr{E}'(\R^n) \defeq \{u \in \TempDistr(\R^n) : \supp u \text{ 是紧集}\}.
+\end{equation}
+\end{definition}
+
+\begin{proposition}[紧支分布的 Fourier 变换]\label{prop:2.11}
+设 $u \in \mathscr{E}'(\R^n)$. 则 $\hat{u} \in \TempDistr(\R^n) \cap \Smooth(\R^n)$. 此外, 存在非负整数 $N$, 使得对任意多重指标 $\alpha \in \N_0^n$, 均存在常数 $C_\alpha$ 使得
+\begin{equation}\label{eq:2.27}
+    |\partial_\xi^\alpha \hat{u}(\xi)| \le C_\alpha \langle \xi \rangle^N, \qquad \xi \in \R^n.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+固定切断函数 $\chi \in \SmoothComp(\R^n)$ 使得在 $\supp u$ 的某个邻域内 $\chi \equiv 1$. 定义
+\begin{equation}\label{eq:2.28}
+    v(\xi) \defeq \langle u, \chi \ee^{-\ii \xi \cdot (\cdot)} \rangle, \qquad \xi \in \R^n.
+\end{equation}
+映射 $\R^n \ni \xi \mapsto \chi \ee^{-\ii \xi \cdot (\cdot)} \in \Schwartz(\R^n)$ 是光滑映射; 其在 $\xi \in \R^n$ 处沿 $\partial_\xi^\alpha$ 的导数等于 Schwartz 函数 $\phi_{\xi, \alpha}(x) \defeq (-\ii x)^\alpha \chi(x) \ee^{-\ii \xi \cdot x}$. 因此 $v \in \Smooth(\R^n)$. 由泛函 $u$ 的连续性知存在 $N \in \N_0$ 与常数 $C$, 使得
+\begin{equation}\label{eq:2.29}
+    |\partial_\xi^\alpha v(\xi)| = |\langle u, \phi_{\xi, \alpha} \rangle| \le C \|\phi_{\xi, \alpha}\|_N \le C_\alpha \langle \xi \rangle^N.
+\end{equation}
+因此 $v \in \Smooth(\R^n)$ 具有多项式增长, 从而 $v \in \TempDistr(\R^n)$. 若取检验函数 $\phi \in \Schwartz(\R^n)$, 我们可计算
+\begin{equation}\label{eq:2.30}
+    \langle v, \phi \rangle = \int_{\R^n} \langle u, \chi \ee^{-\ii \xi \cdot (\cdot)} \rangle \phi(\xi) \,\dd\xi = \langle u, \chi \hat{\phi} \rangle = \langle \chi u, \hat{\phi} \rangle = \langle u, \hat{\phi} \rangle = \langle \hat{u}, \phi \rangle;
+\end{equation}
+其中第二个等号利用了 Riemann 和在 $\Schwartz(\R^n)$ 中的收敛性. 因此 $\hat{u} = v$. 更强的结论见习题~\ref{ex:2.4}.
+\end{proof}
+
+最后回顾, $\mathcal{F}$ 在 $L^2(\R^n)$ 上构成拓扑同构; 这直接遵循 $\Schwartz(\R^n)$ 在 $L^2(\R^n)$ 中的稠密性以及著名的 Plancherel 定理:
+
+\begin{proposition}[Plancherel 定理]\label{prop:2.12}
+对任意 $\phi \in \Schwartz(\R^n)$, 均有
+\begin{equation}\label{eq:2.31}
+    \|\mathcal{F} \phi\|_{L^2(\R^n)} = (2\pi)^{n/2} \|\phi\|_{L^2(\R^n)}, \qquad \|\phi\|_{L^2(\R^n)} \defeq \left( \int_{\R^n} |\phi(x)|^2 \,\dd x \right)^{1/2}.
+\end{equation}
+更一般地, 对任意 $\phi, \psi \in \Schwartz(\R^n)$, 均有 $\langle \mathcal{F} \phi, \mathcal{F} \psi \rangle_{L^2(\R^n)} = (2\pi)^n \langle \phi, \psi \rangle_{L^2(\R^n)}$.
+\end{proposition}
+
+\begin{proof}
+与式~\eqref{eq:2.19} 类似, 我们有
+\begin{equation}\label{eq:2.32}
+    \int_{\R^n} (\mathcal{F} \phi)(\xi) \overline{\psi(\xi)} \,\dd\xi = (2\pi)^n \int_{\R^n} \phi(x) \overline{\mathcal{F}^{-1} \psi(x)} \,\dd x, \qquad \phi, \psi \in \Schwartz(\R^n).
+\end{equation}
+代入 $\psi = \mathcal{F} \phi$ 并结合反演公式即证得式~\eqref{eq:2.31}.
+\end{proof}
+
+在本书的语境中, 读者完全可以直接将 $L^2(\R^n)$ 定义为 $\Schwartz(\R^n)$ 在 $L^2$-范数下的抽象完备化空间, 从而避开测度论的繁琐细节. 由于嵌入映射 $\Schwartz(\R^n) \ni \phi \mapsto T_\phi \in \TempDistr(\R^n)$ 在 $L^2$-范数下是连续的, 我们可以自然地将 $L^2(\R^n)$ 视作 $\TempDistr(\R^n)$ 的连续嵌入子空间. (在此注意, 若 $\phi_j \in \Schwartz(\R^n)$ 满足 $\|\phi_j\|_{L^2} \to 0$, 则对任意 $\phi \in \Schwartz(\R^n)$, 由 Cauchy--Schwarz 不等式 $|\int \phi_j \phi| \le \|\phi_j\|_{L^2} \|\phi\|_{L^2} \to 0$; 这严格说明映射 $L^2(\R^n) \ni \phi \mapsto T_\phi \in \TempDistr(\R^n)$ 是单射.)
+
+\section{Sobolev 空间与 Schwartz 表示定理}\label{sec:2.3}
+\index{Sobolev kongjian@Sobolev 空间 (Sobolev space)}%
+\index{Rellich jinxing dingli@Rellich 紧性定理 (Rellich compactness theorem)}%
+\index{Schwartz biaoshi dingli@Schwartz 表示定理 (Schwartz representation theorem)}%
+
+借助 Fourier 变换, 我们可以定义``分数次求导''的算子:
+
+\begin{definition}[$\R^n$ 上的分数阶微分算子]\label{def:2.13}
+对于 $s \in \R$ (或 $s \in \mathbb{C}$), 我们定义算子
+\begin{equation}\label{eq:2.33}
+    \langle D \rangle^s \colon \TempDistr(\R^n) \to \TempDistr(\R^n), \qquad \langle D \rangle^s \defeq \mathcal{F}^{-1} \langle \xi \rangle^s \mathcal{F}.
+\end{equation}
+\end{definition}
+
+当 $s = 2k$ ($k \in \N_0$) 时, 该算子恰好与 $(\Delta + 1)^k$ 重合; 当 $s = -2$ 时, 它与第~\ref{sec:1.2}~节中的求逆算子~\eqref{eq:1.10} 重合. 在式~\eqref{eq:2.33} 中, 乘子 $\langle \xi \rangle^s = (1 + |\xi|^2)^{s/2}$ 在 $\Schwartz(\R^n)$ 上是连续乘法运算, 从而在 $\TempDistr(\R^n)$ 上连续. 式~\eqref{eq:2.33} 属于更广泛算子类 $f(D) \defeq \mathcal{F}^{-1} f(\xi) \mathcal{F} \colon \TempDistr(\R^n) \to \TempDistr(\R^n)$ 的特例 (其中 $f \colon \R^n \to \mathbb{C}$ 各阶导数均具多项式增长; 例如对于 $f(\xi) = \sum_{|\alpha| \le m} f_\alpha \xi^\alpha$, 显然有 $f(D) = \sum_{|\alpha| \le m} f_\alpha D^\alpha$).
+
+\begin{definition}[$\R^n$ 上的 Sobolev 空间]\label{def:2.14}
+对于 $s \in \R$, $\R^n$ 上 $s$ 阶的 Sobolev 空间定义为
+\begin{equation}\label{eq:2.34}
+    H^s(\R^n) \defeq \left\{ u \in \TempDistr(\R^n) : \langle D \rangle^s u \in L^2(\R^n) \right\}.
+\end{equation}
+配备内积诱导的范数
+\begin{equation}\label{eq:2.35}
+    \|u\|_{H^s(\R^n)} \defeq \|\langle D \rangle^s u\|_{L^2} = (2\pi)^{-n/2} \|\langle \xi \rangle^s \mathcal{F} u\|_{L^2},
+\end{equation}
+$H^s(\R^n)$ 构成一个 Hilbert 空间.
+\end{definition}
+
+\begin{example}[$\delta$-分布与 Sobolev 空间]\label{eg:2.15}
+原点处的 Dirac $\delta$-分布满足: $\delta \in H^s(\R^n) \iff s < -n/2$. 事实上, 由于 $\mathcal{F} \delta = 1$, $\|\langle \xi \rangle^s \mathcal{F} \delta\|_{L^2}^2 = \int_{\R^n} (1 + |\xi|^2)^s \,\dd\xi$, 积分收敛当且仅当 $2s < -n$.
+\end{example}
+
+若 $s > s'$, 则显然有连续包含关系 $H^s(\R^n) \subset H^{s'}(\R^n)$, 因为 $\langle \xi \rangle^{s'} = \langle \xi \rangle^s \langle \xi \rangle^{s' - s}$ 且指数 $s' - s < 0$ 保证了 $\langle \xi \rangle^{s'-s}$ 为有界函数. 对于整数阶 $s = k \in \N_0$, $H^k(\R^n)$ 恰好等于所有直至 $k$ 阶弱导数均属于 $L^2(\R^n)$ 的分布构成的空间 (习题~\ref{ex:2.7}).
+
+在分析中, 相比于 $H^s$-内积 $\langle u, v \rangle_{H^s} = \langle \langle D \rangle^s u, \langle D \rangle^s v \rangle_{L^2}$, $L^2$-内积往往更有用, 特别是由于它在定义微分算子与伪微分算子的伴随算子时所扮演的特殊角色 (命题~\ref{prop:3.3}). $H^s(\R^n)$-内积与 $L^2$-内积之间的相互作用如下.
+
+\begin{lemma}[$H^s(\R^n)$ 的 $L^2$-对偶空间]\label{lemma:2.16}
+半双线性配对
+\begin{equation}\label{eq:2.36}
+    \Schwartz(\R^n) \times \Schwartz(\R^n) \ni (u, v) \mapsto \langle u, v \rangle_{L^2(\R^n)} = \int_{\R^n} u(x) \overline{v(x)} \,\dd x \in \mathbb{C}
+\end{equation}
+以唯一方式延拓为连续的半双线性配对
+\begin{equation}\label{eq:2.37}
+    H^{-s}(\R^n) \times H^s(\R^n) \to \mathbb{C}.
+\end{equation}
+映射 $H^s(\R^n) \ni v \mapsto \langle \cdot, v \rangle_{L^2(\R^n)} \in (H^{-s}(\R^n))^*$ 是反线性拓扑同构.
+\end{lemma}
+
+\begin{proof}
+对 $u, v \in \Schwartz(\R^n)$, Plancherel 定理表明
+\begin{equation}\label{eq:2.38}
+    \langle u, v \rangle_{L^2} = \langle \langle D \rangle^{-s} u, \langle D \rangle^s v \rangle_{L^2}.
+\end{equation}
+右端项对于 $u \in H^{-s}(\R^n)$ 及 $v \in H^s(\R^n)$ 良定义且连续. 结论由 Hilbert 空间 Riesz 表示定理立即得出.
+\end{proof}
+
+我们回顾如下重要事实:
+
+\begin{theorem}[Rellich 紧性定理]\label{thm:2.17}
+对于 $s \in \R$ 及紧子集 $K \subset \R^n$, 记
+\begin{equation}\label{eq:2.39}
+    \dot{H}^s(K) \defeq \left\{ u \in H^s(\R^n) : \supp u \subset K \right\}.
+\end{equation}
+若 $s > s'$, 则包含映射 $\dot{H}^s(K) \hookrightarrow \dot{H}^{s'}(K)$ 是紧算子.
+\end{theorem}
+
+标准证明方法是将包含 $K$ 的大立方体折叠为环面, 然后利用 Fourier 级数 (习题~\ref{ex:5.13}). 在此我们给出完全立足于 $\R^n$ 的直接解析证明.
+
+\begin{proof}[定理~\ref{thm:2.17} 的证明]
+设 $u_j \in \dot{H}^s(K)$ ($j \in \N$) 为有界序列; 经归一化不妨假设对所有 $j$ 均有 $\|u_j\|_{H^s} \le 1$. 由于 $H^s(\R^n)$ 是可分 Hilbert 空间, 由 Banach--Alaoglu 定理, 可抽取弱收敛子序列 (仍记为 $u_j$), 弱收敛于某个 $u \in H^s(\R^n)$, 即对任意 $w \in H^s(\R^n)$,
+\begin{equation}\label{eq:2.40}
+    \langle u_j, w \rangle_{H^s} = \langle \langle D \rangle^s u_j, \langle D \rangle^s w \rangle_{L^2} \to \langle u, w \rangle_{H^s};
+\end{equation}
+且 $\|u\|_{H^s} \le 1$. 取 $w \defeq \langle D \rangle^{-2s} \phi$ ($\phi \in \Schwartz(\R^n)$), 可知 $u_j \to u$ 在 $\TempDistr(\R^n)$ 中弱收敛. 因此存在 $C > 0$ 与 $N \in \N_0$ 使得
+\begin{equation}\label{eq:2.41}
+    |\langle u_j, \phi \rangle| \le C \|\phi\|_N, \qquad \forall\,\phi \in \Schwartz(\R^n).
+\end{equation}
+此外, 对于满足 $\supp \phi \cap K = \emptyset$ 的 $\phi \in \Schwartz(\R^n)$, 显然 $\langle u_j, \phi \rangle = 0$, 故 $\langle u, \phi \rangle = 0$. 于是 $u \in \dot{H}^s(K)$.
+
+我们断言 $u_j \to u$ 在 $H^{s'}(\R^n)$ 中强收敛. 任给 $\epsilon > 0$. 对于充分大的频域半径 $R > 0$, 利用高频衰减因子 $\langle \xi \rangle^{2(s'-s)} \le \langle R \rangle^{-2(s-s')}$, 有
+\begin{equation}\label{eq:2.42}
+    \int_{|\xi| \ge R} \langle \xi \rangle^{2s'} |\hat{u}_j(\xi) - \hat{u}(\xi)|^2 \,\dd\xi \le 2 \langle R \rangle^{-2(s-s')} \int_{|\xi| \ge R} \langle \xi \rangle^{2s} \left( |\hat{u}_j(\xi)|^2 + |\hat{u}(\xi)|^2 \right) \,\dd\xi \le 4 \langle R \rangle^{-2(s-s')} < \frac{\epsilon}{2}.
+\end{equation}
+为了控制低频部分 $|\xi| \le R$ 内的差 $|\hat{u}_j(\xi) - \hat{u}(\xi)|$, 必须利用 $u_j$ 具有紧支集的性质. 固定切断函数 $\chi \in \SmoothComp(\R^n)$ 使得在 $K$ 的邻域上 $\chi \equiv 1$. 命题~\ref{prop:2.11} 的证明表明 $\hat{u}_j \in \TempDistr(\R^n) \cap \Smooth(\R^n)$ 且
+\begin{equation}\label{eq:2.43}
+    \hat{u}_j(\xi) = \langle u_j, \chi \ee^{-\ii \xi \cdot (\cdot)} \rangle, \qquad \xi \in \R^n.
+\end{equation}
+令 $B \defeq \{\xi \in \R^n : |\xi| \le R\}$. 映射 $\xi \mapsto \chi \ee^{-\ii \xi \cdot (\cdot)} \in \Schwartz(\R^n)$ 的光滑性与一致估计~\eqref{eq:2.41} 保证了对任意阶数 $k$,
+\begin{equation}\label{eq:2.44}
+    \sup_{j \in \N} \|\hat{u}_j\|_{\mathcal{C}^k(B)} < \infty.
+\end{equation}
+我们仅使用 $k = 1$ 的情形. 由 Arzelà--Ascoli 定理可知序列 $\hat{u}_j|_B$ 存在子序列在 $\mathcal{C}^0(B)$ 中一致收敛. 但对每个 $\xi \in B$, 极限必等于 $\lim_{j\to\infty} \langle u_j, \chi \ee^{-\ii \xi \cdot (\cdot)} \rangle = \langle u, \chi \ee^{-\ii \xi \cdot (\cdot)} \rangle = \hat{u}(\xi)$. 因此整个序列均有一致收敛 $\hat{u}_j|_B \to \hat{u}|_B$. 于是存在 $j_0 \in \N$ 使得当 $j \ge j_0$ 时,
+\begin{equation}\label{eq:2.45}
+    \int_{|\xi| \le R} \langle \xi \rangle^{2s'} |\hat{u}_j(\xi) - \hat{u}(\xi)|^2 \,\dd\xi \le C_R \int_B |\hat{u}_j(\xi) - \hat{u}(\xi)|^2 \,\dd\xi < \frac{\epsilon}{2}.
+\end{equation}
+结合式~\eqref{eq:2.42} 与式~\eqref{eq:2.45}, 即得当 $j \ge j_0$ 时 $\|u_j - u\|_{H^{s'}}^2 < \epsilon$.
+\end{proof}
+
+对任意 $r \in \R$, 乘以空间权重 $\langle x \rangle^r$ 是 $\TempDistr(\R^n)$ 上的同构. 我们定义\textbf{加权 Sobolev 空间}:
+\begin{equation}\label{eq:2.46}
+    \langle x \rangle^r H^s(\R^n) \defeq \left\{ u \in \TempDistr(\R^n) : \langle x \rangle^{-r} u \in H^s(\R^n) \right\},
+\end{equation}
+其范数平方为
+\begin{equation}\label{eq:2.47}
+    \|u\|_{\langle x \rangle^r H^s(\R^n)}^2 \defeq \|\langle x \rangle^{-r} u\|_{H^s(\R^n)}^2.
+\end{equation}
+$L^2$-配对式~\eqref{eq:2.36} 诱导拓扑同构 $\langle x \rangle^r H^s(\R^n) \cong (\langle x \rangle^{-r} H^{-s}(\R^n))^*$.
+
+Schwartz 空间与缓增分布空间可以用加权 Sobolev 空间完整刻画:
+
+\begin{theorem}[Schwartz 表示定理]\label{thm:2.18}
+我们有
+\begin{equation}\label{eq:2.48}
+    \Schwartz(\R^n) = \bigcap_{s, r \in \R} \langle x \rangle^r H^s(\R^n), \qquad \TempDistr(\R^n) = \bigcup_{s, r \in \R} \langle x \rangle^r H^s(\R^n).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+见习题~\ref{ex:2.8} 与习题~\ref{ex:2.16}.
+\end{proof}
+
+由 Sobolev 嵌入定理 (习题~\ref{ex:2.8}) 可以立即推出: 每一个缓增分布都可以表示为形如 $x^\alpha D^\beta a$ ($a \in \mathcal{C}_b^0(\R^n)$) 的分布的有限和.
+
+在 $\Schwartz(\R^n)$ 与 $\TempDistr(\R^n)$ 之间, 两个极其有用的中间空间是
+\begin{equation*}
+    H^\infty(\R^n) \defeq \bigcap_{s \in \R} H^s(\R^n), \qquad H^{-\infty}(\R^n) \defeq \bigcup_{s \in \R} H^s(\R^n).
+\end{equation*}
+
+\section{Schwartz 核定理}\label{sec:2.4}
+\index{Schwartz he dingli@Schwartz 核定理 (Schwartz kernel theorem)}%
+
+Schwartz 核定理是一项在哲学上有用的事实: 它建立了当前语境下``最一般的''算子 $K$——即将 Schwartz 函数映为缓增分布的算子——与分布积分核 $O_K$ (亦称为 Schwartz 核) 之间的一一对应. 为陈述此定理, 我们注意到任意分布 $K \in \TempDistr(\R^{n+m})$ 均可通过沿 $\R^m$ 因子的积分, 诱导一个有界线性算子 $O_K \colon \Schwartz(\R^m) \to \TempDistr(\R^n)$:
+\begin{equation}\label{eq:2.49}
+    (O_K \phi)(\psi) \defeq \langle K, \psi \otimes \phi \rangle, \qquad \phi \in \Schwartz(\R^m), \quad \psi \in \Schwartz(\R^n).
+\end{equation}
+在形式上, 人们常写为
+\begin{equation}\label{eq:2.50}
+    (O_K \phi)(x) = \int_{\R^m} K(x, y) \phi(y) \,\dd y,
+\end{equation}
+此时式~\eqref{eq:2.49} 正式对应于 $(O_K \phi)(\psi) = \int_{\R^n} \left( \int_{\R^m} K(x, y) \phi(y) \,\dd y \right) \psi(x) \,\dd x$.
+
+\begin{theorem}[Schwartz 核定理: 欧氏空间情形]\label{thm:2.19}
+映射 $K \mapsto O_K$ 是 $\TempDistr(\R^{n+m})$ 与连续线性算子空间 $\mathcal{L}(\Schwartz(\R^m), \TempDistr(\R^n))$ 之间的双射.
+\end{theorem}
+
+\begin{proof}
+单射性证明见习题~\ref{ex:2.17}, 满射性证明见习题~\ref{ex:2.18}.
+\end{proof}
+
+\begin{example}[恒等算子 $I$ 的 Schwartz 核]\label{eg:2.20}
+恒等算子 $I \colon \Schwartz(\R^n) \to \Schwartz(\R^n)$ 复合包含映射 $\Schwartz(\R^n) \hookrightarrow \TempDistr(\R^n)$ 的 Schwartz 核由下式给出:
+\begin{equation}\label{eq:2.51}
+    K(x, y) = \delta(x - y), \qquad x, y \in \R^n.
+\end{equation}
+\end{example}
+
+\section{微分算子}\label{sec:2.5}
+\index{weifen suanzi@微分算子 (differential operator)}%
+\index{quanfuhao@全符号 (full symbol)}%
+\index{jibulvxing@拟局部性 (pseudolocality)}%
+
+给定 $a_\alpha \in \mathcal{C}_b^\infty(\R^n)$ ($\alpha \in \N_0^n, |\alpha| \le m$), 我们可以定义 $m$ 阶微分算子
+\begin{equation}\label{eq:2.52}
+    A = \sum_{|\alpha| \le m} a_\alpha(x) D^\alpha.
+\end{equation}
+由于逐点乘以 $a_\alpha$ 在 $\Schwartz(\R^n)$ 上是连续的, $A$ 定义了 $\Schwartz(\R^n)$ 上的连续线性算子. 进一步, $A$ 以唯一方式延拓为 $\TempDistr(\R^n)$ 上的连续线性算子.
+
+\begin{definition}[微分算子空间]\label{def:2.21}
+我们用 $\Diff^m(\R^n)$ 表示所有形如 $A = \sum_{|\alpha| \le m} a_\alpha(x) D^\alpha$ ($a_\alpha \in \mathcal{C}_b^\infty(\R^n)$) 的算子构成的空间.
+\end{definition}
+
+乘以 $\mathcal{C}_b^\infty(\R^n)$ 中的元素在所有 $s \in \R$ 对应的 Sobolev 空间 $H^s(\R^n)$ 上均定义了有界线性映射. 当 $s \in \N_0$ 时, 这可通过逐项求导直接证明; 对于一般的 $s \in \R$, 这构成了伪微分算子映射性质的特例 (推论~\ref{cor:4.38}). 初等证明见习题~\ref{ex:2.11} (亦可通过对偶与复插值方法证明, 参见 Taylor~\cite[第 4.2 章]{Tay11a}). 因此, 每一个微分算子 $A \in \Diff^m(\R^n)$ 均定义了连续线性映射:
+\[
+    A \colon H^s(\R^n) \to H^{s-m}(\R^n), \qquad \forall\,s \in \R.
+\]
+
+给定形如式~\eqref{eq:2.52} 的算子 $A$, 我们定义 $A$ 的\textbf{全符号} (full symbol) 为
+\begin{equation}\label{eq:2.53}
+    \sigma(A)(x, \xi) \defeq a(x, \xi) \defeq \sum_{|\alpha| \le m} a_\alpha(x) \xi^\alpha.
+\end{equation}
+根据式~\eqref{eq:2.16}, 我们可以将 $A$ 的作用写为
+\begin{equation}\label{eq:2.54}
+    \begin{aligned}
+        (A u)(x) &= (2\pi)^{-n} \int_{\R^n} \ee^{\ii x \cdot \xi} a(x, \xi) \hat{u}(\xi) \,\dd\xi \\
+        &= (2\pi)^{-n} \iint_{\R^n \times \R^n} \ee^{\ii (x-y) \cdot \xi} a(x, \xi) u(y) \,\dd y \,\dd\xi,
+    \end{aligned}
+\end{equation}
+这里的重积分理解为累次积分. 另一方面, 算子 $A$ 的 Schwartz 核 $K$ 可以通过对恒等算子的 Schwartz 核 (见例~\ref{eg:2.20}) 作用 $\sum_{|\alpha| \le m} a_\alpha(x) D_x^\alpha$ 得到, 即
+\begin{equation}\label{eq:2.55}
+    K(x, y) = \sum_{|\alpha| \le m} a_\alpha(x) (D^\alpha \delta)(x - y).
+\end{equation}
+将其与式~\eqref{eq:2.54} 相对比, 形式上有
+\begin{equation}\label{eq:2.56}
+    K(x, y) = (2\pi)^{-n} \int_{\R^n} \ee^{\ii (x-y) \cdot \xi} a(x, \xi) \,\dd\xi.
+\end{equation}
+若将此式理解为 $a$ 关于 $\xi$ 变量的逆 Fourier 变换, 则该式在分布意义下完全严格成立.
+
+公式~\eqref{eq:2.54} 将成为第~\ref{ch:04}~章中在 $\R^n$ 上建立伪微分算子理论的核心出发点.
+
+\begin{proposition}[微分算子的局部性与拟局部性]\label{prop:2.22}
+设 $A \in \Diff^m(\R^n)$. 则 $A$ 是\textbf{局部的} (local), 即
+\begin{equation}\label{eq:2.57}
+    \supp A u \subset \supp u, \qquad u \in \TempDistr(\R^n);
+\end{equation}
+且 $A$ 是\textbf{拟局部的} (pseudolocal), 即
+\begin{equation}\label{eq:2.58}
+    \singsupp A u \subset \singsupp u, \qquad u \in \TempDistr(\R^n).
+\end{equation}
+\end{proposition}
+
+证明是直接的. 从 $A$ 的 Schwartz 核 $K$ 的几何视角来看, 性质~\eqref{eq:2.57} 源于 $K(x, y)$ 的支集完全集中在对角线 $x = y$ 上; 而性质~\eqref{eq:2.58} 则源于 $K(x, y)$ 在对角线 $x = y$ 的外部是完全光滑的 (见习题~\ref{ex:2.21}). 换言之, 在 $K$ 上添加一个 $\Schwartz(\R^{2n})$ 的光滑核元素会破坏局部性~\eqref{eq:2.57}, 但保持拟局部性~\eqref{eq:2.58}. 由于在本书中我们主要关心的是奇性, 因此性质~\eqref{eq:2.58} 才是我们最关心的; 而当 $A$ 是伪微分算子时, 这一性质依然保持. 另一方面, 连续线性算子 $A \colon \Schwartz(\R^n) \to \Schwartz(\R^n)$ 中唯一满足局部性条件~\eqref{eq:2.57} 的算子恰恰只有微分算子 (Peetre 定理, 习题~\ref{ex:2.22}).
+
+\section{半经典设定}\label{sec:2.6}
+\index{banjingdian weifen suanzi@半经典微分算子 (semiclassical differential operator)}%
+\index{banjingdian Sobolev kongjian@半经典 Sobolev 空间 (semiclassical Sobolev space)}%
+
+我们现在考察依赖于参数 $h \in (0, 1)$ 的算子族, 此时基础微分算子由 $D$ 替换为半经典导数 $h D$. 其系数亦可进一步具有 $h$-依赖性; 我们仅要求其关于 $h$ 在 $\mathcal{C}_b^\infty$ 中一致有界, 而不强求关于 $h$ 的正则可微性.
+
+\begin{definition}[半经典微分算子]\label{def:2.23}
+设 $k \in \R$ 且 $m \in \N_0$. 我们用 $h^{-k} \Diff_\hbar^m(\R^n)$ 表示所有形如 $A = (A_h)_{h \in (0, h_0)}$ (其中 $h_0 \in (0, 1]$) 的算子族构成的空间, 使得
+\begin{equation}\label{eq:2.59}
+    A_h = \sum_{|\alpha| \le m} a_\alpha(h, x) (h D)^\alpha, \qquad a_\alpha(h, \cdot) \in \mathcal{C}_b^\infty(\R^n),
+\end{equation}
+且集合 $\{ h^k a_\alpha(h, \cdot) : h \in (0, h_0) \}$ 是 $\mathcal{C}_b^\infty(\R^n)$ 中的有界子集. 我们称 $m$ 为\textbf{微分阶数}, $k$ 为\textbf{半经典阶数}. 当 $k = 0$ 时, 简记为 $\Diff_\hbar^m(\R^n)$. 用 $h^{-k} \Diff_{\hbar, \mathrm{cl}}^m(\R^n) \subset h^{-k} \Diff_\hbar^m(\R^n)$ 表示经典半经典算子子空间, 即满足映射 $h^k a_\alpha \in \mathcal{C}^\infty([0, h_0); \mathcal{C}_b^\infty(\R^n))$ 的算子族. 最后, 我们用 $\mathcal{V}_\hbar(\R^n)$ 表示 (实的或复的) 半经典向量场空间, 即所有形如 $\sum_{|\alpha| = 1} a_\alpha(h, x) (h \partial)^\alpha$ 且系数族 $\{a_\alpha(h, \cdot)\}$ 在 $\mathcal{C}_b^\infty(\R^n)$ 中有界 (且取实值或复值) 的算子构成的空间.
+\end{definition}
+
+在此我们采用如下记号约定: 包含半经典对象的空间带有下标 $\hbar$, 而半经典族中某个具体成员带有下标 $h$ (有时省略). 人们常常滥用记号直接写成 $A = \sum_{|\alpha| \le m} a_\alpha(h, x) (h D)^\alpha$, 从而不明确写出算子的 $h$-依赖性. 此外, 也可以考虑 $A = (A_h)_{h \in I}$ 型的算子族, 其中 $I \subset (0, 1)$ 为任意子集; 典型情形是 $I = \{h_0, h_1, \ldots\}$, 其中 $1 \ge h_0 > h_1 > \cdots > 0$; 相应记号的必要改动我们留给读者.
+
+算子 $A$ 的半经典特性只有在半经典极限 $h \searrow 0$ 时才会显现. 显然, 每一个算子族 $(A_h)_{h \in (0, h_0)} \in \Diff_\hbar^m(\R^n)$ 都是 $\Diff^m(\R^n)$ 中的一致有界算子族 (因为 $D^\alpha$ 的系数为 $h^{|\alpha|} a_\alpha(h, \cdot)$); 但反之不然: 例如 $A_h = D_{x_1} = h^{-1} (h D_{x_1})$ 在 $\Diff^1(\R^n)$ 中一致有界, 但属于 $h^{-k} \Diff_\hbar^1(\R^n)$ 当且仅当 $k \ge 1$.
+
+\begin{example}[高能极限下的谱族]\label{eg:2.24}
+固定 $z \in \mathbb{C}$. 则算子族
+\begin{equation}\label{eq:2.60}
+    A_h \defeq h^2 \Delta - z = \sum_{j=1}^n (h D_j)^2 - z
+\end{equation}
+定义了 $\Diff_\hbar^2(\R^n)$ 中的一个元素. (更确切地说, 有 $(A_h)_{h \in (0, 1)} \in \Diff_\hbar^2(\R^n)$.) 该算子族产生于 $\R^n$ 上 Laplace 算子的谱族 $\Delta - \lambda$ 在高能极限 $\lambda = h^{-2} z \to \infty$ 下的情形: 取定 $|z| = 1$, 当 $h \searrow 0$ 时 $|\lambda| \to \infty$, 且 $h^2(\Delta - h^{-2} z) = h^2 \Delta - z \in \Diff_\hbar^2(\R^n)$ (从而 $\Delta - h^{-2} z \in h^{-2} \Diff_\hbar^2(\R^n)$). 这些算子实际上都是经典半经典微分算子.
+\end{example}
+
+半经典算子的全符号 (semiclassical full symbol) 是通过形式上将 $h D$ 替换为动量变量 $\xi$ 获得的. 于是, 式~\eqref{eq:2.59} 中算子的符号是依赖于 $h$ 的函数
+\begin{equation}\label{eq:2.61}
+    a(h, x, \xi) \defeq \sum_{|\alpha| \le m} a_\alpha(h, x) \xi^\alpha.
+\end{equation}
+(对于固定的 $h > 0$, 这也可以这样得到: 取 $A_h$ 的全符号, 再把 $\xi$ 替换为 $\xi/h$.)
+
+\begin{example}[半经典全符号]\label{eg:2.25}
+算子式~\eqref{eq:2.60} 的半经典全符号为 $(h, x, \xi) \mapsto |\xi|^2 - z = \sum_{j=1}^n \xi_j^2 - z$. 一个稍微更有趣一点的例子由 $\Delta + V$ ($V \in \mathcal{C}_b^\infty(\R^n)$) 在高能谱参数 $h^{-2} z$ 处的半经典伸缩给出: $A = h^2(\Delta + V - h^{-2} z) = h^2 \Delta + h^2 V - z$, 其半经典全符号为 $(h, x, \xi) \mapsto |\xi|^2 + h^2 V(x) - z$.
+\end{example}
+
+适应于导数半经典尺度的 Sobolev 空间定义如下:
+
+\begin{definition}[$\R^n$ 上的半经典 Sobolev 空间]\label{def:2.26}
+对于 $s, k \in \R$, 我们定义 $h^k H_h^s(\R^n) \defeq H^s(\R^n)$ 作为线性空间, 并为其配备范数
+\begin{equation}\label{eq:2.62}
+    \|u\|_{h^k H_h^s(\R^n)} \defeq h^{-k} \|\langle h D \rangle^s u\|_{L^2(\R^n)}, \qquad \langle h D \rangle^s \defeq \mathcal{F}^{-1} \langle h \xi \rangle^s \mathcal{F}.
+\end{equation}
+当 $k = 0$ 时, 空间与其范数分别简记为 $H_h^s(\R^n)$ 与 $\|\cdot\|_{H_h^s(\R^n)}$.
+\end{definition}
+
+每一个半经典算子 $A = (A_h)_{h \in (0, h_0)} \in \Diff_\hbar^m(\R^n)$ 在相应的半经典 Sobolev 空间之间均一致有界, 即存在与 $h$ 无关的常数 $C$, 使得
+\begin{equation}\label{eq:2.63}
+    \|A_h u\|_{H_h^{s-m}(\R^n)} \le C \|u\|_{H_h^s(\R^n)}, \qquad h \in (0, h_0).
+\end{equation}
+这就是对所有 $h \in (0, h_0)$ 统一成立的估计. (对于加权空间上的加权算子, 同样有类似的统一估计.) 这是更一般的定理~\ref{thm:4.51} 的特例. (它也可以通过对偶与复插值方法证明.)
+
+标准 Sobolev 空间与半经典 Sobolev 空间之间的一个有趣的联系, 来自偏 Fourier 变换:
+
+\begin{proposition}[Sobolev 空间与部分 Fourier 变换]\label{prop:2.27}
+记 $x = (x_1, x') \in \R \times \R^{n-1}$. 设 $s \in \R$. 则关于变量 $x_1$ 的偏 Fourier 变换
+\begin{equation}\label{eq:2.64}
+    (\mathcal{F}_1 u)(\xi_1, x') \defeq \int_\R \ee^{-\ii x_1 \xi_1} u(x_1, x') \,\dd x_1
+\end{equation}
+从 $\Schwartz(\R^n) \to \Schwartz(\R^n)$ 连续延拓为拓扑同构
+\begin{equation}\label{eq:2.65}
+    H^s(\R \times \R^{n-1}) \to L^2\left( \R_{\xi_1}; \langle \xi_1 \rangle^{-s} H_{\langle \xi_1 \rangle^{-1}}^s(\R^{n-1}) \right),
+\end{equation}
+其中右侧空间定义为 $\Schwartz(\R \times \R^{n-1})$ 在如下范数下的抽象完备化:
+\begin{equation}\label{eq:2.66}
+    \|v\|_{L^2(\R_{\xi_1}; \langle \xi_1 \rangle^{-s} H_{\langle \xi_1 \rangle^{-1}}^s(\R^{n-1}))}^2 \defeq \int_\R \|v(\xi_1, \cdot)\|_{\langle \xi_1 \rangle^{-s} H_{\langle \xi_1 \rangle^{-1}}^s(\R^{n-1})}^2 \,\dd\xi_1.
+\end{equation}
+\end{proposition}
+
+这在通过关于 $x_1$ 的 Fourier 变换求解系数与 $x_1$ 无关的偏微分方程时很有用, 并且在第~\ref{ch:11}~章中起重要作用.
+
+\begin{proof}[命题~\ref{prop:2.27} 的证明]
+对于 $v = \mathcal{F}_1 u$, 式~\eqref{eq:2.66} 右侧等于
+\begin{equation}\label{eq:2.67}
+    \int_\R \langle \xi_1 \rangle^{2s} \int_{\R^{n-1}} \langle \langle \xi_1 \rangle^{-1} \xi' \rangle^{2s} |\hat{u}(\xi_1, \xi')|^2 \,\dd\xi' \,\dd\xi_1.
+\end{equation}
+对于 $\xi = (\xi_1, \xi')$, 注意到恒等式
+\[
+    \langle \xi_1 \rangle \langle \langle \xi_1 \rangle^{-1} \xi' \rangle = \left( 1 + |\xi_1|^2 \right)^{1/2} \left( 1 + \frac{|\xi'|^2}{1 + |\xi_1|^2} \right)^{1/2} = \left( 1 + |\xi_1|^2 + |\xi'|^2 \right)^{1/2} = \langle \xi \rangle.
+\]
+因此式~\eqref{eq:2.67} 恰好等于 $\iint_{\R^n} \langle \xi \rangle^{2s} |\hat{u}(\xi)|^2 \,\dd\xi = (2\pi)^n \|u\|_{H^s(\R^n)}^2$. 结合 $\Schwartz(\R^n)$ 在 $H^s(\R^n)$ 中的稠密性即完成证明.
+\end{proof}
+
+\section*{注记}
+\addcontentsline{toc}{section}{注记}
+
+分布理论由 Schwartz~\cite{Sch52} 开创. 这一领域主要概念与定理的自成体系的详尽论述可参见 Hörmander~\cite{Hor03} 与 Friedlander--Joshi~\cite{Fri98}. Trèves~\cite{Tre67} 对检验函数空间与分布空间 ($\SmoothComp(\R^n)$, $\Distr(\R^n)$) 的拓扑结构给出了极为详尽的讨论. (我们在第~\ref{ch:05}~章中于一般光滑流形上开展分析时将正式使用 $\SmoothComp$ 与 $\Distr$.)
+
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+
+\begin{exer}[平移 Laplace 算子]\label{ex:2.1}
+回忆 $\Delta = \sum_{j=1}^n D_{x_j}^2$.
+\begin{enumerate}
+    \item 证明 $\Delta + 1 \colon \TempDistr(\R^n) \to \TempDistr(\R^n)$ 是拓扑同构.
+    \item 在 $\Smooth(\R^n)$ 中寻找 $(\Delta + 1) u = 0$ 的非平凡解. 解释为什么这与第一问的结论并不矛盾?
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[$\SmoothComp$ 在缓增分布中的稠密性]\label{ex:2.2}
+我们将以构造性方式证明 $\SmoothComp(\R^n) \subset \TempDistr(\R^n)$ (更确切地说, 是 $\SmoothComp(\R^n)$ 在映射~\eqref{eq:2.12} 下的像) 是稠密的.
+\begin{enumerate}
+    \item 设 $\chi \in \Schwartz(\R^n)$, $\chi(0) = 1$. 对 $\phi \in \Schwartz(\R^n)$, 令 $\phi_\epsilon(x) \defeq \chi(\epsilon x) \phi(x)$. 证明当 $\epsilon \searrow 0$ 时, $\phi_\epsilon \to \phi$ 在 $\Schwartz(\R^n)$ 中成立. 由此证明紧支分布空间 $\mathscr{E}'(\R^n)$ 在 $\TempDistr(\R^n)$ 中是稠密的.
+    \item 设 $\psi \in \SmoothComp(\R^n)$, 并令 $\tilde{\psi}(x) \defeq \psi(-x)$. 对 $\phi \in \Schwartz(\R^n)$, 定义 $\phi$ 与 $\tilde{\psi}$ 的卷积为
+    \begin{equation}\label{eq:2.68}
+        (\phi * \tilde{\psi})(x) \defeq \int_{\R^n} \phi(x - y) \tilde{\psi}(y) \,\dd y.
+    \end{equation}
+    证明 $\phi * \tilde{\psi} \in \Schwartz(\R^n)$. 定义分布 $u \in \TempDistr(\R^n)$ 与 $\psi$ 的卷积为 $\langle u * \psi, \phi \rangle \defeq \langle u, \phi * \tilde{\psi} \rangle$. 验证当 $u \in \Schwartz(\R^n)$ 时这与通常的卷积定义一致.
+    \item 设 $\chi \in \SmoothComp(\R^n)$, $\int_{\R^n} \chi(x) \,\dd x = 1$, 并设 $\chi_\epsilon(x) \defeq \epsilon^{-n} \chi(\epsilon^{-1} x)$. 证明当 $\epsilon \searrow 0$ 时, $\chi_\epsilon * \phi \to \phi$ 在 $\Schwartz(\R^n)$ 中成立.
+    \item 当 $u \in \mathscr{E}'(\R^n)$ 且 $\psi \in \SmoothComp(\R^n)$ 时, 证明 $u * \psi \in \SmoothComp(\R^n)$, 即存在 $v \in \SmoothComp(\R^n)$ 使得 $u * \psi = T_v$.
+    \item 综合上述各小问, 证明 $\SmoothComp(\R^n)$ 在 $\TempDistr(\R^n)$ 中稠密.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[缓增分布空间的对偶空间]\label{ex:2.3}
+设 $F \colon \TempDistr(\R^n) \to \mathbb{C}$ 是缓增分布空间上的弱连续线性泛函. 证明存在唯一的 $\phi \in \Schwartz(\R^n)$ 使得对所有 $u \in \TempDistr(\R^n)$ 均有 $F(u) = \langle u, \phi \rangle$.
+\end{exer}
+
+\begin{exer}[紧支分布空间]\label{ex:2.4}
+证明 $\mathscr{E}'(\R^n)$ 恰好是所有连续线性泛函 $\Smooth(\R^n) \to \mathbb{C}$ 构成的空间. 更确切地, 证明 $u \in \TempDistr(\R^n)$ 属于 $\mathscr{E}'(\R^n)$ 当且仅当线性映射 $u \colon \Schwartz(\R^n) \to \mathbb{C}$ 是某个连续线性映射 $\Smooth(\R^n) \to \mathbb{C}$ 限制在 $\Schwartz(\R^n)$ 上的结果.
+\end{exer}
+
+\begin{exer}[紧支分布的 Fourier 变换]\label{ex:2.5}
+设 $u \in \mathscr{E}'(\R^n)$. 强化命题~\ref{prop:2.11}: 证明 $\mathcal{F} u$ 可以整函数延拓至 $\mathbb{C}^n$, 且存在常数 $C, N \in \R$ 使得对所有 $\xi \in \mathbb{C}^n$, 均有
+\[
+    |(\mathcal{F} u)(\xi)| \le C \langle \xi \rangle^N \ee^{C |\!\operatorname{Im} \xi|}.
+\]
+\end{exer}
+
+\begin{exer}[若干齐次分布]\label{ex:2.6}
+对于满足 $\operatorname{Re} s > -1$ 的 $s \in \mathbb{C}$, 我们定义分布 $(x \pm \ii 0)^s, x_\pm^s \in \TempDistr(\R)$ 为
+\begin{equation}\label{eq:2.69}
+    \langle (x \pm \ii 0)^s, \phi \rangle \defeq \int_{-\infty}^\infty \lim_{\epsilon \searrow 0} (x \pm \ii \epsilon)^s \phi(x) \,\dd x, \qquad \langle x_\pm^s, \phi \rangle \defeq \int_0^\infty x^s \phi(\pm x) \,\dd x,
+\end{equation}
+其中 $\phi \in \Schwartz(\R)$. 在此对 $z \in \mathbb{C} \setminus (-\infty, 0]$, $z^s \defeq \exp(s \log z)$, 取主支对数割线沿负实轴截断.
+\begin{enumerate}
+    \item 证明当 $\operatorname{Re} s > 0$ 时, $\frac{\dd}{\dd x} x_+^s = s x_+^{s-1}$. 由此将 $x_+^s$ 亚纯全纯延拓至 $s \in \mathbb{C} \setminus (-\N)$ (即对任意 $\phi \in \Schwartz(\R)$, $\mathbb{C} \setminus (-\N) \ni s \mapsto \langle x_+^s, \phi \rangle \in \mathbb{C}$ 全纯).
+    \item 当 $\operatorname{Re} s \in (-1, 0)$ 时, 证明恒等式
+    \begin{equation}\label{eq:2.70}
+        \mathcal{F}(x_\pm^s) = \Gamma(s + 1) \ee^{\mp \ii \frac{\pi}{2}(s+1)} (\xi \mp \ii 0)^{-s-1},
+    \end{equation}
+    其中 $\Gamma(z) = \int_0^\infty \ee^{-t} t^{z-1} \,\dd t$ ($\operatorname{Re} z > 0$) 为经典 $\Gamma$-函数.
+    \item 证明 $\Gamma(z + 1) = z \Gamma(z)$. 由此推断 $\frac{1}{\Gamma(z)}$ 可延拓为全平面整函数, 且单零点恰好位于 $z \in -\N_0$. 证明
+    \begin{equation}\label{eq:2.71}
+        \chi_\pm^s \defeq \frac{1}{\Gamma(s+1)} x_\pm^s
+    \end{equation}
+    定义了缓增分布的整函数族. 对 $k \in \N$, 具体计算 $\chi_\pm^{-k}$.
+    \item 证明 $(x \pm \ii 0)^s$ 可延拓为缓增分布的整函数族, 且满足
+    \begin{equation}\label{eq:2.72}
+        \mathcal{F}((x \pm \ii 0)^s) = 2\pi \ee^{\pm \ii \frac{\pi}{2} s} \chi_\pm^{-s-1}.
+    \end{equation}
+    \item 证明当 $\epsilon \searrow 0$ 时, $(x \pm \ii \epsilon)^s \to (x \pm \ii 0)^s$ 在 $\TempDistr(\R)$ 中成立.
+    \item 证明著名的 Plemelj 分布恒等式: $(x - \ii 0)^{-1} - (x + \ii 0)^{-1} = 2\pi \ii \delta(x)$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[Sobolev 空间与弱导数]\label{ex:2.7}
+设 $u \in \TempDistr(\R^n)$, $k \in \N_0$. 证明以下两条件等价:
+\begin{enumerate}
+    \item 对所有满足 $|\alpha| \le k$ 的多重指标 $\alpha \in \N_0^n$, 均有 $\partial^\alpha u \in L^2(\R^n)$.
+    \item $u \in H^k(\R^n)$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[Sobolev 嵌入定理]\label{ex:2.8}
+设 $s > n/2$.
+\begin{enumerate}
+    \item 证明存在常数 $C_s < \infty$ 使得对任意 $\phi \in \Schwartz(\R^n)$,
+    \begin{equation}\label{eq:2.73}
+        \|\phi\|_{L^\infty(\R^n)} \defeq \sup_{x \in \R^n} |\phi(x)| \le C_s \|\phi\|_{H^s(\R^n)}.
+    \end{equation}
+    由此推断 $H^s(\R^n) \subset \mathcal{C}_b^0(\R^n)$.
+    \item 更一般地, 证明当 $s > n/2 + k$ 时, $H^s(\R^n) \subset \mathcal{C}_b^k(\R^n)$.
+    \item 证明定理~\ref{thm:2.18} 中的第一个等式.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[Sobolev 空间的代数性质]\label{ex:2.9}
+设 $n \in \N$.
+\begin{enumerate}
+    \item 设 $u, v \in \Schwartz(\R^n)$, 回忆卷积定义为 $(u * v)(x) = \int_{\R^n} u(y) v(x - y) \,\dd y$. 证明 $\mathcal{F}(u * v) = \mathcal{F}(u) \mathcal{F}(v)$, 并给出 $\mathcal{F}(u v)$ 的对应公式.
+    \item 设 $s > n/2$. 定义核函数
+    \begin{equation}\label{eq:2.74}
+        a(\xi, \eta) \defeq \frac{\langle \xi \rangle^{2s}}{\langle \eta \rangle^{2s} \langle \xi - \eta \rangle^{2s}}, \qquad \xi, \eta \in \R^n.
+    \end{equation}
+    证明 $\sup_{\xi \in \R^n} \int_{\R^n} a(\xi, \eta) \,\dd\eta < \infty$.
+    \item 设 $s > n/2$ 且 $u, v \in H^s(\R^n)$. 证明逐点积 $u v \in H^s(\R^n)$, 并且存在与 $u, v$ 无关的常数 $C$ 使得
+    \[
+        \|u v\|_{H^s(\R^n)} \le C \|u\|_{H^s(\R^n)} \|v\|_{H^s(\R^n)}.
+    \]
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[Sobolev 空间的差商等价刻画]\label{ex:2.10}
+设 $s \in (0, 1)$. 记 $e_j = (0, \ldots, 1, \ldots, 0) \in \R^n$ 为第 $j$ 个标准基向量. 证明:
+\begin{equation}\label{eq:2.75}
+    {\left\vert\kern-0.25ex\left\vert\kern-0.25ex\left\vert u \right\vert\kern-0.25ex\right\vert\kern-0.25ex\right\vert}_{H^s(\R^n)}^2 \defeq \|u\|_{L^2(\R^n)}^2 + \sum_{j=1}^n \int_0^\infty \left\| \frac{\tau_h^j u - u}{h^s} \right\|_{L^2(\R^n)}^2 \,\frac{\dd h}{h}, \qquad (\tau_h^j u)(x) \defeq u(x + h e_j),
+\end{equation}
+定义了 $H^s(\R^n)$ 上的等价范数.
+\end{exer}
+
+\begin{exer}[Sobolev 空间上的函数乘法]\label{ex:2.11}
+对于 $\alpha \in (0, 1]$, 记 $\mathcal{C}_b^{0, \alpha}(\R^n)$ 为包含所有满足下式的函数 $u = u(x)$ 的 Hölder 空间:
+\begin{equation}\label{eq:2.76}
+    \|u\|_{\mathcal{C}_b^{0, \alpha}(\R^n)} \defeq \sup_{x \in \R^n} |u(x)| + \sup_{x \neq y} \frac{|u(x) - u(y)|}{|x - y|^\alpha} < \infty.
+\end{equation}
+对 $k \in \N_0$, 令 $\mathcal{C}_b^{k, \alpha}(\R^n) \defeq \{u \in \mathcal{C}_b^k(\R^n) : \partial^\beta u \in \mathcal{C}_b^{0, \alpha}(\R^n), \ \forall\,|\beta| \le k\}$. 借助习题~\ref{ex:2.10} 证明:
+\begin{equation}\label{eq:2.77}
+    k + \alpha > |s|, \quad a \in \mathcal{C}_b^{k, \alpha}(\R^n), \quad u \in H^s(\R^n) \implies a u \in H^s(\R^n).
+\end{equation}
+(特别地, 对任意 $a \in \mathcal{C}_b^\infty(\R^n)$ 及 $u \in H^s(\R^n)$, 均有 $a u \in H^s(\R^n)$.)
+\end{exer}
+
+\begin{exer}[加权 Sobolev 空间的 Rellich 紧性]\label{ex:2.12}
+设 $s > s'$ 且 $r < r'$. 证明包含映射
+\[
+    \langle x \rangle^r H^s(\R^n) \hookrightarrow \langle x \rangle^{r'} H^{s'}(\R^n)
+\]
+是紧算子.
+\end{exer}
+
+\begin{exer}[Sobolev 插值不等式]\label{ex:2.13}
+设 $s_- < s < s_+$ 且 $\epsilon > 0$. 证明存在依赖于 $\epsilon$ 的常数 $C_\epsilon$ 使得对任意 $u \in H^{s_+}(\R^n)$, 均有
+\begin{equation}\label{eq:2.78}
+    \|u\|_{H^s(\R^n)} \le \epsilon \|u\|_{H^{s_+}(\R^n)} + C_\epsilon \|u\|_{H^{s_-}(\R^n)}.
+\end{equation}
+\end{exer}
+
+\begin{exer}[单侧 Paley--Wiener 定理]\label{ex:2.14}
+定义空间
+\begin{equation}\label{eq:2.79}
+    \dot{\Schwartz}([0, \infty)) \defeq \{u \in \Schwartz(\R) : \supp u \subset [0, \infty)\}, \qquad \dot{\TempDistr}([0, \infty)) \defeq \{u \in \TempDistr(\R) : \supp u \subset [0, \infty)\}.
+\end{equation}
+\begin{enumerate}
+    \item 证明对 $u \in \Schwartz(\R)$, $u \in \dot{\Schwartz}([0, \infty))$ 当且仅当 $\hat{u} \in \Schwartz(\R)$ 是某个连续函数 $\hat{u} \colon \{\zeta \in \mathbb{C} : \operatorname{Im} \zeta \le 0\} \to \mathbb{C}$ 的边界值 $\hat{u}|_\R$, 其中 $\hat{u}$ 在下半平面 $\operatorname{Im} \zeta < 0$ 内全纯, 且对所有 $N \in \R$ 均存在常数 $C_N$ 满足:
+    \begin{equation}\label{eq:2.80}
+        |\hat{u}(\zeta)| \le C_N \langle \operatorname{Re} \zeta \rangle^{-N}, \qquad \operatorname{Im} \zeta \le 0.
+    \end{equation}
+    \item 证明对 $u \in \TempDistr(\R)$, $u \in \dot{\TempDistr}([0, \infty))$ 当且仅当 $\hat{u}$ 是某个连续函数 $v \colon (-\infty, 0]_\eta \to \TempDistr(\R_\xi)$ 的边界值 $\hat{u} = v(0)$, 满足映射 $(-\infty, 0) \times \R \ni (\eta, \xi) \mapsto v(\eta)(\xi)$ 光滑, 且关于 $\zeta = \xi - \ii \eta$ 全纯, 并存在 $N \in \R$ 使得对任意 $\epsilon > 0$ 存在常数 $C_\epsilon$ 满足:
+    \begin{equation}\label{eq:2.81}
+        |v(\zeta)| \le C_\epsilon \ee^{\epsilon |\!\operatorname{Im} \zeta|} \langle \operatorname{Re} \zeta \rangle^N, \qquad \operatorname{Im} \zeta < -\epsilon.
+    \end{equation}
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[迹定理]\label{ex:2.15}
+设 $s > 1/2$. 证明限制映射 $\Schwartz(\R_{x_1} \times \R^{n-1}) \ni u \mapsto u|_{x_1=0} \in \Schwartz(\R^{n-1})$ 依据连续性与稠密性延拓为有界满射:
+\begin{equation}\label{eq:2.82}
+    H^s(\R \times \R^{n-1}) \to H^{s - 1/2}(\R^{n-1}).
+\end{equation}
+\noindent\textbf{注记.}\enspace 迭代应用迹定理可给出习题~\ref{ex:2.8} 中 Sobolev 嵌入定理 $H^s(\R^n) \subset \mathcal{C}_b^0(\R^n)$ ($s > n/2$) 的另一个证明.
+\end{exer}
+
+\begin{exer}[Schwartz 表示定理的证明]\label{ex:2.16}
+证明定理~\ref{thm:2.18} 中的第二个等式. 可按如下步骤推进: 设 $u \in \TempDistr(\R^n)$.
+\begin{enumerate}
+    \item 证明存在常数 $C$ 与整数 $k$ 使得 $|\langle u, \phi \rangle| \le C \|\phi\|_k$.
+    \item 令算子 $R_q \defeq \langle x \rangle^{-q} \langle D \rangle^{-q}$. 证明 $R_q$ 是 $\Schwartz(\R^n)$ 与 $\TempDistr(\R^n)$ 上的同构. 此外证明存在正整数 $q$ 使得 $\|R_q \phi\|_k \le C' \|\phi\|_{L^2(\R^n)}$ (提示: 利用习题~\ref{ex:2.8}, 将其中的 $s$ 与此处的 $q$ 取为偶数便于计算).
+    \item 记 $R_q^\dag \defeq \langle D \rangle^{-q} \langle x \rangle^{-q}$, 由此推导出 $R_q^\dag u \in L^2(\R^n)$, 并最终断定 $u \in \langle x \rangle^q H^{-q}(\R^n)$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[Schwartz 核定理: 单射性]\label{ex:2.17}
+证明定理~\ref{thm:2.19} 中的单射性断言. (提示: 设给定 $K \in \TempDistr(\R^{n+m})$ 满足 $O_K = 0$. 任给 $\phi \in \Schwartz(\R^{n+m})$, 需要证明 $\langle K, \phi \rangle = 0$. 当 $\phi$ 为外积 $\psi_1 \otimes \psi_2$ ($\psi_1 \in \Schwartz(\R^n), \psi_2 \in \Schwartz(\R^m)$) 的有限线性组合时结论已知. 利用 Fourier 级数通过此类线性组合逼近一般的 $\phi$. 先约化至 $\supp K$ 紧致的情形大有帮助.)
+\end{exer}
+
+\begin{exer}[Schwartz 核定理: 满射性]\label{ex:2.18}
+设 $A \colon \Schwartz(\R^n) \to \TempDistr(\R^m)$ 为连续线性算子. 证明定理~\ref{thm:2.19} 中的满射性断言. 可按如下步骤进行:
+\begin{enumerate}
+    \item 证明对所有 $\psi \in \Schwartz(\R^n)$, 存在 $N \in \N$ 使得对任意 $\phi \in \Schwartz(\R^m)$, 均有 $|\langle A \phi, \psi \rangle| \le N \|\phi\|_N$.
+    \item 证明存在实数 $N, M$ 使得 $A$ 经连续延拓成为有界算子:
+    \begin{equation}\label{eq:2.83}
+        A \colon \langle x \rangle^{-M} H^M(\R^m) \to \langle x \rangle^N H^{-N}(\R^n).
+    \end{equation}
+    (提示: 习题~\ref{ex:2.16} 中的估计在形如 $\|\psi\|_k \le C_k \|\psi\|_{\langle x \rangle^{-M} H^M(\R^n)}$ 的形式下将十分有用.)
+    \item 证明算子
+    \begin{equation}\label{eq:2.84}
+        A' \defeq \langle D \rangle^{-N - n/2 - 1} \langle x \rangle^{-N} A \langle D \rangle^{-M - m/2 - 1} \langle x \rangle^{-M}
+    \end{equation}
+    是有界算子 $H^{-m/2 - 1}(\R^m) \to \mathcal{C}_b^0(\R^n)$.
+    \item 对 $y \in \R^m$ 计算 $A' \delta_y$, 由此推导 $A'$ 的 Schwartz 核 $K'$ 满足 $K' \in \mathcal{C}_b^0(\R^{n+m})$.
+    \item 通过建立 $A'$ 与 $A$ 的 Schwartz 核之间的联系, 证明存在 $K \in \TempDistr(\R^{n+m})$ 满足 $A = O_K$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[微分算子的 Schwartz 核]\label{ex:2.19}
+通过验证式~\eqref{eq:2.49} 定义的算子 $O_K$ 满足 $(O_K \phi)(\psi) = \int_{\R^n} (A \phi)(x) \psi(x) \,\dd x$, 检验式~\eqref{eq:2.55} 确实等于式~\eqref{eq:2.52} 中微分算子 $A$ 的 Schwartz 核.
+\end{exer}
+
+\begin{exer}[具有 Schwartz 类积分核的算子]\label{ex:2.20}
+设 $A \colon \Schwartz(\R^n) \to \TempDistr(\R^n)$ 连续, 其 Schwartz 核记为 $K \in \TempDistr(\R^{2n})$. 证明 $K \in \Schwartz(\R^{2n})$ 当且仅当 $A$ 将 $\Schwartz(\R^n)$ 映入 $\Schwartz(\R^n)$ 且以连续性延拓为有界映射 $\TempDistr(\R^n) \to \Schwartz(\R^n)$.
+\end{exer}
+
+\begin{exer}[奇异支集与算子拟局部性]\label{ex:2.21}
+设 $A \colon \TempDistr(\R^n) \to \TempDistr(\R^n)$ 为连续线性算子, $K \in \TempDistr(\R^n \times \R^n)$ 为其 Schwartz 核.
+\begin{enumerate}
+    \item 设 $\singsupp K \subset \operatorname{diag}_{\R^n} \defeq \{(x, y) \in \R^n \times \R^n : x = y\}$. 证明对任意 $u \in \TempDistr(\R^n)$, 均有 $\singsupp A u \subseteq \supp u$.
+    \item 构造一个满足 $\singsupp K \subset \operatorname{diag}_{\R^n}$ 但不是拟局部的算子 $A$ 的反例 (即对某个 $u \in \TempDistr(\R^n)$, $\singsupp A u \not\subset \singsupp u$).
+    \item 设 $A$ 是拟局部的. 证明必有 $\singsupp K \subset \operatorname{diag}_{\R^n}$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[Peetre 定理]\label{ex:2.22}
+设 $A \colon \Schwartz(\R^n) \to \Schwartz(\R^n)$ 为连续线性算子, 且对所有 $u \in \Schwartz(\R^n)$ 均满足 $\supp A u \subset \supp u$. 证明 $A$ 必定是一个微分算子. (提示: 证明 $A$ 的 Schwartz 核 $K$ 的支集严格包含在对角线 $\{x = y\}$ 内. 然后说明它必然是具有光滑系数的 (各阶导数) $\delta$-分布的局部有限线性组合. 为证明 $A$ 具有有限阶数, 充分利用 $K$ 为缓增分布的性质.)
+\end{exer}
+
+\begin{exer}[半经典与非半经典 Sobolev 空间的关系]\label{ex:2.23}
+设 $s \in \R$, 记 $s_\pm \defeq \max(\pm s, 0)$. 证明对所有 $h \in (0, 1)$, 均有
+\begin{equation}\label{eq:2.85}
+    h^{s_-} \|u\|_{H_h^s(\R^n)} \le \|u\|_{H^s(\R^n)} \le h^{-s_+} \|u\|_{H_h^s(\R^n)}.
+\end{equation}
+\end{exer}

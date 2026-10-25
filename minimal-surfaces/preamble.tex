@@ -1,0 +1,200 @@
+% ================================================================
+% 《极小曲面教程》中译本 —— mathtranslation.cls v3.1 之上的兼容层
+% 原书: Tobias Holck Colding & William P. Minicozzi II,
+%       A Course in Minimal Surfaces, AMS GSM 121, 2011.
+% ----------------------------------------------------------------
+% 本文件只补齐类文件未提供、而本书确需的部分; 类文件本身不改动.
+%   1. 定理类环境与带编号小标题共享同一计数器, 全书按章编号 (1.1, 1.2, ...),
+%      与原书版式一致(原书的 "1.1." 既可能是小标题, 也可能是引理).
+%   2. \mtpara{标题}     节内带编号的 run-in 小标题(接正文).
+%      \mtparasec{标题}  同上, 但独占一行.
+%   3. 未编号环境 theorem* / lemma* / ... 与断言 claim.
+%   4. 常用记号缩写(曲面、法向、面积、体积等).
+% ================================================================
+
+% ---------- 1. 共享计数器 ----------
+% 类文件已用 [section] 为每个定理类环境各建一个计数器, 且把它们登记进
+% \cl@section 的重置链. 这里只解除环境定义, 保留计数器本身, 以免 \section
+% 报 "No counter ... defined".
+\makeatletter
+\let\theorem\relax\let\endtheorem\relax
+\let\definition\relax\let\enddefinition\relax
+\let\lemma\relax\let\endlemma\relax
+\let\corollary\relax\let\endcorollary\relax
+\let\proposition\relax\let\endproposition\relax
+\let\remark\relax\let\endremark\relax
+\let\example\relax\let\endexample\relax
+\let\problem\relax\let\endproblem\relax
+\makeatother
+
+% 共享计数器: 按章重置, 显示 "章号.序号".
+\newcounter{mtitem}[chapter]
+\renewcommand{\themtitem}{\thechapter.\arabic{mtitem}}
+
+\theoremstyle{mtfang}
+\newtheorem{theorem}[mtitem]{定理}
+\newtheorem{lemma}[mtitem]{引理}
+\newtheorem{definition}[mtitem]{定义}
+\newtheorem{corollary}[mtitem]{推论}
+\newtheorem{proposition}[mtitem]{命题}
+\newtheorem{remark}[mtitem]{注}
+\newtheorem{conjecture}[mtitem]{猜想}
+\theoremstyle{mtsong}
+\newtheorem{example}[mtitem]{例}
+\newtheorem{problem}[mtitem]{问题}
+
+% 未编号版本(原书中少量不编号的表述).
+\newtheorem*{theorem*}{定理}
+\newtheorem*{lemma*}{引理}
+\newtheorem*{definition*}{定义}
+\newtheorem*{corollary*}{推论}
+\newtheorem*{proposition*}{命题}
+\newtheorem*{remark*}{注}
+\newtheorem*{example*}{例}
+\newtheorem*{conjecture*}{猜想}
+
+% 断言: 证明内部常用的无编号小块, 自带冒号, 不结束段落.
+\newtheorem*{claim*}{断言}
+\AtEndEnvironment{example*}{\envenddiamond}
+\AtEndEnvironment{remark*}{\envenddiamond}
+
+% ---------- 2. 带编号的小标题 ----------
+% 原书的小标题按"节号.序号"编号(第 1 节里的 1.1, 1.2, 1.3; 第 2 节里的
+% 2.1, ..., 2.14), 与按章编号的定理类对象(引理 1.1, 定理 1.21, ...)是两套
+% 互不相干的计数器 —— 原书里 "1.1" 既可能是小标题也可能是引理, 本译本照此.
+\newcounter{mtpara}[section]
+\renewcommand{\themtpara}{\thesection.\arabic{mtpara}}
+
+\newcommand{\mtpara}[1]{%
+  \par\medskip\noindent\refstepcounter{mtpara}%
+  \setcounter{mtparasub}{0}%
+  {\headfont\themtpara.\enspace #1.}\quad\ignorespaces
+}
+\newcommand{\mtparasec}[1]{%
+  \par\medskip\noindent\refstepcounter{mtpara}%
+  \setcounter{mtparasub}{0}%
+  {\headfont\themtpara.\enspace #1.}\par\smallskip\noindent\ignorespaces
+}
+
+% 三级小标题: 原书第 8 章 §5.3 下的 5.3.1, 5.3.2, 5.3.3.
+\newcounter{mtparasub}
+\renewcommand{\themtparasub}{\thesection.\arabic{mtpara}.\arabic{mtparasub}}
+\newcommand{\mtparasub}[1]{%
+  \par\medskip\noindent\refstepcounter{mtparasub}%
+  {\headfont\themtparasub.\enspace #1.}\quad\ignorespaces
+}
+
+% ---------- 3. 节标题样式 ----------
+% 原书节标题为 "1. The Minimal Surface Equation and Minimal Submanifolds"
+% (编号后带句点, 起点左对齐, 无章号前缀).
+\renewcommand{\thesection}{\arabic{section}}
+\titleformat{\section}[block]
+  {\normalfont\large\headfont}
+  {\thesection.}
+  {0.6em}
+  {}
+\titlespacing*{\section}{0pt}{2.4ex plus 1ex minus .2ex}{1.0ex plus .2ex}
+
+% ---------- 4. 引用命令 ----------
+% 所有定理类环境共用一个计数器, \autoref 无法区分类型, 故按类型分别引用.
+\newcommand{\thmref}[1]{定理~\ref{#1}}
+\newcommand{\lemref}[1]{引理~\ref{#1}}
+\newcommand{\defref}[1]{定义~\ref{#1}}
+\newcommand{\propref}[1]{命题~\ref{#1}}
+\newcommand{\corref}[1]{推论~\ref{#1}}
+\newcommand{\remref}[1]{注~\ref{#1}}
+\newcommand{\exref}[1]{例~\ref{#1}}
+\newcommand{\secref}[1]{第~\ref{#1}~节}
+\newcommand{\chapref}[1]{第~\ref{#1}~章}
+\newcommand{\figref}[1]{图~\ref{#1}}
+
+% ---------- 5. 记号缩写 ----------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\bS}{\mathbf{S}}
+\newcommand{\bB}{\mathbf{B}}
+\DeclareMathOperator{\Area}{Area}
+\DeclareMathOperator{\Vol}{Vol}
+\DeclareMathOperator{\Graph}{Graph}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\inj}{inj}
+\DeclareMathOperator{\osc}{osc}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Length}{Length}
+\DeclareMathOperator{\Hess}{Hess}
+\newcommand{\tub}{\mathcal{T}}
+\DeclareMathOperator{\Span}{span}
+\newcommand{\dive}{\operatorname{div}}
+\newcommand{\ii}{\mathrm{i}}
+
+% ---------- 6. 图表标题 ----------
+\usepackage{caption}
+\captionsetup{font=small,labelsep=period,skip=6pt}
+
+% 原书的编号列表一律用 (1)(2)... / (i)(ii)... 的形式, 这里统一.
+\usepackage{enumitem}
+\setlist[enumerate]{label=(\arabic*),leftmargin=2.4em,itemsep=2pt,topsep=2pt}
+
+% 插图统一入口: \mtfigure[宽度比例]{文件名}{图题}{标签}
+\newcommand{\mtfigure}[4][0.45]{%
+  \begin{figure}[htbp]
+    \centering
+    \includegraphics[width=#1\textwidth]{fig/#2}%
+    \caption{#3}%
+    \label{#4}%
+  \end{figure}}
+
+% 并排两图(原书 1.27/1.28、1.31/1.32、1.33/1.34 即为左右并置)
+\newcommand{\mtfigurepair}[6]{%
+  \begin{figure}[htbp]
+    \centering
+    \begin{minipage}[t]{0.485\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{fig/#1}%
+      \caption{#2}\label{#3}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.485\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{fig/#4}%
+      \caption{#5}\label{#6}
+    \end{minipage}
+  \end{figure}}
+
+% ---------- 7. 术语索引改为不编号章节(双栏) ----------
+% 类文件的 \printterminology 假定文档处于 \appendix 状态, 用 \chapter 排
+% "术语索引"(于是显示为"附录 X 术语索引"). 本书没有附录, 术语索引直接跟在
+% 参考文献之后, 故这里自建一份: 章节用 \chapter*(带目录条目).
+%
+% 词条数超过 50 后单栏一页放不下, 改为双栏索引表. 关键在于 \MTTermList
+% 本身就是一串 \MTTermRow{中文}{英文}{标签} 调用, 所以**不必遍历、也不必
+% 拆分**: 把 \MTTermRow 重定义为一段"术语 …… 页码", 再直接执行 \MTTermList
+% 即可按登记顺序逐条输出; multicols 负责分栏与均衡, 阅读顺序天然是
+% "先自上而下、再从左到右"。
+%
+% (曾试过先切成 expl3 序列再按下标两两并排, 但 \MTTermRow 不可展开,
+%  \MTTermRow \seq_item:Nn ... 会把 \seq_item:Nn 当成第一个参数吞掉;
+%  即使加 \exp_after:wN 也不稳, 故弃用。)
+\usepackage{multicol}
+\makeatletter
+\newcommand{\printterminologyunnumbered}{%
+  \cleardoublepage
+  \phantomsection
+  \chapter*{术语索引}%
+  \addcontentsline{toc}{chapter}{术语索引}%
+  \markboth{术语索引}{术语索引}%
+  \begingroup
+  \scriptsize
+  \setlength{\parindent}{0pt}%
+  \setlength{\parskip}{1.1pt}%
+  \renewcommand{\MTTermRow}[3]{%
+    \par\noindent\hangindent=1.1em\hangafter=1
+    {\termfont ##1}~##2\nobreak\dotfill\nobreak
+    \hyperref[##3]{\pageref*{##3}}\par}%
+  \begin{multicols}{2}
+    \raggedright
+    \MTTermList
+  \end{multicols}
+  \endgroup}
+\makeatother

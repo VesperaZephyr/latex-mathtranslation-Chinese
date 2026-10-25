@@ -1,0 +1,649 @@
+% ============ 第4章 §4.7 Nikodym极大函数(Wolff定理)(原书 pp.346-367) ============
+\section{Nikodym 极大函数(Wolff 定理)}\label{sec:4.7}
+\index{Nikodym 极大函数!小 Nikodym 极大函数}
+\index{Nikodym 极大函数!大 Nikodym 极大函数}
+\index{Wolff 定理}
+\index{Córdoba 筛}
+\index{bush 论证}
+\index{tube}
+\index{tube!$\delta$-tube}
+\index{三点插值法}
+
+
+首先,让我们回顾 Hardy--Littlewood 极大函数.
+
+对局部可积函数 $f \in L_{\mathrm{loc}}^{1}(\mathbb{R}^{n})$,Hardy--Littlewood 极大函数定义为
+\begin{equation*}
+\mathcal{M}f(x) := \sup_{t>0}\frac{1}{|B(x,t)|}\int_{B(x,t)}|f(y)|\dd y.
+\end{equation*}
+这里,$B(x,t) \subset \mathbb{R}^{n}$ 表示以 $x$ 为中心,半径 $t$ 的开球,$|B(x,t)|$ 表示其体积.
+
+该极大函数在 $L^{p}(\mathbb{R}^{n})$($p > 1$)上有界这一事实的用途,已通过如下方式得到确认:由它导出 Hardy--Littlewood--Sobolev 不等式,并在上一节的最后本质性地使用了该不等式.也请回忆,有界性成立的核心在于覆盖引理(引理~\ref{lem:4.1.3}).
+
+在 Fourier 分析中,或许是由于测不准原理这一远因,人们会研究一种别具一格的极大函数的估计.
+
+设 $N \gg 1$ 为非常大的参数.对 $a > 0$,(小的)Nikodym 极大函数定义为
+\begin{equation}\tag{4.7.1}
+\mathcal{K}_{N,a}f(x) := \sup_{T \ni x}\frac{1}{|T|}\int_{T}|f(y)|\dd y.
+\label{eq:4.7.1}\end{equation}
+这里,上确界对一切与具有形状
+\begin{align*}
+&a \times \cdots \times a \times (Na) \\
+\intertext{即}
+&\left\{(x',x_n) \in \mathbb{R}^{n}:\ |x'| < \frac{a}{2},\ |x_n| < \frac{Na}{2}\right\}
+\end{align*}
+的 tube 合同的,包含 $x$ 且方向(长轴方向)任意的 tube $T$ 取.进而,(大的)Nikodym 极大函数定义为
+\begin{equation}\tag{4.7.2}
+\mathcal{K}_{N}f(x) := \sup_{a>0}\mathcal{K}_{N,a}f(x).
+\label{eq:4.7.2}\end{equation}
+
+Nikodym 极大函数 $\mathcal{K}_{N}$ 的 $L^{p}(\mathbb{R}^{n})$($p > 1$)有界性,用于控制函数的相对大小关于方向的分布.对出现在该极大函数中的 tube 族,回忆覆盖引理(引理~\ref{lem:4.1.3})的证明并加以应用:若长轴方向全部固定,则可原样应用;但若容许方向具有自由度,则不再是以 3 倍包含其余 tube,而是需要在 $(n-1)$ 维方向上放大 $3N$ 倍,在剩下的 1 维方向上放大 3 倍,于是只能得到如下朴素的估计.
+\begin{equation*}
+\|\mathcal{K}_{N}f\|_{L^{p}(\mathbb{R}^{n})} \leq C_{p,N}\|f\|_{L^{p}(\mathbb{R}^{n})}, \quad C_{p,N} = 2\left(\frac{(3N)^{n-1}3p}{p-1}\right)^{1/p}.
+\end{equation*}
+这里的论点是,求出右端出现的常数 $C_{p,N}$ 关于 $N$ 的最优估计.为了改进上面的估计应当使用怎样的方法呢?我们将在本节中通篇思考这个问题.
+
+由于是极大函数的话题,以下在本节中假定出现的所有函数都是非负的.
+
+\subsection{小 Nikodym 极大函数}\label{sec:4.7.1}
+
+此后设 $N \gg 1$ 为大的整数参数,并令 $\delta = 1/N$.所谓 $\delta$-tube,是指与
+\[
+\{(x',x_n) \in \mathbb{R}^{n}:\ |x'| < \delta/2,\ |x_n| < 1/2\}
+\]
+合同的 tube,$T$ 的方向指长轴的方向.用 $l(T)$ 表示其轴所在的直线,用 $\omega(T) \in S^{n-1}$ 表示其一单位方向向量.暂时,我们将在 $\mathbb{R}^{n}$ 的原点附近进行细致的讨论.
+
+令 $Q_{1} := (-1,1)^{n}$,$Q_{2} := (-2,2)^{n}$.对 $f \in L^{1}(Q_{1})$,小的 Nikodym 极大函数定义为
+\begin{equation*}
+K_{\delta}f(x) := \sup_{T \ni x}\frac{1}{|T|}\int_{T}f(y)\dd y.
+\end{equation*}
+这里,上确界对包含 $x$ 且方向任意的 $\delta$-tube $T$ 取.
+
+关于该极大函数,如下猜想问题至今仍未解决.尽管这一问题已由许多优秀的数学家进行研究,但长期以来仍悬而未决.
+
+\textbf{猜想问题.} 存在常数 $C$,$\alpha$,使得
+\begin{equation}\tag{4.7.3}
+\|K_{\delta}f\|_{L^{n}(Q_{2})} \leq C(\log N)^{\alpha}\|f\|_{L^{n}(Q_{1})}
+\label{eq:4.7.3}\end{equation}
+成立.
+
+现在,若取
+\begin{align*}
+f(x) &= \frac{\chi_{[\delta,1]}(|x|)}{|x|}, \\
+\intertext{则可得估计}
+K_{\delta}f(x) &\geq C^{-1}\log N \quad (|x| < 1), \\
+\intertext{从而}
+\|K_{\delta}f\|_{L^{n}(Q_{2})} &\geq C^{-1}\log N. \\
+\intertext{另一方面,由于}
+\|f\|_{L^{n}(Q_{1})} &= C(\log N)^{1/n},
+\end{align*}
+\eqref{eq:4.7.3}的右端需要出现 $\log N$ 的项.
+
+正如后文将看到的,在 $n = 2$ 时已知此猜想成立.
+
+若 $f \in L^{1}(Q_{1})$,则
+\[
+K_{\delta}f(x) \leq C N^{n-1}\|f\|_{1},
+\]
+从而
+\begin{equation}\tag{4.7.4}
+\|K_{\delta}f\|_{L^{\infty}(Q_{2})} \leq C N^{n-1}\|f\|_{L^{1}(Q_{1})}.
+\label{eq:4.7.4}\end{equation}
+于是,对\eqref{eq:4.7.3},\eqref{eq:4.7.4}进行插值,作为猜想问题的一个版本,我们来考虑如下问题.
+
+\textbf{猜想问题.} 在 $1 \leq p \leq n$ 时
+\begin{equation}\tag{4.7.5}
+\left\|K_{\delta}f\right\|_{L^{q}(Q_{2})} \leq C N^{n/p-1}(\log N)^{\alpha n'/p'}\|f\|_{L^{p}(Q_{1})} \quad \left(q = (n-1)p'\right)
+\label{eq:4.7.5}\end{equation}
+成立.
+
+该猜想问题在 $p = 1$ 时当然成立.因此,论点是使成立的 $p$ 的范围向 $p = n$ 扩展.($\log N$)的指数大小在应用上不成问题.
+
+证明如下定理是本节的目标.
+
+\begin{theorem}[T. Wolff, 1995]\label{thm:4.7.1}
+在 $1 \leq p \leq (n+2)/2$ 时\eqref{eq:4.7.5}成立.特别地,
+\begin{equation}\tag{4.7.6}\begin{aligned}
+\|K_{\delta}f\|_{L^{q}(Q_{2})} & \leq C N^{n/p-1}(\log N)^{\alpha}\|f\|_{L^{p}(Q_{1})} \\
+& \quad (p = (n+2)/2,\ q = (n-1)p')
+\end{aligned}\label{eq:4.7.6}\end{equation}
+这里 $\alpha$ 表示仅依赖于维数 $n$ 的常数.
+\end{theorem}
+
+正如后文将确认的,该定理由如下使用分布函数的命题推出.
+
+\begin{proposition}\label{prop:4.7.2}
+设 $p = (n+2)/2$,$0 < \lambda < 1$,且 $\|f\|_{L^{\infty}(Q_{1})} = 1$,则
+\begin{equation}\tag{4.7.7}\begin{aligned}
+\lambda^{p}\delta^{n-p}|\{x \in Q_{2}:\ K_{\delta}f(x) > \lambda\}|^{(p-1)/(n-1)}&\leq C(\log N)^{(n+5)/2}\int_{Q_{1}}f(y)^{2}\dd y
+ \end{aligned}\label{eq:4.7.7}\end{equation}
+成立.
+\end{proposition}
+
+\subsection{命题~\ref{prop:4.7.2} 的证明}\label{sec:4.7.2}
+
+将 $Q_{2}$ 分割为边长为 $\delta$ 的立方体,把由各立方体中心点组成的集合记为 $I$.$I$ 的个数 $\#I$ 为 $\#I = (2N)^{n}$.对 $i \in I$,用 $Q_{i}$ 表示以 $i$ 为中心,边长为 $\delta$ 的分割立方体.
+
+固定 $0 < \lambda < 1$,令
+\begin{align*}
+\tilde{\mathcal{I}} &:= \mathbf{I} \cap \{x \in Q_{2}:\ K_{\delta}f(x) > \lambda\}, \\
+\intertext{则}
+\{x \in Q_{2}:\ K_{\delta}f(x) > \lambda\} &\subset \bigcup_{i \in \tilde{\mathcal{I}}}Q_{i}, \\
+\intertext{因此我们来估计}
+\sum_{i \in \tilde{\mathcal{I}}}|Q_{i}| &= \delta^{n}\#\tilde{\mathcal{I}}.
+\end{align*}
+
+由极大函数的定义,对每个 $i \in \tilde{I}$ 各选取一个 $\delta$-tube $T_{i} \ni i$,使得
+\begin{equation}\tag{4.7.8}
+\lambda|T_{i}| < \int_{T_{i}}f(y)\dd y, \quad i \in T_{i} \quad (i \in \tilde{\mathcal{I}})
+\label{eq:4.7.8}\end{equation}
+成立.
+
+令
+\[
+\tilde{D} := \left\{(\omega',\omega_{n}) \in S^{n-1}:\ \omega_{n} > \frac{1}{\sqrt{n}}\right\},
+\]
+并(在必要时让依赖于维数的常数进入常数中)假定 $\omega(T_{i}) \in \tilde{D}$.
+
+设集合 $\tilde{I}$ 被超平面 $\{x_{n} = t\}$ 截得的断面中出现的点的个数
+\begin{align*}
+\#(\tilde{\mathcal{I}} \cap \{x_{n} = t\})& \\
+\intertext{在 $t = t_{0}$ 处取最大值,令}
+\mathbf{I}_{0} &:= \mathbf{I} \cap \{x_{n} = t_{0}\}, \quad \mathcal{I}_{0} := \tilde{\mathcal{I}} \cap \{x_{n} = t_{0}\}, \\
+\intertext{则}
+\#\tilde{\mathcal{I}} &\leq 2N\#\mathcal{I}_{0}.
+\end{align*}
+综合以上,为证明\eqref{eq:4.7.7},只需证明
+\begin{equation}\tag{4.7.9}
+\lambda^{(n+2)/2}\delta^{(n-2)/2}\left(\delta^{n-1}\#\mathcal{I}_{0}\right)^{n/2(n-1)} \leq C(\log N)^{(n+5)/2}\int_{Q_{1}}f(y)^{2}\dd y
+\label{eq:4.7.9}\end{equation}
+成立即可.
+
+下面的几何引理将被基本地使用.
+
+\begin{lemma}\label{lem:4.7.3}
+设 $i, j \in \mathcal{I}_{0}$,且 $T_{i} \cap T_{j} \neq \emptyset$,则
+\begin{align*}
+(1)\quad |T_{i} \cap T_{j}| &\leq C\frac{\delta^{n}}{|\omega(T_{i}) - \omega(T_{j})| + \delta}, \\
+(2)\quad |i - j| &\leq |\omega(T_{i}) - \omega(T_{j})|
+\end{align*}
+成立.
+\end{lemma}
+
+两者的证明都很容易.(1)由 $\omega(T_{i}), \omega(T_{j}) \in \tilde{D}$ 推出.继续讨论.使用\eqref{eq:4.7.8}计算可得
+\begin{align*}
+\lambda^{2}\delta^{2n-2}(\#\mathcal{I}_{0})^{2} & = \left(\lambda\delta^{n-1}\#\mathcal{I}_{0}\right)^{2} \\
+& \leq C\left(\sum_{i \in \mathcal{I}_{0}}\int_{T_{i}}f(y)\dd y\right)^{2} \\
+&= C\left(\int\sum_{i \in \mathcal{I}_{0}}\chi_{T_{i}}(y)f(y)\dd y\right)^{2} \\
+&\leq C\int\left(\sum_{i \in \mathcal{I}_{0}}\chi_{T_{i}}(y)\right)^{2}\dd y \cdot \int f(y)^{2}\dd y.
+\end{align*}
+下面我们来估计
+\begin{equation}\tag{4.7.10}
+\int\left(\sum_{i \in \mathcal{I}_{0}}\chi_{T_{i}}(y)\right)^{2}\dd y.
+\label{eq:4.7.10}\end{equation}
+
+\textbf{情形 $n = 2$.} 若 $n = 2$,则由上面的引理和上式,讨论即告完成.实际上,
+\[
+\eqref{eq:4.7.10} = \sum_{i \in \mathcal{I}_{0}}\sum_{j \in \mathcal{I}_{0}}|T_{i} \cap T_{j}| \leq C\sum_{i \in \mathcal{I}_{0}}\sum_{j \in \mathcal{I}_{0}}\frac{\delta^{2}}{|i-j|+\delta} \leq C\#\mathcal{I}_{0}\delta\log N.
+\]
+与\eqref{eq:4.7.10}合起来即得\eqref{eq:4.7.9}.
+
+\textbf{估计\eqref{eq:4.7.10}.} 由于在估计中容许出现 $\log N$ 的项,我们充分利用这一点来估计\eqref{eq:4.7.10}.首先改写如下进行估计.
+\begin{align*}
+\eqref{eq:4.7.10} &= \sum_{i \in \mathcal{I}_{0}}\sum_{j \in \mathcal{I}_{0}}|T_{i} \cap T_{j}| \\
+&\leq c\delta^{n-1}\#\mathcal{I}_{0} \\
+&\quad + \sum_{i \in \mathcal{I}_{0}}\sum_{k=1}^{\log N}\sum\left\{j \in \mathcal{I}_{0}:\ \delta2^{k-1} \leq |\omega(T_{i}) - \omega(T_{j})| < \delta2^{k}\right\}|T_{i} \cap T_{j}| \\
+&\leq c\delta^{n-1}\#\mathcal{I}_{0} \\
+&\quad + \log N\sum_{i \in \mathcal{I}_{0}}\sum\left\{j \in \mathcal{I}_{0}:\ \sigma/2 \leq |\omega(T_{i}) - \omega(T_{j})| < \sigma\right\}|T_{i} \cap T_{j}|, \\
+\intertext{其中 $\sigma := \delta2^{k_{0}}$,$k_{0}$ 是使级数 $\sum_{k}$ 的项取最大的 $k$ 的值. 如果}
+\delta^{n-1}\#\mathcal{I}_{0} &\geq \sum_{i \in \mathcal{I}_{0}}\sum\left\{j \in \mathcal{I}_{0}:\ \sigma/2 \leq |\omega(T_{i}) - \omega(T_{j})| < \sigma\right\}|T_{i} \cap T_{j}| \\
+\intertext{成立,则}
+\eqref{eq:4.7.10} &\leq C(\log N)\delta^{n-1}\#\mathcal{I}_{0},
+\end{align*}
+经由\eqref{eq:4.7.10}得\eqref{eq:4.7.9}成立.因此,我们假定
+\[
+\eqref{eq:4.7.10} \leq C\log N\sum_{i \in \mathcal{I}_{0}}\sum\left\{j \in \mathcal{I}_{0}:\ \sigma/2 \leq |\omega(T_{i}) - \omega(T_{j})| < \sigma\right\}|T_{i} \cap T_{j}|
+\]
+来继续讨论.
+
+像上面那样把待估计的量分配到 $O(\log N)$ 个部分,并关注其中最大的量进行估计的方法,此后将被基本地使用.
+
+将 $I_{0}$ 分割为边长为 $\sigma$ 的立方体,把其中一个记为 $Q$,考虑 $Q \cap \mathcal{I}_{0}$.对每个 $Q \cap \mathcal{I}_{0}$,在满足 $i \in Q \cap \mathcal{I}_{0}$ 的 $i$ 中,各选取一个使
+\[
+\sum\left\{j \in \mathcal{I}_{0}:\ \sigma/2 \leq |\omega(T_{i}) - \omega(T_{j})| < \sigma\right\}|T_{i} \cap T_{j}|
+\]
+取最大的 $i$,把所选取的全体 $i$ 的集合记为 $I_{1}$.当 $i \in I_{1}$ 且 $i \in Q \cap \mathcal{I}_{0}$ 时,记
+\begin{align*}
+I_{i} &:= Q \cap \mathcal{I}_{0}. \\
+\intertext{于是,}
+I_{i} \cap I_{j} &= \emptyset \quad (i \neq j,\ i, j \in \mathcal{I}_{1}), \\
+\mathcal{I}_{0} &= \bigcup_{i \in \mathcal{I}_{1}}I_{i}, \\
+\intertext{并且}
+\eqref{eq:4.7.10} &\leq C\log N\sum_{i \in \mathcal{I}_{1}}\#I_{i}\sum\left\{j \in \mathcal{I}_{0}:\ \sigma/2 \leq |\omega(T_{i}) - \omega(T_{j})| < \sigma\right\}|T_{i} \cap T_{j}|. \\
+\intertext{对 $i \in I_{1}$,令}
+\tilde{J}_{i} &:= \{j \in \mathcal{I}_{0}:\ \sigma/2 \leq |\omega(T_{i}) - \omega(T_{j})| < \sigma,\ T_{i} \cap T_{j} \neq \emptyset\}, \\
+\intertext{则由以上和引理~\ref{lem:4.7.3} 知下式成立:}
+\eqref{eq:4.7.10} &\leq C(\log N)\frac{\delta^{n}}{\sigma}\sum_{i \in \mathcal{I}_{1}}\#I_{i}\#\tilde{J}_{i}.
+\end{align*}
+对每个 $j \in \tilde{J}_{i}$,由简单的几何考察可知
+\begin{align*}
+T_{j} &\subset \{x:\ \operatorname{dist}(x, l(T_{i})) < \sigma\}. \\
+\intertext{因此由\eqref{eq:4.7.8},令}
+&\begin{cases}
+f_{0}(y) := \chi\{\operatorname{dist}(x, l(T_{i})) < \delta\}(y)f(y), \\
+f_{k}(y) := \chi\{\delta2^{k-1} \leq \operatorname{dist}(x, l(T_{i})) < \delta2^{k}\}(y)f(y),
+\end{cases} \\
+\intertext{则}
+\lambda|T_{j}| &< \sum_{k=0}^{k_{0}}\int_{T_{j}}f_{k}(y)\dd y.
+\end{align*}
+利用此式静心思考,可以找到 $\delta < \rho \leq \sigma$ 与 $J_{i} \subset \tilde{J}_{i}$,使得
+\begin{equation}\tag{4.7.11}
+\frac{\lambda}{\log N}|T_{j}| < \int_{T_{j}}\chi\{\rho/2 \leq \operatorname{dist}(x, l(T_{i})) < \rho\}(y)f(y)\dd y \quad (j \in J_{i},\ i \in \mathcal{I}_{1})
+\label{eq:4.7.11}\end{equation}
+和
+\[
+\eqref{eq:4.7.10} \leq C(\log N)^{2}\frac{\delta^{n}}{\sigma}\sum_{i \in \mathcal{I}_{1}}\#I_{i}\#J_{i}
+\]
+同时成立.
+
+这里给出一条之后会变得重要的注意.对\eqref{eq:4.7.11},利用 $\|f\|_{\infty} = 1$ 作简单的几何考察即可知
+\begin{equation}\tag{4.7.12}
+\frac{\sigma}{\rho} \leq C\frac{\log N}{\lambda}
+\label{eq:4.7.12}\end{equation}
+成立.
+
+再增加一个 $\log N$ 的项,然后继续前进.
+
+利用 $\#J_{i} \leq (2N)^{n-1}$,可以找到自然数 $\nu$ 和 $I_{2} \subset I_{1}$,使得
+\begin{equation}\tag{4.7.13}
+\nu \leq \#J_{i} < 2\nu \quad (i \in \mathcal{I}_{2})
+\label{eq:4.7.13}\end{equation}
+和
+\begin{equation}\tag{4.7.14}
+\eqref{eq:4.7.10} \leq C\nu(\log N)^{3}\frac{\delta^{n}}{\sigma}\sum_{i \in \mathcal{I}_{2}}\#I_{i}
+\label{eq:4.7.14}\end{equation}
+同时成立.
+
+\textbf{辅助极大函数.} 设直线 $L \subset \mathbb{R}^{n}$ 的单位方向向量属于 $\tilde{D}_{0}$.对 $f \in L^{1}(Q_{1})$,在集合 $\mathbf{I}_{0}$ 上定义的辅助极大函数为
+\[
+K_{\delta}^{L}f(i) := \sup_{T \ni i,\ T \cap L \neq \emptyset}\frac{1}{|T|}\int_{T}f(y)\dd y \quad (i \in \mathbf{I}_{0}).
+\]
+这里,上确界对包含 $i$ 且与 $L$ 相交的 $\delta$-tube $T$ 取.
+
+关于该辅助极大函数的如下引理,在以后的证明推进中起重要作用.
+
+\begin{lemma}\label{lem:4.7.4}
+设 $\delta < \rho \leq \sigma < 1$,且
+\begin{align*}
+\operatorname{supp}f &\subset \{x:\ \rho/2 \leq \operatorname{dist}(x, L) < \rho\}, \quad \mathcal{I} = \mathbf{I}_{0} \cap \{x:\ \operatorname{dist}(x, L) < \sigma\}, \\
+\intertext{则}
+\lambda^{2}\delta^{n-1}\#\left\{i \in \mathcal{I}:\ K_{\delta}^{L}f(i) > \lambda\right\}&\leq C(\log N)^{2}(\sigma/\rho)^{n-2}\int f(y)^{2}\dd y \quad (\lambda > 0)
+ \end{align*}
+成立.
+\end{lemma}
+
+\begin{proof}
+证明容易,故仅记其概略.令
+\begin{align*}
+E_{1} &:= \{x:\ \rho/2 \leq \operatorname{dist}(x, L) < \rho\}, \quad E_{2} := \{x:\ \sigma/2 \leq \operatorname{dist}(x, L) < \sigma\}, \\
+\intertext{考虑二进制分解,来估计最困难的部分}
+I_{0} &:= \left\{i \in \mathbf{I}_{0} \cap E_{2}:\ K_{\delta}^{L}f(i) > \lambda\right\}
+\end{align*}
+的个数.
+
+与\eqref{eq:4.7.10}相同,此时需要估计 $\left|T_{i} \cap T_{j} \cap E_{1}\right|$ 的和.固定 $T_{i}$ 后,由辅助极大函数的定义可知,与 $T_{i}$ 相交的 $T_{j}$ 本质上只限于包含在由 $L$ 与 $l(T_{i})$ 决定的二维平面的 $\delta$ 邻域中的那些.因此这里可以应用二维的结果.具有如此厚度的平面,随 $E_{1}$,$I_{0}$ 的位置关系,在 $E_{1}$ 上具有 $(\sigma/\rho)^{n-2}$ 的重数.利用这些即证得引理.
+\end{proof}
+
+\textbf{估计 $\nu$ 与 $\nu\#\mathcal{I}_{2}$.} 为了从\eqref{eq:4.7.14}中消去 $\nu$,我们估计 $\nu$ 以及 $\nu\#\mathcal{I}_{2}$.
+
+对 $i \in I_{2}$,回忆\eqref{eq:4.7.11},对 $L = l(T_{i})$ 应用引理~\ref{lem:4.7.4},令
+\begin{align*}
+\overline{T_{i}} &:= \{x:\ \operatorname{dist}(x, l(T_{i})) < \rho\}, \\
+\intertext{则可知}
+\left(\frac{\lambda}{\log N}\right)^{2}\delta^{n-1}\#J_{i} &\leq C(\log N)^{2}(\sigma/\rho)^{n-2}\int_{\overline{T_{i}}}f(y)^{2}\dd y. \\
+\intertext{于是,记}
+\gamma_{1} &:= (\log N)^{4}(\sigma/\rho)^{n-2}\lambda^{-2}\delta^{1-n},
+\end{align*}
+则
+\begin{equation}\tag{4.7.15}
+\nu \leq \#J_{i} \leq C\gamma_{1}\int_{\overline{T_{i}}}f(y)^{2}\dd y.
+\label{eq:4.7.15}\end{equation}
+接下来估计
+\begin{align*}
+\nu\#\mathcal{I}_{2} &\leq C\gamma_{1}\sum_{i \in \mathcal{I}_{2}}\int_{\overline{T_{i}}}f(y)^{2}\dd y. \\
+\intertext{以下是被称作 bush-argument 的手法.把}
+\sum_{i \in \mathcal{I}_{2}}\int_{\overline{T_{i}}}f(y)^{2}\dd y &= \int f(y)^{2}\left(\sum_{i \in I_{2}}\chi_{\overline{T_{i}}}(y)\right)\dd y =: \int f(y)^{2}G(y)\dd y
+\end{align*}
+改写,设 $G(y)$ 在 $y = a$ 处取最大值 $\mu$,来估计 $G(y)$.
+
+由于与 $y = a$ 相交的 $\overline{T_{i}}$ 的个数为 $\mu$,令
+\[
+\mathcal{I}_{3} := \{i \in \mathcal{I}_{2}:\ \overline{T_{i}} \ni a\},
+\]
+来考察 $\nu\#\mathcal{I}_{3}$.
+
+对 $i \in \mathcal{I}_{3}$,由\eqref{eq:4.7.11}得
+\begin{align*}
+\frac{\lambda}{\log N}|T_{j}| &< \int_{T_{j}}\chi_{\overline{T_{i}}}(y)f(y)\dd y \quad (j \in J_{i}), \\
+\intertext{故利用 $\|f\|_{\infty} = 1$,}
+&\begin{aligned}
+\frac{\lambda}{\log N}|T_{j}|& \\
+&< \int_{T_{j}}\chi\left\{\overline{T_{i}} \setminus B\left(a, \frac{\lambda}{3\log N}\right)\right\}(y)f(y)\dd y + \left|T_{j} \cap B\left(a, \frac{\lambda}{3\log N}\right)\right|.
+\end{aligned} \\
+\intertext{因此可设}
+\frac{\lambda}{3\log N}|T_{j}| &< \int_{T_{j}}\chi\left\{\overline{T_{i}} \setminus B\left(a, \frac{\lambda}{3\log N}\right)\right\}(y)f(y)\dd y \quad (j \in J_{i}). \\
+\intertext{用此式再次应用引理~\ref{lem:4.7.4},得}
+\nu &\leq \#J_{i} \leq C\gamma_{1}\int\chi\left\{\overline{T_{i}} \setminus B\left(a, \frac{\lambda}{3\log N}\right)\right\}(y)f(y)^{2}\dd y \quad (i \in \mathcal{I}_{3}). \\
+\intertext{因此}
+\nu\#\mathcal{I}_{3} &\leq C\gamma_{1}\sum_{i \in \mathcal{I}_{3}}\int\chi\left\{\overline{T_{i}} \setminus B\left(a, \frac{\lambda}{3\log N}\right)\right\}(y)f(y)^{2}\dd y.
+\end{align*}
+利用 $\mathcal{I}_{3}$ 至少分离 $\sigma$ 这一事实作简单的几何考察,右端的和中重数由
+\begin{align*}
+\gamma_{2} &:= \left(\frac{\rho}{(\lambda/\log N)\sigma}\right)^{n-1} \\
+\intertext{的常数倍估计,得}
+\nu\#\mathcal{I}_{3} &\leq C\gamma_{1}\gamma_{2}\int f(y)^{2}\dd y.
+\end{align*}
+因此
+\begin{equation}\tag{4.7.16}
+\nu\#\mathcal{I}_{2} \leq C\nu^{-1}\gamma_{1}^{2}\gamma_{2}\left(\int f(y)^{2}\dd y\right)^{2}.
+\label{eq:4.7.16}\end{equation}
+
+\textbf{\eqref{eq:4.7.9}的证明.} 首先假定
+\[
+\sigma \geq \left(\delta^{n-1}\#\mathcal{I}_{0}\right)^{1/(n-1)}.
+\]
+此时,由\eqref{eq:4.7.10},\eqref{eq:4.7.14},\eqref{eq:4.7.15}以及\eqref{eq:4.7.12}计算出
+\begin{align*}
+\sigma\lambda^{n+2}\delta^{n-2}\left(\delta^{n-1}\#\mathcal{I}_{0}\right) &\leq C(\log N)^{n+5}\left(\int f(y)^{2}\dd y\right)^{2}, \\
+\intertext{利用假定得}
+\lambda^{n+2}\delta^{n-2}\left(\delta^{n-1}\#\mathcal{I}_{0}\right)^{n/(n-1)} &\leq C(\log N)^{n+5}\left(\int f(y)^{2}\dd y\right)^{2}. \\
+\intertext{取正平方根,则\eqref{eq:4.7.9}成立. 其次假定}
+\sigma &< \left(\delta^{n-1}\#\mathcal{I}_{0}\right)^{1/(n-1)}.
+\end{align*}
+第一,由\eqref{eq:4.7.14}得
+\begin{equation}\tag{4.7.17}
+\eqref{eq:4.7.10} \leq C\nu(\log N)^{3}\frac{\delta^{n}}{\sigma}\#\mathcal{I}_{0}.
+\label{eq:4.7.17}\end{equation}
+第二,由 $\#I_{i} \leq \left(\frac{\sigma}{\delta}\right)^{n-1}$ 以及\eqref{eq:4.7.14},\eqref{eq:4.7.16}计算出
+\[
+\eqref{eq:4.7.10} \leq C\nu^{-1}\lambda^{-n-3}\delta^{-2n+3}(\log N)^{n+10}\sigma^{n-2}\left(\frac{\sigma}{\rho}\right)^{n-3}\left(\int f(y)^{2}\dd y\right)^{2},
+\]
+用\eqref{eq:4.7.12}得
+\begin{equation}\tag{4.7.18}
+\eqref{eq:4.7.10} \leq C\nu^{-1}\lambda^{-2n}\delta^{-2n+3}(\log N)^{2n+7}\sigma^{n-2}\left(\int f(y)^{2}\dd y\right)^{2}.
+\label{eq:4.7.18}\end{equation}
+把\eqref{eq:4.7.17},\eqref{eq:4.7.18}的两边相乘并取正平方根,则
+\begin{align*}
+&\begin{aligned}
+\eqref{eq:4.7.10}&\leq C\lambda^{-n}\delta^{-(n-3)/2}(\log N)^{n+5}\sigma^{(n-3)/2}(\#I_{0})^{1/2}\int f(y)^{2}\dd y  \\
+&= C\lambda^{-n}\delta^{-n+2}(\log N)^{n+5}\sigma^{(n-3)/2}\left(\delta^{n-1}\#I_{0}\right)^{1/2}\int f(y)^{2}\dd y.
+\end{aligned} \\
+\intertext{由\eqref{eq:4.7.10}得}
+\lambda^{n+2}\delta^{n-2}\left(\delta^{n-1}\#\mathcal{I}_{0}\right)^{3/2} &\leq C(\log N)^{n+5}\sigma^{(n-3)/2}\left(\int f(y)^{2}\dd y\right)^{2}. \\
+\intertext{利用假定,此情形也得}
+\lambda^{n+2}\delta^{n-2}\left(\delta^{n-1}\#\mathcal{I}_{0}\right)^{n/(n-1)} &\leq C(\log N)^{n+5}\left(\int f(y)^{2}\dd y\right)^{2}.
+\end{align*}
+取正平方根,则\eqref{eq:4.7.9}成立.
+
+由以上,命题~\ref{prop:4.7.2} 得证.
+
+\subsection{定理~\ref{thm:4.7.1} 的证明}\label{sec:4.7.3}
+
+定理~\ref{thm:4.7.1} 可由在命题~\ref{prop:4.7.2} 中取 $f = \chi_{E}$($E \subset Q_{1}$)所得的结果与\eqref{eq:4.7.4},用 Marcinkiewicz 插值定理证明.这里,虽然计算稍复杂,但我们用二进制分解给出直接证明.用被称为三点插值法的方法来证明\eqref{eq:4.7.6}.由此定理显然成立.
+
+设 $\lambda > 0$,$\epsilon \gg 1$ 在所需的计算之后确定,分解
+\begin{align*}
+f(x) & = f(x)\chi_{\{f < \lambda\}}(x) + f(x)\chi_{\{\lambda \leq f < \epsilon\lambda\}}(x) + f(x)\chi_{\{\epsilon\lambda \leq f\}}(x) \\
+& =: f_{1}(x) + f_{2}(x) + f_{3}(x), \\
+\intertext{则由次线性性得}
+K_{\delta}f(x) &\leq K_{\delta}f_{1}(x) + K_{\delta}f_{2}(x) + K_{\delta}f_{3}(x).
+\end{align*}
+显然 $K_{\delta}f_{1}(x) \leq \lambda$,故由上式得
+\begin{align*}
+&\begin{aligned}
+\{x \in Q_{2}:\ K_{\delta}f(x) > 3\lambda\}&\subset \{x \in Q_{2}:\ K_{\delta}f_{2}(x) > \lambda\} \cup \{x \in Q_{2}:\ K_{\delta}f_{3}(x) > \lambda\}.
+\end{aligned}  \\
+\intertext{因此}
+&\begin{aligned}
+|\{x \in Q_{2}:\ K_{\delta}f(x) > 3\lambda\}|&\leq |\{x \in Q_{2}:\ K_{\delta}f_{2}(x) > \lambda\}| + |\{x \in Q_{2}:\ K_{\delta}f_{3}(x) > \lambda\}|.
+\end{aligned}  \\
+\intertext{利用此式,}
+&\begin{aligned}
+\int_{Q_{2}}K_{\delta}f(x)^{q}\dd x &= 3^{q}q\int_{0}^{\infty}|\{x \in Q_{2}:\ K_{\delta}f(x) > 3\lambda\}|\lambda^{q-1}\dd\lambda \\
+\qquad &\leq 3^{q}q\int_{0}^{\infty}|\{x \in Q_{2}:\ K_{\delta}f_{2}(x) > \lambda\}|\lambda^{q-1}\dd\lambda
+\end{aligned} \\
+&\begin{aligned}
++ 3^{q}q\int_{0}^{\infty}|\{x \in Q_{2}:\ K_{\delta}f_{3}(x) > \lambda\}|\lambda^{q-1}\dd\lambda&=: 3^{q}q(\mathrm{I} + \mathrm{II}).
+\end{aligned}
+ \end{align*}
+
+\textbf{估计 I.} 首先用命题~\ref{prop:4.7.2} 证明
+\begin{equation}\tag{4.7.19}
+|\{x \in Q_{2}:\ K_{\delta}f_{2}(x) > \lambda\}|^{p/q} \leq C N^{n-p}(\log N)^{\alpha}(\log\epsilon)^{p}\lambda^{-p}\int f_{2}(y)^{p}\dd y.
+\label{eq:4.7.19}\end{equation}
+
+令
+\begin{align*}
+g_{k} &:= f(x)\chi\{2^{k-1}\lambda \leq f < 2^{k}\lambda\}(x) \quad (k > 0), \\
+\intertext{再分解}
+f_{2}(x) &= \sum_{k=1}^{\log\epsilon}g_{k}(x), \\
+\intertext{则}
+|\{x:\ K_{\delta}f_{2}(x) > \lambda\}| &\leq \sum_{k=1}^{\log\epsilon}\left|\left\{x:\ K_{\delta}g_{k}(x) > \frac{\lambda}{\log\epsilon}\right\}\right|. \\
+\intertext{改写为}
+\left|\left\{x:\ K_{\delta}g_{k}(x) > \frac{\lambda}{\log\epsilon}\right\}\right| &= \left|\left\{x:\ K_{\delta}\left(\frac{g_{k}}{2^{k}\lambda}\right)(x) > \frac{1}{2^{k}\log\epsilon}\right\}\right|, \\
+\intertext{即可对该式右端应用命题~\ref{prop:4.7.2}:}
+&\begin{aligned}
+\left|\left\{x:\ K_{\delta}\left(\frac{g_{k}}{2^{k}\lambda}\right)(x) > \frac{1}{2^{k}\log\epsilon}\right\}\right|^{p/q}&\leq C N^{n-p}(\log N)^{\alpha}(2^{k}\log\epsilon)^{p}\int\left(\frac{g_{k}(y)}{2^{k}\lambda}\right)^{2}\dd y  \\
+&\leq C N^{n-p}(\log N)^{\alpha}(\log\epsilon)^{p}\lambda^{-p}\int g_{k}(y)^{p}\dd y.
+\end{aligned}
+\end{align*}
+这里用到了 $(p-1)/(n-1) = p/q$ 与 $\frac{1}{2} \leq \frac{g_{k}(x)}{2^{k}\lambda}$.注意到 $p/q < 1$,由此得
+\begin{align*}
+&\begin{aligned}
+|\{x \in Q_{2}:\ K_{\delta}f_{2}(x) > \lambda\}|^{p/q}&\leq \sum_{k=1}^{\log\epsilon}\left|\left\{x:\ K_{\delta}g_{k}(x) > \frac{\lambda}{\log\epsilon}\right\}\right|^{p/q}  \\
+&\leq C N^{n-p}(\log N)^{\alpha}(\log\epsilon)^{p}\lambda^{-p}\int\sum_{k=1}^{\log\epsilon}g_{k}(y)^{p}\dd y \\
+&= C N^{n-p}(\log N)^{\alpha}(\log\epsilon)^{p}\lambda^{-p}\int f_{2}(y)^{p}\dd y.
+\end{aligned} \\
+\intertext{即知\eqref{eq:4.7.19}成立. 用此来估计 I:}
+&\begin{aligned}
+\mathrm{I} &= \int_{0}^{\infty}|\{x \in Q_{2}:\ K_{\delta}f_{2}(x) > \lambda\}|\lambda^{q-1}\dd\lambda \\
+&\leq C N^{qn/p-q}(\log N)^{\alpha q/p}(\log\epsilon)^{q}\int_{0}^{\infty}\left(\int_{Q_{1}}f(y)^{p}\chi_{\{\lambda \leq f < \epsilon\lambda\}}(y)\dd y\right)^{q/p}\frac{\dd\lambda}{\lambda}.
+\end{aligned} \\
+\intertext{利用 $p/q < 1$,再次用二进制分解,}
+&\begin{aligned}
+\left(\int_{0}^{\infty}\left(\int f(y)^{p}\chi_{\{\lambda \leq f < \epsilon\lambda\}}(y)\dd y\right)^{q/p}\frac{\dd\lambda}{\lambda}\right)^{p/q}&= \left(\sum_{k \in \mathbf{Z}}\int_{2^{k-1}}^{2^{k}}\left(\int f(y)^{p}\chi_{\{\lambda \leq f < \epsilon\lambda\}}(y)\dd y\right)^{q/p}\frac{\dd\lambda}{\lambda}\right)^{p/q}  \\
+&\leq \left(\sum_{k \in \mathbf{Z}}\left(\int f(y)^{p}\chi_{\{2^{k-1} \leq f < \epsilon2^{k}\}}(y)\dd y\right)^{q/p}\int_{2^{k-1}}^{2^{k}}\frac{\dd\lambda}{\lambda}\right)^{p/q} \\
+&\leq C\sum_{k \in \mathbf{Z}}\int f(y)^{p}\chi_{\{2^{k-1} \leq f < \epsilon2^{k}\}}(y)\dd y \\
+&\leq C\int_{0}^{\infty}\int f(y)^{p}\chi_{\{\lambda \leq f < 8\epsilon\lambda\}}(y)\dd y\frac{\dd\lambda}{\lambda}.
+\end{aligned} \\
+\intertext{用此得}
+\mathrm{I} &\leq C N^{qn/p-q}(\log N)^{\alpha q/p}(\log\epsilon)^{q}\left(\int_{0}^{\infty}\int f(y)^{p}\chi_{\{\lambda \leq f < 8\epsilon\lambda\}}(y)\dd y\frac{\dd\lambda}{\lambda}\right)^{q/p} \\
+&\begin{aligned}
+&\leq C N^{qn/p-q}(\log N)^{\alpha q/p}(\log\epsilon)^{q}\left(\int f(y)^{p}\int_{f(y)/8\epsilon}^{f(y)}\frac{\dd\lambda}{\lambda}\dd y\right)^{q/p} \\
+&= C N^{qn/p-q}(\log N)^{\alpha q/p}(\log\epsilon)^{q+q/p}\left(\int f(y)^{p}\dd y\right)^{q/p}.
+\end{aligned}
+\end{align*}
+
+\textbf{估计 II.} 由简单的几何考察可知
+\begin{align*}
+K_{\delta}f(x) &\leq C N^{n-1}\int f(y)\chi_{B(x,1)}(y)\dd y. \\
+\intertext{由 Young 不等式,由此得}
+\|K_{\delta}f\|_{L^{1}(Q_{2})} &\leq C N^{n-1}\|f\|_{L^{1}(Q_{1})}. \\
+\intertext{特别地,关于分布函数有}
+|\{x \in Q_{2}:\ K_{\delta}f(x) > \lambda\}| &\leq C\frac{N^{n-1}}{\lambda}\|f\|_{L^{1}(Q_{1})} \quad (\lambda > 0).
+\end{align*}
+又,若 $f \in L^{p}(Q_{1})$,则 Hölder 不等式给出
+\begin{align*}
+K_{\delta}f(x) &\leq C N^{(n-1)/p}\|f\|_{L^{p}(Q_{1})}. \\
+\intertext{利用这些,}
+&\begin{aligned}
+\mathrm{II} &= \int_{0}^{\infty}|\{x \in Q_{2}:\ K_{\delta}f_{3}(x) > \lambda\}|\lambda^{q-1}\dd\lambda \\
+&\leq C\left(N^{(n-1)/p}\|f\|_{p}\right)^{q-p}\int_{0}^{\infty}|\{x:\ K_{\delta}f_{3}(x) > \lambda\}|\lambda^{p-1}\dd\lambda \\
+&\leq C\left(N^{(n-1)/p}\|f\|_{p}\right)^{q-p}N^{n-1}\int_{0}^{\infty}\int f(y)\chi_{\{\epsilon\lambda \leq f\}}(y)\dd y\,\lambda^{p-2}\dd\lambda \\
+&\leq C N^{q(n-1)/p}\|f\|_{p}^{q-p}\int f(y)\int_{0}^{f(y)/\epsilon}\lambda^{p-2}\dd\lambda\dd y \\
+&\leq C N^{q(n-1)/p}\|f\|_{p}^{q-p}\epsilon^{1-p}\int f(y)^{p}\dd y \\
+&= C N^{q(n-1)/p}\epsilon^{1-p}\left(\int f(y)^{p}\dd y\right)^{q/p}.
+\end{aligned}
+\end{align*}
+若选取 $\epsilon = N^{(q-q/p)/(p-1)}$,则合 I 与 II 的估计得
+\[
+\|K_{\delta}f\|_{L^{q}(Q_{2})} \leq C N^{n/p-1}(\log N)^{(\alpha+1)/p+1}\|f\|_{L^{p}(Q_{1})},
+\]
+于是\eqref{eq:4.7.6}成立,定理得证.
+
+\subsection{大 Nikodym 极大函数(C\'ordoba 的筛)}\label{sec:4.7.4}
+
+这里,我们想利用定理~\ref{thm:4.7.1} 来考虑对由\eqref{eq:4.7.1},\eqref{eq:4.7.2}定义的大 Nikodym 极大函数的估计.C\'ordoba 的筛论证是其核心.
+
+首先,由\eqref{eq:4.7.6}与 Hölder 不等式可知
+\[
+\|K_{\delta}f\|_{L^{p}(Q_{2})} \leq C N^{n/p-1}(\log N)^{\alpha}\|f\|_{L^{p}(Q_{1})} \quad (p = (n+2)/2).
+\]
+回忆 $N = 1/\delta$,将坐标按 $1 \to Na$ 作尺度变换,则由上式得
+\begin{align*}
+\|\mathcal{K}_{N,a}f\|_{L^{p}(Q_{2Na})} &\leq C N^{n/p-1}(\log N)^{\alpha}\|f\|_{L^{p}(Q_{Na})}, \\
+Q_{Na} &:= (-Na, Na)^{n}, \quad Q_{2Na} := (-2Na, 2Na)^{n}
+\end{align*}
+成立.由此,通过适当分解 $f$ 的支集,得
+\begin{equation}\tag{4.7.20}
+\|\mathcal{K}_{N,a}f\|_{L^{p}(\mathbb{R}^{n})} \leq C N^{n/p-1}(\log N)^{\alpha}\|f\|_{L^{p}(\mathbb{R}^{n})} \quad (p = (n+2)/2).
+\label{eq:4.7.20}\end{equation}
+特别地,对一切 $\lambda > 0$,
+\[
+\begin{aligned}
+|\{x \in \mathbb{R}^{n}:\ \mathcal{K}_{N,a}f(x) > \lambda\}| &\leq C N^{n-p}(\log N)^{p\alpha}\lambda^{-p}\|f\|_{p}^{p} \\
+&(p = (n+2)/2)
+\end{aligned}
+\]
+
+下面给出筛引理.
+
+\begin{lemma}\label{lem:4.7.5}
+设 $1 \leq p < \infty$.此时,对依赖于 $N$ 的常数 $C_{N}$,若
+\begin{align*}
+|\{x \in \mathbb{R}^{n}:\ \mathcal{K}_{N,a}f(x) > \lambda\}| &\leq C_{N}\lambda^{-p}\|f\|_{p}^{p} \quad (\lambda > 0) \\
+\intertext{成立,则}
+|\{x \in \mathbb{R}^{n}:\ \mathcal{K}_{N}f(x) > \lambda\}| &\leq C C_{N}(\log N)\lambda^{-p}\|f\|_{p}^{p} \quad (\lambda > 0)
+\end{align*}
+成立.其中 $C$ 是仅依赖于维数 $n$ 与 $p$ 的常数.
+\end{lemma}
+
+由该引理与\eqref{eq:4.7.20}可确认
+\begin{align*}
+&\begin{aligned}
+|\{x \in \mathbb{R}^{n}:\ \mathcal{K}_{N}f(x) > \lambda\}| &\leq C N^{n-p}(\log N)^{p\alpha+1}\lambda^{-p}\|f\|_{p}^{p} \\
+&(p = (n+2)/2)
+\end{aligned} \\
+\intertext{成立.另一方面,}
+|\{x \in \mathbb{R}^{n}:\ \mathcal{K}_{N}f(x) > \lambda\}| &\leq C N^{n-1}\lambda^{-1}\|f\|_{1}
+\end{align*}
+的成立是显然的,因此利用这两式,通过与定理~\ref{thm:4.7.1} 的证明类似的三点插值法的讨论,可证明如下定理.
+
+\begin{theorem}\label{thm:4.7.6}
+在 $1 < p \leq (n+2)/2$ 时
+\begin{equation}\tag{4.7.21}
+\|\mathcal{K}_{N}f\|_{L^{p}(\mathbb{R}^{n})} \leq C N^{n/p-1}(\log N)^{\alpha}\|f\|_{L^{p}(\mathbb{R}^{n})}
+\label{eq:4.7.21}\end{equation}
+成立.这里 $\alpha$ 表示依赖于维数 $n$ 与 $p$ 的常数.
+\end{theorem}
+
+\textbf{引理~\ref{lem:4.7.5} 的证明.}
+
+\begin{proof}
+采用仅在此处使用的记号:与 tube
+\[
+\{(x',x_n) \in \mathbb{R}^{n}:\ |x'| < a/2,\ |x_n| < b/2\}
+\]
+合同的 tube 的维数记为 $(a,b)$.另外,对 tube $T$,用 $cT$ 表示保持 $T$ 的中心与轴所在直线不变,将各边的长度放大 $c$ 倍所得的 tube.
+
+设 $f \in L^{p}(\mathbb{R}^{n})$,令
+\[
+E_{\lambda} := \{x \in \mathbb{R}^{n}:\ \mathcal{K}_{N}f(x) > \lambda\}.
+\]
+此时,设 $A \subset E_{\lambda}$ 为任意紧集,对每个 $x \in A$,由极大函数的定义,选取包含 $x$,维数为 $(a_{x}, Na_{x})$ 的 tube $T_{x}$,使得
+\begin{equation}\tag{4.7.22}
+\lambda < \frac{1}{|T_{x}|}\int_{T_{x}}f(y)\dd y
+\label{eq:4.7.22}\end{equation}
+成立.由 $A$ 的紧性,得到满足
+\[
+\mathcal{A} \subset \bigcup_{j=1}^{\nu}T_{x_{j}}
+\]
+的有限个 tube 的族.把 $T_{x_{j}}$ 记为 $T_{j}$,设 $T_{j}$ 的维数为 $(a_{j}, Na_{j})$.
+
+选取满足
+\begin{align*}
+N^{\kappa} &\leq \max\{a_{j}:\ j = 1, \dots, \nu\} < N^{\kappa+1} \\
+\intertext{的 $\kappa \in \mathbf{Z}$.首先令}
+I_{0} &:= \{j:\ N^{\kappa} \leq a_{j} < N^{\kappa+1}\}, \\
+\intertext{并令}
+J_{0} &:= \{j:\ N^{\kappa-1} \leq a_{j} < N^{\kappa}\}, \\
+\intertext{设}
+\mathcal{A}_{0} &:= \bigcup_{j \in I_{0}}T_{j}, \quad \mathcal{B}_{0} := \bigcup_{j \in J_{0}}T_{j}. \\
+\intertext{其次令}
+I_{1} &:= \{j:\ N^{\kappa-2} \leq a_{j} < N^{\kappa-1},\ T_{j} \cap \mathcal{A}_{0} = \emptyset\}, \\
+\intertext{并令}
+J_{1} &:= \{j:\ N^{\kappa-3} \leq a_{j} < N^{\kappa-2},\ T_{j} \cap \mathcal{B}_{0} = \emptyset\}, \\
+\intertext{设}
+\mathcal{A}_{1} &:= \bigcup_{j \in I_{1}}T_{j}, \quad \mathcal{B}_{1} := \bigcup_{j \in J_{1}}T_{j}. \\
+\intertext{以下归纳地令}
+I_{k} &:= \{j:\ N^{\kappa-2k} \leq a_{j} < N^{\kappa-(2k-1)},\ T_{j} \cap \mathcal{A}_{l} = \emptyset\ (l = 0, \dots, k-1)\}, \\
+\intertext{并令}
+J_{k} &:= \{j:\ N^{\kappa-(2k+1)} \leq a_{j} < N^{\kappa-2k},\ T_{j} \cap \mathcal{B}_{l} = \emptyset\ (l = 0, \dots, k-1)\}, \\
+\intertext{设}
+\mathcal{A}_{k} &:= \bigcup_{j \in I_{k}}T_{j}, \quad \mathcal{B}_{k} := \bigcup_{j \in J_{k}}T_{j}.
+\end{align*}
+该操作当然在有限次($K$ 次)后终止.
+
+由构造方法可知,$\mathcal{A}_{0}, \ldots, \mathcal{A}_{K}$ 以及 $\mathcal{B}_{0}, \ldots, \mathcal{B}_{K}$ 各自互不相交.
+
+任取 $T_{j}$.若
+\[
+N^{\kappa-2k} \leq a_{j} < N^{\kappa-(2k-1)}, \quad j \not\in I_{k},
+\]
+则存在某个 $j' \in I_{k'}$($k' = 0, \ldots, k-1$)使得
+\begin{align*}
+T_{j} \cap T_{j'} &\neq \emptyset. \\
+\intertext{由此考虑 tube 的维数,得}
+T_{j} &\subset 3T_{j'}. \\
+\intertext{另一方面,若}
+N^{\kappa-(2l+1)} &\leq a_{j} < N^{\kappa-2l}, \quad j \not\in J_{l},
+\end{align*}
+则存在某个 $j' \in J_{l'}$($l' = 0, \ldots, l-1$)使得
+\begin{align*}
+T_{j} \cap T_{j'} &\neq \emptyset, \\
+\intertext{故同理}
+T_{j} &\subset 3T_{j'}. \\
+\intertext{因此}
+\mathcal{A} &\subset \bigcup_{k=0}^{K}\bigcup_{j \in I_{k} \cup J_{k}}3T_{j}. \\
+\intertext{由此得}
+|\mathcal{A}| &\leq \sum_{k=0}^{K}\left|\bigcup_{j \in I_{k} \cup J_{k}}3T_{j}\right|. \\
+\intertext{把该右端分成 $O(\log N)$ 个元素,来应用假设.分解}
+&\begin{aligned}
+I_{k} &= \bigcup_{m=0}^{\log N}\left\{j \in I_{k}:\ 2^{m}N^{\kappa-2k} \leq a_{j} < 2^{m+1}N^{\kappa-2k}\right\}, \\
+J_{k} &= \bigcup_{m=0}^{\log N}\left\{j \in J_{k}:\ 2^{m}N^{\kappa-(2k+1)} \leq a_{j} < 2^{m+1}N^{\kappa-(2k+1)}\right\},
+\end{aligned} \\
+\intertext{则存在 $m_{0}$,使得}
+|\mathcal{A}| &\leq \log N\sum_{k=0}^{K}\left|\bigcup_{j \in I'_{k} \cup J'_{k}}3T_{j}\right|, \\
+&\begin{aligned}
+I'_{k} &:= \{j \in I_{k}:\ 2^{m_{0}}N^{\kappa-2k} \leq a_{j} < 2^{m_{0}+1}N^{\kappa-2k}\}, \\
+J'_{k} &:= \{j \in J_{k}:\ 2^{m_{0}}N^{\kappa-(2k+1)} \leq a_{j} < 2^{m_{0}+1}N^{\kappa-(2k+1)}\}.
+\end{aligned} \\
+\intertext{设}
+\mathcal{A}'_{k} &:= \bigcup_{j \in I'_{k}}T_{j}, \quad \mathcal{B}'_{k} := \bigcup_{j \in J'_{k}}T_{j},
+\end{align*}
+则 $\mathcal{A}'_{0}, \ldots, \mathcal{A}'_{K}$ 以及 $\mathcal{B}'_{0}, \ldots, \mathcal{B}'_{K}$ 各自互不相交.因此,把它们合在一起的重数不超过 2.
+
+把引理的假设用于
+\begin{align*}
+&\begin{aligned}
+g_{k}(x) &:= f(x)\chi_{\mathcal{A}'_{k}}(x), \quad a = 2^{m_{0}}N^{\kappa-2k}, \\
+h_{k}(x) &:= f(x)\chi_{\mathcal{B}'_{k}}(x), \quad a = 2^{m_{0}}N^{\kappa-(2k+1)},
+\end{aligned} \\
+\intertext{则由\eqref{eq:4.7.22}与假设得}
+\left|\bigcup_{j \in I'_{k}}3T_{j}\right| &\leq C C_{N}\lambda^{-p}\|g_{k}\|_{p}^{p}, \\
+\left|\bigcup_{j \in J'_{k}}3T_{j}\right| &\leq C C_{N}\lambda^{-p}\|h_{k}\|_{p}^{p}. \\
+\intertext{综合以上,得}
+|\mathcal{A}| &\leq C C_{N}(\log N)\lambda^{-p}\|f\|_{p}^{p}.
+\end{align*}
+由于 $A \subset E_{\lambda}$ 是任意的,引理得证.
+\end{proof}

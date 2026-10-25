@@ -1,0 +1,1085 @@
+% ==== part01 第 1 章:由变分原理导出的方程 ====
+% 源: MinerU_latex_lecture nots.tex 868-2576(pdf_text.txt 588-1962,PDF 第 15-38 页)
+% 术语: 新术语(中文=英文):
+%   时空=space-time; Lorentz 度量=Lorentz metric; 惯性坐标系=inertial coordinate system;
+%   Lorentz 变换=Lorentz transformation; 体积元=volume element; 紧变分=compact variation;
+%   驻定=stationary; 作用量原理=action principle; Christoffel 符号=Christoffel symbols;
+%   水平集=level set; 第二基本形式=second fundamental form; 恰当 2-形式=exact two form;
+%   规范自由度=gauge freedom; 电磁场=electromagnetic field; 外微分=exterior differentiation;
+%   内部对称=internal symmetry; 李群=Lie group; 李代数=Lie algebra; Lie 括号=Lie bracket;
+%   Killing 标量积=Killing scalar product; 正交群=orthogonal group; 特殊正交群=special orthogonal
+%   group; Lorentz 群=Lorentz group; 酉群=unitary group; Hermite 双线性型=hermitian bilinear form;
+%   Killing 型=Killing form; 规范条件=gauge condition; Coulomb 规范=Coulomb gauge;
+%   Lorentz 规范=Lorentz gauge; 时间规范=temporal gauge; 物质场=matter field;
+%   引力场=gravitational field; Einstein 张量=Einstein tensor;
+%   两次缩并的 Bianchi 恒等式=twice contracted Bianchi identity; 微分同胚=diffeomorphism;
+%   正能量条件=positive energy condition; 零锥=null cone; 零对=null pair;
+%   零分解=null decomposition; 共形变换=conformal transformation; 变形张量=deformation tensor;
+%   后向光锥=backward light cone; 能量密度=energy density; 能量通量密度=energy flux density;
+%   有限传播速度=finite propagation speed; 影响域=domain of influence;
+%   全局存在性=global existence; 能量色散=energy dispersion; 等距=isometry
+% REFS: 跨章引用: 第 1 章第 3 节 "We know that (see appendix 4.2, up to a Lorentz transformation
+%   the only Killing, future oriented timelike vectorfield is a constant multiple of ∂_t)"
+%   → 目标: 附录 4.2(正文写"见附录 4.2",待统一解析). 
+%   公式修正(与原书/OCR 差异,已按数学含义处理,均同时对照 pdf_text.txt):
+%   - 源 1627 行 J_i 式补回被 OCR 丢失的 F_{i0}(两源一致缺失,按数学结构还原);
+%   - 源 1216 行 Maxwell 变分积分末项 ∂_ν(√−gF^{μν}) → ∂_μ(√−gF^{μν})(与下文"D_μF^{μν}"一致);
+%   - 源 2503 行 (77) 第一行 T_{+-} 项补回缺失的系数 1/4(由下划线注 2(t²+r²) 与次行 ½(t²+r²) 确定);
+%   - 源 2117 行 T(E_(4),E_(4)) 首行去掉 ^*F_{4A}·^*F_{4A} 前多余的 1/4(否则等式链不成立);
+%   - 源 2569 行 (80) 修正为 Q(L̲,L̲) = L̲(φ)²(原书误印 L(φ)²);
+%   - 源 2497 行 K_0 表达式去掉结尾多余右括号与句点(任务指定);
+%   - 源 1867 行 S_M[ψ,g;M] → S[ψ,g;M](微分同胚不变性应为 S[ψ,g;M]);
+%   - 源 2456 行 Ė_c(0) → E_c(0)(点号为 OCR 噪音);
+%   - 源 1472 行 su(p,q) 定义: A∈U(p,q) → A∈u(p,q),tr_M → tr_Q(由下一句 tr_Q A = Q^{ij}A_{ij} 确定);
+%   - 源 1430 行 "dim δR O" → dim_R O; 源 2493、2557 行 ∂_η → ∂_r; 源 2528/2542 行 \boxed{d} → \Box;
+%   书内疑似笔误(照排未改,供校对参考): O(p,q) 第二行 "LML^T = M"(M 未定义);
+%   Lemma 3.7 中 "Ω = 4(n+1)t"(数学上应为 Ω = 4t,或应写 trπ = 4(n+1)t);
+%   (56) 右端 "−ΔA_0 + ∂^i[A_0,A_i]" 为多余重复项; J_0 展开式(源 1615 行)同此. 
+% 编号说明: 公式 (29)-(80) 顺次自动编号(共 52 个;(43)(44) 为两个独立公式,源文件中的空
+%   enumerate 已处理为 (44));第 3 节 "3.5""3.6" 为 \mtsubsec 子标题,自然推进共享计数器,
+%   故 Lemma 3.7 编号为 3.7;节内 5 个独立子标题(1. 标量场方程 ~ 5. Einstein 场方程)用
+%   \mtsubsecn 不推进计数器;两处未编号 Definition、Remark、Example 用带 * 环境;
+%   脚注 1-11 全部按 pdf_text.txt 对应页补全并翻译. 
+% ====
+
+\chapter{由变分原理导出的方程}
+
+\section{基本概念}
+
+本节我们将讨论一些线性与非线性方程的基本例子, 它们由相对论 Lagrange 量变分地导出. 相对论场论的基本对象是：
+
+\begin{itemize}
+\item \newterm{spacetime}{时空}{space-time} $(\mathbf{M}, \mathbf{g})$, 由 $n+1$ 维流形 $M$ 与 Lorentz 度量 $g$ 构成, 即定义在 $M$ 每点切空间上的、符号为 $(-1, 1, \ldots, 1)$ 的非退化二次型. 我们用 $x^\alpha, \ \alpha = 0, 1, \ldots, n$ 记 $M$ 中点的坐标. 
+
+在本章的大部分内容中, 时空实际上将是最简单的可能例子——即 Minkowski 时空, 其中流形为 $\mathbb{R}^{n+1}$, 度量由下式给出：
+\begin{equation}
+ds^2 = \mathbf{m}_{\alpha\beta}\, dx^\alpha dx^\beta = -dt^2 + (dx^1)^2 + \dots + (dx^n)^2\label{eq:c1-29}
+\end{equation}
+其中 $t = x^0$, $m_{\alpha\beta} = \mathrm{diag}(-1, 1, \ldots, 1)$. 回忆：任何使度量具有形式 \eqref{eq:c1-29} 的坐标系称为 \newterm{inertial-frame}{惯性坐标系}{inertial coordinate system}. 任意两个惯性坐标系由 Lorentz 变换 相联系. 
+
+\item 场的集合 $\boldsymbol{\psi} = \boldsymbol{\psi}^{(1)}, \boldsymbol{\psi}^{(2)}, \dots, \boldsymbol{\psi}^{(p)}$, 它们可以是标量、张量, 或其他一些定义在 $M$ 上的几何对象\footnote{为简单起见, 我们仅限于协变张量. }, 如旋量. 
+
+\item \newterm{lagrangian-density}{Lagrange 密度}{Lagrangian density} L, 它是 $M$ 上的标量函数, 只依赖于张量场 $\psi$ 与度规\footnote{以及其逆 $g^{-1}$. } g. 
+\end{itemize}
+
+我们随后将相应的作用量 $S$ 定义为积分：
+\[
+\mathcal{S} = \mathcal{S}[\psi, \mathbf{g}:\mathcal{U}] = \int_{\mathcal{U}}L[\psi]\, dv_{\mathbf{g}}
+\]
+其中 $\mathcal{U}$ 是 $M$ 的任意相对紧集. 这里 $dv_{\mathbf{g}}$ 表示由度规 $\mathbf{g}$ 生成的 \newterm{volume-element}{体积元}{volume element}. 更精确地, 相对于局部坐标系 $x^\alpha$, 有
+\[
+dv_{\mathbf{g}} = \sqrt{-\mathbf{g}}\, dx^0dx^1\cdots dx^n = \sqrt{-\mathbf{g}}\, dx
+\]
+其中 $g$ 是矩阵 $(\mathbf{g}_{\alpha\beta})$ 的行列式. 
+
+所谓场 $\psi$ 的 \newterm{compact-variation}{紧变分}{compact variation}, 是指一族定义于 $s \in (-\epsilon, \epsilon)$ 的光滑单参数场 $\psi_{(s)}$, 使得：
+\begin{enumerate}
+\item 在 $s = 0$ 处, $\psi_{(0)} = \psi$. 
+\item 在 $\mathbf{M} \setminus \mathcal{U}$ 的所有点 $p$ 处, $\psi_{(s)} = \psi$. 
+\end{enumerate}
+
+对这样的变分, 记 $\delta\psi := \dot{\psi} := \frac{d\psi_{(s)}}{ds}\Big|_{s=0}$. 于是, 对小的 $s$, 
+\[
+\psi_{(s)} = \psi + s\dot{\psi} + O(s^2)
+\]
+若对 $\psi$ 的任意紧变分 $(\psi_{(s)}, \mathcal{U})$, 均有
+\[
+\left.\frac{d}{ds}\mathbf{S}(s)\right|_{s=0} = 0
+\]
+其中
+\[
+\mathbf{S}(s) = \mathbf{S}[\psi_{(s)}, \mathbf{g};\mathcal{U}]
+\]
+则称场 $\psi$ 关于 $S$ 是 \newterm{stationary}{驻定}{stationary} 的. 我们用简记记号将其写成
+\[
+\frac{\delta\mathbf{S}}{\delta\psi} = 0
+\]
+
+\newterm{action-principle}{作用量原理}{action principle}（亦称变分原理）断言：物理系统的一个可接受解必须关于给定的 Lagrange 密度（称为该系统的 Lagrange 量）是驻定的. 作用量原理使我们能够导出场 $\psi$ 所满足的偏微分方程, 称为 Euler-Lagrange 方程. 下面是一些简单的例子：
+
+\mtsubsecn{1}{标量场方程}
+
+从 Lagrange 密度出发：
+\[
+L[\phi] = -\frac{1}{2}\mathbf{g}^{\mu\nu}\partial_\mu\phi\, \partial_\nu\phi - V(\phi)
+\]
+其中 $\phi$ 是定义在 $(\mathbf{M}, \mathbf{g})$ 上的复值标量函数, $V(\phi)$ 是 $\phi$ 的给定实值函数. 
+
+给定 $\phi$ 的紧变分 $(\phi_{(s)}, \mathcal{U})$, 我们设 $S(s) = S[\phi_{(s)}, \mathbf{g};\mathcal{U}]$. 分部积分给出：
+\[
+\begin{aligned}
+\left.\frac{d}{ds}\mathcal{S}(s)\right|_{s=0} &= \int_{\mathcal{U}}\left[-\mathbf{g}^{\mu\nu}\partial_\mu\dot{\phi}\, \partial_\nu\phi - V'(\phi)\dot{\phi}\right]\sqrt{-\mathbf{g}}\, dx\\
+&= \int_{\mathcal{U}}\dot{\phi}\left[\Box_{\mathbf{g}}\phi - V'(\phi)\right]dv_{\mathbf{g}}
+\end{aligned}
+\]
+其中 $\Box_{\mathbf{g}}$ 是 D'Alembert 算子（波算子）：
+\[
+\Box_{\mathbf{g}}\phi = \frac{1}{\sqrt{-\mathbf{g}}}\partial_\mu\left(\mathbf{g}^{\mu\nu}\sqrt{-\mathbf{g}}\, \partial_\nu\phi\right)
+\]
+
+根据作用量原理以及 $\dot{\phi}$ 的任意性, 我们推断 $\phi$ 必满足如下的 Euler-Lagrange 方程：
+\begin{equation}
+\Box_{\mathbf{g}}\phi - V'(\phi) = 0\label{eq:c1-30}
+\end{equation}
+
+方程 \eqref{eq:c1-30} 称为带势 $V(\phi)$ 的标量波动方程. 
+
+\mtsubsecn{2}{波映射}
+
+波映射方程将在如下的框架中定义：时空 $(\mathbf{M}, \mathbf{g})$、带度量 $h$ 的 Riemann 流形 N, 以及映射
+\[
+\phi:\mathbf{M} \longrightarrow N.
+\]
+我们回忆：若 $X$ 是 $M$ 上的向量场, 则 $\phi_*X$ 是 $N$ 上由 $\phi_*X(f) = X(f\circ\phi)$ 定义的向量场. 若 $\omega$ 是 $N$ 上的 1-形式, 则其回拉 $\phi^*\omega$ 是 $M$ 上由 $\phi^*\omega(X) = \omega(\phi_*X)$ 定义的 1-形式, 其中 $X$ 是 $M$ 上的任意向量场. 类似地, 度量 $h$ 的回拉是 $M$ 上由公式 $(\phi^*h)(X, Y) = h(\phi_*X, \phi_*Y)$ 定义的对称 2-协变张量. 在 $M$ 上的局部坐标 $x^\alpha$ 与 $N$ 上的局部坐标 $y^a$ 中, 若 $\phi^a$ 表示 $\phi$ 关于 $y^a$ 的分量, 则有
+\[
+(\phi^*h)_{\alpha\beta}(p) = \frac{\partial\phi^a}{\partial x^\alpha}\frac{\partial\phi^b}{\partial x^\beta}h_{ab}(\phi(p)) = \left\langle\frac{\partial\phi}{\partial x^\alpha}, \frac{\partial\phi}{\partial x^\beta}\right\rangle
+\]
+其中 $\langle\cdot, \cdot\rangle$ 表示 $N$ 上的 Riemann 内积. 
+
+考虑如下涉及映射 $\phi$ 的 Lagrange 密度：
+\[
+L = -\frac{1}{2}\mathrm{Tr}_{\mathbf{g}}(\phi^*h)
+\]
+其中 $\mathrm{Tr}_{\mathbf{g}}(\phi^*h)$ 表示 $\phi^*h$ 关于 $g$ 的迹. 在局部坐标中, 
+\[
+L[\phi] = -\frac{1}{2}\mathbf{g}^{\mu\nu}h_{ab}(\phi)\frac{\partial\phi^a}{\partial x^\mu}\frac{\partial\phi^b}{\partial x^\nu}.
+\]
+
+按定义, 波映射是相应作用量的驻点. 于是通过一个直接的计算：
+\begin{equation}
+\begin{aligned}
+0 &= \left.\frac{d}{ds}\mathcal{S}(s)\right|_{s=0} = I_1 + I_2\\
+I_1 &= -\frac{1}{2}\int_{\mathcal{U}}\mathbf{g}^{\mu\nu}\frac{\partial h_{ab}(\phi)}{\partial\phi^c}\dot{\phi}^c\, \partial_\mu\phi^a\, \partial_\nu\phi^b\sqrt{-\mathbf{g}}\, dx\\
+I_2 &= -\int_{\mathcal{U}}\mathbf{g}^{\mu\nu}h_{ab}(\phi)\partial_\mu\dot{\phi}^a\, \partial_\nu\phi^b\sqrt{-\mathbf{g}}\, dx
+\end{aligned}\label{eq:c1-31}
+\end{equation}
+
+经分部积分、重命名指标并利用关于 $b, c$ 的对称性, 我们可将 $I_2$ 改写为
+\begin{equation}
+\begin{aligned}
+I_2 &= \int_{\mathcal{U}}\dot{\phi}^a\left(h_{ab}(\phi)\Box_{\mathbf{g}}\phi^b + \mathbf{g}^{\mu\nu}\frac{\partial h_{ab}}{\partial\phi^c}\partial_\mu\phi^c\, \partial_\nu\phi^b\right)dv_{\mathbf{g}}\\
+&= \int_{\mathcal{U}}\dot{\phi}^a\left(h_{ab}(\phi)\Box_{\mathbf{g}}\phi^b + \frac{1}{2}\mathbf{g}^{\mu\nu}\left(\frac{\partial h_{ab}}{\partial\phi^c} + \frac{\partial h_{ac}}{\partial\phi^b}\right)\partial_\mu\phi^b\, \partial_\nu\phi^c\right)dv_{\mathbf{g}}
+\end{aligned}\label{eq:c1-32}
+\end{equation}
+另外, 重命名指标：
+\[
+I_1 = -\frac{1}{2}\int_{\mathcal{U}}\mathbf{g}^{\mu\nu}\frac{\partial h_{bc}}{\partial\phi^a}\dot{\phi}^a\, \partial_\mu\phi^b\, \partial_\nu\phi^c\, dv_{\mathbf{g}}.
+\]
+因此, 
+\[
+\begin{aligned}
+0 &= I_1 + I_2\\
+&= \int_{\mathcal{U}}\dot{\phi}^a\left(h_{ab}\Box_{\mathbf{g}}\phi^b + \partial_\mu\phi^b\, \partial_\nu\phi^c\, \mathbf{g}^{\mu\nu}\frac{1}{2}\left(\frac{\partial h_{ab}}{\partial\phi^c} + \frac{\partial h_{ac}}{\partial\phi^b} - \frac{\partial h_{bc}}{\partial\phi^a}\right)\right)dv_{\mathbf{g}}\\
+&= \int_{\mathcal{U}}\dot{\phi}^a\left(h_{ad}\Box_{\mathbf{g}}\phi^d + \partial_\mu\phi^b\, \partial_\nu\phi^c\, \mathbf{g}^{\mu\nu}\frac{1}{2}h^{ds}h_{ad}\cdot\left(\frac{\partial h_{sb}}{\partial\phi^c} + \frac{\partial h_{sc}}{\partial\phi^b} - \frac{\partial h_{bc}}{\partial\phi^s}\right)\right)dv_{\mathbf{g}}\\
+&= \int_{\mathcal{U}}\dot{\phi}^a h_{ad}\left(\Box_{\mathbf{g}}\phi^d + \partial_\mu\phi^b\, \partial_\nu\phi^c\, \mathbf{g}^{\mu\nu}\Gamma^d_{bc}\right)dv_{\mathbf{g}}
+\end{aligned}
+\]
+其中 $\Gamma^d_{bc} = \frac{1}{2}h^{ds}\left(\frac{\partial h_{sb}}{\partial\phi^c} + \frac{\partial h_{sc}}{\partial\phi^b} - \frac{\partial h_{bc}}{\partial\phi^s}\right)$ 是对应于 Riemann 度量 $h$ 的 \newterm{christoffel-symbols}{Christoffel 符号}{Christoffel symbols}. 由 $\dot{\phi}$ 的任意性, 得到波映射的如下方程：
+\begin{equation}
+\Box_{\mathbf{g}}\phi^a + \Gamma^a_{bc}\, \mathbf{g}^{\mu\nu}\partial_\mu\phi^b\, \partial_\nu\phi^c = 0\label{eq:c1-33}
+\end{equation}
+
+\begin{example*}
+设 $N$ 是二维 Riemann 流形, 配有如下形式的度量 $h$：
+\[
+ds^2 = dr^2 + f(r)^2d\theta^2
+\]
+设 $\phi$ 是从 $M$ 到 $N$ 的波映射, 关于 $r, \theta$ 坐标的分量为 $\phi^1, \phi^2$. 则 $\Gamma^1_{11} = \Gamma^2_{11} = \Gamma^1_{12} = \Gamma^2_{22} = 0$, 且 $\Gamma^1_{22} = -f'(r)f(r)$, $\Gamma^2_{12} = \frac{f'(r)}{f(r)}$. 因此, 
+\[
+\begin{aligned}
+\Box_{\mathbf{g}}\phi^1 &= f'(r)f(r)\, \mathbf{g}^{\mu\nu}\partial_\mu\phi^2\, \partial_\nu\phi^2\\
+\Box_{\mathbf{g}}\phi^2 &= -\frac{f'(r)}{f(r)}\, \mathbf{g}^{\mu\nu}\partial_\mu\phi^1\, \partial_\nu\phi^2
+\end{aligned}
+\]
+\end{example*}
+
+当 $N$ 是 Euclidean 空间 $\mathbb{R}^m$ 的子流形时, 波映射方程可以有更简单的表述. 此时, 度量 $h$ 是 Euclidean 度量\footnote{使用外围 Euclidean 空间的标准坐标. }, 故 \eqref{eq:c1-31} 中的第一项消失：
+\[
+\begin{aligned}
+\left.\frac{d}{ds}\mathcal{S}(s)\right|_{s=0} &= -\int_{\mathcal{U}}\mathbf{g}^{\alpha\beta}\left\langle\frac{\partial\phi}{\partial x^\alpha}, \frac{\partial\dot{\phi}}{\partial x^\beta}\right\rangle dv_{\mathbf{g}}\\
+&= \int_{\mathcal{U}}\langle\Box\phi, \dot{\phi}\rangle dv_{\mathbf{g}}
+\end{aligned}
+\]
+其中 $\langle\cdot, \cdot\rangle$ 是 Euclidean 内积, $\Box$ 是 $M$ 上的 D'Alembert 算子. 于是 Euler-Lagrange 方程取如下形式：
+\begin{equation}
+(\Box\phi(p))^T = 0\label{eq:c1-34}
+\end{equation}
+其中 $T$ 表示到 $N$ 在 $\phi(p)$ 处切空间上的投影. 
+
+在 $N\subset \mathbb{R}^m$ 是超曲面的特殊情形, 我们可将 \eqref{eq:c1-34} 改写为更具体的形式. 设 $\nu$ 是 $N$ 上的单位法向量, k 是 \newterm{second-fundamental-form}{第二基本形式}{second fundamental form} $k(X, Y) = \langle\mathbf{D}_X\boldsymbol{\nu}, Y\rangle$, 其中 $\mathbf{D}_X$ 是 Euclidean 空间的标准协变导数. 超曲面 $N$（局部地）定义为某个实值函数 $f$ 的 \newterm{level-set}{水平集}{level set}. 对方程 $f(\phi(x)) = 0$ 关于 $M$ 上的局部坐标 $x^\mu$ 求导, 沿 $M$ 得 $0 = \langle\nu(\phi), \partial_\mu\phi\rangle$. 于是, 
+\[
+\begin{aligned}
+0 &= \partial^\mu\langle\nu(\phi), \partial_\mu\phi\rangle = \langle\Box\phi, \nu\rangle + \mathbf{g}^{\mu\nu}\langle\partial_\nu\nu(\phi), \partial_\mu\phi\rangle\\
+&= \langle\Box\phi, \nu\rangle + \mathbf{g}^{\mu\nu}\langle\nabla_{\phi_*(E_\nu)}\nu, \phi_*(E_\mu)\rangle
+\end{aligned}
+\]
+其中 $\phi_*(E_\mu) = \frac{\partial\phi^i}{\partial x^\mu}\frac{\partial}{\partial y^i}$ 是 $E_\mu = \frac{\partial}{\partial x^\mu}$ 的 \newterm{pushforward}{前推}{pushforward}. 特别地, $\phi_*(E_\mu)$ 与 $N$ 相切. 因此, 
+\begin{equation}
+\langle\Box\phi, \nu\rangle = -k(\phi_*(E^\alpha), \phi_*(E_\alpha))\label{eq:c1-35}
+\end{equation}
+于是波映射方程变为：
+\[
+\Box\phi = -k(\phi_*(E^\alpha), \phi_*(E_\alpha))\, \nu
+\]
+当 $N$ 是标准球面 $\mathbb{S}^{m-1} \subset \mathbb{R}^m$ 时, $k(X, Y) = -\langle X, Y\rangle$；在 $\mathbb{R}^m$ 的标准坐标 $x^\alpha$ 下, $\nu^a(\phi) = \phi^a$, 波映射方程变为：
+\[
+\Box\phi^a = -\phi^a\, \mathbf{g}^{\alpha\beta}\left\langle\frac{\partial\phi}{\partial x^\alpha}, \frac{\partial\phi}{\partial x^\beta}\right\rangle
+\]
+
+\mtsubsecn{3}{Maxwell 方程组}
+
+电磁场 $F$ 是四维流形 $M$ 上的 \newterm{exact-two-form}{恰当 2-形式}{exact two form}. 即 $F$ 是秩为二的反对称张量, 使得
+\begin{equation}
+F = dA\label{eq:c1-36}
+\end{equation}
+其中 $A$ 是 $M$ 上的 1-形式, 称为规范势或联络 1-形式. 注意 $A$ 不是唯一确定的——事实上, 若 $\chi$ 是任意标量函数, 则变换
+\begin{equation}
+A \longrightarrow \tilde{A} = A + d\chi\label{eq:c1-37}
+\end{equation}
+给出 $F$ 的另一个规范势 $\tilde{A}$. 这种任意性程度称为 \newterm{gauge-freedom}{规范自由度}{gauge freedom}, 变换 \eqref{eq:c1-37} 称为规范变换. 
+
+\newterm{electromagnetic-field}{电磁场}{electromagnetic field}的 Lagrange 密度为
+\[
+L[F] = -\frac{1}{4}F_{\mu\nu}F^{\mu\nu}.
+\]
+
+F 的任意紧变分 $(F_{(s)}, \mathcal{U})$ 都可以用规范势 $A$ 的紧变分 $(A_{(s)}, \mathcal{U})$ 表示, 使得 $F_{(s)} = dA_{(s)}$. 记
+\[
+\dot{F} = \left.\frac{d}{ds}F_{(s)}\right|_{s=0}, \qquad \dot{A} = \left.\frac{d}{ds}A_{(s)}\right|_{s=0}
+\]
+则相对于坐标系 $x^\alpha$, 有 $F_{\mu\nu} = \partial_\mu A_\nu - \partial_\nu A_\mu$, 从而 $\dot{F}_{\mu\nu} = \partial_\mu\dot{A}_\nu - \partial_\nu\dot{A}_\mu$. 作用量原理给出：
+\[
+\begin{aligned}
+0 &= \left.\frac{d}{ds}\mathcal{S}(s)\right|_{s=0} = -\frac{1}{2}\int_{\mathbf{M}}\dot{F}_{\mu\nu}F^{\mu\nu}dv_{\mathbf{g}}\\
+&= -\frac{1}{2}\int_{\mathcal{U}}(\partial_\mu\dot{A}_\nu - \partial_\nu\dot{A}_\mu)F^{\mu\nu}dv_{\mathbf{g}}\\
+&= -\int_{\mathcal{U}}\partial_\mu\dot{A}_\nu\, F^{\mu\nu}dv_{\mathbf{g}} = \int_{\mathcal{U}}\dot{A}_\nu\left(\frac{1}{\sqrt{-\mathbf{g}}}\partial_\mu\left(\sqrt{-\mathbf{g}}F^{\mu\nu}\right)\right)dv_{\mathbf{g}}
+\end{aligned}
+\]
+注意被积函数中的第二个因子正是 $\mathbf{D}_\mu F^{\mu\nu}$, 其中 $D$ 是 $M$ 上对应于 $g$ 的协变导数. 因此 Euler-Lagrange 方程取如下形式：
+\begin{equation}
+\mathbf{D}_\nu F^{\mu\nu} = 0.\label{eq:c1-38}
+\end{equation}
+\eqref{eq:c1-36} 与 \eqref{eq:c1-38} 合在一起构成 Maxwell 方程组. 
+
+\textbf{习题.} 给定 $M$ 上的向量场 $X^\alpha$, 证明
+\[
+\mathbf{D}_\alpha X^\alpha = \frac{1}{\sqrt{-\mathbf{g}}}\partial_\alpha\left(\sqrt{-\mathbf{g}}X^\alpha\right)
+\]
+
+利用 $F$ 的 Hodge 对偶, 我们可以把 Maxwell 方程组写成更对称的形式：
+\[
+{}^\star F_{\mu\nu} = \frac{1}{2}\epsilon_{\mu\nu\alpha\beta}F^{\alpha\beta}
+\]
+并注意到 \eqref{eq:c1-38} 等价于 $d\, {}^\star F = 0$. Maxwell 方程组于是取如下形式：
+\begin{equation}
+dF = 0, \qquad d\, {}^\star F = 0\label{eq:c1-39}
+\end{equation}
+或者等价地, 
+\begin{equation}
+\mathbf{D}_\nu F^{\mu\nu} = 0, \qquad \mathbf{D}_\nu\, {}^\star F^{\mu\nu} = 0\label{eq:c1-40}
+\end{equation}
+注意, 由于 Lorentz 变换与 Hodge 对偶和\newterm{exterior-differentiation}{外微分}{exterior differentiation}都可交换, Maxwell 方程组的 Lorentz 不变性在 \eqref{eq:c1-39} 中是显式的. 
+
+\begin{definition*}
+给定任意向量场 X, 我们可以定义缩并
+\[
+\begin{aligned}
+E_\alpha = (i_XF)_\alpha &= X^\mu F_{\alpha\mu}\\
+H_\alpha = (i_X\, {}^\star F)_\alpha &= X^\mu\, {}^\star F_{\alpha\mu}
+\end{aligned}
+\]
+分别称为 $F$ 的电场分量与磁场分量. 注意这两个 1-形式都垂直于 X. 
+\end{definition*}
+
+我们特化到 $M$ 是 Minkowski 空间且 $X = \frac{d}{dx^0} = \frac{d}{dt}$ 的情形. 如前所述, E, H 垂直于 $\frac{d}{dt}$, 故 $E_0 = H_0 = 0$. 空间分量按定义为
+\[
+\begin{aligned}
+E_i &= F_{0i}\\
+H_i &= {}^\star F_{0i} = \frac{1}{2}\epsilon_{0ijk}F^{jk} = \frac{1}{2}\epsilon_{ijk}F^{jk}
+\end{aligned}
+\]
+
+我们现在利用 \eqref{eq:c1-39} 由上推导 $E$ 与 $H$ 的方程, 它们分别蕴含
+\begin{equation}
+\mathbf{D}_\nu\, {}^\star F^{\mu\nu} = 0\label{eq:c1-41}
+\end{equation}
+与 \eqref{eq:c1-38}. 在 \eqref{eq:c1-40} 的两个方程中令 $\mu = 0$, 我们得到：
+\begin{equation}
+\partial^iE_i = 0, \quad \partial^iH_i = 0\label{eq:c1-42}
+\end{equation}
+令 $\mu = i$ 并注意到 $F_{ij} = \epsilon_{ijk}H^k$, ${}^\star F_{ij} = -\epsilon_{ijk}E^k$, 我们写出：
+\[
+\begin{aligned}
+0 &= -\partial^0E_i + \partial^jF_{ij} = \partial_0E_i + \epsilon_{ijk}\partial^jH^k = \partial_tE_i + (\nabla\times H)_i\\
+0 &= \partial_tH_i - \epsilon_{ijk}\partial_jE_k = \partial_tH_i - (\nabla\times E)_i
+\end{aligned}
+\]
+因此, 
+\begin{equation}
+\partial_tE + \nabla\times H = 0\label{eq:c1-43}
+\end{equation}
+\begin{equation}
+\partial_tH - \nabla\times E = 0\label{eq:c1-44}
+\end{equation}
+
+与 \eqref{eq:c1-43} 和 \eqref{eq:c1-44} 相伴, 我们可以在时刻 $t = 0$ 指定数据：
+\[
+E_i(0, x) = E_i^{(0)}, \qquad H_i(0, x) = H_i^{(0)}
+\]
+
+\textbf{习题.} 证明方程组 \eqref{eq:c1-42} 在系统 \eqref{eq:c1-43}–\eqref{eq:c1-44} 的时间演化下保持不变. 换言之, 若 $E^{(0)}, H^{(0)}$ 满足 \eqref{eq:c1-42}, 则 E, H 对所有时刻 $t \in \mathbb{R}$ 都满足 \eqref{eq:c1-42}. 
+
+\mtsubsecn{4}{Yang-Mills 方程组}
+
+所有经典场论的 Lagrange 量都表现出时空的对称性. 除了这些时空对称性, Lagrange 量还可能具有称为场的\newterm{internal-symmetry}{内部对称}{internal symmetry}的对称性. 一个简单的例子是复标量 Lagrange 量：
+\[
+\mathcal{L} = -\frac{1}{2}\mathbf{m}^{\alpha\beta}\partial_\alpha\phi\, \overline{\partial_\beta\phi} - V(|\phi|)
+\]
+其中 $\phi$ 是定义在 Minkowski 时空 $\mathbb{R}^{n+1}$ 上的复值标量, $\bar{\phi}$ 是其复共轭. 我们注意到 $L$ 在变换 $\phi \to e^{i\theta}\phi$ 下不变, 其中 $\theta$ 是固定的实数. 自然会问：Lagrange 量能否修改, 以允许形如 $\phi(x) \to e^{i\theta(x)}\phi(x)$ 的更一般的局部位相变换. 容易看到, 在此类变换下, 由于项 $\mathbf{m}^{\alpha\beta}\partial_\alpha\phi\, \overline{\partial_\beta\phi}$ 的存在, Lagrange 量不再不变. 为得到不变的 Lagrange 量, 需将导数 $\partial_\alpha\phi$ 替换为依赖于规范势 $A_\alpha$ 的协变导数 $\mathcal{D}_\alpha^{(A)}\phi \equiv \phi_{, \alpha} + iA_\alpha\phi$. 我们现在可以容易地验证, 新的 Lagrange 量
+\[
+\mathcal{L} = -\frac{1}{2}\mathbf{m}^{\alpha\beta}D_\alpha^{(A)}\phi\, \bar{D}_\beta^{(A)}\phi - V(|\phi|)
+\]
+相对于局部变换
+\[
+\phi(x^\alpha) \to e^{i\theta(x)}\phi(x^\alpha), \qquad A_\alpha \to A_\alpha - \theta_{, \alpha}
+\]
+不变, 后者称为规范变换. 
+
+注意, 上面引入的规范变换与电磁场 $F$ 的定义配合得很好. 事实上, 令 $F = dA$, 我们注意到 $F$ 是不变的. 这使我们能够考虑一个包含 $F$ 的更一般的 Lagrange 量：
+\[
+\mathcal{L} = -\frac{1}{4}F_{\alpha\beta}F^{\alpha\beta} - \frac{1}{2}m^{\alpha\beta}\phi_{, \alpha}\bar{\phi}_{, \beta} - V(|\phi|)
+\]
+称为 Maxwell-Klein-Gordon Lagrange 量. 
+
+Yang-Mills Lagrange 量是 Maxwell-Klein-Gordon Lagrange 量在如下情形的自然推广：与复标量 $\phi$ 的位相变换对应的群 $SU(1)$ 被替换为更一般的 李群 G. 此时, 规范势或联络 1-形式的作用由定义在 $M$ 上的 $\mathcal{G}$ 值 1-形式 $A = A_\mu dx^\mu$ 承担. 这里 $\mathcal{G}$ 是 李群 $G$ 的 \newterm{lie-algebra}{李代数}{Lie algebra}. 设 $[\cdot, \cdot]$ 为其 \newterm{lie-bracket}{Lie 括号}{Lie bracket}, $\langle\cdot, \cdot\rangle$ 为其 \newterm{killing-scalar-product}{Killing 标量积}{Killing scalar product}. 通常, 李群 $G$ 是经典矩阵群之一, 即 $\mathrm{Mat}(n, \mathbb{R})$ 或 $\mathrm{Mat}(n, \mathbb{C})$ 的子群. 我们稍作停顿, 回忆一些关于相关 李群及其 李代数的知识. 
+
+\begin{enumerate}
+\item \newterm{orthogonal-group}{正交群}{orthogonal group} $\mathbf{O}(p, q)$. 它们是 $\mathbb{R}^n$ 的线性变换群, 保持一个给定的、符号为 $p, q$（$p+q = n$）的非退化对称双线性型. 我们用 $\mathbf{R}^n_{p, q}$ 记相应的空间. $p = 0$ 的情形即 Euclidean 情形, 此时群简记为 $\mathbf{O}(n)$. $p = 1, q = n$ 的情形即 Minkowski 时空 $\mathbb{R}^{n+1}$, 群 $\mathbf{O}(1, n)$ 是 \newterm{lorentz-group}{Lorentz 群}{Lorentz group}. 一般地, 设 $Q$ 是对角矩阵, 其前 $p$ 个对角元为 $-1$, 其余为 $+1$. 则
+\end{enumerate}
+\[
+\begin{aligned}
+\mathbf{O}(p, q) &= \{L \in \mathrm{Mat}(n, \mathbb{R})\, |\, L^TQL = Q\}\\
+&= \{L \in \mathrm{Mat}(n, \mathbb{R})\, |\, LML^T = M\}
+\end{aligned}
+\]
+注意对 $L \in \mathbf{O}(p, q)$, $\det(L) = \pm 1$. 
+
+回忆 \newterm{special-orthogonal-group}{特殊正交群}{special orthogonal group} $\mathbf{SO}(p, q)$ 定义为
+\[
+\mathbf{SO}(p, q) = \{L \in \mathbf{O}(p, q)\, |\, \det L = 1\}.
+\]
+它们对应于 $\mathbf{R}^n_{p, q}$ 的所有保定向等距. $\mathbf{O}(p, q)$ 与 $\mathbf{SO}(p, q)$ 都以\footnote{回忆 李群 $G$ 的 李代数就是 $G$ 在原点的切空间. }
+\[
+\mathbf{so}(p, q) = \{A \in \mathrm{Mat}(n, \mathbb{R})\, |\, AQ + QA^T = 0\}
+\]
+为 李代数, 且 $\dim_{\mathbf{R}}\mathbf{O}(p, q) = \dim_{\mathbf{R}}\mathbf{SO}(p, q) = n(n-1)/2$. so$(p, q)$ 的 Lie 括号是矩阵的通常 Lie 括号, 即 $[A, B] = AB - BA$, 并且我们有 Jacobi 恒等式：
+\begin{equation}
+[A, [B, C]] + [C, [A, B]] + [B, [C, A]] = 0\label{eq:c1-45}
+\end{equation}
+且其 Killing 标量积 $\langle A, B\rangle = -\mathrm{Tr}(AB^T)$（其中 Tr 是矩阵的通常迹）满足相容性条件：
+\begin{equation}
+\langle A, [B, C]\rangle = -\langle[A, B], C\rangle\label{eq:c1-46}
+\end{equation}
+
+\begin{enumerate}
+\setcounter{enumi}{1}
+\item \newterm{unitary-group}{酉群}{unitary group} $\mathbf{U}(p, q)$. 它们是正交群的复类比. 它们是 $\mathbb{C}^n$ 的线性变换群, 保持一个给定的非退化 \newterm{hermitian-bilinear-form}{Hermite 双线性型}{hermitian bilinear form}. 用 $\mathbb{C}^n_{p, q}$ 记相应的空间. 于是, 用上面的矩阵 $Q$：
+\end{enumerate}
+\[
+\mathbf{U}(p, q) = \{U \in \mathrm{Mat}(n, \mathbb{C})\, |\, U^*QU = Q\}
+\]
+且
+\[
+\mathbf{SU}(p, q) = \{U \in \mathbf{U}(p, q)\, |\, \det U = 1\},
+\]
+相应的 李代数为：
+\[
+\begin{aligned}
+\mathbf{u}(p, q) &= \{A \in \mathrm{Mat}(n, \mathbb{C})\, |\, AQ + QA^* = 0\}, \\
+\mathbf{su}(p, q) &= \{A \in \mathbf{u}(p, q)\, |\, \mathrm{tr}_Q A = 0\},
+\end{aligned}
+\]
+其中迹 $\mathrm{tr}_Q A = Q^{ij}A_{ij}$. Lie 括号仍是矩阵的通常括号. Killing 标量积由 $\langle A, B\rangle = -\mathrm{Tr}(AB^*)$ 给出. 另请注意 $\dim_{\mathbf{R}}\mathbf{U}(p, q) = n^2$, $\dim_{\mathbf{R}}\mathbf{SU}(p, q) = n^2 - 1$. 
+
+在 Yang-Mills 理论中, 人们关心具有正定 \newterm{killing-form}{Killing 型}{Killing form}的紧 李群. $O(n), SO(n), U(n), SU(n)$ 即属此类. 
+
+在给定的坐标系中, 联络 1-形式 $A$ 具有形式 $A_\mu dx^\mu$, 我们定义 $\mathcal{G}$ 值张量 $\psi$ 的（规范）协变导数为：
+\begin{equation}
+\mathbf{D}_\mu^{(A)}\psi = \mathbf{D}_\mu\psi + [A_\mu, \psi]\label{eq:c1-47}
+\end{equation}
+其中 $D$ 是 $M$ 上的协变导数. 注意 \eqref{eq:c1-47} 在如下的规范变换下不变：对给定的 $\mathcal{G}$ 值规范势 $A$ 与 $\mathcal{G}$ 值张量 $\psi$, 
+\begin{equation}
+\tilde{\psi} = U^{-1}\psi U, \qquad \tilde{A}_\alpha = U^{-1}A_\alpha U + (\mathbf{D}_\alpha U^{-1})U\label{eq:c1-48}
+\end{equation}
+其中 $U \in G$. 
+
+\begin{proposition}\label{prop:c1-1.1}
+\[
+\begin{aligned}
+\mathbf{D}_\mu^{(\tilde{A})}\tilde{\psi} &= U^{-1}\left(\mathbf{D}_\mu^{(A)}\psi\right)U\\
+&= \widetilde{\mathbf{D}^A\psi}
+\end{aligned}
+\]
+\end{proposition}
+
+\begin{proof}
+这只需要一点耐心. 首先我们将证明
+\[
+\mathbf{D}_\alpha\left(U^{-1}\psi U\right) = U^{-1}\left(\mathbf{D}_\alpha\psi + [\psi, U(\mathbf{D}_\alpha U^{-1})]\right)U
+\]
+事实上
+\[
+\begin{aligned}
+\mathbf{D}_\alpha(U^{-1}\psi U) &= (\mathbf{D}_\alpha U^{-1})\psi U + U^{-1}(\mathbf{D}_\alpha\psi)U + U^{-1}\psi(\mathbf{D}_\alpha U)\\
+&= U^{-1}\left(-(\mathbf{D}_\alpha U)U^{-1}\psi + \mathbf{D}_\alpha\psi + \psi(\mathbf{D}_\alpha U)U^{-1}\right)U\\
+&= U^{-1}\left(\mathbf{D}_\alpha\psi + [\psi, (\mathbf{D}_\alpha U)U^{-1}]\right)U
+\end{aligned}
+\]
+如所期望. 因此
+\[
+\begin{aligned}
+\mathbf{D}_\alpha^{(\tilde{A})}\tilde{\psi} &= \mathbf{D}_\alpha\tilde{\psi} + [\tilde{A}_\alpha, \tilde{\psi}]\\
+&= U^{-1}\left(\mathbf{D}_\alpha\psi + [\psi, U(\mathbf{D}_\alpha U^{-1})]\right) + [U^{-1}A_\alpha U + (\mathbf{D}_\alpha U^{-1})U, \, U^{-1}\psi U]\\
+&= U^{-1}\left(\mathbf{D}_\alpha\psi + [\psi, (\mathbf{D}_\alpha U)U^{-1}] + [A_\alpha, \psi] + [U(\mathbf{D}_\alpha U^{-1}), \psi]\right)U\\
+&= U^{-1}\left(\mathbf{D}_\alpha\psi + [A_\alpha, \psi]\right)U = \widetilde{\mathbf{D}_\alpha^{(A)}\psi}
+\end{aligned}
+\]
+\end{proof}
+
+如同在 Riemann 几何中, 交换两个（规范）协变导数产生一个称为\newterm{curvature}{曲率}{curvature}的基本对象, 这里记为 $F$：
+\begin{equation}
+\mathbf{D}_\alpha\mathbf{D}_\beta\psi - \mathbf{D}_\beta\mathbf{D}_\alpha\psi = [F_{\alpha\beta}, \psi]\label{eq:c1-49}
+\end{equation}
+其中曲率的分量 $F_{\alpha\beta}$ 可由如下直接的计算推出：
+\[
+\begin{aligned}
+\mathbf{D}_\alpha\mathbf{D}_\beta\psi &= \mathbf{D}_\alpha(\mathbf{D}_\beta\psi) + [A_\alpha, \mathbf{D}_\beta\psi]\\
+&= \mathbf{D}_\alpha(\mathbf{D}_\beta\psi + [A_\beta, \psi]) + [A_\alpha, \mathbf{D}_\beta\psi + [A_\beta, \psi]]\\
+&= \mathbf{D}_\alpha\mathbf{D}_\beta\psi + [\mathbf{D}_\alpha A_\beta, \psi] + [A_\beta, \mathbf{D}_\alpha\psi] + [A_\alpha, \mathbf{D}_\beta\psi] + [A_\alpha, [A_\beta, \psi]]
+\end{aligned}
+\]
+从而
+\[
+\begin{aligned}
+(\mathbf{D}_\alpha\mathbf{D}_\beta - \mathbf{D}_\beta\mathbf{D}_\alpha)\psi &= [\mathbf{D}_\alpha A_\beta - \mathbf{D}_\beta A_\alpha, \psi]\\
+&\quad + \underbrace{[A_\alpha, [A_\beta, \psi]] - [A_\beta, [A_\alpha, \psi]]}_{[[A_\alpha, A_\beta], \psi]}
+\end{aligned}
+\]
+因此, 
+\begin{equation}
+F_{\alpha\beta} = \mathbf{D}_\alpha A_\beta - \mathbf{D}_\beta A_\alpha + [A_\alpha, A_\beta]\label{eq:c1-50}
+\end{equation}
+
+我们把如下事实留给读者证明：曲率张量 $F$ 在规范变换下不变. 即
+\[
+\widetilde{F^{(\tilde{A})}}\left(\equiv U^{-1}F^{(\tilde{A})}U\right) = F^{(A)}
+\]
+且 $F$ 满足 Bianchi 恒等式：
+\begin{equation}
+\mathbf{D}_\alpha F_{\beta\gamma} + \mathbf{D}_\gamma F_{\alpha\beta} + \mathbf{D}_\beta F_{\gamma\alpha} = 0\label{eq:c1-51}
+\end{equation}
+
+我们终于可以给出 Yang-Mills Lagrange 量所提供的 Maxwell 理论的推广：
+\begin{equation}
+L[A] = -\frac{1}{4}\left\langle F_{\alpha\beta}^{(A)}, F^{(A)\, \alpha\beta}\right\rangle_{\mathcal{G}}\label{eq:c1-52}
+\end{equation}
+我们像在 Maxwell 理论中那样推导 Euler-Lagrange 方程：
+\[
+\begin{aligned}
+0 &= \left.\frac{d}{ds}\mathbf{S}(s)\right|_{s=0} = -\frac{1}{2}\int_{\mathcal{U}}\left\langle\dot{F}_{\alpha\beta}, F^{\alpha\beta}\right\rangle_{\mathcal{G}}dv_{\mathbf{g}}\\
+&= -\frac{1}{2}\int_{\mathcal{U}}\left\langle\mathbf{D}_\alpha\dot{A}_\beta - \mathbf{D}_\beta\dot{A}_\alpha + [\dot{A}_\alpha, A_\beta] + [A_\alpha, \dot{A}_\beta], F^{\alpha\beta}\right\rangle_{\mathcal{G}}dv_{\mathbf{g}}\\
+&= -\int_{\mathcal{U}}\left(\left\langle\mathbf{D}_\alpha\dot{A}_\beta, F^{\alpha\beta}\right\rangle + \left\langle[A_\alpha, \dot{A}_\beta], F^{\alpha\beta}\right\rangle_{\mathcal{G}}\right)dv_{\mathbf{g}}\\
+&= \int_{\mathcal{U}}\left(\left\langle\dot{A}_\beta, \mathbf{D}_\alpha F^{\alpha\beta}\right\rangle_{\mathcal{G}} + \left\langle\dot{A}_\beta, [A_\alpha, F^{\alpha\beta}]\right\rangle_{\mathcal{G}}\right)dv_{\mathbf{g}}
+\end{aligned}
+\]
+这蕴含
+\begin{equation}
+\mathbf{D}_\nu F^{\mu\nu} = 0\label{eq:c1-53}
+\end{equation}
+\eqref{eq:c1-51} 与 \eqref{eq:c1-53} 合在一起构成 Yang-Mills 方程组. 
+
+注意这些方程在规范变换群下不变. 于是, Yang-Mills 方程组的一个解是规范等价势 $A_\alpha$ 的一个等价类, 其曲率 $F$ 满足 \eqref{eq:c1-53}. 
+
+在我们以后对 Yang-Mills 的处理中, 几乎总是通过对 $A$ 施加附加的约束——称为 \newterm{gauge-condition}{规范条件}{gauge condition}——来指定解的等价类的一个代表元. 有三种标准做法, 每种都给出 Yang-Mills 方程组的一种形式, 各有其优缺点：
+
+\begin{itemize}
+\item \newterm{coulomb-gauge}{Coulomb 规范}{Coulomb gauge}定义为：
+\begin{equation}
+\nabla^iA_i(t, x) = 0, \qquad (t, x) \in \mathbb{R}^{n+1}\label{eq:c1-54}
+\end{equation}
+为简化记号, 先把 \eqref{eq:c1-53} 用流 $J$ 写出：
+\begin{equation}
+\mathbf{D}^\beta F_{\alpha\beta} = J_\alpha = -\left[A^\beta, F_{\alpha\beta}\right]\label{eq:c1-55}
+\end{equation}
+当 $\alpha = 0$ 时, \eqref{eq:c1-54} 使我们能把 \eqref{eq:c1-55} 写成：
+\[
+J_0 = \partial^iF_{0i} = \partial^i(\partial_0A_i - \partial_iA_0 + [A_0, A_i]) - \Delta A_0 + \partial^i[A_0, A_i]
+\]
+从而给出 $A$ 的时间分量：
+\begin{equation}
+\Delta A_0 = 2[\partial_iA_0, A_i] + [A_0, \partial_tA_i] + [A_i, [A_0, A_j]]\label{eq:c1-56}
+\end{equation}
+当 $\alpha = i$ 时, \eqref{eq:c1-55} 读作：
+\[
+J_i = -\partial_tF_{i0} + \partial^jF_{ij} = -\partial_t(\partial_iA_0 + [A_i, A_0]) + \partial^j(\partial_iA_j - \partial_jA_i + [A_i, A_j])
+\]
+化简后：
+\begin{equation}
+\begin{aligned}
+\Box A_i &= -\partial_t\partial_iA_0 - 2[A_j, \partial_jA_i] + [A_j, \partial_iA_j] + [\partial_tA_i, A_j]\\
+&\quad + 2[A_0, \partial_tA_i] - [A_0, \partial_iA_0] - [A_j, [A_j, A_i]] + [A_0, [A_0, A_i]]
+\end{aligned}\label{eq:c1-57}
+\end{equation}
+
+\item \newterm{lorentz-gauge}{Lorentz 规范}{Lorentz gauge}由下式指定：
+\begin{equation}
+\partial^\mu A_\mu(t, x) = 0, \qquad (t, x) \in \mathbb{R}^{3+1}\label{eq:c1-58}
+\end{equation}
+Lorentz 规范对 $A$ 的时间分量与空间分量的对称处理颇具吸引力, 它还使 \eqref{eq:c1-53} 能写成一组波动方程：
+\[
+\begin{aligned}
+\mathbf{D}^\beta F_{\alpha\beta} &= \mathbf{D}^\beta(\partial_\alpha A_\beta - \partial_\beta A_\alpha + [A_\alpha, A_\beta])\\
+&= -\Box A_\alpha + \partial^\beta[A_\alpha, A_\beta] + [A_\beta, \partial_\alpha A_\beta] - [A^\beta, \partial_\beta A_\alpha] + [A_\beta, [A_\alpha, A^\beta]]
+\end{aligned}
+\]
+该方程组可以示意性地写成：
+\[
+\Box\Phi = \Phi\cdot\partial\Phi + \Phi^3
+\]
+同样, 能否把任意解变换到 Lorentz 规范完全不清楚. 此外, 要为此纯双曲型的非线性波动方程组找到好的估计也很困难. 
+
+\item \newterm{temporal-gauge}{时间规范}{temporal gauge}由条件 $A_0 = 0$ 指定. 
+\end{itemize}
+
+\mtsubsecn{5}{Einstein 场方程}
+
+根据广义相对论变分原理, 时空度规 $g$ 自身相对于某个作用量是驻定的：
+\[
+\mathcal{S} = \int_{\mathcal{U}}L\, dv_{\mathbf{g}}.
+\]
+这里 $U$ 是 $(\mathbf{M}, \mathbf{g})$ 的相对紧区域, L（Lagrange 量）假定是 $M$ 上的标量函数, 其对度规的依赖不超过两阶导数\footnote{事实上我们只要求相应的 Euler-Lagrange 方程对度规的导数不超过二阶. }. 还假定它依赖于我们时空中存在的 \newterm{matter-field}{物质场}{matter field} $\psi = \psi^{(1)}, \psi^{(2)}, \dots, \psi^{(p)}$. 
+
+事实上我们写
+\[
+\mathcal{S} = \mathcal{S}_G + \mathcal{S}_M
+\]
+其中
+\[
+\begin{aligned}
+\mathcal{S}_G &= \int_{\mathcal{U}}L_G\, dv_{\mathbf{g}}\\
+\mathcal{S}_M &= \int_{\mathcal{U}}L_M\, dv_{\mathbf{g}}
+\end{aligned}
+\]
+分别表示\newterm{gravitational-field}{引力场}{gravitational field}与物质的（作用量）. 物质 Lagrange 量 $L_M$ 只依赖于物质场 $\psi$（假定为协变张量场）以及时空度规的逆 $\mathbf{g}^{\alpha\beta}$, 后者出现在张量场 $\psi$ 的缩并中, 以产生标量 $L_M$. 它还可能依赖于附加的正定度量, 这些度量不参与变分\footnote{波映射情形下的度量 $h$ 或 Yang-Mills 方程组情形下的 Killing 标量积即属此类. }. 
+
+引力 Lagrange 量 $L_G$ 应当是其对应 Euler-Lagrange 方程至多含度规两阶导数的度规标量不变量, 而唯一的可能候选由\newterm{scalar-curvature}{标量曲率}{scalar curvature} $R$ 给出\footnote{至多相差一个加性常数. }. 因此我们设
+\[
+L_G = \mathbf{R}.
+\]
+
+现在考虑度规 $g$ 的紧变分 $(\mathbf{g}_{(s)}, \mathcal{U})$. 设 $\dot{\mathbf{g}}_{\mu\nu} = \left.\frac{d}{ds}\mathbf{g}_{\mu\nu}\right|_{s=0}$. 于是对小的 s, $\mathbf{g}_{\mu\nu}(s) = \mathbf{g}_{\mu\nu} + s\dot{\mathbf{g}}_{\mu\nu} + O(s^2)$. 又有 $\mathbf{g}^{\mu\nu}(s) = \mathbf{g}^{\mu\nu} - s\dot{\mathbf{g}}^{\mu\nu} + O(s^2)$, 其中 $\dot{\mathbf{g}}^{\mu\nu} = \mathbf{g}^{\alpha\mu}\mathbf{g}^{\beta\nu}\dot{\mathbf{g}}_{\alpha\beta}$. 则
+\[
+\left.\frac{d}{ds}\mathbf{S}_G(s)\right|_{s=0} = \int_{\mathcal{U}}\dot{\mathbf{R}}\, dv_{\mathbf{g}} + \int_{\mathcal{U}}\mathbf{R}\, d\dot{v}_{\mathbf{g}}
+\]
+现在
+\[
+\dot{dv_{\mathbf{g}}} = \frac{1}{2}\mathbf{g}^{\mu\nu}\dot{\mathbf{g}}_{\mu\nu}\, dv_{\mathbf{g}}
+\]
+事实上, 相对于一个坐标系, $dv_{\mathbf{g}} = \sqrt{-\mathbf{g}}\, dx^0dx^1\ldots dx^n$. 于是, 上述等式由
+\[
+\dot{\mathbf{g}} = \mathbf{g}\, \mathbf{g}^{\alpha\beta}\dot{\mathbf{g}}_{\alpha\beta}
+\]
+推出, 其中 $g$ 是 $\mathbf{g}_{\alpha\beta}$ 的行列式. 另一方面, 写 $\mathbf{R} = \mathbf{g}^{\mu\nu}\mathbf{R}_{\mu\nu}$ 并利用公式 $\left.\frac{d}{ds}\mathbf{g}_{(s)}^{\mu\nu}\right|_{s=0} = -\dot{\mathbf{g}}^{\mu\nu}$, 我们计算得 $\dot{\mathbf{R}} = -\dot{\mathbf{g}}^{\mu\nu}\mathbf{R}_{\mu\nu} + \mathbf{g}^{\mu\nu}\dot{\mathbf{R}}_{\mu\nu}$. 因此, 
+\begin{equation}
+\left.\frac{d}{ds}\mathbf{S}_G(s)\right|_{s=0} = -\int_{\mathcal{U}}\left(\mathbf{R}^{\mu\nu} - \frac{1}{2}\mathbf{g}^{\mu\nu}\mathbf{R}\right)\dot{\mathbf{g}}_{\mu\nu}\, dv_{\mathbf{g}} + \int_{\mathcal{U}}\mathbf{g}^{\mu\nu}\dot{\mathbf{R}}_{\mu\nu}\, dv_{\mathbf{g}}\label{eq:c1-59}
+\end{equation}
+
+为计算 $\dot{\mathbf{R}}_{\mu\nu}$, 我们利用下面的引理：
+
+\begin{lemma}\label{lem:c1-1.2}
+设 $\mathbf{g}_{\mu\nu}(s)$ 是一族时空度规, 满足 $\mathbf{g}(0) = \mathbf{g}$ 且 $\left.\frac{d}{ds}\mathbf{g}(0)\right. = \dot{\mathbf{g}}$. 又设 $\left.\frac{d}{ds}\mathbf{R}_{\alpha\beta}(s)\right|_{s=0} = \dot{\mathbf{R}}_{\alpha\beta}$. 则
+\[
+\dot{\mathbf{R}}_{\mu\nu} = \mathbf{D}_\alpha\dot{\Gamma}^\alpha_{\mu\nu} - \mathbf{D}_\mu\dot{\Gamma}^\alpha_{\alpha\nu}
+\]
+其中 $\dot{\Gamma}$ 是张量：
+\[
+\dot{\Gamma}^\alpha_{\beta\gamma} = \frac{1}{2}\mathbf{g}^{\alpha\lambda}\left(\mathbf{D}_\beta\dot{\mathbf{g}}_{\gamma\lambda} + \mathbf{D}_\gamma\dot{\mathbf{g}}_{\beta\lambda} - \mathbf{D}_\lambda\dot{\mathbf{g}}_{\beta\gamma}\right)
+\]
+\end{lemma}
+
+\begin{proof}
+由于恒等式两边都是张量, 只需在一点 $p$ 处、相对于一个使 Christoffel 符号 $\Gamma$ 在 $p$ 处为零的特殊坐标系来证明公式. 相对于这样的坐标系, Ricci 张量具有形式 $\mathbf{R}_{\mu\nu} = \partial_\alpha\Gamma^\alpha_{\mu\nu} - \partial_\mu\Gamma^\alpha_{\alpha\nu}$. 
+\end{proof}
+
+回到 \eqref{eq:c1-59}, 我们发现, 由于 $\mathbf{g}^{\mu\nu}\dot{\mathbf{R}}_{\mu\nu}$ 可以写成支集紧含于 $U$ 的张量的时空散度, 相应的积分恒为零. 因此我们推断：
+\begin{equation}
+\left.\frac{d}{ds}\mathbf{S}_G(s)\right|_{s=0} = -\int_{U}\mathbf{E}^{\mu\nu}\dot{\mathbf{g}}_{\mu\nu}\, dv_{\mathbf{g}}\label{eq:c1-60}
+\end{equation}
+其中 $\mathbf{E}^{\mu\nu} = \mathbf{R}^{\mu\nu} - \textstyle\frac{1}{2}\mathbf{g}^{\mu\nu}\mathbf{R}$. 现在我们考虑作用量积分 $\mathbf{S}_M$ 关于度规的变分. 如前所述, $L_M$ 通过度规的逆 $\mathbf{g}^{\mu\nu}$ 依赖于度规 g. 因此若记 $\mathbf{S}_M(s) = \mathbf{S}_M[\psi, \mathbf{g}_{(s)};\mathcal{U}]$, 并写 $d\dot{v}_{\mathbf{g}} = \frac{1}{2}\mathbf{g}_{\mu\nu}\dot{\mathbf{g}}^{\mu\nu}\, dv_{\mathbf{g}}$, 则有
+\[
+\begin{aligned}
+\left.\frac{d}{ds}\mathbf{S}_M(s)\right|_{s=0} &= -\int_{\mathcal{U}}\frac{\partial L_M}{\partial\mathbf{g}^{\mu\nu}}\dot{\mathbf{g}}^{\mu\nu}\, dv_{\mathbf{g}} + \int_{\mathcal{U}}L_M\, d\dot{v}_{\mathbf{g}}\\
+&= -\int_{\mathcal{U}}\left(\frac{\partial L_M}{\partial\mathbf{g}^{\mu\nu}} - \frac{1}{2}\mathbf{g}_{\mu\nu}L_M\right)\dot{\mathbf{g}}^{\mu\nu}\, dv_{\mathbf{g}}
+\end{aligned}
+\]
+
+\begin{definition*}
+对称张量
+\[
+\mathbf{T}_{\mu\nu} = -\left(\frac{\partial L_M}{\partial\mathbf{g}^{\mu\nu}} - \frac{1}{2}\mathbf{g}_{\mu\nu}L_M\right)
+\]
+称为作用量 $\mathbf{S}_M$ 的能量-动量张量. 
+\end{definition*}
+
+有了这个定义, 我们写
+\begin{equation}
+\left.\frac{d}{ds}\mathbf{S}_M(s)\right|_{s=0} = \int_{\mathcal{U}}\mathbf{T}^{\mu\nu}\dot{\mathbf{g}}_{\mu\nu}\, dv_{\mathbf{g}}\label{eq:c1-61}
+\end{equation}
+最后, 将 \eqref{eq:c1-60} 与 \eqref{eq:c1-61} 结合, 对总作用量 $\mathbf{S}$ 我们得到：
+\[
+\left.\frac{d}{ds}\mathbf{S}(s)\right|_{s=0} = -\int_{\mathcal{U}}\left(\mathbf{E}^{\mu\nu} - \mathbf{T}^{\mu\nu}\right)\dot{\mathbf{g}}_{\mu\nu}\, dv_{\mathbf{g}}
+\]
+由于 $\dot{\mathbf{g}}_{\mu\nu}$ 是支集紧含于 $U$ 的任意对称 2-张量, 我们得到 Einstein 场方程：
+\[
+\mathbf{E}^{\mu\nu} = \mathbf{T}^{\mu\nu}
+\]
+回忆 \newterm{einstein-tensor}{Einstein 张量}{Einstein tensor} $E$ 满足 \newterm{twice-contracted-bianchi}{两次缩并的 Bianchi 恒等式}{twice contracted Bianchi identity}：
+\[
+\mathbf{D}^\nu\mathbf{E}_{\mu\nu} = 0
+\]
+这意味着能量-动量张量 $T$ 也无散度：
+\begin{equation}
+\mathbf{D}_\nu\mathbf{T}^{\mu\nu} = 0\label{eq:c1-62}
+\end{equation}
+这是物质场能量-动量守恒律的简洁的时空表述. 
+
+\section{能量-动量张量}
+
+守恒律 \eqref{eq:c1-62} 是物质场的基本性质. 我们现在转向一个更直接的推导. 
+
+我们考虑具有驻定解 $\psi$ 的任意 Lagrange 场论. 设 $\Phi_s$ 是由给定向量场 $X$ 生成的局部\newterm{diffeomorphism}{微分同胚}{diffeomorphism}单参数群. 我们将用流 $\Phi$ 按如下方式变分场 $\psi$：
+\[
+\begin{aligned}
+\mathbf{g}_s &= (\Phi_s)_*\mathbf{g}\\
+\psi_s &= (\Phi_s)_*\psi.
+\end{aligned}
+\]
+由作用量积分在微分同胚下的不变性, 
+\[
+\mathbf{S}(s) = \mathbf{S}[\psi_s, \mathbf{g}_s;\mathbf{M}] = \mathbf{S}[\psi, \mathbf{g};\mathbf{M}].
+\]
+于是
+\begin{equation}
+0 = \left.\frac{d}{ds}\mathbf{S}(s)\right|_{s=0} = \int_{\mathbf{M}}\frac{\delta\mathbf{S}}{\delta\psi}\, dv_{\mathbf{g}} + \int_{\mathbf{M}}\mathbf{T}^{\mu\nu}\dot{\mathbf{g}}_{\mu\nu}\, dv_{\mathbf{g}}\label{eq:c1-63}
+\end{equation}
+第一项显然为零, 因为 $\psi$ 是驻定解. 在第二项中, 它表示关于度规的变分, 我们有
+\[
+\dot{\mathbf{g}}_{\mu\nu} = \left.\frac{d}{ds}(\mathbf{g}_s)_{\mu\nu}\right|_{s=0} = \mathcal{L}_X\mathbf{g}_{\mu\nu} = \mathbf{D}_\mu X_\nu + \mathbf{D}_\nu X_\mu
+\]
+因此
+\[
+0 = \int_{\mathbf{M}}\mathbf{T}^{\mu\nu}\mathcal{L}_X\mathbf{g}_{\mu\nu}\, dv_{\mathbf{g}} = 2\int_{\mathbf{M}}\mathbf{T}^{\mu\nu}\mathbf{D}_\nu X_\mu\, dv_{\mathbf{g}} = -2\int_{\mathbf{M}}\mathbf{D}_\nu\mathbf{T}^{\mu\nu}X_\mu\, dv_{\mathbf{g}}
+\]
+由于 $X$ 是任意的, 我们断定
+\begin{equation}
+\mathbf{D}_\nu\mathbf{T}^{\mu\nu} = 0.\label{eq:c1-64}
+\end{equation}
+这再次是能量-动量守恒律. 
+
+下面列出前面讨论过的场论的能量-动量张量. 我们把利用定义进行计算的工作留给读者. 
+
+\begin{enumerate}
+\item 标量场方程的能量-动量张量为：
+\[
+\mathbf{T}_{\alpha\beta} = \frac{1}{2}\left(\phi_{, \alpha}\phi_{, \beta} - \frac{1}{2}\mathbf{g}_{\alpha\beta}\left(\mathbf{g}^{\mu\nu}\phi_{, \mu}\phi_{, \nu} + 2V(\phi)\right)\right)
+\]
+\item 波映射的能量-动量张量由下式给出：
+\[
+\mathbf{T}_{\alpha\beta} = \frac{1}{2}\left(\langle\phi_{, \alpha}, \phi_{, \beta}\rangle - \frac{1}{2}\mathbf{g}_{\alpha\beta}\left(\mathbf{g}^{\mu\nu}\langle\phi_{, \mu}, \phi_{, \nu}\rangle\right)\right)
+\]
+其中 $\langle\cdot, \cdot\rangle$ 表示目标流形上的 Riemann 内积. 
+\item Maxwell 方程组的能量-动量张量为：
+\[
+\mathbf{T}_{\alpha\beta} = F_\alpha{}^\mu F_{\beta\mu} - \frac{1}{4}\mathbf{g}_{\alpha\beta}\left(F_{\mu\nu}F^{\mu\nu}\right)
+\]
+\item Yang-Mills 方程组的能量-动量张量为：
+\[
+\mathbf{T}_{\alpha\beta} = \left\langle F_\alpha{}^\mu, F_{\beta\mu}\right\rangle - \frac{1}{4}\mathbf{g}_{\alpha\beta}\left(\left\langle F_{\mu\nu}, F^{\mu\nu}\right\rangle\right)
+\]
+\end{enumerate}
+
+能量-动量张量 $T$ 的一个可接受概念除守恒律 \eqref{eq:c1-64} 外还必须满足如下性质：
+\begin{enumerate}
+\item T 是对称的；
+\item T 满足 \newterm{positive-energy-condition}{正能量条件}{positive energy condition}, 即对任意未来指向类时向量 X, Y, 有 $\mathbf{T}(X, Y) \geq 0$. 
+\end{enumerate}
+
+对称性在我们的构造中是自动成立的. 下面的命题断言, 上述场论的能量-动量张量满足正能量条件. 
+
+\begin{proposition}\label{prop:c1-2.1}
+若 $V$ 为正, 则标量波动方程的能量-动量张量满足正能量条件. 波映射、Maxwell 方程组与 Yang-Mills 的能量-动量张量满足正能量条件. 
+\end{proposition}
+
+\begin{proof}
+为证明正性条件, 考虑某点 $p \in \mathbf{M}$ 处的两个向量 X, Y, 它们都是因果的且未来指向. 由 X, Y 张成的平面与 $p$ 处的\newterm{null-cone}{零锥}{null cone}沿两个零方向相交\footnote{若 X, Y 线性相关, 则任何过其公共方向的平面都可以. }. 设 L, $\underline{L}$ 是对应于两个互补零方向的未来指向零向量, 并按条件
+\[
+\langle L, \underline{L}\rangle = -2
+\]
+归一化, 即它们构成一个\newterm{null-pair}{零对}{null pair}. 由于向量场 X, Y 是 L, $\underline{L}$ 的系数为正的线性组合, 命题将由如下事实推出：$\mathbf{T}(L, L) \geq 0$、$\mathbf{T}(\underline{L}, \underline{L}) \geq 0$ 且 $\mathbf{T}(L, \underline{L}) \geq 0$. 为此, 我们考虑 $p$ 处由向量场 $E_{(n+1)} = L$、$E_{(n)} = \underline{L}$ 及 $E_{(1)}, \ldots, E_{(n-1)}$ 构成的标架, 它具有性质：
+\[
+\langle E_{(i)}, E_{(n)}\rangle = \langle E_{(i)}, E_{(n+1)}\rangle = 0
+\]
+且
+\[
+\langle E_{(i)}, E_{(j)}\rangle = \delta_{ij}
+\]
+对一切 $i, j = 1, \ldots, n-1$. 具有这些性质的标架称为零标架. 
+
+\begin{enumerate}
+\item 现在我们计算波动方程的情形：
+\[
+\begin{aligned}
+\mathbf{T}(L, L) &= \frac{1}{2}E(\phi)^2\\
+\mathbf{T}(\underline{L}, \underline{L}) &= \frac{1}{2}\underline{L}(\phi)^2.
+\end{aligned}
+\]
+它们显然非负. 现在
+\[
+\mathbf{T}(L, \underline{L}) = \frac{1}{2}\left[L(\phi)\underline{L}(\phi) + \left(g^{\mu\nu}\phi_{, \mu}\phi_{, \nu} + 2V(\phi)\right)\right]
+\]
+我们想把 $g^{\mu\nu}\phi_{, \mu}\phi_{, \nu}$ 相对于零标架表示出来. 为此, 注意相对于零标架, 度量 $g_{\alpha\beta}$ 的仅有的非零分量为：
+\[
+g_{n(n+1)} = -2, \qquad g_{ii} = 1, \qquad i = 1, \dots, n-1
+\]
+而逆度量 $g^{\alpha\beta}$ 的非零分量为：
+\[
+g^{n(n+1)} = -\frac{1}{2}, \qquad g^{ii} = 1, \qquad i = 1, \ldots, n-1
+\]
+因此, 
+\[
+g^{\mu\nu}\phi_{, \mu}\phi_{, \nu} = -L(\phi)\underline{L}(\phi) + |\vec{\nabla}\phi|^2
+\]
+其中
+\[
+|\nabla\phi|^2 = (E_{(1)}(\phi))^2 + (E_{(2)}(\phi))^2 + \dots + E_{(n-1)}(\phi)^2.
+\]
+因此, 
+\[
+\mathbf{T}(L, \underline{L}) = \frac{1}{2}|\vec{\nabla}\phi|^2 + V(\phi).
+\]
+\item 对波映射, 按照同样的计算, 我们有
+\[
+\begin{aligned}
+T(E, E) &= \frac{1}{2}\langle E(\phi), E(\phi)\rangle\\
+T(\underline{E}, \underline{E}) &= \frac{1}{2}\langle\underline{E}(\phi), \underline{E}(\phi)\rangle\\
+T(E, \underline{E}) &= \frac{1}{2}\sum_{i=1}^{n-1}\langle E_{(i)}(\phi), E_{(i)}(\phi)\rangle.
+\end{aligned}
+\]
+T 的正性于是由目标流形 $N$ 上的 Riemann 度量 $h$ 推出. 
+\item 为证明 3+1 维 Maxwell 方程组能量-动量张量的正性, 我们先把张量写成更对称的形式：
+\begin{equation}
+T_{\alpha\beta} = \frac{1}{2}\left(F_\alpha{}^\mu F_{\beta\mu} + {}^\star F_\alpha{}^\mu\, {}^\star F_{\beta\mu}\right)\label{eq:c1-65}
+\end{equation}
+其中 ${}^\star F$ 是 $F$ 的 Hodge 对偶, 即 ${}^\star F_{\alpha\beta} = \textstyle\frac{1}{2}\epsilon_{\alpha\beta\mu\nu}F^{\mu\nu}$. 
+
+\textbf{习题.} 验证公式 \eqref{eq:c1-65}. 
+
+我们在每点 $p \in \mathbf{M}$ 处引入 $F$ 的如下\newterm{null-decomposition}{零分解}{null decomposition}：
+\[
+\begin{aligned}
+\alpha_A &= F_{A4}, \qquad \underline{\alpha}_A = F_{A3}\\
+\rho &= \frac{1}{2}F_{34}, \qquad \sigma = \frac{1}{2}\, {}^\star F_{34}.
+\end{aligned}
+\]
+它完全确定了张量 F. 这里指标 $A = 1, 2$ 对应于与球面相切的 $E_1, E_2$ 方向, 而指标 3, 4 对应于 $E_3 = \underline{L}$ 与 $E_4 = L$. 然后我们对 ${}^\star F$ 计算得：
+\[
+\begin{aligned}
+{}^\star F_{A4} &= -{}^\star\alpha_A, \qquad {}^\star F_{A3} = {}^\star\underline{\alpha}_A\\
+{}^\star F_{34} &= 2\sigma, \qquad {}^{\star\star}F_{34} = -2\rho
+\end{aligned}
+\]
+其中 ${}^\star\alpha_A = \epsilon_{AB}\alpha_B$. 这里 $\epsilon_{AB}$ 是单位球面上的体积形式, 故 $\epsilon_{AB} = \textstyle\frac{1}{2}\epsilon_{AB34}$, 即 $\epsilon_{11} = \epsilon_{22} = 0$, $\epsilon_{12} = -\epsilon_{21} = 1$. 用这一记号, 我们计算得：
+\[
+\begin{aligned}
+T(E_{(4)}, E_{(4)}) &= \frac{1}{2}\sum_{A=1}^2\left(F_{4A}\cdot F_{4A} + {}^\star F_{4A}\cdot{}^\star F_{4A}\right)\\
+&= \frac{1}{2}\sum_{A=1}^2\left(\alpha_A\cdot\alpha_A + {}^\star\alpha_A\cdot{}^\star\alpha_A\right)\\
+&= \sum_{A=1}^2\alpha_A\cdot\alpha_A = |\alpha|^2 \geq 0.
+\end{aligned}
+\]
+类似地, 
+\[
+T(E_{(3)}, E_{(3)}) = \sum_{A=1}^2\underline{\alpha}_A\cdot\underline{\alpha}_A = |\underline{\alpha}|^2 \geq 0
+\]
+用同样的方法我们得到
+\[
+T(E, \underline{E}) = \rho^2 + \sigma^2 \geq 0
+\]
+这就证明了我们的断言. 
+\item Yang-Mills 方程组能量-动量张量的正性用与 Maxwell 方程组完全相同的方式证明, 利用 Killing 标量积 $\langle\cdot, \cdot\rangle_{\mathcal{G}}$ 的正性. 
+\end{enumerate}
+\end{proof}
+
+场论的能量-动量张量可能满足的另一个重要性质是无迹条件, 即
+\[
+\mathbf{g}_{\alpha\beta}\mathbf{T}^{\alpha\beta} = 0.
+\]
+事实证明, 这一条件被所有共形不变的场论满足. 
+
+\begin{definition*}
+若相应的作用量积分在度规的共形变换
+\[
+\mathbf{g}_{\alpha\beta} \longrightarrow \tilde{\mathbf{g}}_{\alpha\beta} = \Omega\mathbf{g}_{\alpha\beta}
+\]
+下不变, 则称场论是共形不变的, 其中 $\Omega$ 是时空上的正光滑函数. 
+\end{definition*}
+
+\begin{proposition}\label{prop:c1-2.2}
+共形不变场论的能量-动量张量 $\mathbf{T}$ 是无迹的. 
+\end{proposition}
+
+\begin{proof}
+考虑支集紧含于 $\mathcal{U} \subset \mathcal{M}$ 的任意光滑函数 f. 考虑给定度规 $g$ 的如下变分：
+\[
+\mathbf{g}_{\mu\nu}(s) = e^{sf}\mathbf{g}_{\mu\nu}.
+\]
+设 $S(s) = S_{\mathcal{U}}[\psi, \mathbf{g}(s)]$. 由 $S$ 的协变性, $S(s) = S(0)$. 因此
+\[
+0 = \left.\frac{d}{ds}\mathcal{S}(s)\right|_{s=0} = \int_{\mathcal{U}}T^{\mu\nu}\dot{\mathbf{g}}_{\mu\nu}\, dv_{\mathbf{g}}
+\]
+其中
+\[
+\dot{\mathbf{g}}_{\mu\nu} = \left.\frac{d}{ds}\mathbf{g}_{\mu\nu}(s)\right|_{s=0} = f\mathbf{g}_{\mu\nu}.
+\]
+于是 $\int_{\mathcal{U}}\left(T^{\mu\nu}\mathbf{g}_{\mu\nu}\right)f\, dv_{\mathbf{g}} = 0$, 又因 $f$ 任意, 我们推断：
+\[
+tr\, T = g^{\mu\nu}T_{\mu\nu} \equiv 0.
+\]
+\end{proof}
+
+我们容易验证, Maxwell 方程组与 Yang-Mills 方程组在 $3\times 1$ 维中是共形不变的. 波映射场论在 $1+1$ 维中是共形不变的, 即当时空 $M$ 是二维时\footnote{线性标量波动方程亦然. }. 
+
+\begin{remark*}
+Maxwell 方程组的作用量积分 $\mathbf{S} = \int_{\mathcal{U}}F_{\alpha\beta}F^{\alpha\beta}dv_{\mathbf{g}}$ 在任意维数都是共形不变的, 前提是我们同时按比例缩放电磁场 F. 事实上, 若 $\tilde{\mathbf{g}}_{\alpha\beta} = \Omega^2\mathbf{g}_{\alpha\beta}$, 则 $dv_{\tilde{\mathbf{g}}} = \Omega^{n+1}dv_{\mathbf{g}}$；若再设 $\tilde{F}_{\alpha\beta} = \Omega^{-\frac{n-3}{2}}F_{\alpha\beta}$, 则得到：
+\[
+\begin{aligned}
+\tilde{\mathbf{S}}[\tilde{F}, \tilde{\mathbf{g}}] &= \int \tilde{F}_{\alpha\beta}\tilde{F}_{\gamma\delta}\tilde{\mathbf{g}}^{\alpha\gamma}\tilde{\mathbf{g}}^{\beta\delta}dv_{\tilde{\mathbf{g}}}\\
+&= \int F_{\alpha\beta}F_{\gamma\delta}\mathbf{g}^{\alpha\gamma}\mathbf{g}^{\beta\delta}dv_{\mathbf{g}}\\
+&= \mathbf{S}[F, \mathbf{g}].
+\end{aligned}
+\]
+\end{remark*}
+
+我们以一个关于 $1+1$ 维共形场论的简单观察结束本节. 事实上我们特化到 Minkowski 空间 $\mathbb{R}^{1+1}$, 并考虑局部守恒律 $\partial^\mu\mathbf{T}_{\nu\mu} = 0$. 令 $\nu = 0, 1$, 我们得到：
+\begin{equation}
+\partial^0\mathbf{T}_{00} + \partial^1\mathbf{T}_{01} = 0, \qquad \partial^0\mathbf{T}_{01} + \partial^1\mathbf{T}_{11} = 0\label{eq:c1-66}
+\end{equation}
+由于能量-动量张量无迹, 我们有 $\mathbf{T}_{00} = \mathbf{T}_{11} := A$. 设 $\mathbf{T}_{01} = \mathbf{T}_{10} = B$. 因此 \eqref{eq:c1-66} 蕴含 $A$ 与 $B$ 都满足线性齐次波动方程：
+\begin{equation}
+\Box A = 0 = \Box B.\label{eq:c1-67}
+\end{equation}
+利用这一观察, 容易证明光滑初值对一切时间保持光滑. 
+
+例如, 波映射在 $1+1$ 维中是共形不变的. 此时
+\[
+A = \mathbf{T}_{00} = \frac{1}{2}\left(\langle\partial_t\phi, \partial_t\phi\rangle + \langle\partial_x\phi, \partial_x\phi\rangle\right),
+\]
+给定 $C_0^\infty(\mathbb{R})$ 中的数据, \eqref{eq:c1-67} 蕴含 $\phi$ 的导数对一切正时间保持光滑. 这就证明了\newterm{global-existence}{全局存在性}{global existence}. 
+
+\section{守恒律}
+
+场论的能量-动量张量与守恒律密切相关. 这一联系通过 Noether 原理得以显现：
+
+\textbf{Noether 原理:} 对任一保持作用的单参数变换群, 对应一个守恒律. 
+
+我们如下阐明这一基本原理：设 $\mathbf{S} = \mathbf{S}[\psi, \mathbf{g}]$ 是场 $\psi$ 的作用量积分. 设 $\chi_t$ 是 $M$ 的\newterm{isometry}{等距}{isometry}单参数群, 即 $(\chi_t)_*\mathbf{g} = \mathbf{g}$. 则
+\[
+\begin{aligned}
+\mathbf{S}[(\chi_t)_*\psi, \mathbf{g}] &= \mathbf{S}[(\chi_t)_*\psi, (\chi_t)_*\mathbf{g}]\\
+&= \mathbf{S}[\psi, \mathbf{g}].
+\end{aligned}
+\]
+于是作用在 $\psi \to (\chi_t)_*\psi$ 下保持不变. 根据 Noether 原理, 我们应该能为相应的 Euler-Lagrange 方程找到守恒律\footnote{同样的论证也适用于作用在共形不变场论上的共形等距. 因此在这种设定下我们也预期有守恒律. }. 我们用生成 $\chi_t$ 的 Killing 向量场 $X$ 来推导这些守恒律. 
+
+我们从一个涉及 $\psi$ 的能量-动量张量 $T$ 与任意向量场 $X$ 的一般计算开始. 设 $P$ 是通过将 $T$ 与 $X$ 缩并得到的 1-形式：
+\[
+P_\alpha = \mathbf{T}_{\alpha\beta}X^\beta
+\]
+由于 $T$ 是对称且无散度的, 
+\[
+\mathbf{D}^\alpha P_\alpha = \left(\mathbf{D}^\alpha\mathbf{T}_{\alpha\beta}\right)X^\beta + \mathbf{T}_{\alpha\beta}\left(\mathbf{D}^\alpha X^\beta\right) = \frac{1}{2}\mathbf{T}^{\alpha\beta\, (X)}\pi_{\alpha\beta}
+\]
+其中 ${}^{(X)}\pi_{\alpha\beta}$ 是 $X$ 的\newterm{deformation-tensor}{变形张量}{deformation tensor}：
+\[
+{}^{(X)}\pi_{\alpha\beta} = (\mathcal{L}_X\mathbf{g})_{\alpha\beta} = \mathbf{D}_\alpha X_\beta + \mathbf{D}_\beta X_\alpha
+\]
+
+\textbf{记号.} 我们用
+\[
+\mathcal{N}^-(\bar{t}, \bar{x}) = \{(t, x)\, |\, 0 \leq t \leq \bar{t};\ |x-\bar{x}| = \bar{t} - t\}
+\]
+记顶点为 $p = (\bar{t}, \bar{x}) \in \mathbb{R}^{n+1}$ 的\newterm{backward-light-cone}{后向光锥}{backward light cone}. 该集合在某个时间区间 $[t_1, t_2]$（$t_1 \leq t_2 \leq \bar{t}$）上的限制记为 $\mathcal{N}^-_{[t_1, t_2]}(\bar{t}, \bar{x})$. 这些零超曲面是如下集合的零边界：
+\[
+\begin{aligned}
+\mathcal{J}^-(\bar{t}, \bar{x}) &= \{(t, x)\, |\, 0 \leq t \leq \bar{t};\ |x-\bar{x}| \leq \bar{t} - t\}\\
+\mathcal{J}^-_{[t_2, t_1]}(\bar{t}, \bar{x}) &= \{(t, x)\, |\, t_2 \leq t \leq t_1;\ |x-\bar{x}| \leq \bar{t} - t\}
+\end{aligned}
+\]
+我们用 $S_t = S_t(\bar{t}, \bar{x})$ 与 $B_t = B_t(\bar{t}, \bar{x})$ 分别记时间切片 $\Sigma_t$ 与 $\mathcal{N}^-$ 及 $\mathcal{I}^-$ 的交. 
+
+在沿 $\mathcal{N}^-(p)$ 的每一点 $q = (t, x)$ 处, 我们定义未来指向零向量构成的零对 $(E_+, E_-)$：
+\[
+\underline{L} = E_+ = \partial_t + \frac{x^i - \bar{x}^i}{|x-\bar{x}|}\partial_i, \qquad L = E_- = \partial_t - \frac{x^i - \bar{x}^i}{|x-\bar{x}|}\partial_i
+\]
+注意 $L$ 与 $\underline{L}$ 都是零的, 且 $\langle L, \underline{L}\rangle = -2$. 
+
+以下是 Stokes 定理的简单推论, 采用如下形式. 
+
+\begin{proposition}\label{prop:c1-3.1}
+设 $P_\mu$ 是满足 $\partial^\mu P_\mu = F$ 的 1-形式. 则\footnote{(68) 中的括号 $\langle\cdot, \cdot\rangle$ 表示关于 Minkowski 度量的内积. }, 对一切 $t_1 \leq t_2 \leq \bar{t}$, 
+\begin{equation}
+\int_{B_{t_2}}\langle P, \partial_t\rangle + \int_{\mathcal{N}^-_{[t_1, t_2]}(p)}\langle P, E_-\rangle = \int_{B_{t_1}}\langle P, \partial_t\rangle - \int_{\mathcal{J}^-_{[t_1, t_2]}(p)}F\, dt\, dx\label{eq:c1-68}
+\end{equation}
+其中
+\[
+\int_{\mathcal{N}^-_{[t_1, t_2]}(p)}\langle P, E_-\rangle = \int_{t_1}^{t_2}dt\int_{S_t}\langle P, E_-\rangle\, da_t.
+\]
+\end{proposition}
+
+将 Stokes 定理应用于 \eqref{eq:c1-68}, 即得：
+
+\begin{theorem}\label{thm:c1-3.2}
+设 $T$ 是与某个场论相关的能量-动量张量, X 是任意向量场. 则
+\begin{equation}
+\begin{aligned}
+\int_{B_{t_2}}\mathbf{T}(\partial_t, X) + \int_{\mathcal{N}^-_{[t_1, t_2]}(p)}\mathbf{T}(E_-, X) &= \int_{B_{t_1}}\mathbf{T}(\partial_t, X)\\
+&\quad - \int_{\mathcal{J}^-_{[t_1, t_2]}(p)}\mathbf{T}^{\alpha\beta\, (X)}\pi_{\alpha\beta}\, dt\, dx
+\end{aligned}\label{eq:c1-69}
+\end{equation}
+\end{theorem}
+
+在 $X$ 是 Killing 的特殊情形, 其变形张量 $\pi$ 恒为零. 因此：
+
+\begin{corollary}\label{cor:c1-3.3}
+若 $X$ 是 Killing 向量场, 则
+\begin{equation}
+\int_{B_{t_2}}\mathbf{T}(\partial_t, X) + \int_{\mathcal{N}^-_{[t_1, t_2]}(p)}\mathbf{T}(L, X) = \int_{B_{t_1}}\mathbf{T}(\partial_t, X)\label{eq:c1-70}
+\end{equation}
+\end{corollary}
+
+此外, 若 $T$ 无迹且 $X$ 是共形 Killing 的, 则 \eqref{eq:c1-70} 仍然成立. 
+
+恒等式 \eqref{eq:c1-70} 通常应用于类时未来指向的 Killing 向量场 X, 此时 $T$ 的正能量条件保证 \eqref{eq:c1-70} 中所有被积函数为正. 我们知道（见附录 4.2, 除 Lorentz 变换外, 唯一的 Killing 未来指向类时向量场是 $\partial_t$ 的常数倍）. 取 $X = \partial_t$, \eqref{eq:c1-70} 变为：
+\begin{equation}
+\int_{B_{t_2}}\mathbf{T}(\partial_t, \partial_t) + \int_{\mathcal{N}^-_{[t_1, t_2]}(p)}\mathbf{T}(E_-, \partial_t) = \int_{B_{t_1}}\mathbf{T}(\partial_t, \partial_t)\label{eq:c1-71}
+\end{equation}
+在共形场论的情形, 我们可以取 $X$ 为未来类时的共形 Killing 向量场 $X = K_0 = (t^2+|x|^2)\partial_t + 2tx^i\partial_i$. 于是：
+\begin{equation}
+\int_{B_{t_2}}\mathbf{T}(\partial_t, K_0) + \int_{\mathcal{N}^-_{[t_1, t_2]}(p)}\mathbf{T}(L, K_0) = \int_{B_{t_1}}\mathbf{T}(\partial_t, K_0)\label{eq:c1-72}
+\end{equation}
+
+在 \eqref{eq:c1-71} 中, 项 $\mathbf{T}(\partial_t, \partial_t)$ 称为\newterm{energy-density}{能量密度}{energy density}, 而 $\mathbf{T}(E_-, \partial_t)$ 称为\newterm{energy-flux-density}{能量通量密度}{energy flux density}. 相应的积分分别称为 $B_{t_1}$ 与 $B_{t_2}$ 中所含的能量, 以及穿过 $\mathcal{N}^-$ 的能量通量. \eqref{eq:c1-72} 中的相应项称为共形能量密度、共形通量等. 
+
+方程 \eqref{eq:c1-71} 可用于推导相对论场论的如下基本性质：
+\begin{enumerate}
+\item \newterm{finite-propagation-speed}{有限传播速度}{finite propagation speed}
+\item Cauchy 问题唯一性
+\end{enumerate}
+
+\begin{proof}
+第一个性质由如下事实推出：若 $\int_{B_{t_1}}\mathbf{T}(\partial_t, \partial_t)$ 在时刻 $t = t_1$ 为零, 则积分 $\int_{B_{t_2}}\mathbf{T}(\partial_t, \partial_t)$ 与 $\int_{\mathcal{N}^-_{[t_1, t_2]}}\mathbf{T}(E_-, \partial_t)$ 也都必须为零. 由 $T$ 的正性性质可知, 相应的被积函数也必为零. 考虑具体理论中 $T$ 的具体形式, 即可证明场在球 $B_{t_1}$ 的\newterm{domain-of-influence}{影响域}{domain of influence}内也恒为零. 反之, 若场的初值在 $B_{t_1}$ 的补集中为零, 则场在 $B_{t_1}$ 影响域的补集中恒为零. 
+
+第二个性质的证明对线性场论立即由第一个性质推出. 对非线性理论则需要多费一点功夫. 
+\end{proof}
+
+\textbf{习题 1.} 为我们迄今遇到的每个场论——标量波动方程 (SWE)、波映射 (WM)、Maxwell 方程组 (ME) 与 Yang-Mills (YM)——建立初值问题. 对光滑解证明初值问题解的唯一性. 
+
+以下是 \eqref{eq:c1-71} 与 \eqref{eq:c1-72} 的另一个重要推论. 为陈述结果, 我们引入如下量：
+\begin{equation}
+\mathcal{E}(t) = \int_{\mathbb{R}^n}\mathbf{T}(\partial_t, \partial_t)(t, x)\, dx\label{eq:c1-73}
+\end{equation}
+\begin{equation}
+\mathcal{E}_c(t) = \int_{\mathbb{R}^n}\mathbf{T}(K_0, \partial_t)(t, x)\, dx\label{eq:c1-74}
+\end{equation}
+
+\begin{theorem}[全局能量]\label{thm:c1-3.4}
+对任意场论, 若 $\mathcal{E}(0) < \infty$, 则
+\begin{equation}
+\mathcal{E}(t) = \mathcal{E}(0)\label{eq:c1-75}
+\end{equation}
+此外, 对共形场论, 若 $\mathcal{E}_c(0) < \infty$, 则
+\begin{equation}
+\mathcal{E}_c(t) = \mathcal{E}_c(0)\label{eq:c1-76}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+将 \eqref{eq:c1-71} 与 \eqref{eq:c1-72} 应用于过去因果域 $\mathcal{I}^-(p)$（其中 $p = (\bar{t}, 0)$, 在 $t_1 = 0$ 与 $t_2 = t$ 之间）, 并令 $\bar{t} \to +\infty$, 即可轻易得到. 
+\end{proof}
+
+\textbf{习题 2.} 考虑 Lagrange 量
+\[
+\mathcal{L} = -\frac{1}{2}\mathbf{m}^{\alpha\beta}\partial_\alpha\phi\, \overline{\partial_\beta\phi} - V(|\phi|)
+\]
+其中 $\phi$ 是定义在 Minkowski 时空 $\mathbb{R}^{n+1}$ 上的复值标量, $\bar{\phi}$ 是其复共轭. 如前所述, L 在连续变换群 $\phi \to e^{i\theta}\phi$（$\theta \in \mathbb{R}$）下不变. 根据 Noether 定理, 相应的 Euler-Lagrange 方程应该有一个守恒律. 你能推导出它吗？
+
+\mtsubsec{能量在共形不变情形下的色散}
+在本节中, 我们将利用全局共形能量恒等式 \eqref{eq:c1-76} 来说明 Minkowski 空间中场论的能量如何耗散. 考虑定义在整个 $\mathbb{R}^{n+1}$ 上的共形场论. 在 $\mathbb{R}^{n+1}$ 的每一点（其中 $t \geq 0$）, 定义标准零标架：
+\[
+\begin{aligned}
+L = E_+ &= \partial_t + \partial_r\\
+\underline{L} = E_- &= \partial_t - \partial_r.
+\end{aligned}
+\]
+注意共形 Killing 向量场 $K_0 = (t^2+r^2)\partial_t + 2rt\partial_r$ 可以表示为：
+\[
+K_0 = \frac{1}{2}\left[(t+r)^2E_+ + (t-r)^2E_-\right]
+\]
+于是, 
+\begin{equation}
+\begin{aligned}
+\mathcal{E}_c(t) &= \int_{\mathbb{R}^n}\left[\frac{1}{4}(t+r)^2\mathbf{T}_{++} + \frac{1}{4}(t-r)^2\mathbf{T}_{--} + \frac{1}{4}\underbrace{\left((t+r)^2+(t-r)^2\right)}_{2(t^2+r^2)}\mathbf{T}_{+-}\right]dx\\
+&= \int_{\mathbb{R}^n}\left[\frac{1}{4}(t+r)^2\mathbf{T}_{++} + \frac{1}{2}(t^2+r^2)\mathbf{T}_{+-} + \frac{1}{4}(t-r)^2\mathbf{T}_{--}\right]dx\\
+\mathcal{E}_c(0) &= \int_{\mathbb{R}^n}\mathbf{T}(\partial_t, K_0)(0, x)\, dx = \int_{\mathbb{R}^n}|x|^2\mathbf{T}(\partial_t, \partial_t)\, dx
+\end{aligned}\label{eq:c1-77}
+\end{equation}
+根据 \eqref{eq:c1-76}, 我们有 $\mathcal{E}_c(t) = \mathcal{E}_c(0)$. 假定 $\mathcal{E}_c(0) = \int_{\mathbb{R}^n}|x|^2\mathbf{T}(\partial_t, \partial_t)\, dx$ 有限, 我们断定：
+\[
+\begin{aligned}
+\int_{\mathbb{R}^n}\mathbf{T}_{++}(t, \cdot)\, dx &\lesssim \frac{\mathcal{E}_c(0)}{t^2}\\
+\int_{\mathbb{R}^n}\mathbf{T}_{+-}(t, \cdot)\, dx &\lesssim \frac{\mathcal{E}_c(0)}{t^2}.
+\end{aligned}
+\]
+\eqref{eq:c1-77} 中的剩余项含有因子 $(t-r)^2$, 它沿外向零方向 $r = t + c$ 为常数. 因此对任意 $0 < \epsilon < 1$：
+\[
+\begin{aligned}
+\int_{|x|>(1+\epsilon)t}\mathbf{T}_{--} &= O(t^{-2})\\
+\int_{|x|<(1-\epsilon)t}\mathbf{T}_{--} &= O(t^{-2}).
+\end{aligned}
+\]
+我们断定, 共形场的大部分能量由 $\mathbf{T}_{--}$ 分量携带, 并在光锥附近传播. 
+
+\mtsubsec{$\Box\phi=0$ 的情形}
+波动方程 $\Box\phi = 0$ 只在维数 $n = 1$ 时共形不变. 然而, 在任意维数下我们仍能推导出对应于共形 Killing 向量场的有用守恒律. 
+
+\begin{lemma}\label{lem:c1-3.7}
+设 $\mathbf{T}_{\alpha\beta} = \mathbf{T}_{\alpha\beta}[\phi]$ 是 $\Box\phi = 0$ 的解的相应能量-动量张量. 设 $X$ 是共形 Killing 向量场, 即 $\pi = {}^{(X)}\pi = \mathcal{L}_X m = \Omega m$, 且 $tr\, \pi = m^{\alpha\beta}\pi_{\alpha\beta}$. 容易验证 $\Box\Omega = 0$；事实上, 在 $X = K_0$ 的特殊情形, $\Omega = 4(n+1)t$. 设
+\[
+\bar{P}_\alpha = \mathbf{T}_{\alpha\beta}X^\beta + \frac{n-1}{4(n+1)}tr\, \pi\, \phi\, \partial_\alpha\phi - \frac{n-1}{8(n+1)}\partial_\alpha(tr\, \pi)\, \phi^2.
+\]
+我们有
+\[
+\partial^\alpha\bar{P}_\alpha = 0.
+\]
+\end{lemma}
+
+现在考虑零对 $L = \partial_t + \partial_r$、$\underline{L} = \partial_t - \partial_r$, 如同上一节. 我们容易验证：
+\begin{equation}
+Q(L, L) = L(\phi)^2\label{eq:c1-78}
+\end{equation}
+\begin{equation}
+Q(L, \underline{L}) = |\nabla\phi|^2\label{eq:c1-79}
+\end{equation}
+\begin{equation}
+Q(\underline{L}, \underline{L}) = \underline{L}(\phi)^2\label{eq:c1-80}
+\end{equation}
+其中 $|\nabla\phi|^2 = \sum_A|e_A(\phi)|^2$, $(e_A)_{A=1, \dots, n-1}$ 是张成 $L$ 与 $\underline{L}$ 的正交补的标准正交标架. 

@@ -1,0 +1,1428 @@
+% chapters/ch09.tex - 第 9 章: 求解波动型方程
+\input{chapters/tikz_ch09.tex}
+
+\chapter{求解波动型方程}\label{ch:09}
+
+\index{bo dong fangcheng@波动方程 (wave equation)}%
+\index{nengliang guji@能量估计 (energy estimate)}%
+\index{yinguoxing@因果性 (causality)}%
+作为第~\ref{ch:08}~章中所证明的奇性传播 (更确切地说是正则性传播) 结论的重大应用, 我们将在恰当的时空区域上求解波动型方程 $P u = f$ (定理~\ref{thm:9.33}). 这在实质上大幅推广了例~\ref{eg:7.5}. 此处所采用的处理途径具有一个重要特征, 使之根本区别于第~\ref{ch:07}~章的处理途径: 无论是微分算子本身还是底层的函数空间, 均不是针对任何时间与空间变量的人为分裂来定义的. 此外, 我们通过对形式伴随算子 $P^*$ 的一个先验 (能量) 估计作对偶, 推导出原方程 $P u = f$ 解的存在性. (对偶方法是求解偏微分方程的有力工具, 并将在第~\ref{ch:11}~章中再度登场.) 能量方法在波动方程的研究中经常被使用; 我们在此只发展其基础部分.
+
+我们首先简要介绍 Lorentz 度量 (第~\ref{sec:9.1}~节), 并证明标准的能量估计 (第~\ref{sec:9.2}~节). 在给出关于具支与可延拓特征的 Sobolev 空间的一些泛函分析背景之后 (第~\ref{sec:9.3}~节), 我们讨论波动型方程解的存在性, 唯一性与更高正则性 (第~\ref{sec:9.4}~节). 最后, 我们证明半经典波动型方程的类似结果 (第~\ref{sec:9.5}~节).
+
+我们假定读者熟悉 (半) Riemann 几何中的基本概念, 特别是 Levi-Civita 联络, 测地线以及 Stokes 定理. 覆盖这些主题的标准参考文献为 \cite{HE73,ON83,Lee18}.
+
+\section{Lorentz 几何}\label{sec:9.1}
+\index{Lorentz liuxing@Lorentz 流形 (Lorentzian manifold)}%
+\index{shikong@时空 (spacetime)}%
+\index{guangzhui@光锥 (light cone)}%
+
+本章所研究的波动型方程的几何舞台如下:
+
+\begin{definition}[Lorentz 流形]\label{def:9.1}
+设 $M$ 为 $n$ 维流形, $n \ge 2$. 设 $g \in \Smooth(M; S^2 T^* M)$, 即 $g_p = g(p)$ ($p \in M$) 是 $T_p M$ 上光滑依赖于 $p$ 的双线性型. 若对所有 $p \in M$, $g_p$ 均具有符号差 $(n-1, 1)$ (有时记作 $(-, +, \ldots, +)$), 则称 $g$ 为 \textbf{Lorentz 度量} (Lorentzian metric). 此时称 $(M, g)$ 为 \textbf{Lorentz 流形}或\textbf{时空} (spacetime).
+\end{definition}
+
+由线性代数中的一个基本结果, 对每个 $p \in M$, 均存在 $T_p M$ 的一组正交归一基 $V_1, \ldots, V_n$, 即
+\begin{equation}\label{eq:9.1}
+    g(V_1, V_1) = -1; \qquad g(V_j, V_j) = 1, \; j = 2, \ldots, n; \qquad g(V_i, V_j) = 0, \; i \neq j.
+\end{equation}
+由于 Lorentz 度量 $g$ 是 $T_p M$ 上的非退化双线性型, 它诱导了同构 $T_p M \to T_p^* M$:
+\begin{equation}\label{eq:9.2}
+    T_p M \ni V \mapsto V^\flat \defeq g_p(V, -) \in T_p^* M.
+\end{equation}
+于是 $g$ 在 $T^* M$ 上诱导了一个符号差为 $(n-1, 1)$ 的双线性型 $g^{-1} \in \Smooth(M; S^2 T M)$, 称为\textbf{对偶度量} (dual metric). 式~\eqref{eq:9.2} 的逆映射是
+\begin{equation}\label{eq:9.3}
+    T_p^* M \ni \omega \mapsto \omega^\sharp \defeq g_p^{-1}(\omega, -) \in (T_p^* M)^* = T_p M.
+\end{equation}
+
+\begin{example}[Minkowski 度量]\label{eg:9.2}
+设 $M = \R^n = \R_t \times \R_x^{n-1}$. 则 $M$ 上的 \textbf{Minkowski 度量}定义为
+\begin{equation}\label{eq:9.4}
+    g \defeq -\dd t^2 + \sum_{j=1}^{n-1} (\dd x^j)^2.
+\end{equation}
+每个切空间的一组正交归一基由 $\partial_t, \partial_{x^1}, \ldots, \partial_{x^{n-1}}$ 给出. 对偶度量由下式给出:
+\begin{equation}\label{eq:9.5}
+    g^{-1} = -\partial_t^2 + \sum_{j=1}^{n-1} \partial_{x^j}^2 = -\partial_t \otimes \partial_t + \sum_{j=1}^{n-1} \partial_{x^j} \otimes \partial_{x^j}.
+\end{equation}
+例如, $g^{-1}(\dd t, \dd t) = -1$.
+\end{example}
+
+\begin{definition}[切向量与子空间的因果特征]\label{def:9.3}
+设 $(M, g)$ 为 Lorentz 流形.
+\begin{enumerate}
+    \item 设 $p \in M$. 对于切向量 $0 \neq V \in T_p M$, 称 $V$ 为:
+    \begin{enumerate}
+        \item \textbf{类时的} (timelike), 若 $g_p(V, V) < 0$;
+        \item \textbf{类空的} (spacelike), 若 $g_p(V, V) > 0$;
+        \item \textbf{类光的} (null, 或 lightlike), 若 $g_p(V, V) = 0$;
+        \item \textbf{因果的} (causal), 若 $V$ 为类时的或类光的.
+    \end{enumerate}
+    类似地, 按 $g_p^{-1}(\zeta, \zeta)$ 的符号, 我们把余向量 $\zeta \in T_p^* M$ 分类为类时的, 类空的, 类光的或因果的.
+    \item 线性子空间 $E \subset T_p M$ 称为\textbf{类空的}, 若 $E$ 中所有非零向量均为类空向量 (等价地, $g_p|_{E \times E}$ 正定). 称 $E$ 为 \textbf{Lorentz 的}, 若 $g_p|_{E \times E}$ 具有 Lorentz 符号差; 称 $E$ 为\textbf{类光的}, 若 $g_p|_{E \times E}$ 退化.
+    \item 设 $S \subset M$ 为光滑超曲面. 若对所有 $p \in S$, $T_p S$ 均为类空的 (相应地, 类光的), 则称 $S$ 为\textbf{类空超曲面} (相应地, \textbf{类光超曲面}).
+\end{enumerate}
+\end{definition}
+
+\begin{figure}[htbp]
+\centering
+\drawFigNineOne
+\caption{$T_p M$ 中的光锥. 向量 $V$, $W$ 与 $Z$ 分别是类时的, 类空的与类光的.}\label{fig:9.1}
+\end{figure}
+
+这些概念的物理意义如下: 有质量的观察者沿 $M$ 中的类时曲线运动, 即切向量为类时向量的曲线; 而无质量的粒子沿类光曲线运动. 参见图~\ref{fig:9.1}.
+
+\begin{example}[因果特征]\label{eg:9.4}
+沿用例~\ref{eg:9.2} 的记号, 向量 $\partial_t + v_1 \partial_{x^1}$ 为类时的当且仅当 $|v_1| < 1$, 为类光的当且仅当 $|v_1| = 1$, 为类空的当且仅当 $|v_1| > 1$. 超曲面 $\{t = 0\}$ 是类空的; 事实上, 其切空间由 $\partial_{x^1}, \ldots, \partial_{x^{n-1}}$ 张成. 更一般地, 对 $v \in \R^{n-1}$, 超曲面 $\{t = v \cdot x\}$ 为类空的当且仅当 $|v| < 1$.
+\end{example}
+
+下述关于类空子空间与 Lorentz 子空间的刻画将会有用.
+
+\begin{lemma}[类空子空间]\label{lem:9.5}
+线性子空间 $E \subset T_p M$ 为类空的 (相应地, Lorentz 的) 当且仅当
+\[
+    E^\perp \defeq \{v \in T_p M : g_p(v, w) = 0 \; \forall w \in E\}
+\]
+为 Lorentz 的 (相应地, 类空的).
+\end{lemma}
+
+\begin{proof}
+将 $E$ 的一组 $g_p$-正交归一基 $V_1, \ldots, V_k$ 扩充为 $T_p M$ 的正交归一基 $V_1, \ldots, V_n$. 则 $E^\perp$ 由 $V_{k+1}, \ldots, V_n$ 张成. 在向量 $V_1, \ldots, V_n$ 中, 恰有一个 (记为 $V_j$) 满足 $g_p(V_j, V_j) = -1$, 而对所有 $i \neq j$ 有 $g_p(V_i, V_i) = 1$. 当 $E$ 为类空时, 必有 $j \ge k+1$, 从而 $E^\perp$ 为 Lorentz 的; 而当 $E$ 为 Lorentz 时, 必有 $j \le k$, 从而 $E^\perp$ 为类空的.
+\end{proof}
+
+联系到定义~\ref{def:9.3}(3), 我们得到: $S$ 为类空的当且仅当对所有 $p \in S$, $(T_p S)^\perp$ 为类时的. 由于 $\{V^\flat : V \in (T_p S)^\perp\} = N_p^* S$, 这又等价于所有 $0 \neq \zeta \in N_p^* S$ 均为类时的. 特别地, 若 $S = f^{-1}(0)$, 其中 $f \in \Smooth(M)$ 满足 $\dd f$ 在 $f = 0$ 处为类时的, 则 $S$ 是类空的 (因为对 $p \in S$ 有 $N_p^* S = \Span\{\dd f|_p\}$).
+
+\begin{lemma}[类时向量与因果向量]\label{lem:9.6}
+设 $(M, g)$ 为 Lorentz 流形, $p \in M$. 若 $V \in T_p M$ 为类时的, 而 $W \in T_p M$ 为因果的, 则 $g_p(V, W) \neq 0$.
+\end{lemma}
+
+\begin{proof}
+按式~\eqref{eq:9.1} 取 $T_p M$ 的正交归一基, 可设 $V = V_1$, $W = \sum_{i=1}^{n} W^i V_i$, 其中 $(W^1)^2 \ge \sum_{i=2}^{n} (W^i)^2$. 于是 $g_p(V, W) = -W^1$; 由于 $W \neq 0$, 该值非零.
+\end{proof}
+
+类时向量构成的集合是 $T_p M$ 中的一个开双锥 (去掉顶点), 因此它有两个连通分支. 连续地选取其中一个分支, 称为 $(M, g)$ 的一个\textbf{时间定向} (time orientation), 此时称 $(M, g)$ 为\textbf{可时间定向的} (time-oriented). 时间定向存在当且仅当 $M$ 上存在处处类时的光滑向量场 $V$; 这样的向量场 $V$ 在 $M$ 的每一点处选定了类时向量集合的两个连通分支之一. (这由单位分解的论证得到.)
+
+\begin{definition}[时间定向]\label{def:9.7}
+给定 $M$ 上一个固定的光滑类时向量场 $V$, 称类时/类光/因果向量 $W$ 为\textbf{未来的}类时/类光/因果向量, 若 $g(V, W) < 0$; 称其为\textbf{过去的}类时/类光/因果向量, 若 $g(V, W) > 0$. 称 $\omega \in T^* M$ 为未来的/过去的类时/类光/因果余向量, 若 $\omega^\sharp \in TM$ 为未来的/过去的类时/类光/因果向量.
+\end{definition}
+
+特别地, $V$ 本身是未来类时的, 而 $-V$ 是过去类时的. 我们提醒读者: $\omega$ 为未来类时的意味着 $g^{-1}(\omega, \omega) < 0$ 且 $\omega(V) < 0$. 有些作者把 $\omega(V) > 0$ 的情形定义为余向量是未来类时/类光的. (还有一些作者对 Lorentz 度量采用不同的符号差约定.) 在例~\ref{eg:9.2} 的 Minkowski 时空中, 标准时间定向由 $V = \partial_t$ 诱导, 而此时 $\dd t$ 是过去类时的.
+
+\section{波动型算子, 能量估计与有限传播速度}\label{sec:9.2}
+\index{bo dong suanzi@波动算子 (wave operator)}%
+\index{yingli-nengliang-dongliang zhangliang@应力--能量--动量张量 (stress-energy-momentum tensor)}%
+\index{shoul rongyu@容许区域 (admissible domain)}%
+
+固定一个 $n$ 维 Lorentz 流形 $(M, g)$. 我们仿照 Riemann 流形上 Laplace 算子的定义方式来定义\textbf{波动算子} $\Box_g \in \Diff^2(M)$: 在 $M$ 的局部坐标 $(z^1, \ldots, z^n)$ 下记 $g_{ij} \defeq g(\partial_{z^i}, \partial_{z^j})$, $g^{ij} \defeq g^{-1}(\dd z^i, \dd z^j)$, $|g| \defeq |\det(g_{ij})|$, 则
+\begin{equation}\label{eq:9.6}
+    \Box_g u \defeq \sum_{i,j=1}^{n} |g|^{-\frac12} D_{z^i}\left( |g|^{\frac12} g^{ij} D_{z^j} u \right).
+\end{equation}
+其主象征是对偶度量函数
+\begin{equation}\label{eq:9.7}
+    G(z, \zeta) \defeq \sigma^2(\Box_g)(z, \zeta) = \sum_{i,j=1}^{n} g(z)^{ij} \zeta_i \zeta_j = g(z)^{-1}(\zeta, \zeta), \qquad \zeta \in T_z^* M.
+\end{equation}
+我们可以更简洁地将其记为 $G(\zeta)$. 特征集 $\Char(\Box_g) = \{\zeta \in T^* M \setminus o : G(\zeta) = 0\}$ 由全体类光余向量构成.
+
+在下文中, 我们采用缩写 $\partial_j = \partial_{z^j}$, $D_j = D_{z^j}$. 给定张量 $T \in \Smooth(M; TM \otimes T^* M)$, 把它在局部坐标下的分量记为 $T^i_j \defeq T(\dd z^i, \partial_j)$, 对其他类型的张量类似. 指标的升降通过度量 $g$ 实现, 即
+\begin{equation}\label{eq:9.8}
+    T_{ij} = g_{ii'} T^{i'}_j, \qquad T^{ij} = g^{jj'} T^{i'}_j.
+\end{equation}
+这里我们使用求和约定, 即对重复指标不写出求和号; 进一步的例子是 $(V^\flat)_i = g_{ii'} V^{i'}$ 与 $(\omega^\sharp)^i = g^{ii'} \omega_i$. 我们定义两个对称二张量 $T$, $S$ 的 (\textbf{度量}) \textbf{缩并}为 $T \cdot S \defeq T_{ij} S^{ij}$. 对协变导数我们也使用指标记号: 若 $\nabla$ 表示 $g$ 的 Levi-Civita 联络, 则记
+\begin{equation}\label{eq:9.9}
+    T^i_{j;k} \defeq (\nabla T)(\partial_k, \dd z^i, \partial_j) = (\nabla_k T)(\dd z^i, \partial_j).
+\end{equation}
+更高阶的导数记为 $T^i_{j;kl}$ 等等. 重要的特殊情形有
+\begin{equation}\label{eq:9.10}
+    \begin{aligned}
+        &\Box_g u = -g^{ij} u_{;ij} && \text{(标量波动算子)}, \\
+        &\operatorname{div}_g V = V^i_{;i} && \text{(向量场的散度)}, \\
+        &(\Box_g T)_{i_1 \cdots i_k}^{j_1 \cdots j_l} = -g^{ij} T_{i_1 \cdots i_k}^{j_1 \cdots j_l}{}_{;ij} && \text{(张量波动算子)}, \\
+        &(\operatorname{div}_g T)_i = g^{jk} T_{ij;k} && \text{(二张量的散度)}.
+    \end{aligned}
+\end{equation}
+
+\begin{definition}[波动型算子]\label{def:9.8}
+设 $E \to M$ 为 Lorentz 流形 $(M, g)$ 上的向量丛. 若 $P \in \Diff^2(M; E)$ 是主标量的且满足 $\sigma^2(P) = G$, 其中 $G(\zeta) = g^{-1}(\zeta, \zeta)$ 为对偶度量函数, 则称 $P$ 为\textbf{波动型算子} (wave-type operator).
+\end{definition}
+
+其例子包括标量与张量波动算子 $\Box_g$, 以及这类算子 (作用在丛 $E$ 的截面上) 的和与 $\Diff^1(M; E)$ 中的任意元素. 后一类的一个例子是: 取 $E = M \times \CC$ 为平凡丛, 则 $\Box_g + X + V$ 是波动型算子, 其中 $X \in \mathcal{V}(M)$ 为向量场, $V \in \Smooth(M)$ 为光滑函数. 我们将会看到, 可时间定向的 Lorentz 流形上的波动型算子具有性态良好的 Cauchy 问题. 关于用严格双曲性概念对波动型算子作出的刻画, 参见习题~\ref{ex:9.1}.
+
+Lorentz 几何与波动型算子的微局部分析之间的联系 (我们将在第~\ref{sec:9.4}~节中加以利用) 如下; 记 $\pi \colon T^* M \to M$ 为投影.
+
+\begin{proposition}[双特征线与测地线]\label{prop:9.9}
+我们采用式~\eqref{eq:9.7} 的记号.
+\begin{enumerate}
+    \item 设 $\gamma \colon I \subseteq \R \to T^* M$ 为 $H_{\frac12 G}$ 的积分曲线. (因而 $\gamma$ 是 $H_G$ 的某条积分曲线的常数重参数化.) 记 $\alpha \defeq \pi \circ \gamma \colon I \to M$ 为其向底流形的投影. 则 $\alpha$ 是 $(M, g)$ 中的测地线, 且 $\alpha(s) = \pi(\gamma(s))$, $\alpha'(s) = \gamma(s)^\sharp \in T_{\alpha(s)} M$.
+    \item 反之, 若 $\alpha \colon I \to M$ 为测地线, 则 $s \mapsto \gamma(s) \defeq \alpha'(s)^\flat \in T^*_{\alpha(s)} M$ 定义了 $H_{\frac12 G}$ 的一条积分曲线.
+\end{enumerate}
+特别地, $\Box_g$ 的类光双特征线在这个意义下是 $(M, g)$ 上类光测地线 (即满足 $\alpha'(s)$ 对所有 $s$ 均为类光的测地线 $\alpha$) 到 $T^* M$ 的提升.
+\end{proposition}
+
+\begin{proof}
+由于 $\frac12 G = \frac12 g^{ij} \zeta_i \zeta_j$, 我们有
+\begin{equation}\label{eq:9.11}
+    H_{\frac12 G} = g^{ik} \zeta_i \partial_{z^k} - \frac12 (\partial_{z^i} g^{jk}) \zeta_j \zeta_k \partial_{\zeta_i}.
+\end{equation}
+先证 (1). 注意 $\alpha'(s) = \pi_*(H_{\frac12 G}|_{\gamma(s)}) = \gamma(s)^\sharp \in T_{\gamma(s)} M$. 记 $\alpha(s) = (\alpha^1(s), \ldots, \alpha^n(s))$, 并把 $\gamma(s)$ 的纤维坐标记为 $(\zeta_1(s), \ldots, \zeta_n(s))$. 则 $(\alpha^k)'(s) = g^{ik}(\alpha(s)) \zeta_i(s)$. 取 $s_0 \in I$, 在以 $\alpha(s_0)$ 为中心的正规坐标中计算. 此时在 $\alpha(s_0)$ 处有 $\partial_j g^{ik} = 0$, 从而
+\begin{equation}\label{eq:9.12}
+    (\alpha^k)''(s_0) = g^{ik}(\alpha(s_0)) \zeta_i'(s_0).
+\end{equation}
+但式~\eqref{eq:9.11} 的 $\partial_{\zeta_i}$-分量在 $\gamma(s_0)$ 处为零, 这给出 $(\alpha^k)'(s_0) = 0$. 由于 $g$ 的 Christoffel 符号在 $\alpha(s_0)$ 处为零, 这又等价于测地线方程 $\nabla_{\alpha'} \alpha' = 0$ 在 $\alpha(s_0)$ 处成立. 将论证倒过来即得 (2).
+\end{proof}
+
+由定理~\ref{thm:8.4} 可知, 波动型方程 $P u = f \in \Smooth(M)$ 的解的奇性沿 $\Char(P) = \Char(\Box_g)$ 内部类光测地线的提升传播.
+
+下面我们引入能量方法, 它将使我们能够对一般波动型方程的解证明具有尖锐局部性的估计.
+
+\begin{definition}[应力--能量--动量张量]\label{def:9.10}
+我们定义 (\textbf{抽象}) \textbf{应力--能量--动量张量} $T \in \Smooth(M; S^2 T^* M \otimes S^2 T M)$ 为
+\begin{equation}\label{eq:9.13}
+    T(X, Y) \defeq X \otimes_s Y - \frac12 g(X, Y) g^{-1} \in S^2 T_p M, \qquad X, Y \in T_p M;
+\end{equation}
+这里 $X \otimes_s Y \defeq \frac12 (X \otimes Y + Y \otimes X)$ 为对称张量积. 给定 $u \in \Smooth(M; \CC)$, $u$ 的\textbf{应力--能量--动量张量} $T[u] \in \Smooth(M; S^2 T^* M)$ 定义为
+\begin{equation}\label{eq:9.14}
+    \begin{aligned}
+        T[u](X, Y) &\defeq T(X, Y)(\dd u, \dd \bar u) \\
+        &= \frac12 \left( (X u)(Y \bar u) + (Y u)(X \bar u) - g(X, Y) g^{-1}(\dd u, \dd \bar u) \right).
+    \end{aligned}
+\end{equation}
+\end{definition}
+
+对满足 $g(V, V) = -1$ 的类时向量 $V \in T_p M$, 量 $T[u](V, V)$ 可以解释为沿 $V$ 方向运动的观察者所测得的 $u$ 的\textbf{能量密度}. 例如, 在 Minkowski 空间上 (例~\ref{eg:9.2}) 取 $V = \partial_t$, 有
+\begin{equation}\label{eq:9.15}
+    T[u](\partial_t, \partial_t) = \frac12 \left( |\partial_t u|^2 + |\nabla_x u|^2 \right).
+\end{equation}
+该表达式关于 $\dd u$ 的正定性是下述一般结果的特例.
+
+\begin{proposition}[$T$ 的正定性]\label{prop:9.11}
+若 $X, Y \in T_p M$ 为类时向量且位于同一个时间锥内, 即 $g_p(X, Y) < 0$, 则 $T(X, Y)$ 正定. 若 $X, Y$ 位于同一个因果锥内, 即位于同一个时间锥的闭包内, 则 $T(X, Y)$ 半正定.
+\end{proposition}
+
+\begin{proof}
+只需证明第一个断言, 因为第二个断言随后可由连续性得到. 用 $X / \sqrt{-g_p(X, X)}$ 替换 $X$, 可设 $g_p(X, X) = -1$. 把 $X$ 扩充为 $T_p M$ 的正交归一基 $X, V_1, \ldots, V_{n-1}$, 使得 $Y = \lambda X + \mu V_1$, 其中 $\lambda > 0$, $\mu \in \R$. 对 $Y$ 作伸缩, 可设 $Y = X + \mu V_1$. 于是
+\begin{equation}\label{eq:9.16}
+    \begin{aligned}
+        T(X, Y) &= T(X, X + \mu V_1) \\
+        &= X \otimes_s (X + \mu V_1) - \frac12 \cdot (-1) \left( -X \otimes X + \sum_{j=1}^{n-1} V_j \otimes V_j \right) \\
+        &= \frac12 \left( X \otimes X + 2\mu X \otimes_s V_1 + V_1 \otimes V_1 \right) + \frac12 \sum_{j=2}^{n-1} V_j \otimes V_j.
+    \end{aligned}
+\end{equation}
+而
+\begin{equation}\label{eq:9.17}
+    X \otimes X + 2\mu X \otimes_s V_1 + V_1 \otimes V_1 = (X + \mu V_1) \otimes (X + \mu V_1) + (1 - \mu^2) V_1 \otimes V_1.
+\end{equation}
+由于 $Y$ 为类时向量, 故 $|\mu| < 1$, 所需结论由此得出.
+\end{proof}
+
+\begin{definition}[$J$-流与 $K$-流]\label{def:9.12}
+设 $X \in \mathcal{V}(M)$, $u \in \Smooth(M)$.
+\begin{enumerate}
+    \item 与 $X$ 和 $u$ 相伴的 \textbf{$J$-流}为 ${}^{(X)} J[u] \defeq (T[u](X, \cdot))^\sharp \in \mathcal{V}(M)$.
+    \item 与 $X$ 和 $u$ 相伴的 \textbf{$K$-流}为
+    \begin{equation}\label{eq:9.18}
+        {}^{(X)} K[u] \defeq {}^{(X)} \pi \cdot T[u] \in \Smooth(M),
+    \end{equation}
+    其中 ${}^{(X)} \pi \defeq \frac12 \mathcal{L}_X g$ 是 $X$ 的\textbf{形变张量} (即 $g$ 沿 $X$ 的 Lie 导数 $\mathcal{L}_X g$ 的一半), 而 ``$\cdot$'' 表示度量缩并. 抽象的 \textbf{$K$-流}为 ${}^{(X)} K \defeq {}^{(X)} \pi \cdot T \in \Smooth(M; S^2 T M)$.
+\end{enumerate}
+\end{definition}
+
+于是 ${}^{(X)} K[u] = {}^{(X)} K(\dd u, \dd \bar u)$. 张量 $T, J, K$ 满足下述重要的微分恒等式:
+
+\begin{proposition}[$T, J, K$ 的恒等式]\label{prop:9.13}
+设 $X \in \mathcal{V}(M)$, $u \in \Smooth(M; \CC)$, $w \in \Smooth(M)$. 则 ${}^{(X)} \pi_{ij} = \frac12 (X_{i,j} + X_{j,i})$, 且
+\begin{equation}\label{eq:9.19}
+    \operatorname{div}_g T[u] = -\operatorname{Re}(\Box_g u \, \dd \bar u),
+\end{equation}
+\begin{equation}\label{eq:9.20}
+    \operatorname{div}_g {}^{(X)} J[u] = -\operatorname{Re}(\Box_g u \, X \bar u) + {}^{(X)} K[u],
+\end{equation}
+\begin{equation}\label{eq:9.21}
+    {}^{(wX)} K[u] = w \, {}^{(X)} K[u] + T[u](\nabla w, X).
+\end{equation}
+\end{proposition}
+
+式~\eqref{eq:9.21} 也可写作 ${}^{(wX)} K = w \, {}^{(X)} K + T(\nabla w, X)$.
+
+\begin{proof}
+由于 $g_{ij;k} = 0$, 计算得
+\begin{equation}\label{eq:9.22}
+    \begin{aligned}
+        (\operatorname{div}_g T[u])_i = T[u]_{ij}{}^{;j} &= \operatorname{Re} \left( u_{;i} \bar u_{;j} - \frac12 g_{ij} u_{;k} \bar u^{;k} \right)^{;j} \\
+        &= \operatorname{Re} \left( u_{;ij} \bar u^{;j} + u_{;i} \bar u_{;j}{}^{;j} - \frac12 g_{ij} u_{;kj} \bar u^{;k} - \frac12 g_{ij} u_{;k} \bar u^{;kj} \right) \\
+        &= -\operatorname{Re}(\Box u \, \bar u_{;i}),
+    \end{aligned}
+\end{equation}
+其中用到了 $u_{;ki} = u_{;ik}$. 这就证明了式~\eqref{eq:9.19}.
+
+恒等式~\eqref{eq:9.20} 现在可由对称性 $T[u]_{ij} = T[u]_{ji}$ 以及
+\begin{equation}\label{eq:9.23}
+    \operatorname{div}_g {}^{(X)} J[u] = (T[u]_{ij} X^i)^{;j} = T[u]_{ij}{}^{;j} X^i + \frac12 T[u]^{ij} (X_{i;j} + X_{j;i})
+\end{equation}
+得到, 只要我们证明 ${}^{(X)} \pi_{ij} = \frac12 (X_{i;j} + X_{j;i})$. 为此, 在以 $p \in M$ 为中心的正规坐标中计算. 此时在 $p$ 处有 $X g_{ij} = 0$ 与 $\nabla_j \partial_i = 0$ (从而也有 $\nabla_X \partial_i = 0$), 因此
+\begin{equation}\label{eq:9.24}
+    \begin{aligned}
+        (\mathcal{L}_X g)_{ij} &= (\mathcal{L}_X g)(\partial_i, \partial_j) \\
+        &= X(g(\partial_i, \partial_j)) - g(\mathcal{L}_X \partial_i, \partial_j) - g(\partial_i, \mathcal{L}_X \partial_j) \\
+        &= -g([X, \partial_i], \partial_j) - g(\partial_i, [X, \partial_j]) \\
+        &= -g(\nabla_X \partial_i - \nabla_i X, \partial_j) - g(\partial_i, \nabla_X \partial_j - \nabla_j X) \\
+        &= g(\nabla_i X, \partial_j) + g(\partial_i, \nabla_j X) \\
+        &= X_{j,i} + X_{i,j}.
+    \end{aligned}
+\end{equation}
+利用式~\eqref{eq:9.24}, 进一步计算得
+\begin{equation}\label{eq:9.25}
+    2 \, {}^{(wX)} \pi_{ij} = (wX)_{i,j} + (wX)_{j,i} = w(X_{i,j} + X_{j,i}) + w_{,j} X_i + w_{,i} X_j,
+\end{equation}
+故 ${}^{(wX)} \pi = w \, {}^{(X)} \pi + \dd w \otimes_s X^\flat$. 这蕴涵了式~\eqref{eq:9.21}.
+\end{proof}
+
+把散度定理应用于与任一向量场 $X$ 相伴的 $J$-流, 将在适当的区域 $\Omega \subset M$ 上产生一个\textbf{能量恒等式}.
+
+\begin{definition}[容许时空区域]\label{def:9.14}
+若存在函数 $f_1, \ldots, f_N \in \Smooth(M)$ 使得下列条件成立, 则称闭集 $\Omega \subset M$ 为\textbf{容许的} (\textbf{时空}) \textbf{区域}:
+\begin{enumerate}
+    \item 有
+    \begin{equation}\label{eq:9.26}
+        \Omega = \bigcap_{j=1}^{N} \{p \in M : f_j(p) \ge 0\}.
+    \end{equation}
+    \item 对每个 $p \in \Omega$, 所有在 $p$ 处取零值的 $f_j$ 的微分在 $p$ 处线性无关.
+    \item 对每个 $j$, $\Omega \cap f_j^{-1}(0)$ 连通 (或为空), 且 $\dd f_j(p)$ 对所有 $p \in \Omega \cap f_j^{-1}(0)$ 均为类时的.
+\end{enumerate}
+此外, 若在 $M$ 上固定了时间定向, 则当 $\dd f_j$ 在超曲面 $f_j^{-1}(0) \cap \Omega$ 上为过去 (相应地, 未来) 类时时, 称该非空超曲面为\textbf{初始} (相应地, \textbf{末}) 超曲面.
+\end{definition}
+
+去掉那些在 $\Omega$ 上不取零值的 $f_j$, 可设 $H_j \defeq \Omega \cap f_j^{-1}(0)$ 对所有 $j$ 均非空; 由条件 (3), 每个 $H_j$ 都是类空的. 条件 (2) 蕴涵所有 $H_j$ 横截相交. 此外, 应用隐函数定理可知 $\Omega$ 是一个带角的子流形, 而 $H_j$ 是它的 (\textbf{嵌入}) 边界超曲面 (习题~\ref{ex:9.2}). $H_j$ 处的未来类时单位法向量由
+\begin{equation}\label{eq:9.27}
+    \nu_j \defeq \mp \frac{(\dd f_j)^\sharp}{\sqrt{-g^{-1}(\dd f_j, \dd f_j)}}
+\end{equation}
+给出, 其中在初始超曲面处取 ``$-$'' 号, 在末超曲面处取 ``$+$'' 号. 于是 $\nu_j$ 在初始超曲面处指向内部, 在末超曲面处指向外部. 存在唯一的体积密度
+\begin{equation}\label{eq:9.28}
+    |\dd \sigma_j| \in \Smooth(H_j; \Omega H_j),
+\end{equation}
+使得对所有 $V_1, \ldots, V_{n-1} \in T_p M$ 有
+\begin{equation}\label{eq:9.29}
+    |\dd g|(\nu_j, V_1, \ldots, V_{n-1}) = |\dd \sigma_j|(V_1, \ldots, V_{n-1}).
+\end{equation}
+
+\begin{example}[Minkowski 空间中的容许区域]\label{eg:9.15}
+考虑 $M = \R_t \times \R_x^{n-1}$, 度量为 $g = -\dd t^2 + \sum_{j=1}^{n-1} (\dd x^j)^2$, 并取标准时间定向.
+\begin{enumerate}
+    \item 区域 $\{0 \le t \le 1\}$ 是容许的: 取 $f_1(t, x) = t$, $f_2(t, x) = 1 - t$. 超曲面 $\{t = 0\}$ 是初始超曲面, $\{t = 1\}$ 是末超曲面. 两个超曲面的体积密度均为 $|\dd x| = |\dd x^1 \cdots \dd x^{n-1}|$.
+    \item 区域 $\Omega_1 \defeq \{t \ge 0, |x| < 1 - t\}$ 并不完全容许, 因为它在尖端 $(t, x) = (1, 0)$ 附近不具备所需的形式, 而且超曲面 $0 < |x| = 1 - t \le 1$ 也不是类空的. 然而, 对任意 $0 < \theta' < \theta < 1$, 稍作修改后的
+    \begin{equation}\label{eq:9.30}
+        \Omega_{\theta, \theta'} \defeq \{0 \le t \le \theta', \; |x| < 1 - \theta^{-1} t\}
+    \end{equation}
+    是容许的. 它有一个初始超曲面 $\{t = 0\}$ 与两个末超曲面 $\{t = \theta'\}$ 和 $\{|x| = 1 - \theta^{-1} t\}$. 参见图~\ref{fig:9.2}.
+\end{enumerate}
+\end{example}
+
+\begin{figure}[htbp]
+\centering
+\drawFigNineTwo
+\caption{$(1+1)$ 维 Minkowski 空间 $\R_t \times \R_x$ 中的容许区域 $\Omega_{\theta, \theta'}$. 我们对定义在这类区域上的波动型方程的解证明一个能量恒等式 (定理~\ref{thm:9.16}). 特别地, 我们证明: 若 $u = \partial_t u = 0$ 在 $t = 0$ 处成立, 则 $u$ 在整个 $\Omega_{\theta, \theta'}$ 上为零 (例~\ref{eg:9.18}).}\label{fig:9.2}
+\end{figure}
+
+\begin{theorem}[能量恒等式]\label{thm:9.16}
+设 $(M, g)$ 可时间定向. 设 $\Omega \subset M$ 为形如~\eqref{eq:9.26} 的容许时空区域. 把 $\Omega$ 的边界超曲面 $H_j \defeq \Omega \cap f_j^{-1}(0)$ 排序, 使得 $H_1, \ldots, H_{N_1}$ 为初始超曲面, $H_{N_1+1}, \ldots, H_{N_1+N_F}$ 为末超曲面. 把 $H_j$ 处的未来类时单位法向量记为 $\nu_j$ (见式~\eqref{eq:9.27}). 设 $X \in \mathcal{V}(M)$. 则对所有 $u \in \mathcal{C}_{\mathrm{c}}^2(\Omega)$ 有恒等式
+\begin{equation}\label{eq:9.31}
+    \begin{aligned}
+        &\sum_{j=1}^{N_F} \int_{H_{N_1+j}} T[u](X, \nu_{N_1+j}) \, |\dd \sigma_{N_1+j}| + \int_{\Omega} {}^{(X)} K[u] \, |\dd g| \\
+        &\qquad = \sum_{j=1}^{N_1} \int_{H_j} T[u](X, \nu_j) \, |\dd \sigma_j| + \int_{\Omega} \operatorname{Re}(\Box_g u \, X \bar u) \, |\dd g|.
+    \end{aligned}
+\end{equation}
+\end{theorem}
+
+当体积项 ${}^{(X)} K[u]$ 非负时, 上式特别有用; 参见下文例~\ref{eg:9.17}--\ref{eg:9.18} 与定理~\ref{thm:9.19}.
+
+\begin{proof}[定理~\ref{thm:9.16} 的证明]
+这是 Stokes 定理的标准应用; 我们详细写出计算过程, 以核对式~\eqref{eq:9.31} 中的符号.
+
+利用单位分解, 只需考虑 $X$ 支撑在一个坐标卡 $z \in \R^n$ 中的情形, 其中初始超曲面由 $H_i = \{z^i = 0\}$ ($i = 1, \ldots, N_I' \le N_I$) 给出, 末超曲面 (重新编号后) 由 $H_i = \{z^i = 0\}$ ($i = N_I' + 1, \ldots, N_I' + N_F' \defeq N \le n$) 给出, 其中 $N_F' \le N_F$, 并且 $\operatorname{supp} X$ 包含在集合 $\{0 \le z^i < 1, \; i = 1, \ldots, N, \; |z^j| < 1, \; j = N+1, \ldots, n\}$ 中. 再把 $z^i$ ($i = 1, \ldots, N$) 乘以适当的正光滑函数, 还可设 $\dd z^i$ 在 $z^i = 0$ 处是单位余向量, 从而
+\begin{equation}\label{eq:9.32}
+    \nu_i = -(\dd z^i)^\sharp \; (i = 1, \ldots, N_I'), \qquad \nu_i = (\dd z^i)^\sharp \; (i = N_I' + 1, \ldots, N),
+\end{equation}
+且 $(\dd z^i)^\sharp$ 是 $H_i$ 处指向外部的单位法向量. 在该坐标卡中, 度量的体积形式 (\textbf{取标准定向}) 为
+\begin{equation}\label{eq:9.33}
+    \dd g = \sqrt{|g|} \, \dd z^1 \wedge \cdots \wedge \dd z^n, \qquad |g| \defeq |\det(g_{ij})|.
+\end{equation}
+对任一向量场 $J$, 有 $\dd (J \lrcorner \dd g) = (\operatorname{div}_g J) \, \dd g$, 这在正规坐标中容易验证. $H_i$ ($i = 1, \ldots, N$) 上带有诱导定向的面积形式为
+\begin{equation}\label{eq:9.34}
+    \dd \sigma_i = (\dd z^i)^\sharp \lrcorner \, \dd g.
+\end{equation}
+记 $J = {}^{(X)} J[u]$. 定义 $(n-1)$-形式 $\omega \defeq J \lrcorner \, \dd g$. 则 $\dd \omega = (\operatorname{div}_g J) \, \dd g$, 故恒等式~\eqref{eq:9.20} 与 Stokes 定理给出
+\begin{equation}\label{eq:9.35}
+    \int_{\Omega} {}^{(X)} K[u] \, \dd g - \int_{\Omega} \operatorname{Re}(\Box_g u \, X \bar u) \, \dd g = \int_{\Omega} \dd \omega = \int_{\partial \Omega} \omega = \sum_{i=1}^{N} \int_{H_i} \iota_{H_i}^* \omega,
+\end{equation}
+其中 $\iota_{H_i} \colon H_i \hookrightarrow M$ 为嵌入. 通过计算
+\begin{equation}\label{eq:9.36}
+    \begin{aligned}
+        \omega(\partial_1, \ldots, \widehat{\partial_i}, \ldots, \partial_n) &= (-1)^{i-1} \dd g(\partial_1, \ldots, J, \ldots, \partial_n) = (-1)^{i-1} \sqrt{|g|} \, \dd z^i(J), \\
+        \dd \sigma_i(\partial_1, \ldots, \widehat{\partial_i}, \ldots, \partial_n) &= (-1)^{i-1} \dd g(\partial_1, \ldots, (\dd z^i)^\sharp, \ldots, \partial_n) = (-1)^{i-1} \sqrt{|g|} \, \dd z^i((\dd z^i)^\sharp),
+    \end{aligned}
+\end{equation}
+我们把 $\iota_{H_i}^* \omega$ 与 $\dd \sigma_i$ 联系起来. 由于在 $H_i$ 上 $\dd z^i((\dd z^i)^\sharp) = g^{-1}(\dd z^i, \dd z^i) = -1$, 我们得到
+\begin{equation}\label{eq:9.37}
+    \iota_{H_i}^* \omega = -\dd z^i(J) \, \dd \sigma_i = \pm g(J, \nu_i) \, \dd \sigma_i,
+\end{equation}
+其中对 $i = 1, \ldots, N_I'$ 取 ``$+$'' 号, 对 $i = N_I' + 1, \ldots, N$ 取 ``$-$'' 号. 把它代入式~\eqref{eq:9.35} 即得式~\eqref{eq:9.31}.
+\end{proof}
+
+上述证明对任意 $J \in \mathcal{V}(M)$ 给出下述恒等式:
+\begin{equation}\label{eq:9.38}
+    \int_{\Omega} \operatorname{div}_g J \, |\dd g| = \sum_{j=1}^{N_1} \int_{H_j} g(J, \nu_j) \, |\dd \sigma_j| - \sum_{j=1}^{N_F} \int_{H_{N_1+j}} g(J, \nu_{N_1+j}) \, |\dd \sigma_{N_1+j}|.
+\end{equation}
+
+\begin{example}[Minkowski 空间上的能量恒等式]\label{eg:9.17}
+沿用例~\ref{eg:9.15}, 取 $X = \partial_t$, $\Omega = \{0 \le t \le 1\}$. 此时 $\nu_1 = \nu_2 = \partial_t$, ${}^{(X)} K[u] = 0$. 若 $\Box_g u = 0$, 则恒等式~\eqref{eq:9.31} 给出 $t$-水平集上 $u$ 的能量 (定义为)
+\begin{equation}\label{eq:9.39}
+    E[u](t) \defeq \int_{\R^n} T[u](t, x)(\partial_t, \partial_t) \, \dd x = \int_{\R^n} \frac12 \left( |\partial_t u(t, x)|^2 + |\nabla_x u(t, x)|^2 \right) \dd x
+\end{equation}
+(见式~\eqref{eq:9.15}) 满足恒等式 $E[u](1) = E[u](0)$.
+\end{example}
+
+\begin{example}[有限传播速度]\label{eg:9.18}
+在 Minkowski 空间上考虑式~\eqref{eq:9.30} 中的区域 $\Omega_{\theta, \theta'}$, 其中 $0 < \theta' < \theta < 1$ 固定. 设 $\Box_g u = 0$ 在 $\Omega_{\theta, \theta'}$ 中成立, 且 $u$, $\partial_t u$ 在 $t = 0$ 处为零. 则对 $X = \partial_t$ (此时 ${}^{(X)} K = 0$) 的恒等式~\eqref{eq:9.31} 分别应用在 $\Omega_{\theta, \theta'} \cap \{t \le \theta_0\} = \Omega_{\theta, \theta_0}$ ($\theta_0 \in (0, \theta']$) 上, 蕴涵 $\nabla u = 0$ 在 $\Omega_{\theta, \theta'}$ 中成立, 从而 $u = 0$. 这意味着: 即使 $u$ 或 $\partial_t u$ 在 $t = 0$, $|x| > 1$ 处非零, 波动方程的光滑解仍然在 $\Omega_{\theta, \theta'}$ 上为零. (令 $\theta', \theta \nearrow 1$, 这蕴涵 $u = 0$ 在 $\Omega_1 = \{0 \le |x| \le 1 - t\}$ 上成立.) 这是波动方程解的有限传播速度的典型例子. 对向量场 $X$ 稍作修改, 便可由式~\eqref{eq:9.31} 在 $\Omega_{\theta, \theta'}$ 上的单次应用得出 $\nabla u|_{\Omega_{\theta, \theta'}} = 0$ 的结论. 具体地说, 考虑 $X = \ee^{-\alpha t} \partial_t$, 其中 $\alpha > 0$. 这仍是未来类时的; 但由于衰减权 $\ee^{-\alpha t}$ 的出现, 其 $K$-流现在非零. 事实上, 由式~\eqref{eq:9.21},
+\begin{equation}\label{eq:9.40}
+    {}^{(X)} K[u] = T[u](\nabla \ee^{-\alpha t}, \partial_t) = \alpha T[u](\partial_t, \partial_t),
+\end{equation}
+它是关于 $\dd u$ 的正定二次型. (等价地, ${}^{(X)} K \in \Smooth(M; S^2 T M)$ 正定.) 在 $\Omega_{\theta, \theta'}$ 上以此向量场 $X$ 应用式~\eqref{eq:9.31} 蕴涵 $\int_{\Omega_{\theta, \theta'}} {}^{(X)} K[u] \, |\dd g| \le 0$; 这直接给出 $\nabla u = 0$ 在 $\Omega_{\theta, \theta'}$ 中成立.
+
+本例子后半部分展示了一个重要的想法: 使用随时间衰减的权 (即形如 $0 < f(t)$ 的权, 其中 $t \in \Smooth(M)$ 具有过去类时的微分, $f' < 0$, 甚至 $f' < -cf$) 以获得体积项 $K[u]$ 的正性. 我们在下述一般能量估计的证明中使用同样的想法.
+\end{example}
+
+\begin{theorem}[能量估计]\label{thm:9.19}
+设 $\Omega$ 为可时间定向时空 $(M, g)$ 中的紧容许时空区域, 其初始超曲面与末超曲面分别为 $H_1, \ldots, H_{N_1}$ 与 $H_{N_1+1}, \ldots, H_{N_1+N_F}$. 设存在函数 $t \in \Smooth(\Omega)$ 使得 $\dd t$ 为过去类时的. 置
+\begin{equation}\label{eq:9.41}
+    E_1[u] \defeq \sum_{j=1}^{N_1} \left( \|u|_{H_j}\|_{H^1(H_j; E)} + \|\nu_j(u)\|_{L^2(H_j; E)} \right),
+\end{equation}
+其中 $\nu_j(u)$ 表示 $u$ 沿 $\nu_j$ 关于 $E$ 上某光滑联络的导数. 类似地定义 $E_F[u]$, 此时使用 $H_{N_1+j}$ ($j = 1, \ldots, N_F$). 设 $P \in \Diff^2(\Omega; E)$ 为 $(\Omega, g)$ 上的波动型算子. 则存在常数 $C$, 使得对所有 $u \in \mathcal{C}^2(\Omega; E)$ 成立估计
+\begin{equation}\label{eq:9.42}
+    \|u\|_{H^1(\Omega; E)} + E_F[u] \le C \left( \|P u\|_{L^2(\Omega; E)} + E_1[u] \right).
+\end{equation}
+特别地, 若 $u$ 在 $\Omega$ 的所有初始超曲面处二阶消失, 则
+\begin{equation}\label{eq:9.43}
+    \|u\|_{H^1(\Omega; E)} \le C \|P u\|_{L^2(\Omega; E)}.
+\end{equation}
+\end{theorem}
+
+定理~\ref{thm:9.19} 中的 $L^2$-范数与 $H^1$-范数可借助 $E$ 的局部平凡化与单位分解来定义. 等价地 (\textbf{在范数等价的意义下}), $L^2(\Omega; E)$ 上的范数可用任一光滑体积密度 (\textbf{例如} $|\dd g|$) 与 $E$ 上正定的纤维内积来定义; 为定义 $H^1(\Omega; E)$ 上的范数, 固定有限个算子 $V_1, \ldots, V_N \in \Diff^1(\Omega; E)$, 使它们在 $\Smooth(\Omega)$ 上张成 $\Diff^1(\Omega; E)$, 并置 $\|u\|_{H^1(\Omega; E)}^2 \defeq \|u\|_{L^2(\Omega; E)}^2 + \sum_{i=1}^{N} \|V_i u\|_{L^2(\Omega; E)}^2$. $H_j$ 上的范数可类似定义. (带边界或角的区域上的 Sobolev 空间将在第~\ref{sec:9.3}~节中更详细地讨论.)
+
+注意, 与椭圆算子的估计相比, 估计~\eqref{eq:9.42}--\eqref{eq:9.43} 损失了一个导数.
+
+\begin{proof}[定理~\ref{thm:9.19} 的证明]
+我们只考虑 $E = M \times \CC$ 为复秩 $1$ 平凡丛的情形. 一般情形在记号上更繁琐, 但想法相同, 故留给读者. 写
+\begin{equation}\label{eq:9.44}
+    P = \Box_g + V + a, \qquad V \in \mathcal{V}(\Omega), \quad a \in \Smooth(\Omega),
+\end{equation}
+其中允许 $V$ 与 $a$ 取复值. 固定一个未来类时向量场 $X_0 \in \mathcal{V}(M)$. (显式的选择是 $X_0 = -\nabla t$.) 我们打算对向量场
+\begin{equation}\label{eq:9.45}
+    X \defeq w^2 X_0, \qquad w \defeq \ee^{-\alpha t}, \quad \alpha > 0
+\end{equation}
+使用能量恒等式~\eqref{eq:9.31}. 利用式~\eqref{eq:9.21} 与 $\frac{\nabla w}{w} = -\alpha \nabla t$, 其 $K$-流为
+\begin{equation}\label{eq:9.46}
+    {}^{(X)} K = w^2 \left( \frac{{}^{(X_0)} K}{2} + 2 T\left( \frac{\nabla w}{w}, X_0 \right) \right) = w^2 \left( \frac{{}^{(X_0)} K}{2} + 2\alpha T(-\nabla t, X_0) \right).
+\end{equation}
+由命题~\ref{prop:9.11}, $T(-\nabla t, X_0)$ 在 $\Omega$ 上正定. 因此, 只要 $\alpha$ 取得充分大, 对称二余张量 ${}^{(X)} K \in \Smooth(\Omega; S^2 T \Omega)$ 便正定. 为处理 $P$ 的次主项, 我们需要安排更多的正性; 于是固定 $\alpha_0$, 使得对所有 $\alpha \ge \alpha_0$,
+\begin{equation}\label{eq:9.47}
+    {}^{(X)} K + \frac12 (V \otimes X + X \otimes \bar V) = w^2 \left( \frac{{}^{(X_0)} K}{2} + 2\alpha T(-\nabla t, X_0) + \frac12 (V \otimes X_0 + X_0 \otimes \bar V) \right)
+\end{equation}
+正定.
+
+先证估计~\eqref{eq:9.43}. 把恒等式~\eqref{eq:9.31} 应用于在所有初始超曲面处二阶消失的 $u$, 则右端的和为零. 左端的和是 $\dd u$ 的正定二次型的积分之和; 我们暂时将其丢弃. 剩下的是不等式
+\begin{equation}\label{eq:9.48}
+    \begin{aligned}
+        \int_{\Omega} {}^{(X)} K[u] \, |\dd g| &\le \int_{\Omega} \operatorname{Re}(\Box_g u \, X \bar u) \, |\dd g| \\
+        &= \int_{\Omega} \operatorname{Re}(P u \, X \bar u) \, |\dd g| - \int_{\Omega} \operatorname{Re}(V u \, X \bar u) \, |\dd g| - \int_{\Omega} \operatorname{Re}(a u \, X \bar u) \, |\dd g|.
+    \end{aligned}
+\end{equation}
+把 $\int_{\Omega} \operatorname{Re}(V u \, X \bar u) \, |\dd g|$ 移到左端并利用式~\eqref{eq:9.47} 的正定性, 我们得到: 存在与 $\alpha \ge \alpha_0$ 无关的常数 $c > 0$, 使得
+\begin{equation}\label{eq:9.49}
+    c \|w \, \dd u\|_{L^2(\Omega; T^* \Omega)}^2 \le \int_{\Omega} w |P u| \cdot w |X_0 u| \, |\dd g| + \|a\|_{L^\infty} \int_{\Omega} w |u| \cdot w |X_0 u| \, |\dd g|.
+\end{equation}
+对两个被积函数应用 Peter--Paul 不等式, 并利用初等估计 $\int_{\Omega} w^2 |X_0 u|^2 \, |\dd g| \le C \|w \, \dd u\|_{L^2(\Omega; T^* \Omega)}^2$ (其中 $C$ 与 $\alpha$ 无关), 式~\eqref{eq:9.49} 的右端进一步被
+\begin{equation}\label{eq:9.50}
+    \left( \frac{1}{4\epsilon} \int_{\Omega} w^2 |P u|^2 \, |\dd g| + \epsilon C \|w \, \dd u\|_{L^2}^2 \right) + \left( \frac{C}{\epsilon} \int_{\Omega} w^2 |u|^2 \, |\dd g| + \epsilon C \|w \, \dd u\|_{L^2}^2 \right)
+\end{equation}
+所界住, 其中 $C$ 与 $\alpha \ge \alpha_0$ 无关. 取充分小的 $\epsilon > 0$, 关于 $w \, \dd u$ 的范数便可吸收到式~\eqref{eq:9.49} 的左端, 于是得到
+\begin{equation}\label{eq:9.51}
+    \|w \, \dd u\|_{L^2}^2 \le C \left( \int_{\Omega} w^2 |P u|^2 \, |\dd g| + \int_{\Omega} w^2 |u|^2 \, |\dd g| \right),
+\end{equation}
+其中常数 $C$ 与 $\alpha \ge \alpha_0$ 无关.
+
+为完成证明, 还需用 $w \, \dd u$ 的一个小常数倍 (取 $\frac{1}{2C}$ 即可) 来界住 $\int_{\Omega} w^2 |u|^2 \, |\dd g|$. 我们用微积分基本定理来做这件事, 其中的小性来自把 $\alpha$ 取得足够大. 我们用散度定理表述如下: 有
+\begin{equation}\label{eq:9.52}
+    \begin{aligned}
+        \operatorname{div}_g(|u|^2 X) &= |u|^2 \operatorname{div}_g X + X(|u|^2) \\
+        &= |u|^2 \operatorname{div}_g (w^2 X_0) + 2w^2 \operatorname{Re}(u X_0 \bar u) \\
+        &= w^2 \left( \left( \operatorname{div}_g X_0 + 2 \frac{X_0 w}{w} \right) |u|^2 + 2\operatorname{Re}(u X_0 \bar u) \right).
+    \end{aligned}
+\end{equation}
+由于 $\operatorname{div}_g X_0 \in \Smooth(\Omega)$ 有界, 且 $\frac{X_0 w}{w} = -\alpha (X_0 t) < 0$, 故存在常数 $c > 0$ (\textbf{与} $\alpha$ \textbf{无关}), 使得对所有充分大的 $\alpha$ 有
+\begin{equation}\label{eq:9.53}
+    \operatorname{div}_g(-|u|^2 X) \ge \alpha c \, w^2 |u|^2 - 2w^2 \operatorname{Re}(u X_0 \bar u).
+\end{equation}
+我们在 $\Omega$ 上对向量场 $-|u|^2 X$ 应用散度定理~\eqref{eq:9.38}. 由当前对 $u$ 的假设, $\Omega$ 的初始超曲面处的边界项为零; 而末超曲面处的边界项等于 $-\int_{H_{N_1+j}} g(-|u|^2 X, \nu_{N_1+j}) \, |\dd \sigma_{N_1+j}|$, 从而是 $u$ 的负定二次型的积分; 我们暂时把后者丢弃. 因此
+\begin{equation}\label{eq:9.54}
+    c\alpha \int_{\Omega} w^2 |u|^2 \, |\dd g| - 2 \int_{\Omega} \operatorname{Re}(w u \cdot w X_0 \bar u) \, |\dd g| \le \int_{\Omega} \operatorname{div}_g(-|u|^2 X) \, |\dd g| \le 0.
+\end{equation}
+由 Peter--Paul 不等式得
+\begin{equation}\label{eq:9.55}
+    c\alpha \int_{\Omega} w^2 |u|^2 \, |\dd g| \le \int_{\Omega} w^2 |u|^2 \, |\dd g| + C \|w \, \dd u\|_{L^2}^2.
+\end{equation}
+于是对 $\alpha \ge \frac{2}{c}$ 得到
+\begin{equation}\label{eq:9.56}
+    \int_{\Omega} w^2 |u|^2 \, |\dd g| \le C' \alpha^{-1} \|w \, \dd u\|_{L^2}^2,
+\end{equation}
+其中 $C'$ 与 $\alpha$ 无关. 把该估计的 $(C+1)$ 倍加到式~\eqref{eq:9.51} 上, 并取 $\alpha$ 充分大使 $(C+1)C'\alpha^{-1} < \frac12$, 便得到 $\|w u\|_{L^2}^2 + \|w \, \dd u\|_{L^2}^2 \le C \|w P u\|_{L^2}^2$. 这蕴涵了所需的估计~\eqref{eq:9.43}. 为证明完整的估计~\eqref{eq:9.42}, 只需保留此前丢弃的边界项. 具体地说, 记 $E_1^1[w, u] \defeq \sum_{j=1}^{N_1} \|w \, \dd u|_{H_j}\|_{L^2(H_j; T^* \Omega)}^2$, 并类似地定义 $E_F^1[w, u]$, 则估计~\eqref{eq:9.51} 可以加强为
+\begin{equation}\label{eq:9.57}
+    E_F^1[w, u] + \|w \, \dd u\|_{L^2}^2 \le C \left( E_1^1[w, u] + \int_{\Omega} w^2 |P u|^2 \, |\dd g| + \int_{\Omega} w^2 |u|^2 \, |\dd g| \right).
+\end{equation}
+记 $E_1^0[w, u] \defeq \sum_{j=1}^{N_1} \|w u|_{H_j}\|_{L^2(H_j)}^2$, 并类似地定义 $E_F^0[w, u]$, 则估计~\eqref{eq:9.56} 同样可以加强为
+\begin{equation}\label{eq:9.58}
+    \alpha^{-1} E_F^0[w, u] + \int_{\Omega} w^2 |u|^2 \, |\dd g| \le C' \alpha^{-1} \left( \|w \, \dd u\|_{L^2}^2 + E_1^0[w, u] \right),
+\end{equation}
+其中常数 $C' < \infty$ 与 $\alpha$ 无关. 把该估计的 $(C+1)$ 倍加到式~\eqref{eq:9.57} 上, 当 $\alpha$ 充分大时即得式~\eqref{eq:9.42}.
+\end{proof}
+
+推广例~\ref{eg:9.18}, 我们特别得到: 若 $u$ 在 $\Omega$ 的初始超曲面处二阶消失, 且满足齐次波动型方程 $P u = 0$, 则 $u$ 在 $\Omega$ 上恒为零. (把它应用于 $P u = f = P v$ 且具有相同初始数据的两个解 $u, v$ 之差, 即在该处二阶消失的 $u - v$, 便知 $u = v$: 波动型方程初值问题的光滑解是唯一的.) 这再次是关于有限传播速度的陈述: 波不能通过末超曲面传入 $\Omega$. 不严格地说:
+\begin{equation}\label{eq:9.59}
+    \text{波不会沿类空方向传播, 即 ``不比光速更快''.}
+\end{equation}
+
+注意, 式~\eqref{eq:9.42} 是一个\textbf{先验估计}: 它只对 $u \in \Smooth(\Omega; E)$ 适用. (由连续性与稠密性论证, 它对 $u \in H^2(\Omega; E)$ 也成立.) 特别地, 它本身并不蕴涵 $P u = f$ 解的存在性. 我们将从 $P^*$ 上的先验估计~\eqref{eq:9.42} 出发, 通过对偶来证明解的存在性 (第~\ref{sec:9.4}~节). 所需的泛函分析准备在第~\ref{sec:9.3}~节中讨论. 一旦建立了可解性与唯一性, 估计~\eqref{eq:9.42} 便可从先验估计升级为波动型方程解的估计; 当 $u$ 的初始数据为零 (故 $E_1[u] = 0$) 且丢弃末能量 $E_F[u] \ge 0$ 时, 这样的估计见式~\eqref{eq:9.95}.
+
+本节最后, 我们概述能量估计~\eqref{eq:9.42} 的证明核心中所利用的 $K$-流的符号与第~\ref{ch:08}~章的正换位子论证之间的联系. 考虑标量波动算子 $\Box_g$. 对向量场 $X$, 考虑 ``换位子'' (\textbf{参见} 式~\eqref{eq:8.28})
+\begin{equation}\label{eq:9.60}
+    2 \operatorname{Im} \langle \Box_g u, \ii^{-1} X u \rangle_{L^2(\Omega)}.
+\end{equation}
+忽略边界项, 它等于 $\langle Q u, u \rangle$, 其中
+\begin{equation}\label{eq:9.61}
+    Q \defeq \Box_g X + X^* \Box_g = \ii [\Box_g, \ii^{-1} X] - (\operatorname{div}_g X) \Box_g,
+\end{equation}
+这里用到了 $X^* = -X - \operatorname{div}_g X$. 写 $X = X^j \partial_j$, 则 $Q$ 的主象征等于
+\begin{equation}\label{eq:9.62}
+    \begin{aligned}
+        \sigma^2(Q)(\zeta) &= H_G(X^j \zeta_j) - (\operatorname{div}_g X) g^{-1}(\zeta, \zeta) \\
+        &= \zeta_j \zeta_k \left( 2 g^{k\ell} \partial_\ell X^j - X^\ell \partial_\ell g^{jk} \right) - (\operatorname{div}_g X) g^{jk} \zeta_j \zeta_k \\
+        &= \zeta_j \zeta_k \left( g^{k\ell} \partial_\ell X^j + g^{j\ell} \partial_\ell X^k - X^\ell \partial_\ell g^{jk} \right) - \zeta_j \zeta_k g^{jk} X^\ell{}_{;\ell} \\
+        &= \left( X^{j;k} + X^{k;j} - X^\ell{}_{;\ell} g^{jk} \right) \zeta_j \zeta_k.
+    \end{aligned}
+\end{equation}
+它与抽象 $K$-流的关系如下: 有 ${}^{(X)} K(\zeta, \zeta) = {}^{(X)} \pi^{jk} T_{jk}(\zeta, \zeta)$, 其中 $T_{jk}(\zeta, \zeta) = \zeta_j \zeta_k - \frac12 g^{\ell m} \zeta_\ell \zeta_m g_{jk}$, 因此由命题~\ref{prop:9.13} 得
+\begin{equation}\label{eq:9.63}
+    \sigma^2(Q)(\zeta) = 2 \, {}^{(X)} K(\zeta, \zeta).
+\end{equation}
+然而, 与实主型情形不同, 能量估计~\eqref{eq:9.42} 的证明中起作用的不仅是该主象征在特征集上的正性, 而是它对所有余向量 $\zeta$ (\textbf{包括} $\Box_g$ 的椭圆集中的那些) 的正性.
+
+\section{具支与可延拓特征的 Sobolev 空间}\label{sec:9.3}
+\index{juzhi fenbu@具支分布 (supported distribution)}%
+\index{keyantu fenbu@可延拓分布 (extendible distribution)}%
+\index{yancuo suanzi@延拓算子 (extension operator)}%
+
+设 $M$ 为光滑流形. (本节中我们不需要 $M$ 上的任何进一步结构.) 我们在此只讨论复值分布; 处理取值为丛的分布所需的记号修改留给读者.
+
+\begin{definition}[具支分布与可延拓分布]\label{def:9.20}
+设 $\mathcal{F}(M)$ 表示一个局部凸分布空间, 其到 $\Distr(M)$ 的包含映射连续.
+\begin{enumerate}
+    \item (\textbf{具支分布}.) 设 $K \subset M$ 为闭集. 则
+    \begin{equation}\label{eq:9.64}
+        \dot{\mathcal{F}}(K) \defeq \{u \in \mathcal{F}(M) : \operatorname{supp} u \subset K\} \subset \Distr(M)
+    \end{equation}
+    表示 $K$ 上的 (\textbf{$\mathcal{F}$ 类的}) 具支分布空间.
+    \item (\textbf{可延拓分布}.) 设 $U \subset M$ 为开集. 则
+    \begin{equation}\label{eq:9.65}
+        \bar{\mathcal{F}}(U) \defeq \{u|_U : u \in \mathcal{F}(M)\} \subset \Distr(U)
+    \end{equation}
+    表示 $U$ 上的 (\textbf{$\mathcal{F}$ 类的}) 可延拓分布空间.
+\end{enumerate}
+\end{definition}
+
+这类空间自然出现在 $\R_t \times X$ 上发展方程 $P u = f$ 的研究中: 若 $f = 0$ 当 $t < 0$, 而人们寻求满足 $t < 0$ 时 $u = 0$ 的解 $u$, 则自然应在某个空间 $\mathcal{F}$ 的 $\dot{\mathcal{F}}([0, \infty) \times X)$ 中工作. 若只寻求到时刻 $t = T > 0$ 为止的解, 则在 $t = T$ 附近应使用 $\mathcal{F}((-\infty, T) \times X)$ 型的空间. 同时编码 (\textbf{在} $t = 0$ \textbf{处的}) 支集性质与 (\textbf{在} $t = T$ \textbf{处的}) 可延拓性质的混合空间将在下文定义~\ref{def:9.28} 中引入.
+
+我们给 $\dot{\mathcal{F}}(K) \subset \mathcal{F}(M)$ 赋以子空间拓扑. 限制映射 $\mathcal{F}(M) \to \bar{\mathcal{F}}(U)$ 的核为 $\dot{\mathcal{F}}(M \setminus U)$, 从而诱导同构
+\begin{equation}\label{eq:9.66}
+    \bar{\mathcal{F}}(U) \cong \mathcal{F}(M) / \dot{\mathcal{F}}(M \setminus U);
+\end{equation}
+我们给 $\bar{\mathcal{F}}(U)$ 赋以商拓扑. 当 $\Omega = \overline{\Omega^\circ} \subset M$ 为带角的光滑子流形时, 人们有时说 $\dot{\mathcal{F}}(\Omega)$ 中的元素在 $\partial \Omega$ 处具有\textbf{具支特征}, 而 $\dot{\mathcal{F}}(\Omega^\circ)$ 中的元素在 $\partial \Omega$ 处具有\textbf{可延拓特征}. 在下文中, 我们主要考虑
+\begin{equation}\label{eq:9.67}
+    \mathcal{F}(M) = H_{\mathrm{loc}}^s(M)
+\end{equation}
+的情形. 当 $M = \R^n$ 时, 也可以考虑 $\mathcal{F}(\R^n) = H^s(\R^n)$; 在后一情形下 $\dot{H}^s(K)$ 与 $\dot{H}^s(U)$ 的某些性质是习题~\ref{ex:9.4}--\ref{ex:9.6} 的主题. 另一个可以考察的情形是 $\mathcal{F}(M) = \Smooth(M)$; 此时 $\bar{\mathcal{C}}^\infty(U)$ 是所有在 $U$ 上光滑且可光滑延拓到 $M$ 的光滑函数构成的空间, 而 $\dot{\mathcal{C}}^\infty(K)$ 是所有在 $K$ 之外为零 (\textbf{从而特别在} $\partial K$ \textbf{处无穷阶消失}) 的光滑函数构成的空间.
+
+\begin{example}[区间上的可延拓分布与具支分布]\label{eg:9.21}
+由 $u(x) \defeq 1$ ($x \in (0, 1)$) 定义的函数 $u$ 是 $L^2(\R)$ 中某个函数在 $(0, 1)$ 上的限制, 从而定义了元素 $u \in \bar{L}^2((0, 1))$. 其导数为 $u' = 0 \in \bar{H}^{-1}((0, 1))$. 另一方面, 特征函数 $v \defeq \mathbf{1}_{[0,1]} \in L^2(\R)$ 的支集包含在 $[0, 1]$ 中, 故 $v \in \dot{L}^2([0, 1])$. 其导数 $v' = \delta_0 - \delta_1 \in \dot{H}^{-1}([0, 1])$ 非零.
+\end{example}
+
+在具支与可延拓的情形下, 标准的稠密性结果成立:
+
+\begin{proposition}[稠密性]\label{prop:9.22}
+设 $s \in \R$.
+\begin{enumerate}
+    \item (\textbf{可延拓情形}.) 设 $U \subset M$ 为开集. 则 $\bar{\mathcal{C}}^\infty(U) \subset \bar{H}_{\mathrm{loc}}^s(U)$ 稠密.
+    \item (\textbf{具支情形}.) 设 $\Omega \subset M$ 为带角的光滑子流形. 则 $\dot{\mathcal{C}}^\infty(\Omega) \subset \dot{H}_{\mathrm{loc}}^s(\Omega)$ 稠密.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+对 (1), 设 $\{\phi_i\}$ ($\phi_i \in \SmoothComp(U_i)$) 是从属于坐标卡覆盖 $M = \bigcup_i U_i$ (其中 $F_i \colon U_i \to F_i(U_i) \subset \R^n$, $\overline{U}_i$ 紧) 的单位分解. 固定 $\psi_i \in \SmoothComp(\R^n)$, $\int_{\R^n} \psi_i(x) \, \dd x = 1$, 其支集包含在 $\{|x| < \epsilon_i\}$ 中, 其中 $\epsilon_i > 0$ 取得使 $z \in \operatorname{supp} \phi_i$, $|x| < \epsilon_i$ 蕴涵 $F_i(z) + x \in F_i(U_i)$. 置 $\psi_{i,\epsilon}(x) \defeq \epsilon^{-n} \psi_i(x/\epsilon)$. 于是对每个 $\tilde u \in H_{\mathrm{loc}}^s(M)$ 有
+\begin{equation}\label{eq:9.68}
+    \tilde u_\epsilon \defeq \sum_i F_i^*\left( \psi_{i,\epsilon} * (F_i^{-1})^*(\phi_i \tilde u) \right) \to \tilde u
+\end{equation}
+在 $H_{\mathrm{loc}}^s(M)$ 中当 $\epsilon \to 0$. 给定 $u \in \bar{H}_{\mathrm{loc}}^s(U)$ 及其延拓 $\tilde u \in H_{\mathrm{loc}}^s(M)$, 我们于是有 $u_\epsilon \defeq \tilde u_\epsilon|_U \in \bar{\mathcal{C}}^\infty(U)$, 且 $u_\epsilon \to u$ 在 $\bar{H}_{\mathrm{loc}}^s(U)$ 中.
+
+对 (2), 同样可利用单位分解把证明归结为 $\Omega = [0, \infty)^k \times \R^{n-k} \subset \R^n$ 的局部结果. 设 $u \in H^s(\R^n)$ 且 $\operatorname{supp} u \subset \Omega$; 则
+\begin{equation}\label{eq:9.69}
+    u_\delta(x_1, \ldots, x_k, y_1, \ldots, y_{n-k}) \defeq u(x_1 - \delta, \ldots, x_k - \delta, y_1, \ldots, y_{n-k})
+\end{equation}
+属于 $H^s(\R^n)$, 其支集包含在 $[\delta, \infty)^k \times \R^{n-k}$ 中, 且当 $\delta \to 0$ 时在 $H^s(\R^n)$ 中收敛到 $u$. 固定 $\psi \in \SmoothComp(B(0,1))$ 使 $\int_{\R^n} \psi(x) \, \dd x = 1$, 并置 $\psi_\epsilon(x) \defeq \epsilon^{-n} \psi(x/\epsilon)$. 则 $u_{\delta,\epsilon} \defeq \psi_\epsilon * u_\delta \to u_\delta$ 在 $H^s(\R^n)$ 中当 $\epsilon \to 0$; 但当 $\epsilon \le \delta$ 时 $\operatorname{supp} u_{\delta,\epsilon} \subset \Omega$, 故此时 $u_{\delta,\epsilon} \in \dot{\mathcal{C}}^\infty(\Omega)$.
+\end{proof}
+
+对 (\textbf{预}) \textbf{紧的} $U, K \subset M$, 空间 $\dot{H}^s(K)$ 与 $\bar{H}^s(U)$ 可以赋予 Hilbert 空间结构. 对前者, 这已在命题~\ref{prop:5.58} 中证明.
+
+\begin{proposition}[Hilbert 空间结构: 可延拓情形]\label{prop:9.23}
+设 $U \subset M$ 为预紧开子集. 则 $\bar{H}^s(U) \defeq \bar{H}_{\mathrm{loc}}^s(U)$ 可 Hilbert 化.
+\end{proposition}
+
+\begin{proof}
+固定紧集 $K \subset M$, 使其内部包含 $U$ 的闭包. 固定 $\chi \in \SmoothComp(K^\circ)$, 使 $\chi = 1$ 在 $\bar U$ 上成立. 由限制到 $U$ 给出的连续映射 $\dot{H}^s(K) \to \bar{H}^s(U)$ 是满射: 因为若 $u \in \bar{H}^s(U)$ 而 $\tilde u \in \dot{H}_{\mathrm{loc}}^s(M)$ 是 $u$ 的延拓, 则 $\chi \tilde u \in \dot{H}^s(K)$ 也是延拓. 由于该映射的核为 $\dot{H}^s(K \setminus U)$, 我们得到 Fréchet 空间的同构
+\begin{equation}\label{eq:9.70}
+    \dot{H}^s(K) / \dot{H}^s(K \setminus U) \cong \bar{H}^s(U).
+\end{equation}
+由命题~\ref{prop:5.58}, 左端是可 Hilbert 化的空间, 从而 $\bar{H}^s(U)$ 也是.
+\end{proof}
+
+知道下述事实是有用的: 对非负整数阶 $s \in \N_0$ 与具有光滑边界或角的区域, 空间 $\dot{H}^s(K)$ 与 $\dot{H}^s(U)$ 具有内蕴刻画, 即不涉及外围流形 $M$ 的刻画. 这对 $\dot{H}^s(K)$ 是直接的: 函数 $u \in \dot{L}^2(K)$ 属于 $\dot{H}^s(K)$ 当且仅当对所有 $P \in \Diff^s(M)$ 有 $P u \in \dot{L}^2(K)$. 关于 $\dot{H}^s(U)$ 的结果如下.
+
+\begin{proposition}[内蕴刻画: 整数阶]\label{prop:9.24}
+设 $\Omega = \overline{\Omega^\circ} \subset M$ 为紧的光滑带角子流形. 在 $\Omega$ 上固定一个体积密度以定义 $L^2(\Omega)$. 设 $s \in \N_0$, 并设 $\{P_i : i = 1, \ldots, N\} \subset \Diff^s(\Omega)$ 是一组微分算子, 它们在 $\Smooth(\Omega)$ 上张成 $\Diff^s(\Omega)$. 则 $\bar{H}^s(\Omega^\circ)$ 等于 $\Omega^\circ$ 上平方范数
+\begin{equation}\label{eq:9.71}
+    \|u\|_{H^s(\Omega^\circ)}^2 \defeq \sum_{i=1}^{N} \|P_i u\|_{L^2(\Omega^\circ)}^2
+\end{equation}
+有限的分布构成的空间 $H^s(\Omega^\circ)$, 且由该范数诱导的拓扑与 $\bar{H}^s(\Omega^\circ)$ 上的标准拓扑相同.
+\end{proposition}
+
+证明的想法是把 $H^s(\Omega^\circ)$ 中的元素延拓为在 $\Omega$ 的邻域中有定义且具支的 $H^s$-函数. 我们先陈述一个局部延拓结果, 这里采用 Seeley \cite{See64} 给出的强形式:
+
+\begin{theorem}[延拓算子: 局部情形]\label{thm:9.25}
+设 $c > 0$. 则存在连续线性映射 $E \colon \Smooth([0, \infty)) \to \Smooth(\R)$, 具有下述性质.
+\begin{enumerate}
+    \item (\textbf{延拓与支集}.) 对 $u \in \Smooth([0, \infty))$ 有 $(Eu)|_{[0, \infty)} = u$, 且 $\operatorname{supp}(Eu) \subset [-c, \infty)$.
+    \item (\textbf{有界性}.) 对所有 $s \in \N_0$, 映射 $E$ 由连续性与稠密性从映射 $\SmoothComp([0, \infty)) \to \SmoothComp(\R)$ 延拓为有界线性映射
+    \begin{equation}\label{eq:9.72}
+        H^s((0, \infty)) \defeq \{u \in L^2((0, \infty)) : u^{(j)} \in L^2((0, \infty)) \; \forall j = 0, \ldots, s\} \longrightarrow H^s(\R).
+    \end{equation}
+\end{enumerate}
+对 $0 \le j \le k \le n$, 存在类似的延拓算子 $E_{k,j}$, 把 $[0, \infty)^k \times \R^{n-k}$ 上的函数映为 $[0, \infty)^j \times \R^{n-j}$ 上支集包含在 $[0, \infty)^j \times [-c, \infty)^{k-j} \times \R^{n-k}$ 中的函数.
+\end{theorem}
+
+\begin{proof}
+固定 $\chi \in \Smooth([0, c))$, 使它在 $0$ 附近等于 $1$. 对常数 $c_\ell \in \R$ 与 $\epsilon_\ell \in (0, 1]$ ($\epsilon_\ell \to 0$), 其取法稍后指定, 置
+\begin{equation}\label{eq:9.73}
+    (Eu)(x) \defeq
+    \begin{cases}
+        u(x), & x \ge 0, \\
+        \sum_{\ell=0}^{\infty} c_\ell (\chi u)\left(-\frac{x}{\epsilon_\ell}\right), & x < 0.
+    \end{cases}
+\end{equation}
+由于对每个 $x < 0$ 定义 $(Eu)(x)$ 的级数只有有限项非零, $Eu$ 在 $x \neq 0$ 处光滑. 此外, 第 $\ell$ 项的第 $j$ 阶导数满足界
+\begin{equation}\label{eq:9.74}
+    \sup_{x<0} \left| c_\ell (-\epsilon_\ell)^{-j} \frac{\dd^j}{\dd x^j}(\chi u)\left(-\frac{x}{\epsilon_\ell}\right) \right| \le C_j |c_\ell| \epsilon_\ell^{-j}, \qquad C_j \defeq \|\chi u\|_{C^j([0, \infty))} < \infty.
+\end{equation}
+因此, 若 $c_\ell$ 满足
+\begin{equation}\label{eq:9.75}
+    \sum_{\ell=0}^{\infty} |c_\ell| \epsilon_\ell^{-j} < \infty, \qquad j \in \N_0,
+\end{equation}
+则 $(Eu)|_{x<0} \in \Smooth((-\infty, 0))$ 可光滑地延拓到 $(-\infty, 0]$. 我们计算其在 $0$ 处的第 $j$ 阶导数, 它等于
+\begin{equation}\label{eq:9.76}
+    \frac{\dd^j}{\dd x^j}(Eu)(x)\Big|_{x=0-} = \sum_{\ell=0}^{\infty} c_\ell (-\epsilon_\ell)^{-j} \frac{\dd^j u}{\dd x^j}(0).
+\end{equation}
+为使其等于 $\frac{\dd^j u}{\dd x^j}(0)$, 必须要求
+\begin{equation}\label{eq:9.77}
+    \sum_{\ell=0}^{\infty} c_\ell \epsilon_\ell^{-j} = (-1)^j, \qquad j \in \N_0.
+\end{equation}
+我们通过置 $\epsilon_\ell \defeq 3^{-\ell}$ 并取 $c_\ell$ 使
+\begin{equation}\label{eq:9.78}
+    \sin\left(\frac{\pi}{2} z\right) = \sum_{\ell=0}^{\infty} c_\ell z^\ell
+\end{equation}
+来同时满足式~\eqref{eq:9.75} 与式~\eqref{eq:9.77}. (\textbf{显式地}, $c_{2m} = 0$, $c_{2m+1} = (-1)^m \frac{(\pi/2)^{2m+1}}{(2m+1)!}$.) 于是 $\sum_{\ell=0}^{\infty} c_\ell \epsilon_\ell^{-j} = \sin(\frac{\pi}{2} 3^j) = (-1)^j$, 这确实成立, 因为 $3^j \equiv (-1)^j \bmod 4$, 故式~\eqref{eq:9.77} 成立; 而式~\eqref{eq:9.75} 由式~\eqref{eq:9.78} 对所有 $z \in \CC$ (\textbf{特别对} $z = 3^j$) 的绝对收敛性得到.
+
+转向 (2), 对 $u \in \SmoothComp([0, \infty))$, 我们估计 $(Eu)|_{x<0}$ 的第 $\ell$ 项的第 $j$ 阶导数:
+\begin{equation}\label{eq:9.79}
+    \left( \int_{-\infty}^{0} \left| c_\ell (-\epsilon_\ell)^{-j} \frac{\dd^j}{\dd x^j}(\chi u)\left(-\frac{x}{\epsilon_\ell}\right) \right|^2 \dd x \right)^{\frac12} \le |c_\ell| \epsilon_\ell^{-j+\frac12} \|u\|_{H^j((0,c))}.
+\end{equation}
+因此 $\|(Eu)|_{x<0}\|_{H^s((-\infty,0))} \le C_s \|u\|_{H^s((0,c))}$, 从而
+\begin{equation}\label{eq:9.80}
+    \|Eu\|_{H^s(\R)} \le C_s \|u\|_{H^s((0, \infty))}.
+\end{equation}
+$\SmoothComp([0, \infty)) \subset H^s((0, \infty))$ 的稠密性可由该构造容易地推出: 按式~\eqref{eq:9.73} 定义 $E \colon H^s((0, \infty)) \to H^s(\R)$, 利用 $\SmoothComp(\R) \subset H^s(\R)$ 的稠密性用紧支光滑函数在 $H^s(\R)$ 中逼近 $Eu$, 再把这些光滑函数限制回 $[0, \infty)$.
+
+延拓算子 $E_k \colon \Smooth([0, \infty)^k \times \R^{n-k}) \to \Smooth([0, \infty)^{k-1} \times \R^{n-k+1})$ 可定义为
+\begin{equation}\label{eq:9.81}
+    \begin{aligned}
+        (E_k u)(x_1, \ldots, x_{k-1}, x, y_1, \ldots, y_{n-k}) &\defeq (E u_{x', y})(x), \\
+        u_{x', y}(x) &\defeq u(x', x, y) \in \Smooth([0, \infty)),
+    \end{aligned}
+\end{equation}
+其中 $x' = (x_1, \ldots, x_{k-1})$, $y = (y_1, \ldots, y_{n-k})$. 由于上述关于 $E$ 的估计逐字成立 (\textbf{只是多了对} $x'$, $y$ \textbf{的光滑依赖}), 这确实把 $\Smooth([0, \infty)^k \times \R^{n-k})$ 映入 $\Smooth([0, \infty)^{k-1} \times \R^{n-k+1})$, 且在每个非负整数阶 Sobolev 空间上有界. 复合 $E_{k,j} \defeq E_{j+1} \circ E_{j+2} \circ \cdots \circ E_{k-1} \circ E_k$ 即为所需映射 $\Smooth([0, \infty)^k \times \R^{n-k}) \to \Smooth([0, \infty)^j \times \R^{n-j})$.
+\end{proof}
+
+\begin{corollary}[延拓算子: 带角子流形]\label{cor:9.26}
+设 $M$ 为光滑流形, $\Omega \subset M$ 为紧的光滑带角子流形. 设 $K \subset M$ 为紧集, 其内部包含 $\Omega$. 则存在连续线性映射 $E \colon \Smooth(\Omega) \to \dot{\mathcal{C}}^\infty(K)$, 它由连续性与稠密性延拓为有界线性映射
+\begin{equation}\label{eq:9.82}
+    E \colon H^s(\Omega^\circ) \to \dot{H}^s(K)
+\end{equation}
+($\forall s \in \N_0$).
+\end{corollary}
+
+\begin{proof}
+固定单位分解 $\{\phi_i\}$ ($i = 1, \ldots, N$, $\phi_i \in \SmoothComp(U_i)$, $\sum_{i=1}^{N} \phi_i = 1$ 在 $\Omega$ 上), 从属于 $M$ 上的坐标卡 $F_i \colon U_i \to F_i(U_i) \subset \R^n$, 在每个坐标卡中 $\Omega$ 是乘积 $[0, \infty)^{k_i} \times \R^{n-k_i}$ (\textbf{参见} 式~\eqref{eq:5.16}). 把每个 $\phi_i$ 乘以一个在 $\Omega$ 上等于 $1$ 且支撑在 $K^\circ$ 中的截断函数, 可使得对所有 $i$ 有 $\operatorname{supp} \phi_i \subset K^\circ$. 固定 $\tilde{\phi}_i \in \SmoothComp(U_i)$, 使 $\tilde{\phi}_i = 1$ 在 $\operatorname{supp} \phi_i$ 上成立且 $\operatorname{supp} \tilde{\phi}_i \subset K$. 按定理~\ref{thm:9.25} 的记号记 $E_{k_i} \defeq E_{k_i, 0}$. 则映射
+\begin{equation}\label{eq:9.83}
+    E u \defeq \sum_{i=1}^{N} \tilde{\phi}_i F_i^*\left( E_{k_i}\left( (F_i^{-1})^*(\phi_i u) \right) \right)
+\end{equation}
+满足全部要求. $\mathcal{C}^\infty(\Omega) \subset H^s(\Omega^\circ)$ 的稠密性可这样证明: 对给定的 $u \in H^s(\Omega^\circ)$, 先取其延拓 $Eu \in \dot{H}^s(K)$, 在局部坐标中用单位分解将其光滑化, 再把光滑化后的函数限制回 $\Omega$.
+\end{proof}
+
+命题~\ref{prop:9.24} 的证明现在是直接的.
+
+\begin{proof}[命题~\ref{prop:9.24} 的证明]
+恒等映射
+\begin{equation}\label{eq:9.84}
+    \bar{H}^s(\Omega^\circ) \to H^s(\Omega^\circ)
+\end{equation}
+连续. 固定紧集 $K \subset M$, 使其内部包含 $\Omega$. 记 $E$ 为推论~\ref{cor:9.26} 中的延拓映射. 则式~\eqref{eq:9.84} 的逆由连续映射 $H^s(\Omega^\circ) \ni u \mapsto (Eu)|_{\Omega^\circ} \in \bar{H}^s(\Omega^\circ)$ 给出.
+\end{proof}
+
+下面讨论关于 $L^2$ 的对偶空间. 我们有定理~\ref{thm:5.63} 的下述类比. (\textbf{非紧} $\Omega$ 的版本留给读者陈述.)
+
+\begin{theorem}[对偶空间]\label{thm:9.27}
+在 $M$ 上固定体积密度 $\mu$. 设 $\Omega \subset M$ 为紧的光滑带角子流形, $s \in \R$. 则半双线性型
+\begin{equation}\label{eq:9.85}
+    \dot{\mathcal{C}}^\infty(\Omega) \times \bar{\mathcal{C}}^\infty(\Omega^\circ) \ni (u, v) \mapsto \langle u, v \rangle_{L^2} \defeq \int_{\Omega^\circ} u(x) \overline{v(x)} \, \dd \mu(x) \in \CC
+\end{equation}
+由连续性与稠密性延拓为连续半双线性型 $\dot{H}^s(\Omega) \times \bar{H}^{-s}(\Omega^\circ) \to \CC$. 映射 $\dot{H}^s(\Omega) \ni u \mapsto \langle u, \bar{\cdot}\rangle_{L^2} \in \bar{H}^{-s}(\Omega^\circ)^*$ 与 $\bar{H}^{-s}(\Omega^\circ) \ni v \mapsto \langle \cdot, \bar{v}\rangle_{L^2} \in \dot{H}^s(\Omega)^*$ 均为同构.
+\end{theorem}
+
+于是
+\begin{equation}\label{eq:9.86}
+    \dot{H}^s(\Omega)^* = \bar{H}^{-s}(\Omega^\circ), \qquad \bar{H}^s(\Omega^\circ)^* = \dot{H}^{-s}(\Omega).
+\end{equation}
+
+\begin{proof}[定理~\ref{thm:9.27} 的证明]
+定理~\ref{thm:5.63} 蕴涵 $L^2$-配对
+\begin{equation}\label{eq:9.87}
+    \dot{H}^s(\Omega) \times H_{\mathrm{loc}}^{-s}(M) \to \CC, \qquad (u, v) \mapsto \langle u, v \rangle_{L^2}
+\end{equation}
+是良定义的. 若 $\operatorname{supp} v \subset M \setminus \Omega^\circ$, 则可用式~\eqref{eq:9.69} 中的平移论证, 在 $H_{\mathrm{loc}}^{-s}(M)$ 中用满足 $\operatorname{supp} v_\delta \subset M \setminus \Omega$ 的元素 $v_\delta$ 逼近 $v$. 配对 $\langle u, v_\delta \rangle_{L^2}$ 为零, 因为它是一列光滑化版本 $u_\epsilon \in \Smooth(M)$ 与 $v_{\delta,\epsilon} \in \Smooth(M)$ 的配对 $\langle u_\epsilon, v_{\delta,\epsilon}\rangle_{L^2}$ 当 $\epsilon \to 0$ 时的极限. 但我们可以做到: 对所有充分小的 $\epsilon > 0$ 有 $\operatorname{supp} u_\epsilon \cap \operatorname{supp} v_{\delta,\epsilon} = \emptyset$, 从而 $\langle u_\epsilon, v_{\delta,\epsilon}\rangle_{L^2} = 0$. 因此对 $v \in \dot{H}_{\mathrm{loc}}^{-s}(M \setminus \Omega^\circ)$ 有 $\langle u, v\rangle_{L^2} = 0$. 我们断定式~\eqref{eq:9.87} 下降为良定义的配对 $\dot{H}^s(\Omega) \times \bar{H}^{-s}(\Omega^\circ) \to \CC$.
+
+现在考虑连续线性泛函 $\lambda \colon \dot{H}^s(\Omega) \to \CC$. 由 Hahn--Banach 定理, 可把 $\lambda$ 延拓为连续线性泛函 $\tilde{\lambda} \colon H_{\mathrm{c}}^s(M) \to \CC$, 它因而由与某个 $\tilde{v} \in H_{\mathrm{loc}}^{-s}(M)$ 的 $L^2$-配对给出. (同样可以把 $\lambda$ 延拓为 $H_{\mathrm{loc}}^s(M) \to \CC$ 上的连续泛函, 从而由与某个 $\tilde v \in H_{\mathrm{c}}^{-s}(M)$ 的 $L^2$-配对给出.) 因此 $\lambda(u) = \langle u, \tilde v \rangle_{L^2} = \langle u, v\rangle_{L^2}$, 其中置 $v \defeq \tilde v|_{\Omega^\circ} \in \bar{H}^{-s}(\Omega^\circ)$.
+
+最后考虑连续线性泛函 $\lambda \colon \bar{H}^{-s}(\Omega^\circ) \to \CC$. 复合
+\begin{equation}\label{eq:9.88}
+    \tilde{\lambda} \colon H_{\mathrm{loc}}^{-s}(M) \xrightarrow{w \mapsto w|_{\Omega^\circ}} \bar{H}^{-s}(\Omega^\circ) \xrightarrow{\lambda} \CC
+\end{equation}
+是连续线性泛函, 从而由与某个 $u \in H_{\mathrm{c}}^s(M)$ 的 $L^2$-配对给出. 但由于对所有 $v \in \dot{H}_{\mathrm{loc}}^{-s}(M \setminus \Omega^\circ) \subset \ker \tilde{\lambda}$ 有 $\langle u, v\rangle_{L^2} = 0$, 我们断定 $\operatorname{supp} u \subset \Omega$, 故 $u \in \dot{H}^s(\Omega)$.
+\end{proof}
+
+在上述证明中, 可以通过把 $M$ 换成一个包含 $\Omega$ 的邻域的微分同胚像的紧流形, 来避免使用 $H_{\mathrm{loc}}^{-s}(M)$ 与 $H_{\mathrm{c}}^s(M)$. 这样的替换不影响 $\dot{H}^s(\Omega)$ 与 $\bar{H}^{-s}(\Omega^\circ)$ 上的拓扑, 而此时可以使用 (\textbf{Hilbert 空间}) $H^{\pm s}(M)$, 由式~\eqref{eq:5.154} 它们的 $L^2$-对偶为 $H^{\mp s}(M)$.
+
+正如定义~\ref{def:9.20} 之后所说明的, 我们最后引入在不同边界超曲面处分别具有具支特征与可延拓特征的空间:
+
+\begin{definition}[混合空间]\label{def:9.28}
+设 $\Omega \subset M$ 为紧子集, 形如 $\Omega = \bigcap_{j=1}^{N} \{f_j \ge 0\}$, 其中 $f_1, \ldots, f_N \in \Smooth(M)$ 满足: 在每个 $p \in \Omega$ 处, 所有在 $p$ 处取零值的 $f_j$ 的微分线性无关; 且 $H_j \defeq \Omega \cap f_j^{-1}(0)$ 对所有 $j$ 连通. 设 $N_1 \in \{0, \ldots, N\}$. 则 $H^s$ 类分布中在 $H_1, \ldots, H_{N_1}$ 处具具支特征, 在 $H_{N_1+1}, \ldots, H_N$ 处具可延拓特征的空间
+\begin{equation}\label{eq:9.89}
+    H^s(\Omega)^{\bullet,-}
+\end{equation}
+定义如下. 取 $\delta > 0$, 使得关于 $f_j$ 的条件对 $f_{j,\delta} = f_j + \delta$ 同样成立, 且 $\Omega_\delta \defeq \bigcap_{j=1}^{N} \{f_{j,\delta} \ge 0\}$ 紧. 置 $U \defeq \bigcap_{j=N_1+1}^{N} \{f_j > 0\}$. 则
+\begin{equation}\label{eq:9.90}
+    H^s(\Omega)^{\bullet,-} \defeq \{u|_U : u \in \dot{H}^s(\Omega_\delta)\},
+\end{equation}
+并赋以商拓扑.
+\end{definition}
+
+$H^s(\Omega)^{\bullet,-}$ 上的拓扑与 $\delta$ 的选取无关. 此外, 由于 $\dot{H}^s(\Omega_\delta)$ 可 Hilbert 化, $H^s(\Omega)^{\bullet,-}$ 也可 Hilbert 化.
+
+若 $N_1 = 0$, 则 $H^s(\Omega)^{\bullet,-} = \bar{H}^s(\Omega^\circ)$; 而若 $N_1 = N$, 则 $H^s(\Omega)^{\bullet,-} = \dot{H}^s(\Omega)$. 拘泥的读者或许更愿意把式~\eqref{eq:9.90} 中的空间写作 $H^s(\Omega')^{\bullet,-}$, 其中 $\Omega' \defeq \bigcap_{j=1}^{N_1} \{f_j \ge 0\} \cap \bigcap_{j=N_1+1}^{N} \{f_j > 0\}$, 但为简化记号我们不予这样做.
+
+\begin{example}[常微分方程初值问题]\label{eg:9.29}
+我们说明如何用混合空间来编码求解发展方程的方向. 考虑 $\Omega = [0, 1]$, 其初始超曲面为 $\{0\}$, 末超曲面为 $\{1\}$. 考虑常微分方程
+\begin{equation}\label{eq:9.91}
+    u' = f \in H^{s-1}([0, 1])^{\bullet,-}
+\end{equation}
+(或更拘泥地写作 $f \in H^{s-1}([0, 1])^{\bullet,-}$). 把 $f$ 延拓为满足 $\operatorname{supp} \tilde f \subset [0, \infty)$ 的 $\tilde f \in H^{s-1}(\R)$, 便可从 $0$ 出发积分 $\tilde f$, 得到满足 $\operatorname{supp} \tilde u \subset [0, \infty)$ 与 $\tilde u' = \tilde f$ 的 $\tilde u \in H_{\mathrm{loc}}^s(\R)$. 因此 $u = \tilde u|_{(-\infty, 1)} \in H^s([0, 1])^{\bullet,-}$ 求解了式~\eqref{eq:9.91}. 此外, 我们有下述强唯一性陈述: 若 $v \in H^{-\infty}([0, 1])^{\bullet,-}$, 即对某个 $s' \in \R$ 有 $v \in H^{s'}([0, 1])^{\bullet,-}$, 且 $v' = f$, 则 $v = u$. 事实上, $v - u$ 在 $(-\infty, 0)$ 上为零, 且在 $(-\infty, 1)$ 上满足 $(v - u)' = 0$, 故在 $(-\infty, 1)$ 上 $v = u$. ——若 $f \in \SmoothComp((0, 1))$, 该论证给出式~\eqref{eq:9.91} 的唯一前向解 $u(x) = \int_0^x f(y) \, \dd y$. 对这样的 $f$, 也可以改在 $H^s([0, 1])^{-\bullet}$ 中求解 $u' = f$; 这将给出解 $u_- \in H^s([0, 1])^{-\bullet}$, 它在 $H^{-\infty}([0, 1])^{-\bullet}$ 中唯一, 并由后向解 $u_-(x) = \int_1^x f(y) \, \dd y$ 显式给出.
+\end{example}
+
+\begin{example}[能量估计]\label{eg:9.30}
+能量估计~\eqref{eq:9.43} 蕴涵
+\begin{equation}\label{eq:9.92}
+    \|u\|_{H^1(\Omega; E)^{\bullet,-}} \le C \|P u\|_{L^2(\Omega; E)^{\bullet,-}}, \qquad u \in \mathcal{C}^2(\Omega; E)^{\bullet,-}.
+\end{equation}
+先验的隶属关系 $u \in \mathcal{C}^2(\Omega; E)^{\bullet,-}$ 编码了在 $\Omega$ 的初始超曲面处的三阶消失性 (\textbf{这比实际需要的更强}). 由命题~\ref{prop:9.24} 的一个简单推广, 式~\eqref{eq:9.92} 中的范数等于式~\eqref{eq:9.43} 中所用的范数.
+\end{example}
+
+对定理~\ref{thm:9.27} 的证明稍作修改, 便得到下述结果, 其证明留给读者.
+
+\begin{theorem}[对偶空间]\label{thm:9.31}
+沿用定义~\ref{def:9.28} 的记号, 有
+\begin{equation}\label{eq:9.93}
+    \left( H^s(\Omega)^{\bullet,-} \right)^* \cong H^{-s}(\Omega)^{-\bullet},
+\end{equation}
+其中 $H^{-s}(\Omega)^{-\bullet}$ 是 $H^{-s}$ 类分布中在 $H_1, \ldots, H_{N_1}$ 处具可延拓特征, 在 $H_{N_1+1}, \ldots, H_N$ 处具具支特征的空间. 该同构由 $M$ 上任一选取的体积密度通过连续性与稠密性从 $\Smooth(\Omega)^{\bullet,-} \times \Smooth(\Omega)^{-\bullet} \ni (u, v) \mapsto \langle u, v\rangle_{L^2(\Omega)}$ 诱导.
+\end{theorem}
+
+为用对偶论证求解偏微分方程, 重要的是理解分部积分在 $L^2$-配对 $H^s(\Omega)^{\bullet,-} \times H^{-s}(\Omega)^{-\bullet} \ni (u, v) \mapsto \langle u, v \rangle_{L^2}$ 中如何运作.
+
+\begin{lemma}[分部积分]\label{lem:9.32}
+沿用定义~\ref{def:9.28} 的记号. 在 $M$ 上固定一个体积密度. 设 $P \in \Diff^m(\Omega)$, $s \in \R$. 则
+\begin{equation}\label{eq:9.94}
+    \langle P u, v \rangle_{L^2} = \langle u, P^* v \rangle_{L^2} \qquad \forall u \in H^s(\Omega)^{\bullet,-}, \; v \in H^{-s+m}(\Omega)^{-\bullet}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+由连续性与稠密性, 只需对 $u \in \Smooth(\Omega)^{\bullet,-}$ 与 $v \in \Smooth(\Omega)^{-\bullet}$ 证明式~\eqref{eq:9.94}. 此时分部积分不产生任何边界项, 因为在 $\Omega$ 的每个边界超曲面处, $u$ 与 $v$ 中至少有一个无穷阶消失.
+\end{proof}
+
+\section{正则性, 唯一性与可解性}\label{sec:9.4}
+\index{zhengdingxing@正定性 (well-posedness)}%
+\index{duiou lunzheng@对偶论证 (duality argument)}%
+
+本节的主要目标是证明下述关于波动型方程前向问题适定性的结果.
+
+\begin{theorem}[求解波动型方程]\label{thm:9.33}
+设 $\Omega$ 为可时间定向时空 $(M, g)$ 中的紧容许时空区域 (定义~\ref{def:9.14}). 设存在具有类时微分的函数 $t \in \Smooth(\Omega)$. 设 $P \in \Diff^2(M; E)$ 为 $(M, g)$ 上的波动型算子 (定义~\ref{def:9.8}). 设 $s \in \R$, 并用 $H^s(\Omega; E)^{\bullet,-}$ 表示 $E$ 的 $H^s$ 类分布截面中在 $\Omega$ 的初始超曲面处具具支特征, 在末超曲面处具可延拓特征的空间. 设 $f \in H^{s-1}(\Omega; E)^{\bullet,-}$. 则:
+\begin{enumerate}
+    \item (\textbf{存在性}.) 存在 $u \in H^s(\Omega; E)^{\bullet,-}$ 使 $P u = f$. 此外, 存在常数 $C$ (\textbf{与} $f$ \textbf{无关}) 使得
+    \begin{equation}\label{eq:9.95}
+        \|u\|_{H^s(\Omega; E)^{\bullet,-}} \le C \|f\|_{H^{s-1}(\Omega; E)^{\bullet,-}}.
+    \end{equation}
+    \item (\textbf{唯一性}.) 若 $v \in H^{-\infty}(\Omega; E)^{\bullet,-}$ (\textbf{即对某个} $s' \in \R$ \textbf{有} $v \in H^{s'}(\Omega; E)^{\bullet,-}$) 且 $P v = f$, 则 $v = u$.
+\end{enumerate}
+\end{theorem}
+
+解 $u$ 称为\textbf{前向解}. 由该结果与 Sobolev 嵌入可得一个简单推论: 若源项 $f \in \Smooth(\Omega; E)^{\bullet,-}$ 光滑, 则前向解也光滑, 即 $u \in \Smooth(\Omega; E)^{\bullet,-}$. 定理~\ref{thm:9.33} 关于解的延拓与正则性保持的一个变体将在推论~\ref{cor:9.38} 中讨论.
+
+为记号简洁, 我们只讨论复值情形, 即 $E = M \times \CC$ 为平凡丛. 为准备证明, 我们引入下述记号.
+
+\begin{enumerate}
+    \item 我们写 $\Omega = \bigcap_{j=1}^{N} \{f_j \ge 0\}$, 其中 $f_j \in \Smooth(M)$ 满足定义~\ref{def:9.14} 的条件, 且每个 $H_j \defeq \Omega \cap f_j^{-1}(0)$ 非空. 我们把 $f_j$ 排序, 使 $H_1, \ldots, H_{N_1}$ 为 $\Omega$ 的初始超曲面, $H_{N_1+1}, \ldots, H_N$ 为末超曲面.
+    \item 固定 $\delta > 0$, 使得对任意选取的 $\delta_j \in [-\delta, \delta]$, 函数 $f_{j,\delta} \defeq f_j + \delta_j$ 也满足定义~\ref{def:9.14} 的条件. 对 $\delta_I, \delta_F \in [-\delta, \delta]$, 置
+    \begin{equation}\label{eq:9.96}
+        \Omega_{\delta_I, \delta_F} \defeq \bigcap_{j=1}^{N_1} \{f_{j,\delta_I} \ge 0\} \cap \bigcap_{j=N_1+1}^{N} \{f_{j,\delta_F} \ge 0\}.
+    \end{equation}
+    于是, 当 $\delta_{I/F} > 0$ 时, 区域在初始/末超曲面附近被扩大; 而当 $\delta_{I/F} < 0$ 时, 它被缩小. 参见图~\ref{fig:9.3}.
+    \item $H^s(\Omega)^{- \bullet}$ 表示 $H^s$ 类分布中在 $\Omega$ 的初始超曲面处具可延拓特征, 在末超曲面处具具支特征的空间; 对 $H^s(\Omega_{\delta_I, \delta_F})^{- \bullet}$ 类似.
+\end{enumerate}
+
+\begin{figure}[htbp]
+\centering
+\drawFigNineThree
+\caption{一个容许时空区域 $\Omega$ 及其修改 $\Omega_{\delta_I = \eta_I}$ ($\delta_I, \eta > 0$).}\label{fig:9.3}
+\end{figure}
+
+证明策略如下:
+\begin{enumerate}
+    \item 先对 $s = 0$ 用对偶论证证明存在性 (引理~\ref{lem:9.34}).
+    \item 用定理~\ref{thm:8.10} (\textbf{奇性传播}) 证明更高正则性. 唯一性由 $P$ 在 $H^0(\Omega)^{\bullet,-}$ 上的零空间中元素的光滑性以及能量估计~\eqref{eq:9.43} 得到 (引理~\ref{lem:9.35}).
+    \item 由于定理~\ref{thm:8.10} 只适用于开流形, 它不能给出 $\Omega$ 的末超曲面附近的\textbf{一致}估计. 为弥补这一点, 我们引入一个延拓/限制论证 (引理~\ref{lem:9.36} 与推论~\ref{cor:9.37}). 这意味着: 利用已建立的 $s = 0$ 情形的可解性, 把具有正则源项的波动方程的解延拓为较大区域上波动方程的解, 其源项被延拓且同样正则; 于是奇性传播与微局部椭圆正则性结果在 $\Omega$ 的一个开邻域上给出 $H^s$-控制. 再限制回 $\Omega$ 便得到所需的高阶正则性估计.
+    \item 对 $s < 0$ 的情形, 我们把迄今证明的唯一性与正则性结论应用于 $P^*$, 并用对偶论证处理.
+\end{enumerate}
+
+我们从 $s = 0$ 的基本存在性结果开始.
+
+\begin{lemma}[存在性: $s = 0$]\label{lem:9.34}
+存在常数 $C < \infty$, 使得对所有 $f \in H^{-1}(\Omega)^{\bullet,-}$ 存在 $u \in H^0(\Omega)^{\bullet,-}$ 满足 $P u = f$, 且
+\begin{equation}\label{eq:9.97}
+    \|u\|_{H^0(\Omega)^{\bullet,-}} \le C \|f\|_{H^{-1}(\Omega)^{\bullet,-}}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+我们对波动型算子 $P^*$ 与 $(M, g)$ 的相反时间定向 (\textbf{即使} $\dd t$ \textbf{为未来类时的那个定向}) 应用定理~\ref{thm:9.19}; 此时 $\Omega$ 的初始超曲面与末超曲面互换角色. 在当前的记号下, 我们于是有估计
+\begin{equation}\label{eq:9.98}
+    \|v\|_{H^1(\Omega)^{- \bullet}} \le C \|P^* v\|_{L^2(\Omega)^{- \bullet}}, \qquad v \in \mathcal{C}^2(\Omega)^{- \bullet}.
+\end{equation}
+(\textbf{另见} 例~\ref{eg:9.30}.) 现在考虑线性泛函
+\begin{equation}\label{eq:9.99}
+    \lambda \colon P^* v \mapsto \langle v, f \rangle_{L^2}, \qquad v \in \mathcal{C}^2(\Omega)^{- \bullet}.
+\end{equation}
+由于 $\mathcal{C}^2(\Omega)^{- \bullet} \subset H^2(\Omega)^{- \bullet} \subset H^1(\Omega)^{- \bullet}$, 由定理~\ref{thm:9.31} 它是良定义的. 此外, 利用式~\eqref{eq:9.98} 有
+\begin{equation}\label{eq:9.100}
+    |\lambda(P^* v)| \le C' \|v\|_{H^1(\Omega)^{- \bullet}} \|f\|_{H^{-1}(\Omega)^{\bullet,-}} \le CC' \|P^* v\|_{L^2(\Omega)^{- \bullet}} \|f\|_{H^{-1}(\Omega)^{\bullet,-}}.
+\end{equation}
+由 Hahn--Banach 定理, $\lambda$ 因而延拓为 $L^2(\Omega)^{- \bullet}$ 上的连续线性泛函, 其范数不超过 $CC' \|f\|_{H^{-1}(\Omega)^{\bullet,-}}$. 由于 $L^2(\Omega)^{- \bullet}$ 的对偶空间是 $L^2(\Omega)^{\bullet,-}$, 于是存在 $u \in L^2(\Omega)^{\bullet,-} = H^0(\Omega)^{\bullet,-}$, 使得对所有 $w \in L^2(\Omega)^{- \bullet}$ 有 $\lambda(w) = \langle w, u \rangle_{L^2}$. 取 $w = P^* v$ ($v \in \mathcal{C}^2(\Omega)^{- \bullet}$), 这意味着
+\begin{equation}\label{eq:9.101}
+    \langle P^* v, u \rangle_{L^2} = \langle v, f \rangle_{L^2}.
+\end{equation}
+由引理~\ref{lem:9.32}, 左端等于 $\langle v, P u \rangle_{L^2}$. 因此
+\begin{equation}\label{eq:9.102}
+    \langle v, P u - f \rangle_{L^2} = 0 \qquad \forall v \in \mathcal{C}^2(\Omega)^{- \bullet}.
+\end{equation}
+由于 $P u - f \in H^{-2}(\Omega)^{\bullet,-}$, 上式 (\textbf{由连续性与稠密性}) 对所有 $v \in H^2(\Omega)^{- \bullet}$ 仍成立. 故 $P u - f = 0 \in (H^2(\Omega)^{- \bullet})^* = H^{-2}(\Omega)^{\bullet,-}$.
+\end{proof}
+
+\begin{lemma}[唯一性]\label{lem:9.35}
+设 $u, v \in H^{-\infty}(\Omega)^{\bullet,-}$ 满足 $P u = P v$. 则 $u = v$.
+\end{lemma}
+
+\begin{proof}
+只需证明: 当 $u \in H^{s'}(\Omega)^{\bullet,-}$ (某个 $s' \in \R$) 且 $P u = 0$ 时 $u = 0$. 把 $u$ 用零延拓到 $\Omega_{\delta,0}$; 于是 $u \in H^{s'}(\Omega_{\delta,0})^{\bullet,-}$ 求解 $P u = 0$. 我们的目标是证明: 对所有 $\eta > 0$ 有
+\begin{equation}\label{eq:9.103}
+    u \in H^\infty(\Omega_{0,-\eta})^{\bullet,-}.
+\end{equation}
+一旦证明了这一点, 便由 Sobolev 嵌入得到 $u \in \mathcal{C}^2(\Omega_{0,-\eta})^{\bullet,-}$. 定理~\ref{thm:9.19} 以估计~\eqref{eq:9.92} 的形式蕴涵 $u = 0$ 在 $\Omega_{0,-\eta}$ 上成立. 由于 $\eta > 0$ 任意, 这给出 $u = 0$ 在 $\Omega$ 上成立.
+
+为证明式~\eqref{eq:9.103}, 取 $z \in \Omega_{0,-\eta}$ 与点 $\zeta \in \Char(P) \cap T_z^* M$. 设
+\begin{equation}\label{eq:9.104}
+    \gamma \colon I \to T^* \Omega_{\delta,-\eta}, \qquad I \subseteq [0, \infty),
+\end{equation}
+为从 $\gamma(0) = (z, \zeta)$ 出发的极大过去指向类光双特征线; 即 $\gamma'(s) = \pm H_G|_{\gamma(s)}$, 其中当 $\zeta$ 为未来 (相应地, 过去) 类光时取 ``$-$'' (相应地, ``$+$'') 号. 我们断言存在 $T \in I$ 使
+\begin{equation}\label{eq:9.105}
+    \pi(\gamma(T)) \in \Omega_{\delta,-\eta} \setminus \Omega_{0,-\eta},
+\end{equation}
+其中 $\pi \colon T^* M \to M$ 为投影. (\textbf{特别地}, $\gamma$ 到达了 $u$ 为零从而光滑的区域.) 参见图~\ref{fig:9.4}. 为证明这一点, 回顾命题~\ref{prop:9.9} 并考虑过去指向类光测地线 $\alpha \defeq \pi \circ \gamma$. 注意 $t \circ \alpha$ 单调递减, 因为其导数等于 $\dd t(\alpha'(s)) < 0$ (\textbf{这里} $\dd t$ \textbf{为过去类时的}, 而 $\alpha'(s)$ \textbf{为过去类光的}). 由于 $\Omega_{\delta,-\eta}$ 紧, 我们事实上还有 $c \defeq \inf_{s \in I} |\dd t(\alpha'(s))| > 0$. 令 $t_- \defeq \min_{\Omega_{\delta,-\eta}} t > -\infty$, 则区间 $I$ 是 $[0, (t(\gamma(0)) - t_-)/c]$ 的紧子区间; 令 $s_+ = \max I$. 我们断言 $\alpha(s_+)$ 落在 $\Omega_{\delta,-\eta}$ 的某个初始超曲面上, 这将蕴涵式~\eqref{eq:9.105}. 若该断言不成立, 则 $\alpha(s_+) \in \Omega_{\delta',-\eta}$ 对某个 $\delta' \in (0, \delta)$ 成立. 注意此时 $\alpha(s_+)$ 不可能落在 $\Omega_{\delta',-\eta}$ 的末超曲面上, 否则对充分小的 $\epsilon > 0$, $\alpha(s_+ - \epsilon)$ 将落在 $\Omega_{\delta,0} \setminus \Omega_{\delta,-\eta}$ 中. 因此 $\alpha(s_+)$ 落在 $\Omega_{\delta,-\eta}$ 的内部, 从而 $\alpha$ 不是不可延拓的, 这与定义区间 $I$ 的极大性矛盾.
+\end{proof}
+
+对每个 $z \in \Omega_{0,-\eta}$ 与 $\zeta \in T_z^* M \cap \Char(P)$, 我们把正则性传播 (\textbf{定理~\ref{thm:8.8}}) 应用于从 $(z, \zeta)$ 出发的过去指向类光双特征线, 断定 $(z, \zeta) \notin \WF(u)$. 因此 $\WF(u)$ 与 $(T_{\Omega_{0,-\eta}}^* M \setminus o) \cap \Char(P)$ 不交. 另一方面, 由微局部椭圆正则性 (命题~\ref{prop:6.33}), $\WF(u)$ 与 $\Ell(P)$ 不交. 故对所有 $\eta > 0$ 有 $\WF(u) \cap (T_{\Omega_{0,-\eta}}^* M \setminus o) = \emptyset$, 这给出式~\eqref{eq:9.103}.
+
+为着后面的目的 (\textbf{具体地说}, 为引理~\ref{lem:9.36} 的证明), 更有用的是定量版本. 我们可以对适当的伪微分算子 $B, G, E \in \Psi^0(M)$ 应用推论~\ref{cor:8.19}, 这些算子具有下述性质:
+\begin{enumerate}
+    \item $B$ 与 $G$ 的 Schwartz 核的支集包含在 $M \times M$ 的一个开子集中, 该开子集含于 $\Omega_{\delta,-\frac{\eta}{2}} \times \Omega_{\delta,-\frac{\eta}{2}}$; $E$ 的 Schwartz 核的支集包含在某个开集 $U \subset M$ 的 $U \times U$ 中, 而 $U$ 含于 $\Omega_{\delta,-\frac{\eta}{2}} \times \Omega_{\delta,-\frac{\eta}{2}}$.
+    \item $B$ 在 $S_{\Omega_{0,-\eta}}^* M$ 上椭圆.
+    \item 估计~\eqref{eq:8.21} 成立, 即
+    \begin{equation}\label{eq:9.106}
+        \|B u\|_{H^s} \le C \left( \|E u\|_{H^s} + \|G P u\|_{H^{s-1}} + \|\chi u\|_{H^{s'}} \right).
+    \end{equation}
+\end{enumerate}
+这里我们固定截断函数 $\chi \in \SmoothComp(\Omega_{\delta,0}^\circ)$, 它在 $B, G, E$ 的 Schwartz 核支集的底投影 (\textbf{对任一因子}) 附近等于 $1$.
+
+利用 $E u = 0$ (\textbf{由} $u$ \textbf{在} $U$ \textbf{上为零}) 以及 $P u = 0$, 估计~\eqref{eq:9.106} 蕴涵
+\begin{equation}\label{eq:9.107}
+    \|B u\|_{H^s} \le C \|u\|_{H^{s'}(\Omega)^{\bullet,-}}.
+\end{equation}
+取 $\phi \in \SmoothComp(\Omega_{\delta,0}^\circ)$, 使 $\phi = 1$ 在 $\Omega_{0,-\eta}$ 上成立且 $\Ell(B) \supset S_{\operatorname{supp}\phi}^* M$. 则 $\phi u \in H^s$, 其范数被 $C(\|B u\|_{H^s} + \|\chi u\|_{H^{s'}})$ 界住, 从而
+\begin{equation}\label{eq:9.108}
+    \|u\|_{H^s(\Omega_{0,-\eta})^{\bullet,-}} \le C \|\phi u\|_{H^s} \le C' \|u\|_{H^{s'}(\Omega)^{\bullet,-}}.
+\end{equation}
+由于 $s$ 任意, 我们得到式~\eqref{eq:9.103}.
+
+习惯上人们只引用关于 $H^s$ 波前集的缺失或传播的定性结果 (\textbf{如上述证明的前半部分}), 而省略显式转化为定量估计这一步 (\textbf{我们在后半部分写了出来}). 原因在于: 所有定性结果 (\textbf{命题~\ref{prop:6.33}, 定理~\ref{thm:8.8}}) 都伴随 (\textbf{事实上是作为其推论被证明}) 定量估计 (\textbf{命题~\ref{prop:6.39}, 定理~\ref{thm:8.10}}), 而这些定量估计的组合便给出所需的 $H^s$-控制.
+
+\begin{figure}[htbp]
+\centering
+\drawFigNineFour
+\caption{一条从 $\pi(\gamma(0)) \in \Omega_{\delta,-\eta}$ 出发, 终止于 $\pi(\gamma(T)) \in \Omega_{\delta,-\eta} \setminus \Omega_{0,-\eta}$ 的类光测地线 $\pi \circ \gamma$ (\textbf{即类光双特征线} $\gamma$ \textbf{到底流形的投影}).}\label{fig:9.4}
+\end{figure}
+
+\begin{lemma}[更高正则性: $s \ge 0$]\label{lem:9.36}
+设 $s_0, s \ge 0$. 若 $u \in H^{s_0}(\Omega)^{\bullet,-}$ 满足 $P u = f \in H^{s-1}(\Omega)^{\bullet,-}$, 则 $u \in H^s(\Omega)^{\bullet,-}$, 且有估计
+\begin{equation}\label{eq:9.109}
+    \|u\|_{H^s(\Omega)^{\bullet,-}} \le C \left( \|u\|_{H^{s_0}(\Omega)^{\bullet,-}} + \|f\|_{H^{s-1}(\Omega)^{\bullet,-}} \right).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+在 $H^{s-1}(\Omega)^{\bullet,-} \cong \dot{H}^{s-1}(\Omega_{0,\delta}) / \dot{H}^{s-1}(\Omega_{0,\delta} \setminus \Omega)$ 上使用商范数. (\textbf{拘泥的读者或许愿意把} $\Omega_{0,\delta} \setminus \Omega$ \textbf{写作} $\overline{\Omega_{0,\delta} \setminus \Omega}$.) 取延拓 $\tilde f \in \dot{H}^{s-1}(\Omega_{0,\delta})$, 使 $\|\tilde f\|_{\dot{H}^{s-1}(\Omega_{0,\delta})} = \|f\|_{H^{s-1}(\Omega)^{\bullet,-}}$. 仍把 $\tilde f$ 用零延拓到 $\Omega_{\delta,\delta}$ 后的结果记为 $\tilde f \in \dot{H}^{s-1}(\Omega_{\delta,\delta})$. 现在可用引理~\ref{lem:9.34} 求解
+\begin{equation}\label{eq:9.110}
+    P \tilde u = \tilde f, \qquad \tilde u \in H^0(\Omega_{\delta,\delta})^{\bullet,-}.
+\end{equation}
+把 $u$ 用零延拓到 $\Omega_{\delta,0}$ 后求解方程 $P u = f = \tilde f|_{\Omega_{\delta,0}}$; 由唯一性 (引理~\ref{lem:9.35}), 我们有 $\tilde u = u$ 在 $\Omega_{\delta,0}$ 上成立. 特别地, $\tilde u$ 在 $\Omega_{\delta,0} \setminus \Omega$ 上为零.
+
+现在把奇性传播 (\textbf{定理~\ref{thm:8.8}}) 应用于方程~\eqref{eq:9.110}. 所有从 $\Omega$ 上方的点出发的过去指向类光双特征线都到达 $\Omega_{\delta,0} \setminus \Omega$ 上方的某点, 而 $\tilde u$ 在该点为零 (\textbf{从而特别光滑}). 结合 $P$ 在 $S_\Omega^* M \setminus \Char(P)$ 上的微局部椭圆正则性, 我们断定 $\WF^s(\tilde u) \cap S_\Omega^* M = \emptyset$, 从而限制 $u = \tilde u|_{\Omega_{\delta,0}}$ 属于 $H^s(\Omega)^{\bullet,-}$. 定量估计~\eqref{eq:9.109} 可由定量的传播估计与椭圆估计得到.
+\end{proof}
+
+\begin{corollary}[存在性与唯一性: $s \ge 0$]\label{cor:9.37}
+设 $s \ge 0$. 则存在常数 $C < \infty$, 使得对所有 $f \in H^{s-1}(\Omega)^{\bullet,-}$ 存在 $u \in H^s(\Omega)^{\bullet,-}$ 满足 $P u = f$, 且
+\begin{equation}\label{eq:9.111}
+    \|u\|_{H^s(\Omega)^{\bullet,-}} \le C \|f\|_{H^{s-1}(\Omega)^{\bullet,-}}.
+\end{equation}
+此外, $u$ 是 $P u = f$ 在空间 $H^{-\infty}(\Omega)^{\bullet,-}$ 中的唯一解.
+\end{corollary}
+
+\begin{proof}
+引理~\ref{lem:9.34} 给出 $P u = f$ 的解 $u \in H^0(\Omega)^{\bullet,-}$, 而引理~\ref{lem:9.36} 表明事实上 $u \in H^s(\Omega)^{\bullet,-}$. 把 $s_0 = 0$ 时的式~\eqref{eq:9.109} 与式~\eqref{eq:9.97} 结合便证明了估计~\eqref{eq:9.111}. 唯一性由引理~\ref{lem:9.35} 得到.
+\end{proof}
+
+现在完成定理~\ref{thm:9.33} 的证明.
+
+\begin{proof}[定理~\ref{thm:9.33} 的证明]
+尚需处理 $s < 0$ 的情形. 我们仿照引理~\ref{lem:9.34} 的证明. 把推论~\ref{cor:9.37} 应用于算子 $P^*$ 与 $(M, g)$ 的相反时间定向; 这给出先验估计
+\begin{equation}\label{eq:9.112}
+    \|v\|_{H^{-s+1}(\Omega)^{-\bullet}} \le C \|P^* v\|_{H^{-s}(\Omega)^{-\bullet}}, \qquad v \in H^{-s+2}(\Omega)^{-\bullet}.
+\end{equation}
+(\textbf{注意} $-s+1 > 0$, 故推论~\ref{cor:9.37} 确实适用.) 于是线性泛函
+\begin{equation}\label{eq:9.113}
+    \lambda \colon P^* v \mapsto \langle v, f \rangle_{L^2}, \qquad v \in H^{-s+2}(\Omega)^{-\bullet}
+\end{equation}
+是良定义的, 且满足估计
+\begin{equation}\label{eq:9.114}
+    |\lambda(P^* v)| \le C' \|v\|_{H^{-s+1}(\Omega)^{-\bullet}} \|f\|_{H^{s-1}(\Omega)^{\bullet,-}} \le CC' \|P^* v\|_{H^{-s}(\Omega)^{-\bullet}} \|f\|_{H^{s-1}(\Omega)^{\bullet,-}}.
+\end{equation}
+因此 $\lambda$ 可延拓为 $H^{-s}(\Omega)^{-\bullet}$ 上的连续线性泛函. 由定理~\ref{thm:9.31}, 它因而由与某个 $u \in H^s(\Omega)^{\bullet,-}$ 的 $L^2$-配对给出. 由此得到的恒等式
+\begin{equation}\label{eq:9.115}
+    0 = \langle P^* v, u \rangle_{L^2} - \langle v, f \rangle_{L^2} = \langle v, P u - f \rangle_{L^2}, \qquad v \in H^{-s+2}(\Omega)^{-\bullet}
+\end{equation}
+再次由定理~\ref{thm:9.31} 蕴涵 $P u - f \in H^{s-2}(\Omega)^{\bullet,-}$ 为零. 这建立了 $P u = f$ 解的存在性. $u$ 的唯一性已在引理~\ref{lem:9.35} 中证明.
+\end{proof}
+
+作为一个有用的推论, 若已知波动型方程的解在初始时刻属于 $H^s$ 类, 便可证明其 $H^s$-估计; 参见图~\ref{fig:9.5}. 使用定理~\ref{thm:9.33} 的假设以及随后引入的记号, 精确的陈述如下:
+
+\begin{figure}[htbp]
+\centering
+\drawFigNineFive
+\caption{估计~\eqref{eq:9.116} 的图示: $\Omega_{-\delta,0}$ 由 $\Omega$ 将初始超曲面 $t = 0$ 平移至 $t = \delta$ 得到, 故 $u$ 在 $\Omega \setminus \Omega_{-\delta,0}$ (\textbf{即} $\Omega$ \textbf{的初始超曲面附近}) 上的 $H^s$-界蕴涵 $u$ 在整个 $\Omega$ 上的 $H^s$-界.}\label{fig:9.5}
+\end{figure}
+
+\begin{corollary}[延拓估计]\label{cor:9.38}
+设 $s \in \R$. 设 $u \in \bar{H}^{-\infty}(\Omega; E)$ 满足 $P u = f \in \bar{H}^{s-1}(\Omega; E)$, 且对某个 $\delta > 0$ 有 $u|_{\Omega \setminus \Omega_{-\delta,0}} \in \bar{H}^s(\Omega \setminus \Omega_{-\delta,0}; E)$, 即 $u$ 在 $\Omega$ 的初始超曲面附近属于 $H^s$. 则 $u \in \bar{H}^s(\Omega; E)$, 且有估计
+\begin{equation}\label{eq:9.116}
+    \|u\|_{\bar{H}^s(\Omega; E)} \le C \left( \|f\|_{\bar{H}^{s-1}(\Omega; E)} + \|u|_{\Omega \setminus \Omega_{-\delta,0}}\|_{\bar{H}^s(\Omega \setminus \Omega_{-\delta,0}; E)} \right).
+\end{equation}
+\end{corollary}
+
+拘泥的读者或许愿意在此处写 $(\Omega \setminus \Omega_{-\delta,0})^\circ$.
+
+\begin{proof}[推论~\ref{cor:9.38} 的证明]
+我们在记号中省略丛 $E$. 设 $u \in \bar{H}^{s'}(\Omega)$. 取 $\chi \in \Smooth(\Omega)$, 它在 $\Omega$ 的初始超曲面附近等于 $1$, 而在 $\Omega_{-\delta,0}$ 附近等于 $0$. 则 $u' \defeq (1 - \chi) u \in H^{s'}(\Omega)^{\bullet,-}$ 是
+\begin{equation}\label{eq:9.117}
+    P u' = (1 - \chi) P u - [P, \chi] u = (1 - \chi) f - [P, \chi] u \defeq f'
+\end{equation}
+的 (\textbf{唯一}) 前向解. 对在 $\operatorname{supp} \dd \chi$ 附近等于 $1$ 且在 $\Omega_{-\delta,0}$ 附近等于 $0$ 的 $\bar{\chi} \in \Smooth(\Omega)$, 有 $[P, \chi] = [P, \chi]\bar{\chi} \in \Diff^1(M)$, 因此 $[P, \chi] u = [P, \chi](\bar{\chi} u) \in H^{s-1}(\Omega)^{\bullet,-}$. 于是 $f' \in H^{s-1}(\Omega)^{\bullet,-}$, 从而定理~\ref{thm:9.33} 给出 $u' \in H^s(\Omega)^{\bullet,-}$. 对 $u', f'$ 应用式~\eqref{eq:9.95} 得
+\begin{equation*}
+    \begin{aligned}
+        \|u\|_{\bar{H}^s(\Omega)} &\le \|\chi u\|_{\bar{H}^s(\Omega)} + \|(1 - \chi) u\|_{\bar{H}^s(\Omega)} \\
+        &\le C' \left( \|u|_{\Omega \setminus \Omega_{-\delta,0}}\|_{\bar{H}^s(\Omega \setminus \Omega_{-\delta,0})} + \|u'\|_{H^s(\Omega)^{\bullet,-}} \right) \\
+        &\le C'' \left( \|u|_{\Omega \setminus \Omega_{-\delta,0}}\|_{\bar{H}^s(\Omega \setminus \Omega_{-\delta,0})} + \|f'\|_{H^{s-1}(\Omega)^{\bullet,-}} \right) \\
+        &\le C \left( \|u|_{\Omega \setminus \Omega_{-\delta,0}}\|_{\bar{H}^s(\Omega \setminus \Omega_{-\delta,0})} + \|f\|_{\bar{H}^{s-1}(\Omega)} \right).
+    \end{aligned}
+\end{equation*}
+证毕.
+\end{proof}
+
+\section{半经典估计}\label{sec:9.5}
+\index{banjingdian bo dong suanzi@半经典波动算子 (semiclassical wave operator)}%
+\index{pu zu@谱族 (spectral family)}%
+
+为陈述定义~\ref{def:9.8} 的正确半经典推广, 我们必须限制在满足下述条件的 Lorentz 流形 $(M, g)$ 上: 存在光滑函数 $t \in \Smooth(M)$, 使 $\dd t$ 处处类时. 记 $G(z, \zeta) \defeq g_z^{-1}(\zeta, \zeta)$ 为对偶度量函数.
+
+\begin{definition}[半经典波动型算子]\label{def:9.39}
+设 $E \to M$ 为向量丛. 设 $P = (P_h)_{(0, h_0)} \in \Diff_h^2(M; E)$ 为经典半经典算子. 若 $P$ 的主象征是主标量的, 且等于一个纤维上二次多项式 $p \in S^2(T^* M)$, 并具有下述性质, 则称 $P$ 为 $(M, g, t)$ 上的\textbf{半经典波动型算子}:
+\begin{enumerate}
+    \item $p \equiv G \bmod S^1(T^* M)$;
+    \item 对所有 $z \in M$ 与 $\zeta \in T_z^* M$, 方程 $p(z, \zeta + \lambda \dd t) = 0$ 有两个互异的实根 $\lambda = \lambda_\pm$.
+\end{enumerate}
+\end{definition}
+
+在标量情形, 即 $E = M \times \CC$ 时, 第一个条件等价于要求 $P - h^2 \Box_g \in \Diff_h^1$.
+
+\begin{example}[一个非例]\label{eg:9.40}
+把 $\R^{1+n}$ 上的点与余向量分别写作 $(t, x)$ 与 $\tau \dd t + \xi \dd x$. 算子 $P \defeq h^2(-D_t^2 + D_x^2) \in \Diff_h^2(\R_{t,x}^{1+n})$ 的半经典主象征为 $p(t, x, \tau, \xi) = -\tau^2 + |\xi|^2$. 它在零截面 $\{(\tau, \xi) = (0,0)\} \subset T^* \R^{1+n}$ 处二次地消失. 因此它不是定义~\ref{def:9.39} 意义下的半经典波动算子. 方程 $P u = f$ 等价于带 $h$-相关源项的非半经典波动方程 $(-D_t^2 + D_x^2)u = h^{-2} f$.
+\end{example}
+
+\begin{example}[带位势的波动算子]\label{eg:9.41}
+沿用上例的记号, 设 $V \in \Smooth(\R^{1+n})$, 考虑 $P \defeq h^2(-D_t^2 + D_x^2) + V(t, x) \in \Diff_h^2(\R^{1+n})$. $P$ 的半经典主象征为 $p(t, x, \tau, \xi) = -\tau^2 + |\xi|^2 + V(t, x)$. 它是半经典波动算子当且仅当 $V > 0$ 处处成立. (\textbf{关于该符号条件被破坏时半经典估计失效的情形, 参见习题~\ref{ex:9.12}}.)
+\end{example}
+
+下述构造在第~\ref{ch:11}~章中自然出现, 它产生一大类半经典波动型算子. 事实上, 所有半经典波动型算子都模 $h^2 \Diff_h^1$ 地由该构造得到 (命题~\ref{prop:9.43}).
+
+\begin{proposition}[高能波动算子的谱族]\label{prop:9.42}
+设 $M' = \R_s \times M$, 并设 $g'$ 为 $M'$ 上的 Lorentz 度量, 具有下述性质:
+\begin{enumerate}
+    \item $\mathcal{L}_{\partial_s} g' = 0$, 即平移 $(s, p) \mapsto (s + c, p)$ 对所有 $c \in \R$ 都是 $(M', g')$ 的等距.
+    \item $\partial_s$ 关于 $g'$ 为类空的; 等价地,
+    \begin{equation}\label{eq:9.118}
+        T_z^* M \defeq \operatorname{ann} \partial_s = \{\omega \in T_{(0,z)}^* M' : \omega(\partial_s) = 0\}, \qquad z \in M,
+    \end{equation}
+    是 $T_{(0,z)}^* M'$ 关于 $g'$ 的 Lorentz 子空间.
+    \item 通过 $g_z^{-1} \defeq (g_{(0,z)}^{-1})^{-1}|_{T_z^* M}$ 定义 $M$ 上的 Lorentz 度量 $g$, 则存在具有处处类时微分的函数 $t \in \Smooth(M)$.
+\end{enumerate}
+设 $P' \in \Diff^2(M')$ 为 $(M', g')$ 上的波动型算子, 且它是\textbf{定态的}, 即 $[\partial_s, P'] = 0$. 把 $P'$ 的\textbf{谱族}记为
+\begin{equation}\label{eq:9.119}
+    \widehat{P}'(\sigma) \in \Diff^2(M), \quad \sigma \in \CC, \qquad \widehat{P}'(\sigma) u \defeq \left( \ee^{\ii \sigma s} P'(\ee^{-\ii \sigma s} u) \right)\big|_{s=0}.
+\end{equation}
+最后固定 $\alpha \in \R$, 并 (对任一符号选取) 定义
+\begin{equation}\label{eq:9.120}
+    P = (P_h)_{h \in (0,1)}, \qquad P_h \defeq h^2 \widehat{P}'\left( \pm h^{-1}(1 - \ii h \alpha) \right).
+\end{equation}
+则 $P \in \Diff_h^2(M)$ 是 $(M, g, t)$ 上的经典半经典波动型算子, 且
+\begin{equation}\label{eq:9.121}
+    \sigma_h^2(P)(z, \zeta) = \sigma^2(P')((0, z), \mp \dd s + \zeta), \qquad z \in M, \; \zeta \in T_z^* M.
+\end{equation}
+\end{proposition}
+
+关于式~\eqref{eq:9.118}, 我们用到: 由 $q(\omega)(V) \defeq \omega(V)$ ($V \in TM$) 给出的映射 $q \colon T_{\{0\} \times M}^* M' \to T^* M$ 限制为同构 $q \colon \operatorname{ann} \partial_s \xrightarrow{\simeq} T^* M$. (\textbf{这里利用了乘积结构} $M' = \R_s \times M$.)
+
+几何上, 式~\eqref{eq:9.121} 蕴涵: $P$ 的半经典特征集等于仿射超平面 $\mp \dd s + T^* M$ (\textbf{其中} $T^* M = \operatorname{ann} \partial_s$) 与 $P'$ 的特征集的交. 参见图~\ref{fig:9.6}.
+
+谱族的定义~\eqref{eq:9.119} 可推广到 $P'$ 作用在向量丛 $\pi^* E \to M'$ 的截面上的情形, 其中 $E \to M$ 为向量丛, $\pi \colon M' \ni (s, p) \mapsto p \in M$ 为投影.
+
+\begin{figure}[htbp]
+\centering
+\drawFigNineSix
+\caption{$T^* M'$ 的纤维 $T_{(0,z)}^* M'$、其线性子空间 $T_z^* M$ 以及其仿射子空间 $\dd s + T_z^* M$. 公式~\eqref{eq:9.121} (\textbf{取下方的符号}) 蕴涵: $P$ 的半经典特征集 $\Char_h(P)$ 是 $P'$ 的特征集 $\Char(P')$ 与 $\dd s + T_z^* M$ 的交.}\label{fig:9.6}
+\end{figure}
+
+在给出命题~\ref{prop:9.42} 的证明之前, 先给出一个简单的例子. 设 $M = \R_t \times \R_x^{n-1}$, 并给 $M' = \R_s \times M$ 配以度量 $g' = \dd s^2 + g$, 其中 $g = -\dd t^2 + \dd x^2$. 令 $P' \defeq \Box_{g'} = D_s^2 - D_t^2 + D_x^2$. 则 $\widehat{P}'(\sigma) = -D_t^2 + D_x^2 + \sigma^2$, 因此
+\begin{equation}\label{eq:9.122}
+    P_h = -(h D_t)^2 + (h D_x)^2 + (1 - \ii h \alpha)^2.
+\end{equation}
+$P = (P_h)_{h \in (0,1)}$ 的半经典主象征为 $p = -\tau^2 + |\xi|^2 + 1$. (\textbf{这正是} $V = 1$ \textbf{时的例~\ref{eg:9.41}}.) 于是 $P$ 是 $(M, g, t)$ 上的半经典波动型算子.
+
+\begin{proof}[命题~\ref{prop:9.42} 的证明]
+在 $M$ 的局部坐标 $z \in \R^n$ 下, 可写
+\begin{equation}\label{eq:9.123}
+    P' = \sum_{j+|\alpha| = 2} (g')^{j,\alpha}(z) D_s^j D_z^\alpha + \sum_{j+|\alpha| \le 1} a_{j,\alpha}(z) D_s^j D_z^\alpha,
+\end{equation}
+其中 $(g')^{2,0} = g'^{-1}(\dd s, \dd s)$, 对 $\alpha = e_j \defeq (0, \ldots, 1, \ldots, 0)$ (\textbf{第} $j$ \textbf{位为} $1$) 有 $(g')^{1,\alpha} = g'^{-1}(\dd s, \dd z_j)$, 而对 $\alpha = e_j + e_k$ 有 $(g')^{0,\alpha} = g'^{-1}(\dd z_j, \dd z_k) = g^{-1}(\dd z_j, \dd z_k)$; 此外 $a_{j,\alpha} \in \Smooth$. $P'$ 的谱族可由式~\eqref{eq:9.123} 把 $D_s$ 形式地替换为 $-\sigma$ 得到. 因此
+\begin{equation}\label{eq:9.124}
+    \begin{aligned}
+        P_h &= \sum_{j+|\alpha| = 2} (g')^{j,\alpha}(z) \left( \mp (1 - \ii h \alpha) \right)^j (h D_z)^\alpha \\
+        &\quad + \sum_{j+|\alpha| \le 1} h^{1-(j+|\alpha|)} a_{j,\alpha}(z) \left( \mp (1 - \ii h \alpha) \right)^j (h D_z)^\alpha.
+    \end{aligned}
+\end{equation}
+只有第一个和式对 $P$ 的半经典象征 $p$ 有贡献, 故 $p \colon (z, \zeta) \mapsto \sum_{j+|\alpha|=2} (g')^{j,\alpha}(z) (\mp 1)^j \zeta^\alpha = g'^{-1}(\mp \dd s + \zeta, \mp \dd s + \zeta)$, 正如所断言. 于是 $p(z, \zeta) \equiv (g'_z)^{-1}(\zeta, \zeta) = g_z^{-1}(\zeta, \zeta)$ 模 $S^1$, 这验证了定义~\ref{def:9.39} 的 (1).
+
+尚需验证定义~\ref{def:9.39} 的 (2); 这里将用到 $\partial_s$ 的类空性, 从而用到 $T_z^* M = \operatorname{ann} \partial_s \subset T_{(0,z)}^* M'$ 的 Lorentz 性. 把 $t$ 延拓为 $M'$ 上与 $s$ 无关的光滑函数, 则 $\dd t(\partial_s) = \partial_s t = 0$, 故对所有 $z \in M$ 有 $\dd t \in T_z^* M$; 它关于 $g'$ 为类时的. 我们引入 $T_z^* M$ 的正交归一基 $\epsilon^1, \ldots, \epsilon^n$, 使 $g'^{-1}(\epsilon^1, \epsilon^1) = -1$, $g'^{-1}(\epsilon^j, \epsilon^j) = 1$ ($j = 2, \ldots, n$), 且 $\dd t = a \epsilon^1$ ($a \neq 0$), 再用适当的 $\epsilon^0 \in T_{(0,z)}^* M'$ ($g'^{-1}(\epsilon^0, \epsilon^0) = 1$) 把它补成 $T_{(0,z)}^* M'$ 的正交归一基. 由于 $\dd s \notin T_z^* M$, 有 $\dd s = \sum_{j=0}^{n} s_j \epsilon^j$, 其中 $s_0 \neq 0$. 把给定的余向量 $\zeta \in T_z^* M$ 写作 $\zeta = \sum_{j=1}^{n} \zeta_j \epsilon^j$, 现在计算
+\begin{equation}\label{eq:9.125}
+    \mp \dd s + \zeta + \lambda \dd t = \mp s_0 \epsilon^0 + \lambda a \epsilon^1 + \sum_{j=1}^{n} (\zeta_j \mp s_j) \epsilon^j
+\end{equation}
+关于 $g_{(0,z)}^{'\,-1}$ 与自身的内积, 得
+\begin{equation}\label{eq:9.126}
+    p(z, \zeta + \lambda \dd t) = -(\lambda a + \zeta_1 \mp s_1)^2 + s_0^2 + \sum_{j=2}^{n} (\zeta_j \mp s_j)^2.
+\end{equation}
+对 $\lambda = -a^{-1}(\zeta_1 \mp s_1)$, 该表达式为正, 因为 $s_0 \neq 0$. 另一方面, 对绝对值充分大的 $\lambda \in \R$, 它为负. 因此 $\lambda \mapsto p(z, \zeta + \lambda \dd t)$ 有两个互异的实根.
+\end{proof}
+
+反之有:
+
+\begin{proposition}[半经典波动型算子的刻画]\label{prop:9.43}
+设 $P = (P_h)_{h \in (0, h_0)} \in \Diff_h^2(M)$ 为 $(M, g, t)$ 上的经典半经典波动型算子. 则存在 $M' \defeq \R_s \times M$ 上的 Lorentz 度量 $g'$ 与 $(M', g')$ 上满足命题~\ref{prop:9.42} 条件的波动型算子 $P' \in \Diff^2(M')$, 使得按记号~\eqref{eq:9.119} 有
+\begin{equation}\label{eq:9.127}
+    \begin{gathered}
+        P_h - h^2 \widehat{P}'(h^{-1}) = h^2 V_h + h^3 r_h, \\
+        V = (V_h)_{h \in (0, h_0)} \in \mathcal{V}_h(M), \qquad r = (r_h)_{h \in (0, h_0)} \in \Diff_h^0(M).
+    \end{gathered}
+\end{equation}
+这里允许 $V_h$ 与 $r_h$ 取复值. 特别地,
+\begin{equation}\label{eq:9.128}
+    P_h - h^2 \widehat{P}'(h^{-1}) \in h^2 \Diff_h^1(M).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+把 $P$ 的半经典主象征记为 $p \in S^2(T^* M)$. 记 $\langle \cdot, \cdot \rangle \defeq g^{-1}(\cdot, \cdot)$. 存在唯一的 $a \in \Smooth(M; T^* M)$ 与 $b \in \Smooth(M)$, 使
+\begin{equation}\label{eq:9.129}
+    p(z, \zeta) = \langle \zeta, \zeta \rangle + 2 \langle a, \zeta \rangle + b = \langle \zeta + a, \zeta + a \rangle + (b - \langle a, a \rangle).
+\end{equation}
+取 $\zeta = -a$, 要求 $p(z, \zeta + \lambda \dd t) = \lambda^2 \langle \dd t, \dd t \rangle + (b - \langle a, a \rangle)$ 有两个互异实根, 由于 $\langle \dd t, \dd t \rangle < 0$, 这迫使
+\begin{equation}\label{eq:9.130}
+    b - \langle a, a \rangle > 0.
+\end{equation}
+通过其逆定义 $g_{(s,z)}' \in S^2 T_{(s,z)}^* M$:
+\begin{equation}\label{eq:9.131}
+    g_{(s,z)}^{'\,-1}(-c \dd s + \zeta, -c \dd s + \zeta) \defeq \langle \zeta + ca, \zeta + ca \rangle + c^2 (b - \langle a, a \rangle), \qquad c \in \R, \; \zeta \in T_z^* M.
+\end{equation}
+这是关于 $(c, \zeta)$ 的唯一二次型, 它在 $c = 1$ 时等于式~\eqref{eq:9.129}. 显然 $\mathcal{L}_{\partial_s} g' = 0$, 且 $\partial_s$ 为类空的, 因为 $\operatorname{ann} \partial_s = T_z^* M$ 为 Lorentz 的. 现在考虑差
+\begin{equation}\label{eq:9.132}
+    E_h \defeq P_h - h^2 \widehat{\Box_{g'}}(h^{-1}).
+\end{equation}
+由命题~\ref{prop:9.42}, 对 $E = (E_h)_{h \in (0, h_0)}$ 有 $\sigma_h^2(E) = 0$, 从而 $E \in h \Diff_h^1(M)$. 由于 $E$ 是经典的, 于是可写
+\begin{equation}\label{eq:9.133}
+    E_h = h \left( hX + q_0 + h(V_h + q_1) + h^2 r_h \right),
+\end{equation}
+其中 $X \in \mathcal{V}(M)$ (\textbf{故} $(hX)_{h \in (0, h_0)} \in \mathcal{V}_h(M)$), $q_0, q_1 \in \Smooth(M)$, 此外 $(V_h)_{h \in (0, h_0)} \in \mathcal{V}_h(M)$, 而 $r_h \in \Smooth(M)$ 一致有界. 置
+\begin{equation}\label{eq:9.134}
+    P' \defeq \Box_{g'} + X - q_0 D_s + q_1 \in \Diff^2(M'),
+\end{equation}
+于是 $P_h - h^2 \widehat{P}'(h^{-1}) = h^2 V_h + h^3 r_h$.
+\end{proof}
+
+由式~\eqref{eq:9.129}--\eqref{eq:9.130} 可见, 半经典特征集 $\Char_h(P) \subset \overline{T}^* M$ 有两个分支 (\textbf{当} $n = \dim M \ge 3$ \textbf{时连通}), 它们由 $\langle \zeta + a, \dd t \rangle$ 的符号区分: 若宣布 $\dd t$ 为过去类时的, 则满足 $g_z^{-1}(\zeta + a, \dd t) > 0$ (相应地, $< 0$) 的 $(z, \zeta) \in \Char_h(P) \cap T^* M$ 之集合的闭包即为未来 (相应地, 过去) 分支.
+
+下面转向能量估计. 我们先证明定理~\ref{thm:9.19} 的一个类比. 我们使用定义~\ref{def:9.14} 的记号.
+
+\begin{theorem}[半经典能量估计]\label{thm:9.44}
+设 $\Omega \subset M$ 为紧容许时空区域. 固定 $\Diff^1(\Omega; E)$ 在 $\Smooth(\Omega)$ 上的有限生成集 $V_1, \ldots, V_N \in \Diff^1(\Omega; E)$. 用 $\nu_j(u)$ 表示 $u$ 沿 $\nu_j$ 关于 $E$ 上某光滑联络的导数. 置
+\begin{equation}\label{eq:9.135}
+    \begin{aligned}
+        \|u\|_{H_h^1(\Omega; E)}^2 &\defeq \|u\|_{L^2(\Omega; E)}^2 + \sum_{i=1}^{N} \|h V_i u\|_{L^2(\Omega; E)}^2, \\
+        E_{h,1}[u] &\defeq \sum_{j=1}^{N_1} \left( \|u|_{H_j}\|_{H_h^1(H_j; E)} + \|h \nu_j(u)\|_{L^2(H_j; E)} \right), \\
+        E_{h,F}[u] &\defeq \sum_{j=1}^{N_F} \left( \|u|_{H_{N_1+j}}\|_{H_h^1(H_{N_1+j}; E)} + \|h \nu_{N_1+j}(u)\|_{L^2(H_{N_1+j}; E)} \right).
+    \end{aligned}
+\end{equation}
+设 $P = (P_h)_{h \in (0, h_0)} \in \Diff_h^2(\Omega; E)$ 为 $(\Omega, g, t)$ 上的半经典波动型算子. 则存在常数 $C$, 使得对所有 $u \in \mathcal{C}^2(\Omega; E)$ 成立估计
+\begin{equation}\label{eq:9.136}
+    \|u\|_{H_h^1(\Omega; E)} + E_{h,F}[u] \le C \left( h^{-1} \|P_h u\|_{L^2(\Omega; E)} + E_{h,1}[u] \right).
+\end{equation}
+特别地, 若 $u$ 在 $\Omega$ 的所有初始超曲面处二阶消失, 则
+\begin{equation}\label{eq:9.137}
+    \|u\|_{H_h^1(\Omega; E)} \le C h^{-1} \|P_h u\|_{L^2(\Omega; E)}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+我们只讨论 $E = M \times \CC$ 的情形. 取命题~\ref{prop:9.43} 中的 $g'$ 与 $P' \in \Diff^2(\R \times \Omega)$, 于是 $P_h = h^2 \widehat{P}'(h^{-1}) + R_h$, 其中 $R = (R_h)_{h \in (0, h_0)} \in h^2 \Diff_h^1(\Omega)$. 假设对算子 $h^2 \widehat{P}'(h^{-1})$ 已有估计~\eqref{eq:9.136}, 则可估计
+\begin{equation}\label{eq:9.138}
+    \begin{aligned}
+        C h^{-1} \|h^2 \widehat{P}'(h^{-1}) u\|_{L^2} &\le C h^{-1} \left( \|P_h u\|_{L^2} + h^2 \|u\|_{H_h^1} \right) \\
+        &= C h^{-1} \|P_h u\|_{L^2} + Ch \|u\|_{H_h^1}.
+    \end{aligned}
+\end{equation}
+对 $h < h_1 \defeq \min(h_0, 1/2C)$, 可把 $Ch\|u\|_{H_h^1}$ 吸收, 从而对 $P_h$ 推出~\eqref{eq:9.136}. 另一方面, 对 $h \in [h_1, h_0)$, $H_h^1$ 与 $H^1$ 上的范数一致等价, 故对这些 $h$ 的~\eqref{eq:9.136} 由~\eqref{eq:9.42} 得到.
+
+于是余下的证明可只对 $P_h \defeq h^2 \widehat{P}'(h^{-1})$ 进行. 记 $\sigma \defeq h^{-1}$. 把所需估计~\eqref{eq:9.136} 乘以 $h^{-1}$, 便只需证明: 对任一充分大但固定的 $\sigma_1 \ge h_1^{-1}$ 与所有 $u \in \mathcal{C}^2(\Omega)$ 有
+\begin{equation}\label{eq:9.139}
+    \|\sigma u\|_{L^2(\Omega)} + \|\dd u\|_{L^2(\Omega; T^* \Omega)} + E_{(\sigma),F}[u] \le C \left( \|\widehat{P}'(\sigma) u\|_{L^2(\Omega)} + E_{(\sigma),I}[u] \right), \quad \sigma > \sigma_1,
+\end{equation}
+其中 $E_{(\sigma),\bullet}[u]$ 表示 $\sigma u$ 与 $\dd u$ 在 $H_j$ 上的 $L^2$-范数之和, 当 $\bullet = I$ 时 $j = 1, \ldots, N_I$, 当 $\bullet = F$ 时 $j = N_I+1, \ldots, N_I+N_F$. 我们将由
+\begin{equation}\label{eq:9.140}
+    u'(s, z) \defeq \ee^{-\ii \sigma s} u(z) \quad \text{在} \; \Omega' \defeq [-1, 1]_s \times \Omega \; \text{上}
+\end{equation}
+的能量估计推出它. 把 $\R \times \Omega$ 上的外微分写作
+\begin{equation}\label{eq:9.141}
+    \dd' f(s, z) \defeq \partial_s f(s, z) \, \dd s + \dd(f(s, \cdot)),
+\end{equation}
+其中 $\dd(f(s, \cdot)) \in \Smooth(M; T^* M)$ 是 $f(s, \cdot) \in \Smooth(M)$ 的外微分. 则
+\begin{equation}\label{eq:9.142}
+    \dd' u' = \ee^{-\ii \sigma s} (-\ii \sigma \, \dd s + \dd u), \qquad P' u'(s, z) = \ee^{-\ii \sigma s} (\widehat{P}'(\sigma) u)(z).
+\end{equation}
+由于 $|\ee^{-\ii \sigma s}| = 1$, 估计~\eqref{eq:9.139} 因而等价于
+\begin{equation}\label{eq:9.143}
+    \|\dd' u'\|_{L^2(\Omega'; T^* \Omega')} + E_F'[u'] \le C \left( \|P' u'\|_{L^2(\Omega')} + E_I'[u'] \right), \qquad u' \in \ee^{-\ii \sigma s} \mathcal{C}^2(\Omega) \subset \mathcal{C}^2(\Omega'),
+\end{equation}
+其中, 记 $H_j' \defeq [-1, 1] \times H_j$,
+\begin{equation}\label{eq:9.144}
+    E_I'[u'] \defeq \sum_{j=1}^{N_1} \|(\dd' u')|_{H_j'}\|_{L^2(H_j'; T^* \Omega')},
+\end{equation}
+而 $E_F'[u']$ 类似定义. 这并不完全是定理~\ref{thm:9.19} 的推论, 因为 $\Omega'$ 的超曲面 $\{\pm 1\} \times \Omega$ 似乎未在式~\eqref{eq:9.143} 中被计入.
+
+为证明式~\eqref{eq:9.143}, 我们改为重访定理~\ref{thm:9.19} 的证明, 其基础是恒等式~\eqref{eq:9.31}. 先考虑 $P' = \Box_{g'}$ 的情形. 我们对 ${}^{(X)} J'[u']$ 应用散度定理, 其中 $J'$ 是关于度量 $g'$ 的 $J$-流, 而 $X$ 是 $\Omega'$ 上与 $s$ 无关的向量场, 即 $\mathcal{L}_{\partial_s} X = 0$. 我们断言: 对 $u' \in \ee^{-\ii \sigma s}\mathcal{C}^2(\Omega)$ 有
+\begin{equation}\label{eq:9.145}
+    \begin{aligned}
+        &\sum_{j=1}^{N_F} \int_{H_{N_1+j}'} T'[u'](X, \nu_{N_1+j}) \, |\dd s \, \dd \sigma_{N_1+j}| + \int_{\Omega'} {}^{(X)} K'[u'] \, |\dd s \, \dd g| \\
+        &\qquad = \sum_{j=1}^{N_1} \int_{H_j'} T'[u'](X, \nu_j) \, |\dd s \, \dd \sigma_j| + \int_{\Omega'} \operatorname{Re}(\Box_{g'} u' \, X \overline{u'}) \, |\dd s \, \dd g|,
+    \end{aligned}
+\end{equation}
+其中 $T'$ (相应地, $K'$) 是关于 $g'$ 的应力--能量--动量张量 (相应地, $K$-流). 为证明它, 只需说明: 对 $u' \in \ee^{-\ii \sigma s}\mathcal{C}^2(\Omega)$, $\{\pm 1\} \times \Omega$ 处的附加边界项相互抵消. 为此, 可用 $\Omega$ 上的单位分解把 $X$ 局部化到可定向坐标卡中; 记相应的体积形式为 $\dd g'$. 定义 $\phi_s \colon \Omega \ni z \mapsto (s, z) \in \Omega'$, 并置
+\begin{equation}\label{eq:9.146}
+    B(s) \defeq \int_{\Omega} \phi_s^* \left( {}^{(X)} J'[u'] \cdot \dd g' \right).
+\end{equation}
+为证 $B(-1) = B(1)$, 只需建立 $\mathcal{L}_{\partial_s}({}^{(X)} J'[u'] \cdot \dd g') = 0$. 由于 $\mathcal{L}_{\partial_s} g' = 0$ 且 $\mathcal{L}_{\partial_s} X = 0$, 这可由
+\begin{equation}\label{eq:9.147}
+    \begin{aligned}
+        T'[u'](\cdot, \cdot) &= \dd' u' \otimes_s \dd' \overline{u'} - \frac12 g'^{-1}(\dd' u', \dd' \overline{u'}) g' \\
+        &= \operatorname{Re}\left( (-\ii \sigma \, \dd s + \dd u) \otimes_s (\ii \sigma \, \dd s + \dd \bar u) \right) - \frac12 g'^{-1}(-\ii \sigma \, \dd s + \dd u, \ii \sigma \, \dd s + \dd \bar u) g'
+    \end{aligned}
+\end{equation}
+沿 $\partial_s$ 的 Lie 导数为零得到.
+
+现在按式~\eqref{eq:9.45} 取 $X = \ee^{-2\alpha t} X_0$, $X_0 = -g^{-1}(\dd t, \cdot)$ 来使用式~\eqref{eq:9.145}; 它确实满足 $\mathcal{L}_{\partial_s} X = 0$. 此外, 由于 $\dd t$ 关于 $g^{-1}$ 为类时的, $X$ 关于 $g'$ 为类时的. 当 $\alpha$ 充分大时, $K$-流 ${}^{(X)} K'[u']$ 关于 $\dd' u'$ 从而关于 $(\sigma u, \dd u)$ 正定. 由于式~\eqref{eq:9.145} 的每个被积函数都与 $s$ 无关, 我们得到 $P' = \Box_{g'}$ 时的估计~\eqref{eq:9.143}.
+
+对一般的 $P' = \Box_{g'} + V' + a$, 其中 $a \in \Smooth(M)$ (\textbf{视为} $M'$ \textbf{上与} $s$ \textbf{无关的函数}) 而 $V' \in \mathcal{V}(M')$ 与 $s$-平移交换, 我们把式~\eqref{eq:9.145} 中最后的被积函数改写为
+\begin{equation}\label{eq:9.148}
+    \operatorname{Re}(P' u' \, X \overline{u'}) - \operatorname{Re}(V' u' \, X \overline{u'}) - \operatorname{Re}(a u' \, X \overline{u'}).
+\end{equation}
+这里第二项与式~\eqref{eq:9.145} 中的 ${}^{(X)} K'[u']$ 之和当 $\alpha$ 充分大时仍为正定, 故当 $a = 0$ 时我们得到式~\eqref{eq:9.143}, 从而得到式~\eqref{eq:9.139}. 对一般的 $a$, 可以先以 $\Box_{g'} + V'$ 代替 $P'$ 建立式~\eqref{eq:9.139}, 再把差估计为
+\begin{equation}\label{eq:9.149}
+    C \|a u\|_{L^2} \le \frac{C \|a\|_{L^\infty}}{|\sigma|} \|\sigma u\|_{L^2}.
+\end{equation}
+对充分大的 $\sigma$, 这可以吸收到式~\eqref{eq:9.139} 的左端.
+\end{proof}
+
+现在可以证明定理~\ref{thm:9.33} 的半经典版本.
+
+\begin{theorem}[求解半经典波动型方程]\label{thm:9.45}
+设 $\Omega$ 为可时间定向时空 $(M, g)$ 中的紧容许时空区域, 而 $(M, g)$ 上存在具有类时微分的函数 $t \in \Smooth(M)$. 设 $P = (P_h)_{h \in (0, h_0)}$ 为 $(M, g, t)$ 上的半经典波动型算子. 设 $s \in \R$. 则存在常数 $C$, 使得下述成立: 对所有 $f \in H^{s-1}(\Omega; E)^{\bullet,-}$, 方程 $P_h u = f$ 的唯一前向解 $u \in H^s(\Omega; E)^{\bullet,-}$ 满足
+\begin{equation}\label{eq:9.150}
+    \|u\|_{H_h^s(\Omega; E)^{\bullet,-}} \le C h^{-1} \|f\|_{H_h^{s-1}(\Omega; E)^{\bullet,-}}.
+\end{equation}
+\end{theorem}
+
+我们澄清该结果中所用的范数: 设 $U$ 为闭包紧的开集, $K$ 为内部包含 $\bar U$ 的紧集. $\dot{H}_h^s(\bar U)$ 上的范数此前已在式~\eqref{eq:5.205} 前讨论过. 我们把 $\bar{H}_h^s(U)$ 上的范数定义为商范数 $\dot{H}_h^s(K)/\dot{H}_h^s(K \setminus U)$; 要点在于对所有 $h$ 使用同一个固定的 $K$. (\textbf{不同的} $K$ \textbf{给出的一致等价的范数}.) 式~\eqref{eq:9.150} 中的范数按定义~\ref{def:9.28} 的方式作为商范数定义.
+
+\begin{proof}[定理~\ref{thm:9.45} 的证明]
+我们在记号中省略丛 $E$. 可解性与唯一性由定理~\ref{thm:9.33} 得到, 故只需讨论一致估计~\eqref{eq:9.150}. 不过, 为建立~\eqref{eq:9.150}, 最简单的方法仍是重复定理~\ref{thm:9.33} 证明中的某些论证.
+
+如同引理~\ref{lem:9.34} 的证明那样, 用 $P^*$ 的先验估计~\eqref{eq:9.137}, 我们得到 $s = 0$ 时的估计~\eqref{eq:9.150}. 为证明更高正则阶 $s \ge 0$ 的估计, 我们使用延拓/限制论证与半经典正则性传播. 我们使用式~\eqref{eq:9.96} 的记号 $\Omega_{\delta_I, \delta_F}$, 并固定充分小的 $\delta > 0$. 我们在 $H_h^{s-1}(\Omega)^{\bullet,-}$ 上使用由定义域为 $\bar{H}_h^{s-1}(\Omega_{0,\delta})$ 的限制映射所定义的商范数. 于是, 给定 $h \in (0, h_0)$ 与 $f \in H^{s-1}(\Omega)^{\bullet,-}$, 我们固定 $\tilde f \in \dot{H}^{s-1}(\Omega_{0,\delta})$ 使
+\begin{equation}\label{eq:9.151}
+    \|\tilde f\|_{\dot{H}_h^{s-1}(\Omega_{0,\delta})} = \|f\|_{H_h^{s-1}(\Omega)^{\bullet,-}}.
+\end{equation}
+把 $\tilde f$ 用零延拓到 $\Omega_{\delta,\delta}$. 对 $\tilde u \in H^s(\Omega_{\delta,\delta})^{\bullet,-}$ 求解 $P_h \tilde u = \tilde f$. 则 $\tilde u$ 满足一致估计
+\begin{equation}\label{eq:9.152}
+    \|\tilde u\|_{L^2(\Omega_{\delta,\delta})^{\bullet,-}} \le C h^{-1} \|\tilde f\|_{H_h^{-1}(\Omega_{\delta,\delta})^{\bullet,-}} \le C' h^{-1} \|\tilde f\|_{H_h^{s-1}(\Omega_{\delta,\delta})^{\bullet,-}}.
+\end{equation}
+固定 $\phi \in \SmoothComp(\Omega_{\delta,\delta}^\circ)$, 使 $\phi = 1$ 在 $\Omega$ 上成立. 我们断言
+\begin{equation}\label{eq:9.153}
+    \|\phi \tilde u\|_{\dot{H}_h^{\tilde s}(\Omega_{\delta,\delta})} \le C \left( h^{-1} \|\tilde f\|_{\dot{H}_h^{s-1}(\Omega_{\delta,\delta})} + h^N \|\tilde u\|_{L^2(\Omega_{\delta,\delta})^{\bullet,-}} \right).
+\end{equation}
+鉴于式~\eqref{eq:9.152}, 这就对 $u \defeq \tilde u|_\Omega$ 给出估计~\eqref{eq:9.150}.
+
+写 $p = \sigma_h^2(P)$, 并固定椭圆且正的象征 $\rho \in S_{\mathrm{cl}}^{-1}(T^* M)$. 令 $\tilde H_p \defeq \rho H_p$. 则只要证明: 从 $\Char_h(P) \cap T_{\Omega_{\delta,\delta}}^* M$ 中任一点出发的 $\mp \tilde H_p$ 的每条积分曲线都在有限时间内进入 $\Omega_{\delta,\delta} \setminus \Omega_{0,\delta}$, 估计~\eqref{eq:9.153} 便由定理~\ref{thm:8.27} 得到; 这里对特征集的未来 (相应地, 过去) 分支中的点取 ``$-$'' (相应地, ``$+$'') 号. 现在, $S^* M$ 中的积分曲线是 $(M, g)$ 上类光测地线投影到 $S^* M$ 的提升, 它们可如引理~\ref{lem:9.35} 的证明中那样分析. 对 $T^* M$ 中的积分曲线, 可取 $\rho = 1$ 并使用 $P$ 的主象征表达式~\eqref{eq:9.129}. 这给出 $H_p t = 2\langle \dd t, \zeta + a \rangle$. 但由于 $0 = p = \langle \zeta + a, \zeta + a \rangle + (b - \langle a, a \rangle)$ 结合式~\eqref{eq:9.130} 蕴涵 $\langle \zeta + a, \zeta + a \rangle < 0$, 故 $\zeta + a$ 为类时的; 从而当 $\zeta + a$ 为未来 (相应地, 过去) 类时时 $H_p t > 0$ (相应地, $< 0$). 再次如同引理~\ref{lem:9.35} 那样论证, 便在此情形下也得到所需结论.
+
+最后, 如同定理~\ref{thm:9.33} 证明的最后一步那样, 用对偶论证处理 $s < 0$ 的情形.
+\end{proof}
+
+采用定理~\ref{thm:9.45} 的设定, 我们有推论~\ref{cor:9.38} 的下述类比 (\textbf{证明相同}):
+
+\begin{corollary}[半经典延拓估计]\label{cor:9.46}
+设 $s \in \R$. 设 $u \in \bar{H}^{-\infty}(\Omega; E)$ 满足 $P_h u = f \in \bar{H}^{s-1}(\Omega; E)$, 且对某个 $\delta > 0$ 有 $u|_{\Omega \setminus \Omega_{-\delta,0}} \in \bar{H}^s(\Omega \setminus \Omega_{-\delta,0}; E)$. 则 $u \in \bar{H}^s(\Omega; E)$, 且有一致估计
+\begin{equation}\label{eq:9.154}
+    \|u\|_{H_h^s(\Omega; E)} \le C \left( h^{-1} \|f\|_{\bar{H}_h^{s-1}(\Omega; E)} + \|u|_{\Omega \setminus \Omega_{-\delta,0}}\|_{H_h^s(\Omega \setminus \Omega_{-\delta,0}; E)} \right).
+\end{equation}
+\end{corollary}
+
+\section*{注记}
+\addcontentsline{toc(1)}{section}{注记}
+
+本章给出的求解波动方程的途径, 以相当简洁的方式为强迫问题给出了最优的时空正则性. 关于波动方程存在性, 唯一性与正则性理论的另一条途径, 它与第~\ref{ch:07}~章的方法联系更紧密, 见 Hörmander \cite[第 XXIII 章]{Hor07}. 该途径能更干净地处理初值问题, 但对强迫问题效率稍低, 因为需要引入具有不同空间正则阶与时空正则阶的空间, 才能从 $C_t^0 H_x^s$-正则性推出波的 $H_{t,x}^s$-正则性 (\textbf{其源项属于} $H_{t,x}^{s-1}$).
+
+半经典波动型算子的估计在 Dyatlov--Zworski \cite[附录 E.4]{DZ19} 中用 Hörmander \cite[第 XXIII 章]{Hor07} 的分解方法的半经典版本证明. 我们在第~\ref{sec:9.5}~节的表述与 Vasy \cite[\S 3.3]{Vas13} 的途径更接近.
+
+我们之所以限制在波动型方程——它们与严格双曲二阶微分算子相同 (习题~\ref{ex:9.1})——主要是由于它们在应用 (\textbf{例如第~\ref{ch:11}~章}) 中所起的特殊作用. 高阶算子的能量估计在 Taylor \cite[第 2.8 章]{Tay11a} 中讨论.
+
+\section*{习题}
+\addcontentsline{toc(1)}{section}{习题}
+
+\begin{exer}[波动型算子与严格双曲性]\label{ex:9.1}
+设 $M$ 为光滑流形, $t \in \Smooth(M)$ 为微分处处非零的光滑函数. 设 $P \in \Diff^2(M; E)$ 为主标量算子; 把其主象征记为 $p \colon T^* M \to \CC$. 证明下述条件等价.
+\begin{enumerate}[label=(\arabic*)]
+    \item $P$ 关于某个使 $\dd t$ 处处类时的 Lorentz 度量 $g$ 为波动型算子.
+    \item 主象征 $p$ 取实值, 且对所有 $z \in M$ 与 $\zeta \in T_z^* M \setminus \operatorname{span}\{\dd t\}$, 方程 $p(z, \zeta + \lambda \dd t) = 0$ 有两个互异的实解 $\lambda$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[容许时空区域]\label{ex:9.2}
+设 $\Omega \subset M$ 为式~\eqref{eq:9.26} 中的容许时空区域, 并置 $H_j \defeq \Omega \cap f_j^{-1}(0)$.
+\begin{enumerate}[label=(\arabic*)]
+    \item 证明 $\Omega$ 是带角的子流形. 这意味着: 对每个 $p \in \Omega$, 存在 $k \in \{0, \ldots, n\}$ 以及在 $p$ 的邻域 $U$ 上定义的局部坐标 $z = (z^1, \ldots, z^n) \in \R^n$, 使得 $p$ 处 $z = 0$, 且 $\Omega \cap U = \{z : z^1 \ge 0, \ldots, z^k \ge 0\}$.
+    \item 证明每个 $H_j$ 都是 $M$ 中某个光滑超曲面在 $\Omega$ 中的闭包.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[高阶能量估计]\label{ex:9.3}
+设 $\Omega$ 为可时间定向时空 $(M, g)$ 中的紧容许时空区域. 定义
+\begin{equation}\label{eq:9.155}
+    E_1^m[u] \defeq \sum_{j=1}^{N_1} \left( \|u|_{H_j}\|_{H^m(H_j; E)} + \|\nu_j(u)\|_{H^{m-1}(H_j; E)} \right).
+\end{equation}
+类似地定义 $E_F^m[u]$, 此时使用 $H_{N_1+j}$ ($j = 1, \ldots, N_F$). 设存在函数 $t \in \Smooth(\Omega)$ 使 $\dd t$ 为过去类时的. 设 $P \in \Diff^2(\Omega; E)$ 为 $(\Omega, g)$ 上的波动型算子, $m \in \N$. 证明: 存在常数 $C$, 使得对所有 $u \in \mathcal{C}^{m+1}(\Omega; E)$ 有估计
+\begin{equation}\label{eq:9.156}
+    \|u\|_{H^m(\Omega; E)} + E_F^m[u] \le C \left( \|P u\|_{H^{m-1}(\Omega; E)} + E_1^m[u] \right).
+\end{equation}
+可按如下步骤进行.
+\begin{enumerate}[label=(\arabic*)]
+    \item 固定有限集 $\{A_1, \ldots, A_J\} \subset \Diff^{m-1}(\Omega)$, 它在 $\Smooth(\Omega)$ 上张成 $\Diff^{m-1}(\Omega)$. 证明: 对每个 $j = 1, \ldots, J$, 存在算子 $X_{j,k} \in \Diff^1(\Omega)$ ($k = 1, \ldots, J$), 使
+    \begin{equation}\label{eq:9.157}
+        [P, A_j] = \sum_{k=1}^{J} X_{j,k} A_k.
+    \end{equation}
+    由此推出: 若 $f = P u$, 则 $U \defeq (A_j u)_{j=1, \ldots, J}$ 满足波动型方程 $\mathcal{P} U = F \defeq (A_j f)_{j=1, \ldots, J}$, 其中 $\mathcal{P} \defeq (\delta_{jk} P - X_{j,k})_{j,k = 1, \ldots, J}$.
+    \item 用定理~\ref{thm:9.19} 得到 $U$ 的能量估计. 利用偏微分方程 $P u = f$ 证明 $E_1^1[U] \le C E_1^m[u]$, 并完成证明.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[移位算子]\label{ex:9.4}
+设 $\R_+^n \defeq \R_{x'}^{n-1} \times (0, \infty)_{x_n}$, $s \in \R$.
+\begin{enumerate}[label=(\arabic*)]
+    \item 证明 Fourier 乘子 $(\langle D_{x'}\rangle + \ii D_{x_n})^s$ 定义了等距同构 $\dot{H}^s(\R_+^n) \to \dot{L}^2(\R_+^n)$. (\textbf{提示}. 使用习题~\ref{ex:2.14} 的 Paley--Wiener 定理.)
+    \item 证明 $(\langle D_{x'}\rangle - \ii D_{x_n})^s \colon H^s(\R^n) \to L^2(\R^n)$ 诱导出等距同构 $\dot{H}^s(\R_+^n) \to \dot{L}^2(\R_+^n)$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[可延拓空间与具支空间的关系 I]\label{ex:9.5}
+我们研究限制映射 $R \colon \dot{H}^s([0, \infty)) \ni u \mapsto u|_{(0, \infty)} \in \bar{H}^s((0, \infty))$ 的性质.
+\begin{enumerate}[label=(\arabic*)]
+    \item 设 $s > -\frac12$. 证明 $R$ 是单射.
+    \item 设 $0 \le s < \frac12$. 证明 $R$ 是满射. 为此可按如下步骤进行.
+    \begin{enumerate}[label=(\roman*)]
+        \item 证明乘以 $|x|^{-s}$ 定义了有界线性映射 $H^s(\R) \to L^2(\R)$. (\textbf{提示}. 只需对 $u \in \SmoothComp(\R)$ 证明 $\int_0^\infty x^{-2s}|u(x)|^2 \dd x \le C\|u\|_{H^s(\R)}^2$. 给定 $u \in \SmoothComp(\R)$, 考虑 $v(x) \defeq \frac1x \int_0^x (u(x) - u(y)) \dd y$, 并用习题~\ref{ex:2.10} 证明 $\|x^{-s}v\|_{L^2((0,\infty))} \le C\|u\|_{H^s(\R)}$. 此外证明 $w(x) \defeq u(x) - v(x) = \int_x^\infty \frac{v(y)}{y} \dd y$, 并建立估计 $\|x^{-s}w\|_{L^2((0,\infty))} \le C\|x^{-s}v\|_{L^2((0,\infty))}$.)
+        \item 证明: 若 $u \in \bar{H}^s((0, \infty))$, 则 $L^2$-函数 $x \mapsto H(x)u(x)$ (\textbf{其中} $H$ \textbf{为 Heaviside 函数}) 属于 $H^s(\R)$.
+    \end{enumerate}
+    \item 设 $|s| < \frac12$. 证明 $R$ 是同构. 更一般地, 设 $\Omega \subset \R^n$ 为紧的光滑带角子流形; 证明 $\dot{H}^s(\Omega) = \bar{H}^s(\Omega^\circ)$, 即限制映射 $\dot{H}^s(\Omega) \ni u \mapsto u|_{\Omega^\circ} \in \bar{H}^s(\Omega^\circ)$ 是同构.
+    \item 设 $s < \frac12$, $s \notin \Z + \frac12$. 证明 $R$ 是满射.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[可延拓空间与具支空间的关系 II]\label{ex:9.6}
+本习题建立在习题~\ref{ex:9.5} 之上. 设 $s \notin \Z + \frac12$.
+\begin{enumerate}[label=(\arabic*)]
+    \item 证明 $u \in \bar{H}^s((0, \infty))$ 是某个 $\dot{H}^s([0, \infty))$ 中元素在 $(0, \infty)$ 上的限制, 当且仅当对所有 $0 \le j < s - \frac12$ 有 $u^{(j)}(0) = 0$. (\textbf{对} $s < \frac12$ \textbf{该条件为空}.) 注意由 Sobolev 嵌入, 值 $u^{(j)}(0)$ 是良定义的.
+    \item 当 $\Omega$ 为光滑流形 $M$ 中的紧光滑带边子流形时, 把上述结论推广到 $\bar{H}^s(\Omega)$ 与 $\dot{H}^s(\Omega^\circ)$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[具支/可延拓空间的进一步应用: 局部可解性 I, 椭圆方程]\label{ex:9.7}
+设 $P \in \Diff^m(M)$ 为椭圆微分算子, $x_0 \in M$. 本习题的目标是证明: 存在 $x_0$ 的开邻域 $U \subset M$, 使得对所有 $s \in \R$,
+\begin{equation}\label{eq:9.158}
+    P \colon \bar{H}^s(U) \to \bar{H}^{s-m}(U) \; \text{是满射}.
+\end{equation}
+\begin{enumerate}[label=(\arabic*)]
+    \item 取 $N$ 使 $-N < -s + m$. 设 $U$ 预紧. 证明
+    \begin{equation}\label{eq:9.159}
+        \|v\|_{\dot{H}^{-s+m}(\bar U)} \le C \left( \|P^* v\|_{\dot{H}^{-s}(\bar U)} + \|v\|_{\dot{H}^{-N}(\bar U)} \right),
+    \end{equation}
+    并断定 $P^* \colon \dot{H}^{-s+m}(\bar U) \to \dot{H}^{-s}(\bar U)$ 具有有限维的核与闭值域.
+    \item 证明: 若 $U$ 是 $x_0$ 的充分小邻域, 则 $\ker_{\Smooth(\bar U)} P^* = \{0\}$. 此后固定这样的 $U$. 断定 $\ker_{\dot{H}^{-s+m}(\bar U)} P^* = \{0\}$ 对所有 $s \in \R$ 成立.
+    \item 对上一部分中的 $U$, 证明估计
+    \begin{equation}\label{eq:9.160}
+        \|v\|_{\dot{H}^{-s+m}(\bar U)} \le C' \|P^* v\|_{\dot{H}^{-s}(\bar U)}.
+    \end{equation}
+    \item 用对偶论证推出~\eqref{eq:9.158}.
+    \item 设 $U'$ 为 $x_0$ 的开邻域, 其闭包含于 $U$. 证明 $P \colon \Smooth(U') \to \Smooth(U')$ 是满射.
+    \item $P \colon \dot{\mathcal{C}}^\infty(\bar U) \to \dot{\mathcal{C}}^\infty(\bar U)$ 是否是满射?
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[具支/可延拓空间的进一步应用: 局部可解性 II, 实主型方程]\label{ex:9.8}
+设 $P \in \Diff^m(M)$ 为具有实主象征 $p$ 的微分算子, $x_0 \in M$. 设没有极大的类光双特征线包含在 $T_{x_0}^* M \setminus o$ 中. 本习题的目标是证明: 存在 $x_0$ 的预紧开邻域 $U \subset M$, 使得对所有 $s \in \R$ 与 $f \in \dot{H}^{s-m+1}(U)$, 存在 $P u = f$ 的解 $u \in \dot{H}^s(U)$.
+\begin{enumerate}[label=(\arabic*)]
+    \item 证明可以这样选取 $U$: 使从 $\Char(P) \cap (T_U^* M \setminus o)$ 出发的每条极大类光双特征线都进入 $T^*(M \setminus U) \setminus o$. 对这样的 $U$, 证明
+    \begin{equation}\label{eq:9.161}
+        \|v\|_{\dot{H}^{-s+m-1}(\bar U)} \le C \left( \|P^* v\|_{\dot{H}^{-s}(\bar U)} + \|v\|_{\dot{H}^{-N}(\bar U)} \right),
+    \end{equation}
+    其中 $N$ 固定且满足 $-N < -s + m$.
+    \item 把 $U$ 进一步缩小, 证明 $\|v\|_{\dot{H}^{-s+m-1}(\bar U)} \le C' \|P^* v\|_{\dot{H}^{-s}(\bar U)}$.
+    \item 用对偶论证得出结论.
+\end{enumerate}
+\textbf{注记}. 关于本结果及相关结果, 参见 Hörmander \cite[第 III, XIII 章]{Hor63}, \cite[\S 3.2]{Hor71b} 以及 Taylor \cite[第 VI 章, \S 3]{Tay81}.
+\end{exer}
+
+\begin{exer}[Rellich 紧性]\label{ex:9.9}
+设 $\Omega \subset M$ 为光滑流形 $M$ 中的紧带角子流形, 如定义~\ref{def:9.28} 所述. 设 $s > s'$. 证明包含映射 $H^s(\Omega)^{\bullet,-} \to H^{s'}(\Omega)^{\bullet,-}$ 是紧的.
+\end{exer}
+
+\begin{exer}[由强迫问题得到初值问题]\label{ex:9.10}
+设 $M = \R \times X$, 其中 $X$ 为闭流形. 设 $g$ 为 $M$ 上的 Lorentz 度量, 使 $\dd t$ 为过去类时的. 我们假定 $g^{-1}(\dd t, \dd t) = -1$. (\textbf{不作此归一化也可求解本习题}; 只是式~\eqref{eq:9.163} 中的表达式会更复杂.) 设 $P \in \Diff^2(M)$ 为 $(M, g)$ 上的波动型算子, 于是
+\begin{equation}\label{eq:9.162}
+    P = \partial_t^2 + P_1 \partial_t + P_2,
+\end{equation}
+其中 $P_1 \in \Smooth(\R; \Diff^1(X))$, $P_2 \in \Smooth(\R; \Diff^2(X))$.
+\begin{enumerate}[label=(\arabic*)]
+    \item 设 $u \in \Smooth(\R \times X)$, 置 $f \defeq P u$. 用 $H = H(t)$ 表示 Heaviside 函数, 证明恒等式
+    \begin{equation}\label{eq:9.163}
+        P(Hu) = Hf + \delta'(t) u_0 + \delta(t)(P_1(0) u_0 + u_1), \qquad u_0 \defeq u(0, \cdot), \; u_1 \defeq \partial_t u(0, \cdot).
+    \end{equation}
+    \item 给定 $u_0, u_1 \in \Smooth(X)$ 与 $f \in \Smooth([0, T] \times X)$, 定义 $f' \defeq Hf + \delta'(t)u_0 + \delta(t)(P_1(0)u_0 + u_1)$. 证明对所有 $s' < -\frac32$ 有 $f' \in H^{s'}([0, T] \times X)^{\bullet,-}$, 且 $\WF(f') \subset N^*\{t = 0\} \setminus o$.
+    \item 承接上一部分, 定义 $u' \in H^{s'+1}([0, T] \times X)^{\bullet,-}$ 为 $P u' = f'$ 的解. 用微局部椭圆传播与实主型传播结果证明: 对所有 $s < \frac12$ 与 $T' \in (0, T)$ 有 $u' \in H^s([0, T'] \times X)^{\bullet,-}$, 且 $u'$ 在 $(0, T) \times X$ 上光滑.
+    \item 承接前两部分, 设 $\tilde f \in \Smooth([-1, T] \times X)$ 为 $f$ 的延拓. 证明存在唯一的 $\tilde u \in \Smooth([-1, T] \times X)$, 它求解 $P \tilde u = \tilde f$ 且在 $(0, T) \times X$ 上等于 $u'$. 最后证明 $u \defeq \tilde u|_{[0,T] \times X}$ 求解初值问题
+    \begin{equation}\label{eq:9.164}
+        P u = f, \qquad u|_{t=0} = u_0, \qquad \partial_t u|_{t=0} = u_1.
+    \end{equation}
+    \item 用习题~\ref{ex:9.3} 把~\eqref{eq:9.164} 的可解性结果推广到如下情形: $u_0 \in H^m(X)$, $u_1 \in H^{m-1}(X)$, $f \in \bar{H}^{m-1}([0, T] \times X)$, $m \in \N$, 且解属于 $\bar{H}^m([0, T] \times X)$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[定常波动方程的指数界]\label{ex:9.11}
+设 $X$ 为闭流形, $M = \R \times X$. 设 $g$ 为 $M$ 上的光滑 Lorentz 度量, 它是\textbf{定常的}, 即 $\mathcal{L}_{\partial_t} g = 0$, 且 $\dd t$ 为过去类时的. 设 $P \in \Diff^2(M)$ 为 $(M, g)$ 上的波动型算子, 且是定常的, 即 $[\partial_t, P] = 0$. 在 $\R \times X$ 上用 $\|u\|_{H^m(\R \times X)}^2 \defeq \sum_{j=0}^{m} \int_{\R} \|\partial_t^j u(t, \cdot)\|_{H^{m-j}(X)}^2 \dd t$ 定义 Sobolev 范数. 证明: 对所有 $m \in \N$, 存在常数 $C, \alpha$, 使得对 $P u = f$ 的前向解 $u$ (\textbf{其中} $\operatorname{supp} u, \operatorname{supp} f \subset \{t \ge 0\}$) 有
+\begin{equation}\label{eq:9.165}
+    \|\ee^{-\alpha t} u\|_{\dot{H}^m([0, \infty) \times X)} \le C \|\ee^{-\alpha t} f\|_{\dot{H}^{m-1}([0, \infty) \times X)}.
+\end{equation}
+\end{exer}
+
+\begin{exer}[不是半经典波动型算子]\label{ex:9.12}
+在 $\R_t \times \mathbb{S}_\theta^1$ 上考虑 $P_h = -(h D_t)^2 + (h D_\theta)^2 - 1$, 其中 $\mathbb{S}_\theta^1 = \R / 2\pi\Z$. 证明: 不存在常数 $C, N$, 使得对所有 $f \in \Smooth(\mathbb{S}^1)$, 初值问题
+\begin{equation}\label{eq:9.166}
+    P_h u_h = 0, \qquad u_h(0, x) = f(x), \qquad \partial_t u_h(0, x) = 0
+\end{equation}
+的解 $u_h = u_h(t, x)$ 满足界
+\begin{equation}\label{eq:9.167}
+    \|u_h(1, x)\|_{L^2(\mathbb{S}^1)} \le C h^{-N} \|f\|_{H^N(\mathbb{S}^1)}.
+\end{equation}
+\end{exer}

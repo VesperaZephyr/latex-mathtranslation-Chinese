@@ -1,0 +1,123 @@
+% sections2/sec3_flat.tex
+\section{平坦模}
+\label{sec:flat}
+
+既然线性映射的张量积通常不能保持单射性，我们就必须特别关注并命名那些能够始终保持单射性的 $R$-模 $N$：即只要 $M \xrightarrow{\varphi} M'$ 是单射，由其诱导的映射 $N \otimes_R M \xrightarrow{1 \otimes \varphi} N \otimes_R M'$ 就必定也是单射（注意在 $N$ 上的映射是恒等映射）.
+
+\begin{definition}\label{def:flat-module}
+设 $N$ 为 $R$-模.若对所有单射线性映射 $M \xrightarrow{\varphi} M'$，诱导的线性映射
+\[
+  N \otimes_R M \xrightarrow{1 \otimes \varphi} N \otimes_R M'
+\]
+恒为单射，则称 $N$ 为\newterm{flat-mod-def}{平坦模}{flat module}.
+\end{definition}
+
+平坦模的概念之所以重要，在于自然界中存在极为丰富且核心的平坦模范例：
+
+\begin{theorem}[自由模必平坦]\label{thm:free-is-flat}
+任何自由 $R$-模 $F$ 都是平坦模：若线性映射 $\varphi \colon M \to M'$ 是单射，则
+\[
+  1 \otimes \varphi \colon F \otimes_R M \to F \otimes_R M'
+\]
+必为单射.
+\end{theorem}
+
+\begin{proof}
+当 $F = 0$ 时显然.设 $F \neq 0$ 且具有一组基 $\{e_i\}_{i \in I}$.在第一篇中我们已经证明， $F \otimes_R M$ 中的每个元素都可以唯一地表示为 $\sum_{i} e_i \otimes m_i$（其中 $m_i \in M$），对 $F \otimes_R M'$ 亦然.
+
+设 $t \in \ker(1 \otimes \varphi)$，将 $t$ 展开为 $\sum_i e_i \otimes m_i$.则
+\[
+  0 = (1 \otimes \varphi)(t) = \sum_{i} e_i \otimes \varphi(m_i).
+\]
+由基展开表示的唯一性，必有每个 $\varphi(m_i) = 0$.因为 $\varphi$ 是单射，故所有 $m_i = 0$，从而 $t = 0$.
+\end{proof}
+
+注意：定理~\ref{thm:free-is-flat} 对自由模的基没有任何有限性要求，无限基自由模同样平坦.
+
+\begin{theorem}[分式域必平坦]\label{thm:fraction-field-flat}
+设 $R$ 为整环，$K$ 为其分式域.则 $K$ 作为 $R$-模是平坦模.
+\end{theorem}
+
+\begin{remark}\label{rem:fraction-not-free}
+定理~\ref{thm:fraction-field-flat} 绝非定理~\ref{thm:free-is-flat} 的特例：若 $K$ 作为 $R$-模是自由模，则必然要求 $K = R$（因为 $K$ 中任意两元素均 $R$-线性相关，其自由秩至多为 $1$；若为 $1$ 则 $K \cong R$，从而 $1/a \in R$，要求 $R$ 是域）.因此只要 $R$ 不是域（如 $R = \Z$），其分式域 $K$（如 $\Q$）便给出了一个\textbf{平坦却非自由}的经典范例！
+\end{remark}
+
+\begin{proof}[定理~\ref{thm:fraction-field-flat} 的证明]
+设 $M \xrightarrow{\varphi} M'$ 为单射 $R$-模同态.回忆第一篇证明过的结论：$K \otimes_R M$ 中的每个张量都是简单张量（通分即可），且简单张量 $x \otimes m = 0$ 当且仅当 $x = 0$ 或 $m \in M_{\mathrm{tor}}$.
+
+设 $(1 \otimes \varphi)(t) = 0$.将 $t$ 写为 $x \otimes m$，则 $0 = (1 \otimes \varphi)(t) = x \otimes \varphi(m)$.因此 $x = 0$ 或者 $\varphi(m) \in M'_{\mathrm{tor}}$.若 $\varphi(m) \in M'_{\mathrm{tor}}$，则存在非零 $r \in R$ 使得 $r\varphi(m) = 0$.由线性性 $\varphi(rm) = 0$；由 $\varphi$ 单射即得 $rm = 0$，故 $m \in M_{\mathrm{tor}}$.因此在任何情况下均有 $t = x \otimes m = 0$，证明了 $1 \otimes \varphi$ 是单射.
+\end{proof}
+
+若 $M$ 是 $M'$ 的子模，定理~\ref{thm:fraction-field-flat} 保证了我们可以自然地将 $K \otimes_R M$ 视为 $K \otimes_R M'$ 的子空间.即使 $M$ 或 $M'$ 内部带有扭元（此时 $M \to K \otimes_R M$ 自身可能不是单射），张量积之间的映射 $K \otimes_R M \to K \otimes_R M'$ 却依然保持严格单射！
+
+\begin{remark}\label{rem:localization-flat}
+定理~\ref{thm:fraction-field-flat} 可直接推广：对于任意交换环 $R$ 及其乘法子集 $D$，局部化环 $R_D$ 作为 $R$-模恒为平坦模.
+\end{remark}
+
+\begin{theorem}\label{thm:flat-ideal-mult}
+若 $M$ 是平坦 $R$-模，则对 $R$ 的任意理想 $I$，均有同构
+\[
+  I \otimes_R M \cong IM, \quad i \otimes m \mapsto im.
+\]
+\end{theorem}
+
+\begin{proof}
+包含映射 $I \hookrightarrow R$ 是单射.由 $M$ 的平坦性，诱导单射 $I \otimes_R M \hookrightarrow R \otimes_R M \cong M$.复合映射将 $i \otimes m$ 映为 $im$，其像恰好是子模 $IM$，故为同构.
+\end{proof}
+
+\begin{example}[非平坦模范例]\label{ex:non-flat-torsion}
+非零扭阿贝尔群 $A$（例如有限群 $\Z/n\Z$ 或无限群 $\Q/\Z$）作为 $\Z$-模绝不是平坦的：包含映射 $\Z \hookrightarrow \Q$ 是单射，但与其作张量积后得到 $A \otimes_\Z \Z \cong A \to A \otimes_\Z \Q = 0$，单射性彻底破坏！更一般地，整环上的任何非零扭模都不是平坦模.
+\end{example}
+
+\begin{theorem}[平坦模与核的精确保持]\label{thm:flat-preserves-kernel}
+设 $N$ 为平坦 $R$-模，$\varphi \colon M \to M'$ 为线性映射.则映射
+\[
+  N \otimes_R M \xrightarrow{1 \otimes \varphi} N \otimes_R M'
+\]
+的核恰好等于 $N \otimes_R \ker \varphi$（自然地视作 $N \otimes_R M$ 的子模）：
+\[
+  \ker(1 \otimes \varphi) = (1 \otimes i)(N \otimes_R \ker \varphi).
+\]
+换言之，\textbf{与平坦模作张量积严格保持任意线性映射的核}.
+\end{theorem}
+
+\begin{theorem}\label{thm:flat-tensor-flat}
+两个平坦模的张量积依然是平坦模.
+\end{theorem}
+
+\begin{proof}
+设 $N$ 与 $N'$ 平坦，$\varphi \colon M \to M'$ 为单射.由 $N'$ 平坦，$1 \otimes \varphi \colon N' \otimes_R M \to N' \otimes_R M'$ 为单射；再由 $N$ 平坦，$1 \otimes (1 \otimes \varphi) \colon N \otimes_R (N' \otimes_R M) \to N \otimes_R (N' \otimes_R M')$ 为单射.利用结合律同构，即得 $(N \otimes_R N') \otimes_R M \to (N \otimes_R N') \otimes_R M'$ 为单射.
+\end{proof}
+
+\begin{theorem}[双边映射单射判别准则]\label{thm:injective-tensor-both}
+设 $\varphi \colon M \to M'$ 与 $\psi \colon N \to N'$ 均为单射.若满足下列条件之一：
+\begin{enumerate}
+  \item $M$ 与 $N'$ 均为平坦模；
+  \item $M'$ 与 $N$ 均为平坦模；
+\end{enumerate}
+则张量积映射 $\varphi \otimes \psi \colon M \otimes_R N \to M' \otimes_R N'$ 必为单射.
+\end{theorem}
+
+\begin{proof}
+将 $\varphi \otimes \psi$ 分解为复合：
+\[
+  M \otimes_R N \xrightarrow{1 \otimes \psi} M \otimes_R N' \xrightarrow{\varphi \otimes 1} M' \otimes_R N'.
+\]
+若 $M$ 平坦，则 $1 \otimes \psi$ 单；若 $N'$ 平坦，则 $\varphi \otimes 1$ 单.两单射之复合必为单射！对另一种条件对称分解即可.
+\end{proof}
+
+\begin{corollary}\label{cor:flat-tensor-powers-injective}
+设 $M_1, \dots, M_k$ 与 $N_1, \dots, N_k$ 均为平坦 $R$-模，且 $\varphi_i \colon M_i \to N_i$ 均为单射.则
+\[
+  \varphi_1 \otimes \dots \otimes \varphi_k \colon M_1 \otimes_R \dots \otimes_R M_k \to N_1 \otimes_R \dots \otimes_R N_k
+\]
+必为单射.特别地，平坦模之间单射的张量幂 $\varphi^{\otimes k}$ 恒为单射.
+\end{corollary}
+
+\begin{corollary}\label{cor:free-independent-tensors}
+设 $M$ 为自由 $R$-模，$\{m_1, \dots, m_d\}$ 是 $M$ 中的有限线性无关子集.则对任意 $k \leq d$，$d^k$ 个简单张量
+\[
+  m_{i_1} \otimes \dots \otimes m_{i_k} \quad (1 \leq i_1, \dots, i_k \leq d)
+\]
+在张量幂 $M^{\otimes k}$ 中必定是 $R$-线性无关的.
+\end{corollary}

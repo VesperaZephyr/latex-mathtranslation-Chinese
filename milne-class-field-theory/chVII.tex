@@ -1,0 +1,1323 @@
+% ============================================================
+% 第七章  整体类域论: 主要定理的证明
+% 源: Milne CFT v4.03, Chapter VII (书页 p.199--226)
+% OCR: 行 7441--8470; 脚注 1--7 从原书 PDF 恢复
+% 勘误: CFT 勘误表无本章条目; 原书无编号公式, 但 (*) 标记照排;
+%       4.3 证明缺失公式 h(C_L)=h(I_{L,T})/h(U(T)) 及两张图
+%       (引理 6.1 域图, 引理 6.5 蛇形图) 均从原书恢复.
+%       原书 "H^2(-/K)" 的连字符在 pdftotext 中丢失, 记号已还原.
+% 标签前缀: vii.
+% ============================================================
+\chapter{整体类域论: 主要定理的证明}\label{ch:VII}
+\index{zhengtileiyulun@整体类域论(global class field theory)}
+
+\begin{quote}
+\itshape J'ai revu un peu la théorie du corps de classes, dont j'ai enfin l'impression d'avoir compris les énoncés essentiels (bien entendu, pas les démonstrations!)
+\end{quote}
+\hspace*{\fill}Grothendieck, 致 Serre 的信, 1956.9.19\footnote{``我近来稍稍重温了类域论, 终于觉得自己理解了它的几个主要结论 (当然, 不包括证明!)'' (原书脚注给出的英译, 此处译出.)}
+
+本章中我们遵循 \cite{Tate1967} 的方法 (另见 \cite{ArtinTate1961}) 证明整体类域论的主要定理, 即互反律与存在定理 (第 \ref{ch:V} 章的定理 \ref{thm:v.5.3} 与 \ref{thm:v.5.5}). 全章均使用 idèle 而非理想.
+
+本章独立于第 \ref{ch:VI} 章, 只是用第 \ref{ch:VI} 章的定理 \ref{thm:vi.4.9} 可以替代第 \ref{sec:VII.6} 节. 我们需要引用第 \ref{ch:V} 章的地方仅有: idèle 类群的定义, 以及整体 Artin 映射 $\phi\colon\mathbb{I}\to\Gal(L/K)$ 作为局部 Artin 映射之``积''的定义 (第 \ref{sec:VII.5} 节). 另一方面, 我们将频繁使用第 \ref{ch:II}、\ref{ch:III} 两章的结果.
+
+我们使用第 \ref{ch:V} 章的记号 (特别见本书 p.\pageref{pg:orig169}). 特别地, $|\cdot|_v$ 表示 $v$ 的规范绝对值 (使乘积公式成立的那个).
+
+\section{概述}\label{sec:VII.1}
+
+设 $L/K$ 是数域的有限 Galois 扩张, Galois 群为 $G$. Idèle 类群 $\mathbf{C}_L\overset{\text{def}}{=}\mathbb{I}_L/L^{\times}$ 在整体类域论中所扮演的角色, 恰如乘法群 $L^{\times}$ 在局部类域论中的角色. 特别地, 当 $L/K$ 为 Abel 扩张时, 我们将证明存在同构
+\[
+\phi\colon\mathbf{C}_{K}/\Nm_{L/K}(\mathbf{C}_{L})\to G,
+\]
+其局部分量即局部 Artin 映射, 也就是说: 对 $K$ 的任意素 $v$ 与其上的 $L$ 的素 $w$, 下图交换:
+\[
+\begin{tikzcd}
+K_{v}^{\times}\ar[r, "\phi_{v}"]\ar[d] & \Gal(L_{w}/K_{v})\ar[d]\\
+\mathbb{I}_{K}\ar[r, "\phi"'] & \Gal(L/K),
+\end{tikzcd}
+\]
+其中 $\phi_v$ 是第 \ref{ch:I}、\ref{ch:III} 两章的局部 Artin 映射.
+
+根据 Tate 定理 (第 \ref{ch:II} 章, 3.11), 为得到这样的同构, 只需证明: 对每个具有 Galois 群 $G$ 的有限 Galois 扩张 $L/K$,
+
+(a) $H^{1}(G,\mathbf{C}_{L})=0$;
+
+(b) $H^{2}(G,\mathbf{C}_{L})$ 是 $[L:K]$ 阶循环群, 带有一个典范生成元 $u_{L/K}$;
+
+(c) 若 $E\supset L\supset K$ 是 $K$ 的两个有限 Galois 扩张, 则 $\mathrm{Res}(u_{E/K})=u_{E/L}$.
+
+此时同构 $\phi_{L/K}$ 便是 $u_{L/K}$ 所定义之映射的逆:
+\[
+H_{T}^{-2}(G,\mathbb{Z})\to H_{T}^{0}(G,\mathbf{C}_{L}).
+\]
+一旦证明了基本类 $u_{L/K}$ 与局部基本类相容, $\phi_{L/K}$ 就会是局部 Artin 映射的乘积.
+
+实际上, 我们采用一条略为不同的路线. 我们将把整体 Artin 映射 $\mathbf{C}_K\to\Gal(L/K)$ 定义为局部 Artin 映射的``积'', 并用比 (a)(b) 稍弱的结果推出它具有应有的性质.
+
+在第 \ref{sec:VII.2} 节中, 我们用局部域的上同调表示 idèle 的上同调:
+\[
+\begin{aligned}
+&H^{0}(G,\mathbb{I}_{L})=\mathbb{I}_{K};\\
+&H^{r}_{T}(G,\mathbb{I}_{L})\simeq\bigoplus_{v}H^{r}_{T}(G^{v},L^{v\times})
+\end{aligned}
+\]
+(对 $K$ 的素 $v$ 求和; 取定 $w|v$, 则 $G^v$ 是 $w$ 的分解群, $L^v=L_w$). 在第 \ref{sec:VII.3} 节算出 $S$-单位群的 Herbrand 商之后, 我们在第 \ref{sec:VII.4} 节证明第一个不等式:
+\[
+\text{对任意循环扩张 }L/K,\quad(\mathbf{C}_K:\Nm_{L/K}\mathbf{C}_L)\ge[L:K].
+\]
+在第 \ref{sec:VII.4} 节我们还将证明: 对任何 Abel 扩张, Galois 群由 Frobenius 元生成. 第 \ref{sec:VII.5} 节陈述定理:
+\[
+\begin{gathered}
+\text{对数域的每个 Galois 扩张 }L/K:\ \text{(a)}\ (\mathbf{C}_K:\Nm_{L/K}\mathbf{C}_L)\le[L:K]\ \text{(第二个不等式)};\\
+\text{(b)}\ H^{1}(G,\mathbf{C}_{L})=1;\quad \text{(c)}\ H^{2}(G,\mathbf{C}_{L})\ \text{的阶}\le[L:K],
+\end{gathered}
+\]
+并利用第 \ref{ch:VI} 章的定理 \ref{thm:vi.4.9} 证明之. 下一节给出该定理的另一个证明, 避免使用复分析.
+
+在作一些关于 Brauer 群的预备之后, 第 \ref{sec:VII.7} 节通过证明: 对每个 Abel 扩张 $L/K$, $K^{\times}$ 包含在 $\phi_{L/K}:\mathbb{I}_K\to\Gal(L/K)$ 的核中, 来完成互反律的证明. 由于我们已经知道 $\Nm_{L/K}(\mathbb{I}_L)$ 包含在 $\phi_{L/K}$ 的核中, 且 $\phi_{L/K}$ 是满射 (因为 $\Gal(L/K)$ 由 Frobenius 元生成), 第二个不等式便蕴含 $\phi_{L/K}$ 是同构.
+
+我们在第 \ref{sec:VII.9} 节证明存在定理, 证明途径是: $C_K$ 的每个 (开) 有限指数子群都包含如下扩张的某个子扩张的范群, 该扩张由先添加一个单位根、再作 Kummer 扩张而得到.
+
+在某种程度上, $K$ 的循环分圆扩张扮演着与局部域的无分歧扩张相同的角色. 例如, 互反律证明的最后一步的关键在于: $\mathrm{Br}(K)$ 的每个元素都被一个循环分圆扩张分裂.
+
+\section{Idèle 的上同调}\label{sec:VII.2}
+
+设 $L/K$ 是数域的有限 Galois 扩张, Galois 群为 $G$. 回顾: $\sigma\in G$ 按规则 $|\sigma a|_{\sigma w}=|a|_w$ 作用在 $L$ 的位于 $K$ 的固定素 $v$ 之上的素 $w$ 上. 因此 $\sigma$ 是赋值域的同构
+\[
+(L,|\mid_{w})\to(L,|\mid_{\sigma w}),
+\]
+从而可延拓到完备化上: 有交换图
+\[
+\begin{tikzcd}
+L_{w}\ar[r, "\sigma"] & L_{\sigma w}\\
+L\ar[u, "i_{w}"']\ar[r, "\sigma"'] & L\ar[u, "i_{\sigma w}"']
+\end{tikzcd}
+\]
+取定 $K$ 的素 $v$, 设 $w_0$ 是 $L$ 的位于 $v$ 之上的素. 映射 $\sigma\mapsto\sigma w_0$ 定义双射
+\[
+G/G_{w_{0}}\to\{w\mid v\},
+\]
+其中 $G_{w_0}$ 是 $w_0$ 的分解群.
+
+我们希望把 $G$ 在 $L$ 上的作用延拓为 $G$ 在 $\prod_{w|v}L_w$ 上的作用. 回顾 (ANT, 8.2): 映射
+\[
+a\otimes b\mapsto(i_{w}(a)b)_{w}\colon L\otimes_{K}K_{v}\to\prod_{w|v}L_{w}
+\]
+是同构. 群 $G$ 通过其在 $L$ 上的作用作用于 $L\otimes_K K_v$, 我们用这个同构把该作用转移到 $\prod_{w|v}L_w$ 上. 于是:
+
+(a) $G$ 的元素连续地作用于 $\prod_{w|v}L_w$;
+
+(b) 所有形如 $(a,\ldots,a)$ ($a\in K_v$) 的元素都被 $G$ 固定;
+
+(c) 对每个 $a\in L$, $\sigma(\ldots,i_w(a),\ldots)=(\ldots,i_w(\sigma a),\ldots)$.
+
+这些条件唯一确定该作用 (实际上, (a) 与 (c) 已确定它, 因为 $K$ 在 $K_v$ 中稠密).
+
+\begin{lemma}\label{lem:vii.2.1}
+对 $\sigma\in G$ 与 $\alpha=(\alpha(w))\in\prod_{w\mid v}L_w$,
+\begin{equation*}
+(\sigma\alpha)(w)=\sigma\bigl(\alpha(\sigma^{-1}w)\bigr).\tag{$*$}
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+规则 $(*)$ 确实定义了 $G$ 在 $\prod L_w$ 上的连续作用, 故只需验证它满足 (b) 与 (c). 条件 (b) 显然. 对 (c), 设 $\alpha(w)=i_w(a)$, $a\in L$. 则 (由 $(*)$)
+\[
+(\sigma\alpha)(w)=\sigma\bigl(i_{\sigma^{-1}w}(a)\bigr).
+\]
+在上面的交换图中把 $w$ 换成 $\sigma^{-1}w$, 便得公式 $\sigma\circ i_{\sigma^{-1}w}=i_{w}\circ\sigma$. 因此
+\[
+(\sigma\alpha)(w)=i_{w}(\sigma a),
+\]
+这正是所要证的.
+\end{proof}
+
+用更朴素的话说: $(\sigma\alpha)(\sigma w)=\sigma(\alpha(w))$, 即若 $\alpha$ 在 $w$-分量处是 $a$, 则 $\sigma\alpha$ 在 $\sigma w$-分量处是 $\sigma a$.
+
+注意 $G$ 在 $\prod_{w|v}L_w$ 上的作用诱导出 $G$ 在 $\prod_{w|v}L_w$ 的子集 $\prod_{w|v}L_w^{\times}$ 与 $\prod_{w|v}U_w$ 上的作用.
+
+\begin{proposition}\label{prop:vii.2.2}
+取定 $w_0|v$, 设 $G_{w_0}$ 为其分解群. 对 $\alpha\in\prod_{w|v}L_w$ 与 $\sigma\in G$, 定义 $f_{\alpha}(\sigma)=\sigma(\alpha(\sigma^{-1}w_{0}))$. 则 $f_{\alpha}\in\operatorname{Ind}_{G_{w_{0}}}^{G}(L_{w_{0}})$, 且映射
+\[
+\alpha\mapsto f_{\alpha}\colon\prod_{w\mid v}L_{w}\to\operatorname{Ind}_{G_{w_{0}}}^{G}(L_{w_{0}})
+\]
+是 $G$-模的同构. 把 $L_w$ 换成 $L_w^{\times}$ 或 $U_w$ 后同样的结论成立.
+\end{proposition}
+
+\begin{proof}
+回顾 (II, \S \ref{sec:II.1}):
+\[
+\operatorname{Ind}_{G_{w_{0}}}^{G}(L_{w_{0}})=\{f:G\to L_{w_{0}}\mid f(\rho\sigma)=\rho f(\sigma),\ \text{一切 }\rho\in G_{w_{0}}\},
+\]
+且 $\tau\in G$ 按 $(\tau f)(\sigma)=f(\sigma\tau)$ 作用于 $f\in\operatorname{Ind}_{G_{w_{0}}}^{G}(L_{w_{0}})$. 对 $\rho\in G_{w_{0}}$,
+\[
+f_{\alpha}(\rho\sigma)=\rho\sigma\bigl(\alpha(\sigma^{-1}\rho^{-1}w_{0})\bigr)=\rho\sigma\bigl(\alpha(\sigma^{-1}w_{0})\bigr)=\rho f_{\alpha}(\sigma),
+\]
+故 $f_{\alpha}\in\operatorname{Ind}_{G_{w_{0}}}^{G}(L_{w_{0}})$. 此外,
+\[
+(\tau f_{\alpha})(\sigma)=f_{\alpha}(\sigma\tau)=\sigma\tau\bigl(\alpha(\tau^{-1}\sigma^{-1}w_{0})\bigr)=\sigma(\tau\alpha)(\sigma^{-1}w_{0})=f_{\tau\alpha}(\sigma),
+\]
+故 $\alpha\mapsto f_\alpha$ 是 $G$-模同态 $\prod_{w|v}L_w\to\operatorname{Ind}_{G_{w_{0}}}^{G}(L_{w_{0}})$. 给定 $f\in\operatorname{Ind}_{G_{w_{0}}}^{G}(L_{w_{0}})$, 令
+\[
+\alpha_{f}(w)=\sigma\bigl(f(\sigma^{-1})\bigr),\quad w=\sigma w_{0}.
+\]
+则 $f\mapsto\alpha_f$ 是 $\alpha\mapsto f_\alpha$ 的逆.
+\end{proof}
+
+\begin{proposition}\label{prop:vii.2.3}
+对一切 $r$,
+\[
+H^{r}\Bigl(G,\prod_{w\mid v}L_{w}^{\times}\Bigr)\simeq H^{r}(G_{w_{0}},L_{w_{0}}^{\times}).
+\]
+特别地,
+\[
+H^{0}\Bigl(G,\prod_{w|v}L_{w}^{\times}\Bigr)\simeq K_{v}^{\times}.
+\]
+把 $L_w^{\times}$ 换成 $U_w$ 后同样的结论成立.
+\end{proposition}
+
+\begin{proof}
+由 Shapiro 引理 (II, \ref{prop:ii.1.11}),
+\[
+H^{r}\Bigl(G,\prod_{w|v}L_{w}^{\times}\Bigr)=H^{r}\bigl(G,\operatorname{Ind}_{G_{w_{0}}}^{G}L_{w_{0}}^{\times}\bigr)=H^{r}(G_{w_{0}},L_{w_{0}}^{\times}).
+\]
+\end{proof}
+
+\begin{remark}\label{rem:vii.2.4}
+群 $H^r(G_{w_0},L_{w_0}^{\times})$ 在典范同构的意义下不依赖于整除 $v$ 的素 $w_0$: 设 $w$ 是另一个这样的素, 则可写 $w=\sigma w_0$, 且我们有相容的同构对
+\[
+\tau\mapsto\sigma\tau\sigma^{-1}\colon G_{w_{0}}\to G_{w},\qquad x\mapsto\sigma^{-1}x\colon L_{w}\to L_{w_{0}},
+\]
+从而对每个 $r$ 有同构
+\[
+H^{r}(G_{w},L_{w}^{\times})\to H^{r}(G_{w_{0}},L_{w_{0}}^{\times})
+\]
+(见 II, \S \ref{sec:II.1}). 若 $w=\sigma'w_0$, 则 $\sigma'=\sigma\tau$, $\tau\in G_{w_0}$. 由 $\sigma$ 与 $\sigma'$ 定义的两个映射相差 $H^r(G_{w_0},L_{w_0}^{\times})$ 的由 $\tau$ 给出的自同构, 而它是恒等映射 (II, \ref{ex:ii.1.27}d). 因此 $H^r(G_{w_0},L_{w_0}^{\times})$ 与 $H^r(G_w,L_w^{\times})$ 典范同构. 这提示如下记号: 取定 $w|v$, 令
+\[
+G^{v}=G_{w},\quad L^{v}=L_{w},\quad U^{v}=U_{w}.
+\]
+这些对象只在相差非典范同构的意义下有定义, 但 $H^r(G^v,L^{v\times})$ 与 $H^r(G^v,U^v)$ 在典范同构的意义下有定义.
+\end{remark}
+
+我们赋予 $\mathbb{I}_L$ 如下的 $G$-作用, 使包含
+\[
+\prod_{w\mid v}L_{w}^{\times}\to\mathbb{I}_{L}
+\]
+都是 $G$-同态. 于是若 $\alpha$ 在 $w$-分量处是 $a_w$, 则 $\sigma\alpha$ 在 $\sigma w$-分量处是 $\sigma a_w$.
+
+\begin{proposition}\label{prop:vii.2.5}
+(a) 映射 $\mathbb{I}_K\hookrightarrow\mathbb{I}_L$ 诱导同构 $\mathbb{I}_K\to\mathbb{I}_L^{G}$.
+
+(b) 对所有 $r\ge0$,
+\[
+H_{T}^{r}(G,\mathbb{I}_{L})=\bigoplus_{v}H_{T}^{r}(G^{v},L^{v\times}).
+\]
+\end{proposition}
+
+\begin{proof}
+(a) 显然, $\alpha=(a_w)$ 被 $G$ 固定当且仅当每个子族 $(a_w)_{w|v}$ 被 $G$ 固定. 而 $(a_w)_{w|v}$ 被 $G$ 固定仅当 $a_w$ 不依赖于 $w$ 且落在 $K_v^{\times}$ 中.
+
+(b) 对 $K$ 的素的每个有限集 $S$, 令
+\[
+\mathbb{I}_{L,S}=\prod_{v\in S}\Bigl(\prod_{w|v}L_{w}^{\times}\Bigr)\times\prod_{v\notin S}\Bigl(\prod_{w|v}U_{w}\Bigr).
+\]
+则 $\mathbb{I}_{L,S}$ 在 $G$ 的作用下稳定, 且 $\mathbb{I}_L$ 是 $\mathbb{I}_{L,S}$ 的归纳极限, 其中 $S$ 跑遍 $K$ 的包含全部无限素与全部在 $L$ 中分歧的素的有限素集. 于是 (见 II, \ref{prop:ii.4.4}),
+\[
+H^{r}(G,\mathbb{I}_{L})=\varinjlim H^{r}(G,\mathbb{I}_{L,S}).
+\]
+应用 (II, \ref{prop:ii.1.25}) 与 (\ref{prop:vii.2.3}) 得
+\begin{align*}
+H^{r}(G,\mathbb{I}_{L,S})&=\prod_{v\in S}H^{r}\Bigl(G,\prod_{w|v}L_{w}^{\times}\Bigr)\times\prod_{v\notin S}H^{r}\Bigl(G,\prod_{w|v}U_{w}\Bigr)\\
+&=\prod_{v\in S}H^{r}(G^{v},L^{v\times})\times\prod_{v\notin S}H^{r}(G^{v},U^{v}).
+\end{align*}
+由 (III, \ref{prop:iii.1.1}), 当 $r>0$ 时第二个因子为零, 故
+\begin{align*}
+H^{r}(G,\mathbb{I}_{L})&=\varinjlim_{S}H^{r}(G,\mathbb{I}_{L,S})\\
+&=\varinjlim_{S}\bigoplus_{v\in S}H^{r}(G^{v},L^{v\times})\\
+&=\bigoplus_{\text{一切 }v}H^{r}(G^{v},L^{v\times}).
+\end{align*}
+对 $r\le0$ 使用 Tate 群后同样的论证成立.
+\end{proof}
+
+\begin{corollary}\label{cor:vii.2.6}
+(a) $H^{1}(G,\mathbb{I}_{L})=0$;
+
+(b) $H^{2}(G,\mathbb{I}_{L})\simeq\bigoplus_{v}\bigl(\tfrac{1}{n_{v}}\mathbb{Z}/\mathbb{Z}\bigr)$, 其中 $n_v=[L^{v}:K_v]$.
+\end{corollary}
+
+\begin{proof}
+(a) 应用 Hilbert 定理 90 (II, \ref{prop:ii.1.22}).
+
+(b) 由第 \ref{ch:III} 章的定理\ref{thm:iii.2.1}, 不变映射给出同构
+\[
+H^{2}(G^{v},L^{v\times})\to\frac{1}{n_{v}}\mathbb{Z}/\mathbb{Z}.
+\]
+\end{proof}
+
+\begin{proposition}\label{prop:vii.2.7}
+设 $S$ 为 $K$ 的素的有限集, $T$ 为 $L$ 中位于 $S$ 的素之上的素集. 若 $L/K$ 循环, 则 Herbrand 商
+\[
+h(\mathbb{I}_{L,T})=\prod_{v\in S}n_{v},\quad n_{v}=[L^{v}:K_{v}].
+\]
+\end{proposition}
+
+\begin{proof}
+我们有
+\[
+\mathbb{I}_{L,T}=\Biggl(\prod_{v\in S}\Bigl(\prod_{w|v}L_{w}^{\times}\Bigr)\Biggr)\times\Biggl(\prod_{v\notin S}\Bigl(\prod_{w|v}U_{w}\Bigr)\Biggr).
+\]
+第二个因子的 Herbrand 商为 $1$ (应用 III, \ref{lem:iii.2.5}), 故
+\begin{align*}
+h(G,\mathbb{I}_{L,T})&=\prod_{v\in S}h\Bigl(G,\prod_{w|v}L_{w}^{\times}\Bigr)\\
+&=\prod_{v\in S}h(G^{v},L^{v\times})\\
+&=\prod_{v\in S}\bigl|H^{2}(G^{v},L^{v\times})\bigr|\\
+&=\prod_{v\in S}n_{v}.
+\end{align*}
+\end{proof}
+
+\subsection*{Idèle 上的范映射}
+
+设 $L/K$ 是数域的有限 Galois 扩张. 与对任何 $G$-模一样, 存在范映射
+\[
+x\mapsto\prod_{\sigma\in G}\sigma x\colon\mathbb{I}_{L}\to\mathbb{I}_{L}^{G}=\mathbb{I}_{K}.
+\]
+我们需要考察这个映射. 回顾 (ANT, 8.4): 有交换图
+\[
+\begin{tikzcd}
+L^{\times}\ar[r]\ar[d, "\Nm_{L/K}"'] & \prod_{w\mid v}L_{w}^{\times}\ar[d, "(a_{w})\mapsto\prod\Nm_{Lw/K_{v}}a_{w}"]\\
+K^{\times}\ar[r] & K_{v}^{\times}.
+\end{tikzcd}
+\]
+对每个 $w$, $\Nm L_w^{\times}$ 在 $K_v^{\times}$ 中开 (因为它指数有限; 见 I, \ref{lem:1.3}), 且对任何不分歧的 $w$, 范映射把 $U_w$ 映到 $U_v$ 上 (见 III, \ref{prop:iii.1.2}). 图中右侧竖直映射的像等于 $\Nm L_w^{\times}$ (对任意 $w|v$; 因为任意两个 $L_w$ 都 $K_v$-同构). 我们把它记作 $\Nm L^{v\times}$.
+
+设 $S\supset S_{\infty}$ 为 $K$ 的素的有限集, 包含全部分歧素, 并设 $T$ 为位于 $S$ 的素之上的素集. 上面的论述表明
+\[
+\Nm_{L/K}\mathbb{I}_{L,T}=\prod_{v\in S}V_{v}\times\prod_{v\notin S}U_{v},
+\]
+其中 $V_v$ 是 $K_v^{\times}$ 的指数有限的开子群. 它是 $\mathbb{I}_{K,S}$ 中的开子群, 而 $\mathbb{I}_{K,S}$ 在 $\mathbb{I}_K$ 中开. 于是我们证明了下述结果.
+
+\begin{proposition}\label{prop:vii.2.8}
+对数域的每个有限 Galois 扩张 $L/K$, $\Nm_{L/K}\mathbb{I}_L$ 包含 $\mathbb{I}_K$ 的一个开子群, 从而它本身是开的.
+\end{proposition}
+
+事实上, 我们之前 (V, \ref{cor:v.4.13}) 已经证明: 每个范群都对某个模 $\mathfrak{m}$ 包含 $W_{\mathfrak{m}}$, 而 $W_{\mathfrak{m}}$ 是开的.
+
+接下来考虑 idèle 类上的范映射. 考虑
+\[
+\begin{tikzcd}
+0\ar[r] & L^{\times}\ar[r]\ar[d, "\Nm_{L/K}"'] & \mathbb{I}_{L}\ar[r]\ar[d, "\Nm_{L/K}"'] & \mathbf{C}_{L}\ar[r]\ar[d] & 0\\
+0\ar[r] & K^{\times}\ar[r] & \mathbb{I}_{K}\ar[r] & \mathbf{C}_{K}\ar[r] & 0.
+\end{tikzcd}
+\]
+左侧方块交换, 故范映射 $\mathbb{I}_L\to\mathbb{I}_K$ 诱导范映射 $\Nm_{L/K}\colon\mathbf{C}_L\to\mathbf{C}_K$. 由蛇形引理, 商映射 $\mathbb{I}_K\to\mathbf{C}_K$ 诱导同构
+\[
+\mathbb{I}_{K}/K^{\times}\cdot\Nm(\mathbb{I}_{L})\to\mathbf{C}_{K}/\Nm(\mathbf{C}_{L}).
+\]
+
+\section{单位群的上同调}\label{sec:VII.3}
+
+设 $L/K$ 是数域的有限扩张, Galois 群为 $G$. 设 $S\supset S_{\infty}$ 为 $K$ 的素的有限集, 并设 $T$ 为 $L$ 中位于 $S$ 的素之上的素集. 由于 $T$ 在 $G$ 的作用下稳定, $T$-单位群
+\[
+U(T)\overset{\mathrm{def}}{=}\{\alpha\in L\mid\operatorname{ord}_{w}(\alpha)=0,\ \text{一切 }w\notin T\}
+\]
+也在 $G$ 的作用下稳定.
+
+\begin{proposition}\label{prop:vii.3.1}
+在上述情况下, 设 $G$ 循环. 则 Herbrand 商 $h(U(T))$ 有定义, 且满足
+\[
+n\cdot h(U(T))=\prod_{v\in S}n_{v},
+\]
+其中 $n=[L:K]$, $n_v=[L^{v}:K_v]$.
+\end{proposition}
+
+证明分两步: 我们先证明同一实向量空间中任意两个 $G$-稳定的满格\footnote{回顾: 实向量空间 $V$ 的子群 $M$ 称为\textbf{满格} (full lattice), 如果 $M$ 由 $V$ 的一组基作为 $\Z$-模生成; 等价地, $M$ 有限生成且典范映射 $\R\otimes_{\Z}M\to V$ 是同构. $\Q$-向量空间中满格的定义类似.}有相同的 Herbrand 商; 然后构造两个这样的格, 一个的 Herbrand 商为 $n\cdot h(U(T))$, 另一个的 Herbrand 商为 $\prod n_v$.
+
+\begin{lemma}\label{lem:vii.3.2}
+设 $G$ 为有限群, $k$ 为无限域. 设 $M$ 与 $N$ 是 $k[G]$-模, 视为 $k$-向量空间时有限维. 若对某个域 $\Omega\supset k$, $M\otimes_k\Omega$ 与 $N\otimes_k\Omega$ 作为 $\Omega[G]$-模同构, 则它们作为 $k[G]$-模已经同构.
+\end{lemma}
+
+\begin{proof}
+首先注意: 若 $V$ 是 $k$ 上一个齐次线性方程组的解空间, 则同一方程组在 $\Omega$ 上的解空间有一组坐标在 $k$ 中的基. 实际上, 求解空间的标准算法在 $k$ 上与在 $\Omega$ 上执行给出相同的结果.
+
+$k$-线性映射 $\alpha\colon M\to N$ 是 $G$-同态, 当且仅当 $\alpha(\sigma m)=\sigma\alpha(m)$ 对一切 $m\in M$, $\sigma\in G$ 成立. 给 $M$ 与 $N$ 取定基后, 给出 $k$-线性映射 $\alpha\colon M\to N$ 等价于给出一个矩阵 $A$, 而 ``$\alpha$ 是 $G$-同态''这一条件形如 $A\cdot B(\sigma)=C(\sigma)\cdot A$ (对某些矩阵 $B(\sigma)$, $C(\sigma)$). 这是 $A$ 的系数的线性条件, 故由前述观察, 存在 $k[G]$-同态 $\alpha_1,\ldots,\alpha_r\colon M\to N$, 构成 $\Omega[G]$-同态空间 $M\otimes_k\Omega\to N\otimes_k\Omega$ 的一组 $\Omega$-基.
+
+由于 $M\otimes_k\Omega$ 与 $N\otimes_k\Omega$ 作为 $\Omega[G]$-模同构, 存在 $a_1,\ldots,a_r\in\Omega$ 使 $\sum a_i\alpha_i$ 是同构, 从而行列式非零. 但 $\det(\sum a_i\alpha_i)$ 是系数属于 $k$ 的关于 $a_i$ 的多项式, 而上一句话表明其系数不全为零. 由于 $k$ 无限, 可取 $k$ 中的 $a_i$ 使 $\sum a_i\alpha_i$ 的行列式非零\footnote{这里用到: 系数取自无限域 $k$ 的多项式 $f$ 若对所有 $(a_1,\ldots,a_n)\in k^{n}$ 都有 $f(a_1,\ldots,a_n)=0$, 则 $f=0$ (FT, 5.18 的证明).}, 从而是 $k[G]$-同构 $M\to N$.
+\end{proof}
+
+\begin{remark}\label{rem:vii.3.3}
+若嫌上述证明过于初等, 这里另给一个. 设 $k$ 特征为零. $M$ 作为 $k[G]$-模的自同构群 $H$ 是若干形如 $\mathrm{GL}_d(D)$ ($D$ 为 $k$ 上的除法代数) 的群之积. 同构 $M\to N$ 的函子是 $H$ 的一个主齐性空间 (非空, 因为存在某个包含 $k$ 的域上的同构), 从而定义了 $H^{1}(k,H)$ 的一个元素. 而 Hilbert 定理 90 的推广表明 $H^{1}(k,H)=1$.
+\end{remark}
+
+\begin{lemma}\label{lem:vii.3.4}
+设 $G$ 为有限循环群, $M$ 与 $N$ 是 $G$-模, 作为 $\Z$-模有限生成, 且 $M\otimes_{\Z}\Q$ 与 $N\otimes_{\Z}\Q$ 作为 $G$-模同构. 若 $h(M)$ 与 $h(N)$ 之一有定义, 则另一个也有定义, 且两者相等.
+\end{lemma}
+
+\begin{proof}
+由 (II, \ref{cor:ii.3.9}), 可设 $M$ 与 $N$ 无挠. 取同构
+\[
+\alpha\colon M\otimes\Q\to N\otimes\Q.
+\]
+则 $\alpha(M)$ 与 $N$ 是同一 $\Q$-向量空间中的格, 故 $\alpha(M)\subset n^{-1}N$ 对某个 $n\in\N$ 成立 (把 $\alpha(M)$ 的一组基的元素用 $N$ 的基表出, 取系数的公分母为 $n$). 把 $\alpha$ 换成 $n\alpha$ 后, 有 $\alpha(M)\subset N$. 现在有正合列
+\[
+0\to M\xrightarrow{\alpha}N\to N/\alpha(M)\to 0,
+\]
+其中 $N/\alpha(M)$ 有限, 再一次应用 (II, \ref{cor:ii.3.9}) 便得 $h(M)=h(N)$.
+\end{proof}
+
+\begin{lemma}\label{lem:vii.3.5}
+设 $G$ 为有限循环群, $V$ 是一个实向量空间, $G$ 线性地作用于其上 (即 $V$ 是 $\R[G]$-模). 设 $M$ 与 $N$ 是 $V$ 中两个 $G$-稳定的满格. 若 $h(M)$ 与 $h(N)$ 之一有定义, 则另一个也有定义, 且两者相等.
+\end{lemma}
+
+\begin{proof}
+由于 $M$ 与 $N$ 是 $V$ 中的满格, 典范映射
+\[
+M\otimes_{\Z}\R\to V,\quad N\otimes_{\Z}\R\to V
+\]
+是同构. 这些映射是 $G$-同态, 因此由 (\ref{lem:vii.3.2}), 作为 $\Q[G]$-模有 $M\otimes_{\Z}\Q\approx N\otimes_{\Z}\Q$, 从而可应用引理\ref{lem:vii.3.4}.
+\end{proof}
+
+现在完成命题\ref{prop:vii.3.1} 的证明. 设 $V$ 是以 $T$ 的元素为指标的若干份 $\R$ 的乘积, 即
+\[
+V=\operatorname{Hom}(T,\R).
+\]
+我们让 $G$ 按如下规则作用于 $V$:
+\[
+(\sigma f)(w)=f(\sigma^{-1}w),\quad\sigma\in G,\quad w\in T.
+\]
+$V$ 中的第一个格是 $N\overset{\text{def}}{=}\operatorname{Hom}(T,\Z)$. 对每个 $v\in S$, 取位于 $v$ 之上的一个 $w$, 并设 $G^v$ 为 $w$ 的分解群. 集合 $G^{v}\cdot w$ ($v\in S$) 恰是 $G$ 作用在 $T$ 上的轨道. 特别地, $T$ 是这些集合的不交并, 故
+\[
+\operatorname{Hom}(T,\Z)=\bigoplus_{v}\operatorname{Hom}(G/G^{v},\Z).
+\]
+但 $\operatorname{Hom}(G/G^{v},\Z)=\operatorname{Ind}_{G^{v}}^{G}(\Z)$ ($\Z$ 视为平凡的 $G^v$-模). 因此
+\[
+h(G,N)=\prod_{v}h\bigl(G,\operatorname{Ind}_{G^{v}}^{G}(\Z)\bigr)=\prod h(G^{v},\Z)=\prod n_{v}.
+\]
+现在定义第二个格. 设 $\lambda\colon U(T)\to V$ 为映射 $a\mapsto(\ldots,\log|a|_{w},\ldots)$, 并令 $M^{0}$ 为 $\lambda$ 的像. 注意 $\lambda$ 与 $G$ 的作用交换. $\lambda$ 的核由 $L^{\times}$ 中满足 $|a|_{w}=1$ (对所有 $w$, 包括无限素) 的元素 $a$ 组成, 这些正是 $L$ 中 $1$ 的根, 故 $h(U(T))=h(M^{0})$. 乘积公式表明 $M^{0}$ 包含在 $V$ 的子空间
+\[
+V^{0}\colon\sum x_{w}=0
+\]
+之中, 而 $T$-单位定理的证明表明 $M^{0}$ 是 $V^0$ 中的格 (参见 ANT, 5.8). 向量 $e=(1,1,\ldots,1)$ 在 $G$ 下稳定, 我们令 $M=M^{0}+\Z e$. 则 $M\otimes_{\Z}\R=V^{0}+\R e=V$, 故 $M$ 是 $V$ 中的格. 此外,
+\[
+h(M)=h(M^{0})\cdot h(\Z)=h(M^{0})\cdot n.
+\]
+这就完成了命题\ref{prop:vii.3.1} 的证明.
+
+\section{Idèle 类的上同调 I: 第一个不等式}\label{sec:VII.4}
+
+设 $L/K$ 是数域的有限 Galois 扩张, Galois 群为 $G$. 我们有 $G$-模的行正合交换图
+\[
+\begin{tikzcd}
+0\ar[r] & K^{\times}\ar[r]\ar[d] & \mathbb{I}_{K}\ar[r]\ar[d] & \mathbf{C}_{K}\ar[r]\ar[d] & 0\\
+0\ar[r] & L^{\times}\ar[r] & \mathbb{I}_{L}\ar[r] & \mathbf{C}_{L}\ar[r] & 0.
+\end{tikzcd}
+\]
+各行正合正是 idèle 类群的定义. 左侧方块的竖直箭头是自然包含, 故该方块交换, 这表明右侧的竖直箭头存在.
+
+\begin{lemma}\label{lem:vii.4.1}
+典范映射 $\mathbf{C}_K\to\mathbf{C}_L$ 诱导同构
+\[
+\mathbf{C}_{K}\to\mathbf{C}_{L}^{G}=H^{0}(G,\mathbf{C}_{L}).
+\]
+\end{lemma}
+
+\begin{proof}
+由上图的下一行得到上同调序列
+\[
+\begin{tikzcd}
+0\ar[r] & H^{0}(G,L^{\times})\ar[r]\ar[d, equal] & H^{0}(G,\mathbb{I}_{L})\ar[r]\ar[d, equal] & H^{0}(G,\mathbf{C}_{L})\ar[r]\ar[d, equal] & H^{1}(G,L^{\times})\ar[d, equal]\\
+ & L^{\times G} & \mathbb{I}_{L}^{G} & \mathbf{C}_{L}^{G} & 0
+\end{tikzcd}
+\]
+它可以与
+\[
+0\to K^{\times}\to\mathbb{I}_{K}\to\mathbf{C}_{K}\to 0
+\]
+等同.
+\end{proof}
+
+数域的理想类群有限, 且由素理想的类生成, 因此它由有限多个素理想生成.
+
+\begin{lemma}\label{lem:vii.4.2}
+设 $K$ 为数域, $S\supset S_{\infty}$ 为 $K$ 的素的有限集, 包含 $K$ 的理想类群的一组生成元. 则
+\[
+\mathbb{I}_{K}=K^{\times}\cdot\mathbb{I}_{S}.
+\]
+\end{lemma}
+
+\begin{proof}
+``$S$ 包含 $K$ 的理想类群的一组生成元''这一条件意味着: 每个分式理想 $\mathfrak{a}$ 都能写成
+\[
+\mathfrak{a}=\mathfrak{b}\cdot(c),
+\]
+其中 $\mathfrak{b}$ 落在由 $S$ 中的素理想生成的群内, $c\in K^{\times}$. 因此在商群 $I^{S}=I/\langle S\rangle$ 中 $\mathfrak{a}=(c)$, 从而 $I^{S}/i(K^{\times})=0$.
+\end{proof}
+
+对 $K$ 的每个有限素集 $S\supset S_{\infty}$, 自然映射 $\mathbb{I}\to I^{S}$ 定义同构 $\mathbb{I}/\mathbb{I}_{S}\to I^{S}$. 两边对 $K^{\times}$ 作商, 得 $\mathbb{I}/K^{\times}\cdot\mathbb{I}_{S}\simeq I^{S}/i(K^{\times})\simeq 0$.
+
+回顾: 我们要证明, 对每个 Abel 扩张 $L/K$ 有 $\mathbf{C}_K/\Nm_{L/K}\mathbf{C}_L\simeq\Gal(L/K)$, 且对每个 Galois 扩张有 $H^{1}(G,\mathbf{C}_L)=1$. 对循环扩张, 这两个断言蕴含 Herbrand 商
+\[
+h(\mathbf{C}_{L})\overset{\mathrm{def}}{=}\frac{(\mathbf{C}_{K}:\Nm\mathbf{C}_{L})}{\bigl|H^{1}(G,\mathbf{C}_{L})\bigr|}=[L:K].
+\]
+作为第一步, 我们验证这个等式.
+
+\begin{theorem}\label{thm:vii.4.3}
+对数域的每个有限循环扩张 $L/K$, $h(\mathbf{C}_L)=[L:K]$.
+\end{theorem}
+
+\begin{proof}
+设 $S$ 为 $K$ 的任意一个满足下列条件的有限素集:
+
+(a) $S\supset S_{\infty}$, 即 $K$ 的无限素之集;
+
+(b) $S$ 包含在 $L$ 中分歧的全部素;
+
+(c) $S$ 包含 $\mathfrak{P}\cap\mathcal{O}_K$, 其中 $\mathfrak{P}$ 取遍 $L$ 的理想类群的一组生成元.
+
+设 $T$ 为 $L$ 中位于 $S$ 的素之上的素集. 条件 (c) 蕴含 $\mathbb{I}_L=\mathbb{I}_{L,T}\cdot L^{\times}$, 故
+\[
+\mathbf{C}_{L}\overset{\mathrm{def}}{=}\mathbb{I}_{L}/L^{\times}=L^{\times}\cdot\mathbb{I}_{L,T}/L^{\times}\simeq\mathbb{I}_{L,T}/L^{\times}\cap\mathbb{I}_{T}.
+\]
+注意
+\[
+L^{\times}\cap\mathbb{I}_{T}=\{\alpha\in L\mid\operatorname{ord}_{w}(\alpha)=0,\ \forall w\notin T\}=U(T),
+\]
+于是
+\[
+h(\mathbf{C}_{L})=h(\mathbb{I}_{L,T})/h(U(T)).
+\]
+定理由命题 \ref{prop:vii.2.7} 与命题 \ref{prop:vii.3.1} 推出.
+\end{proof}
+
+\begin{corollary}[第一个不等式]\label{cor:vii.4.4}
+若 $L/K$ 是 $n$ 次循环扩张, 则
+\[
+(\mathbb{I}_{K}:K^{\times}\cdot\Nm(\mathbb{I}_{L}))\ge n.
+\]
+\end{corollary}
+
+\begin{proof}
+由于 $h(\mathbf{C}_L)=n$, 其分子必 $\ge n$.
+\end{proof}
+
+下面给出第一个不等式的一些应用.
+
+\begin{lemma}\label{lem:vii.4.5}
+设 $L$ 是 $K$ 的有限可解扩张 (即 Galois 群可解的有限 Galois 扩张). 若存在 $\mathbb{I}_K$ 的子群 $D$ 使得
+
+(a) $D\subset\Nm_{L/K}\mathbb{I}_L$, 且
+
+(b) $K^{\times}\cdot D$ 在 $\mathbb{I}_K$ 中稠密,
+
+则 $L=K$.
+\end{lemma}
+
+\begin{proof}
+若 $L\ne K$, 则存在 $L$ 的子域 $K'$, 它在 $K$ 上循环且 $\ne K$. 则
+\[
+D\subset\Nm_{L/K}(\mathbb{I}_{L})=\Nm_{K'/K}\bigl(\Nm_{L/K}(\mathbb{I}_{L})\bigr)\subset\Nm_{K'/K}(\mathbb{I}_{K'}).
+\]
+因此 $K^{\times}\cdot\Nm_{K'/K}\mathbb{I}_{K'}$ 在 $\mathbb{I}_K$ 中稠密. 由于它是 $\Nm_{K'/K}\mathbb{I}_{K'}$ 的平移之并, 它是开的 (\ref{prop:vii.2.8}); 又由于它是 $\mathbb{I}_K$ 的子群, 它也是闭的. 于是 $K^{\times}\cdot\Nm_{K'/K}\mathbb{I}_{K'}=\mathbb{I}_K$, 而第一个不等式蕴含 $K'=K$.
+\end{proof}
+
+\begin{proposition}\label{prop:vii.4.6}
+设 $L$ 是 $K$ 的有限可解扩张. 若 $L\ne K$, 则 $K$ 中有无穷多个素在 $L$ 中不完全分裂.
+\end{proposition}
+
+\begin{proof}
+设只有有限多个, 并设 $S\supset S_{\infty}$ 为 $K$ 的有限素集, 包含所有不完全分裂的素. 我们对
+\[
+D=\mathbb{I}^{S}\overset{\mathrm{def}}{=}\{(a_{v})\mid a_{v}=1,\ \text{一切 }v\in S\}
+\]
+应用引理. 对 $w|v\notin S$, 有 $L_w=K_v$, 故显然 $D\subset\Nm(\mathbb{I}_L)$. 设 $\mathbf{a}=(a_v)\in\mathbb{I}$. 由弱逼近定理 (ANT, 7.20), 存在 $b\in K^{\times}$, 它对所有 $v\in S$ 都在 $K_v$ 中非常接近 $a_v$. 取 $\mathbf{a}'$ 为 $\mathbb{I}^{S}$ 中使 $\mathbf{b}\mathbf{a}'$ 的 $v$-分量对所有 $v\notin S$ 都等于 $a_v$ 的元素. 则 $\mathbf{b}\mathbf{a}'$ 在 $\mathbb{I}_K$ 中接近 $\mathbf{a}$. 故 $K^{\times}\cdot D$ 在 $\mathbb{I}_K$ 中稠密.
+\end{proof}
+
+\begin{proposition}\label{prop:vii.4.7}
+设 $L/K$ 是具有 Galois 群 $G$ 的有限可解扩张, $T$ 为包含在 $L$ 中分歧者的素理想有限集. 则 $\mathfrak{P}\notin T$ 的 Frobenius 元 $(\mathfrak{P},L/K)$ 生成 $G$.
+\end{proposition}
+
+\begin{proof}
+必要时把 $T$ 换大, 可设它在 $G$ 下稳定. 于是由 $\mathfrak{P}\notin T$ 处的 Frobenius 元生成的子群 $H$ 是正规的. 令 $E=L^{H}$. 回顾 (\hyperlink{item:v.1.11}{V, 1.11}):
+\[
+(\mathfrak{P}\cap E,E/K)=(\mathfrak{P},L/K)\big|_{E},
+\]
+而后者是恒等映射. 因此 $K$ 中不位于 $T$ 的素之下的所有素 $\mathfrak{p}$ 都在 $E$ 中分裂, 这表明 $E=K$. 由 Galois 理论主定理, 这蕴含 $H=G$.
+\end{proof}
+
+\begin{corollary}\label{cor:vii.4.8}
+对每个 Abel 扩张 $L/K$ 与 $K$ 的每个包含在 $L$ 中分歧者的有限素集 $S\supset S_{\infty}$, 映射
+\[
+\mathfrak{p}\mapsto(\mathfrak{p},L/K)\colon I^{S}\to\Gal(L/K)
+\]
+是满射. (回顾: $I^{S}$ 是由不在 $S$ 中的素理想生成的分式理想群.)
+\end{corollary}
+
+\begin{proof}
+像包含 $\mathfrak{P}$ 整除某个不在 $S$ 中的素 $p$ 的全部 Frobenius 元 $(\mathfrak{P},L/K)$, 而这些元生成 $\Gal(L/K)$.
+\end{proof}
+
+\begin{remark}\label{rem:vii.4.9}
+当然, 命题 \ref{prop:vii.4.6} 比用复分析可得的结果 (见定理 \ref{thm:vi.3.4}) 弱得多, 但它足以证明互反律.
+\end{remark}
+
+\section{Idèle 类的上同调 II: 第二个不等式}\label{sec:VII.5}
+
+\begin{theorem}\label{thm:vii.5.1}
+设 $L/K$ 是数域的 Galois 扩张, Galois 群为 $G$. 则
+
+(a) (第二个不等式) 指数 $(\mathbb{I}_K:K^{\times}\cdot\Nm(\mathbb{I}_L))$ 有限, 且整除 $[L:K]$;
+
+(b) 群 $H^{1}(G,\mathbf{C}_{L})=0$;
+
+(c) 群 $H^{2}(G,\mathbf{C}_{L})$ 有限, 且其阶整除 $[L:K]$.
+\end{theorem}
+
+\begin{lemma}\label{lem:vii.5.2}
+若 $G$ 循环, 则定理的断言 (a)(b)(c) 相互等价 (且 $(\mathbb{I}_K:K^{\times}\cdot\Nm(\mathbb{I}_L))=(H^{2}(G,\mathbf{C}_L):1)=[L:K]$).
+\end{lemma}
+
+\begin{proof}
+不加限制于 $G$, 我们有
+\[
+\mathbb{I}_{K}/K^{\times}\cdot\Nm_{L/K}(\mathbb{I}_{L})\simeq\mathbf{C}_{K}/\Nm_{L/K}(\mathbf{C}_{L})=H_{T}^{0}(G,\mathbf{C}_{L}).
+\]
+若 $G$ 循环, 其上同调是周期的, 故 $H_T^{0}(G,\mathbf{C}_L)\approx H^{2}(G,\mathbf{C}_L)$. 这证明 (a) 与 (c) 等价. 定理\ref{thm:vii.4.3} 断言 Herbrand 商 $h(\mathbf{C}_L)=[L:K]$, 故 (a) 与 (c) 各自等价于 (b).
+\end{proof}
+
+\begin{lemma}\label{lem:vii.5.3}
+只需对 $G$ 是 $p$-群 ($p$ 为素数) 的情形证明该定理.
+\end{lemma}
+
+\begin{proof}
+回顾 (II, \ref{cor:ii.1.33}): 若 $H$ 是 $G$ 的 Sylow $p$-子群, 则对每个 $G$-模 $M$, 映射
+\[
+\operatorname{Res}\colon H_{T}^{r}(G,M)\to H_{T}^{r}(H,M)
+\]
+在 $p$-primary 分量上是单射. 因此, 若定理对 $L/L^{H}$ 成立, 则 $p$ 不整除 $H_T^{1}(G,\mathbf{C}_L)$ 的阶, 且整除 $H_T^{0}(G,\mathbf{C}_L)$ 与 $H_T^{2}(G,\mathbf{C}_L)$ 之阶的 $p$ 的幂次小于整除 $[L:K]$ 的 $p$ 的幂次. 对所有 $p$ 应用此结论, 便得引理.
+\end{proof}
+
+\begin{lemma}\label{lem:vii.5.4}
+只需对 $G$ 是素数 $p$ 阶循环群的情形证明该定理.
+\end{lemma}
+
+\begin{proof}
+由上一引理, 可设 $G$ 是 $p$-群. 我们对 $(G:1)$ 作归纳来证明定理. 由于 $G$ 是 $p$-群, 它有指数为 $p$ 的正规子群 $H$ (见 GT 4.17). 考虑正合列 (II, \ref{prop:ii.1.34})
+\[
+0\to H^{1}(G/H,\mathbf{C}_{K'})\xrightarrow{\operatorname{Inf}}H^{1}(G,\mathbf{C}_{L})\xrightarrow{\operatorname{Res}}H^{1}(H,\mathbf{C}_{L}),
+\]
+其中 $K'=L^{H}$. 由假设 $H^{1}(G/H,\mathbf{C}_{K'})=0$, 由归纳假设 $H^{1}(H,\mathbf{C}_{L})=0$. 故 $H^{1}(G,\mathbf{C}_{L})=0$, 即断言 (b) 成立.
+
+由于 $H^{1}(H,\mathbf{C}_{L})=0$, 序列
+\[
+0\to H^{2}(G/H,\mathbf{C}_{K'})\to H^{2}(G,\mathbf{C}_{L})\to H^{2}(H,\mathbf{C}_{L})
+\]
+正合, 由此推出断言 (c) 成立.
+
+最后注意
+\[
+(\mathbf{C}_{K}:\Nm_{L/K}(\mathbf{C}_{L}))=(\mathbf{C}_{K}:\Nm_{K'/K}(\mathbf{C}_{K'}))\cdot(\Nm_{K'/K}(\mathbf{C}_{K'}):\Nm_{L/K}(\mathbf{C}_{L})),
+\]
+它整除 $p[L:K']$, 因为 $\Nm_{K'/K}$ 诱导满射
+\[
+\mathbf{C}_{K'}/\Nm_{L/K'}(\mathbf{C}_{L})\to\Nm_{K'/K}(\mathbf{C}_{K'})/\Nm_{L/K}(\mathbf{C}_{L}).
+\]
+要借助引理\ref{lem:vii.5.2} 完成定理\ref{thm:vii.5.1} 的证明, 剩下的只需证明第二个不等式对 $p$ 次循环扩张成立; 但在 (VI \ref{thm:vi.4.9}) 中我们已对所有有限 Galois 扩张证明了第二个不等式. (关于该命题的理想语言与 idèle 语言两种形式之间的转换, 见命题 \ref{prop:v.4.6}.) 下一节我们给出第二个不等式的一个不依赖于第 \ref{ch:VI} 章的代数证明.
+\end{proof}
+
+\begin{remark}\label{rem:vii.5.5}
+对数域的有限 Galois 扩张 $L/K$, 我们给它附加了群 $\mathbf{C}_K/\Nm(\mathbf{C}_L)$ 与 $H^{2}(G,\mathbf{C}_L)$. 当 $L/K$ 循环时, 它们 (在取定 $G$ 的一个生成元后) 典范同构, 否则不然. 第一个群总同构于 $G^{\mathrm{ab}}$, 第二个总为 $[L:K]$ 阶循环群. 于是, 当 $G$ Abel 但不循环时, 两群阶相同但不互相同构; 当 $G$ 非 Abel 时, 两群阶不同.
+\end{remark}
+
+\section{第二个不等式的代数证明}\label{sec:VII.6}
+
+我们将对 $L/K$ 为 $p$ (素数) 次循环扩张的情形证明第二个不等式.
+
+\begin{lemma}\label{lem:vii.6.1}
+只需在 $K$ 包含 $p$ 次单位根的情形下证明第二个不等式.
+\end{lemma}
+
+\begin{proof}
+设 $\zeta$ 为一个本原 $p$ 次单位根 (取在包含 $L$ 的某个固定的 $K$ 的代数闭包中), 令 $K'=K[\zeta]$, $L'=K'\cdot L=L[\zeta]$. 则 $[K':K]=m|p-1$, 从而与 $p$ 互素. 于是 $K'\cap L=K$, 且有如下图形:
+\[
+\begin{tikzcd}[row sep=2.2em, column sep=2.2em]
+ & & L' \\
+ & K' \ar[ur, "p"] & & L \ar[ul, "m"'] \\
+ & & K \ar[ur, "p"] \ar[ul, "m"']
+\end{tikzcd}
+\]
+映射
+\[
+\Gal(L'/K)\to\Gal(L/K)\times\Gal(K'/K)
+\]
+是同构. 考虑图:
+\[
+\begin{tikzcd}[column sep=1.4em]
+\mathbf{C}_{L} \ar[r, "\Nm_{L/K}"] \ar[d, "i_{L}"'] & \mathbf{C}_{K} \ar[r] \ar[d, "i_{K}"'] & \mathbf{C}_{K}/\Nm\mathbf{C}_{L} \ar[r] \ar[d] & 0 \\
+\mathbf{C}_{L'} \ar[r, "\Nm_{L'/K'}"] \ar[d, "\Nm_{L'/L}"'] & \mathbf{C}_{K'} \ar[r] \ar[d, "\Nm_{K'/K}"'] & \mathbf{C}_{K'}/\Nm\mathbf{C}_{L'} \ar[r] \ar[d] & 0 \\
+\mathbf{C}_{L} \ar[r, "\Nm_{L/K}"] & \mathbf{C}_{K} \ar[r] & \mathbf{C}_{K}/\Nm\mathbf{C}_{L} \ar[r] & 0
+\end{tikzcd}
+\]
+这里 $i_L$ 与 $i_K$ 是由包含 $\mathbb{I}_L\hookrightarrow\mathbb{I}_{L'}$ 与 $\mathbb{I}_K\hookrightarrow\mathbb{I}_{K'}$ 诱导的映射; $\Nm_{L/K}$ 与 $\Nm_{L'/K'}$ 是映射
+\[
+x\mapsto\sum\sigma x,\quad\sigma\in\Gal(L/K)\simeq\Gal(L'/K'),
+\]
+而 $\Nm_{L'/L}$ 与 $\Nm_{K'/K}$ 是映射
+\[
+x\mapsto\sum\sigma x,\quad\sigma\in\Gal(L'/L)\simeq\Gal(K'/K).
+\]
+显然左侧的方块交换, 这蕴含图的其余部分存在. 复合
+\[
+\Nm_{L'/L}\circ i_{L}\quad\text{与}\quad\Nm_{K'/K}\circ i_{K}
+\]
+都是乘以 $m$. 因此复合
+\[
+\mathbf{C}_{K}/\Nm\mathbf{C}_{L}\to\mathbf{C}_{K'}/\Nm\mathbf{C}_{L'}\to\mathbf{C}_{K}/\Nm\mathbf{C}_{L}
+\]
+也是乘以 $m$, 从而是同构 (显然, $\mathbf{C}_K$ 中的 $p$ 次幂都是范, 故 $\mathbf{C}_K/\Nm\mathbf{C}_L$ 被 $p$ 杀死). 特别地, 第二个映射是满射, 故
+\[
+(\mathbf{C}_{K}:\Nm\mathbf{C}_{L})\ \text{整除}\ (\mathbf{C}_{K'}:\Nm\mathbf{C}_{L'}),
+\]
+而由假设, 后者整除 $p$.
+\end{proof}
+
+我们将对如下情形证明第二个不等式: $K$ 包含本原 $p$ 次单位根, 且 $L$ 是 $K$ 的指数为 $p$ 的有限 Abel 扩张, Galois 群为 $G$. 设 $[L:K]=p^{r}$, 则 $G\approx(\Z/p\Z)^{r}$. 由 Kummer 理论 (见本章附录), 存在 $a_1,\ldots,a_r\in K$ 使
+\[
+L=K\bigl[a_{1}^{\frac{1}{p}},\ldots,a_{r}^{\frac{1}{p}}\bigr].
+\]
+设 $S$ 为 $K$ 的素的有限集, 满足:
+
+(a) $S$ 包含无限素;
+
+(b) $S$ 包含 $p$ 的全部因子;
+
+(c) $S$ 充分大, 使得所有 $a_i$ 都是 $S$-单位;
+
+(d) $S$ 包含 $K$ 的理想类群的一组生成元, 从而 $\mathbb{I}_K=\mathbb{I}_{K,S}\cdot K^{\times}$ (见 \ref{lem:vii.4.2}).
+
+注意, 根据 (\ref{prop:vii.A.5}), 条件 (b) 与 (c) 蕴含 $S$ 包含在 $L$ 中分歧的全部素.
+
+照例, 我们以 $U(S)$ 记 $S$-单位群, 即在 $S$ 之外的所有素处都是单位的 $K^{\times}$ 中元素之群. 回顾单位定理:
+\[
+U(S)\approx\Z^{s-1}\times U(S)_{\mathrm{tors}},\qquad s=|S|.
+\]
+群 $U(S)_{\mathrm{tors}}$ 循环, 且在当前情形其阶被 $p$ 整除 (因为它包含 $\mu_p$), 故
+\[
+U(S)/U(S)^{p}\approx(\Z/p\Z)^{s}.
+\]
+令 $M=K[U(S)^{\frac{1}{p}}]$. 这是与群
+\[
+U(S)\cdot K^{\times p}/K^{\times p}\simeq U(S)/U(S)\cap K^{\times p}=U(S)/U(S)^{p}\approx(\Z/p\Z)^{s}
+\]
+相对应的 Kummer 扩张. 于是我们有扩张
+\[
+M\overset{p^{t}}{\supset}L\overset{p^{r}}{\supset}K,\qquad r+t=s.
+\]
+
+\begin{lemma}\label{lem:vii.6.2}
+存在与 $S$ 不交的 $K$ 的素的有限集 $T$, 使得 $\{(\mathfrak{p}_{v},M/K)\mid v\in T\}$ 构成 $\Gal(M/L)$ (视为 $\F_p$-向量空间) 的一组基.
+\end{lemma}
+
+\begin{proof}
+注意 $S$ 包含 $K$ 的在 $M$ 中分歧的全部素 (由 \ref{prop:vii.A.5}). 因此, 对位于不在 $S$ 中的素 $v$ 之上的 $M$ 的素 $w$, 扩张 $M_w/K_v$ 不分歧, 从而是指数为 $p$ 的循环扩张. 于是它要么是 $p$ 阶循环的, 要么平凡. 这样, 若 $M_w\ne L_w$, 则 $L_w=K_v$ (这里我用 $w$ 同时表示 $M$ 的素与其整除的 $L$ 的素).
+
+由 (\ref{prop:vii.4.7}), 存在 $M$ 的素的有限集 $T'$, 其元素均不整除 $S$ 中的素, 使得 $w\in T'$ 的 Frobenius 元 $(\mathfrak{p}_w,M/L)$ 生成 $\Gal(M/L)$. 必要时把 $T'$ 换成其子集, 可设这些 Frobenius 元构成 $\Gal(M/L)$ 的一组基. 设 $w\in T'$ 整除 $L$ 的素 $w_L$ 与 $K$ 的素 $w_K$. 由于 $M_w\ne L_{w_L}$, 有 $L_{w_L}=K_{w_K}$, 从而 $(\mathfrak{p}_w,M/L)=(\mathfrak{p}_w,M/K)$. 于是 $T=\{w_K\mid w\in T'\}$ 具有所需性质.
+\end{proof}
+
+注意 $T$ 的阶为 $t$, 其中 $p^{t}=[M:L]$, 且若 $w$ 是 $M$ 的满足 $w|v\in T$ 的素, 则 $L_w=K_v$.
+
+\begin{lemma}\label{lem:vii.6.3}
+采用上述记号: 元素 $a\in U(S)$ 在 $L$ 中成为 $p$ 次幂, 当且仅当它对所有 $v\in T$ 都在 $K_v$ 中成为 $p$ 次幂.
+\end{lemma}
+
+\begin{proof}
+$\implies$: 设 $a\in U(S)$. 若 $a$ 在 $L$ 中成为 $p$ 次幂, 则它对所有 $w$ 都在 $L_w^{\times}$ 中成为 $p$ 次幂. 但若 $w|v\in T$, 则 $L_w=K_v$, 故它在 $K_v$ 中成为 $p$ 次幂.
+
+$\Longleftarrow$: 设 $a\in U(S)$. 则 $a^{\frac{1}{p}}\in M$. 若 $a^{\frac{1}{p}}$ 对所有 $v\in T$ 都落在 $K_v$ 中, 则 $a^{\frac{1}{p}}$ 被所有 $v\in T$ 的 $(\mathfrak{p}_v,M/K)$ 固定, 从而被 $\Gal(M/L)$ 固定. 于是 $a^{\frac{1}{p}}$ 落在 $L$ 中, 故 $a\in L^{p}$.
+\end{proof}
+
+\begin{lemma}\label{lem:vii.6.4}
+$\mathbb{I}_K$ 的子群
+\[
+E=\prod_{v\in S}K_{v}^{\times p}\times\prod_{v\in T}K_{v}^{\times}\times\prod_{v\notin S\cup T}U_{v}
+\]
+包含在 $\Nm_{L/K}(\mathbb{I}_L)$ 中.
+\end{lemma}
+
+\begin{proof}
+设 $\mathbf{a}=(a_v)\in E$. 须证 $\mathbf{a}$ 的每个分量 $a_v$ 都是范.
+
+$v\in S$: 由局部类域论,
+\[
+K_{v}^{\times}/\Nm L_{w}^{\times}\xrightarrow{\ \simeq\ }\Gal(L_{w}/K_{v}).
+\]
+由于第二个群被 $p$ 杀死, 第一个群也必被 $p$ 杀死, 即 $K_v^{\times p}\subset\Nm L_w^{\times}$.
+
+$v\in T$: 此处 $L_w=K_v$, 故 $K_v$ 的每个元素都是来自 $L_w$ 的范.
+
+$v\notin S\cup T$: 由于 $L_w$ 在 $K_v$ 上不分歧, 范映射 $U_w\to U_v$ 是满射 (见 III, \ref{prop:iii.1.2}).
+\end{proof}
+
+现在
+\[
+(\mathbf{C}_{K}:\Nm\mathbf{C}_{L})=(\mathbb{I}_{K}:K^{\times}\cdot\Nm\mathbb{I}_{L}),
+\]
+它整除 $(\mathbb{I}_K:K^{\times}E)$, 故剩下只需证明
+\[
+\bigl(\mathbb{I}_{K}:K^{\times}E\bigr)\ \text{整除}\ p^{r}.
+\]
+但 $\mathbb{I}_K=K^{\times}\cdot\mathbb{I}_S=K^{\times}\cdot\mathbb{I}_{S\cup T}$, 故
+\[
+(\mathbb{I}_{K}:K^{\times}E)=(K^{\times}\mathbb{I}_{S\cup T}:K^{\times}E).
+\]
+
+\begin{lemma}\label{lem:vii.6.5}
+设 $A$, $B$, $C$ 是某个 Abel 群的子群, 且 $A\supset B$. 则
+\[
+(AC:BC)(A\cap C:B\cap C)=(A:B),
+\]
+其含义是: 若其中两个指数有限, 则第三个也有限, 且等式成立.
+\end{lemma}
+
+\begin{proof}
+在下述交换图中, 列与前两行显然正合, 由此 (例如用蛇形引理) 推得底行
+\[
+\begin{tikzcd}[column sep=1.2em, row sep=1.2em]
+ & 0 \ar[d] & 0 \ar[d] & 0 \ar[d] & \\
+0 \ar[r] & B\cap C \ar[r] \ar[d] & B \ar[r] \ar[d] & BC/C \ar[d] \ar[r] & 0 \\
+0 \ar[r] & A\cap C \ar[r] \ar[d] & A \ar[r] \ar[d] & AC/C \ar[d] \ar[r] & 0 \\
+0 \ar[r] & A\cap C/B\cap C \ar[r] \ar[d] & A/B \ar[r] \ar[d] & AC/BC \ar[r] \ar[d] & 0 \\
+ & 0 & 0 & 0 &
+\end{tikzcd}
+\]
+正合. 这就证明了断言.
+\end{proof}
+
+对 $A=\mathbb{I}_{S\cup T}$, $B=E$, $C=K^{\times}$ 应用该引理, 得
+\[
+(\mathbb{I}_{K}:K^{\times}E)=\frac{(\mathbb{I}_{S\cup T}:E)}{(U(S\cup T):K^{\times}\cap E)}.
+\]
+
+\begin{lemma}\label{lem:vii.6.6}
+采用上述记号:
+\[
+(\mathbb{I}_{S\cup T}:E)=p^{2s}.
+\]
+\end{lemma}
+
+\begin{lemma}\label{lem:vii.6.7}
+采用上述记号:
+\[
+(U(S\cup T):K^{\times}\cap E)=p^{s+t}.
+\]
+\end{lemma}
+
+由于 $r+t=s$, 这将证明待证的公式.
+
+(\ref{lem:vii.6.6} 的) 证明: 显然 $(\mathbb{I}_{S\cup T}:E)=\prod_{v\in S}(K_{v}^{\times}:K_{v}^{\times p})$. 由于 $S$ 中有 $s$ 个素, 而 $K$ 包含 $p$ 个互异的 $p$ 次单位根, 下述命题表明
+\[
+\bigl(\mathbb{I}_{S\cup T}:E\bigr)=\frac{p^{2s}}{\prod_{v\in S}|p|_{v}}.
+\]
+由假设, $S$ 包含所有使 $|p|_{v}\ne1$ 的素, 故
+\[
+\prod_{v\in S}|p|_{v}=\prod_{\text{一切 }v}|p|_{v},
+\]
+由乘积公式, 后者等于 $1$.
+
+\begin{proposition}\label{prop:vii.6.8}
+设 $K$ 为特征零的局部域, $\mu_n$ 为 $K^{\times}$ 中 $n$ 次单位根之群. 则
+\[
+(K^{\times}:K^{\times n})=n\cdot\frac{|\mu_{n}|}{|n|}.
+\]
+若 $K$ 非阿基米德, $U$ 为 $K$ 的单位群, 则
+\[
+(U:U^{n})=\frac{|\mu_{n}|}{|n|}.
+\]
+\end{proposition}
+
+\begin{proof}
+若 $K=\CC$, 第一式化为 $1=n\cdot\frac{n}{n^{2}}$; 若 $K=\R$, 当 $n$ 为奇数时化为 $1=n\cdot\frac{1}{n}$, 当 $n$ 为偶数时化为 $2=n\cdot\frac{2}{n}$. 若 $K$ 非阿基米德, 则 $K^{\times}\approx U\times\Z$, 故
+\[
+(K^{\times}:K^{\times n})=(U:U^{n})(\Z:n\Z)=(U:U^{n})\,n.
+\]
+因此剩下只需证明第二式.
+
+对 Abel 群 $M$, 记
+\[
+h_{n}(M)=(M:nM)/(M_{n}:1),\quad M_{n}=\{x\in M\mid nx=0\}.
+\]
+则 $h_n(M)$ 是把 $M$ 视为具有平凡作用的 $\Z/n\Z$-模时的 Herbrand 商, 故可应用 II, \S\ref{sec:II.2} 的结果.
+
+正如 (III, \ref{lem:iii.2.4}) 的证明中所见, 指数映射给出从 $\mathcal{O}_K$ 的一个有限指数子群到 $U$ 的一个有限指数子群的同构. 因此
+\[
+h_{n}(U)=h_{n}(\mathcal{O}_{K})=(\mathcal{O}_{K}:n\mathcal{O}_{K})\overset{\mathrm{def}}{=}|n|^{-1}.
+\]
+故
+\[
+(U:U^{n})=\frac{(U_{n}:1)}{|n|}.
+\]
+由于 $U_{n}=\mu_{n}$, 第二式得证.
+\end{proof}
+
+(\ref{lem:vii.6.7} 的) 证明: 显然 $K^{\times}\cap E\supset U(S\cup T)^{p}$. 由单位定理 (如前) 得 $(U(S\cup T):U(S\cup T)^{p})=p^{s+t}$, 故剩下只需证明
+\[
+K^{\times}\cap E\subset U(S\cup T)^{p}.
+\]
+这一点由下面两个引理完成 (第一个表明第二个引理可用来证明该包含关系).
+
+\begin{lemma}\label{lem:vii.6.9}
+在上述假设下, 显然映射
+\[
+U(S)\to\prod_{v\in T}U_{v}/U_{v}^{p}
+\]
+是满射.
+\end{lemma}
+
+\begin{proof}
+设 $H$ 为该映射的核. 为证映射满射, 我们将证明
+\[
+(U(S):H)=\prod_{v\in T}(U_{v}:U_{v}^{p}).
+\]
+由于 $T$ 与 $S$ 不交, 对所有 $v\in T$ 有 $|p|_{v}=1$, 故由 (\ref{prop:vii.6.8}) 右端为 $p^{t}$. 另一方面, 由引理\ref{lem:vii.6.3}, $H=U(S)\cap L^{\times p}$, 故
+\[
+U(S)/H=U(S)/U(S)\cap L^{\times p}\simeq U(S)\cdot L^{\times p}/L^{\times p}.
+\]
+最后一个群由 Kummer 理论 (见 \ref{thm:vii.A.3}) 对应于扩张 $M/L$, 从而阶为 $[M:L]=p^{t}$.
+\end{proof}
+
+\begin{proposition}\label{prop:vii.6.10}
+设 $K$ 为包含本原 $n$ 次单位根的数域. 设 $S$ 为包含无限素、$n$ 的因子以及 $K$ 的理想类群的一组代表元的素集. 设 $T$ 为与 $S$ 不交的素集, 使得
+\[
+U(S)\to\prod_{v\in T}U_{v}/U_{v}^{n}
+\]
+是满射. 设 $b\in K^{\times}$ 对所有 $v\in S$ 都是 $K_v$ 中的 $n$ 次幂, 且在 $S\cup T$ 之外是单位. 则 $b\in K^{\times n}$.
+\end{proposition}
+
+\begin{proof}
+令 $L=K[b^{\frac{1}{n}}]$, 须证 $L=K$. 令
+\[
+D=\prod_{v\in S}K_{v}^{\times}\times\prod_{v\in T}U_{v}^{n}\times\prod_{v\notin S\cup T}U_{v}.
+\]
+由引理\ref{lem:vii.4.5}, 为证 $L=K$, 只需证明:
+
+(a) $D\subset\Nm_{L/K}\mathbb{I}_L$, 且
+
+(b) $D\cdot K^{\times}=\mathbb{I}_K$.
+
+(a) 设 $\mathbf{d}=(d_v)\in D$. 须验证 $d_v$ 对所有 $v$ 都是来自 $K_v[b^{\frac{1}{n}}]$ 的范. $v\in S$: 此时 $K_v[b^{\frac{1}{n}}]=K_v$, 故 $K_v$ 的每个元素都是范. $v\in T$: 由局部类域论, 指数 $(K_{v}^{\times}:\Nm K_{v}[b^{\frac{1}{n}}]^{\times})$ 等于次数 $[K_v[b^{\frac{1}{n}}]:K_v]$, 后者整除 $n$. 故 $K_v$ 中的每个 $n$ 次幂都是范. $v\notin S\cup T$: 因为 $nb$ 在 $v$ 处是单位, 域 $K_v[b^{\frac{1}{n}}]$ 在 $K_v$ 上不分歧, 故每个单位都是范.
+
+(b) 显然 $\mathbb{I}_S/D=\prod_{v\in T}U_v/U_v^{n}$, 且由假设 $U(S)\to\prod_{v\in T}U_v/U_v^{n}$ 是满射. 故 $\mathbb{I}_S=D\cdot U(S)$, 从而
+\[
+\mathbb{I}_{K}=\mathbb{I}_{S}\cdot K^{\times}=D\cdot U(S)\cdot K^{\times}=D\cdot K^{\times}.
+\]
+\end{proof}
+
+这就完成了定理\ref{thm:vii.5.1} (第二个不等式) 的证明.
+
+\section{对 Brauer 群的应用}\label{sec:VII.7}
+
+我们令 $H^{2}(L/K)=H^{2}(\Gal(L/K),L^{\times})$ 且 $H^{2}(-/K)=H^{2}(\Gal(K^{\mathrm{al}}/K),K^{\mathrm{al}\times})$. 读过第 \ref{ch:IV} 章的读者会认出: $H^{2}(L/K)\simeq\mathrm{Br}(L/K)$, $H^{2}(-/K)=\mathrm{Br}(K)$.
+
+\begin{theorem}\label{thm:vii.7.1}
+对数域的每个 Galois 扩张 $L/K$ (可以是无限的), 典范映射
+\[
+H^{2}(L/K)\to\bigoplus_{v}H^{2}(L^{v}/K_{v})
+\]
+是单射.
+\end{theorem}
+
+\begin{proof}
+先设 $L/K$ 是具有 Galois 群 $G$ 的有限 Galois 扩张. 由于 $H^{1}(G,\mathbf{C}_{L})=0$,
+\[
+0\to L^{\times}\to\mathbb{I}_{L}\to\mathbf{C}_{L}\to 0
+\]
+的上同调序列为
+\[
+0\to H^{2}(G,L^{\times})\to H^{2}(G,\mathbb{I}_{L})\to\cdots.
+\]
+但
+\[
+H^{2}(G,L^{\times})=H^{2}(L/K),
+\]
+且 (见 \ref{prop:vii.2.5})
+\[
+H^{2}(G,\mathbb{I}_{L})=\bigoplus H^{2}(G^{v},L^{v\times})=\bigoplus H^{2}(L^{v}/K_{v}),
+\]
+这就证明了该情形下的定理. 对无限扩张的情形, 在有限 Galois 子扩张上取极限即可.
+\end{proof}
+
+称域的扩张 $L/K$ 为\textbf{分圆}的 (cyclotomic), 若 $L\subset K[\zeta]$, 其中 $\zeta$ 是某个单位根. 下述命题将在整体互反律的证明中发挥作用.
+
+\begin{proposition}\label{prop:vii.7.2}
+对每个 $\beta\in H^{2}(-/K)$, 存在 $K$ 的循环分圆扩张 $L$, 使 $\beta$ 在 $H^{2}(-/L)$ 中的像为零.
+\end{proposition}
+
+\begin{proof}
+定理表明 $\beta$ 由其在 $H^{2}(K_v)$ 中的像决定, 从而由不变量 $\mathrm{inv}_{v}(\beta_{v})\in\Q/\Z$ 决定 (见第 \ref{ch:III} 章的定理\ref{thm:iii.2.1}). 对 $K$ 的每个有限扩张 $L$ 与 $L$ 的素 $w|v$, 有 $\mathrm{inv}_{w}(\beta|L)=[L_{w}:K_{v}]\cdot\mathrm{inv}_{v}(\beta)$ (同前), 故只需求一个循环分圆扩张 $L/K$, 使得对所有 $v$,
+\[
+[L^{v}:K_{v}]\cdot\operatorname{inv}_{v}(\beta_{v})=0\ \bmod\ \Z.
+\]
+注意: 由于 $H^{2}(-/K)$ (由定理\ref{thm:vii.7.1}) 单射地映入局部群的直和, $\mathrm{inv}_{v}(\beta_{v})=0$ 对几乎所有 $v$ 成立. 故存在整数 $m>0$ 使 $m\,\mathrm{inv}_{v}(\beta_{v})=0$ 对所有 $v$ 成立. 具有所需性质的 $L$ 的存在性由下一个引理保证.
+\end{proof}
+
+\begin{lemma}\label{lem:vii.7.3}
+给定数域 $K$、$K$ 的有限素的有限集 $S$ 与整数 $m>0$, 存在 $K$ 的全复循环分圆扩张 $L$, 使得 $m|[L^{v}:K_{v}]$ 对所有 $v\in S$ 成立.
+\end{lemma}
+
+\begin{proof}
+只需对 $\Q$ 与 $m\cdot[K:\Q]$ 证明. 故不妨设 $K=\Q$.
+
+设 $l$ 为素数, $\zeta$ 为本原 $l^{r}$ 次单位根, $r>2$. 则 $\Gal(\Q[\zeta]/\Q)\simeq(\Z/l^{r}\Z)^{\times}$, 且
+\[
+(\Z/l^{r}\Z)^{\times}\approx
+\begin{cases}
+\Delta\times C(l^{r-1}) & l\ \text{为奇数},\\
+\Delta\times C(2^{r-2}) & l=2,
+\end{cases}
+\]
+其中 $\Delta$ 在两种情形下分别为 $l-1$ 阶与 $2$ 阶, $C(t)$ 表示 $t$ 阶循环群 (\cite{Serre1970}, II, 3.2). 因此 $L(l^{r})\overset{\text{def}}{=}\Q[\zeta]^{\Delta}$ 是 $\Q$ 的 $l^{r-2}$ 次或 $l^{r-3}$ 次循环分圆扩张.
+
+再看 $\Q_p[\zeta]$. 若 $p=l$, 则 $\Q[\zeta]$ 在 $p$ 上全分歧, 故 $[\Q_p[\zeta]:\Q_p]=[\Q[\zeta]:\Q]=\varphi(l^{r})$. 若 $p\ne l$, 则 $\Q[\zeta]$ 在 $p$ 上全不分歧, 而 $[\Q_p[\zeta]:\Q_p]$ 是使 $l^{r}|p^{t}-1$ 的最小整数 $t$. 无论哪种情形, 当 $r\to\infty$ 时都有 $[\Q_p[\zeta]:\Q_p]\to\infty$. 于是对每个 $p$, $[L(l^{r})_p:\Q_p]$ 是随 $r\to\infty$ 趋于 $\infty$ 的 $l$ 的幂.
+
+互异素数幂阶的循环群之积仍是循环群. 因此, 对互异的素数 $l_1,\ldots,l_s$, $L=L(l_1^{r_1})\cdots L(l_s^{r_s})$ 是循环的, 并且显然, 取 $l_1^{r_1}\ldots l_s^{r_s}$ 充分大, 即可保证局部次数 $[L_p:\Q_p]$ 对所有 $p\in S$ 都被 $m$ 整除.
+\end{proof}
+
+用更具体的话说, 上述两个结果表明:
+
+若 $K$ 上的中心单代数在所有 $K_v$ 上分裂, 则它在 $K$ 上分裂;
+
+$K$ 上的每个中心单代数都在 $K$ 的某个循环分圆扩张上分裂.
+
+\section{互反律证明的完成}\label{sec:VII.8}
+
+回顾: 对数域的有限 Abel 扩张 $L/K$ (Galois 群为 $G$), 我们定义了同态 $\phi_{L/K}\colon\mathbb{I}_K\to G$, $\phi_{L/K}(\mathbf{a})=\prod_v\phi_v(a_v)$.
+
+\begin{theorem}\label{thm:vii.8.1}
+(a) 设 $L/K$ 是数域的有限 Abel 扩张. 则 $\phi_{L/K}$ 在主 idèle 子群 $K^{\times}\subset\mathbb{I}_K$ 上取值 $1$.
+
+(b) 设 $L/K$ 是数域的有限 Galois 扩张. 则对一切 $\alpha\in H^{2}(L/K)$ 有 $\sum\mathrm{inv}_{v}(\alpha)=0$.
+\end{theorem}
+
+在证明该定理之前, 我们解释为什么 (a) 蕴含 $L/K$ 的互反律. 断言 (a) 说 $\phi_{L/K}\colon\mathbb{I}_K\to\Gal(L/K)$ 的核包含 $K^{\times}$. 我们已经知道它的核包含 $\Nm_{L/K}(\mathbb{I}_L)$\footnote{因为这在局部成立.}, 故它定义同态
+\begin{equation*}
+\mathbb{I}_{K}/K^{\times}\cdot\Nm_{L/K}\mathbb{I}_{L}\to\Gal(L/K)\tag{$*$}
+\end{equation*}
+对在 $L$ 中不分歧的 $K$ 的每个有限素 $v$, $\phi_{L/K}$ 把在 $v$-分量处为素元的 idèle 映到 Frobenius 元 $(\mathfrak{p}_v,L/K)$, 故 (\ref{prop:vii.4.7}) 表明 $\phi_{L/K}$ 是满射. 另一方面, 第二个不等式 (\ref{thm:vii.5.1}) 断言
+\[
+(\mathbb{I}_{K}:K^{\times}\cdot\Nm_{L/K}\mathbb{I}_{L})\le[L:K],
+\]
+故同态 $(*)$ 是同构.
+
+\begin{example}\label{ex:vii.8.2}
+我们对扩张 $\Q[\zeta_m]/\Q$ 验证 (\ref{thm:vii.8.1}a), 其中 $\zeta_m$ 是本原 $m$ 次单位根. 把 $\Gal(\Q[\zeta_m]/\Q)$ 与 $(\Z/m\Z)^{\times}$ 等同: 对与 $m$ 互素的整数 $n$, $[n]$ 表示把 $\zeta_m$ 映到 $\zeta_m^{n}$ 的 $\Q[\zeta_m]$ 的自同构. 只需证: 对所有 $l|m$ 都有 $\phi(a)|_{\Q[\zeta_{l^{r}}]}=1$. 于是可设 $m=l^{r}$, $m\ne 2$.
+
+同态 $\phi_{\infty}\colon\R^{\times}/\Nm(\CC^{\times})\to\Gal(\Q[\zeta_m]/\Q)$ 把每个负实数映为共轭运算. 故 $\phi_{\infty}(a)=[\operatorname{sign}(a)]$.
+
+设 $a=up^{s}\in\Q_p^{\times}$. 若 $p\ne l$, 则 $p$ 在 $\Q[\zeta_m]$ 中不分歧, 且 $\phi_p(a)$ 的作用是 $p$ 处 Frobenius 元的 $s$ 次幂:
+\[
+\phi_{p}(up^{s})=[p^{s}].
+\]
+素数 $l$ 在 $\Q[\zeta_m]$ 中全分歧, 且
+\[
+\phi_{l}(a)=[u^{-1}]
+\]
+(见 I, \ref{ex:3.13}).\footnote{正如 Catherine O'Neil 向我指出的, 这里用到了第 \ref{ch:I} 章 \S 3 的一个结果, 与我所说的``可以跳过第 \ref{ch:I} 章 \S 2--4''相悖. 不过, 对 $\Q$ 的分圆扩张, 有可能用初等方法证明定理\ref{thm:vii.8.1} 的 (a). 例如, 用 \hyperlink{item:v.5.10}{V, 5.10} 中的图定义 $\phi_{\Q}$, 再验证其局部分量正确. 这一点将在未来版本中澄清. (另见注记\ref{rem:vii.8.3}.)}
+
+只需在三种情形 $a=-1$, $a=l$, $a=$ 素数 $q\ne l$ 下证明 $\phi(a)=1$. 我们有:
+\[
+\phi_{p}(-1)=
+\begin{cases}
+[-1] & \text{若 } p=\infty,\\
+[-1] & \text{若 } p=l,\\
+[1] & \text{若 } p\ne l,\infty,
+\end{cases}
+\qquad
+\phi_{p}(l)=
+\begin{cases}
+[1] & \text{若 } p=l,\\
+[1] & \text{若 } p\ne l,
+\end{cases}
+\]
+\[
+\phi_{p}(q)=
+\begin{cases}
+[q] & \text{若 } p=q,\\
+[q^{-1}] & \text{若 } p=l,\\
+[1] & \text{若 } p\ne l,q.
+\end{cases}
+\]
+每种情形下都有 $\prod\phi_p(a)=1$.
+\end{example}
+
+\begin{remark}\label{rem:vii.8.3}
+在例 V \ref{ex:v.4.10} 中, 我们证明了: 附加到 Artin 映射 $\phi\colon C_{\infty(m)}\to\Gal(\Q[\zeta_m]/\Q)$ 上的同态 $\phi\colon\mathbb{I}_{\Q}\to\Gal(\Q[\zeta_m]/\Q)$ 的局部分量等于局部 Artin 映射. 由于按定义 $\phi(\Q^{\times})=1$, 这给出了 (\ref{thm:vii.8.1}a) 在 $\Q[\zeta_m]/\Q$ 情形的另一个证明.
+\end{remark}
+
+\begin{lemma}\label{lem:vii.8.4}
+(a) 若 \ref{thm:vii.8.1}(a) 对 $L/K$ 成立, 则它对每个子扩张也成立.
+
+(b) 若 \ref{thm:vii.8.1}(a) 对 $L/K$ 成立, 则它对 $L\cdot K'/K'$ 也成立, 其中 $K'\supset K$ 为任意数域.
+\end{lemma}
+
+\begin{proof}
+(a) 设 $L\supset K'\supset K$. 则 $\phi_{K'/K}$ 是 $\phi_{L/K}$ 与限制映射 $\Gal(L/K)\to\Gal(K'/K)$ 的复合 (因为这对局部 Artin 映射成立).
+
+(b) 令 $L'=L\cdot K'$. 对 $K'$ 的每个素 $w$, 有交换图
+\[
+\begin{tikzcd}
+K_{w}^{\prime\times}\ar[r, "\phi_{w}"]\ar[d, "\Nm"'] & \Gal(L^{\prime w}/K'_{w})\ar[d, "\operatorname{res}"]\\
+K_{v}^{\times}\ar[r, "\phi_{v}"'] & \Gal(L^{v}/K_{v}).
+\end{tikzcd}
+\]
+把它们合并, 得交换图:
+\[
+\begin{tikzcd}
+\mathbb{I}_{K'}\ar[r, "\phi_{L'/K'}"]\ar[d, "\Nm"'] & \Gal(L'/K')\ar[d, "\operatorname{res}"]\\
+\mathbb{I}_{K}\ar[r, "\phi_{L/K}"'] & \Gal(L/K).
+\end{tikzcd}
+\]
+由于 idèle 上的范映射把 $K'^{\times}$ 映入 $K^{\times}$, 由先前的结果即得本引理.
+\end{proof}
+
+由例\ref{ex:vii.8.2} 与引理\ref{lem:vii.8.4}, 我们得到: (\ref{thm:vii.8.1}a) 对数域 $K$ 的所有分圆扩张\footnote{称扩张 $L/K$ 为\textbf{分圆}的 (cyclotomic), 若 $L\subset K[\zeta]$, $\zeta$ 为某个单位根.}成立.
+
+接下来需要在定理\ref{thm:vii.8.1} 的两个断言之间建立联系.
+
+\begin{lemma}\label{lem:vii.8.5}
+设 $L/K$ 是数域的 Abel 扩张. 若 \ref{thm:vii.8.1}(b) 对 $L/K$ 成立, 则 \ref{thm:vii.8.1}(a) 也成立. 反之, 若 $L/K$ 循环且 \ref{thm:vii.8.1}(a) 对 $L/K$ 成立, 则 \ref{thm:vii.8.1}(b) 也成立.
+\end{lemma}
+
+\begin{proof}
+设 $\chi\in\operatorname{Hom}(G,\Q/\Z)$. 可把 $\chi$ 视为 $H^{1}(G,\Q/\Z)$ 的元素, 其在由序列
+\[
+0\to\Z\to\Q\to\Q/\Z\to 0
+\]
+产生的边缘映射下的像是一个元素 $\delta\chi\in H^{2}(G,\Z)$. 考虑图
+\[
+\begin{tikzcd}
+K^{\times}\ar[r]\ar[d] & \mathbb{I}_{K}\ar[r, "\phi_{L/K}"]\ar[d] & G\ar[d, "\chi"]\\
+H^{2}(G,L^{\times})\ar[r] & H^{2}(G,\mathbb{I}_{L})\ar[r] & \Q/\Z.
+\end{tikzcd}
+\]
+前两个竖直箭头是与 $\delta\chi$ 的杯积: 若 $\delta\chi$ 由 2-上循环 $n_{\sigma,\tau}$ 表示, 则 $x$ 的像由 2-上循环 $\sigma,\tau\mapsto x^{n_{\sigma,\tau}}$ 表示. 显然左侧方块交换. 右侧竖直映射就是 $\chi$ 本身. 右侧方块交换由 (III, \ref{prop:iii.3.6}) 推出. 现设 \ref{thm:vii.8.1}(b) 对 $L/K$ 成立. 则 $\chi(\phi_{L/K}(a))=0$ 对 $G$ 的所有特征 $\chi$ 成立, 故 $\phi_{L/K}(a)$ 本身为零. 反之, 当 $G$ 循环时, 可取 $\chi$ 为单射, 于是 8.1(a) 蕴含 8.1(b), 因为此时 $\cup\delta\chi$ 是同构 (II, \ref{rem:ii.3.5}).
+\end{proof}
+
+既然我们已对分圆扩张知道 \ref{thm:vii.8.1}(a), 也就对循环分圆扩张知道 \ref{thm:vii.8.1}(b). 此外, 一旦证明了定理的 (b), 整个定理便得证. 于是, 下述结果完成了定理的证明.
+
+\begin{lemma}\label{lem:vii.8.6}
+若 \ref{thm:vii.8.1}(b) 对循环分圆扩张成立, 则它对所有有限 Galois 扩张成立.
+\end{lemma}
+
+\begin{proof}
+设 $\beta\in H^{2}(-/K)$. 已知: 若 $\beta\in H^{2}(L/K)$, 其中 $L/K$ 为某个循环分圆扩张, 则 $\sum\mathrm{inv}_{v}(\beta)=0$, 其中 $\beta_v$ 是 $\beta$ 在 $H^{2}(K_v)$ 中的像; 而命题\ref{prop:vii.7.2} 说 $H^{2}(-/K)$ 中的每个 $\beta$ 都落在某个循环分圆扩张 $L/K$ 的 $H^{2}(L/K)$ 中.
+
+[附注: 这里用到 inflation-restriction 序列
+\[
+0\to H^{2}(\Gal(L/K),L^{\times})\to H^{2}(G_{K},\bar{K}^{\times})\to H^{2}(G_{L},\bar{L}^{\times}),
+\]
+且如上的 $\beta$ 落在中间的群中, 并在右侧的群中为零.]
+\end{proof}
+
+\section{存在定理}\label{sec:VII.9}
+
+本节证明存在定理: idèle 类群的每个有限指数开子群都是范群. 证明的大部分可以从第 \ref{sec:VII.6} 节中抽取出来. 但为了免去一些重复, 我给出一个独立于第 \ref{sec:VII.6} 节的证明 (只依赖几个初等断言).
+
+\begin{lemma}\label{lem:vii.9.1}
+若 $U$ 是范群, $V\supset U$, 则 $V$ 也是范群.
+\end{lemma}
+
+\begin{proof}
+设 $U=\Nm\mathbf{C}_L$. 根据互反律, Artin 映射定义同构
+\[
+\phi\colon\mathbf{C}_{K}/U\to\Gal(L/K).
+\]
+设 $M$ 为 $\phi(V)$ 的固定域, 则 $\phi$ 定义同构
+\[
+\mathbf{C}_{K}/V\to\Gal(M/K),
+\]
+而根据互反律, $\phi\colon\mathbf{C}_K\to\Gal(M/K)$ 的核是 $\Nm_{M/K}\mathbf{C}_M$.
+\end{proof}
+
+从素数分解即可看出: 有理数 $a$ 是 $n$ 次幂, 当且仅当它在 $\R$ 中和在所有素数 $p|a$ 的 $\Q_p$ 中都是 $n$ 次幂. 对数域证明类似的命题则需要互反律 (或复分析).
+
+\begin{proposition}\label{prop:vii.9.2}
+设 $K$ 为包含本原 $n$ 次单位根的数域, $S\supset S_{\infty}$ 为 $K$ 的素的有限集, 包含所有整除 $n$ 的素以及足以生成 $K$ 的类群的素. 若 $a\in K^{\times}$ 满足:
+
+-- $a$ 对所有 $v\in S$ 都是 $K_v$ 中的 $n$ 次幂;
+
+-- $a$ 对所有 $v\notin S$ 都是 $K_v$ 中的单位.
+
+则 $a$ 是 $K$ 中的 $n$ 次幂.
+\end{proposition}
+
+\begin{proof}
+令 $L=K[a^{1/n}]$. 由于 $\zeta_n\in K$, 这是 $K$ 的 Abel 扩张.\footnote{来自 Wojtek Wawr\'ow: 由于证明中的 $L=K[a^{1/n}]$ 是循环的, 此证明似乎只用到第一个不等式 (确切地说是引理\ref{lem:vii.4.5}), 而非完整的互反律. 此外, 这个命题似乎在书中任何地方都没有被用到.} 对每个素 $v\in S$, $X^{n}-a$ 在 $K_v[X]$ 中完全分裂, 故对所有 $w|v$ 有 $L_w=K_v$, 从而范映射 $L_{w}^{\times}\to K_{v}^{\times}$ 是满射. 另一方面, $L$ 在每个 $v\notin S$ 处于 $K$ 不分歧, 故范映射 $\Nm_{L/K}\colon U_w\to U_v$ 是满射. 因此 $\Nm_{L/K}(\mathbb{I}_L)\supset\mathbb{I}_S$, 于是
+\[
+K^{\times}\cdot\Nm_{L/K}(\mathbb{I}_{L})\supset K^{\times}\cdot\mathbb{I}_{S}=\mathbb{I}_{K}.
+\]
+互反律现在表明 $L=K$, 故 $a$ 是 $K$ 中的 $n$ 次幂.
+\end{proof}
+
+\begin{lemma}[存在定理的关键情形]\label{lem:vii.9.3}
+设 $K$ 为包含本原 $p$ 次单位根的数域 ($p$ 为素数). 则 $\mathbf{C}_K$ 的每个使 $\mathbf{C}_K/V$ 为被 $p$ 杀死的有限群的开子群 $V$ 都是范群.
+\end{lemma}
+
+\begin{proof}
+设 $S\supset S_{\infty}$ 为 $K$ 的素的有限集, 包含无限素、整除 $p$ 的素, 以及足以使 $\mathbb{I}_K=K^{\times}\cdot\mathbb{I}_S$ 的素. 设 $L$ 为由 Kummer 理论对应于群 $U(S)\cdot K^{\times p}$ 的 $K$ 的扩张, 即 $L=K[U(S)^{\frac{1}{p}}]$, 并令
+\[
+E=\prod_{v\in S}K_{v}^{\times p}\times\prod_{v\notin S}U_{v}.
+\]
+我们将通过验证
+\[
+\text{(a)}\ E\subset\Nm(\mathbb{I}_{L});\qquad \text{(b)}\ (\mathbb{I}_{K}:K^{\times}\cdot E)=p^{s}=(\mathbb{I}_{K}:K^{\times}\cdot\Nm_{L/K}(\mathbb{I}_{L}))
+\]
+来证明 $K^{\times}\cdot E=K^{\times}\cdot\Nm(\mathbb{I}_L)$.
+
+对 $K$ 的任意素 $v$ 与其上的 $L$ 的素 $w$, 局部 Artin 映射是同构
+\[
+K_{v}^{\times}/\Nm(L_{w}^{\times})\to\Gal(L_{w}/K_{v}).
+\]
+由于 $L/K$ 具有指数 $p$, $\Nm(L_{w}^{\times})\supset K_{v}^{\times p}$.
+
+对任意 $v\notin S$, $L$ 在 $v$ 处于 $K$ 不分歧, 故范映射 $U_w\to U_v$ 是满射.
+
+合并上述两段的结论, 便得 (a).
+
+由互反律,
+\[
+(\mathbb{I}_{K}:K^{\times}\cdot\Nm(\mathbb{I}_{L}))=[L:K],
+\]
+而由 Kummer 理论,
+\[
+[L:K]=(U(S)\cdot K^{\times p}:K^{\times p}).
+\]
+但
+\[
+U(S)\cdot K^{\times p}/K^{\times p}\approx U(S)/U(S)\cap K^{\times p}.
+\]
+若 $a^{p}\in U(S)$, 则 $a\in U(S)$, 故 $U(S)\cap K^{\times p}=U(S)^{p}$. 于是, 由 Dirichlet 单位定理 (ANT, 5.9),
+\[
+U(S)\approx U(S)_{\mathrm{torsion}}\oplus\Z^{s-1},
+\]
+且 $U(S)_{\mathrm{torsion}}$ 是 $K$ 中单位根之群, 是阶被 $p$ 整除的循环群. 故 $(U(S):U(S)^{p})=p^{s}$.
+
+另一方面,
+\[
+(\mathbb{I}_{K}:K^{\times}\cdot E)=(\mathbb{I}_{S}\cdot K^{\times}:E\cdot K^{\times}),
+\]
+由 (\ref{lem:vii.6.5}), 它等于
+\[
+(\mathbb{I}_{S}:E)/(\mathbb{I}_{S}\cap K^{\times}:E\cap K^{\times}).
+\]
+因此 (见 \ref{prop:vii.6.8}),
+\[
+\bigl(\mathbb{I}_{S}:E\bigr)=\prod_{v\in S}(K_{v}^{\times}:K_{v}^{\times p})=\prod_{v\in S}\frac{p}{|p|_{v}}\cdot p=p^{2s}.
+\]
+这里用到 $K$ 包含本原 $p$ 次单位根, 且 $S$ 包含所有使 $|p|_{v}\ne1$ 的 $v$, 故由乘积公式 $\prod_{v\in S}|p|_{v}=\prod_{\text{一切 }v}|p|_{v}=1$. 由此推出 $K^{\times}\cdot E=K^{\times}\cdot\Nm\mathbb{I}_{L}$.
+
+现在设 $V$ 为 $\mathbf{C}_K$ 的使 $\mathbf{C}_K/V$ 被 $p$ 杀死的开子群, $U$ 为 $V$ 在 $\mathbb{I}_K$ 中的原像. 则 $U$ 在 $\mathbb{I}_K$ 中开, 故存在素的有限集 $S$ 使 $U\supset\prod_{v\in S}1\times\prod_{v\notin S}U_v$. 此外, $\mathbb{I}_K/U$ 具有指数 $p$, 故 $U\supset\mathbb{I}_K^{p}$. 于是 $U\supset E\cdot K^{\times}$, 而 $E\cdot K^{\times}/K^{\times}$ 是范群, 故 $U/K^{\times}=V$ 也是范群.
+\end{proof}
+
+为简便起见, 在下一个引理的证明中, 我们假定范式限制定理 (该定理要到下一章才证明). 关于避免使用该定理的证明, 见 \cite{CasselsFrohlich1967} 中 Tate 的文章 p.~202.
+
+\begin{lemma}\label{lem:vii.9.4}
+设 $U$ 为 $\mathbf{C}_K$ 的有限指数开子群. 若存在有限扩张 $K'/K$ 使得 $\Nm_{K'/K}^{-1}(U)$ 是范群, 则 $U$ 也是范群.
+\end{lemma}
+
+\begin{proof}
+记 $U'$ 为 $\Nm_{K'/K}^{-1}(U)$, 并设 $L$ 是满足 $\Nm\mathbf{C}_L=U'$ 的 $K'$ 的 Abel 扩张. 若 $M$ 是 $L/K$ 的极大 Abel 子扩张, 则
+\[
+\Nm_{M/K}\mathbf{C}_{M}=\Nm_{L/K}\mathbf{C}_{L}=\Nm_{K'/K}U'\subset U,
+\]
+于是可应用引理\ref{lem:vii.9.1}.
+\end{proof}
+
+\begin{theorem}\label{thm:vii.9.5}
+$\mathbf{C}_K$ 的每个有限指数子群都是范群.
+\end{theorem}
+
+\begin{proof}
+对 $U$ 的指数作归纳. 若指数为 $1$, 则无须证明. 否则, 存在素数 $p$ 整除 $(\mathbf{C}_K:U)$. 由 (\ref{lem:vii.9.4}), 可设 $K$ 包含 $p$ 次单位根. 取 $\mathbf{C}_K$ 的包含 $U$ 且在 $\mathbf{C}_K$ 中指数为 $p$ 的子群 $U_1$. 由 (\ref{lem:vii.9.3}), 存在 $K$ 的 Abel 扩张 $K'$ 使 $\Nm_{K'/K}\mathbf{C}_{K'}=U_1$; 并且 $K'$ 是 $K$ 上 $p$ 次循环扩张. 令 $U'=\Nm_{K'/K}^{-1}U$. 映射
+\[
+\Nm_{K'/K}\colon\mathbf{C}_{K'}\to\mathbf{C}_{K}/U
+\]
+的像为 $U_1/U$, 核为 $U'$. 故
+\[
+(\mathbf{C}_{K'}:U')=(\mathbf{C}_{K}:U)/p,
+\]
+由归纳假设 $U'$ 是范群. 现在可应用 (\ref{lem:vii.9.4}) 推出 $U$ 是范群.
+\end{proof}
+
+\phantomsection
+\section*{A 附录: Kummer 理论}
+\addcontentsline{toc}{section}{A 附录: Kummer 理论}
+\renewcommand{\thetheorem}{A.\arabic{theorem}}
+\setcounter{theorem}{0}
+
+本附录中, $K$ 始终是包含本原 $n$ 次单位根 $\zeta$ 的域. 特别地, $K$ 的特征为 $0$, 或特征为不整除 $n$ 的 $p$. 以 $\mu_n$ 记 $K$ 中 $n$ 次单位根之群. 则 $\mu_n$ 是 $K^{\times}$ 的 $n$ 阶循环子群, 以 $\zeta$ 为生成元.
+
+\begin{proposition}\label{prop:vii.A.1}
+设 $L=K[\alpha]$, 其中 $\alpha^{n}\in K$ 且 $\alpha$ 的更小的幂都不在 $K$ 中. 则 $L$ 是 $K$ 的 Galois 扩张, Galois 群为 $n$ 阶循环群. 反之, 若 $L$ 是 $K$ 的 $n$ 次循环扩张, 则 $L=K[\alpha]$, 其中 $\alpha^{n}\in K$.
+\end{proposition}
+
+\begin{proof}
+见 FT 5.26.
+\end{proof}
+
+\begin{proposition}\label{prop:vii.A.2}
+$K$ 的两个 $n$ 次循环扩张 $K[a^{\frac{1}{n}}]$ 与 $K[b^{\frac{1}{n}}]$ 相等, 当且仅当 $a=b^{r}c^{n}$, 其中 $r\in\Z$ 与 $n$ 互素, $c\in K^{\times}$; 也就是说, 当且仅当 $a$ 与 $b$ 在 $K^{\times}/K^{\times n}$ 中生成同一个子群.
+\end{proposition}
+
+\begin{proof}
+见 FT 5.28.
+\end{proof}
+
+最后两个结果给出了 $K$ 包含本原 $n$ 次单位根时其 $n$ 次循环扩张的完全分类. 不难把它推广到指数为 $n$ 的全部 Abel 扩张的分类.
+
+\begin{theorem}\label{thm:vii.A.3}
+映射
+\[
+L\mapsto K^{\times}\cap L^{\times n}/K^{\times n}
+\]
+给出从 $K$ 的含于某个固定代数闭包 $\Omega$ 中的指数为 $n$ 的有限 Abel 扩张到 $K^{\times}/K^{\times n}$ 的有限子群之间的一一对应. 对应于 $B$ 的扩张是 $K[B^{\frac{1}{n}}]$, 即 $\Omega$ 中包含 $K$ 与 $B$ 的每个元素的某个 $n$ 次根的最小子域. 若 $L\leftrightarrow B$, 则 $[L:K]=(B:K^{\times n})$.
+\end{theorem}
+
+\begin{proof}
+见 FT 5.29.
+\end{proof}
+
+\begin{example}\label{ex:vii.A.4}
+(a) $\R$ 的二次扩张与 $\R^{\times}/\R^{\times 2}=\{\pm1\}$ 的子群一一对应.
+
+(b) $\Q$ 的指数为 $2$ 的有限 Abel 扩张与
+\[
+\Q^{\times}/\Q^{\times 2}\approx\{\pm1\}\times\Z/2\Z\times\Z/2\Z\times\cdots
+\]
+($\Z/2\Z$ 的拷贝以素数为指标) 的有限子群一一对应.
+\end{example}
+
+复习完这些代数之后, 我们回到一些数论.
+
+\begin{proposition}\label{prop:vii.A.5}
+设 $K$ 为数域, $L=K[a_{1}^{\frac{1}{n}},\cdots,a_{m}^{\frac{1}{n}}]$. 若 $na_i$ 在 $K_v$ 中是单位 (对一切 $i$), 则 $L$ 在 $K$ 的有限素 $v$ 处不分歧.
+\end{proposition}
+
+\begin{proof}
+只需考虑循环扩张 $K[a^{\frac{1}{n}}]$, 由 \ref{prop:vii.A.1} 可设其次数为 $n$. 令 $\alpha=a^{\frac{1}{n}}$, $f=X^{n}-a$. 则
+\[
+\operatorname{disc}f=\pm\Nm_{L/K}f'(\alpha)=\pm\Nm_{L/K}n\alpha^{n-1}=\pm n^{n}a^{n-1}.
+\]
+于是若 $\mathfrak{p}_v$ 不整除 $na$, 它就不整除 $\operatorname{disc}f$, 更不整除 $\operatorname{disc}(\mathcal{O}_L/\mathcal{O}_K)$. (见 ANT, 第 2 章.)
+\end{proof}
+
+\begin{remark}\label{rem:vii.A.6}
+确定 $K[a^{\frac{1}{n}}]/K$ 在整除 $n$ 的素 $p$ 处的分歧可能相当复杂. 下述概括了 $n=p$ 为素数且 $K$ 包含本原 $p$ 次单位根 $\zeta$ 时的情形. 设 $\pi=\zeta-1$, $a\in K^{\times}$ 与 $p$ 互素且不是 $K$ 中的 $p$ 次幂.
+
+(a) $\mathfrak{p}\mid p$ 在扩张 $K[a^{\frac{1}{p}}]/K$ 中完全分裂, 当且仅当 $X^{p}\equiv a\bmod\mathfrak{p}\pi\mathfrak{p}$ 在 $\mathcal{O}_K$ 中有非零解 (此时称 $a$ 在 $\mathfrak{p}$ 处是\textbf{超 primary} 的, hyperprimary).
+
+(b) $\mathfrak{p}\mid p$ 在扩张 $K[a^{\frac{1}{p}}]/K$ 中不分歧, 当且仅当 $X^{p}\equiv a\bmod\mathfrak{p}\pi$ 在 $\mathcal{O}_K$ 中有非零解 (此时称 $a$ 在 $\mathfrak{p}$ 处是 \textbf{primary} 的).
+
+(c) 扩张 $K[a^{\frac{1}{p}}]/K$ 在 $K$ 的所有有限素处不分歧, 当且仅当 $a$ 是 primary 的且 $(a)=\mathfrak{a}^{p}$ 对某个理想 $\mathfrak{a}$ 成立.
+
+这些结论的证明提示见 \cite{Washington1997}, 习题 9.3, 与 \cite{CasselsFrohlich1967}, 习题 2.12, p.~353. 在 $K=\Q[\zeta]$ 的情形, 另见 \cite{Cassels1986}, pp.~139--140, 与 \cite{FrohlichTaylor1991}, III, 3.11.
+\end{remark}
+
+% 恢复定理编号
+\renewcommand{\thetheorem}{\thesection.\arabic{theorem}}

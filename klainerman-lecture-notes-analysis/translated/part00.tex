@@ -1,0 +1,484 @@
+% ==== part00 第一部分导言: PDE 的世界 ====
+% 源: MinerU_latex_lecture nots.tex 93-867 (对应 pdf_text.txt 1-587, PDF 第 4-14 页)
+% 术语: 偏微分方程=pde, 常微分方程=ode, 积分方程=integral-equation, 函数方程=functional-equation,
+%       Laplace 方程=laplace-equation, 热方程=heat-equation, 波动方程=wave-equation, 演化方程=evolution-equation,
+%       Schrödinger 方程=schrodinger-equation, Klein-Gordon 方程=klein-gordon-equation, 叠加原理=superposition,
+%       线性=linear, 非线性=nonlinear, 极小曲面=minimal-surface, 微分算子=differential-operator, 局部性=locality,
+%       不变群=invariance-group, 李群=lie-group, Dirichlet 问题=dirichlet-problem, 边界条件=boundary-condition,
+%       初值条件=initial-condition, 初值问题=initial-value-problem, 边值问题=boundary-value-problem,
+%       Cauchy-Riemann 方程组=cauchy-riemann, 复解析函数=complex-analytic, 确定方程组=determined-system,
+%       超定(方程组)=overdetermined, 欠定(方程组)=underdetermined, 恰当形式=exact-form, 外微分=exterior-derivative,
+%       de Rham 复形=de-rham-complex, D'Alembert 算子=dalembertian, Minkowski 内积=minkowski-product,
+%       Lorentz 变换=lorentz-transformation, Galilei 不变=galilean-invariance, Dirac 算子=dirac-operator,
+%       黎曼面=riemann-surface, Gauss 曲率=gauss-curvature, Gauss-Bonnet 公式=gauss-bonnet-formula,
+%       欧拉示性数=euler-characteristic, 单值化定理=uniformization-theorem, 共形变换=conformal-transformation,
+%       Laplace-Beltrami 算子=laplace-beltrami-operator, Ricci 流=ricci-flow, 调和坐标=harmonic-coordinates,
+%       Ricci 曲率=ricci-curvature, 截面曲率=sectional-curvature, Einstein 真空方程=einstein-vacuum-equations,
+%       Ricci 平坦=ricci-flat, Lorentz 流形=lorentzian-manifold, Lorentz 度量=lorentz-metric, 波坐标=wave-coordinates,
+%       规范场论=gauge-field-theory, 规范变换=gauge-transformation, 控制论=control-theory,
+%       随机微分方程=stochastic-differential-equation, Brown 运动=brownian-motion, Black-Scholes 方程=black-scholes-equation
+% REFS:
+%   - "我们将在第 2 节讨论"(section 2): 指向本部分(导言)下一节 "2. ...", 节标签由后续 part 文件给出, 待解析.
+%   - 原书未解析交叉引用 "see (??)"(Ricci 流调和坐标段落, Δ_g 定义附近): 按原文保留 "(??)", 疑指 (21) 或 (8), 待人工确认.
+%   - 原书笔误, 已按原文保留: (7) 右端 Σ e^{ij} X_i X_j 应为 X_i Y_j; (9) 末项 X_4Y_4 应为 X_3Y_3;
+%     γ 矩阵列出 γ^0, γ^1, γ^3, γ^4(缺 γ^2); "Schrödinger 方程 (278)" 疑为 (4) 之误.
+%   - 原书笔误, 已修正: 调和坐标 x=(x^1,x^2,x^2) 修正为 (x^1,x^2,x^3); ∂_i^2 = ∂²/∂x_i² 修正为 ∂²/(∂x^i)²;
+%     E=m c^2 与 |x|^2=a^2 中 OCR 多余 dot 已去除.
+%   - "见纲要文章"(compendium article)两处: 非本书章节引用, 保留文字即可.
+%   - 脚注 1-4 已从 pdf_text.txt 页尾找回并翻译(可逆变换/Dirac 算子 Euclidean 版本/Ricci 流体积/波坐标).
+% 编号说明: 本部分含 1 个编号定理 (Theorem 1.1, 标签 thm:c0-1.1) 与 28 个编号公式 (1)-(28);
+%           正文 "Example."(Dirichlet 问题) 原书无编号, 译为 "例."; 9 个行间公式原书无编号, 用 \[ \] 不编号.
+
+\section{PDE 的世界}
+
+与常微分方程或积分方程一样, \newterm{pde}{偏微分方程}{partial differential equation}也是\newterm{functional-equation}{函数方程}{functional equation}.
+也就是说, 我们试图确定的未知量(一个或多个)都是函数.
+就偏微分方程(PDE)而言, 这些函数要从一些方程中确定, 这些方程除了通常的加法与乘法运算之外, 还涉及函数的偏导数.
+下面是最基本的几个例子:
+
+\begin{itemize}
+\item (\newterm{laplace-equation}{Laplace 方程}{Laplace equation})
+\begin{equation}\label{eq:c0-1}
+\Delta u = 0
+\end{equation}
+其中 $\Delta u = \frac{\partial^{2}}{\partial x^{2}} u + \frac{\partial^{2}}{\partial y^{2}} u + \frac{\partial^{2}}{\partial z^{2}} u$.
+在基础数学定义一节中描述的其他两个例子是
+\item (\newterm{heat-equation}{热方程}{heat equation})
+\begin{equation}\label{eq:c0-2}
+-\partial_{t} u + k \Delta u = 0,
+\end{equation}
+\item (\newterm{wave-equation}{波动方程}{wave equation})
+\begin{equation}\label{eq:c0-3}
+-\partial_{t}^{2} u + c^{2} \Delta u = 0.
+\end{equation}
+\end{itemize}
+
+在这两种情形下, 都要寻找一个依赖于变量 $t, x, y, z$ 的函数 $u$, 使之满足相应的方程.
+注意 \eqref{eq:c0-2} 与 \eqref{eq:c0-3} 都含有与第一个方程中含义相同的符号 $\Delta$, 即
+$\Delta u = \left(\frac{\partial^{2}}{\partial x^{2}} + \frac{\partial^{2}}{\partial y^{2}} + \frac{\partial^{2}}{\partial z^{2}}\right) u = \frac{\partial^{2} u}{\partial x^{2}} + \frac{\partial^{2} u}{\partial y^{2}} + \frac{\partial^{2} u}{\partial z^{2}}$.
+在 \eqref{eq:c0-2} 与 \eqref{eq:c0-3} 中, $k>0$ 与 $c$ 都是固定常数(前者表示扩散速率, 后者表示光速).
+只需研究特殊情形 $k = 1$ 与 $c = 1$ 下的方程求解即可.
+事实上, 例如若 $u(t, x, y, z)$ 是 \eqref{eq:c0-3} 的解, 则 $v(t, x, y, z) = u(t, x/c, y/c, z/c)$ 满足 $c = 1$ 情形的同一方程.
+这两个方程都称为\newterm{evolution-equation}{演化方程}{evolution equation}, 原因很简单:它们被用来描述某个特定物理对象相对于时间参数 $t$ 的变化.
+注意 \eqref{eq:c0-1} 可以解释为 \eqref{eq:c0-3} 与 \eqref{eq:c0-2} 的特殊情形.
+事实上, \eqref{eq:c0-3} 或 \eqref{eq:c0-2} 的与 $t$ 无关的解 $u = u(t, x, y, z)$, 即 $\partial_{t} u = 0$, 都满足 \eqref{eq:c0-1}.
+
+下面是一些重要的 PDE 的其他例子:
+
+\begin{itemize}
+\item (\newterm{schrodinger-equation}{Schrödinger 方程}{Schr\"odinger equation})
+\begin{equation}\label{eq:c0-4}
+i \partial_{t} u + k \Delta u = 0
+\end{equation}
+其中 $u : \mathbb{R} \times \mathbb{R}^{3} \to \mathbb{C}$.
+该方程描述一个有质量粒子的量子演化, $k = \frac{\hbar}{2 m}$, 其中 $\hbar > 0$ 是 Planck 常数, $m$ 是粒子的质量.
+与热方程一样, 可以通过简单的变量替换把 $k$ 归一化为 1.
+尽管该方程在形式上与热方程非常相似, 它的定性行为却大不相同.
+在研究 PDE 时务必牢记:方程形式的微小改变可能导致解的性质发生很大变化.
+\item (\newterm{klein-gordon-equation}{Klein-Gordon 方程}{Klein-Gordon equation})
+\begin{equation}\label{eq:c0-5}
+-\partial_{t}^{2} u + c^{2} \Delta u - \left(\frac{m c^{2}}{\hbar}\right)^{2} u = 0
+\end{equation}
+它是 Schrödinger 方程的相对论对应物;参数 $m$ 具有质量的物理含义, 而 $m c^{2}$ 具有静能量的物理含义(这反映了 Einstein 的著名方程 $E = m c^{2}$).
+通过对时间与空间同时作适当的变量替换, 可以把常数 $c$ 与 $\frac{m c^{2}}{\hbar}$ 归一化, 使二者都等于 1.
+\item (\newterm{minimal-surface}{极小曲面}{minimal surface})
+\begin{equation}\label{eq:c0-6}
+\partial_{x}\left(\frac{\partial_{x} u}{(1 + |\partial_{x} u|^{2} + |\partial_{y} u|^{2})^{\frac{1}{2}}}\right) + \partial_{y}\left(\frac{\partial_{y} u}{(1 + |\partial_{x} u|^{2} + |\partial_{y} u|^{2})^{\frac{1}{2}}}\right) = 0.
+\end{equation}
+这里 $\partial_{x}$ 与 $\partial_{y}$ 是偏导数 $\frac{\partial}{\partial x}$ 与 $\frac{\partial}{\partial y}$ 的简写记号.
+\end{itemize}
+
+注意上面提到的三个 PDE 都满足下列称为\newterm{superposition}{叠加原理}{principle of superposition}的简单性质:若 $u_{1}, u_{2}$ 是某个方程的解, 则它们的任意线性组合 $\lambda_{1} u_{1} + \lambda_{2} u_{2}$(其中 $\lambda_{1}, \lambda_{2}$ 是任意实数)也是该方程的解.
+这样的方程称为\newterm{linear}{线性}{linear}方程.
+下面这个关于未知函数 $u = u(x, y)$ 的方程显然不是线性的:
+
+到目前为止我们遇到的方程都可以写成 $\mathcal{P}[u] = 0$ 的形式, 其中 $\mathcal{P}$ 是作用在 $u$ 上的\newterm{differential-operator}{微分算子}{differential operator}.
+微分算子不过是这样一条规则:它把定义在 $\mathbb{R}^{n}$ 或它的某个开子集上的函数 $u$ 映为函数 $\mathcal{P}[u]$, 所执行的运算如下:
+
+\begin{itemize}
+\item 我们可以取 $u$ 关于 $\mathbb{R}^{n}$ 的变量 $x = (x^{1}, x^{2}, \ldots, x^{n})$ 的偏导数 $\partial_{i} u = \frac{\partial u}{\partial x^{i}}$.
+还允许 $u$ 的高阶偏导数, 如混合二阶偏导数 $\partial_{i} \partial_{j} u = \frac{\partial^{2} u}{\partial x^{i} \partial x^{j}}$, 或 $\partial_{i}^{2} = \frac{\partial^{2}}{(\partial x^{i})^{2}}$.
+
+方程 \eqref{eq:c0-2} 的伴随微分算子为 $\mathcal{P} = -\partial_{t} + \Delta$, 而方程 \eqref{eq:c0-3} 的为 $-\partial_{t}^{2} + \Delta$.
+\item 可以对 $u$ 及其偏导数彼此相加、相乘, 也可以与变量 $x$ 的给定函数相加、相乘.
+还可能出现与给定函数的复合.
+\end{itemize}
+
+对于方程 \eqref{eq:c0-1}, 伴随微分算子为 $\mathcal{P} = \Delta = \partial_{1}^{2} + \partial_{2}^{2} + \partial_{3}^{2} = \sum_{i, j = 1}^{3} e^{i j} \partial_{i} \partial_{j}$, 其中 $e^{i j}$ 是以 (1, 1, 1) 为元素的对角 $3 \times 3$ 矩阵, 对应于 $\mathbb{R}^{3}$ 中向量 $X, Y$ 的 Euclidean 内积
+
+\begin{equation}\label{eq:c0-7}
+\langle X, Y \rangle = X_{1} Y_{1} + X_{2} Y_{2} + X_{3} Y_{3} = \sum_{i, j = 1}^{3} e^{i j} X_{i} X_{j}.
+\end{equation}
+
+方程 \eqref{eq:c0-2}、\eqref{eq:c0-3} 与 \eqref{eq:c0-4} 的伴随微分算子分别是 $\mathcal{P} = -\partial_{t} + \Delta$、$\mathcal{P} = -\partial_{t}^{2} + \Delta$ 与 $\mathcal{P} = i \partial_{t} + \Delta$, 其变量为 $t, x^{1}, x^{2}, x^{3} \in \mathbb{R}^{1+3}$.
+对于波动方程 \eqref{eq:c0-3} 这一特殊情形, 把变量 $t$ 记为 $x^{0}$ 是有益的.
+波算子于是可以写成如下形式:
+
+\begin{equation}\label{eq:c0-8}
+\Box = -\partial_{0}^{2} + \partial_{1}^{2} + \partial_{2}^{2} + \partial_{3}^{2} = \sum_{\alpha, \beta = 0}^{3} m^{\alpha \beta} \partial_{\alpha} \partial_{\beta}
+\end{equation}
+
+其中 $m^{\alpha \beta}$ 是以 $(-1, 1, 1, 1)$ 为元素的对角 $4 \times 4$ 矩阵, 对应于 $\mathbb{R}^{1+3}$ 中的\newterm{minkowski-product}{Minkowski 内积}{Minkowski scalar product}.
+这后一种内积对 $4$ 向量 $\boldsymbol{X} = (X_{0}, X_{1}, X_{2}, X_{3})$ 与 $Y = (Y_{0}, Y_{1}, Y_{2}, Y_{3})$ 定义为
+
+\begin{equation}\label{eq:c0-9}
+m(X, Y) = \sum_{\alpha, \beta = 0}^{3} m^{\alpha \beta} X_{\alpha} Y_{\beta} = -X_{0} Y_{0} + X_{1} Y_{1} + X_{2} Y_{2} + X_{4} Y_{4}
+\end{equation}
+
+微分算子 $\Box$ 以法国数学家的名字命名为\newterm{dalembertian}{D'Alembert 算子}{D'Alembertian}, 他是第一位在振动弦方程中引入该算子的数学家.
+
+注意, 方程 \eqref{eq:c0-1}--\eqref{eq:c0-4} 的伴随微分算子都是线性的, 即
+
+\[
+\mathcal{P}[\lambda u + \mu v] = \lambda \mathcal{P}[u] + \mu \mathcal{P}[v],
+\]
+
+对任意函数 $u, v$ 与任意实数或复数 $\lambda, \mu$ 成立.
+下面是线性微分算子的另一个简单例子
+
+\begin{equation}\label{eq:c0-10}
+\mathcal{P}[u] = a_{1}(x) \partial_{1} u + a_{2}(x) \partial_{2} u
+\end{equation}
+
+其中 $\boldsymbol{x} = (x_{1}, x_{2})$, $a_{1}, a_{2}$ 是 $x$ 的给定函数, 称为线性算子的系数.
+形如
+
+\begin{equation}\label{eq:c0-11}
+\mathcal{P}[u] = f,
+\end{equation}
+
+对应线性微分算子 $\mathcal{P}$ 与给定函数 $f = f(x)$ 的方程称为线性非齐次方程.
+这种方程的任意解 $u$ 都可以表示为 $\boldsymbol{u} = \boldsymbol{u}_{0} + \boldsymbol{v}$ 的形式, 其中 $u_{0}$ 是 \eqref{eq:c0-11} 的特解, 而 $v$ 是齐次方程
+
+\begin{equation}\label{eq:c0-12}
+\mathcal{P}[v] = 0.
+\end{equation}
+
+的解.
+
+对于方程 \eqref{eq:c0-6}, 微分算子 $\mathcal{P}$ 相对于变量 $x^{1}$ 与 $x^{2}$ 可以写成如下形式:
+
+\[
+\mathcal{P}[u] = \sum_{i = 1}^{2} \partial_{i}\left(\frac{1}{(1 + |\partial u|^{2})^{\frac{1}{2}}} \partial_{i} u\right),
+\]
+
+其中 $|\partial u|^{2} = (\partial_{1} u)^{2} + (\partial_{2} u)^{2}$.
+显然在这种情况下 $\mathcal{P}[u]$ 不是线性的.
+我们称它为\newterm{nonlinear}{非线性}{nonlinear}算子, 相应的方程 \eqref{eq:c0-6} 称为非线性方程.
+线性与非线性微分算子都有一个重要性质:\newterm{locality}{局部性}{locality}.
+这意味着当我们把 $\mathcal{P}$ 作用于某个在开集 $D$ 中为零的函数 $u$ 时, 所得函数 $\mathcal{P}[u]$ 也在 $D$ 中为零.
+
+还要注意, 我们的方程 \eqref{eq:c0-1}--\eqref{eq:c0-4} 还是平移不变的.
+以 \eqref{eq:c0-1} 为例, 这意味着只要函数 $u = u(x)$ 是解, 函数 $u_{c}(x) := u(T_{c} x)$ 也是解, 其中 $T_{c}$ 是平移 $T_{c}(x) = x + c$.
+另一方面, 由 \eqref{eq:c0-10} 定义的算子 $\mathcal{P}$ 所对应的方程 $\mathcal{P}[u] = 0$ 则不具有这种性质, 除非系数 $a_{1}, a_{2}$ 是常数.
+显然, 把 $\mathcal{P}[u] = 0$ 的任意解 $u = u(x)$ 映为另一个解 $u_{T}(x) := u(T x)$ 的可逆变换\footnote{这些变换通常是线性映射.}$T : \mathbb{R}^{n} \to \mathbb{R}^{n}$ 的全体构成一个群, 称为方程的\newterm{invariance-group}{不变群}{invariance group}.
+两个对称的复合仍然是对称, 对称的逆也是对称, 因此自然地把对称的集合看作构成一个群(通常是有限维或无限维\newterm{lie-group}{李群}{Lie group}).
+
+Laplace 方程 \eqref{eq:c0-1} 不仅关于平移不变, 还关于旋转不变, 即保持 Euclidean 内积 \eqref{eq:c0-7} 的线性变换 $O : \mathbb{R}^{3} \to \mathbb{R}^{3}$, 也就是说, 对所有向量 $X, Y \in \mathbb{R}^{3}$ 有 $\langle O X, O Y \rangle = \langle X, Y \rangle$.
+类似地, 波动方程 \eqref{eq:c0-3} 与 Klein-Gordon 方程 \eqref{eq:c0-5} 在\newterm{lorentz-transformation}{Lorentz 变换}{Lorentz transformation}下不变, 即保持 Minkowski 内积 \eqref{eq:c0-9} 的线性变换 $L : \mathbb{R}^{1+3} \to \mathbb{R}^{1+3}$, 也就是说, $m(L X, L Y) = m(X, Y)$.
+我们的其他演化方程 \eqref{eq:c0-2} 与 \eqref{eq:c0-4} 显然关于空间变量 $x = (x^{1}, x^{2}, x^{3}) \in \mathbb{R}^{3}$ 的旋转不变, 其中 $t$ 保持固定.
+它们还是\newterm{galilean-invariance}{Galilei 不变}{Galilean invariant}的, 这意味着, 就 Schrödinger \eqref{eq:c6-278} 这一特殊情形而言, 只要 $u = u(t, x)$ 是解, 则对任意向量 $v \in \mathbb{R}^{3}$, $u_{v}(t, x) = e^{i (x \cdot v)} e^{i t |v|^{2}} u(t, x - v t)$ 也是解.
+
+到目前为止, 我们一直默认方程在整个空间中成立:Laplace 方程在 $\mathbb{R}^{3}$ 中, 热方程、波动方程与 Schrödinger 方程在 $\mathbb{R}^{4}$ 中, 极小曲面方程在 $\mathbb{R}^{2}$ 中.
+实际上, 人们常常被限制在相应空间的一个区域上.
+例如, 方程 \eqref{eq:c0-1} 通常在有界开区域上研究, 并附加以指定的\newterm{boundary-condition}{边界条件}{boundary condition}.
+下面是一个典型例子.
+
+\textbf{例.} 在 $\mathbb{R}^{3}$ 的开区域 $D$ 上的\newterm{dirichlet-problem}{Dirichlet 问题}{Dirichlet problem}是:求定义在 $D$ 的闭包 $\bar{D}$ 上、在 $D$ 内二次连续可微的连续函数 $u$, 使得在 $D$ 中 $\Delta u = 0$, 并且 $u$ 在 $D$ 的边界 $\partial D$ 上的限制被指定为某个连续函数 $u_{0}$.
+更精确地说, 我们要求
+
+\begin{equation}\label{eq:c0-13}
+u|_{\partial D} = u_{0}
+\end{equation}
+
+对于 \eqref{eq:c0-6} 的解也可以施加同样的边界条件, 此时 $D$ 是 $\mathbb{R}^{2}$ 中的有界开区域.
+在 $D$ 中满足边界条件 \eqref{eq:c0-13} 的 \eqref{eq:c0-6} 的解 $u = u(x, y)$ 解决了 Plateau 问题, 即在 $\mathbb{R}^{3}$ 中寻找经过给定曲线的极小曲面.
+可以证明, 由图像 $\Gamma_{u} = \{(x, y, u(x, y)) \mid (x, y) \in D \subset \mathbb{R}^{2}\}$ 给出的曲面在所有满足相同边界条件 $v|_{\partial D} = u_{0}$ 的图像曲面 $\Gamma_{v}$ 中具有最小面积.
+
+对演化方程 \eqref{eq:c0-2}--\eqref{eq:c0-4} 也可以施加自然的边界条件.
+最简单的是指定 $u$ 在超平面 $t = 0$ 上的值.
+对于热方程与 Schrödinger 方程, 我们令
+
+\[
+u|_{t = 0} = u_{0}
+\]
+
+而对于涉及 $t$ 的二阶导数的波动方程, 则施加两个条件
+
+\begin{equation}\label{eq:c0-14}
+u|_{t = 0} = u_{0} \quad \text{且} \quad \partial_{t} u|_{t = 0} = u_{1}
+\end{equation}
+
+其中 $u_{0}, u_{1}$ 是坐标 $(x, y, z)$ 的函数, 称为\newterm{initial-condition}{初值条件}{initial condition}.
+在两种情形下解\newterm{initial-value-problem}{初值问题}{initial value problem}, 都意味着寻找方程在 $t > 0$ 时、且在 $t = 0$ 处满足相应初值条件的解.
+此外, 还可以把变量 $(x, y, z)$ 限制在 $\mathbb{R}^{3}$ 的开区域 $D$ 上.
+更进一步, 可以尝试在区域 $[0, \infty) \times D$ 上解\newterm{boundary-value-problem}{边值问题}{boundary value problem}:在 $[0, \infty) \times \partial D$ 上施加诸如 \eqref{eq:c0-13} 那样的边界条件, 并在 $t = 0$ 处施加初值条件.
+
+对给定的 PDE, 边界条件与初值条件的选择非常重要.
+找出哪些是恰当的边界条件与初值条件, 是 PDE 一般理论的一个重要方面, 我们将在第 2 节讨论.
+对物理上有意义的方程, 这些条件会从其推导背景中自然地出现.
+例如, 振动弦由一维波动方程 $\partial_{t}^{2} u - \partial_{x}^{2} u = 0$ 在区域 $(a, b) \times \mathbb{R}$ 中的解描述, 初值条件 $u = u_{0}$, $\partial_{t} u = u_{1}$(在 $t = t_{0}$ 处)相当于指定弦的初始位置与速度.
+另一方面, 边界条件 $u(a) = u(b) = 0$ 只表示弦的两端被固定.
+
+到目前为止我们只考虑了含一个未知函数的方程.
+实际上, 许多重要的方程都以偏微分方程组的形式出现.
+下面这个重要例子含有两个未知函数 $u_{1} = u_{1}(x^{1}, x^{2})$, $u_{2} = u_{2}(x^{1}, x^{2})$, 它们满足
+
+\begin{itemize}
+\item (\newterm{cauchy-riemann}{Cauchy-Riemann 方程组}{Cauchy-Riemann equations})
+\begin{equation}\label{eq:c0-15}
+\partial_{1} u_{2} - \partial_{2} u_{1} = 0, \qquad \partial_{1} u_{1} + \partial_{2} u_{2} = 0.
+\end{equation}
+\end{itemize}
+
+Cauchy 首先观察到, $u = u_{1} + i u_{2}$ 作为 $z = x^{1} + i x^{2}$ 的函数是\newterm{complex-analytic}{复解析函数}{complex analytic function}, 当且仅当 \eqref{eq:c0-15} 成立.
+再令 $\bar{\partial} = \partial_{1} + i \partial_{2}$, 注意 \eqref{eq:c0-15} 等价于
+
+\begin{equation}\label{eq:c0-16}
+\bar{\partial} u = 0.
+\end{equation}
+
+方程 \eqref{eq:c0-15} 也可以写成 $\mathcal{P}[u] = 0$ 的形式:引入列向量 $u = (u_{1}, u_{2})$ 以及微分算子 $\mathcal{P}[u]$,
+
+\[
+\mathcal{P}[u] = \begin{pmatrix} -\partial_{2} & \partial_{1} \\ \partial_{1} & \partial_{2} \end{pmatrix} \cdot \binom{u_{1}}{u_{2}}
+\]
+
+方程组 \eqref{eq:c0-15} 含有两个方程与两个未知量, 这是\newterm{determined-system}{确定方程组}{determined system}的标准情形.
+若方程组所含方程多于未知量, 则称为\newterm{overdetermined}{超定方程组}{over-determined system};若所含方程少于未知量, 则称为\newterm{underdetermined}{欠定方程组}{underdetermined system}.
+例如, 含两个方程与一个未知量的方程组 $\partial_{x} u(x, y) = f$, $\partial_{y} u(x, y) = g$ 显然是超定的.
+解存在的必要条件是 $\partial_{y} f = \partial_{x} g$, 这个条件可以解释为要求一次形式 $w = f(x, y) d x + g(x, y) d y$ 是\newterm{exact-form}{恰当形式}{exact form}, 即它的\newterm{exterior-derivative}{外微分}{exterior derivative} $d \omega$ 恒等于零.
+诸如\newterm{de-rham-complex}{de Rham 复形}{de Rham complex}之类的超定方程组在几何中起着非常重要的作用.
+
+注意 \eqref{eq:c0-15} 是线性方程组.
+还要注意, 算子 $\mathcal{P}$ 具有如下引人注目的性质:
+
+\[
+\mathcal{P}^{2}[u] = \mathcal{P}[\mathcal{P}[u]] = \binom{\Delta u_{1}}{\Delta u_{2}}
+\]
+
+换言之, $\mathcal{P}^{2} = \Delta \cdot I$, 其中 $I$ 是恒等算子 $I[u] = u$, 因此可以把 $\mathcal{P}$ 看作 $\Delta$ 的平方根.
+对 D'Alembert 算子 $\Box$ 也可以定义类似类型的平方根.
+为此我们需要满足下述性质的 $4 \times 4$ 复矩阵 $\gamma^{0}, \gamma^{1}, \gamma^{3}, \gamma^{4}$
+
+\begin{equation}\label{eq:c0-17}
+\gamma^{\alpha} \gamma^{\beta} + \gamma^{\beta} \gamma^{\alpha} = -2 m^{\alpha \beta} I
+\end{equation}
+
+其中 $I$ 是 $4 \times 4$ 单位矩阵, $m^{\alpha \beta}$ 如 \eqref{eq:c0-8} 所示.
+利用 $\gamma$ 矩阵, 我们可以引入\newterm{dirac-operator}{Dirac 算子}{Dirac operator}, 它作用于定义在 $\mathbb{R}^{1+3}$ 上、取值于 $\mathbb{C}^{4}$ 的 $u = (u_{1}, u_{2}, u_{3}, u_{4})$, 定义为
+
+\begin{equation}\label{eq:c0-18}
+\mathcal{D} u = i \gamma^{\alpha} \partial_{\alpha} u
+\end{equation}
+
+利用 \eqref{eq:c0-17} 我们容易验证 $\mathcal{D}^{2} u = \Box u$.
+因此 Dirac 算子 $\mathcal{D}$ 可以看作 D'Alembert 算子 $\Box$ 的平方根.
+它导出了如下基本方程, 这是 Dirac 为自由、有质量、相对论性粒子(如电子)引入的方程:
+
+\begin{itemize}
+\item (Dirac 方程)
+\begin{equation}\label{eq:c0-19}
+\mathcal{D} u = k u
+\end{equation}
+\end{itemize}
+
+偏微分方程在数学与科学中无处不在.
+它们为一些最重要的物理理论提供了基本数学框架, 例如弹性力学、流体力学、电磁学、广义相对论与非相对论量子力学.
+更现代的相对论量子场论原则上导出了含无穷多个未知量的方程, 这超出了偏微分方程的范围.
+然而, 即使在这种情况下, 基本方程仍保留着 PDE 的局部性.
+而且, 量子场论的出发点总是一个由 PDE 方程组描述的经典场论.
+例如, 基于 Yang-Mills-Higgs 场论的弱相互作用与强相互作用标准模型就是如此.
+如果再加上经典力学的常微分方程(它可以看作一维 PDE), 我们就会看到, 本质上全部物理学都是由微分方程描述的.
+支撑我们一些最基本物理理论的偏微分方程的其他例子, 是 Maxwell、Einstein、Euler 与 Navier-Stokes 方程组.
+注意, 每一个方程都处于整个物理学领域的核心, 即电动力学、广义相对论与流体力学.
+
+物理学中出现的主要 PDE 的一个重要特征是它们表面上的普遍性.
+例如, 波动方程最初由 D'Alembert 引入以描述振动弦的运动, 后来被发现与声波和电磁波的传播有关.
+热方程最初由 Fourier 引入以描述热的传播, 也出现在许多其他耗散效应起重要作用的场合.
+对于 Laplace、Schrödinger 方程以及许多其他基本方程, 情形也同样如此.
+
+更令人惊讶的是, 最初为描述具体物理现象而引入的方程, 在那些被视为纯粹数学的领域, 如复分析、微分几何、拓扑与代数几何中, 也发挥着基本作用.
+例如, 研究全纯函数性质的复分析, 可以被看作研究 Cauchy-Riemann 方程组 \eqref{eq:c0-15} 在 $\mathbb{R}^{2}$ 的某个区域中的解.
+在拓扑与代数几何中起基本作用的 Hodge 理论, 其基础是研究流形上一类推广 Cauchy-Riemann 方程组的线性 PDE 方程组的解空间.
+Atiyah-Singer 指标定理则是以流形上一类特殊的线性 PDE 来表述的, 它们与 Dirac 算子 \eqref{eq:c0-18} 的 Euclidean 版本有关\footnote{这是把 \eqref{eq:c0-17} 中的 Minkowski 度量 $m$ 换成 Euclidean 度量 $e$ 后得到的算子.}.
+
+几何中的重要问题往往可以归结为求特定偏微分方程(通常是非线性的)的解.
+在求经过给定曲线的、具有最小总面积的曲面的 Plateau 问题中, 我们已经看到了这样的例子.
+著名的\newterm{uniformization-theorem}{单值化定理}{uniformization theorem}提供了另一个极好的例子.
+
+为了陈述单值化定理, 我们需要回忆紧\newterm{riemann-surface}{黎曼面}{Riemann surface} $S$ 的定义.
+它是一个配备光滑正定度量 $g$ 的二维紧流形.
+\newterm{gauss-curvature}{Gauss 曲率}{Gauss curvature} $K = K(g)$ 是曲面的一个重要不变量, 它可以在每一点 $p \in S$ 处, 由 $p$ 附近局部坐标系 $x = (x^{1}, x^{2})$ 下的分量 $g_{a b}$ 显式算出.
+计算涉及分量 $g_{a b}$ 关于 $x^{1}$ 与 $x^{2}$ 的一阶与二阶偏导数.
+一个显著的事实是, $K$ 的最终值不依赖于进行计算的特定坐标系.
+此外, 在 $S$ 是 $\mathbb{R}^{3}$ 中由方程 $|x|^{2} = a^{2}$ 给出的标准球面的特殊情形下, Gauss 曲率等于与我们对曲率的直觉相符的期望值, 即 $K = a^{-2}$.
+Gauss 曲率的另一个显著性质是, 它沿 $S$ 的全积分不依赖于度量 $g$, 而只依赖于 $S$ 的拓扑性质.
+更精确地说, 根据\newterm{gauss-bonnet-formula}{Gauss-Bonnet 公式}{Gauss-Bonnet formula}, 我们有
+
+\[
+\chi(S) = (2 \pi)^{-1} \int_{S} K \, d a_{g},
+\]
+
+其中 $d a_{g}$ 表示度量 $g$ 的面积元.
+在坐标 $x^{1}, x^{2}$ 下有 $d a_{g} = \sqrt{|g|}\, d x^{1} d x^{2}$, 其中 $|g|$ 是矩阵 $(g_{a b})_{a, b = 1, 2}$ 的行列式.
+数 $\chi(S)$ 是整数 $2, 0, -2, \ldots, -2 k, \ldots$ 之一, 称为 $S$ 的\newterm{euler-characteristic}{欧拉示性数}{Euler characteristic}, 并且有简单的拓扑解释.
+因此, 任何可以连续变形为标准球面的曲面都有 $\chi(S) = 2$, 而任何可以连续变形为环面的曲面都有 $\chi(S) = 0$.
+现在我们可以陈述单值化定理:
+
+\begin{theorem}\label{thm:c0-1.1}
+设 $S$ 是带度量 $g$、Gauss 曲率 $K = K(g)$ 与 欧拉示性数 $\chi(S)$ 的二维紧 黎曼面.
+则存在度量 $g$ 的一个\newterm{conformal-transformation}{共形变换}{conformal transformation}, 即 $\tilde{g} = \Omega^{2} g$, 其中 $\Omega$ 是某个光滑的非零函数, 使得新度量 $\tilde{g}$ 的 Gauss 曲率 $\tilde{K}$ 恒等于 $1$、$0$ 或 $-1$, 视 $\chi(S) > 0$、$\chi(S) = 0$ 或 $\chi(S) < 0$ 而定.
+\end{theorem}
+
+为了证明这个非常重要的几何结果——它按 欧拉示性数给出了所有紧曲面的完整分类——我们被引向 $S$ 上的一个非线性偏微分方程.
+事实上, 假设 $\chi(S) = 2$, 于是我们希望度量 $\tilde{g} = e^{2 u} g$ 的 Gauss 曲率 $\tilde{K}$ 恰好为 1.
+通过简单计算, 很容易把 $\tilde{K}$ 与原度量 $g$ 的 Gauss 曲率 $K$ 联系起来.
+这就导出了关于 $u$ 的如下方程:
+
+\begin{equation}\label{eq:c0-20}
+\Delta_{S} u + e^{2 u} = K
+\end{equation}
+
+其中 $\Delta_{S}$, 称为 $S$ 的\newterm{laplace-beltrami-operator}{Laplace-Beltrami 算子}{Laplace-Beltrami operator}, 是 Laplace 算子(见 \eqref{eq:c0-1})到曲面 $S$ 上的直接推广.
+因此, 单值化定理的证明归结为解方程 \eqref{eq:c0-20}, 即对具有 Gauss 曲率 $K$ 的给定曲面 $S$, 求一个满足 \eqref{eq:c0-20} 的实值函数 $u$.
+
+下面给出算子 $\Delta_{S}$ 相对于开坐标卡 $D \subset S$ 上的局部坐标系 $x = (x^{1}, x^{2})$ 的精确定义.
+记 $G(x) = (g_{a b}(x))_{a, b = 1, 2}$ 为以我们的 Riemann 度量在 $D$ 上的分量为元素的 $2 \times 2$ 矩阵.
+设 $G^{-1}(x)$ 表示 $G(x)$ 的逆矩阵, 并记其分量为 $(g^{a b}(x))_{a, b = 1, 2}$.
+于是, 对所有 $x \in D$,
+
+\[
+\sum_{c} g_{a c}(x) g^{c b}(x) = \delta_{a b}
+\]
+
+其中 $\delta_{a b}$ 是通常的 Kronecker 记号.
+如前, 我们还令 $|g(x)| = \det(G(x))$, 并定义
+
+\[
+\Delta_{S} u(x) = \frac{1}{\sqrt{|g(x)|}} \sum_{a, b = 1, 2} \partial_{b}\left(\sqrt{|g(x)|}\, g^{a b}(x)\, \partial_{a} u(x)\right)
+\]
+
+通常我们在上述公式中略去对 $x$ 的显式依赖.
+采用 Einstein 对重复指标求和的约定也非常方便, 于是可以写成
+
+\begin{equation}\label{eq:c0-21}
+\Delta_{S} u = \frac{1}{\sqrt{|g|}} \partial_{b}\left(\sqrt{|g|}\, g^{a b}\, \partial_{a} u\right)
+\end{equation}
+
+作为第三个例子, 我们考虑紧 $n$ 维流形 $M$ 上的\newterm{ricci-flow}{Ricci 流}{Ricci flow}方程, 它在《纲要》(Compendium)的某篇文章中有描述.
+在三维这一特殊情形下, 该方程最近被决定性地用于给出 Thurston 几何化猜想(包括著名的 Poincaré 猜想)的第一个证明.
+几何化猜想在《纲要》的拓扑部分有描述, 它是上述二维单值化定理在三维空间中的精确类比.
+Ricci 流在 $M$ 上任意局部坐标 $x = (x^{1}, x^{2}, x^{3})$ 下由如下方程定义:
+
+\begin{itemize}
+\item (Ricci 流)
+\begin{equation}\label{eq:c0-22}
+\partial_{t} g_{i j} = R_{i j}(g)
+\end{equation}
+\end{itemize}
+
+这里 $g_{i j} = g_{i j}(t)$ 是光滑依赖于参数 $t$ 的 Riemann 度量族, $R_{i j}(g)$ 表示度量 $g_{i j}$ 的\newterm{ricci-curvature}{Ricci 曲率}{Ricci curvature}.
+它不过是在单值化定理中遇到的 Gauss 曲率的三维推广.
+在给定坐标系中, $R_{i j}(g)$ 可以用度量系数 $g_{i j}$ 及其一阶与二阶偏导数算出.
+由于 $g_{i j}$ 与 $R_{i j}$ 都关于 $i, j = 1, 2, 3$ 对称, 我们可以把 \eqref{eq:c0-22} 解释为由六个方程与六个未知量组成的非线性方程组.
+仔细观察会发现, \eqref{eq:c0-22} 与热方程 \eqref{eq:c0-2} 有关.
+事实上, 相对于称为\newterm{harmonic-coordinates}{调和坐标}{harmonic coordinates}的特定坐标系 $x = (x^{1}, x^{2}, x^{3})$ 作直接计算, 可以证明 Ricci 流 \eqref{eq:c0-22} 具有如下形式
+
+\begin{equation}\label{eq:c0-23}
+\partial_{t} g_{i j} - \Delta_{g} g_{i j} = N_{i j}(g, \partial g)
+\end{equation}
+
+其中每个 $N_{i j}$, $i, j = 1, 2, 3$, 都是分量 $g_{i j}$ 及其关于坐标 $x$ 的一阶偏导数的函数, 而 $\Delta_{g}$ 又是与 $\mathbb{R}^{3}$ 中的 Laplacian $\Delta$ 非常相似的微分算子(见 (??)).
+更精确地说, 若 $G^{-1} = (g^{a b})_{a, b = 1, 2, 3}$ 表示 $G = (g_{a b})_{a, b = 1, 2, 3}$ 的逆矩阵, 则利用求和约定可以写成
+
+\[
+\Delta_{g} = g^{a b} \partial_{a} \partial_{b} = \sum_{a, b = 1}^{3} g^{a b} \partial_{a} \partial_{b}.
+\]
+
+在点 $p \in M$ 的一个小邻域内, 我们可以选取调和坐标 $x^{a}$, 使得 $g^{a b}(p) = \delta^{a b}$, 其中 $\delta^{a b}$ 表示通常的 Kronecker 记号.
+于是, 在 $p$ 附近, $\Delta_{g}$ 看起来确实像 $\Delta = \delta^{a b} \partial_{a} \partial_{b}$.
+
+Ricci 流\footnote{实际上需要把方程 \eqref{eq:c0-22} 稍作修改, 以确保 $M$ 关于度量 $g(t)$ 计算的总体积保持不变.}允许我们把 $M$ 上的任意 Riemann 度量变形为一个具有常\newterm{sectional-curvature}{截面曲率}{sectional curvature}的简单度量.
+其思想是从一个度量 $g$ 出发, 寻找满足初值条件 $g(0) = g$ 的 \eqref{eq:c0-22} 的解 $g(t)$.
+人们希望当 $t \to \infty$ 时, 度量 $g(t)$ 收敛到一个常曲率度量.
+直观上可以这样理解:这与热方程 \eqref{eq:c0-2} 中随着 $t$ 增大热量在空间中均匀分布的方式相同.
+事实上, 由于 \eqref{eq:c0-22} 与 \eqref{eq:c0-2} 相似, 我们预期随着度量按 \eqref{eq:c0-22} 演化, $g(t)$ 的曲率变化会越来越小.
+当 $t \to \infty$ 时在极限中得到的度量类型将使我们能够确定 $M$ 的拓扑特征.
+然而, 在实现这一目标之前, 流可能会产生奇点.
+为了克服这一重大技术困难, 需要对 \eqref{eq:c0-22} 的解的行为作详细的定性分析, 这一任务几乎需要几何 PDE 在过去一百年中的所有进展.
+
+正如上面所见, 调和坐标的选取使我们能够把 Ricci 流写成非线性热方程组 \eqref{eq:c0-23}.
+这一事实对几何方程相当典型.
+此时讨论另一个重要例子——真空中的 Einstein 方程——是有益的.
+这个方程的简介及其在广义相对论中重要性的简短讨论, 可以在《纲要》的文章中找到(见纲要文章).
+\newterm{einstein-vacuum-equations}{Einstein 真空方程}{Einstein vacuum equations}的解由\newterm{ricci-flat}{Ricci 平坦}{Ricci flat}时空给出, 即\newterm{lorentzian-manifold}{Lorentz 流形}{Lorentzian manifold} $(M, g)$, 其中 $M$ 是四维流形, $g$ 是它上面的\newterm{lorentz-metric}{Lorentz 度量}{Lorentz metric}, 并且相应的 Ricci 曲率恒等于零.
+
+\begin{itemize}
+\item (Einstein 真空)
+\begin{equation}\label{eq:c0-24}
+\operatorname{Ric}(g) = 0.
+\end{equation}
+\end{itemize}
+
+Lorentz 度量的 Ricci 曲率 $\operatorname{Ric}(g)$ 可以完全按照 Riemann 情形的方式定义.
+因此, 相对于坐标系 $x^{\alpha}$, 其中 $\alpha = 0, 1, 2, 3$, Ricci 曲率(记作 $R_{\alpha \beta}$)可以用度量系数 $g_{\alpha \beta}$ 的一阶与二阶偏导数表示.
+如前, 我们用 $g^{\alpha \beta}$ 表示逆度量的分量.
+此外, 选取一个称为\newterm{wave-coordinates}{波坐标}{wave coordinates}\footnote{它们是上面讨论的调和坐标的精确类比.}的特定坐标系, 我们可以把 Einstein 真空方程 \eqref{eq:c0-24} 写成与波动方程 \eqref{eq:c0-3} 有关的方程组形式, 正如 Ricci 流方程组 \eqref{eq:c0-23} 与热方程 \eqref{eq:c0-2} 有关一样.
+更精确地说,
+
+\begin{equation}\label{eq:c0-25}
+\Box_{g} g_{\alpha \beta} = N_{\alpha \beta}(g, \partial g)
+\end{equation}
+
+其中, 与 Ricci 流的情形一样, 项 $N_{\alpha \beta}(g, \partial g)$ 是可以显式算出的表达式, 它们依赖于度量 $g_{\alpha \beta}$、其逆 $g^{\alpha \beta}$ 以及 $g_{\alpha \beta}$ 关于坐标 $x^{\alpha}$ 的一阶导数.
+这是关于度量 $(g_{\alpha \beta})_{\alpha, \beta = 0, 1, 2, 3}$ 的十个未知分量的十个方程的方程组.
+出现在左端的微分算子
+
+\[
+\Box_{g} = \sum_{\mu, \nu} g^{\mu \nu} \partial_{\mu} \partial_{\nu}
+\]
+
+与我们之前在 \eqref{eq:c0-8} 中遇到的波算子 $\Box = m^{\mu \nu} \partial_{\mu} \partial_{\nu} = -\partial_{0}^{2} + \Delta$ 非常相似.
+事实上, 在点 $p \in M$ 的一个邻域内, 我们可以选取波坐标 $x^{\alpha}$, 使得 $g^{\mu \nu}(p) = m^{\mu \nu}$.
+于是, 局部地, $\Box_{g}$ 看起来就像 $\Box = \Box_{m}$, 从而我们可以把 \eqref{eq:c0-25} 解释为非线性波动方程组.
+
+最后两个例子说明了, 对由几何量(如 Ricci 曲率)定义的方程, 选取好的坐标很重要.
+要解这样的方程并寻找解的有趣性质, 选取一个良好适应的坐标系往往非常重要.
+在诸如 Yang-Mills 方程之类的\newterm{gauge-field-theory}{规范场论}{gauge field theory}中, 坐标的角色被\newterm{gauge-transformation}{规范变换}{gauge transformation}所取代.
+
+最后我们需要指出, PDE 不仅出现在物理学与几何学中, 也出现在应用科学的许多领域.
+例如在工程中, 人们常常希望对 PDE 的解施加辅助条件, 它们对应于物理系统中我们能直接影响的部分, 比如小提琴琴弦与琴弓直接接触的部分, 以便控制它们的行为, 即获得优美的声音.
+处理这一问题的数学理论称为\newterm{control-theory}{控制论}{Control Theory}.
+
+在处理复杂物理系统时, 当我们不可能在任何给定时刻掌握系统的完整状态信息时, 人们常常对影响它的各种因素作各种随机性假设.
+这就导出一类非常重要的方程, 称为\newterm{stochastic-differential-equation}{随机微分方程}{stochastic differential equation}.
+举一个简单例子, 考虑 $N \times N$ 的常微分方程组
+
+\begin{equation}\label{eq:c0-26}
+\frac{d x}{d t} = f(x(t))
+\end{equation}
+
+这里 $f$ 是给定函数 $f : \mathbb{R}^{N} \to \mathbb{R}^{N}$.
+解 $x(t)$ 是向量值函数 $x : [0, \infty) \to \mathbb{R}^{N}$.
+给定初值 $x(0) = x_{0}$, 我们可以精确确定解在任意给定时刻 $t$ 的位置 $x(t)$ 与速度 $\frac{d x}{d t}$.
+在应用情形中, 由于各种难以计入的因素, 解的状态可能无法如此精确地确定.
+因此, 合理地修改方程以计入影响系统的随机效应.
+于是人们考虑如下形式的方程
+
+\begin{equation}\label{eq:c0-27}
+\frac{d x}{d t} = f(x(t)) + B(x(t)) \frac{d W}{d t}(t)
+\end{equation}
+
+其中 $B(x)$ 是 $N \times M$ 维矩阵, $W(t)$ 表示 $\mathbb{R}^{M}$ 中的\newterm{brownian-motion}{Brown 运动}{Brownian motion}.
+对偏微分方程也可以作类似的计入随机性的修改.
+一个特别有趣的 PDE 例子是著名的\newterm{black-scholes-equation}{Black-Scholes 方程}{Black-Scholes equation}, 它由与金融中股票期权价格有关的随机过程导出.
+股票期权的真实价格 $u(s, t)$(在时刻 $t$、价值为 $s$)满足如下 PDE:
+
+\begin{equation}\label{eq:c0-28}
+\partial_{t} u + r s \, \partial_{s} u + \frac{\sigma^{2}}{2} s^{2} \, \partial_{s}^{2} u - r u = 0, \qquad s > 0, \quad t \in [0, T],
+\end{equation}
+
+并受到期时刻 $T$ 的终值条件 $u = \max(0, (s - p))$ 与边界条件 $u(0, t) = 0$, $t \in [0, T]$ 约束.
+这里 $p$ 是期权的执行价.
+注意, 这个方程实际上是热方程 \eqref{eq:c0-2} 的一个(时间反演的)变体, 从而说明了上面提出的观点:同一类数学方程可以出现在几个完全不同的应用中(在这里是热力学与数理金融).

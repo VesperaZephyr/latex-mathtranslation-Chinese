@@ -1,0 +1,289 @@
+% !TeX root = ../main.tex
+% 第 2 章 基本密度性质 (对应原书 pp. 20--27)
+
+\chapter{基本密度性质}\label{chap:2}
+
+\section{引言}
+
+回顾一下，称 $\mathbb{R}^n$ 的子集 $E$ 为一个 $s$-集（$0\leq s\leq n$），如果 $E$ 是 $\mathcal{H}^s$-可测的且 $0<\mathcal{H}^s(E)<\infty$.一般我们排除 $s=0$ 的情形，因为对 $s=0$ 常常需要不同于其他 $s$ 值的专门处理.不过，由于 $0$-集恰好就是有限点集，其性质是直截了当的.
+
+接下来三章讨论 $s$-集的局部性质，特别是密度与切线的存在性问题.由于测度性质在可数并下保持，其中一些结果可以用于 $\mathcal{H}^s$-测度为\newterm{sigma-finite-measure}{$\sigma$-有限的 $\mathcal{H}^s$-可测集}{sigma-finite measure}（即作为 $s$-集的可数并而形成的集合）.$\mathcal{H}^s$-测度非 $\sigma$-有限的 $s$ 维集合很难把握，除非求出其有限测度的子集；这将在\cref{chap:5} 中讨论.
+
+通常把 $s$ 视为固定的；在没有歧义时，``测度''、``可测''、\newterm{almost-all}{``几乎所有的''}{almost all}（即``除一个测度为零的集合外''）等术语均指测度 $\mathcal{H}^s$.
+
+首先定义在本书发展中起主要作用的基本集合密度.这些密度是勒贝格密度 \eqref{eq:1.20} 的自然类似物，尽管它们的行为可能截然不同.这些密度刻画了一个集合的局部测度与``期望''测度之比.
+
+设 $B_r(x)$ 表示以 $x$ 为心、$r$ 为半径的\newterm{ball}{闭球}{ball}，于是 $|B_r(x)|=2r$.称
+\[
+  \bar{D}^{s}(E,x)=\varlimsup_{r\to 0}\frac{\mathcal{H}^{s}\bigl(E\cap B_r(x)\bigr)}{(2r)^{s}}
+\]
+与
+\[
+  \underline{D}^{s}(E,x)=\varliminf_{r\to 0}\frac{\mathcal{H}^{s}\bigl(E\cap B_r(x)\bigr)}{(2r)^{s}}
+\]
+分别为 $s$-集 $E$ 在点 $x\in\mathbb{R}^n$ 处的\newterm{upper density}{上密度}{density, upper}与\newterm{lower density}{下密度}{density, lower}（有时也称为上、下球面密度或圆形密度）.若 $\bar{D}^s(E,x)=\underline{D}^s(E,x)$，则称 $E$ 在 $x$ 处的\newterm{density}{密度}{density}存在，并用 $D^s(E,x)$ 表示这个公共值.
+
+若点 $x\in E$ 满足 $\underline{D}^s(E,x)=\bar{D}^s(E,x)=1$，则称 $x$ 为 $E$ 的\newterm{regular point}{正则点}{regular point}；否则称 $x$ 为\newterm{irregular point}{非正则点}{irregular point}.若 $s$-集 $E$ 的 $\mathcal{H}^s$-几乎所有的点都是正则点，则称 $E$ 是\newterm{regular}{正则的}{regular set}；若几乎所有的点都是非正则点，则称 $E$ 是\newterm{irregular}{非正则的}{irregular set}.
+
+刻画正则 $s$-集并给出 $s$-集密度的界，是本书的两个重要目标.勒贝格密度定理在这里没有类似物：$s$-集在几乎所有的点处密度为 $1$ 一般并不成立.事实上，该学科的主要结果之一是：除非 $s$ 为整数，$s$-集不可能是正则的.然而，若 $s$ 是整数，$s$-集可分解为一个正则部分与一个非正则部分.非常粗略地说，正则 $s$-集看起来像 $\mathbb{R}^n$ 中某个 $s$ 维流形的可测子集，而非正则集则可能表现得像 $n$ 个 Cantor 型集合的 Descartes 积——适当选取这些集合使所得集合具有所需的维数.
+
+虽然我们主要关心球面密度，但引入 $s$-集 $E$ 在 $x$ 处的\newterm{upper convex density}{上凸密度}{density, upper convex}也很方便，其定义为
+\begin{equation}\label{eq:2.1}
+  \bar{D}^{s}_{\mathrm{c}}(E,x)=\lim_{r\to 0}\Bigl\{\sup\frac{\mathcal{H}^{s}(E\cap U)}{|U|^{s}}\Bigr\},
+\end{equation}
+其中上确界取遍所有满足 $x\in U$ 且 $0<|U|\leq r$ 的凸集 $U$.任何集合都含于一个等直径的凸集之中，故这等价于取遍所有满足 $x\in U$ 且 $0<|U|\leq r$ 的集合 $U$ 取上确界.
+
+由于 $B_r(x)$ 是凸的，且当 $x\in U$ 时有 $U\subset B_r(x)$，其中 $r=|U|$，故有关系
+\begin{equation}\label{eq:2.2}
+  2^{-s}\,\bar{D}^{s}_{\mathrm{c}}(E,x)\leq\bar{D}^{s}(E,x)\leq\bar{D}^{s}_{\mathrm{c}}(E,x).
+\end{equation}
+
+在证明关于密度的基本结果之前，陈述一些经常应用的一般性原则或许是有价值的.
+
+第一，我们常常需要知道由度量或测度性质定义的点集关于适当的测度是可测的.在本学科的实践中，验证可测性几乎总是形式上的手续.所遇到的集合通常可以用已知的可测集经由 $\lim_{\rho\to 0}$、$\varlimsup_{\rho>0}E_\rho$ 之类的组合表达出来；随后在检验集合 $E_\rho$ 的定义时发现，它就等于对正有理数 $\rho$ 取的可数交 $\bigcap_{\rho\in\mathbf{Q}^+}E_\rho$.\cref{lem:2.1} 给出了可测性的若干示范，但在其后当例行验证已足够时，我们常常不再明确提及而默认所涉集合可测.
+
+第二，许多证明涉及证明由某个性质（如密度条件）定义的点集测度为零.典型地，需要证明集合 $E=\{x:\psi(x)>0\}$ 的 Hausdorff 测度为零，其中 $\psi$ 是某个实值函数.标准的方法是证明对每个 $\alpha>0$，集合 $\{x:\psi(x)>\alpha\}$ 测度为零，并指出可数并 $E=\bigcup_{j=1}^{\infty}\{x:\psi(x)>1/j\}$ 亦必如此.于是只需证明：对一切 $\alpha,\varepsilon>0$ 有 $\mathcal{H}^s\{x:\psi(x)>\alpha\}<\varepsilon$.
+
+第三，提一下``一致化''的思想.若要求一个性质在集合 $E$ 的几乎所有的点处成立，只需证明：对一切 $\varepsilon>0$，存在子集 $F\subset E$ 使 $E\setminus F$ 的测度小于 $\varepsilon$，且该性质在整个 $F$ 上成立.这样做的好处是 $F$ 常可取得比 $E$ 正则得多.例如，利用\cref{thm:1.6} 一般可取 $F$ 为闭集，而且还可选取 $F$ 使各种密度（举例来说）在 $F$ 上一致收敛.在本书中，我们一般用字母 $F$ 表示这个``工作集''，即剥去 $E$ 最剧烈的不规则性后所得的集合.很多时候，如果一个结果能在合理的拓扑与一致性假设下对某个集合证明成立，那么把它推广到完全一般的情形就纯粹是技术性的事了.
+
+\section{初等密度界}
+
+本节开始研究 $s$-集的基本密度性质，证明一些对一切 $s$ 值都成立的结果.这类结果首先由 Besicovitch（\citeyear{besicovitch1928a,besicovitch1938}） 对线性可测集给出，后一篇文章包含了改进的证明.\textcite{besicovitch1945a,marstrand1954a,wallin1969} 指出，把这些工作推广到 $\mathbb{R}^n$ 中任意 $s$ 与 $n$ 的 $s$-集并无困难.
+
+首先验证密度作为 $x$ 的函数的可测性.有时谈\newterm{measurable-function}{函数的可测性}{measurable function}比谈由函数定义的集合的可测性更简单.称函数 $f:\mathbb{R}^n\to\mathbb{R}$ 为可测的（相应地，\newterm{borel-measurable-function}{Borel 可测的}{Borel-measurable function}、\newterm{upper-semicontinuous-function}{上半连续的}{upper semicontinuous function}），如果 $\{x:f(x)<c\}$ 对每个 $c$ 都是可测集（相应地，Borel 集、开集）；把 $<$ 换成 $\leq$、$>$ 或 $\geq$ 也得到可测性的等价定义.由连续性的开集定义可知，$\mathbb{R}^n$ 上的连续函数都是 Borel 可测的.
+
+\begin{lemma}\label{lem:2.1}
+设 $E$ 是一个 $s$-集.
+
+(a) 对每个 $r$，$\mathcal{H}^s\bigl(E\cap B_r(x)\bigr)$ 是 $x$ 的上半连续函数，从而是 Borel 可测函数.
+
+(b) $\underline{D}^s(E,x)$ 与 $\bar{D}^s(E,x)$ 是 $x$ 的 Borel 可测函数.
+\end{lemma}
+
+\begin{proof}
+(a) 给定 $r,\alpha>0$，写
+\[
+  F=\{x:\mathcal{H}^{s}\bigl(E\cap B_r(x)\bigr)<\alpha\}.
+\]
+设 $x\in F$.当 $\varepsilon\searrow 0$ 时，$B_{r+\varepsilon}(x)$ 递减到 $B_r(x)$，故由 $\mathcal{H}^s$ 的上连续性，
+\[
+  \mathcal{H}^{s}\bigl(E\cap B_{r+\varepsilon}(x)\bigr)\searrow\mathcal{H}^{s}\bigl(E\cap B_r(x)\bigr).
+\]
+于是可找到 $\varepsilon$ 使 $\mathcal{H}^s\bigl(E\cap B_{r+\varepsilon}(x)\bigr)<\alpha$，从而当 $|y-x|\leq\varepsilon$ 时 $B_r(y)\subset B_{r+\varepsilon}(x)$ 且 $\mathcal{H}^s\bigl(E\cap B_r(y)\bigr)<\alpha$.故 $F$ 是 $\mathbb{R}^n$ 的开子集.这对一切 $\alpha$ 成立，因此 $\mathcal{H}^s\bigl(E\cap B_r(x)\bigr)$ 是 $x$ 的上半连续函数.
+
+(b) 利用 (a)，
+\[
+  \{x:\mathcal{H}^{s}\bigl(E\cap B_r(x)\bigr)<\alpha(2r)^{s}\}
+\]
+是开集，于是给定 $\rho>0$，
+\[
+  F_{\rho}=\{x:\mathcal{H}^{s}\bigl(E\cap B_r(x)\bigr)<\alpha(2r)^{s}\ \text{对某个}\ r<\rho\}
+\]
+作为这类集合之并也是开的.现在
+\[
+  \{x:\underline{D}^{s}(E,x)<\alpha\}=\bigcap_{\rho>0}F_{\rho};
+\]
+由于 $F_\rho$ 随 $\rho$ 减小而增大，这个交可以只对正有理数 $\rho$ 取.于是 $\{x:\underline{D}^s(E,x)<\alpha\}$ 是 $G_{\delta}$-集，从而对每个 $\alpha$ 都是 Borel 集，即 $\underline{D}^s(E,x)$ 是 $x$ 的 Borel 可测函数.类似的论证建立 $\bar{D}^s(E,x)$ 的可测性.
+\end{proof}
+
+这条引理使我们能够断言：对任何 $s$-集 $E$，形如 $\{x:D^s(E,x)>\alpha\}$ 的集合都是 $\mathcal{H}^s$-可测的.证明的另一个推论是：形如
+\[
+  \{x:\mathcal{H}^{s}\bigl(E\cap B_r(x)\bigr)<\alpha(2r)^{s}\ \text{对某个}\ r\leq\rho\}
+\]
+的集合是 $\mathcal{H}^s$-可测的（作为开集）；稍作变化便可用``对每个''替换``对某个''.
+
+我们先对凸密度得到上密度的界，然后用 \eqref{eq:2.2} 推出圆形密度的相应结果.下述定理当 $E$ 为紧集时是显然的，但它成立得更广.
+
+\begin{theorem}\label{thm:2.2}
+若 $E$ 是 $\mathbb{R}^n$ 中的 $s$-集，则对 $\mathcal{H}^s$-几乎所有的 $x\notin E$ 有 $\bar{D}^s_{\mathrm{c}}(E,x)=0$.
+\end{theorem}
+
+\begin{proof}
+固定 $\alpha>0$；我们证明可测集
+\[
+  F=\{x\notin E:\bar{D}^{s}_{\mathrm{c}}(E,x)>\alpha\}
+\]
+测度为零.由 $\mathcal{H}^s$ 的正则性，给定 $\delta>0$，可找到闭集 $E_1\subset E$ 使 $\mathcal{H}^s(E\setminus E_1)<\delta$.对 $\rho>0$ 令
+\begin{equation}\label{eq:2.3}
+  \mathcal{V}=\bigl\{U:\ U\ \text{为闭凸集},\ 0<|U|\leq\rho,\ U\cap E_1=\emptyset
+  \ \text{且}\ \mathcal{H}^{s}(E\cap U)>\alpha|U|^{s}\bigr\}.
+\end{equation}
+利用 \eqref{eq:2.1} 与 $E_1$ 的闭性，$\mathcal{V}$ 是 $F$ 的由闭集构成的 Vitali 类，于是可用 Vitali 定理（\cref{thm:1.10}(a)）找到 $\mathcal{V}$ 中的不交序列 $\{U_i\}$，使或者 $\sum|U_i|^s=\infty$，或者 $\mathcal{H}^s\bigl(F\setminus\bigcup U_i\bigr)=0$.
+
+但由 \eqref{eq:2.3}，
+\[
+  \sum|U_i|^{s}
+  <\frac{1}{\alpha}\sum\mathcal{H}^{s}(E\cap U_i)
+  =\frac{1}{\alpha}\mathcal{H}^{s}\Bigl(E\cap\bigcup_{i}U_i\Bigr)
+  \leq\frac{1}{\alpha}\mathcal{H}^{s}(E\setminus E_1)
+  <\frac{\delta}{\alpha}<\infty,
+\]
+因为 $\{U_i\}$ 两两不交且都与 $E_1$ 不交.于是 $\mathcal{H}^s\bigl(F\setminus\bigcup U_i\bigr)=0$，从而
+\[
+  \mathcal{H}^{s}_{\rho}(F)
+  \leq\mathcal{H}^{s}_{\rho}\Bigl(F\setminus\bigcup U_i\Bigr)+\mathcal{H}^{s}_{\rho}\Bigl(F\cap\bigcup U_i\Bigr)
+  \leq\mathcal{H}^{s}\Bigl(F\setminus\bigcup U_i\Bigr)+\sum|U_i|^{s}
+  <0+\frac{\delta}{\alpha}.
+\]
+这对一切 $\delta>0$ 与一切 $\rho>0$ 成立，故 $\mathcal{H}^s(F)=0$，如所需.
+\end{proof}
+
+\begin{theorem}\label{thm:2.3}
+若 $E$ 是 $\mathbb{R}^n$ 中的 $s$-集，则在 $\mathcal{H}^s$-几乎所有的 $x\in E$ 处 $\bar{D}^s_{\mathrm{c}}(E,x)=1$.
+\end{theorem}
+
+\begin{proof}
+(a) 我们用 Hausdorff 测度的定义证明在 $E$ 中几乎处处有 $\bar{D}^s_{\mathrm{c}}(E,x)\geq 1$.取 $\alpha<1$ 与 $\rho>0$，令
+\begin{equation}\label{eq:2.4}
+  F=\bigl\{x\in E:\mathcal{H}^{s}(E\cap U)<\alpha|U|^{s}\ \text{对一切满足}\ x\in U,\ |U|\leq\rho\ \text{的凸集}\ U\bigr\}.
+\end{equation}
+则 $F$ 是 $E$ 的 Borel 子集.对任意 $\varepsilon>0$，可找到 $F$ 的由凸集构成的 $\rho$-覆盖 $\{U_i\}$ 使
+\[
+  \sum|U_i|^{s}<\mathcal{H}^{s}(F)+\varepsilon.
+\]
+于是，设每个 $U_i$ 都含有 $F$ 的某个点，并利用 \eqref{eq:2.4}，
+\[
+  \mathcal{H}^{s}(F)
+  \leq\sum_{i}\mathcal{H}^{s}(F\cap U_i)
+  \leq\sum_{i}\mathcal{H}^{s}(E\cap U_i)
+  <\alpha\sum_{i}|U_i|^{s}
+  <\alpha\bigl(\mathcal{H}^{s}(F)+\varepsilon\bigr).
+\]
+由于 $\alpha<1$ 且外面的不等式对一切 $\varepsilon>0$ 成立，故 $\mathcal{H}^s(F)=0$.对任意 $\rho>0$ 都可定义这样的 $F$，故由定义，在 $E$ 中几乎处处有 $\bar{D}^s_{\mathrm{c}}(E,x)\geq\alpha$.这对一切 $\alpha<1$ 成立，于是在 $E$ 中几乎处处有 $\bar{D}^s_{\mathrm{c}}(E,x)\geq 1$.
+
+(b) 我们用 Vitali 方法证明几乎处处有 $\bar{D}^s_{\mathrm{c}}(E,x)\leq 1$.给定 $\alpha>1$，令 $F=\{x\in E:\bar{D}^s_{\mathrm{c}}(E,x)>\alpha\}$，则 $F$ 是 $E$ 的可测子集.令 $F_0=\{x\in F:\bar{D}^s_{\mathrm{c}}(E\setminus F,x)=0\}$.则由\cref{thm:2.2} 有 $\mathcal{H}^s(F\setminus F_0)=0$.利用凸密度的定义，当 $x\in F_0$ 时
+\[
+  \bar{D}^{s}_{\mathrm{c}}(F,x)\geq\bar{D}^{s}_{\mathrm{c}}(E,x)-\bar{D}^{s}_{\mathrm{c}}(E\setminus F,x)>\alpha.
+\]
+于是
+\begin{equation}\label{eq:2.5}
+  \mathcal{V}=\{U:U\ \text{为闭凸集且}\ \mathcal{H}^{s}(F\cap U)>\alpha|U|^{s}\}
+\end{equation}
+是 $F_0$ 的一个 Vitali 类，故由\cref{thm:1.10}(b)，给定 $\varepsilon>0$，可找到 $\mathcal{V}$ 中的不交序列 $\{U_i\}_i$ 使 $\mathcal{H}^s(F_0)\leq\sum|U_i|^s+\varepsilon$.由 \eqref{eq:2.5}，
+\[
+  \mathcal{H}^{s}(F)=\mathcal{H}^{s}(F_0)
+  <\frac{1}{\alpha}\sum\mathcal{H}^{s}(F\cap U_i)+\varepsilon
+  \leq\frac{1}{\alpha}\mathcal{H}^{s}(F)+\varepsilon.
+\]
+该不等式对任意 $\varepsilon>0$ 成立，故当 $\alpha>1$ 时 $\mathcal{H}^s(F)=0$，如所需.
+\end{proof}
+
+\textcite{freilich1966} 与 \textcite{daviessamuels1974} 对出乎意料一般的 Hausdorff 型测度得到了与\cref{thm:2.2,thm:2.3} 类似的结果.
+
+这两个定理对圆形密度（在我们的发展中更为重要）的类似物，用 \eqref{eq:2.2} 立即得到.
+
+\begin{corollary}\label{cor:2.4}
+若 $E$ 是 $\mathbb{R}^n$ 中的 $s$-集，则在 $E$ 外 $\mathcal{H}^s$-几乎所有的 $x$ 处 $D^s(E,x)=0$.
+\end{corollary}
+
+\begin{corollary}\label{cor:2.5}
+若 $E$ 是 $\mathbb{R}^n$ 中的 $s$-集，则在几乎所有的 $x\in E$ 处
+\[
+  2^{-s}\leq\bar{D}^{s}(E,x)\leq 1.
+\]
+\end{corollary}
+
+\cref{cor:2.4} 有若干重要推论.其一是：$s$-集的可测子集的密度，在该子集的几乎所有点处与原集合的密度相等.这个结果常被用于准备性的场合：于是当考察某个具有特定密度性质的子集时，我们可以弃置集合的其余部分，使该密度性质几乎处处成立.
+
+\begin{corollary}\label{cor:2.6}
+设 $F$ 是 $s$-集 $E$ 的可测子集.则在几乎所有的 $x\in F$ 处
+$\underline{D}^s(F,x)=\underline{D}^s(E,x)$ 且 $\bar{D}^s(F,x)=\bar{D}^s(E,x)$.
+\end{corollary}
+
+\begin{proof}
+记 $H=E\setminus F$.由\cref{cor:2.4}，在 $F$ 中几乎所有的 $x$ 处 $D^s(H,x)=0$.对这些 $x$，
+\[
+  \underline{D}^{s}(E,x)=\underline{D}^{s}(F,x)+D^{s}(H,x)=\underline{D}^{s}(F,x)
+  \quad\text{且}\quad
+  \bar{D}^{s}(E,x)=\bar{D}^{s}(F,x)+D^{s}(H,x)=\bar{D}^{s}(F,x). \qedhere
+\]
+\end{proof}
+
+\begin{corollary}\label{cor:2.7}
+设 $E=\bigcup_{j}E_j$ 是 $s$-集的可数不交并且 $\mathcal{H}^{s}(E)<\infty$.则对任意 $k$，在几乎所有的 $x\in E_k$ 处
+\[
+  \underline{D}^{s}(E_k,x)=\underline{D}^{s}(E,x)
+  \quad\text{且}\quad
+  \bar{D}^{s}(E_k,x)=\bar{D}^{s}(E,x).
+\]
+\end{corollary}
+
+\begin{proof}
+对 $E$ 的子集 $E_k$ 应用\cref{cor:2.6}.
+\end{proof}
+
+\begin{corollary}\label{cor:2.8}
+设 $E$ 是 $s$-集.若 $E$ 是正则的（相应地，非正则的），则 $E$ 的任何测度为正的可测子集也是正则的（相应地，非正则的）.
+\end{corollary}
+
+\begin{proof}
+由\cref{cor:2.6} 与正则性的定义立得.
+\end{proof}
+
+\begin{corollary}\label{cor:2.9}
+正则集（相应地，非正则集）与可测集之交是正则集（相应地，非正则集）.正则集与非正则集之交测度为零.
+\end{corollary}
+
+\begin{proof}
+前两个断言由\cref{cor:2.8} 得出.最后的断言成立，因为这样的交必既是正则集又是非正则集.
+\end{proof}
+
+下一条推论使我们能够独立地处理 $s$-集的正则部分与非正则部分.
+
+\begin{corollary}[\newterm{decomposition-theorem}{分解定理}{decomposition theorem}]\label{cor:2.10}
+若 $E$ 是 $s$-集，则 $E$ 的正则点之集是一个正则集，而 $E$ 的非正则点之集是一个非正则集.
+\end{corollary}
+
+\begin{proof}
+由\cref{lem:2.1}，正则点之集与非正则点之集都可测，故由\cref{cor:2.6} 即得本推论.
+\end{proof}
+
+对 $\mathbb{R}^n$（$n\geq 2$）中的 $s$-集，我们还能得到上角密度的界.\newterm{density-angular}{角密度}{density, angular}由 \textcite{besicovitch1929,besicovitch1938} 引入，用于研究 $s$-集的切线性质.设 $\theta$ 为单位向量，$\phi$ 为一个角；令 $S(x,\theta,\phi)$ 为顶点在 $x$、轴沿方向 $\theta$ 的\newterm{cone}{闭单向无穷锥}{cone}，由那些使线段 $[x,y]$ 与 $\theta$ 的夹角至多为 $\phi$ 的点 $y$ 组成.记 $S_r(x,\theta,\phi)=B_r(x)\cap S(x,\theta,\phi)$ 为相应的半径 $r$ 的\newterm{spherical-sector}{球面扇形}{spherical sector}.角密度的定义与球面密度类似，只是把 $B_r(x)$ 换成\newterm{sector}{扇形}{sector} $S_r(x,\theta,\phi)$.于是
+\[
+  \bar{D}^{s}(E,x,\theta,\phi)=\varlimsup_{r\to 0}\frac{\mathcal{H}^{s}\bigl(E\cap S_r(x,\theta,\phi)\bigr)}{(2r)^{s}}
+\]
+与
+\[
+  \underline{D}^{s}(E,x,\theta,\phi)=\varliminf_{r\to 0}\frac{\mathcal{H}^{s}\bigl(E\cap S_r(x,\theta,\phi)\bigr)}{(2r)^{s}}
+\]
+分别为 $E$ 在 $x$ 处的\newterm{upper angular density}{上角密度}{density, upper angular}与\newterm{lower angular density}{下角密度}{density, lower angular}.一次例行验证（见\cref{lem:2.1}）即可建立角密度及其相关集合的一切所需的可测性.
+
+比较球面扇形的直径与半径，由定义可得
+\[
+  \bar{D}^{s}(E,x,\theta,\phi)\leq 2^{-s}|S_1(x,\theta,\phi)|^{s}\,\bar{D}^{s}_{\mathrm{c}}(E,x).
+\]
+于是由\cref{thm:2.3} 立即推出：给定 $\theta$ 与 $\phi$，对几乎所有的 $x\in E$，
+\[
+  \bar{D}^{s}(E,x,\theta,\phi)\leq 2^{-s}|S_1(x,\theta,\phi)|^{s}.
+\]
+计算扇形的直径，上式成为
+\[
+  \bar{D}^{s}(E,x,\theta,\phi)\leq
+  \begin{cases}
+    2^{-s} & \bigl(0<\phi\leq\tfrac{1}{6}\pi\bigr)\\
+    (\sin\phi)^{s} & \bigl(\tfrac{1}{6}\pi\leq\phi\leq\tfrac{1}{2}\pi\bigr)\\
+    1 & \bigl(\tfrac{1}{2}\pi\leq\phi\leq\pi\bigr).
+  \end{cases}
+\]
+当 $\phi\geq\frac{1}{2}\pi$ 时，通过修改\cref{thm:2.3} 证明的 (a) 部分，可得到上角密度的正的下界，见\cref{exe:2.3}.于是
+\[
+  \bar{D}^{s}(E,x,\theta,\phi)\geq
+  \begin{cases}
+    0 & \bigl(0<\phi<\tfrac{1}{2}\pi\bigr)\\
+    2^{-s} & \bigl(\tfrac{1}{2}\pi\leq\phi\leq\pi\bigr).
+  \end{cases}
+\]
+下密度的估计要难得到一些；我们将在后面结合切线性质在某些情形下予以考虑.
+
+\textcite{morgan1935,gillis1935,besicovitch1938,dickinson1939} 给出了密度与角密度取极端值的一些集合的构造.
+
+\begin{exercises}
+\item 设 $E$ 是 Cantor 集，证明对一切 $x$ 有 $\underline{D}^s(E,x)\leq 2^{-s}$，其中 $s=\log 2/\log 3$.进而证明 $E$ 是非正则的.
+\item 定义 $\mathbb{R}^n$ 中 $s$-集 $E$ 在 $x$ 处的上立方密度为
+$\varlimsup_{r\to 0}\mathcal{H}^s\bigl(E\cap S_r(x)\bigr)/|S_r(x)|^s$，
+其中 $S_r(x)$ 表示以 $x$ 为心、边平行于坐标轴、边长为 $r$ 的立方体.\footnote{原书此处印作 $\varlimsup_{r\to\infty}$.因所证结论为``在几乎所有的 $x\in E$ 处''的局部密度估计，且当 $r\to\infty$ 时左端对任何有限测度之集恒趋于 $0$（例如取 $E$ 为 Cantor 集），$r\to\infty$ 应为 $r\to 0$ 之排印误，故按 $r\to 0$ 翻译.——译者注.}
+证明在几乎所有的 $x\in E$ 处，$E$ 的上立方密度介于 $2^{-s}n^{-s/2}$ 与 $1$ 之间.
+\item 设 $E$ 是 $\mathbb{R}^n$（$n\geq 2$）中的 $s$-集，$\theta$ 是单位向量，证明对几乎所有的 $x\in E$ 有 $2^{-s}\leq\bar{D}^s\bigl(E,x,\theta,\tfrac{1}{2}\pi\bigr)$.（仿照\cref{thm:2.3}(a) 的证明；需要利用 $\mathcal{H}^s$ 的正则性获得一个闭集来工作.）进而证明当 $\phi\geq\frac{1}{2}\pi$ 时 $2^{-s}\leq\bar{D}^s(E,x,\theta,\phi)$.
+\item 设 $\psi:\mathbb{R}^n\to\mathbb{R}^n$ 是 Jacobian 不取零值的连续可微变换.若 $E$ 是 $s$-集，证明对一切 $x$ 有 $\bar{D}^s\bigl(\psi(E),\psi(x)\bigr)=\bar{D}^s(E,x)$；对下密度也有类似结果.
+\item 用\cref{cor:2.4} 与\cref{thm:1.12} 证明勒贝格密度定理（\cref{thm:1.13}）.
+\end{exercises}

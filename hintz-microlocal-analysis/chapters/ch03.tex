@@ -1,0 +1,636 @@
+% chapters/ch03.tex - 第 3 章: 符号
+
+\chapter{符号}\label{ch:03}
+
+对于形如
+\begin{equation}\label{eq:3.1}
+    a(x, \xi) = \sum_{|\alpha| \le m} a_\alpha(x) \xi^\alpha, \qquad a_\alpha \in \mathcal{C}_b^\infty(\R^n)
+\end{equation}
+的任意函数, 我们可以通过令
+\begin{equation}\label{eq:3.2}
+    (\Op(a) u)(x) \defeq \sum_{|\alpha| \le m} a_\alpha(x) D^\alpha u(x)
+\end{equation}
+来与其关联一个微分算子. 由此定义的映射 $\Op$ 称为\textbf{量化映射} (quantization map). 我们在定义~\ref{def:2.13} 中已经看到, 能够对更一般的函数 $a(x, \xi)$ 进行量化是非常有用的, 例如 $a(x, \xi) = \langle \xi \rangle^s$ (对应 $\Op(a) = \langle D \rangle^s$) 或
+\begin{equation}\label{eq:3.3}
+    a(x, \xi) = a_s(x) \langle \xi \rangle^s, \qquad a_s \in \mathcal{C}_b^\infty(\R^n).
+\end{equation}
+虽然它不再是关于 $\xi$ 的多项式, 但这个函数与多项式共享如下重要性质: 每对 $\xi$ 求导一次, 在 $|\xi| \to \infty$ 时就多获得一阶衰减; 而对 $x$ 求导时, 它在 $|\xi| \to \infty$ 时的界并不变差. 具有这些性质的一般符号类将在第~\ref{sec:3.1}~节中引入并分析.
+
+尽管完全确定相应的算子 $\Op(a)$ 需要获知全符号 $a(x, \xi)$, 但在许多分析目的下, 我们并不需要全程追踪全符号的全部细节. \textbf{主符号} (principal symbol)——在微分算子 $A = \Op(a)$ 的情形下仅保留式~\eqref{eq:3.1} 中 $|\alpha| = m$ 的项——控制了算子 $A$ 最关键的性质, 例如其椭圆性.
+
+\begin{definition}[微分算子的主符号]\label{def:3.1}
+给定 $m$ 阶微分算子 $A = \sum_{|\alpha| \le m} a_\alpha(x) D^\alpha$ ($m \in \N_0$), 其主符号定义为
+\begin{equation}\label{eq:3.4}
+    \sigma_m(A)(x, \xi) \defeq \sum_{|\alpha| = m} a_\alpha(x) \xi^\alpha.
+\end{equation}
+若对所有 $x \in \R^n$ 及所有 $\xi \neq 0$ 均有 $\sigma_m(A)(x, \xi) \neq 0$, 则称算子 $A$ 是\textbf{椭圆型的} (elliptic).
+\end{definition}
+
+典型例子包括 Cauchy--Riemann 算子 $A = \frac{1}{2}(\partial_{x_1} + \ii \partial_{x_2}) \in \Diff^1(\R^2)$, 以及对任意复数 $z \in \mathbb{C}$ 的算子 $A = \Delta - z \in \Diff^2(\R^n)$. 一般符号的椭圆性概念将在第~\ref{sec:3.2}~节中深入探讨.
+
+\begin{remark}[阶数的依赖性]\label{rem:3.2}
+主符号的定义依赖于阶数 $m$ 的选择. 例如, 人们可以将一个 $A \in \Diff^{m-1}(\R^n)$ 的算子视为 $m$ 阶算子, 此时作为 $m$ 阶算子其主符号 $\sigma_m(A)$ 处处恒等于零. 换言之, 对于 $A \in \Diff^m(\R^n)$, $\sigma_m(A) = 0$ 当且仅当 $A \in \Diff^{m-1}(\R^n)$.
+\end{remark}
+
+为了进一步说明主符号的理论动机, 我们指出它在微分算子的标准运算 (如求伴随, 算子复合以及坐标变换) 下具有非常简洁的代数表现:
+
+\begin{proposition}[主符号的代数性质]\label{prop:3.3}
+设 $A \in \Diff^m(\R^n)$.
+\begin{enumerate}
+    \item 定义 $A$ 关于 $L^2(\R^n)$ 内积的形式伴随算子 $A^*$ 满足:
+    \[
+        \int_{\R^n} (A^* u)(x) \overline{v(x)} \,\dd x = \int_{\R^n} u(x) \overline{(A v)(x)} \,\dd x, \qquad u, v \in \SmoothComp(\R^n).
+    \]
+    则 $A^* \in \Diff^m(\R^n)$ 且
+    \begin{equation}\label{eq:3.5}
+        \sigma_m(A^*)(x, \xi) = \overline{\sigma_m(A)(x, \xi)}.
+    \end{equation}
+    \item 设 $B \in \Diff^{m'}(\R^n)$. 则复合算子 $A \circ B \in \Diff^{m+m'}(\R^n)$ 且
+    \begin{equation}\label{eq:3.6}
+        \sigma_{m+m'}(A \circ B)(x, \xi) = \sigma_m(A)(x, \xi) \sigma_{m'}(B)(x, \xi).
+    \end{equation}
+    \item 设 $\kappa \colon \R^n \to \R^n$ 为在某个紧集外部为恒等映射的光滑微分同胚. 定义算子 $A_\kappa \colon \Schwartz(\R^n) \to \Schwartz(\R^n)$ 为 $(A_\kappa u)(y) \defeq (A(u \circ \kappa^{-1}))(\kappa(y))$. 则 $A_\kappa \in \Diff^m(\R^n)$ 且
+    \begin{equation}\label{eq:3.7}
+        \sigma_m(A_\kappa)(y, \eta) = \sigma_m(A)\left( \kappa(y), (\kappa'(y)^T)^{-1} \eta \right).
+    \end{equation}
+\end{enumerate}
+\end{proposition}
+
+因此, 粗略地说, 主符号把算子的非交换代数 $\Diff(\R^n) = \bigcup_{m \in \N_0} \Diff^m(\R^n)$ 映入函数组成的交换代数. 性质~(3) 表明主符号可以作为余切丛 $T^* \R^n$ 上的函数而良定义; 这一不变的观点将在第~\ref{ch:05}~章中详细讨论.
+
+\begin{proof}[命题~\ref{prop:3.3} 的证明]
+只需考虑单项式算子 $A = a(x) D^\alpha$ ($|\alpha| = m$) 以及 $B = b(x) D^\beta$ ($|\beta| = m'$).
+
+对于 (1), $A^* = D^\alpha \bar{a} = \bar{a} D^\alpha + [D^\alpha, \bar{a}]$. 由于对易子 $[D^\alpha, \bar{a}] \in \Diff^{m-1}(\R^n)$, 其最高阶项正是 $\bar{a} D^\alpha$, 故式~\eqref{eq:3.5} 成立.
+
+对于 (2), 注意到
+\begin{equation}\label{eq:3.8}
+    A \circ B = a b D^{\alpha + \beta} + a [D^\alpha, b] D^\beta,
+\end{equation}
+其中第二项属于 $\Diff^{m+m'-1}(\R^n)$, 故最高阶部分仅由 $a b D^{\alpha+\beta}$ 提供, 即证得式~\eqref{eq:3.6}.
+
+对于 (3), 记 $y = \kappa^{-1}(x)$. 由复合求导链式法则知 $\partial_x = ((\kappa^{-1})'|_x)^T \partial_y = (\kappa'(y)^T)^{-1} \partial_y$. 从而
+\begin{equation}\label{eq:3.9}
+    (A_\kappa u)(y) = a(\kappa(y)) \left( (\kappa'(y)^T)^{-1} D_y \right)^\alpha u.
+\end{equation}
+根据 Leibniz 法则展开导数, 所有含有作用在 $(\kappa'(y)^T)^{-1}$ 上的导数的项, 作用在 $u$ 上均给出阶数 $\le m - 1$ 的微分算子. 从而最高阶主导项由对 $u$ 施加的全部 $m$ 阶导数贡献, 其主符号恰为 $a(\kappa(y)) ((\kappa'(y)^T)^{-1} \eta)^\alpha$.
+\end{proof}
+
+在实际应用中涌现出的许多符号, 与微分算子的 (全) 符号有如下相似之处: 当 $|\xi| > 1$ 时, 它们可以表为关于伸缩变换 $\xi \mapsto \lambda \xi$ ($\lambda \ge 1$) 具有齐次性的各项之和. (在原点 $\xi = 0$ 处保持光滑的齐次函数仅有多项式; 见习题~\ref{ex:3.5}.) 例如, 当 $s \notin 2\N_0$ 时, 符号 $\langle \xi \rangle^s$ 可以展开为级数 $\sum_{j \ge 0} c_j |\xi|^{s-j}$ ($c_j \in \R$); 这构成了\textbf{经典符号}的一个代表性例子 (第~\ref{sec:3.3}~节与习题~\ref{ex:3.3}). 在微局部分析中, 此类级数的收敛性实际上并不重要: 阶数为 $-\infty$ 的符号 (即对任意 $N$ 均满足 $|\xi| \to \infty$ 时按 $|\xi|^{-N}$ 快速衰减的符号), 经量化后将对应于光滑化算子 (见引理~\ref{lem:4.17}). 因此, 我们将在第~\ref{sec:3.4}~节讨论重要的\textbf{渐近求和} (asymptotic summation) 概念: 它允许人们在模去 $-\infty$ 阶符号 (所谓的残余符号) 的意义下, 将无穷多个阶数趋于 $-\infty$ 的符号形式相加, 而完全不要求级数具备通常意义下的逐点收敛性. 渐近求和在构造辅助算子 (例如椭圆算子的拟逆) 的全符号时经常出现 (第~\ref{sec:4.7}~节), 此时人们通过逐次添加阶数越来越低的修正项来构造符号.
+
+依赖于一个附加的 (半经典的) 参数 $h \in (0, 1)$ 的符号在第~\ref{sec:3.5}~节中讨论.
+
+\section{基本定义}\label{sec:3.1}
+\index{fuhaolei@符号类 (symbol classes)}%
+\index{canyufuhao@残余符号 (residual symbols)}%
+
+本章的主要定义如下:
+
+\begin{definition}[符号类]\label{def:3.4}
+设 $m \in \R$, $n, N \in \N_0$. 阶数为 $m$ 的 (一致) \textbf{符号空间}
+\begin{equation}\label{eq:3.10}
+    S^m(\R^n; \R^N) \subset \mathcal{C}^\infty(\R^n \times \R^N)
+\end{equation}
+由所有满足如下条件的函数 $a = a(x, \xi)$ 组成: 对任意多重指标 $\alpha \in \N_0^n$ 与 $\beta \in \N_0^N$, 均存在常数 $C_{\alpha\beta}$ 使得
+\begin{equation}\label{eq:3.11}
+    |\partial_x^\alpha \partial_\xi^\beta a(x, \xi)| \le C_{\alpha\beta} \langle \xi \rangle^{m - |\beta|}, \qquad \forall\,x \in \R^n, \ \xi \in \R^N.
+\end{equation}
+对于仅依赖于 $\xi$ 的符号, 我们简记为
+\begin{equation}\label{eq:3.12}
+    S^m(\R^N) \defeq S^m(\R^0; \R^N).
+\end{equation}
+\end{definition}
+
+对 $\xi$ 变量求导所换来的衰减增强性质通常称为 (关于 $\xi$ 的) \textbf{符号性行为}, 而 $\xi$ 称为符号变量.
+
+\begin{remark}[其他常见记号]\label{rem:3.5}
+在文献中, 此类符号空间有时被记为 $S^m_\infty(\R^n; \R^N)$, 下标 ``$\infty$'' 表示“系数”在 $x$ 变量上的一致有界性.
+\end{remark}
+
+为空间 $S^m(\R^n; \R^N)$ 配备由式~\eqref{eq:3.11} 中的最佳常数给出的范数, 或更简洁地,
+\begin{equation}\label{eq:3.13}
+    \|a\|_{m, k} \defeq \sup_{(x, \xi) \in \R^n \times \R^N} \max_{|\alpha| + |\beta| \le k} \langle \xi \rangle^{-m + |\beta|} |\partial_x^\alpha \partial_\xi^\beta a(x, \xi)|, \qquad k \in \N_0,
+\end{equation}
+$S^m(\R^n; \R^N)$ 构成一个 Fréchet 空间. 直接由定义可知, 如下微分算子均为连续线性映射:
+\begin{equation}\label{eq:3.14}
+    D_x^\alpha \colon S^m(\R^n; \R^N) \to S^m(\R^n; \R^N), \qquad D_\xi^\beta \colon S^m(\R^n; \R^N) \to S^{m - |\beta|}(\R^n; \R^N).
+\end{equation}
+
+\begin{example}[符号, I]\label{eg:3.6}
+$\R^n$ 上 $m$ 阶微分算子的全符号 (见式~\eqref{eq:2.53}) 属于 $S^m(\R^n; \R^n)$. 作为特例, 给定 $a \in \mathcal{C}_b^\infty(\R^n)$, 函数 $(x, \xi) \mapsto a(x)$ 属于 $S^0(\R^n; \R^N)$ (对任意 $N$).
+\end{example}
+
+\begin{example}[符号, II]\label{eg:3.7}
+设 $m \in \R$. 则 $\langle \xi \rangle^m \in S^m(\R^n)$ (习题~\ref{ex:3.3}).
+\end{example}
+
+\begin{proposition}[符号的逐点乘积]\label{prop:3.8}
+符号的逐点乘法构成了连续的双线性映射:
+\begin{equation}\label{eq:3.15}
+    S^m(\R^n; \R^N) \times S^{m'}(\R^n; \R^N) \to S^{m+m'}(\R^n; \R^N).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+这直接源于 Leibniz 乘积求导法则: 对 $a \in S^m(\R^n; \R^N)$, $b \in S^{m'}(\R^n; \R^N)$ 以及 $\alpha \in \N_0^n, \beta \in \N_0^N$,
+\[
+    \begin{aligned}
+        |\partial_x^\alpha \partial_\xi^\beta (a \cdot b)| &= \left| \sum_{\substack{\alpha' + \alpha'' = \alpha \\ \beta' + \beta'' = \beta}} \binom{\alpha}{\alpha'} \binom{\beta}{\beta'} (\partial_x^{\alpha'} \partial_\xi^{\beta'} a) (\partial_x^{\alpha''} \partial_\xi^{\beta''} b) \right| \\
+        &\le \sum_{\substack{\alpha' + \alpha'' = \alpha \\ \beta' + \beta'' = \beta}} C_{\alpha' \beta'} C_{\alpha'' \beta''} \langle \xi \rangle^{m - |\beta'|} \langle \xi \rangle^{m' - |\beta''|} \le C_{\alpha\beta} \langle \xi \rangle^{m + m' - |\beta|},
+    \end{aligned}
+\]
+证毕.
+\end{proof}
+
+我们注意到如下平凡的连续包含:
+\begin{equation}\label{eq:3.16}
+    S^m(\R^n; \R^N) \subseteq S^{m'}(\R^n; \R^N),
+\end{equation}
+因此符号空间族 $\{S^m(\R^n; \R^N)\}_{m \in \R}$ 给出了全体符号空间 $\bigcup_{m \in \R} S^m(\R^n; \R^N)$ 的一个过滤 (filtration). 反方向上, 我们定义\textbf{残余符号空间} (residual symbols) 为
+\begin{equation}\label{eq:3.17}
+    S^{-\infty}(\R^n; \R^N) \defeq \bigcap_{m \in \R} S^m(\R^n; \R^N).
+\end{equation}
+配备半范数族 $\|\cdot\|_{m, k}$ ($m \in \mathbb{Z}, k \in \N_0$), $S^{-\infty}(\R^n; \R^N)$ 亦为 Fréchet 空间.
+
+\begin{example}[符号, III]\label{eg:3.9}
+显然有 $\Schwartz(\R^n \times \R^N) \subset S^{-\infty}(\R^n; \R^N)$. 此外, $\Schwartz(\R^N) = S^{-\infty}(\R^N)$, 且更一般地 $\mathcal{C}_b^\infty(\R^n; \Schwartz(\R^N)) = S^{-\infty}(\R^n; \R^N)$. 最后, 给定切断函数 $\chi \in \SmoothComp(\R^N)$, 其拉回函数 $(x, \xi) \mapsto \chi(\xi)$ 属于残余符号空间 $S^{-\infty}(\R^n; \R^N)$.
+\end{example}
+
+虽然当 $m < m'$ 时包含映射~\eqref{eq:3.16} 的值域从不稠密 (参见习题~\ref{ex:3.7}), 但我们有如下替代结果:
+
+\begin{proposition}[符号空间的稠密性]\label{prop:3.10}
+设 $m < m'$. 则 $S^{-\infty}(\R^n; \R^N)$ 是 $S^m(\R^n; \R^N)$ 在 $S^{m'}(\R^n; \R^N)$ 的拓扑下的稠密子空间. 事实上更强的结论成立: 对任意 $a \in S^m(\R^n; \R^N)$, 存在序列 $a_j \in S^{-\infty}(\R^n; \R^N)$, 它在 $S^m(\R^n; \R^N)$ 中一致有界, 且在 $S^{m'}(\R^n; \R^N)$ 的拓扑下收敛于 $a$.
+\end{proposition}
+
+\begin{proof}
+选取光滑切断函数 $\chi \in \SmoothComp(\R^N) \subset S^{-\infty}(\R^N)$ (见例~\ref{eg:3.9}), 满足当 $|\xi| \le 1$ 时 $\chi \equiv 1$, 当 $|\xi| \ge 2$ 时 $\chi \equiv 0$, 且对所有 $\xi$ 均有 $\chi(\xi) \in [0, 1]$. 由命题~\ref{prop:3.8}, 定义
+\begin{equation}\label{eq:3.18}
+    a_j(x, \xi) \defeq a(x, \xi) \chi(\xi / j) \in S^{-\infty}(\R^n; \R^N).
+\end{equation}
+根据命题~\ref{prop:3.8}, 只需证明缩放因子
+\begin{equation}\label{eq:3.19}
+    \chi_j(\xi) \defeq \chi(\xi / j)
+\end{equation}
+在 $S^0(\R^N)$ 中一致有界, 并且对任意 $\epsilon > 0$ 在 $S^\epsilon(\R^N)$ 的拓扑下收敛于常数函数 $1$.
+
+关于一致有界性: 对所有 $j$ 显然有 $|\chi_j(\xi)| \le \|\chi\|_{0, 0}$; 而当 $|\beta| \ge 1$ 时, $\partial_\xi^\beta \chi_j(\xi)$ 在 $|\xi| \le j$ 上为零, 且
+\begin{equation}\label{eq:3.20}
+    |\xi|^{|\beta|} \partial_\xi^\beta \chi_j(\xi) = \chi_\beta(\xi / j), \qquad \chi_\beta(\xi) \defeq |\xi|^{|\beta|} (\partial^\beta \chi)(\xi) \in \SmoothComp(\R^N).
+\end{equation}
+关于收敛性: 注意到 $\supp(\chi_j - 1) \subset \{|\xi| \ge j\}$. 因此
+\begin{equation}\label{eq:3.21}
+    |\chi(\xi / j) - 1| \le j^{-\epsilon} |\xi|^\epsilon \le j^{-\epsilon} \langle \xi \rangle^\epsilon.
+\end{equation}
+对于导数, 结合支集与式~\eqref{eq:3.20} 可知:
+\begin{equation}\label{eq:3.22}
+    |\xi|^{|\beta| - \epsilon} |\partial_\xi^\beta (\chi_j(\xi) - 1)| = |\xi|^{|\beta| - \epsilon} |\partial_\xi^\beta \chi_j(\xi)| \le j^{-\epsilon} |\chi_\beta(\xi / j)|.
+\end{equation}
+因此 $\|\chi_j - 1\|_{\epsilon, k} \le C_{\epsilon, k} j^{-\epsilon} \to 0$ ($j \to \infty$).
+\end{proof}
+
+\section{椭圆性}\label{sec:3.2}
+\index{tuoyuan fuhao@椭圆符号 (elliptic symbols)}%
+
+我们现在将第~\ref{sec:1.2}~节中算子 $\Delta + 1$ (式~\eqref{eq:1.9}) 的符号核心性质推广至一般符号:
+
+\begin{definition}[椭圆符号]\label{def:3.11}
+设 $m \in \R$. 符号 $a \in S^m(\R^n; \R^N)$ 称为 (一致) \textbf{椭圆的} (elliptic), 若存在符号 $b \in S^{-m}(\R^n; \R^N)$ 使得
+\[
+    a b - 1 \in S^{-1}(\R^n; \R^N).
+\]
+\end{definition}
+
+一个简单的 $m = 2$ 阶椭圆符号实例为 $a(x, \xi) = |\xi|^2 - z$ (其中 $z \in \mathbb{C}$ 任意, 例如 $z = -1$).
+
+\begin{proposition}[椭圆性的等价刻画]\label{prop:3.12}
+设 $m \in \R$, $a \in S^m(\R^n; \R^N)$. 则下列条件等价:
+\begin{enumerate}
+    \item $a$ 是椭圆符号.
+    \item 存在常数 $C, c > 0$ 使得
+    \begin{equation}\label{eq:3.23}
+        |\xi| \ge C \implies |a(x, \xi)| \ge c |\xi|^m.
+    \end{equation}
+    \item 存在常数 $C', c' > 0$ 使得
+    \begin{equation}\label{eq:3.24}
+        |a(x, \xi)| \ge c' |\xi|^m - C' |\xi|^{m-1}, \qquad \forall\,|\xi| \ge 1.
+    \end{equation}
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+若 $a$ 椭圆, 则由定义~\ref{def:3.11}, 存在 $b \in S^{-m}$ 与 $r \in S^{-1}$ 使得 $a b = 1 - r$. 从而
+\begin{equation}\label{eq:3.25}
+    1 - C \langle \xi \rangle^{-1} \le |a(x, \xi)| |b(x, \xi)| \le C |a(x, \xi)| \langle \xi \rangle^{-m},
+\end{equation}
+即
+\begin{equation}\label{eq:3.26}
+    |a(x, \xi)| \ge \frac{1}{C} \langle \xi \rangle^m - \langle \xi \rangle^{m-1}.
+\end{equation}
+由于当 $|\xi| \ge 1$ 时 $\frac{\langle \xi \rangle}{|\xi|} \in (1, \sqrt{2}]$, 这立即推出式~\eqref{eq:3.24}. 而式~\eqref{eq:3.24} 显然蕴含式~\eqref{eq:3.23} (取 $c = c'/2$, $C = 2C'/c'$).
+
+最后, 若式~\eqref{eq:3.23} 成立, 选取切断函数 $\chi \in \Smooth(\R^N)$ 使得在 $|\xi| \le C$ 上 $\chi(\xi) = 0$, 而在 $|\xi| \ge 2C$ 上 $\chi(\xi) = 1$. 则 (习题~\ref{ex:3.4})
+\begin{equation}\label{eq:3.27}
+    b(x, \xi) \defeq \frac{\chi(\xi)}{a(x, \xi)} \in S^{-m}(\R^n; \R^N),
+\end{equation}
+且 $a(x, \xi) b(x, \xi) - 1 = \chi(\xi) - 1 \in S^{-\infty}(\R^n; \R^N) \subset S^{-1}(\R^n; \R^N)$, 证明了 (1).
+\end{proof}
+
+注意到: 若 $a \in S^m(\R^n; \R^N)$ 是椭圆的, 则对任意 $a' \in S^{m-1}(\R^n; \R^N)$, $a + a'$ 仍然是椭圆的. 因此, 椭圆性只是商空间中等价类
+\begin{equation}\label{eq:3.28}
+    [a] \in S^m(\R^n; \R^N) / S^{m-1}(\R^n; \R^N)
+\end{equation}
+的性质. 对于微分算子的全符号, 我们可以将 $[a]$ 与 $a$ 的首项、$m$ 次齐次的部分等同起来. 对于接下来引入的经典符号, 这一点同样成立.
+
+\section{经典符号}\label{sec:3.3}
+\index{jingdian fuhao@经典符号 (classical symbols)}%
+\index{qici fuhao@齐次符号 (homogeneous symbols)}%
+
+一类重要的符号子类模仿了微分算子的符号 (即关于 $\xi$ 齐次的函数之和). 更确切地, 我们称定义在 $\xi \neq 0$ 上的函数 $a(x, \xi)$ 为关于 $\xi$ 的 $m \in \R$ 阶 (正) \textbf{齐次函数}, 若
+\begin{equation}\label{eq:3.29}
+    a(x, \lambda \xi) = \lambda^m a(x, \xi), \qquad \forall\,\lambda > 0.
+\end{equation}
+
+\begin{definition}[齐次符号空间]\label{def:3.13}
+设 $m \in \R$. 空间 $S_{\mathrm{hom}}^m(\R^n; \R^N \setminus \{0\})$ 由所有满足式~\eqref{eq:3.29} 的光滑函数 $a(x, \xi) \in \mathcal{C}^\infty(\R^n \times (\R^N \setminus \{0\}))$ 组成, 且对所有 $\alpha \in \N_0^n, \beta \in \N_0^N$, 均存在常数 $C_{\alpha\beta}$ 使得
+\begin{equation}\label{eq:3.30}
+    |\partial_x^\alpha \partial_\xi^\beta a(x, \xi)| \le C_{\alpha\beta} |\xi|^{m - |\beta|}, \qquad \forall\,\xi \neq 0.
+\end{equation}
+\end{definition}
+
+微分算子全符号 $a(x, \xi) = \sum_{|\alpha| \le m} a_\alpha(x) \xi^\alpha$ 的各齐次分量即为典型的齐次符号:
+\begin{equation}\label{eq:3.31}
+    \sum_{|\alpha| = j} a_\alpha(x) \xi^\alpha \in S_{\mathrm{hom}}^j(\R^n; \R^n \setminus \{0\}).
+\end{equation}
+这些齐次符号当然可以光滑延拓至原点 $\xi = 0$. 齐次多项式是唯一具有此光滑延拓性质的齐次符号 (习题~\ref{ex:3.5}). 若 $a \in S_{\mathrm{hom}}^m(\R^n; \R^N \setminus \{0\})$, 我们通常通过乘以 $1 - \chi$ (其中 $\chi \in \SmoothComp(\R^N)$ 在 $0$ 附近恒为 $1$) 将其平滑截断, 从而制造出 $S^m(\R^n; \R^N)$ 中的正规符号. 将此类符号求和便引出如下定义 (它预示了下一节讨论的渐近求和概念):
+
+\begin{definition}[经典符号空间]\label{def:3.14}
+设 $m \in \R$, 并固定在原点附近恒为 $1$ 的切断函数 $\chi \in \SmoothComp(\R^N)$. 一个符号 $a \in S^m(\R^n; \R^N)$ 称为 $m$ 阶\textbf{经典符号} (classical symbol), 若存在一族齐次符号 $a_{m-j} \in S_{\mathrm{hom}}^{m-j}(\R^n; \R^N \setminus \{0\})$ ($j \in \N_0$), 使得对任意 $J \in \N$, 均有
+\begin{equation}\label{eq:3.32}
+    a - \sum_{j=0}^{J-1} (1 - \chi) a_{m-j} \in S^{m-J}(\R^n; \R^N).
+\end{equation}
+全体 $m$ 阶经典符号构成的空间记为 $S_{\mathrm{cl}}^m(\R^n; \R^N)$. 此外, 我们令
+\begin{equation}\label{eq:3.33}
+    S_{\mathrm{cl}}^{-\infty}(\R^n; \R^N) \defeq S^{-\infty}(\R^n; \R^N).
+\end{equation}
+\end{definition}
+
+可以证明, 代替式~\eqref{eq:3.32} 中的符号类归属, 只要求逐点界便已足够 (习题~\ref{ex:3.9}).
+
+\begin{lemma}[经典符号齐次分量的唯一性]\label{lem:3.15}
+式~\eqref{eq:3.32} 中的齐次分量 $a_{m-j}$ 由符号 $a$ 唯一决定.
+\end{lemma}
+
+证明留作练习 (习题~\ref{ex:3.11}). 配备 $a_{m-j}$ 的半范数与余项在对应空间中的半范数后, $S_{\mathrm{cl}}^m(\R^n; \R^N)$ 成为一个 Fréchet 空间. 命题~\ref{prop:3.10} 对经典符号则彻底失效; 事实上容易看出
+\begin{equation}\label{eq:3.34}
+    S^{-\infty}(\R^n; \R^N) \subset S_{\mathrm{cl}}^m(\R^n; \R^N) \quad \text{对所有 } m \in \R \text{ 都是闭的}.
+\end{equation}
+对于定义~\ref{def:3.14} 中的 $a \in S_{\mathrm{cl}}^m(\R^n; \R^N)$, 我们可以将等价类 $[a] \in S^m(\R^n; \R^N) / S^{m-1}(\R^n; \R^N)$ 与首项齐次部分 $a_m$ 等同起来 (对比式~\eqref{eq:3.4}).
+
+\section{渐近求和}\label{sec:3.4}
+\index{jianjin qiuhe@渐近求和 (asymptotic summation)}%
+\index{Borel yinli@Borel 引理 (Borel's lemma)}%
+
+式~\eqref{eq:3.32} 存在一个通用的``逆命题'', 它在迭代地构造各种符号 (经典符号或非经典符号) 并逐次加入更低阶修正项时非常有用:
+
+\begin{proposition}[渐近和的存在性与唯一性]\label{prop:3.16}
+设 $a_j \in S^{m_j}(\R^n; \R^N)$ ($j \ge 0$), 且满足 $\limsup_{j \to \infty} m_j = -\infty$. 令 $\bar{m}_j \defeq \sup_{j' \ge j} m_{j'}$ 以及 $m \defeq \bar{m}_0$. 则存在符号 $a \in S^m(\R^n; \R^N)$ 使得对所有 $J \in \N$,
+\begin{equation}\label{eq:3.35}
+    a - \sum_{j=0}^{J-1} a_j \in S^{\bar{m}_J}(\R^n; \R^N).
+\end{equation}
+此外, $a$ 在模去残余符号空间 $S^{-\infty}(\R^n; \R^N)$ 的意义下是唯一的. 我们称 $a$ 为 $a_j$ 的\textbf{渐近和}, 记作
+\begin{equation}\label{eq:3.36}
+    a \sim \sum_{j=0}^\infty a_j.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+这与关于在 $0$ 处具有预定 Taylor 级数的光滑函数之存在性的 Borel 引理相似. 唯一性是显然的, 因为任意两个渐近和之差必定属于所有 $S^{\bar{m}_J}$, 从而属于交集 $S^{-\infty}$.
+
+关于存在性, 通过先有限部分求和, 不妨设 $a_j \in S^{m-j}(\R^n; \R^N)$ 且 $\bar{m}_j = m - j$. 固定切断函数 $\chi \in \Smooth(\R^N)$, 满足在 $|\xi| \le 1$ 上为 $0$, 在 $|\xi| \ge 2$ 上为 $1$. 选取待定的正序列 $\epsilon_j \searrow 0$, 我们令
+\begin{equation}\label{eq:3.37}
+    a(x, \xi) \defeq \sum_{j=0}^\infty \chi(\epsilon_j \xi) a_j(x, \xi).
+\end{equation}
+该级数在局部是有限和, 故 $a \in \Smooth(\R^n \times \R^N)$. 只要足够快地减小 $\epsilon_j$, 我们便可保证
+\begin{equation}\label{eq:3.38}
+    \|\chi(\epsilon_j \cdot) a_j\|_{m-j', j} \le 2^{-j}, \qquad \forall\,0 \le j' < j.
+\end{equation}
+事实上, 由命题~\ref{prop:3.10} 的证明知当 $\epsilon_j \to 0$ 时 $\chi(\epsilon_j \cdot) a_j \to 0$ 在 $S^{m-j'}$ 中成立; 而对每个固定的 $j$, 式~\eqref{eq:3.38} 仅对有限个 $j'$ 提出了要求. 于是级数 $\sum_{j=J+1}^\infty \chi(\epsilon_j \xi) a_j$ 在 $S^{m-J}(\R^n; \R^N)$ 中绝对收敛. 从而级数~\eqref{eq:3.37} 在 $S^m(\R^n; \R^N)$ 中收敛, 并且
+\begin{equation}\label{eq:3.39}
+    a(x, \xi) - \sum_{j=0}^{J-1} a_j(x, \xi) = \sum_{j=0}^{J-1} (\chi(\epsilon_j \xi) - 1) a_j(x, \xi) + \sum_{j=J}^\infty \chi(\epsilon_j \xi) a_j(x, \xi) \in S^{m-J}(\R^n; \R^N).
+\end{equation}
+证明完成.
+\end{proof}
+
+经典符号空间 $S_{\mathrm{cl}}^m(\R^n; \R^N)$ 恰好可以等价刻画为那些可以表示为在 $|\xi| \ge 1$ 上正 $m-j$ 次齐次符号之渐近和的符号空间.
+
+为完备起见并供后续使用, 我们进一步将该结论强化为渐近和关于序列 $(a_j)$ 的连续依赖性:
+
+\begin{proposition}[连续渐近求和映射]\label{prop:3.17}
+记
+\begin{equation}\label{eq:3.40}
+    \ell S^m(\R^n; \R^N) \defeq \prod_{j=0}^\infty S^{m-j}(\R^n; \R^N)
+\end{equation}
+为所有满足 $a_j \in S^{m-j}(\R^n; \R^N)$ 的序列 $(a_0, a_1, \ldots)$ 构成的空间. 为其配备由半范数族
+\[
+    \|(a_j)\|_J \defeq \max_{0 \le k \le J} \|a_k\|_{m-k, J}
+\]
+生成的拓扑. 则存在一个连续的 (非线性) 映射
+\begin{equation}\label{eq:3.41}
+    \sum\nolimits_{\mathcal{A}} \colon \ell S^m(\R^n; \R^N) \to S^m(\R^n; \R^N)
+\end{equation}
+满足 $\sum_{\mathcal{A}}((a_j)_{j \in \N_0}) \sim \sum_{j=0}^\infty a_j$.
+\end{proposition}
+
+\begin{remark}[与 $\Smooth(\R^n)$ 拓扑的类比]\label{rem:3.18}
+$\ell S^m(\R^n; \R^N)$ 上的拓扑类似于通常 $\Smooth(\R^n)$ 上由紧球半范数族诱导的 Fréchet 拓扑. 序列的收敛性等价于对每个 $J \in \N$, 前 $J$ 个分量在各自符号空间中的收敛.
+\end{remark}
+
+\begin{proof}[命题~\ref{prop:3.17} 的证明]
+固定切断函数 $\chi \in \Smooth(\R^N)$, 满足在 $|\xi| \le 1$ 上为 $0$, 在 $|\xi| \ge 2$ 上为 $1$. 如同前一命题的证明, 对于 $a = (a_j)_{j \in \N_0} \in \ell S^m(\R^n; \R^N)$, 我们置
+\begin{equation}\label{eq:3.42}
+    \left( \sum\nolimits_{\mathcal{A}} a \right)(x, \xi) \defeq \sum_{j=0}^\infty \chi(\epsilon_j(a) \xi) a_j(x, \xi),
+\end{equation}
+其中 $\epsilon_j(a)$ 如同式~\eqref{eq:3.38} 中所选取, 满足对所有 $j \in \N$,
+\begin{equation}\label{eq:3.43}
+    \max_{0 \le j' \le j-1} \|\chi(\epsilon_j(a) \xi) a_j(x, \xi)\|_{m-j', j} \le 2^{-j},
+\end{equation}
+并且我们令 $\epsilon_0(a) = 1$. 我们现在需要给出 $\epsilon_j(a)$ 的一个具体构造选取. 为此, 我们注意到对 $|\alpha| + |\beta| \le j' \le j - 1$,
+\begin{equation}\label{eq:3.44}
+    \begin{aligned}
+        \max_{0 \le j' \le j-1} \langle \xi \rangle^{-m+j'+|\beta|} |\partial_x^\alpha \partial_\xi^\beta \chi(\epsilon_j(a) \xi) a_j(x, \xi)|
+        &\le \max_{0 \le j' \le j-1} C_j \langle \xi \rangle^{-m+j'} \langle \xi \rangle^{m-j} \|a_j\|_{m-j, j'} 1_{|\xi| \ge \epsilon_j(a)^{-1}} \\
+        &\le C_j \epsilon_j(a) \|a_j\|_{m-j, j},
+    \end{aligned}
+\end{equation}
+其中常数 $C_j$ 仅依赖于 $\chi$ (当然还依赖于 $j$). 因此, 只要我们选取
+\begin{equation}\label{eq:3.45}
+    \epsilon_j(a) \defeq 2^{-j} \left( 1 + C_j \|a_j\|_{m-j, j} \right)^{-1},
+\end{equation}
+式~\eqref{eq:3.43} 即自动成立. 借助这一选取, $\sum_{\mathcal{A}} a$ 良定义, 并且 $\sum_{\mathcal{A}} a \sim \sum_{j=0}^\infty a_j$.
+
+我们现在验证连续性. 定义
+\begin{equation}\label{eq:3.46}
+    \chi_j(q, \xi) \defeq \chi\bigl(2^{-j}(1 + C_j q)^{-1} \xi\bigr),
+\end{equation}
+从而 $(\sum_{\mathcal{A}} a)(x, \xi) = \sum_{j=0}^\infty \chi_j(\|a_j\|_{m-j, j}, \xi) a_j(x, \xi)$. 固定序列 $a = (a_j)_{j \in \N_0} \in \ell S^m(\R^n; \R^N)$, 并固定指标 $k \in \N_0, \epsilon > 0$. 我们需要证明存在 $\delta > 0$ 以及 $J \in \N$ 使得
+\begin{equation}\label{eq:3.47}
+    a' \in \ell S^m(\R^n; \R^N), \quad \|a - a'\|_J \le \delta \implies \left\| \sum\nolimits_{\mathcal{A}} a - \sum\nolimits_{\mathcal{A}} a' \right\|_{m, k} < \epsilon,
+\end{equation}
+而这只要如下不等式成立即可:
+\begin{equation}\label{eq:3.48}
+    \left\| \sum_{j=0}^\infty \left( \chi_j(\|a_j\|_{m-j, j}, \xi) a_j - \chi_j(\|a'_j\|_{m-j, j}, \xi) a'_j \right) \right\|_{m, k} < \epsilon.
+\end{equation}
+我们首先记录对任意 $q, q' \ge 0$ 的估计:
+\begin{equation}\label{eq:3.49}
+    \|\chi_j(q, \xi) - \chi_j(q', \xi)\|_{0, k} \le C_j |q - q'|.
+\end{equation}
+我们仅对 $k = 0$ 给出证明. 不失一般性可设 $q \le q'$. 此时除非 $2^j(1 + C_j q) \le |\xi| \le 2^{j+1}(1 + C_j q')$, 否则必有 $\chi_j(q, \xi) - \chi_j(q', \xi) = 0$. 当 $|\xi|$ 处于该区间范围内时, 我们能够估计:
+\begin{equation}\label{eq:3.50}
+    \begin{aligned}
+        |\chi_j(q, \xi) - \chi_j(q', \xi)|
+        &= \left| \chi\left( \frac{\xi}{2^j(1 + C_j q)} \right) - \chi\left( \frac{\xi}{2^j(1 + C_j q')} \right) \right| \\
+        &\le \|\chi'\|_{L^\infty} \frac{|\xi|}{2^j} \left| \frac{1}{1 + C_j q} - \frac{1}{1 + C_j q'} \right| \\
+        &\le 2 \|\chi'\|_{L^\infty} \left( \frac{1 + C_j q'}{1 + C_j q} - 1 \right) \le 2 C_j \|\chi'\|_{L^\infty} (q' - q).
+    \end{aligned}
+\end{equation}
+式~\eqref{eq:3.48} 中的第 $j$ 个求和项现在可以估计为:
+\begin{equation}\label{eq:3.51}
+    \begin{aligned}
+        &\|\chi_j(\|a_j\|_{m-j, j}, \xi)(a_j - a'_j)\|_{m, k} + \|(\chi_j(\|a_j\|_{m-j, j}, \xi) - \chi_j(\|a'_j\|_{m-j, j}, \xi)) a'_j\|_{m, k} \\
+        &\le \tilde{C}_j \|a_j - a'_j\|_{m, k} + |\|a_j\|_{m-j, j} - \|a'_j\|_{m-j, j}| \|a'_j\|_{m, k} \\
+        &\le \tilde{C}_j (1 + \|a_j\|_{m, k}) \|a - a'\|_{\max(j, k)}.
+    \end{aligned}
+\end{equation}
+当 $a' \to a$ 在 $\ell S^m(\R^n; \R^N)$ 中成立时, 该项显然趋于零.
+
+我们利用式~\eqref{eq:3.43} 估计级数~\eqref{eq:3.48} 的尾部: 只要 $j > k$, 这便给出上界:
+\begin{equation}\label{eq:3.52}
+    \|\chi_j(\|a_j\|_{m-j, j}, \xi) a_j\|_{m, k} + \|\chi_j(\|a'_j\|_{m-j, j}, \xi) a'_j\|_{m, k} \le 2^{-j} + 2^{-j} = 2^{-j+1}.
+\end{equation}
+因此, 我们首先选取 $J_0 \in \N$ 使得 $J_0 > k$, 且 $\sum_{j=J_0}^\infty 2^{-j+1} < \epsilon/2$; 随后选取 $\delta > 0$ 以及 $J \in \N$, 使得只要 $a' \in \ell S^m(\R^n; \R^N)$ 满足 $\|a - a'\|_J < \delta$, 就保证式~\eqref{eq:3.48} 中对每一个 $j = 0, \ldots, J_0 - 1$ 的第 $j$ 项均被 $\epsilon/(2 J_0)$ 控制. 这便确立了式~\eqref{eq:3.47}.
+\end{proof}
+
+\section{半经典符号}\label{sec:3.5}
+\index{banjingdian fuhao@半经典符号 (semiclassical symbols)}%
+\index{banjingdian tuoyuanxing@半经典椭圆性 (semiclassical ellipticity)}%
+
+下述定义推广定义~\ref{def:3.4}, 其方式恰如定义~\ref{def:2.23} 推广定义~\ref{def:2.21}.
+
+\begin{definition}[半经典符号空间]\label{def:3.19}
+设 $k, m \in \R$ 以及 $n, N \in \N_0$. 我们定义
+\begin{equation}\label{eq:3.53}
+    h^{-k} S_\hbar^m(\R^n; \R^N) \defeq \left\{ a = (a_h)_{h \in (0, h_0)} : h_0 \in (0, 1], \ \{h^k a_h\} \text{ 是 } S^m(\R^n; \R^N) \text{ 中的有界子集} \right\}.
+\end{equation}
+当 $k = 0$ 时, 简记为 $S_\hbar^m(\R^n; \R^N)$. 经典半经典符号子空间 $h^{-k} S_{\hbar, \mathrm{cl}}^m(\R^n; \R^N)$ 定义为满足 $h^k a_h \in \mathcal{C}^\infty([0, h_0); S_{\mathrm{cl}}^m(\R^n; \R^N))$ 的算子族. 最后, 我们记
+\begin{equation}\label{eq:3.54}
+    h^\infty S_\hbar^{-\infty}(\R^n; \R^N) \defeq \bigcap_{k, m \in \R} h^{-k} S_\hbar^m(\R^n; \R^N).
+\end{equation}
+\end{definition}
+
+对于固定的 $h_0 \in (0, 1]$, 我们利用半范数族 $\sup_{h \in (0, h_0)} \|h^k a_h\|_{m, j}$ ($j \in \N_0$) 为定义在 $h < h_0$ 上的半经典符号空间赋予拓扑, 其中 $S^m$-半范数 $\|\cdot\|_{m, j}$ 在式~\eqref{eq:3.13} 中定义.
+
+例~\ref{eg:2.25} 中的全符号是经典半经典符号: 它们属于 $S_{\hbar, \mathrm{cl}}^2(\R^n; \R^n)$. 半经典符号的经典性不仅意味着每个 $a_h$ 都是经典符号, 还意味着 $a_h$ 光滑地延拓到 $h = 0$. 为把这联系到定义~\ref{def:3.14}, 注意到这种光滑性特别蕴含了存在 $b_j \in S_{\mathrm{cl}}^m(\R^n; \R^N)$ ($j \in \N_0$) 使得对所有 $J \in \N$ 都有 $a_h(x, \xi) - \sum_{i=0}^{J-1} h^j b_j(x, \xi) \in h^J S_{\hbar}^m(\R^n; \R^N)$.
+
+为确定椭圆性与主符号的正确概念, 考虑 $A = a(h, x) (h D)^\alpha$ 与 $B = b(h, x) (h D)^\beta$ 的复合, 其中 $a(h, \cdot), b(h, \cdot)$ 在 $\mathcal{C}_b^\infty(\R^n)$ 中一致有界: 它满足
+\begin{equation}\label{eq:3.55}
+    A \circ B = a b (h D)^{\alpha + \beta} + a [(h D)^\alpha, b] (h D)^\beta.
+\end{equation}
+展开对易子可得 $[(h D)^\alpha, b] = h \sum_{\gamma < \alpha} b_\gamma (h D)^\gamma$, 其中 $b_\gamma(h, \cdot)$ 在 $\mathcal{C}_b^\infty(\R^n)$ 中一致有界. 因此式~\eqref{eq:3.55} 中的第二项不仅是低阶的——在半经典微分阶数的意义上 (它至多含有 $|\alpha| + |\beta| - 1$ 个半经典导数), 而且在 $h \searrow 0$ 的衰减意义上也是低阶的 (因为有前置因子 $h$). 这提示我们, 半经典算子的主符号应当取为如下商空间中的元素:
+\begin{equation}\label{eq:3.56}
+    h^{-k} S_\hbar^m(\R^n; \R^n) / h^{-k+1} S_\hbar^{m-1}(\R^n; \R^n).
+\end{equation}
+
+我们将在第~\ref{sec:4.9}~节讨论半经典伪微分算子时确认这是恰当的空间. 对于某些特殊类别的半经典算子, 可以避免直接使用商空间~\eqref{eq:3.56}, 如下例所示.
+
+\begin{example}[特定微分算子的半经典主符号]\label{eg:3.20}
+设 $A_h = \sum_{|\alpha| \le m} a_\alpha(h, x) (h D)^\alpha \in \Diff_{\hbar, \mathrm{cl}}^m(\R^n)$ 具有如下性质: $\sum_{|\alpha| = m} a_\alpha(h, x) \xi^\alpha$ 与 $h$ 无关. 则我们可以将其半经典主符号——即其全半经典符号 $a(h, x, \xi) = \sum_{|\alpha| \le m} a_\alpha(h, x) \xi^\alpha$ 在 $S_\hbar^m(\R^n; \R^n) / h S_\hbar^{m-1}(\R^n; \R^n)$ 中的等价类——等同于函数
+\begin{equation}\label{eq:3.57}
+    \sum_{|\alpha| \le m} a_\alpha(0, x) \xi^\alpha \in S^m(\R^n; \R^n).
+\end{equation}
+(关键在于 $a(h, x, \xi) - \sum_{|\alpha| \le m} a_\alpha(0, x) \xi^\alpha \in h S_\hbar^{m-1}$.) 例如, 在此意义下, $h^2(\Delta + V) - z$ 的半经典主符号是 $|\xi|^2 - z$.
+\end{example}
+
+\begin{definition}[半经典椭圆性]\label{def:3.21}
+设 $k, m \in \R$. 半经典符号 $a \in h^{-k} S_\hbar^m(\R^n; \R^N)$ 称为 (一致) \textbf{半经典椭圆的}, 若存在符号 $b \in h^k S_\hbar^{-m}(\R^n; \R^N)$ 以及 $h_0 > 0$, 使得在 $h < h_0$ 时
+\[
+    a b - 1 \in h S_\hbar^{-1}(\R^n; \R^N).
+\]
+\end{definition}
+
+引入 (可能很小的) $h_0 > 0$ 是为了照顾如下事实: 人们通常只对 $h \searrow 0$ 极限中的半经典符号 (与算子) 感兴趣. 因此, 比如说, 人们并不在意 $a(h, \cdot)$ 在 $h = \frac{1}{2}$ 处椭圆性的失效.
+
+\begin{example}[经典椭圆性与半经典椭圆性的对比]\label{eg:3.22}
+来自例~\ref{eg:3.20} 的半经典符号 $|\xi|^2 - z$ 是半经典椭圆的当且仅当 $z \notin [0, \infty)$. 请务必注意: 项 $z$ 尽管就 $|\xi| \to \infty$ 的增长阶数而言是低阶项, 但在 $h \searrow 0$ 的衰减意义下它与 $|\xi|^2$ 同阶 (没有多余的 $h$ 因子), 因而在这里至关重要.
+\end{example}
+
+定义~\ref{def:3.21} 中的条件等价于一个看似更强的条件:
+
+\begin{proposition}[半经典椭圆性的等价刻画]\label{prop:3.23}
+设 $a \in h^{-k} S_\hbar^m(\R^n; \R^N)$. 则下列条件等价:
+\begin{enumerate}
+    \item $a$ 是半经典椭圆的.
+    \item 存在 $h_0 > 0$ 使得在 $h < h_0$ 时 $a$ 处处非零, 且 $\frac{1}{a} \in h^k S_\hbar^{-m}(\R^n; \R^N)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+若 $a$ 半经典椭圆, 则在 $h < h_0$ 上 $a b = 1 - r$, 其中 $r \in h S_\hbar^{-1}$. 当 $h_0$ 充分小时 $|1 - r| \ge 1/2$. 于是 $\frac{1}{1-r} = 1 + r'$ (其中 $r' = \frac{r}{1-r} \in h S_\hbar^{-1}$). 从而 $a b (1 + r') = 1$, 故 $\frac{1}{a} = b(1 + r') \in h^k S_\hbar^{-m}$. 反向显然.
+\end{proof}
+
+对于经典符号, 可以给出椭圆性的一个更具体的刻画; 为简洁起见, 我们只讨论半经典阶数 $k = 0$ 的情形.
+
+\begin{proposition}[经典半经典符号的椭圆性判定]\label{prop:3.24}
+设 $m \in \R$, $a \in S_{\hbar, \mathrm{cl}}^m(\R^n; \R^N)$. 则 $a$ 是半经典椭圆的当且仅当极限符号 $a|_{h=0} \in S_{\mathrm{cl}}^m(\R^n; \R^N)$ 是椭圆符号且处处非零.
+\end{proposition}
+
+\begin{proof}
+若 $a$ 半经典椭圆, 则存在 $b \in S_\hbar^{-m}(\R^n; \R^N)$ 与 $h_0 > 0$ 使得在 $h < h_0$ 上 $a b = 1$. 这表明当 $h < h_0$ 时 $a \neq 0$, 并且
+\begin{equation}\label{eq:3.58}
+    \left| \frac{1}{a} \right| = |b| \le C \langle \xi \rangle^{-m}, \qquad h < h_0.
+\end{equation}
+因此, $a|_{h=0} \in S_{\mathrm{cl}}^m$ 是椭圆的. 反之, 若 $a|_{h=0} \in S_{\mathrm{cl}}^m$ 椭圆且处处非零, 置 $b \defeq (a|_{h=0})^{-1} \in S_{\mathrm{cl}}^{-m}$, 则
+\begin{equation}\label{eq:3.59}
+    a(h, x, \xi) b(x, \xi) = 1 - h r(h, x, \xi), \qquad r \in S_{\hbar, \mathrm{cl}}^0(\R^n; \R^N).
+\end{equation}
+于是式~\eqref{eq:3.58} 将 $m$ 替换为 $0$ 且将 $a$ 替换为 $1 - h r$ 依然成立, 从而对充分小的 $h$, $1 - h r$ 在 $S_{\hbar, \mathrm{cl}}^0(\R^n; \R^N)$ 中是椭圆且可逆的. 命题~\ref{prop:3.23} 随即推导出 $a$ 的半经典椭圆性.
+\end{proof}
+
+最后, 我们讨论半经典符号的渐近求和.
+
+\begin{proposition}[半经典符号的渐近求和]\label{prop:3.25}
+设 $a_j \in h^{-k_j} S_\hbar^{m_j}(\R^n; \R^N)$ ($j \ge 0$) 定义在 $h < h_0$ 上, 满足 $\limsup_{j\to\infty} k_j = -\infty$ 且 $\limsup_{j\to\infty} m_j = -\infty$. 记 $\bar{k}_j \defeq \sup_{j' \ge j} k_{j'}$, $\bar{m}_j \defeq \sup_{j' \ge j} m_{j'}$, 并设 $k = \bar{k}_0, m = \bar{m}_0$. 则存在符号 $a \in h^{-k} S_\hbar^m(\R^n; \R^N)$ 使得对所有 $J \in \N$,
+\begin{equation}\label{eq:3.60}
+    a - \sum_{j=0}^{J-1} a_j \in h^{-\bar{k}_J} S_\hbar^{\bar{m}_J}(\R^n; \R^N), \qquad h < h_0.
+\end{equation}
+此外, $a$ 在模去 $h^\infty S_\hbar^{-\infty}(\R^n; \R^N)$ 的意义下唯一, 记作 $a \sim \sum_{j=0}^\infty a_j$.
+\end{proposition}
+
+\begin{proof}
+证明与命题~\ref{prop:3.16} 的证明非常相似. 我们只证明渐近和的存在性. 不失一般性可设 $k_j = k - j, m_j = m - j$. 选取光滑函数 $\chi \in \Smooth([0, \infty))$ (在 $[0, 1]$ 上为 $1$, 在 $[2, \infty)$ 上为 $0$), 并取正数列 $\epsilon_j \searrow 0$, 令
+\begin{equation}\label{eq:3.61}
+    a(h, x, \xi) \defeq \sum_{j=0}^\infty \chi\left( \frac{h \langle \xi \rangle^{-1}}{\epsilon_j} \right) a_j(h, x, \xi).
+\end{equation}
+对每个固定的 $h \in (0, h_0)$, 该和在相空间中是局部有限和. 选取充分小的 $\epsilon_j$ 使得
+\begin{equation}\label{eq:3.62}
+    \sup_{h \in (0, h_0)} h^{k - j'} \left\| \chi\left( \frac{h \langle \xi \rangle^{-1}}{\epsilon_j} \right) a_j(h, x, \xi) \right\|_{m - j', j} \le 2^{-j}, \qquad \forall\,0 \le j' < j.
+\end{equation}
+于是对每个 $h \in (0, h_0)$, 式~\eqref{eq:3.61} 中的和式在 $S^m(\R^n; \R^N)$ 中收敛, 且极限的每个半范数都被一个与 $h$ 无关的常数乘以 $h^{-k}$ 所控制.
+\end{proof}
+
+\section*{注记}
+\addcontentsline{toc}{section}{注记}
+
+经典符号由 Kohn--Nirenberg~\cite{KN65} 在现代形式的伪微分算子开山之作中首次引入. (经典符号在文献中有时也被称为``一步多重齐次符号'' (one-step polyhomogeneous), 但这并非作者偏爱的术语.) 除 $S^m(\R^n; \R^N)$ 之外 (更一般地是 $S^m(U; \R^N)$, 其中式~\eqref{eq:3.11} 中的常数 $C_{\alpha\beta}$ 允许依赖于 $x$ 所允许变化的紧子集 $K \subset U$), 还存在许多其他符号类. 我们这里只提及两个例子. 型为 $(\rho, \delta)$ 的符号——即将式~\eqref{eq:3.11} 中的 $m - |\beta|$ 替换为 $m - \rho |\beta| + \delta |\alpha|$——在 Hörmander~\cite[定义 1.1.1]{Hor71a} 中讨论. (除了其他用途外, 它们对于变阶算子与 Sobolev 空间的研究很重要; 关于在散射理论中的应用见 Vasy~\cite{Vas18}.) 在 $x$ 变量上也具有符号性行为的符号, 出现在渐近欧氏空间或锥空间上散射伪微分算子的研究背景中; 它们由 Parenti~\cite{Par72}, Shubin~\cite{Shu71} 与 Melrose~\cite{Mel94} 引入 (另见习题~\ref{ex:4.14}--\ref{ex:4.22}). 经量化之后——正如下一章对定义~\ref{def:3.4} 的符号所讨论的那样——它们给出伪微分算子代数, 各自具有不同的性质与应用. 更一般的符号类在 Zworski~\cite{Zwo12} 与 Lerner~\cite{Ler10} 中讨论.
+
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+
+\begin{exer}[利用振荡检验法确定主符号]\label{ex:3.1}
+证明微分算子 $A \in \Diff^m(\R^n)$ 的主符号 $\sigma_m(A)$ 刻画了 $A$ 的``高频极限行为'', 意义如下: 对任意 $x_0, \xi_0 \in \R^n$,
+\begin{equation}\label{eq:3.63}
+    \sigma_m(A)(x_0, \xi_0) = \lim_{\lambda \to \infty} \lambda^{-m} \left( \ee^{-\ii \lambda \xi_0 \cdot (\cdot)} A \ee^{\ii \lambda \xi_0 \cdot (\cdot)} \right)(x_0).
+\end{equation}
+\end{exer}
+
+\begin{exer}[符号类的二进环形刻画]\label{ex:3.2}
+令环形区域 $\mathcal{A} \defeq \{\xi \in \R^N : 1 \le |\xi| \le 4\}$. 设 $a \in \Smooth(\R^N)$, 对 $j \in \N$ 定义
+\begin{equation}\label{eq:3.64}
+    a_j \in \Smooth(\mathcal{A}), \qquad a_j(\xi) \defeq 2^{-j m} a(2^j \xi).
+\end{equation}
+证明 $a \in S^m(\R^N)$ 当且仅当函数族 $\{a_j : j \in \N\} \subset \Smooth(\mathcal{A})$ 在 $\Smooth(\mathcal{A})$ 中有界 (即其自身及各阶导数在 $\mathcal{A}$ 上的上确界范数一致有界).
+\end{exer}
+
+\begin{exer}[符号与经典符号]\label{ex:3.3}
+\begin{enumerate}
+    \item 设 $m \in \R$. 证明 $\langle \xi \rangle^m \in S_{\mathrm{cl}}^m(\R^N)$.
+    \item 证明 $\operatorname{Re} \langle \xi \rangle^\ii \in S^0(\R^N)$ 不是经典符号 (其中 $\ii = \sqrt{-1}$).
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[椭圆符号的拟逆]\label{ex:3.4}
+\begin{enumerate}
+    \item 证明若 $a \in S^m(\R^n; \R^N)$ 满足式~\eqref{eq:3.23}, 且 $\chi \in S^0(\R^N)$ 在 $|\xi| \le 2C$ 上为零, 则 $\chi / a \in S^{-m}(\R^n; \R^N)$.
+    \item 若进一步假定 $a$ 与 $\chi$ 均为经典符号, 证明 $\chi / a$ 亦为经典符号.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[光滑齐次符号与多项式]\label{ex:3.5}
+\begin{enumerate}
+    \item 设 $\beta \in \N_0^N$. 证明
+    \begin{equation}\label{eq:3.65}
+        \partial_\xi^\beta \colon S_{\mathrm{hom}}^m(\R^n; \R^N \setminus \{0\}) \to S_{\mathrm{hom}}^{m - |\beta|}(\R^n; \R^N \setminus \{0\}).
+    \end{equation}
+    \item 设 $a \in S_{\mathrm{hom}}^m(\R^n; \R^N \setminus \{0\})$, 且 $m < 0$. 若 $a$ 可以光滑延拓至全空间 $\R^n \times \R^N$, 证明 $a$ 恒等于零.
+    \item 设 $m \in \R$, 并设 $a \in S_{\mathrm{hom}}^m(\R^n; \R^N \setminus \{0\})$ 非平凡且可光滑延拓至 $\R^n \times \R^N$. 证明必有 $m \in \N_0$, 且 $a(x, \xi) = \sum_{|\alpha| = m} a_\alpha(x) \xi^\alpha$ ($a_\alpha \in \mathcal{C}_b^\infty(\R^n)$).
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[不同阶经典符号空间的交集]\label{ex:3.6}
+设 $m, m' \in \R$ 满足 $m - m' \notin \mathbb{Z}$. 证明
+\[
+    S_{\mathrm{cl}}^m(\R^n; \R^N) \cap S_{\mathrm{cl}}^{m'}(\R^n; \R^N) = S^{-\infty}(\R^n; \R^N).
+\]
+\end{exer}
+
+\begin{exer}[符号空间的闭包]\label{ex:3.7}
+\begin{enumerate}
+    \item 设 $a \in S^0(\R^N)$ 满足 $\lim_{|\xi| \to \infty} |a(\xi)| = 0$. 证明对任意 $\beta \in \N_0^N \setminus \{0\}$, 均有 $\lim_{|\xi| \to \infty} \langle \xi \rangle^{|\beta|} |\partial^\beta a(\xi)| = 0$.
+    \item 证明 $S^{-\infty}(\R^N)$ 在 $S^0(\R^N)$ 中的闭包恰好等于子空间
+    \begin{equation}\label{eq:3.66}
+        \left\{ a \in S^0(\R^N) : \lim_{|\xi| \to \infty} |a(\xi)| = 0 \right\}.
+    \end{equation}
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[通过逐点界判定残余符号]\label{ex:3.8}
+设 $a \in S^m(\R^n; \R^N)$. 若对所有实数 $N$, 均存在常数 $C_N$ 使得 $|a(x, \xi)| \le C_N \langle \xi \rangle^{-N}$, 证明 $a \in S^{-\infty}(\R^n; \R^N)$.
+\end{exer}
+
+\begin{exer}[通过逐点余项界判定经典符号]\label{ex:3.9}
+设 $a \in S^m(\R^n; \R^N)$. 证明 $a \in S_{\mathrm{cl}}^m(\R^n; \R^N)$ 当且仅当存在齐次分量 $a_{m-j} \in S_{\mathrm{hom}}^{m-j}(\R^n; \R^N \setminus \{0\})$ ($j \in \N_0$), 使得对所有 $J \in \N$ 均存在常数 $C_J$ 满足:
+\begin{equation}\label{eq:3.67}
+    \left| a(x, \xi) - \sum_{j=0}^{J-1} a_{m-j}(x, \xi) \right| \le C_J |\xi|^{m - J}, \qquad \forall\,x \in \R^n, \ |\xi| \ge 1.
+\end{equation}
+\end{exer}
+
+\begin{exer}[函数与符号的复合及开方]\label{ex:3.10}
+\begin{enumerate}
+    \item 设 $a \in S^0(\R^n; \R^N)$, 取区间 $I \defeq [\inf a, \sup a]$. 设 $f \in \Smooth(I)$. 证明复合函数 $f \circ a \in S^0(\R^n; \R^N)$.
+    \item 证明若 $a \in S^0(\R^n; \R^N)$ 椭圆且在充分大的 $\xi \in \R^N$ 处为正, 则存在符号 $b \in S^0(\R^n; \R^N)$ 使得 $a - b^2 \in S^{-1}(\R^n; \R^N)$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[经典符号齐次分量的唯一性证明]\label{ex:3.11}
+证明引理~\ref{lem:3.15}.
+\end{exer}
+
+\begin{exer}[通过 Euler 向量场检验经典符号]\label{ex:3.12}
+设 $m \in \R$, $a \in S^m(\R^n_x; \R^N_\xi)$. 定义向量场 $V \defeq \xi \cdot \partial_\xi = \sum_{i=1}^N \xi_i \partial_{\xi_i}$. 证明 $a \in S_{\mathrm{cl}}^m(\R^n; \R^N)$ 当且仅当对所有 $J \in \N$, 均有
+\begin{equation}\label{eq:3.68}
+    (V - (m - J + 1)) \cdots (V - (m - 1)) (V - m) a \in S^{m-J}(\R^n; \R^N).
+\end{equation}
+\end{exer}
+
+\begin{exer}[渐近求和的非线性本质]\label{ex:3.13}
+证明不存在既连续又线性的映射 $\sum_{\mathcal{A}} \colon \ell S^m(\R^n; \R^N) \to S^m(\R^n; \R^N)$ 满足 $\sum_{\mathcal{A}}((a_j)_{j \in \N_0}) \sim \sum_{j=0}^\infty a_j$.
+\end{exer}
+
+\begin{exer}[半经典符号的反常实例]\label{ex:3.14}
+构造一个半经典符号 $a \in S_\hbar^0(\R^N)$, 使得当 $h \searrow 0$ 时 $a(h, \xi) \to 1$ 在 $\R^N_\xi$ 的任意紧子集上一致成立, 但 $a$ 并不是半经典椭圆符号.
+\end{exer}
+
+\begin{exer}[半经典符号的连续渐近求和]\label{ex:3.15}
+在下文中, 所有半经典符号假定均定义在 $h \in (0, h_0)$ 上. 为序列空间
+\begin{equation}\label{eq:3.69}
+    \ell_\hbar S^m(\R^n; \R^N) \defeq \prod_{j=0}^\infty h^j S_\hbar^{m-j}(\R^n; \R^N)
+\end{equation}
+配备由如下半范数族生成的拓扑:
+\begin{equation}\label{eq:3.70}
+    \|(a_j)\|_J \defeq \max_{0 \le k \le J} \sup_{h \in (0, h_0)} h^{-k} \|a_k(h, \cdot)\|_{m-k, J}.
+\end{equation}
+证明存在连续映射
+\begin{equation}\label{eq:3.71}
+    \sum\nolimits_{\mathcal{A}} \colon \ell_\hbar S^m(\R^n; \R^N) \to S_\hbar^m(\R^n; \R^N)
+\end{equation}
+满足 $\sum_{\mathcal{A}}((a_j)_{j \in \N_0}) \sim \sum_{j=0}^\infty a_j$.
+\end{exer}

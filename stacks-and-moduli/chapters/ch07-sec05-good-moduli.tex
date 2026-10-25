@@ -1,0 +1,476 @@
+\section{仿射 GIT 与良模空间}\label{src:7.5}
+\begin{epigraph}
+不变量理论已经数次被宣告死亡, 却如凤凰一般, 一次又一次从灰烬中重生.
+\epigraphauthor{Jean Dieudonné 与 James Carrell \cite{DC71}}
+\end{epigraph}
+仿射 GIT 的主定理 (推论~\bookref{7.5.13}) 断言: 若线性约化群 $G$ 作用于仿射概形 $\Spec A$, 则 $\Spec A\to\Spec A^G$ 是一个商, 其中 $\Spec A^G$ 的闭点对应于 $\Spec A$ 中的闭 $G$-轨道. 回忆域 $\Bbbk$ 上的仿射代数群 $G$ 是线性约化的, 是指取 $G$-不变量 $V\mapsto V^G$ 的函子 $\operatorname{Rep}(G)\to\mathsf{Vect}_{\Bbbk}$ 正合. 例子包括:
+\begin{itemize}
+\item 阶不被 $\operatorname{char}(\Bbbk)$ 整除的有限离散群 $G$ (Maschke 定理~\bookref{B.1.41});
+\item 环面 $\mathbb G_m^n$ 与可对角化群概形 (命题~\bookref{B.1.16});
+\item $\operatorname{char}(\Bbbk)=0$ 时的约化群, 如 $\mathrm{GL}_n$, $\mathrm{SL}_n$, $\mathrm{PGL}_n$ (定理~\bookref{B.1.46}).
+\end{itemize}
+更多等价条件, 性质以及线性约化群的讨论见 \S\bookref{B.1.6-subsection}.
+
+给定线性约化群 $G$ 在仿射 $\Bbbk$-概形 $\Spec A$ 上的作用, 包含 $A^G\hookrightarrow A$ 诱导交换图
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&,column sep=large]
+\Spec A\arrow[d]\arrow[dr,"{\widetilde\pi}"]\&\\
+{[\Spec A/G]}\arrow[r,"{\pi}"']\&\Spec A^G.
+\end{tikzcd}
+\end{align*}
+注意 $\pi:[\Spec A/G]\to\Spec A^G$ 具有以下两个性质:
+\begin{enumerate}[(1)]
+\item $\Gamma([\Spec A/G],\mathcal O_{[\Spec A/G]})=A^G$, 这由整体截面的定义得到.
+\item 函子 $\pi_*:\QCoh([\Spec A/G])\to\QCoh(\Spec A^G)$ 正合. 这是因为 $\pi_*$ 把对应于带有 $G$-作用的 $A$-模 $M$ 的拟凝聚 $\mathcal O_{\mathcal X}$-模 $\widetilde M$ 送到 $\widetilde{M^G}$ (习题~\bookref{7.1.11}), 因此由线性约化性的定义可知其正合.
+\end{enumerate}
+这正是良模空间的定义性质 (定义~\bookref{7.5.5}). 证明仿射 GIT 商性质的大部分论证都容易推广到良模空间. 我们将由良模空间的主要性质 (定理~\bookref{7.5.11}) 推出仿射 GIT 的主定理~\bookref{7.5.13}, 但也鼓励读者直接尝试证明这些性质 (习题~\bookref{7.5.1}). 射影 GIT 将在第~\bookref{8} 章讨论.
+
+\begin{exercise}\label{src:7.5.1}
+设域 $\Bbbk$ 上的线性约化群 $G$ 作用于仿射 $\Bbbk$-概形 $\Spec A$, 令 $\pi:\Spec A\to\Spec A^G$.
+\begin{enumerate}[(a)]
+\item 若 $N$ 是 $A^G$-模, 证明自然映射 $N\xrightarrow{\sim}(N\otimes_{A^G}A)^G$ 是同构.
+\item 证明 $\pi:\Spec A\to\Spec A^G$ 满射.
+
+提示: 对每个点 $y\in\Spec A^G$, 将 (a) 应用于 $A^G$-模 $\kappa(y)$.
+\item 证明若 $I\subseteq A$ 是 $G$-不变理想, 则 $V(I)$ 在 $\pi$ 下的像闭, 并可与 $V(I^G)$ 等同.
+\item 证明若 $Z_1,Z_2$ 是由 $G$-不变理想 $I_1,I_2\subseteq A$ 定义的闭 $G$-不变子概形, 则 $(I_1+I_2)^G=I_1^G+I_2^G$. 推出 $\pi(Z_1\cap Z_2)=\pi(Z_1)\cap\pi(Z_2)$, 且若 $Z_1,Z_2$ 不交, 则可用一个 $G$-不变函数将它们分离, 即存在 $f\in A^G$ 使得 $f|_{Z_1}=0$ 且 $f|_{Z_2}=0$.
+\item 证明若 $x_1,x_2\in(\Spec A^G)(\Bbbk)$, 则 $\pi(x_1)=\pi(x_2)$ 当且仅当 $\overline{Gx_1}\cap\overline{Gx_2}\ne\emptyset$. 特别地, $\pi$ 诱导 $\Spec A$ 中 $\Bbbk$-点的闭轨道与 $\Spec A^G$ 的闭 $\Bbbk$-点之间的双射.
+\item 若 $J\subseteq A^G$ 是理想, 证明 $J=(JA)^G$.
+\item 证明 $\pi:\Spec A\to\Spec A^G$ 对取值于概形的 $G$-不变映射是泛的, 即若 $f:\Spec A\to Y$ 是到概形 $Y$ 的 $G$-不变映射, 则存在唯一映射 $g\to\Spec A^G$ 使得 $f=g\circ\pi$.
+
+提示: 先处理 $Y$ 仿射的情形. 若 $\{Y_i\}$ 是 $Y$ 的仿射覆盖, 令 $U_i:=f^{-1}(Y_i)\subseteq\Spec A$, 其补集记作 $Z_i$. 考虑商 $\Spec A\setminus\pi^{-1}(\pi(Z_i))\to\Spec A^G\setminus\pi(Z_i)$, 它是良模空间, 且 $\mathcal X\setminus\pi^{-1}(\pi(Z_i))\subseteq U_i$. 利用仿射情形构造唯一分解 $\Spec A^G\setminus\pi(Z_i)\to Y_i$, 再用 $\bigcap_i\pi(Z_i)=\emptyset$ 证明这些映射粘合为所需的 $\Spec A^G\to Y$; 另见 \cite[\S0.6]{GIT}.
+\item 证明若 $A$ 是 Noether 环, 则 $A^G$ 也是.
+\item 证明若 $A$ 在 $\Bbbk$ 上有限型, 则 $A^G$ 也是.
+
+提示: 取 $A$ 的 $\Bbbk$-代数生成元 $f_1,\ldots,f_n$, 以及包含所有 $f_i$ 的有限维 $G$-不变子空间 $V\subseteq A$ (命题~\bookref{B.1.20}(1)), 构造满射 $\operatorname{Sym}^*V=\Bbbk[x_1,\ldots,x_m]\twoheadrightarrow A$, 归约到 $A=\Bbbk[x_1,\ldots,x_m]$. 证明满足 $B_0=\Bbbk$ 的分次 $\Bbbk$-代数 $B$ 有限生成, 当且仅当 $B_+=\sum_{d>0}B_d$ 是有限生成理想.
+\end{enumerate}
+\end{exercise}
+在建立良模空间性质的定理~\bookref{7.5.11} 中, 只有性质 (i) 的证明比上述仿射情形明显复杂. 此外, 将 (g) 推广为 $\Spec A\to\Spec A^G$ 对取值于代数空间的 $G$-不变映射泛, 并证明良模空间的相应泛性质 (定理~\bookref{7.5.11}(4)), 也需要额外的工作.
+
+\begin{remark}[Hilbert 第十四问题]\label{src:7.5.2}
+Hilbert 第十四问题问不变量环 $A^G$ 何时有限生成. 虽然这并非总成立, Hilbert 证明 $G$ 线性约化时成立, 这正是上述 (i). Hilbert 先证明 $A=\Bbbk[x_1,\ldots,x_n]$ 的每个理想有限生成, 即今天所说的 Hilbert 基定理, 以推出理想 $J_+:=A_+^G$ 有限生成, 从而 $A^G$ 有限生成. 与 (i) 提示中的证明梗概不同, Hilbert 使用了 Reynolds 算子 $R:A\to A^G$. 它是一个在 $A^G$ 上为恒等, 保持分次的 $\Bbbk$-线性映射, 且对 $x\in A^G$, $y\in A$ 满足 $R(xy)=xR(y)$. 因 $G$ 线性约化, Reynolds 算子存在 (见注记~\bookref{B.1.45}). 由 Hilbert 基定理, $J_+A\subseteq A$ 由有限个 $f_1,\ldots,f_n\in A^G$ 生成, 并可取它们齐次. 为证明它们也在 $A^G$ 中生成理想 $J_+$, 取 $f\in A_d^G$, 写成
+\begin{align}\label{src:7.5.3}
+f=\sum_{i=1}^n f_i g_i,
+\end{align}
+其中每个 $g_i\in A$ 是次数为 $d-\deg f_i$ 的齐次函数, 未必不变 (若 $\deg f_i>d$, 则取 $g_i=0$). 对 \bookeqref{7.5.3} 应用 Reynolds 算子 $R$, 得到 $f=R(f)=\sum_i f_iR(g_i)$, 其中 $R(g_i)\in A^G$. 因此 $f$ 属于 $A^G$ 中由 $f_i$ 生成的理想.
+
+Hilbert 在 \cite{Hil93} 中给出了不变量环有限生成的构造性证明. 在论证中, 他建立了合冲定理, 零点定理, 一个 Noether 正规化的版本以及一个 Hilbert--Mumford 判据的版本. 这些结果促进了现代交换代数的发展. 强烈建议阅读 \cite{Hil90} 和 \cite{Hil93}, 或 Hilbert 讲义的译本 \cite{Hil93}.
+\end{remark}
+\begin{remark}[正特征下的约化性]\label{src:7.5.4}
+在特征 $p$ 下, 每个光滑线性约化群都是由阶与特征互素的有限平展群概形对环面作的扩张. 特别地, $\mathrm{GL}_n$ 不线性约化 (见例~\bookref{B.1.47}). 对代数闭域 $\Bbbk$ 上的仿射代数群 $G$, 在特征 $p$ 下有以下变体:
+\begin{enumerate}[(1)]
+\item $G$ 约化, 是指 $G$ 光滑, 且 $G$ 的每个光滑, 连通, 幺幂正规子群都平凡;
+\item $G$ 几何约化, 是指对每个 $G$-表示的满射 $V\to W$ 和 $w\in W^G$, 存在 $n>0$ 使得 $w^{p^n}$ 属于 $\operatorname{Sym}^{p^n}V\to\operatorname{Sym}^{p^n}W$ 的像.
+\end{enumerate}
+Mumford 的猜想 \cite[前言]{GIT}, 即现在的 Haboush 定理 \cite{Hab75}, 断言 $G$ 光滑时两者等价 (见定理~\bookref{B.1.49}). 更多讨论见 \S\bookref{B.1.6-subsection}.
+
+仿射 GIT 最初针对线性约化群发展, 但几何约化群的定义性质可用于证明 $\Spec A\to\Spec A^G$ 具有类似的性质: 推论~\bookref{7.5.13}(1)--(4) 成立, 唯一例外是 $A$ 为 Noether 环未必蕴含 $A^G$ 为 Noether 环. 这些论证并不比线性约化情形复杂很多, 但为简便起见, 我们仅在线性约化情形证明. 可参阅 \cite{Nag64}, \cite[附录 1.C]{MFK94}, \cite[\S3]{New78}, \cite[\S3.4]{Dol03}, \cite[\S2]{Spr77} 和 \cite[\S2]{DC71}.
+\end{remark}
+
+\subsection{良模空间}\label{src:7.5.1-subsection}
+良模空间的定义来自 GIT 商的性质, 具体而言是态射 $\pi:[\Spec A/G]\to\Spec A^G$ 与
+$\pi:[X^{\mathrm{ss}}/G]\to X^{\mathrm{ss}}/G:=\Proj\bigoplus_{d\ge0}\Gamma(X,\mathcal O_X(d))^G$ 的性质, 其中 $G$ 线性约化, $X\subseteq\mathbb P(V)$ 是射影化 $G$-表示中的 $G$-不变闭子概形.
+\begin{definition}[良模空间]\label{src:7.5.5}
+从代数叠 $\mathcal X$ 到代数空间 $X$ 的拟紧拟分离态射 $\pi:\mathcal X\to X$ 称为\newterm{良模空间}{good moduli space}, 若
+\begin{enumerate}[(1)]
+\item $\mathcal O_X\to\pi_*\mathcal O_{\mathcal X}$ 是同构;
+\item $\pi_*:\QCoh(\mathcal X)\to\QCoh(X)$ 正合.
+\end{enumerate}
+\end{definition}
+\begin{example}[基本例子: 仿射 GIT]\label{src:7.5.6}
+若域 $\Bbbk$ 上的线性约化群 $G$ 作用于仿射 $\Bbbk$-概形 $\Spec A$, 则 $[\Spec A/G]\to\Spec A^G$ 是良模空间. 稍后将证明每个良模空间在 $X$ 上平展局部都具有这一形式 (推论~\bookref{7.7.4}).
+\end{example}
+\begin{example}[具体例子]\label{src:7.5.7}
+若 $\mathbb G_m$ 在域 $\Bbbk$ 上按 $t\cdot(x_1,\ldots,x_n)=(tx_1,\ldots,tx_n)$ 作用于 $\mathbb A^n$, 则 $[\mathbb A^n/\mathbb G_m]\to\Spec\Bbbk$ 是良模空间. 点 $0\in[\mathbb A^n/\mathbb G_m](\Bbbk)$ 是闭点, 其余每个 $\Bbbk$-点都不闭, 且其闭包含有 $0$. 这只是每个 $\mathbb G_m$-轨道的闭包含有 $0$ 的叠论表述. 还应注意 $[\mathbb A^n/\mathbb G_m]\setminus0=\mathbb P^{n-1}$.
+
+若 $\mathbb G_m$ 按 $t\cdot(x,y)=(tx,t^{-1}y)$ 作用于 $\mathbb A^2$, 则 $[\mathbb A^2/\mathbb G_m]\to\Spec\Bbbk[xy]=\mathbb A^1$ 是良模空间. 良商 $\mathbb A^2\to\mathbb A^1$ 在 $a\ne0$ 上的纤维是双曲线 $xy=a$, 而良模空间 $[\mathbb A^2/\mathbb G_m]\to\mathbb A^1$ 的纤维是点 $\Spec\Bbbk\cong[V(xy-a)/\mathbb G_m]$. 在原点上的纤维是 $\mathbb A^2$ 中三个轨道的并 $\{(x,0)\mid x\ne0\}\cup\{(0,y)\mid y\ne0\}\cup\{0,0\}$. 注意 $[\mathbb A^2/\mathbb G_m]\setminus0=\mathbb A^1\cup_{\mathbb A^1\setminus0}\mathbb A^1$ 是非分离仿射直线. 图示见例~\bookref{4.9.28}.
+\end{example}
+\begin{example}[$n\times n$ 矩阵的共轭作用]\label{src:7.5.8}
+在 $\mathrm{GL}_n$ 对 $\operatorname{Mat}_{n,n}$ 的共轭作用下, 迹与行列式显然是不变函数. 更一般地, 若 $X=(X_{ij})$ 是一般的 $n\times n$ 矩阵, 则特征多项式 $\det(X-\lambda I)$ 的系数 $a_0,\ldots,a_{n-1}$ 是不变函数, 且经典结果表明它们自由生成不变量环. 因此, 把矩阵送到其特征多项式的映射
+\begin{align*}
+[\operatorname{Mat}_{n,n}/\mathrm{GL}_n]\longrightarrow\operatorname{Mat}_{n,n}//\mathrm{GL}_n=\Spec\Bbbk[a_0,\ldots,a_{n-1}]
+\end{align*}
+是良模空间. 若两个矩阵有相同的 Jordan 块分解, 它们就被等同; 每个纤维中唯一的闭点对应于一个对角矩阵. 例如矩阵 $\begin{pmatrix}\lambda&1\\0&\lambda\end{pmatrix}$ 的 $\mathrm{GL}_2$-轨道闭包包含 $\begin{pmatrix}\lambda&0\\0&\lambda\end{pmatrix}$, 两者在 $\operatorname{Mat}_{2,2}//\mathrm{GL}_2$ 中被等同.
+\end{example}
+\begin{example}[同时共轭]\label{src:7.5.9}
+$\mathrm{GL}_2$ 按 $g\cdot(A,B)=(gAg^{-1},gBg^{-1})$ 作用于 $\operatorname{Mat}_{2,2}\times\operatorname{Mat}_{2,2}$ 的不变量环是多项式环 $\Gamma(U,\mathcal O_U)^{\mathrm{GL}_2}=\Bbbk[\operatorname{tr}A,\operatorname{tr}B,\det A,\det B,\operatorname{tr}AB]$. 见 \cite{DCP17}.
+\end{example}
+\begin{example}[温和粗模空间]\label{src:7.5.10}
+若 $\mathcal X$ 是 Noether 概形 $S$ 上有限型的分离 Deligne--Mumford 叠, Keel--Mori 定理~\bookref{5.4.6} 保证粗模空间 $\pi:\mathcal X\to X$ 存在. 若每个自同构群的阶都与特征互素, 即在 $\Gamma(S,\mathcal O_S)$ 中可逆, 则称此粗模空间为温和的. 温和粗模空间是良模空间 (引理~\bookref{5.4.22}). 若 $\mathcal X$ 的稳定子拟有限, 则每个良模空间 $\pi:\mathcal X\to X$ 实际上都是温和粗模空间, 且 $\pi$ 分离; 见命题~\bookref{7.5.35}.
+\end{example}
+本节的目标是建立以下定理.
+\begin{theorem}\label{src:7.5.11}
+若 $\pi:\mathcal X\to X$ 是良模空间且 $X$ 拟分离, 则
+\begin{enumerate}[(1)]
+\item $\pi$ 满射且泛闭;
+\item 对闭子叠 $\mathcal Z_1,\mathcal Z_2\subseteq\mathcal X$, 有 $\operatorname{im}(\mathcal Z_1\cap\mathcal Z_2)=\operatorname{im}(\mathcal Z_1)\cap\operatorname{im}(\mathcal Z_2)$. 对几何点 $x_1,x_2\in\mathcal X(\Bbbk)$, 有 $\pi(x_1)=\pi(x_2)\in X(\Bbbk)$ 当且仅当在 $|\mathcal X\times_S\Bbbk|$ 中 $\overline{\{x_1\}}\cap\overline{\{x_2\}}\ne\emptyset$. 特别地, $\pi$ 诱导 $\mathcal X$ 的闭点与 $X$ 的闭点之间的双射;
+\item 若 $\mathcal X$ 是 Noether 叠, 则 $X$ 也是. 若 $\mathcal X$ 在 Noether 代数空间 $S$ 上有限型, 则 $X$ 在 $S$ 上有限型, 且 $\pi_*$ 保持凝聚性, 即 $F\in\mathsf{Coh}(\mathcal X)$ 蕴含 $\pi_*F\in\mathsf{Coh}(X)$;
+\item 若 $\mathcal X$ 是 Noether 叠, 则 $\pi$ 对到代数空间的映射是泛的.
+\end{enumerate}
+\end{theorem}
+\begin{remark}\label{src:7.5.12}
+在 (2) 中, 像与交都按概形论意义理解. 由于 $\pi$ 闭, 闭子叠 $\mathcal Z$ 的集合论像可与其概形论像 $\operatorname{im}(\mathcal Z)$ 的拓扑空间等同. 若理想层 $I\subseteq\mathcal O_{\mathcal X}$ 定义 $\mathcal Z$, 则像 $\operatorname{im}(\mathcal Z)$ 由 $\pi_*I\subseteq\pi_*\mathcal O_{\mathcal X}=\mathcal O_X$ 定义.
+\end{remark}
+在仿射 GIT 情形, 我们有良模空间 $\pi:[\Spec A/G]\to\Spec A^G$ 及良商 $\widetilde\pi:\Spec A\to\Spec A^G$, 上述定理可表述为:
+\begin{corollary}[仿射 GIT]\label{src:7.5.13}
+设 $G$ 是代数闭域 $\Bbbk$ 上的线性约化群. 则 $\widetilde\pi:U=\Spec A\to U//G:=\Spec A^G$ 满足:
+\begin{enumerate}[(1)]
+\item $\widetilde\pi$ 满射, 且对每个 $G$-不变闭子概形 $Z\subseteq U$, 像 $\operatorname{im}(Z)\subseteq U//G$ 闭. 沿概形态射 $T\to U//G$ 作基变换后仍成立;
+\item 对 $G$-不变闭子概形 $Z_1,Z_2\subseteq U$, 有 $\operatorname{im}(Z_1\cap Z_2)=\operatorname{im}(Z_1)\cap\operatorname{im}(Z_2)$. 对 $x_1,x_2\in X(\Bbbk)$, 有 $\widetilde\pi(x_1)=\widetilde\pi(x_2)$ 当且仅当 $\overline{Gx_1}\cap\overline{Gx_2}\ne\emptyset$. 特别地, $\widetilde\pi$ 诱导 $U$ 中 $\Bbbk$-点的闭 $G$-轨道与 $U//G$ 的 $\Bbbk$-点之间的双射;
+\item 若 $A$ 是 Noether 环, 则 $A^G$ 也是. 若 $A$ 在 $\Bbbk$ 上有限生成, 则 $A^G$ 也有限生成, 且对每个带有 $G$-作用的有限生成 $A$-模 $M$, $M^G$ 是有限生成 $A^G$-模;
+\item 若 $A$ 是 Noether 环, 则 $\widetilde\pi$ 对到代数空间的 $G$-不变映射是泛的.
+\end{enumerate}
+\end{corollary}
+\begin{remark}[适当模空间]\label{src:7.5.14}
+良模空间的概念可推广以刻画几何约化群的商 (注记~\bookref{7.5.4}). 在 \cite{Alp14} 中, 从代数叠到代数空间的拟紧拟分离态射 $\pi:\mathcal X\to X$ 称为\newterm{适当模空间}{adequate moduli space}, 若 (1) $\mathcal O_X\to\pi_*\mathcal O_X$ 是同构; (2) 对拟凝聚 $\mathcal O_{\mathcal X}$-代数的每个满射 $\mathcal A\to\mathcal B$, $\pi_*\mathcal B$ 在光滑态射 $\Spec A\to\mathcal Y$ 上的每个截面 $s$, 都有一个正整数次幂可提升为 $\pi_*\mathcal A$ 的截面. 适当模空间满足定理~\bookref{7.5.11}(1)--(4), 除了 Noether 性的蕴含. 若 $G$ 几何约化, 则 $[\Spec A/G]\to\Spec A^G$ 是适当模空间. 在特征 $0$ 下, 适当模空间必为良模空间. 建立适当模空间的性质并不显著更难, 但我们仅发展良模空间理论, 因为它较为简洁, 更适合学生首先学习.
+\end{remark}
+
+\subsection{上同调仿射态射}\label{src:7.5.2-subsection}
+良模空间定义~\bookref{7.5.5}(2) 中推出 $\pi_*$ 的正合性条件, 是仿射性的一个非可表类似物.
+\begin{definition}[上同调仿射]\label{src:7.5.15}
+代数叠的拟紧拟分离态射 $f:\mathcal X\to\mathcal Y$ 称为\newterm{上同调仿射的}{cohomologically affine}, 若 $f_*:\QCoh(\mathcal X)\to\QCoh(\mathcal Y)$ 正合. 拟紧拟分离代数叠 $\mathcal X$ 称为上同调仿射的, 若 $\mathcal X\to\Spec\mathbb Z$ 是上同调仿射的.
+\end{definition}
+\begin{example}\label{src:7.5.16}
+域 $\Bbbk$ 上的仿射代数群 $G$ 线性约化 (定义~\bookref{B.1.37}), 当且仅当 $BG$ 上同调仿射. 若 $G$ 线性约化并作用于仿射 $\Bbbk$-概形 $\Spec A$, 则 $[\Spec A/G]$ 上同调仿射, 因为结构态射 $[\Spec A/G]\to\Spec\Bbbk$ 是仿射态射 $[\Spec A/G]\to BG$ 与上同调仿射态射 $BG\to\Spec\Bbbk$ 的复合.
+\end{example}
+\begin{remark}\label{src:7.5.17}
+由 Serre 仿射性判据~\bookref{5.5.16}, 代数空间上同调仿射当且仅当它是仿射概形. 具有仿射对角态射的代数叠 $\mathcal X$ 上同调仿射当且仅当对所有 $i>0$ 及每个拟凝聚层 $F$, 有 $H^i(\mathcal X,F)=0$. 这是因为对这样的叠, 命题~\bookref{7.1.29} 说明上同调可在 $\QCoh(\mathcal X)$ 中计算. 对角态射非仿射的代数叠则不满足这一结论, 如椭圆曲线 $E$ 的 $BE$.
+
+同样, 具有仿射对角态射的代数叠之间的态射 $f:\mathcal X\to\mathcal Y$ 上同调仿射, 当且仅当对所有 $i>0$ 及每个拟凝聚层 $F$, 有 $R^if_*F=0$. 若 $f$ 还可表, 则 $f$ 上同调仿射当且仅当它仿射 (见下述推论~\bookref{7.5.20}).
+\end{remark}
+\begin{remark}[Noether 情形]\label{src:7.5.18}
+若 $\mathcal X$ 是 Noether 叠, 则拟紧拟分离态射 $f:\mathcal X\to\mathcal Y$ 上同调仿射当且仅当 $f_*:\mathsf{Coh}(\mathcal X)\to\QCoh(\mathcal Y)$ 正合. 因为每个拟凝聚层都是凝聚层的余极限 (命题~\bookref{7.1.15}), 且 $f_*$ 与余极限交换. 上同调也与余极限交换 (命题~\bookref{7.1.31}), 因此具有仿射对角态射的 Noether 代数叠之间的态射 $f:\mathcal X\to\mathcal Y$ 上同调仿射, 当且仅当对所有 $i>0$ 及每个凝聚层 $F$, 有 $R^if_*F=0$.
+\end{remark}
+\begin{lemma}\label{src:7.5.19}
+考虑代数叠的笛卡尔图
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&]
+\mathcal X'\arrow[r,"{g'}"]\arrow[d,"{\pi'}"']\&\mathcal X\arrow[d,"{\pi}"]\\
+\mathcal Y'\arrow[r,"{g}"']\&\mathcal Y.
+\end{tikzcd}
+\end{align*}
+\begin{enumerate}[(1)]
+\item 若 $g$ 忠实平坦且 $\pi'$ 上同调仿射, 则 $\pi$ 上同调仿射.
+\item 若 $\mathcal Y$ 具有拟仿射对角态射 (例如拟分离代数空间), 且 $\pi$ 上同调仿射, 则 $\pi'$ 上同调仿射.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+对于 (1), 平坦基变换~\bookref{7.1.14} 给出拟凝聚层范畴上函子的等价 $g^*\pi_*\simeq\pi'_*g'^*$. 由于 $\pi_*$ 与 $g'^*$ 正合, $g^*$ 忠实正合, 故 $\pi_*$ 正合.
+
+对于 (2), 先证明若 $g$ 拟仿射且 $\pi$ 上同调仿射, 则 $\pi'$ 也上同调仿射. 只需处理 $g$ 为开浸入及仿射的情形. 若 $g$ 是开浸入, $F'\to G'$ 是 $\QCoh(\mathcal X')$ 中的满射, 定义 $G=\operatorname{im}(g'_*F'\to g'_*G')$. 注意 $g'^*G\cong G'$. 由于 $\pi_*$ 正合, $\pi_*g'_*F'\to\pi_*G$ 满射. 应用 $g^*$, 再利用 $g^*\pi_*\simeq\pi'_*g'^*$ 及 $g'^*g'_*\simeq\operatorname{id}$, 得到满射 $\pi'_*F'\to\pi'_*g'^*G\cong\pi'_*G'$. 若 $g$ 仿射, 则 $g_*$ 忠实正合. 因 $\pi_*$ 与 $g'_*$ 正合, 恒等式 $g_*\pi'_*\simeq\pi_*g'_*$ 说明 $\pi'_*$ 也正合. 为证明 (2), 可假定 $\mathcal Y$ 和 $\mathcal Y'$ 拟紧. 取光滑展示 $Y=\Spec A\to\mathcal Y$ 及 $Y'=\Spec A'\to\mathcal Y'\times_{\mathcal Y}Y$. 因 $\mathcal Y$ 具有拟仿射对角态射, $Y\to\mathcal Y$ 拟仿射, 所以 $\mathcal X_Y\to Y$ 上同调仿射. 又因 $Y'\to Y$ 仿射, $\mathcal X_{Y'}\to Y'$ 也上同调仿射. 由 (1), $\pi':\mathcal X'\to\mathcal Y'$ 上同调仿射.
+\end{proof}
+\begin{corollary}\label{src:7.5.20}
+设 $f:\mathcal X\to\mathcal Y$ 是代数叠的可表态射, 且 $\mathcal Y$ 具有拟仿射对角态射. 则 $f$ 仿射当且仅当 $f$ 上同调仿射.
+\end{corollary}
+\begin{proof}
+在这些假设下, 仿射与上同调仿射都是 fppf 局部性质. 因此可归约到 $\mathcal Y$ 为仿射概形, $\mathcal X$ 为代数空间的情形, 这正是 Serre 仿射性判据~\bookref{5.5.16} 的内容.
+\end{proof}
+
+\subsection{线性约化群的性质}\label{src:7.5.3-subsection}
+回忆域 $\Bbbk$ 上的仿射代数群 $G$ 线性约化, 是指函子 $\operatorname{Rep}(G)\to\mathsf{Vect}_{\Bbbk}$, $V\mapsto V^G$ 正合 (定义~\bookref{B.1.37}); 等价地, $BG\to\Spec\Bbbk$ 上同调仿射.
+\begin{proposition}\label{src:7.5.21}
+设 $1\to K\to G\to Q\to1$ 是域 $\Bbbk$ 上仿射代数群的正合列. 则 $G$ 线性约化当且仅当 $K$ 和 $Q$ 都线性约化.
+\end{proposition}
+\begin{proof}
+使用习题~\bookref{3.4.40}(c) 中的笛卡尔图
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&]
+Q\arrow[r]\arrow[d]\&BK\arrow[r]\arrow[d]\&\Spec\Bbbk\arrow[d]\\
+\Spec\Bbbk\arrow[r]\&BG\arrow[r,"{q}"']\&BQ.
+\end{tikzcd}
+\end{align*}
+对于 $(\Leftarrow)$, 沿 $\Spec\Bbbk\to BQ$ 的 fppf 下降 (引理~\bookref{7.5.19}(2)) 说明 $BG\to BQ$ 上同调仿射, 故复合 $BG\to BQ\to\Spec\Bbbk$ 也上同调仿射. 反之, 由于 $Q$ 仿射, 沿 $\Spec\Bbbk\to BG$ 的 fppf 下降说明 $BK\to BG$ 仿射. 因此 $BK\to BG\to\Spec\Bbbk$ 上同调仿射, 即 $K$ 线性约化. 为证明 $Q$ 线性约化, 我们断言每个 $Q$-表示 $V$ 的伴随映射 $V\to q_*q^*V$ 是同构. 实际上 $q^*V$ 是 $K$ 作用平凡的 $G$-表示, 而 $G$-表示 $W$ 沿 $q:BG\to BQ$ 的推出是 $Q$-表示 $W^K$, 所以 $V=q_*q^*V$. 因而 $\Gamma(BQ,-)=\Gamma(BG,q^*(-))$ 正合.
+\end{proof}
+\begin{proposition}\label{src:7.5.22}
+设 $H$ 是代数闭域 $\Bbbk$ 上的线性约化群. 若 $H$ 自由作用于仿射 $\Bbbk$-概形 $U$, 则代数空间商 $U/H$ 仿射.
+\end{proposition}
+\begin{proof}
+代数空间 $U/H$ 与良商 $\Spec A^H$ 都对到代数空间的映射泛 (定理~\bookref{7.5.11}(4)). 或者, 复合 $U/H\to BH\to\Spec\Bbbk$ 是仿射态射后接上同调仿射态射, 因此由 Serre 仿射性判据~\bookref{5.5.16}, $U/H$ 仿射.
+\end{proof}
+特别地, 若 $H$ 是仿射代数群 $G$ 的线性约化子群, 则商 $G/H$ 仿射. Matsushima 定理给出逆命题.
+\begin{proposition}[Matsushima 定理]\label{src:7.5.23}
+设 $G$ 是代数闭域 $\Bbbk$ 上的线性约化群.
+\begin{enumerate}[(1)]
+\item $G$ 的子群 $H$ 线性约化当且仅当 $G/H$ 仿射.
+\item 若 $G$ 作用于有限型 $\Bbbk$-代数空间 $U$, $u\in U$ 是稳定子为 $G_u$ 的 $\Bbbk$-点, 则 $G_u$ 线性约化当且仅当轨道 $Gu$ 仿射. 特别地, 若 $U$ 仿射, 则闭轨道上的点的稳定子必线性约化.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+因 $Gu=G/G_u$, (2) 由 (1) 得到. 对于 (1), $(\Rightarrow)$ 由命题~\bookref{7.5.22} 得到. 反之, 考虑笛卡尔图
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&]
+G/H\arrow[r]\arrow[d]\&\Spec\Bbbk\arrow[d]\\
+BH\arrow[r]\&BG.
+\end{tikzcd}
+\end{align*}
+若 $G/H$ 仿射, 沿 $\Spec\Bbbk\to BG$ 的 fppf 下降说明 $BH\to BG$ 仿射. 因此 $BH\to BG\to\Spec\Bbbk$ 上同调仿射, 即 $H$ 线性约化.
+\end{proof}
+
+\subsection{良模空间的初步性质}\label{src:7.5.4-subsection}
+\begin{lemma}\label{src:7.5.24}
+考虑代数叠的笛卡尔图
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&]
+\mathcal X'\arrow[r,"{g'}"]\arrow[d,"{\pi'}"']\&\mathcal X\arrow[d,"{\pi}"]\\
+X'\arrow[r,"{g}"']\&X,
+\end{tikzcd}
+\end{align*}
+其中 $X$ 和 $X'$ 是拟分离代数空间.
+\begin{enumerate}[(1)]
+\item 若 $g$ 忠实平坦且 $\pi'$ 是良模空间, 则 $\pi$ 是良模空间.
+\end{enumerate}
+以下各条还假设 $\pi$ 是良模空间.
+\begin{enumerate}[(1)]\setcounter{enumi}{1}
+\item $\pi'$ 是良模空间.
+\item 对 $F\in\QCoh(\mathcal X)$ 与 $G\in\QCoh(X)$, 伴随映射 $\pi_*F\otimes G\to\pi_*(F\otimes\pi^*G)$ 是同构. 特别地, $G\xrightarrow{\sim}\pi_*\pi^*G$ 是同构.
+\item 对 $F\in\QCoh(\mathcal X)$, 伴随映射 $g^*\pi_*F\xrightarrow{\sim}\pi'_*g'^*F$ 是同构.
+\item 对拟凝聚理想层 $J\subseteq\mathcal O_X$, 自然映射 $J\to\pi_*(\pi^{-1}J\cdot\mathcal O_{\mathcal X})$ 是同构.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+若 $g:X'\to X$ 平坦, 自然映射 $\mathcal O_X\to\pi_*\mathcal O_{\mathcal X}$ 沿 $g$ 的拉回是 $\mathcal O_{X'}\to\pi'_*\mathcal O_{\mathcal X'}$. 因此, 引理~\bookref{7.5.19} 与 fppf 下降给出 (1) 以及 (2) 中 $g$ 平坦的情形. 又因 $X'$ 拟分离, 它具有拟仿射对角态射 (推论~\bookref{5.5.8}). 证明一般的 (2) 之前先证 (3). 取平展展示 $U\to X$, 其中 $U$ 是仿射概形的不交并. 由 (2) 的平坦情形, 基变换 $\pi_U:\mathcal X_U\to U$ 也是良模空间. 平坦基变换~\bookref{7.1.14} 还说明伴随映射 $\pi_*F\otimes G\to\pi_*(F\otimes\pi^*G)$ 沿 $U\to X$ 拉回为 $\pi_{U,*}F_U\otimes G_U\to\pi_{U,*}(F_U\otimes\pi_U^*G_U)$, 其中 $F_U,G_U$ 分别是到 $\mathcal X_U,X_U$ 的拉回. 因此可假定 $X=\Spec A$ 仿射. 若 $G_2\to G_1\to G\to0$ 是自由展示, 则对 $i=1,1$, 映射 $\pi_*F\otimes G_i\to\pi_*(F\otimes\pi^*G_i)$ 是同构. 因 $\pi_*F\otimes-$ 与 $\pi_*(F\otimes\pi^*(-))$ 右正合, 有右正合列的交换图
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&,column sep=small]
+\pi_*F\otimes G_2\arrow[r]\arrow[d]\&\pi_*F\otimes G_1\arrow[r]\arrow[d]\&\pi_*F\otimes G\arrow[r]\arrow[d]\&0\\
+\pi_*(F\otimes\pi^*G_2)\arrow[r]\&\pi_*(F\otimes\pi^*G_1)\arrow[r]\&\pi_*(F\otimes\pi^*G)\arrow[r]\&0.
+\end{tikzcd}
+\end{align*}
+左边两个竖直映射是同构, 所以右边的也是同构.
+
+对于 (2), 引理~\bookref{7.5.19}(2) 已证明 $\pi'_*$ 正合, 故只需证明 $\mathcal O_{X'}\to\pi'_*\mathcal O_{\mathcal X'}$ 是同构. 可假定 $X,X'$ 仿射. 此时 $g_*$ 忠实正合, 故只需证明 $g_*\mathcal O_{X'}\to g_*\pi'_*\mathcal O_{\mathcal X'}$ 是同构. 由 $g$ 仿射得到恒等式 $g'_*\pi'^*\mathcal O_{X'}\cong\pi^*g_*\mathcal O_{X'}$, 因而此映射可等同于
+\begin{align*}
+g_*\mathcal O_{X'}\longrightarrow g_*\pi'_*\mathcal O_{\mathcal X'}
+\cong\pi_*g'_*\mathcal O_{\mathcal X'}\cong\pi_*\pi^*g_*\mathcal O_{X'}.
+\end{align*}
+此复合与对 $F=g_*\mathcal O_{X'}$ 应用 (3) 所得的伴随同构等同, 因此是同构.
+
+对于 (4), 平坦基变换~\bookref{7.1.14} 说明它在 $X$ 与 $X'$ 上是 fppf 局部的, 且 $g$ 平坦时成立. 因而可归约到 $X'\to X$ 为仿射概形态射的情形. 将 $X'\to X$ 分解为闭浸入后接平坦态射, 可进一步归约到它是由拟凝聚理想层 $J\subseteq\mathcal O_X$ 定义的闭浸入. 要证明 $\pi_*F/J\pi_*F\cong\pi_*(F/(\pi^{-1}J\cdot\mathcal O_{\mathcal X})F)$. 由 $\pi_*$ 正合, 等价于包含 $J\pi_*F\to\pi_*((\pi^{-1}J\cdot\mathcal O_{\mathcal X})F)$ 满射. 层 $(\pi^{-1}J\cdot\mathcal O_{\mathcal X})F$ 是 $\pi^*J\otimes F\to F$ 的像, 所以其推出是 $\pi_*(\pi^*J\otimes F)\to\pi_*F$ 的像. 由 (3), 后者可等同于 $J\otimes\pi_*F\to\pi_*F$ 的像.
+
+对于 (5), 若 $Z\subseteq X$ 是 $J$ 定义的闭子空间, 则原像理想层 $\pi^{-1}J\cdot\mathcal O_{\mathcal X}$ 定义 $\pi^{-1}(Z)$. 由 $\pi_*$ 正合, 有短正合列的交换图
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&,column sep=small]
+0\arrow[r]\&J\arrow[r]\arrow[d]\&\mathcal O_X\arrow[r]\arrow[d]\&\mathcal O_Z\arrow[r]\arrow[d]\&0\\
+0\arrow[r]\&\pi_*(\pi^{-1}J\cdot\mathcal O_{\mathcal X})\arrow[r]\&\pi_*\mathcal O_{\mathcal X}\arrow[r]\&\pi_*\mathcal O_{\pi^{-1}(Z)}\arrow[r]\&0.
+\end{tikzcd}
+\end{align*}
+因 $\mathcal X\to X$ 与 $\pi^{-1}(Z)\to Z$ 都是良模空间, 右边两个竖直箭头是同构, 所以左边的也是同构.
+\end{proof}
+\begin{remark}\label{src:7.5.25}
+(3) 中的同构 $\pi_*F\otimes G\to\pi_*(F\otimes\pi^*G)$ 类似投影公式, 但即使 $G$ 非局部自由仍成立!
+\end{remark}
+\begin{lemma}\label{src:7.5.26}
+设 $\pi:\mathcal X\to X$ 是良模空间且 $X$ 拟分离.
+\begin{enumerate}[(1)]
+\item 若 $\mathcal A$ 是拟凝聚 $\mathcal O_{\mathcal X}$-代数层, 则 $\Spec_{\mathcal X}\mathcal A\to\Spec_X\pi_*\mathcal A$ 是良模空间.
+\item 若 $\mathcal Z\subseteq\mathcal X$ 是由理想层 $I$ 定义的闭子叠, $\operatorname{im}\mathcal Z\subseteq X$ 是其概形论像, 即由 $\pi_*I\subseteq\mathcal O_X$ 定义的闭子空间, 则 $\mathcal Z\to\operatorname{im}\mathcal Z$ 是良模空间.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+对于 (1), 引理~\bookref{7.5.19}(2) 说明 $\mathcal X\times_X\Spec_X\pi_*\mathcal A\to\Spec_X\pi_*\mathcal A$ 上同调仿射, 而 $\Spec_{\mathcal X}\mathcal A\to\mathcal X\times_X\Spec_X\pi_*\mathcal A$ 仿射, 因此 $\Spec_{\mathcal X}\mathcal A\to\Spec_X\pi_*\mathcal A$ 上同调仿射. 由构造, $\mathcal O_{\Spec_{\mathcal X}\mathcal A}$ 的推出是 $\mathcal O_{\Spec_X\pi_*\mathcal A}$, 所以该态射是良模空间. 对 $\mathcal Z=\Spec_{\mathcal X}(\mathcal O_{\mathcal X}/I)$ 应用 (1), 再用 $\pi_*(\mathcal O_{\mathcal X}/I)=\mathcal O_X/\pi_*I$, 就得到 (2).
+\end{proof}
+上述引理给出定理~\bookref{7.5.11} 前两条的简短证明.
+\begin{proof}[定理~\bookref{7.5.11}(1) 的证明]
+对每个域值点 $x\in X(\Bbbk)$, 基变换 $\mathcal X_x:=\mathcal X\times_X\Spec\Bbbk\to\Spec\Bbbk$ 是良模空间 (引理~\bookref{7.5.24}(2)). 特别地, $\Gamma(\mathcal X_x,\mathcal O_{\mathcal X_x})=\Bbbk$, 因而 $\mathcal X_x$ 非空, $\pi:\mathcal X\to X$ 满射. 对闭子叠 $\mathcal Z\subseteq\mathcal X$, 引理~\bookref{7.5.26}(2) 说明 $\mathcal Z\to\operatorname{im}\mathcal Z$ 是良模空间, 故也满射. 所以集合论像 $\pi(\mathcal Z)$ 可与 $\mathcal Z$ 中的概形论像等同, 因而闭. 由于良模空间在基变换下稳定, 它们泛闭.
+\end{proof}
+\begin{proof}[定理~\bookref{7.5.11}(2) 的证明]
+设子叠 $\mathcal Z_1,\mathcal Z_2\subseteq\mathcal X$ 由理想层 $I_1,I_2\subseteq\mathcal O_{\mathcal X}$ 定义. 对短正合列 $0\to I_1\to I_1+I_2\to I_2/(I_1\cap I_2)\to0$ 以及满射 $I_2\to I_2/(I_1\cap I_2)$ 应用正合函子 $\pi_*$, 得到交换图
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&,column sep=small]
+\&\&\pi_*I_2\arrow[d]\arrow[dr,two heads]\&\\
+0\arrow[r]\&\pi_*I_1\arrow[r]\&\pi_*(I_1+I_2)\arrow[r,two heads]\&\pi_*I_2/\pi_*(I_1\cap I_2)\arrow[r]\&0.
+\end{tikzcd}
+\end{align*}
+于是自然包含 $\pi_*I_1+\pi_*I_2\to\pi_*(I_1+I_2)$ 满射.
+\end{proof}
+\begin{exercise}\label{src:7.5.27}
+设 $\mathcal X$ 是具有仿射对角态射的代数叠, $\mathcal X\to X$ 是良模空间. 证明对每个像在 $|\mathcal X|$ 中闭的域值点 $x\in\mathcal X(\Bbbk)$, 稳定子 $G_x$ 线性约化.
+\end{exercise}
+
+\subsection{良模空间的有限型性}\label{src:7.5.5-subsection}
+为证明良模空间 $\mathcal X\to X$ 保持有限型性, 将利用它泛淹没, 并证明有限型性沿泛淹没映射下降. 回忆 \S\bookref{A.4.2-subsection}, 概形态射 $f:X\to Y$ 泛淹没是指 $f$ 满射, $Y$ 具有商拓扑, 且这些性质在基变换下稳定. fppf 态射与 Noether 概形的泛闭态射都是泛淹没的. 这一概念可推广到代数叠的态射; 良模空间泛闭 (定理~\bookref{7.5.11}(1)), 所以也泛淹没.
+\begin{proposition}[有限型性的泛淹没下降]\label{src:7.5.28}
+设 $X'\to X$ 是 Noether 概形的泛淹没态射. 若 $X\to Y$ 是 Noether 概形的态射, 且 $X'\to X\to S$ 有限型, 则 $X\to S$ 也有限型.
+\end{proposition}
+\begin{proof}
+可假定 $S=\Spec A$ 与 $X=\Spec B$ 仿射. Noether 环 $B$ 在 $A$ 上有限型当且仅当 $\Spec B$ 各不可约分支的约化在 $A$ 上有限型, 因而可假定 $B$ 是整环. 由泛平坦性~\bookref{A.2.13} 与 Raynaud--Gruson 平坦化~\bookref{A.2.18}, 有交换图
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&]
+Z'\arrow[r]\arrow[d]\&X'\arrow[d,"{f}"]\\
+Z\arrow[r,"{g}"']\&X,
+\end{tikzcd}
+\end{align*}
+其中 $g:Z=\operatorname{Bl}_IX\to X$ 是沿理想 $I\subseteq B$ 的爆破, $Z'$ 是 $X'$ 的严格变换, 即 $(Z\setminus g^{-1}(V(I)))\times_XX'$ 在 $Z\times_XX'$ 中的闭包, 且 $Z'\to Z$ 平坦. 断言 $X'\to X$ 的泛淹没性蕴含 $Z'\to Z$ 满射. 因 $g$ 在 $U=X\setminus V(I)$ 上是同构且 $f$ 满射, $g^{-1}(U)$ 包含在像中. 对点 $z\in Z$, 可取从离散赋值环来的映射 $\Spec R\to Z$, 其泛点映到 $g^{-1}(U)$, 特殊点映到 $z$. 因 $X'\to X$ 泛淹没, 存在离散赋值环扩张 $R\to R'$ 及提升 $\Spec R'\to X'$ (见习题~\bookref{A.4.9}). 诱导的 $\Spec R'\to Z\times_XX'$ 经过 $Z'$, 所以 $z$ 在 $Z'$ 的像中.
+
+因 $X'$ 在 $S$ 上有限型, $Z'$ 也有限型. 忠实平坦下降 (命题~\bookref{3.1.27}(1)) 说明 $Z\to S$ 也有限型. 为证明 $X\to S$ 有限型, 取 $I$ 的生成元 $f_1,\ldots,f_n$, 使得 $Z=\bigcup_i\Spec B_i$, 其中 $B_i=B\langle f_j/f_i\rangle\subseteq K=\operatorname{Frac}(B)$ 是由 $B$ 和 $j\ne i$ 时的 $f_j/f_i$ 生成的子代数. 写 $B=\bigcup_\lambda B_\lambda$ 为其有限生成 $A$-子代数的并. 对 $\lambda\gg0$, 所有 $f_i\in B_\lambda$, 令 $I_\lambda=(f_1,\ldots,f_n)\subseteq B_\lambda$. 因 $Z$ 在 $S$ 上有限型, 每个 $B_i$ 在 $B$ 上有限生成, 所以对 $\lambda\gg0$, 图
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&,column sep=large]
+B_{\lambda,i}=B_\lambda\langle f_j/f_i\rangle\arrow[r,hook]\arrow[d,hook]\&\operatorname{Frac}(B_\lambda)\arrow[d,hook]\\
+B_i=B\langle f_j/f_i\rangle\arrow[r,hook]\&\operatorname{Frac}(B)
+\end{tikzcd}
+\end{align*}
+中的包含 $B_{\lambda,i}\hookrightarrow B_i$ 满射. 于是对 $\lambda\gg0$, $Z=\operatorname{Bl}_I\Spec B=\operatorname{Bl}_{I_\lambda}\Spec B_\lambda$. 考虑复合
+\begin{align*}
+g_\lambda:Z\xrightarrow{g}X=\Spec B\xrightarrow{p_\lambda}\Spec B_\lambda.
+\end{align*}
+将单射 $\mathcal O_X\hookrightarrow g_*\mathcal O_Z$ 沿 $p_\lambda$ 推出, 得到包含 $p_{\lambda,*}\mathcal O_X\hookrightarrow g_{\lambda,*}\mathcal O_Z$. 而 $g_{\lambda,*}\mathcal O_Z$ 凝聚, 故 $p_{\lambda,*}\mathcal O_X$ 也凝聚. 这说明 $B$ 是有限 $B_\lambda$-模, 从而是有限生成 $A$-代数.
+\end{proof}
+\begin{proof}[定理~\bookref{7.5.11}(3) 的证明]
+若 $\mathcal X$ 是 Noether 叠, $I_1\subseteq I_2\subseteq\cdots$ 是 $\mathcal O_X$ 的理想层升链, 则 $\pi^{-1}I_1\cdot\mathcal O_{\mathcal X}\subseteq\pi^{-1}I_2\cdot\mathcal O_{\mathcal X}\subseteq\cdots$ 是终止的理想层升链. 由引理~\bookref{7.5.26}(5), $I_n=\pi_*(\pi^{-1}I_n\cdot\mathcal O_{\mathcal X})$, 因此原升链终止, $X$ 是 Noether 的.
+
+现设 $S$ 是 Noether 的, $\mathcal X$ 在 $S$ 上有限型. 因 $\mathcal X\to X$ 泛闭 (定理~\bookref{7.5.11}(1)), 它也泛淹没. 取概形的光滑展示 $U\to\mathcal X$. 因 $U\to\mathcal X$ 泛淹没, 复合 $U\to\mathcal X\to X$ 也泛淹没. $U\to S$ 有限型且 $X$ 是 Noether 的, 故命题~\bookref{7.5.28} 说明 $X\to S$ 有限型.
+
+给定 $\mathcal X$ 上的凝聚层 $F$, 为证明 $\pi_*F$ 凝聚, 可假定 $X=\Spec A$ 仿射且 $\mathcal X$ 不可约. 还可归约到 $\mathcal X$ 约化: 设 $I\subseteq\mathcal O_{\mathcal X}$ 定义 $\mathcal X_{\mathrm{red}}\hookrightarrow\mathcal X$, 则某个 $N>0$ 满足 $I^N=0$. 考察正合列 $0\to\pi_*(I^{k+1}F)\to\pi_*(I^kF)\to\pi_*(I^kF/I^{k+1}F)\to0$, 利用 $I^kF/I^{k+1}F$ 支撑在 $\mathcal X_{\mathrm{red}}$ 上而其推出凝聚, 由归纳得到 $\pi_*F$ 凝聚.
+
+由 Noether 归纳, 可假定当 $\operatorname{Supp}(F)\subsetneq\mathcal X$ 时 $\pi_*F$ 凝聚. 最大挠子层 $F_{\mathrm{tors}}\subseteq F$ 的支撑严格包含于 $\mathcal X$. 利用 $0\to F_{\mathrm{tors}}\to F\to F/F_{\mathrm{tors}}\to0$ 和 $\pi_*$ 的正合性, 可知 $\pi_*(F/F_{\mathrm{tors}})$ 凝聚蕴含 $\pi_*F$ 凝聚. 故可假定 $F$ 无挠. 此时每个截面 $s:\mathcal O_{\mathcal X}\to F$ 都单射. 对向量空间 $\xi^*F$ 的维数归纳, 其中 $\xi:\Spec K\to\mathcal X$ 是像为泛点的域值点. 若 $F$ 没有截面, 则 $\pi_*F=0$ 凝聚. 否则一个截面诱导短正合列 $0\to\mathcal O_{\mathcal X}\to F\to F/\mathcal O_{\mathcal X}\to0$, 而 $\xi^*(F/\mathcal O_{\mathcal X})$ 的维数严格减小. 再利用 $\pi_*$ 正合, 可由 $\pi_*(F/\mathcal O_{\mathcal X})$ 的凝聚性推出 $\pi_*F$ 凝聚.
+\end{proof}
+
+\subsection{良模空间的泛性质}\label{src:7.5.6-subsection}
+现证明 $\pi:\mathcal X\to X$ 对到代数空间的映射泛, 从而完成定理~\bookref{7.5.11}. 论证与定理~\bookref{5.2.3} 中粗模空间的论证相同.
+\begin{proof}[定理~\bookref{7.5.11}(4) 的证明]
+需证明每个图
+\begin{align}\label{src:7.5.29}
+\begin{tikzcd}[ampersand replacement=\&]
+\mathcal X\arrow[r,"{f}"]\arrow[d,"{\pi}"']\&Y\\
+X\arrow[ur,dashed]\&
+\end{tikzcd}
+\end{align}
+有唯一填充, 即自然映射 $\operatorname{Mor}(X,Y)\to\operatorname{Mor}(\mathcal X,Y)$ 双射. 唯一性与定理~\bookref{5.2.3} 的证明相同, 仅用到 $\pi$ 泛闭, 概形性支配且满射: 若 $h_1,h_2:X\to Y$ 是两个填充, 则 $\pi$ 经过其等化子 $E\to X$. 因 $E\to X$ 泛闭, 局部有限型, 满射且为单态射, 它是同构.
+
+对于存在性, $Y$ 仿射时容易:
+\begin{align*}
+\operatorname{Mor}(X,Y)&=\Hom(\Gamma(Y,\mathcal O_Y),\Gamma(X,\mathcal O_X))\\
+&=\Hom(\Gamma(Y,\mathcal O_Y),\Gamma(\mathcal X,\mathcal O_{\mathcal X}))=\operatorname{Mor}(\mathcal X,Y).
+\end{align*}
+一般地, 因 $\mathcal X$ 拟紧, $\mathcal X\to Y$ 经过拟紧子空间, 所以还可假定 $Y$ 拟紧. 利用平展下降及极限方法, 可归约到 $X=\Spec A$, 其中 $A$ 是严格 Hensel 局部环, 与粗模空间的情形 (定理~\bookref{5.2.3}) 一样. 因 $A$ 局部, $|\mathcal X|$ 有唯一闭点 $x$. 令 $\mathcal G_x\hookrightarrow\mathcal X$ 是剩余 gerbe 的闭浸入 (命题~\bookref{4.5.16}). 取平展展示 $(Y'=\Spec B,y')\to(Y,f(x))$. 基变换 $\mathcal X':=\mathcal X\times_YY'\to\mathcal X$ 平展, 分离, 满射且可表. 取 $x$ 的一个原像 $x'\in|\mathcal X'|$, 及包含 $x'$ 的拟紧开子叠 $\mathcal U'\subseteq\mathcal X'$. 在图
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&]
+\mathcal U'\arrow[r,hook]\arrow[d]\&\mathcal X'\arrow[r]\arrow[d]\&\mathcal X\arrow[d,"{f}"]\\
+Y'\arrow[r,equal]\&Y'\arrow[r]\&Y
+\end{tikzcd}
+\end{align*}
+中, $\mathcal U'\to\mathcal X$ 可表, 拟有限且分离. Zariski 主定理~\bookref{7.1.17} 给出分解 $\mathcal U'\to\widetilde{\mathcal X}\to\mathcal X$, 其中前者为开浸入, 后者有限. 写 $\widetilde{\mathcal X}=\Spec_{\mathcal X}\mathcal A$, $\mathcal A$ 为凝聚代数层. 引理~\bookref{7.5.26}(1) 说明 $\widetilde\pi:\widetilde{\mathcal X}\to\widetilde X:=\Spec_X\pi_*\mathcal A$ 是良模空间, 定理~\bookref{7.5.11}(3) 说明 $\pi_*\mathcal A$ 凝聚. 因此 $\widetilde X\to X=\Spec A$ 有限且 $A$ 是 Hensel 环, 可由命题~\bookref{B.5.9} 写 $\widetilde X=\coprod_i\Spec A_i$, 每个 $A_i$ 是 Hensel 局部环. 将 $\widetilde{\mathcal X}$ 换为包含 $x'$ 的 $\widetilde{\mathcal X}_i:=\widetilde\pi^{-1}(\Spec A_i)$, 将 $\mathcal U'$ 换为 $\widetilde{\mathcal X}_i\cap\mathcal U'$. 此时 $\widetilde{\mathcal X}$ 有唯一闭点 $x'\in|\mathcal U'|$, 所以补集为空, 即 $\mathcal U'=\widetilde{\mathcal X}$. 因而 $\mathcal U'\to\mathcal X$ 有限平展, 又因它在 $x'$ 处诱导剩余 gerbe 的同构, 其次数为 $1$, 即它是同构. 最后, 因 $Y'$ 仿射, $\mathcal X\cong\mathcal U'\to Y'$ 经过 $X\to Y'$, 故 $f$ 经过复合 $X\to Y'\to Y$.
+\end{proof}
+
+\subsection{Luna 基本引理}\label{src:7.5.7-subsection}
+下面的结果将用于构造良模空间 (定理~\bookref{7.10.1}), 良模空间的局部结构定理~\bookref{7.7.3} 及 Luna 平展切片定理~\bookref{7.7.5} 的证明, 也用于许多其他论证.
+\begin{theorem}[Luna 基本引理]\label{src:7.5.30}
+考虑交换图
+\begin{align}\label{src:7.5.31}
+\begin{tikzcd}[ampersand replacement=\&]
+\mathcal X'\arrow[r,"{f}"]\arrow[d,"{\pi'}"']\&\mathcal X\arrow[d,"{\pi}"]\\
+X'\arrow[r,"{g}"']\&X,
+\end{tikzcd}
+\end{align}
+其中 $f:\mathcal X'\to\mathcal X$ 是具有仿射对角态射的 Noether 代数叠之间的分离可表态射, $\pi,\pi'$ 是良模空间. 设点 $x'\in|\mathcal X'|$ 满足
+\begin{enumerate}[(a)]
+\item $f$ 在 $x'$ 处平展;
+\item $f$ 在 $x'$ 处诱导稳定子群的同构;
+\item $x'\in|\mathcal X'|$ 与 $x=f(x')\in|\mathcal X|$ 都是闭点.
+\end{enumerate}
+则 $\pi'(x')$ 有开邻域 $U'\subseteq X'$, 使得 $U'\to X$ 平展且 $U'\times_X\mathcal X\cong\pi'^{-1}(U')$.
+\end{theorem}
+\begin{remark}\label{src:7.5.32}
+此结果实际包含两件事: $g$ 在 $\pi'(x')$ 处平展; 将 $X'$ 换为 $\pi'(x')$ 的开邻域后, 图 \bookeqref{7.5.31} 笛卡尔. 对有限群的商, 命题~\bookref{5.4.1} 已建立此结论. Luna 最初的表述 \cite[第 94 页]{Lun73} 是 $\mathcal X'\cong[\Spec A'/G]$, $\mathcal X\cong[\Spec A/G]$, $G$ 线性约化, 且 $\mathcal X'\to\mathcal X$ 来自 $G$-等变态射 $\Spec A'\to\Spec A$ 的情形.
+\end{remark}
+\begin{proof}
+改用定理~\bookref{7.5.11}(4) 的论证. 问题在 $X$ 上平展局部, 极限方法 (见命题~\bookref{5.4.1} 的证明) 允许假定 $X=\Spec A$, $A$ 为严格 Hensel 局部环. 若 $\mathcal U'\subseteq\mathcal X'$ 是 $f$ 的平展轨迹, 则 $\mathcal X'\setminus\pi^{-1}(\pi'(\mathcal X'\setminus\mathcal U'))$ 包含 $x'$, 因为定理~\bookref{7.5.11}(2) 说明 $\pi'(x')$ 与 $\pi'(\mathcal X'\setminus\mathcal U')$ 不交. 因此可将 $\mathcal X'$ 换为该开子叠, 假定 $f$ 平展. 由 Zariski 主定理~\bookref{7.1.17}, 取分解 $\mathcal X'\to\widetilde{\mathcal X}=\Spec_{\mathcal X}\mathcal A\to\mathcal X$, 其中前者为开浸入, 后者有限. 则 $\widetilde{\mathcal X}\to\widetilde X:=\Spec_X\pi_*\mathcal A$ 是良模空间, $\widetilde X\to X$ 有限. 因 $A$ 是 Hensel 环, 可写 $\widetilde X=\coprod_i\Spec A_i$, 每个 $A_i$ 是 Hensel 局部环. 若 $U'=\Spec A_i$ 是包含 $x'$ 的像的连通分支, 则 $\widetilde\pi^{-1}(U')\subseteq\widetilde{\mathcal X}$ 是有唯一闭点的开子叠, 该闭点必为 $x'$, 因而 $\mathcal X'=\pi^{-1}(U')$. 由于 $\mathcal X'\to\mathcal X$ 有限平展且次数为 $1$ (它在 $x'$ 处保持剩余 gerbe), $f$ 是同构, 因此 $g$ 也是同构.
+\end{proof}
+\begin{corollary}\label{src:7.5.33}
+在定理~\bookref{7.5.30} 的假设下, 若 $f$ 平展, 且每个闭点 $x'\in|X'|$ 满足
+\begin{enumerate}[(a)]
+\item $f(x')\in|\mathcal X|$ 闭;
+\item $f$ 在 $x'$ 处诱导稳定子群的同构,
+\end{enumerate}
+则 $g:X'\to X$ 平展, 且 \bookeqref{7.5.31} 笛卡尔.
+\end{corollary}
+
+\subsection{良模空间的有限覆盖}\label{src:7.5.8-subsection}
+\begin{proposition}\label{src:7.5.34}
+考虑交换图
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&]
+\mathcal X'\arrow[r,"{f}"]\arrow[d,"{\pi'}"']\&\mathcal X\arrow[d,"{\pi}"]\\
+X'\arrow[r,"{g}"']\&X,
+\end{tikzcd}
+\end{align*}
+其中 $\mathcal X,\mathcal X'$ 是具有仿射对角态射的 Noether 代数叠, $\pi,\pi'$ 是良模空间. 假定
+\begin{enumerate}[(a)]
+\item $f$ 可表, 拟有限且分离;
+\item $f$ 将闭点映到闭点;
+\item $g$ 有限.
+\end{enumerate}
+则 $f$ 有限.
+\end{proposition}
+\begin{proof}
+由 Zariski 主定理~\bookref{7.1.17}, 有分解 $\mathcal X'\to\widetilde{\mathcal X}=\Spec_{\mathcal X}\mathcal A\to\mathcal X$, 其中前者是开浸入, 后者有限. 则 $\widetilde X=\Spec_X\pi_*\mathcal A$ 在 $X$ 上有限, $\widetilde{\mathcal X}\to\widetilde X$ 是良模空间. 将 $\mathcal X\to X$ 换为 $\widetilde{\mathcal X}\to\widetilde X$, 可假定 $f$ 是开浸入. 将 $\mathcal X$ 换为 $X'\times_X\mathcal X$, 还可归约到 $X'=X$. 对每个闭点 $x\in X$, 令 $x'\in|\mathcal X'|$ 为其上唯一闭点. 由 (b), $f(x')\in|\mathcal X|$ 是 $x$ 上唯一闭点. 因 $\mathcal X'$ 包含 $\mathcal X$ 的所有闭点, $f$ 是同构.
+\end{proof}
+\begin{proposition}\label{src:7.5.35}
+设 $\mathcal X$ 是具有仿射对角态射的 Noether 代数叠, 并有良模空间 $\pi:\mathcal X\to X$. 若对角态射 $\mathcal X\to\mathcal X\times\mathcal X$ 拟有限, 则它有限, 即 $\pi$ 分离.
+\end{proposition}
+\begin{proof}
+断言 $\mathcal X\times_X\mathcal X\to X$ 是良模空间. 由引理~\bookref{7.5.19}, 投影 $p_1:\mathcal X\times_X\mathcal X\to\mathcal X$ 上同调仿射, 所以 $\pi\circ p_1$ 也是. 若 $U\to\mathcal X$ 是光滑展示, 则 $p_1:U\times_X\mathcal X\to U$ 是良模空间 (引理~\bookref{7.5.24}), 特别地 $\mathcal O_U\xrightarrow{\sim}p_{1,*}\mathcal O_{U\times_X\mathcal X}$. 下降给出 $\mathcal O_{\mathcal X}\xrightarrow{\sim}p_{1,*}\mathcal O_{\mathcal X\times_X\mathcal X}$, 因而 $\mathcal O_X\xrightarrow{\sim}(\pi\circ p_1)_*\mathcal O_{\mathcal X\times_X\mathcal X}$, 断言得证. 对角态射 $\mathcal X\to\mathcal X\times_X\mathcal X$ 可表, 拟有限且分离, 将闭点映到闭点, 并在良模空间上诱导同构. 命题~\bookref{7.5.34} 说明它有限. 因 $\mathcal X$ 的对角态射仿射, 对角态射有限等价于它固有.
+\end{proof}
+
+\subsection{向量丛的下降}\label{src:7.5.9-subsection}
+\begin{proposition}\label{src:7.5.36}
+设 $\mathcal X$ 是 Noether 代数叠, $\pi:\mathcal X\to X$ 是良模空间. $\mathcal X$ 上的向量丛 $F$ 下降为 $X$ 上的向量丛, 当且仅当对每个像闭的域值点 $x:\Spec\Bbbk\to\mathcal X$, $G_x$ 在纤维 $F\otimes\Bbbk$ 上的作用平凡. 此时 $\pi_*F$ 是向量丛, 伴随映射 $\pi^*\pi_*F\to F$ 是同构.
+\end{proposition}
+\begin{proof}
+沿用温和粗模空间情形的论证 (命题~\bookref{5.4.27}). 必要性显然. 为证明充分性, 考虑交换图
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&]
+\mathcal G_x\arrow[r,hook]\arrow[d,"{p}"']\&\mathcal X\arrow[d,"{\pi}"]\\
+\Spec\kappa(x)\arrow[r]\&X.
+\end{tikzcd}
+\end{align*}
+先断言 $\pi^*\pi_*F\to F$ 满射. 对每个闭点 $x\in|\mathcal X|$, 假设蕴含 $p^*p_*(F|_{\mathcal G_x})\cong F|_{\mathcal G_x}$. 对满射 $F\to F|_{\mathcal G_x}$ 应用 $\pi^*\pi_*(-)|_{\mathcal G_x}$, 利用 $\pi_*$ 正合, 得到
+\begin{align*}
+(\pi^*\pi_*F)|_{\mathcal G_x}&\longrightarrow\pi^*(\pi_*(F|_{\mathcal G_x}))|_{\mathcal G_x}\\
+&\cong p^*p_*(F|_{\mathcal G_x})\cong F|_{\mathcal G_x}
+\end{align*}
+满射. 断言由引理~\bookref{7.5.37}(2) 得到.
+
+为证明 $\pi_*F$ 是向量丛, 可假定 $X=\Spec A$ 仿射且 $F$ 的秩 $r$ 为常数. 满射 $\bigoplus_{s\in\Gamma(X,\pi_*F)}A\to\pi_*F$ 拉回为满射 $\bigoplus_{s\in\Gamma(\mathcal X,F)}\mathcal O_{\mathcal X}\to\pi^*\pi_*F$. 由上述断言, 它与 $\pi^*\pi_*F\to F$ 的复合满射. 因 $F|_{\mathcal G_x}\cong\mathcal O_{\mathcal G_x}^r$ 平凡, 对每个闭点 $x$, 可取 $r$ 个截面 $\phi:\mathcal O_{\mathcal X}^{\oplus r}\to F$, 使 $\phi|_{\mathcal G_x}$ 是同构. 引理~\bookref{7.5.37}(2) 给出 $\pi(x)$ 的开邻域 $U\subseteq X$, 使 $\phi|_{\pi^{-1}(U)}$ 是同构. 因而 $\pi_*\phi:\mathcal O_X^{\oplus r}\to\pi_*F$ 在 $U$ 上是同构, 所以 $\pi_*F$ 是与 $F$ 同秩的向量丛. 最后, $\pi^*\pi_*F\to F$ 是同秩向量丛的满射, 故是同构. 另见 \cite[定理 10.3]{Alp13} 和 \cite[定理 B]{Ryd20}. 良商的情形归于 Kempf; 见 \cite[定理 2.3]{DN89} 和 \cite[命题 4.2]{KKV89}.
+\end{proof}
+\begin{lemma}\label{src:7.5.37}
+设 $\mathcal X$ 是 Noether 代数叠, $\pi:\mathcal X\to X$ 是良模空间, $x\in|\mathcal X|$ 是闭点.
+\begin{enumerate}[(1)]
+\item 若 $F$ 是 $\mathcal X$ 上的凝聚层, 且 $F|_{\mathcal G_x}=0$, 则 $\pi(x)$ 有开邻域 $U\subseteq X$, 使 $F|_{\pi^{-1}(U)}=0$.
+\item 若 $\phi:F\to G$ 是凝聚层的态射 (或同秩向量丛的态射), 且 $\phi|_{\mathcal G_x}$ 满射, 则 $\pi(x)$ 有开邻域 $U\subseteq X$, 使 $\phi|_{\pi^{-1}(U)}$ 满射 (或为同构).
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+引理~\bookref{5.4.26} 中同样的初等论证适用.
+\end{proof}
+
+\subsection{上同调的有限性}\label{src:7.5.10-subsection}
+\begin{proposition}\label{src:7.5.38}
+设代数叠 $\mathcal X$ 在 Noether 仿射概形 $\Spec A$ 上固有, $\pi:\mathcal X\to X$ 是良模空间. 存在整数 $N$, 使得对 $\mathcal X$ 上每个凝聚层 $F$, 当 $i>N$ 时 $H^i(\mathcal X,F)=0$, 且每个 $i$ 的 $H^i(\mathcal X,F)$ 都是有限生成 $A$-模.
+\end{proposition}
+\begin{proof}
+因 $\pi_*$ 正合, Grothendieck 谱序列给出 $H^i(\mathcal X,F)=H^i(X,\pi_*F)$. 又因 $\pi_*F$ 凝聚 (定理~\bookref{7.5.11}(3)), 结论由 $X$ 上上同调的有限性 (定理~\bookref{5.6.8}) 及习题~\bookref{5.6.10} 得到.
+\end{proof}
+
+\subsection{良模空间的奇点}\label{src:7.5.11-subsection}
+若 $\mathcal X\to X$ 是分离 Noether 代数叠的温和粗模空间且 $\mathcal X$ 光滑, 则 $X$ 具有温和商奇点 (见注记~\bookref{5.4.25}). 这里讨论良模空间的类似性质, 先考虑域 $\Bbbk$ 上的线性约化群 $G$ 作用于 Noether 仿射 $\Bbbk$-概形 $X=\Spec A$ 的情形. Hochster 与 Roberts 的经典定理说, 若 $A$ 正则, 则 $A^G$ 是 Cohen--Macaulay 环 \cite{HR74}. 有趣的是, $A$ 为 Cohen--Macaulay 环并不蕴含 $A^G$ 也是 \cite[例 2.1]{HR74}. Boutot 的定理说, 若 $X$ 在 $\Bbbk$ 上有限型且 $\operatorname{char}(\Bbbk)=0$, 则 $X$ 具有有理奇点蕴含 $X//G=\Spec A^G$ 也具有有理奇点 \cite{Bou87}. 光滑簇具有有理奇点, 具有有理奇点的簇是 Cohen--Macaulay 的, 因而 Boutot 定理在特征零下蕴含 Hochster--Roberts 定理.
+
+这些结果也适用于良模空间 $\mathcal X\to X$, 其中 $\mathcal X$ 在特征零代数闭域 $\Bbbk$ 上有限型且具有仿射对角态射. 这是良模空间局部结构定理~\bookref{7.7.3} 的推论. 还应提及最近的推广: 若 $\mathcal X$ 有 klt 奇点, 则 $X$ 也是 \cite[定理 5]{BGLM24}. 这些蕴含可概括为:
+\begin{align*}
+\mathcal X\text{ 光滑}&\Longrightarrow X\text{ 是 Cohen--Macaulay 的},\\
+\mathcal X\text{ 有有理奇点}&\Longrightarrow X\text{ 有有理奇点},\\
+\mathcal X\text{ 是 klt 的}&\Longrightarrow X\text{ 是 klt 型的}.\footnotemark
+\end{align*}
+\footnotetext{klt 型是比 klt 更广的概念. $\mathcal X$ 是 klt 的并不蕴含 $X$ 是 klt 的.}
+最后提及一个相关结果: 特征零代数闭域上的不可约, $\mathbb Q$-Gorenstein 有限型概形 $X$ 是对数终端的, 当且仅当它有一个从光滑代数叠来的叠式保典消解 $\mathcal X\to X$ \cite[定理 1.4]{SU24}.
+\begin{exercise}\label{src:7.5.39}
+设 $\mathcal X$ 是代数闭域 $\Bbbk$ 上具有仿射对角态射的光滑代数叠. 设
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&]
+\mathcal U\arrow[r,hook]\arrow[d]\&\mathcal X\arrow[d]\\
+U\arrow[r,hook]\&X
+\end{tikzcd}
+\end{align*}
+笛卡尔, 其中 $\mathcal X\to X$ 是良模空间, $U\hookrightarrow X$ 是开浸入. 若 $\mathcal U$ 是 Deligne--Mumford 叠 (或 $\mathcal U$ 是 Deligne--Mumford 叠且是 $U$ 上的 gerbe, 如 $\mathcal U$ 为代数空间), 且 $\operatorname{codim}_{\mathcal X}(\mathcal X\setminus\mathcal U)\ge2$, 则 $X$ 是 $\mathbb Q$-析因的 (或局部析因的), 当且仅当对 $\mathcal X$ 上每个线丛 $L$ 及每个闭点 $x\in|\mathcal X\setminus\mathcal U|$, $G_x^0$ (或 $G_x$) 在纤维 $L\otimes\kappa(x)$ 上的作用平凡.
+
+提示: 证明 $X$ 析因 (或 $\mathbb Q$-析因), 当且仅当 $\Pic(X)\to\Pic(U)$ (或 $\Pic(X)_{\mathbb Q}\to\Pic(U)_{\mathbb Q}$) 满射. 再应用命题~\bookref{7.5.36}.
+\end{exercise}

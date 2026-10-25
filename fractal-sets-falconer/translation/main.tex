@@ -1,0 +1,134 @@
+% !TeX program = xelatex
+% 译本：《分形集的几何》(The Geometry of Fractal Sets, K. J. Falconer,
+% Cambridge Tracts in Mathematics 85, Cambridge University Press, 1985).
+% 编译：xelatex -> biber -> xelatex -> xelatex
+\documentclass[
+  BookTitleCN={分形集的几何},
+  BookTitleEN={The Geometry of Fractal Sets},
+  OriginalAuthor={K. J. Falconer},
+  OriginalEdition={Cambridge Tracts in Mathematics 85},
+  OriginalPublisher={Cambridge University Press},
+  OriginalYear={1985},
+  Translator={Fingolfin},
+  ModelUsed={GLM-5.3-Flash},
+  TranslationDate={11 Sep 2026},
+  BibStyle={authoryear}
+]{mathtranslation}
+
+\raggedbottom
+
+\addbibresource{references.bib}
+
+% 参考文献与引文中作者名之间使用中文连接词
+\DeclareDelimFormat{multinamedelim}{~与~}
+\DeclareDelimFormat{finalnamedelim}{~与~}
+
+% ================================================================
+%  与原书一致的编号机制
+% ================================================================
+% 原书中定义、定理、引理、推论共用一个按章计数的计数器
+% (如 Theorem 1.10、Lemma 1.3、Corollary 2.4)，此处重新声明.
+\makeatletter
+\let\definition\relax\let\enddefinition\relax
+\let\lemma\relax\let\endlemma\relax
+\let\theorem\relax\let\endtheorem\relax
+\let\corollary\relax\let\endcorollary\relax
+\let\proposition\relax\let\endproposition\relax
+\let\remark\relax\let\endremark\relax
+\let\example\relax\let\endexample\relax
+\let\problem\relax\let\endproblem\relax
+% 原计数器一并清除, 否则 \newtheorem 因 \c@definition 已定义而报错
+\csundef{c@definition}\csundef{c@lemma}\csundef{c@theorem}\csundef{c@corollary}%
+\csundef{c@proposition}\csundef{c@remark}\csundef{c@example}\csundef{c@problem}
+% amsmath 的计数器检查点列表 \cl@@ckpt 中残留被清除的计数器, 一并滤除
+\def\MT@elt#1{\ifcsname c@#1\endcsname\noexpand\@elt{#1}\fi}
+{\let\@elt\MT@elt\xdef\cl@@ckpt{\cl@@ckpt}}
+\theoremstyle{mtfang}
+\newtheorem{definition}{定义}[chapter]
+\newtheorem{lemma}[definition]{引理}
+\newtheorem{theorem}[definition]{定理}
+\newtheorem{corollary}[definition]{推论}
+\newtheorem{proposition}[definition]{命题}
+\newtheorem{remark}[definition]{注}
+\theoremstyle{mtsong}
+\newtheorem{example}[definition]{例}
+\newtheorem{problem}[definition]{问题}
+
+% 清除旧 [section] 声明留在 \cl@section 重置链中的残留
+\@removefromreset{definition}{section}\@removefromreset{lemma}{section}%
+\@removefromreset{theorem}{section}\@removefromreset{corollary}{section}%
+\@removefromreset{proposition}{section}\@removefromreset{remark}{section}%
+\@removefromreset{example}{section}\@removefromreset{problem}{section}
+
+% 原书所有定理类环境共用一个计数器; cleveref 依计数器判定引用类型.
+% 通过 \crefalias 在各环境开始处设置别名, 使 \cref 能区分定理/引理/推论等.
+\AtBeginEnvironment{definition}{\crefalias{definition}{definition}}
+\AtBeginEnvironment{lemma}{\crefalias{definition}{lemma}}
+\AtBeginEnvironment{theorem}{\crefalias{definition}{theorem}}
+\AtBeginEnvironment{corollary}{\crefalias{definition}{corollary}}
+\AtBeginEnvironment{proposition}{\crefalias{definition}{proposition}}
+\AtBeginEnvironment{remark}{\crefalias{definition}{remark}}
+\AtBeginEnvironment{example}{\crefalias{definition}{example}}
+\AtBeginEnvironment{problem}{\crefalias{definition}{problem}}
+\crefname{exercise}{习题}{习题}
+
+% 公式与插图按章编号 (原书: (1.12)、Fig. 8.5).
+\numberwithin{equation}{chapter}
+\counterwithin{figure}{chapter}
+
+% 习题按章编号 (原书: Exercise 1.6), 习题环境在章末统一给出.
+\counterwithout{exercise}{section}
+\counterwithin{exercise}{chapter}
+\renewcommand{\theexercise}{\thechapter.\arabic{exercise}}
+\makeatother
+
+% 章首的 \cleardoublepage 插入的空白页不排页眉页脚
+\renewcommand{\cleardoublepage}{%
+  \clearpage
+  \if@twoside
+    \ifodd\c@page\else
+      \thispagestyle{empty}%
+      \hbox{}\newpage
+    \fi
+  \fi
+}
+\makeatother
+
+% cleveref 多重引用使用中文连接词 (命令由 cleveref 在 \begin{document} 时定义)
+\AtBeginDocument{%
+  \renewcommand{\crefpairconjunction}{ 与 }%
+  \renewcommand{\crefmiddleconjunction}{、}%
+  \renewcommand{\creflastconjunction}{ 与 }%
+}
+
+\begin{document}
+
+\maketitle
+
+\frontmatter
+\input{chapters/translator-note}
+\input{chapters/preface}
+\input{chapters/introduction}
+\input{chapters/notation}
+
+\makecontents
+
+\mainmatter
+\input{chapters/chapter01}
+\input{chapters/chapter02}
+\input{chapters/chapter03}
+\input{chapters/chapter04}
+\input{chapters/chapter05}
+\input{chapters/chapter06}
+\input{chapters/chapter07}
+\input{chapters/chapter08}
+
+% 参考文献: 模板 v3.2 起 \makebibliography 自动进入后置部分并无编号排版
+\renewcommand{\BibliographyNote}{%
+  原书各条目末尾方括号中所注为引用该文献的章节，此处以注记形式保留.}
+\makebibliography
+
+% 术语索引: 模板 v3.2 起同样自动无编号排版
+\printterminology
+
+\end{document}

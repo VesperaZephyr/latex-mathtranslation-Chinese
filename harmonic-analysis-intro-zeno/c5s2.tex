@@ -1,0 +1,150 @@
+% ============ 第5章 §5.2 Schwartz 函数的卷积 (原书 pp.104-107) ============
+
+\section{Schwartz 函数的卷积}\label{sec:5.2}
+
+一般地, 函数的卷积由
+\[
+f * g(x) = \int_{\mathbb{R}^{n}}f(x-y)g(y)\dd y
+\]
+给出. 对 Schwartz 函数这个定义也有效. 并且, Schwartz 函数的卷积仍是 Schwartz 函数. 积分在某种意义下可以用``Riemann 和''写出, 但重要的是, 用``Riemann 和''逼近卷积在 Schwartz 函数空间的拓扑中也是有效的. 为了避免计算过程变长, 稍加巧思, 决定按``Riemann 和风格''来分割. 首先, 证明刚才所述``Schwartz 函数的卷积仍是 Schwartz 函数''这一事实.
+
+卷积是用积分号表示的运算, 必须证明卷积后的函数可微, 所以想先确认微分号与积分号的交换 (定理~\ref{thm:2.13}). 那么, 这里确认 $f * g$ 是 $\mathcal{S}(\mathbb{R}^{n})$ 的元.
+
+\begin{theorem}[* 在 $\mathcal{S}(\mathbb{R}^{n})$ 中的乘法性]\label{thm:5.2}
+卷积运算 * 在 $\mathcal{S}(\mathbb{R}^{n})$ 中是封闭的. 即, 当 $f, g \in \mathcal{S}(\mathbb{R}^{n})$ 时, $f * g \in \mathcal{S}(\mathbb{R}^{n})$.
+\end{theorem}
+
+\begin{proof}
+首先必须证明 $f * g$ 属于 $C^{\infty}(\mathbb{R}^{n})$. 为此, 考察 $f * g(x)$ 的被积函数 $f(x-y)g(y)$, 记其为 $F(x, y)$. $\partial_{x_{j}}F(x, y) = \partial_{j}f(x-y)g(y)$ 成立, 对各 $x, y \in \mathbb{R}^{n}$, $F(x, y)$ 满足下面的条件.
+\[
+|F(x, y)|(1+|y|)^{n+1} = |f(x-y)g(y)|(1+|y|)^{n+1}
+\]
+\begin{align*}
+&\leq \sup_{z \in \mathbb{R}^{n}}|f(z)| \cdot \sup_{w \in \mathbb{R}^{n}}(1+|w|)^{n+1}|g(w)|, \\
+&|\partial_{x_{j}}F(x, y)|(1+|y|)^{n+1} = |\partial_{j}f(x-y)g(y)|(1+|y|)^{n+1} \\
+&\leq \sup_{z \in \mathbb{R}^{n}}|\partial_{j}f(z)| \cdot \sup_{w \in \mathbb{R}^{n}}(1+|w|)^{n+1}|g(w)|.
+\end{align*}
+因此可以交换微分号与积分号, $\partial_{j}[f*g](x) = (\partial_{j}f)*g(x)$ 成立. 特别地, $f * g$ 至少 1 次可微, 且该等式成立. 由这个计算也可知, $f * g$, $\partial_{j}[f*g]$ 是有界函数. 由于 $\partial_{j}f$ 与 $f$ 一样是 $\mathcal{S}(\mathbb{R}^{n})$ 的元, 这个考察可以反复使用, 可知 $f * g$ 任意次可微, 且包括 $f * g$ 在内连续, $f * g \in C^{\infty}(\mathbb{R}^{n})$ 成立.
+
+取 $\alpha \in \mathbb{N}_{0}^{n}$ 与 $N \in \mathbb{N}$. 此时, 由积分的三角不等式, $1+|x| \leq (1+|x-y|)(1+|y|)$, $x, y \in \mathbb{R}^{n}$, 以及
+\[
+\int_{\mathbb{R}^{n}}\frac{\dd y}{(1+|y|)^{n+1}} < \infty
+\]
+得到
+\begin{align}
+&\sup_{x \in \mathbb{R}^{n}}(1+|x|)^{N}|\partial^{\alpha}[f*g](x)| \nonumber \\
+&\leq \sup_{x \in \mathbb{R}^{n}}(1+|x|)^{N}\int_{\mathbb{R}^{n}}|\partial^{\alpha}f(x-y)| \cdot |g(y)|\dd y \nonumber \\
+&\leq \sup_{x \in \mathbb{R}^{n}}\int_{\mathbb{R}^{n}}(1+|x-y|)^{N}|\partial^{\alpha}f(x-y)| \cdot (1+|y|)^{N}|g(y)|\dd y \nonumber \\
+&\lesssim \sup_{w \in \mathbb{R}^{n}}(1+|w|)^{N}|\partial^{\alpha}f(w)| \cdot \sup_{y \in \mathbb{R}^{n}}(1+|y|)^{N+n+1}|g(y)|.
+\tag{5.3}
+\label{eq:5.3}
+\end{align}
+因此, 可以结论 $f * g \in \mathcal{S}(\mathbb{R}^{n})$.
+\end{proof}
+
+卷积是由
+\[
+f * g(x) = \int_{\mathbb{R}^{n}}f(x-y)g(y)\dd y
+\]
+给出的函数, 但通过分割积分区域, 可以将其分割为
+\[
+f * g(x) = \sum_{k \in \mathbb{Z}^{n}}\int_{k+[0,1]^{n}}f(x-y)g(y)\dd y.
+\]
+重要的是, 这并非各点收敛的意义, 而是在 $\mathcal{S}(\mathbb{R}^{n})$ 的拓扑中进行的.
+
+\begin{lemma}\label{lem:5.1}
+设 $f, g \in \mathcal{S}(\mathbb{R}^{n})$. 对 $k \in \mathbb{Z}^{n}$, 令
+\[
+\Phi_{k}(x) = \int_{k+[0,1]^{n}}f(x-y)g(y)\dd y.
+\]
+(1) 对各 $k \in \mathbb{Z}^{n}$, $\Phi_{k}$ 属于 $\mathcal{S}(\mathbb{R}^{n})$.
+(2) $f * g = \sum_{k \in \mathbb{Z}^{n}}\Phi_{k}$ 成立. 准确地说,
+\[
+\lim_{R \to \infty}\sum_{k \in \mathbb{Z}^{n} \cap B(R)}\Phi_{k} = f * g
+\]
+在 $\mathcal{S}(\mathbb{R}^{n})$ 的拓扑中成立.
+\end{lemma}
+
+\begin{proof}
+(1) 与前面一样, $\Phi_{k}$ 可微, 且
+\begin{align*}
+&\sup_{x \in \mathbb{R}^{n}}(1+|x|)^{N}|\partial^{\alpha}\Phi_{k}(x)| \\
+&= \sup_{x \in \mathbb{R}^{n}}(1+|x|)^{N}\int_{k+[0,1]^{n}}|\partial^{\alpha}f(x-y)| \cdot |g(y)|\dd y \\
+&\leq \sup_{x \in \mathbb{R}^{n}}\int_{k+[0,1]^{n}}(1+|x-y|)^{N}|\partial^{\alpha}f(x-y)| \cdot (1+|y|)^{N}|g(y)|\dd y \\
+&\lesssim (1+|k|)^{-n-1}\sup_{y \in \mathbb{R}^{n}}(1+|y|)^{N}|\partial^{\alpha}f(y)|\sup_{y \in k+[0,1]^{n}}(1+|y|)^{N}|g(y)|
+\end{align*}
+所以得到结论.
+
+(2) 基于刚才的计算, 设 $R > 0$, 由
+\begin{align*}
+\sum_{k \in \mathbb{Z}^{n}\setminus B(R)}(1+|k|)^{-n-1} &\lesssim \int_{\mathbb{R}^{n}\setminus B(R)}\frac{\dd x}{(1+|x|)^{n+1}} \\
+&\lesssim \frac{1}{\sqrt{R}}\int_{\mathbb{R}^{n}\setminus B(R)}\frac{\dd x}{(1+|x|)^{n+1/2}} \\
+&\lesssim \frac{1}{\sqrt{R}}
+\end{align*}
+得到
+\begin{align*}
+&\sup_{x \in \mathbb{R}^{n}}(1+|x|)^{N}\left|\partial^{\alpha}[f*g](x) - \sum_{k \in \mathbb{Z}^{n} \cap B(R)}\partial^{\alpha}\Phi_{k}(x)\right| \\
+&\leq \sum_{k \in \mathbb{Z}^{n}\setminus B(R)}(1+|k|)^{-n-1}\sup_{y \in \mathbb{R}^{n}}(1+|y|)^{N}|\partial^{\alpha}f(y)| \\
+&\quad \times \sup_{y \in k+[0,1]^{n}}(1+|y|)^{N+n+1}|g(y)| \\
+&\lesssim R^{-1/2}
+\end{align*}
+所以得到所希望的收敛.
+\end{proof}
+
+这里, 进一步分析 $\Phi_{k}$. 记 $m = (m_{1}, m_{2}, \ldots, m_{n})$. 将 $\Phi_{k}$ 按 Riemann 和风格分割,
+\[
+\Phi_{k}(x) = \lim_{N \to \infty}\sum_{m \in \{1, 2, \ldots, N\}^{n}}f\left(x - k - \frac{m}{N}\right)\int_{k+\frac{m}{N}+[-N^{-1},0]^{n}}g(y)\dd y
+\]
+对所有 x 成立, 但可知该等式也是在 $\mathcal{S}(\mathbb{R}^{n})$ 的拓扑中发生的.
+
+\begin{lemma}\label{lem:5.2}
+在 $\mathcal{S}(\mathbb{R}^{n})$ 的拓扑中,
+\[
+\Phi_{k} = \lim_{N \to \infty}\sum_{m \in \{1, 2, \ldots, N\}^{n}}f\left(\cdot - k - \frac{m}{N}\right)\int_{k+\frac{m}{N}+[-N^{-1},0]^{n}}g(y)\dd y
+\]
+成立.
+\end{lemma}
+
+\begin{proof}
+由练习题~\ref{exer:5.5}, 在一致收敛的意义下, 只要能证明
+\[
+\lim_{N \to \infty}\sum_{m \in \{1, 2, \ldots, N\}^{n}}(1+|\cdot|)^{N}\partial^{\beta}f\left(\cdot - k - \frac{m}{N}\right)\int_{k+\frac{m}{N}+[-N^{-1},0]^{n}}g(y)\dd y
+\]
+收敛于 $(1+|\cdot|)^{N}\partial^{\beta}\Phi_{k}$ 即可, 但将 $\partial^{\beta}f$ 替换为 f, 设 $\beta = 0$ 来考虑也可以.
+
+令
+\[
+h(x, y, m, N, k) = \left(f(x-y) - f\left(x - k - \frac{m}{N}\right)\right)g(y).
+\]
+于是,
+\begin{align*}
+&\Phi_{k}(x) - \sum_{m \in \{1, 2, \ldots, N\}^{n}}f\left(x - k - \frac{m}{N}\right)\int_{k+\frac{m}{N}+[-N^{-1},0]^{n}}g(y)\dd y \\
+&= \sum_{m \in \{1, 2, \ldots, N\}^{n}}\int_{k+\frac{m}{N}+[-N^{-1},0]^{n}}h(x, y, m, N, k)\dd y.
+\end{align*}
+与前面一样计算, 由于 $|y - k - N^{-1}m| \lesssim N^{-1}$, 存在依赖于 k, x, y, m, N 的 $t \in [0, 1]$, 使得
+\begin{align*}
+&\int_{k+\frac{m}{N}+[-N^{-1},0]^{n}}|h(x, y, m, N, k)|\dd y \\
+&\lesssim N^{-1}\int_{k+\frac{m}{N}+[-N^{-1},0]^{n}}\left|\nabla f\left(x - (1-t)y - tk - t\frac{m}{N}\right)\right| \cdot |g(y)|\dd y
+\end{align*}
+成立. 因此, 注意
+\[
+1 + |x| \leq \left(1 + \left|x - y + ty - tk - t\frac{m}{N}\right|\right)\left(1 + \left|(1-t)y + tk + t\frac{m}{N}\right|\right),
+\]
+得到
+\begin{align*}
+&\sup_{x \in \mathbb{R}^{n}}(1+|x|)^{N}\int_{k+\frac{m}{N}+[-N^{-1},0]^{n}}|h(x, y, m, N, k)|\dd y \\
+&\lesssim \frac{1}{N}\sup_{x \in \mathbb{R}^{n}}\int_{k+\frac{m}{N}+[-N^{-1},0]^{n}}\left(1 + \left|x - (1-t)y - tk - t\frac{m}{N}\right|\right)^{N} \\
+&\quad \times (1+|y|)^{N}\left|\nabla f\left(x - (1-t)y - tk - t\frac{m}{N}\right)\right| \cdot |g(y)|\dd y \\
+&\lesssim \frac{1}{N(1+|k|)^{n+1}}\sup_{y \in \mathbb{R}^{n}}(1+|y|)^{N}|\nabla f(y)|\sup_{y \in k+[0,1]^{n}}(1+|y|)^{N}|g(y)|.
+\end{align*}
+之后只需将其代入再取极限.
+\end{proof}
+
+\begin{exercise}\label{exer:5.5}
+设 $\{\varphi_{j}\}_{j=1}^{\infty} \subset \mathcal{S}(\mathbb{R}^{n})$ 收敛于 $\varphi \in \mathcal{S}(\mathbb{R}^{n})$ 的必要充分条件是, 对所有自然数 N 与 $\alpha \in \mathbb{N}_{0}^{n}$,
+\begin{equation}\tag{5.4}
+\lim_{j \to \infty}\left(\sup_{x \in \mathbb{R}^{n}}(1+|x|)^{N}|\partial^{\alpha}\varphi(x) - \partial^{\alpha}\varphi_{j}(x)|\right) = 0
+\label{eq:5.4}
+\end{equation}
+成立, 证明这一点.
+\end{exercise}

@@ -1,0 +1,1036 @@
+% !TeX root = ../main.tex
+% 第 8 章 分形集杂例 (对应原书 pp. 113--149)
+
+\chapter{分形集杂例}\label{chap:8}
+
+\section{引言}
+
+本章综述由特定构造产生、或出现于数学或物理其他分支中的分数维数集合的例子，并把它们与本书前面的内容联系起来.这些专题的选择完全出于作者的一时兴致，而非因为它们代表了分形集合最重要的出现场合.每一节中选取若干有意义的结果加以证明，其余则仅加引用.希望这一方式能鼓励读者在别处更深入地跟进其中某些专题.大部分例子来自拥有浩繁文献的数学领域，因此本章的参考文献只给出主要出处以及包含进一步综述与文献的近期文章和书籍.
+
+\section{分数维数的曲线}
+
+本节在 $(x,y)$ 坐标平面内工作，考察 $\Gamma$ 的 Hausdorff 维数（\newterm{curve-dimension}{曲线的维数}{curve, dimension of}），即定义在（比如说）单位区间上的函数 $f$ 的图像所构成的点集 $\{(x,f(x))\}$ 的 Hausdorff 维数.
+
+若 $f$ 是有界变差函数，即对一切分割 $0=x_0<x_1<\cdots<x_m=1$，$\sum_{i=1}^{m}|f(x_i)-f(x_{i-1})|$ 有界，则我们实际上回到了 3.2~节的情形：$\Gamma$ 是可求长曲线，从而是正则 $1$-集.然而，若 $f$ 充分不规则（尽管连续），$\Gamma$ 的维数可以大于 $1$.此时仅由 $f$ 的知识来计算 $\Gamma$ 的 Hausdorff 维数与测度可能很难.不过，若 $f$ 满足 Lipschitz 条件，则容易得到一个上界.
+
+\begin{theorem}\label{thm:8.1}
+设
+\begin{equation}\label{eq:8.1}
+  |f(x+h)-f(x)|\leq ch^{2-s}
+\end{equation}
+对一切 $x$ 及一切满足 $0<h\leq h_0$ 的 $h$ 成立，其中 $c$ 与 $h_0$ 为正常数.则 $\mathcal{H}^s(\Gamma)<\infty$.
+\end{theorem}
+
+\begin{proof}
+设 $I$ 是 $x$ 轴上长度 $h<h_0$ 的任意区间.由 \eqref{eq:8.1}，在 $I$ 上方取一列正方形可见：$\Gamma$ 的部分 $\{(x,f(x)):x\in I\}$ 可以用至多 $h^{-1}ch^{2-s}+1$ 个边长为 $h$ 的正方形覆盖.于是把 $[0,1]$ 分成 $m$ 等份，每份长 $h=1/m<h_0$，可见
+\[
+  \mathcal{H}^{s}_{2^{\frac{1}{2}}h}(\Gamma)\leq m\bigl(h^{-1}ch^{2-s}+1\bigr)\bigl(2^{\frac{1}{2}}h\bigr)^{s}\leq c\,2^{1+s/2}
+\]
+对一列趋于 $0$ 的 $h$ 值成立.从而 $\mathcal{H}^s(\Gamma)\leq c\,2^{1+s/2}<\infty$.
+\end{proof}
+
+得到图像具有精细结构的函数的最容易办法是把一系列振荡越来越快的函数相加.于是若 $\sum_{1}^{\infty}|a_i|<\infty$ 且 $\lambda_i\to\infty$，由三角级数
+\begin{equation}\label{eq:8.2}
+  f(x)=\sum_{i=1}^{\infty}a_i\sin(\lambda_i x)
+\end{equation}
+定义的函数，在 $a_i$ 与 $\lambda_i$ 选取得当的情况下，可以预期其图像的维数大于 $1$.PLACEHOLDER-NEVER-5
+\begin{equation}\label{eq:8.3}
+  f(x)=\sum_{i=1}^{\infty}\lambda^{(s-2)i}\sin(\lambda^{i}x),
+\end{equation}
+其中 $1<s<2$，$\lambda>1$；它是 \newterm{weierstrass-function}{Weierstrass 函数}{Weierstrass function}，连续却处处不可微.Weierstrass 函数的图像很可能具有维数 $s$，但这似乎尚未被严格证明.（维数不能超过 $s$，见\cref{exe:8.3}.）\textcite{mandelbrot1977} 引入了 Weierstrass 函数的一个变式
+\[
+  f(x)=\sum_{i=-\infty}^{\infty}\lambda^{(s-2)i}\bigl(1-\cos\lambda^{i}x\bigr),
+\]
+该函数具有尺度性质：对一切 $x$ 有 $f(\lambda x)=\lambda^{2-s}f(x)$；同样其图像的维数应当是 $s$.\textcite{berrylewis1980} 给出了这类函数的计算机实现，并引用了各种物理应用的文献.
+
+为便于计算，把 \eqref{eq:8.2} 中的正弦函数换成形式稍异的周期函数会更方便.设 $g$ 是 $\mathbb{R}$ 上周期为 $4$ 的``锯齿''函数：
+\[
+  g(4k+x)=
+  \begin{cases}
+    x & (0\leq x<1)\\
+    2-x & (1\leq x<3)\\
+    x-4 & (3\leq x<4),
+  \end{cases}
+\]
+其中 $k$ 为整数且 $0\leq x<4$.（特别注意 $g$ 在所有非整数 $x$ 处导数的模为 $1$.）于是我们研究函数
+\begin{equation}\label{eq:8.4}
+  f(x)=\sum_{i=1}^{\infty}a_i g(\lambda_i x)
+\end{equation}
+以代替 \eqref{eq:8.2}.\textcite{besicovitchursell1937} 对这类函数中某些函数的图像建立了 Hausdorff 维数：
+
+\begin{theorem}\label{thm:8.2}
+设 $\Gamma$ 是函数
+\begin{equation}\label{eq:8.5}
+  f(x)=\sum_{i=1}^{\infty}\lambda_i^{s-2}g(\lambda_i x)
+\end{equation}
+（$x\in[0,1]$，$1<s<2$）的图像.设 $\{\lambda_i\}$ 是正数序列，$\lambda_{i+1}/\lambda_i$ 递增于无穷且 $\log\lambda_{i+1}/\log\lambda_i\to 1$.则 $\dim\Gamma=s$.
+\end{theorem}
+
+\begin{proof}
+若
+\begin{equation}\label{eq:8.6}
+  \lambda_{k+1}^{-1}\leq h<\lambda_k^{-1},
+\end{equation}
+则
+\begin{align*}
+  |f(x+h)-f(x)|
+  &\leq\sum_{1}^{k}\lambda_i^{s-2}|g\bigl(\lambda_i(x+h)\bigr)-g(\lambda_i x)|+2\sum_{k+1}^{\infty}\lambda_i^{s-2}\\
+  &\leq h\sum_{1}^{k}\lambda_i^{s-1}+2\sum_{k+1}^{\infty}\lambda_i^{s-2}
+  \leq 2h\lambda_k^{s-1}+4\lambda_{k+1}^{s-2},
+\end{align*}
+只要 $k$ 充分大.于是由 \eqref{eq:8.6}，当 $h$ 充分小时
+\[
+  |f(x+h)-f(x)|\leq 2h^{2-s}+4h^{2-s}=6h^{2-s}.
+\]
+由\cref{thm:8.1} 得 $\mathcal{H}^s(\Gamma)<\infty$.
+
+$\Gamma$ 维数的下估计则相当棘手.设 $S$ 是边长为 $h$、边平行于坐标轴的正方形.设 $I$ 是 $S$ 到 $x$ 轴上投影的区间.我们证明集合 $E=\{x:(x,f(x))\in S\}$ 的勒贝格测度不能太大.
+
+定义部分和
+\[
+  f_k(x)=\sum_{1}^{k}\lambda_i^{s-2}g(\lambda_i x).
+\]
+以下始终设 $k$ 大到足以保证 $\lambda_{k+1}\geq 2\lambda_k\geq 2$，使
+\begin{equation}\label{eq:8.7}
+  |f(x)-f_k(x)|=\Bigl|\sum_{k+1}^{\infty}\lambda_i^{s-2}g(\lambda_i x)\Bigr|\leq\sum_{k+1}^{\infty}\lambda_i^{s-2}\leq 2\lambda_{k+1}^{s-2},
+\end{equation}
+并且（对非例外的 $x$）
+\begin{equation}\label{eq:8.8}
+  |f_k'(x)|=\Bigl|\sum_{1}^{k}\lambda_i^{s-1}g'(\lambda_i x)\Bigr|\geq\lambda_k^{s-1}-\sum_{1}^{k-1}\lambda_i^{s-1}\geq\frac{1}{2}\lambda_k^{s-1}.
+\end{equation}
+
+先设正方形 $S$ 的边 $h=\lambda_k^{-1}$ 对某个这样的 $k$ 成立.设 $m$ 是满足
+\begin{equation}\label{eq:8.9}
+  \lambda_{k+m}^{s-2}\leq h=\lambda_k^{-1}<\lambda_{k+m-1}^{s-2}
+\end{equation}
+的整数.当然 $m\geq 1$.另一方面，由于 $\lambda_{i+1}/\lambda_i$ 递增，
+\[
+  \Bigl(\frac{\lambda_{k+1}}{\lambda_k}\Bigr)^{(m-1)(2-s)}\lambda_k^{2-s}
+  <\Bigl(\frac{\lambda_{k+m-1}}{\lambda_{k+m-2}}\cdots\frac{\lambda_{k+1}}{\lambda_k}\lambda_k\Bigr)^{2-s}
+  =\lambda_{k+m-1}^{2-s}<\lambda_k,
+\]
+故
+\[
+  \Bigl(\frac{\lambda_{k+1}}{\lambda_k}\Bigr)^{(m-1)(2-s)}
+  <\lambda_k^{s-1}
+  <\Bigl(\frac{\lambda_k}{\lambda_{k-1}}\cdots\frac{\lambda_2}{\lambda_1}\lambda_1\Bigr)^{s-1}
+  <\Bigl(\frac{\lambda_{k+1}}{\lambda_k}\Bigr)^{(k-1)(s-1)}\lambda_1^{s-1}.
+\]
+于是取对数得
+\begin{equation}\label{eq:8.10}
+  m\leq ak,
+\end{equation}
+其中 $a$ 与 $k$ 无关.
+
+若 $m=1$，则由 \eqref{eq:8.7}，$(x,f(x))$ 能落在 $S$ 中仅当 $(x,f_k(x))$ 落在把 $S$ 向上、下各扩大距离 $2\lambda_{k+1}^{s-2}\leq 2h$ 所得矩形 $S_1$ 之中.导数 $f_k'(x)$ 在区间 $I$ 内至多变号一次.在 $f_k'(x)$ 恒号的每一段上 $|f_k'(x)|\geq\frac{1}{2}\lambda_k^{s-1}$，故 $(x,f_k(x))$ 能落在 $S_1$ 中的 $x$ 只能属于长度至多为 $2\lambda_k^{1-s}$ 乘以 $S_1$ 的高度的区间.于是
+\begin{equation}\label{eq:8.11}
+  \mathscr{L}^{1}(E)\leq 2\cdot 2\lambda_k^{1-s}\cdot 5h=20h^{s}.
+\end{equation}
+若 $m>1$，则可把 $I$ 分成至多两部分，使 $f_k'(x)$ 在每部分恒号.由 \eqref{eq:8.9}，$S_1$ 的高为 $h+4\lambda_{k+1}^{s-2}\leq 5\lambda_{k+1}^{s-2}$，故在每一部分中寻找 $E$ 的点时只需考虑属于长度为 $2\lambda_k^{1-s}\cdot 5\lambda_{k+1}^{s-2}$ 的子区间的 $x$.再把每个这样的子区间进一步分成 $f_{k+1}'(x)$ 也恒号的部分.这样，从每个旧区间至多得到 $2\lambda_k^{1-s}\cdot 5\lambda_{k+1}^{s-2}\cdot\frac{1}{2}\lambda_{k+1}+1\leq 6\bigl(\lambda_{k+1}/\lambda_k\bigr)^{s-1}$ 个新区间.
+
+若 $m>2$，重复该过程，从上一组区间中的每个至多得到 $6\bigl(\lambda_{k+2}/\lambda_{k+1}\bigr)^{s-1}$ 个使 $f_{k+2}'(x)$ 也恒号的区间.如此进行，最终看到 $E$ 可以被至多
+\[
+  2\cdot 6^{m-1}\Bigl(\frac{\lambda_{k+1}}{\lambda_k}\cdot\frac{\lambda_{k+2}}{\lambda_{k+1}}\cdots\frac{\lambda_{k+m-1}}{\lambda_{k+m-2}}\Bigr)^{s-1}
+  =2\cdot 6^{m-1}\Bigl(\frac{\lambda_{k+m-1}}{\lambda_k}\Bigr)^{s-1}
+\]
+个使 $f_{k+m-1}'(x)$ 恒号的区间覆盖.由 \eqref{eq:8.7}，在每个这样的区间上，$(x,f(x))\in S$ 仅当 $(x,f_{k+m-1}(x))\in S_2$，其中 $S_2$ 是把 $S$ 向上、下各扩大距离 $2\lambda_{k+m}^{s-2}$ 所得的矩形.$S_2$ 的高为 $h+4\lambda_{k+m}^{s-2}\leq 5h$，于是考虑 $f_{k+m-1}$ 在每个这样的区间上的梯度并利用 \eqref{eq:8.8} 与 \eqref{eq:8.9}，得
+\[
+  \mathscr{L}^{1}(E)
+  \leq 2\cdot 6^{m-1}\Bigl(\frac{\lambda_{k+m-1}}{\lambda_k}\Bigr)^{s-1}\cdot 5h\cdot 2\lambda_{k+m-1}^{1-s}
+  \leq 20\cdot 6^{m-1}h^{s}\leq 20\cdot 6^{ak}h^{s}.
+\]
+于是存在常数 $b$ 与 $c$，使当 $h=\lambda_k^{-1}$ 时 $\mathscr{L}^1(E)\leq cb^kh^s$.
+
+现在设 $S$ 是边长 $h$ 满足 $\lambda_{k+1}^{-1}<h\leq\lambda_k^{-1}$ 的正方形.由上面的结果，当 $t<s$ 时
+\[
+  \mathscr{L}^{1}(E)\leq cb^{k}\lambda_k^{-s}
+  =c\lambda_{k+1}^{-t}\frac{\lambda_{k+1}^{t}}{\lambda_k^{(s+t)/2}}\frac{b^{k}}{\lambda_k^{(s-t)/2}}.
+\]
+从而
+\begin{equation}\label{eq:8.12}
+  \mathscr{L}^{1}(E)\leq c_1h^{t},
+\end{equation}
+因为由 $\lambda_k$ 的增长条件，当 $k$ 充分大时 $\lambda_k^{(s+t)/2}$ 比 $\lambda_{k+1}^{t}$ 增长得快，且 $\lambda_k^{(s-t)/2}$ 比 $b^k$ 增长得快.
+
+若 $\{U_i\}$ 是 $\Gamma$ 的任意覆盖，把每个 $U_i$ 放进边长为 $|U_i|$ 的正方形 $S_i$ 中.记 $E_i=\{x:(x,f(x))\in S_i\}$，则必有 $[0,1]\subset\bigcup_i E_i$.于是由 \eqref{eq:8.12}，
+\[
+  \sum|U_i|^{t}=\sum 2^{-\frac{1}{2}t}|S_i|^{t}\geq c_1^{-1}\sum\mathscr{L}^{1}(E_i)\geq c_1^{-1}.
+\]
+故当 $t<s$ 时 $\mathcal{H}^t(\Gamma)>c_1^{-1}>0$，于是 $\dim\Gamma=s$.
+\end{proof}
+
+注意，同样的论证表明：在关于 $\lambda_i$ 的相同条件下，函数
+\[
+  f(x)=\sum_{i=1}^{\infty}\lambda_i^{s-2}g(\lambda_i x+\theta_i)
+\]
+的图像的维数为 $s$，其中诸 $\theta_i$ 是固定的``相位''.
+
+\textcite{besicovitchursell1937} 用非常类似的方法证明：若在 \eqref{eq:8.5} 中对所有 $i$ 有 $\lambda_{i+1}=\lambda_i^{\mu}$，其中 $\mu=(s-1)(2-t)/(2-s)(t-1)$，$1<t<s$，则 $\dim\Gamma=t$.\textcites{loveyoung1937,kline1945} 给出了一些进一步的计算.
+
+人们还引入了曲线``维数''的各种其他定义，并与 Hausdorff 维数比较.例如，可以考虑当分割的最大区间长度趋于零时 $\sum_{i=1}^{m}|f(x_i)-f(x_{i-1})|^s$ 的下极限或上极限（见 \textcite{ville1936}）.另外，若 $\Gamma(x,x+h)$ 表示 $\Gamma$ 对应于区间 $[x,x+h]$ 的部分，则当 $h\to 0$ 时 $\mathcal{H}^s\bigl(\Gamma(x,x+h)\bigr)/h^s$ 的极限有一些有趣的性质（Besicovitch（\citeyear{besicovitch1964b,besicovitch1965a,besicovitch1967}））.
+
+\section{自相似集}
+
+许多经典的分形集都是``自相似的''，即由与整个集合几何相似但尺度更小的部分构成.最简单的例子是 Cantor 集（见 1.4~节）：$E\cap[0,\frac{1}{3}]$ 与 $E\cap[\frac{2}{3},1]$ 都与 $E$ 相似但按因子 $\frac{1}{3}$ 缩放；$E\cap[0,\frac{1}{9}]$、$E\cap[\frac{2}{9},\frac{1}{3}]$、$E\cap[\frac{2}{3},\frac{7}{9}]$ 与 $E\cap[\frac{8}{9},1]$ 都以比例因子 $\frac{1}{9}$ 与 $E$ 相似，如此等等.平面中的两个例子描绘于图~\ref{fig:8.1} 与图~\ref{fig:8.2}；图~\ref{fig:8.1} 显示的是熟悉的 \newterm{koch-curve}{Koch 曲线}{Koch curve}即雪花曲线.Mandelbrot（\citeyear{mandelbrot1977,mandelbrot1982}） 的书与 \textcite{dekking1982} 的文章给出了许多其他美丽自相似集的计算机实现，\textcite{stepney1984} 给出了绘制这类集合的计算机程序.
+
+整个世纪以来人们都知道自相似集的例子，但只是近来才有人尝试把它们的理论置于系统的基础之上.\textcite{dekking1982} 描述了利用自由群中词的自同态做到这一点的一般方法.这里我们给出 \textcite{hutchinson1981} 优雅处理的一个版本（另见 \textcite{moran1946} 与 \textcite{marion1979}）.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.66\textwidth]{fig8-1.png}
+  \caption{Koch 曲线及其生成元}
+  \label{fig:8.1}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.62\textwidth]{fig8-2.png}
+  \caption{两个平面自相似集及其生成元}
+  \label{fig:8.2}
+\end{figure}
+
+称映射 $\psi:\mathbb{R}^n\to\mathbb{R}^n$ 为\newterm{contraction}{压缩}{contraction}，若 $|\psi(x)-\psi(y)|\leq c|x-y|$ 对一切 $x,y\in\mathbb{R}^n$ 成立，其中 $c<1$.显然任何压缩都是连续映射.称使该不等式对一切 $x,y$ 成立的 $c$ 的下确界为该压缩的\newterm{ratio}{压缩比}{ratio of a contraction}.把 $\mathbb{R}^n$ 的每个子集都变为几何相似集合的压缩称为\newterm{similitude}{相似压缩}{similitude}.于是相似压缩是伸缩、旋转、平移以及或许一个反射的复合；其压缩比恰是相似压缩的尺度因子.
+
+就本节而言，称集合 $E\subset\mathbb{R}^n$ 对一组压缩 $\psi_1,\ldots,\psi_m$ 是不变的（\newterm{invariant}{不变集}{invariant set}），若 $E=\bigcup_{1}^{m}\psi_j(E)$.若此外这些压缩都是相似压缩，且对某个 $s$ 有 $\mathcal{H}^s(E)>0$ 而 $\mathcal{H}^s\bigl(\psi_i(E)\cap\psi_j(E)\bigr)=0$（$i\neq j$），则称 $E$ 是\newterm{self-similar}{自相似的}{self-similar set}.（这一测度条件保证 $E$ 的自相似特征不因重叠而丧失.）我们将证明：对任意有限压缩组，存在唯一非空紧不变集 $E$；而且对满足``开集条件''的相似压缩组，集合 $E$ 是一个 $s$-集，$s$ 可由压缩比算出.为明确思路：Cantor 集是实直线上相似压缩
+\[
+  \psi_1(x)=x/3,\qquad \psi_2(x)=(2+x)/3
+\]
+下不变的唯一紧集.
+
+设 $\{\psi_j\}_{1}^{m}$ 是一组压缩，令 $\psi$ 表示由
+\[
+  \psi(F)=\bigcup_{1}^{m}\psi_j(F)
+\]
+定义的 $\mathbb{R}^n$ 子集的变换.记 $\psi$ 的迭代为 $\psi^0(F)=F$ 与 $\psi^{k+1}(F)=\psi(\psi^k(F))$（$k\geq 0$）.
+
+注意，本节的工作对定义在 $\mathbb{R}^n$ 的紧子集上的压缩同样有效.
+
+\begin{theorem}\label{thm:8.3}
+给定 $\mathbb{R}^n$ 上压缩比为 $r_j<1$ 的压缩组 $\{\psi_j\}_{1}^{m}$，存在唯一非空紧集 $E$ 使
+\begin{equation}\label{eq:8.13}
+  E=\psi(E)=\bigcup_{1}^{m}\psi_j(E).
+\end{equation}
+进一步，若 $F$ 是 $\mathbb{R}^n$ 的任何非空紧子集，则当 $k\to\infty$ 时迭代 $\psi^k(F)$ 在 Hausdorff 度量下收敛于 $E$.
+\end{theorem}
+
+\begin{proof}
+设 $\mathcal{C}$ 是 $\mathbb{R}^n$ 的所有非空紧子集构成的类.由 Blaschke 选择定理（\cref{thm:3.16}）证明中的完备性部分，$\mathcal{C}$ 赋予 Hausdorff 度量 $\delta$ 后成为完备度量空间.若 $F_1,F_2\in\mathcal{C}$，则由 $\delta$ 的定义，
+\[
+  \delta\bigl(\psi(F_1),\psi(F_2)\bigr)
+  =\delta\Bigl(\bigcup_{1}^{m}\psi_j(F_1),\bigcup_{1}^{m}\psi_j(F_2)\Bigr)
+  \leq\max_{j}\delta\bigl(\psi_j(F_1),\psi_j(F_2)\bigr)
+  \leq\bigl(\max_{j}r_j\bigr)\delta(F_1,F_2).
+\]
+（由于 $\psi_j$ 是压缩，若 $F_1$ 含于 $F_2$ 的 $\delta$-平行体之中，则 $\psi_j(F_1)$ 含于 $\psi_j(F_2)$ 的 $r_j\delta$-平行体之中.）由于 $\max_j r_j<1$，$\psi$ 是 $\mathcal{C}$ 上的压缩映射.由完备度量空间的压缩映射定理，存在唯一的 $E\in\mathcal{C}$ 使 $\psi(E)=E$，而且对任意 $F\in\mathcal{C}$ 有 $\delta(\psi^k(F),E)\to 0$（$k\to\infty$）.
+
+可以证明，不变集 $E$ 是映射 $\psi_{j_1}\circ\psi_{j_2}\circ\cdots\circ\psi_{j_k}$（对满足 $1\leq j_i\leq m$ 的一切有限序列 $\{j_1,j_2,\ldots,j_k\}$ 取）的不动点之集的闭包.（我们采用约定 $(\psi_1\circ\psi_2)(x)=\psi_1(\psi_2(x))$ 等.）
+\end{proof}
+
+现在设 $s$ 是满足
+\[
+  \sum_{1}^{m}r_j^{s}=1
+\]
+的数.把它 $k$ 次乘方，得到有用的恒等式
+\begin{equation}\label{eq:8.14}
+  \sum_{j_1\ldots j_k}(r_{j_1}r_{j_2}\cdots r_{j_k})^{s}=1,
+\end{equation}
+其中求和取遍满足 $1\leq j_i\leq m$ 的一切 $k$ 元组 $\{j_1\ldots j_k\}$.对任何这样的序列与任何集合 $F$，写
+\[
+  F_{j_1\ldots j_k}=\psi_{j_1}\circ\cdots\circ\psi_{j_k}(F).
+\]
+
+下面的引理可视为\cref{thm:8.3} 在测度上的类似物；事实上 \textcite{hutchinson1981} 用压缩映射定理给出了一个证明.
+
+\begin{lemma}\label{lem:8.4}
+存在 Borel 测度 $\mu$，其支集含于 $E$，$\mu(\mathbb{R}^n)=1$，且对任何可测集 $F$ 有
+\begin{equation}\label{eq:8.15}
+  \mu(F)=\sum_{j=1}^{m}r_j^{s}\mu\bigl(\psi_j^{-1}(F)\bigr).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+取 $x\in E$，并记 $x_{j_1\ldots j_k}=\psi_{j_1}\circ\cdots\circ\psi_{j_k}(x)$.对 $k=1,2,\ldots$，在 $E$ 上连续函数空间 $\mathscr{F}$ 上如下定义正线性泛函：
+\begin{equation}\label{eq:8.16}
+  \phi_k(f)=\sum_{j_1\ldots j_k}(r_{j_1}\cdots r_{j_k})^{s}f\bigl(x_{j_1\ldots j_k}\bigr).
+\end{equation}
+若 $f\in\mathscr{F}$，则 $f$ 在 $E$ 上一致连续，故给定 $\varepsilon>0$，可找到 $p$ 使得当 $k\geq p$ 时 $f$ 在每个 $E_{j_1\ldots j_k}$ 上的变动小于 $\varepsilon$（回忆 $|E_{j_1\ldots j_k}|\leq(\max_j r_j)^k|E|$）.由于当 $k\geq p$ 时 $x_{j_1\ldots j_k}\in E_{j_1\ldots j_p}$，由 \eqref{eq:8.16} 与 \eqref{eq:8.14} 得：当 $k,k'\geq p$ 时 $|\phi_k(f)-\phi_{k'}(f)|\leq\varepsilon$.由收敛的一般原理，$\{\phi_k(f)\}_k$ 对每个 $f$ 收敛，其极限在 $\mathscr{F}$ 上定义了一个正线性泛函.由 Riesz 表示定理（\cref{thm:6.2}），存在 Borel 测度 $\mu$ 使
+\begin{equation}\label{eq:8.17}
+  \int f\,\mathrm{d}\mu=\lim_{k\to\infty}\phi_k(f)
+\end{equation}
+（$f\in\mathscr{F}$）.取 $f\equiv 1$，由 \eqref{eq:8.16} 显然有 $\mu(\mathbb{R}^n)=1$.对任意 $f\in\mathscr{F}$，
+\begin{align*}
+  \phi_k(f)
+  &=\sum_{j_1}r_{j_1}^{s}\sum_{j_2\ldots j_k}(r_{j_2}\cdots r_{j_k})^{s}f\bigl(x_{j_1\ldots j_k}\bigr)\\
+  &=\sum_{j_1}r_{j_1}^{s}\sum_{j_2\ldots j_k}(r_{j_2}\cdots r_{j_k})^{s}f\bigl(\psi_{j_1}(x_{j_2\ldots j_k})\bigr)
+  =\sum_{j}r_j^{s}\phi_{k-1}(f\circ\psi_j).
+\end{align*}
+令 $k\to\infty$，利用 \eqref{eq:8.17} 得：若 $f\in\mathscr{F}$，则
+\[
+  \int f\,\mathrm{d}\mu=\sum_{j}r_j^{s}\int f\circ\psi_j\,\mathrm{d}\mu.
+\]
+利用单调收敛定理作通常的逼近，这对一切非负函数 $f$ 也成立，故 \eqref{eq:8.15} 得证.
+
+最后，若 $f$ 是在 $E$ 上为零的任何连续函数，则由 \eqref{eq:8.16} 对一切 $k$ 有 $\phi_k(f)=0$，故由 \eqref{eq:8.17} 有 $\int f\,\mathrm{d}\mu=0$.于是 $\mu$ 由 $E$ 支撑.
+\end{proof}
+
+由此，记
+\[
+  \mu_{j_1\ldots j_k}(F)=\mu\bigl((\psi_{j_1}\circ\cdots\circ\psi_{j_k})^{-1}(F)\bigr)
+  =\mu\bigl(\psi_{j_k}^{-1}\circ\cdots\circ\psi_{j_1}^{-1}(F)\bigr),
+\]
+则测度 $\mu_{j_1\ldots j_k}$ 的支集含于 $E_{j_1\ldots j_k}$.又由 \eqref{eq:8.15},
+\begin{equation}\label{eq:8.18}
+  \mu_{j_1\ldots j_k}=\sum_{j}r_j^{s}\mu_{j_1\ldots j_k j}.
+\end{equation}
+
+称开集条件（\newterm{open set condition}{开集条件}{open set condition}）对压缩 $\{\psi_j\}_{1}^{m}$ 成立，若存在有界开集 $V$ 使
+\begin{equation}\label{eq:8.19}
+  \psi(V)=\bigcup_{j=1}^{m}\psi_j(V)\subset V
+\end{equation}
+且这个并不交.经 $\psi_{j_1\ldots j_k}$ 变换得
+\[
+  \bigcup_{j=1}^{m}V_{j_1\ldots j_k j}\subset V_{j_1\ldots j_k},
+\]
+同样是不交并.于是集合 $\{V_{j_1\ldots j_k}\}$（$k$ 任意）构成一个网：该族中任意两个集合要么不交，要么一个含于另一个.
+
+若 \eqref{eq:8.19} 成立，则 $E\subset\overline{V}$（横线表示闭包）；事实上
+\begin{equation}\label{eq:8.20}
+  E=\bigcap_{k=0}^{\infty}\psi^{k}(\overline{V}),
+\end{equation}
+因为 $\{\psi^k(\overline{V})\}_k$ 是由\cref{thm:8.3} 在 Hausdorff 度量下收敛于 $E$ 的紧集递减序列，若 $E$ 在 $\overline{V}$ 之外有点则这是不可能的.在 $\psi_{j_1}\circ\cdots\circ\psi_{j_k}$ 下取像得 $E_{j_1\ldots j_k}\subset\overline{V}_{j_1\ldots j_k}$.（当然，由于 $\psi_j$ 连续，有 $\psi_j(\overline{V})\subset\overline{\psi_j(V)}$ 等.）
+
+现在设 $\{\psi_j\}$ 是相似压缩.我们将证明：若开集条件成立，则不变集 $E$ 自相似，且 $E$ 的 Hausdorff 维数与相似维数相等.\newterm{similarity dimension}{相似维数}{similarity dimension}易于计算，它是使
+\[
+  \sum_{1}^{m}r_j^{s}=1
+\]
+的唯一正数 $s$.开集条件保证集合 $\psi_j(E)$ 不能重叠太多.
+
+\begin{lemma}\label{lem:8.5}
+设 $\{V_i\}$ 是 $\mathbb{R}^n$ 的不交开子集之族，每个 $V_i$ 含有一个半径为 $c_1\rho$ 的球且含于一个半径为 $c_2\rho$ 的球.则任何半径为 $\rho$ 的球 $B$ 至多与 $(1+2c_2)^n c_1^{-n}$ 个 $\overline{V}_i$ 相交.
+\end{lemma}
+
+\begin{proof}
+若 $\overline{V}_i$ 与 $B$ 相交，则 $\overline{V}_i$ 含于一个与 $B$ 同心、半径为 $(1+2c_2)\rho$ 的球.若 $\{\overline{V}_i\}$ 中有 $q$ 个与 $B$ 相交，则把相应内含球的体积求和得 $q(c_1\rho)^n\leq(1+2c_2)^n\rho^n$，给出所述的 $q$ 的界.
+\end{proof}
+
+\begin{theorem}\label{thm:8.6}
+设开集条件对压缩比为 $r_j$（$1\leq j\leq m$）的相似压缩 $\psi_j$ 成立.则相伴的紧不变集 $E$ 是一个 $s$-集，其中 $s$ 由
+\begin{equation}\label{eq:8.21}
+  \sum_{1}^{m}r_j^{s}=1
+\end{equation}
+确定；特别地 $0<\mathcal{H}^s(E)<\infty$.
+\end{theorem}
+
+\begin{proof}
+迭代 \eqref{eq:8.13} 得 $E=\bigcup_{j_1\ldots j_k}E_{j_1\ldots j_k}$.由 \eqref{eq:8.14},
+\[
+  \sum_{j_1\ldots j_k}|E_{j_1\ldots j_k}|^{s}
+  =\sum_{j_1\ldots j_k}|E|^{s}(r_{j_1}\cdots r_{j_k})^{s}
+  =|E|^{s}.
+\]
+由于当 $k\to\infty$ 时 $|E_{j_1\ldots j_k}|\leq(\max_j r_j)^k|E|\to 0$，我们得出 $\mathcal{H}^s(E)\leq|E|^s<\infty$.
+
+下界用两条引理得到.设使 \eqref{eq:8.19} 成立的开集 $V$ 含有半径为 $c_1$ 的球并含于半径为 $c_2$ 的球.取任意 $\rho>0$.对每个无穷序列 $\{j_1,j_2,\ldots\}$（$1\leq j_i\leq m$），在该序列于使
+\begin{equation}\label{eq:8.22}
+  \bigl(\min_{j}r_j\bigr)\rho\leq r_{j_1}\cdots r_{j_k}\leq\rho
+\end{equation}
+的最小 $k\geq 1$ 处截断，并记 $\mathcal{S}$ 为由此得到的有限序列之集.由开集的网性质，$\{V_{j_1\ldots j_k}:j_1\ldots j_k\in\mathcal{S}\}$ 是不交族.每个这样的 $V_{j_1\ldots j_k}$ 含有半径为 $c_1r_{j_1}\cdots r_{j_k}$ 从而由 \eqref{eq:8.22} 半径为 $c_1(\min_j r_j)\rho$ 的球，类似地含于半径为 $c_2r_{j_1}\cdots r_{j_k}$ 从而半径为 $c_2\rho$ 的球.由\cref{lem:8.5}，任何半径为 $\rho$ 的球 $B$ 至多与族 $\{\overline{V}_{j_1\ldots j_k}:j_1\ldots j_k\in\mathcal{S}\}$ 中的 $q=(1+2c_2)^n c_1^{-n}(\min_j r_j)^{-n}$ 个集合相交.又对任何 $\{j_1,\ldots,j_k\}$ 有 $\mu_{j_1\ldots j_k}(\mathbb{R}^n)=1$ 且 $\operatorname{support}(\mu_{j_1\ldots j_k})\subset E_{j_1\ldots j_k}\subset\overline{V}_{j_1\ldots j_k}$.按需要迭代 \eqref{eq:8.18} 可见
+\[
+  \mu=\sum_{j_1\ldots j_k\in\mathcal{S}}(r_{j_1}\cdots r_{j_k})^{s}\mu_{j_1\ldots j_k},
+\]
+故 $\mu(B)\leq\sum(r_{j_1}\cdots r_{j_k})^s\mu_{j_1\ldots j_k}(\mathbb{R}^n)$，其中求和取遍 $\mathcal{S}$ 中使 $\overline{V}_{j_1\ldots j_k}$ 与 $B$ 相交的序列 $\{j_1,\ldots,j_k\}$.于是利用 \eqref{eq:8.22}，对任何满足 $|B|<|V|$ 的球有 $\mu(B)\leq q\rho^s=q2^{-s}|B|^s$.但给定 $E$ 的任何覆盖 $\{U_i\}$，可用满足 $|B_i|\leq 2|U_i|$ 的球 $\{B_i\}$ 覆盖 $E$，故
+\[
+  1=\mu(E)\leq\sum\mu(B_i)\leq q2^{-s}\sum|B_i|^{s}\leq q\sum|U_i|^{s}.
+\]
+可以选取 $\{U_i\}$ 使 $\sum|U_i|^s$ 任意接近 $\mathcal{H}^s(E)$，故 $\mathcal{H}^s(E)\geq q^{-1}>0$，如所需.
+\end{proof}
+
+\begin{corollary}\label{cor:8.7}
+若开集条件成立，则 $\mathcal{H}^s\bigl(\psi_i(E)\cap\psi_j(E)\bigr)=0$（$i\neq j$），特别地 $E$ 是自相似的.
+\end{corollary}
+
+\begin{proof}
+利用 $\psi_j$ 是相似压缩这一事实，
+\[
+  \sum_{j=1}^{m}\mathcal{H}^{s}\bigl(\psi_j(E)\bigr)=\sum_{j=1}^{m}r_j^{s}\mathcal{H}^{s}(E)=\mathcal{H}^{s}(E).
+\]
+由于 $0<\mathcal{H}^s(E)<\infty$，由 \eqref{eq:8.13} 与 $\mathcal{H}^s$ 的可加性，这只有在 $\mathcal{H}^s\bigl(\psi_i(E)\cap\psi_j(E)\bigr)=0$（$i\neq j$）时才可能.
+\end{proof}
+
+若 $\psi_j$ 是压缩而非相似压缩，这一技术仍可用于估计 Hausdorff 维数.这里给出一个有用的情形（另见\cref{exe:8.5}）.
+
+\begin{theorem}\label{thm:8.8}
+设 $\{\psi_j\}_{1}^{m}$ 是 $\mathbb{R}$ 上的压缩，开集条件 \eqref{eq:8.19} 对开区间 $V$ 成立.设对每个 $j$ 与一切 $x,y\in\overline{V}$ 有
+\begin{equation}\label{eq:8.23}
+  q_{j}|x-y|\leq|\psi_{j}(x)-\psi_{j}(y)|\leq r_{j}|x-y|.
+\end{equation}
+则 $s\leq\dim E\leq t$，其中 $s$ 与 $t$ 由 $\sum_{1}^{m}q_j^{s}=1=\sum_{1}^{m}r_j^{t}$ 定义.
+\end{theorem}
+
+\begin{proof}
+\cref{thm:8.6} 的方法给出上界.为得下界，照那里的方法进行，但不使用\cref{lem:8.5}，而使用如下事实：若 $\{V_i\}$ 是长度至少为 $2c_1\rho$ 的不交区间之族，则任何长度为 $2\rho$ 的区间 $B$ 至多与 $c_1^{-1}+2$ 个 $\overline{V}_i$ 相交.
+\end{proof}
+
+当 $\psi_j$ 仅仅是压缩时，通过对 $k>1$ 的映射 $\{\psi_{j_1\ldots j_k}\}$ 进行工作并用更紧的估计替换 \eqref{eq:8.23}，通常可以得到 $\dim E$ 更好的估计.
+
+1.5~节的方法也可用于估计这类集合的维数.
+
+\textcite{mandelbrot1982} 引入了自相似集的\newterm{generator}{生成元}{generator}的概念，它方便地指定一组相似压缩.一个生成元由若干直线段与两个特别标定的点组成.我们把映射这两个特殊点到线段端点的相似压缩与每条线段相联系.利用生成元，通过迭代``把每条线段换成生成元的相似拷贝''的过程，可以构造逼近自相似集的集合序列.这样得到的集合序列正是 $\psi^k(G)$，其中 $G$ 是生成元.注意在 $\mathbb{R}^2$ 中相似压缩只能在相差一个反射的意义下确定，但其定向可以通过展示第一次迭代来指定.由生成元利用\cref{thm:8.6} 容易算出集合的维数.这一思想最好用例子说明.图~\ref{fig:8.1}(b) 与图~\ref{fig:8.2}(b) 显示了图~\ref{fig:8.1}(a) 与图~\ref{fig:8.2}(a) 中曲线的生成元及逼近的前几个阶段.
+
+作为一个变式，可以在这类构造中引入随机因素.若在迭代过程的每一步按某种概率分布随机选取 $\psi_j$，也可能发展出一套理论.此时所得集合本身不是自相似的，但在统计意义上是自相似的：集合与其分支子集具有相同的概率分布.在合理条件下，这类集合以概率 $1$ 达到一个特定的维数，它可以用 $\psi_j$ 的压缩比的期望表示.
+
+\section{密切填装与 Apollonian 填装}
+
+设 $V$ 是 $\mathbb{R}^n$ 的有界开子集.称闭球序列 $\{B_i\}_{1}^{\infty}$ 为 $V$ 的一个\newterm{osculatory packing}{密切填装}{osculatory packing}，如果对每个 $j$，$B_j$ 是含于 $V\setminus\bigcup_{1}^{j-1}B_i$ 中的最大球（或最大球之一）.最有趣的情形称为 \newterm{Apollonian packing}{Apollonian 填装}{Apollonian packing}，当 $V$ 是 $\mathbb{R}^2$ 中一个曲边三角形的内部时得到（这一填装的前几个阶段见图~\ref{fig:8.3}）.
+
+特别有意义的是闭集 $E=V\setminus\bigcup_{1}^{\infty}B_i$ 的 Hausdorff 维数，它称为填装的\newterm{residual set}{剩余集}{residual set}.对 Apollonian 填装显然有 $1\leq\dim E\leq 2$，但证明这两个不等式都是严格的就出奇地困难，更不用说给出 $\dim E$ 的好的估计了.\textcite{hirst1967} 最先得到非平凡的估计，这里我们概述他的论证，并加入源自 \textcite{boyd1973b} 的一些改进.某些繁琐却直截了当的代数计算的细节从略.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{fig8-3.png}
+  \caption{Apollonian 填装}
+  \label{fig:8.3}
+\end{figure}
+
+利用初等三角学可以证明下述关于曲边三角形内切圆半径与外接圆半径的公式.内切圆半径的表达式即著名的 \newterm{soddy-formula}{Soddy 公式}{Soddy's formula}，其证明见 \textcite{coxeter1961}（第 12 页），并被物理学家 \textcite{soddy1936} 以韵文形式表述.
+
+\begin{lemma}\label{lem:8.9}
+设 $T$ 是由半径为 $a,b,c$ 的相互外切的圆构成的曲边三角形.则 $T$ 的内切圆半径 $r$ 与外接圆半径 $\rho$ 由
+\[
+  r^{-1}=a^{-1}+b^{-1}+c^{-1}+2\bigl(b^{-1}c^{-1}+a^{-1}c^{-1}+a^{-1}b^{-1}\bigr)^{\frac{1}{2}}
+\]
+与
+\[
+  \rho^{2}=(abc)/(a+b+c)=\bigl(b^{-1}c^{-1}+a^{-1}c^{-1}+a^{-1}b^{-1}\bigr)^{-1}
+\]
+给出.
+\end{lemma}
+
+设 $T$ 是任意曲边三角形，边为半径 $a,b,c$ 的圆，其内切圆盘为 $B$.设 $T_1,T_2,T_3$ 是从 $T$ 中去掉 $B$ 后剩下的三个曲边三角形.设 $T,T_j$ 的外接圆半径分别为 $\rho,\rho_j$.
+
+\begin{lemma}\label{lem:8.10}
+若 $s\geq\log 3/\log\bigl(1+2\cdot 3^{-\frac{1}{2}}\bigr)=1.4311\ldots$，则 $\rho^{s}\geq\rho_1^{s}+\rho_2^{s}+\rho_3^{s}$.
+\end{lemma}
+
+\begin{proof}
+对 $T$ 与 $T_1$ 应用\cref{lem:8.9}，经一些计算得
+\[
+  \rho/\rho_1=1+\rho\bigl(b^{-1}+c^{-1}\bigr)
+\]
+（$T$ 与 $T_1$ 公共边的半径为 $b$ 与 $c$），对 $T_2,T_3$ 有类似公式.于是
+\[
+  \rho_1^{s}+\rho_2^{s}+\rho_3^{s}
+  =\rho^{s}\bigl[\bigl(1+(b^{-1}+c^{-1})\rho\bigr)^{-s}+\bigl(1+(a^{-1}+c^{-1})\rho\bigr)^{-s}
+  +\bigl(1+(a^{-1}+b^{-1})\rho\bigr)^{-s}\bigr],
+\]
+其中 $\rho=(b^{-1}c^{-1}+a^{-1}c^{-1}+a^{-1}b^{-1})^{-\frac{1}{2}}$.方括号中的表达式关于 $a,b,c$ 齐次，故为证它对任意 $a,b,c$ 都以 $1$ 为上界，可设 $\rho=1$.这是一个约束下的优化问题；只要 $s\geq\log 3/\log\bigl(1+2\cdot 3^{-\frac{1}{2}}\bigr)$，不难得到所需的界，见 \textcite{hirst1967}.
+\end{proof}
+
+现在设 $T$ 是边为单位半径圆的等边曲边三角形.从 $T$ 中去掉闭内切圆盘 $B$ 后剩下三个曲边三角形 $T_1,T_2,T_3$.去掉这三个三角形的内切圆盘 $B_1,B_2,B_3$ 后留下九个曲边三角形 $T_{j_1j_2}$（$1\leq j_1,j_2\leq 3$），其内切圆盘为 $B_{j_1j_2}$.如此进行，每一阶段从 $T_{j_1\ldots j_k}$ 中去掉内切圆盘 $B_{j_1\ldots j_k}$，得到曲边三角形 $T_{j_1\ldots j_k1}$、$T_{j_1\ldots j_k2}$、$T_{j_1\ldots j_k3}$.（我们一致地分配指标 $1,2,3$ 以指示三角形相对 $B_{j_1\ldots j_k}$ 的位置.）注意，如此得到的曲边三角形的内部构成一个集合之网.对满足 $1\leq j_i\leq 3$ 的一切有限序列 $\mathbf{j}=\{j_1,\ldots,j_k\}$ 取圆盘族 $\{B_{j_1\ldots j_k}\}$，便得到 $T$ 的 Apollonian 填装.
+
+\begin{theorem}\label{thm:8.11}
+若 $E$ 是 Apollonian 填装的剩余集，则 $\dim E\leq\log 3/\log\bigl(1+2\cdot 3^{-\frac{1}{2}}\bigr)=1.4311\ldots$.
+\end{theorem}
+
+\begin{proof}
+给定 $\delta>0$，可选取足够大的 $k$ 使对所有长度为 $k$ 的序列 $\mathbf{j}$ 有 $|T_{\mathbf{j}}|\leq\delta$.由于 $E\subset\bigcup_{\mathbf{j}}T_{\mathbf{j}}$（并对一切这样的 $k$ 元组取并），
+\[
+  \mathcal{H}^{s}_{\delta}(E)\leq\sum_{j_1\ldots j_k}|T_{j_1\ldots j_k}|^{s}\leq 2^{s}\sum_{j_1\ldots j_k}\rho_{j_1\ldots j_k}^{s},
+\]
+其中 $\rho_j$ 是 $T_j$ 的外接圆半径.若 $s>\log 3/\log\bigl(1+2\cdot 3^{-\frac{1}{2}}\bigr)$，则由\cref{lem:8.10} 的反复应用，
+\[
+  \sum_{j_1\ldots j_k}\rho_{j_1\ldots j_k}^{s}
+  \leq\sum_{j_1\ldots j_{k-1}}\rho_{j_1\ldots j_{k-1}}^{s}
+  \leq\cdots\leq\sum_{j_1}\rho_{j_1}^{s}\leq\rho^{s},
+\]
+其中 $\rho=3^{-\frac{1}{2}}$ 是 $T$ 的外接圆半径.于是对一切 $\delta>0$ 有 $\mathcal{H}^s_{\delta}(E)\leq(2\cdot 3^{-\frac{1}{2}})^{s}$，从而 $\mathcal{H}^s(E)\leq(2\cdot 3^{-\frac{1}{2}})^{s}$.
+\end{proof}
+
+为得到剩余集维数的下界，我们估计曲边三角形 $T_j$ 的内切圆半径 $r_j$.记 $T_j$ 各边（圆）的曲率（即半径的倒数）为 $\alpha_j,\beta_j,\gamma_j$（同样用一致的定向约定），并令
+\begin{equation}\label{eq:8.24}
+  \sigma_j=\bigl(\beta_j\gamma_j+\alpha_j\gamma_j+\alpha_j\beta_j\bigr)^{\frac{1}{2}}.
+\end{equation}
+至少在原则上，可以通过反复应用 Soddy 公式算出这些半径与曲率.设 $M_1,M_2,M_3$ 为矩阵
+\[
+  M_1=\begin{pmatrix}1&0&0&0\\1&1&0&1\\1&0&1&1\\2&0&0&1\end{pmatrix},\qquad
+  M_2=\begin{pmatrix}1&1&0&1\\0&1&0&0\\0&1&1&1\\0&2&0&1\end{pmatrix},\qquad
+  M_3=\begin{pmatrix}1&0&1&1\\0&1&1&1\\0&0&1&0\\0&0&2&1\end{pmatrix}.
+\]
+由\cref{lem:8.9}，行向量 $(\alpha_{\mathbf{j}},\beta_{\mathbf{j}},\gamma_{\mathbf{j}},\sigma_{\mathbf{j}})$ 满足关系
+\[
+  (\alpha_{\mathbf{j}p},\beta_{\mathbf{j}p},\gamma_{\mathbf{j}p},\sigma_{\mathbf{j}p})=(\alpha_{\mathbf{j}},\beta_{\mathbf{j}},\gamma_{\mathbf{j}},\sigma_{\mathbf{j}})M_p\qquad(p=1,2,3),
+\]
+其中 $\mathbf{j}p$ 表示序列 $\{j_1,\ldots,j_k,p\}$.（容易验证此时 \eqref{eq:8.24} 对把 $\mathbf{j}$ 换成 $\mathbf{j}p$ 也成立.）于是迭代得
+\begin{equation}\label{eq:8.25}
+  (\alpha_{\mathbf{j}},\beta_{\mathbf{j}},\gamma_{\mathbf{j}},\sigma_{\mathbf{j}})=(1,1,1,\sqrt{3})\,M_{j_1}M_{j_2}\cdots M_{j_k},
+\end{equation}
+由此可把 $B_{\mathbf{j}}$ 的半径表示为
+\begin{equation}\label{eq:8.26}
+  r_{\mathbf{j}}^{-1}=\alpha_{\mathbf{j}}+\beta_{\mathbf{j}}+\gamma_{\mathbf{j}}+2\sigma_{\mathbf{j}}
+  =(1,1,1,\sqrt{3})\,M_{j_1}M_{j_2}\cdots M_{j_k}\,(1,1,1,2)' ,
+\end{equation}
+其中撇号表示向量的转置.
+
+于是填装圆半径趋于零的速率直接取决于矩阵乘积 $M_{j_1}M_{j_2}\cdots M_{j_k}$ 当 $k\to\infty$ 时的行为.可以把乘积中的矩阵看作以相等概率从 $M_1,M_2,M_3$ 中随机选取，而所需的信息便包含在 $k$ 充分大时矩阵乘积诸元素的值的概率分布之中.随机矩阵乘积的理论正在发展之中，见 Kingman（\citeyear{kingman1973,kingman1976}）.我们概述一种用这些思想估计 $\dim E$ 下界的方法，而不是 \textcite{hirst1967,boyd1973a} 更复杂但计算上更有效的方法.利用 \textcite{kingman1976} 定理 2.2 证明的一个修改，可以证明：存在数 $\lambda$，使得矩阵 $M_{j_1}M_{j_2}\cdots M_{j_k}$ 的每个元素的 $k$ 次根当 $k\to\infty$ 时对几乎每个序列 $\{j_1,j_2,\ldots\}$（$1\leq j_i\leq 3$）（关于无穷序列集合上的自然乘积测度）都收敛于 $\lambda$.关键是：对所给的矩阵 $M_1,M_2,M_3$，有 $1<\lambda<3$.于是对任意 $\varepsilon>0$，可找到足够大的 $m$，使得对比例为 $1-\varepsilon$ 的所有长度为 $m$ 的序列 $\{j_1,\ldots,j_m\}$，$M_{j_1}\cdots M_{jm}$ 的一切元素都小于 $(\lambda+\varepsilon)^m$.当然这一事实可以直接计算验证.对给定的 $\varepsilon$，令 $\mathcal{U}$ 表示具有该性质的 $m$ 项序列之集.
+
+\begin{lemma}\label{lem:8.12}
+设 $t\leq\bigl(\log 3+m^{-1}\log(1-\varepsilon)\bigr)/\log(\lambda+\varepsilon)$.设 $\mathcal{S}$ 是有限序列的有限集，使三角形 $\{T_{\mathbf{j}}:\mathbf{j}\in\mathcal{S}\}$ 覆盖剩余集 $E$.则
+\begin{equation}\label{eq:8.27}
+  \sum_{\mathbf{j}\in\mathcal{S}}r_{\mathbf{j}}^{t}\geq c,
+\end{equation}
+其中 $c$ 是正常数.
+\end{lemma}
+
+\begin{proof}
+只需在 $\mathcal{S}$ 中每个序列的项数都是 $m$ 的倍数的假设下证明引理.因为把每个 $T_{\mathbf{j}}$ 换成 $T_{\mathbf{j}'}$（其中 $\mathbf{j}'$ 由 $\mathbf{j}$ 的前 $mq$ 项组成，$q$ 是 $\mathbf{j}$ 的项数除以 $m$ 的商），由 \eqref{eq:8.26} 使 \eqref{eq:8.27} 中和式的每一项至多增大 $5^{mt}$ 倍.由三角形的网性质，还可设 $\{T_{\mathbf{j}}:\mathbf{j}\in\mathcal{S}\}$ 除公共顶点外是不交族.设 $\mathbf{j}_1,\mathbf{j}_2,\ldots,\mathbf{j}_q$ 是 $\mathcal{S}$ 中最长的序列之一，其中每个 $\mathbf{j}_i$ 都是 $m$ 元组.由于这些三角形覆盖 $E$，序列 $\mathbf{j}_1,\mathbf{j}_2,\ldots,\mathbf{j}_{q-1},\mathbf{j}$ 必属于 $\mathcal{S}$ 对每个 $m$ 元组 $\mathbf{j}$ 成立.但若 $\mathbf{j}\in\mathcal{U}$，则由 \eqref{eq:8.26},
+\begin{align*}
+  r_{\mathbf{j}_1\ldots\mathbf{j}_{q-1}\mathbf{j}}^{-1}
+  &=(1,1,1,\sqrt{3})\,M_{\mathbf{j}_1}\cdots M_{\mathbf{j}_{q-1}}M_{\mathbf{j}}(1,1,1,2)'\\
+  &\leq(1,1,1,\sqrt{3})\,M_{\mathbf{j}_1}\cdots M_{\mathbf{j}_{q-1}}(1,1,1,2)'\,(\lambda+\varepsilon)^{m}\\
+  &\leq(\lambda+\varepsilon)^{m}r_{\mathbf{j}_1\ldots\mathbf{j}_{q-1}}^{-1}.
+\end{align*}
+于是对所述的 $t$，
+\[
+  \sum_{\mathbf{j}}r_{\mathbf{j}_1\ldots\mathbf{j}_{q-1}\mathbf{j}}^{t}
+  \geq\sum_{\mathbf{j}\in\mathcal{U}}r_{\mathbf{j}_1\ldots\mathbf{j}_{q-1}\mathbf{j}}^{t}
+  \geq(1-\varepsilon)3^{m}(\lambda+\varepsilon)^{-mt}r_{\mathbf{j}_1\ldots\mathbf{j}_{q-1}}^{t}
+  \geq r_{\mathbf{j}_1\ldots\mathbf{j}_{q-1}}^{t},
+\]
+故把三角形 $T_{\mathbf{j}_1\ldots\mathbf{j}_{q-1},\mathbf{j}}$ 换成单个三角形 $T_{\mathbf{j}_1\ldots\mathbf{j}_{q-1}}$ 不会增大 \eqref{eq:8.27} 中的和.可以重复这一过程直至到达单个三角形 $T$，此时 \eqref{eq:8.27} 显然.故 \eqref{eq:8.27} 对曲边三角形子族构成的 $E$ 的任何覆盖成立.
+\end{proof}
+
+\begin{lemma}\label{lem:8.13}
+设 $\{V_i\}$ 是满足 $E\subset\bigcup_i V_i$ 的开圆盘有限集.则存在有限序列的有限集 $\mathcal{S}$ 使 $E\subset\bigcup_{\mathbf{j}\in\mathcal{S}}T_{\mathbf{j}}$ 且
+\begin{equation}\label{eq:8.28}
+  \sum_{i}|V_i|^{t}\geq 4^{-t}\sum_{\mathbf{j}\in\mathcal{S}}r_{\mathbf{j}}^{t}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+显然可设每个 $V_i$ 都与 $T$ 重叠，且没有圆盘包含任何其他圆盘.依次考察每个圆盘 $V_i$.设 $k$ 是使 $V_i$ 恰与一个项数为 $k$ 的序列 $\mathbf{j}$ 对应的三角形 $T_{\mathbf{j}}$ 相交的最大整数.分两种情形.
+
+(a) 若 $V_i$ 与 $T_{\mathbf{j}1}$、$T_{\mathbf{j}2}$、$T_{\mathbf{j}3}$ 都相交，则 $V_i$ 必与构成这三个三角形边界的四个圆中至少三个相交，故 $V_i$ 的半径至少是这三个圆构成的曲边三角形的内切圆半径.于是注意到 $T_{\mathbf{j}}$ 各边（圆）的半径大于 $r_{\mathbf{j}}$ 并用\cref{lem:8.9}，得
+\begin{equation}\label{eq:8.29}
+  \frac{1}{2}|V_i|\geq\min\{r_{\mathbf{j}1},r_{\mathbf{j}2},r_{\mathbf{j}3},r_{\mathbf{j}}\}\geq\frac{1}{8}r_{\mathbf{j}},
+\end{equation}
+并把 $\mathbf{j}$ 放入 $\mathcal{S}$.
+
+(b) 设 $V_i$ 只与 $T_{\mathbf{j}1},T_{\mathbf{j}2},T_{\mathbf{j}3}$ 中的两个相交，不失一般性设为 $T_{\mathbf{j}1}$ 与 $T_{\mathbf{j}2}$.设 $w$ 为 $T_{\mathbf{j}1}$ 与 $T_{\mathbf{j}2}$ 的公共点.若 $w\notin V_i$，则正如 (a) 中那样，
+\begin{equation}\label{eq:8.30}
+  \frac{1}{2}|V_i|\geq r_{\mathbf{j}3}\geq\frac{1}{8}r_{\mathbf{j}},
+\end{equation}
+并把 $\mathbf{j}$ 放入 $\mathcal{S}$.否则 $w\in V_i$.记 $B^0=B_{\mathbf{j}1}$，$B^1=B_{\mathbf{j}12}$，$B^2=B_{\mathbf{j}122}$，$B^3=B_{\mathbf{j}1222},\ldots$.设 $m$ 是使 $B^m$ 与 $V_i$ 相交的最小整数.则 $B^{m+1}\subset V_i$，故照前使用\cref{lem:8.9} 得
+\begin{equation}\label{eq:8.31}
+  |V_i|\geq|B^{m+1}|\geq\frac{1}{8}|B^{m}|.
+\end{equation}
+设 $\mathbf{j}'\in\mathcal{S}$，其中 $\mathbf{j}'=\mathbf{j}1222\ldots 2$ 是对应于 $B^m$ 的序列.对形如 $B_{\mathbf{j}211\ldots 1}$ 的球作对称的论证，找到对应于含于 $T_{\mathbf{j}2}$ 内的三角形的序列 $\mathbf{j}''$，也把它放入 $\mathcal{S}$.则 $E\cap V_i\subset T_{\mathbf{j}'}\cup T_{\mathbf{j}''}$.
+
+我们注意到，按此构造 $E\subset\bigcup_{\mathbf{j}\in\mathcal{S}}T_{\mathbf{j}}$，且每个 $E\cap V_i$ 被 $\{T_{\mathbf{j}}:\mathbf{j}\in\mathcal{S}\}$ 中一个或两个三角形覆盖.合并 \eqref{eq:8.29}--\eqref{eq:8.31} 即得 \eqref{eq:8.28}.
+\end{proof}
+
+\begin{theorem}\label{thm:8.14}
+对曲边等边三角形的 Apollonian 填装，$\dim E>1$，其中 $E$ 是填装的剩余集.
+\end{theorem}
+
+\begin{proof}
+按上文选取 $\varepsilon$ 与 $m$ 使 $t=\bigl(\log 3+m^{-1}\log(1-\varepsilon)\bigr)/\log(\lambda+\varepsilon)>1$.于是合并\cref{lem:8.12,lem:8.13} 可见：对 $E$ 的任何由开圆盘 $\{V_i\}$ 构成的有限覆盖有 $\sum_{i}|V_i|^{t}\geq 4^{-t}c$.若 $\{U_i\}$ 是 $E$ 的由任意集合构成的覆盖，则把每个 $U_i$ 放进一个开圆盘 $V_i$ 并利用 $E$ 的紧性，推得 $\sum_{i}|U_i|^{t}\geq 2^{-t}4^{-t}c$.故 $\mathcal{H}^t(E)>0$，如所需.
+\end{proof}
+
+当然，由此得 $\dim E\geq\log 3/\log\lambda$，其中 $\lambda$ 是与矩阵乘积相联系的极限数.
+
+\textcite{hirst1967} 通过比上文更仔细地估计仅四个矩阵的乘积 $M_{j_1}\cdots M_{j_4}$ 的效应，证明了 $\dim E>1.001$.\textcite{boyd1973a} 发展了把 $\dim E$ 求到任意精度的数值方法；现已知道 $1.300<\dim E<1.315$.\textcite{larman1967b} 用一种截然不同的方法证明了任何用圆盘填装一个区域所得剩余集的维数至少为 $1.03$.
+
+注意，任何（凹边的）曲边三角形的 Apollonian 填装在复记法下形如 $z\to(az+b)/(cz+d)$ 的 \newterm{mobius-transformation}{Möbius 变换}{Mobius transformation}下彼此等价.这是因为这类映射（可以选取它们把任何曲边三角形映到任何别的曲边三角形）具有把圆变为圆、例外情形变为直线的性质.特别地，由\cref{lem:1.8} 可得所有曲边三角形的 Apollonian 填装的剩余集具有相同的维数.进一步，用前面的记号，可找到把 $T$ 分别映到 $T_1,T_2,T_3$ 的 Möbius 变换 $\psi_1,\psi_2,\psi_3$.于是剩余集 $E$ 是满足 $E=\bigcup_{j=1}^{3}\psi_j(E)$ 的紧集.因此尽管 $\psi_j$ 只是非扩张而非压缩，8.3~节的思想仍可经调整用于研究 Apollonian 填装.这一问题的一个推广是求形如 $\psi_{j_1}\circ\cdots\circ\psi_{j_k}$ 的所有映射的极限点之集的 Hausdorff 维数，其中 $\psi_{j_i}$ 取自给定的一组 Möbius 变换；见 \textcites{patterson1976,sullivan1979,mandelbrot1983}.
+
+与任何密切填装 $\{B_i\}$ 相联系的一个重要数字是填装的\newterm{exponent}{指数}{exponent of packing} $e$，定义为使 $\sum_{i=1}^{\infty}|B_i|^t<\infty$ 的 $t$ 的下确界.事实表明，对 Apollonian 填装，指数 $e$ 等于剩余集 $E$ 的维数.证明 $\dim E\leq e$ 相对容易（见\cref{exe:8.6}；\textcite{larman1966} 给出了更一般的结果.）\textcite{boyd1973b} 证明的相反不等式要难得多.需要仔细考察矩阵乘积以证明：若 $t<e$，则存在常数 $c$，使得若曲边三角形 $\{T_{\mathbf{j}}:\mathbf{j}\in\mathcal{S}\}$ 覆盖 $E$，则 $\sum_{\mathbf{j}\in\mathcal{S}}r_{\mathbf{j}}^t\geq c$.结果随后由\cref{lem:8.13} 得出.
+
+\textcite{eggleston1953a} 研究了用取向相反的较小等边三角形填装一个等边三角形所得的剩余集.图~\ref{fig:8.4} 所示的构形留下维数为 $\log 3/\log 2$ 的剩余集，这是任何此类填装所能得到的最小值（见\cref{exe:8.7}）.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.42\textwidth]{fig8-4.png}
+  \caption{用取向相反的等边三角形作填装}
+  \label{fig:8.4}
+\end{figure}
+
+\section{一个来自数论的例子}
+
+Hausdorff 测度在\newterm{number-theory}{数论}{number theory}中——特别是在\newterm{diophantine-approximation}{丢番图逼近}{Diophantine approximation}中——找到了大量应用.典型地说：``能被有理数逼近到指定精度的数的集合，其 Hausdorff 维数不能太大''.这里我们考虑这类结果中的具体结果，它们就\cref{chap:6} 的投影定理提供了一个有启发性的例子.
+
+按数论的惯例，记 $\|x\|$ 为实数 $x$ 到最近整数的距离.我们需要下述定理的一维与二维两个版本.
+
+\begin{theorem}\label{thm:8.15}
+取 $\alpha>0$ 及正整数序列 $n_1,n_2,\ldots$ 使
+\begin{equation}\label{eq:8.32}
+  n_{j+1}\geq n_j^{j}.
+\end{equation}
+
+(a) 设 $F$ 是满足
+\begin{equation}\label{eq:8.33}
+  \|n_j x\|\leq n_j^{-\alpha}\qquad(j=1,2,\ldots)
+\end{equation}
+的实数 $x$ 之集.则 $\dim F=1/(1+\alpha)$.
+
+(b) 设 $E$ 是满足
+\[
+  \|n_j x\|,\ \|n_j y\|\leq n_j^{-\alpha}\qquad(j=1,2,\ldots)
+\]
+的 $(x,y)\in\mathbb{R}^2$ 之集.则 $\dim E=2/(1+\alpha)$.
+\end{theorem}
+
+\begin{proof}
+(a) 记
+\begin{equation}\label{eq:8.34}
+  F_j=\bigcup_{i=-\infty}^{\infty}\bigl[i n_j^{-1}-n_j^{-1-\alpha},\ i n_j^{-1}+n_j^{-1-\alpha}\bigr],
+\end{equation}
+则
+\begin{equation}\label{eq:8.35}
+  F=\bigcap_{j=1}^{\infty}F_j.
+\end{equation}
+首先注意，$F$ 与任何区间 $I$ 的交对每个 $j$ 都可以用至多 $|I|n_j+2$ 个长度为 $2n_j^{-1-\alpha}$ 的区间覆盖.由于当 $j\to\infty$ 时这些长度趋于零，$F\cap I$ 具有有限的 $\mathcal{H}^{1/(1+\alpha)}$-测度，故 $\dim F\leq 1/(1+\alpha)$.
+
+为求维数的下界，取 $s<1/(1+\alpha)$，并把 $F$ 稍加修改以配合\cref{thm:1.15}，证明 $\mathcal{H}^s(F)>0$.不妨设对一切 $j$ 有 $n_{j+1}n_j^{-1-\alpha}\geq 2$、$n_j^{\alpha}\geq 4$ 且 $n_1\geq 4$；若非如此，利用 \eqref{eq:8.32} 忽略小的 $j$ 值并重新编号即可.令
+\begin{equation}\label{eq:8.36}
+  m_j=\bigl[2n_{j+1}n_j^{-1-\alpha}-2\bigr]\geq n_{j+1}n_j^{-1-\alpha}\geq 2,
+\end{equation}
+其中 $[\ ]$ 表示``不超过的最大整数''.注意可找到 $c>0$ 使
+\begin{equation}\label{eq:8.37}
+  m_1\cdots m_{j-1}n_j^{-s(1+\alpha)}\geq c\qquad(j\geq 2).
+\end{equation}
+事实上，把 $j$ 换成 $j+1$ 时该不等式左端增大了一个因子
+\[
+  m_j n_{j+1}^{-s(1+\alpha)}n_j^{s(1+\alpha)}
+  \geq n_{j+1}^{1-s(1+\alpha)}n_j^{(s-1)(1+\alpha)}
+  \geq n_j^{j[1-s(1+\alpha)]+(s-1)(1+\alpha)},
+\]
+这里用了 \eqref{eq:8.36} 与 \eqref{eq:8.32}；而当 $j$ 充分大时它大于 $1$，因为 $1-s(1+\alpha)>0$.
+
+$F_j$ 的每个区间依两端重叠的情况含有 $m_j$、$m_j+1$ 或 $m_j+2$ 个 $F_{j+1}$ 的完整区间.为顾及这些端点效应，我们如下把 $F$ 缩减为 $F'$.令 $F_0'$ 为单位区间.若 $j\geq 0$ 且 $F_j'$ 已经指定，则从 $F_j'$ 的每个区间中恰好选取 $m_j$ 个 $F_{j+1}$ 的相邻完整区间来定义 $F_{j+1}'$.令 $F'=\bigcap_{j=0}^{\infty}F_j'$，则 $F'\subset F\cap[0,1]$.
+
+现在按\cref{thm:1.15} 之前描述的 Cantor 型过程构造 $[0,1]$ 的子集 $E$.令 $E_0=[0,1]$，并按那里描述的方式构造 $E_1,E_2,\ldots$，使 $E_j$ 的每个区间含有 $m_j$ 个 $E_{j+1}$ 的区间，于是 \eqref{eq:1.23} 成为
+\begin{equation}\label{eq:8.38}
+  m_j|J|^{s}=|I|^{s},
+\end{equation}
+其中 $J$ 是 $E_{j+1}$ 的典型区间，$I$ 是 $E_j$ 的区间.由\cref{thm:1.15}，集合 $E=\bigcap_{j=0}^{\infty}E_j$ 的维数为 $s$.
+
+存在从 $F'$ 到 $E$ 的自然双射 $\psi$：若 $x\in F'$ 位于 $F_j'$ 的第 $k_j$ 个区间（从左数起），则 $\psi(x)$ 是对所有 $j$ 都位于 $E_j$ 的第 $k_j$ 个区间中的唯一点.设 $x$ 与 $y$ 是 $F'$ 的不同点.设 $j$ 是使 $x$ 与 $y$ 位于 $F_{j+1}'$ 的不同区间中的最小整数；设 $y$ 位于含 $x$ 的区间右侧第 $k$ 个区间.则
+\begin{equation}\label{eq:8.39}
+  |y-x|\geq kn_{j+1}^{-1}-2n_{j+1}^{-1-\alpha}\geq\frac{1}{2}kn_{j+1}^{-1}.
+\end{equation}
+另一方面，$E$ 中的点 $\psi(x)$ 与 $\psi(y)$ 位于 $E_j$ 的同一区间 $I$ 内，但 $\psi(y)$ 位于 $E_{j+1}$ 的在 $\psi(x)$ 所在区间右侧第 $k$ 个的区间中.于是
+\[
+  |\psi(y)-\psi(x)|
+  \leq 2k|I|m_j^{-1}
+  \leq 2k(m_1\cdots m_{j-1})^{-1/s}m_j^{-1}
+  \leq 2kc_1n_j^{-1-\alpha}m_j^{-1}
+  \leq 2kc_1n_{j+1}^{-1},
+\]
+其中 $c_1=c^{-1/s}$，这里迭代了 \eqref{eq:8.38} 并用了 \eqref{eq:8.37} 与 \eqref{eq:8.36}.与 \eqref{eq:8.39} 结合得
+\[
+  |\psi(y)-\psi(x)|\leq 4c_1|y-x|.
+\]
+由\cref{lem:1.8} 得 $s=\dim E\leq\dim F'\leq\dim F$.这对一切 $s<1/(1+\alpha)$ 成立.
+
+(b) 证明 (b) 的一种途径是把\cref{thm:1.15} 与 (a) 的证明修改到二维.另一种途径是：利用 Descartes 积集的\cref{cor:5.10} 连同 (a)，集合 $E=F\times F$ 的维数至少为 $2/(1+\alpha)$.另一方面，若 $S$ 是任何单位边长正方形，则对每个 $j$ 可用 $(n_j+2)^2$ 个直径为 $2^{\frac{1}{2}}n_j^{-1-\alpha}$ 的正方形覆盖 $E\cap S$（从 $F_j\times F_j$ 中取正方形）.于是 $\dim(E\cap S)$，从而 $\dim E$，至多为 $2/(1+\alpha)$.
+\end{proof}
+
+注意，满足 \eqref{eq:8.33} 的 $x$ 正是``密切可逼近''的数：即对一切 $j$，存在有理数 $p_j/n_j$ 使 $|x-p_j/n_j|\leq n_j^{-1-\alpha}$.
+
+若把不等式 \eqref{eq:8.33} 要求``对无穷多个 $j$''成立而非``对一切 $j$''成立，相应的结果就更难证明.此时交 \eqref{eq:8.35} 换成一个上极限.我们不加证明地陈述 \newterm{jarniks-theorem}{Jarník 定理}{Jarnik's theorem}的一维版本.其证明都相当技术化，见 \textcites{jarnik1931,besicovitch1934b,eggleston1952} 与 Kaufman（\citeyear{kaufman1970,kaufman1981}）；与连分数的一个有趣联系见 \textcite{good1941}.(b) 部分给出了解增大速度的某种指示.
+
+\begin{theorem}\label{thm:8.16}
+取 $\beta>1$.
+
+(a) 使不等式
+\[
+  \|nx\|\leq n^{-\beta}
+\]
+对无穷多个 $n$ 成立的实数 $x$ 之集的 Hausdorff 维数为 $2/(1+\beta)$.
+
+(b) 设 $m_1,m_2,\ldots$ 是快速增长（比如说 $m_{j+1}\geq m_j^j$）的整数列.则使
+\[
+  \|nx\|\leq nm_j^{-1-\beta}\quad\text{且}\quad n\leq m_j
+\]
+对某个 $n$ 对无穷多个 $j$ 成立的实数 $x$ 之集的 Hausdorff 维数为 $2/(1+\beta)$.
+\end{theorem}
+
+现在考虑\cref{thm:8.15}(b) 的平面集 $E$ 到直线上的投影.结果表明，投影的例外方向的集合大到可能出现的最大程度.（比较\cref{thm:6.8}.）
+
+\begin{theorem}\label{thm:8.17}
+设 $n_1,n_2,\ldots$ 是快速增长（比如说 $n_{j+1}\geq n_j^j$）的正整数列.对 $s\leq 1$，设 $E$ 是满足 $-1\leq x,y\leq 1$ 且
+\[
+  \|n_j x\|,\ \|n_j y\|\leq n_j^{1-2/s}\qquad(j=1,2,\ldots)
+\]
+的 $(x,y)\in\mathbb{R}^2$ 之集.则 $\dim E=s$，且方向集
+\begin{equation}\label{eq:8.40}
+  \{\theta:\dim(\operatorname{proj}_{\theta}E)<s\}
+\end{equation}
+的 Hausdorff 维数至少为 $s$.
+\end{theorem}
+
+\begin{proof}
+由\cref{thm:8.15}(b) 立即得 $\dim E=s$.
+
+对 $\delta>0$ 令
+\[
+  A_{\delta}=\bigl\{a:\|na\|\leq nn_j^{-2/s}\ \text{对某个满足}\ 1\leq n\leq n_j^{1-\delta}\ \text{的}\ n\ \text{对无穷多个}\ j\bigr\}.
+\]
+在\cref{thm:8.16}(b) 中取 $m_j=n_j^{1-\delta}$ 与 $\beta=2/s(1-\delta)-1$ 给出
+\begin{equation}\label{eq:8.41}
+  \dim A_{\delta}=s(1-\delta).
+\end{equation}
+对 $a\in\mathbb{R}$，设 $\psi_a:\mathbb{R}^2\to\mathbb{R}$ 为线性映射
+\begin{equation}\label{eq:8.42}
+  \psi_a(x,y)=ax+y.
+\end{equation}
+若 $a\in A_{\delta}$，则对任意大的 $j$，存在整数 $n$ 与 $b$ 使
+\begin{equation}\label{eq:8.43}
+  1\leq n\leq n_j^{1-\delta}
+\end{equation}
+且
+\[
+  |na-b|\leq nn_j^{-2/s},
+\]
+故
+\begin{equation}\label{eq:8.44}
+  |a-b/n|\leq n_j^{-2/s}.
+\end{equation}
+若 $u,v$ 是满足 $|u|,|v|\leq n_j$ 的整数，则在坐标记号下写
+\[
+  (u,v)=(qn,-qb)+(r,\,v+qb),
+\]
+其中 $u=qn+r$，$q,r$ 的选取使 $0\leq r<n$.若 $a'=b/n$，则
+\[
+  \psi_{a'}(u,v)=\psi_{a'}(qn,-qb)+\psi_{a'}(r,v+qb)=0+\psi_{a'}(r,v+qb).
+\]
+由于当 $(u,v)$ 变化时 $(r,v+qb)$ 至多取 $cnn_j$ 个不同的值（$c=3(1+|b|)$），$\psi_{a'}(u,v)$ 从而 $\psi_{a'}(un_j^{-1},vn_j^{-1})$ 亦然.但 $E$ 的每一点的这两个坐标都在某对整数 $u,v$ 下距 $\bigl(un_j^{-1},vn_j^{-1}\bigr)$ 不超过 $n_j^{-2/s}$，故 $\psi_{a'}(E)$ 可以用 $cnn_j$ 个长度为 $2(|a'|+1)n_j^{-2/s}$ 的区间覆盖.而由 \eqref{eq:8.44}，当 $|x|,|y|\leq 1$ 时 $|\psi_a(x,y)-\psi_{a'}(x,y)|\leq n_j^{-2/s}$，故 $\psi_a(E)$ 可以用 $cnn_j$ 个长度为 $2(|a'|+2)n_j^{-2/s}$ 的区间覆盖.这可以对任意大的 $j$ 做到，故只要当 $j\to\infty$ 时 $nn_jn_j^{-2t/s}\to 0$——由 \eqref{eq:8.43}，当 $t>(1-\frac{1}{2}\delta)s$ 时正是如此——就有 $\mathcal{H}^t\bigl(\psi_a(E)\bigr)=0$.
+
+于是我们证明了：若 $a\in A_{\delta}$（对任意 $\delta>0$），即 $a\in A=\bigcup_{\delta>0}A_{\delta}$，则 $\dim\bigl(\psi_a(E)\bigr)<s$.由 \eqref{eq:8.41}，$\dim A=s$.由 $\psi_a$ 的定义，当 $a=\cot\theta$ 时集合 $\psi_a(E)$ 与 $\operatorname{proj}_{\theta}(E)$ 几何相似，从而有相同的 Hausdorff 维数.我们得出：使 $\dim\bigl(\operatorname{proj}_{\theta}(E)\bigr)<s$ 的 $\theta$ 之集的维数至少为 $s$.
+\end{proof}
+
+上述例子及其高维推广归功于 \textcite{kaufmanmattila1975}，取代了 \textcite{marstrand1954a} 与 \textcite{kaufman1969} 的例子.由 \textcite{mattila1975b} 关于方向例外集的最大维数的结果，集合 \eqref{eq:8.40} 的维数恰为 $s$.从投影的观点看，这类数论例子一般表现出最坏的可能行为.
+
+Hausdorff 测度在数论中的进一步应用见 \textcites{eggleston1952,bakerschmidt1970,rogers1970,baker1978}.丢番图逼近的更广泛的论述见 \textcite{baker1975} 或 \textcite{schmidt1980}.
+
+\section{在凸性中的一些应用}
+
+本节描述 Hausdorff 测度在\newterm{convexity}{凸性}{convexity}（凸集几何）中出现的若干方式.前两个结果表明凸曲面的不规则性不能太大.第三个结果是投影定理的一个应用.
+
+设 $K$ 是 $\mathbb{R}^3$ 中的（紧）凸体.若 $K$ 在 $x$ 处支撑多于一个切平面，则称 $x$ 是 $K$ 的曲面 $\partial K$ 的\newterm{singular-point}{奇点}{singular point}.下面的定理可推广到高维，归功于 \textcite{andersonklee1952}；\textcite{besicovitch1963a} 给出了另一个证明.
+
+\begin{theorem}\label{thm:8.18}
+设 $K$ 是 $\mathbb{R}^3$ 中的凸体.则 $\partial K$ 的奇点之集含于可求长曲线的可数并之中，从而具有 $\sigma$-有限的 $\mathcal{H}^1$-测度.
+\end{theorem}
+
+\begin{proof}
+设 $\Pi$ 是与 $K$ 不相交的平面，$f:\Pi\to\partial K$ 是``最近点''映射.即若 $x\in\Pi$，则 $f(x)$ 是 $K$ 中使 $|f(x)-x|$ 最小的点；由于 $K$ 凸，该点唯一.若 $x,y\in\Pi$，则（可能空间扭歪的）四边形 $x,f(x),f(y),y$ 的角 $\angle xf(x)f(y)$ 与 $\angle yf(y)f(x)$ 必至少为 $\frac{1}{2}\pi$，因为线段 $[f(x),f(y)]$ 含于 $K$ 中且含有作为 $x$ 与 $y$ 的``最近点''候选的点.于是 $f$ 不增大距离，即
+\begin{equation}\label{eq:8.45}
+  |f(x)-f(y)|\leq|x-y|\qquad(x,y\in\Pi).
+\end{equation}
+记 $\partial K_{\Pi}$ 为 $\Pi$ 在 $f$ 下的像，粗略地说即 $\partial K$ 上与 $\Pi$ 同侧的那些点.若 $z$ 是 $\partial K_{\Pi}$ 的奇点，则容易看出 $f^{-1}(z)$ 含有一条直线段.事实上，若 $z$ 是锥型奇点（$z$ 是包含 $K$ 的圆锥的顶点），则 $f^{-1}(z)$ 含有一个圆盘.设 $\{L_i\}_{1}^{\infty}$ 为 $\Pi$ 中相对于 $\Pi$ 内某对固定坐标轴具有有理坐标端点的线段构成的可数族.若 $z$ 是 $\partial K_{\Pi}$ 的奇点，则 $f^{-1}(z)$ 含有一条必与某个 $L_i$ 相交的线段.于是 $\partial K_{\Pi}$ 的奇点含于 $\bigcup_i f(L_i)$ 之中.而利用 \eqref{eq:8.45} 可见，$\partial K$ 的子集 $f(L_i)$ 要么是一条可求长曲线，要么是一个单点（见 3.2~节）.于是 $\partial K_{\Pi}$ 的奇点含于可求长曲线的可数族之中，从而具有 $\sigma$-有限的 $\mathcal{H}^1$-测度.
+
+最后，若 $\Pi_1,\ldots,\Pi_4$ 是包住 $K$ 的四面体各面所在的平面，则 $\partial K$ 的每个奇点都是某个 $\partial K_{\Pi_j}$（$1\leq j\leq 4$）的奇点.于是 $\partial K$ 的奇点构成一个 $\sigma$-有限的正则 $1$-集.
+\end{proof}
+
+顺便指出，由证明容易看出凸体的锥型奇点之集至多可数.（若 $z$ 是 $\partial K$ 的锥型奇点，则 $f^{-1}(z)$ 含有一个圆盘，而平面 $\Pi$ 只能含可数多个不交圆盘.）
+
+\textcite{klee1957} 问：位于凸曲面内的直线段的方向之集可以有多大.\textcite{mcminn1960} 在三维情形解决了这一问题，这里我们给出 \textcite{besicovitch1963b} 证明的简化版本.
+
+\begin{theorem}\label{thm:8.19}
+设 $K$ 是 $\mathbb{R}^3$ 中的凸体.则含于 $\partial K$ 内的线段的方向之集（把方向视为单位球面的子集）具有 $\sigma$-有限的 $\mathcal{H}^1$-测度.
+\end{theorem}
+
+\begin{proof}
+设 $\Pi_1$ 与 $\Pi_2$ 是与 $\partial K$ 相交成凸曲线 $\Gamma_1$ 与 $\Gamma_2$ 的平行平面.我们先证明：$\partial K$ 内同时截过 $\Gamma_1$ 与 $\Gamma_2$ 的线段的方向之（紧）集的 $\mathcal{H}^1$-测度是 $\sigma$-有限的.如下定义函数 $f_1:\Gamma_1\to\Gamma_2$：设 $x\in\Gamma_1$.对每个使 $\Gamma_1$ 与 $\Gamma_2$ 位于同侧、在 $x$ 处切于 $\Gamma_1$ 且也切于 $\Gamma_2$ 的平面 $\Pi$，$\Pi\cap\Gamma_2$ 要么是一个单点，要么是一条直线段.这些点或线段在所有这样的 $\Pi$ 上的总体是 $\Gamma_2$ 的一个单点或一条闭子弧.令 $f_1(x)$ 为这个点或弧的中点.显然 $f_1$ 是单调函数，从而是有界变差的.于是由向量差 $g_1(x)=f_1(x)-x$ 给出的函数 $g_1:\Gamma_1\to\mathbb{R}^3$ 也是有界变差的.正交投影到 $\Pi_1$ 上，$\operatorname{proj}_{\Pi_1}\circ g_1:\Gamma_1\to\Pi_1$ 有界变差，故由\cref{exe:3.1}，$\operatorname{proj}_{\Pi_1}\bigl(g_1(\Gamma_1)\bigr)$ 是 $\mathcal{H}^1$-测度有限的集合.但 $\operatorname{proj}_{\Pi_1}\bigl(g(\Gamma_1)\bigr)$ 是线段 $\{[x,f_1(x)]:x\in\Gamma_1\}$ 的方向余弦之集，故这类线段的方向之集具有有限的 $\mathcal{H}^1$-测度.
+
+我们以完全相同的方式定义 $f_2:\Gamma_2\to\Gamma_1$，并推得线段 $\{[f_2(y),y]:y\in\Gamma_2\}$ 的方向之集也具有有限的 $\mathcal{H}^1$-测度.
+
+若 $[x,y]$ 是 $\partial K$ 中满足 $x\in\Gamma_1$、$y\in\Gamma_2$ 的线段，且其形式既非 $[x,f_1(x)]$ 又非 $[f_2(y),y]$，则两种可能必居其一，我们依次考虑.首先 $x$ 可以位于 $\Gamma_1$ 的直线段 $L_1$ 上，$y$ 位于 $\Gamma_2$ 中平行的线段 $L_2$ 上.线段 $\{[x,y]:x\in L_1,\ y\in L_2\}$ 的方向之集显然有有限的 $\mathcal{H}^1$-测度.由于凸曲线只能含可数多条直线段，这样的线段对至多可数多对.第二种可能是 $x$ 与 $y$ 分别为 $\Gamma_1$ 与 $\Gamma_2$ 的奇异点（即支撑多于一条切线的点）.这对至多可数多条 $[x,y]$ 可能发生.于是两类``例外''线段 $[x,y]$ 的方向之集都具有 $\sigma$-有限的 $\mathcal{H}^1$-测度.把所有情形合在一起即得：截过 $\Gamma_1$ 与 $\Gamma_2$ 的边界线段的方向之集具有 $\sigma$-有限的 $\mathcal{H}^1$-测度.
+
+最后，取平行于三个坐标平面且与之距离为有理数的全部平面，我们得到平行平面对的可数族，使 $\partial K$ 中的每条线段都与该族中某对平面相交.于是边界线段的方向之集含于 $\sigma$-有限集的可数族之中，从而是 $\sigma$-有限的.
+\end{proof}
+
+\textcite{ewaldlarmanrogers1970} 完成了该定理的高维类似物的研究：他们证明，若 $K$ 是 $\mathbb{R}^n$ 中的凸体，则位于 $K$ 边界内的 $k$ 维球体的取向（$G_{n,k}$ 意义下）之集具有 $\sigma$-有限的 $\mathcal{H}^{k(n-k-1)}$-测度.
+
+一个相关问题——凸体表面上位于某条边界线段（或更一般地，某 $k$ 维球体）内的点的测度——由 \textcite{burton1979} 讨论.\textcite{larman1971b} 考察了凸体的面的相对边界之并的测度.
+
+\textcite{klee1959} 的一个著名结果断言：若 $K$ 是 $\mathbb{R}^3$ 中每个平面截面都是多边形的凸体，则 $K$ 必是多胞体，即有限点集的凸包.曾有猜测：若 $K$ 的截面在几乎所有方向上几乎处处是多边形，则 $K$ 至多有可数多个\newterm{extreme-point}{极点}{extreme point}（不在 $K$ 内任何线段的内部的边界点）.这一猜测被 \textcite{dallalarman1980} 推翻，他们证明极点之集的 Hausdorff 维数可以大到 $1$.我们不在此重复他们精巧的构造，而只是从投影定理推出这已是可能出现的最坏情形.
+
+\begin{theorem}\label{thm:8.20}
+设 $K$ 是 $\mathbb{R}^3$ 中截面几乎处处是多边形的凸体.则 $K$ 的极点之集 $E$ 的 Hausdorff 维数至多为 $1$.
+\end{theorem}
+
+\begin{proof}
+这是把 Mattila 对投影定理的改进应用于 Borel 集 $E$ 的简单推论（见 6.3~节的倒数第二段）.若 $\dim E>1$ 且 $0<t<\dim E-1$，则对几乎所有的单位向量 $\boldsymbol{\theta}$，
+\[
+  \mathcal{H}^{t}\bigl(E\cap\operatorname{proj}_{\theta}^{-1}u\bigr)=\infty
+\]
+对 $L_\theta$ 上一个正 $\mathscr{L}^1$-测度的 $u$ 集合成立，其中 $\operatorname{proj}_{\theta}$ 表示到直线 $L_\theta$（过原点沿方向 $\boldsymbol{\theta}$）上的投影.对这样的 $\boldsymbol{\theta}$ 与 $u$，平面 $\operatorname{proj}_{\theta}^{-1}u$ 与 $E$ 交成无穷集.$K$ 的任何极点当然是平面凸集 $K\cap\operatorname{proj}_{\theta}^{-1}u$ 的极点，故这些平面截面不可能是多边形.
+\end{proof}
+
+\section{动力系统中的吸引子}
+
+撰写本书之时，数学与数学物理的一个增长领域是对\newterm{dynamical-system}{动力系统}{dynamical system}中``混沌''与``奇怪吸引子''的研究.我们尝试用几页篇幅概述这类吸引子如何产生的一些基本思想.
+
+设 $f$ 是度量空间（通常是 $\mathbb{R}^n$，$n\geq 1$ 的子集）到自身的映射.我们关心序列——\newterm{orbit}{轨道}{orbit} $\{f^m(x)\}_{m=1}^{\infty}$——对不同初始点 $x$ 的行为，特别是 $m$ 很大时的行为.（照例 $f^m$ 表示 $f$ 的 $m$ 次迭代.）例如，这些序列可能是周期的，或可能收敛于一条周期轨道.或者 $\{f^m(x)\}$ 可能表现得近乎随机地在度量空间中游荡.人们很快被引导去研究不变集，即使 $f(E)\subset E$ 的集合 $E$.于是若 $x\in E$，迭代 $f^m(x)$ 对一切 $m$ 都被困在 $E$ 内.若 $f$ 连续，不变集的闭包也是不变的，而一个主要问题就是求给定函数 $f$ 的闭不变集.在特别有意义的情形，不变集可能呈现精细结构.也许最简单的例子是 $f:\mathbb{R}\to\mathbb{R}$，$f(x)=\frac{3}{2}(1-|2x-1|)$，Cantor 集对它是不变的，见\cref{exe:8.8}.一些被称为 Julia 集的非凡集合由要求 $f(E)=E$ 定义，其中 $f$ 是复平面的变换 $z\to z^2-\mu$；Mandelbrot（\citeyear{mandelbrot1982}，第 19 节）对参数 $\mu$ 的各种值绘出了这些集合.
+
+然而，实践中最重要的不变集都具有某种稳定性，否则它们不太可能在物理情境或计算机实现中被观察到.这些集合称为\newterm{attractor}{吸引子}{attractor}.吸引子的定义多种多样；本质上，映射 $f$ 的吸引子是满足 $f(E)\subset E$ 的闭集 $E$，而且若 $x\in V$，则 $f^m(x)$ 到 $E$ 的距离当 $m\to\infty$ 时趋于 $0$，其中 $V$ 是包含 $E$ 的``大''集合，例如 $E$ 的开邻域.通常还要求 $E$ 在某种意义上是极小的，比如要求轨道 $\{f^m(x)\}$ 对某个 $x$ 在 $E$ 中稠密.若 $E$ 具有精细结构，或对初始条件有敏感依赖（使两个相近的点在 $f$ 的迭代下未必保持接近），则 $E$ 可称为奇怪吸引子.判定哪些函数产生奇怪吸引子、为何出现这类吸引子以及它们有何结构，仍有许多工作要做.这一学科已变得极其复杂，\newterm{bifurcation-theory}{分歧理论}{bifurcation theory}、\newterm{ergodic-theory}{遍历理论}{ergodic theory}、微分拓扑与泛函分析都在其中起着重要作用.关于一维与二维映射的出色综述见 \textcite{whitley1983}.
+
+对实区间上映射的研究近来进展可观，主要归功于 Feigenbaum（\citeyear{feigenbaum1978,feigenbaum1979}） 与 Jonker 与 Rand（\citeyear{jonkendrand1981a,jonkendrand1981b}）.这里我们详细考察 \textcite{grassberger1981} 研究过的一个函数，它虽然貌似矫揉造作，却易于分析，并且在更一般的背景中具有重要性.
+
+考虑泛函方程，即著名的重正化方程，
+\begin{equation}\label{eq:8.46}
+  g\bigl(g(x/\alpha)\bigr)=-g(x)/\alpha,
+\end{equation}
+连同规范化条件 $g(0)=1$.可以证明（见 \textcite{campaninoepstein1981} 与 \textcite{lanford1982}）该方程被某个在 $[-1,1]$ 上的偶实解析函数 $g$ 对 $\alpha=2.50290\ldots$ 所满足.（虽然这个解局部唯一，但尚不知道 \eqref{eq:8.46} 是否对其他 $\alpha$ 值有解.）函数 $g$ 在 $[-1,1]$ 上精确到四位小数为
+\begin{equation}\label{eq:8.47}
+  \begin{aligned}
+    g(x)&=1-1.5276x^{2}+0.1048x^{4}+0.0267x^{6}\\
+    &\quad -0.0035x^{8}+0.0008x^{10}+0.0003x^{12},
+  \end{aligned}
+\end{equation}
+其图像示于图~\ref{fig:8.5}.我们用 8.3~节的思想估计 $g$ 的吸引子的维数.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{fig8-5.png}
+  \caption{函数 $y=g(x)$}
+  \label{fig:8.5}
+\end{figure}
+
+\begin{theorem}\label{thm:8.21}
+函数 $g$ 对每个 $k\geq 0$ 有唯一的周期为 $2^k$ 的（不稳定）周期轨道，以及满足 $0.5345<\dim E<0.5544$ 的闭不变吸引子 $E$.若 $x\in[-1,1]$，则要么 $g^m(x)$ 对充分大的 $m$ 是周期点（这只对可数多个 $x$ 发生），要么 $g^m(x)$ 到 $E$ 的距离当 $m\to\infty$ 时趋于 $0$.若 $x\in E$，则轨道 $\{g^m(x)\}_{1}^{\infty}$ 在 $E$ 中稠密.
+\end{theorem}
+
+\begin{proof}
+迭代 \eqref{eq:8.46} 并利用 $g$ 的偶性，
+\begin{equation}\label{eq:8.48}
+  g^{2^{k}}\Bigl(\Bigl(-\frac{1}{\alpha}\Bigr)^{k}x\Bigr)=\Bigl(-\frac{1}{\alpha}\Bigr)^{k}g(x)\qquad(k\geq 0).
+\end{equation}
+记 $x_m=g^m(0)$，可见 $x_{2^k}=(-1/\alpha)^k$（$k\geq 0$），并且经计算得
+\[
+  x_1=1,\qquad x_2=-0.3995,\qquad x_3=0.7589,\qquad x_4=0.1596.
+\]
+设 $V$ 为开区间 $(x_2,x_1)$，并在 $\overline{V}$ 上定义映射
+\begin{equation}\label{eq:8.49}
+  \psi_1(x)=-\frac{1}{\alpha}x,\qquad \psi_2(x)=g^{-1}\Bigl(-\frac{1}{\alpha}x\Bigr),
+\end{equation}
+其中 $g^{-1}$ 总取正值.注意
+\[
+  \psi_1(V)=(x_2,x_4),\qquad \psi_2(V)=(x_3,x_1),
+\]
+故开集条件对压缩 $\psi_1,\psi_2$ 成立（见 8.3~节）.由\cref{thm:8.3,thm:8.8}，存在唯一紧集 $E$ 使 $E=\psi_1(E)\cup\psi_2(E)$，且 $s\leq\dim E\leq t$，其中
+\[
+  \bigl(\inf|\psi_1'(x)|\bigr)^{s}+\bigl(\inf|\psi_2'(x)|\bigr)^{s}
+  =1=\bigl(\sup|\psi_1'(x)|\bigr)^{t}+\bigl(\sup|\psi_2'(x)|\bigr)^{t},
+\]
+下确界与上确界取遍 $x\in\overline{V}$.由于 $g'$（从而 $(g^{-1})'$）的极端值在区间 $\overline{V}$ 的端点取得，得
+\[
+  \alpha^{-s}+\bigl(\alpha|g'(x_1)|\bigr)^{-s}=1=\alpha^{-t}+\bigl(\alpha|g'(x_3)|\bigr)^{-t},
+\]
+计算导数得 $0.5345<\dim E<0.5544$.
+
+剩下考察点的迭代的确界行为.由于 $g[-1,1]\subset\overline{V}$，可以完全在 $\overline{V}$ 内工作.改写 \eqref{eq:8.46} 可见 $g(-(1/\alpha)x)=g\bigl(-(1/\alpha)g(x)\bigr)$（注意 $g(-(1/\alpha)x)>0$），得到在 $[-1,1]$ 上成立的函数恒等式
+\begin{equation}\label{eq:8.50}
+  g\circ\psi_1=\psi_2\circ g,\qquad g\circ\psi_2=\psi_1.
+\end{equation}
+于是记 $\psi_{j_1j_2\ldots j_k}=\psi_{j_1}\circ\psi_{j_2}\circ\cdots\circ\psi_{j_k}$，我们有
+\begin{equation}\label{eq:8.51}
+  \begin{aligned}
+    g\circ\psi_{11\ldots1}&=\psi_{22\ldots2}\circ g,\\
+    g\circ\psi_{11\ldots12j_1\ldots j_k}&=\psi_{22\ldots21j_i\ldots j_k}\qquad(2\leq i\leq k+1).
+  \end{aligned}
+\end{equation}
+由于 $g(\overline{V})\subset\overline{V}$，得
+\begin{equation}\label{eq:8.52}
+  g\bigl(\psi^{k}(\overline{V})\bigr)\subset\psi^{k}(\overline{V}),
+\end{equation}
+其中照 8.3~节，$\psi^k(\overline{V})=\bigcup_{j_1\ldots j_k}\psi_{j_1\ldots j_k}(\overline{V})$.于是 $\psi^k(\overline{V})$ 中的任何点在 $g$ 的迭代下被困于 $\psi^k(\overline{V})$ 之中.进一步，由 \eqref{eq:8.51} 可见，若 $x\in\psi^k(\overline{V})$，则当 $m$ 增大时 $g^m(x)$ 依次访问 $2^k$ 个（不交的）集合 $\psi_{j_1\ldots j_k}(\overline{V})$ 中的每一个.
+
+设 $x_f=0.5493\ldots$ 为 $g$ 在 $[-1,1]$ 中的唯一不动点.由 \eqref{eq:8.48}，点 $(-1/\alpha)^k x_f$ 从而 $g^m\bigl((-1/\alpha)^k x_f\bigr)$ 是周期至多为 $2^k$ 的周期点.然而由上面的注记，$g^m\bigl((-1/\alpha)^kx_f\bigr)$ 在每 $2^k$ 个相继的 $m$ 值中位于不同的 $\psi_{j_1\ldots j_k}(\overline{V})$ 内（注意 $(-1/\alpha)^kx_f\in\psi_{11\ldots1}(\overline{V})$），给出一条周期为 $2^k$ 的轨道.
+
+现在设 $x\in\overline{V}$ 是使 $g^m(x)$ 永不击中这些周期轨道的点.我们证明 $g^m(x)$ 必收敛于 $E$.我们已经知道一旦进入 $\psi^k(\overline{V})$，迭代 $g^m(x)$ 就被困在那里 \eqref{eq:8.52}.我们证明在迭代下 $\psi^k(\overline{V})$ 中的点最终进入 $\psi^{k+1}(\overline{V})$（对每个 $k$）.设 $g^m(x)\in\psi^k(\overline{V})$ 对某个 $k\geq 0$ 成立，设 $g^m(x)=\psi_{j_1\ldots j_k}(y)$，其中 $y\in\overline{V}$.点 $y$ 不能是不动点 $x_f$，否则由 \eqref{eq:8.51}，$g^m(x)$ 将有周期 $2^k$.于是要么 $y\in[x_2,x_4]\cup[x_3,x_1]$，要么 $y\in[x_4,x_f)\cup(x_f,x_3]$.在后一种情形，由于 $g'(x)<-1$ 于 $g^{-1}[x_4,x_3]=[-x_2,x_3]$ 上，$y$ 的迭代离开不稳定不动点 $x_f$ 移动，直至对某个 $r$ 有 $g^r(y)\in[x_2,x_4]\cup[x_3,x_1]$.于是无论哪种情形都可找到 $r\geq 0$ 使 $g^r(y)\in\psi_j(\overline{V})$，$j=1$ 或 $2$.迭代 \eqref{eq:8.51} 得 $g^{r2^k}\circ\psi_{j_1\ldots j_k}=\psi_{j_1\ldots j_k}\circ g^r$，故
+\[
+  g^{r2^{k}+m}(x)
+  =g^{r2^{k}}\bigl(\psi_{j_1\ldots j_k}(y)\bigr)
+  =\psi_{j_1\ldots j_k}\bigl(g^{r}(y)\bigr)
+  \subset\psi_{j_1\ldots j_k}(\overline{V})
+  \subset\psi^{k+1}(\overline{V}).
+\]
+于是 $\overline{V}$ 中任何不终于周期轨道的点 $x$ 最终进入一切 $\psi^k(\overline{V})$.由 \eqref{eq:8.20}，$E=\bigcap_{k=0}^{\infty}\psi^k(\overline{V})$，故 $g^m(x)$ 到 $E$ 的距离必趋于零.
+
+若 $x\in E$，则对任意 $k$，迭代 $g^m(x)$ 依次访问 $2^k$ 个集合 $\psi_{j_1\ldots j_k}(\overline{V})$ 中的每一个，由此得轨道 $\{g^m(x)\}$ 在 $E$ 中稠密.
+\end{proof}
+
+注意，通过估计充分大的 $k$ 的 $\psi_{j_1\ldots j_k}$ 的导数，可把 $\dim E$ 求到任意精度.事实上 $\dim E=0.538\ldots$.\textcite{ruelle1983} 近来证明这类映射的吸引子实际上是 $s$-集，其中实数 $s$ 可以用映射的``压强''表述.
+
+上面描述的映射 $g$ 在某种意义上是一大类呈现混沌行为的 $[-1,1]$ 上映射的代表性映射.设 $f$ 是 $[-1,1]$ 到自身的任何光滑（比如二阶可微）映射，使 $f$ 在 $0$ 处有唯一极大值，$f(0)=1$，$f''(0)<0$，且当 $x<0$ 时 $f'(x)>0$、当 $x>0$ 时 $f'(x)<0$.设 $f_\lambda$ 为 $[-1,1]$ 上的映射 $f_\lambda(x)=\lambda f(x)$，$0<\lambda<1$.当 $\lambda$ 小时映射 $f_\lambda$ 有唯一的稳定不动点（稳定指附近的点在 $f_\lambda$ 迭代下收敛于它）.可以证明，当 $\lambda$ 增大到某个值 $\lambda_1$ 时该不动点变得不稳定，让位于一对周期为 $2$ 的稳定点.继续增大 $\lambda$ 到 $\lambda_2$，这个环分岔成周期为 $4$ 的稳定环，在 $\lambda_3$ 处出现周期为 $8$ 的环，如此等等.（关于这一过程更详细的描述，特别是关于\newterm{logistic-mapping}{``logistic 映射''}{logistic mapping}$f(x)=1-2x^2$——经坐标变换等价于 $[0,1]$ 上的 $f(x)=4x(1-x)$——见 \textcite{may1976,hofstadter1981,feigenbaum1981}.）Feigenbaum（\citeyear{feigenbaum1978,feigenbaum1979,feigenbaum1981}） 发现了序列 $\{\lambda_j\}$ 的一些非凡性质：他证明 $\lambda_j$ 递增于临界值 $\lambda_\infty$，且 $(\lambda_{j+1}-\lambda_j)/(\lambda_{j+2}-\lambda_{j+1})\to\delta$，其中 $\delta=4.669\ldots$ 是一个普适常数，即不依赖于函数 $f$ 的具体形式.已知 $f_{\lambda_\infty}$ 的迭代行为在定性上类似于上文研究的函数 $g$：$f_{\lambda_\infty}$ 对每个 $k$ 总有一条周期为 $2^k$ 的不稳定轨道，以及一个 Cantor 型特征的不变集，它吸引区间的几乎所有点.让 $\lambda$ 越过 $\lambda_\infty$ 后稳定的周期轨道重新占上风，并且当 $\lambda$ 接近对应于周期 $3\cdot 2^j$ 的环的累积的第二个临界值时，它们以类似方式分岔，如此等等.
+
+Feigenbaum 通过考察 $f$ 的周期点当 $j\to\infty$ 的行为证明：对所论类型的任何函数 $f$，
+\[
+  \lim_{k\to\infty}(-\alpha)^{k}f_{\lambda_\infty}^{2^{k}}\bigl(x/\alpha^{k}\bigr)=g(x)
+\]
+满足泛函方程 \eqref{eq:8.46}，其中 $\alpha=2.5029\ldots$ 是已知方程有解的那个数.（坐标的线性缩放允许假设 $g(0)=1$.）于是，就 $f_{\lambda_\infty}^m$ 当 $m\to\infty$ 的极限行为而言，$f_{\lambda_\infty}$ 的迭代可以预期以与 $g$ 的迭代类似的方式行动，不仅在定性上，而且在某些方面在定量上也是如此.特别地，人们或许希望 $f_{\lambda_\infty}$ 的吸引子的 Hausdorff 维数总与 $g$ 的相同.\textcite{grassberger1981} 给出了一些计算证据表明情况确实如此：在分岔点的首次累积 $\lambda_\infty$ 处，已知存在的奇怪吸引子具有维数 $0.538\ldots$.
+
+当然，类似的问题也出现在高维，而分析变得相当困难.\textcite{smale1967} 提出的 $\mathbb{R}^2$ 上的变换——\newterm{horseshoe-diffeomorphism}{``马蹄微分同胚''}{horseshoe diffeomorphism}——说明了奇怪吸引子如何作为``折叠与收缩''的结果出现.单位正方形 $S$ 上的映射 $f$ 在定性上如图~\ref{fig:8.6}(a) 所示，其中 $f(a)=a'$ 等，正方形的上下两半被映到马蹄的两臂.$f^m(S)$ 的前几次迭代示于图~\ref{fig:8.6}(b)，显然 $S$ 的所有点的迭代都收敛于 Cantor 型集合 $\bigcap_{m=0}^{\infty}f^m(S)$.通过适当地定义 $f$，可以得到维数介于 $1$ 与 $2$ 之间的任何吸引子.由于 $f$ 的宽度收缩效应，该吸引子在 $f$ 的扰动下稳定.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{fig8-6.png}
+  \caption{Smale 马蹄微分同胚}
+  \label{fig:8.6}
+\end{figure}
+
+一个更难分析的 $\mathbb{R}^2$ 映射是 \newterm{henon-pomeau-mapping}{Hénon--Pomeau 映射}{Henon-Pomeau mapping}，其坐标形式为
+\[
+  f(x,y)=(y+1-ax^{2},\,bx),
+\]
+其中 $a,b$ 为常数.这一映射在一切 $(x,y)$ 处的 Jacobian 为 $-b$，故以一致的速率收缩面积.它受到大量关注，因为在线性坐标变换的意义下它是具有这一性质的最一般的二次映射.它与一维（二次）logistic 映射相关，其吸引子对某些 $(a,b)$ 可以预期具有精细结构.然而，对已知产生分数维数不变集的 $a,b$ 值，结果该集合并不是吸引子.\textcite{henonpomeau1976} 对 $a=1.4$、$b=0.3$ 考察了一些轨道；更近的分析见 \textcite{simo1979} 及 \textcite{whitley1983} 的文章.
+
+至此我们只考虑了离散动力系统，但对连续系统或流（即微分方程组的解曲线）类似的想法也成立.记 $f_t(x)$ 为点 $x$ 在时刻 $t$ 所到达的位置.则
+\[
+  f_{t_2}\bigl(f_{t_1}(x)\bigr)=f_{t_1+t_2}(x),
+\]
+这里假定流是自治的（即由不依赖于时间的微分方程导出）.同样，人们寻求闭不变集（使 $f_t(E)\subset E$ 对一切 $t\geq 0$ 成立），它们在如下意义上是吸引子：对大量的 $x$，$f_1(x)$ 对任意大的 $t$ 访问 $E$ 的任何点的每个邻域.
+
+对 Smale 马蹄映射作简单修改提供了一个流产生奇怪吸引子的例子.设 $f_t$ 是方形截面圆环 $V$ 内的一个流，它以恒定速率沿环内侧绕行，绕环一周用单位时间.设 $\Pi$ 是横截于环的平面，并设 $f_t$ 定义得使当 $x\in S=V\cap\Pi$ 时 $f_1(x)=f(x)$，其中 $f$ 是 $S$ 上的马蹄映射.（在 $V$ 上定义具有该性质的流是直截了当的.）于是若 $E$ 是该流的吸引子，则 $E\cap\Pi=\bigcap_{m=0}^{\infty}f^m(S)$ 是马蹄映射的吸引子.为求吸引子的其余部分，只需让这个集合沿环绕行，得 $E=\bigcup_{t=0}^{1}f_t\bigl(\bigcap_{m=0}^{\infty}f^m(S)\bigr)$.于是该吸引子局部上是马蹄吸引子与一条线段的乘积，故由 5.3~节工作的微小变式，其维数等于 $1+\dim\bigcap_{0}^{\infty}f^m(S)$.或者，该吸引子可局部地视为一维 Cantor 集与平面区域的乘积.
+
+实践中，微分方程流的动力学可以极其复杂，这类简单化的处理走不了多远.在寻找奇怪吸引子时被考察最多的微分方程组或许是 \textcite{lorenz1963} 为模拟天气的某些方面而提出的\newterm{lorenz-equations}{方程组}{Lorenz equations}
+\begin{equation}\label{eq:8.53}
+  \left.
+  \begin{aligned}
+    \dot{x}&=\sigma(y-x),\\
+    \dot{y}&=rx-y-xz,\\
+    \dot{z}&=xy-bz,
+  \end{aligned}
+  \right\}
+\end{equation}
+其中 $\sigma,r,b$ 为常数.\textcite{sparrow1982} 的书对该方程组的吸引子与分岔作了透彻的论述.混沌行为在某些参数值处出现，通常选取研究的情形是 $\sigma=10$，$r=28$，$b=\frac{8}{3}$.
+
+\textcite{temam1983} 考察了流体力学的 \newterm{navier-stokes-equation}{Navier--Stokes 方程}{Navier-Stokes equation}.特别地，他估计了吸引子的 Hausdorff 维数，以及弱解的奇点作为时空子集的维数.
+
+近来，人们尝试用运动的常数——特别是轨道的 \newterm{lyapunov-exponents}{Lyapunov 特征指数}{Lyapunov exponents}——来表示动力系统吸引子的维数.（Lyapunov 指数是局部化膨胀矩阵的特征值的长期轨道平均.）这些思想的综述及一些例子见 \textcite{frederickson1983}.
+
+关于吸引子及其与湍流等问题的关系的进一步讨论，见会议文集 \textcites{temam1976,bernardratiu1977,haken1982,guckenheimerholmes1983,barenblattioossjoseph1983}.关于吸引子仍有大量工作要做；事实上，许多已被宣称的结果仍有待于建立在严格的基础之上.
+
+\section{布朗运动}
+
+1827 年植物学家 R.~Brown 观察到悬浮在液体中的微小颗粒处于不停的运动之中，并描绘出高度不规则的路径.这后来被解释为分子对颗粒轰击的结果.在空气的烟尘颗粒中也注意到了类似现象.1905 年 Einstein 发表了对这一运动的数学研究，最终导致 Perrin 获得诺贝尔奖的 Avogadro 常数计算.
+
+\textcite{wiener1923} 提出了 \newterm{brownian-motion}{布朗运动}{Brownian motion}的严格概率模型.他构造了 \newterm{wiener-process}{``Wiener 过程''}{Wiener process}，其随机行为与布朗运动非常相似.这里我们概述这一模型的细节，并给出 \textcite{taylor1953} 关于布朗路径以概率 $1$ 具有 Hausdorff 维数 $2$ 的证明.
+
+若 $n\geq 1$，令 $\Omega$ 表示所有满足 $\omega(0)$ 为原点的连续路径 $\omega:[0,\infty)\to\mathbb{R}^n$ 构成的类.把 $\omega(t)$ 想象为描绘路径 $\omega$ 的颗粒在时刻 $t$ 的位置.可以证明：存在概率测度 $p$（$p(\Omega)=1$），定义在 $\Omega$ 的一个大子集系统上，使得：
+
+(a) 路径具有\newterm{independent-increments}{独立增量}{independent increments}，即若 $t_1\leq t_2\leq t_3\leq t_4$，则 $\omega(t_2)-\omega(t_1)$ 与 $\omega(t_4)-\omega(t_3)$ 独立；
+
+(b) $\omega(t+h)-\omega(t)$ 对一切 $t$ 具有零均值、方差为 $h$ 的 Gaussian 分布.特别地，路径增量的分布是\newterm{stationary-process}{平稳的}{stationary process}（$\omega(t+h)-\omega(t)$ 不依赖于 $t$）、\newterm{isotropic-process}{各向同性的}{isotropic process}（与方向无关），且
+\begin{equation}\label{eq:8.54}
+  p\{\omega:|\omega(t+h)-\omega(t)|\leq\rho\}
+  =ch^{-n/2}\int_{0}^{\rho}r^{n-1}\exp(-r^{2}/2h)\,\mathrm{d}r,
+\end{equation}
+其中 $c$ 是为保证 $p(\Omega)=1$ 而选取的规范化常数.
+
+概率测度 $p$ 可以构造得使一大类路径集合可测，包括 $\Omega$ 的所有形如 $\{\omega:\omega(t_i)\in B_i\ (i=1,2,\ldots,k)\}$ 的子集，其中诸 $B_i$ 是 $\mathbb{R}^n$ 的 Borel 子集.建立这样一个过程的存在性与唯一性相当复杂，有兴趣的读者可参阅例如 \textcite{hida1980}.事实上，测度 $p$ 可以定义在所有（不必连续的）函数 $\omega:[0,\infty)\to\mathbb{R}^n$ 构成的类上，而且由其他条件可得路径以概率 $1$ 连续.
+
+容易看出，把 $\mathbb{R}^n$ 中的布朗过程投影到子空间上给出一个低维布朗过程.
+
+布朗概率分布的重要性在于：它是使路径具有平稳、独立、方差有限的各向同性增量的本质上唯一的分布.这些条件很可能适用于任何物理情境.
+
+可以把布朗运动看作步长趋于零时随机游动的极限情形.该过程\newterm{statistically-self-similar}{在统计意义上是自相似的}{statistically self-similar}：对任意 $\gamma>0$，路径 $\omega(t)$ 与 $\omega(\gamma^2 t)/\gamma$ 具有相同的概率分布.
+
+\begin{lemma}\label{lem:8.22}
+若 $0<\lambda<\frac{1}{2}$，则对几乎所有的 $\omega\in\Omega$ 存在 $h_0>0$，使
+\[
+  |\omega(t+h)-\omega(t)|\leq|h|^{\lambda}
+\]
+对 $0\leq t\leq 1$ 与 $|h|<h_0$ 成立.
+\end{lemma}
+
+\begin{proof}
+设 $j$ 与 $m$ 为正整数.则 \eqref{eq:8.54} 蕴含
+\[
+\begin{aligned}
+  p\bigl\{\omega:|\omega(2^{-j}m)-\omega(2^{-j}(m-1))|>2^{-j\lambda}\bigr\}
+  &=c\,2^{jn/2}\int_{2^{-j\lambda}}^{\infty}r^{n-1}\exp(-r^{2}2^{j-1})\,\mathrm{d}r\\
+  &=c\int_{2^{j(\frac{1}{2}-\lambda)}}^{\infty}r^{n-1}\exp(-r^{2}/2)\,\mathrm{d}r\\
+  &\leq c_1\exp\bigl(-2^{j(\frac{1}{2}-\lambda)}\bigr)
+  \leq c_2\,2^{-2j},
+\end{aligned}
+\]
+其中作了代换并用了在 $\lambda<\frac{1}{2}$ 时成立的一些粗放的估计，$c_1$ 与 $c_2$ 与 $j,m$ 无关.于是
+\begin{align*}
+  &p\{\omega:|\omega(2^{-j}m)-\omega(2^{-j}(m-1))|>2^{-j\lambda}\\
+  &\qquad\text{对某个满足}\ j>k,\ 1\leq m\leq 2^j\ \text{的}\ j,m\}
+  \leq c_2\sum_{j=k}^{\infty}2^{j}2^{-2j}=c_2\,2^{-k}.
+\end{align*}
+于是对几乎所有的 $\omega\in\Omega$，
+\begin{equation}\label{eq:8.55}
+  |\omega(2^{-j}m)-\omega(2^{-j}(m-1))|\leq 2^{-j\lambda}\qquad(m=1,2,\ldots,2^{j})
+\end{equation}
+对一切充分大的 $j$ 成立.任何区间 $(t,t+h)\subset(0,1)$ 都可以表示为形如 $\bigl(2^{-j}(m-1),2^{-j}m\bigr)$（$2^{-j}\leq h$，且每种长度至多两个区间）的相邻二进区间的可数并.（取 $(t,t+h)$ 的所有不被其他这类区间包含的二进子区间.）于是若 $h$ 足够小，$k$ 是满足 $2^{-k}\leq h$ 的最小整数，则利用 \eqref{eq:8.55} 与三角不等式以及 $\omega(t)$ 的连续性，
+\[
+  |\omega(t+h)-\omega(t)|\leq 2\sum_{j=k}^{\infty}2^{-j\lambda}=2^{-k\lambda}2/(1-2^{-\lambda})\leq h^{\lambda}2/(1-2^{-\lambda}).
+\]
+只要 $h$ 充分小，这对 $0\leq t<t+h\leq 1$ 与几乎所有的 $\omega\in\Omega$（对任意 $\lambda<\frac{1}{2}$）成立，故引理结论得证.
+\end{proof}
+
+\begin{theorem}\label{thm:8.23}
+$\mathbb{R}^n$（$n\geq 2$）中的布朗路径以概率 $1$ 具有 Hausdorff 维数 $2$.
+\end{theorem}
+
+\begin{proof}
+(a) 我们用位势论方法证明对几乎所有的路径 $\omega$ 有 $\dim\omega\geq 2$.固定 $1<s<2$.利用 \eqref{eq:8.54} 得
+\[
+  \int_{\omega\in\Omega}\frac{\mathrm{d}p(\omega)}{|\omega(t+h)-\omega(t)|^{s}}
+  =ch^{-n/2}\int_{0}^{\infty}r^{-s+n-1}\exp(-r^{2}/2h)\,\mathrm{d}r
+  =c_1h^{-s/2},
+\]
+其中在被积函数中作了 $r^2/h$ 的代换，$c_1$ 与 $h,t$ 无关.于是
+\[
+  \int_{u=0}^{1}\int_{t=0}^{1}\int_{\omega\in\Omega}\frac{\mathrm{d}p(\omega)\,\mathrm{d}t\,\mathrm{d}u}{|\omega(t)-\omega(u)|^{s}}
+  =\int_{0}^{1}\int_{0}^{1}\frac{c_1\,\mathrm{d}t\,\mathrm{d}u}{|t-u|^{s/2}}<\infty.
+\]
+布朗运动的可测性保证 $|\omega(t)-\omega(u)|^{-s}$ 关于 $[0,1]\times[0,1]\times\Omega$ 上的乘积测度可测，故利用 Fubini 定理我们得出：
+\[
+  \int_{0}^{1}\int_{0}^{1}\frac{\mathrm{d}t\,\mathrm{d}u}{|\omega(t)-\omega(u)|^{s}}<\infty
+\]
+对几乎所有的 $\omega\in\Omega$ 成立.
+
+路径 $\omega$ 上有自然的质量分布 $\mu_\omega$：$\mu_\omega(E)=\mathscr{L}^{1}\{t:0\leq t\leq 1\ \text{且}\ \omega(t)\in E\}$.于是对几乎所有的 $\omega\in\Omega$，$s$-能量 $I_s(\mu_\omega)$ 有限，故由\cref{cor:6.6}(a)，$s\leq\dim\bigl(\omega[0,1]\bigr)\leq\dim\omega$.这对一切 $s<2$ 成立，故对几乎所有的 $\omega\in\Omega$ 有 $\dim\omega\geq 2$.
+
+(b) 我们用\cref{thm:8.1} 方法的一个变式得到路径维数的上界.取 $s>2$.\cref{lem:8.22} 蕴含对几乎所有的 $\omega\in\Omega$ 可找到 $h_0>0$，使
+\[
+  |\omega(t+h)-\omega(t)|\leq|h|^{1/s}
+  \qquad\text{若}\ |h|\leq h_0\ \text{且}\ 0\leq t<t+h\leq 1.
+\]
+对这样的路径 $\omega$，当 $h\leq h_0$ 时子弧 $\omega[t,t+h]$ 可以放进半径为 $h^{1/s}$ 的球中.于是若 $m$ 是满足 $1/m\leq h_0$ 的整数，则可以把 $\omega[0,1]=\bigcup_{j=1}^{m}\omega[(j-1)/m,j/m]$ 放进 $m$ 个半径各为 $m^{-1/s}$ 的球中.故当 $\delta\geq 2m^{-1/s}$ 时 $\mathcal{H}^s_{\delta}\bigl(\omega[0,1]\bigr)\leq m2^s(m^{-1/s})^s=2^s$.令 $m\to\infty$，我们得出：若 $s>2$ 则 $\mathcal{H}^s\bigl(\omega[0,1]\bigr)\leq 2^s$；于是事实上由 \eqref{eq:1.14}，$\mathcal{H}^s\bigl(\omega[0,1]\bigr)=0$，从而 $\mathcal{H}^s(\omega)=0$.
+\end{proof}
+
+\textcite{taylor1953} 还证明了对 $\mathbb{R}^n$ 中几乎所有的路径有 $\mathcal{H}^s(\omega)=0$.\textcites{ray1963,taylor1964} 进行的更精细的计算表明：以概率 $1$，布朗路径关于测度函数
+\[
+  h(t)=t^{2}\log\frac{1}{t}\log\log\log\frac{1}{t}
+\]
+具有正而有限的 Hausdorff 测度.（在 Hausdorff 测度的定义中把 $|U_i|^s$ 换成 $h(U_i)$，这允许更精细的维数定义，见 1.2~节.）
+
+关于布朗路径的二重点、三重点与多重点的几乎必然 Hausdorff 维数也有人提出了类似问题.该理论还被推广到更一般的 \newterm{levy-process}{Lévy 稳定过程}{Levy process}.其中一些专题的进一步讨论与大量文献见 \textcite{rogers1970}（第 133 页）及 \textcites{pruitttaylor1969,taylor1973,pruitt1975,adler1981}，另见 \textcite{mandelbrot1982}（第 39 节）.
+
+\section{结语}
+
+本章我们叙述了分形集合出现的若干情形，以及本书前面讨论的思想可以被应用于其中的场合.Mandelbrot（\citeyear{mandelbrot1975,mandelbrot1977,mandelbrot1982}） 的著述提供了其他此类集合的广阔全景，其中许多尚未经受严格的数学分析.这些著述包含关于更多专题的非常完整的文献，\textcite{rogers1970} 一书关于 Hausdorff 测度应用的最后一章也是如此.
+
+虽然本书所描述的许多工作并不特别新近，但这一学科仍包含许多未解决的问题，有旧有新.分形集几何的理论与应用看来将在未来的许多年里保持为一个活跃的研究领域.借用 Besicovitch 关于 Kakeya 问题的影片中的话：``愿研究这些事情的人们的努力终获成功''.
+
+\begin{exercises}
+\item 证明若允许 \eqref{eq:8.1} 中的 $c$ 依赖于 $x$，\cref{thm:8.1} 仍然成立.
+\item 证明 $\mathbb{R}$ 上连续可微函数的图像是一个 $1$-集.
+\item 证明 Weierstrass 函数 \eqref{eq:8.3} 的图像的维数至多为 $s$.
+\item 设 $f:[0,1]\to\mathbb{R}$ 的图像为 $\Gamma$.证明若对一切分割 $0\leq x_0<\cdots<x_m\leq 1$ 有 $\sum_{i=1}^{m}|f(x_i)-f(x_{i-1})|^s\leq c$，则 $\mathcal{H}^s(\Gamma)<\infty$.
+\item 设开集条件 \eqref{eq:8.19} 对 $\mathbb{R}^n$ 上的压缩 $\{\psi_j\}_{1}^{m}$ 成立，且对每个 $j$ 与一切 $x,y$ 有
+\[
+  q_j|x-y|\leq|\psi_j(x)-\psi_j(y)|\leq r_j|x-y|.
+\]
+若 $E$ 是与这些压缩相伴的不变集，调整\cref{thm:8.6} 的证明以证明 $s'\leq\dim E\leq t$，其中 $s'=s-\log\bigl(\max(r_j/q_j)\bigr)/\log\bigl(\min(1/q_j)\bigr)$，且 $\sum_{1}^{m}q_j^{s}=1=\sum_{1}^{m}r_j^{t}$.
+\item 设 $\{B_i\}_{1}^{\infty}$ 是开集 $V\subset\mathbb{R}^n$ 的一个密切填装.证明 $V\subset\bigcup_i B_i'$，其中 $B_i'$ 是与 $B_i$ 同心但半径加倍的球.进而证明剩余集的 Hausdorff 维数至多等于填装的指数.
+\item 证明图~\ref{fig:8.4} 所示等边三角形填装的剩余集是 $s=\log 3/\log 2$ 的 $s$-集.（注意剩余集是自相似的.）
+\item 证明映射 $f:\mathbb{R}\to\mathbb{R}$，$f(x)=\frac{3}{2}(1-|2x-1|)$ 以 $0$ 为不动点、以 Cantor 集 $E$ 为不变集.证明若 $x\in E\setminus\{0\}$，则迭代 $f^m(x)$ 在 $E$ 中稠密；若 $x\notin E$，则当 $m\to\infty$ 时 $f^m(x)\to-\infty$.（考虑三进展开或许有帮助.）
+\end{exercises}

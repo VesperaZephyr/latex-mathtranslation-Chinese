@@ -1,0 +1,363 @@
+% ==== part09 第 9 章:双线性估计 ====
+% 源: MinerU_latex_A-非.tex 302-717 行;校对 pdf_text.txt 11162-11551 行(PDF 第 205-212 页)
+% 术语(新增，键=中文=英文):
+%   bilinear-operator=双线性算子=bilinear operator; bilinear-estimate=双线性估计=bilinear estimate;
+%   reduced-initial-data=约化初值=reduced initial data; admissible-pair=容许对=acceptable pair
+%   (原书用 acceptable，同 admissible pair); dimensional-analysis=量纲分析=dimensional analysis;
+%   dimensional-condition=量纲条件=dimension condition; trichotomy-formula=三分公式=trichotomy formula;
+%   low-high-term=低-高项=low-high term; high-low-term=高-低项=high-low term;
+%   high-high-term=高-高项=high-high term; littlewood-paley-projection=Littlewood-Paley 投影=
+%   Littlewood-Paley projection; ellipsoid-of-revolution=旋转椭球面=ellipsoid of revolution;
+%   hyperboloid-of-revolution=旋转双曲面=hyperboloid of revolution; null-quadratic-form=零二次型=
+%   null quadratic form; null-form=零形式=null form; symbol=象征=symbol;
+%   Strichartz 估计=Strichartz estimate(专名，直接书写)
+% REFS:
+%   跨章引用(第 8 章，均写成 eqref/autoref，由协调员统一核对标签):
+%     - 第 1 节 "The Strichartz estimate (331)" → \eqref{eq:c8-331}
+%     - 第 1 节 "recalling (346)" → \eqref{eq:c8-346}
+%     - 第 2 节 "apply theorem 0.42" → \thmref{thm:c8-0.42}
+%   原书未解析引用(照排保留 "??"/"[?]"):
+%     - 源 495 行 "theorem \ref{eq:10.16}" → 正文写 "定理 ??"，原书与 pdf_text 均显示 ??
+%     - 源 564 行 "see [?]"、源 584 行 "see [?]，[?]，[?] and [?]" 文献引用缺失，照排
+%     - 源 646 行 "special case of theorem ??"、源 716 行 "particular cases of theorem ??"
+%     - 源 612 行 "presented in the next section": 所指第 9 章第 4 节在原书不存在(第 9 章止于第 3 节)
+%   FOOTNOTE: 定理 2.1 脚注 1 按 pdf_text.txt 第 11469-11470 行补全并翻译
+%   OCR/原书笔误修正(均对照 pdf_text.txt，按数学含义处理):
+%     - 源 382/386 行 (386)(387): 积分变量 s 与 x 混用，统一为 x;F 的第二自变量 (τ+x|ξ|)/2 改为
+%       (τ-x|ξ|)/2(原书两源一致印错，与推导 J_F^- = ∫F(λ，τ-λ)dλ、λ=(τ+x|ξ|)/2 不符)
+%     - 源 402 行 δ 恒等式第三行 2λξcosθ → 2λ|ξ|cosθ;末行 2a|ξ| 补 λ → 2a|ξ|λ(与 (388) 一致)
+%     - 源 428 行 J_F^- 第一行 [1-(…)] 补平方 → [1-(…)²]
+%     - 源 478 行 "g_k" → "g_λ"，"H^α" → "H^a"(与 b/2=γ-a 一致)
+%     - 源 490 行 "By symmetry" 后标注 LH → HL(原书笔误，数学上应为高-低项)
+%     - 源 589 行 "\Box = \Box v = 0" → "\Box u = \Box v = 0"
+%     - 源 625 行 2Q_0(u，v)=□(uv)-□u v-u□u 末项 → u□v(数学上必须，与后续 □u=□v=0 用法一致)
+%     - 源 655 行 "|||f|||" → ‖f‖
+%     - 源 660 行 "with initial." 原书句子残缺，按"带初值"译出
+%     - 源 713 行 两式第二因子 "u[0]" → "v[0]"(原书笔误)
+%     - "Cauchy-Schwartz" → "Cauchy-Schwarz"(原书拼写)
+% 编号说明:
+%   - 公式 (384)-(400) 共 17 个，用 \begin{equation} 自动编号(全书连续,part08 应止于 (383));
+%     其余行间公式用 \[ \] 不编号(与原书一致)
+%   - 定理类 1.1/1.2/2.1/3.1-3.7 共享计数器自动对齐;Lemma 3.7 在 OCR 源中显示为
+%     \section{LEMMA 3.7...},实为引理,用 lemma 环境
+%   - 第 9 章无章引言,直接从第 1 节开始;源第 717 行后为附录 A(partapx),未越界
+% ====
+
+\chapter{双线性估计}
+
+\section{若干 Strichartz 估计的双线性证明}
+
+考虑 $\mathbb{R}^{1+3}$ 中的齐次波动方程 $\Box u = 0$. 取 $q = r = 4$, $\gamma = 1/2$, Strichartz 估计 \eqref{eq:c8-331} 具有如下形式:
+\[
+\|u\|_{L^4(\mathbb{R}^{1+3})} \lesssim \|f\|_{\dot H^{1/2}} + \|g\|_{\dot H^{-1/2}}
+\]
+将 $u = u^{+} + u^{-}$ 分解, 只需证明
+\begin{equation}
+\|u^{+}\|_{L^4(\mathbb{R}^{1+3})} \lesssim \|f^{+}\|_{\dot H^{1/2}}\label{eq:c9-384}
+\end{equation}
+其中
+\[
+u^{+}(t, x) = \int e^{ix\cdot\xi + t|\xi|}\hat f(\xi)\, d\xi
+\]
+显然，
+\[
+\|u^{+}\|^2_{L^4(\mathbb{R}^{1+3})} = \|u^{+}\cdot u^{+}\|_{L^2} = \|\widetilde{u^{+}} * \widetilde{u^{+}}\|_{L^2}
+\]
+现在， 回忆 \eqref{eq:c8-346}， 并略去指标 +，
+\[
+\begin{aligned}
+\tilde{u}*\tilde{u}(\tau, \xi) &= \int\int\delta(\tau - \lambda - |\xi-\eta|)\hat f(\xi-\eta)\delta(\lambda - |\eta|)\hat f(\eta)\, d\lambda\, d\eta\\
+&= \int\delta(\tau - |\eta| - |\xi-\eta|)\hat f(\eta)\hat f(\xi-\eta)\, d\eta
+\end{aligned}
+\]
+显然， \eqref{eq:c9-384} 由下面的事实推出:
+
+\begin{theorem}\label{thm:c9-1.1}
+\newterm{bilinear-operator}{双线性算子}{bilinear operator}
+\[
+B(F, G) = \int\delta(\tau - |\eta| - |\xi-\eta|)\frac{F(\xi-\eta)}{|\xi-\eta|^{1/2}}\frac{G(\eta)}{|\eta|^{1/2}}\, d\eta.
+\]
+满足估计
+\begin{equation}
+\|B(F, G)\|_{L^2(\mathbb{R}^{1+3})} \lesssim \|F\|_{L^2(\mathbb{R}^3)}\|G\|_{L^2(\mathbb{R}^{1+3})}\label{eq:c9-385}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+由 Cauchy-Schwarz 不等式，
+\[
+\begin{aligned}
+|B(F, G)(\tau, \xi)|^2 &\lesssim J(\tau, \xi)\int\delta(\tau - |\eta| - |\xi-\eta|)|F(\xi-\eta)|^2|G(\eta)|^2\, d\eta\\
+J(\tau, \xi) &= \int\delta(\tau - |\eta| - |\xi-\eta|)\frac{1}{|\xi-\eta|}\frac{1}{|\eta|}\, d\eta
+\end{aligned}
+\]
+只需证明 $J$ 一致有界. 事实上， 若确实如此， 则
+\[
+\begin{aligned}
+\|B(F, G)\|_{L^2(\mathbb{R}^{1+3})} &\lesssim \sup_{\tau, \xi}J(\tau, \xi)\int\int\delta(\tau - |\eta| - |\xi-\eta|)|F(\xi-\eta)|^2|G(\eta)|^2\, d\eta\, d\tau\, d\xi\\
+&\lesssim \sup_{\tau, \xi}J(\tau, \xi)\|F\|_{L^2}^2\|G\|_{L^2}^2
+\end{aligned}
+\]
+因此， \newterm{bilinear-estimate}{双线性估计}{bilinear estimate}是 $J$ 的一致有界性的直接推论. 而这由下面这个更一般的引理推出.
+\end{proof}
+
+\begin{lemma}\label{lem:c9-1.2}
+设 $F$ 是两变量的任意函数， $J_F$ 为积分
+\[
+J_F^{\mp}(\tau, \xi) = \int_{\mathbb{R}^n}\delta(\tau - |\eta| \mp |\xi-\eta|)F(|\eta|, |\xi-\eta|)
+\]
+则，
+\begin{equation}
+J_F^{-}(\tau, \xi) = (\tau^2 - |\xi|^2)^{\frac{n-3}{2}}\int_{-1}^{1}F\big(\frac{\tau + x|\xi|}{2}, \frac{\tau - x|\xi|}{2}\big)(\tau^2 - x^2|\xi|^2)(1 - |x|^2)^{\frac{n-3}{2}}\, dx, \label{eq:c9-386}
+\end{equation}
+\begin{equation}
+J_F^{+}(\tau, \xi) = (\tau^2 - |\xi|^2)^{\frac{n-3}{2}}\int_{1}^{\infty}F\big(\frac{\tau + x|\xi|}{2}, \frac{\tau - x|\xi|}{2}\big)(\tau^2 - x^2|\xi|^2)(1 - |x|^2)^{\frac{n-3}{2}}\, dx\label{eq:c9-387}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+注意到， 在 $\mp = -$ 的情形， 测度 $\delta(\tau - |\eta| - |\xi-\eta|)$ 支在焦点为 $0$ 与 $\xi$ 的\newterm{ellipsoid-of-revolution}{旋转椭球面}{ellipsoid of revolution} $\mathcal{E}(\tau, \xi) = \{\eta\in\mathbb{R}^n: |\eta| + |\xi-\eta| = \tau\}$ 上， 此时 $|\xi| \leq \tau$. 在 $\mp = +$ 的情形， 测度 $\delta(\tau - |\eta| + |\xi-\eta|)$ 支在焦点为 $0$ 与 $\xi$ 的\newterm{hyperboloid-of-revolution}{旋转双曲面}{hyperboloid of revolution} $\mathcal{H}(\tau, \xi) = \{\eta\in\mathbb{R}^n: |\eta| - |\xi-\eta| = \tau\}$ 上， 这是一个体积无穷的无界超曲面. 此时 $|\xi|^2 \leq \tau^2$. 在分布意义下， 我们有恒等式
+\[
+\begin{aligned}
+\delta(\tau - |\eta| \mp |\xi-\eta|) &= \delta\big(\frac{(\tau - |\eta|)^2 - |\xi-\eta|^2}{2(\tau - |\eta|)}\big)\\
+&= 2(\tau - |\eta|)\delta\big((\tau - |\eta|)^2 - |\xi-\eta|^2\big)\\
+&= 2(\tau - |\eta|)\delta\big(\tau^2 - |\xi|^2 - 2\tau\lambda + 2\lambda|\xi|\cos\theta\big)\\
+&= 2(\tau - |\eta|)\delta\big(\tau^2 - |\xi|^2 - 2\tau\lambda + 2a|\xi|\lambda\big)
+\end{aligned}
+\]
+其中 $a$ 是 $\eta$ 与 $\xi$ 之间夹角的余弦. 于是， 对固定的 $\tau$ 与 $\xi$， 在测度的支集上必须有
+\begin{equation}
+a = -\frac{\tau^2 - |\xi|^2 - 2\tau\lambda}{2|\xi|\lambda}\label{eq:c9-388}
+\end{equation}
+注意到， 在椭球情形， $a$ 可以取区间 $[-1, 1]$ 中的任意值， 从而， 由于 $\lambda = \frac{\tau^2 - |\xi|^2}{2(\tau - a|\xi|)}$， 我们有
+\[
+\frac{\tau - |\xi|}{2} \leq \lambda \leq \frac{\tau + |\xi|}{2}.
+\]
+另一方面， 在 $|\xi|^2 > \tau^2$ 的双曲情形， 还必须有如下限制:
+\[
+\frac{\tau}{|\xi|} \leq a.
+\]
+从而 $\lambda = \frac{-\tau^2 + |\xi|^2}{2(-\tau + a|\xi|)} \geq \frac{\tau + |\xi|}{2}$.
+于是， 由于 $d\eta = \lambda^{n-1}d\lambda\, dS_\omega = (1 - a^2)^{\frac{n-3}{2}}\lambda^{n-1}d\lambda\, dS_{\omega'}$，
+\[
+\begin{aligned}
+J_F^{-} &= \frac{1}{|\xi|}\int_{\frac{\tau-|\xi|}{2}}^{\frac{\tau+|\xi|}{2}}F(\lambda, \tau-\lambda)(\tau-\lambda)\lambda^{n-2}\Big[1 - \Big(\frac{\tau^2 - |\xi|^2 - 2\tau\lambda}{2|\xi|\lambda}\Big)^2\Big]^{\frac{n-3}{2}}d\lambda\\
+&= \frac{(\tau^2 - |\xi|^2)^{\frac{n-3}{2}}}{|\xi|^{n-2}}\int_{\frac{\tau-|\xi|}{2}}^{\frac{\tau+|\xi|}{2}}F(\lambda, \tau-\lambda)(\tau-\lambda)\lambda\Big[\Big(\frac{\tau+|\xi|}{2} - \lambda\Big)\Big(\lambda - \frac{\tau-|\xi|}{2}\Big)\Big]^{\frac{n-3}{2}}d\lambda
+\end{aligned}
+\]
+最后， 我们作变量替换 $x = \frac{2\lambda - \tau}{|\xi|}$， 以导出所期望的公式 \eqref{eq:c9-386}. \eqref{eq:c9-387} 的证明与此相同.
+\end{proof}
+
+\section{改进的双线性 Strichartz 估计}
+
+考虑两个齐次波动方程 $\Box u = \Box v = 0$ 的解. 为简单起见， 并且不失一般性， 我们假设 $u$， $v$ 在 $t = 0$ 时满足\newterm{reduced-initial-data}{约化初值}{reduced initial data}:
+\[
+u(0, x) = f(x), \quad v(0, x) = g(x), \quad \partial_t u(0, x) = \partial_t v(0, x) = 0.
+\]
+我们考虑如下形式的估计
+\[
+\|D^{-b}(uv)\|_{L_t^{q/2}L_x^{r/2}} \lesssim \|f\|_{\dot H^a}\|g\|_{\dot H^a}
+\]
+其中 $(q, r)$ 是一个\newterm{admissible-pair}{容许对}{acceptable pair}. 由量纲分析并回忆 \eqref{eq:c8-331} 中的指数 $\gamma = n\big((\frac{1}{2} - \frac{1}{r})\big) - \frac{1}{q}$， 我们必须有
+\begin{equation}
+2a = -b + 2\bigl(n\big(\frac{1}{2} - \frac{1}{r}\big) - \frac{1}{q}\bigr) = -b + 2\gamma\label{eq:c9-389}
+\end{equation}
+我们用三分公式分解乘积 $u\cdot v$:
+\[
+\begin{aligned}
+u\cdot v &= \sum_{\mu<\lambda}u_\mu v_\lambda + \sum_{\mu<\lambda}v_\mu u_\lambda + \sum_{\mu\leq\lambda}P_\mu(u_\lambda v_\lambda)\\
+&= (u\cdot v)_{LH} + (u\cdot v)_{HL} + (u\cdot v)_{HH}
+\end{aligned}
+\]
+这里 $\mu, \lambda\in 2^{\mathbb{Z}}$， $u_\lambda = P_\lambda u$， 而 $P_\lambda$ 是通常的 \newterm{littlewood-paley-projection}{Littlewood-Paley 投影}{Littlewood-Paley projection}. 现在，
+\[
+\|D^{-b}(uv)_{LH}\|_{L_t^{q/2}L_x^{r/2}} \leq \sum_{\mu\leq\lambda}\lambda^{-b}\|u_\mu v_\lambda\|_{L_t^{q/2}L_x^{r/2}} \leq \sum_{\mu\leq\lambda}\lambda^{-b}\|u_\mu\|_{L_t^q L_x^r}\|v_\lambda\|_{L_t^q L_x^r}
+\]
+根据前一节的 Strichartz 估计
+\[
+\|u_\mu\|_{L_t^q L_x^r} \lesssim \mu^{(\gamma-a)}\|f_\mu\|_{\dot H^a} = \mu^{b/2}\|f_\mu\|_{\dot H^a}, \qquad
+\|v_\lambda\|_{L_t^q L_x^r} \lesssim \lambda^{(\gamma-a)}\|g_\lambda\|_{\dot H^a} = \lambda^{b/2}\|g_\lambda\|_{\dot H^a}
+\]
+并且， 对 $b > 0$，
+\[
+\|D^{-b}(uv)_{LH}\|_{L_t^{q/2}L_x^{r/2}} \lesssim \sum_{\mu\leq\lambda}\big(\frac{\mu}{\lambda}\big)^b\|f_\mu\|_{\dot H^a}\|g_\lambda\|_{\dot H^a} \lesssim \|f\|_{\dot H^a}\|g\|_{\dot H^a}
+\]
+由对称性，
+\[
+\|D^{-b}(uv)_{HL}\|_{L_t^{q/2}L_x^{r/2}} \lesssim \|f\|_{\dot H^a}\|g\|_{\dot H^a}
+\]
+因此， 只剩下估计高-高项 $\|(u\cdot v)_{HH}\|_{L_t^{q/2}L_x^{r/2}}$. 这需要基于定理 ?? 的更为精细的论证. 我们写出
+\[
+\|D^{-b}(u\cdot v)_{HH}\|_{L_t^{q/2}L_x^{r/2}} \lesssim \sum_{\mu\leq\lambda}\mu^{-b}\|P_\mu(u_\lambda v_\lambda)\|_{L_t^{q/2}L_x^{r/2}}
+\]
+如果我们使用标准的 Strichartz 估计， 即
+\begin{equation}
+\|P_\mu(u_\lambda v_\lambda)\|_{L_t^{q/2}L_x^{r/2}} \lesssim \|u_\lambda\|_{L_t^q L_x^r}\|v_\lambda\|_{L_t^q L_x^r} = \lambda^{2(\gamma-a)}\|f\|_{\dot H^a}\|g\|_{\dot H^a} = \lambda^b\|f\|_{\dot H^a}\|g\|_{\dot H^a}\label{eq:c9-390}
+\end{equation}
+则会导出
+\[
+\|D^{-b}(u\cdot v)_{HH}\|_{L_t^{q/2}L_x^{r/2}} \lesssim \sum_{\mu\leq\lambda}\lambda^b\mu^{-b}\|f\|_{\dot H^a}\|g\|_{\dot H^a}
+\]
+这是发散的. 我们需要用更强的估计取代 \eqref{eq:c9-390}， 该估计要考虑 $P_\mu$ 位于 $u_\lambda v_\lambda$ 之前这一事实. 为此， 我们首先需要利用一些正交性性质. 我们在 Fourier 空间中把数据 $f_\lambda$， $g_\lambda$ 分解为支在大小为 $\mu$ 的立方体上的小块， $f_\lambda = \sum_Q f_Q$， $g_\lambda = \sum_Q g_Q$， 并用 $u_Q$， $v_Q$ 记相应的解. 显然， 该分解与波算子 $\Box$ 可交换. 于是， $u_\lambda \sim \sum_Q u_Q$， $v_\lambda \sim \sum_Q v_Q$， 并且
+\[
+P_\mu(u_\lambda\cdot v_\lambda) \sim \sum_{Q_1, Q_2}P_\mu\big(u_{Q_1}v_{Q_2}\big)
+\]
+注意到， 只有当 $Q_1 + Q_2$ 与 $P_\mu$ 支集的、大小为 $\mu$ 的频率区域相交时， $P_\mu(u_{Q_1}u_{Q_2}) \neq 0$. 对每个大小为 $\mu$ 的立方体 $Q_1$， 只有有限多个(其个数只依赖于 $n$)立方体 $Q_2$ 使得上述情形发生. 从道理上说， 必要时通过放大立方体， 我们可以假设 $Q_2 = -Q_1$， 于是
+\[
+P_\mu(u_\lambda\cdot v_\lambda) \sim \sum_Q u_Q v_{-Q}.
+\]
+因此，
+\[
+\|P_\mu(u_\lambda v_\lambda)\|_{L_t^{q/2}L_x^{r/2}} \lesssim \sum_Q\|u_Q v_{-Q}\|_{L_t^q L_x^r} \lesssim \sum_Q\|u_Q\|_{L_t^q L_x^r}\|v_{-Q}\|_{L_t^q L_x^r}.
+\]
+我们现在可以应用\thmref{thm:c8-0.42}. 于是，
+\[
+\|u_Q\|_{L_t^q L_x^r} \lesssim \big(\frac{\mu}{\lambda}\big)^{\frac{1}{2}-\frac{1}{r}}\|f_Q\|_{\dot H^\gamma}
+\]
+对 $v_{-Q}$ 也类似. 因此，
+\[
+\begin{aligned}
+\|P_\mu(u_\lambda v_\lambda)\|_{L_t^{q/2}L_x^{r/2}} &\lesssim \big(\frac{\mu}{\lambda}\big)^{1-\frac{2}{r}}\sum_Q\|f_Q\|_{\dot H^\gamma}\|g_Q\|_{\dot H^\gamma}\\
+&\lesssim \big(\frac{\mu}{\lambda}\big)^{1-\frac{2}{r}}\|f_\lambda\|_{\dot H^\gamma}\|g_\lambda\|_{\dot H^\gamma}\\
+&\lesssim \big(\frac{\mu}{\lambda}\big)^{1-\frac{2}{r}}\lambda^{2\gamma-2a}\|f_\lambda\|_{\dot H^a}\|g_\lambda\|_{\dot H^a}\\
+&\lesssim \big(\frac{\mu}{\lambda}\big)^{1-\frac{2}{r}}\lambda^b\|f_\lambda\|_{\dot H^a}\|g_\lambda\|_{\dot H^a}
+\end{aligned}
+\]
+并且， 从而，
+\[
+\begin{aligned}
+\|D^{-b}(u\cdot v)_{HH}\|_{L_t^{q/2}L_x^{r/2}} &\lesssim \sum_{\mu<\lambda}\big(\frac{\mu}{\lambda}\big)^{1-\frac{2}{r}-b}\|f_\lambda\|_{\dot H^a}\|g_\lambda\|_{\dot H^a}\\
+&\lesssim \|f\|_{\dot H^a}\|g\|_{\dot H^a}
+\end{aligned}
+\]
+只要 $b < 1 - \frac{2}{r}$. 我们刚刚证明了如下的双线性估计， 参见 [?].
+
+\begin{theorem}\label{thm:c9-2.1}
+下面的估计\footnote{此处 $\|u[0]\|_{\dot H^a} = \|u(0)\|_{\dot H^a} + \|\partial_t u(0)\|_{\dot H^a}$.}对 $\Box u = \Box v = 0$ 的解、任意容许对 $(q, r)$ 以及任意 $0 \leq b < 1 - \frac{2}{r}$ 成立:
+\begin{equation}
+\|D^{-b}(u\cdot v)\|_{L_t^{q/2}L_x^{r/2}} \lesssim \|u[0]\|_{\dot H^a}\|v[0]\|_{\dot H^a}\label{eq:c9-391}
+\end{equation}
+只要如下的\newterm{dimensional-condition}{量纲条件}{dimensional condition}成立:
+\begin{equation}
+a = -\frac{b}{2} + \gamma, \qquad \gamma = n\big(\frac{1}{2} - \frac{1}{r}\big) - \frac{1}{q}\label{eq:c9-392}
+\end{equation}
+\end{theorem}
+
+\section{零形式的双线性估计}
+
+在本小节中， 我们讨论零二次型的最简单的双线性估计， 参见 [?]， [?]， [?] 与 [?].
+
+\begin{definition}\label{def:c9-3.1}
+设 $u$， $v$ 是 $\mathbb{R}^{n+1}$ 上满足 $\Box u = \Box v = 0$ 的两个光滑解. \newterm{null-quadratic-form}{标准零二次型}{null quadratic form}为
+$Q_0(u, v) = -\partial_t u\, \partial_t v + \sum_{i=1}^{n}\partial_i u\, \partial_i v$，
+以及
+$Q_{ij}(u, v) = \partial_i u\, \partial_j v - \partial_i v\, \partial_j u$，
+和
+$Q_{0i}(u, v) = \partial_i u\, \partial_t v - \partial_i v\, \partial_t u$，
+其中 $i, j = 1, \ldots, n$.
+\end{definition}
+
+\begin{theorem}\label{thm:c9-3.2}
+对任意\newterm{null-form}{零形式}{null form} $Q$ 以及 $\mathbb{R}^{n+1}$ 上满足 $\Box u = \Box v = 0$ 的任意解， $n \geq 2$， 我们有
+\begin{equation}
+\|Q(u, v)\|_{L^2(\mathbb{R}^{n+1})} \lesssim \|u[0]\|_{\dot H^1(\mathbb{R}^n)}\|v[0]\|_{H^{\frac{n+1}{2}}(\mathbb{R}^n)}\label{eq:c9-393}
+\end{equation}
+\end{theorem}
+
+\begin{remark}\label{rem:c9-3.3}
+不失一般性， 只需考虑约化初值问题
+\begin{equation}
+u(0, x) = f(x), \quad v(0, x) = g(x), \quad \partial_t u(0, x) = \partial_t v(0, x) = 0\label{eq:c9-394}
+\end{equation}
+下面我们说明如何从下一节给出的更一般的双线性估计形式推导出 \thmref{thm:c9-3.2} 中的估计.
+\end{remark}
+
+\begin{definition}\label{def:c9-3.4}
+设 $D^{\alpha}$， $D_+^{\alpha}$ 与 $D_-^{\alpha}$ 是 $\mathbb{R}^{n+1}$ 中分别由具有如下\newterm{symbol}{象征}{symbol}的乘子所定义的算子:
+\[
+|\xi|^{\alpha}, \qquad (|\tau| + |\xi|)^{\alpha}, \qquad \big||\tau| - |\xi|\big|^{\alpha}.
+\]
+\end{definition}
+
+注意到， 对任意光滑函数 $u$， $v$， 我们可以写出
+\[
+2Q_0(u, v) = \Box(uv) - \Box u\, v - u\, \Box v
+\]
+于是， 若 $\Box u = \Box v = 0$， 利用 Plancherel 恒等式，
+\[
+\begin{aligned}
+\|Q_0(u, v)\|_{L^2(\mathbb{R}^{n+1})} &\leq \frac{1}{2}\|\Box(uv)\|_{L^2(\mathbb{R}^{n+1})} = \frac{1}{2}(2\pi)^{-n}\|(\tau^2 - |\xi|^2)\widetilde{uv}\|_{L^2(\mathbb{R}^{n+1})}\\
+&\lesssim \|D_+ D_-(uv)\|_{L^2(\mathbb{R}^{n+1})}
+\end{aligned}
+\]
+因此，
+\begin{equation}
+\|Q_0(u, v)\|_{L^2(\mathbb{R}^{n+1})} \leq \|D_+ D_-(uv)\|_{L^2(\mathbb{R}^{n+1})}\label{eq:c9-395}
+\end{equation}
+于是， 在零形式 $Q_0$ 的情形， \thmref{thm:c9-3.2} 归结为
+\begin{equation}
+\|D_+ D_-(uv)\|_{L^2(\mathbb{R}^{n+1})} \lesssim \|u[0]\|_{\dot H^1(\mathbb{R}^n)}\|v[0]\|_{H^{\frac{n+1}{2}}(\mathbb{R}^n)}\label{eq:c9-396}
+\end{equation}
+这是定理 ?? 的一个特殊情形.
+
+下面我们证明， 对其他零形式 $Q_{ij}$， $Q_{0i}$， 类似的估计也成立.
+
+\begin{remark}\label{rem:c9-3.5}
+给定 $\Box u = 0$ 的一个解 $u$， 其初值为 $u(0, x) = f(x)$， $\partial_t u(0, x) = 0$， 我们用 $u'$ 记同一方程的、具有数据 $u'(0, x) = f'(x)$， $\partial_t u'(0, x) = 0$ 的解， 其中 $f' = \mathcal{F}^{-1}(|\hat f|)$. 当然， 注意到 $\|f'\|_{\dot H^a} = \|f\|_{\dot H^a}$， 因此， 从我们正在考虑的 $L^2$ 型估计的角度看， $u$ 与 $u'$ 是无法区分的.
+\end{remark}
+
+\begin{proposition}\label{prop:c9-3.6}
+设 $u$， $v$ 是齐次波动方程的带初值的光滑解. 下面的估计成立:
+\begin{equation}
+\|Q_{ij}(u, v)\|_{L^2(\mathbb{R}^{n+1})} \lesssim \|D^{1/2}D_-^{1/2}\big(D^{1/2}u'\cdot D^{1/2}v'\big)\|_{L^2(\mathbb{R}^{n+1})}\label{eq:c9-397}
+\end{equation}
+\begin{equation}
+\|Q_{0i}(u, v)\|_{L^2(\mathbb{R}^{n+1})} \lesssim \|D_+^{1/2}D_-^{1/2}\big(D^{1/2}u'\cdot D^{1/2}v'\big)\|_{L^2(\mathbb{R}^{n+1})}\label{eq:c9-398}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+我们首先像前面一样分解 $u = u^{+} + u^{-}$， $v = v^{+} + v^{-}$. 在 Fourier 变量中写出
+\[
+\widetilde{Q_{ij}(u^{+}, v^{\pm})}(\tau, \xi) = \int q_{ij}(\eta, \xi-\eta)\delta(\tau - |\eta| \pm |\xi-\eta|)\hat f(\eta)\hat g(\xi-\eta)\, d\eta
+\]
+其中 $q_{ij}(\eta, \xi-\eta) = \eta_i(\xi-\eta)_j - \eta_j(\xi-\eta)_i = (\xi\wedge\eta)_{ij}$. 现在我们依赖下面这个简单的引理.
+
+\begin{lemma}\label{lem:c9-3.7}
+下面的不等式成立:
+\begin{equation}
+|\xi \wedge \eta| \lesssim |\xi|^{1/2}|\eta|^{1/2}|\xi+\eta|^{1/2}(|\xi| + |\eta| - |\xi+\eta|)^{1/2}\label{eq:c9-399}
+\end{equation}
+\begin{equation}
+|\xi \wedge \eta| \lesssim |\xi|^{1/2}|\eta|^{1/2}|\xi+\eta|^{1/2}\big(|\xi+\eta| - \big||\xi| - |\eta|\big|\big)^{1/2}\label{eq:c9-400}
+\end{equation}
+\end{lemma}
+
+我们确实有
+\[
+\begin{aligned}
+4|\xi \wedge \eta|^2 &= 4(|\xi||\eta| - \xi\cdot\eta)(|\xi||\eta| + \xi\cdot\eta)\\
+&= (|\xi| + |\eta| - |\xi+\eta|)(|\xi| + |\eta| + |\xi+\eta|)\big(|\xi+\eta| - \big||\xi| - |\eta|\big|\big)\big(|\xi+\eta| + \big||\xi| - |\eta|\big|\big)
+\end{aligned}
+\]
+由此引理立即得证.
+
+因此， 在两种情形下， $|\widetilde{Q_{ij}(u^{+}, v^{\pm})}(\tau, \xi)|$ 都可以被下面的表达式界定:
+\[
+\begin{aligned}
+&\int |q_{ij}(\eta, \xi-\eta)|\, \delta(\tau - |\eta| \pm |\xi-\eta|)\, |\hat f(\eta)|\, |\hat g(\xi-\eta)|\, d\eta\\
+&\lesssim \big||\tau| - |\xi|\big|^{1/2}|\xi|^{1/2}\int\delta(\tau - |\eta| \pm |\xi-\eta|)\, |\eta|^{1/2}|\xi-\eta|^{1/2}|\hat f(\eta)|\, |\hat g(\xi-\eta)|\, d\eta\\
+&= D^{1/2}D_-^{1/2}(D^{1/2}u'\cdot D^{1/2}v')
+\end{aligned}
+\]
+如所愿.
+\end{proof}
+
+根据\propref{prop:c9-3.6}， 对于 $Q = Q_{ij}$ 与 $Q = Q_{0i}$， \thmref{thm:c9-3.2} 分别归结为如下命题:
+\[
+\begin{aligned}
+\|D^{1/2}D_-^{1/2}(u\cdot v)\|_{L^2(\mathbb{R}^{n+1})} &\lesssim \|u[0]\|_{\dot H^{1/2}}\cdot\|v[0]\|_{\dot H^{n/2}}\\
+\|D_+^{1/2}D_-^{1/2}(u\cdot v)\|_{L^2(\mathbb{R}^{n+1})} &\lesssim \|u[0]\|_{\dot H^{1/2}}\cdot\|v[0]\|_{\dot H^{n/2}}
+\end{aligned}
+\]
+它们是定理 ?? 的特殊情形.

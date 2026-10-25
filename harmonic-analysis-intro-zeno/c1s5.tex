@@ -1,0 +1,163 @@
+% ============ 第1章 §1.5 Rademacher 序列 (原书 pp.19-24) ============
+\section{Rademacher 序列}\label{sec:1.5}
+\index{0symbolrj@$r_{j}$}
+
+\index{K@Khintchine 不等式}
+
+\index{R@Rademacher 序列}
+
+
+
+
+
+
+
+
+这里想做的事是 $\ell^{2}$-范数的变形. $a = (a_{1}, a_{2}, \ldots, a_{N})$ 的 $\ell^{2}$-范数由
+\[
+\| a \|_{\ell^{2}} = \sqrt{\sum_{j=1}^{N} |a_{j}|^{2}}
+\]
+给出, 但因为有平方根, 在某种意义上是难处理的. 若使用 $\ell^{2}$ 内积, 平方根在表面上就消失了. 实际上, 以 $e_{j} = \{\delta_{j,k}\}_{k=1}^{N}$ 为基本向量,
+\[
+\| a \|_{\ell^{2}} = \left\| \sum_{j=1}^{N} a_{j}\mathbf{e}_{j} \right\| = \| (a_{1}, a_{2}, \ldots, a_{N}) \|,
+\]
+就是这个缘故. 这个 $\sum_{j=1}^{N} a_{j}e_{j}$ 的表示关于 $a$ 是线性的, 可以说是便于处理的形式. 这个想法不能再发展一些吗?
+
+一般地, 关于数列的范数和算子范数, 从经验上可以说出下面的事实. 首先, 范数和算子范数有时能求出精确值, 但即使能求出, 其方法也多为艰深的. 其次, 即使范数的值不能精确求出, 也有时能知道一定程度的信息. 实际上, 我们已经看到, 用 Marcinkiewicz 插值定理等, 能求出算子范数的上界. 这里, 基于这个经验法则, 来探索使
+\[
+C^{-1}\| a \|_{\ell^{2}} \leq ??? \leq C\| a \|_{\ell^{2}}
+\]
+成立的 $???$ 是什么.
+
+在概率论中出现的作为基本工具的 Rademacher 序列, 在调和分析中也非常强大. 这里, 我们来考察 Rademacher 序列的性质, 并将其应用于函数空间的性质, 给出前面问题的解答.
+
+\begin{definition}[Rademacher 序列]\label{def:1.3}
+函数列 $r_{j}$, $j = 1, 2, \ldots$ 由
+\[
+r_{j}(t) \equiv \sum_{k=1}^{2^{j}} (-1)^{k-1}\chi_{[(k-1)2^{-j}, k2^{-j})}(t) \quad (t \in \R)
+\]
+定义.
+\end{definition}
+
+\begin{example}\label{exa:1.11}
+设 $t \in \R$.
+
+(1) $r_{1}(t) = \chi_{[0,1/2)}(t) - \chi_{[1/2,1)}(t)$.
+
+(2) $r_{2}(t) = \chi_{[0,1/4)}(t) - \chi_{[1/4,1/2)}(t) + \chi_{[1/2,3/4)}(t) - \chi_{[3/4,1)}(t)$.
+\end{example}
+
+积分在 $[0, 1)$ 上考虑, 注意下面的性质.
+
+\begin{proposition}\label{prop:1.1}
+设 $N \in \N$. 对函数列 $f_{j}: \{-1, 1\} \to \R$, $j = 1, 2, \ldots, N$,
+\[
+\int_{0}^{1} \prod_{j=1}^{N} f_{j}(r_{j}(t)) \dd t = \prod_{j=1}^{N} \int_{0}^{1} f_{j}(r_{j}(t)) \dd t
+\]
+成立.
+\end{proposition}
+
+\begin{proof}
+由积分的可加性,
+\[
+\int_{0}^{1} \prod_{j=1}^{N} f_{j}(r_{j}(t)) \dd t = \sum_{k=1}^{2^{N}} \int_{2^{-N}(k-1)}^{2^{-N}k} \prod_{j=1}^{N} f_{j}(r_{j}(t)) \dd t,
+\]
+但在 $[2^{-N}(k-1), 2^{-N}k)$ 上函数 $\prod_{j=1}^{N} f_{j}(r_{j}(t))$ 是常数, 所以特别地
+\[
+\prod_{j=1}^{N} f_{j}(r_{j}(t)) = \prod_{j=1}^{N} f_{j}(r_{j}(2^{-N}(k-1))).
+\]
+因此,
+\begin{align*}
+\int_{0}^{1} \prod_{j=1}^{N} f_{j}(r_{j}(t)) \dd t & = \sum_{k=1}^{2^{N}} \prod_{j=1}^{N} f_{j}(r_{j}(2^{-N}(k-1)))\int_{2^{-N}(k-1)}^{2^{-N}k} \dd t \\
+& = 2^{-N}\sum_{k=1}^{2^{N}} \prod_{j=1}^{N} f_{j}(r_{j}(2^{-N}(k-1))).
+\end{align*}
+由于
+\[
+\{1, -1\}^{N} = \left\{\{r_{j}(2^{-N}(k-1))\}_{j=1}^{N} : k = 1, 2, \ldots, 2^{N}\right\},
+\]
+用 $m = (m_{1}, m_{2}, \ldots, m_{N})$ 表示, 实际计算得
+\begin{align*}
+\int_{0}^{1} \prod_{j=1}^{N} f_{j}(r_{j}(t)) \dd t & = \sum_{m \in \{-1, 1\}^{N}} 2^{-N}\prod_{j=1}^{N} f_{j}(m_{j}) \\
+& = \prod_{j=1}^{N} \frac{f_{j}(1) + f_{j}(-1)}{2} \\
+& = \prod_{j=1}^{N} \int_{0}^{1} f_{j}(r_{j}(t)) \dd t.
+\end{align*}
+\end{proof}
+
+$\{r_{j}\}_{j=1}^{N}$ 在下面的意义下是正交的. 这也是调和分析学中正负相消的一个例子.
+
+\begin{lemma}\label{lem:1.2}
+对任意复数列 $a = \{a_{j}\}_{j=1}^{N}$,
+\[
+\| a \|_{\ell^{2}} = \left(\int_{0}^{1} \left| \sum_{j=1}^{N} a_{j}r_{j}(t) \right|^{2} \dd t\right)^{\frac{1}{2}}
+\]
+成立.
+\end{lemma}
+
+\begin{proof}
+用对 $j, j' = 1, 2, \ldots, N$ 的 Kronecker 记号 $\delta_{j,j'}$ 来证明. 由于 $\{r_{j}\}_{j=1}^{N}$ 满足
+\[
+\int_{0}^{1} r_{j}(t)r_{j'}(t) \dd t = \delta_{j,j'},
+\]
+\begin{align*}
+\int_{0}^{1} \left| \sum_{j=1}^{N} a_{j}r_{j}(t) \right|^{2} \dd t & = \int_{0}^{1} \sum_{j=1}^{N}\sum_{k=1}^{N} a_{j}r_{j}(t)\overline{a_{k}}r_{k}(t) \dd t \\
+& = \sum_{j=1}^{N}\sum_{k=1}^{N} a_{j}\overline{a_{k}}\int_{0}^{1} r_{j}(t)r_{k}(t) \dd t \\
+& = \sum_{j=1}^{N} |a_{j}|^{2} \\
+& = \| a \|_{\ell^{2}}^{2}
+\end{align*}
+得证.
+\end{proof}
+
+因为 $\cosh t$ 满足 $\cosh t = \frac{e^{t} + e^{-t}}{2}$, 所以正如通过 $e^{t}$, $e^{-t}$ 与 $\cosh t$ 的泰勒展开所能确认的那样,
+\begin{equation}\tag{1.9}\label{eq:1.9}
+|t|^{p} \leq \max(|t|^{[p]}, |t|^{[p+1]}) \leq (2[p+1])! \cosh t \leq (2[p+1])! e^{t^{2}}
+\end{equation}
+成立 (参照练习题~\ref{exer:1.19}). 利用它来证明作为变形 $\ell^{p}$-范数的工具的 Khintchine 不等式.
+
+\begin{theorem}[Khintchine 不等式]\label{thm:1.6}
+对 $N \in \N$, $1 \leq p < \infty$, 存在不依赖于 $N$ 的常数 $c_{p} > 1$, 使得对任意复数列 $a = \{a_{j}\}_{j=1}^{N}$,
+\begin{equation}\tag{1.10}\label{eq:1.10}
+c_{p}^{-1}\| a \|_{\ell^{2}} \leq \left(\int_{0}^{1} \left| \sum_{j=1}^{N} a_{j}r_{j}(t) \right|^{p} \dd t\right)^{\frac{1}{p}} \leq c_{p}\| a \|_{\ell^{2}}
+\end{equation}
+成立.
+\end{theorem}
+
+\begin{proof}
+来证明式~\eqref{eq:1.10} 中右侧的不等式. 归一化为 $\|a\|_{\ell^{2}} = 1$. 由式~\eqref{eq:1.9} 左侧的不等式与引理~\ref{lem:1.1}, 结合 $r_{j}$ 对称地分布在 $\pm 1$ 上这一事实,
+\begin{align*}
+\int_{0}^{1} \left| \sum_{j=1}^{N} a_{j}r_{j}(t) \right|^{p} \dd t & \leq (2[p+1])! \int_{0}^{1} \cosh\left(\sum_{j=1}^{N} a_{j}r_{j}(t)\right) \dd t \\
+& = (2[p+1])! \int_{0}^{1} \exp\left(\sum_{j=1}^{N} a_{j}r_{j}(t)\right) \dd t \\
+& = (2[p+1])! \prod_{j=1}^{N} \int_{0}^{1} \exp(a_{j}r_{j}(t)) \dd t.
+\end{align*}
+这里, 与刚才一样, 由 $r_{j}$ 分布的对称性,
+\begin{align*}
+\int_{0}^{1} \exp(a_{j}r_{j}(t)) \dd t & = \int_{0}^{1} \exp(a_{j}r_{1}(t)) \dd t \\
+& = \int_{0}^{\frac{1}{2}} \exp(a_{j}) \dd t + \int_{\frac{1}{2}}^{1} \exp(-a_{j}) \dd t \\
+& = \cosh(a_{j})
+\end{align*}
+需要注意. 进一步, 由式~\eqref{eq:1.9} 右侧的不等式与 Rademacher 列的对称性,
+\begin{align*}
+\left(\int_{0}^{1} \left| \sum_{j=1}^{N} a_{j}r_{j}(t) \right|^{p} \dd t\right)^{\frac{1}{p}} & \leq \sqrt[p]{(2[p+1])!}\left(\prod_{j=1}^{N} \cosh a_{j}\right)^{\frac{1}{p}} \\
+& \leq \sqrt[p]{(2[p+1])!}\prod_{j=1}^{N} e^{a_{j}^{2}/p} \\
+& = \sqrt[p]{(2[p+1])! e}.
+\end{align*}
+这样, 式~\eqref{eq:1.10} 右侧的证明就完成了.
+
+在证明式~\eqref{eq:1.10} 左侧的不等式时, 由式~\eqref{eq:1.7} 可假定 $p = 1$. 由引理~\ref{lem:1.2} 与式~\eqref{eq:1.6},
+\begin{align*}
+\| a \|_{\ell^{2}} & \leq \left(\int_{0}^{1} \left| \sum_{j=1}^{N} a_{j}r_{j}(t) \right| \dd t\right)^{\frac{1}{3}}\left(\int_{0}^{1} \left| \sum_{j=1}^{N} a_{j}r_{j}(t) \right|^{4} \dd t\right)^{\frac{1}{6}} \\
+& \leq c_{4}^{\frac{2}{3}}\left(\int_{0}^{1} \left| \sum_{j=1}^{N} a_{j}r_{j}(t) \right| \dd t\right)^{\frac{1}{3}}\| a \|_{\ell^{2}}^{\frac{2}{3}}
+\end{align*}
+得. 将其整理, 就得到 $p = 1$ 时 (因此, 也是 $p \geq 1$ 时的) 式~\eqref{eq:1.10} 左侧的不等式.
+\end{proof}
+
+\begin{exercise}\label{exer:1.18}
+求积分 $\int_{0}^{\frac{5}{8}} r_{1}(t)r_{2}(t)r_{3}(t) \dd t$.
+\end{exercise}
+
+\begin{exercise}\label{exer:1.19}
+对实数 $t$, 通过比较两边的泰勒展开, 证明 $2e^{t^{2}} \geq e^{t} + e^{-t}$.
+\end{exercise}
+
+\begin{exercise}\label{exer:1.20}
+对实数列 $\{a_{j}\}_{j=1}^{N}$, 求 $\max_{t \in \R}\left|\sum_{j=1}^{N} a_{j}r_{j}(t)\right|$. 将 Khintchine 不等式的各个不等式作比较, 也是一件趣事吧. 【提示】取 $N = 3$, 分 $a_{1}, a_{2}, a_{3}$ 的符号来考虑.
+\end{exercise}

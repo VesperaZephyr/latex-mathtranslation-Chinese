@@ -1,0 +1,723 @@
+\begingroup
+\raggedbottom
+\setlength{\emergencystretch}{2em}
+\section{代数群}\label{src:B.1}
+\begin{epigraph}
+群如其人, 由其作用而为人所知.
+\epigraphauthor{Guillermo Moreno}
+\end{epigraph}
+我们将速览群概形, 代数群及其作用. 关于代数群的更详细论述, 推荐阅读 \cite{Bor91,Hum75,Spr98,Wat79,Mil17}; 关于一般基底上的群概形, 推荐阅读 \cite{SGA3I,SGA3II,SGA3III,DG70,Con14}.
+
+\subsection{群概形及其作用}\label{src:B.1.1-subsection}
+\begin{definition}\label{src:B.1.1}
+概形 $S$ 上的\newterm{群概形}{group scheme} 是一个概形态射 $\pi:G\to S$, 配备乘法态射 $m:G\times_S G\to G$, 取逆态射 $\iota:G\to G$ 及单位态射 $e:S\to G$ (每个态射都在 $S$ 上), 使得下列图交换:
+\[
+\begin{tikzcd}[column sep=1.2em,row sep=2em]
+G\times_S G\times_S G\arrow[r,"\mathrm{id}\times m"]\arrow[d,"m\times\mathrm{id}"']&G\times_S G\arrow[d,"m"]\\
+G\times_S G\arrow[r,"m"']&G
+\end{tikzcd}
+\qquad
+\begin{tikzcd}[column sep=1.2em,row sep=2em]
+G\arrow[r,"{(\mathrm{id},\iota)}"]\arrow[d,"{(\iota,\mathrm{id})}"']\arrow[dr,"e\circ\pi" description]&G\times_S G\arrow[d,"m"]\\
+G\times_S G\arrow[r,"m"']&G
+\end{tikzcd}
+\]
+\[
+\begin{tikzcd}[column sep=3em,row sep=2em]
+G\arrow[r,"{(e\circ\pi,\mathrm{id})}"]\arrow[d,"{(\mathrm{id},e\circ\pi)}"']\arrow[dr,"\mathrm{id}" description]&G\times_S G\arrow[d,"m"]\\
+G\times_S G\arrow[r,"m"']&G.
+\end{tikzcd}
+\]
+三幅图依次表示结合律, 逆元律与单位元律.
+
+对于 $S$ 上的群概形 $H$ 和 $G$, \textit{群概形态射} 是一个 $S$ 上的概形态射 $\phi:H\to G$, 满足 $m_G\circ(\phi\times\phi)=\phi\circ m_H$. $G$ 的一个\textit{(闭) 子群} 是非空的 (闭) 子概形 $H\subseteq G$, 使得 $H\times H\hookrightarrow G\times G\xrightarrow{m_G}G$ 及 $H\hookrightarrow G\xrightarrow{\iota}G$ 都经过 $H$ 分解. 若对每个 $S$-概形 $T$, 子群 $H(T)\subseteq G(T)$ 都正规, 则称子群 $H\subseteq G$ 为\textit{正规子群}.
+\end{definition}
+\begin{remark}\label{src:B.1.2}
+若 $G$ 和 $S$ 均仿射, 则反转上述箭头就给出了 $\Gamma(G,\mathcal O_G)$ 上的一个 $\Gamma(S,\mathcal O_S)$-Hopf 代数结构.
+\end{remark}
+\begin{exercise}\label{src:B.1.3}
+证明 $S$ 上的群概形也可以等价地定义为 $S$ 上的概形 $G$ 配备一个分解
+\[
+\begin{tikzcd}[column sep=3em]
+\Sch/S\arrow[r]\arrow[dr,"{\operatorname{Mor}_S(-,G)}"']&\mathsf{Gps}\arrow[d]\\
+&\Sets,
+\end{tikzcd}
+\]
+其中 $\mathsf{Gps}\to\Sets$ 是遗忘函子.
+
+(我们要求的并非存在这样的分解; 这个分解本身就是数据的一部分! 事实上, 同一个概形可以具有多个群概形结构, 例如 $\mathbb C$ 上的 $\mathbb Z/4$ 与 $\mathbb Z/2\times\mathbb Z/2$.)
+\end{exercise}
+\begin{example}[重要例子]\label{src:B.1.4}
+设 $S=\Spec R$.
+\begin{enumerate}[(1)]
+\item $R$ 上的\newterm{乘法群概形}{multiplicative group scheme} 是 $\mathbb G_{m,R}=\Spec R[t]_t$, 其余乘法 $m^*:R[t]_t\to R[t]_t\otimes_R R[t']_{t'}$ 由 $t\mapsto tt'$ 给出. 乘积 $\mathbb G_{m,R}^n$ 称为秩为 $n$ 的\newterm{分裂环面}{split torus}.
+\item \newterm{单位根群概形}{group scheme of roots of unity} $\boldsymbol\mu_{n,R}=\Spec R[t]/(t^n-1)$ 的余乘法由 $t\mapsto tt'$ 给出.
+\item $R$ 上的\newterm{加法群概形}{additive group scheme} 是 $\mathbb G_{a,R}=\Spec R[t]$, 其余乘法 $m^*:R[t]\to R[t]\otimes_R R[t']$ 由 $t\mapsto t+t'$ 给出.
+\end{enumerate}
+设 $V$ 是有限秩自由 $R$-模.
+\begin{enumerate}[(1)]\setcounter{enumi}{2}
+\item $V$ 上的\newterm{一般线性群}{general linear group} 是
+\[
+\operatorname{GL}(V)=\Spec\bigl(\operatorname{Sym}^*(\operatorname{End}(V))_{\det}\bigr),
+\]
+其中 $\det$ 表示行列式多项式, 余乘法 $m^*:\operatorname{Sym}^*(\operatorname{End}(V))\to\operatorname{Sym}^*(\operatorname{End}(V))\otimes_R\operatorname{Sym}^*(\operatorname{End}(V))$ 定义如下: 对 $V$ 的一组基 $v_1,\ldots,v_n$, 由 $v_i\mapsto v_j$ 且当 $k\ne i$ 时 $v_k\mapsto0$ 定义的自同态 $x_{ij}:V\to V$ ($i,j=1,\ldots,n$) 给出 $\operatorname{End}(V)$ 的一组基, 并令 $m^*(x_{ij})=x_{i1}\otimes x_{1j}+\cdots+x_{in}\otimes x_{nj}$.
+\item $V$ 上的\newterm{特殊线性群}{special linear group} 是由 $\det=1$ 定义的闭子群 $\operatorname{SL}(V)\subseteq\operatorname{GL}(V)$.
+\item \newterm{射影线性群}{projective linear group} $\operatorname{PGL}(V)$ 是仿射群概形
+\[
+\Proj\bigl(\operatorname{Sym}^*(\operatorname{End}(V))\bigr)_{\det},
+\]
+其余乘法类似于 $\operatorname{GL}(V)$ 的余乘法.
+\end{enumerate}
+记 $\operatorname{GL}_{n,R}=\operatorname{GL}(R^n)$, $\operatorname{SL}_{n,R}=\operatorname{GL}(R^n)$, $\operatorname{PGL}_{n,R}=\operatorname{PGL}(R^n)$. 基环明确时, 常简记为 $\mathbb G_m$, $\operatorname{GL}_n$, $\operatorname{SL}_n$ 和 $\operatorname{PGL}_n$.
+\end{example}
+\begin{exercise}\label{src:B.1.5}
+\begin{enumerate}[(a)]
+\item 给出上述各例的函子描述.
+\item 证明每个抽象群 $G$ 都可以赋予基概形 $S$ 上群概形 $\coprod_{g\in G}S$ 的结构. 给出显式描述与函子描述. 滥用记号, 有时也将这个群概形记为 $G\to S$.
+\item 证明若 $n$ 在 $\Gamma(S,\mathcal O_S)$ 中可逆, 则 $\boldsymbol\mu_{n,S}$ 同构于有限群 $\mathbb Z/n\mathbb Z$ 所诱导的群概形.
+\end{enumerate}
+\end{exercise}
+\begin{remark}[经典群与例外群]\label{src:B.1.6}
+\newterm{经典群}{classical group} 指 $A_n$ 型的仿射代数群 $\operatorname{SL}_{n+1}$, $B_n$ 型的 $\operatorname{SO}_{2n+1}$ (特殊正交群), $C_n$ 型的 $\operatorname{Sp}_{2n}$ (辛群), 以及 $D_n$ 型的 $\operatorname{SO}_{2n}$. 经典群是半单群分类的基本组成部分, 这里的型指其根系的 Dynkin 图. 另一方面, 还有与例外 Dynkin 图 $\mathrm G_2$, $\mathrm F_4$, $\mathrm E_6$, $\mathrm E_7$, $\mathrm E_8$ 对应的五个\newterm{例外群}{exceptional group}.
+\end{remark}
+\begin{example}[可对角化群概形]\label{src:B.1.7}
+设 $R$ 是环, $A$ 是有限生成 Abel 群. 将 $R[A]$ 定义为以 $A$ 的元素为基的自由 $R$-模, 则 $A$ 中的乘法在生成元上诱导乘法, 从而赋予 $R[A]$ 一个 $R$-代数结构. 由 $a\mapsto a\otimes a$ 定义的余乘法 $R[A]\to R[A]\otimes_R R[A]$ 给出 $\Spec R$ 上的群概形 $D_R(A)=\Spec R[A]$. 若 $\Spec R$ 上的群概形 $G$ 对某个 $A$ 满足 $G\cong D_R(A)$, 则称 $G$ \newterm{可对角化}{diagonalizable}.
+
+群概形 $D_R(\mathbb Z^r)=\mathbb G_{m,R}^r$ 是 $r$ 维分裂环面, 而 $D_R(\mathbb Z/n)=\boldsymbol\mu_{n,R}=\Spec R[t]/(t^n-1)$ 是 $n$ 次单位根群; 这对任意环 $R$ 和整数 $n$ 成立, 即使 $n$ 在 $R$ 中不可逆也如此. 有限生成 Abel 群的分类表明每个可对角化群概形均为乘积 $\mathbb G_m^r\times\boldsymbol\mu_{n_1}\times\cdots\times\boldsymbol\mu_{n_k}$.
+
+若群概形 $G\to S$ 在 $S$ 的某个平展覆盖之后变为可对角化的, 则称其为\newterm{乘法型}{multiplicative type}.
+\end{example}
+\begin{exercise}\label{src:B.1.8}
+\begin{enumerate}[(a)]
+\item 将 $D_R(A)$ 描述为函子 $\Sch/R\to\mathsf{Gps}$.
+\item 证明 $R$ 上的群概形同态 $D_R(A)\to D_R(B)$ 等价于群同态 $B\to A$.
+\end{enumerate}
+\end{exercise}
+回顾群概形的下列一般性质.
+\begin{proposition}\label{src:B.1.9}
+设 $G\to S$ 是局部有限型群概形.
+\begin{enumerate}[(1)]
+\item 若 $S=\Spec k$, 则 $\dim G=\dim_eG$, 其中 $e\in G(k)$ 表示单位元.
+\item 函数 $S\to\mathbb Z$, $s\mapsto\dim G_s$ 上半连续.
+\item $G\to S$ 平凡当且仅当对每个 $s\in S$, 纤维 $G_s$ 平凡.
+\item $G\to S$ 非分歧 (或分离, 拟分离) 当且仅当单位截面 $e:S\to G$ 是开浸入 (或闭浸入, 拟紧).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+对于 (1), 可设 $k$ 代数闭. 此时元素 $g\in G(k)$ 定义同构 $g:G\to G$, 从而 $\dim_eG=\dim_gG$. 对于 (2), 对任意局部有限型态射 $\pi:G\to S$, 函数 $G\to\mathbb Z$, $g\mapsto\dim G_{\pi(g)}$ 上半连续 \cite[IV.$13.1.3$]{EGA}. 由于 $G\to S$ 是群概形, 存在单位截面 $S\to G$, 因而复合 $S\to G\to\mathbb Z$, $s\mapsto\dim_{e(s)}G_s=\dim G_s$ 上半连续. 对于 (3), 每个纤维均非分歧, 故 $G\to S$ 非分歧. 因此 $\Omega_{G/S}=0$, 对角线 $G\to G\times_S G$ 是开浸入. 由此单位截面 $S\to G$ 是满的开浸入, 因而是同构. 对于 (4), $G\to S$ 非分歧 (或分离, 拟分离) 当且仅当 $\Delta_{G/S}:G\to G\times_S G$ 是开浸入 (或闭浸入, 拟紧), 而 Cartesian 图
+\[
+\begin{tikzcd}[column sep=3.5em]
+S\arrow[r,"e"]\arrow[d,"e"']&G\arrow[r,"\pi"]\arrow[d,"\Delta_{G/S}"]&S\arrow[d,"e"]\\
+G\arrow[r,"\Delta_{G/S}"']\arrow[ur,phantom,"\square" description]&G\times_S G\arrow[r,"{(g,h)\mapsto g^{-1}h}"']\arrow[ur,phantom,"\square" description]&G
+\end{tikzcd}
+\]
+表明这等价于 $e:S\to G$ 是开浸入 (或闭浸入, 拟紧).
+\end{proof}
+
+\paragraph{作用.}
+\begin{definition}[作用]\label{src:B.1.10}
+设 $G\to S$ 是乘法为 $m$, 单位为 $e$ 的群概形. $G$ 在概形 $p:X\to S$ 上的\textit{作用} 是 $S$ 上的态射 $a:G\times_S X\to X$, 使得下列图交换:
+\[
+\begin{tikzcd}[column sep=2em]
+G\times_S G\times_S X\arrow[r,"\mathrm{id}\times a"]\arrow[d,"m\times\mathrm{id}"']&G\times_S X\arrow[d,"a"]\\
+G\times_S X\arrow[r,"a"']&G
+\end{tikzcd}
+\qquad
+\begin{tikzcd}[column sep=2em]
+X\arrow[r,"{(e\circ p,\mathrm{id})}"]\arrow[dr,"\mathrm{id}"']&G\times_S X\arrow[d,"a"]\\
+&X.
+\end{tikzcd}
+\]
+若 $X$ 和 $Y$ 是带有 $G$-作用的 $S$-概形, 则称 $S$-概形态射 $f:X\to Y$ 为 $G$-\textit{等变的}, 如果 $a_Y\circ(\mathrm{id}\times f)=f\circ a_X$; 若它 $G$-等变且 $Y$ 上的 $G$-作用平凡, 则称其为 $G$-\textit{不变的}.
+\end{definition}
+例如, 群概形 $G\to S$ 通过左乘 $g\cdot g'=gg'$ 或右乘 $g\cdot g'=g'g^{-1}$ 作用于自身.
+\begin{exercise}\label{src:B.1.11}
+证明在 $X\to S$ 上给出 $G\to S$ 的群作用, 等价于给出函子 $\operatorname{Mor}_S(-,G):\Sch/S\to\mathsf{Gps}$ 在函子 $\operatorname{Mor}_S(-,X):\Sch/S\to\Sets$ 上的作用.
+
+(这首先要求说明一个取值于群的函子在一个取值于集合的函子上作用意味着什么.)
+\end{exercise}
+\begin{definition}[稳定子与轨道]\label{src:B.1.12}
+给定群概形 $G\to S$ 在 $X\to S$ 上的作用 $\sigma$, $S$-态射 $f:T\to X$ 的\textit{稳定子} 是 $T$ 上由下列纤维积定义的群概形 $G_f$ (有时也记为 $\operatorname{Stab}^G(f)$ 或 $\operatorname{Stab}(f)$):
+\[
+\begin{tikzcd}[column sep=2em]
+G_f\arrow[rr]\arrow[d]&&T\arrow[d,"f"]\\
+G\times_S T\arrow[r]\arrow[urr,phantom,"\square" description]&G\times_S X\arrow[r,"\sigma"']&X.
+\end{tikzcd}
+\]
+$f$ 的\textit{轨道} 则在集合意义下定义为 $G\times_S T\to G\times_S X\xrightarrow{\sigma}X$ 的像.
+
+\textit{稳定子群概形} $S_X\to X$ 定义为恒等态射 $\mathrm{id}:X\to X$ 的稳定子, 并等同于纤维积
+\[
+\begin{tikzcd}
+S_X\arrow[r]\arrow[d]&X\arrow[d,"\Delta"]\\
+G\times_S X\arrow[r,"{(\sigma,p_2)}"']&X\times_S X.
+\end{tikzcd}
+\]
+当 $S=\Spec k$, 其中 $k$ 为域, 且 $x\in X(k)$ 时, 稳定子 $G_x=\operatorname{Stab}^G(x)$ 是映射 $\sigma_x:G\to X$, $g\mapsto x$ 下 $x$ 的原像, 并等同于稳定子群概形 $S_X\to X$ 的纤维. 另一方面, 轨道 $Gx$ (有时记为 $O(x)$) 是 $\sigma_x$ 的像. 当 $G$ 与 $X$ 均有限型时, 像 $Gx\subseteq X$ 局部闭 (命题~\bookref{B.1.19}(5)), 故 $Gx$ 从 $\sigma_x$ 的概形论像继承一个自然的概形结构; 注意, 当 $G$ 光滑时 (例如 $\operatorname{char}(k)=0$), 轨道 $Gx$ 具有约化概形结构.
+\end{definition}
+
+\paragraph{商.}
+在代数几何中构造子群的商或群作用的商是一件微妙的事. 若 fppf 群概形 $G\to S$ 自由作用于概形 $X\to S$, 则商函子定义为下述函子的 fppf 层化:
+\[
+(X/G)^{\mathrm{pre}}:\Sch/S\to\Sets,\qquad T\mapsto X(T)/G(T).
+\]
+虽然商层 $X/G$ 未必可由概形表出, 但有定理断言 $X/G$ 是代数空间 (定理~\bookref{7.3.1}). 还有定理断言, 若 $G\to S$ 光滑, 则 $X/G$ 等同于 $(X/G)^{\mathrm{pre}}$ 的平展层化 (推论~\bookref{7.3.3}).
+
+不过, 在特殊情形下, 已知商作为概形存在. 下面三个例子在本书中均占有重要地位:
+\begin{itemize}
+\item 若 $G$ 是 $k$ 上的代数群, $H\subseteq G$ 是子群, 则 $G/H$ 是拟射影概形 (命题~\bookref{B.1.19}(7)).
+\item 若有限群 $G$ 自由作用于仿射概形 $X$, 则 $X/G$ 仿射 (命题~\bookref{5.3.3}). 事实上, 若有限群 $G$ 作用于仿射 (或射影, 拟射影) 概形 $X$ (不必自由作用), 则存在几何商 (见定义~\bookref{5.2.2}); 见习题~\bookref{5.2.14}. 此商也记为 $X/G$, 但未必表出 $(X/G)^{\mathrm{pre}}$ 的层化.
+\item 若 $k$ 上的线性约化群 $G$ 作用于仿射概形 $X=\Spec A$, 则存在具有良好几何性质的良商 $X/\!/G=\Spec A^G$ (定义~\bookref{8.1.1} 与命题~\bookref{8.1.3}). 给定 $G$ 在射影概形 $X$ 上的作用, 几何不变量理论研究如何找出具有射影良商 $U/\!/G$ 的开子概形 $U\subseteq X$; 见第~\bookref{8} 章.
+\end{itemize}
+在相当一般的条件下, 几何商 $X/G$ 作为代数空间存在. 例如, $G$ 是仿射代数群且作用映射 $G\times X\to X\times X$ 固有时即如此 (推论~\bookref{5.4.12}).
+
+\paragraph{诱导作用与 Borel 构造.}
+若 $H\subseteq G$ 是 $k$ 上代数群的包含, $X$ 是带有 $H$-作用的概形, 则 $H$ 通过 $h\cdot(g,x)=(gh^{-1},hx)$ 自由作用于 $G\times X$, 定义
+\[
+G\times^H X:=(G\times X)/H
+\]
+为商代数空间, 它通过 $g\cdot(g',x)=(gg',x)$ 继承 $G$ 的作用. 这有时称为 \textit{Borel 构造}. 此时商叠 $[X/H]$ 与 $[G\times^H X/G]$ 同构 (习题~\bookref{4.4.19}).
+
+\paragraph{表示.}
+\begin{definition}[表示]\label{src:B.1.13}
+设 $S=\Spec R$ 是仿射概形, $G\to S$ 是乘法为 $m$, 单位为 $e$ 的群概形. $G$ 的一个\newterm{表示}{representation} (或\newterm{余模}{comodule}) 是一个 $R$-模 $V$ 配备 $R$-模同态 $\sigma:V\to\Gamma(G,\mathcal O_G)\otimes_R V$ (称为\newterm{余作用}{coaction}), 使得下列图交换:
+\[
+\begin{tikzcd}[column sep=3em]
+V\arrow[r,"\sigma"]\arrow[d,"\sigma"']&\Gamma(G,\mathcal O_G)\otimes_R V\arrow[d,"\mathrm{id}\otimes\sigma"]\\
+\Gamma(G,\mathcal O_G)\otimes_R V\arrow[r,"m^*\otimes\mathrm{id}"']&\Gamma(G,\mathcal O_G)\otimes_R\Gamma(G,\mathcal O_G)\otimes_R V
+\end{tikzcd}
+\]
+\[
+\begin{tikzcd}
+V\arrow[r,"\sigma"]\arrow[dr,"\mathrm{id}"']&\Gamma(G,\mathcal O_G)\otimes_R V\arrow[d,"e^*\otimes\mathrm{id}"]\\
+&V.
+\end{tikzcd}
+\]
+表示的态射与子表示按自然方式定义. 若 $V$ 是 $G$-表示, 则其\textit{不变子空间} 定义为 $V^G=\{v\in V\mid\sigma(v)=1\otimes v\}$.
+\end{definition}
+\begin{example}\label{src:B.1.14}
+\begin{enumerate}[(1)]
+\item 给定 $R$-模 $V$, $V$ 上的\textit{平凡表示} 由余作用 $\sigma(v)=1\otimes v$ 定义.
+\item $\Gamma(G,\mathcal O_G)$ 上的\newterm{正则表示}{regular representation} 由余乘法 $m^*:\Gamma(G,\mathcal O_G)\to\Gamma(G,\mathcal O_G)\otimes_R\Gamma(G,\mathcal O_G)$ 定义.
+\item $\operatorname{GL}_{n,R}=\Spec R[x_{ij}]_{\det}$ (或其子群概形) 在 $V=R^n$ 上的\textit{标准表示} 由余作用 $\sigma:V\to\Gamma(\operatorname{GL}_{n,R})\otimes_R V$, $\sigma(e_i)=\sum_{j=1}^n x_{ij}\otimes e_j$ 给出, 其中 $(e_1,\ldots,e_n)$ 是 $V$ 的标准基.
+\end{enumerate}
+\end{example}
+$G$ 的表示 $V$ 在 $\mathbb A(V)=\Spec(\operatorname{Sym}^*V)$ 上诱导 $G$ 的作用, 称为\textit{线性作用}.
+\begin{exercise}\label{src:B.1.15}
+若 $G$ 是域 $k$ 上的群概形, 证明有限维向量空间 $V$ 的一个 $G$-表示等价于群概形同态 $G\to\operatorname{GL}(V)$.
+\end{exercise}
+\newpage
+\begin{proposition}\label{src:B.1.16}
+设 $G=D_k(A)$ 是域 $k$ 上的可对角化群概形 (见例~\bookref{B.1.7}). $G$ 的每个表示都是一维表示的直和.
+\end{proposition}
+\begin{proof}
+设 $V$ 是 $G$ 的表示, 余作用为 $\sigma:V\to k[A]\otimes_k V$. 每个 $a\in A$ 定义 $G$ 的一维表示 $W_a=k$, 其余作用 $W_a\to k[A]\otimes_k W_a$ 由 $1\mapsto a\otimes1$ 给出. 对于 $a\in A$, 子空间
+\[
+V_a:=\{v\in V\mid\sigma(v)=a\otimes v\}
+\]
+作为 $G$-表示同构于 $W_a\otimes V_a$, 其中将 $V_a$ 视为平凡表示; 若 $V_a$ 有限维, 则 $V_a\cong W_a^{\dim V_a}$. 注意, 当 $a=0$ 时, $W_a$ 是平凡的一维表示且 $V^G=V_0$. 留给读者验证, 作为 $G$-表示有 $V\cong\bigoplus_{a\in A}V_a$. 另见 \cite[定理 $12.30$]{Mil17} 与 \cite[定理 $5.3.3$]{SGA3I}.
+\end{proof}
+\begin{exercise}\label{src:B.1.17}
+将上述结论及证明推广至环 $R$ 上的可对角化群概形 $D_R(A)$.
+\end{exercise}
+
+\subsection{代数群}\label{src:B.1.2-subsection}
+\begin{definition}\label{src:B.1.18}
+域 $k$ 上的\newterm{代数群}{algebraic group} 是 $k$ 上有限型的群概形 $G$.
+\end{definition}
+\begin{proposition}\label{src:B.1.19}
+设 $G$ 是域 $k$ 上局部有限型的群概形 (例如代数群).
+\begin{enumerate}[(1)]
+\item $G$ 分离.
+\item (Cartier 定理) 若 $\operatorname{char}(k)=0$, 则 $G$ 光滑.
+\item 若 $k$ 完美, 则
+\begin{enumerate}[(i)]
+\item $G$ 光滑当且仅当 $G$ 约化, 当且仅当 $G$ 几何约化;
+\item $G_{\mathrm{red}}\subseteq G$ 是子群概形.
+\end{enumerate}
+\item 包含单位元的连通分支 $G^0\subseteq G$ 是 $k$ 上有限型的开闭不可约子群概形. 此外, $G^0$ 的构造与 $k$ 的域扩张交换, 且 $G/G^0$ 是 $k$ 上的平展代数群.
+\item 若 $G$ 作用于有限型 $k$-概形 $X$, 且 $x\in X$ 为闭点, 则在集合意义下定义为 $G\to X$, $g\mapsto g\cdot x$ 的像的轨道 $Gu$ 在其闭包 $\overline{Gx}$ 中为开集. 特别地, 维数最小的轨道是闭的. 此外,
+\[
+\dim G=\dim Gx+\dim G_x,
+\]
+而函数 $x\mapsto\dim G_x$ 上半连续, $x\mapsto\dim Gx$ 下半连续.
+\item 每个子群 $H\subseteq G$ 都是闭的.
+\item 若 $G$ 有限型且 $H\subseteq G$ 是子群, 则 $G/H$ 拟射影. 特别地, 每个代数群都拟射影.
+\item (Barsotti--Chevalley 结构定理) 若 $G$ 光滑且连通, 则存在唯一的连通仿射正规子群 $H\trianglelefteq G$, 使得 $G/H$ 为 Abel 簇; 若 $k$ 完美, 则 $H$ 光滑.
+\end{enumerate}
+在 (8) 中, \newterm{Abel 簇}{abelian variety} 按定义是域上的光滑固有代数群. 它必然射影且群律交换 \cite[第 $39$, $59$ 页]{Mum70a}. 椭圆曲线是一维 Abel 簇.
+\end{proposition}
+\begin{proof}
+命题~\bookref{B.1.9}(4) 蕴涵 (1), 因为局部有限型 $k$-概形的任意 $k$-点都是闭点. 对于 (2), 见 \cite[\S$15$]{Car62}, \cite{Oor66}, \cite[第 $167$ 页]{Mum66a}, \cite[\S$11.4$]{Wat79}, \cite[定理 $3.23$ 及推论 $8.39$]{Mil17} 与 \cite[Tag 047N]{SP}. 对于 (3), 见 \cite[命题 $1.26$ 及推论 $1.39$]{Mil17} 与 \cite[Tags 047P, 047R]{SP}. 对于 (4), 见 \cite[\S$6.7$]{Wat79}, \cite[\S$7.3$]{Hum75}, \cite[命题 $2.2.1$]{Spr98}, \cite[命题 $1.34$]{Mil17} 与 \cite[Tag 0B7R]{SP}. 这里或许令人惊讶的是, $G^0$ 自动拟紧.\footnote{正文中用这一点证明 $\operatorname{Pic}_X^0$ 的有界性; 见定理~\bookref{7.4.65}.} 这可由一个简单论证得到: 化归到 $k$ 代数闭的情形, 并选取非空仿射开子概形 $U\subseteq G$. 缩小后, 可设 $U$ 对取逆封闭. 乘法映射 $U\times U\to G$ 为满射, 从而 $G$ 拟紧. 若 $g\in G(k)$, 则由于 $U$ 稠密, 交集 $U\cap gU$ 包含某个元素 $h$. 写成 $h=gu$, 即有 $g=hu^{-1}$.
+
+对于 (5) 的第一部分, 见 \cite[\S I.$1.8$]{Bor91}, \cite[\S$8.3$]{Hum75}, \cite[引理 $2.3.3$]{Spr98} 与 \cite[命题 $1.68$]{Mil17}. 等式 $\dim G=\dim Gx+\dim G_x$ 来自等同 $Gx\cong G/G_x$, 而半连续性的结论来自对稳定子群概形 $S_X\to X$ 应用命题~\bookref{B.1.9}(2). 考虑 $H$ 在 $G$ 上的作用, 即由 (5) 得到 (6). 对于 (7), 见 \cite[第 $128$ 页]{Cho57}, \cite[定理 $6.8$]{Bor91}, \cite[推论 VI.$2.6$]{Ray70}, \cite[定理 $5.2.2$]{Bri17}, \cite[\S$12$]{Hum75}, \cite[定理 $5.5.5$]{Spr98} 与 \cite[定理 $8.44$]{Mil17}. Chevalley 在 $1953$ 年宣布了 (8) 的证明, 但直到 \cite{Che60} 才发表. 在此期间, Barsotti 给出了独立的证明 \cite{Bar55a,Bar55b}. Rosenlicht 在 \cite{Ros56} 中给出了更初等的论证. 另见 \cite{Con02}, \cite[定理 $1$, $2$]{Bri17} 与 \cite[定理 $8.27$]{Mil17}.
+\end{proof}
+
+\subsection{仿射代数群}\label{src:B.1.3-subsection}
+我们特别关心\newterm{仿射代数群}{affine algebraic group}, 即域上有限型的仿射群概形. 它们有时也称为\newterm{线性代数群}{linear algebraic group}, 下述命题的第二部分说明了这一名称的理由.
+\begin{proposition}\label{src:B.1.20}
+设 $G$ 是域 $k$ 上的仿射代数群.
+\begin{enumerate}[(1)]
+\item $G$ 的每个表示 $V$ 都是其有限维子表示的并.
+\item 存在有限维表示 $V$ 以及群概形的闭浸入 $G\hookrightarrow\operatorname{GL}(V)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+对于 (1), 设 $\sigma:V\to\Gamma(G,\mathcal O_G)\otimes_k V$ 为余作用. 只需证明每个有限维子空间 $W\subseteq V$ 均包含在有限维 $G$-子表示 $W'\subseteq V$ 中. 若 $w_1,\ldots,w_n$ 是 $W$ 的一组基, 且 $\sigma(w_i)=\sum_j f_{ij}\otimes v_{ij}$, 则可验证由 $v_{ij}$ 生成的子空间 $G$-不变并包含 $W$. 对于 (2), 考虑 $G$ 的正则表示 $\Gamma(G,\mathcal O_G)$, 应用 (1) 构造包含一组 $k$-代数生成元的有限维子表示 $V$. 可验证这给出闭浸入 $G\hookrightarrow\operatorname{GL}(V)$. 见 \cite[\S I.$1.9$--$10$]{Bor91}, \cite[\S$8.6$]{Hum75}, \cite[命题 $2.3.6$ 及定理 $2.3.7$]{Spr98} 与 \cite[命题 $4.7$, 推论 $4.10$]{Mil17}.
+\end{proof}
+我们将反复使用命题~\bookref{B.1.20}(1) 的下述简单推论.
+\begin{proposition}\label{src:B.1.21}
+设 $G$ 是域 $k$ 上的仿射代数群, $X$ 是带有 $G$-作用的有限型仿射 $k$-概形.
+\begin{enumerate}[(1)]
+\item 存在 $G$-等变闭浸入 $X\hookrightarrow\mathbb A(V)$, 其中 $V$ 为有限维 $G$-表示.
+\item 对每个 $G$-不变闭子概形 $Z\subseteq X$, 存在 $G$-等变态射 $f:X\to\mathbb A(W)$, 其中 $W$ 为有限维 $G$-表示, 使得 $f^{-1}(0)=Z$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+写成 $X=\Spec A$, 设 $f_1,\ldots,f_n$ 为一组 $k$-代数生成元. 由命题~\bookref{B.1.20}(1), 存在包含每个 $f_i$ 的有限维 $G$-不变子空间 $V\subseteq A$. 满射 $\operatorname{Sym}^*V\to A$ 诱导 $G$-等变嵌入 $X\hookrightarrow\mathbb A(V)$. 对于 (2), 设 $Z=\Spec A/I$, $g_1,\ldots,g_m\in I$ 为一组生成元. 取包含每个 $g_i$ 的有限维 $G$-不变子空间 $W\subseteq I$, 则 $G$-不变态射 $f:X\to\mathbb A(W)$ 具有所需性质 $f^{-1}(0)=Z$.
+\end{proof}
+
+\paragraph{环面.}
+域 $k$ 上仿射代数群的子群 $T\subseteq G$ 称为秩为 $n$ 的\newterm{环面}{torus} (或分裂环面), 如果 $T_{\overline k}\cong\mathbb G_{m,\overline k}^n$ (或在 $k$ 上有 $T\cong\mathbb G_{m,k}^n$). 若 $T$ 不包含于 $G$ 的任何更大的子环面中, 则称为\newterm{极大环面}{maximal torus}. 例如, $\operatorname{GL}_n$ 中的对角矩阵构成秩为 $n$ 的分裂极大环面.
+\begin{proposition}\label{src:B.1.22}
+设 $G$ 是域 $k$ 上的仿射代数群.
+\begin{enumerate}[(1)]
+\item $G$ 包含一个极大环面 $T$, 使得对每个域扩张 $k\to k'$, $T_{k'}\subseteq G_{k'}$ 都是极大环面.
+\item 若 $k$ 代数闭, 则所有极大环面共轭.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+见 \cite[\S III.$8$]{Bor91}, \cite[\S$34.3$--$5$]{Hum75}, \cite[定理 $13.3.6$]{Spr98} 与 \cite[定理 $17.82$, $17.105$]{Mil17}.
+\end{proof}
+仿射代数群的理论当然远不止于此. 下面简述我们将用到的几个事实.
+
+\paragraph{Jordan 分解.}
+回顾元素 $g\in\operatorname{GL}_n(k)$ 称为\textit{半单的}, 如果它在 $k$ 的某个扩张上可对角化; 称为\textit{幺幂的}, 如果 $g-1$ 幂零, 即对某个 $n$ 有 $(1-g)^n=0$. 若 $G$ 是完美域 $k$ 上的仿射代数群, 则对每个元素 $g\in G(k)$, 存在唯一的元素 $g_s,g_u\in G(k)$, 分别称为 $g$ 的\textit{半单部分} 与\textit{幺幂部分}, 使得 $g=g_sg_u=g_ug_s$, 且 $g_s$ 与 $g_u$ 在任意表示 $G\to\operatorname{GL}_n$ 下的像分别半单与幺幂. 见 \cite[\S$4$]{Bor91}, \cite[\S$15.3$]{Hum75}, \cite[\S$2.4$]{Spr98} 与 \cite[定理 $9.17$]{Mil17}.
+\begin{example}[幺幂群]\label{src:B.1.23}
+域 $k$ 上的仿射代数群 $G$ 称为\newterm{幺幂群}{unipotent group}, 如果存在忠实表示 $V$ 以及一组基 $V\cong k^n$, 使得诱导映射 $G\hookrightarrow\operatorname{GL}(V)\cong\operatorname{GL}_n$ 的像包含于对角元全为 $1$ 的上三角矩阵子群 $\mathbb U_n$ 中. 例如, $\mathbb G_a$ 是幺幂群. 有下列等价关系:
+\[
+\begin{aligned}
+&G\text{ 是幺幂群}\\
+\Longleftrightarrow\quad& G\text{ 有正规子群滤过 }1=G_0\trianglelefteq G_1\trianglelefteq\cdots\trianglelefteq G_n=G,\\
+&\hspace{8em}G_i/G_{i-1}\cong\mathbb G_a\\
+\Longleftrightarrow\quad& V^G\ne0\text{ 对每个非零表示 }V\text{ 成立}\\
+\Longleftrightarrow\quad&\text{每个元素 }g\in G\text{ 都幺幂, 即 }g=g_u.
+\end{aligned}
+\]
+每个幺幂群作为概形同构于仿射空间. 见 \cite[\S$4.8$]{Bor91}, \cite[\S$17.5$]{Hum75}, \cite[\S$2.4$]{Spr98} 与 \cite[\S$14$]{Mil17}.
+\end{example}
+
+\subsection{单参数子群, 中心化子与抛物子群}\label{src:B.1.4-subsection}
+\begin{definition}[单参数子群与特征]\label{src:B.1.24}
+若 $G$ 是域 $k$ 上的代数群, 则\newterm{单参数子群}{one-parameter subgroup} (亦称\newterm{余特征}{cocharacter}) 是代数群同态 $\lambda:\mathbb G_m\to G$ (不要求它是子群). \newterm{特征}{character} 是同态 $\chi:G\to\mathbb G_m$.
+\end{definition}
+尽管采用这一名称, 我们并不要求单参数子群是单射. 例如, $\mathbb G_m\to\mathbb G_m$, $t\mapsto t^2$ 是单参数子群. 记 $\mathbb X_*(G)$ 为单参数子群的集合, $\mathbb X^*(G)$ 为特征群. 由于任意特征 $\mathbb G_m\to\mathbb G_m$ 都对某个 $d\in\mathbb Z$ 由 $t\mapsto t^d$ 给出, 故有配对
+\[
+\langle-,-\rangle:\mathbb X_*(G)\times\mathbb X^*(G)\to\mathbb X^*(\mathbb G_m)\cong\mathbb Z,\qquad(\lambda,\chi)\mapsto\chi\circ\lambda.
+\]
+\begin{example}[环面]\label{src:B.1.25}
+若 $T\cong\mathbb G_m^n$ 是 $n$ 维环面, 则任意单参数子群 $\lambda:\mathbb G_m\to T$ 均由 $t\mapsto(t^{\lambda_1},\ldots,t^{\lambda_n})$ 给出, 其中 $\lambda_i$ 为整数; 而 $T$ 的特征由 $(t_1,\ldots,t_n)\mapsto t_1^{\chi_1}\cdots t_n^{\chi_n}$ 给出, 其中 $\chi_i$ 为整数. 因此有双射 $\mathbb X_*(T)\cong\mathbb Z^n$ 与 $\mathbb X^*(T)\cong\mathbb Z^n$, 在此等同下 $\langle-,-\rangle:\mathbb X_*(T)\times\mathbb X^*(T)\to\mathbb Z$ 为标准内积.
+\end{example}
+\begin{example}[\texorpdfstring{$\operatorname{GL}_n$}{GLn}]\label{src:B.1.26}
+每个单参数子群 $\lambda$ 都包含于某个极大环面中; 由于极大环面共轭 (命题~\bookref{B.1.22}), 存在 $g\in G(k)$, 使得 $g\lambda g^{-1}$ 包含于由对角矩阵组成的极大环面中.
+\end{example}
+\clearpage
+\begin{definition}[中心化子, 抛物子群与幺幂子群]\label{src:B.1.27}
+给定代数群的单参数子群 $\lambda:\mathbb G_m\to G$, 定义下列子群:
+\[
+\begin{aligned}
+C_\lambda&=\{g\in G\mid\lambda(t)g=g\lambda(t)\text{ 对所有 }t\},&&\text{(中心化子)}\\
+P_\lambda&=\{g\in G\mid\lim_{t\to0}\lambda(t)g\lambda(t)^{-1}\text{ 存在}\},&&\text{(抛物子群)}\\
+U_\lambda&=\{g\in G\mid\lim_{t\to0}\lambda(t)g\lambda(t)^{-1}=1\},&&\text{(幺幂子群)}.
+\end{aligned}
+\]
+更准确地说, 存在 $G$ 的子群 $C_\lambda$ (或 $P_\lambda$, $U_\lambda$), 表出将 $k$-代数 $R$ 映至满足 $\lambda_R=g^{-1}\lambda_Rg$ (或 $\lim_{t\to0}\lambda_R(t)g\lambda(t)^{-1}$ 存在, $\lim_{t\to0}\lambda(t)g\lambda_R(t)^{-1}=1$) 的元素 $g\in G(R)$ 所组成子群的函子. 注意, 按定义, 当 $t\to0$ 时 $\lambda_R(t)g\lambda_R(t)^{-1}$ 的极限存在, 是指自然映射 $\mathbb G_{m,R}\to G$, $t\mapsto\lambda_R(t)g\lambda_R(t)^{-1}$ 可延拓为 $\mathbb A_R^1\to G$, 而该极限就是复合 $\Spec R\xhookrightarrow{0}\mathbb A_R^1\to G$.
+
+在 $\lambda$ 对 $G$ 的共轭作用下, $C_\lambda$ 正是不动点轨迹, 而 $P_\lambda$ 是 \S\bookref{7.8.1-subsection} 中定义的吸引子轨迹 $G_\lambda^+$. 存在同态 $P_\lambda\to C_\lambda$, $g\mapsto\lim_{t\to0}\lambda(t)g\lambda(t)^{-1}$, 它在 $C_\lambda$ 上为恒等. 这给出分裂短正合列
+\[
+1\to U_\lambda\to P_\lambda\to C_\lambda\to1.
+\]
+\end{definition}
+\begin{example}[\texorpdfstring{$\operatorname{GL}_n$}{GLn}]\label{src:B.1.28}
+设 $\lambda:\mathbb G_m\to\operatorname{GL}_n$ 为单参数子群. 更换基后, 可设 $\lambda(t)=\operatorname{diag}(t^{\lambda_1},\ldots,t^{\lambda_n})$, 其中 $\lambda_1\le\cdots\le\lambda_n$. 给定 $(g_{ij})\in\operatorname{GL}_n$, 有 $\lambda(t)(g_{ij})\lambda(t)^{-1}=(t^{\lambda_i-\lambda_j}g_{ij})$. 若整数 $n_1,\ldots,n_s$ 满足 $\sum_i n_i=n$ 且
+\[
+\lambda_1=\cdots=\lambda_{n_1}<\lambda_{n_1+1}=\cdots=\lambda_{n_1+n_2}<\cdots<\lambda_{n-n_s+1}=\cdots=\lambda_n,
+\]
+则 $C_\lambda=\operatorname{GL}_{n_1}\times\cdots\times\operatorname{GL}_{n_s}$ 是分块对角矩阵子群, 而 $P_\lambda$ 为分块上三角矩阵子群. 例如, 若 $\lambda(t)=(t^{-1},t^2,t^2,t^7)$, 则
+\[
+\begin{aligned}
+U_\lambda&=\begin{pmatrix}1&*&*&*\\0&1&0&*\\0&0&1&*\\0&0&0&1\end{pmatrix},\qquad
+P_\lambda=\begin{pmatrix}*&*&*&*\\0&*&*&*\\0&*&*&*\\0&0&0&*\end{pmatrix},\\
+C_\lambda&=\begin{pmatrix}*&0&0&0\\0&*&*&0\\0&*&*&0\\0&0&0&*\end{pmatrix}.
+\end{aligned}
+\]
+\end{example}
+记录抛物子群的下列性质. 约化群将在 \S\bookref{B.1.6-subsection} 中定义并讨论.
+\begin{proposition}\label{src:B.1.29}
+设 $G$ 是代数闭域 $k$ 上的连通约化代数群, $\lambda:\mathbb G_m\to G$ 是单参数子群.
+\begin{enumerate}[(a)]
+\item 中心化子 $C_\lambda$ 连通且约化.
+\item 子群 $P_\lambda$ 连通且为抛物子群, 即 $G/P_\lambda$ 射影, 并且 $N_G(P_\lambda)=P_\lambda$.
+\item 子群 $U_\lambda$ 是 $P_\lambda$ 的幺幂根基, 它自由且传递地作用于 $P_\lambda$ 中与 $\lambda$ (在 $P_\lambda$ 下) 共轭的单参数子群集合.
+\item 若 $\lambda,\lambda':\mathbb G_m\to G$ 是单参数子群, 则交集 $P_\lambda\cap P_{\lambda'}$ 包含 $G$ 的一个极大环面.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+对于 (a)--(c), 见 \cite[\S$13.4$]{Spr98}, \cite[定理 $4.1.7$ 及推论 $5.2.8$]{Con14}. 对于 (d), 见 \cite[命题 $20.7$]{Bor91}.
+\end{proof}
+\begin{remark}[球面建筑]\label{src:B.1.30}
+约化群的单参数子群集合可以赋予一种``笨拙却非凡的度量空间''结构 (Mumford 在 \cite[第 $55$ 页]{GIT} 中如此描述). \newterm{球面建筑}{spherical building} 最早由 J. Tits 引入, 它是 $\mathbb X_*(G)$ 关于下述等价关系的商: 若存在 $g\in P_\lambda(k)$, 使得对某些整数 $n,m$ 有 $\rho(t^n)=g^{-1}\lambda(t^m)g$, 则 $\lambda\sim\rho$.
+\end{remark}
+
+\subsection{带群作用的线丛}\label{src:B.1.5-subsection}
+\begin{definition}\label{src:B.1.31}
+若域 $k$ 上的代数群 $G$ 通过 $\sigma:G\times U\to U$ 作用于 $k$-概形 $U$, 则\newterm{带有 $G$-作用的线丛}{line bundle with a $G$-action} (亦称 $G$-\newterm{线性化}{linearization}) 是 $U$ 上的线丛 $L$ 配备同构 $\alpha:\sigma^*L\xrightarrow{\sim}p_2^*L$, 满足余循环条件 $p_{23}^*\alpha\circ(\mathrm{id}\times\sigma)^*\alpha=(m\times\mathrm{id})^*\alpha$, 即下图交换:
+\[
+\begin{tikzcd}[column sep=3em,row sep=2em]
+&(\sigma\circ(\mathrm{id}\times\sigma))^*L\arrow[r,"(\mathrm{id}\times\sigma)^*\alpha"]&(p_2\circ(\mathrm{id}\times\sigma))^*L\arrow[dr,equal]&\\
+(\sigma\circ(m\times\mathrm{id}))^*L\arrow[ur,equal]\arrow[dr,"(m\times\mathrm{id})^*\alpha"']&&&(\sigma\circ p_{23})^*L\arrow[dl,"p_{23}^*\alpha"]\\
+&(p_2\circ(m\times\mathrm{id}))^*L\arrow[r,equal]&(p_2\circ p_{23})^*L&
+\end{tikzcd}
+\]
+\end{definition}
+当 $U$ 射影时, 极丰沛线丛 $L$ 上的 $G$-作用对应于一个有限维 $G$-表示 $V=\mathrm H^0(U,L)$ 以及 $G$-等变闭浸入 $U\hookrightarrow\mathbb P(V)$. 上图中的余循环条件类似于拟凝聚层的 fpqc 下降 (\bookref{3.1.4}) 中的余循环条件. 由于代数叠上的线丛通过 fpqc 下降定义, $[U/G]$ 上的线丛恰好就是 $U$ 上带有 $G$-作用的线丛.
+\begin{example}\label{src:B.1.32}
+在 $\operatorname{PGL}_{n+1}$ 和 $\operatorname{SL}_{n+1}$ 对 $\mathbb P^n$ 的作用下, 线丛 $\mathcal O(1)$ 允许 $\operatorname{SL}_{n+1}$ 的作用, 但不允许 $\operatorname{PGL}_{n+1}$ 的作用. 不过, $\mathcal O(n+1)$ 允许 $\operatorname{PGL}_{n+1}$ 的作用.
+\end{example}
+\begin{theorem}[Sumihiro 线性化定理]\label{src:B.1.33}
+设 $G$ 是代数闭域 $k$ 上光滑连通的仿射代数群, $U$ 是带有 $G$-作用的有限型正规 $k$-概形.
+\begin{enumerate}[(1)]
+\item 若 $L$ 是 $U$ 上的线丛, 则存在整数 $n>0$, 使得 $L^{\otimes n}$ 允许 $G$ 的作用.
+\item 若 $U$ 拟射影, 则存在局部闭嵌入 $U\hookrightarrow\mathbb P(V)$, 其中 $V$ 是有限维 $G$-表示.
+\item 每个点 $u\in U$ 都具有 $G$-不变的拟射影开邻域.
+\end{enumerate}
+此外, 在更一般的情形下, 若 $G\to S$ 是具有连通纤维的光滑仿射群概形 (例如 $G=\operatorname{GL}_{n,S}$), 且 $U$ 是正规 Noether 概形, 则 (1) 成立.
+\end{theorem}
+\begin{proof}
+对于 (1), 见 \cite[定理 $1$]{Sum74}, \cite[引理 $1.2$]{Sum75} 与 \cite[命题 $2.4$]{KKLV89}. (2) 是 (1) 的直接推论. 对于 (3), 见 \cite[引理 $8$]{Sum74} 与 \cite[定理 $3.8$]{Sum75}.
+\end{proof}
+当 $G$ 为环面时, 存在 $G$-不变的仿射覆盖.
+\begin{theorem}[Sumihiro 环面作用定理]\label{src:B.1.34}
+设 $U$ 是代数闭域 $k$ 上的有限型正规概形, 配备环面 $T$ 的作用. 则任意点 $u\in U$ 都具有 $T$-不变的仿射开邻域.
+\end{theorem}
+\begin{proof}
+见 \cite[推论 $2$]{Sum74} 与 \cite[推论 $3.11$]{Sum75}.
+\end{proof}
+\begin{remark}\label{src:B.1.35}
+若 $U$ 不正规, 则定理~\bookref{B.1.33} 与~\bookref{B.1.34} 可能失效. 例如, 平面结点三次曲线具有 $\mathbb G_m$-作用, 但原点的任何 $\mathbb G_m$-不变邻域都不能 $\mathbb G_m$-等变地嵌入射影空间. 不过, 存在 $\mathbb G_m$-等变的平展仿射邻域 $\Spec k[x,y]/(xy)\to U$ (其中 $x$ 与 $y$ 的权分别为 $1$ 与 $-1$). 事实上, 每个带有 $\mathbb G_m$-作用的非正规概形 (甚至代数空间) 都具有这样的平展邻域 (见定理~\bookref{7.7.24}).
+\end{remark}
+
+\subsection{约化性}\label{src:B.1.6-subsection}
+线性约化群用于第~\bookref{8} 章几何不变量理论 (GIT) 的发展. 在特征 $p$ 中, 代数群有三种不同的性质: 线性约化, 约化与几何约化:
+\begin{equation}\label{src:B.1.36}
+\begin{tikzcd}[column sep=3.6em]
+\text{线性约化}\arrow[r,Rightarrow]\arrow[r,Leftarrow,bend left=25,"{\operatorname{char}=0}"]&\text{几何约化}&\text{约化}\arrow[l,Rightarrow]\arrow[l,Leftarrow,bend right=25,"G\text{ 光滑}"'].
+\end{tikzcd}
+\end{equation}
+在特征 $p$ 中, 线性约化群受到很强的限制: Nagata 的定理 \cite{Nag62} 断言, 特征 $p$ 中的光滑代数群 $G$ 线性约化当且仅当连通分支 $G^0$ 为环面, 且 $G/G^0$ 的阶与 $p$ 互素. 虽然针对几何约化群发展 GIT 并不会困难太多 (见注记~\bookref{7.5.4}), 但学生先在线性约化群的背景下学习这一理论会更容易.
+
+\paragraph{线性约化群.}
+记 $\operatorname{Rep}(G)$ 为代数群 $G$ 的表示范畴. 若 $V$ 是余作用为 $\sigma:V\to\Gamma(G,\mathcal O_G)\otimes V$ 的 $G$-表示, 则不变量为 $V^G:=\{v\in V\mid\sigma(v)=1\otimes v\}$. 若 $G$ 的表示 $V$ 的每个子表示 $W\subseteq V$ 均为 $0$ 或 $V$, 则称 $V$ \newterm{不可约}{irreducible}.
+\begin{definition}\label{src:B.1.37}
+域 $k$ 上的仿射代数群 $G$ 称为\newterm{线性约化群}{linearly reductive group}, 如果将 $G$-表示 $V$ 映至其 $G$-不变量 $V^G$ 的函子 $\operatorname{Rep}(G)\to\mathsf{Vect}_k$ 正合.
+\end{definition}
+\begin{proposition}\label{src:B.1.38}
+设 $G$ 是域 $k$ 上的仿射代数群. 下列条件等价:
+\begin{enumerate}[(1)]
+\item $G$ 线性约化;
+\item[(\theenumi$'$)] 有限维表示范畴上的函子 $\operatorname{Rep}_{\mathrm{fd}}(G)\to\mathsf{Vect}_k$, $V\mapsto V^G$ 正合;
+\item 每个 $G$-表示 (或有限维 $G$-表示) 都是不可约表示的直和;
+\item 给定 $G$-表示 (或有限维 $G$-表示) $V$ 以及 $G$-不变子空间 $W\subseteq V$, 存在 $G$-不变子空间 $W'\subseteq V$, 使得 $V=W\oplus W'$;
+\item 对每个有限维表示 $V$ 及不动 $k$-点 $x\in\mathbb P(V)^G$, 存在 $G$-不变线性函数 $f\in\Gamma(\mathbb P(V),\mathcal O(1))^G$, 使得 $f(x)\ne0$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+条件 (4) 可转述为: 对每个到平凡表示的满射 $V\to k$, 存在 $f\in V^G$ 映至某个非零元素. 为证明这蕴涵 (1), 设 $\pi:V\to W$ 为 $G$-表示的满射, $w\in W^G$. 对 $\pi^{-1}(\langle w\rangle)$ 应用命题~\bookref{B.1.20}, 可得非零有限维 $G$-表示 $V'\subseteq V$ 满射到 $\langle w\rangle$, 由 (4) 存在元素 $v\in(V')^G\subseteq V^G$ 映至 $w$. 因此 $(1)\Longleftrightarrow(1')\Longleftrightarrow(4)$.
+
+将 (2) 和 (3) 中的有限维条件记为 $(2')$ 和 $(3')$. 蕴涵 $(2)\Longrightarrow(2')\Longrightarrow(4)$ 及 $(3)\Longrightarrow(3')\Longrightarrow(1')$ 容易得到. 由于 $(3)\Longrightarrow(2)$ 也显然成立, 只需证明 $(1)\Longrightarrow(3)$. 为此, 对正合列 $0\to W\to V\to V/W\to0$ 应用正合函子
+\[
+\begin{aligned}
+\operatorname{Mor}_{\operatorname{Rep}(G)}(V/W,-)
+&=\operatorname{Mor}_{\operatorname{Rep}(G)}\bigl(k,(V/W)^\vee\otimes-\bigr)\\
+&=\bigl((V/W)^\vee\otimes-\bigr)^G,
+\end{aligned}
+\]
+可知 $V\to V/W$ 具有 $G$-不变截面.
+\end{proof}
+\begin{remark}\label{src:B.1.39}
+用 \S\bookref{7.5} 中引入的术语来说, $G$ 线性约化当且仅当 $BG\to\Spec k$ 上同调仿射, 或等价地, 是一个良模空间.
+
+对于域扩张 $k\to k'$, $G$ 线性约化当且仅当 $G_{k'}$ 线性约化; 这容易直接看出, 也可由引理~\bookref{7.5.19} 中更一般的结论得到. 线性约化群对商与扩张封闭 (命题~\bookref{7.5.21}).
+\end{remark}
+\clearpage
+\begin{example}[可对角化群]\label{src:B.1.40}
+由于可对角化群概形的每个表示都是一维表示的直和 (命题~\bookref{B.1.16}), 每个可对角化群概形都线性约化.
+\end{example}
+\begin{proposition}[Maschke 定理]\label{src:B.1.41}
+设 $G$ 为有限抽象群, 将其视为域 $k$ 上的有限群概形. 若 $G$ 的阶与 $\operatorname{char}(k)$ 互素, 则 $G$ 线性约化.
+\end{proposition}
+\begin{proof}
+若 $V$ 是 $G$-表示, 则对平移取平均可得 $G$-等变的 $k$-线性映射
+\begin{equation}\label{src:B.1.42}
+R_V:V\to V^G,\qquad v\mapsto\frac1{|G|}\sum_{g\in G}g\cdot v,
+\end{equation}
+它在 $V^G$ 上为恒等. 这些映射关于 $G$-表示的映射 $f:V\to W$ 函子性地相容, 即 $R_W\circ f=f\circ R_V$. 因此 $G$-表示的满射 $V\to W$ 在不变量上诱导满射 $V^G\to W^G$.
+\end{proof}
+\begin{example}[\texorpdfstring{$\mathbb Z/p\mathbb Z$}{Z/pZ}]\label{src:B.1.43}
+在特征 $p$ 中, $G=\mathbb Z/p\mathbb Z$ 不线性约化. 为此, 取 $G$ 的二维表示 $V$, 其中一个生成元通过矩阵 $\begin{pmatrix}1&1\\0&1\end{pmatrix}$ 作用. 投影到第一分量的满射 $V\to k$ 是 $G$-表示的满射, 但在不变量上诱导的映射 $V^G\to k$ 为零映射. 几何上, 这对应于 $G$ 在 $\mathbb A^2=\mathbb A(V)$ 上的作用, 使得 $G$-不动点 $(1,0)$ 包含在每个不变超平面中. 不过, $p$ 次幂映射 $\operatorname{Sym}^pV\to\operatorname{Sym}^pk=k$ 在取不变量后为满射; 换言之, 存在不包含 $(1,0)$ 的 $G$-不变超曲面.
+\end{example}
+\begin{example}[\texorpdfstring{$\mathbb G_a$}{Ga}]\label{src:B.1.44}
+在任意域 $k$ 上, 加法群 $\mathbb G_a$ 都不线性约化. 这次取二维表示 $V=k^2$, 由 $t\mapsto\begin{pmatrix}1&t\\0&1\end{pmatrix}$ 给出. 由 $(x,y)\mapsto x$ 定义的投影 $V\to k$ 是没有补空间的 $\mathbb G_a$-表示满射. 此时, 不仅不存在避开 $(1,0)\in\mathbb A(V)$ 的 $\mathbb G_a$-不变超平面, 也不存在这样的 $\mathbb G_a$-不变超曲面.
+\end{example}
+\begin{remark}[Reynolds 算子]\label{src:B.1.45}
+映射~\bookeqref{B.1.42} 称为 $G$ 在 $V$ 上作用的 \newterm{Reynolds 算子}{Reynolds operator}. 若 $G$ 线性约化, 则典范投影 $R_V:V\to V^G$ 为 Reynolds 算子, 即在 $V^G$ 上为恒等, 且与 $G$-表示的映射相容的 $k$-线性映射. 对于 $G$ 在 $k$-概形 $\Spec A$ 上的作用, 其对偶作用为 $A\to\Gamma(G,\mathcal O_G)\otimes A$, 存在投影 $R_A:A\to A^G$. 这不是环映射, 但由于乘法 $A^G\otimes A\to A$ 是与 Reynolds 算子交换的 $G$-表示映射, 故
+\[
+R_A(xy)=xR_A(y)\qquad\text{对 }x\in A^G,\ y\in A.
+\]
+这称为 \textit{Reynolds 恒等式}, 并表明 $R_A:A\to A^G$ 是 $A^G$-模同态.
+
+在注记~\bookref{7.5.2} 中, 用 Reynolds 算子证明了只要 $A$ 有限生成, $A^G$ 就有限生成. 虽然在推论~\bookref{7.5.13} 中我们利用不变量函子的正合性证明仿射 GIT 商的性质, 但也可以使用 Reynolds 算子; 见 \cite[\S$1.2$]{GIT}. 此外, 构造 Reynolds 算子是证明线性约化性的有效方法. Maschke 定理 (\bookref{B.1.41}) 使用了这一证明技巧, 定理~\bookref{B.1.46} 中还会再次使用.
+\end{remark}
+
+\paragraph{约化群.}
+代数闭域 $k$ 上的光滑仿射代数群 $G$ 称为\newterm{约化群}{reductive group}, 如果 $G$ 的每个光滑连通幺幂正规子群都平凡.\footnote{有时也假设 $G$ 连通. 对于约化群概形 $G\to S$, 文献中没有这一歧义: $G$ 在 $S$ 上光滑且仿射, 几何纤维连通且约化 \cite[Exp. XIX, 定义 $2.7$]{SGA3III}.} 在 $\mathbb C$ 上, $G$ 约化当且仅当它是其任意极大紧子群的复化 \cite[XVII.$5$]{Hoc65}. 在任意域 $k$ 上, 若 $G_{\overline k}$ 约化, 则称 $G$ 约化. 约化群是一类特别好的代数群, 出现于数学的许多分支. 它们可以用根数据进行显式分类. 见 \cite{Bor91,Hum75,Spr98,Mil17}.
+
+对于光滑仿射代数群 $G$, 存在 $G$ 的子群 $R(G)$ 与 $R_u(G)$, 分别称为\newterm{根基}{radical} 与\newterm{幺幂根基}{unipotent radical}, 它们分别在连通正规可解子群与连通正规幺幂子群中极大, 且其构造与可分域扩张交换. 在完美域 $k$ 上, $G$ 约化当且仅当 $R_u(G)$ 平凡, 且商 $G/R_u(G)$ 约化. 另一方面, 若 $R(G)$ 平凡, 则定义 $G$ 为\newterm{半单群}{semisimple group}. 对于约化群 $G$, 中心 $Z(G)$ 可对角化, 并包含 $R(G)$ 作为其最大的子环面, 商 $G/R(G)$ 半单.
+
+经典代数群 $\operatorname{GL}_n$, $\operatorname{PGL}_n$, $\operatorname{SL}_n$, $\operatorname{Sp}_{2n}$ 在每种特征下都约化. 由于我们针对线性约化群的作用发展 GIT, 必须知道这些群在特征 $0$ 中线性约化.
+\begin{theorem}\label{src:B.1.46}
+在特征 $0$ 中, 约化代数群线性约化. 对于光滑代数群, 逆命题在任意特征下成立.
+\end{theorem}
+\begin{proof}
+Hilbert 在 \cite{Hil90} 中利用一个十九世纪不变量论学者熟知的显式微分算子, 即 $\Omega$-过程, 证明了 $\mathbb C$ 上 $\operatorname{SL}_n$ 和 $\operatorname{GL}_n$ 的线性约化性. 下面概述 $\mathbb C$ 上 $G=\operatorname{GL}_n$ 时的论证. 写成 $\Gamma(\operatorname{GL}_n,\mathcal O_{\operatorname{GL}_n})=\mathbb C[X_{ij}]_{\det}$. 设 $V$ 为有限维 $\operatorname{GL}_n$-表示, 标量矩阵以权 $k$ 作用, 设 $\sigma:\operatorname{Sym}^*V\to\mathbb C[X_{ij}]_{\det}\otimes\operatorname{Sym}^*V$ 为 $\mathbb A(V)=\Spec\operatorname{Sym}^*V$ 上的对偶作用. 微分算子
+\[
+\Omega:=\det\left(\frac{\partial}{\partial X_{ij}}\right)
+\]
+线性地作用于 $\mathbb C[X_{ij}]_{\det}$ 及 $\mathbb C[X_{ij}]_{\det}\otimes\operatorname{Sym}^*V$. 可验证映射
+\[
+V\to V^{\operatorname{GL}_n},\qquad
+f\mapsto\frac{1}{\Omega^k\bigl(\det(X_{ij})^k\bigr)}\Omega^k\bigl(\det(X_{ij})^k\sigma(f)\bigr)
+\]
+定义了 Reynolds 算子, 从而 $\operatorname{GL}_n$ 线性约化. 这一论证是代数的, 对每个特征 $0$ 的域均适用. 见 \cite[\S$4.3$]{Stu08}, \cite[\S$2.1$]{Dol03} 与 \cite[\S$4.5.3$]{DK15}.
+
+Weyl 扩展了 Hurwitz, Schur 和 Cartan 所发展的积分方法, 证明了 $\mathbb C$ 上的每个约化代数群都线性约化 \cite{Wey26,Wey25}. 这一技巧如今称为``Weyl 酉化技巧''. 紧 Lie 群 $K$ 具有左 $K$-不变的有限测度 $\mu$, 称为\textit{左 Haar 测度}. 对有限维 $K$-表示 $V$ 取平均, 给出一个 $k$-线性映射
+\[
+V\to V^K,\qquad v\mapsto\frac{1}{\int_K\mathrm d\mu(g)}\int_K(g\cdot v)\,\mathrm d\mu(g),
+\]
+它在 $V^K$ 上为常值, 且与 $K$-表示的映射相容. 这与 Maschke 定理 (\bookref{B.1.41}) 中一样, 是一个 Reynolds 算子 (注记~\bookref{B.1.45}), 因而 $V\mapsto V^K$ 正合. 对 $\mathbb C$ 上的约化代数群 $G$, 存在实紧 Lie 子群 $K\subseteq G(\mathbb C)$, 它在 Zariski 拓扑下稠密. 例如对于 $\operatorname{GL}_n$, $K=U_n$ 是酉矩阵子群 (``酉化技巧''由此得名). 对有限维 $G$-表示 $V$, 有等同 $V^K=V^G$, 而取 $K$-不变量的函子正合, 故取 $G$-不变量的函子也正合. 另见 \cite[\S$3.2$]{Dol03} 与 \cite[定理 $14.3$]{Bum13}.\footnote{利用 \S\bookref{B.3} 的极限方法, 这一解析论证足以证明任意特征 $0$ 的域上约化群 $G$ 的线性约化性: 由极限方法 (\S\bookref{B.3}), 存在在 $\mathbb Q$ 上超越次数有限的子域 $k'\subseteq k$ 以及群概形 $G'\to\Spec k'$, 使得 $G'_k=G$. 选取嵌入 $k'\hookrightarrow\mathbb C$, 利用约化性与线性约化性不受可分域扩张影响, 可知若 $G'_{\mathbb C}$ 线性约化, 则 $G$ 也线性约化.}
+
+还有一个利用 Casimir 算子的代数论证. 首先, 因为每个约化群都是一个环面与一个半单群的扩张, 可化归到 $G$ 半单的情形. 给定 $G$ 的 Lie 代数表示 $\rho:\mathfrak g\to\mathfrak{gl}(V)$, 在 $\mathfrak g$ 上有对称双线性型 $\langle x,y\rangle=\operatorname{Tr}(\rho(x)\circ\rho(y))$. 设 $\{e_i\}$ 为 $\mathfrak g$ 的一组基, $\{e_i'\}$ 为关于 $\langle-,-\rangle$ 的对偶基, 则 \textit{Casimir 算子} 是 $V$ 上的 $\mathfrak g$-自同态 $c_V:=\sum_{i=1}^n\rho(e_i)\circ\rho(e_i')$. 为证明 $G$ 线性约化, 只需为任意余维为 $1$ 的不可约子空间 $W\subseteq V$ 找到补空间. 由于 $G$ 半单, $G$ 在 $V/W$ 上平凡作用, 因而 $\mathfrak g$ 也如此. 于是 $\mathfrak g$ 将 $V$ 映入 $W$, 故 $c_V$ 亦然, 即 $c_V(V)\subseteq W$. 另一方面, 由于 $W$ 不可约, $c_V$ 在 $W$ 上通过乘以某个标量作用 (Schur 引理). 从而 $\ker(c_V)\subseteq V$ 是 $W$ 的补空间. 另见 \cite[定理 $22.42$]{Mil17}, \cite[\S$4.3$]{Muk03}, \cite[\S$6.2$]{Hum78} 与 \cite[\S$4.5.2$]{DK15}.
+
+对于逆命题, 需证明线性约化群 $G$ 的幺幂根基 $R_u(G)$ 平凡. 由于 $G/R_u(G)$ 仿射, 线性约化群的 Matsushima 定理 (\bookref{7.5.23}) 蕴涵 $R_u(G)$ 线性约化. 但非平凡幺幂群不线性约化. 事实上, 由幺幂群的结构, 只需证明 $\mathbb G_a$ 不线性约化 (例~\bookref{B.1.44}). 另见 \cite{NM64}.
+\end{proof}
+\begin{example}\label{src:B.1.47}
+代数群 $\operatorname{GL}_n$, $\operatorname{PGL}_n$, $\operatorname{SL}_n$, $\operatorname{Sp}_{2n}$ 等在特征 $p$ 中不线性约化. 例如, 在特征 $2$ 中, 考虑 $\operatorname{SL}_2$ 在二元二次型空间 $V=\operatorname{Sym}^2(k^2)=\{Ax^2+Bxy+Cy^2\}$ 上的作用. 由线性型的平方 $L^2$ 构成的子空间 $W$ 是没有补空间的 $\operatorname{GL}_2$-不变子空间; 商 $V\to V/W=\mathbb C$ 由 $(A,B,C)\mapsto B$ 给出. 虽然不存在在 $(0,1,0)$ 处非零的不变线性函数, 但判别式 $\Delta=B^2\in\operatorname{Sym}^2V^\vee$ 是在 $(0,1,0)$ 处非零的不变函数 (验证了下文给出的几何约化性条件).
+\end{example}
+\begin{theorem}[Matsushima 定理]\label{src:B.1.48}
+设 $G$ 是域 $k$ 上的约化群. 子群 $H\subseteq G$ 约化当且仅当 $G/H$ 仿射.
+\end{theorem}
+\begin{proof}
+当 $G$ 线性约化时的证明见命题~\bookref{7.5.23}. 一般情形可用类似方式证明, 其中依赖 Serre 仿射性判据 (\bookref{5.5.16}) 的推广: 代数空间 $U$ 仿射, 如果对每个 $\mathcal O_U$-代数的满射 $A\to B$, $B$ 的每个整体截面都有某个正整数次幂可提升为 $A$ 的整体截面. 另见 \cite{Mat60,BB63,Ric77,FS82} 与 \cite[定理 $9.4.1$]{Alp14}.
+\end{proof}
+
+\paragraph{几何约化群.}
+特征为 $p\ge0$ 的域 $k$ 上的仿射代数群 $G$ 称为\newterm{几何约化群}{geometrically reductive group}, 如果对每个 $G$-表示的满射 $V\to W$ 及 $w\in W^G$, 存在 $n>0$, 使得 $w^{p^n}$ 属于 $\operatorname{Sym}^{p^n}V\to\operatorname{Sym}^{p^n}W$ 的像. 这一条件可转述为类似于命题~\bookref{B.1.38}(4) 的几何性质: 对不动 $k$-点 $x\in\mathbb P(V)^G$, 存在不变齐次多项式 $f\in\Gamma(\mathbb P(V),\mathcal O(p^n))^G$, 其中 $n>0$, 使得 $f(x)\ne0$. 在特征 $0$ 中, 线性约化性与几何约化性等价.
+
+为了将 GIT 推广到正特征下 $\operatorname{SL}_n$ 和 $\operatorname{GL}_n$ 等约化群的作用, Mumford 在 \cite[前言]{GIT} 中猜想约化群几何约化. Haboush 解决了这一猜想.
+\begin{theorem}[Haboush 定理]\label{src:B.1.49}
+域 $k$ 上的约化群 $G$ 几何约化.
+\end{theorem}
+\begin{proof}
+见 \cite{Hab75,SS11}.
+\end{proof}
+当 $G$ 光滑时, 逆命题成立. 事实上, 仿射代数群 $G$ 几何约化当且仅当 $G_{\mathrm{red}}$ 约化. 特征 $p$ 中的光滑代数群 $G$ 线性约化当且仅当连通分支 $G^0$ 为环面, 且 $G/G^0$ 的阶与 $p$ 互素 \cite{Nag62}. 每个有限 (可能非约化) 群概形 $G$ 都几何约化, 且其线性约化当且仅当 $G^0$ 可对角化, $G/G^0$ 的阶与 $p$ 互素 \cite[定理 $1.2$]{HR15}. 交换代数群 $G$ 约化当且仅当它可对角化. 还应指出, 光滑代数群 $G$ 的约化性可以刻画为: 对有限生成 $k$-代数上的每个余作用, 其不变量环都有限生成.
+
+\subsection{主丛}\label{src:B.1.7-subsection}
+主 $G$-丛是拓扑纤维丛 $P\to T$ 的代数版本, 其中 $G$ 在 $P$ 上自由且传递地作用, 商为 $T=P/G$. 例如, $\mathbb A^2\setminus0\to\mathbb P^1$ 是主 $\mathbb G_m$-丛. 主 $G$-丛及其性质对于代数叠理论的发展至关重要. 例如, 我们将商叠 $[U/G]$ 在概形 $T$ 上的对象定义为主 $G$-丛 $P\to T$ 配备一个 $G$-等变映射 $P\to U$. 关于主 $G$-丛的更多背景, 可参阅 \cite[\S$5.12$]{Poo17} 与 \cite{Bal09}.
+\newpage
+\begin{samepage}
+\begin{definition}\label{src:B.1.50}
+设 $G\to S$ 是 fppf 仿射群概形. $S$-概形 $X$ 上的\newterm{主 $G$-丛}{principal $G$-bundle} 是一个 $X$ 上的概形 $P$, 带有 $G$ 的作用 $\sigma:G\times_S P\to P$, 使得 $P\to X$ 是 $G$-不变的 fppf 态射 (其中 $X$ 上的作用平凡), 且
+\[
+(\sigma,p_2):G\times_S P\to P\times_X P,\qquad(g,p)\mapsto(gp,p)
+\]
+为同构.
+\end{definition}
+\end{samepage}
+注意, $X$ 上的主 $G$-丛与 $X$ 上的主 $G\times_S X$-丛是相同的数据. 主 $G$-丛的态射是 $G$-等变的概形态射. 若存在 $G$-等变同构 $P\cong G\times_S X$, 则称主 $G$-丛 $P\to X$ \textit{平凡}, 其中 $G$ 通过第一因子上的乘法作用于 $G\times_S X$.
+
+主 $G$-丛 $P\to X$ 也可视为 $G$-torsor (定义~\bookref{7.4.1}); 后者是景上集合层 $P$ 配备群层 $G$ 的自由传递作用这一一般概念. 当 $G\to S$ 为 fppf 仿射群概形时, 主 $G$-丛与 $G$-torsor 的范畴等价; 见例~\bookref{7.4.5}. 本书始终区分这两个概念, 但在交谈或文献中它们常被混用.
+\begin{exercise}\label{src:B.1.51}
+证明主 $G$-丛的态射必然为同构.
+\end{exercise}
+主 $G$-丛可以在 fppf 局部平凡化; 若 $G$ 光滑, 甚至可以在平展局部平凡化.
+\begin{proposition}\label{src:B.1.52}
+设 $G\to S$ 为 fppf 仿射群概形, $P\to X$ 是 $S$-概形的 $G$-等变态射, 其中 $X$ 上的作用平凡. 则 $P\to X$ 是主 $G$-丛当且仅当存在 fppf 态射 $X'\to X$, 使得 $P\times_X X'$ 在 $X'$ 上同构于平凡主 $G$-丛 $G\times_S X'$. 此外, 若 $G\to S$ 光滑, 可令 $X'\to X$ 为满的平展态射.
+\end{proposition}
+\begin{proof}
+取 $X'=P\to X$, 即由定义得到 $(\Longrightarrow)$ 方向. 对于 $(\Longleftarrow)$, 将 $G\to S$ 沿 $X\to S$ 作基变换后, 可设 $G$ 定义在 $X$ 上. 设 $G_{X'}$ 与 $P_{X'}$ 为 $G$ 与 $P$ 沿 $X'\to X$ 的基变换. 作用映射 $(\sigma,p_2):G\times_X P\to P\times_X P$ 沿 $X'\to X$ 的基变换是 $G_{X'}$ 在 $X'$ 上作用于 $P_{X'}$ 的作用映射 $G_{X'}\times_{X'}P_{X'}\to P_{X'}\times_{X'}P_{X'}$, 由于 $P_{X'}$ 平凡, 此作用平凡. 因为为同构是靶上的 fpqc 局部性质 (\bookref{3.1.26}), 可知 $(\sigma,p_2):G\times_X P\to P\times_X P$ 为同构. 若 $G$ 光滑, 则 $X'=P\to S$ 是满的光滑态射, 使得 $P_{X'}$ 平凡. 由于经过一个满的平展态射 $S'\to S$ 后 $X'\to S$ 存在截面 (推论~\bookref{A.3.5}), $P_{S'}$ 也平凡.
+\end{proof}
+
+\paragraph{主丛的例子.}
+\begin{exercise}\label{src:B.1.53}
+设 $L/K$ 为有限 Galois 扩张, $G=\operatorname{Gal}(L/K)$ 为其 Galois 群, 将其视为 $\Spec K$ 上的有限群概形. 证明 $\Spec L\to\Spec K$ 是主 $G$-丛.
+\end{exercise}
+\begin{exercise}[线丛与主乘法群丛]\label{src:B.1.54}
+若 $X$ 为概形, 证明存在协变范畴等价
+\[
+\begin{aligned}
+\{X\text{ 上的线丛}\}&\xrightarrow{\sim}\{X\text{ 上的主 }\mathbb G_m\text{-丛}\},\\
+L&\longmapsto\mathbb A(L^\vee)\setminus X=\Spec(\operatorname{Sym}^*L^\vee)\setminus\text{零截面},
+\end{aligned}
+\]
+这里左侧是 $X$ 上线丛的群胚 (只允许同构作为态射), 右侧是 $X$ 上主 $\mathbb G_m$-丛的群胚.
+\end{exercise}
+\begin{exercise}[\texorpdfstring{$S_d$}{Sd}-丛]\label{src:B.1.55}
+若 $X$ 为概形且 $d\ge1$, 证明存在群胚等价
+\[
+\begin{aligned}
+\{X\text{ 的有限平展 }d\text{ 次覆盖}\}&\xrightarrow{\sim}\{X\text{ 上的主 }S_d\text{-丛}\},\\
+(Y\to X)&\longmapsto\left(\underbrace{Y\times_X\cdots\times_X Y}_{d\text{ 次}}\setminus\Delta\to X\right),\\
+(P/S_{d-1}\to X)&\mathrel{\reflectbox{$\longmapsto$}}(P\to X).
+\end{aligned}
+\]
+对于向右的映射, 对称群 $S_d$ 通过置换作用于 $d$ 重纤维积 $Y\times_X\cdots\times_X Y$, $\Delta$ 表示大对角线, 即至少两个点重合的 $d$ 元组构成的 $S_d$-等变闭轨迹. 也可以将 $Y\times_X\cdots\times_X Y\setminus\Delta$ 等同于参数化平凡 $d$ 次覆盖与 $Y$ 之间同构的概形 $\underline{\operatorname{Isom}}_X(X\times\{1,\ldots,d\},Y)$. 对于向左的映射, $P/S_{d-1}$ 表示固定第 $d$ 个指标的子群 $S_{d-1}\subseteq S_d$ 的自由作用的商.
+\end{exercise}
+\begin{samepage}
+\begin{exercise}\label{src:B.1.56}
+\begin{enumerate}[(a)]
+\item 证明标准投影 $\mathbb A^{n+1}\setminus0\to\mathbb P^n$ 是主 $\mathbb G_m$-丛.
+\item 对 $\mathbb P^n$ 上的每个线丛 $\mathcal O(d)$, 显式确定对应的主 $\mathbb G_m$-丛. 特别地, 哪个 $\mathcal O(d)$ 对应于 (a) 中的主 $\mathbb G_m$-丛?
+\end{enumerate}
+\end{exercise}
+\end{samepage}
+\begin{exercise}[标架丛]\label{src:B.1.57}
+设 $T$ 为概形, $E$ 为 $X$ 上秩为 $n$ 的向量丛.
+\begin{enumerate}[(a)]
+\item \newterm{标架丛}{frame bundle} $\operatorname{Fr}_E$ 是 $\Sch/X$ 上的函子 $\underline{\operatorname{Isom}}_{\mathcal O_X}(\mathcal O_X^{\oplus n},E)$, 即
+\[
+\begin{aligned}
+\operatorname{Fr}_E:\Sch/X&\to\Sets,\\
+(T\to X)&\mapsto\{\text{平凡化 }\mathcal O_T^{\oplus n}\xrightarrow{\sim}E_T\}.
+\end{aligned}
+\]
+由习题~\bookref{1.3.21} 回顾, 函子 $\underline{\operatorname{Hom}}_{\mathcal O_X}(\mathcal O_X^{\oplus n},E)$ 可由概形 $H:=\mathbb A(\mathcal Hom_{\mathcal O_X}(\mathcal O_X^{\oplus n},E)^\vee)=\mathbb A((E^\vee)^{\oplus n})$ 表出. 证明 $\operatorname{Fr}_E$ 可由 $H$ 中以 $\det(u)\ne0$ 定义的开子概形表出, 其中 $u:\mathcal O_H^{\oplus n}\to E_H$ 为万有同态. 此外, 证明 $\operatorname{Fr}_E\to X$ 为主 $\operatorname{GL}_n$-丛.
+\item \textit{射影化标架丛} $\mathbb P\operatorname{Fr}_E$ 是函子
+\[
+\begin{aligned}
+\mathbb P\operatorname{Fr}_E:\Sch/X&\to\Sets,\\
+(T\to X)&\mapsto
+\left\{(L,\alpha)\ \middle|\ \begin{aligned}&L\text{ 是 }T\text{ 上的线丛,}\\&\alpha:\mathcal O_T^{\oplus n}\xrightarrow{\sim}E_T\otimes L\text{ 是同构}\end{aligned}\right\}\big/\sim,
+\end{aligned}
+\]
+其中若存在同构 $\beta:L\to L'$, 使得 $\alpha'=(\mathrm{id}\otimes\beta)\circ\alpha$, 则 $(L,\alpha)\sim(L',\alpha')$. 证明 $\mathbb P\operatorname{Fr}_E$ 可由 $\mathbb P:=\mathbb P(\mathcal Hom_{\mathcal O_X}(\mathcal O_X^{\oplus n},E)^\vee)=\mathbb P((E^\vee)^{\oplus n})$ 中以 $\det(u)\ne0$ 定义的开子概形表出, 其中
+\[
+u:\mathcal O_{\mathbb P}^{\oplus n}\to E_{\mathbb P}\otimes\mathcal O_{\mathbb P}(1)
+\]
+是对应于万有商 $\mathcal Hom_{\mathcal O_{\mathbb P}}(\mathcal O_{\mathbb P}^{\oplus n},E_{\mathbb P})^\vee\twoheadrightarrow\mathcal O_{\mathbb P}(1)$ 的同态. 此外, 证明 $\mathbb P\operatorname{Fr}_E\to X$ 为主 $\operatorname{PGL}_n$-丛.
+\end{enumerate}
+\end{exercise}
+\begin{exercise}[向量丛与主一般线性群丛]\label{src:B.1.58}
+对概形 $X$, 证明将向量丛 $E$ 映至标架丛 $\operatorname{Fr}_E$ 的对应给出群胚等价
+\[
+\begin{aligned}
+\{X\text{ 上的向量丛}\}&\xrightarrow{\sim}\{X\text{ 上的主 }\operatorname{GL}_n\text{-丛}\},\\
+E&\longmapsto\operatorname{Fr}_W,
+\end{aligned}
+\]
+其逆对应将 $P\to X$ 映至总空间为 $P\times\mathbb A^n$ 上对角 $\operatorname{GL}_n$-作用的商 $P\times^{\operatorname{GL}_n}\mathbb A^n:=(P\times\mathbb A^n)/\operatorname{GL}_n$ 的向量丛.
+\end{exercise}
+\begin{exercise}[主特殊线性群丛]\label{src:B.1.59}
+证明概形 $X$ 上主 $\operatorname{SL}_n$-丛的群胚等价于二元组 $(V,\alpha)$ 的群胚, 其中 $V$ 是 $X$ 上秩为 $n$ 的向量丛, $\alpha:\mathcal O_X\xrightarrow{\sim}\det V$ 为平凡化. 二元组的态射 $(V',\alpha')\to(V,\alpha)$ 是同构 $\phi:V'\to V$, 满足 $\alpha'=\alpha\circ\det\phi$.
+\end{exercise}
+\begin{exercise}[正交群]\label{src:B.1.60}
+设 $k$ 为域, $\operatorname{char}(k)\ne2$, $V$ 为带有非退化二次型 $q$ 的 $n$ 维向量空间. 设 $O(q)\subseteq\operatorname{GL}(V)$ 为保持该二次型的可逆矩阵子群. 若 $q=x_1^2+\cdots+x_n^2$ 为对角化的二次型, 则 $O(q)=O_n$ 为正交矩阵 $A$ (即 $AA^\top=I$) 的集合. 证明 $k$-概形 $X$ 上的主 $O(q)$-丛与 $X$ 上带有非退化二次型的秩 $n$ 向量丛之间存在双射.
+\end{exercise}
+\clearpage
+\begin{example}[特殊群]\label{src:B.1.61}
+域 $k$ 上的仿射代数群 $G$ 称为\textit{特殊群}, 如果每个主 $G$-丛 $P\to T$ 都 Zariski 局部平凡. 例如, $\operatorname{GL}_n$ (如 $\mathbb G_m=\operatorname{GL}_n$) 是特殊群, 因为主 $\operatorname{GL}_n$-丛对应于向量丛 (习题~\bookref{B.1.58}). $\mathbb G_a$ 也是特殊群. 一种证明方法是利用拟凝聚上同调既可在 Zariski 景上也可在小平展景上计算 (命题~\bookref{5.1.41}). 将结构层 $\mathcal O_T$ 视为 $\mathbb G_a$, 即得 $\mathrm H^1(T,\mathbb G_a)=\mathrm H^1(T_{\text{ét}},\mathbb G_a)$, 从而 Zariski 拓扑中的 $\mathbb G_a$-torsor 与小平展拓扑中的 $\mathbb G_a$-torsor 存在双射对应.
+
+若 $1\to K\to G\to Q\to1$ 为仿射代数群的正合列, 且 $K$ 与 $Q$ 均为特殊群, 则不难看出 $G$ 也是特殊群. 由幺幂群可刻画为 $\mathbb G_a$ 的扩张可知, 每个幺幂群都是特殊群.
+\end{example}
+
+\paragraph{诱导主丛与结构群约化.}
+\begin{definition}[诱导主丛]\label{src:B.1.62}
+设 $H\to G$ 为概形 $S$ 上 fppf 仿射群概形的同态. 若 $P\to X$ 是主 $H$-丛, 则 $P$ 经由 $H\to G$ \textit{诱导的主 $G$-丛} 是
+\[
+G\times^H P\to X,
+\]
+其中 $G\times^H P$ 为作用 $h\cdot(g,p)=(gh^{-1},hp)$ 的商 $(G\times P)/H$, $G$ 通过 $g'\cdot(g,p)=(g'g,p)$ 作用于 $G\times^H P$.
+\end{definition}
+\begin{exercise}\label{src:B.1.63}
+验证 $G\times^H P\to X$ 为主 $G$-丛.
+\end{exercise}
+\begin{definition}[结构群约化]\label{src:B.1.64}
+设 $H\to G$ 为概形 $S$ 上 fppf 仿射群概形的同态. 若 $Q\to X$ 是主 $G$-丛, 则 $Q$ 沿 $H\to G$ 的\newterm{结构群约化}{reduction of structure group} 是一个主 $H$-丛 $P\to X$ 配备主 $G$-丛的同构 $Q\xrightarrow{\sim}G\times^H P$.
+\end{definition}
+\begin{lemma}\label{src:B.1.65}
+设 $H\to G$ 为概形 $S$ 上 fppf 仿射群概形的单态射, $Q\to X$ 为主 $G$-丛. $Q$ 沿 $H\to G$ 的结构群约化等价于给出 $Q/H$ 在 $X$ 上的一个截面.
+\end{lemma}
+\begin{proof}
+截面 $s:X\to Q/H$ 经由拉回诱导主 $H$-丛 $P\to X$:
+\[
+\begin{tikzcd}
+P\arrow[r]\arrow[d]&Q\arrow[d]\\
+X\arrow[r,"s"']\arrow[ur,phantom,"\square" description]&Q/H.
+\end{tikzcd}
+\]
+由 $(g,p)\mapsto g\cdot p$ 定义的诱导映射 $G\times^H P\to Q$ 是主 $G$-丛的同构. 反之, 将同构 $G\times^H P\xrightarrow{\sim}Q$ 与由 $p\mapsto(\mathrm{id},p)$ 给出的 $H$-等变包含 $P\to G\times^H P$ 复合, 得到 $H$-等变映射 $P\to Q$, 它在 $H$-作用下下降为截面 $X=P/H\to Q/H$.
+\end{proof}
+概形 $X$ 上主 $G$-丛的同构类由平展上同调群 $\mathrm H^1(X_{\text{ét}},G)$ 分类; 见习题~\bookref{7.4.43}.
+\begin{exercise}\label{src:B.1.66}
+设 $1\to K\to G\to Q\to1$ 是抽象 Abel 群的正合列, 它在概形 $X$ 上诱导平展上同调群的短正合列
+\[
+\mathrm H^1(X_{\text{ét}},K)\to\mathrm H^1(X_{\text{ét}},G)\to\mathrm H^1(X_{\text{ét}},Q).
+\]
+证明主 $G$-丛 $P\to X$ 允许结构群约化到 $K$ 当且仅当类 $[P]\in P\in\mathrm H^1(X_{\text{ét}},G)$ 映至 $0\in\mathrm H^1(X_{\text{ét}},Q)$.
+\end{exercise}
+\begin{exercise}\label{src:B.1.67}
+设 $G\to S$ 为 fppf 仿射群概形, $P_1$ 与 $P_2$ 为 $S$-概形 $X$ 上的主 $G$-丛. 证明 $P_1\times P_2\to X\times X$ 沿对角线 $G\to G\times G$ 的结构群约化对应于主 $G$-丛的同构 $P_1\to P_2$.
+\end{exercise}
+
+\paragraph{Brauer--Severi 概形与 Azumaya 代数.}
+\begin{exercise}[Brauer--Severi 概形]\label{src:B.1.68}
+概形态射 $P\to X$ 称为相对维数为 $r$ 的 \newterm{Brauer--Severi 概形}{Brauer--Severi scheme}, 如果存在平展覆盖 $X'\to X$ 以及同构 $P\times_X X'\cong\mathbb P_{X'}^r$. 非平凡 Brauer--Severi 概形的一个例子是 $\Proj\mathbb R[x,y,z]/(x^2+y^2+z^2)\to\Spec\mathbb R$. 证明
+\[
+\begin{aligned}
+\left\{\begin{gathered}X\text{ 上相对维数为 }r\text{ 的}\\\text{Brauer--Severi 概形}\end{gathered}\right\}
+&\longrightarrow\{X\text{ 上的主 }\operatorname{PGL}_{r+1}\text{-丛}\},\\
+X&\longmapsto\underline{\operatorname{Isom}}_X(\mathbb P_X^r,X),\\
+(P\times\mathbb P^r)/\operatorname{PGL}_{r+1}&\mathrel{\reflectbox{$\longmapsto$}}P
+\end{aligned}
+\]
+定义群胚等价.
+
+还应注意, 概形 $X$ 上 $\operatorname{PGL}_{r+1}$-torsor 的同构类集合由平展上同调群 $\mathrm H^1(X_{\text{ét}},\operatorname{PGL}_{r+1})$ 分类 (见习题~\bookref{7.4.43}(a)). 另见 \cite[\S X.$6$]{Ser79}.
+\end{exercise}
+\begin{exercise}\label{src:B.1.69}
+设 $P\to X$ 为固有平坦且有限表现的概形态射. 假设对每个几何点 $\Spec k\to X$, 几何纤维 $P\times_X k$ 均同构于 $\mathbb P_k^1$. 证明 $P\to X$ 为相对维数为 $1$ 的 Brauer--Severi 概形.
+
+\textit{方法一 (由局部到整体):} 证明对每个点 $x\in X$, 存在有限可分域扩张 $\kappa(s)\to K$, 使得 $P\times_X K\cong\mathbb P_K^1$. 再证明存在平展邻域 $(X',x')\to(X,x)$, 使得在 $\kappa(x)$ 上有 $K\cong\kappa(x')$. 现在假设 $P\times_s\kappa(s)\cong\mathbb P_{\kappa(s)}^1$, 利用形变论 (命题~\bookref{C.2.4}) 证明存在相容同构 $P\times_X\mathcal O_{X,x}/\mathfrak m_x^n\cong\mathbb P_{\mathcal O_{X,x}/\mathfrak m_x^n}^1$, $n>0$. 利用 Grothendieck 存在定理 (\bookref{C.5.3}) 证明 $P\times_X\widehat{\mathcal O}_{X,x}\cong\mathbb P_{\widehat{\mathcal O}_{X,x}}^1$. 最后, 应用 Artin 逼近 (\bookref{B.5.18}) 证明存在平展邻域 $(X',x')\to(X,x)$, 使得 $P\times_X X'\cong\mathbb P_{X'}^1$.
+
+\textit{方法二 (直接论证):} 假设 $\pi:P\to X$ 存在截面 $\sigma:X\to P$, 证明每个点 $x\in X$ 都具有开邻域 $U\subseteq X$, 使得 $P\times_X U\cong\mathbb P_U^1$. 设 $L$ 是 $P$ 上对应于 Cartier 除子 $\sigma$ 的线丛, 利用上同调与基变换 (\bookref{A.6.8}) 证明 $\mathcal E:=\pi_*\mathcal L$ 是 $X$ 上秩为 $2$ 的向量丛, $\pi^*\mathcal E\twoheadrightarrow\mathcal L$ 为满射, 且在 $X$ 上 $P\cong\mathbb P(\mathcal E)$. 选取 $\mathcal E$ 在其上平凡的 $x\in X$ 的开邻域, 即得结论. 回到一般情形, 证明存在与 $\Omega_{P/X}^\vee$ 关联的有效除子 $D$, 使得 $D\to X$ 平展. 沿 $D\to X$ 作基变换, 化归到 $P\to X$ 有截面的情形. 另见 \cite[命题 $25.3$ 及习题 $25.2$]{Har77}.
+\end{exercise}
+\begin{exercise}[Azumaya 代数]\label{src:B.1.70}
+概形 $X$ 上秩为 $r^2$ 的 \newterm{Azumaya 代数}{Azumaya algebra} 是一个 (可能非交换的) 结合 $\mathcal O_X$-代数 $A$, 它作为 $\mathcal O_X$-模凝聚, 且存在平展覆盖 $X'\to X$, 使得 $A\otimes_{\mathcal O_X}\mathcal O_{X'}$ 同构于矩阵代数 $M_r(\mathcal O_X)$; 见 \cite[\S IV.$2$]{Mil80}. 域 $k$ 上的 Azumaya 代数是\newterm{中心单代数}{central simple algebra} (即一个有限维结合 $k$-代数, 它是单的且中心为 $k$); 四元数给出 $\mathbb R$ 上的一个中心单代数. 证明对应
+\[
+A\longmapsto\underline{\operatorname{Isom}}_X(M_r(\mathcal O_X),A)
+\]
+定义 $X$ 上秩为 $r^2$ 的 Azumaya 代数与 $X$ 上 $\operatorname{PGL}_n$-torsor 之间的双射.
+\end{exercise}
+\begin{remark}\label{src:B.1.71}
+习题~\bookref{B.1.68} 与~\bookref{B.1.70} 在概形 $X$ 上对象的同构类集合之间给出双射
+\[
+\begin{aligned}
+\{\text{秩为 }r^2\text{ 的 Azumaya 代数}\}
+&\simeq\{\text{主 }\operatorname{PGL}_n\text{-torsor}\}\\
+&\simeq\{\text{相对维数为 }r\text{ 的 Brauer--Severi 概形}\}.
+\end{aligned}
+\]
+这些双射的复合可理解为将 $X$ 上的 Azumaya 代数 $\mathcal A$ 映至参数化秩 $r$ 右理想的闭子概形 $X\subseteq\Gr_X(r,\mathcal A)$ 所定义的 Brauer--Severi 概形. \newterm{Brauer 群}{Brauer group} $\operatorname{Br}(X)$ 通过 Azumaya 代数定义, 并与 $\mathbb G_m$-gerbe 密切相关; 见注记~\bookref{7.4.51} 与习题~\bookref{7.4.52}.
+\end{remark}
+\par\clearpage
+\endgroup

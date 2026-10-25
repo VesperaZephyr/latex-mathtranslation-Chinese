@@ -1,0 +1,892 @@
+% ============ 第 VI 部分: Fourier 分析在群上随机游走中的应用 ============
+% (Application of Fourier Analysis to Random Walks on Groups)
+% 原书 VI.1 - VI.7 (原书 pp.311-338)
+
+在本章中, 我们主要关注有限群的情形, 但在最后一节中给出一些对更一般群的结果.
+
+\section{有限 \index{Markov 链}Markov 链}
+
+我们一次性固定概率空间 $\Omega$ (即总体积为 $1$ 的测度空间).
+
+\begin{definition}[\index{随机变量}随机变量与分布]
+\label{def:VI.1.1}
+设 $X$ 是可测空间 (即带 $\sigma$-代数的空间). 取值于 $X$ 的随机变量 (random variable) 是可测函数 $X \colon \Omega \to X$.
+对 $X$ 的每个可测子集 $A$, 记 $\mathbb{P}(X \in A)$ 为 $X^{-1}(A)$ 的测度. (我们把它看作 $X$ 在 $A$ 中的概率.) $X$ 的分布 (distribution) 是 $X$ 上由 $\mu(A) = \mathbb{P}(X \in A)$ 定义的概率分布 $\mu$.
+\end{definition}
+
+我们把随机变量看作某个实验或观察的结果. 概率空间 $\Omega$ 通常不指明 (可以把它想成类似``所有可能的宇宙''的东西). 例如, 可以把掷硬币的结果看作取值于有限集 $\{$正面, 反面$\}$ 的随机变量. 若硬币无偏, 该\index{随机变量的分布}随机变量的分布由 $\mu(\{$正面$\}) = \mu(\{$反面$\}) = \frac{1}{2}$ 给出.
+在这些讲义中, 我们只关心 $X$ 有限且其 $\sigma$-代数为 $X$ 的所有子集的集合的情形. 可以 (而且将要) 把 $X$ 上的测度看作函数 $\mu \colon X \to \R_{\geq 0}$.
+从现在起, 假设 $X$ 有限.
+
+\begin{definition}[\index{随机矩阵}随机矩阵 (stochastic matrix)]
+\label{def:VI.1.2}
+矩阵 $P = (P_{ij}) \in M_n(\R)$ 称为随机的 (stochastic), 若对所有 $i, j \in \{1, \ldots, n\}$ 有 $P_{ij} \geq 0$ 且对每个 $i \in \{1, \ldots, n\}$ 有 $\sum_{j=1}^n P_{ij} = 1$.
+若 $P \colon X \times X \to \R$ 是函数, 把它看作大小为 $|X| \times |X|$ 的矩阵, 若对所有 $x, y \in X$ 有 $P(x, y) \geq 0$ 且对每个 $x \in X$ 有 $\sum_{y \in X}P(x, y) = 1$, 则称它随机.
+\end{definition}
+
+\begin{definition}[Markov 链 (Markov chain)]
+\label{def:VI.1.3}
+设 $P \colon X^2 \to \R$ 是随机函数, $\nu$ 是 $X$ 上的概率分布. 状态空间为 $X$、初始分布为 $\nu$、转移矩阵 (transition matrix) 为 $P$ 的 (离散时间齐次) Markov 链是取值于 $X$ 的随机变量序列 $(X_n)_{n \geq 0}$, 使得:
+\begin{enumerate}
+\item[(a)] $X_0$ 的分布是 $\nu$.
+\item[(b)] 对每个 $n \geq 0$ 和所有 $x_0, \ldots, x_{n+1} \in X$, 若 $\mathbb{P}(X_n = x_n, \ldots, X_0 = x_0) > 0$, 则
+\[
+\mathbb{P}(X_{n+1} = x_{n+1} \mid X_n = x_n, \ldots, X_0 = x_0) = P(x_n, x_{n+1}).
+\]
+\end{enumerate}
+\end{definition}
+
+设 $P, Q \colon X^2 \to \R$ 是两个函数. 记 $PQ$ 为 $X^2 \to \R$ 的函数:
+\[
+PQ(x, y) = \sum_{z \in X}P(x, z)Q(z, y).
+\]
+(若把 $X^2$ 上的函数看作矩阵, 这就是通常的矩阵乘积.)
+特别地, 记 $P^n$ 为乘积 $PP\cdots P$ ($n$ 次); 按约定, $P^0$ 是对角线的特征函数.
+
+\begin{lemma}[$X_n$ 的分布]
+\label{lem:VI.1.4}
+设 $(X_n)_{n \geq 0}$ 是 $X$ 上初始分布为 $\nu$、转移矩阵为 $P$ 的 Markov 链. 则对每个 $x \in X$,
+\[
+\mathbb{P}(X_n = x) = \sum_{y \in X}\nu(y)P^n(y, x).
+\]
+换句话说, 若把 $P$ 看作矩阵、$\nu$ 看作行向量, 则 $X_n$ 的分布是 $\nu P^n$.
+\end{lemma}
+
+\begin{proof}
+对 $n$ 归纳证明. $n = 0$ 时显然. 假设对某个 $n$ 已知, 证明对 $n+1$. 设 $x \in X$. 则
+\begin{align*}
+\mathbb{P}(X_{n+1} = x) &= \sum_{y \in X, \mathbb{P}(X_n = y) \neq 0}\mathbb{P}(X_{n+1} = x \mid X_n = y) \\
+&= \sum_{y \in X}\mathbb{P}(X_n = y)\mathbb{P}(X_{n+1} = x \mid X_n = y) \\
+&= \sum_{y \in X}\mathbb{P}(X_n = y)P(y, x).
+\end{align*}
+用归纳假设, 得到
+\[
+\mathbb{P}(X_{n+1} = x) = \sum_{y \in X}P(y, x)\sum_{z \in X}\nu(z)P^n(z, y) = \sum_{z \in X}\nu(z)P^{n+1}(z, x).
+\]
+\end{proof}
+
+\begin{example}[Markov 链的例子]
+\label{exa:VI.1.5}
+(1) 离散圆上的随机游走 (random walk on the discrete circle): 取 $X = \Z/r\Z$, $\nu = \delta_0$, $P$ 由
+\[
+P(x, y) = \begin{cases} \frac{1}{2} & \text{若 } x - y \in \{\pm 1\}, \\ 0 & \text{否则} \end{cases}
+\]
+定义. 此 Markov 链在``离散圆'' $\Z/n\Z$ 上建模随机游走, 以概率 $1$ 从 $0$ 出发, 然后每个时刻 $n$ 有 $50\%$ 的概率走到离散圆上的前一个点, $50\%$ 的概率走到下一个点.
+(2) 用随机对换洗牌 (mixing a deck of cards using random transpositions): 我们试图理解如下情形: 有一副 $N$ 张牌. 每个时刻 $n$, 随机 (均匀且独立地) 选两张牌并交换它们在牌组中的位置. 需要多久才能洗匀?
+此问题用状态空间为 $S_N$ (表示牌组所有可能的排列), 初始分布为集中在起始位置上的 \index{Dirac 测度}Dirac 测度, 转移矩阵 $P$ 由
+\[
+P(\tau\sigma, \sigma) = \begin{cases} \frac{1}{N} & \text{若 } \tau = 1, \\ \frac{2}{N^2} & \text{若 } \tau \text{ 是对换}, \\ 0 & \text{否则} \end{cases}
+\]
+给出的 Markov 链建模.
+(3) Bernoulli-Laplace 扩散模型 (Bernoulli-Laplace diffusion model): 有标号 $0$ 和 $1$ 的两个瓮. 开始时, 瓮 $0$ 装有 $r$ 个红球, 瓮 $1$ 装有 $b$ 个蓝球. 每个时刻 $n$, 在每个瓮中 (均匀且独立地) 选一个球并交换. 需要多久才能混匀?
+用状态空间为 $S_N/S_r \times S_b$ (其中 $N = r + b$, $S_r \times S_b$ 通过显然的双射 $\{1, \ldots, r\} \times \{1, \ldots, b\} \simeq \{1, \ldots, N\}$ 嵌入 $S_N$) 的 Markov 链建模. 事实上, 可以把 $N$ 个球看作集合 $\{1, \ldots, N\}$, 其中前 $r$ 个球红、后 $b$ 个球蓝. 上述过程的状态是满足 $|A| = r$ 的 $\{1, \ldots, N\}$ 的子集 $A$ (瓮 $0$ 的内容); 注意在两个瓮之间交换两个球不改变每个瓮中的球数. 群 $S_N$ 在 $\{1, \ldots, N\}$ 的基数为 $r$ 的子集的集合 $\Omega_r$ 上传递作用, 其子群 $S_r \times S_b$ 是 $\{1, \ldots, r\}$ 的稳定化子, 所以状态集确实与 $S_N/S_r \times S_b$ 双射对应. 初始分布是集中在 $\{1, \ldots, r\}$ 上的 Dirac 测度. 转移矩阵 $P$ 由
+\[
+P(A', A) = \begin{cases} \frac{(r-1)!(b-1)!}{(r+b)!} & \text{若 } r - |A \cap A'| = 1, \\ 0 & \text{否则} \end{cases}
+\]
+给出. 事实上, 需要计算满足 $r - |A \cap A'| = 1$ 的 $\{1, \ldots, N\}$ 的基数为 $r$ 的子集偶对 $(A, A')$ 的数目; 注意此条件意味着 $A' - A$ 和 $A - A'$ 都恰好有一个元素. 有 $\frac{(r+b)!}{r!b!}$ 种选择 $A$ 的方式, $b$ 种选择 $A' - A$ 的元素的方式, $r$ 种选择 $A - A'$ 的元素的方式.
+\end{example}
+
+我们一直在问例子中的链是否收敛, 但第一个问题应该是: 它们能收敛到什么分布?
+
+\begin{definition}[平稳分布 (stationary distribution)]
+\label{def:VI.1.6}
+考虑随机函数 $P \colon X^2 \to \R$. $P$ 的平稳分布是 $X$ 上满足对每个 $y \in X$ 有
+\[
+\mu(y) = \sum_{x \in X}\mu(x)P(x, y)
+\]
+的概率分布 $\mu$.
+若把 $P$ 看作 $|X| \times |X|$ 矩阵、$\mu$ 看作大小为 $|X|$ 的行向量, 则条件变成 $\mu P = \mu$.
+若转移矩阵为 $P$ 的 Markov 链以任何合理意义收敛, 则其极限的分布应是 $P$ 的平稳分布.
+最后, 定义将对随机变量使用的距离. 注意若 $X$ 是一般测度空间, 此定义同样有意义, 且后面的引理在本质上用同样的证明仍然成立.
+\end{definition}
+
+\begin{definition}[\index{全变差距离}全变差距离 (total variation distance)]
+\label{def:VI.1.7}
+设 $\mu$ 和 $\nu$ 是 $X$ 上的两个概率分布. 它们的全变差距离 (total variation distance) 是
+\[
+\|\mu - \nu\|_{TV} = \max_{A \subset X}|\mu(A) - \nu(A)|.
+\]
+这显然是概率分布集合上的度量, 事实上它与 $L^1$ 度量密切相关.
+\end{definition}
+
+\begin{lemma}[全变差距离的公式]
+\label{lem:VI.1.8}
+设 $\mu$ 和 $\nu$ 是 $X$ 上的两个概率分布. 则
+\[
+\|\mu - \nu\|_{TV} = \frac{1}{2}\sum_{x \in X}|\mu(x) - \nu(x)|.
+\]
+\end{lemma}
+
+\begin{proof}
+设 $B = \{x \in X \mid \mu(x) \geq \nu(x)\}$. 对每个 $A \subset X$,
+\begin{multline*}
+\mu(A) - \nu(A) = \mu(A \cap B) - \nu(A \cap B) + \sum_{x \in A - A \cap B}(\mu(x) - \nu(x)) \leq \mu(A \cap B) - \nu(A \cap B) \\
+= \mu(B) - \nu(B) - \sum_{x \in B - A \cap B}(\mu(x) - \nu(x)) \leq \mu(B) - \nu(B).
+\end{multline*}
+类似地,
+\[
+\nu(A) - \mu(A) \leq \nu(X - B) - \mu(X - B) = \mu(B) - \nu(B).
+\]
+所以 $|\mu(A) - \nu(A)| \leq \mu(B) - \nu(B)$, 且 $A = B$ 或 $A = X - B$ 时取等号, 得到
+\begin{align*}
+\|\mu - \nu\|_{TV} &= \mu(B) - \nu(B) = \frac{1}{2}(\mu(B) - \nu(B) + \nu(X - B) - \mu(X - B)) \\
+&= \frac{1}{2}\sum_{x \in B}|\mu(x) - \nu(x)| + \frac{1}{2}\sum_{x \in X - B}|\mu(x) - \nu(x)| \\
+&= \frac{1}{2}\|\mu - \nu\|_1.
+\end{align*}
+\end{proof}
+
+\section{Perron-Frobenius 定理与 Markov 链的收敛}
+
+\begin{notation}[矩阵的序]
+\label{not:VI.2.1}
+设 $A, B \in M_{nm}(\R)$. 若对每个 $(i, j) \in \{1, \ldots, n\} \times \{1, \ldots, m\}$ 有 $A_{ij} \geq B_{ij}$ (相应地 $A_{ij} > B_{ij}$), 则说 $A \geq B$ (相应地 $A > B$). 还用 $|A|$ 记 $n \times m$ 矩阵 $(|A_{ij}|)$.
+\end{notation}
+
+\begin{definition}[\index{正矩阵}正矩阵与遍历矩阵]
+\label{def:VI.2.2}
+若 $P > 0$, 则说矩阵 $P = (P_{ij}) \in M_n(\R)$ 正 (positive).
+\end{definition}
+
+\begin{definition}[遍历矩阵 (ergodic matrix)]
+\label{def:VI.2.3}
+若存在正整数 $r$ 使得 $P^r$ 正, 则说随机矩阵 $P \in M_n(\R)$ 遍历 (ergodic).
+\end{definition}
+
+回忆线性代数中下列经典定理:
+
+\begin{theorem}[Perron-Frobenius 定理]
+\label{thm:VI.2.4}
+设 $P = (P_{ij}) \in M_n(\R)$ 是遍历随机矩阵. 则:
+\begin{enumerate}
+\item[(i)] 矩阵 $P$ 以 $1$ 为单特征值, 且 $P$ 的每个复特征值 $\lambda$ 满足 $|\lambda| < 1$.
+\item[(ii)] 满足 $wP = w$ 的行向量 $w \in M_{1n}(\R)$ 的空间是 $1$ 维的, 且它有生成元 $v = (v_1, \ldots, v_n)$ 使得对每个 $i$ 有 $v_i > 0$ 且 $v_1 + \cdots + v_n = 1$.
+\item[(iii)] 设 $P_{\infty}$ 是行都等于 (ii) 的向量 $v$ 的 $n \times n$ 矩阵. 则 $r \to +\infty$ 时 $P^r \to P_{\infty}$. 更精确地, 设 $\rho = \max\{|\lambda| \mid \lambda \neq 1 \text{ 是 } P \text{ 的特征值}\}$; 由 (i) 知道 $\rho < 1$. 固定 $M_n(\R)$ 上的任何范数 $\|\cdot\|$. 则存在多项式 $f \in \Z[t]$ 使得
+\[
+\|P^k - P_{\infty}\| \leq f(k)\rho^k.
+\]
+\end{enumerate}
+\end{theorem}
+
+\begin{lemma}[Perron-Frobenius 引理]
+\label{lem:VI.2.5}
+设 $A = (A_{ij}) \in M_n(\R)$ 是正矩阵, 设
+\[
+Z = \{x = (x_1, \ldots, x_n) \in \R^n \mid x \geq 0 \text{ 且 } x_1 + \cdots + x_n = 1\},
+\]
+设
+\[
+\Lambda = \{\lambda \in \R \mid \exists x \in Z,\, Ax \geq \lambda x\}.
+\]
+则实数 $\lambda_0 = \sup\Lambda$ 为正, 是 $A$ 的特征多项式的单根, 且它有一个全元素为正的特征向量. 又, 对 $A$ 的每个复特征值 $\lambda \neq \lambda_0$, $|\lambda| < \lambda_0$.
+\end{lemma}
+
+\begin{proof}
+注意 $\Lambda \neq \emptyset$, 因为 $0 \in \Lambda$, 且 $\Lambda$ 被 $A$ 的所有元素之和控制上界. 所以 $\lambda_0$ 良定义且非负. 设 $(\mu_n)_{n \geq 0}$ 是 $\Lambda$ 中收敛到 $\lambda_0$ 的序列; 对每个 $n \geq 0$, 选择 $x^{(n)} \in Z$ 使得 $Ax^{(n)} \geq \mu_nx^{(n)}$. 由于 $Z$ 紧, 可以假设序列 $(x^{(n)})_{n \geq 0}$ 收敛到某个 $x \in Z$, 然后有 $Ax \geq \lambda_0x$. 假设 $Ax \neq \lambda_0x$, 则因 $A > 0$ 得到 $A(Ax) > \lambda_0Ax$. 由于 $Ax \geq 0$ 且 $Ax \neq 0$, 可以把 $Ax$ 乘以正纯量得到向量 $y \in Z$ 使得 $Ay > \lambda_0y$, 这与 $\lambda_0$ 的定义矛盾. 所以 $Ax = \lambda_0x$. 又, 由于 $x$ 至少有一个正元素且 $A > 0$, 向量 $\lambda_0x = Ax$ 的所有元素为正, 这蕴含 $\lambda_0 > 0$ 且 $x > 0$.
+其次证明 $A$ 的每个复特征值 $\lambda \neq \lambda_0$ 满足 $|\lambda| < \lambda_0$. 设 $\lambda$ 是 $A$ 的复特征值. 则存在非零向量 $y = (y_1, \ldots, y_n) \in \CC^n$ 使得 $Ay = \lambda y$. 对每个 $i \in \{1, \ldots, n\}$,
+\[
+|\lambda||y_i| = \Bigl|\sum_{j=1}^n A_{ij}y_j\Bigr| \leq \sum_{j=1}^n A_{ij}|y_j|.
+\]
+换句话说, 有 $A|y| \geq |\lambda||y|$. 由于可以把 $|y|$ 规范化得到 $Z$ 的元素, 这证明 $|\lambda| \leq \lambda_0$. 假设 $|\lambda| = \lambda_0$. 由于 $A > 0$, 存在正实数 $\delta$ 使得 $A_0 := A - \delta I_n > 0$. 则 $\mu \longmapsto \mu - \delta$ 诱导 $A$ 的特征值与 $A_0$ 的特征值之间的双射, 特别地 $\lambda_0 - \delta$ 是 $A_0$ 的最大实特征值 (且它为正, 因为 $A_0 > 0$). 把本段开头应用于 $A_0$, 看到 $|\lambda - \delta| \leq \lambda_0 - \delta$. 但此时
+\[
+\lambda_0 = |\lambda| = |\lambda - \delta + \delta| \leq |\lambda - \delta| + \delta \leq \lambda_0,
+\]
+所以 $|\lambda - \delta| + \delta = |\lambda|$, 因此 $\lambda \in \R_{\geq \delta}$, 且必有 $\lambda = \lambda_0$.
+证明特征空间 $E_{\lambda_0} := \Ker(A - \lambda_0I_n)$ 维数为 $1$. 假设存在 $y = (y_1, \ldots, y_n) \in E_{\lambda_0}$ (元素为实数) 使得族 $\{x, y\}$ 线性无关. 可以假设 $y$ 至少有一个正元素. 写 $x = (x_1, \ldots, x_n)$, 设 $\mu = \sup\{\nu \in \R \mid \forall i \in \{1, \ldots, n\},\, x_i \geq \nu y_i\}$. 则 $x - \mu y \geq 0$ 且 $x - \mu y \ngeq 0$. 向量 $x - \mu y$ 非零, 因为 $x$ 和 $y$ 线性无关, 且有 $A(x - \mu y) = \lambda_0(x - \mu y)$. 由于 $A > 0$, $x - \mu y \geq 0$, $\lambda_0 > 0$, 这蕴含 $x - \mu y > 0$, 与 $\nu$ 的选取矛盾.
+现在证明 $\lambda_0$ 是 $A$ 的特征多项式 $\chi_A(t)$ 的单根. 可以找到 $g \in \GL_n(\R)$ 使得 $g^{-1}Ag$ 具有 $\begin{pmatrix} \lambda_0 & * \\ 0 & B \end{pmatrix}$ 的形式, 其中 $B \in M_{n-1}(\R)$. 有 $\chi_A(t) = (t - \lambda_0)\chi_B(t)$. 假设 $\lambda_0$ 作为 $\chi_A(t)$ 的根的重数 $\geq 2$. 则 $\lambda_0$ 是 $\chi_B(t)$ 的根, 所以存在 $z \in \R^{n-1}$ 使得 $Bz = \lambda_0z$. 设 $y = g\begin{pmatrix} 0 \\ z \end{pmatrix} \in \R^n$, 则对某个 $\alpha \in \R$ 有 $Ay = \lambda_0y + \alpha x$. 由于 $\dim(E_{\lambda_0}) \neq 0$ 是 $1$, 向量 $y$ 不可能是 $A$ 的特征向量, 所以 $\alpha \neq 0$. 简单归纳 (用 $Ax = \lambda_0x$ 这一事实) 表明对每个正整数 $r$, $A^ry = \lambda_0^ry + r\alpha\lambda_0^{r-1}x$. 由于 $A^r > 0$, 这蕴含
+\[
+A^r|y| \geq |A^ry| = |\lambda_0^ry + r\alpha\lambda_0^{r-1}x| \geq |r\alpha\lambda_0^{r-1}x| - \lambda_0^r|y| = \lambda_0^{r-1}(r|\alpha x| - \lambda_0|y|).
+\]
+由于 $\alpha \neq 0$ 且 $x > 0$, 存在正整数 $r$ 使得 $r|\alpha x| - \lambda_0|y| > \lambda_0|y|$, 然后 $A^r|y| > \lambda_0^r|y|$. 由于 $A^r > 0$, 把本证明的开头应用于 $A^r$, 看到这蕴含 $A^r$ 有实特征值 $> \lambda_0^r$. 但这不可能, 因为 $A^r$ 的特征值是 $A$ 的特征值的 $r$ 次幂, 所以它们的绝对值都 $\leq \lambda_0^r$.
+\end{proof}
+
+\begin{proof}[定理的证明]
+证明 (i). 设 $v_0 = (1, \ldots, 1) \in \R^n$. 则 $P$ 随机这一事实等价于 $P \geq 0$ 且 $Pv_0 = v_0$. 由于所有矩阵 $P^r$ ($r \geq 1$) 的元素非负且满足 $P^rv_0 = v_0$, 它们都随机. 又, 若 $x = (x_1, \ldots, x_n) \in (\R_{\geq 0})^n$, $Q = (Q_{ij}) \in M_n(\R)$ 随机, 则对每个 $i \in \{1, \ldots, n\}$,
+\[
+(Qx)_i = \sum_{j=1}^n Q_{ij}x_j \leq \sup_{1 \leq j \leq n}x_j.
+\]
+固定整数 $r \geq 1$ 使得 $P^r > 0$. 由引理, 矩阵 $P^r$ 有简单实正特征值 $\lambda_0$, 使得 $P^r$ 的每个复特征值 $\lambda \neq \lambda_0$ 满足 $|\lambda| < \lambda_0$. 由引理中 $\lambda_0$ 的定义和上面关于随机矩阵的观察, 有 $\lambda_0 \leq 1$. 另一方面, $Pv_0 = v_0$, 所以 $1$ 是 $P$ 的特征值, 从而也是 $P^r$ 的, 因此 $\lambda_0 = 1$. 设 $\lambda \in \CC$ 是 $P$ 的特征值, $y \in \CC^n$ 是此特征值的特征向量. 则 $P^ry = \lambda^ry$, 所以 $\lambda^r$ 是 $P^r$ 的特征值. 若 $\lambda^r \neq 1$, 则由引理 $|\lambda^r| < 1$, 所以 $|\lambda| < 1$. 若 $\lambda^r = 1$, 则特征向量 $y$ 必在 $\Ker(P^r - I_n)$ 中, 且知道 (再次由引理) 这个空间是 $1$ 维的. 由于 $v_0 \in \Ker(P^r - I_n)$, 向量 $y$ 必是 $v_0$ 的倍数, 然后 $\lambda = 1$.
+最后, 若 $P$ 的特征多项式是 $\chi_P(t) = (t - \lambda_1)\cdots(t - \lambda_n)$, 则 $P^r$ 的特征多项式是 $\chi_{P^r}(t) = (t - \lambda_1^r)\cdots(t - \lambda_n^r)$. 所以 $1$ 在 $\chi_P(t)$ 中的重数至多是它在 $\chi_{P^r}(t)$ 中的重数, 而由引理知道后者是 $1$. 这完成 (i) 的证明.
+证明 (ii). 由于 $P$ 和 $P^T$ 有相同的特征多项式, 由 (i) 知道 $1$ 是 $P^T$ 的单特征值, 所以满足 $wP = w$ 的行向量空间维数为 $1$. 设 $w = (w_1, \ldots, w_n)$ 是这个空间的非零向量. 则也有 $|w|P = |w|$. 事实上, 对每个 $j \in \{1, \ldots, n\}$,
+\[
+|w_j| = \Bigl|\sum_{i=1}^n w_iP_{ij}\Bigr| \leq \sum_{i=1}^n |w_i|P_{ij}
+\]
+(因为所有 $P_{ij}$ 非负). 假设 $|w| \neq |w|P$. 则存在 $j_0 \in \{1, \ldots, n\}$ 使得 $|w_{j_0}| < \sum_{i=1}^n |w_i|P_{ij_0}$, 这蕴含
+\[
+\sum_{i=1}^n |w_i| = \sum_{i=1}^n\sum_{j=1}^n |w_i|P_{ij} > \sum_{j=1}^n |w_j|,
+\]
+矛盾. 由于 $w \neq 0$, $|w_i|$ 中至少有一个为正. 若如前选择 $r \geq 1$ 使得 $P^r > 0$, 则 $|w| = P^r|w|$, 所以对每个 $j \in \{1, \ldots, n\}$, $|w_j| = \sum_{i=1}^n (P^r)_{ij}|w_i| > 0$. 这完成 (ii) 的证明.
+最后证明 (iii). 由于 $M_n(\R)$ 上的所有范数等价, 只需对某个特定范数证明结论. 由 Jordan 标准形的存在性 (实际上是 Jordan-Chevalley 分解), 存在矩阵 $g \in \GL_n(\R)$ 使得 $g^{-1}Pg = A = \begin{pmatrix} 1 & 0 \\ 0 & B \end{pmatrix}$, 其中 $B \in M_{n-1}(\R)$ 满足 $B = D + N$, $D$ 是对角矩阵, $N$ 是幂零矩阵且 $DN = ND$. 在 $M_n(\R)$ 上选择由 $\R^n$ 上通常 Euclid 范数给出的算子范数 $\|\cdot\|$. $D$ 的元素是 $P$ 的异于 $1$ 的特征值, 所以 $\|D\| = \rho$. 由于 $D$ 和 $N$ 交换, 对每个 $k \in \Z_{\geq 0}$,
+\[
+B^k = (D + N)^k = \sum_{j=0}^k\binom{k}{j}D^{k-j}N^j.
+\]
+若 $k \geq n$ (事实上 $k \geq n - 1$ 就够), 这化简为 $\sum_{j=0}^n\binom{k}{j}D^{k-j}N^j$, 因为 $j \geq n$ 时 $N^j = 0$. 所以若 $k \geq n$,
+\[
+\|B^k\| \leq \sum_{j=0}^n\binom{k}{j}\|D\|^{k-j}\|N\|^j \leq \rho^{k-n}\sum_{j=0}^n\binom{k}{j}\|N\|^j.
+\]
+设 $A_{\infty} = \begin{pmatrix} 1 & 0 \\ 0 & B_{\infty} \end{pmatrix}$, 其中 $B_{\infty} = 0 \in M_{n-1}(\R)$. 则对每个 $k \geq 0$ 有 $\|A^k - A_{\infty}\| = \|B^k\|$, 所以 $A^k \to A_{\infty}$ (因为 $\rho < 1$). 这蕴含 $P^k \to P_0 := gA_{\infty}g^{-1}$ (当 $k \to +\infty$). 又,
+\[
+\|P^k - P_0\| = \|g^{-1}(A^k - A_{\infty})g\| \leq \|g\|\|g^{-1}\|\|B^k\|,
+\]
+它被 $\rho^k$ 和 $k$ 的多项式的乘积控制. 所以只需证明 $P_0 = P_{\infty}$. 由于 $P_0 = \lim_{k \to +\infty}P^k$, 有 $P_0P = PP_0 = P_0$. 回忆 $1$ 是 $P$ 和 $P^T$ 的单特征值. 所以 $P_0$ 的所有行都是 $P^T$ 的对应特征向量的倍数, 即 $v$ 的倍数. 又, 由于对每个 $k \geq 0$ 有 $P^k$ 随机, 其极限 $P_0$ 随机. 所以 $P_0$ 的所有行的元素非负且和为 $1$, 这意味着它们都等于 $v$, 且 $P_0 = P_{\infty}$.
+\end{proof}
+
+\begin{definition}[\index{遍历 Markov 链}遍历 Markov 链]
+\label{def:VI.2.6}
+若 $P$ 遍历, 则称转移矩阵为 $P$ 的 Markov 链遍历 (ergodic).
+\end{definition}
+
+在例子 \ref{exa:VI.1.5} 中, 除了 (1) 中 $r$ 为偶数时的 Markov 链, 所有链都遍历.
+
+\begin{corollary}[遍历链的收敛]
+\label{cor:VI.2.7}
+设 $(X_n)_{n \geq 0}$ 是转移矩阵为 $P$ 的遍历 Markov 链. 则 $P$ 有唯一平稳分布 $\mu$, 且若 $\mu_n$ 是 $X_n$ 的分布, 有
+\[
+\|\mu_n - \mu\|_{TV} \leq f(n)\rho^n,
+\]
+其中 $f$ 是多项式, $\rho = \max\{|\lambda| \mid \lambda \neq 1 \text{ 是 } P \text{ 的特征值}\} < 1$.
+\end{corollary}
+
+\begin{proof}
+设 $\nu$ 是 Markov 链的初始分布. 由引理 \ref{lem:VI.1.4}, $\mu_n = \nu P^n$. 设 $P_{\infty}$ 是序列 $(P^n)_{n \geq 0}$ 的极限. $P_{\infty}$ 的所有行都等于 $\mu$, 所以 $\nu P_{\infty} = \mu$. 若用 $X$ 到 $\R$ 的函数空间上的 $L^1$ 范数 (对 $X$ 上的计数测度) 定义矩阵空间上的算子范数 $\|\cdot\|$, 则
+\[
+\|\mu_n - \mu\|_{TV} = \frac{1}{2}\|\mu_n - \mu\|_1 = \frac{1}{2}\|\nu P^n - \nu P_{\infty}\|_1 \leq \frac{1}{2}\|\nu\|_1\|P^n - P_{\infty}\|,
+\]
+所以 $\|\mu_n - \mu\|_{TV}$ 的界立即由定理的 (iii) 得出.
+\end{proof}
+
+\begin{remark}[收敛界的缺陷]
+\label{rem:VI.2.8}
+虽然 $\|\mu_n - \mu\|_{TV}$ 的界看起来相当好 (它是指数的), 但若想知道 $\mu_n$ 何时恰好接近平稳分布, 它毫无用处. 需要更仔细地分析问题才能回答这类问题. 这就是我们现在将在一些特殊情形中尝试做的.
+\end{remark}
+
+\begin{example}[随机对换链遍历]
+\label{exa:VI.2.9}
+例子 \ref{exa:VI.1.5}(2) 的链遍历. 事实上, 设 $T \subset S_n$ 是 $\{1\}$ 和对换集合的并. 则对 $r \geq 1$ 和 $\sigma, \sigma' \in S_n$, $P^r(\sigma', \sigma) > 0$ 当且仅当 $\sigma'\sigma^{-1}$ 可以写成 $T$ 的恰好 $r$ 个元素的乘积; 由于 $1 \in T$, 这等价于条件: $\sigma'\sigma^{-1}$ 可以写成 $s$ 个对换的乘积, 其中 $s \leq r$. 所以若 $r \geq \frac{n(n-1)}{2}$ ($S_n$ 的最长元素的长度), 则对所有 $\sigma, \sigma' \in S_n$, $P^r(\sigma', \sigma) > 0$.
+\end{example}
+
+\section{遍历性判据}
+本节的定义和结果在后续各节中不使用.
+回忆下列定义:
+
+\begin{definition}[图 (graph)]
+\label{def:VI.3.1}
+(有限无向) 图是偶对 $\mathcal{G} = (X, E)$, 其中 $X$ 是有限集, $E$ 是 $X$ 的不同元素的无序偶对 $\{x, y\}$ 的集合. 说 $X$ 是 $\mathcal{G}$ 的顶点集 (set of vertices), $E$ 是边集 (set of edges).
+设 $x, y \in X$. $\mathcal{G}$ 中连接 $x$ 和 $y$ 的路径 (path) 是 $\mathcal{G}$ 的边序列 $p = (e_0, \ldots, e_n)$, 使得可以把 $e_i$ 写成 $e_i = \{x_i, y_i\}$, 其中 $x_0 = x$, $y_n = y$, 对每个 $i \in \{0, \ldots, n-1\}$ 有 $y_i = x_{i+1}$. 称整数 $n + 1$ 为路径 $p$ 的长度 (length), 记为 $|p|$. 若 $x = y$, 则说路径是闭路径 (closed path) 或基于 $x$ 的回路 (loop).
+说图 $\mathcal{G}$ 连通 (connected), 若对每个 $x, y \in X$, 存在连接 $x$ 和 $y$ 的路径. 说 $\mathcal{G}$ 二部 (bipartite), 若存在满射 $\varphi \colon X \to \{-1, 1\}$ 使得对 $\mathcal{G}$ 的每条边 $e = \{x, y\}$, $\varphi(x) \neq \varphi(y)$. (换句话说, 可以把 $X$ 分成两个非空子集 $X_0$ 和 $X_1$, 使得每条边连接 $X_0$ 的元素和 $X_1$ 的元素.)
+对每个 $x, y \in X$, $x$ 和 $y$ 之间的距离 (distance) $d(x, y)$ 是连接 $x$ 和 $y$ 的最短路径的长度; 若不存在这样的路径, 则设 $d(x, y) = +\infty$. 注意若 $\mathcal{G}$ 连通, 这定义 $X$ 上的度量.
+\end{definition}
+
+下列结果是经典的.
+
+\begin{proposition}[二部图判据]
+\label{prop:VI.3.2}
+设 $\mathcal{G} = (X, E)$ 是连通图, 满足 $|X| \geq 2$. 则下列条件等价:
+\begin{enumerate}
+\item[(i)] $\mathcal{G}$ 二部;
+\item[(ii)] $\mathcal{G}$ 中的每个回路长度偶;
+\item[(iii)] 存在 $x_0$ 使得基于 $x_0$ 的每个回路长度偶.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+证明 (i) 蕴含 (ii). 假设 $\mathcal{G}$ 二部, $\varphi \colon X \to \{-1, 1\}$ 如定义. 设 $(e_0, \ldots, e_n)$ 是 $\mathcal{G}$ 中的回路. 写 $e_i = \{x_i, y_i\}$, 其中 $0 \leq i \leq n - 1$ 时 $x_i = y_{i+1}$, $y_n = x_0$. 则对 $i$ 简单归纳表明: $i$ 偶时 $\varphi(x_i) = \varphi(x_0)$ 且 $\varphi(y_i) \neq \varphi(x_0)$; $i$ 奇时 $\varphi(x_i) \neq \varphi(x_0)$ 且 $\varphi(y_i) = \varphi(x_0)$. 但 $y_n = x_0$, 所以 $\varphi(y_n) = \varphi(x_0)$, 因此 $n$ 奇, 回路长度偶.
+(ii) 蕴含 (iii) 显然. 现在假设 (iii), 证明 (i). 选择 $x_0 \in X$ 使得基于 $x_0$ 的每个回路长度偶. 要定义函数 $\varphi \colon X \to \{0, 1\}$. 设 $y \in X$. 由于 $\mathcal{G}$ 连通, 存在连接 $x_0$ 和 $x$ 的路径 $p = (e_0, \ldots, e_n)$, 设 $\varphi(x) = (-1)^{|p|}$. 需要证明这不依赖路径. 设 $q = (f_0, \ldots, f_m)$ 是连接 $x_0$ 和 $x$ 的另一条路径. 则 $(e_0, \ldots, e_n, f_m, \ldots, f_0)$ 是基于 $x_0$ 的回路, 所以由假设它长度偶, 因此 $|p| + |q|$ 偶, 且 $(-1)^{|p|} = (-1)^{|q|}$. 注意 $\varphi(x_0) = 1$, 且若 $\{x_0, x\}$ 是边 (这样的边必存在, 因为 $\mathcal{G}$ 连通且 $|X| \geq 2$), 则 $\varphi(x) = -1$. 所以 $\varphi$ 满射. 设 $e = \{x, y\}$ 是 $\mathcal{G}$ 的边. 设 $p = (e_0, \ldots, e_n)$ 是连接 $x_0$ 和 $x$ 的路径. 则 $p' := (e_0, \ldots, e_n, e)$ 是连接 $x_0$ 和 $y$ 的路径, $|p'| = |p| + 1$, 所以 $\varphi(x) \neq \varphi(y)$. 这证明 $\mathcal{G}$ 二部.
+\end{proof}
+
+现在来看与 Markov 链的联系.
+
+\begin{proposition}[图的连通性与遍历性]
+\label{prop:VI.3.3}
+设 $X$ 是有限集, $P \colon X \times X \to \R$ 是随机函数. 按如下方式定义图 $\mathcal{G} = (X, E)$: $X$ 的不同元素偶对 $\{x, y\}$ 是 $\mathcal{G}$ 的边当且仅当 $P(x, y) > 0$.
+假设 $\mathcal{G}$ 连通且不二部. 则函数 $P$ 遍历.
+\end{proposition}
+
+\begin{proof}
+注意对每个 $x, y \in X$ 和每个 $n \geq 1$, $P^n(x, y) > 0$ 当且仅当存在连接 $x$ 和 $y$ 的长度为 $n$ 的路径.
+由命题 \ref{prop:VI.3.2}, 对每个 $x \in X$, 存在基于 $x$ 的奇数长度回路 $p_x$. 写 $2m + 1 = \max_{x \in X}|p_x|$, 其中 $m \in \Z_{\geq 0}$. 设 $x \in X$. 证明对每个 $n \geq 2m$, 存在基于 $x$ 的长度为 $n$ 的回路. 设 $\{x, z\}$ 是边. 对每个 $r \geq 0$, 记 $q_{2r}$ 为长度 $2r$ 的回路 $q_{2r} = (\{x, z\}, \{z, x\}, \ldots, \{x, z\}, \{z, x\})$. 设 $n \geq 2m$. 若 $n$ 偶, 则 $q_n$ 是基于 $x$ 的长度为 $n$ 的回路. 若 $n$ 奇, 则 $r := \frac{n - |p_x|}{2}$ 是非负整数, 且把 $p_x$ 和 $q_{2r}$ 拼接得到的回路长度 $n$ 且包含 $x$.
+设 $\delta = \max_{x,y \in X}d(x, y)$. (这称为图 $\mathcal{G}$ 的直径 (diameter).) 设 $x, y \in X$, $n \geq 2m + \delta$, 证明存在连接 $x$ 和 $y$ 的长度为 $n$ 的路径 (这将完成证明). 设 $p$ 是连接 $x$ 和 $y$ 的任何路径. 则 $|p| \leq \delta$, 所以由上一段, 存在基于 $x$ 的长度为 $n - |p|$ 的回路 $q$. $p$ 和 $q$ 的拼接就是所要的路径.
+\end{proof}
+
+\begin{corollary}[例子中的遍历性]
+\label{cor:VI.3.4}
+\begin{enumerate}
+\item[(i)] 例子 \ref{exa:VI.1.5}(1) 的链遍历当且仅当 $r$ 奇.
+\item[(ii)] 例子 \ref{exa:VI.1.5}(3) 的链在 $r \leq n - 1$ 时遍历.
+\end{enumerate}
+我们将在第 VI.5 节中用另一种方法重新证明 (ii).
+\end{corollary}
+
+\begin{proof}
+(i) 对应链的图以 $\Z/r\Z$ 为顶点集, 且 $a, b \in \Z/r\Z$ 之间连边当且仅当 $a - b \in \{\pm 1\}$. 此图显然连通, 容易看到它二部当且仅当 $r$ 偶. 特别地, 若 $r$ 奇, 则命题蕴含链遍历.
+现在假设 $r$ 偶. 对 $n$ 简单归纳表明, 对每个 $n \geq 1$ 和所有 $a, b \in \Z/r\Z$, 若 $n + a + b$ 在 $\Z/2\Z$ 中的像非零, 则 $P^n(a, b) = 0$. 事实上, 这由 $n = 1$ 时 $P$ 的定义得出. 假设结果对某个 $n \geq 1$ 已知, 证明对 $n + 1$. 设 $a, b \in \Z/r\Z$ 使得 $P^{n+1}(a, b) \neq 0$. 由于 $P^{n+1}(a, b) = \sum_{c \in \Z/r\Z}P(a, c)P^n(c, b)$, 存在 $c \in \Z/r\Z$ 使得 $P(a, c) \neq 0$ 且 $P^n(c, b) \neq 0$. 由归纳假设和 $n = 1$ 的情形, 这蕴含 $a + c \neq 0 \bmod 2$ 且 $n + c + b \neq 0 \bmod 2$, 然后 $n + a + b + 2c = n + a + b = 0 \bmod 2$.
+(ii) 对应 Markov 链的图以 $\{1, \ldots, n\}$ 的基数为 $r$ 的子集的集合 $\Omega_r$ 为顶点集, $A, A' \in \Omega_r$ 之间连边当且仅当 $|A \cap A'| = r - 1$. 设 $A_0 = \{1, \ldots, r\}$. 首先证明图连通. 设 $A \in \Omega_r$. 把 $A$ 写成 $A = \{n_1, \ldots, n_r\}$, 并选择元素的顺序使得 $A \cap A_0 = \{1, \ldots, n_s\}$, 其中 $s = |A \cap A_0|$. 设 $m_1, \ldots, m_{r-s}$ 是 $A_0 - A$ 的元素. 对 $0 \leq i \leq r - s$, 设 $B_i = \{n_1, \ldots, n_{s+i}, m_{i+1}, \ldots, m_{r-s}\}$. 则 $B_0 = A_0$, $B_{r-s} = A$, 且对每个 $i \in \{0, \ldots, r - s - 1\}$, $B_i$ 和 $B_{i+1}$ 之间有边. 所以图连通.
+现在通过找奇数长度回路证明图不二部. 设 $A = \{1, \ldots, r - 1, r + 1\}$, $B = \{2, \ldots, r, r + 1\}$. 则 $\{A_0, A\}$, $\{A, B\}$, $\{B, A_0\}$ 都是边, 所以找到了长度 $3$ 的回路.
+\end{proof}
+
+\section{齐性空间上的随机游走}
+现在假设有限群 $G$ 传递 (左) 作用于有限集 $X$. 固定 $x_0 \in X$, 设 $K$ 是 $x_0$ 在 $G$ 中的稳定化子, 于是有双射 $G/K \simeq X$, $g \longmapsto g \cdot x_0$.
+警告: 在本节中, 用 $G$ 上的计数测度定义卷积乘积和 $L^p$ 范数. 小心常数! (这样选择的原因是要让两个概率分布的卷积仍是概率分布.)
+
+\begin{definition}[转移概率 $P_{\pi}$]
+\label{def:VI.4.1}
+若 $\pi$ 是 $G$ 上的概率分布, 记 $P_{\pi} \colon X \times X \to \R$ 为由
+\[
+P_{\pi}(xK, yK) = \pi(yKx^{-1})
+\]
+对所有 $x, y \in G$ 定义的函数.
+\end{definition}
+
+\begin{definition}[左不变随机游走]
+\label{def:VI.4.2}
+由 $\pi$ 驱动 (driven by $\pi$)、初始分布为 $\nu$ 的 $X$ 上左不变随机游走 (left-invariant random walk) 是状态空间为 $X$、初始分布为 $\nu$、转移矩阵为 $P_{\pi}$ 的 Markov 链.
+\end{definition}
+
+下面是用语言描述这个 Markov 链 $(X_n)_{n \geq 0}$: 按概率分布 $\nu$ 在 $X$ 上选择起点. 在时刻 $n$, 用概率分布 $\pi$ 选择 $G$ 的元素并作用于当前位置, 得到时刻 $n+1$ 的位置.
+
+\begin{remark}[$P_{\pi}$ 双随机]
+\label{rem:VI.4.3}
+矩阵 $P_{\pi}$ 实际上双随机 (bistochastic), 即 $P_{\pi}$ 和它的转置都随机. 事实上, 对每个 $y \in G$,
+\begin{align*}
+\sum_{x \in G/K}P_{\pi}(xK, yK) &= \sum_{x \in G/K}\pi(yKx^{-1}) \\
+&= \sum_{x \in G}\pi(yx^{-1}) \\
+&= 1.
+\end{align*}
+特别地, $X$ 上的均匀概率分布是 $P_{\pi}$ 的不变分布. 若 $P_{\pi}$ 遍历, 它是唯一的不变分布.
+\end{remark}
+
+若齐性空间是 $G$ 本身, 可以给出简单的遍历性判据. (见 {[}1{]} 的引理 16.20 和命题 16.21.)
+
+\begin{proposition}[遍历性判据]
+\label{prop:VI.4.4}
+假设 $X = G$, 设 $S = \operatorname{supp}(\pi)$. 记 $G_S$ 为可以写成 $g_1\cdots g_{2r}$ ($r \geq 0$) 的元素集合, 其中 $g_i$ 中恰好 $r$ 个在 $S$ 中, $r$ 个在 $S^{-1}$ 中.
+则 $G_S$ 是 $G$ 的子群, 且函数 $P_{\pi}$ 遍历当且仅当 $G = G_S$.
+特别地, 若 $\pi(1) \neq 0$, 则 $P_{\pi}$ 遍历当且仅当 $S$ 生成 $G$. 更一般地, 若 $S$ 生成 $G$ 且不包含于 $G$ 的严格子群的陪集中, 则 $P_{\pi}$ 遍历. (注意对每个 $g \in S$ 有 $S \subset gG_S$.)
+\end{proposition}
+
+\begin{proposition}[转移矩阵与卷积]
+\label{prop:VI.4.5}
+对每个 $n \geq 1$, $P_{\pi}^n = P_{\pi^{*n}}$, 其中 $\pi^{*n}$ 是 $\pi$ 的 $n$ 重卷积乘积.
+\end{proposition}
+
+\begin{proof}
+对 $n$ 归纳证明. $n = 1$ 时它只是 $P_{\pi}$ 的定义. 假设等式对某个 $n \geq 1$ 已知, 证明对 $n+1$. 设 $x, y \in X$. 则
+\begin{align*}
+P_{\pi}^{n+1}(xK, yK) &= \sum_{z \in G/K}P_{\pi}(xK, zK)P_{\pi}^n(zK, yK) \\
+&= \sum_{z \in G/K}\pi(zKx^{-1})\pi^{*n}(yKz^{-1}) \\
+&= \sum_{z \in G, h \in K}\pi(zx^{-1})\pi^{*n}(yhz^{-1}) \\
+&= \sum_{h \in K}\pi^{*(n+1)}(yhx^{-1}) \\
+&= \pi^{*(n+1)}(x, y).
+\end{align*}
+\end{proof}
+
+\begin{corollary}[上界引理 (upper bound lemma)]
+\label{cor:VI.4.6}
+设 $\pi$ 是 $G$ 上的概率测度, 假设 $\pi$ 被 $K$ 右不变. 考虑由 $\pi$ 驱动、初始分布为集中在 $x_0 \in X$ 上的 Dirac 测度的左不变随机游走 $(X_n)_{n \geq 0}$. 设 $\mu_n$ 是 $X_n$ 的分布, $\mu$ 是 $X$ 上的均匀概率分布.
+则对每个 $n \geq 0$,
+\[
+\|\mu_n - \mu\|_{TV}^2 \leq \frac{1}{4}\sum_{\substack{(\rho, V) \in \widehat{G}\\ V^K \neq 0 \text{ 且 } \rho \not\simeq \mathbf{1}}}\dim(V)\operatorname{Tr}((\hat{\pi}(\rho)^*)^n \circ \hat{\pi}(\rho)^n),
+\]
+其中用 $\mathbf{1}$ 记 $G$ 的平凡表示.
+\end{corollary}
+
+回忆若 $(\rho, V) \in \widehat{G}$ 是 $G$ 的不可约酉表示, $f \colon G \to \CC$ 是函数, 则 $\hat{f}(\rho)$ 是由
+\[
+\hat{f}(\rho) = \sum_{x \in G}f(x)\rho(x^{-1})
+\]
+定义的 $V$ 的自同态.
+
+\begin{proof}
+固定 $n \geq 0$. 对每个 $x \in G$, 由引理 \ref{lem:VI.1.4} 和命题 \ref{prop:VI.4.5},
+\[
+\mu_n(x) = P_{\pi}^n(x_0, x) = \pi^{*n}(xK).
+\]
+设 $\pi_0$ 是 $G$ 上的均匀概率分布. 由引理 \ref{lem:VI.1.8},
+\begin{align*}
+\|\mu_n - \mu\|_{TV}^2 &= \frac{1}{4}\Bigl(\sum_{x \in G/K}|\mu_n(x) - \mu(x)|\Bigr)^2 \\
+&= \frac{1}{4}\Bigl(\sum_{x \in G}|\pi^{*n}(x) - \pi_0(x)|\Bigr)^2 \\
+&= \frac{1}{4}\|\pi^{*n} - \pi_0\|_1^2 \\
+&\leq \frac{|G|}{4}\|\pi^{*n} - \pi_0\|_2^2,
+\end{align*}
+其中最后一个不等式是 Cauchy-Schwarz 不等式. (注意用 $G$ 上的计数测度定义 $L^p$ 范数.) 设 $f = \pi^{*n} - \pi_0 \in L^2(G)$. 由 Parseval 公式 (定理 \ref{thm:IV.6.3}(iii); 注意来自未规范化 Haar 测度的因子 $\frac{1}{|G|}$),
+\[
+\|f\|_2^2 = \frac{1}{|G|}\sum_{(\rho, V) \in \widehat{G}}\dim(V)\operatorname{Tr}(\hat{f}(\rho)^* \circ \hat{f}(\rho)).
+\]
+所以需要计算 $\hat{f}(\rho)$. 注意对每个 $\rho \in \widehat{G}$,
+\[
+\hat{f}(\rho) = \hat{\pi}(\rho)^n - \hat{\pi}_0(\rho).
+\]
+首先假设 $\rho = \mathbf{1}$. 则 $\hat{\pi}(\rho) = \hat{\pi}_0(\rho) = 1$, 所以 $\hat{f}(\rho) = 0$.
+设 $(\rho, V) \in \widehat{G}$, 假设 $\rho \not\simeq \mathbf{1}$. 则 $\hat{\pi}_0(\rho) = \sum_{x \in G}\rho(x^{-1})$ 是 $\End(V)$ 的 $G$-等变元素, 所以由 Schur 引理是 $\mathrm{id}_V$ 的倍数, 且其迹等于 $\frac{1}{|G|}\sum_{x \in G}\chi(x) = 0$ (由推论 \ref{cor:IV.5.8}). 所以 $\hat{\pi}_0(\rho) = 0$, $\hat{f}(\rho) = \hat{\pi}(\rho)^n$. 为完成证明, 只需证明 $V^K = 0$ 时 $\hat{\pi}(\rho) = 0$. 设 $T = \hat{\pi}(\rho) = \sum_{x \in G}\pi(x)\rho(x^{-1})$, $P_K = \sum_{x \in K}\rho(x)$. 由于 $\pi$ 被 $K$ 右不变, 对每个 $x \in K$ 有 $\rho(x) \circ T = T$, 所以 $P_K \circ T = |K|T$. 但由命题 \ref{prop:V.1.7}, $P_K$ 是 $V^K$ 上的正交投影, 所以 $\Im(T) \subset V^K$, 因此 $V^K = 0$ 时 $T = 0$.
+\end{proof}
+
+\begin{corollary}[Gelfand 对情形的上界引理]
+\label{cor:VI.4.7}
+用前一推论的记号, 假设 $(G, K)$ 是 Gelfand 对且 $\pi$ 双 $K$-不变. 如第 V.6 节, 设 $\mathcal{Z}$ 是 $(G, K)$ 的对偶空间 (即由定理 \ref{thm:V.7.1} 的球函数集合).
+则对每个 $n \geq 0$,
+\[
+\|\mu_n - \mu\|_{TV}^2 \leq \frac{1}{4}\sum_{\phi \in \mathcal{Z}, \phi \neq 1}\dim(V_{\phi})|\hat{\pi}(\phi)|^{2n},
+\]
+其中现在若 $f \in \mathcal{C}(K\backslash G/K)$, $\phi \in \mathcal{Z}$, 纯量 $\hat{f}(\phi) \in \CC$ 是由
+\[
+\hat{f}(\phi) = \sum_{x \in G}f(x)\phi(x^{-1})
+\]
+定义的球傅里叶变换.
+\end{corollary}
+
+\begin{proof}
+证明与前一推论的证明几乎相同, 只是用推论 \ref{cor:V.7.2} 的 Parseval 公式计算 $\|\pi^{*n} - \pi_0\|_2^2$. 由该公式,
+\[
+\|\pi^{*n} - \pi_0\|_2^2 = \frac{1}{|G|}\sum_{\phi \in \mathcal{Z}}\dim(V_{\phi})|\hat{f}(\phi)|^2,
+\]
+其中 $f = \pi^{*n} - \pi_0$. 若 $\phi = 1$ 是对应于平凡表示的球函数, 则 $\hat{\pi}(\phi) = \hat{\pi}_0(\phi) = 1$, 所以 $\hat{f}(\phi) = 0$. 若 $\phi \neq 1$, 则
+\[
+\hat{\pi}_0(\phi) = \sum_{x \in G}\phi(x^{-1}) = \langle 1, \phi \rangle_{L^2(G)} = 0
+\]
+(例如由定理 \ref{thm:V.7.1}(i)). 所以 $\hat{f}(\phi) = \hat{\pi}(\phi)^n$, 完成证明.
+\end{proof}
+
+\section{Bernoulli-Laplace 扩散模型的应用}
+回忆 Bernoulli-Laplace 扩散模型在例子 \ref{exa:VI.1.5}(3) 中描述过. 有两个正整数 $r$ 和 $b$. 此模型是集合 $\Omega_r$ (即 $\{1, \ldots, r + b\}$ 的基数为 $r$ 的子集) 上、初始分布为集中在 $\{1, \ldots, r\}$ 上的 Dirac 分布的 Markov 链 $(X_n)_{n \geq 0}$. 群 $G := S_{r+b}$ 在 $\Omega_r$ 上传递作用, $A_0 := \{1, \ldots, r\}$ 的稳定化子是 $K := S_r \times S_b$. 链的转移矩阵 $P$ 由
+\[
+P(A', A) = \begin{cases} \frac{(r-1)!(b-1)!}{(r+b)!} & \text{若 } r - |A \cap A'| = 1, \\ 0 & \text{否则} \end{cases}
+\]
+给出.
+回忆在习题 \ref{ex:V.8.2.1}(e) 中定义了 $\Omega_r$ 上的度量 $d$, $d(A, A') = r - |A \cap A'|$, 且在 \ref{ex:V.8.2.1}(d) (和 \ref{ex:V.8.2.1}(f)) 中证明 $K$ 在 $G/K \simeq \Omega_r$ 上的轨道是以 $A_0$ 为中心的球面. $G$ 上的双不变概率分布 $\pi$ 与 $K\backslash G/K$ (即 $G/K$ 的 $K$-轨道) 上的概率分布双射对应, 且对 $P$ 的描述容易蕴含 $P = P_{\pi}$, 其中 $\pi$ 是对应于以 $A_0$ 为中心、半径 $1$ 的球面上的均匀分布的双不变概率分布.
+若 $\mu_n$ 是 $X_n$ 的分布, $\mu$ 是 $\Omega_r$ 的均匀分布, 则由推论 \ref{cor:VI.4.7},
+\[
+\|\mu_n - \mu\|_{TV}^2 \leq \frac{1}{4}\sum_{\phi \in \mathcal{Z} - \{1\}}\dim(V_{\phi})|\hat{\pi}(\phi)|^{2n}.
+\]
+在第 V.8.2 节的习题中计算了所有这些项. 例如假设 $r \leq b$ (否则只需交换 $r$ 和 $b$, 得到等价的问题). 则在习题 \ref{ex:V.8.2.3} 中看到如何把 $G$ 在 $L^2(\Omega_r)$ 上的拟正则表示分解成不可约子表示 (见 \ref{ex:V.8.2.3}(j) 和 \ref{ex:V.8.2.3}(k)), 且恰好有 $r + 1$ 个. 记对应的球函数为 $\phi_0, \ldots, \phi_r$, 如在习题 \ref{ex:V.8.2.4} 中. 特别地, 函数 $\phi_0$ 就是常值函数 $1$. 在 \ref{ex:V.8.2.3}(f) 中计算了这些函数, 但实际上只需要 \ref{ex:V.8.2.3}(g). 事实上, 只关心 $\hat{\pi}(\phi_s)$, $1 \leq s \leq r$. 由于 $\pi$ 对应于以 $A_0$ 为中心、半径 $1$ 的球面上的均匀分布, 数 $\hat{\pi}(\phi_s)$ 就是 $\phi_s$ 中 $\sigma_{1,r-1}(A_0)$ 的系数 (用习题 \ref{ex:V.8.2.3} 的记号), 即
+\[
+\hat{\pi}(\phi_s) = 1 - \frac{s(r + b - s + 1)}{rb}.
+\]
+又, \ref{ex:V.8.2.3}(f) 说
+\[
+\dim(V_{\phi_s}) = \binom{r+b}{s} - \binom{r+b}{s-1}
+\]
+若 $1 \leq s \leq r$.
+所以推论 \ref{cor:VI.4.7} 给出
+\[
+\|\mu_n - \mu\|_{TV}^2 \leq \frac{1}{4}\sum_{s=1}^r\Bigl(\binom{r+b}{s} - \binom{r+b}{s-1}\Bigr)\Bigl(1 - \frac{s(r + b - s + 1)}{rb}\Bigr)^{2n}.
+\]
+再花一些功夫, 可以得到下列结果.
+
+\begin{theorem}[Bernoulli-Laplace 混合时间上界]
+\label{thm:VI.5.1}
+(见 {[}8{]} 第 3F 章定理 10.) 存在普适常数 $a \in \R_{>0}$ 使得若 $n = \frac{r+b}{4}(\log(2(r+b)) + c)$ 且 $c \geq 0$, 则
+\[
+\|\mu_n - \mu\|_{TV} \leq ae^{-c/2}.
+\]
+\end{theorem}
+
+另一个不同的计算 (仍用球函数) 给出下列定理:
+
+\begin{theorem}[Bernoulli-Laplace 混合时间下界]
+\label{thm:VI.5.2}
+(见 {[}7{]} 定理 6.3.2.) 若 $r = b$ 足够大, 则对 $n = \frac{r+b}{4}(\log(2(r+b)) - c)$ 且 $0 < c < \log(2(r+b))$,
+\[
+\|\mu_n - \mu\|_{TV} \geq 1 - 32e^{-c}.
+\]
+\end{theorem}
+
+\section{局部紧群上的随机游走}
+在本节中, 将看到关于更一般群上随机游走的一些结果 (大多不加证明). 这里没有触及的许多问题的好参考是 Breuillard 的综述 {[}5{]}.
+固定局部紧群 $G$ 和 $G$ 上的左 Haar 测度.
+
+\subsection{设定}
+
+\begin{definition}[\index{Radon 测度}Radon 测度 (Radon measure)]
+\label{def:VI.6.1.1}
+(见注记 \ref{rem:I.4.1.6}.) $G$ 上的 (复) Radon 测度是 $\mathcal{C}_0(G)$ (带范数 $\|\cdot\|_{\infty}$) 上的有界线性泛函. 记 $\mathcal{M}(G)$ 为 Radon 测度的空间, $\|\cdot\|$ 为其范数 (即算子范数); 这是巴拿赫空间. 若 $\mu$ 是 Radon 测度, 记 $f \longmapsto \int_G f(x)\,\dd\mu(x)$ 为 $\mathcal{C}_0(G)$ 上对应的线性泛函.
+\end{definition}
+
+\begin{example}[Radon 测度的例子]
+\label{exa:VI.6.1.2}
+(1) 任何正则 Borel 测度都是 $G$ 上的 Radon 测度 (想把它们与一般 Radon 测度区分时, 这样的测度称为``正''的).
+(2) 若 $\phi \in L^1(G)$, 则线性泛函 $f \longmapsto \int_G f(x)\phi(x)\,\dd x$ 是 $G$ 上的 Radon 测度, 常记为 $\phi(x)dx$ 或 $\phi dx$.
+(3) 对每个 $x \in G$, 线性泛函 $\mathcal{C}_0(G) \to \CC$, $f \longmapsto f(x)$ 是 $G$ 上的 Radon 测度, 称为 $x$ 处的 Dirac 测度.
+\end{example}
+
+定义两个 Radon 测度 $\mu$ 和 $\nu$ 的卷积乘积 $\mu * \nu$ 为线性泛函
+\[
+f \longmapsto \int_{G \times G}f(xy)\,\dd\mu(x)\,\dd\nu(y).
+\]
+则不难验证 $\|\mu * \nu\| \leq \|\mu\|\|\nu\|$ 且 $\mathcal{M}(G)$ 上的卷积乘积结合. 这使得 $\mathcal{M}(G)$ 成为 Banach 代数, 且 $1$ 处的 Dirac 测度是 $\mathcal{M}(G)$ 的单位元.
+若 $\mu = \phi dx$, $\mu' = \phi' dx$, 则容易验证 $\mu * \mu' = (\phi * \phi')dx$, 其中 $\phi * \phi'$ 是 $L^1(G)$ 中的通常卷积.
+记 $\widehat{G}$ 为 $G$ 的不可约酉表示的酉等价类的集合. 可以把傅里叶变换 (普通和球两种版本) 延拓到 $\mathcal{M}(G)$:
+\begin{enumerate}
+\item[(1)] 若 $\mu \in \mathcal{M}(G)$, $(\pi, V) \in \widehat{G}$, 定义 $\hat{\mu}(\pi) \in \End(V)$:
+\[
+\hat{\mu}(\pi)(v) = \int_G\pi(x^{-1})(v)\,\dd\mu(x).
+\]
+\item[(2)] 假设 $G$ 是 Gelfand 对 $(G, K)$ 的第一项, $\phi$ 是 $G$ 上正定型球函数. 则对每个 $\mu \in \mathcal{M}(G)$, 定义 $\hat{\mu}(\phi) \in \CC$:
+\[
+\hat{\mu}(\phi) = \int_G\phi(x^{-1})\,\dd\mu(x).
+\]
+\end{enumerate}
+对两种版本的傅里叶变换, 等式
+\[
+\widehat{\mu * \mu'} = \hat{\mu}\hat{\mu'}
+\]
+对所有 $\mu, \mu' \in \mathcal{M}(G)$ 成立 (其中右端的乘积在第一种情形是自同态的复合, 第二种情形是乘法).
+下列定理是 L\'evy 收敛判据的推广. 说 Radon 测度的序列 $(\mu_n)_{n \geq 0}$ 弱收敛 (weakly converges), 若它在 $\mathcal{M}(G)$ 的弱*拓扑中收敛.
+
+\begin{theorem}[\index{Lévy 收敛判据}L\'evy 判据]\footnote{见 {[}12{]} 第 5.2 节, 定理 5.2.}
+\label{thm:VI.6.1.3}
+\begin{enumerate}
+\item[(i)] 若 $\mu, \mu' \in \mathcal{M}(G)$ 满足对每个 $\pi \in \widehat{G}$ 有 $\hat{\mu}(\pi) = \hat{\mu}'(\pi)$, 则 $\mu = \mu'$.
+\item[(ii)] 设 $(\mu_n)_{n \geq 0}$ 是 $G$ 上的 (正) 概率测度序列, $\mu$ 是 $G$ 上的另一个概率测度. 若 $(\mu_n)_{n \geq 0}$ 弱收敛到 $\mu$, 则对每个 $(\pi, V) \in \widehat{G}$ 和每个 $v \in V$, $\lim_{n \to +\infty}\hat{\mu}_n(\pi)(v) = \hat{\mu}(\pi)(v)$. 反之, 若对每个 $(\pi, V) \in \widehat{G}$ 和所有 $v, w \in V$, $\lim_{n \to +\infty}\langle \hat{\mu}_n(\pi)(v), w \rangle = \langle \hat{\mu}(\pi)(v), w \rangle$, 则 $(\mu_n)_{n \geq 0}$ 弱收敛到 $\mu$.
+\end{enumerate}
+\end{theorem}
+
+\subsection{随机游走}
+
+固定 $G$ 上的正则 Borel 概率测度 $\mu$, 想理解 $\mu^{*n}$ 当 $n \to +\infty$ 时的行为.
+与随机游走的联系是: $\mu^{*n}$ 是状态空间为 $G$、初始分布为 $\delta_1$、``转移矩阵''为 $\mu(yx^{-1})$ 的 Markov 链第 $n$ 步的分布. (为简化记号选择 $\delta_1$ 作为初始分布, 但对大多数结果这不是真正必要的.) 换句话说, 考虑取值于 $G$、分布为 $\mu$ 的独立随机变量序列 $(g_n)_{n \geq 1}$. Markov 链 $(X_n)_{n \geq 0}$ 由 $X_n = g_1\cdots g_n$ 定义 (所以 $X_0$ 是常值函数 $1$). 也可以考虑空间 $G/K$ 上的随机游走, 其中 $K$ 是 $G$ 的子群: 如前取 $(g_n)_{n \geq 1}$, 固定取值于 $G/K$ 的某个初始随机变量 $X_0$ (例如常值函数), 设 $X_n = g_n\cdots g_1X_0$.
+
+\subsection{紧群}
+在本节中, 假设 $G$ 紧. 从 Ito 和 Kawada 的一般收敛结果开始 ({[}14{]}, 也见 {[}5{]} 定理 2.3).
+回忆 $\mu$ 的支撑 (support) 由定义是满足如下条件的 $x \in G$ 的集合: 对 $x$ 的每个邻域 $U$, $\mu(U) > 0$.
+
+\begin{theorem}[Ito-Kawada 定理]\footnote{见 {[}14{]}, 也见 {[}5{]} 定理 2.3.}
+\label{thm:VI.6.3.1}
+假设 $\mu$ 的支撑生成 $G$ 的稠密子群, 且不包含于 $G$ 的真闭子群的任何 (左或右) 陪集中. 则序列 $(\mu^{*n})_{n \geq 0}$ 弱收敛到 $G$ 上的规范化 Haar 测度.
+\end{theorem}
+
+证明基于定理 \ref{thm:VI.6.1.3}(ii) 的收敛判据. 必须证明对每个非平凡的 $(\pi, V) \in \widehat{G}$, 序列 $\widehat{\mu^{*n}}(\pi) = \hat{\mu}(\pi)^n$ 在 $\End(V)$ 中收敛到 $0$. 注意 $V$ 有限维 (因为 $G$ 紧), 所以 $\End(V)$ 中的所有收敛概念等价, 只需证明 $\hat{\mu}(\pi)$ 的所有特征值的绝对值 $< 1$. 假设事实并非如此, 则存在单位向量 $v \in V$ 使得
+\[
+\int_G\pi(x^{-1})(v)\,\dd\mu(x) = \lambda v,
+\]
+其中 $|\lambda| = 1$. 不难看到这迫使 $\pi(x^{-1})(v)$ $\mu$-几乎处处等于 $\lambda v$, 与定理的假设矛盾.
+注意此结果比命题 \ref{prop:VI.4.4} (和 Perron-Frobenius 定理) 弱得多, 因为它只保证 $(\mu^{*n})_{n \geq 0}$ 的弱收敛, 对其它拓扑 (如全变差距离诱导的拓扑) 的收敛或收敛速度只字未提. 若 $G$ 有限, 概率测度集合上的所有收敛概念一致 (它只是 $G$ 上函数空间 (有限维) 的凸子集); 又, 由上界引理 (推论 \ref{cor:VI.4.6}) 收敛速度指数且被最大的 $\neq 1$ 的 $\hat{\mu}(\pi)$ 特征值控制. 但若 $G$ 无穷, 则 $\widehat{G}$ 也无穷, 所以即使 $\hat{\mu}(\pi)$ 的所有特征值的绝对值 $< 1$, 也可以得到任意接近 $1$ 的特征值. 事实上, 当这种情况不发生时有专门的名字:
+
+\begin{definition}[\index{谱隙}谱隙 (spectral gap)]
+\label{def:VI.6.3.2}
+若存在 $\varepsilon > 0$ 使得对每个非平凡的 $\pi \in \widehat{G}$ 和 $\hat{\mu}(\pi)$ 的每个特征值 $\lambda$, $|\lambda| < 1 - \varepsilon$, 则说 $G$ 上的概率测度 $\mu$ 有谱隙 (spectral gap).
+\end{definition}
+
+先看一些例子.
+
+\begin{example}[$L^2$ 密度有谱隙]
+\label{exa:VI.6.3.3}
+若 $\mu = \phi dx$, $\phi \in L^2(G)$, 则 $\mu$ 有谱隙. 事实上, 上界引理 (推论 \ref{cor:VI.4.6}) 用本质上相同的证明仍成立: 对每个 $n \geq 0$,
+\[
+\|\mu^{*n} - \mu_G\|_{TV}^2 \leq \frac{1}{4}\sum_{\substack{(\rho, V) \in \widehat{G}\\ \rho \not\simeq \mathbf{1}}}\dim(V)\operatorname{Tr}((\hat{\pi}(\rho)^*)^n \circ \hat{\pi}(\rho)^n),
+\]
+其中用 $\mathbf{1}$ 记 $G$ 的平凡表示, $\mu_G$ 记 $G$ 上的规范化 Haar 测度. (也可以证明空间 $G/K$ 上的随机游走版本.) 所以此情形下有全变差距离的收敛且速度指数.
+\end{example}
+
+在另一个极端, 有有限支撑的测度.
+
+\begin{example}[无谱隙的测度]
+\label{exa:VI.6.3.4}
+取 $G = S^1$. 设 $\lambda_1, \ldots, \lambda_r \in \R$, 考虑 $G$ 上的测度
+\[
+\mu = \frac{1}{2r}\sum_{s=1}^r(\delta_{e^{2i\pi\lambda_s}} + \delta_{e^{-2i\pi\lambda_s}}).
+\]
+回忆 $\widehat{G} = \Z$ (其中 $n \in \Z$ 对应于 $G$ 的表示 $z \longmapsto z^n$). 对每个 $n \in \Z$,
+\[
+\hat{\mu}(n) = \frac{1}{2r}\sum_{s=1}^r(e^{2i\pi n\lambda_s} + e^{-2i\pi n\lambda_s}).
+\]
+假设族 $(1, \lambda_1, \ldots, \lambda_r)$ 在 $\Q$ 上线性无关. 则 Kronecker 定理 (见例如 {[}13{]} 第 XXIII 章) 说集合 $\{(e^{2i\pi n\lambda_1}, \ldots, e^{2i\pi n\lambda_r}) \mid n \in \Z\}$ 在 $(S^1)^r$ 中稠密. 所以可以找到 $n \neq 0$ 使得 $\hat{\mu}(n)$ 任意接近 $1$. 换句话说, 测度 $\mu$ 没有谱隙.
+\end{example}
+
+$SU(d)$ 等``好''群上的哪些测度有谱隙是非常困难且活跃的研究领域. 给出一些 (困难的) 近期结果, 对 $G = \SU(d)$ 归功于 Bourgain 和 Gamburd (cf. {[}4{]} 和 {[}3{]}), 对一般简单紧 Lie 群归功于 Benoist 和 de Saxc\'e (cf. {[}2{]}).
+
+\begin{theorem}[谱隙判据]\footnote{见 {[}4{]} 和 {[}3{]} (对 $\SU(d)$), {[}2{]} (一般简单紧 Lie 群).}
+\label{thm:VI.6.3.5}
+设 $G$ 是简单紧 Lie 群 (例如 $d \geq 2$ 时 $G = \SU(d)$ 或 $d = 3$ 或 $d \geq 5$ 时 $G = \SO(d)$), $\mu$ 是 $G$ 上的概率测度. 说 $\mu$ 几乎 Diophantine (almost Diophantine), 若存在 $c_1, c_2 > 0$ 使得对 $G$ 的每个真闭子群 $H$ 和每个足够大的 $n \in \Z_{\geq 0}$, $\mu^{*n}(\{x \in G \mid d(x, H) \leq e^{-c_1n}\}) \leq e^{-c_2n}$ (其中 $d$ 是 $G$ 上的任何度量).
+则 $\mu$ 有谱隙当且仅当它几乎 Diophantine.
+\end{theorem}
+
+虽然下一版本对任何简单紧 Lie 群都有推广, 为简单起见只对 $\SU(d)$ 陈述.
+
+\begin{theorem}[代数支撑的谱隙]
+\label{thm:VI.6.3.6}
+设 $G = \SU(d)$, $\mu$ 是 $G$ 上的概率测度, 使得 $\mu$ 的支撑生成 $G$ 的稠密子群 (这样的测度有时称为``适应的'' (adapted)).
+若 $\mu$ 的支撑的每个元素有代数元素, 则 $\mu$ 有谱隙.
+\end{theorem}
+
+事实上, Benoist 和 de Saxc\'e 猜想代数性条件不必要 (所以每个适应测度都应有谱隙), 见 {[}2{]} 的引言.
+
+\begin{remark}[与 Banach-Ruziewicz 问题的联系]
+\label{rem:VI.6.3.7}
+谱隙问题也与 Banach-Ruziewicz 问题相关 (联系见 Sarnak 的书 {[}21{]} 第 2 章; Banach-Ruziewicz 问题的另一个好参考是 Lubotzky 的书 {[}15{]}). 此问题问 Lebesgue 测度是否是球面 $S^n \subset \R^n$ 的 Lebesgue 可测子集上唯一的 (差一个常数) 有限可加 $\SO(n+1)$-不变测度. 已知 $n = 1$ 时答案``否'', $n \geq 2$ 时``是''. 对 $n \geq 4$, 它归功于 Margulis 和 Sullivan, 用 $n \geq 4$ 时 $\SO(n+1)$ 有满足 Kazhdan 性质 (T) 的有限生成稠密子群这一事实 (事实上, 同样的方法将证明 Haar 测度是任何非 $\SO(n)$ ($n \geq 4$) 的简单紧 Lie 群上唯一的左不变平均). 对 $n = 2, 3$, 解最初归功于 Drinfeld, 用 Jacquet-Langlands 对应和 Ramanujan-Petersson 猜想. (所有这些及更多内容见 {[}15{]}.)
+\end{remark}
+
+\subsection{用 Fourier 分析的随机游走收敛}
+现在给出紧群 (或齐性空间) 上可以用 Fourier 分析分析的随机游走的一些例子, 精神与第 VI.5 节相同.
+如前所述 (在例子 \ref{exa:VI.6.3.3} 中), 上界引理 (推论 \ref{cor:VI.4.6}) 对一般紧群仍成立.
+与有限群一样, 当测度 $\mu$ 共轭不变, 或 $\mu$ 双 $K$-不变且 $(G, K)$ 是 Gelfand 对时, Fourier 分析效果最好.
+
+\paragraph{$\SO(n)$ 中的随机反射 (Random reflections in $\SO(n)$)}
+此结果的参考文献是 Rosenthal 的论文 {[}17{]}. 固定 $n \geq 2$, $\theta \in (0, 2\pi)$. 设
+\[
+R_{\theta} = \begin{pmatrix} \cos\theta & \sin\theta & & 0 \\ -\sin\theta & \cos\theta & & \\ & & 1 & \\ & & & \ddots \\ 0 & & & 1 \end{pmatrix} \in \SO(n),
+\]
+设 $\mu_{\theta}$ 是集中在 $R_{\theta}$ 的共轭类上的唯一共轭不变概率测度 (换句话说, 测度 $\mu_{\theta}$ 是 $\SO(n)$ 的规范化 Haar 测度在映射 $\SO(n) \to \SO(n)$, $x \longmapsto xR_{\theta}x^{-1}$ 下的像).
+
+\begin{theorem}[随机反射的混合时间]
+\label{thm:VI.6.4.1}
+\begin{enumerate}
+\item[(i)] 存在 $\Gamma, \Delta > 0$ (其中 $\Delta$ 不依赖 $\theta$) 使得对每个 $n \geq 1$ 和每个 $c > 0$, 若 $k = \frac{1}{2(1-\cos\theta)}(n\log n - cn)$, 则
+\[
+\|\mu_{\theta}^{*k} - dx\|_{TV} \geq 1 - \Gamma e^{-2c} - \Delta\frac{\log n}{n}.
+\]
+\item[(ii)] 假设 $\theta = \pi$. 则存在 $\Lambda, \gamma > 0$ 使得对每个 $n \geq 3$ 和每个 $c > 0$, 若 $k = \frac{1}{4}n\log n + cn$, 则
+\[
+\|\mu_{\theta}^{*k} - dx\|_{TV} \leq \Lambda e^{-\gamma c}.
+\]
+\end{enumerate}
+\end{theorem}
+
+\paragraph{Gelfand 对情形 (The Gelfand pair case)}
+此结果的参考文献是 Su 的论文 {[}24{]}.
+固定 $\theta \in (0, \pi)$, 考虑 $S^2 \simeq \SO(3)/\SO(2)$ 上的下列随机过程:
+\begin{itemize}
+\item $X_0$ 恒为北极;
+\item 从 $X_n$ 到 $X_{n+1}$, 选择 (独立且均匀地) 一个方向, 并沿该方向的测地线 (= 大圆) 移动距离 $\theta$.
+\end{itemize}
+此随机游走不由 $\SO(3)$ 上的测度驱动, 但它等价于这样的游走 (见 {[}24{]} 第 3 节). 设 $\mu_n$ 是 $X_n$ 的分布, $\lambda$ 是 $S^2$ 上唯一的 $\SO(3)$-不变概率测度. 则有下列结果:
+
+\begin{theorem}[球面上的随机游走]
+\label{thm:VI.6.4.2}
+若 $n = \frac{1}{\sin^2\theta}c$ 且 $c \geq 0$, 则
+\[
+0.433e^{-c/2} \leq \|\mu_l - \lambda\|_{DD} \leq 4.442e^{-c/8}.
+\]
+\end{theorem}
+
+在此定理中, $\|\cdot\|_{DD}$ 是\index{偏差距离}偏差距离 (discrepancy distance): 若 $X$ 是度量空间, $\mu, \mu'$ 是 $X$ 上的两个 (Borel) 概率测度, 则
+\[
+\|\mu - \mu'\|_{DD} = \sup_{B \subset X \text{ 球}}|\mu(B) - \mu'(B)|.
+\]
+它被全变差距离控制上界, 但可以看到全变差距离看不到的一些现象 (见下一小节).
+
+\paragraph{关于不同类型收敛的注记 (Remark about the different types of convergence)}
+本小节的参考文献是 Su 的论文 {[}23{]}.
+考虑圆 $S^1$ 上由测度 $\mu = \frac{1}{2}(\delta_{e^{2i\pi\alpha}} + \delta_{e^{-2i\pi\alpha}})$ (对某个无理数 $\alpha \in \R$) 驱动的随机游走 $(X_n)_{n \geq 0}$, 设 $\mu_n$ 是 $X_n$ 的分布. 则:
+\begin{itemize}
+\item Ito-Kawada 的一般收敛结果 (定理 \ref{thm:VI.6.3.1}) 说 $(\mu_n)_{n \geq 0}$ 弱收敛到 $S^1$ 上的规范化 Haar 测度 $dx$.
+\item 另一方面, 在例子 \ref{exa:VI.6.3.4} 中看到 $\mu$ 没有谱隙, 所以收敛不能太好. 事实上, $(\mu_n)_{n \geq 0}$ 不全变差距离收敛到 $dx$.
+\item 第三方面, 在许多情形 $(\mu_n)_{n \geq 0}$ 确实在偏差距离中收敛到 $dx$ (但不指数快). 更精确地有:
+\end{itemize}
+
+\begin{theorem}[无理旋转的偏差]
+\label{thm:VI.6.4.3}
+设 $\eta$ 是 $\alpha$ 的类型 (type), 即
+\[
+\eta = \sup\{\gamma > 0 \mid \liminf_{m \to +\infty}m^{\gamma}\{m\alpha\} = 0\}
+\]
+(其中 $\{\cdot\}$ 是分数部分). 则对每个 $\varepsilon > 0$,
+\[
+\|\mu_n - dx\|_{DD} = O(n^{-1/2\eta + \varepsilon})
+\]
+且
+\[
+\|\mu_n - dx\|_{DD} = \Omega(n^{-1/2\eta - \varepsilon}).
+\]
+若 $\alpha$ 是二次无理数, 可以做得更好: 存在常数 $c_1, c_2 > 0$ 使得对每个 $n \geq 1$,
+\[
+\frac{c_1}{\sqrt{n}} \leq \|\mu_n - dx\|_{DD} \leq \frac{c_2}{\sqrt{n}}.
+\]
+已知 $\alpha$ 代数时 $\eta = 1$, 且 $[0,1]$ 中类型 $1$ 的元素子集的 Lebesgue 测度为 $1$.
+\end{theorem}
+
+\subsection{非紧群上的随机游走}
+不再假设 $G$ 紧. 固定 $G$ 上的概率测度 $\mu$. 可以问的众多问题之一是: $G$ 上由 $\mu$ 驱动的随机游走是否走向无穷, 若是, 多快.
+本节的一个参考是 Quint 的出色课程笔记 ({[}16{]}).
+首先定义连续线性算子 $P_{\mu} \colon L^2(G) \to L^2(G)$:
+\[
+P_{\mu}(f)(x) = \int_G f(yx)\,\dd\mu(y)
+\]
+若 $f \in \mathcal{C}_c(G)$, $x \in G$; 通过连续性延拓到 $L^2(G)$. (若 $\mu = \phi dx$, $\phi \in L^1(G)$, 这正好是定理 \ref{thm:I.4.2.6}(i) 的构造应用于 $G$ 的右正则表示.)
+记 $\rho(P_{\mu})$ 为 $P_{\mu}$ 作为 Banach 代数 $\End(L^2(G))$ 的元素的谱半径. 总有 $\rho(P_{\mu}) \leq 1$ (因为 $\mu$ 是概率测度).
+
+\begin{theorem}[Kesten 判据]
+\label{thm:VI.6.5.1}
+(定理 5.2 of {[}16{]}.)
+\begin{enumerate}
+\item[(i)] 若 $G$ 可解, 则 $\rho(P_{\mu}) = 1$.
+\item[(ii)] 设 $H$ 是由 $\mu$ 的支撑生成的子群在 $G$ 中的闭包. 若 $\rho(P_{\mu}) = 1$, 则 $H$ 可解.
+\end{enumerate}
+\end{theorem}
+
+\begin{definition}[紧生成 (compactly generated)]
+\label{def:VI.6.5.2}
+若存在生成 $G$ 的紧子集 $K$, 则说 $G$ 紧生成 (compactly generated).
+\end{definition}
+
+若 $G$ 离散, 这只是说 $G$ 有限生成.
+
+\begin{definition}[$j_K$]
+\label{def:VI.6.5.3}
+假设 $G$ 紧生成, 设 $K$ 是生成 $G$ 的对称紧子集. 定义 $j_K \colon G \to \Z$:
+\[
+j_K(x) = \min\{n \in \Z_{\geq 0} \mid x \in K^n\}
+\]
+(约定 $K^0 = \{1\}$).
+\end{definition}
+
+\begin{lemma}[$j_K$ 的等价性]
+\label{lem:VI.6.5.4}
+若 $K$ 和 $L$ 是生成 $G$ 的两个对称紧子集, 则存在 $a > 0$ 使得 $j_L \leq aj_K$.
+\end{lemma}
+
+\begin{corollary}[非可解群的逃逸速度]
+\label{cor:VI.6.5.5}
+(推论 7.3 of {[}16{]}.)
+假设 $G$ 紧生成, 设 $K$ 是生成 $G$ 的对称紧子集. 设 $\mu$ 是 $G$ 上的概率测度, $(g_n)_{n \geq 1}$ 是取值于 $G$、分布为 $\mu$ 的独立随机变量序列.
+设 $H$ 是由 $\mu$ 的支撑生成的子群在 $G$ 中的闭包. 若 $H$ 不可解, 则存在 $\alpha, \varepsilon > 0$ 使得对每个 $n \geq 1$,
+\[
+\mathbb{P}(j_K(g_n\cdots g_1) \leq \varepsilon n) = o(e^{-\alpha n}).
+\]
+特别地, 由 Borel-Cantelli 引理 (见 {[}18{]} 第 17.1 节), 若 $n$ 足够大, 几乎必然 $j_K(g_n\cdots g_1) \geq \varepsilon n$.
+\end{corollary}
+
+以一个例子结束. 说 $\SL_2(\R)$ 的子群 $H$ 非初等 (non-elementary), 若 $H$ 的共轭不包含于 $\SO(2)$、$\left\{\begin{pmatrix} a & b \\ 0 & a^{-1} \end{pmatrix}, a \in \R^{\times}, b \in \R\right\}$ 或 $\left\{\begin{pmatrix} a & 0 \\ 0 & a^{-1} \end{pmatrix}, a \in \R^{\times}\right\} \cup \left\{\begin{pmatrix} 0 & a \\ a^{-1} & 0 \end{pmatrix}, a \in \R^{\times}\right\}$. (等价条件是 $H$ 不紧且不固定 $\R^2$ 中的直线或两条直线的并. 这里 $\SL_2(\R)$ 在 $\R^2$ 上的作用由包含 $\SL_2(\R) \subset \GL_2(\R)$ 给出的标准作用.)
+
+\begin{proposition}[非初等与不可解]
+\label{prop:VI.6.5.6}
+(命题 8.6 of {[}16{]}.)
+$\SL_2(\R)$ 的闭子群不可解当且仅当它非初等.
+\end{proposition}
+
+\begin{example}[非初等子群的随机游走]
+\label{exa:VI.6.5.7}
+若 $t \in \R^{\times}$, 设 $a_t = \begin{pmatrix} t & 0 \\ 0 & t^{-1} \end{pmatrix}$. 若 $\theta \in \R$, 设 $r_{\theta} = \begin{pmatrix} \cos\theta & \sin\theta \\ -\sin\theta & \cos\theta \end{pmatrix}$.
+则若 $s, t > 1$, $0 < \theta < \pi/2$, 由 $a_s$ 和 $r_{\theta}a_tr_{\theta}^{-1}$ 张成的 $\SL_2(\R)$ 的子群非初等, 所以推论 \ref{cor:VI.6.5.5} 适用于由测度 $\mu = \frac{1}{2}(\delta_{a_t} + \delta_{r_{\theta}a_tr_{\theta}^{-1}})$ 驱动的随机游走.
+\end{example}
+
+\section{问题: 非可解群上的随机游走}
+设 $G$ 是局部紧群. 固定 $G$ 上的左不变 Haar 测度 $\mu_G$. 在此问题中, $G$ 上的所有测度都假设是正则 Borel 测度, 可以假设 $G$ $\sigma$-紧.\footnote{我们主要关心\index{紧生成群}紧生成群, 它们显然 $\sigma$-紧.}
+\begin{enumerate}
+\item[(1)] 设 $H$ 是 $G$ 的闭子群, $\mu_H$ 是 $H$ 上的左不变 Haar 测度. 此题的目标是证明: 若 $L^{\infty}(G)$ 上存在被 $H$ 左不变的平均, 则 $H$ 可解.\footnote{其逆也真且容易证明得多, 但不需要它.}
+  \begin{enumerate}
+  \item[(a)] 要证明: 对 $G$ 中 $1$ 的每个开邻域 $U$, 存在 $G/H$ 的子集 $T$ 使得:
+    \begin{itemize}
+    \item $G/H = \bigcup_{t \in T}Ut$;
+    \item 对 $G/H$ 的每个紧子集 $K$, 集合 $K \cap T$ 有限.
+    \end{itemize}
+    为简化证明 (也因为这是后面唯一需要的情形), 假设 $G$ 是紧子集的可数族的并. 选择 $G$ 中 $1$ 的开邻域 $V$ 使得 $V^{-1}V \subset U$.
+    \begin{enumerate}
+    \item[(i)] 证明若 $K$ 是 $G/H$ 的紧子集, 则不存在 $K$ 的元素序列 $(t_n)_{n \geq 0}$ 使得 $n \neq m$ 时 $Vt_n \cap Vt_m = \emptyset$.
+    \item[(ii)] 写 $G/H = \bigcup_{n \geq 0}K_n$, 其中 $K_n$ 是 $G/H$ 的紧子集, 且对每个 $n \geq 0$ 有 $K_n \subset K_{n+1}$. 归纳定义 $G/H$ 的有限子集族 $(T_n)_{n \geq 0}$:
+      \begin{itemize}
+      \item $T_0 = \emptyset$;
+      \item 对 $n \geq 1$, 取 $T_n$ 为 $L_n := K_n - (UT_0 \cup \cdots \cup UT_{n-1})$ 的极大有限子集, 使得对所有满足 $t \neq t'$ 的 $t, t' \in T_n$, $Vt \cap Vt' = \emptyset$.
+      \end{itemize}
+      证明定义有意义且对每个 $n \geq 1$, $K_n \subset \bigcup_{i=0}^n UT_i$.
+    \item[(iii)] 证明 $T := \bigcup_{n \geq 0}T_n$ 满足两个要求的性质.
+    \end{enumerate}
+  \item[(b)] 证明存在有界连续函数 $\theta \colon G \to \R_{\geq 0}$ 使得:
+    \begin{itemize}
+    \item 对 $G$ 的任何紧子集 $K$, 函数 $\theta|_{KH}$ 有紧支撑;
+    \item 对每个 $x \in G$, $\int_H\theta(xy)\,\dd\mu_H(y) = 1$.
+    \end{itemize}
+    (提示: 取 (a) 中的 $T$, 其中 $U$ 相对紧, 取满足 $\phi|_U = 1$ 的 $\phi \in \mathcal{C}_c^+(G)$, 定义 $\psi(x) = \sum_{t \in T}\phi(xg_t^{-1})$, 其中 $g_t \in G$ 是 $t$ 的提升, 然后稍微修改 $\psi$.)
+  \item[(c)] 对每个 $\phi \in L^{\infty}(H)$, 定义 $\phi_{\theta} \colon G \to \CC$:
+    \[
+    \phi_{\theta}(x) = \int_H\phi(y)\theta(x^{-1}y)\,\dd\mu_H(y).
+    \]
+    证明 $\phi_{\theta} \in L^{\infty}(G)$.
+  \item[(d)] 若 $M$ 是 $L^{\infty}(G)$ 上被 $H$ 左不变的平均, 证明 $\phi \longmapsto M(\phi_{\theta})$ 是 $L^{\infty}(H)$ 上的左不变平均.
+  \end{enumerate}
+\item[(2)] 设 $T \colon V \to W$ 是两个赋范 $\CC$-向量空间之间的有界线性算子.
+  \begin{enumerate}
+  \item[(a)] 若 $V$ 和 $W$ 是希尔伯特空间且 $\Im(T)$ 不在 $W$ 中稠密, 证明 $T^*$ 不单射.
+  \item[(b)] 若 $V$ 完备且 $\Im(T)$ 不在 $W$ 中闭, 证明存在 $V$ 的范数 $1$ 向量序列 $(v_n)_{n \geq 0}$ 使得 $\lim_{n \to +\infty}T(v_n) = 0$.
+  \end{enumerate}
+\item[(3)] 设 $\mu$ 是 $G$ 上的概率测度. 对每个 $f \in \mathcal{C}_c(G)$, 定义函数 $P_{\mu}f \colon G \to \CC$:
+    \[
+    (P_{\mu}f)(x) = \int_G f(yx)\,\dd\mu(y).
+    \]
+  \begin{enumerate}
+  \item[(a)] 对每个 $f \in \mathcal{C}_c(G)$, 证明 $P_{\mu}f$ 连续且 $\|P_{\mu}f\|_2 \leq \|f\|_2$.
+  \item[(b)] 证明 $P_{\mu}$ 延拓成连续线性算子 $P_{\mu} \colon L^2(G) \to L^2(G)$ 且 $\|P_{\mu}\|_{\mathrm{op}} \leq 1$.
+  \item[(c)] 证明 $(P_{\mu})^* = P_{\nu}$, 其中 $\nu$ 是由 $\nu(E) = \mu(E^{-1})$ 定义的概率测度.
+  \end{enumerate}
+\item[(4)] 假设 $G$ 可解, 设 $\mu$ 是 $G$ 上的概率测度. 要证明 $\rho(P_{\mu}) = 1$. (其中 $\rho(P_{\mu})$ 是 $P_{\mu}$ 作为 $\End(L^2(G))$ 的元素的谱半径.)
+  \begin{enumerate}
+  \item[(a)] 对每个 $\varepsilon > 0$, 证明存在 $G$ 的紧子集 $K$ 和函数 $f \in L^2(G)$ 使得:
+    \begin{itemize}
+    \item $\mu(K) \geq 1 - \varepsilon$;
+    \item $\|f\|_2 = 1$;
+    \item $\sup_{x \in K}\|L_xf - f\|_2 \leq \varepsilon$.
+    \end{itemize}
+  \item[(b)] 对每个 $\varepsilon > 0$, 证明存在函数 $f \in L^2(G)$ 使得 $\|f\|_2 = 1$ 且 $\|P_{\mu}f - f\|_2 \leq \varepsilon$.
+  \item[(c)] 证明 $\rho(P_{\mu}) = 1$.
+  \end{enumerate}
+\item[(5)] 设 $\mu$ 是 $G$ 上的概率测度. 假设 $\rho(P_{\mu}) = 1$, 设 $H$ 是由 $\mu$ 的支撑生成的子群的闭包. (其中 $\mu$ 的支撑是满足 $x$ 的每个开邻域对 $\mu$ 有正体积的 $x \in G$ 的集合.) 要证明 $H$ 可解.
+  \begin{enumerate}
+  \item[(a)] 证明下列条件至少有一个成立:
+    \begin{enumerate}
+    \item[($\alpha$)] 存在 $\lambda \in \CC$ 使得 $|\lambda| = 1$ 且 $P_{\mu} - \lambda\mathrm{id}_{L^2(G)}$ 不单射.
+    \item[($\beta$)] 存在 $\lambda \in \CC$ 使得 $|\lambda| = 1$ 且 $\Im(P_{\mu} - \lambda\mathrm{id}_{L^2(G)})$ 不在 $L^2(G)$ 中稠密.
+    \item[($\gamma$)] 存在 $\lambda \in \CC$ 使得 $|\lambda| = 1$ 且 $\Im(P_{\mu} - \lambda\mathrm{id}_{L^2(G)})$ 不在 $L^2(G)$ 中闭.
+    \end{enumerate}
+  \item[(b)] 假设条件 ($\alpha$) 成立.
+    \begin{enumerate}
+    \item[(i)] 证明 $P_{\mu} - \mathrm{id}_{L^2(G)}$ 不单射.
+    \item[(ii)] 证明存在 $L^2(G)$ 的非零元素被 $H$ 左不变.
+    \item[(iii)] 证明 $H$ 紧.
+    \end{enumerate}
+  \item[(c)] 若条件 ($\beta$) 成立, 证明 $H$ 紧.
+  \item[(d)] 假设条件 ($\gamma$) 成立.
+    \begin{enumerate}
+    \item[(i)] 证明存在 $L^2(G)$ 的范数 $1$ 元素序列 $(f_n)_{n \geq 0}$ 使得 $\lim_{n \to +\infty}\|P_{\mu}f_n - \lambda f_n\|_2 = 0$.
+    \item[(ii)] 定义 $g_n \colon G \to \R_{\geq 0}$:
+      \[
+      g_n(x) = \|L_xf_n - \lambda f_n\|_2^2.
+      \]
+      证明序列 $(g_n)_{n \geq 0}$ 在 $L^1(G, \mu)$ 中收敛到 $0$ (注意测度!).
+    \item[(iii)] 证明可以假设 $\lim_{n \to +\infty}g_n(x) = 0$ 对 $\mu$-几乎每个 $x \in G$.
+    \item[(iv)] 定义 $h_n \colon G \to \R_{\geq 0}$: $h_n(x) = |f_n(x)|^2$. 证明对每个 $n$ 有 $\int_G h_n(x)\,\dd\mu_G(x) = 1$, 且 $\lim_{n \to +\infty}\|L_xh_n - h_n\|_1 = 0$ 对 $\mu$-几乎每个 $x \in G$. (注意回到 $L^1(G)$.)
+    \item[(v)] 证明存在 $L^{\infty}(G)$ 上被 $H$ 左不变的平均 $M$.
+    \end{enumerate}
+\end{enumerate}
+\item[(6)] 若 $K$ 是生成 $G$ 的紧对称 (即 $K^{-1} = K$) 子集, 定义 $j_K \colon G \to \Z_{\geq 0}$:
+  \[
+  j_K(x) = \min\{n \in \Z_{\geq 0} \mid x \in K^n\}
+  \]
+  (约定 $K^0 = \{1\}$).
+  证明若 $L$ 是生成 $G$ 的另一个紧对称子集, 则存在 $a > 0$ 使得 $j_L \leq aj_K$.
+  设 $K$ 是 $G$ 的非空内部紧对称子集. 此题的目标是证明序列 $(\mu_G(K^n)^{1/n})_{n \geq 1}$ 收敛.
+  \begin{enumerate}
+  \item[(a)] 若 $A$, $B$ 和 $C$ 是 $G$ 的紧子集, 证明
+    \[
+    \mu_G(AB)\mu_G(C) \leq \mu_G(AC)\mu_G(C^{-1}B).
+    \]
+    (提示: 看 $\mathbb{1}_{AC} * \mathbb{1}_{C^{-1}B}$.)
+  \item[(b)] 证明对所有 $n, m \in \Z_{\geq 1}$,
+    \[
+    \mu_G(K^{n+m}) \leq \mu_G(K)^{-1}\mu_G(K^{n+1})\mu_G(K^{m+1}).
+    \]
+  \item[(c)] 得出结论.
+  \end{enumerate}
+\item[(7)] 设 $\mu$ 是 $G$ 上的概率测度. 假设由 $\mu$ 的支撑生成的子群的闭包 $H$ 不可解, 且 $G$ 紧生成. 固定生成 $G$ 的对称紧子集 $K$. 要证明存在 $\varepsilon, \alpha > 0$ 使得, 若 $(g_n)_{n \geq 1}$ 是取值于 $G$、分布为 $\mu$ 的独立随机变量序列, 则对每个 $n \geq 0$,
+  \[
+  \mathbb{P}(j_K(g_n\cdots g_1) \leq \varepsilon n) = o(e^{-\alpha n}).
+  \]
+  换句话说, 要证明
+  \[
+  \mu^{*n}(K^{\lfloor \varepsilon n \rfloor}) = o(e^{-\alpha n}),
+  \]
+  其中 $\mu^{*n}$ 是 $G^n$ 上的测度 $\mu^n$ 在乘法映射 $(x_1, \ldots, x_n) \longmapsto x_1\cdots x_n$ 下的像. (这两个陈述的等价基本上是``独立''的定义, 不需要证明.)
+  \begin{enumerate}
+  \item[(a)] 证明可以假设 $K$ 有非空内部.
+  \item[(b)] 证明对 $G$ 的每个紧子集 $L$ 和每个 $n \geq 1$,
+    \[
+    \mu^{*n}(L)\mu_G(K) \leq \langle P_{\mu}^n\mathbb{1}_{LK}, \mathbb{1}_K \rangle_{L^2(G)}.
+    \]
+  \item[(c)] 设 $\varepsilon > 0$. 证明存在 $\alpha > 0$ 使得对每个 $n \geq 1$,
+    \[
+    \langle P_{\mu}^n\mathbb{1}_{K^{\lfloor \varepsilon n \rfloor + 1}}, \mathbb{1}_K \rangle_{L^2(G)} = o(e^{-\alpha n}\|\mathbb{1}_{K^{\lfloor \varepsilon n \rfloor + 1}}\|_{L^2(G)}\|\mathbb{1}_K\|_{L^2(G)}).
+    \]
+  \item[(d)] 证明若在 (c) 中选择 $\varepsilon$ 足够小, 则
+    \[
+    \langle P_{\mu}^n\mathbb{1}_{K^{\lfloor \varepsilon n \rfloor + 1}}, \mathbb{1}_K \rangle_{L^2(G)} = o(e^{-\alpha n/2}).
+    \]
+  \item[(e)] 得出结论.
+  \end{enumerate}
+\end{enumerate}

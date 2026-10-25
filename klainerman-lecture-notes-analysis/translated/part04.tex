@@ -1,0 +1,925 @@
+% ==== part04 第 4 章:基本解与基本线性偏微分方程 ====
+% 源: MinerU_latex_lecture nots.tex 5211-6715 行;校对 pdf_text.txt 4043-5551 行(PDF 第 77-104 页)
+% 术语(本部分新增,中文=英文):
+%   调和函数=harmonic function(键 harmonic-function);次调和=subharmonic(键 subharmonic);
+%   超调和=superharmonic(键 superharmonic);Green 函数=Green's function(键 green-function);
+%   椭圆算子=elliptic operator(键 elliptic-operator);随机游走=random walk(键 random-walk);
+%   前向基本解=forward fundamental solution(键 forward-fundamental-solution);
+%   共面积公式=co-area formula(键 coarea-formula);弱解=weak solution(键 weak-solution)
+%   其余沿用已有术语: 基本解/分布/检验函数/卷积/示性函数/Heaviside 函数/能量-动量张量/
+%   波算子/程函方程/后向光锥等(已在 part00/01/03 引入,本部分直接使用不重复 \newterm)
+% REFS(需协调员统一解析):
+%   - 源 6154 行 "the homogeneous family of distributions j_a defined by proposition ??": 原书
+%     "proposition ??" 引用未解析(疑指引言或第 2/3 章中定义齐次分布族 j_a 的命题),正文按原文
+%     写 "命题 ??",待补链.
+%   - 源 6182 行 "See Exercise 3 of section (4) for the n = 3 case": 原书指 "第 4 节的习题 3"
+%     (n=3 情形),本部分第 4 节习题 3 为热算子最大值原理,与原意不符;疑指其他章的节,待解析.
+%   - 源 6124 行 "We will return to the study of the Laplace equation ... in Chapter 3.":
+%     指第 3 章(该章为分布/Fourier 相关),正文写 "第 3 章".
+%   - 源 5975 行 Remark 2.6 "the measure in Exercise 5 of the Introduction": 指引言(part00)习题 5.
+%   - 源 5835 行 "introduced formally in the exercises in the Introduction": 指引言习题中引入的 Green 函数.
+%   - 源 6088 行 "is proven in the Appendix": 指附录 A(co-area 公式),正文写 "附录".
+%   - 源 6397 行 "as discussed in subsection 4, Example 2": 指分布回拉部分(第 3 章?)的小节 4 例 2,待解析.
+%   - 源 6325 行 "see [J]": 文献 [J](疑为 John 的著作),保留 [J].
+%   - 源 6027 行 "Evans or Gilbarg and Trudinger": 文献名,保留.
+%   - 公式 (142) 与验证式(6372 行)符号不一致(原书如此): (142) 为正号 E_+^{(1+3)}=
+%     1/(2π)H(t)δ(t²-|x|²),验证式写 -1/2 π^{-1}H(t)δ_0(t²-|x|²)=-1/(4π)r^{-1}δ(t-r),照原书保留.
+%   - 源 6254 行 "deduce (148) from (142)": 原文如此((148) 为 E=Aδ(u)),按数学意义疑应为
+%     "(143) 从 (142)",照原文保留 \eqref 并在此注明.
+%   - 源 6245 行 公式 (143) 右端以悬空 "=" 结束(两处 OCR 一致),按原书保留悬空等号.
+%   - 源 6420 行 "2∂_α A ∂_β u + □u = 0": OCR 索引混乱,按数学含义与脚注 12(输运方程)还原为
+%     2∂_α A ∂^α u + □u = 0.
+%   - 源 6172 行 "E_+^{(2k+1+1)}" 保留原书写法(即 n=2k+1 维空间情形的 n+1=2k+2 维).
+%   - FOOTNOTE: 脚注 1-14 全部已从 pdf_text.txt 对应页找回并翻译.
+% 编号说明:
+%   - 引言无编号(\section*{引言}),第一个编号对象为 Proposition 0.3,故先 \setcounter{mtthm}{2};
+%   - 第 1 节: 命题 1.1、定理 1.2、推论 1.3、定理 1.4/1.5/1.6(习题为加粗段落,不推进计数器);
+%     未编号 Remark 用 remark*;
+%   - 第 2 节: 命题 2.1、2.2、定理 2.3、命题 2.4、定理 2.5、注 2.6、命题 2.7、定理 2.8、命题 2.9;
+%     未编号 Remark(ODE 猜测)、Note、Example 用 remark*/example*;习题 1-8 为加粗段落;
+%   - 第 3 节: 定理 3.1、3.2、命题 3.3、定理 3.4;习题 1-10 为加粗段落;
+%   - 第 4 节: 无编号定理对象;习题 1-5 为加粗段落;4.1 用 \mtsubsecn{4.1}{...}(不推进计数器),
+%     其下习题 1、2 亦为加粗段落;
+%   - 编号公式共 18 个: (137)-(154),均用 \begin{equation}\label{eq:c4-NNN} 按原书编号;
+%     其余行间公式用 \[ \] 不编号.
+% ====
+
+\chapter{基本解与基本线性偏微分方程}
+
+\section*{引言}
+
+在引言中， 我们以 $\mathbb{R}^{3}$ 中 Laplace 算子的特殊情形介绍了基本解的基本概念， 并利用该解推导了具有紧支集数据的 Poisson 方程的若干基本事实.现在我们开始从同一视角、但更深入地研究几个基本的线性偏微分方程.
+
+给定具有常系数的线性偏微分算子
+
+\[
+P(\partial) = \sum_{|\alpha| \leq k} a_{\alpha}\partial^{\alpha}
+\]
+
+其中 $a_{\alpha} \in \mathbb{C}$.我们说一个分布 $E$ 是基本解， 如果它满足 $P(\partial)E = \delta_{0}$.若如此， 则对形如 $P(\partial)u = f$ 的方程（其中 $f \in \mathcal{D}'(\mathbb{R}^{n})$ 是紧支集分布）， 我们总可以通过令 $u = E*f$ 来找到解.这容易由如下事实推出：对任意 $u \in \mathcal{D}'(\mathbb{R}^{n})$ 有 $\delta_{0}*u = u$；再结合下面的命题（它最终源于 $\mathbb{R}^{n}$ 中所有平移可交换这一事实）.
+
+\setcounter{mtthm}{2}
+\begin{proposition}\label{prop:c4-0.3}
+假设 $u, v \in \mathcal{D}'(\mathbb{R}^{n})$， 其中至少一个具有紧支集.则
+
+\[
+P(\partial)(u*v) = P(\partial)u*v = u*P(\partial)v.
+\]
+\end{proposition}
+
+可以证明如下一般结果.
+
+\begin{theorem}[Ehrenpreis--Malgrange]\label{thm:c4-0.4}
+$\mathbb{R}^{n}$ 上任意具有常系数的线性偏微分算子 $P(\partial)$ 都有基本解.
+\end{theorem}
+
+其证明涉及初等的 Fourier 与泛函分析， 实际上与本讲义的关系较为疏远（不过有一道期中习题表明， 在更一般的背景下类似的定理可能存在障碍）.归根结底， 基本解必须足够显式， 才能用于导出所讨论方程的有趣性质.
+
+我们转而处理一些重要的、平移不变的线性微分算子的具体例子， 它们具有特殊而有用的不变性质.凭借这些算子的简单性与特殊对称性， 我们能够导出基本解的显式公式.这使我们能够导出相应方程的重要定性性质（解的存在性与正则性、对数据的连续依赖性等）.然而， 这些定性性质往往与各种对称性无关， 并且显然在算子被轻微甚至大幅度扰动后仍然成立.因此请记住：尽管显式公式非常有用， 但为了理解 PDE 的性质， 我们最终需要发展更稳健的技巧.
+
+\section{Cauchy-Riemann 方程组}
+
+算子\footnote{记住这一定义的简便方法， 是把 $f$ 写成 $f(x, y) = f\!\left(\frac{z+\bar{z}}{2}, \frac{z-\bar{z}}{2i}\right)$.还要注意 $\frac{\partial f}{\partial z} = \frac{1}{2}\!\left(\frac{\partial}{\partial x} - i\frac{\partial}{\partial y}\right)$， 且 $df = \frac{\partial f}{\partial z}dz + \frac{\partial f}{\partial \bar{z}}d\bar{z}$.}
+$\frac{\partial}{\partial \bar{z}} = \frac{1}{2}\!\left(\frac{\partial}{\partial x} + i\frac{\partial}{\partial y}\right)$ 是复分析的基础；复分析研究线性偏微分方程
+$\frac{\partial f}{\partial \bar{z}} = 0$ 的解 $f : \mathbb{C} \to \mathbb{C}$.这样的函数称为全纯函数， 它们合在一起构成 $\mathbb{C}$ 上的一个代数， 此外还具有许多其他引人入胜的性质.联系 $f$ 的实部与虚部的这对偏微分方程称为 Cauchy-Riemann 方程组.我们假定读者已经熟悉复分析这一学科， 并进而通过应用分布理论来建立该学科的基本事实.在本节中， 我们将使用微分形式的表述， 特别地， 用 $\frac{\mathrm{d}\bar{z} \wedge \mathrm{d}z}{2i} = dx \wedge dy$ 表示 $\mathbb{C}$ 上的体积形式.给定函数 $f(z, \bar{z})$， 我们用复记号写成
+
+\[
+df = \frac{\partial f}{\partial z}dz + \frac{\partial f}{\partial \bar{z}}d\bar{z}.
+\]
+
+根据我们的一般定义， $\frac{\partial}{\partial \bar{z}}$ 的基本解是 $\mathbb{R}^{2}$ 中的一个分布 $K$， 满足 $\frac{\partial}{\partial \bar{z}}K = \delta_{0}$.与 Laplace 算子不同， $\frac{\partial}{\partial \bar{z}}$ 作为算子不与旋转 $u(z) \mapsto \tilde{u} = u(e^{it}z)$ 交换.事实上， 由计算
+
+\[
+\begin{aligned}
+d\bigl[u(e^{it}z)\bigr] &= \frac{\partial u}{\partial z}(e^{it}z)\, d(e^{it}z) + \frac{\partial u}{\partial \bar{z}}(e^{it}z)\, d\bigl(\overline{e^{it}z}\bigr) \\
+&= e^{it}\frac{\partial u}{\partial z}(e^{it}z)\, dz + e^{-it}\frac{\partial u}{\partial \bar{z}}(e^{it}z)\, d\bar{z}
+\end{aligned}
+\]
+
+可得 $\frac{\partial}{\partial \bar{z}}\tilde{u} = e^{-it}\frac{\partial u}{\partial \bar{z}}(e^{it}z)$.
+
+然而， 如果已经有一个基本解 $u$（满足 $\frac{\partial u}{\partial \bar{z}} = \delta_{0}$）， 那么由上面的计算可以构造出另一个基本解 $e^{it}u(e^{it}z)$， 因为 $\delta$-函数是旋转不变的.通过在旋转群上取平均， 我们可以不失一般性地假设这两个基本解相同， 即 $K(e^{it}z) = e^{-it}K(z)$， 这促使我们寻找如下形式的基本解
+
+\[
+K(re^{i\theta}) = g(r)e^{-i\theta}.
+\]
+
+由于 $\delta_{0}$ 是 $-2$ 次齐次的， 而 $\frac{\partial}{\partial \bar{z}}$ 使齐次度降低 1， 我们猜想 $g(r) = \frac{c}{r}$（其中 $c \in \mathbb{C}$ 为某常数）， 从而基本解将是 $-1$ 次齐次的.于是我们猜测 $K(z) = \frac{c}{z}$（$c$ 为某常数）.事实上， 由于 $\frac{1}{z}$ 是局部可积的， 它在 $\mathbb{R}^{2}$ 中处处定义一个分布， 且 $\frac{\partial}{\partial \bar{z}}\frac{1}{z}$ 的支集在原点.此外， 由于 $\frac{\partial}{\partial \bar{z}}\frac{1}{z}$ 是 $-2$ 次齐次的， 由支集为单点的分布的刻画我们推断它必为 $\delta_{0}$ 的常数倍；即 $\frac{\partial}{\partial \bar{z}}\frac{1}{z} = C\delta_{0}$， 其中 $C \in \mathbb{C}$ 为某常数（可能为 0）.
+
+我们可以把该分布作用到任意我们想要的检验函数上来确定这个常数， 我们将选取单位圆盘 $D = \{|z| \leq 1\}$ 的示性函数作为检验函数.严格说来， 这样做超出了我们所讲述的分布理论的范畴， 但我们可以毫无困难地证明其合理性：要点在于， 当一个因子略有奇性时， 另一个因子至少是连续的， 这使我们能够从光滑逼近过渡.用实变量记号， 可以通过分部积分来计算
+
+\[
+\int H(1-|z|) \cdot \frac{\partial}{\partial \bar{z}}\frac{1}{z}\, dx\, dy = -\int \frac{1}{x+iy}\frac{\partial}{\partial \bar{z}}H(1-|x+iy|)\, dx\, dy.
+\]
+
+对 $\frac{\partial}{\partial \bar{z}}|z|^{2} = \frac{\partial}{\partial \bar{z}}(z\bar{z})$ 应用乘积法则， 可得 $\frac{\partial}{\partial \bar{z}}|z| = \frac{z}{2|z|}$， 从而
+
+\[
+-\int \frac{1}{x+iy}\frac{\partial}{\partial \bar{z}}H(1-|x+iy|)\, dx\, dy = \int \frac{1}{2|z|}\delta(1-|z|)\, dx\, dy = \pi.
+\]
+
+等价地， 我们可以应用 Stokes 定理\footnote{必须注意参数化 $\theta \mapsto e^{i\theta}$ 给出圆的正确定向.若天真地用顺时针参数化 $\theta \mapsto e^{-i\theta}$ 复现下面的计算， 将导致符号错误.}来计算
+
+\[
+\begin{aligned}
+&\int_{D}\frac{\partial}{\partial \bar{z}}\left(\frac{1}{z}\right)\frac{\mathrm{d}\bar{z} \wedge \mathrm{d}z}{2i} = \int_{D}\mathrm{d}\left(\frac{1}{z}\frac{dz}{2i}\right) \\
+&\qquad = \int_{\partial D}\frac{1}{z}\frac{dz}{2i} \\
+&\qquad = \int_{0}^{2\pi}e^{-i\theta}\frac{ie^{i\theta}d\theta}{2i} \\
+&\qquad = \pi
+\end{aligned}
+\]
+
+由此得到命题：
+
+\begin{proposition}\label{prop:c4-1.1}
+设 $K(z) = \frac{1}{\pi}\frac{1}{z}$， 则 $\frac{\partial K}{\partial \bar{z}} = \delta_{0}$.
+\end{proposition}
+
+找到基本解后， 我们将立即得到全纯函数的表示公式.我们首先注意到， 上述计算的一个变体使我们能够计算 $\frac{\partial \chi_{\Omega}}{\partial \bar{z}}$：当 $\Omega$ 是带 Lipschitz 边界\footnote{我们证明散度定理时假设边界是光滑的， 但该证明的一个非常微小的变体对 Lipschitz 边界也成立.例如参见 Hörmander.}的开集， 且把 $\frac{1}{z}$ 换成任意检验函数时， 它表明
+
+\[
+\int \frac{\partial \chi_{\Omega}}{\partial \bar{z}} \cdot \phi(z)\frac{\mathrm{d}\bar{z} \wedge \mathrm{d}z}{2i} = -\int_{\partial\Omega}\phi(z)\frac{dz}{2i}, \qquad \phi \in \mathcal{C}_{0}^{\infty}(\mathbb{C}).
+\]
+
+例如， 这可由对恒等式
+
+\[
+d(\chi_{\Omega}\phi\, dz) = \left(\frac{\partial}{\partial \bar{z}}\chi_{\Omega}\phi + \chi_{\Omega}\frac{\partial}{\partial \bar{z}}\phi\right)d\bar{z} \wedge dz
+\]
+
+积分得到.验证这类涉及分布的积分恒等式成立的最简单方法之一， 是让奇异分布 $\chi_{\Omega}$ 被光滑函数 $\chi_{\Omega}^{\varepsilon}$ 逼近.在这种情况下， 由于 $\partial\Omega$ 是 Lipschitz 的而 $\phi$ 是连续函数， $\frac{\partial}{\partial \bar{z}}\chi_{\Omega}$ 是一个测度， 因此已经可以看出该计算是有效的.
+
+在特殊情形 $\frac{\partial f}{\partial \bar{z}} = 0$（在 $\Omega$ 内）且 $f$ 在 $\overline{\Omega}$ 的某个邻域内是（比如说）$\mathcal{C}^{1}$ 的时， 我们可以从光滑逼近 $\phi_{n} \to f$ 过渡， 从而断定 $\int_{\partial\Omega}f(z)dz = 0$\footnote{更直接地， 可以计算 $d(f\, dz) = df \wedge dz = \frac{\partial f}{\partial z}dz \wedge dz + \frac{\partial f}{\partial \bar{z}}d\bar{z} \wedge dz = 0$， 然后在 $\Omega$ 上积分.}.
+
+现在， 把 $\frac{\partial}{\partial \bar{z}}$ 作用到乘积
+
+\[
+\frac{\partial}{\partial \bar{z}}\left[\chi_{\Omega} \cdot \frac{1}{\pi(z-z_{0})}\right] = \delta_{z_{0}} + \frac{1}{\pi(z-z_{0})}\frac{\partial \chi_{\Omega}}{\partial \bar{z}}
+\]
+
+上， 得到一个支集仅含于 $z_{0}$ 与 $\Omega$ 边界的紧支集分布.
+
+我们通过用 $\frac{\mathrm{d}\bar{z} \wedge dz}{2i}$ 作积分来理解这个等式， 得到恒等式：
+
+\begin{theorem}\label{thm:c4-1.2}
+设 $\Omega \subseteq \mathbb{C}$ 是带 Lipschitz 边界 $\partial\Omega$ 的有界区域， $z_{0} \in \Omega$， $\phi \in \mathcal{C}^{\infty}(\mathbb{C})$， 则
+
+\[
+\frac{1}{2\pi i}\int_{\partial\Omega}\frac{\phi(z)}{z-z_{0}}dz = \phi(z_{0}) + \frac{1}{2\pi i}\int_{\Omega}\frac{\partial \phi}{\partial \bar{z}}\frac{1}{z-z_{0}}d\bar{z} \wedge dz.
+\]
+\end{theorem}
+
+我们只对光滑函数陈述了该定理， 但由逼近， 定理在远为一般的条件下成立.特别地， 当 $f$ 在 $\Omega$ 内全纯且在 $\overline{\Omega}$ 的某个邻域内是 $\mathcal{C}^{1}$ 时， 我们可以从光滑的 $\phi$ 过渡到 $f$， 由此得到如下推论：
+
+\begin{corollary}[Cauchy 积分公式]\label{cor:c4-1.3}
+设 $f$、$\Omega$ 与 $z_{0} \in \Omega$ 如上， 则
+
+\[
+\frac{1}{2\pi i}\int_{\partial\Omega}\frac{f(z)}{z-z_{0}}dz = f(z_{0}).
+\]
+\end{corollary}
+
+\begin{remark*}
+应用 Cauchy 积分公式并计算边界积分时必须多加小心.首先， 假设 $f$ 在边界上保持良好的性态， 这对于从光滑逼近过渡是至关重要的， 挖去原点的单位圆盘上 $\frac{1}{z}$ 的例子就说明了这一点.在这种情况下， Cauchy 积分公式不能应用于（比如说）非常接近 0 的点 $z_{0}$——边界积分 $\int_{\partial D}\frac{1}{z} \cdot \frac{1}{z-z_{0}}dz$ 的大小显然不会比弧长 $\int_{|z|=1}1\, |dz| = 2\pi$ 大多少.我们使用 Stokes 定理所涵盖的另一个重要问题是， 必须考虑边界的定向.
+\end{remark*}
+
+通过分析 Cauchy 积分公式可以证明， 全纯函数（在上述条件下）在 $\Omega$ 的任何内点处都具有收敛的幂级数展开， 因而特别是光滑的.更有用的是， 可以给出这种光滑性的定量刻画：对包含于 $\Omega$ 的紧集 $K$， 导出形如 $\|\partial^{\alpha}f\|_{L^{\infty}(K)} \lesssim \|f\|_{L^{\infty}(\partial\Omega)}$ 的估计.同样的估计还表明 $\frac{\partial f}{\partial \bar{z}} = 0$ 的解如何随其边界值连续变化（当解存在时）.这种解析性是更一般现象的一个例子：基本解在原点之外的正则性对应于 PDE 解的正则性.然而， 一般而言， 若能不依赖显式公式而得到这样的正则性结果（也许不必这么强）， 那就好了.我们很快就会重新讨论全纯函数.
+
+\noindent\textbf{习题 1.}\quad 我们说 $u \in \mathcal{D}'(\Omega)$ 是 Cauchy-Riemann 方程组的\newterm{weak-solution}{弱解}{weak solution}， 如果 $\frac{\partial u}{\partial \bar{z}} = 0$ 在分布意义下成立.证明：一个连续函数若是弱解， 则它实际上是经典的全纯函数（因而是解析的）.（提示：全纯函数类在平移与线性组合下封闭， 因此考虑 $u$ 的一个磨光可能有用.然后利用先验估计.）
+
+\noindent\textbf{习题 2.}\quad 由习题 1 推出：
+
+\begin{theorem}[Schwartz 反射原理]\label{thm:c4-1.4}
+设 $\Omega$ 是 $\mathbb{C}$ 的一个开子区域， 与实轴相交于一个区间 $I$.若 $f$ 在 $\Omega$ 上连续且在 $\Omega\backslash I$ 上全纯， 则 $f$ 在 $\Omega$ 上全纯.
+\end{theorem}
+
+提示：$f(x+iy) = \lim_{\varepsilon\to 0}\mathbf{1}_{\{|y|>\varepsilon\}} \cdot f(x+iy)$ 在弱意义下成立.
+
+\noindent\textbf{习题 3.}\quad 再证明：
+
+\begin{theorem}[Morera 定理]\label{thm:c4-1.5}
+设 $f$ 在开圆盘 $D$ 中连续.则 $f$ 在 $D$ 中全纯， 当且仅当对任何边界 $\partial T$ 含于 $D$ 的直角三角形内部 $T$， 有
+
+\[
+\int \chi_{T}\frac{\partial f}{\partial \bar{z}}d\bar{z} \wedge dz \equiv \int_{\partial T}f(z)dz = 0.
+\]
+\end{theorem}
+
+注意， 最左边的积分在经典意义下没有意义， 因为没有对 $\frac{\partial f}{\partial \bar{z}}$ 作任何正则性假设.（提示：这既可以利用关于 $\chi_{T}$ 的线性过渡到一般检验函数来证明， 也可以利用假设中的平移不变性来证明.）
+
+\noindent\textbf{习题 4.}\quad Cauchy 积分公式立即推出如下形式的估计：$|f(z_{0})| \leq C\max_{z\in\partial\Omega}|f(z)|$， 其中正常数 $C = C(z_{0})$ 与 $f$ 无关.然而， 本质上由于 $\delta_{z_{0}} : f \to f(z_{0})$ 也是环同态， 我们能够选取与 $z_{0}$ 无关的 $C = 1$， 从而证明
+
+\begin{theorem}[最大模原理]\label{thm:c4-1.6}
+若 $\Omega$ 是闭包 $\overline{\Omega}$ 紧的开集， 且 $f$ 在 $\overline{\Omega}$ 的某个邻域内全纯， 则
+
+\[
+\max_{z\in\Omega}|f(z)| = \max_{z\in\partial\Omega}|f(z)|.
+\]
+\end{theorem}
+
+这一思路的一种论证归功于 Landau.
+
+另一方面， 仅由估计 $|f(z_{0})| \leq C\max_{z\in\partial\Omega}|f(z)|$ 即可推出（由 Hahn-Banach 定理）：最初对全纯函数的连续边界值定义的线性泛函 $\delta_{z_{0}} : f \mapsto f(z_{0})$ 可延拓为 $\mathcal{C}(\partial\Omega)$ 上的连续线性泛函， 因此由一个测度表示（即对在 $\Omega$ 内全纯且连续到边界的 $f$， 有 $f(z_{0}) = \int_{\partial\Omega}f(z)\, d\mu_{z_{0}}(z)$， 其中 $\mu_{z_{0}}$ 是边界上的某个有限测度， 先验上不一定唯一）.事实上， 我们已经通过证明 Cauchy 积分公式算出了这个测度.另一方面， 最大模原理可以在不使用 Cauchy 积分公式的情况下证明（习题部分请读者在下一节关于 Laplace 算子的习题 8 中给出这样的证明）.因此我们看到， 先验估计与积分表示公式的存在性是相辅相成的， 它们共同表达了解的唯一性以及对数据的连续依赖性.然而请注意：
+
+\noindent\textbf{习题 5.}\quad 如果任意边界数据 $f \in \mathcal{C}(\partial\Omega)$ 都能被 $\Omega$ 中的全纯函数 $u$（$\frac{\partial u}{\partial \bar{z}} = 0$）实现， 那么根据上面的最大模原理， 连续泛函 $\delta_{z_{0}} : f \mapsto u(z_{0})$（$z_{0} \in \Omega$）将是定义在代数 $\mathcal{C}(\partial\Omega)$ 上的连续环同态.然而， $\mathcal{C}(\partial\Omega)$ 上任何如上延拓 $\delta_{z_{0}}$ 的连续线性泛函都不可能是环同态\footnote{事实上， 代数 $\mathcal{C}(\partial\Omega)$ 上所有这样的连续环同态都是边界本身上的点质量.}.因此， 存在不能实现为全纯函数边界值的连续函数.
+
+因此， 我们不能仅由先验估计（如最大模原理）或表示公式就断定解存在.理解解的存在性的障碍是 PDE 中的一个有趣问题， 通常需要理解所讨论方程背后的几何或拓扑.例如， 就目前的情形而言， 全纯函数不能把一条闭曲线映为另一条定向相反的曲线.
+\section{Laplace 算子 \texorpdfstring{$\Delta$}{Δ}}
+
+正如我们在引言中所见， $\mathbb{R}^{n}$ 上的 Laplace 算子（或 Laplacian）$\Delta = \sum_{i=1}^{n}\partial_{i}^{2}$ 是最简单也是最重要的线性微分算子之一.$\Delta u = 0$ 的解称为\newterm{harmonic-function}{调和函数}{harmonic function}.在二维情形， $\Delta$ 与全纯函数的研究有关（例如， 由恒等式 $\Delta = 4\frac{\partial}{\partial \bar{z}}\frac{\partial}{\partial z}$ 以及我们前面的正则性结果可见， 全纯函数的实部与虚部都是调和的）.该算子也常常记作 $\nabla \cdot \nabla = (\partial_{1}, \partial_{2}, \ldots, \partial_{n}) \cdot (\partial_{1}, \partial_{2}, \ldots, \partial_{n})$；这种记号清楚地表明了算子的旋转对称性， 也清楚地表明了分部积分恒等式
+
+\[
+-\int \Delta u\, v\, dx = \int \nabla u \cdot \nabla v\, dx, \qquad u, v \in \mathcal{C}_{0}^{\infty}(\mathbb{R}^{n})
+\]
+
+后者可视为该算子的另一种定义\footnote{后一种定义可推广到 Riemann 流形上的 Laplace-Beltrami 算子， 此时梯度、点积与体积形式都必须关于度量来取.这一几何观点为我们提供了看待标准 Laplacian 旋转不变性的另一种方式.}.
+
+在引言的习题中， 我们利用球对称求出了 Laplace 方程的基本解.现在我们可以严格地验证：我们形式导出的基本解是真正的基本解.
+
+\begin{proposition}\label{prop:c4-2.1}
+对所有 $n \geq 3$， 定义 $K_{n}(x) = \bigl((2-n)\omega_{n}\bigr)^{-1}|x|^{2-n}$；而对 $n = 2$， 定义 $K_{2}(x) = (2\pi)^{-1}\log|x|$.这里 $\omega_{n}$ 表示单位球面 $\mathbb{S}^{n-1}$ 的面积.则对所有 $n \geq 2$ 有
+
+\[
+\Delta K_{n} = \delta_{0}.
+\]
+\end{proposition}
+
+\begin{proof}
+由直接计算， $\Delta K_{n} = (\partial_{r}^{2} + \frac{n-1}{r}\partial_{r})K_{n}$ 在原点之外消失， 因此可表示为 $\delta_{0}$ 的若干导数的和.于是 $\Delta K_{n}$ 是支集在 $\mathbb{R}^{n}$ 原点处的分布， 且是 $-n$ 次齐次的， 这意味着它是 $\delta_{0}$ 的常数倍.为确定该常数， 我们可以使用任意检验函数， 并且（与 Cauchy-Riemann 方程组中的考虑相同）我们选取单位球的示性函数 $H(1-|x|)$.略加滥用记号， 记 $K_{n}(x) = K_{n}(|x|)$， 则
+
+\[
+\begin{aligned}
+\int \Delta K_{n}(x)H(1-|x|)dx &\equiv -\int \nabla K_{n}(x) \cdot \nabla H(1-|x|)dx \\
+&= \int \delta(1-|x|)\nabla K_{n}(|x|) \cdot \frac{x}{|x|}dx \\
+&\equiv \int \delta(1-|x|)\frac{\mathrm{d}K_{n}}{\mathrm{d}r}(|x|)\frac{x}{|x|} \cdot \frac{x}{|x|}dx \\
+&= \int_{|x|=1}\frac{\mathrm{d}K_{n}}{\mathrm{d}r}(1)d\sigma \\
+&= 1
+\end{aligned}
+\]
+\end{proof}
+
+有了基本解 $K_{n}(x)$， 我们就可以求解非齐次方程
+
+\[
+\Delta V = \rho, \qquad \rho \in \mathcal{C}_{0}^{\infty}(\mathbb{R}^{n})
+\]
+
+其解由公式 $V(x) = K_{n}*\rho(x) = \int K_{n}(x-y)\rho(y)dy$ 给出.该解也常常记作 $\Delta^{-1}\rho$.
+
+凭借一些微分几何的基本知识， 我们可以给出另一个证明.在极坐标 $x = r\omega$（$r > 0$， $|\omega| = 1$）下， $\Delta$ 取如下形式：
+
+\[
+\Delta = \partial_{r}^{2} + \frac{n-1}{r}\partial_{r} + r^{-2}\Delta_{\mathbb{S}^{n-1}},
+\]
+
+其中 $\Delta_{\mathbb{S}^{n-1}}$ 是单位球面 $\mathbb{S}^{n-1}$ 上的 Laplace-Beltrami 算子.
+
+\noindent\textbf{习题 1.}\quad 证明：具有度量 $g$\footnote{其中 $\nabla_{g}u$ 由 $du(X) = g(\nabla_{g}u, X)$ 隐式定义， 而 $\Delta_{g}$ 由恒等式 $-\int_{M}\Delta_{g}u\, v\, dS_{g} = \int_{M}g(\nabla_{g}u, \nabla_{g}v)\, dS_{g}$（$u, v \in \mathcal{C}_{0}^{\infty}(M)$）定义.}的 Riemann 流形上的 Laplace-Beltrami 算子， 在局部坐标 $x^{i}$ 下由下式给出：
+
+\[
+\Delta_{g}\phi = \frac{1}{\sqrt{|g|}}\partial_{i}\bigl(g^{ij}\sqrt{|g|}\partial_{j}\phi\bigr).
+\]
+
+这里 $g^{ij}$ 是逆度量 $g^{-1}$ 相对于坐标 $x^{i}$ 的分量.$M$ 上的体积元 $dS_{g}$ 在局部坐标下由 $dS_{g} = \sqrt{|g|}\, dx^{1}dx^{2}\cdots dx^{n}$ 给出.注意， 在紧流形 $M$ 上
+
+\[
+\int_{M}\Delta_{g}u\, v\, dS_{g} = \int_{M}u\, \Delta_{g}v\, dS_{g}.
+\]
+
+\noindent\textbf{习题 2.}\quad 计算单位球面 $\mathbb{S}^{n-1}$ 的 Laplace-Beltrami 算子， 并验证 $\Delta$ 的极分解公式.对特殊情形 $n = 3$， 相对于坐标 $x^{1} = r\cos\theta^{1}$， $x^{2} = r\sin\theta^{1}\cos\theta^{2}$， $x^{3} = r\sin\theta^{1}\sin\theta^{2}$（$\theta^{1} \in [0, \pi)$， $\theta^{2} \in [0, 2\pi)$）证明
+
+\[
+\Delta_{\mathbb{S}^{2}} = \partial_{\theta^{1}}^{2} + \cot\theta^{1}\partial_{\theta^{1}} + \frac{1}{\sin^{2}\theta^{1}}\partial_{\theta^{2}}^{2}.
+\]
+
+此外， 面积元 $dS_{\omega}$ 取如下形式：$dS_{\omega} = r^{2}\sin\theta^{1}\, d\theta^{1}d\theta^{2}$.
+
+\begin{proof}[几何推导]
+对光滑函数 $\phi(\boldsymbol{x}) = \phi(r\omega)$， 在极坐标 $r = |x|$、$\omega \in \mathbb{S}^{n-1}$（$\mathbb{R}^{n}$ 中的单位球面）下， 有
+
+\[
+\begin{aligned}
+\Delta\phi &= \left(\partial_{r}^{2} + \frac{n-1}{r}\partial_{r} + r^{-2}\Delta_{\mathbb{S}^{n-1}}\right)\phi \\
+&= r^{-(n-1)}\partial_{r}\bigl(r^{n-1}\partial_{r}\phi\bigr) + r^{-2}\Delta_{\mathbb{S}^{n-1}}\phi
+\end{aligned}
+\]
+
+现在我们过渡到极坐标 $x = r\omega$， 使体积元可以写成 $dx = r^{n-1}drdS_{\omega}$.在 Riemann 流形 $\mathbb{S}^{n-1}$ 上分部积分， 我们计算得
+
+\[
+\begin{aligned}
+\langle \Delta K_{n}, \phi\rangle &= \langle K_{n}, \Delta\phi\rangle \\
+&= \int_{|\omega|=1}\int_{0}^{\infty}K_{n}(r)\partial_{r}\bigl(r^{n-1}\partial_{r}\phi\bigr)drdS_{\omega} + \int_{|\omega|=1}\int_{0}^{\infty}K_{n}(r)\Delta_{\mathbb{S}^{n-1}}\phi\, drdS_{\omega} \\
+&= \bigl((2-n)\omega_{n}\bigr)^{-1}\int_{|\omega|=1}\int_{0}^{\infty}r^{-n+2}\partial_{r}\bigl(r^{n-1}\partial_{r}\phi\bigr)drdS_{\omega} + 0 \\
+&= -\int_{0}^{\infty}r^{-n+1}\bigl(r^{n-1}\partial_{r}\tilde{\phi}\bigr)dr = -\int_{0}^{\infty}\partial_{r}\tilde{\phi}(r)dr = \phi(0)
+\end{aligned}
+\]
+
+其中在上述计算中， 我们定义 $\tilde{\phi}(r)$ 为 $\phi$ 在 $|x| = r$ 上的平均.我们推断， 对 $n \geq 3$ 有 $\Delta K_{n} = \delta_{0}$， 正如所愿.情形 $n = 2$ 可以同样处理.
+\end{proof}
+
+\begin{remark*}
+注意， 除常数外， $K_{n}(x)$ 的表达式也可以通过寻找球对称解 $K = K(|x|)$ 轻易猜出.事实上， 方程 $\Delta K = 0$ 归结为常微分方程 $K''(r) + \frac{n-1}{r}K'(r) = 0$.
+\end{remark*}
+
+找到基本解后， 我们可以像前面一样立即推出一个表示公式.设 $\phi \in \mathcal{C}_{0}^{\infty}$ 是光滑检验函数， $\Omega$ 是带 Lipschitz 边界的有界开集， $x \in \Omega$.我们有
+
+\[
+\begin{aligned}
+\phi(x) &= \int_{\Omega}\phi(y)\delta(x-y)dy \\
+&= \int \chi_{\Omega}\phi\, \Delta K_{n}(x-y)dy
+\end{aligned}
+\]
+
+我们的策略是分部积分， 允许至多一个导数作用到示性函数上.回忆我们关于分布回拉的讨论：$\nabla\chi_{\Omega} = \vec{n}\, d\sigma_{\partial\Omega}$， 其中 $\vec{n}$ 是内单位法向， $d\sigma$ 是边界上的曲面测度.与经典分部积分不同， 这里的处理仿佛没有边界项， 因为乘积 $\chi_{\Omega}\phi\, \Delta K_{n}(x-y)$ 具有紧支集.对在边界 $\partial\Omega$ 处具有连续一阶导数的函数 $f$， 我们用 $\frac{\partial f}{\partial\nu}$ 表示外单位法向导数.
+
+\[
+\begin{aligned}
+&\phi(x) = -\int \nabla(\chi_{\Omega}\phi) \cdot \nabla K_{n}(x-y)dy \\
+&\quad = -\int \phi\nabla\chi_{\Omega} \cdot \nabla K_{n}(x-y)dy - \int \chi_{\Omega}\nabla\phi \cdot \nabla K_{n}(x-y)dy \\
+&\quad = \int_{\partial\Omega}\phi\frac{\partial}{\partial\nu}K_{n}(x-y)d\sigma(y) - \int \nabla\phi \cdot \bigl(\nabla(\chi_{\Omega}K_{n}) - K_{n}\nabla\chi_{\Omega}\bigr) \\
+&\quad = \int_{\partial\Omega}\phi\frac{\partial}{\partial\nu}K_{n}(x-y)d\sigma(y) - \int_{\partial\Omega}K_{n}(x-y)\frac{\partial\phi}{\partial\nu}d\sigma(y) + \int_{\Omega}K_{n}(x-y)\Delta\phi\, dy
+\end{aligned}
+\]
+
+于是我们得到表示公式
+
+\begin{equation}
+\phi(x) = \int_{\Omega}K_{n}(x-y)\Delta\phi\, dy + \int_{\partial\Omega}\phi\frac{\partial}{\partial\nu}K_{n}(x-y)d\sigma(y) - \int_{\partial\Omega}K_{n}(x-y)\frac{\partial\phi}{\partial\nu}d\sigma(y)\label{eq:c4-137}
+\end{equation}
+
+特别地（由逼近）， 如果 $u$ 在 $\Omega$ 内调和（并且在 $\Omega$ 的某个邻域内是 $C^{2}$ 的）：
+
+\begin{proposition}\label{prop:c4-2.2}
+\begin{equation}
+u(y) = \int_{\partial\Omega}\left(u(x)\frac{\partial K_{n}}{\partial\nu}(x-y) - \frac{\partial u}{\partial\nu}(x)K_{n}(x-y)\right)d\sigma(x)\label{eq:c4-138}
+\end{equation}
+\end{proposition}
+
+有了表示公式， 我们可以重复前面针对 Cauchy-Riemann 方程组所做的大部分分析.我们发现， 由于基本解是实解析的， 上述调和函数实际上是实解析的， 并且有以 $u$ 与 $\frac{\partial u}{\partial\nu}$ 的边界值表示的、关于导数的定量先验估计.我们还可以用这些估计证明：满足 $\Delta u = 0$ 的连续函数实际上是经典解.但用这个公式继续分析调和函数可能具有误导性， 因为调和函数的内点值由其边界值唯一确定， 因此法向导数不能任意给定.
+
+事实上， 我们现在陈述的调和函数最大值原理表明：区域内部的调和函数仅由其边界值确定.
+
+\begin{theorem}[最大值原理]\label{thm:c4-2.3}
+若 $u : \Omega \to \mathbb{R}$ 在连通开集 $\Omega$ 上是 $\mathcal{C}^{2}$ 的， 且在 $\Omega$ 内 $\Delta u \geq 0$， 则 $u$ 不能在内部取得最大值， 除非 $u$ 是常数.特别地， 当 $\Omega$ 有界时，
+
+\begin{equation}
+\sup_{\overline{\Omega}}u(x) = \sup_{\partial\Omega}u(x)\label{eq:c4-139}
+\end{equation}
+
+并且作为推论， 当 $u$ 调和时， $\sup_{\overline{\Omega}}|u(x)| = \sup_{\partial\Omega}|u(x)|$.
+\end{theorem}
+
+\begin{proof}
+第一个论断称为 $\mathcal{C}^{2}$ 次调和函数的强最大值原理（次调和函数指在经典意义下满足 $\Delta u \geq 0$ 的函数）；该定理表明， 区域 $\Omega$ 中的次调和函数在内部严格保持在边界值处处更大的调和函数之下， 故得名``次调和''.强最大值原理将是后面要证明的一个定理（次调和函数的平均值不等式）的简单推论， 不过我们把证明留给读者.但眼下我们至少可以证明``弱最大值原理''（即不等式 \eqref{eq:c4-139}）.
+
+事实上， 当 $\Delta u > 0$ 严格正时， （强）最大值原理是显然的， 因为函数 $u$ 在任意点至少在一个方向上是严格凸的.通过逼近（例如把 $u$ 换成 $u + \varepsilon x_{1}^{2}$）， 我们可以在只假设 $\Delta u \geq 0$ 于有界区域 $\Omega$ 内成立、且 $u$ 连续延拓到 $\partial\Omega$ 的情况下得到弱最大值原理.
+
+显然， 把 $u$ 换成 $-u$ 后， 对超调和函数成立``强最小值原理''\footnote{超调和指 $\Delta u \leq 0$.}， 它特别蕴含了定理中陈述的最后一个等式.
+\end{proof}
+
+证明中描述的超调和与次调和函数的概念， 即使对调和函数本身的分析也是有用的：它们更容易显式构造（用指数函数、多项式等）， 并且可以按照上面的最大值原理来界定调和函数.
+按照全纯函数最大模原理讨论之后的同样推理， 调和函数必然有形如 $u(y) = \int_{\partial\Omega}u(x)d\mu_{y}(x)$ 的表示公式， 其中 $\mu_{y}$ 是依赖于 $y \in \Omega$ 的有限测度.我们可以如下得到这样的表示公式：如果能够找到在 $\Omega$ 边界上与基本解 $K_{n}(x-y)$ 重合的调和函数 $\psi_{y}(x)$， 则函数 $G(x, y) = K_{n}(x-y) - \phi_{y}(x)$ 满足
+
+\[
+\Delta_{x}G(x, y) = \delta_{y}(x) \text{ 于 } \Omega, \qquad G(x, y) = 0 \text{ 于 } \partial\Omega
+\]
+
+由最大值原理， 这样的函数至多有一个.上面的函数 $G(x, y)$ 称为 $\Omega$ 的\newterm{green-function}{Green 函数}{Green's function}， 它在引言的习题中被正式引入.按照我们前面的表示公式那样计算 $u(y) = \int\chi_{\Omega}(x)u(x)\Delta G(x, y)dx$（这次 $G$ 的边界条件消去了一个边界项：$\chi_{\Omega}\nabla G(x, y) = \nabla(\chi_{\Omega}G(x, y))$）， 我们得到所需的表示公式：
+
+\begin{proposition}\label{prop:c4-2.4}
+若 $u$ 在 $\Omega$ 内调和， 在 $\Omega$ 的某个邻域内是 $C^{2}$ 的， 且 $G(x, y)$ 如上， 则
+
+\begin{equation}
+u(y) = \int_{\partial\Omega}\left[u(x)\frac{\partial G}{\partial\nu}(x, y)\right]d\sigma(x)\label{eq:c4-140}
+\end{equation}
+\end{proposition}
+
+\begin{remark*}
+注意：我们并未证明公式右端定义的函数对任意区域都有定义， 也未证明它定义了一个调和函数， 甚至没有证明当 $y$ 趋向边界时它实现被积函数中的边界值.当边界足够好（比如 Lipschitz）时， 这些都可以证明， 并且任意连续边界值都可以由调和函数实现（与 Cauchy-Riemann 方程组的情形相反）.
+\end{remark*}
+
+出现在 \eqref{eq:c4-140} 中的概率测度 $\frac{\partial G}{\partial\nu}(x, y)d\sigma(x)$ 描述了从点 $y$ 出发的\newterm{random-walk}{随机游走}{random walk}首次接触边界的概率分布.于是， 调和函数在点 $y$ 处的值可以看作从 $y$ 出发的随机游走在首次接触点处边界数据所取值的期望.由这一解释， 调和函数的一些特征（例如下面的最大值原理与平均值性质）是显然的， 但我们不在此处探讨这一解释.
+
+\begin{example*}
+对于 $\mathbb{R}^{n}$ 中的半空间 $x^{n} > 0$， 可以通过在点 $y^{*} = (y^{1}, \ldots, y^{n-1}, -y^{n})$ 放置一个负点源， 并定义 $\mathcal{G}(x, y) = K(x-y) - K(x-y^{*})$， 来得到 Green 函数（$\Delta G(x, y) = \delta_{y}$， $G(x^{1}, \ldots, x^{n-1}, 0) = 0$）的显式公式.则 $G(x, y)$ 在 $x^{n} = 0$ 上为零， 因为这样的点到 $y$ 与 $y^{*}$ 等距， 而基本解只依赖于 Euclidean 距离.同样的方法也可以用来构造球 $|y| \leq 1$ 的 Green 函数.此时使用共形反射 $y \mapsto y^{*} = \frac{y}{|y|^{2}}$， 它固定球面 $|y| = 1$.Green 函数于是取如下形式：$G(x, y) = K(x-y) - K(|x|(x-y^{*}))$.在二维情形可以用全纯函数得到更多例子.
+\end{example*}
+
+我们到目前为止的分析的主要结果（最大值原理、可由 Green 公式推出的各种先验估计， 以及 $\mathbb{R}^{n}$ 上对紧支集数据解的存在性）中， 有许多对与 Laplacian 密切类似的其他算子也成立.例如， 通过换元可以看到， 当 $u$ 是调和函数且 $v(\Psi(x)) = u(x)$（$\Psi$ 是 $\mathbb{R}^{n}$ 的微分同胚）时， $v$ 将满足如下形式的方程：$L[v] = \sum_{i, j=1}^{n}a^{ij}(y)\partial_{i}\partial_{j}v + b^{i}(y)\partial_{i}v = 0$， 其中光滑函数 $a^{ij}(y)$ 是对称正定矩阵 $a^{ij}(\Psi(x)) = D\Psi(x)(D\Psi)^{t}(x)$ 的系数， 而一阶项依赖于 $\Psi$ 的二阶导数.
+
+更一般的形如 $L = \sum_{i, j=1}^{n}a^{ij}(x)\partial_{i}\partial_{j} + \sum_{i=1}^{n}b^{i}\partial_{i}$ 的算子， 其中矩阵 $(a^{ij}(x))$ 对称正定， 称为\newterm{elliptic-operator}{椭圆算子}{elliptic operator}.它们与 Laplacian 有许多共同性质毫不奇怪， 但它们通常不一定具有与 Laplace 算子相同数量的对称性\footnote{当人们提到一个偏微分算子的``对称性''时， 通常想到的是一族与算子可交换的向量场， 或使算子不变的它们的流.$\Delta$ 在 $\mathbb{R}^{n}$ 上的对称性是底层 Euclidean 几何的对称性：无穷小平移 $\partial_{x^{1}}, \ldots, \partial_{x^{n}}$ 连同无穷小旋转.相应的流生成 Euclidean 空间的刚体运动群.在这个微分同胚不变的意义下， 如上对 Laplacian 的坐标变换具有相同数量的对称性.我们后面会看到， 这种对称性在分析微分算子时可能非常有用.无论如何， 显然仅凭椭圆性条件并不能推出这种保持算子的流的存在.}， 因此需要更稳健的方法才能成功地分析它们.不过， 也有把 Laplace 算子的结果与估计延拓、输运到更一般椭圆算子的方法.
+
+下面的定理体现了 Laplace 算子的旋转与平移对称性， 事实上它既刻画了调和函数， 也刻画了 Laplace 算子本身.因此， 它可以用来证明用其他方法无法触及的、关于 Laplace 算子与调和函数的结果， 因此它的应用也仅限于这些目的.该定理表明 Laplacian 如何控制不同半径的球平均的变化.
+
+\begin{theorem}[平均值性质]\label{thm:c4-2.5}
+当 $u$ 在中心为 $x$、半径为 $R^{*} > R$ 的球内调和时， $u(x)$ 等于它在以 $x$ 为中心、半径为 $R$ 的球面上的平均值
+
+\[
+u(x) = \frac{1}{n\omega_{n}}\frac{1}{R^{n-1}}\int_{|y-x|=R}u(y)d\sigma(y)
+\]
+
+当 $\Delta u \geq 0$ 时， ``$=$''换成``$\leq$''.事实上， 对所有 $u \in \mathcal{C}^{\infty}(\mathbb{R}^{n})$、$0 < R_{1} < R_{2} < R^{*}$， 有
+
+\[
+\begin{aligned}
+&\frac{1}{R_{2}^{n-1}}\int_{|x|=R_{2}}u(x)d\sigma(x) - \frac{1}{R_{1}^{n-1}}\int_{|x|=R_{1}}u(x)d\sigma(x) \\
+&= \int_{R_{1}}^{R_{2}}\left[\int_{|y|\leq\tau}\Delta u(y)dy\right]\tau^{-(n-1)}d\tau
+\end{aligned}
+\]
+\end{theorem}
+
+\begin{proof}
+我们证明最后一个公式， 因为定理的第一个恒等式是它的直接推论（令内半径趋于 0）.事实上， 后一个公式表明当 $\Delta u \geq 0$ 时球平均随半径增大而增大.
+
+虽然公式以积分形式陈述， 但我们用辅助函数 $\psi(\tau) = \frac{1}{\tau^{n-1}}\int_{|x|=\tau}u(x)d\sigma(x) = \frac{1}{\tau^{n-1}}\int\delta(\tau-|x|)u(x)dx$ 证明其微分版本.记 $r = |x|$：
+
+\[
+\begin{aligned}
+\frac{\mathrm{d}\psi}{\mathrm{d}\tau} &= \int\frac{1}{\tau^{n-1}}\left(\frac{\partial}{\partial\tau} - \frac{n-1}{\tau}\right)\delta(\tau-r)u(x)dx \\
+&= \frac{1}{\tau^{n-1}}\int\left(-\frac{\partial}{\partial r} - \frac{n-1}{r}\right)\delta(\tau-r)u(x)dx \\
+&= \frac{1}{\tau^{n-1}}\int\left(-\frac{\partial}{\partial r} - \frac{n-1}{r}\right)\left(-\frac{\partial}{\partial r}\right)H(\tau-r)u(x)dx \\
+&= \frac{1}{\tau^{n-1}}\int\Delta H(\tau-r)u(x)dx \\
+&= \frac{1}{\tau^{n-1}}\int_{|x|\leq\tau}\Delta u(x)dx
+\end{aligned}
+\]
+
+在第二个等式中， 我们使用了如下事实：$\delta(\tau-r)$ 是 0 阶分布， $\frac{n-1}{r}$ 与 $\frac{n-1}{\tau}$ 在它的支集上到 0 阶一致；还使用了如下事实：任何由映射 $(\tau, x) \mapsto \tau-r$ 回拉的分布， 在 $\mathrm{d}\tau - \mathrm{d}r$ 的零空间中的任何向量场作用下保持不变（因此 $(\partial_{\tau} + \partial_{r})\delta(\tau-r) = 0$）.在第四行中， 我们认识到算子 $\frac{\partial^{2}}{\partial r^{2}} + \frac{n-1}{r}\frac{\partial}{\partial r}$ 作用于球对称函数时与 Laplacian 一致.
+
+对 $\tau$ 从 $R_{1}$ 到 $R_{2}$ 积分即得所需公式.
+\end{proof}
+
+\begin{remark}\label{rem:c4-2.6}
+我们实质上计算得到
+
+\[
+\int u(x)d\mu(x) = \int \Delta u\, \Delta^{-1}\mu\, dx
+\]
+
+其中 $\mu$ 是引言习题 5 中的测度.
+\end{remark}
+
+上述公式的一个特殊情形在复分析中有重要应用.当 $f$ 是圆盘 $\mathcal{D}$ 中的非零全纯函数时， 我们有恒等式
+
+\[
+\frac{1}{2\pi}\Delta\log|f(z)| = \sum_{\rho_{k}}\delta_{\rho_{k}}(z)
+\]
+
+其中 $\rho_{k}$ 遍历 $f$ 的有限个零点（按重数计）——右端的测度在代数几何中称为 $f$ 的零因子.在零点 $\rho_{j}$ 附近局部地看出这个恒等式的方法是：把 $f$ 写成 $f(z) = e^{g(z)}(z-\rho_{j})^{n}$， 其中 $g$ 在 $\rho_{j}$ 的某个邻域内全纯；并回忆全纯函数的实部是调和的， 且二维情形 Laplacian 的基本解由 $\frac{1}{2\pi}\log|z|$ 给出.这个计算特别蕴含 $\log|f(z)|$ 是次调和函数（这一事实可以与最大值原理结合使用， 给出关于全纯函数的强估计）.把\thmref{thm:c4-2.5} 中的一般公式应用于 $u = \frac{1}{2\pi}\log|f(z)|$， 我们得到
+
+\begin{proposition}[Jensen 公式]\label{prop:c4-2.7}
+设 $f$ 在中心为零、半径为 $R$ 的闭球的某个邻域内全纯， 且其（离散的）零点集合 $\{\rho_{j}\}$ 满足 $0 < |\rho_{j}| \neq R$.则
+
+\[
+\frac{1}{2\pi R}\int_{0}^{2\pi}\log|f(Re^{i\theta})|d\theta - \log|f(0)| = \sum_{|\rho_{j}|<R}\log\left|\frac{R}{\rho_{j}}\right|
+\]
+\end{proposition}
+
+\begin{proof}
+从\thmref{thm:c4-2.5} 中的一般公式出发， 我们通过标准的磨光构造让 $u \to \frac{1}{2\pi}\log|f(z)|$， 并注意到我们对 $f(z)$ 的假设足以保证定理中的积分公式对 $R_{2} = R$ 与 $0 < R_{1} < \min|\rho_{j}|$ 仍然有效.令 $R_{1}$ 趋于 0 即得 Jensen 公式的左端.
+
+现在用 Fubini 定理（或分部积分）显式计算一般公式的右端：
+
+\[
+\begin{aligned}
+\int_{0}^{R}\left[\int_{|y|\leq\tau}\frac{1}{2\pi}\Delta\log|f(z)|dy\right]\tau^{-1}d\tau &= \int_{0}^{R}\left[\int_{0}^{\tau}\sum_{\rho_{j}}\delta_{|\rho_{j}|}(t)dt\right]\tau^{-1}d\tau \\
+&= \int_{0}^{R}\sum_{\rho_{j}}\delta_{|\rho_{j}|}(t)\left[\int_{t}^{R}\tau^{-1}d\tau\right]dt \\
+&= \sum_{|\rho_{j}|<R}\log\left|\frac{R}{\rho_{j}}\right|
+\end{aligned}
+\]
+\end{proof}
+
+习题 1--5 中的定理是研究 Laplace 方程（连同它们到其他椭圆 PDE 的推广）的基本定理， 如果读者想查阅参考书， 其证明可以在 Evans 或 Gilbarg 与 Trudinger 的书中以某种形式找到.
+
+\noindent\textbf{习题 1.}\quad [Hopf 引理] 断言：有界开集上的调和函数 $u : \Omega \to \mathbb{R}$ 在边界光滑的边界点 $x_{0}$ 处（其中对 $x \in \Omega\backslash\{x_{0}\}$ 有 $u(x_{0}) > u(x)$）必须满足 $\frac{\partial u}{\partial\nu}(x_{0}) > 0$.证明这一事实.一种方法是设计 $u$ 在 $x_{0}$ 附近的适当超调和扰动， 并用弱最大值原理把 $u$ 界定在超调和扰动之下.
+
+\noindent\textbf{习题 2.}\quad 证明次调和函数的强最大值原理.（到现在为止， 你也许已经能看出不止一种证法.）尝试把这一结果也推广到椭圆方程的 $\mathcal{C}^{2}$``次解''——换言之， 假设
+
+\[
+Lu = \sum_{i, j=1}^{n}a^{ij}(x)\partial_{i}\partial_{j}u + \sum_{i=1}^{n}b^{i}(x)\partial_{i}u \geq 0
+\]
+
+其中矩阵满足 $a^{ij}(x)\xi_{i}\xi_{j} \geq \lambda|\xi|^{2}$， 即一致正定.
+
+\noindent\textbf{习题 3.}\quad 证明边界良好的开集 $\Omega$ 的 Green 函数具有如下性质：$G(x, y) = \int\delta_{x}(z)G(z, y)dz = \int\delta_{y}(z)G(z, x)dz = G(y, x)$；对 $x \in \Omega\backslash\{y\}$ 有 $G(x, y) < 0$；且在任意边界点 $x_{0}$ 处有 $\frac{\partial G}{\partial\nu}(x_{0}) > 0$；以及 $\int_{\partial\Omega}\frac{\partial G}{\partial\nu}(x, y)d\sigma(x) = 1$.你如何从物理上或概率上解释这些事实中的任何一个？
+
+\noindent\textbf{习题 4.}\quad [Harnack 不等式] 证明：若 $K \subseteq \Omega$ 紧， 则存在依赖于 $K$ 的常数 $C$， 使得对 $\Omega$ 中所有非负调和函数 $u$ 有
+
+\[
+\sup_{K}u \leq C\inf_{K}u
+\]
+
+\begin{theorem}[Liouville 定理]\label{thm:c4-2.8}
+$\mathbb{R}^{n}$ 上处处有界（整）调和函数是常数.
+\end{theorem}
+
+\noindent\textbf{习题 5.}\quad 证明 Liouville 定理.
+
+\noindent\textbf{习题 6.}\quad 共面积公式， 用分布理论（稍带含糊地）写成 $h(f(x)) = \int h(t)\delta_{0}(f(x)-t)dt$， 它允许我们把一般密度 $h(f(x))$ 分解为 $f$ 的水平集上的曲面测度， 然后可以逐个分析.例如， 当 $f(x) = |x|$ 时， 共面积公式归结为极坐标积分.该公式等价于分布回拉的定义， 并在附录中证明；请用它证明如下恒等式：
+
+设 $u \in \mathcal{C}_{0}^{\infty}(\mathbb{R}^{n})$， $\rho(x) = \tilde{\rho}(|x|)$ 是球对称密度.则若 $\rho_{\varepsilon} \equiv \varepsilon^{-n}\rho(\frac{x}{\varepsilon})$， 我们有公式
+
+\[
+\frac{\partial}{\partial\varepsilon}u*\rho_{\varepsilon}(x) = \varepsilon^{-(n-1)}\int_{0}^{\infty}\left[\int_{|y|\leq\varepsilon t}\Delta u(x-y)dy\right]t\tilde{\rho}(t)dt
+\]
+
+\noindent\textbf{习题 7.}\quad 证明（至少 $n \geq 3$ 的情形）如下
+
+\begin{proposition}\label{prop:c4-2.9}
+对任意 $f \in \mathcal{C}_{0}^{\infty}(\mathbb{R}^{n})$（$n \geq 3$）， 方程 $\Delta u = f$ 有唯一的在无穷远处消失的光滑解， 即在 $|x| \to \infty$ 时趋于 0.该解由 $\int_{\mathbb{R}^{n}}K_{n}(x-y)f(y)dy$ 表示.对 $n = 2$， 同样的方程有光滑解 $u(x)$， 满足 $\lim_{|x|\to\infty}\frac{|u(x)|}{|x|} = 0$， 且当 $|x| \to \infty$ 时 $|\partial u(x)| \to 0$.该解由 $\int_{\mathbb{R}^{2}}\frac{1}{2\pi}\log|x-y|f(y)dy$ 表示， 并且（在此类中）在相差一个加法常数的意义下唯一.
+\end{proposition}
+
+\noindent\textbf{习题 8.}\quad 证明全纯函数的最大模原理.
+
+我们将回到 Laplace 方程（及其某些推广）的研究， 见第 3 章.
+\section{D'Alembert 算子}
+
+回忆 D'Alembert 算子 $\Box = -\partial_{t}^{2} + \Delta$ 是 $\mathbb{R}^{1+n}$ 中在平移与 Lorentz 变换（即 Poincaré 群）下不变的最简单微分算子.最容易的验证方法是写成 $\Box = m^{\alpha\beta}\partial_{\alpha}\partial_{\beta}$， 其中 $m$ 是 Minkowski 度量.由于 $m$ 在 Poincaré 群下不变， $\Box$ 亦然.因此， 寻找如下形式的基本解是有意义的：$\phi(t, x) = f(\rho)$， 其中\footnote{回忆我们记 $t = x^{0}$， 并对指标 $\alpha, \beta = 0, 1, \ldots, n$ 使用求和约定.} $\rho = t^{2} - |x|^{2} = -m_{\alpha\beta}x^{\alpha}x^{\beta}$ 在 Lorentz 变换下不变.此外， 由于 $\mathbb{R}^{n+1}$ 上的分布 $\delta_{0}$ 是 $-(n+1)$ 次齐次的， 而应用 $\Box$ 使齐次度降低 2， 我们断定 $f$ 必须是 $-\frac{n-1}{2}$ 次齐次的.因此， 基本解的一个好的候选者必然具有形式 $E = c_{n}(t^{2}-|x|^{2})^{-\frac{n-1}{2}}$（$c_{n}$ 为某常数）， 于区域 $t > |x|$ 中.于是我们转而寻找一个 $-n+1$ 次齐次的分布 $E_{+}$， 它在区域 $t > |x|$ 中与 $c_{n}(t^{2}-|x|^{2})^{-\frac{n-1}{2}}$ 一致.乍一看这可能很困难， 因为 $(t^{2}-|x|^{2})^{-\frac{n-1}{2}}$ 沿 $|x| = |t|$ 的奇性阶数很高；直到我们意识到可以利用命题 ?? 定义的齐次分布族 $j_{a}$.事实上我们需要选取 $a = -\frac{n-1}{2} + 1$， 并取 $E_{+}$ 与 $j_{-\frac{n-1}{2}+1}(t^{2}-x^{2})$ 成正比， 理解为回拉 $f^{*}(j_{-\frac{n-1}{2}+1})$， 其中 $f = t^{2}-|x|^{2}$.在当前的语境下， 稍微改变记号更方便， 写成
+
+\[
+\chi_{+}^{a} := j_{a+1}
+\]
+
+于是
+
+\[
+E = \chi_{+}^{-\frac{n-1}{2}}(t^{2}-|x|^{2}).
+\]
+
+注意， 表达式 $\chi_{+}^{-\frac{n-1}{2}}(t^{2}-|x|^{2})$ 并不完全严格， 因为 $t^{2}-|x|^{2}$ 的梯度在原点处消失， 因此 $\chi_{+}^{-\frac{n-1}{2}}(t^{2}-|x|^{2})$ 只在 $\mathbb{R}^{n+1}-\{0\}$ 上定义分布.严格的表述需要更多小心， 但该分布特殊的齐次度基本上允许唯一的延拓到整个空间， $n = 3$ 的情形参见第 4 节的习题 3.现在我们得到的分布具有正确的性质， 只是它的支集覆盖整个区域 $|x| \leq |t|$.出于确定的物理原因， 我们更倾向于支集只在未来区域 $|x| \leq t$ 中的分布.这就定义了我们的\newterm{forward-fundamental-solution}{前向基本解}{forward fundamental solution}候选：
+
+\[
+E_{+}^{(n+1)}(t, x) = c_{n}H(t)\chi_{+}^{-\frac{n-1}{2}}(t^{2}-|x|^{2})
+\]
+
+其中 $H(t)$ 是支集在 $t \geq 0$ 上的 Heaviside 函数， $c_{n}$ 是待定的归一化常数.利用链式法则容易证明， $\Box E_{+}^{(n+1)} = m^{\alpha\beta}\partial_{\alpha}\partial_{\beta}\bigl(\chi_{+}^{-\frac{n-1}{2}}(f)\bigr)$ 必须在原点之外消失.由通常的齐次性考虑我们推断 $\Box E_{+}^{(n+1)}$ 与原点处的 $\delta$ 函数成正比.因此只剩下确定归一化因子 $c_{n}$.我们有如下结果：
+
+\begin{theorem}\label{thm:c4-3.1}
+由下式定义的分布 $E_{+}^{(n+1)}$
+
+\begin{equation}
+E_{+}^{(n+1)}(t, x) = -\frac{1}{2}\pi^{\frac{1-n}{2}}H(t)\chi_{+}^{-\frac{n-1}{2}}(t^{2}-|x|^{2})\label{eq:c4-141}
+\end{equation}
+
+是波动方程支集于前向区域 $|x| \leq t$ 的唯一基本解.
+\end{theorem}
+
+我们将在后面证明这个定理， 现在先作几点说明.首先， 注意 $n > 1$ 为奇数与 $n$ 为偶数的情形之间有根本的区别.事实上， 在前一种情形， $E_{+}^{(n+1)}$ 的支集只在区域 $|x| < t$ 的边界上， 即未来光锥 $|x| = t$ 上；而在后一种情形， $E_{+}^{(n+1)}$ 的支集覆盖整个前向区域 $|x| \leq t$.更精确地说， 利用链式法则以及 $\frac{\mathrm{d}}{\mathrm{d}\lambda}\chi_{+}^{s}(\lambda) = \chi_{+}^{s-1}(\lambda)$， 我们可以把基本解在远离原点处写得稍显式一些：在维数 $n = 3+2k$ 时， 基本解看起来像支集于前向光锥上的一个测度的导数
+
+\[
+c_{n}H(t)\left(\frac{-1}{2r}\partial_{r}\right)^{k}\delta(t^{2}-|x|^{2}) = c_{n}H(t)\left(\frac{1}{2t}\partial_{t}\right)^{k}\delta(t^{2}-|x|^{2})
+\]
+
+而在 $n = 2+2k$ 维时， 它具有如下形式
+
+\[
+c_{n}H(t)\left(\frac{-1}{2r}\partial_{r}\right)^{k}\frac{1}{\sqrt{t^{2}-|x|^{2}}}\cdot\mathbf{1}_{\{|x|\leq t\}} = c_{n}H(t)\left(\frac{1}{2t}\partial_{t}\right)^{k}\frac{1}{\sqrt{t^{2}-|x|^{2}}}\cdot\mathbf{1}_{\{|x|\leq t\}}
+\]
+
+（上面的分布相等， 因为 $\frac{1}{t}\partial_{t} + \frac{1}{r}\partial_{r}$ 位于 $\mathrm{d}(t^{2}-r^{2})$ 的零空间中）.在最重要的特殊情形 $n = 3$ 时， 我们有
+
+\begin{equation}
+E_{+}^{(1+3)} = \frac{1}{2\pi}H(t)\delta(t^{2}-|x|^{2}) = \frac{1}{4\pi}\delta(t-|x|)\label{eq:c4-142}
+\end{equation}
+
+另外， 对 $n = 2$ 有
+
+\begin{equation}
+E_{+}^{(1+2)} = \frac{1}{2\pi^{1/2}}H(t)(t^{2}-|x|^{2})^{1/2} =\label{eq:c4-143}
+\end{equation}
+
+重要的是要观察到， 知道奇数维的基本解就可以确定偶数维的基本解.这称为下降法.只需把 $E_{+}^{(2k+1+1)}$ 作用到与某个空间变量无关的检验函数上即可.不必担心该检验函数没有紧支集， 它会奏效， 因为对任意固定的 $t$， 基本解在 $x$ 上具有紧支集.作为例子， 读者不妨由 \eqref{eq:c4-142} 推导 \eqref{eq:c4-148}.另一个简单的说明：注意对每个固定的 $t$， $E_{+}$ 在 $x$ 上具有紧支集， 因此 $E_{+}$ 可以作用到任意在 $t$ 上具有紧支集的光滑函数上.
+
+\noindent\textbf{习题 1.}\quad 推导维数 $n = 1$ 的基本解.事实上\footnote{在 $1+1$ 维中， 波算子可以分解为 $\Box = (\partial_{t}-\partial_{x})\cdot(\partial_{t}+\partial_{x})$.}证明 Cauchy 问题的一般解具有形式 $\psi_{1}(t+x) + \psi_{2}(t-x)$.
+
+基本解使我们能够求解一般的 Cauchy 问题
+
+\begin{equation}
+\Box\phi = f, \qquad \phi(0, x) = f(x), \quad \partial_{t}\phi(0, x) = g(x)\label{eq:c4-144}
+\end{equation}
+
+为了明白如何做到这一点， 考虑点 $p = (t_{0}, x_{0})$（$t_{0} > 0$）， 并注意到对任何检验函数 $\phi$， 在上半空间 $\mathcal{D}_{+} = \{(t, x): t \geq 0\}$ 中有
+
+\[
+\phi(t_{0}, x_{0}) = \int_{\mathcal{D}_{+}}\phi(t, x)\delta_{p}(t, x)dtdx = \int_{\mathbb{R}^{1+n}}\chi_{+}\phi\left(m^{\alpha\beta}\partial_{\alpha}\partial_{\beta}\right)E_{p}(t, x)dtdx
+\]
+
+其中 $\chi_{+}$ 是 $\mathcal{D}_{+}$ 的示性函数， $E_{p}(t, x) = E_{+}(t-t_{0}, x-x_{0})$.因此， 分部积分得
+
+\[
+\begin{aligned}
+\phi(t_{0}, x_{0}) &= -\int_{\mathbb{R}^{1+n}}m^{\alpha\beta}\partial_{\alpha}\chi\, \phi\, \partial_{\beta}E_{p} - \int_{\mathbb{R}^{1+n}}m^{\alpha\beta}\chi\, \partial_{\alpha}\phi\, \partial_{\beta}E_{p} \\
+&= -\int_{\mathbb{R}^{1+n}}m^{\alpha\beta}\partial_{\alpha}\chi\, \phi\, \partial_{\beta}E_{p} + \int_{\mathbb{R}^{1+n}}\chi\, m^{\alpha\beta}\partial_{\alpha}\partial_{\beta}\phi\, E_{p} \\
+&\quad + \int_{\mathbb{R}^{1+n}}m^{\alpha\beta}\partial_{\beta}\chi\, \partial_{\alpha}\phi\, E_{p}
+\end{aligned}
+\]
+
+即
+
+\[
+\begin{aligned}
+\phi(t_{0}, x_{0}) &= \int_{\mathcal{D}_{+}}\Box\phi\, E_{p} - \int_{\mathbb{R}^{1+n}}\partial^{\alpha}\chi\, \phi\, \partial_{\alpha}E_{p} + \int_{\mathbb{R}^{1+n}}\partial^{\alpha}\chi\, \partial_{\alpha}\phi\, E_{p} \\
+&= \int_{\mathcal{D}_{+}}\Box\phi + \int_{\mathbb{R}^{1+n}}\partial_{t}\chi\, \phi\, \partial_{t}E_{p} - \int_{\mathbb{R}^{1+n}}\partial_{t}\chi\, \partial_{t}\phi\, E_{p} \\
+&= \int_{\mathcal{D}_{+}}\Box\phi + \int_{\mathbb{R}^{1+n}}\delta(t)\, \phi\, \partial_{t}E_{p} - \int_{\mathbb{R}^{1+n}}\delta(t)\partial_{t}\phi\, E_{p} \\
+&= \int_{\mathcal{D}_{+}}\Box\phi\, E_{p} - \int_{\mathbb{R}^{1+n}}\delta(t)\, \phi\, \partial_{t_{0}}E_{p} - \int_{\mathbb{R}^{1+n}}\delta(t)\partial_{t}\phi\, E_{p} \\
+&= \int_{\mathcal{D}_{+}}\Box\phi\, E_{p} - \partial_{t_{0}}\left(\int_{\mathbb{R}^{n}}f(x)E_{p}(0, x)dx\right) - \int_{\mathbb{R}^{n}}g(x)E_{p}(0, x)dx.
+\end{aligned}
+\]
+
+最终公式取如下形式：
+
+\begin{equation}
+\begin{aligned}
+\phi(t_{0}, x_{0}) &= \int_{0}^{t_{0}}\int_{\mathbb{R}^{n}}E_{+}(t_{0}-t, x_{0}-x)\Box\phi(t, x)dtdx \\
+&\quad - \partial_{t_{0}}\left(\int_{\mathbb{R}^{n}}E_{+}(t_{0}, x-x_{0})f(x)dx\right) - \int_{\mathbb{R}^{n}}E_{+}(t_{0}, x-x_{0})g(x)dx
+\end{aligned}\label{eq:c4-145}
+\end{equation}
+
+把唯一性问题（我们稍后将单独处理）放在一边， 我们推出如下结果.
+
+\begin{theorem}[Kirchhoff--Hadamard]\label{thm:c4-3.2}
+初值问题 $\Box\phi = F$， $\phi(0, x) = f(x)$， $\partial_{t}\phi(0, x) = g(x)$ 对任意光滑函数 $f, g, F$ 都有唯一解， 由公式 \eqref{eq:c4-145} 给出.
+\end{theorem}
+
+\noindent\textbf{习题 2.}\quad 把公式 \eqref{eq:c4-145} 与 Laplacian 的 \eqref{eq:c4-137} 作比较.解释如果我们试图对 Laplace 方程证明与上面的\thmref{thm:c4-3.2} 类似的结果， 可能会出什么问题.
+
+\noindent\textbf{习题 3.}\quad 证明：在特殊情形维数 $1+3$ 时， 公式 \eqref{eq:c4-145} 取更常见的 Kirchhoff 公式形式：
+
+\begin{equation}
+\begin{aligned}
+\phi(t, x) &= \partial_{t}\left((4\pi t)^{-1}\int_{|x-y|=t}f(y)da(y)\right) + (4\pi t)^{-1}\int_{|x-y|=t}g(y)da(y) \\
+&\quad + \int_{0}^{t}ds\frac{1}{t-s}\int_{|x-y|=t-s}\Box\phi(s, y)da(y)
+\end{aligned}\label{eq:c4-146}
+\end{equation}
+
+推导 Kirchhoff 公式 \eqref{eq:c4-146} 的传统方法是先证明齐次情形， 即 $\Box\phi = 0$.事实上， 只需用优美的球平均方法证明 $f = 0$ 且 $g$ 任意的情形即可， 清晰的推导见 \cite{j}.齐次情形处理完之后， 就可以用 Duhamel 原理导出一般公式.具体如下：设 $W(t)g$ 表示齐次问题在数据 $f = 0$、$g$ 任意时的解 $\phi(t, \cdot)$.把它看作一族由 $t$ 参数化的算子， 把 $\mathbb{R}^{n}$ 上的光滑函数映到 $\mathbb{R}^{n}$ 上的光滑函数.于是我们需要验证方程 $\Box\phi = F$ 的解由公式
+
+\begin{equation}
+\phi(t, x) = \int_{0}^{t}W(t-s)F(s, \cdot)ds\label{eq:c4-147}
+\end{equation}
+
+给出.
+
+\noindent\textbf{习题 4.}\quad 证明这一论断.
+
+\noindent\textbf{习题 5.}\quad 如果在 Cauchy 问题的表述中把超曲面 $t = 0$ 换成由 $t = h(x)$ 给出的更一般的超曲面 $\Sigma_{0}$， 会发生什么？证明：如果超曲面是类空的， 即 $|\nabla h(x)| < 1$， 那么可以推出与 \eqref{eq:c4-145} 类似的公式.如果曲面在某个点 $(t_{0}, x_{0}) \in \Sigma_{0}$ 处变为类时的， 即 $|\nabla h(x_{0})| > 1$， 会发生什么？证明：在光锥 $t = |x|$ 上给定初值与法向导数的 Cauchy 问题， 一般地在锥的空间内部没有解.当你试图用 $H(t-|x|)$ 替换 $H(t)$ 来推导光锥上数据的表示公式时， 会发生什么？
+
+\noindent\textbf{习题 6.}\quad 假设 $\rho$ 有紧支集， 且在紧集 $K$ 之外光滑.设 $u_{+}$ 是 $\Box u = \rho$ 在 $\mathbb{R}^{n+1}$ 中的解 $E_{+}*\rho$.证明 $u$ 在由 $K$ 出发的光锥集 $\{k + (|x|, x) : k \in K, x \in \mathbb{R}^{n}\}$ 之外光滑.
+
+\begin{proof}[\thmref{thm:c4-3.1} 在 $\mathbb{R}^{1+3}$ 中的证明]
+首先注意， 我们可以用球坐标把 $\Box$ 写成如下形式：
+
+\[
+\Box = -\partial_{t}^{2} + \Delta = -\partial_{t}^{2} + \partial_{r}^{2} + \frac{2}{r}\partial_{r} + r^{-2}\Delta_{\mathbb{S}^{n-1}}
+\]
+
+我们必须验证
+
+\[
+E_{+}^{(1+3)}(t, x) = -\frac{1}{2}\pi^{-1}H(t)\delta_{0}(t^{2}-|x|^{2}) = -\frac{1}{4\pi}r^{-1}\delta(t-r)
+\]
+
+其中 $r = |x|$.于是， 由于 $\Box\phi = -r^{-1}(\partial_{t}+\partial_{r})(\partial_{t}-\partial_{r})(r\phi) + \Delta_{\mathbb{S}^{2}}\phi$， 取 $\psi(t, r\omega) = (\partial_{t}-\partial_{r})\bigl(r\phi(t, r\omega)\bigr)$， 我们有
+
+\[
+\begin{aligned}
+\langle E_{+}, \Box\phi\rangle &= \frac{1}{4\pi}\int_{\mathbb{S}^{2}}\int_{0}^{\infty}\int_{0}^{\infty}\delta(t-r)(\partial_{t}+\partial_{r})\psi\, dtdrdS_{\omega} \\
+&= \frac{1}{4\pi}\int_{\mathbb{S}^{2}}dS_{\omega}\left(\int_{0}^{\infty}\frac{d}{dr}\psi(r, r)dr\right) \\
+&= -\psi(0, 0) = \phi(0)
+\end{aligned}
+\]
+
+于是 $\Box E_{+} = \delta_{0}$， 正如所愿.
+\end{proof}
+
+下面我们给出波动方程在特殊情形 $\mathbb{R}^{1+3}$ 中基本解的另一种推导.这就是所谓的几何光学推导.我们寻找 $\Box\phi = 0$ 的如下形式的解：
+
+\begin{equation}
+E = A\delta(u)\label{eq:c4-148}
+\end{equation}
+
+其中实函数 $A$ 与 $u$ 待定.这里 $\delta(u)$ 就是 $\delta_{0}$ 被 $u$ 的回拉， 正如第 4 小节的例 2 所讨论的.简单的计算得到
+
+\[
+m^{\alpha\beta}\partial_{\alpha}\partial_{\beta}\bigl(A\delta(u)\bigr) = m^{\alpha\beta}\left(\partial_{\alpha}\partial_{\beta}A\, \delta(u) + \left(2\partial_{\alpha}A\partial_{\beta}u + \Box u\right)\delta'(u) + \partial_{\alpha}u\partial_{\beta}u\, \delta''(u)\right)
+\]
+
+为消去 $\delta''(u)$ 的系数， 我们需要选取 $u$ 使得
+
+\begin{equation}
+m^{\alpha\beta}\partial_{\alpha}u\partial_{\beta}u = 0.\label{eq:c4-149}
+\end{equation}
+
+这就是 Minkowski 空间中著名的程函方程.一个简单的解族由 $u(t, x) = t-t_{0}-|x-x_{0}|$ 给出（$(t_{0}, x_{0})$ 为给定点）， 其水平超曲面就是以 $(t_{0}, x_{0})$ 为顶点的后向光锥.为了我们的目的， 我们选取 $u = t-|x|$.其次， 为消去 $\delta'(u)$ 的系数， 我们需要选取 $A$ 使得\footnote{事实证明， 下面的方程可以解释为沿后向零锥 $t-|x| = 0$ 的生成元的输运方程.}
+
+\[
+2\partial_{\alpha}A\, \partial^{\alpha}u + \Box u = 0.
+\]
+
+容易验证选取 $A = |x|^{-1}$ 即可.最后只剩下计算含 $\delta(u)$ 的项， 即
+
+\[
+(\Box A)\delta(u) = (-\Delta|x|^{-1})\delta(u) = -4\pi\delta_{0}(x)\delta(u) = -\delta_{0}(t, x)
+\]
+
+其中第一个 $\delta_{0}(x)$ 是 $\mathbb{R}^{3}$ 中的 $\delta$ 函数， 而最后的 $\delta_{0}$ 是 $\mathbb{R}^{1+3}$ 中所需的 $\delta$ 函数.于是 $E_{+}^{1+3} = -\frac{1}{4\pi}\frac{1}{|x|}\delta(t-|x|)$， 正如所愿.
+
+\noindent\textbf{习题 7.}\quad 证明涉及分布乘积的最后一步.
+
+基本解 $E_{+}$ 的唯一性.只需证明\thmref{thm:c4-3.2} 中一般 Cauchy 问题解的唯一性即可.
+
+\noindent\textbf{习题 8.}\quad 验证上面的论断.
+
+我们从一个涉及能量-动量张量的简单计算开始.为了高效计算， 记住我们对时空指标 $\alpha, \beta = 0, 1, \ldots, n$ 使用求和约定会有所帮助.我们还将使用标准的几何约定：相对于度量上升或下降指标.于是， 若 $U^{\alpha}$ 是向量（即所谓的逆变向量）， 我们定义协变向量 $U_{\beta} = m_{\beta\alpha}U^{\alpha}$.类似地， 若 $V_{\alpha}$ 是协变向量， 我们定义 $V^{\beta} = m^{\beta\alpha}V_{\alpha}$.
+
+\begin{proposition}\label{prop:c4-3.3}
+设
+
+\begin{equation}
+Q_{\alpha\beta}[\phi] = \partial_{\alpha}\phi\partial_{\beta}\phi - \frac{1}{2}m_{\alpha\beta}\left(m^{\gamma\delta}\phi_{\gamma}\phi_{\delta}\right) = \partial_{\alpha}\phi\partial_{\beta}\phi - \frac{1}{2}m_{\alpha\beta}\phi^{\gamma}\phi_{\gamma}\label{eq:c4-150}
+\end{equation}
+
+为 $\Box$ 的所谓的能量-动量张量.则\footnote{根据上升与下降指标的约定， $\partial^{\beta}Q_{\alpha\beta} = m^{\beta\gamma}\partial_{\gamma}Q_{\alpha\beta}$.这没有问题， 因为 $\partial_{\gamma}m_{\alpha\beta} = 0$.}
+
+\begin{equation}
+\partial^{\beta}Q_{\alpha\beta} = \Box\phi\, \partial_{\alpha}\phi.\label{eq:c4-151}
+\end{equation}
+\end{proposition}
+
+特别地， 若 $\Box\phi = 0$， 则 $\partial^{\beta}Q_{0\beta} = 0$.现在考虑点 $p(t_{0}, x_{0}) \in \mathbb{R}^{1+n}$ 以及上面引入的方程 \eqref{eq:c4-149} 的解 $u(t, x) = t-t_{0}-|x-x_{0}|$.再设 $t_{1} < t_{2} < t_{0}$， 考虑分布 $H(u)H(t-t_{1})H(t_{2}-t)$（$H(t)$ 为 Heaviside 函数）， 并像我们多次做过的那样分部积分， 以导出恒等式：
+
+\[
+\begin{aligned}
+0 &= \int_{\mathbb{R}^{1+n}}H(u)H(t-t_{1})H(t_{2}-t)\partial^{\beta}Q_{0\beta} \\
+&= -\int_{\mathbb{R}^{1+n}}H'(u)H(t-t_{1})H(t_{2}-t)\partial^{\beta}u\, Q_{0\beta} \\
+&\quad + \int_{\mathbb{R}^{1+n}}H(u)H(t-t_{1})H'(t_{2}-t)Q_{00} \\
+&\quad - \int_{\mathbb{R}^{1+n}}H(u)H'(t-t_{1})H(t_{2}-t)Q_{00}
+\end{aligned}
+\]
+
+这个恒等式可以改写成如下形式：
+
+\begin{equation}
+\int_{\mathcal{D}(t_{2})}Q_{00} + \int_{\mathcal{N}(t_{1}, t_{2})}Q_{0\beta}L^{\beta} = \int_{\mathcal{D}(t_{1})}Q_{00}\label{eq:c4-152}
+\end{equation}
+
+其中 $\mathcal{D}(t_{1})$、$\mathcal{D}(t_{2})$ 是穿过实心光锥 $|x-x_{0}| \leq t-t_{0}$ 的 $t$-截面， $\mathcal{N}(t_{1}, t_{2})$ 表示光锥 $|x-x_{0}| = t-t_{0}$ 在截面 $t = t_{1}$ 与 $t = t_{2}$ 之间的部分， 并且
+
+\[
+L^{\beta} = -\partial^{\beta}u = m^{\beta\gamma}\partial_{\gamma}u.
+\]
+
+容易验证
+
+\[
+Q_{00} = \frac{1}{2}\left(|\partial_{t}\phi|^{2} + \sum_{i=1}^{n}|\partial_{i}\phi|^{2}\right) = \frac{1}{2}\left(|\partial_{t}\phi|^{2} + |\nabla\phi|^{2}\right).
+\]
+
+并且我们有
+
+\noindent\textbf{习题 9.}\quad 证明
+
+\[
+Q_{0\beta}L^{\beta} \geq 0.
+\]
+
+于是我们推出
+
+\begin{theorem}[能量不等式]\label{thm:c4-3.4}
+对由曲面 $t-t_{0}-|x-x_{0}| = 0$、$t = t_{1}$ 与 $t = t_{2}$ 围成的实心区域的一个邻域中的波动方程 $\Box\phi = 0$ 的每个解， 都有
+
+\[
+\int_{D(t_{2})}\frac{1}{2}\left(|\partial_{t}\phi|^{2} + |\nabla\phi|^{2}\right) \leq \int_{D(t_{1})}\frac{1}{2}\left(|\partial_{t}\phi|^{2} + |\nabla\phi|^{2}\right)
+\]
+\end{theorem}
+
+特别地， 任何在 $D(t_{1})$ 上消失的光滑解也必在 $D(t_{2})$ 上消失.
+
+\noindent\textbf{习题 10.}\quad 像我们先前从显式解推出那样， 从能量不等式推出 Cauchy 问题的有限传播速度.注意， 先前讨论的奇数空间维数 $n = 3+2k$ 中的强 Huygens 原理是一个非常特殊的现象， 它与波算子 $\Box$ 的精确形式有关.然而波动方程所展现的有限传播速度现象则更稳健， 它是许多相关的、如上能量不等式成立的方程所共有的特征.
+
+最后， 我们在所有维数下验证前向基本解的有效性.
+
+\begin{proof}[\thmref{thm:c4-3.1} 的证明(所有 $n$)]
+我们证明公式（略去常数 $c_{n}$ 的绝对值）.
+
+\[
+\begin{aligned}
+\int\!\!\int \Box\chi_{+}^{-\frac{n-1}{2}}(t^{2}-|x|^{2}) \cdot H(1-|t|)dxdt &= \int\!\!\int\partial_{t}^{2}\chi_{+}^{-\frac{n-1}{2}}(t^{2}-|x|^{2}) \cdot H(1-|t|)dxdt \\
+&= \int\!\!\int\partial_{t}\chi_{+}^{-\frac{n-1}{2}}(t^{2}-r^{2})\delta(1-t)dxdt \\
+&\quad - \int\!\!\int\partial_{t}\chi_{+}^{-\frac{n-1}{2}}(t^{2}-r^{2})\delta(1+t)dxdt \\
+&= 2\int\!\!\int\partial_{t}\chi_{+}^{-\frac{n-1}{2}}(t^{2}-r^{2})\delta(1-t)dxdt \\
+&= 2\int\!\!\int\left(\frac{-t}{r}\right)\partial_{r}\chi_{+}^{-\frac{n-1}{2}}(t^{2}-r^{2})\delta(1-t)dxdt
+\end{aligned}
+\]
+
+取 $\delta(1-t)$ 的定义， 上式变为超曲面 $t = 1$ 上的积分， 我们把它写成极坐标（体积形式写为 $r^{n-1}drd\Omega_{n-1}$， 其中 $d\Omega_{n-1}$ 是 $\mathbb{R}^{n}$ 中单位球面上的曲面测度）.我们在此指出， 正如我们后面将要看到的， 一个分布并不必须是连续函数才能在低维子流形上有有意义的限制.
+
+去掉不重要的因子 2， 我们继续：
+
+\[
+\begin{aligned}
+&\int\!\!\int\left(\frac{-t}{r}\right)\partial_{r}\chi_{+}^{-\frac{n-1}{2}}(t^{2}-r^{2})\delta(1-t)dxdt \\
+&= \int\!\!\int\frac{-1}{r}\partial_{r}\chi_{+}^{-\frac{n-1}{2}}(1-r^{2})r^{n-1}drd\Omega_{n-1} \\
+&= |\mathbb{S}^{n-1}|\int_{0}^{\infty}-r^{n-2}\partial_{r}\chi_{+}^{-\frac{n-1}{2}}(1-r^{2})dr
+\end{aligned}
+\]
+
+于是我们的命题归结为证明数
+
+\[
+-\int_{0}^{\infty}r^{n-2}\partial_{r}\chi_{+}^{-\frac{n-1}{2}}(1-r^{2})dr
+\]
+
+是正的.尽管我们还没有定义这个数\footnote{注意， 然而（由乘积法则）$r^{n-2} \cdot H(r)$ 具有相当好的正则性， 它的唯一奇点位于远离 $r = 1$ 处.}， 我们还是通过归纳证明它的正性， 并按 $n$ 的奇偶性分情形.对 $n = 1+2k$， 我们分部积分并注意到边界项消失， 得到
+
+\[
+\begin{aligned}
+\int_{0}^{\infty}r^{n-2}\partial_{r}\chi_{+}^{-\frac{n-1}{2}}(1-r^{2})dr &= \int_{0}^{\infty}r^{2k}\left(\frac{-\partial_{r}}{2r}\right)^{k+1}H(1-r^{2})dr \\
+&\equiv I_{k} \\
+&= 2^{-(k+1)}\int\partial_{r}\left(r^{2k-1}\cdot H(r)\right)\left(\frac{-\partial_{r}}{2r}\right)^{k}H(1-r^{2})dr \\
+&= 2^{-(k+1)}(2k-1)\int_{0}^{\infty}r^{2(k-1)}\left(\frac{-\partial_{r}}{2r}\right)^{k}H(1-r^{2})dr \\
+&= 2^{-(k+1)}(2k-1)I_{k-1}
+\end{aligned}
+\]
+
+只要我们能计算
+
+\[
+\begin{aligned}
+I_{1} &= \int_{0}^{\infty}r^{2}\left(\frac{-\partial_{r}}{2r}\right)H(1-r^{2})dr = \int_{0}^{\infty}\delta(1-r^{2})dr \\
+&= \int_{0}^{\infty}\frac{1}{1+r}\delta(1-r)dr = 1/2 > 0
+\end{aligned}
+\]
+
+最后一个积分就应该由对 $k$ 的归纳是正的.一旦适当地选取 $c_{n} > 0$， 这就证明了奇数空间维数情形下的命题.情形 $n = 2+2k$ 类似.
+\end{proof}
+\section{热算子 \texorpdfstring{$\mathcal{H}$}{H}}
+
+我们考虑作用在定义于 $\mathbb{R} \times \mathbb{R}^{n} = \mathbb{R}^{n+1}$ 上的函数的热算子 $\mathcal{H} = \partial_{t} - \Delta$.寻找 $\mathcal{H}u = 0$ 的球对称解是有意义的：也就是说， 考虑函数 $u(t, x) = u(t, |x|) = u(t, r)$.用这种方式可以找到一族局部可积解 $E_{c}(t, x) = cH(t)\, t^{-\frac{n}{2}}e^{-|x|^{2}/4t}$， 其中 $H(t)$ 是 Heaviside 函数（尽管通过 傅里叶变换处理更容易）.
+
+事实上， 对所有 $(t, x) \neq (0, 0)$ 都有 $\mathcal{H}(E_{c}) = 0$.下面我们证明， 在整个空间上 $\mathcal{H}(E_{c})$ 与 $\delta_{0}$ 成正比， 并且可以确定常数 $c = c_{n} = 2^{-n}\pi^{-\frac{n}{2}}$， 使得相应的 $E = E_{c}$ 是 $\mathcal{H}$ 的基本解， 即 $\mathcal{H}(E) = \delta_{0}$.
+
+我们可以非常容易地通过考虑抛物型缩放 $(t, x) \mapsto (\alpha^{2}t, \alpha x)$ 来推断 $\mathcal{H}E_{c} = C\delta_{0}$（$C$ 为某常数， 可能为 0）.为确定该常数， 我们可以使用任意检验函数， 取 $H(1-t)$ 会很方便.我们的做法大体上正是如此.
+
+设 $\phi \in \mathcal{C}_{0}^{\infty}(\mathbb{R}^{n+1})$，
+
+\[
+\begin{aligned}
+\langle \mathcal{H}(E), \phi\rangle &= \langle E, \mathcal{H}^{t}\phi\rangle = -\int E(t, x)(\partial_{t}+\Delta)\phi(t, x)dxdt \\
+&= -\lim_{\varepsilon\to 0^{+}}\int_{\varepsilon}^{\infty}\int_{\mathbb{R}^{n}}E(t, x)(\partial_{t}+\Delta)\phi(t, x)dxdt \\
+&= \lim_{\varepsilon\to 0^{+}}\int_{\varepsilon}^{\infty}\int_{\mathbb{R}^{n}}(\partial_{t}-\Delta)E(t, x)\phi(t, x)dxdt + \lim_{\varepsilon\to 0^{+}}\int_{\mathbb{R}^{n}}E(\varepsilon, x)\phi(\varepsilon, x)dx \\
+&= \lim_{\varepsilon\to 0^{+}}\int_{\mathbb{R}^{n}}E(\varepsilon, x)\phi(\varepsilon, x)dx = c_{n}\lim_{\varepsilon\to 0^{+}}\varepsilon^{-n/2}\int_{\mathbb{R}^{n}}e^{-|x|^{2}/4\varepsilon}\phi(\varepsilon, x)dx
+\end{aligned}
+\]
+
+现在我们作变量替换 $x = 2\varepsilon^{1/2}y$：
+
+\[
+\begin{aligned}
+\langle \mathcal{H}(E), \phi\rangle &= 2^{n}c_{n}\lim_{\varepsilon\to 0^{+}}\int_{\mathbb{R}^{n}}\phi(\varepsilon, 2\varepsilon^{1/2}y)e^{-|y|^{2}}dy = 2^{n}c_{n}\phi(0, 0)\int_{\mathbb{R}^{n}}e^{-|y|^{2}}dy \\
+&= \phi(0, 0)
+\end{aligned}
+\]
+
+撇开事实 $\int_{\mathbb{R}^{n}}e^{-|y|^{2}}dy = \pi^{n/2}$（后面会证明）不谈， 我们已经证明
+
+\begin{equation}
+E(t, x) = (4\pi t)^{-n/2}H(t)e^{-|x|^{2}/4t}\label{eq:c4-153}
+\end{equation}
+
+是 $\mathcal{H}$ 的基本解.注意， 对任意固定的 $t > 0$， $E(t, x)$ 的支集遍布整个 $\mathbb{R}^{n}$， 这意味着热方程（与波动方程相反）表现出``无限传播速度''.这一现象与热算子的抛物型缩放有关， 后者与 $-\partial_{t}^{2} + \sum_{i}\partial_{i}^{2}$ 相反， 赋予时间与空间不同的``单位''.还要注意， $E(t, x)$ 在 $t > 0$ 时是光滑的；这一事实将导致初值问题 $\mathcal{H}\psi = 0$（在 $(0, \infty) \times \mathbb{R}^{n}$ 上）， $\psi(0, x) = \psi_{0}(x)$ 的瞬时磨光.
+
+\noindent\textbf{习题 1.}\quad 推导初值问题的表示公式.为什么不可能对任意初值数据把热方程沿时间向后求解？
+
+\noindent\textbf{习题 2.}\quad 证明：上面 Cauchy 问题的表示公式对足够光滑的数据确实给出经典解.验证得到了正确的边界值.（这与 Cauchy-Riemann 方程组的情形形成对照.）
+
+\noindent\textbf{习题 3.}\quad 写出 $\mathcal{H}\psi = 0$ 的 $\mathcal{C}^{2}$ 解在 $(0, T] \times \overline{\Omega}$ 内部的最大值原理， 其中 $\Omega$ 是开有界集.
+
+\noindent\textbf{习题 4.}\quad 设 $\Psi : [0, T] \times \mathbb{R}^{n}$ 是热方程的解， 对固定时间在空间无穷远处快速衰减.证明``能量''
+
+\[
+e(t) = \int_{\mathbb{R}^{n}}|\Psi(t, x)|^{2}dx
+\]
+
+随时间递减.由此推出热方程的唯一性定理.
+
+\noindent\textbf{习题 5.}\quad 人们常用 $e^{t\Delta}\psi_{0}$ 表示 $\mathcal{H}\psi = 0$（在 $(0, \infty) \times \mathbb{R}^{n}$ 上）， $\psi(0, x) = \psi_{0}(x)$ 的（典范）解在固定时间 $t > 0$ 超曲面上的限制.证明 $e^{(t+s)\Delta} = e^{t\Delta}e^{s\Delta}$ 作为快速衰减光滑函数上的时间演化算子成立.
+
+\mtsubsecn{4.1}{\texorpdfstring{Schrödinger 算子 $S$}{Schrödinger 算子 S}}
+
+Schrödinger 算子 $\mathcal{S} = i\partial_{t} + \Delta$ 有一个基本解， 表面上看与热算子的完全一样：
+
+\begin{equation}
+E(t, x) = (4\pi it)^{-n/2}H(t)e^{i|x|^{2}/4t}\label{eq:c4-154}
+\end{equation}
+
+然而， 当然， 指数因子 $e^{i|x|^{2}/4t}$ 中 $i$ 的存在造成了天壤之别.
+
+\noindent\textbf{习题 1.}\quad 证明（对适当选取的 $\log$ 的枝切）局部可积函数 $E$ 确实是 $\mathcal{S}$ 的基本解.
+
+\noindent\textbf{习题 2.}\quad 与热方程的习题 5 类似， 人们把 Schrödinger 方程的时间演化算子记为 $e^{it\Delta}$.证明 $e^{it\Delta}$ 是酉算子， 其意义是量
+
+\[
+\int_{\mathbb{R}^{n}}|\Psi(t, x)|^{2}dx
+\]
+
+随时间保持不变.

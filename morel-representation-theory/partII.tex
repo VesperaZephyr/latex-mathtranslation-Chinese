@@ -1,0 +1,838 @@
+% ============ 第 II 部分: 一些 Gelfand 理论 (Some Gelfand Theory) ============
+% 原书 II.1 - II.5 (原书 pp.119-144)
+% 编号: II.1.1.1 (子节级) / II.2.1 (节级) / 习题 II.5.1 (节级)
+
+\section{Banach 代数}
+在本节中, $A$ 是一个 Banach 代数. (见定义 \ref{def:I.4.1.4}.) 注意范数的次乘性蕴含乘法是从 $A \times A$ 到 $A$ 的连续映射.
+我们现在假设 $A$ 有单位元 $e$, 记 $A^{\times}$ 为 $A$ 的可逆元群.
+
+\subsection{元素的谱}
+
+\begin{definition}[谱与谱半径]
+\label{def:II.1.1.1}
+设 $x \in A$.
+\begin{enumerate}
+\item[(i)] $x$ 在 $A$ 中的谱 (spectrum) 是
+\[
+\sigma(x) = \sigma_A(x) = \{\lambda \in \CC \mid \lambda e - x \notin A^{\times}\}.
+\]
+\item[(ii)] $x$ 的谱半径 (spectral radius) 是
+\[
+\rho(x) = \inf_{n \geq 1}\|x^n\|^{1/n}.
+\]
+\end{enumerate}
+\end{definition}
+
+我们将在下面看到 $\rho(x)$ 等于 $\sup\{|\lambda| \mid \lambda \in \sigma(x)\}$ (这证明``谱半径''这个名字是合理的).
+我们从证明可逆元和谱半径的一些基本性质开始. (注意 (i) 不用 $A$ 的完备性, 所以它在任何赋范代数中都成立.)
+
+\begin{proposition}[可逆元的基本性质]
+\label{prop:II.1.1.2}
+\begin{enumerate}
+\item[(i)] 若 $x, y \in A^{\times}$ 满足 $\|x - y\| \leq \frac{1}{2}\|x^{-1}\|^{-1}$, 则
+\[
+\|x^{-1} - y^{-1}\| \leq 2\|x^{-1}\|^2\|y - x\|.
+\]
+特别地, 映射 $x \longmapsto x^{-1}$ 是从 $A^{\times}$ 到自身的同胚.
+\item[(ii)] 对每个 $x \in A$,
+\[
+\rho(x) = \lim_{n \to +\infty}\|x^n\|^{1/n}
+\]
+(\index{Gelfand 公式}Gelfand 公式).
+\item[(iii)] 设 $x \in A$. 若 $\rho(x) < 1$ (例如 $\|x\| < 1$), 则 $e - x \in A^{\times}$, 且 $(e - x)^{-1} = \sum_{n \geq 0}x^n$, 约定 $x^0 = e$. (特别地, 级数收敛.)
+\item[(iv)] 群 $A^{\times}$ 在 $A$ 中开.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i). 有
+\[
+\|y^{-1}\| - \|x^{-1}\| \leq \|y^{-1} - x^{-1}\| = \|y^{-1}(x - y)x^{-1}\| \leq \|y^{-1}\|\|x - y\|\|x^{-1}\| \leq \frac{1}{2}\|y^{-1}\|.
+\]
+特别地, $\|y^{-1}\| \leq 2\|x^{-1}\|$. 把它与上面的不等式结合, 给出
+\[
+\|y^{-1} - x^{-1}\| \leq \|y^{-1}\|\|x - y\|\|x^{-1}\| \leq 2\|x^{-1}\|^2\|x - y\|,
+\]
+这就是第一个结论. 这也证明映射 $x \longmapsto x^{-1}$ 连续. 由于这个映射等于它自己的逆, 它是同胚.
+
+(ii). 设 $\varepsilon > 0$. 我们要找到 $N \in \Z_{\geq 1}$ 使得对 $n \geq N$ 有 $\|x^n\|^{1/n} \leq \rho(x) + \varepsilon$. (我们已经知道由 $\rho(x)$ 的定义有 $\|x^n\|^{1/n} \geq \rho(x)$, 所以这足以确立结果.) 由 $\rho(x)$ 的定义, 可以找到 $m \geq 1$ 使得 $\|x^m\|^{1/m} \leq \rho(x) + \frac{1}{2}\varepsilon$. 对每个整数 $n \geq 1$, 把 $n$ 写成 $n = mq(n) + r(n)$, 其中 $q(n), r(n) \in \N$, $0 \leq r(n) \leq m - 1$. 注意
+\[
+\frac{q(n)}{n} = \frac{1}{m}\Bigl(1 - \frac{r(n)}{n}\Bigr) \xrightarrow[n \to +\infty]{} \frac{1}{m},
+\]
+所以
+\[
+\|x^m\|^{q(n)/n}\|x\|^{r(n)/n} \xrightarrow[n \to +\infty]{} \|x^m\|^{1/m}.
+\]
+选取 $N \geq 1$ 使得对 $n \geq N$ 有
+\[
+\|x^m\|^{q(n)/n}\|x\|^{r(n)/n} \leq \|x^m\|^{1/m} + \frac{\varepsilon}{2} \leq \rho(x) + \varepsilon.
+\]
+则若 $n \geq N$,
+\[
+\|x^n\|^{1/n} = \|x^{mq(n)}x^{r(n)}\|^{1/n} \leq \|x^m\|^{q(n)/n}\|x\|^{r(n)/n} \leq \rho(x) + \varepsilon,
+\]
+如所愿.\footnote{此证明中的推理有时称为 Fekete 引理. 参见 https://en.wikipedia.org/wiki/Subadditivity.}
+
+(iii). 固定 $r \in \R$ 使得 $\rho(x) < r < 1$. 则由 (ii), 对足够大的 $n$ 有 $\|x^n\| \leq r^n$. 对每个 $n \in \N$, 记 $S_n = \sum_{k=0}^n x^k$. 则若 $m \geq n$ 足够大,
+\[
+\|S_m - S_n\| = \Bigl\|\sum_{k=n+1}^m x^k\Bigr\| \leq r^{n+1}\sum_{k \geq 0}r^k = r^{n+1}\frac{1}{1-r}.
+\]
+所以序列 $(S_n)_{n \geq 0}$ 是 Cauchy 列, 且因 $A$ 完备而收敛. 这意味着级数 $\sum_{n \geq 0}x^n$ 收敛. 而且, 对每个 $n \geq 0$,
+\[
+(e - x)S_n = S_n(e - x) = \sum_{k=0}^n x^k - \sum_{k=1}^{n+1}x^k = e - x^{n+1}.
+\]
+当 $n \to +\infty$ 时这趋于 $e$, 所以 $\sum_{n \geq 0}x^n$ 是 $e - x$ 的逆.
+
+(iv). 设 $x \in A^{\times}$. 若 $y \in A$ 满足 $\|y - x\| < \|x^{-1}\|^{-1}$, 则
+\[
+\|e - x^{-1}y\| \leq \|x^{-1}\|\|x - y\| < 1.
+\]
+所以由 (iii), $x^{-1}y \in A^{\times}$, 从而 $y \in A^{\times}$.
+\end{proof}
+
+\begin{theorem}[谱的非空紧致性]
+\label{thm:II.1.1.3}
+对每个 $x \in A$, 谱 $\sigma_A(x)$ 是 $\CC$ 的非空紧子集, 且
+\[
+\rho(x) = \max\{|\lambda| \mid \lambda \in \sigma_A(x)\}.
+\]
+\end{theorem}
+
+这解释了 $\rho(x)$ 被称为``谱半径''的原因. 特别地注意, 虽然 $x$ 的谱依赖于 $A$ (例如, 若考虑包含 $x$ 的 $A$ 的 Banach 子代数 $B$, 则 $\sigma_B(x) \supset \sigma_A(x)$, 但这可能不是等式), $x$ 的谱半径却不依赖.
+
+\begin{proof}
+考虑映射 $F \colon \CC \to A$, $\lambda \longmapsto \lambda e - x$. 则 $F$ 连续, 且 $\sigma_A(x)$ 是 $A$ 的闭子集 $A - A^{\times}$ 的原像, 所以 $\sigma_A(x)$ 在 $\CC$ 中闭.
+其次, 设 $\lambda \in \CC$ 满足 $|\lambda| > \rho(x)$. 则 $\rho(\lambda^{-1}x) < 1$, 所以由命题 \ref{prop:II.1.1.2}(iii), $e - \lambda^{-1}x = \lambda^{-1}(\lambda e - x) \in A^{\times}$, 这立即蕴含 $\lambda \notin \sigma_A(x)$. 所以我们已证明
+\[
+\rho(x) \geq \sup\{|\lambda| \mid \lambda \in \sigma_A(x)\}.
+\]
+特别地, $\sigma_A(x)$ 是 $\CC$ 的闭且有界子集, 所以它紧.
+让我们证明 $\sigma_A(x)$ 非空. 设 $T \colon A \to \CC$ 是有界线性泛函, 定义 $f \colon \CC - \sigma_A(x) \to \CC$ 为 $f(\lambda) = T((\lambda e - x)^{-1})$. 若 $\lambda, \mu \in \CC - \sigma_A(x)$, 则
+\[
+(\lambda e - x)^{-1} - (\mu e - x)^{-1} = (\lambda e - x)^{-1}((\mu e - x) - (\lambda e - x))(\mu e - x)^{-1} = -(\lambda - \mu)(\lambda e - x)^{-1}(\mu e - x)^{-1},
+\]
+所以若 $\lambda \neq \mu$,
+\[
+\frac{f(\lambda) - f(\mu)}{\lambda - \mu} = -T((\lambda e - x)^{-1}(\mu e - x)^{-1}).
+\]
+利用函数 $y \longmapsto y^{-1}$ 的连续性 (见命题 \ref{prop:II.1.1.2}(i)), 对每个 $\lambda \in \CC - \sigma_A(x)$ 得到
+\[
+\lim_{\mu \to \lambda}\frac{f(\lambda) - f(\mu)}{\lambda - \mu} = -T((\lambda e - x)^{-2}).
+\]
+特别地, 函数 $f$ 在 $\CC - \sigma_A(x)$ 上全纯. 让我们证明 $f$ 在无穷远处消失, 即当 $|\lambda| \to +\infty$ 时 $f(\lambda)$ 趋于 $0$. 设 $\lambda \in \CC$ 满足 $|\lambda| > \rho(x)$. 则由命题 \ref{prop:II.1.1.2}(iii),
+\[
+(\lambda e - x)^{-1} = \lambda^{-1}(e - \lambda^{-1}x)^{-1} = \frac{1}{\lambda}\sum_{n \geq 0}\frac{x^n}{\lambda^n},
+\]
+所以
+\[
+\|(\lambda e - x)^{-1}\| \leq \frac{1}{|\lambda|}\sum_{n \geq 0}\frac{\|x\|^n}{|\lambda|^n} = \frac{1}{|\lambda|}\cdot\frac{1}{1 - |\lambda|^{-1}\|x\|}.
+\]
+当 $|\lambda| \to +\infty$ 时这趋于 $0$; 由于 $T$ 连续, $f(\lambda)$ 也如此.
+现在假设 $\sigma_A(x) = \emptyset$. 则 $f$ 是整函数, 且当 $|\lambda| \to +\infty$ 时 $f(\lambda) \to 0$. 由 Liouville 定理, 这蕴含 $f = 0$, 即对每个 $\lambda \in \CC$ 有 $T((\lambda e - x)^{-1}) = 0$. 但这在 $\Hom(A, \CC)$ 的每个 $T$ 上都成立, 且由 Hahn-Banach 定理 $A$ 上的有界线性泛函分离点, 所以对每个 $\lambda \in \CC$ 有 $(\lambda e - x)^{-1} = 0$. 这不可能, 因为 $(\lambda e - x)^{-1} \in A^{\times}$. 所以 $\sigma_A(x) \neq \emptyset$.
+最后, 我们证明
+\[
+\rho(x) \leq \max\{|\lambda| \mid \lambda \in \sigma_A(x)\}.
+\]
+设 $r = \max\{|\lambda| \mid \lambda \in \sigma_A(x)\}$. 我们已经知道 $r \leq \rho(x)$. 假设 $r < \rho(x)$, 选取 $r'$ 使得 $r < r' < \rho(x)$. 设 $T \in \Hom(A, \CC)$, 如前定义 $f \colon \CC - \sigma_A(x) \to \CC$. 则我们已见 $f$ 在 $\CC - \sigma_A(x) \supset \{\lambda \in \CC \mid |\lambda| > r\}$ 上全纯. 我们还看到, 若 $|\lambda| > \rho(x)$, 则
+\[
+(\lambda e - x)^{-1} = \sum_{n \geq 0}\frac{x^n}{\lambda^{n+1}},
+\]
+所以
+\[
+f(\lambda) = \sum_{n \geq 0}\frac{T(x^n)}{\lambda^{n+1}}.
+\]
+由幂级数展开的唯一性, 这对 $|\lambda| > r$ 仍成立. 特别地, 级数 $\sum_{n \geq 0}\frac{T(x^n)}{(r')^{n+1}}$ 收敛, 所以序列 $\bigl(\frac{T(x^n)}{(r')^{n+1}}\bigr)_{n \geq 0}$ 收敛到 $0$, 从而有界. 考虑 $\Hom(A, \CC)$ 上的有界线性泛函序列 $(\alpha_n)_{n \geq 0}$, 定义为 $\alpha_n(T) = \frac{T(x^n)}{(r')^{n+1}}$. 我们刚看到对每个 $T \in \Hom(A, \CC)$, 序列 $(\alpha_n(T))_{n \geq 0}$ 有界. 由共鸣定理 (定理 \ref{thm:I.3.2.11}), 这蕴含序列 $(\|\alpha_n\|_{\mathrm{op}})_{n \geq 0}$ 有界. 但注意由 Hahn-Banach 定理, $\|\alpha_n\|_{\mathrm{op}} = \frac{\|x^n\|}{(r')^{n+1}}$. 所以序列 $\bigl(\frac{\|x^n\|}{(r')^{n+1}}\bigr)_{n \geq 0}$ 有界. 选取控制它的实数 $C$. 则
+\[
+\rho(x) = \lim_{n \to +\infty}\|x^n\|^{1/n} \leq \lim_{n \to +\infty}C^{1/n}(r')^{(n+1)/n} = r',
+\]
+矛盾. 所以 $r \geq \rho(x)$.
+\end{proof}
+
+\subsection{\index{Gelfand-Mazur 定理}Gelfand-Mazur 定理}
+
+众所周知, 每个是域的有限维 $\CC$-代数都同构于 $\CC$. 这就是它的 Banach 代数版本.
+
+\begin{corollary}[Gelfand-Mazur 定理]
+\label{cor:II.1.2.1}
+设 $A$ 是每个非零元素都可逆的 Banach 代数. 则 $A$ 同构于 $\CC$ (即 $A = \CC e$).
+\end{corollary}
+
+\begin{proof}
+设 $x \in A$. 由定理 \ref{thm:II.1.1.3}, $\sigma_A(x) \neq \emptyset$. 设 $\lambda \in \sigma_A(x)$, 则 $\lambda e - x$ 不可逆, 所以由假设 $x = \lambda e$.
+\end{proof}
+
+\begin{definition}[理想]
+\label{def:II.1.2.2}
+我们说 $A$ 的子集 $I$ 是理想 (ideal), 如果它是通常代数意义上的理想, 即 $I$ 是 $A$ 的 $\CC$-子空间, 且被 $A$ 的每个元素的左右乘法稳定. 若 $I$ 是 $A$ 的理想且 $I \neq A$, \index{真理想}则称 $I$ 是 $A$ 的真理想 (proper ideal).
+\end{definition}
+
+若 $I$ 是 $A$ 的理想, 则容易看出 $\overline{I}$ 也是理想.
+还要回忆商范数的定义.
+
+\begin{definition}[商范数]
+\label{def:II.1.2.3}
+设 $V$ 是赋范向量空间, $W \subset V$ 是闭子空间. 则 $V/W$ 上的\index{商范数}商范数 (quotient norm) 定义为
+\[
+\|x + W\| = \inf_{w \in W}\|v + w\|.
+\]
+\end{definition}
+
+若 $V$ 是巴拿赫空间, 则 $V/W$ 也是 (对商范数).
+
+\begin{proposition}[商代数的 Banach 代数结构]
+\label{prop:II.1.2.4}
+\begin{enumerate}
+\item[(i)] 若 $I$ 是 $A$ 的闭理想, 则 $A/I$ 对商范数是 Banach 代数.
+\item[(ii)] 若 $I$ 是 $A$ 的真理想, 则其闭包 $\overline{I}$ 也是.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i). 我们已经知道 $A/I$ 是巴拿赫空间和代数, 所以只需验证其范数次乘. 设 $x, y \in A$. 则
+\begin{align*}
+\|x + I\|\|y + I\| &= \inf_{a,b \in I}\|x + a\|\|y + b\| \\
+&\geq \inf_{a,b \in I}\|(x + a)(y + b)\| \\
+&= \inf_{a,b \in I}\|xy + (ay + xb + ab)\| \\
+&\geq \inf_{c \in I}\|xy + c\| \quad \text{(因为若 } a, b \in I \text{ 则 } ay + xb + ab \in I\text{)} \\
+&= \|xy + I\|.
+\end{align*}
+
+(ii). 考虑开球 $B = \{x \in A \mid \|e - x\| < 1\}$. 则由命题 \ref{prop:II.1.1.2}, $B \subset A^{\times}$, 所以 $B \cap I = \emptyset$. 由于 $B$ 开, 这蕴含 $B \cap \overline{I} = \emptyset$, 所以 $\overline{I} \neq A$.
+\end{proof}
+
+\begin{corollary}[极大理想与 $\CC$]
+\label{cor:II.1.2.5}
+设 $A$ 是交换含幺 Banach 代数. 若 $\mathfrak{m}$ 是 $A$ 的极大理想, 则 $\mathfrak{m}$ 闭, 且 $A/\mathfrak{m} = \CC$.
+\end{corollary}
+
+这是 Nullstellensatz 的 Banach 代数版本.
+
+\begin{proof}
+由命题 \ref{prop:II.1.2.4}, 理想 $\overline{\mathfrak{m}}$ 也真; 由于 $\mathfrak{m}$ 极大, 必有 $\mathfrak{m} = \overline{\mathfrak{m}}$, 即 $\mathfrak{m}$ 闭. 由同一命题, $A/\mathfrak{m}$ 是 Banach 代数. 又, $A/\mathfrak{m}$ 的每个非零元素都可逆 (因为 $\mathfrak{m}$ 极大), 所以由 Gelfand-Mazur 定理 $A/\mathfrak{m} = \CC$.
+\end{proof}
+
+% ============ II.2 \index{Banach 代数的谱}Banach 代数的谱 (原书 pp.124-127) ============
+\section{Banach 代数的谱}
+在本节中, $A$ 仍是 Banach 代数, 但我们不假设它有单位元.
+
+\begin{definition}[\index{乘法泛函}乘法泛函与谱]
+\label{def:II.2.1}
+$A$ 上的乘法泛函 (multiplicative functional) 是非零线性泛函 $\phi \colon A \to \CC$, 使得对所有 $x, y \in A$ 有 $\phi(xy) = \phi(x)\phi(y)$.
+$A$ 上所有乘法泛函的集合称为 $A$ 的谱 (spectrum), 记为 $\sigma(A)$. 我们在 $\sigma(A)$ 上赋予弱*拓扑. 换句话说, 若 $\phi \in \sigma(A)$, 则 $\phi$ 的开邻域基由集合 $\{\psi \in \sigma(A) \mid \forall i \in \{1, \ldots, n\},\, |\phi(x_i) - \psi(x_i)| < c_i\}$ 给出, 其中 $n \in \Z_{\geq 1}$, $x_1, \ldots, x_n \in A$, $c_1, \ldots, c_n \in \R_{>0}$.
+\end{definition}
+
+注意我们不假设 $\phi$ 连续; 事实上这自动成立, 我们将在下面看到.
+
+\begin{lemma}[乘法泛函在单位元上取值 $1$]
+\label{lem:II.2.2}
+若 $A$ 含幺, 则对每个 $\phi \in \sigma(A)$ 有 $\phi(e) = 1$ 且 $\phi(A^{\times}) \subset \CC^{\times}$.
+\end{lemma}
+
+\begin{proof}
+设 $x \in A$ 使得 $\phi(x) \neq 0$. 则 $\phi(x) = \phi(xe) = \phi(x)\phi(e)$, 所以 $\phi(e) = 1$. 又, 若 $y \in A^{\times}$, 则 $1 = \phi(e) = \phi(y)\phi(y^{-1})$, 所以 $\phi(y) \in \CC^{\times}$.
+\end{proof}
+
+\begin{definition}[单位化 (adjoining an identity)]
+\label{def:II.2.3}
+设 $A$ 是 Banach 代数. 我们如下定义含幺 Banach 代数 $A^{\tilde{e}}$: 取 $\CC$-向量空间 $A \oplus \CC e$, 在 $A^{\tilde{e}}$ 上定义乘法 $(x + \lambda e)(y + \mu e) = (xy + \lambda y + \mu x) + \lambda\mu e$ (对 $x, y \in A$, $\lambda, \mu \in \CC$) 和范数 $\|x + \lambda e\| = \|x\| + |\lambda|$ (对 $x \in A$, $\lambda \in \CC$). 若 $A$ 是 Banach $*$-代数, 则令 $(x + \lambda e)^* = x^* + \bar{\lambda}e$ (对 $x \in A$, $\lambda \in \CC$), 把 $A^{\tilde{e}}$ 变成 Banach $*$-代数.
+此构造称为给 $A$ \index{添加单位元}添加单位元 (adjoining an identity).
+\end{definition}
+
+\begin{remark}[$A$ 已含幺的情形]
+\label{rem:II.2.4}
+若 $A$ 已有单位元, 则 $A^{\tilde{e}}$ 不等于 $A$. 事实上, 若记 $e_A$ 为 $A$ 的单位元, 则映射 $A^{\tilde{e}} \to A \times \CC$, $x + \lambda e \longmapsto (x + \lambda e_A, \lambda)$ 是 $\CC$-代数的同构 (也是同胚).
+\end{remark}
+
+\begin{proposition}[谱的嵌入]
+\label{prop:II.2.5}
+对每个 $\phi \in \sigma(A)$, 通过令 $\tilde{\phi}(x + \lambda e) = \phi(x) + \lambda$ 得到 $\sigma(A^{\tilde{e}})$ 的元素 $\tilde{\phi}$. 这定义单射映射 $\sigma(A) \to \sigma(A^{\tilde{e}})$, 其像是 $\sigma(A^{\tilde{e}}) - \{\phi_{\infty}\}$, 其中 $\phi_{\infty}$ 由 $\phi_{\infty}(x + \lambda e) = \lambda$ 定义.
+\end{proposition}
+
+以后我们将等同 $\phi$ 与 $\tilde{\phi}$, 直接写 $\sigma(A^{\tilde{e}}) = \sigma(A) \cup \{\phi_{\infty}\}$.
+
+\begin{proof}
+$\tilde{\phi}$ 是乘法泛函这一事实直接由 $A^{\tilde{e}}$ 上乘法的定义得出, 且 $\tilde{\phi}$ 显然确定 $\phi$. 所以我们只需验证关于 $\sigma(A) \to \sigma(A^{\tilde{e}})$ 的像的结论.
+设 $\psi \in \sigma(A^{\tilde{e}})$ 满足 $\psi \neq \phi_{\infty}$, 令 $\phi = \psi|_A$. 则对所有 $x \in A$ 和 $\lambda \in \CC$ 有 $\psi(x + \lambda e) = \phi(x) + \lambda$; 由于 $\psi \neq \phi_{\infty}$, 线性泛函 $\phi \colon A \to \CC$ 不能为零, 所以 $\phi$ 是 $A$ 上的乘法泛函, 且显然 $\psi = \tilde{\phi}$.
+\end{proof}
+
+\begin{corollary}[乘法泛函自动有界]
+\label{cor:II.2.6}
+设 $\phi \in \sigma(A)$. 则 $\phi$ 是 $A$ 上的有界线性函数, 且 $\|\phi\|_{\mathrm{op}} \leq 1$, 若 $A$ 含幺则等号成立.
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:II.2.5}, 乘法泛函 $\phi$ 延拓成 $A^{\tilde{e}}$ 上的乘法泛函 $\tilde{\phi}$. 设 $x \in A$. 对每个满足 $|\lambda| > \|x\|$ 的 $\lambda \in \CC$, 元素 $x - \lambda e$ 在 $A^{\tilde{e}}$ 中可逆 (由命题 \ref{prop:II.1.1.2}), 所以 $\phi(x) - \lambda = \tilde{\phi}(x - \lambda e) \neq 0$. 这蕴含 $|\phi(x)| \leq \|x\|$, 即 $\phi$ 有界且 $\|\phi\|_{\mathrm{op}} \leq 1$.
+若 $A$ 含幺, 则 $\|e\| = 1$ 且 $\phi(e) = 1$, 所以 $\|\phi\|_{\mathrm{op}} = 1$.
+\end{proof}
+
+\begin{theorem}[谱的紧致性]
+\label{thm:II.2.7}
+设 $A$ 是 Banach 代数.
+\begin{enumerate}
+\item[(i)] 若 $A$ 含幺, 则空间 $\sigma(A)$ 紧 Hausdorff.
+\item[(ii)] 一般地, 空间 $\sigma(A)$ 局部紧 Hausdorff, 且 $\sigma(A^{\tilde{e}})$ 是它的 Alexandroff 紧化 (a.k.a. 单点紧化).
+\end{enumerate}
+\end{theorem}
+
+回忆若 $X$ 是 Hausdorff 局部紧拓扑空间, 则其 Alexandroff 紧化是空间 $X \cup \{\infty\}$ (即加上一个点的 $X$), 且其开子集是 $X$ 的开子集和 $X \cup \{\infty\}$ 中 $X$ 的紧子集的余集.
+
+\begin{proof}
+由推论 \ref{cor:II.2.6}, 谱 $\sigma(A)$ 是 $\Hom(A, \CC)$ 的闭单位球的子集. 我们知道这个闭单位球对 $\Hom(A, \CC)$ 上的弱*拓扑紧 Hausdorff (这是 Alaoglu 定理), 且 $\sigma(A) \cup \{0\}$ 在此拓扑中闭, 因为它由闭条件 $\phi(xy) = \phi(x)\phi(y)$ (对所有 $x, y \in A$) 定义. 所以 $\sigma(A) \cup \{0\}$ 紧 (对弱*拓扑), 且它的开子集 $\sigma(A)$ 局部紧. 若 $A$ 含幺, 则 $\sigma(A)$ 在 $\sigma(A) \cup \{0\}$ 中闭, 因为它由条件 $\phi(e) = 1$ 切出, 所以 $\sigma(A)$ 紧.
+现在我们证明 (ii) 的最后一句. 若 $\phi \in \sigma(A)$ (相应地 $\sigma(A^{\tilde{e}})$), $x \in A$, $c > 0$, 令
+\[
+U(\phi, x, c) = \{\psi \in \sigma(A) \mid |\phi(x) - \psi(x)| < c\}
+\]
+(相应地 $\tilde{U}(\phi, x, c) = \{\psi \in \sigma(A^{\tilde{e}}) \mid |\phi(x) - \psi(x)| < c\}$).
+这些构成 $\sigma(A)$ (相应地 $\sigma(A^{\tilde{e}})$) 的拓扑的基.
+若 $\phi \in \sigma(A)$, $x \in A$, $c > 0$, 则
+\[
+\tilde{U}(\tilde{\phi}, x, c) = \begin{cases} U(\phi, x, c) \cup \{\phi_{\infty}\} & \text{若 } |\phi(x)| < c, \\ U(\phi, x, c) & \text{否则}. \end{cases}
+\]
+对 $\phi_{\infty}$ 的邻域, 若 $x \in A$, $c > 0$, 则
+\[
+\tilde{U}(\phi_{\infty}, x, c) = \{\phi_{\infty}\} \cup \{\phi \in \sigma(A) \mid |\phi(x)| < c\} = \sigma(A^{\tilde{e}}) - \{\psi \in \sigma(A^{\tilde{e}}) \mid |\psi(x)| \geq c\}.
+\]
+所以 $\sigma(A)$ 的拓扑由 $\sigma(A^{\tilde{e}})$ 的拓扑诱导. 又, 由于对所有的 $x \in A$ 和 $c > 0$, 集合 $\{\psi \in \sigma(A^{\tilde{e}}) \mid |\psi(x)| \geq c\}$ 在 $\sigma(A^{\tilde{e}})$ 中闭, 从而紧, $\phi_{\infty}$ 在 $\sigma(A^{\tilde{e}})$ 中的开邻域正好是 $\sigma(A)$ 的紧子集的余集. 这意味着 $\sigma(A^{\tilde{e}})$ 是 $\sigma(A)$ 的 Alexandroff 紧化.
+\end{proof}
+
+\begin{definition}[\index{Gelfand 变换}Gelfand 变换]
+\label{def:II.2.8}
+设 $A$ 是 Banach 代数. 对每个 $x \in A$, 映射 $\hat{x} \colon \sigma(A) \to \CC$, $\hat{x}(\phi) = \phi(x)$ 称为 $x$ 的 Gelfand 变换 (Gelfand transform).
+注意每个 $\hat{x}$ 由 $\sigma(A)$ 的拓扑定义在 $\sigma(A)$ 上连续. 由此产生的映射 $\Gamma \colon A \to \mathcal{C}(\sigma(A))$, $x \longmapsto \hat{x}$ 称为 $A$ 的 \index{Gelfand 表示}Gelfand 表示 (Gelfand representation) (有时也称为 Gelfand 变换).
+\end{definition}
+
+注意 $\Gamma$ 由 $\mathcal{C}(\sigma(A))$ 上的代数运算的定义是 $\CC$-代数的同态.
+
+\begin{theorem}[Gelfand 表示的性质]
+\label{thm:II.2.9}
+\begin{enumerate}
+\item[(i)] 映射 $\Gamma$ 把 $A$ 映到 $\mathcal{C}_0(\sigma(A))$, 且对每个 $x \in A$ 有 $\|\hat{x}\|_{\infty} \leq \|x\|$.
+\item[(ii)] $\Gamma$ 的像分离 $\sigma(A)$ 的点.
+\item[(iii)] 若 $A$ 含幺, 则 $\hat{e}$ 是 $\sigma(A)$ 上的常值函数 $1$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i). 若 $A$ 含幺, 则 $\sigma(A)$ 紧, 所以 $\mathcal{C}_0(\sigma(A)) = \mathcal{C}(\sigma(A))$. 一般地, 由于 $\sigma(A^{\tilde{e}})$ 是 $\sigma(A)$ 的 Alexandroff 紧化, 只需验证对每个 $x \in A$ 有 $\hat{x}(\phi_{\infty}) = 0$; 但这由定义立即得出.
+设 $x \in A$. 则
+\[
+\|\hat{x}\|_{\infty} = \sup_{\phi \in \sigma(A)}|\hat{x}(\phi)| = \sup_{\phi \in \sigma(A)}|\phi(x)| \leq \|x\|
+\]
+由推论 \ref{cor:II.2.6}.
+(ii). 设 $\phi, \phi' \in \sigma(A)$ 满足 $\phi \neq \phi'$. 则存在 $x \in A$ 使得 $\phi(x) \neq \phi'(x)$, 即 $\hat{x}(\phi) \neq \hat{x}(\phi')$.
+(iii). 这由引理 \ref{lem:II.2.2} 立即得出.
+\end{proof}
+
+对一般的 Banach 代数 (即使是含幺的), 谱可以为空 (见习题 \ref{ex:II.5.1}). 但这不能发生在交换 Banach 代数上.
+
+\begin{theorem}[谱与极大理想的双射]
+\label{thm:II.2.10}
+设 $A$ 是交换含幺 Banach 代数. 则映射 $\phi \longmapsto \Ker(\phi)$ 诱导从 $\sigma(A)$ 到 $A$ 的极大理想集合的双射.
+\end{theorem}
+
+若你见过谱的另一个定义 (例如在代数几何中), 此定理说明它与我们的定义如何联系.
+
+\begin{proof}
+若 $\phi \in \sigma(A)$, 则 $A/\Ker(\phi) \simeq \CC$ (注意 $\phi$ 因非零而满射), 所以 $\Ker(\phi)$ 是 $A$ 的极大理想. 这证明映射良定义.
+若 $\mathfrak{m}$ 是极大理想, 则由 Gelfand-Mazur 定理 $A/\mathfrak{m} \simeq \CC$ (见推论 \ref{cor:II.1.2.5}), 所以映射 $\phi \colon A \to A/\mathfrak{m} \simeq \CC$ 是满足 $\Ker(\phi) = \mathfrak{m}$ 的 $\sigma(A)$ 的元素. 这证明映射满射.
+现在我们需要验证单射性. 设 $\phi, \psi \in \sigma(A)$ 满足 $\mathfrak{m} := \Ker(\phi) = \Ker(\psi)$. 设 $x \in A$. 由于 $A/\mathfrak{m} \simeq \CC$, 可以把 $x$ 写成 $x = \lambda e + y$, 其中 $\lambda \in \CC$, $y \in \mathfrak{m}$. 则
+\[
+\phi(x) = \lambda = \psi(y).
+\]
+所以 $\phi = \psi$.
+\end{proof}
+
+\begin{corollary}[谱半径的 Gelfand 公式]
+\label{cor:II.2.11}
+设 $A$ 是交换含幺 Banach 代数. 则对每个 $x \in A$:
+\begin{enumerate}
+\item[(i)] $x \in A^{\times}$ 当且仅当 $\hat{x}$ 不取零值;
+\item[(ii)] $\hat{x}(\sigma(A)) = \sigma_A(x)$;
+\item[(iii)] $\|\hat{x}\|_{\infty} = \rho(x)$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+(i). 若 $x \in A^{\times}$, 则 $\hat{x}$ 不能消失, 因为有 $\widehat{x}\widehat{x^{-1}} = \hat{e} = 1$. 反之, 假设 $x$ 不可逆. 则存在包含 $x$ 的极大理想, 所以由定理 \ref{thm:II.2.10} 存在 $\phi \in \sigma(A)$ 使得 $0 = \phi(x) = \hat{x}(\phi)$.
+(ii). 由 (i),
+\[
+\sigma_A(x) = \{\lambda \in \CC \mid x - \lambda e \notin A^{\times}\} = \{\lambda \in \CC \mid \widehat{x - \lambda e} \text{ 至少在一个点消失}\} = \hat{x}(\sigma(A)).
+\]
+(iii). 这由 (ii) 和定理 \ref{thm:II.1.1.3} 得出.
+\end{proof}
+
+% ============ II.3 C* 代数与 \index{Gelfand-Naimark 定理}Gelfand-Naimark 定理 (原书 pp.128-130) ============
+\section{\texorpdfstring{\index{$\mathcal{C}^*$-代数}$\mathcal{C}^*$-代数与 Gelfand-Naimark 定理}{C*-代数与 Gelfand-Naimark 定理}}
+
+\begin{definition}[$\mathcal{C}^*$-代数]
+\label{def:II.3.1}
+Banach $*$-代数 $A$ 称为 $\mathcal{C}^*$-代数 ($\mathcal{C}^*$-algebra), 如果对每个 $x \in A$ 有 $\|x^*x\| = \|x\|^2$.
+\end{definition}
+
+\begin{remark}[Bourbaki 的术语]
+\label{rem:II.3.2}
+除 Bourbaki 外大家都称它为 $\mathcal{C}^*$-代数, Bourbaki 说``星代数'' (algèbre stellaire).
+\end{remark}
+
+\begin{lemma}[对合保范]
+\label{lem:II.3.3}
+若 $A$ 是 $\mathcal{C}^*$-代数, 则对每个 $x \in A$ 有 $\|x\| = \|x^*\|$.
+\end{lemma}
+
+\begin{proof}
+设 $x \in A - \{0\}$. 则
+\[
+\|x\|^2 = \|x^*x\| \leq \|x^*\|\|x\|,
+\]
+所以 $\|x\| \leq \|x^*\|$. 把它应用于 $x^*$ 并利用 $(x^*)^* = x$, 得到 $\|x^*\| \leq \|x\|$.
+\end{proof}
+
+\begin{example}[$\mathcal{C}^*$-代数的例子]
+\label{exa:II.3.4}
+例 \ref{exa:I.4.2.2} 的大多数例子实际上是 $\mathcal{C}^*$-代数.
+\begin{enumerate}
+\item[(a)] $\CC$ 是 $\mathcal{C}^*$-代数, 因为对每个 $\lambda \in \CC$ 有 $|\lambda\bar{\lambda}| = |\lambda|^2$.
+\item[(b)] 设 $G$ 是局部紧群. 则 $L^1(G)$ 一般不是 $\mathcal{C}^*$-代数, 尽管它确实满足引理 \ref{lem:II.3.3} 的结论.\footnote{有一种方法修改 $L^1(G)$ 上的范数, 使新范数下的完备化成为 $\mathcal{C}^*$-代数, 但我们这里不需要.}
+\item[(c)] 设 $X$ 是局部紧 Hausdorff 空间. 则 $\mathcal{C}_0(X)$ 是 $\mathcal{C}^*$-代数, 因为对每个 $f \in \mathcal{C}_0(X)$,
+\[
+\|f^*f\|_{\infty} = \sup_{x \in X}|f(x)\overline{f(x)}| = \sup_{x \in X}|f(x)|^2 = \|f\|_{\infty}^2.
+\]
+\item[(d)] 设 $V$ 是希尔伯特空间. 则 $\End(V)$ 是 $\mathcal{C}^*$-代数. 事实上, 设 $T \in \End(V)$. 我们要证明 $\|T^*T\|_{\mathrm{op}} = \|T\|_{\mathrm{op}}^2$. 首先注意
+\[
+\|T^*\|_{\mathrm{op}} = \sup_{\substack{v,w \in V\\ \|v\| = \|w\| = 1}}|\langle T^*(v), w \rangle| = \sup_{\substack{v,w \in V\\ \|v\| = \|w\| = 1}}|\langle v, T(w) \rangle| = \|T\|_{\mathrm{op}},
+\]
+所以 $\|T^*T\|_{\mathrm{op}} \leq \|T^*\|_{\mathrm{op}}\|T\|_{\mathrm{op}} = \|T\|_{\mathrm{op}}^2$. 另一方面,
+\[
+\|T^*T\|_{\mathrm{op}} = \sup_{\substack{v \in V\\ \|v\| = 1}}\|T^*T(v)\| \geq \sup_{\substack{v \in V\\ \|v\| = 1}}|\langle T^*T(v), v \rangle| = \sup_{\substack{v \in V\\ \|v\| = 1}}|\langle T(v), T(v) \rangle| = \|T\|_{\mathrm{op}}^2.
+\]
+\end{enumerate}
+\end{example}
+
+\begin{proposition}[乘法泛函是 $*$-同态]
+\label{prop:II.3.5}
+设 $A$ 是 $\mathcal{C}^*$-代数. 则 Gelfand 表示 $\Gamma \colon A \to \mathcal{C}_0(\sigma(A))$ 是 $*$-同态.
+\end{proposition}
+
+\begin{remark}[对称性]
+\label{rem:II.3.6}
+此命题说 $A$ 上的每个乘法泛函都是 $*$-同态. 满足此条件的 Banach $*$-代数称为\index{对称 $*$-代数}对称 (symmetric) 的. 每个 $\mathcal{C}^*$-代数都对称, 但其逆不真. (例如, 若 $G$ 是局部紧交换群, 则 $L^1(G)$ 对称, 见习题 \ref{ex:II.5.4}.)
+\end{remark}
+
+\begin{proof}
+通过给 $A$ 添加单位元, 可以约化到 $A$ 含幺的情形. (见习题 \ref{ex:II.5.6} 中对 $A^{\tilde{e}}$ 范数的正确选取. 注意改变 $A^{\tilde{e}}$ 上的范数不影响 $\sigma(A^{\tilde{e}})$, 因为谱的定义不涉及范数.)
+设 $x \in A$, $\phi \in \sigma(A)$. 我们要证明 $\phi(x^*) = \widehat{x^*}(\phi) = \overline{\hat{x}(\phi)} = \overline{\phi(x)}$. 把 $\phi(x)$ 写成 $\phi(x) = a + ib$, $\phi(x^*) = c + id$, 其中 $a, b, c, d \in \R$.
+假设 $b + d \neq 0$. 设
+\[
+y = \frac{1}{b + d}(x + x^* - (a + c)e) \in A.
+\]
+注意 $y = y^*$, 且
+\[
+\phi(y) = \frac{1}{b + d}(a + ib + c + id - (a + c)) = i,
+\]
+所以对每个 $t \in \R$ 有 $\phi(y + ite) = (1 + t)i$, 从而
+\[
+|1 + t| = |\phi(y + ite)| \leq \|y + ite\|
+\]
+(由推论 \ref{cor:II.2.6}). 利用 $\mathcal{C}^*$-代数的定义性质和 $y = y^*$ 这一事实, 对每个 $t \in \R$,
+\[
+(1 + t)^2 \leq \|y + ite\|^2 = \|(y + ite)(y + ite)^*\| = \|(y + ite)(y - ite)\| = \|y^2 + t^2e\| \leq \|y^2\| + t^2,
+\]
+即 $1 + 2t \leq \|y^2\|$. 但这蕴含 $\|y^2\|$ 无穷, 不可能. 所以 $b + d = 0$, 即 $d = -b$.
+把同样的推理应用于 $ix$ 和 $(ix)^* = -ix^*$ (注意 $\phi(ix) = -b + ia$ 且 $\phi((ix)^*) = d - ic$), 得到 $a - c = 0$, 即 $a = c$. 这完成了 $\phi(x^*) = \overline{\phi(x)}$ 的证明.
+\end{proof}
+
+\begin{proposition}[自伴元的范数等于谱半径]
+\label{prop:II.3.7}
+设 $A$ 是交换含幺 $\mathcal{C}^*$-代数. 则对每个 $x \in A$ 有 $\|x\| = \rho(x)$.
+\end{proposition}
+
+\begin{proof}
+若 $x \in A$ 满足 $x = x^*$, 则 $\|x\|^2 = \|x^*x\| = \|x^2\|$, 所以对每个 $n \in \N$ 有 $\|x^{2^n}\| = \|x\|^{2^n}$.
+现在设 $x$ 是 $A$ 的任意元素. 则 $(xx^*)^* = xx^*$, 所以第一部分适用于 $xx^*$. 又, 对每个 $n \in \N$, $(xx^*)^{2^n} = x^{2^n}(x^*)^{2^n}$ (因为 $A$ 交换). 所以若 $n \geq 0$,
+\[
+\|x\|^{2^{n+1}} = \|xx^*\|^{2^n} = \|(xx^*)^{2^n}\| = \|x^{2^n}(x^*)^{2^n}\| = \|x^{2^n}\|^2.
+\]
+这蕴含
+\[
+\rho(x) = \lim_{n \to +\infty}\|x^{2^n}\|^{2^{-n}} = \|x\|.
+\]
+\end{proof}
+
+\begin{definition}[\index{正规元}正规元]
+\label{def:II.3.8}
+若 $A$ 是 Banach $*$-代数, $A$ 的元素 $x$ 称为正规 (normal) 的, 如果 $xx^* = x^*x$.
+\end{definition}
+
+\begin{corollary}[正规元的范数]
+\label{cor:II.3.9}
+设 $A$ 是含幺 $\mathcal{C}^*$-代数, $x \in A$ 是正规元. 则 $\rho(x) = \|x\|$.
+\end{corollary}
+
+特别地, 若 $V$ 是希尔伯特空间且 $T \in \End(V)$ 正规, 则 $\|T\|_{\mathrm{op}} = \rho(T)$.
+
+\begin{proof}
+事实上, 由于 $x$ 与 $x^*$ 交换, $A$ 中包含 $x$ 和 $x^*$ 的最小含幺 $\CC$-代数 $A'$ 的闭包是交换 $\mathcal{C}^*$-代数, 且把 $x$ 看作 $A'$ 的元素时 $\rho(x)$ 和 $\|x\|$ 不变.
+\end{proof}
+
+\begin{theorem}[Gelfand-Naimark 定理]
+\label{thm:II.3.10}
+设 $A$ 是交换含幺 $\mathcal{C}^*$-代数. 则 Gelfand 表示 $\Gamma \colon A \to \mathcal{C}(\sigma(A))$ 是等距 $*$-同构.
+\end{theorem}
+
+\begin{proof}
+由命题 \ref{prop:II.3.5} 知道 $\Gamma$ 是 $*$-同态, 由推论 \ref{cor:II.2.11}(iii) 和命题 \ref{prop:II.3.7} 知道它是等距. 特别地, $\Gamma$ 单射. 所以只需证明它满射. 由于 $\Gamma$ 等距且 $A$ 完备, 像 $\Gamma(A)$ 在 $\mathcal{C}(\sigma(A))$ 中闭; 但它由定理 \ref{thm:II.2.9}(ii) 分离点, 且因 $\Gamma(e) = 1$ 包含常值函数, 所以由 Stone-Weierstrass 定理它等于 $\mathcal{C}(\sigma(A))$.
+\end{proof}
+
+容易看出 Gelfand-Naimark 定理蕴含下面的结果 (但我们不需要它).
+
+\begin{corollary}[非幺情形的 Gelfand-Naimark 定理]
+\label{cor:II.3.11}
+设 $A$ 是交换 $\mathcal{C}^*$-代数. 则 Gelfand 表示 $\Gamma \colon A \to \mathcal{C}_0(\sigma(A))$ 是等距 $*$-同构.
+\end{corollary}
+
+% ============ II.4 \index{谱定理}谱定理 (原书 pp.131-133) ============
+\section{谱定理}
+
+\begin{theorem}[谱定理]
+\label{thm:II.4.1}
+设 $V$ 是希尔伯特空间, $T \in \End(V)$ 正规. 记 $A_T$ 为 $\End(V)$ 中由 $T$ 和 $T^*$ 生成的含幺子代数的闭包; 它是交换的, 因为 $T$ 与 $T^*$ 交换.
+则存在等距 $*$-同构 $\Phi \colon \mathcal{C}(\sigma(T)) \to A_T$ 使得, 若 $\iota$ 是 $\sigma(T)$ 到 $\CC$ 的注入, 则 $\Phi(\iota) = T$.
+\end{theorem}
+
+注意我们直接写 $\sigma(T)$ 表示 $\sigma_{\End(V)}(T)$ (这是 $T$ 的通常谱).
+这个定理看起来不太像有限维线性代数的谱定理. 见习题 \ref{ex:II.5.2} 了解两者之间如何过渡.
+
+\begin{proof}
+设 $A = A_T$. 首先我们用 $\sigma_A(T)$ 代替 $\sigma(T)$ 证明结果, 然后证明 $\sigma(T) = \sigma_A(T)$. 注意我们自动有 $\sigma(T) \subset \sigma_A(T)$ (因为若 $\lambda\mathrm{id}_V - T$ 在 $\End(V)$ 中不可逆, 则它当然在子代数中也不可逆).
+考虑 $T$ (看作 $A$ 的元素) 的 Gelfand 变换, 这是连续映射 $\hat{T} \colon \sigma(A) \to \CC$. 让我们证明 $\hat{T}$ 单射. 考虑 $\phi_1, \phi_2 \in \sigma(A)$, 即 $A$ 上的两个乘法泛函, 满足 $\hat{T}(\phi_1) = \hat{T}(\phi_2)$, 即 $\phi_1(T) = \phi_2(T)$. 我们已见 Gelfand 表示是 $*$-同态, 所以
+\[
+\widehat{T^*}(\phi_1) = \overline{\hat{T}(\phi_1)} = \overline{\hat{T}(\phi_2)} = \widehat{T^*}(\phi_2),
+\]
+即 $\phi_1(T^*) = \phi_2(T^*)$. 乘法泛函 $\phi_1$ 和 $\phi_2$ 在 $e$, $T$, $T^*$ 上相等, 且它们连续, 所以它们在整个 $A$ 上相等, 这正是我们想要的.
+现在回忆 $\sigma(A)$ 紧 Hausdorff, 因为 $A$ 含幺. 所以 $\hat{T}$ 诱导从 $\sigma(A)$ 到其在 $\CC$ 中的像的同胚, 由推论 \ref{cor:II.2.11} 其像就是 $\sigma_A(T)$. 所以与 $\hat{T}$ 复合给出等距 $*$-同构 $\Psi \colon \mathcal{C}(\sigma_A(T)) \to \mathcal{C}(\sigma(A))$.
+回忆我们还有 $A$ 的 Gelfand 表示, 它是等距 $*$-同构 $\Gamma \colon A \to \mathcal{C}(\sigma(A))$. 所以令 $\Phi = \Gamma^{-1} \circ \Psi$ 得到等距 $*$-同构 $\Phi \colon \mathcal{C}(\sigma_A(T)) \to A$.
+让我们证明 $\Phi(\iota) = T$. 由于 $\Gamma \colon A \to \mathcal{C}(\sigma(A))$ 是同构, 只需验证 $\hat{T} = \widehat{\Phi(\iota)}$, 即 $\hat{T} = \Psi(\iota)$. 设 $\phi \in \sigma(A)$. 则 $\Psi(\iota)(\phi) = \iota(\hat{T}(\phi)) = \hat{T}(\phi)$, 如所愿.
+最后, 我们证明包含 $\sigma(T) \subset \sigma_A(T)$ 是等式. 设 $\lambda \in \sigma_A(T)$, 假设 $\lambda \notin \sigma(T)$. 设 $\varepsilon > 0$, 选取 $f \in \mathcal{C}(\sigma_A(T))$ 使得 $\|f\|_{\infty} = 1$, $f(\lambda) = 1$, 且若 $|\lambda - \mu| \geq \varepsilon > 0$ 则 $f(\mu) = 0$. 设 $U = \Phi(f) \in A$, 则 $\|U\|_{\mathrm{op}} = \|f\|_{\infty} = 1$. 注意 $\Phi(1) = \mathrm{id}_V$ (其中 $1$ 是取值 $1$ 的常值函数), 因为 $\Phi$ 是代数同构. 所以 $T - \lambda\mathrm{id}_V = \Phi(\iota - \lambda)$, 且 $(T - \lambda\mathrm{id}_V) \circ U = \Phi((\iota - \lambda)f)$. 由于 $\Phi$ 等距, 这蕴含
+\[
+\|(T - \lambda\mathrm{id}_V) \circ U\|_{\mathrm{op}} = \|(\iota - \lambda)f\|_{\infty} \leq \varepsilon
+\]
+(因为 $f$ 被 $1$ 控制, 且若 $|\lambda - \mu| \geq \varepsilon$ 则 $f(\mu) = 0$). 另一方面, 由于 $\lambda \notin \sigma(T)$, 算子 $T - \lambda\mathrm{id}_V$ 在 $\End(V)$ 中可逆, 所以
+\[
+1 = \|f\|_{\infty} = \|U\|_{\mathrm{op}} = \|(T - \lambda\mathrm{id}_V)^{-1}(T - \lambda\mathrm{id}_V)U\|_{\mathrm{op}} \leq \varepsilon\|(T - \lambda\mathrm{id}_V)^{-1}\|_{\mathrm{op}}.
+\]
+这对每个 $\varepsilon > 0$ 都成立, 所以它蕴含 $1 = 0$, 矛盾.
+\end{proof}
+
+\begin{corollary}[谱为单点集的条件]
+\label{cor:II.4.2}
+设 $V$ 是希尔伯特空间, $T \in \End(V)$ 正规. 则下列条件等价:
+\begin{enumerate}
+\item[(i)] $\sigma(T)$ 是单点集;
+\item[(ii)] $T \in \CC\,\mathrm{id}_V$;
+\item[(iii)] $A_T = \CC\,\mathrm{id}_V$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+(i)$\Rightarrow$(ii). 若 $\sigma(T) = \{\lambda\}$, 则 $\iota$ 是 $\mathcal{C}(\sigma(T))$ 的单位元的 $\lambda$ 倍, 所以 $T = \Phi(\iota) = \lambda\mathrm{id}_V$.
+(ii)$\Rightarrow$(iii). 若 $T \in \CC\,\mathrm{id}_V$, 则 $\CC\,\mathrm{id}_V$ 是包含 $T$ 和 $T^*$ 的 $A$ 的闭含幺子代数, 所以它等于 $A_T$.
+(ii)$\Rightarrow$(iii). 假设 $A_T = \CC\,\mathrm{id}_V$. 设 $\lambda, \mu \in \sigma(T)$. 若 $\lambda \neq \mu$, 则可以找到 $f_1, f_2 \in \mathcal{C}(\sigma(T))$ 使得 $f_1(\lambda) = 1$, $f_2(\mu) = 1$ 且 $f_1f_2 = 0$. 但此时 $\Phi(f_1)\Phi(f_2) = 0$ 且 $\Phi(f_1), \Phi(f_2) \neq 0$, 这与 $\CC$ 是整环矛盾.
+\end{proof}
+
+\begin{definition}[\index{中心化子}中心化子]
+\label{def:II.4.3}
+若 $A$ 是 $\CC$-代数, $E \subset A$ 是子集, 令 $Z_A(E) = \{x \in A \mid \forall y \in E,\, xy = yx\}$. 这称为 $E$ 在 $A$ 中的中心化子 (centralizer).
+\end{definition}
+
+容易看出中心化子总是 $A$ 的子代数.
+
+\begin{corollary}[不可约作用下的中心化子]
+\label{cor:II.4.4}
+设 $V$ 是希尔伯特空间, $E$ 是 $\End(V)$ 的满足 $E^* = E$ 的子集. 假设 $V$ 的被 $E$ 的所有元素稳定的唯一闭子空间是 $\{0\}$ 和 $V$. 则 $Z_{\End(V)}(E) = \CC\,\mathrm{id}_V$.
+\end{corollary}
+
+\begin{proof}
+设 $A = Z_{\End(V)}(E)$. 它是 $\End(V)$ 的闭子代数. 我们证明 $A$ 对 $*$ 稳定: 若 $T \in A$, 则对每个 $U \in E$, 有 $U^* \in E$, 所以
+\[
+T^* \circ U = (U^* \circ T)^* = (T \circ U^*)^* = U \circ T^*,
+\]
+所以 $T^* \in A$. 特别地, 子代数 $A$ 由其正规元生成; 事实上, 对每个 $T \in A$, $T = \frac{1}{2}((T + T^*) + (T - T^*))$, 且 $T + T^*$ 和 $T - T^*$ 都正规.
+
+回忆我们要证明 $A$ 的每个元素都在 $\CC\,\mathrm{id}_V$ 中; 由刚才证明的, 只需对 $A$ 的正规元证明. 所以设 $T \in A$ 正规. 由推论 \ref{cor:II.4.2}, 只需证明 $T$ 的谱 $\sigma(T)$ 是单点集. 由谱定理 (定理 \ref{thm:II.4.1}), 有等距 $*$-同构 $\Phi \colon \mathcal{C}(\sigma(T)) \to A_T$, 其中 $A_T$ 是 $\End(V)$ 中由 $T$ 和 $T^*$ 生成的含幺子代数的闭包, 且 $\Phi$ 把嵌入 $\iota \colon \sigma(T) \hookrightarrow \CC$ 送到 $T$. 注意 $A_T \subset A$. 现在假设 $\sigma(T)$ 不是单点集. 则可以找到两个非零函数 $f_1, f_2 \in \mathcal{C}(\sigma(T))$ 使得 $f_1f_2 = 0$, 且 $\Phi(f_1), \Phi(f_2)$ 是满足 $\Phi(f_1)\Phi(f_2) = 0$ 的 $\End_G(V)$ 的非零元素. 设 $W = \Im(\Phi(f_2))$; 则 $W \neq \{0\}$, 因为 $\Phi(f_2)$ 非零. 又, 由于 $\Phi(f_2)$ 与 $E$ 的每个元素交换, 子空间 $W$ 被 $E$ 的所有元素稳定, 所以由假设 $W = V$. 但又有 $\Phi(f_1)(W) = 0$, 因为 $\Phi(f_1)\Phi(f_2) = 0$, 所以 $\Phi(f_1) = 0$, 这与 $f_1, f_2$ 的选取矛盾. 所以 $\sigma(T)$ 是单点集, 我们完成了.
+\end{proof}
+
+% ============ II.5 习题 (原书 pp.133-144) ============
+\section{习题}
+
+\begin{exercise}[$\End(V)$ 的谱为空]
+\label{ex:II.5.1}
+\begin{enumerate}
+\item[(a)] 设 $V$ 是有限维 $\CC$-向量空间且 $\dim_{\CC}(V) \geq 2$. 证明 $\sigma(\End(V)) = \emptyset$.
+\item[(b)] 设 $V$ 是无穷维希尔伯特空间. 证明 $\sigma(\End(V)) = \emptyset$.
+\end{enumerate}
+(提示: 看幂零自同态.)
+\end{exercise}
+
+\begin{solution}
+(a). 可以假设 $V = \CC^n$, 所以 $\End(V) = M_n(\CC)$. 设 $\phi \colon M_n(\CC) \to \CC$ 是乘法线性泛函. 我们要证明 $\phi = 0$. 设 $(E_{ij})_{1 \leq i,j \leq n}$ 是 $M_n(\CC)$ 的典范基 (即 $E_{ij}$ 是除 $(i,j)$ 处为 $1$ 外全为零的矩阵). 则 $E_{ij}E_{kl}$ 在 $j \neq k$ 时等于 $0$, 且 $E_{ij}E_{jl} = E_{il}$. 特别地, 若 $i \neq j$, 则 $E_{ij}^2 = 0$, 所以 $0 = \phi(E_{ij}^2) = \phi(E_{ij})^2$, 且 $\phi(E_{ij}) = 0$. 又, 对每个 $i \in \{1, \ldots, n\}$, 若选取满足 $j \neq i$ 的 $j$ (因为 $n \geq 2$ 这可能), 则 $E_{ii} = E_{ij}E_{ji}$, 所以 $\phi(E_{ii}) = \phi(E_{ij})\phi(E_{ji}) = 0$. 总之, 我们证明了 $\phi$ 在 $M_n(\CC)$ 的基上为零, 所以 $\phi = 0$.
+
+(b). 设 $\phi \colon \End(V) \to \CC$ 是乘法线性泛函. 同 (a), 关键是注意若 $T \in \End(V)$ 满足 $T^2 = 0$, 则 $\phi(T)^2 = 0$, 所以 $\phi(T) = 0$.
+现在选取两个闭子空间 $V_1$ 和 $V_2$ 使得 $V = V_1 \oplus V_2$ 且 $V_1$ 与 $V_2$ 同构. (因为 $V$ 无穷维这可能. 例如, 选取 $V$ 的 Hilbert 基 $(e_i)_{i \in I}$. 由于 $I$ 无穷, 可以找到 $I_1, I_2 \subset I$ 使得 $I = I_1 \sqcup I_2$ 且 $I_1$ 与 $I_2$ 之间存在双射. 对 $r = 1, 2$ 取 $V_r = \bigoplus_{i \in I_r}\CC e_i$.) 选取同构 $U_1 \colon V_1 \to V_2$ 和 $U_2 \colon V_2 \to V_1$. 设 $T_1 \in \End(V)$ 由 $T_1(v + w) = U_1(v)$ (若 $v \in V_1$, $w \in V_2$) 定义, $T_2 \in \End(V)$ 由 $T_2(v + w) = U_2(w)$ (若 $v \in V_1$, $w \in V_2$) 定义. 则 $T_1^2 = T_2^2 = 0$, 所以 $\phi(T_1) = \phi(T_2) = 0$, 且也有 $\phi(T_1 + T_2) = 0$. 但 $T := T_1 + T_2$ 是 $V$ 的自同构, 所以对每个 $T' \in \End(V)$, $T' = T(T^{-1}T')$, 从而 $\phi(T') = \phi(T)\phi(T^{-1}T') = 0$.
+\end{solution}
+
+\begin{exercise}[有限维谱定理]
+\label{ex:II.5.2}
+设 $V$ 是有限维希尔伯特空间. 本题的目标是把讲义中的谱定理 (定理 \ref{thm:II.4.1}) 与通常的有限维谱定理 (它说 $V$ 的正规自同态在标准正交基下可对角化) 联系起来.
+回忆若 $R$ 是交换环, 若存在整数 $n \geq 1$ 使得 $x^n = 0$ 则称 $x \in R$ 幂零 (nilpotent); 若 $R$ 的唯一幂零元是 $0$, 则称 $R$ 约化 (reduced).
+\begin{enumerate}
+\item[(a)] 证明通常的有限维谱定理 (如上所述) 蕴含 $V$ 的定理 \ref{thm:II.4.1}.
+\item[(b)] 设 $T \in \End(V)$, $A$ 是 $\End(V)$ 中由 $T$ 生成的含幺子代数 (即 $T$ 的多项式的空间). 证明 $T$ 可对角化当且仅当 $A$ 约化.
+\item[(c)] 设 $A$ 是 $\End(V)$ 的交换含幺子代数. 若 $A$ 约化, 证明存在 $V$ 的子空间 $V_1, \ldots, V_r$ (除排序外唯一确定) 使得 $V = \bigoplus_{i=1}^r V_i$, 且
+\[
+A = \{T \in \End(V) \mid \forall i \in \{1, \ldots, r\},\, T(V_i) \subset V_i \text{ 且 } T|_{V_i} \in \CC \cdot \mathrm{id}_{V_i}\}.
+\]
+\item[(d)] 设 $A$ 如 (c). 证明 $A$ 对映射 $T \longmapsto T^*$ 稳定当且仅当 $V_i$ 两两正交.
+\item[(e)] 证明定理 \ref{thm:II.4.1} 蕴含通常的有限维谱定理 (如上所述).
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 设 $T \in \End(V)$ 是正规自同态. 由有限维谱定理, 可以找到 $V$ 的标准正交基 $(e_1, \ldots, e_n)$ 和 $\lambda_1, \ldots, \lambda_n \in \CC$ 使得对每个 $i \in \{1, \ldots, n\}$ 有 $T(e_i) = \lambda_ie_i$. 由于基标准正交, 对每个 $i \in \{1, \ldots, n\}$ 也有 $T^*(e_i) = \bar{\lambda}_ie_i$. 重新排列 $e_i$ 后, 还可以假设存在 $1 \leq n_0 \leq \cdots \leq n_r = n+1$ 使得: 若存在 $s \in \{0, \ldots, r-1\}$ 满足 $n_s \leq i, j \leq n_{s+1} - 1$ 则 $\lambda_i = \lambda_j$, 否则 $\lambda_i \neq \lambda_j$.
+特别地, 可以假设 $V = \CC^n$, 且 $T$ 是对角线元素为 $\lambda_1, \ldots, \lambda_n$ 的对角矩阵, 对 $\lambda_i$ 的条件同上. 我断言 $A_T$ 是 $M_n(\CC)$ 中满足如下条件的对角矩阵 $x_1, \ldots, x_n$ 的子代数: 若存在 $s \in \{0, \ldots, r-1\}$ 满足 $n_s \leq i, j \leq n_{s+1} - 1$ 则 $x_i = x_j$. 首先, 这确实定义 $M_n(\CC)$ 的子代数. 也显然 $A_T$ 的每个矩阵都具有此形式, 因为 $A_T$ (作为代数) 由 $I_n$, $T$ 和 $T^*$ 生成, 且这三个矩阵都满足定义 $A_T$ 的条件. 最后, 设 $X \in A_T$, $x_1, \ldots, x_n$ 是它的对角线元素. 由 Lagrange 插值, 存在多项式 $P \in \CC[t]$ 使得对 $s \in \{0, \ldots, r-1\}$ 有 $P(\lambda_{n_s}) = x_{n_s}$, 然后 $P(T)$ 是对角线元素为 $x_1, \ldots, x_n$ 的对角矩阵, 即 $X$.
+
+(b). 设 $P \in \CC[t]$ 是 $T$ 的最小多项式. 则由最小多项式的定义, 映射 $\CC[t] \to M_n(\CC)$, $f(t) \longmapsto f(T)$ 是以 $A$ 为像、以 $P$ 生成的理想为核的 $\CC$-代数同态. 所以 $A \simeq \CC[t]/(P)$. 若把 $P(t)$ 写成 $P(t) = \prod_{i=1}^r(t - a_i)^{n_i}$ (其中 $a_1, \ldots, a_r \in \CC$ 两两不同, $n_1, \ldots, n_r \geq 1$), 则由中国剩余定理 $A \simeq \prod_{i=1}^n \CC[t]/(t - a_i)^{n_i}$. 所以 $A$ 约化当且仅当所有 $n_i$ 都等于 $1$, 即当且仅当 $P$ 只有单根, 这等价于 $T$ 可对角化.
+
+(c). 若 $T \in A$, 则 $\End(V)$ 中由 $T$ 生成的含幺子代数包含于 $A$, 特别地它约化; 由 (b), 这蕴含 $T$ 可对角化. 由于 $A$ 由有限多个元素生成 (因为它是有限维 $\CC$-向量空间), 且这些元素可对角化且两两交换, 可以找到基 $(e_1, \ldots, e_n)$ 使得 $A$ 的每个元素在其中对角. 对 $i \in \{1, \ldots, n\}$, 定义 $\phi_i \colon A \to \CC$ 为 $T(e_i) = \phi_i(T)e_i$ (对 $T \in A$). 则 $\phi_1, \ldots, \phi_n$ 是 $A$ 上的乘法泛函. 重新排列 $e_i$ 后, 可以假设存在 $1 \leq n_0 \leq \cdots \leq n_r = n+1$ 使得: 若存在 $s \in \{0, \ldots, r-1\}$ 满足 $n_s \leq i, j \leq n_{s+1} - 1$ 则 $\phi_i = \phi_j$, 否则 $\phi_i \neq \phi_j$. 注意所有 $\phi_i$ 非零 (因为它们把 $I_n$ 送到 $1$), 所以它们满射. 我断言 $\phi_{n_0}, \phi_{n_1}, \ldots, \phi_{n_{r-1}}$ 线性无关 (作为函数 $A \to \CC$). 这是经典结果, 但让我们快速证明. 假设不真, 选取 $\phi_{n_i}$ 的非平凡线性相关关系 $\sum_{i=0}^{r-1}a_i\phi_{n_i} = 0$ ($a_i \in \CC$), 使得非零 $a_i$ 的个数最小. 至少有 $2$ 个非零 $a_i$, 所以重新排序后可以假设 $a_0, a_1 \neq 0$. 选取 $x_0 \in A$ 使得 $\phi_{n_1}(x_0) \neq \phi_{n_1}(x_0)$. 则对每个 $x \in A$,
+\[
+0 = \phi_{n_0}(x_0)\sum_{i=0}^{r-1}a_i\phi_{n_i}(x) - \sum_{i=0}^{r-1}a_i\phi_{n_i}(x_0x) = \sum_{i=1}^{r-1}a_i(\phi_{n_0}(x_0) - \phi_{n_i}(x_0))\phi_{n_i}(x).
+\]
+所以 $\sum_{i=1}^{r-1}a_i(\phi_{n_0}(x_0) - \phi_{n_i}(x_0))\phi_{n_i} = 0$, 其中 $a_1(\phi_{n_1}(x_0) - \phi_{n_1}(x_0)) \neq 0$. 所以我们有 $\phi_{n_i}$ 的另一个非平凡线性相关关系, 且它的非零系数比第一个少, 矛盾.
+既然知道 $\phi_{n_0}, \phi_{n_1}, \ldots, \phi_{n_{r-1}}$ 线性无关, 也知道 $(\phi_{n_0}, \phi_{n_1}, \ldots, \phi_{n_{r-1}}) \colon A \to \CC^r$ 满射. 对 $i \in \{1, \ldots, r\}$, 设 $V_i = \operatorname{Span}(e_{n_{i-1}}, \ldots, e_{-1+n_i}) \subset V$. 则若 $T \in A$, $T$ 在每个 $V_i$ 上按恒等映射的倍数作用, 且 $(\phi_{n_0}, \phi_{n_1}, \ldots, \phi_{n_{r-1}}) \colon A \to \CC^r$ 的满射性蕴含其逆也真. (若 $(a_1, \ldots, a_r) \in \CC^r$, 选取 $T \in A$ 使得对 $0 \leq i \leq r-1$ 有 $\phi_{n_i} = a_{i+1}$. 则 $T$ 在每个 $V_i$ 上按 $\phi_{n_{i+1}}(T) = a_i$ 倍作用.)
+最后, 让我们证明 $V_1, \ldots, V_r$ 唯一确定. 设 $V = V'_1 \oplus \cdots \oplus V'_s$ 是满足同样性质的另一个分解. 选取两两不同的 $a_1, \ldots, a_r \in \CC$, 设 $T \in A$ 满足对每个 $i$ 有 $T|_{V_i} = a_i\mathrm{id}_{V_i}$. 则 $V_1, \ldots, V_r$ 是 $T$ 的特征空间, 且 $T$ 在每个 $V'_j$ 上按恒等映射的倍数作用, 所以必存在 $\{1, \ldots, r\}$ 的分拆 $I_1, \ldots, I_s$ 使得对每个 $j \in \{1, \ldots, s\}$ 有 $V'_j = \bigoplus_{i \in I_j}V_i$. 但 $V_i$ 与 $V'_j$ 的角色对称, 所以交换 $V_i$ 与 $V'_j$ 后有类似的性质. 这蕴含 $r = s$ 且 $V'_1, \ldots, V'_r$ 除排序外等于 $V_1, \ldots, V_r$.
+
+(d). 对 $i \in \{1, \ldots, r\}$, 定义线性自同态 $\pi_i \colon V \to V$ 为: 若 $v_j \in V_j$ ($j \in \{1, \ldots, r\}$), 则 $\pi_i(v_1 \cdots + v_r) = v_i$. 则 $\Im(\pi_i) = V_i$, $\Ker(\pi_i) = \bigoplus_{j \neq i}V_j$, 且 $\pi_1 + \cdots + \pi_r = \mathrm{id}_V$. 注意 $A$ 正好是 $\End(V)$ 的子代数 $\{\sum_{i=1}^r\lambda_i\pi_i \mid \lambda_1, \ldots, \lambda_r \in \CC\}$.
+若 $V_1, \ldots, V_r$ 两两正交, 则 $\pi_1, \ldots, \pi_r$ 是正交投影, 所以它们自伴, 从而 $A$ 对 $T \longmapsto T^*$ 稳定.
+反之, 假设 $A$ 对 $T \longmapsto T^*$ 稳定. 若 $v \in V$, $w \in V_1^{\perp}$, 则
+\[
+0 = \langle \pi_1(v), w \rangle = \langle v, \pi_1^*(w) \rangle.
+\]
+这蕴含 $V_1^{\perp} \subset \Ker(\pi_1^*)$. 由于 $\operatorname{rk}(\pi_1^*) = \operatorname{rk}(\pi_1) = \dim(V_1)$, 实际上有 $\Ker(\pi_1^*) = V_1^{\perp}$. 但 $\pi_1^* \in A$, 所以 $\pi_1^*$ 的每个特征空间都是 $V_i$ 的和, 因此存在 $I \subset \{1, \ldots, r\}$ 使得 $\Ker(\pi_1^*) = \bigoplus_{i \in I}V_i$. 由于 $V_1^{\perp} \cap V_1 = \{0\}$, 集合 $I$ 不能包含 $1$. 但 $\Ker(\pi_1^*)$ 的维数只能是 $\dim(V) - n_1$, 所以唯一可能是 $I = \{2, \ldots, r\}$. 最后, 我们证明了
+\[
+V_1^{\perp} = \Ker(\pi_1^*) = V_2 \oplus \cdots \oplus V_r.
+\]
+对其他 $\pi_i$ 重复此过程, 看到对每个 $i \in \{1, \ldots, r\}$,
+\[
+V_i^{\perp} = \bigoplus_{j \neq i}V_j.
+\]
+
+(e). 设 $T \in \End(V)$, 设 $\Phi \colon \mathcal{C}(\sigma(T)) \to A_T$ 如定理 \ref{thm:II.4.1}. 特别地, $A_T$ 是 $\End(V)$ 的交换约化子代数 (因为 $\mathcal{C}(\sigma(T))$ 约化), 且它 (由定义) 对 $*$ 稳定, 所以由 (c) 和 (d), 有 $V$ 分解成两两正交子空间的直和 $V = V_1 \oplus \cdots \oplus V_r$, 使得 $A_T$ 的每个元素保持此分解并在每个 $V_i$ 上按纯量作用. 若为每个 $V_i$ 选取标准正交基并把它们合在一起, 将得到 $V$ 的标准正交基, 其中 $A_T$ 的每个元素对角. 现在只需回忆 $T \in A_T$.
+\end{solution}
+
+\begin{exercise}[$\mathcal{C}(X)$ 的谱]
+\label{ex:II.5.3}
+本题旨在不使用 II.3 和 II.4 节的任何结果来解.\footnote{与 Nullstellensatz 比较.}
+设 $X$ 是局部紧 Hausdorff 拓扑空间. 设 $\tilde{X}$ 是 $X$ 的 Alexandroff 紧化. 这意味着 $\tilde{X} = X \cup \{\infty\}$, 且 $\tilde{X}$ 的开集是 $X$ 的开子集和形如 $(X - K) \cup \{\infty\}$ 的集合, 其中 $K$ 是 $X$ 的紧子集.
+\begin{enumerate}
+\item[(a)] 证明 $\tilde{X}$ 是紧 Hausdorff 拓扑空间, $X$ 在 $\tilde{X}$ 中开, 且 $X$ 在 $\tilde{X}$ 中稠密当且仅当 $X$ 不紧.
+\item[(b)] 证明 $\mathcal{C}(\tilde{X})$ 同构于给 $\mathcal{C}_0(X)$ 添加单位元得到的 Banach $*$-代数. (别忘了比较拓扑.)
+\item[(c)] 若 $X$ 紧, 证明 $\mathcal{C}(X)$ 的每个真理想都包含于某个理想 $\mathfrak{m}_x = \{f \in \mathcal{C}(X) \mid f(x) = 0\}$ ($x \in X$).
+\item[(d)] 一般地, 证明映射 $X \to \sigma(\mathcal{C}_0(X))$, $x \longmapsto (\phi_x \colon f \longmapsto f(x))$ 是同胚.
+\end{enumerate}
+设 $A$ 是交换 Banach 代数. 若 $I$ 是 $A$ 的理想, 令
+\[
+V(I) = \{x \in \sigma(A) \mid \forall f \in A,\, \hat{f}(x) = 0\}.
+\]
+若 $N$ 是 $\sigma(A)$ 的子集, 令
+\[
+I(N) = \{f \in A \mid \forall x \in N,\, \hat{f}(x) = 0\}.
+\]
+\begin{enumerate}
+\item[(a)] 假设 $X$ 紧. 证明对 $\mathcal{C}(X)$ 的每个闭理想 $I$ 和 $\sigma(\mathcal{C}(X)) \simeq X$ 的每个闭子集 $N$,
+\[
+I(V(I)) = I \quad \text{且} \quad V(I(N)) = N.
+\]
+\end{enumerate}
+注意. 不假设 $X$ 紧时结果仍成立 (处处用 $\mathcal{C}_0(X)$).
+
+\begin{solution}
+(a). 首先证明定义确实给出 $\tilde{X}$ 上的拓扑. 设 $(U_i)_{i \in I}$ 是 $\tilde{X}$ 的开子集族. 则可以把 $I$ 写成 $I = I' \sqcup I''$, 其中对 $i \in I'$, $U_i \subset X$ 开; 对 $i \in I''$, $U_i = X - K_i$ 且 $K_i$ 紧. 有
+\[
+\bigcup_{i \in I}U_i = \Bigl(\bigcup_{i \in I'}U_i\Bigr) \cup \Bigl(X - \bigcap_{i \in I''}K_i\Bigr).
+\]
+若 $I''$ 空, 这是 $X$ 的开子集, 从而是 $\tilde{X}$ 的开子集. 否则, 这是 $\tilde{X}$ 的紧子集 $\bigcap_{i \in I''}K_i - \bigcup_{i \in I'}U_i$ 的余集, 所以它又是 $\tilde{X}$ 的开子集. 另一方面,
+\[
+\bigcap_{i \in I}U_i = \Bigl(\bigcap_{i \in I'}U_i\Bigr) \cap \Bigl(X - \bigcup_{i \in I''}K_i\Bigr).
+\]
+假设 $I$ 有限. 则若 $I'' = \emptyset$, 集合 $\bigcap_{i \in I}U_i$ 是 $X$ 的开子集 $\bigcap_{i \in I'}U_i$, 从而是 $\tilde{X}$ 的开子集. 否则, 它是 $\tilde{X}$ 的紧子集 $\bigcup_{i \in I''}K_i - \bigcap_{i \in I'}U_i$ 的余集, 所以它又是 $\tilde{X}$ 的开子集.
+让我们证明 $\tilde{X}$ Hausdorff. 设 $x, y \in \tilde{X}$ 满足 $x \neq y$. 我们要找到 $x$ 和 $y$ 的不相交开邻域. 若 $x, y \in X$, 则存在 $X$ 的开子集 $U$ 和 $V$ 使得 $x \in U$, $y \in V$, $U \cap V = \emptyset$. 这些集合在 $\tilde{X}$ 中仍开, 所以我们完成了. 若 $x$ 或 $y$ 是 $\infty$, 可以假设 $x$ 是. 由于 $X$ 局部紧, 可以找到 $X$ 的紧子集 $K$ 和 $X$ 的开子集 $V$ 使得 $y \in V \subset K$. 则 $U := \tilde{X} - K$ 是包含 $x = \infty$ 的 $\tilde{X}$ 的开子集, 且 $U \cap V = \emptyset$.
+让我们证明 $\tilde{X}$ 紧. 设 $(U_i)_{i \in I}$ 是 $\tilde{X}$ 的开子集族, 满足 $\tilde{X} = \bigcup_{i \in I}U_i$. 设 $i_0 \in I$ 使得 $\infty \in U_{i_0}$, 记 $K = X - U_{i_0}$. 这是 $X$ 的紧子集, 且被开子集 $U_i \cap X$ ($i \in I - \{i_0\}$) 覆盖. 所以存在 $I - \{i_0\}$ 的有限子集 $J$ 使得 $K \subset \bigcup_{i \in J}U_i$, 然后 $\tilde{X} = \bigcup_{i \in J \cup \{i_0\}}U_i$.
+集合 $X$ 由 $\tilde{X}$ 的拓扑定义在 $\tilde{X}$ 中开.
+假设 $X$ 不紧. 则若 $U$ 是 $\infty$ 在 $\tilde{X}$ 中的开邻域, $\tilde{X}$ 的紧子集 $X - U$ 不能等于 $X$, 这意味着 $U \cap X \neq \emptyset$. 所以 $\infty$ 在 $X$ 于 $\tilde{X}$ 中的闭包里. 反之, 假设 $X$ 紧. 则 $\{\infty\} = \tilde{X} - X$ 是 $\tilde{X}$ 的开子集, 所以 $\infty$ 是 $\tilde{X}$ 的孤立点.
+
+(b). 设 $A$ 是给 $\mathcal{C}_0(X)$ 添加单位元得到的 Banach $*$-代数. 有 $A = \mathcal{C}_0(X) \oplus \CC e$, 其中 $\|f + \lambda e\| = \|f\|_{\infty} + |\lambda|$, $(f + \lambda e)^* = \bar{f} + \bar{\lambda}e$ (对 $f \in \mathcal{C}_0(X)$, $\lambda \in \CC$).
+注意可以把每个 $f \in \mathcal{C}_0(X)$ 通过令 $f(\infty) = 0$ 延拓成 $\tilde{X}$ 上的连续函数. ($f$ 在无穷远处为零这一条件正好说明延拓后的函数连续, 由 $\tilde{X}$ 上拓扑的定义.) 这给出单射 $\CC$-代数映射 $\mathcal{C}_0(X) \to \mathcal{C}(\tilde{X})$. 所以得到映射 $\alpha \colon A \to \mathcal{C}(\tilde{X})$, $f + \lambda e \longmapsto \tilde{f} + \lambda$, 其中第二个``$\lambda$''是 $\tilde{X}$ 上的常值函数. 由 $A$ 上乘法的定义, 这个 $\alpha$ 是 $\CC$-代数的同态; 由 $A$ 上 $*$ 的定义, 它是 $*$-同态. 又, $\alpha$ 有界, 因为若 $f \in \mathcal{C}_0(X)$, $\lambda \in \CC$, 则
+\[
+\|\tilde{f} + \lambda\|_{\infty} \leq \|f\|_{\infty} + |\lambda| = \|f + \lambda e\|.
+\]
+最后, 注意 $\alpha$ 满射, 因为它有逆, 把 $f \in \mathcal{C}(\tilde{X})$ 送到 $(f|_X - \lambda) + \lambda e$. 由开映射定理 (也称为 Banach-Schauder 定理), $\alpha$ 的逆也有界, 所以 $\alpha$ 是同胚.
+
+(c). 设 $I$ 是 $\mathcal{C}(X)$ 的理想, 假设 $I$ 不包含于任何 $\mathfrak{m}_x$. 则对每个 $x \in X$, 可以找到 $f_x \in I$ 使得 $f_x(x) \neq 0$; 由于 $f_x$ 连续, 还可以找到 $x$ 的开邻域 $U_x$ 使得对每个 $y \in U_x$ 有 $f_x(y) \neq 0$. 有 $X = \bigcup_{x \in X}U_x$, 且 $X$ 紧, 所以存在 $x_1, \ldots, x_n \in X$ 使得 $X = \bigcup_{i=1}^n U_{x_i}$. 设 $f = \sum_{i=1}^n|f_{x_i}|^2 = \sum_{i=1}^n f_{x_i}\overline{f_{x_i}}$. 则 $f \in I$ (因为 $I$ 是理想), 且 $f$ 在 $X$ 上不消失; 事实上, 若 $x \in X$, 可以找到满足 $x \in U_{x_i}$ 的 $i \in \{1, \ldots, n\}$, 然后 $f(x) \geq |f_{x_i}(x)|^2 > 0$. 所以函数 $g \colon x \longmapsto f(x)^{-1}$ 存在且在 $X$ 上连续, 且有 $gf = 1$, 这蕴含 $1 \in I$, 从而 $I = \mathcal{C}(X)$.
+
+(d). 记此映射为 $\alpha$. 首先证明 $\alpha$ 单射. 若 $x, y \in X$ 满足 $x \neq y$, 则由 Urysohn 引理存在 $f \in \mathcal{C}_0(X)$ 使得 $f(x) \neq f(y)$, 所以 $\phi_x \neq \phi_y$.
+让我们证明 $\alpha$ 满射. 设 $\phi \colon \mathcal{C}_0(X) \to \CC$ 是乘法泛函. 可以把它延拓成 $\mathcal{C}_0(X)^{\tilde{e}}$ 上的乘法泛函 $\tilde{\phi}$, 且我们在 (b) 中看到 $\mathcal{C}_0(X)^{\tilde{e}}$ 同构于 $\mathcal{C}(\tilde{X})$. 设 $I = \Ker(\tilde{\phi})$. 这是 $\mathcal{C}(\tilde{X})$ 的极大理想, 所以由 (c), 存在 $x \in \tilde{X}$ 使得 $I \subset \mathfrak{m}_x$, 且由于 $I$ 极大必有 $I = \mathfrak{m}_x$. 又注意 (b) 中构造的同构 $\mathcal{C}_0(X)^{\tilde{e}} \simeq \mathcal{C}(\tilde{X})$ 把 $\mathcal{C}_0(X)$ 等同于 $\mathfrak{m}_{\infty}$. 所以, 由于 $\phi$ 在 $\mathcal{C}_0(X)$ 上不为零, 不能有 $x = \infty$, 故 $x \in X$, 且有
+\[
+\Ker(\phi) = \{f \in \mathcal{C}_0(X) \mid f(x) = 0\} = \Ker(\phi_x).
+\]
+像定理 \ref{thm:II.2.10} 的证明那样, 这容易蕴含 $\phi = \phi_x$.
+映射 $\alpha$ 由 $\sigma(\mathcal{C}_0(X))$ 上拓扑的定义连续. 若 $X$ 紧, 这蕴含 $\alpha$ 是同胚. 一般地, $\tilde{X}$ 的 Alexandroff 紧化的 $\alpha$ 版本因 $\tilde{X}$ 紧而是同胚, 且它到 $X$ 的限制是 $\alpha$ (若像 (b) 那样把 $\mathcal{C}_0(X)$ 等同于 $\mathcal{C}(\tilde{X})$ 的子代数), 所以 $\alpha$ 开, 我们完成了.
+
+(e). 注意若 $N$ 是 $X$ 的闭子集, 则 $I(N) = \bigcap_{x \in N}\mathfrak{m}_x$, 所以 $I(N)$ 是 $\mathcal{C}(X)$ 的理想.
+设 $I$ 是 $\mathcal{C}(X)$ 的闭理想, 设 $N = N(I)$. 对每个 $x \in N$ 和每个 $f \in I$, 由 $N(I)$ 的定义有 $f(x) = 0$. 所以 $I \subset \bigcap_{x \in N}\mathfrak{m}_x = I(N)$. 反之, 设 $f \in \bigcap_{x \in N}\mathfrak{m}_x$; 我们要证明 $f \in I$. 由假设, 对每个 $x \in N$ 有 $f(x) = 0$, 所以 $\operatorname{supp}(f) \cap N = \emptyset$. 对每个 $y \in \operatorname{supp}(f)$, 选取满足 $f_y(y) \neq 0$ 的 $f_y \in I$; 由于 $f_y$ 连续, 可以找到 $X$ 的开子集 $U_y \ni y$ 使得对每个 $z \in U_y$ 有 $f_y(z) \neq 0$. 有 $\operatorname{supp}(f) \subset \bigcup_{y \in \operatorname{supp}(f)}U_y$, 且 $\operatorname{supp}(f)$ 紧, 所以可以找到 $y_1, \ldots, y_n \in \operatorname{supp}(f)$ 使得 $\operatorname{supp}(f) \subset \bigcup_{i=1}^n U_{y_i}$. 设 $g = \sum_{i=1}^n|f_{y_i}|^2$. 则 $g \in I$, 且对每个 $y \in \operatorname{supp}(f)$ 有 $g(y) > 0$. 定义函数 $h \colon X \to \CC$:
+\[
+h(x) = \begin{cases} f(x)g(x)^{-1} & \text{若 } x \in \operatorname{supp}(f), \\ 0 & \text{否则}. \end{cases}
+\]
+设 $U = \{x \in X \mid g(x) \neq 0\}$, $V = X - \operatorname{supp}(f)$. 则 $U$ 和 $V$ 是 $X$ 的开子集且 $X = U \cup V$. 在 $U$ 上, 函数 $h$ 等于 $fg^{-1}$, 所以连续; 在 $V$ 上, 它等于 $0$, 所以也连续. 所以 $h \in \mathcal{C}(X)$, 且由 $h$ 的定义有 $f = gh$. 由于 $g \in I$, 这证明 $f \in I$, 如所愿.
+现在设 $N$ 是 $X$ 的闭子集, $I = I(N)$. 对每个 $x \in N$ 和每个 $f \in I$, 由 $I(N)$ 的定义有 $f(x) = 0$, 所以 $N \subset V(I)$. 反之, 若 $x \notin N$, 则由 Urysohn 引理可以找到 $f \in \mathcal{C}(X)$ 使得 $f|_N = 0$ 且 $f(x) \neq 0$. 则由 $I(N)$ 的定义 $f \in I$, 所以 $x \notin V(I)$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[$\ell^1(\Z)$ 的谱]
+\label{ex:II.5.4}
+考虑 Banach $*$-代数 $\ell^1(\Z)$ (即离散群 $G = \Z$ 的 $L^1(G)$, 带卷积乘积和课堂上定义的对合). 把 $\ell^1(\Z)$ 的元素写成 $\CC^{\Z}$ 中的序列 $a = (a_n)_{n \in \Z}$.
+\begin{enumerate}
+\item[(a)] 证明 $\ell^1(\Z)$ 不是 $\mathcal{C}^*$-代数.
+\item[(b)] 证明存在同胚 $\sigma(\ell^1(\Z)) \xrightarrow{\sim} S^1$ 使得 $a = (a_n)_{n \in \Z}$ 的 Gelfand 变换是函数 $S^1 \to \CC$, $e^{i\theta} \longmapsto \sum_{n=-\infty}^{+\infty}a_ne^{in\theta}$.\footnote{这意味着 Gelfand 变换是 $*$-同态, 即 Banach $*$-代数 $L^1(G)$ 对称, 即使它不是 $\mathcal{C}^*$-代数.}
+\item[(c)] 更一般地, 若 $G$ 是交换局部紧群, 证明映射 $\widehat{G} \to \sigma(L^1(G))$, $\chi \longmapsto \bigl(f \longmapsto \int_G f(x)\chi(x)\,\dd x\bigr)$ 是同胚. (提示: $L^1(G)$ 的对偶是什么?)
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 设 $a = (a_n)_{n \in \Z}$. 则 $a^* = (a_{-n})_{n \in \Z}$ (回忆 $\Z$ 幺模, 因为它交换 (或因为离散)). 设 $b = a^* * a$. 则对每个 $n \in \Z$,
+\[
+b_n = \sum_{m \in \Z}a^*_ma_{n-m} = \sum_{m \in \Z}\overline{a_{-m}}a_{n-m}.
+\]
+取由 $a_0 = i$, $a_1 = 1$, $a_2 = i$, 且对 $n \in \Z - \{0, 1, 2\}$ 有 $a_n = 0$ 定义的 $a$. 则 $a^*_0 = -i$, $a^*_{-1} = 1$, $a^*_2 = -i$, 且对 $n \in \Z - \{-2, -1, 0\}$ 有 $a^*_n = 0$. 所以对 $n \notin \{-2, -1, 0, 1, 2\}$ 有 $b_n = 0$, 且
+\[
+b_{-2} = a^*_{-2}a_0 = 1,
+\]
+\[
+b_{-1} = a^*_{-1}a_0 + a^*_{-2}a_1 = i - i = 0,
+\]
+\[
+b_0 = a^*_{-2}a_2 + a^*_{-1}a_1 + a^*_0a_0 = 3,
+\]
+\[
+b_1 = a^*_0a_1 + a^*_{-1}a_2 = -i + i = 0,
+\]
+且
+\[
+b_2 = a^*_0a_2 = 1.
+\]
+所以 $|b|_1 = 5 \neq |a|_1^2 = 9$.
+
+(b). 由习题 \ref{ex:I.5.4.1}(d) 知道 $\widehat{\Z} \simeq S^1$, 所以由 (c) 得到同胚 $S^1 = \widehat{\Z} \to \sigma(\ell^1(\Z))$. 展开公式, 看到它把 $z \in S^1$ 送到 $\ell^1(\Z)$ 上的乘法泛函 $a = (a_n)_{n \in \Z} \longmapsto \sum_{n \in \Z}a_nz^n$, 这正是我们想要的.
+
+(c). 设 $G$ 是交换局部紧群. 设 $\phi \in \sigma(L^1(G))$. 我们要证明 $\phi$ 来自 $\widehat{G}$ 的元素 $\chi$. 由于 $\phi$ 是 $L^1(G)$ 上的连续线性泛函, 存在 $\chi \in L^{\infty}(G)$ 使得对每个 $f \in L^1(G)$ 有 $\phi(f) = \int_G f(x)\chi(x)\,\dd x$.
+对每个 $f, g \in L^1(G)$,
+\begin{align*}
+\phi(f)\int_G g(y)\chi(y)\,\dd y &= \phi(f)\phi(g) \\
+&= \phi(g * f) \\
+&= \int_{G \times G}g(y)f(y^{-1}x)\chi(x)\,\dd x\,\dd y \\
+&= \int_G g(y)\phi(L_yf)\,\dd y.
+\end{align*}
+由于这对每个 $g \in L^1(G)$ 成立, 函数 $\phi(f)\chi$ 和 $y \longmapsto \phi(L_yf)$ (都在 $L^{\infty}(G)$ 中) 几乎处处相等. 所以, 若选取满足 $\phi(f) \neq 0$ 的 $f \in L^1(G)$, 可以把 $\chi$ 换成 $y \longmapsto \phi(f)^{-1}\phi(L_yf)$. 由于函数 $\phi \colon L^1(G) \to \CC$ 和 $G \to L^1(G)$, $y \longmapsto L_yf$ 连续 (第二个由命题 \ref{prop:I.3.1.13}), 这个新的 $\chi$ 连续. 又, 对每个 $g \in L^1(G)$ 和每个 $y \in G$ 有 $\phi(g)\chi(y) = \phi(L_yg)$.
+设 $x, y \in G$. 由于 $L_{xy}f = L_x(L_yf)$, 有
+\[
+\phi(L_{xy}f) = \chi(xy)\phi(f) = \chi(x)\phi(L_yf) = \chi(x)\chi(y)\phi(f),
+\]
+所以 $\chi(xy) = \chi(x)\chi(y)$. 所以 $\chi \in \widehat{G}$, 且我们已证明题设的映射 $\widehat{G} \to \sigma(L^1(G))$ 满射. 注意此映射也单射, 因为 $G$ 上的连续函数由它在 $L^1(G)$ 上定义的线性泛函确定. 又, $\sigma(L^1(G)) \subset L^{\infty}(G)$ 上的拓扑由定义是弱*拓扑, 且我们已在习题 \ref{ex:I.5.4.2}(a) 中看到这与 $\widehat{G}$ 上的紧收敛拓扑一致, 所以映射 $\widehat{G} \to \sigma(L^1(G))$ 是同胚.
+\end{solution}
+
+\begin{exercise}[$\mathcal{C}^*$-范数的唯一性]
+\label{ex:II.5.5}
+设 $A$ 是带对合反自同构 $*$ 的含幺 $\CC$-代数. 证明 $A$ 上至多有一个范数使 $A$ 成为 $\mathcal{C}^*$-代数.
+\end{exercise}
+
+\begin{solution}
+设 $\|\cdot\|$ 是使 $A$ 成为 $\mathcal{C}^*$-代数的 $A$ 上的范数. 设 $x \in A$. 注意 $(x^*x)^* = x^*x$, 所以 $x^*x$ 正规. 由 $\mathcal{C}^*$-代数的定义和推论 \ref{cor:II.3.9},
+\[
+\|x\| = \|x^*x\|^{1/2} = \rho(x^*x)^{1/2}.
+\]
+但由定理 \ref{thm:II.1.1.3},
+\[
+\rho(x^*x) = \max\{|\lambda| \mid \lambda \in \CC,\, x^*x - \lambda e \notin A^{\times}\}.
+\]
+最后一个量只依赖于 $A$ 的代数结构和 $*$, 它确定 $\|x\|$.
+\end{solution}
+
+\begin{exercise}[$A^{\tilde{e}}$ 的 $\mathcal{C}^*$-范数]
+\label{ex:II.5.6}
+设 $A$ 是 $\mathcal{C}^*$-代数. 则 $A^{\tilde{e}}$ 是 Banach $*$-代数, 但对范数 $\|x + \lambda e\| = \|x\| + |\lambda|$ 它不总是 $\mathcal{C}^*$-代数. (见习题 \ref{ex:II.5.3}(b) 了解此现象的例子.)
+我们在 $A^{\tilde{e}}$ 上定义新范数 $\|\cdot\|'$:
+\[
+\|x + \lambda e\|' = \sup\{\|xy + \lambda y\| \mid y \in A,\, \|y\| \leq 1\}.
+\]
+我们现在假设 $A$ 没有单位元且 $A \neq \{0\}$.
+\begin{enumerate}
+\item[(a)] 证明 $\|\cdot\|'$ 是 $A^{\tilde{e}}$ 上的次乘范数.
+\item[(b)] 证明 $\|\cdot\|'$ 在 $A$ 上与 $\|\cdot\|$ 一致, $A$ 在 $A^{\tilde{e}}$ 中闭, 且 $A^{\tilde{e}}$ 对 $\|\cdot\|'$ 完备.
+\item[(c)] 证明 $A^{\tilde{e}}$ 对范数 $\|\cdot\|'$ 是 $\mathcal{C}^*$-代数.
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+(a). 设 $x_1 = y_1 + \lambda_1e$, $x_2 = y_2 + \lambda_2e$ 是 $A^{\tilde{e}}$ 的元素 ($y_1, y_2 \in A$, $\lambda_1, \lambda_2 \in \CC$), $c \in \CC$. 则
+\begin{align*}
+\|x_1 + x_2\|' &= \sup\{\|y_1y + \lambda_1y + y_2y + \lambda_2y\| \mid y \in A,\, \|y\| = 1\} \\
+&\leq \sup\{\|y_1y + \lambda_1y\| \mid y \in A,\, \|y\| \leq 1\} + \sup\{\|y_2y + \lambda_2y\| \mid y \in A,\, \|y\| \leq 1\} \\
+&= \|x_1\|' + \|x_2\|',
+\end{align*}
+\[
+\|cx_1\|' = \sup\{\|cy_1y + c\lambda_1y\| \mid y \in A,\, \|y\| \leq 1\} = |c|\sup\{\|y_1y + \lambda_1y\| \mid y \in A,\, \|y\| \leq 1\} = |c|\|x_1\|',
+\]
+且
+\begin{align*}
+\|x_1x_2\|' &= \sup\{\|(y_1y_2 + \lambda_2y_1 + \lambda_1y_2)y + \lambda_1\lambda_2y\| \mid y \in A,\, \|y\| = 1\} \\
+&= \sup\{\|y_1(y_2y + \lambda_2y) + \lambda_1(y_2y + \lambda_2y)\| \mid y \in A,\, \|y\| = 1\} \\
+&\leq \sup\{\|y_1 + \lambda_1e\|'\|y_2y + \lambda_2y\| \mid y \in A,\, \|y\| \leq 1\} \\
+&= \|x_1\|'\|x_2\|'.
+\end{align*}
+为证明 $\|\cdot\|'$ 是 $A^{\tilde{e}}$ 上的范数, 还需证明 $x + \lambda e \neq 0$ 时 $\|x + \lambda e\|' \neq 0$. 假设 $\|x + \lambda e\|' = 0$, 则对每个满足 $\|y\| = 1$ 的 $y \in A$ 有 $xy + \lambda y = 0$, 从而对每个 $y \in A$ 成立. 若 $x = 0$, 则 $\lambda = 0$. 若 $x \neq 0$, 则取 $y = x^*$ (注意 $xx^* \neq 0$, 因为 $\|xx^*\| = \|x^*\|^2 \neq 0$), 看到 $\lambda \neq 0$. 则对每个 $y \in A$ 有 $\lambda^{-1}xy = y$, 即 $\lambda^{-1}x$ 是 $A$ 的左单位元. 这蕴含 $(\lambda^{-1}x)^*$ 是 $A$ 的右单位元, 所以 $A$ 有单位元, 与我们假设矛盾. 所以 $x = 0$.
+
+(b). 若 $x \in A$, 则
+\[
+\|x\|' = \sup\{\|xy\| \mid y \in A,\, \|y\| = 1\} \leq \|x\|.
+\]
+若 $x = 0$, 则 $\|x\|' = \|x\| = 0$. 否则, 也有 $x^* \neq 0$; 取 $y = \frac{1}{\|x^*\|}x^*$, 得到
+\[
+\|x\|' \geq \frac{1}{\|x^*\|}\|xx^*\| = \|x^*\| = \|x\|.
+\]
+所以 $A$ 对 $\|\cdot\|'$ 完备, 从而是 $A^{\tilde{e}}$ 的闭子集. 特别地, 商映射 $A^{\tilde{e}} \to A^{\tilde{e}}/A \simeq \CC$, $x + \lambda e \longmapsto \lambda$ 连续.
+现在我们证明 $A^{\tilde{e}}$ 对 $\|\cdot\|'$ 完备. 设 $(x_n + \lambda_ne)_{n \geq 0}$ 是 $A^{\tilde{e}}$ 中的 Cauchy 序列, 其中 $x_n \in A$, $\lambda_n \in \CC$. 由上一段, 序列 $(\lambda_n)_{n \geq 0}$ 是 Cauchy 列, 所以 $A$ 中的序列 $(x_n)_{n \geq 0}$ 也是 Cauchy 列. 由于两个范数在 $A$ 上一致, 序列 $(x_n)_{n \geq 0}$ 收敛到某个 $x \in A$, 当然 $(\lambda_n)_{n \geq 0}$ 收敛到某个 $\lambda \in \CC$. 现在显然 (用显然的事实: 对 $z \in A$, $\mu \in \CC$ 有 $\|z + \mu e\|' \leq \|z\| + |\mu|$) 序列 $(x_n + \lambda_ne)_{n \geq 0}$ 在 $A^{\tilde{e}}$ 中收敛到 $x + \lambda e$.
+
+(c). 最后, 我们证明 $A^{\tilde{e}}$ 是 $\mathcal{C}^*$-代数. 设 $x \in A$, $\lambda \in \CC$. 我们要证明 $\|(x + \lambda e)^*(x + \lambda e)\|' = (\|x + \lambda e\|')^2$. 可以假设 $x + \lambda e \neq 0$. 设 $\varepsilon > 0$. 则可以找到 $y \in A$ 使得 $\|y\| = 1$ 且
+\[
+\|xy + \lambda y\| \geq \|x + \lambda e\|'(1 - \varepsilon).
+\]
+注意 $xy + \lambda y = (x + \lambda e)y$ (在 $A^{\tilde{e}}$ 中). 所以
+\begin{align*}
+(1 - \varepsilon)^2(\|x + \lambda e\|')^2 &\leq \|xy + \lambda y\|^2 \\
+&= \|(xy + \lambda y)^*(xy + \lambda y)\| \\
+&= \|y^*(x + \lambda e)^*(x + \lambda e)y\|' \\
+&\leq \|y\|^2\|(x + \lambda e)^*(x + \lambda e)\|' \\
+&= \|(x + \lambda e)^*(x + \lambda e)\|'.
+\end{align*}
+由于这对每个 $\varepsilon$ 成立, 得到
+\[
+\|(x + \lambda e)^*(x + \lambda e)\|' \geq (\|x + \lambda e\|')^2.
+\]
+利用范数的次乘性, 推出
+\[
+\|x + \lambda e\|' \leq \|(x + \lambda e)^*\|'.
+\]
+由于 $*$ 在 $A^{\tilde{e}}$ 上双射, 最后一个不等式实际上是等式, 所以还得到
+\[
+(\|x + \lambda e\|')^2 \leq \|(x + \lambda e)^*(x + \lambda e)\|' \leq (\|x + \lambda e\|')^2,
+\]
+这就完成了证明.
+\end{solution}

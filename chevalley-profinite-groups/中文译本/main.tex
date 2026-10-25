@@ -1,0 +1,81 @@
+% !TeX program = xelatex
+% 《投射有限群与 Galois 上同调》中文译本主文件
+% 原书: Rosalie Chevalley, Profinite groups and Galois cohomology,
+%       Universität Wien, Semester Project, Winter 2009-2010.
+%
+% 原书编号方案(据原书 PDF 逐节核对):
+%   * 节号不带章前缀: "1. Definition and examples"; 小节号 "1.1", "2.3" 等;
+%   * 定理类环境按"节"连续编号, 且两组各共用一个计数器:
+%       甲组: Definition / Notation / Remark / Example
+%       乙组: Theorem / Lemma / Proposition / Corollary
+%     如第1章第2节: 命题 2.1-2.9(乙), 定义 2.1、记号 2.2(甲);
+%   * 公式全文连续编号 (1)-(7), 不按章重置.
+\documentclass[
+  BookTitleCN={投射有限群与 Galois 上同调},
+  BookTitleEN={Profinite Groups and Galois Cohomology},
+  OriginalAuthor={Rosalie Chevalley},
+  OriginalEdition={学期项目论文(Semester Project)},
+  OriginalPublisher={维也纳大学理学院},
+  OriginalYear={2009--2010},
+  Translator={Fingolfin},
+  ModelUsed={Claude},
+  TranslationDate={1 Oct 2026}
+]{mathtranslation}
+
+\addbibresource{references.bib}
+
+% 有序列表样式控制: 原书定理类环境内的列表一律用 (1) (2) (3) 编号,
+% 故各 enumerate 均写作 \begin{enumerate}[label=(\arabic*),leftmargin=*].
+\usepackage{enumitem}
+
+\makeatletter
+% ---- 与原书一致的定理编号机制 ----
+% cls 已按 [section] 定义 definition/lemma/theorem/corollary/proposition/
+% remark/example/problem. 现将两组环境并入各自共享的计数器.
+\theoremstyle{mtfang}
+\newtheorem{notation}[definition]{记号}
+\newtheorem{examples}[definition]{例}
+\MT@defautorefname{notation}{记号}
+\MT@defautorefname{examples}{例}
+\AtEndEnvironment{examples}{\envenddiamond}
+\crefname{examples}{例}{例}
+% 甲组: 记号、例已并入 definition; 再把注、单数例并入 definition
+\let\c@remark\c@definition
+\let\c@example\c@definition
+% 乙组: 引理、命题、推论并入 theorem
+\let\c@lemma\c@theorem
+\let\c@proposition\c@theorem
+\let\c@corollary\c@theorem
+\makeatother
+
+% 节与小节编号不带章前缀, 与原书一致
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}
+
+% 公式全文连续编号, 显示为 (1), (2), ...
+\counterwithout{equation}{chapter}
+\renewcommand{\theequation}{\arabic{equation}}
+
+\begin{document}
+
+\maketitle
+
+\frontmatter
+\input{preface}
+\input{abstract}
+
+\makecontents
+
+\mainmatter
+\input{chapters/chapter01}
+\input{chapters/chapter02}
+\input{chapters/chapter03}
+\input{chapters/chapter04}
+\input{chapters/chapter05}
+
+\makebibliography
+
+% 术语索引: \newterm 首次引入的术语自动汇入
+\printterminology
+
+\end{document}

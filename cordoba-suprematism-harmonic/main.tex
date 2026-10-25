@@ -1,0 +1,287 @@
+% !TeX program = xelatex
+% ================================================================
+% 《调和分析中的至上主义》(Suprematism in Harmonic Analysis, 2024,
+% Antonio Córdoba) 中文译本 —— 基于数译(mathtranslations.org)排版模板 mathtranslation.cls
+% 使用 XeLaTeX 编译两次以上(生成目录、交叉引用、术语索引页码),
+% 并用 biber 处理参考文献.
+% 依赖: logo.pdf, chapters/*.tex, references.bib, figs/
+%
+% 编号体系(与原书一致):
+%  - 定理类环境(定义/引理/定理/推论/命题/注)共享同一计数器,
+%    按"章.序号"编号(如 定理 5.8);
+%  - 公式按"章.序号"编号(如 (8.2));
+%  - 小节编号 章.节(如 5.7), 小小节 编号 章.节.小节(如 5.7.3);
+%  - 参考文献沿用原书全局编号 1–226(主文献 1–17, 其后按章分组).
+% ================================================================
+
+\documentclass[
+  BookTitleCN={调和分析中的至上主义},
+  BookTitleEN={Suprematism in Harmonic Analysis},
+  OriginalAuthor={Antonio Córdoba},
+  OriginalEdition={Progress in Mathematics Vol. 356},
+  OriginalPublisher={Birkhäuser · Springer},
+  OriginalYear={2024},
+  Translator={数译},
+  ModelUsed={GLM-5.3},
+  TranslationDate={23 Aug 2026},
+  BibStyle=numeric-comp
+]{mathtranslation}
+
+% 类文件未含 esint(正文用其积分号)
+\usepackage{esint}
+
+% 参考文献数据源(类文件只载入 biblatex, 由文档指定 .bib)
+\addbibresource{references.bib}
+
+% 对齐旧版的 biblatex 选项: 作者全名、至多 6 位后 et al.,
+% defernumbers 支持按章分组的全局连续编号 1–226.
+\ExecuteBibliographyOptions{
+  maxbibnames=6,giveninits=false,defernumbers=true,
+  isbn=false,url=false,doi=false,eprint=false}
+
+% ================================================================
+% 定理类环境
+% ----------------------------------------------------------------
+% 原书"定义/引理/定理/推论/命题/注/问题/猜想/事实/例"共享同一计数器,
+% 按"章.序号"编号(如 定理 5.8). 类文件为每类各建独立计数器, 故先撤销
+% 类文件中的定义, 再按共享计数器重建.
+% ================================================================
+\makeatletter
+\def\MT@undefthm#1{%
+  \expandafter\let\csname #1\endcsname\relax
+  \expandafter\let\csname end#1\endcsname\relax
+  \expandafter\let\csname c@#1\endcsname\relax
+}
+\MT@undefthm{theorem}\MT@undefthm{definition}\MT@undefthm{lemma}%
+\MT@undefthm{corollary}\MT@undefthm{proposition}\MT@undefthm{remark}%
+\MT@undefthm{example}\MT@undefthm{problem}
+\makeatother
+
+% 类文件为上述计数器都注册了 \@addtoreset{...}{section}. 在原书里 section 就是
+% "章"(旧模板把章伪装成 section), 故每章重置一次; 重映射到 chapter 之后, section
+% 变成"小节", 若不去掉这些钩子, 每进入一个小节定理编号就会被重置.
+% 注意: 只能逐个 \@removefromreset, 不能清空整个 \cl@section —— 其中还有
+% subsection 的按节重置(book 类原生), 一起清掉会让小节编号不再随节归零.
+\makeatletter
+\@removefromreset{theorem}{section}
+\@removefromreset{definition}{section}
+\@removefromreset{lemma}{section}
+\@removefromreset{corollary}{section}
+\@removefromreset{proposition}{section}
+\@removefromreset{remark}{section}
+\@removefromreset{example}{section}
+\@removefromreset{problem}{section}
+\makeatother
+
+% 注: \newtheorem{X}[theorem]{...} 不会为 X 建立计数器, 只把 \theX 指向 \thetheorem.
+% 但 hyperref / cleveref 会访问 \the\c@X, 若 \c@X 残留 \relax 便报
+% "You can't use \relax after \the". 故重建之后把各别名的计数器寄存器
+% 一律指到 theorem 的寄存器上 —— 这正是"共享计数器"的语义.
+
+\theoremstyle{mtfang}
+\newtheorem{theorem}{定理}[chapter]
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{proposition}[theorem]{命题}
+\newtheorem{remark}[theorem]{注}
+\newtheorem{question}[theorem]{问题}
+\newtheorem{conjecture}[theorem]{猜想}
+\newtheorem{fact}[theorem]{事实}
+
+\theoremstyle{mtsong}
+\newtheorem{example}[theorem]{例}
+\newtheorem{problem}[theorem]{问题}
+
+% 无编号版本
+\theoremstyle{mtfang}
+\newtheorem*{theorem*}{定理}
+\newtheorem*{definition*}{定义}
+\newtheorem*{lemma*}{引理}
+\newtheorem*{corollary*}{推论}
+\newtheorem*{proposition*}{命题}
+\newtheorem*{remark*}{注}
+\newtheorem*{question*}{问题}
+\newtheorem*{conjecture*}{猜想}
+\newtheorem*{fact*}{事实}
+\newtheorem*{claim*}{断言}
+\theoremstyle{mtsong}
+\newtheorem*{example*}{例}
+
+% 把共享计数器的别名寄存器指到 theorem(见上文的说明)
+\makeatletter
+\let\c@definition\c@theorem
+\let\c@lemma\c@theorem
+\let\c@corollary\c@theorem
+\let\c@proposition\c@theorem
+\let\c@remark\c@theorem
+\let\c@question\c@theorem
+\let\c@conjecture\c@theorem
+\let\c@fact\c@theorem
+\let\c@example\c@theorem
+\let\c@problem\c@theorem
+\makeatother
+
+% 类文件只给 example/remark 挂了菱形结束标记; 与原书一致, 无编号的 remark*
+% 不再额外补挂(原模板亦未给 remark* 挂标记)。
+
+% 按类型区分的引用命令
+\newcommand{\thmref}[1]{定理~\ref{#1}}
+\newcommand{\lemref}[1]{引理~\ref{#1}}
+\newcommand{\defref}[1]{定义~\ref{#1}}
+\newcommand{\propref}[1]{命题~\ref{#1}}
+\newcommand{\corref}[1]{推论~\ref{#1}}
+\newcommand{\remref}[1]{注~\ref{#1}}
+\newcommand{\exref}[1]{例~\ref{#1}}
+\newcommand{\probref}[1]{问题~\ref{#1}}
+\newcommand{\quesref}[1]{问题~\ref{#1}}
+\newcommand{\conjref}[1]{猜想~\ref{#1}}
+\newcommand{\factref}[1]{事实~\ref{#1}}
+
+% ---------- 公式与图: 按"章.序号"编号 ----------
+\numberwithin{equation}{chapter}
+\counterwithin{figure}{chapter}
+\renewcommand{\thefigure}{\arabic{chapter}.\arabic{figure}}
+
+% ================================================================
+% 术语索引
+% ----------------------------------------------------------------
+% 类文件的 \printterminology 假定文档用了 \appendix, 于是"术语索引"
+% 会被编成附录章节. 本文献无附录, 若照搬会变成普通的"第 N 章".
+% 这里改为无编号章, 与"译者说明""参考文献"一致.
+% ================================================================
+\let\MTSupOrigChapter\chapter
+\newcommand{\MTSupStarChapter}[1]{%
+  \MTSupOrigChapter*{#1}%
+  \phantomsection\addcontentsline{toc}{chapter}{#1}%
+}
+\let\MTSupOrigPrintTerminology\printterminology
+\renewcommand{\printterminology}{%
+  \begingroup
+  \let\chapter\MTSupStarChapter
+  \MTSupOrigPrintTerminology
+  \endgroup
+}
+
+% ================================================================
+% 常用数学宏
+% ================================================================
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\Q}{\mathbb{Q}}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\mes}{mes}
+\DeclareMathOperator{\vol}{vol}
+\DeclareMathOperator{\length}{length}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\card}{card}
+
+% 章首题记与图片占位
+\newcommand{\epigraph}[2]{%
+  \par\vspace{0.8em}
+  \begin{flushright}
+  \begin{minipage}{0.66\textwidth}
+    \raggedleft\itshape #1\par
+    \if\relax\detokenize{#2}\relax\else
+      \smallskip
+      \raggedleft\small——~#2\par
+    \fi
+  \end{minipage}
+  \end{flushright}
+  \vspace{0.8em}
+}
+
+\newcommand{\FIGPLACEHOLDER}[1]{%
+  \fbox{\parbox[c][4cm][c]{0.8\textwidth}{\centering\large [待插入图片: #1]}}%
+}
+
+\begin{document}
+
+\makecover
+
+% ---------- 前置部分(罗马页码): 获奖说明、译者说明、目录 ----------
+\frontmatter
+
+\thispagestyle{plain}
+
+\begin{center}
+  \vspace*{1.5cm}
+  {\Large\bfseries 本书荣获 2024 年度 Ferran Sunyer i Balaguer 奖}\\[1.2cm]
+\end{center}
+
+\noindent
+Ferran Sunyer i Balaguer (1912--1967) 是一位自学成才的加泰罗尼亚数学家.
+尽管身患严重残疾, 他在经典数学分析领域的研究一直十分活跃, 并因此在国际上享有声誉.
+他的继承人在加泰罗尼亚研究所 (Institut d'Estudis Catalans) 内设立了 Ferran Sunyer i Balaguer 基金会,
+以纪念 Ferran Sunyer i Balaguer, 并促进数学研究.
+
+\smallskip
+\noindent
+基金会每年与加泰罗尼亚研究所共同颁发一项国际研究奖, 授予一部具有综述性质的教学专著.
+获奖专著在本丛书中出版. 关于此奖项与基金会的详细信息见
+\url{https://ffsb.espais.iec.cat/en/the-ferran-sunyer-i-balaguer-prize/}.
+
+\smallskip
+\noindent
+2024 年度奖项科学委员会成员:
+Ruth Kellerhals (Université de Fribourg),
+Jiang-Hua Lu (University of Hong Kong),
+Marta Sanz-Solé (Universitat de Barcelona),
+Kristian Seip (NTNU),
+Yuri Tschinkel (Courant Institute of Mathematical Sciences, New York University).
+
+\chapter*{译者说明}
+\addcontentsline{toc}{chapter}{译者说明}
+
+本译本依据 Antonio Córdoba 著 \emph{Suprematism in Harmonic Analysis}
+(Birkhäuser, Progress in Mathematics Vol. 356, 2024, Ferran Sunyer i Balaguer 奖 2024 年度获奖著作)译出.
+翻译以数学正确性优先, 章节结构、定理编号与公式编号均与原书一致;
+正文中的文献引用编号~[n] 亦与原书全局编号一致, 对应关系见文末参考文献.
+
+\vspace{0.5cm}
+\hfill \Translator
+
+\hfill \TranslationDate
+
+\tableofcontents
+
+% ---------- 正文(阿拉伯页码) ----------
+\mainmatter
+
+\input{chapters/frontmatter}   % 前言与记号说明
+
+\input{chapters/ch1}
+\input{chapters/ch2}
+\input{chapters/ch3}
+\input{chapters/ch4}
+\input{chapters/ch5}
+\input{chapters/ch6}
+\input{chapters/ch7}
+\input{chapters/ch8}
+\input{chapters/ch9}
+
+% ---------- 参考文献 ----------
+\chapter*{参考文献}
+\addcontentsline{toc}{chapter}{参考文献}
+
+\nocite{*}
+\printbibliography[keyword=general,heading=none,resetnumbers=true]
+\section*{第 1 章参考文献}\printbibliography[keyword=ch1,heading=none,resetnumbers=false]
+\section*{第 2 章参考文献}\printbibliography[keyword=ch2,heading=none,resetnumbers=false]
+\section*{第 3 章参考文献}\printbibliography[keyword=ch3,heading=none,resetnumbers=false]
+\section*{第 4 章参考文献}\printbibliography[keyword=ch4,heading=none,resetnumbers=false]
+\section*{第 5 章参考文献}\printbibliography[keyword=ch5,heading=none,resetnumbers=false]
+\section*{第 6 章参考文献}\printbibliography[keyword=ch6,heading=none,resetnumbers=false]
+\section*{第 7 章参考文献}\printbibliography[keyword=ch7,heading=none,resetnumbers=false]
+\section*{第 8 章参考文献}\printbibliography[keyword=ch8,heading=none,resetnumbers=false]
+\section*{第 9 章参考文献}\printbibliography[keyword=ch9,heading=none,resetnumbers=false]
+
+% ---------- 术语索引 ----------
+\printterminology
+
+\end{document}

@@ -1,0 +1,1632 @@
+% ==== partgf1 几何与 Fourier 方法在非线性波动方程中的应用 ====
+% 源: MinerU_latex_A-非.tex 2284-4614 行(作者所附论文, 含 ABSTRACT、LECTURE I、II、III)
+% 术语: 适定性=well-posedness;  临界适定性指数=critical WP exponent;  交换向量场=commuting vectorfields; 
+%       广义能量=generalized energies;  伪微分算子=pseudodifferential operator;  二进壳层=dyadic shell; 
+%       球平均=spherical means;  近整体存在性=almost global existence;  零条件=null condition; 
+%       波动容许=wave admissible;  零二次型=null quadratic form;  微局域=microlocal;  单位分解=partition of unity; 
+%       波动区域=wave zone;  剥离=peeling;  管分解=tube decomposition;  尺度归纳=induction on scales; 
+%       锥限制猜想=cone restriction conjecture;  频率包络=frequency envelope;  自举=bootstrap; 
+%       可接受误差=acceptable error;  规范重整化=gauge renormalization;  有界可平行化=bounded parallelizable; 
+%       结构系数=structure coefficients;  联络系数=connection coefficients;  散度-旋度系统=divergence-curl system; 
+%       标准正交标架=orthonormal frame;  全测地子流形=totally geodesic submanifold;  初值数据集=initial data set; 
+%       约束方程=constraint equations;  渐近平坦=asymptotically flat;  诱导度量=induced metric; 
+%       第二基本形式=second fundamental form;  整体双曲=globally hyperbolic;  波坐标=wave coordinates; 
+%       最大未来发展=maximal future development;  强稳定性=strong stability;  宇宙监督=cosmic censorship; 
+%       仿微分演算=paradifferential calculus;  参数层=parametrix;  输运方程=transport equation; 
+%       程函方程=eikonal equation;  光学函数=optical function;  零对=null pair;  形变张量=deformation tensor; 
+%       修正能量-动量张量=modified energy-momentum tensor;  修正 Morawetz 向量场=modified Morawetz vectorfield; 
+%       共形能量=conformal energy;  比较定理=comparison theorem;  广义共形恒等式=generalized conformal identity; 
+%       无迹部分=traceless part;  时间叶状结构=time foliation;  共形 Killing 向量场=conformal Killing vector field; 
+%       加速算子=boost;  倒置平移=inverted translations;  伸缩向量场=scaling vector field; 
+%       加权 Sobolev 范数=weighted Sobolev norm
+% REFS:
+%   跨部分引用(在本部分之外, 需统一解析):
+%     - "the Complement to Lecture I"(约 2454、4277、4399、4407 行)→ 第一讲的补充部分(命题 4.11 等, 另一文件)
+%     - "Complements to Lecture III"(3974 行)→ 第三讲的补充部分(另一文件)
+%     - 文内 "Lecture I/II/III" 即本部分三个 \subsection, 直接写"第一/二/三讲"
+%   FOOTNOTE: 论文部分在 pdf_text.txt 中为乱码, 脚注 1-28 原文无法找回; 已在对应位置放置占位
+%     \footnote{(原书脚注 N 文本缺失, 待补)}, 需按原书补译. 位置: 1=注 1.7 末;  2=注 1.13 末; 
+%     3=命题 1.23 首;  4=命题 1.28 前段;  5=一般 WP 猜想第 2 条;  6=例 2;  7=更高阶迭代段;  8=波映射散度-旋度系统; 
+%     9=注 2.12 首;  10、11=注 2.17;  12=命题 2.22 首;  13、14=定义 3.3;  15、16=定义 3.4; 
+%     17=最大发展段;  18=Penrose 定理段;  19=定理 3.6;  20=问题(强稳定性);  21=半线性情形段; 
+%     22=粗糙系数段;  23=历史注记首;  24=Tataru 段;  25=参数层构造段;  26=定理 3.10 末;  27=定理 3.10 证明概要首; 
+%     28=定义 3.14
+%   编号异常:
+%     - 行内引用 "(138)-(142)"(4270 行)、"(138)"(4493 行)、"(142)"(4501 行):本文内度量条件编号为
+%       (72)-(76), 已按 (72)-(76)/(72)/(76) 映射为 \eqref; 若与原文不符请协调
+%     - "Theorem 2.19"(3618 行):原文本对象为 Proposition 2.19, 已按"命题 2.19"处理
+%     - 原书两处 "L^\infty \subset H^s" Sobolev 嵌入(3028、3915 行), 数学上应为 H^s \subset L^\infty, 已修正
+%     - (WM)/(YM)/(MKG) 三个公式原书用字母编号; 为保持其后公式编号 (22)-(63) 不变, 此处必须使用
+%       \tag{WM} 等(指南"禁止 \tag"的规则在本特例下无法满足, 否则全部后续编号整体偏移)
+%     - K = \tfrac12(\underline{u}^2L + u^2L)(4339 行)中第二个 L 应为 \underline{L}, 已修正
+%     - "T + N are the generating normals"(4321 行)应为 T \pm N, 已修正
+%     - E_\pm = \partial_t \pm \partial_r(2785 行 OCR 误为 \partial_r \pm \partial_r), 已修正
+%     - Q_{ij} 定义(2947 行)第二项应为 \partial_i\psi\partial_j\phi, 已修正
+%     - (49) 的标签在 OCR 中缺失(显示为一个空 enumerate), 已按 "U = I + \sum U_k" 补为 (49)
+%     - 定理 3.12 中 "t_*\lambda^a"(4267 行)应为 t_* \leq \lambda^a, 已修正
+%     - 定义 2.9 范数中 \Lambda_\perp 应为 \Lambda_-(OCR 误), 已修正
+%     - (84) 末尾 "\lesssim \mathcal{Q}_0[\psi](t)" 属 (85) 的内容, 已按 (84)=定义、(85)=比较分离
+%     - 频率包络构造中 c_k = \sum_{k'}2^{-\sigma|k-k'|}\|P_k\| 应取 \|P_{k'}f\|, 已修正
+%     - 2574 行 \|\sum_I\nabla^j\chi_I\|_{L^\infty} 应为 \sum_I\|\nabla^j\chi_I\|_{L^\infty}, 已修正
+%     - 4139 行 "eikonal equation (79)" 为对本文内 (79) 的前向引用, 已 \eqref
+%     - 定理 3.6 后的 "Problem"、两处 "Conjecture" 未编号, 用 problem*/加粗标题处理, 不推进计数器
+%     - 3.20 缺失(3.19 与 3.21 之间无非编号对象), 照原书跳过
+%     - 定理 2.18 的 proof 环境在 OCR 中未闭合:按行文将其闭合于命题 2.19 陈述之后(即 "In what
+%       follows we recall the definition of frequency envelope..." 之前)
+%   OCR-BROKEN(存疑, 待核):
+%     - (86) 中 \psi^2\square_h(t) 存疑
+%     - 修正能量-动量张量(4337 行)公式似缺项(右端未出现 \alpha 指标), 按 OCR 直译
+%     - 2484 行 "Killing 向量场 T,  L_{\mu\nu}" 中 L_{\mu\nu} 未定义(疑为 O_{\mu\nu}), 按 OCR 直译
+%     - (93) Codazzi 方程中 R_{B4AB} 指标存疑, 按 OCR 直译
+%     - 命题 1.28 (21) 右端两项均为 D\phi[0], 疑第二项为 D\psi[0], 按 OCR 直译
+%     - 定理 3.12 (78) 中 \|\psi[0]\|_{H^k} 的 k 未定义, 按 OCR 直译
+% 编号说明: 本部分为作者所附论文, 公式从 (1) 重新编号(开头已 \setcounter{equation}{0}); 
+%   编号公式用 \begin{equation} 自动编号(与既有 part01 等一致); (WM)/(YM)/(MKG) 三个字母编号
+%   公式保留 \tag 并用 \label{eq:cG-WM} 等引用; 定理类共享计数器按节重置, 与共享序列
+%   1.x / 2.x / 3.x 一致; Lecture II 中 "1. Wave Maps"、"2. Yang-Mills"、"3. Maxwell-Klein-Gordon"、
+%   "Main Theorem"、"General WP Conjecture" 为独立/无编号标题(\mtsubsecn), 不推进计数器; 
+%   "2.1. Motivation"、"2.10. Wave Maps with critical regularity" 与 Lecture III 的 "3.1"、"3.9"、
+%   "3.11" 为共享序列子标题(\mtsubsec)
+% ====
+
+\setcounter{subsection}{0}
+\setcounter{theorem}{0}
+\setcounter{equation}{0}
+
+\section*{几何与 Fourier 方法在非线性波动方程中的应用}
+\markboth{几何与 Fourier 方法在非线性波动方程中的应用}{几何与 Fourier 方法在非线性波动方程中的应用}
+\addcontentsline{toc}{section}{几何与 Fourier 方法在非线性波动方程中的应用}
+
+\noindent\textsc{Sergiu Klainerman}
+
+\noindent\textbf{摘要.} 在过去的二十年里, 非线性波动方程这一主题因三个基础性的发展而被彻底改变. 
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item 精巧几何技巧的出现, 即仅涉及物理空间中几何构造的技巧. 
+\item Littlewood-Paley 分解的系统应用以及仿微分演算的引入. 
+\item 时空 Fourier 技巧的发展, 例如 Strichartz 型不等式与双线性估计. 
+\end{enumerate}
+
+这些讲稿的目标是讨论这些进展所涉及的一些技术问题, 并通过它们所导致的主要新结果加以说明. 我们还计划讨论一些近期的发展, 它们需要几何方法与 Fourier 方法之间高度非平凡的合作, 并预示着这两种看似不可调和的观点未来强有力的融合. 
+
+在第一讲中, 我们将回顾 Minkowski 空间中标准波动方程解的基本估计, 并讨论证明它们的各种几何与 Fourier 方法. 在第二讲中, 我们将讨论这些技巧对半线性方程(如波映射、Maxwell-Klein-Gordon 方程与 Yang-Mills 方程)的应用. 最后, 在最后一讲中, 我们将讨论对与 Einstein 真空方程相关的拟线性方程的应用. 
+
+\subsection{第一讲：标准波动方程的估计}
+
+考虑 Minkowski 空间 $\mathbb{R}^{n+1}$ 中的标准波动方程
+
+\begin{equation}
+\Box \phi = 0.\label{eq:cG-1}
+\end{equation}
+
+$\mathbb{R}^{n+1}$ 中的标准惯性坐标记为 $x^{\mu}$, $\mu = 0, 1, \dots , n$, 相对于这些坐标, Minkowski 度量取对角形式 $m_{\mu \nu} = \mathrm{diag}(-1, 1, \dots , 1)$. 记 $x^0 = t$, $x = (x^{1}, \ldots , x^{n})$ 表示空间坐标. 我们将通篇使用关于重复指标通常的求和约定, 以及关于向量和张量指标升降的标准约定. 特别地, 若 $x_{\mu} = m_{\mu \nu}x^{\nu}$, 则 $x_0 = -t$, $x_{i} = x^{i}$, $i = 1, \dots , n$. 我们使用记号 $\partial_{\mu} = \frac{\partial}{\partial x^{\mu}}$ 与 $\partial_t = \frac{\partial}{\partial x^0}$. $\Sigma_{t_0}$ 表示类空超平面 $t = t_0$. 波算子定义为 $\square = m^{\alpha \beta}\partial_{\alpha \beta} = -\partial_t^2 + \sum_i\partial_i^2$. 
+
+下面我们回顾 (1) 的解的基本已知估计, 这些解满足 $t = 0$ 处的初值问题, 
+
+\begin{equation}
+\phi (0,  x) = f (x),  \quad \partial_ {t} \phi (0,  x) = g (x)\label{eq:cG-2}
+\end{equation}
+
+为方便起见, 记 $\phi[0] = (f,  D^{-1}g)$, 其中 $D^{-1}$ 是以 $|\xi|^{-1}$ 为符号的伪微分算子. 
+
+\begin{proposition}[能量恒等式、不等式]\label{prop:cG-1.1}
+(1)、(2) 的解满足, 
+
+\begin{equation}
+E [ \partial \phi ] (t) = E [ \partial \phi ] (0)\label{eq:cG-3}
+\end{equation}
+
+其中
+
+\begin{equation}
+E [ \partial \phi ] (t) = \int_ {\Sigma_ {t}} \left(|\partial_ {t} \phi | ^ {2} + \sum_ {i} | \partial_ {i} \phi | ^ {2}\right) d x\label{eq:cG-4}
+\end{equation}
+
+作为推论, 对所有 $s \geq 0$ 有能量不等式, 
+
+\[
+\left\| \partial \phi (t) \right\| _ {H ^ {s} (\mathbb {R} ^ {n})} \leq \left\| \partial \phi (0) \right\| _ {H ^ {s} (\mathbb {R} ^ {n})}.
+\]
+\end{proposition}
+
+\begin{proof}
+能量恒等式既可用几何技巧(仅涉及分部积分)证明, 也可用 Fourier 技巧证明, 后者使用 Plancherel 公式与如下 Fourier 表示公式, 
+
+\begin{equation}
+\phi (t,  x) = (2 \pi) ^ {- n} \int e ^ {i x \cdot \xi} \Big(\cos t | \xi | \widehat{f} (\xi) + \frac {\sin t | \xi |}{| \xi |} \widehat{g} (\xi) \Big) d \xi\label{eq:cG-5}
+\end{equation}
+
+高阶能量不等式基于 $\square$ 与 $\partial_{\mu}$ 的交换关系. 
+\end{proof}
+
+\begin{remark}\label{rem:cG-1.2}
+标准的 Sobolev 嵌入 $H^{s}(\mathbb{R}^{n}) \subset L^{\infty}(\mathbb{R}^{n})$($s > \frac{n}{2}$)使我们无需显式表示即可得到 (1) 的解的 $L^{\infty}$ 界. 这一过程可推广到与局部存在定理相联系的非线性方程. 
+\end{remark}
+
+\begin{proposition}[色散不等式]\label{prop:cG-1.3}
+(1)、(2) 的解满足, 
+
+\begin{equation}
+\| \phi (t) \| _ {L ^ {\infty}} \leq c t ^ {- \frac {n - 1}{2}} \| D ^ {\frac {n + 1}{2}} \phi [ 0 ] \| _ {L ^ {1}}\label{eq:cG-6}
+\end{equation}
+\end{proposition}
+
+\begin{remark}\label{rem:cG-1.4}
+事实上 \eqref{eq:cG-6} 并不完全正确; 若把左端的 $L^{\infty}$ 范数换成 BMO 范数, 或把右端的 $L^1$ 范数换成 Hardy 范数 $\mathcal{H}^1$, 则相应估计成立. 然而, 若数据 $\phi(0) = f$、$\partial_t\phi(0) = g$ 的 傅里叶变换支集位于二进壳层 $\frac{\lambda}{2} \leq |\xi| \leq 2\lambda$ 内(其中 $\lambda \in 2^{\mathbf{N}}$ 固定), 则不等\eqref{eq:cG-6} 按原样成立. 
+\end{remark}
+
+\begin{proof}
+直到最近, (6) 的唯一稳健证明仍是基于对表示\eqref{eq:cG-5} 应用稳定相方法. 在奇数维中, 可以用解的球平均表示证明色散估计的一个相关形式. 我们将在后面讨论 (6) 的一个不依赖任何表示公式的推导. 
+\end{proof}
+
+\begin{remark}\label{rem:cG-1.5}
+色散不等式提供两类信息. 第一类涉及 $\|\phi(t)\|_{L^{\infty}}$ 当 $t\to\infty$ 时的精确衰减率, 第二类则给出 $\|\phi(t)\|_{L^{\infty}}$ 对 $t>0$ 的正则性性质的信息. 就改善正则性而言, 与 Sobolev 嵌入 $L^{\infty}(\mathbb{R}^{n})\subset W^{1, n}(\mathbb{R}^{n})$ 相比, 估计 (6) 对 $t>0$ 增益了 $\frac{n-1}{2}$ 阶导数. 
+\end{remark}
+
+众所周知, 就渐近行为而言, (6) 在非线性波动方程的应用中并不十分有用. 推导波动方程解的渐近性质的更有效方法是基于广义能量估计, 它由交换向量场方法结合整体 Sobolev 不等式得到. 下面我们非常简要地介绍这一观点; 我们将在第一讲的补充部分更系统地展开它. 下面我们回顾推导上述衰减率估计的交换向量场方法. 其思想是将能量恒等\eqref{eq:cG-3} 与交换向量场以及经典 Sobolev 不等式的整体形式结合使用. 
+
+Minkowski 时空 $R^{n+1}$ 配备一族 Killing 与共形 Killing 向量场:平移 $T_{\mu} = \partial_{\mu}$、Lorentz 旋转 $O_{\mu\nu} = x_{\mu}\partial_{\nu} - x_{\nu}\partial_{\mu}$、伸缩向量场 $S = t\partial_{t} + x^{i}\partial_{i}$ 以及倒置平移 $K_{\mu} = -2x_{\mu}S + \langle x,  x \rangle \partial_{\mu}$. 回顾 $x^{\mu}$ 表示标准变量 $x^{0} = t,  x^{1},  \ldots,  x^{n}$, 而 $x_{\mu} = m_{\mu\nu}x^{\nu}$. Killing 向量场 $T_{\mu}$ 与 $O_{\mu\nu}$ 与 $\Box$ 交换, 而 $S$ 在如下意义下保持解空间:由 $\Box\phi = 0$ 可推出 $\Box S\phi = 0$, 因为 $[\Box,  S] = 2\Box$. 我们把算子 $O_{\mu\nu}$ 分解为角旋转算子 $^{(ij)}O = x_{i}\partial_{j} - x_{j}\partial_{i}$ 与加速算子 $^{(i)}L = x_{i}\partial_{t} + t\partial_{i}$, 其中 $i,  j,  k = 1,  \ldots,  n$. 回顾 (4) 中的能量表达式. 基于上述交换性质, 我们定义如下"广义能量"
+
+\begin{equation}
+E _ {k} [ \partial \phi ] = \sum_ {X _ {i _ {1}}, ..,  X _ {i _ {j}}} E ^ {2} [ \partial X _ {i _ {1}} X _ {i _ {2}} \cdots X _ {i _ {j}} \phi ]\label{eq:cG-7}
+\end{equation}
+
+其中求和取遍 $0 \leq j \leq k$ 以及所有 Killing 向量场 $T$、$L_{\mu\nu}$ 与伸缩向量场 $S$. 交换向量场方法的关键在于, 量 $E_{k}$, $k \geq 1$, 被 (1) 的解所保持. 因此, 若对所有 $0 \leq k \leq s$, 数据 $f,  g$ 满足
+
+\begin{equation}
+\int (1 + | x |) ^ {2 k} \left(| \nabla^ {k + 1} f (x) | ^ {2} + | \nabla^ {k} g (x) | ^ {2}\right) d x \leq C _ {s} < \infty\label{eq:cG-8}
+\end{equation}
+
+则对所有 $t$ 有 $E_{s}[\partial \phi](t) \leq C_{s}$. (1) 的解的期望衰减估计现在可以从如下整体形式的 Sobolev 不等式(见 \cite{gfref27})导出:
+
+\begin{proposition}[衰减估计{[}27{]}]\label{prop:cG-1.6}
+设 $\phi$ 是 $R^{n + 1}$ 中的任意函数, 使得对某个整数 $s > \frac{n}{2} +1$, $E_{s}[\phi]$ 有限. 则对所有 $t > 0$, 
+
+\begin{equation}
+| \partial \phi (t,  x) | \lesssim (1 + t + | x |) ^ {- \frac {n - 1}{2}} (1 + | t - | x | |) ^ {- \frac {1}{2}} E _ {s} [ \phi ]\label{eq:cG-9}
+\end{equation}
+
+因此, 若 (1) 中的数据 $f,  g$ 对 $0 \leq k \leq s$ 满足 \eqref{eq:cG-8}, 其中某个 $s > \frac{n}{2}$, 则对所有 $t \geq 0$, 
+
+\begin{equation}
+\| \partial \phi (t, \cdot) \| _ {L ^ {\infty}} \lesssim \frac {1}{(1 + t + | x |) ^ {\frac {n - 1}{2}} (1 + | t - | x | |) ^ {\frac {1}{2}}}\label{eq:cG-10}
+\end{equation}
+\end{proposition}
+
+\begin{remark}\label{rem:cG-1.7}
+显然, 这一证明纯几何的\footnote{（原书脚注 1 文本缺失, 待补）}估计蕴含色散不等\eqref{eq:cG-6} 所给出的衰减性质. 事实上, 它在波动区域 $|x| \sim t$ 之外提供了更多信息, 这与线性方程 $\Box\phi = 0$ 的预期传播性质十分吻合. 另一方面, 由于 (9) 实为 Sobolev 不等式的整体版本, (6) 的改进正则性特征似乎与\propref{prop:cG-1.6} 的估计无关. 然而事实并非如此, 我们将在下一个命题中看到. 
+\end{remark}
+
+\begin{remark}\label{rem:cG-1.8}
+交换向量场方法(\cite{gfref27}, 亦见 \cite{gfref46})最初是作为 \cite{gfref17} 中\newterm{almost-global-existence}{近整体存在性}{almost global existence}结果的一个替代性的、大大简化的证明而发展起来的. 该方法非常灵活, 可应用于证明:对足够小的初值数据, 在维数 $n > 3$ 中的整体存在性, 以及在维数 $n = 3$ 中对包括完全非线性方程在内的广大类非线性波动方程的近整体存在性. 它还可与\newterm{null-condition}{零条件}{null condition}(见下面\propref{prop:cG-1.22} 之后的讨论)结合, 证明低维 $n = 3,  2$ 中的整体存在性结果. 向量场方法后来被许多其他作者进一步发展, 特别是 H. Lindblad \cite{gfref48} 与 T. Sideris \cite{gfref63, gfref64, gfref65}, 亦见 Hormander \cite{gfref16} 及其中的参考文献. \cite{gfref12} 中出现了向量场方法的一个重要修改, 其中向量场不得不加以修正. 这一点将在第三讲中作一定程度的讨论. 
+\end{remark}
+
+\begin{proposition}[见 {[}30{]}]\label{prop:cG-1.9}
+交换向量场方法蕴含色散不等\eqref{eq:cG-6}. 
+\end{proposition}
+
+\begin{proof}
+不失一般性, 可假设 $\partial_{t}\phi = g = 0$, 且 $f = \phi(0)$ 的 傅里叶变换支集位于壳层 $\frac{\lambda}{2} \leq |\xi| \leq 2\lambda$ 内, 其中 $\lambda \in 2^{N}$. 通过简单的伸缩论证, 我们事实上可假设 $\lambda = 1$. 由于 $\hat{\phi}$——$\phi$ 关于空间变量 $x$ 的 傅里叶变换——的支集也位于同一壳层内, 只需证明对 $\nabla\phi$ 或 $\nabla^{k}\phi$ 的估计. 接下来我们用中心位于整数坐标点 $I \in Z^n$ 的圆盘 $D_{I}$ 覆盖 $R^{n}$, 使得每个 $D_{I}$ 至多与有限个 $c_{n}$ 个圆盘 $D_{J}$ 相交, 其中 $c_{n}$ 只依赖于维数 $n$. 考虑一个光滑的单位分解 $(\chi_I)_{I \in \mathbf{Z}^n}$, 满足 $\operatorname{supp} \chi_I \subset D_I$, 且每个 $\chi_I$ 非负. 显然我们可以安排, 对所有 $k$, 
+
+\begin{equation}
+\sum_ {I \in \mathbf {Z} ^ {n}} | \nabla^ {k} \chi_ {I} (x) | \leq C _ {k,  n}\label{eq:cG-11}
+\end{equation}
+
+在 $x \in R^{n}$ 上一致成立. 现在设 $f_{I} = \chi_{I} \cdot f$, $\phi_{I}$ 为 (1) 的以 $\phi_{I}(0) = f_{I}$、$\partial_{t}\phi_{I}(0) = 0$ 为数据的相应解. 显然 $f = \sum_{I} f_{I}$, $\phi = \sum_{I} \phi_{I}$. 只需证明对所有 $I$, 
+
+\begin{equation}
+\| \nabla^ {k} \phi_ {I} (t) \| _ {L ^ {\infty}} \leq C _ {n,  k} (1 + t) ^ {- \frac {n - 1}{2}} \sum_ {j = 0} ^ {n + k + 1} \| D ^ {j} f _ {I} \| _ {L ^ {1}}\label{eq:cG-12}
+\end{equation}
+
+其中常数 $C_{n, k}$ 只依赖于 $n$ 与 $k$. 事实上, 若 (12) 成立, 我们容易推出 $\| \nabla^k\phi (t)\|_{L^\infty}\leq C_{n, k}(1 + t)^{-\frac{n - 1}{2}}\sum_{j = 0}^{n + k + 1}\sum_{I}\| \nabla^j\chi_I\|_{L^\infty}\| f\|_{L^1}$, 从而由 (11) 得 $\| \nabla^k\phi (t)\|_{L^\infty}\leq C_{n, k}(1 + t)^{-\frac{n - 1}{2}}\| f\|_{L^1}$. 
+
+因此只需验证 (12). 不失一般性, 通过空间平移, 可假设 $I = 0$. 将\propref{prop:cG-1.6} 应用于 $\psi = \nabla \phi_{0}$, 对 $s_{*}$——严格大于 $\frac{n}{2} + 1$ 的第一个整数——推得
+
+\[
+\begin{aligned}
+\| \psi (t) \| _ {L ^ {\infty}} &\leq c (1 + t) ^ {- \frac {n - 1}{2}} E _ {s _ {*}} [ \phi_ {0} ] (t) \\
+&\leq c (1 + t) ^ {- \frac {n - 1}{2}} E _ {s _ {*}} [ \phi_ {0} ] (0).
+\end{aligned}
+\]
+
+由于 $\phi_0$ 的支集包含在原点为中心、半径为 1 的球内, 我们有
+
+\[
+E _ {s _ {*}} [ \phi_ {0} ] (0) \leq C _ {n} \sum_ {j = 0} ^ {s _ {*} + 1} \| D ^ {j} f _ {0} \| _ {L ^ {2}}.
+\]
+
+最后, 根据 $\mathbb{R}^n$ 中的标准 Sobolev 不等式 $\| f\|_{L^2}\leq c\| \nabla^{\frac{n}{2}}f\|_{L^1}$, 我们得到
+
+\[
+\| \psi (t) \| _ {L ^ {\infty}} \leq c (1 + t) ^ {- \frac {n - 1}{2}} \sum_ {j = 0} ^ {n + 2 + 1} \| D ^ {j} f _ {0} \| _ {L ^ {1}}
+\]
+
+如所期望. 
+\end{proof}
+
+在能量不等式与色散不等式之间插值, 可导出所谓的 Strichartz-Brenner 结果, 
+
+\[
+\| \phi (t) \| _ {L ^ {r}} \leq c | t | ^ {- \gamma (r)} \| \nabla^ {\sigma} \partial \phi (0) \| _ {L ^ {r ^ {\prime}}}
+\]
+
+其中 $\gamma(r)=(n-1)(\frac{1}{2}-\frac{2}{r})$, $\frac{1}{r}+\frac{1}{r'}=1$, $r\geq2$, 以及伸缩条件 $\frac{n}{r}=-\gamma(r)-\sigma-1+\frac{n}{r'}$. 这通过标准的 $TT^{*}$ 论证、Hardy-Littlewood-Sobolev 不等式以及 Littlewood-Paley 理论的应用, 导出推广的 Strichartz 型不等式. 
+
+\begin{definition}\label{def:cG-1.10}
+一对正实数 $(q, r)$ 称为\newterm{wave-admissible}{波动容许}{wave admissible}的, 若
+
+\[
+\frac {2}{q} \leq \gamma (r) = (n - 1) (\frac {1}{2} - \frac {2}{r}),  \qquad q \geq 2,  \qquad (q,  r,  n) \neq (\infty ,  1,  3).
+\]
+\end{definition}
+
+\begin{proposition}[Strichartz 型不等式]\label{prop:cG-1.11}
+初值问题 (1)--(2) 的解满足, 
+
+\begin{equation}
+\| \phi \| _ {L _ {t} ^ {q} L _ {x} ^ {r} ([ 0,  T ] \times \mathbb {R} ^ {n})} \leq c \| \phi [ 0 ] \| _ {H ^ {\sigma}},  \quad \sigma = n (\frac {1}{2} - \frac {2}{r}) - \frac {1}{q}\label{eq:cG-13}
+\end{equation}
+\end{proposition}
+
+\begin{remark}\label{rem:cG-1.12}
+Strichartz 本人只证明了各向同性情形 $q = r$ 的估计. 其余估计归功于 Pecher、Ginibre-Velo、Lindblad-Sogge 与 Keel-Tao. 关于这些估计的最终版本及精确参考文献, 我们请读者参阅 Keel-Tao \cite{gfref20}. 
+\end{remark}
+
+\begin{remark}\label{rem:cG-1.13}
+Strichartz 型不等式在非线性波动方程理论的许多近期进展中起着关键作用. 注意到在固定频率下由能量恒等式与色散不等式推导 (13) 的步骤是相当软的, 它们可追溯至 Duhamel 原理与初值问题的唯一性. \footnote{（原书脚注 2 文本缺失, 待补）}两者都适用于带变系数的一般线性波动方程, 且对系数的正则性要求很低. 因此, Strichartz 型不等式的主要构件是 (3) 与 (6). 
+\end{remark}
+
+迄今讨论的所有估计都是针对波动\eqref{eq:cG-1} 的单个解的. 它们在应用于非线性项中含导数的波动方程时作用有限. 过去十年中发展出了一种新观点:直接估计涉及 (1) 的多个解的双线性乃至多重线性表达式, 可获得远为更多的灵活性. 
+
+\begin{proposition}[双线性 Strichartz 估计{[}47{]}]\label{prop:cG-1.14}
+设 $\phi,  \psi$ 是 (1) 的两个解. 假设 $n \geq 2$ 且 $(q,  r)$ 是波动容许对. 则
+
+\begin{equation}
+\| D ^ {\sigma} (\phi \psi) \| _ {L _ {t} ^ {q / 2} L _ {x} ^ {r / 2}} \lesssim \| \phi [ 0 ] \| _ {\dot {H} ^ {s _ {1}}} \| \psi [ 0 ] \| _ {\dot {H} ^ {s _ {2}}}\label{eq:cG-14}
+\end{equation}
+
+其中 $\sigma,  s_1,  s_2$ 满足, 
+
+\begin{align*}
+0 < \sigma < n - \frac {2 n}{r} - \frac {4}{q}, \\
+0 < s _ {1},  s _ {2} < \frac {n}{2} - \frac {n}{r} - \frac {1}{q}, \\
+s _ {1} + s _ {2} + \sigma = n - \frac {2 n}{r} - \frac {2}{q}.
+\end{align*}
+\end{proposition}
+
+\begin{proof}
+证明基于如下色散不等式的\newterm{microlocal}{微局域}{microlocal}版本:
+
+\begin{proposition}[改进的色散不等式{[}47{]}]\label{prop:cG-1.15}
+考虑 (1)、(2) 的一个解, 其初值数据的 傅里叶变换支集位于单位二进环 $\frac{1}{2} \leq |\xi| \leq 2$ 内的小半径球中, 球半径为 $\mu$. 则
+
+\begin{equation}
+\| \phi (t) \| _ {L ^ {\infty}} \leq c \mu t ^ {- \frac {n - 1}{2}} \| \phi [ 0 ] \| _ {L ^ {1}}.\label{eq:cG-15}
+\end{equation}
+\end{proposition}
+
+改进的色散不等式很容易由标准稳定相方法推出. 我们尚没有令人满意的几何推导. 
+\end{proof}
+
+现在考虑更一般的双线性估计, 其形式为
+
+\begin{equation}
+\| D ^ {\gamma} D _ {+} ^ {\gamma_+} D _ {-} ^ {\gamma_-} (\phi \psi) \| _ {L _ {t} ^ {q / 2} L _ {x} ^ {r / 2}} \lesssim \| \phi [ 0 ] \| _ {\dot {H} ^ {s _ {1}}} \| \psi [ 0 ] \| _ {\dot {H} ^ {s _ {2}}}, \label{eq:cG-16}
+\end{equation}
+
+其中 $\phi$ 与 $\psi$ 解 (1). 这里 $D^{\gamma},  D_{+}^{\gamma_+},  D_{-}^{\gamma_-}$ 是以 $|\xi|^{\gamma}$、$||\tau| + |\xi||^{\gamma_+}$、$||\tau| - |\xi||^{\gamma_-}$ 为符号的乘子算子. 在 $q,  r = 4$ 的情形, 所有这些估计都是已知的. 下述定理的特殊情形最早出现在 \cite{gfref31} 中, 后来出现在 \cite{gfref37, gfref44, gfref39} 中. 完整解最近由 Foschi-Klainerman \cite{gfref14} 完成, 亦见 \cite{gfref69}. 
+
+\begin{proposition}[双线性估计{[}14{]}]\label{prop:cG-1.16}
+设 $n \geq 2$, $\gamma,  \gamma_{-},  \gamma_{+},  s_1,  s_2 \in \mathbb{R}$. 估计
+
+\[
+\| D ^ {\gamma} D _ {+} ^ {\gamma_+} D _ {-} ^ {\gamma_-} (\phi \psi) \| _ {L _ {t} ^ {2} L _ {x} ^ {2}} \lesssim \| \phi [ 0 ] \| _ {\dot {H} ^ {s _ {1}}} \| \psi [ 0 ] \| _ {\dot {H} ^ {s _ {2}}}
+\]
+
+对所有初值数据被 (1) 的解满足, 当且仅当如下条件成立:
+
+\[
+\begin{aligned}
+\gamma + \gamma_ {+} + \gamma_ {-} &= s _ {1} + s _ {2} - \frac {n - 1}{2},  \\
+\gamma_ {-} &\geq - \frac {n - 3}{4},  \\
+\gamma &> - \frac {n - 1}{2},  \\
+s _ {i} &\leq \gamma_ {-} + \frac {n - 1}{2},  \quad i = 1,  2,  \\
+s _ {1} + s _ {2} &\geq \frac {1}{2},  \\
+(s _ {i},  \gamma_ {-}) &\neq \left(\frac {n + 1}{4},  - \frac {n - 3}{4}\right),  \quad i = 1,  2,  \\
+(s _ {1} + s _ {2},  \gamma_ {-}) &\neq \left(\frac {1}{2},  - \frac {n - 3}{4}\right).
+\end{aligned}
+\]
+\end{proposition}
+
+这些估计与零二次型密切相关. 
+
+\begin{definition}\label{def:cG-1.17}
+设 $\phi,  \psi$ 是 $\mathbb{R}^{n+1}$ 上的两个光滑函数. 我们定义, 
+
+\begin{align*}
+Q _ {0} (\phi ,  \psi) &= m ^ {\alpha \beta} \partial_ {\alpha} \phi \partial_ {\beta} \psi \\
+Q _ {i j} (\phi ,  \psi) &= \partial_ {i} \phi \partial_ {j} \psi - \partial_ {i} \psi \partial_ {j} \phi \\
+Q _ {0 i} (\phi ,  \psi) &= \partial_ {i} \phi \partial_ {t} \psi - \partial_ {i} \psi \partial_ {t} \phi.
+\end{align*}
+\end{definition}
+
+\begin{definition}\label{def:cG-1.18}
+若 $\phi,  \psi$ 是 $S'(\mathbb{R}^{n+1})$ 中的分布, 其时空 傅里叶变换 $\widehat{\phi},  \widehat{\psi}$ 是函数. 我们记 $\phi \precsim \psi$, 当且仅当 $|\widehat{\phi}| \leq C\widehat{\psi}$. 
+\end{definition}
+
+\begin{lemma}[见 {[}44{]} 及其参考文献]\label{lem:cG-1.19}
+如下关系成立:
+
+\begin{equation}
+Q _ {0} (\phi ,  \psi) \precsim D _ {+} D _ {-} (\phi \psi)\label{eq:cG-17}
+\end{equation}
+
+\begin{equation}
+Q _ {i j} (\phi ,  \psi) \precsim D ^ {\frac {1}{2}} D _ {-} ^ {\frac {1}{2}} (D ^ {\frac {1}{2}} \phi D ^ {\frac {1}{2}} \psi)\label{eq:cG-18}
+\end{equation}
+\end{lemma}
+
+\begin{remark}\label{rem:cG-1.20}
+对 $Q_{0i}$ 可导出类似公式. 可以将上述引理与\propref{prop:cG-1.16} 的双线性估计结合, 导出零二次型的非平凡 $L^{2}$ 时空估计. 
+\end{remark}
+
+\begin{remark}\label{rem:cG-1.21}
+虽然\propref{prop:cG-1.16} 的双线性估计中显现的正则性增益是最近十年的发展, 但零二次型对非线性方程应用的重要性早先就已在衰减增益方面为人所知. 下面是一个典型事实. 
+\end{remark}
+
+\begin{proposition}[零形式的衰减{[}28{]}]\label{prop:cG-1.22}
+设 $\phi,  \psi$ 是 (1) 的两个解, 并假设其初值数据对足够大的 $s$ 满足\newterm{weighted-sobolev-norm}{加权 Sobolev 范数}{weighted Sobolev norm}界 (8). 则对零形式 $Q_0,  Q_{ij},  Q_{0i}$ 中的任何一个, 当 $t\to \infty$ 时有衰减估计, 
+
+\begin{equation}
+\left\| Q (\phi ,  \psi) (t) \right\| _ {L ^ {2} \left(\mathbb {R} ^ {n}\right)} \leq C t ^ {- n}\label{eq:cG-19}
+\end{equation}
+\end{proposition}
+
+证明是\propref{prop:cG-1.6} 的衰减估计的如下改进的直接推论. 
+
+\begin{proposition}[剥离衰减性质]\label{prop:cG-1.23}
+设 $\phi$ 是 $R^{n + 1}$ 中的任意函数, 使得对某个整数 $s > \frac{n}{2} +2$, $E_{s}[\phi]$ 有限. 设 $E_{\pm} = \partial_t \pm \partial_r$, 其中 $\partial_r = \sum_i\frac{x^i}{|x|}\partial_i$. 再考虑\footnote{（原书脚注 3 文本缺失, 待补）}在 $\mathbb{R}^{n + 1}$ 的每一点处的向量 $(E_A)_{A = 1}^{n - 1}$, 使得 $\langle E_A,  E_\pm \rangle = 0$ 且 $\langle E_A, E_B \rangle = \delta_{AB}$. 置 $|\nabla \phi |^2 = \sum_{A = 1}^{n - 1}E_A(\phi)^2$. 我们有, 
+
+\[
+\begin{aligned}
+\| E _ {+} \phi (t) \| _ {L ^ {\infty}} &\lesssim \left(\frac {1}{t}\right) ^ {\frac {n + 1}{2}} \\
+\| \nabla \phi (t) \| _ {L ^ {\infty}} &\lesssim \left(\frac {1}{t}\right) ^ {\frac {n + 1}{2}} \\
+\| (1 + | u |) E _ {-} \phi (t) \| _ {L ^ {\infty}} &\lesssim \left(\frac {1}{t}\right) ^ {\frac {n - 1}{2}}
+\end{aligned}
+\]
+\end{proposition}
+
+\begin{remark}\label{rem:cG-1.24}
+\propref{prop:cG-1.22} 中零二次型衰减的改进被用来(见 \cite{gfref28})在 $\mathbb{R}^{3 + 1}$ 中为满足零条件的一类一般拟线性波动方程建立小数据整体存在性. 证明 \cite{gfref28} 中结果所用的这些向量场技巧已被 Sideris 在 \cite{gfref63}、\cite{gfref64}、\cite{gfref65} 中推广到波映射与非线性弹性理论的应用中. 
+\end{remark}
+
+到目前为止, 我们只考虑了 $q = r = 4$ 情形下 (16) 型的一般双线性估计. 对"波动容许"指数 $q$ 与 $r$ 以及 $\gamma_{-}$, \propref{prop:cG-1.14} 给出的估计在 $s_{1} = s_{2}$ 时是精确的. 存在一个一般的双线性猜想, 断言在指数 $\gamma, \gamma_{+}, \gamma_{-}, s_{1}, s_{2}$ 的适当限制下, 估计 (16) 成立. 该猜想的若干非常重要的情形由 T. Tao \cite{gfref68} 利用 T. Wolff \cite{gfref76} 在他关于锥限制猜想的重要近期工作中发展的思想证明了. 然而我想以这些近期发展中的一个重要而非常简单的成分来结束第一讲. 这就是一般的波可以分解为管的思想. 
+
+\begin{definition}\label{def:cG-1.25}
+若波 $\phi$ 的初值数据满足
+
+\[
+\partial_ {t} \phi (0) = \pm i \sqrt {- \Delta} \phi (0)
+\]
+
+即 Fourier 表示 $\partial_t\widehat{\phi}(0, \xi) = \pm i|\xi |\widehat{\phi}(0, \xi)$, 则称波 $\phi$ 为 $\pm$ 波. 注意到任何波都可以按照公式
+
+\[
+\phi = \phi^ {+} + \phi^ {-}
+\]
+
+分解为 $\pm$ 波, 其中 $\phi^{\pm}$ 的初值数据由 $\phi^{\pm}[0] = P^{\pm}\phi [0]$ 给出, 
+
+\[
+P _ {\pm} \phi [ 0 ] := \left(\frac {\phi (0) \mp i (- \Delta) ^ {- 1 / 2} \phi_ {t} (0)}{2},  \frac {\phi_ {t} (0) \pm i (- \Delta) ^ {1 / 2} \phi (0)}{2}\right).
+\]
+\end{definition}
+
+\begin{remark}\label{rem:cG-1.26}
+注意到解 $\phi^{+},  \phi^{-}$ 由其数据唯一确定. 换言之, 我们只需分解 $\phi$ 的数据即可定义它们. 然而它们可以用 傅里叶变换表示如下, 
+
+\begin{equation}
+\phi^ {\pm} (t,  x) = \int e ^ {\pm i t | \xi |} e ^ {i x \cdot \xi} \widehat {P ^ {\pm} \phi [ 0 ]} (\xi) d \xi .\label{eq:cG-20}
+\end{equation}
+\end{remark}
+
+\begin{proposition}\label{prop:cG-1.27}
+考虑 $\phi = \phi^{-}$, 一个负波, 其 $\phi^{-}[0]$(本质上)支集在球 $B = B(0,  \Lambda_0)$ 内, $\Lambda_0 > 1$, 且其 傅里叶变换支集位于区域 $\{\xi : \frac{1}{2} \leq \xi_1 \leq 2,  |\xi'| \leq \frac{1}{\Lambda_0} \}$ 内, 其中 $|\xi'| = \sqrt{\xi_2^2 + \cdots + \xi_n^2}$. 对任意 $t \geq 0$, 我们考虑区域 $T^{+}(t,  \Lambda) = \{x : |x| \leq t + \Lambda_0;  |x_1 - t|^2 + |x'|^2 \leq \Lambda^2\}$. 则对所有满足 $\Lambda_0 \leq \Lambda \leq t \leq \Lambda_0^2$ 的 $t$, 有:
+
+\[
+\| \partial \phi^ {-} (t) \| _ {L ^ {2} (\Sigma_ {t} \backslash T ^ {+} (t,  \Lambda))} \leq C _ {N} \left(\frac {\Lambda_ {0}}{\Lambda} \right) ^ {N} E (\phi) ^ {\frac {1}{2}}
+\]
+\end{proposition}
+
+\begin{proof}
+该命题的标准证明基于对积分表示\eqref{eq:cG-20} 作简单的分部积分. 也可以给出基于交换向量场的纯几何证明 \cite{gfref43}. 
+\end{proof}
+
+前述命题的向量场方法证明, 结合\propref{prop:cG-1.22} 的零估计以及由 T. Wolff \cite{gfref76} 与 T. Tao \cite{gfref68} 开创的"尺度归纳"这一重要思想, 使我们能够\footnote{这是与 I.~Rodnianski 和 T.~Tao 合作中的工作.}给出如下双线性估计的纯几何证明:
+
+\begin{proposition}\label{prop:cG-1.28}
+设 $\phi,  \psi$ 是 (1) 的两个解, $Q$ 是零形式 $Q_0$、$Q_{ij}$ 或 $Q_{0i}$ 之一. 则
+
+\begin{equation}
+\| Q (\phi ,  \psi) \| _ {L ^ {2} (\mathbb {R} ^ {n + 1})} \lesssim \| D \phi [ 0 ] \| _ {L ^ {2} (\mathbb {R} ^ {n})} \| D ^ {\frac {n + 1}{2}} \phi [ 0 ] \| _ {L ^ {2} (\mathbb {R} ^ {n})}\label{eq:cG-21}
+\end{equation}
+
+该估计是\propref{prop:cG-1.16} 的特殊情形, 最早由 Machedon 与本人证明(见 \cite{gfref31}), 其证明严重依赖 $Q(\phi,  \psi)$ 的时空 傅里叶变换. 它已被用于 Yang-Mills \cite{gfref34}、Maxwell-Klein-Gordon \cite{gfref33} 与临界幂次 Yang-Mills-Higgs \cite{gfref19} 解的有限能量整体存在性的证明. 
+\end{proposition}
+
+\subsection{第二讲：半线性波动方程的应用}
+
+我们关心重要几何系统(如波映射、Yang-Mills 方程与 Maxwell-Klein-Gordon 方程)的 Cauchy 问题. 作为一阶近似, 所有这些方程都可以写成如下形式
+
+\[
+\Box \phi = \mathcal {N} (\phi), 
+\]
+
+其中 $\Box = -\partial_{t}^{2} + \Delta$ 是 $R \times R^{n}$ 上的标准波算子, $\Delta = \sum_{j=1}^{n} \partial_{j}^{2}$ 是 $R^{n}$ 上的 Laplace 算子, $\phi = \phi(t,  x)$ 对某个 $N \geq 1$ 取值于 $R^{N}$, 而 $\mathcal{N}$ 是关于时间变量局部的非线性算子(即 $\mathcal{N}(\phi)(t,  \cdot)$ 只依赖于 $t'$ 在 $t$ 的任意邻域内的 $\phi(t',  \cdot)$). 
+
+我们在初始超平面 $t = 0$ 上给定 Cauchy 数据:
+
+\[
+(\phi ,  \partial_ {t} \phi) _ {t = 0} = (f,  g) \in H ^ {s} \times H ^ {s - 1}
+\]
+
+其中 $H^{s} = \{f : (I - \Delta)^{s / 2}f\in L^{2}\}$. 为简单起见, 记 $\phi [0]\in H^s$. 
+
+事实上我们将集中于如下类型的系统:
+
+\mtsubsecn{1}{波映射}
+
+\begin{equation}
+\Box \phi^ {I} + \sum_ {J,  K} \Gamma_ {J K} ^ {I} (\phi) Q _ {0} (\phi^ {J},  \phi^ {K}) = 0.\tag{WM}\label{eq:cG-WM}
+\end{equation}
+
+这里, $\phi^{I}$ 表示 $\phi$ 的第 $I$ 个分量函数, $\Gamma_{JK}^{I}$ 是从 $R^{N}$ 到 $R$ 的光滑函数, $Q_{0}$ 是零形式
+
+\[
+Q _ {0} (\phi ,  \psi) = \sum_ {\mu = 0} ^ {n} \partial_ {\mu} \phi \partial^ {\mu} \psi = - \partial_ {t} \phi \partial_ {t} \psi + \sum_ {j = 1} ^ {n} \partial_ {j} \phi \partial_ {j} \psi .
+\]
+
+\mtsubsecn{2}{Yang-Mills 型}
+
+\begin{equation}
+\Box \phi = D ^ {- 1} Q (\phi ,  \phi) + Q (D ^ {- 1} \phi ,  \phi), \tag{YM}\label{eq:cG-YM}
+\end{equation}
+
+其中 $D^{\alpha}=(-\Delta)^{\alpha/2}$, 而 $Q$ 表示如下类型的任意双线性算子:给定向量值函数 $\phi$ 与 $\psi$, $Q(\phi, \psi)$ 的第 $I$ 个分量函数是 $Q_{ij}(\phi^{J}, \psi^{K})$(对所有 $1\leq i<j\leq n$ 及所有 $J$、K)的常实系数线性组合, 其中 $Q_{ij}$ 是零形式
+
+\[
+Q _ {i j} (\phi ,  \psi) = \partial_ {i} \phi \partial_ {j} \psi - \partial_ {i} \psi \partial_ {j} \phi .
+\]
+
+(等式 (\ref{eq:cG-YM}) 右端的两个 $Q$ 可能代表两个不同的这种算子. )
+
+\mtsubsecn{3}{Maxwell-Klein-Gordon 型}
+
+\begin{equation}
+\left\{ \begin{aligned} \Box \phi &= D ^ {- 1} Q (\psi ,  \psi),  \\ \Box \psi &= Q (D ^ {- 1} \phi ,  \psi),  \end{aligned} \right.\tag{MKG}\label{eq:cG-MKG}
+\end{equation}
+
+其中 $\phi = (\phi^1,  \ldots,  \phi^{N_1})$, $\psi = (\psi^1,  \ldots,  \psi^{N_2})$, $N = N_1 + N_2$, $Q$ 的含义与之前相同. 因此 (\ref{eq:cG-MKG}) 是 (\ref{eq:cG-YM}) 的特殊情形. 
+
+如下定理概括了今天已知的主要适定性结果. 
+
+\mtsubsecn{}{主定理}
+
+\begin{enumerate}
+\def\labelenumi{\roman{enumi}.}
+\item (\cite{gfref35, gfref44}.) 若 $n \geq 2$ 且 $s > s_c = \frac{n}{2}$, 则 (\ref{eq:cG-WM}) 对 $H^s(\mathbb{R}^n)$ 中的初值数据\newterm{well-posedness}{适定}{well-posed}. 
+\item (\cite{gfref72},  \cite{gfref73}.) 系统 (\ref{eq:cG-WM}) 对所有 $n \geq 2$ 在 Besov 空间 $B_2^{\frac{n}{2}, 1}(\mathbb{R}^n)$ 中对小数据局部适定. 
+\item (\cite{gfref70},  \cite{gfref41},  \cite{gfref71}.) 若 $n \geq 5$ 且目标流形容许有界可平行化结构, 则波映射系统对 $H^{\frac{n}{2}}(\mathbb{R}^{n})$ 中的小数据"弱适定". 若目标流形是标准球面 $S^{k}$, 则同一结果对 $n \geq 2$ 也成立. 
+\item (\cite{gfref33},  \cite{gfref34},  \cite{gfref19}.) 若 $n = 3$, 完整的 MKG 与 YM 系统在能量范数 $H^2(\mathbb{R}^n)$ 中对大数据整体适定. 该结果对带临界幂次非线性的 Yang-Mills-Higgs 系统也成立. 
+\item (\cite{gfref13},  \cite{gfref21}.) 若 $n = 3$, 完整的 MKG 系统在 $s > \frac{3}{4}$ 时局部适定, 在 $s > \frac{7}{8}$ 时整体适定. 
+\item (\cite{gfref39},  \cite{gfref47}.) 若 $n = 4$, 约化的 MKG 与 YM 型系统对 $s > s_c = 1$ 局部适定. 
+\end{enumerate}
+
+\mtsubsec{主定理的动机}
+
+考虑系统
+
+\begin{equation}
+\Box u = F (u,  \partial u), \label{eq:cG-22}
+\end{equation}
+
+其中 $u : R^{1+n} \to R^{N}$, $\partial u = (\partial_{t}u,  \partial_{1}u,  \ldots,  \partial_{n}u)$, F 是满足 $F(0) = 0$ 的光滑 $R^{N}$ 值函数. 对 (22) 有如下标准的存在唯一性结果:
+
+\begin{theorem}[经典局部存在性]\label{thm:cG-2.2}
+\eqref{eq:cG-22} 对所有 $s > \frac{n}{2} + 1$ 对 $H^{s} \times H^{s - 1}(\mathbb{R}^{n})$ 中的初值数据局部适定. 这意味着对任意初值数据 $u[0] \in H^{s}(\mathbb{R}^{n})$, $s > \frac{n}{2} + 1$, 存在 $T > 0$ 与唯一解
+
+\[
+u \in C ^ {0} ([ 0,  T ],  H ^ {s} (\mathbb {R} ^ {n})) \cap C ^ {1} ([ 0,  T ],  H ^ {s - 1} (\mathbb {R} ^ {n})).
+\]
+
+此外, 解连续(事实上解析地)依赖于数据. 
+\end{theorem}
+
+\begin{remark}\label{rem:cG-2.3}
+这一非常经典的结果的证明仅基于简单的能量估计、$H^s \subset L^{\infty}$ Sobolev 嵌入以及一些简单的插值不等式. 此外, 证明无需重大困难即可推广到非常一般的演化方程类, 包括拟线性波动方程组. 
+\end{remark}
+
+\begin{remark}\label{rem:cG-2.4}
+就初值数据的正则性假设而言, 该结果远非精确. 最优适定性问题具有根本的重要性, 并在过去 10 年中产生了大量工作. 
+\end{remark}
+
+为了更好地理解我们例子(波映射、Maxwell-Klein-Gordon 与 Yang-Mills 方程)背景下最优局部适定性的问题, 我们需要定义\newterm{critical-wp-exponent}{临界适定性指数}{critical well-posedness exponent}(以下简记为 WP 指数)$s_{c}$. 我们的所有方程都有与之相联的自然伸缩, 而 $s_{c}$ 是使初值数据的 $\dot{H}^{s} \times \dot{H}^{s-1}$ 范数在该伸缩下不变的那个唯一的 $s$ 值. 例如, 若 $u$ 解 (\ref{eq:cG-WM}), 则对任意 $\lambda > 0$, 
+
+\[
+u _ {\lambda} (t,  x) = u (\lambda t,  \lambda x), 
+\]
+
+也解 (\ref{eq:cG-WM}). 由于 $\| u_{\lambda}(t) \|_{H^s} = \lambda^{\frac{n}{2} - s} \| u(\lambda t) \|_{H^s}$, (\ref{eq:cG-WM}) 的临界 WP 指数为 $s_c = \frac{n}{2}$. 
+
+同样的原理适用于 (\ref{eq:cG-MKG})、(\ref{eq:cG-YM}). 事实上, 它们都有临界 WP 指数 $s_c = \frac{n - 2}{2}$. 
+
+有了这个定义, 我们陈述如下(见 \cite{gfref29}):
+
+\mtsubsecn{}{一般 WP 猜想}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item 对所有基本场论, 初值问题对 $H^{s}$ 中的初值数据($s > s_{c}$)局部适定. 
+\item 基本场论对所有 $H^{s_{c}} \times H^{s_{c}-1}$ 范数小的初值数据弱\footnote{解可能不能光滑（解析地）依赖于数据.}整体适定. 
+\item 基本场论对 $H^{s} \times H^{s-1}$ 中的初值数据($s < s_{c}$)不适定. 
+\end{enumerate}
+
+为了证明 $s > s_c$ 时的局部适定性, 需要在适当的 Banach 空间中进行 Picard 迭代. 考虑 Cauchy 问题
+
+\[
+\Box u = \mathcal {N} (u),  \qquad (u,  \partial_ {t} u) _ {t = 0} = (f,  g)
+\]
+
+第 0 次迭代 $u_0$ 就是解的齐次部分:
+
+\[
+\Box u _ {0} = 0,  \qquad (u,  \partial_ {t} u) _ {t = 0} = (f,  g).
+\]
+
+后续迭代归纳地由下式给出
+
+\[
+u _ {j + 1} = u _ {0} + \square^ {- 1} \mathcal {N} (u _ {j})
+\]
+
+其中 $j \geq 0$, $\Box^{-1}$ 是把任意充分正则的 $F$ 映到 $\Box v = F$ 且 $(v,  \partial_{t} v)_{t=0} = 0$ 的解 $v$ 的算子. 
+
+若我们要通过迭代证明 $\Box u = \mathcal{N}(u)$ 带 $H^{s} \times H^{s-1}$ 初值数据的局部解的存在性, 就必须能够证明迭代仍留在数据空间中:
+
+\begin{equation}
+f \in H ^ {s},  \quad g \in H ^ {s - 1} \implies u _ {j} (t) \in H ^ {s},  \quad \partial_ {t} u _ {j} (t) \in H ^ {s - 1}\label{eq:cG-23}
+\end{equation}
+
+对所有 $j \geq 0$ 及某个区间 $(0,  T)$ 内的所有 $t$ 成立. 对 $j = 0$, (23) 平凡成立, 但 $j = 1$ 的情形已经提供了有价值的见解. 
+
+\begin{definition}\label{def:cG-2.5}
+若 (23) 对 $j = 1$ 及所有 $(f, g)\in H^{s}\times H^{s - 1}$ 成立, 则称第一次迭代对 $H^{s}$ 中的初值数据是 $WP$ 的. 
+\end{definition}
+
+\textbf{例 1.} 考虑模型问题
+
+\[
+\Box u = (\partial_ {t} u) ^ {2}, 
+\]
+
+其中 $u$ 是实值的. 该方程与 (\ref{eq:cG-WM}) 具有相同的伸缩性质, 因此其 WP 指数为 $s_c = \frac{n}{2}$. 我们想找出使得第一次迭代 $u_1$ 对 $H^s$ 中的初值数据为 WP 的那些 $s$ 的集合的下界. 一个涉及 Duhamel 原理的简单计算表明, 这归结为证明如下类型的估计
+
+\begin{equation}
+\int_ {\mathbb {R} ^ {n} \times \mathbb {R} ^ {n}} K (\xi ,  \eta) f (\xi) g (\eta) h (\xi + \eta) d \xi d \eta \lesssim \| f \| _ {L ^ {2}} \| g \| _ {L ^ {2}} \| h \| _ {L ^ {2}}\label{eq:cG-24}
+\end{equation}
+
+对所有 $f, g, h\in L^{2}(\mathbb{R}^{n})$ 成立, 其中
+
+\begin{equation}
+K (\xi ,  \eta) = \frac {\langle \xi + \eta \rangle ^ {s - 1}}{\langle \xi \rangle ^ {s - 1} \langle \eta \rangle ^ {s - 1} \left(1 + \Delta_ {\pm} (\xi ,  \eta)\right)}\label{eq:cG-25}
+\end{equation}
+
+\begin{equation}
+\Delta_ {+} = | \xi | + | \eta | - | \xi + \eta |,  \quad \Delta_ {-} = | \xi + \eta | - \left| | \xi | - | \eta | \right|.\label{eq:cG-26}
+\end{equation}
+
+这里我们使用记号 $\langle\cdot\rangle=1+|\cdot|$. 
+
+关于如下类型的积分估计, 可以证明:
+
+\begin{equation}
+\int_ {\mathbb {R} ^ {n} \times \mathbb {R} ^ {n}} \frac {f (\xi) g (\eta) h (\xi + \eta)}{\langle \xi \rangle ^ {a} \langle \eta \rangle ^ {b} (1 + \Delta_ {\pm} (\xi ,  \eta)) ^ {c}} d \xi d \eta \lesssim \| f \| _ {L ^ {2}} \| g \| _ {L ^ {2}} \| h \| _ {L ^ {2}}, \label{eq:cG-27}
+\end{equation}
+
+其中 $\Delta_{\pm}$ 由 (26) 给出. 
+
+\begin{proposition}\label{prop:cG-2.6}
+设 $a,  b,  c \geq 0$. 则当 $a + b + c > \frac{n}{2}$ 且 $c < \frac{n-1}{4}$ 时, (27) 成立. 
+\end{proposition}
+
+\begin{remark}\label{rem:cG-2.7}
+应当指出, 若 $a + b + c < \frac{n}{2}$ 或 $c \geq \frac{n-1}{4}$, 该估计不成立, 这基于简单的集中型反例. 
+\end{remark}
+
+将\propref{prop:cG-2.6} 应用于核 (25), 我们需要
+
+\[
+s - 1 + \min \left(1,  \frac {n - 1}{4}\right) > \frac {n}{2}, 
+\]
+
+即 $s > \max \left( \frac{n}{2},  \frac{n+5}{4} \right)$. 
+
+因此, 对维数 $n = 3$ 中的模型方程 $\Box u = (\partial_t u)^2$, 上述例子表明第一次迭代对 $H^s$ 中的初值数据在 $s > 2 = s_c + \frac{1}{2}$ 时为 WP; 事实上, 可以证明当 $s \leq 2$ 时这不成立. 这应与 Lindblad \cite{gfref49} 在维数 $n = 3$ 中的反例相比较, 后者表明存在 $\Box u = q(\partial u)$ 型的方程——其中 $q$ 是 $\mathbb{R}^4$ 上的二次型——对 $H^2$ 中的数据不适定. 然而, 若二次型 $q$ 是零形式型的, 则几乎可以一路到达临界 WP 指数 $s_c$. 下面两个例子在第一次迭代的层面上验证了这一点. 
+
+\textbf{例 2.} 考虑方程\footnote{下面的方程其实可以平凡地求解并分析, 参见 \cite{gfref31} 引言的第一页.}
+
+\[
+\Box u = Q _ {0} (u,  u), 
+\]
+
+其中 $u$ 是实值的. 同样, 第一次迭代的 WP 问题归结为证明 (24) 型估计, 但由于算子 $Q_{0}$ 的特殊零结构, 奇异因子 $\Delta_{\pm}$ 从核的分母中完全消去. 事实上, K 由下式给出
+
+\[
+K (\xi ,  \eta) = \langle \xi \rangle ^ {- s} + \langle \eta \rangle ^ {- s}, 
+\]
+
+因此由\propref{prop:cG-2.6}, 第一次迭代对 $H^{s}$ 中的数据在 $s > s_{c} = \frac{n}{2}$ 时为 WP. 
+
+\textbf{例 3.} 考虑方程
+
+\[
+\Box u = Q (u,  u), 
+\]
+
+其中 $u$ 是向量值的, $Q(u, u)$ 是其第 $I$ 个分量为 $Q_{ij}(u^{J}, u^{K})$(对所有 $i$、$j$、$J$ 与 $K$)的线性组合的向量. 与前一个例子一样, 由于 $Q_{ij}$ 的零结构存在消去, 但在这种情况下我们只能消去 $\Delta_{\pm}$ 的半个幂. 事实上, $K$ 现在由下式给出
+
+\[
+K (\xi ,  \eta) = \left(\langle \xi \rangle ^ {- s + \frac {1}{2}} + \langle \eta \rangle ^ {- s + \frac {1}{2}}\right) \left(1 + \Delta_ {\pm} (\xi ,  \eta)\right) ^ {- \frac {1}{2}}
+\]
+
+因此第一次迭代对 $H^s$ 中的数据在 $s > \max \left( \frac{n}{2},  \frac{n + 3}{4} \right)$ 时为 WP. 
+
+通过一个明显的修改, 若我们转而考虑方程
+
+\[
+\Box u = Q (D ^ {- 1} u,  u), 
+\]
+
+则发现第一次迭代对 $H^{s}$ 中的数据在 $s > \max\left(\frac{n-2}{2},  \frac{n-1}{4}\right)$ 时为 WP. 
+
+\textbf{更高阶迭代.} 第一次迭代的分析一旦完成, 真正困难的工作就开始了. 为了证明迭代 $u_{k+1}$ 满足 (23), 仅仅对前面所有 $u_{j},  j \leq k$ 使用 (23) 是不够的. \footnote{除了 ($s > s_c + 1$) 时经典局部存在性结果的证明.}我们需要一个强得多的函数空间, 它与第一讲中描述的 Strichartz 与双线性估计密切相关. 
+
+\textbf{记号.} $R^{n+1}$ 中缓增分布 $u$ 的 傅里叶变换记为 $Fu$ 或 $\widehat{u}$, 与空间维数无关. 在频率空间中我们使用坐标 $(\tau,  \xi) = \Xi = (\Xi^{0},  \ldots,  \Xi^{n})$, 其中 $\tau \in R$ 与 $\xi \in R^{n}$ 分别对应于时间变量 $t$ 与空间变量 x. $R^{1+n}$ 上的 Lorentz 内积为
+
+\[
+\langle \Xi ;  \widetilde {\Xi} \rangle = \sum_ {\mu = 0} ^ {n} \Xi_ {\mu} \widetilde {\Xi} ^ {\mu} = - \Xi^ {0} \widetilde {\Xi} ^ {0} + \sum_ {j = 1} ^ {n} \Xi^ {j} \widetilde {\Xi} ^ {j}, 
+\]
+
+波算子 $\square$ 的符号为 $- \langle \Xi; \Xi\rangle = \tau^{2}-|\xi|^{2}$. $|\Xi|$ 总表示 Euclid 范数 $|\Xi|^{2}=\tau^{2}+|\xi|^{2}$. 
+
+\begin{definition}\label{def:cG-2.8}
+设 $\Lambda^{\alpha}$、$\Lambda_{+}^{\alpha}$ 与 $\Lambda_{-}^{\alpha}$ 是由下式给出的乘子
+
+\begin{align*}
+\widehat {\Lambda^ {\alpha} f} (\xi) &= \left(1 + | \xi | ^ {2}\right) ^ {\alpha / 2} \widehat {f} (\xi), \\
+\widehat {\Lambda_ {+} ^ {\alpha}} u (\Xi) &= \left(1 + | \Xi | ^ {2}\right) ^ {\alpha / 2} \widehat {u} (\Xi), \\
+\widehat {\Lambda_ {-} ^ {\alpha}} u (\Xi) &= \left(1 + \frac {\langle \Xi ;  \Xi \rangle ^ {2}}{1 + | \Xi | ^ {2}}\right) ^ {\alpha / 2} \widehat {u} (\Xi).
+\end{align*}
+\end{definition}
+
+我们定义空间 $H^{s, \theta}(\mathbb{R}^{n + 1})$, 它以与 $H^{s}(\mathbb{R}^{n})$ 适应 $\mathbb{R}^n$ 上 Laplace 算子相同的方式适应 $\mathbb{R}^{1 + n}$ 上的波算子. 
+
+\begin{definition}\label{def:cG-2.9}
+对 $s,  \theta \in \mathbb{R}$, 定义
+
+\[
+H ^ {s,  \theta} = \left\{u \in \mathcal {S} ^ {\prime} \left(\mathbb {R} ^ {n + 1}\right) : \Lambda^ {s} \Lambda_ {-} ^ {\theta} u \in L ^ {2} \left(\mathbb {R} ^ {n + 1}\right) \right\}
+\]
+
+其范数为 $\| u\|_{s, \theta} = \| \Lambda^s\Lambda_-^\theta u\|_{L^2}$. 
+\end{definition}
+
+在 $H^{s, \theta}$ 与数据在 $H^{s}$ 中的齐次波动方程的解空间之间存在一个非常简单的联系. 事实上, 每个 $u \in H^{s, \theta}$ 都具有如下形式
+
+\begin{equation}
+u (t) = \frac {1}{2 \pi} \int_ {- \infty} ^ {\infty} \frac {e ^ {i t \lambda} u _ {\lambda} (t)}{(1 + | \lambda |) ^ {\theta}} d \lambda \qquad (H ^ {s}\text{值积分})\label{eq:cG-28}
+\end{equation}
+
+其中 $\{u_{\lambda}\}_{\lambda \in \mathbb{R}}$ 是 (1) 的以 $H^{s}$ 中数据为初值的一参数解族; 即 $\Box u_{\lambda} = 0$ 且 $(u_{\lambda}, \partial_t u_{\lambda})_{t = 0} = (f_{\lambda}, 0)$, 其中 $\lambda \mapsto f_{\lambda}$ 属于 $L^2 (\mathbb{R}, H^s)$. 此外, $\| u\|_{s, \theta}^2 = \int \| f_\lambda \| _s^2 d\lambda$. 
+
+(28) 的一个重要推论如下:
+
+\textbf{原理.} 数据在 $H^{s}$ 中的齐次波动方程解的线性或多重线性时空估计, 蕴含对 $H^{s, \theta}$、$\theta > \frac{1}{2}$ 中元素的相应估计. 
+
+空间 $H^{s, \theta}$ 为证明主定理提供了一个粗略的框架. 事实上, 它们只适用于证明主定理的第 i) 部分. 所有进一步的进展都需要引入这些空间的实质性改进. 关于 $H^{s, \theta}$ 空间及其修改如何与第一讲的双线性与 Strichartz 估计以及上述原理一起用来证明主定理中 $s > s_{c}$ 的适定性结果, 我们请感兴趣的读者参阅我们的综述 \cite{gfref45}. $s = s_{c}$ 的情形在 T. Tao 近期的研究之前完全开放, 这将在下一节描述. 
+
+\mtsubsec{临界正则性的波映射}
+
+下面我将讨论 T. Tao 最近获得的关于临界正则性波映射的突破性结果. 他的结果以有力的方式说明了物理空间中的几何思想与 Fourier 分析技巧(如仿微分演算、Strichartz 与双线性估计)之间的相互作用. 因此它与这些讲稿的框架非常吻合. 
+
+他的结果适用于波映射 $\phi : \mathbb{R}^{n+1} \to S^N$, 其中 $S^N$ 是 Euclid 空间 $\mathbb{R}^{N+1}$ 中的单位球面, 对任意维数 $n \geq 2$ 成立. 不过 $n \geq 5$ 的情形要容易得多, 使人们能够集中于 Tao 的规范重整化这一主要新思想. 事实上我将给出 Rodnianski 与本人 \cite{gfref41} 对 Tao 的 $n \geq 5$ 结果的推广, 推广到一般的目标流形类. 
+
+设 $\phi : \mathbb{R}^{n+1} \dashrightarrow (\mathcal{N},  h)$, 其中 $(\mathcal{N},  h)$ 是维数为 $N$ 的 Riemann 流形. 这里 $\mathbb{R}^{n+1}$ 表示配备度量 $m = \mathrm{diag}(-1,  1,  \ldots,  1)$ 的标准 Minkowski 空间. $\nabla$ 表示 $\mathcal{N}$ 的切丛 $T\mathcal{N}$ 上的 Levi-Civita 联络. 在 $\mathcal{N}$ 的局部坐标 $y^I,  I = 1,  \ldots,  N$ 下, 波映射方程取如下熟悉的形式
+
+\begin{equation}
+\partial^ {\alpha} \partial_ {\alpha} \phi^ {I} + \Gamma_ {J K} ^ {I} \partial_ {\beta} \phi^ {J} \partial_ {\gamma} \phi^ {K} m ^ {\beta \gamma} = 0.\label{eq:cG-29}
+\end{equation}
+
+其中 $\Gamma_{JK}^{I}$ 是 $\mathcal{N}$ 上 Levi-Civita 联络 $\nabla$ 的 Christoffel 系数, $\phi^I,  I = 1,  \ldots,  N$ 是映射 $\phi$ 在 $\mathcal{N}$ 局部坐标下的分量. 设 $e_a = e_a^I \frac{\partial}{\partial y^I}$ 是向量场的\newterm{orthonormal-frame}{标准正交标架}{orthonormal frame}, $\omega^a = \omega_I^a dy^I$ 是相应的 1-形式对偶基, 满足 $\omega^a(e_b) = \delta_b^a$. 由 $h(e_a,  e_b) = \delta_{ab}$ 推得 $h_{IJ} = \sum_a \omega_I^a \omega_J^a$. 定义, 
+
+\begin{equation}
+\phi_ {\alpha} ^ {a} = \omega_ {I} ^ {a} \partial_ {\alpha} \phi^ {I}\label{eq:cG-30}
+\end{equation}
+
+其中 $\phi^I$ 是映射 $\phi$ 相对于 $\mathcal{N}$ 上局部坐标 $y^{I}$ 的分量. 显然 $\partial_{\alpha}\phi^{I} = e_{a}^{I}\phi_{\alpha}^{a}$. 给定 $\mathcal{N}$ 上的函数 $F$, 记 $\partial_{\alpha}F(\phi) = \frac{\partial}{\partial y^{I}} F(\phi)\partial_{\alpha}\phi^{I} = \frac{\partial}{\partial y^{I}} F(\phi)e_{d}^{I}\phi_{\alpha}^{d} = F_{, d}(\phi)\phi_{\alpha}^{d}$, 其中 $F_{, d} = e_{d}(F)$. 
+
+我们容易验证, 与波映射 $\phi$ 相联的函数 $\phi_{\alpha}^{a}=\langle\partial_{\alpha}\phi, e_{a}\rangle$ 满足\footnote{（原书脚注 8 文本缺失, 待补）}如下\newterm{divergence-curl-system}{散度-旋度系统}{divergence-curl system}, 
+
+\begin{equation}
+\partial_ {\beta} \phi_ {\alpha} ^ {a} - \partial_ {\alpha} \phi_ {\beta} ^ {a} = C _ {b c} ^ {a} \phi_ {\alpha} ^ {b} \phi_ {\beta} ^ {c}\label{eq:cG-31}
+\end{equation}
+
+\begin{equation}
+\partial^ {\alpha} \phi_ {\alpha} ^ {a} = - \Gamma_ {b c} ^ {a} \phi_ {\beta} ^ {b} \phi_ {\gamma} ^ {c} m ^ {\beta \gamma}\label{eq:cG-32}
+\end{equation}
+
+其中 $C_{bc}^{a}$ 与 $\Gamma_{bc}^{a}$ 分别是标架的\newterm{structure-coefficients}{结构系数}{structure coefficients}与\newterm{connection-coefficients}{联络系数}{connection coefficients}, 
+
+\[
+\begin{aligned}
+[e _ {b},  e _ {c}] &= C _ {b c} ^ {a} e _ {a} \\
+\nabla_ {e _ {b}} e _ {c} &= \Gamma_ {b c} ^ {a} e _ {a}
+\end{aligned}
+\]
+
+鉴于公式 $[e_b, e_c] = \nabla_{e_b}e_c - \nabla_{e_c}e_b$, 我们推得
+
+\[
+C _ {b c} ^ {a} = \Gamma_ {b c} ^ {a} - \Gamma_ {c b} ^ {a}.
+\]
+
+由于标架 $e_a$ 是标准正交的, $\Gamma_{bc}^a = \langle \nabla_{e_b} e_c;  e_a \rangle = - \langle e_c;  \nabla_{e_b} e_a \rangle$, 因此
+
+\begin{equation}
+\Gamma_ {b c} ^ {a} = - \Gamma_ {b a} ^ {c}.\label{eq:cG-33}
+\end{equation}
+
+此外, 
+
+\[
+\Gamma_ {b c} ^ {a} = \frac {1}{2} \left(C _ {b c} ^ {a} + C _ {a c} ^ {b} + C _ {a b} ^ {c} \right).
+\]
+
+\begin{definition}\label{def:cG-2.11}
+若存在 $N$ 上的标准正交标架 $(e_{a})_{a=1}^{N}$, 使得结构系数 $C_{bc}^{a}$ 及其标架导数 $C_{bc, d_{1}d_{2}\ldots d_{k}}^{a}$ 在 $N$ 上一致有界, 则称 Riemann 流形 $N$ 具有"有界可平行化"结构. 
+\end{definition}
+
+\begin{remark}\label{rem:cG-2.12}
+有界可平行化流形有大量例子. 首先, 在任何 李群上, 我们都可以构造左不变向量场的标准正交基 $e_a$, 使得结构常数 $C_{bc}^a$ 为常数. \footnote{我们把这些结构称为``常可平行化''.}常负曲率流形 $\mathbf{H}^N$($N > 2$)是有界可平行化的. 此外 $\mathbf{H}^2$, 即双曲平面, 是 李群, 见 \cite{gfref11} 第 3.1 节的相关讨论. 另外, 任何紧 Riemann 流形都可以作为\newterm{totally-geodesic-submanifold}{全测地子流形}{totally geodesic submanifold}嵌入到有界可平行化的 Riemann 流形中, 见 \cite{gfref11}. 
+\end{remark}
+
+\begin{proposition}\label{prop:cG-2.13}
+设 $N$ 是 Riemann 流形, $\phi: R^{n+1} \longrightarrow N$ 是波映射. 1-形式 $\phi_{\alpha}^{a} = \langle \partial_{\alpha}\phi,  e_{a} \rangle$ 满足\eqref{eq:cG-31}、(32) 以及如下波动方程组, 
+
+\begin{equation}
+\Box \Phi = - 2 R _ {\mu} \cdot \partial^ {\mu} \Phi + E\label{eq:cG-34}
+\end{equation}
+
+其中 $\Phi = (\phi_{\alpha}^{a})$, $R_{\mu} = (R_{b\mu}^{a})_{a, b = 1}^{N}$, $R_{b\mu}^{a} = \Gamma_{cb}^{a}\phi_{\mu}^{c}$. $E = (E_{\alpha}^{a})$ 的分量是关于 $\Phi = (\phi_{\alpha}^{a})$ 的分量的三次齐次多项式, 其系数只依赖于结构函数 $C_{bc}^{a}$ 及其关于标架的导数 $C_{bc, d}^{a}$. 
+\end{proposition}
+
+\begin{remark}\label{rem:cG-2.14}
+必须强调, 矩阵 $R_{\mu}$ 是反对称的, 即
+
+\begin{equation}
+R _ {b \mu} ^ {a} = - R _ {a \mu} ^ {b}\label{eq:cG-35}
+\end{equation}
+
+这是 \eqref{eq:cG-33} 的直接推论. 这表明著名的"Helein 技巧"——在 $N$ 为标准球面的特殊情形下将波映射方程的形式反对称化, 这一技巧在 Tao 关于标准球面的工作 \cite{gfref70}、\cite{gfref71} 中起着根本作用——实际上源于任意 Riemann 流形上联络系数的普遍性质, 只要用标准正交标架表示即可. 
+\end{remark}
+
+我们研究波映射在如下初值问题下的演化
+
+\begin{equation}
+\phi (0) = \varphi ,  \qquad \partial_ {t} \phi (0) = \psi = \psi_ {0} ^ {a} e _ {a}\label{eq:cG-36}
+\end{equation}
+
+$\varphi$ 是从 $R^{n}$ 到 $N$ 的任意光滑映射, $\psi = \psi_{0}^{a}e_{a}$ 是从 $R^{n+1}$ 到 TN 的任意光滑映射. 设 $\varphi_{i}^{a} = \langle\partial_{i}\varphi,  e_{a}\rangle$. 
+
+\begin{definition}\label{def:cG-2.15}
+若所有分量 $\varphi_i^a$、$\psi_i^a$ 分别属于空间 $\dot{H}^{s-1}(\mathbb{R}^n)$、$H^{s-1}(\mathbb{R}^n)$, 则称初值数据 $\phi[0] = (\varphi,  \psi)$ 属于 Sobolev 空间 $\dot{H}^s(\mathbb{R}^n)$, resp. $H^s(\mathbb{R}^n)$. 记
+
+\[
+\left\| \phi [ 0 ] \right\| _ {\dot {H} ^ {s}} = \sum_ {a,  i} \left(\left\| \varphi_ {i} ^ {a} \right\| _ {\dot {H} ^ {s - 1}} + \left\| \psi_ {i} ^ {a} \right\| _ {\dot {H} ^ {s - 1}}\right)
+\]
+
+$\| \phi [0]\|_{H^s}$ 的定义类似. 
+\end{definition}
+
+我们现在可以陈述我们的定理, 见 \cite{gfref41}. 
+
+\begin{theorem}\label{thm:cG-2.16}
+设 $N$ 是配备有界可平行化结构的 Riemann 流形. 假设 $n \geq 5$, 初值数据 $\phi[0] = (\varphi,  \psi = \psi_{i}^{a} e_{a})$ 对某个 $\frac{n}{2} < s$ 属于 $H^{s}$. 我们还作临界小性假设:
+
+\[
+\| \phi [ 0 ] \| _ {\dot {H} ^ {\frac {n}{2}}} \leq \varepsilon
+\]
+
+则带初值数据 $\phi[0]$ 的波映射 $\phi$ 可以在 $H^{s}$ 范数意义下唯一地整体延拓到任意时间. 
+\end{theorem}
+
+\begin{remark}\label{rem:cG-2.17}
+该定理把 \cite{gfref70} 中的结果从目标流形为标准球面的情形推广到有界、可平行化流形的情形. 维数限制 $n \geq 5$ 与 \cite{gfref70} 中相同; 这使我们只需依赖 Strichartz 估计. 对标准球面的情形,   维数限制在 \cite{gfref71} 中借助双线性估计\footnote{这些量被用来利用特殊零二次型 $Q_0(u, v)=m^{\alpha\beta}\partial_\alpha u\, \partial_\beta v$ 的存在, 它出现在波映射到标准球面的特殊表达式中,  见 \cite{gfref70}、\cite{gfref71}.}、$H^{s, \theta}$ 空间以及 \cite{gfref73} 的精细方法被去除了. 即使有 \cite{gfref71} 作参照, 把我们的结果推广到二维似乎也不是直截了当的. \footnote{这是因为需要处理除 $Q_0$ 之外其他类型的零二次型.此外,  我们是对映射的一阶导数（而不是映射本身）在 $\Lambda$ 中使用波动方程（见 (34)）, 这带来了额外的复杂性.}
+\end{remark}
+
+主定理的证明依赖于 $H^{s}$、$s > \frac{n}{2}$ 中的局部适定性结果. 下面陈述精确的结果:
+
+\begin{theorem}\label{thm:cG-2.18}
+假设初值数据 $\phi[0] \in H^{s}(\mathbb{R}^{n})$ 对某个 $s \geq s_{0} > \frac{n}{2}$ 成立. 存在只依赖于 $\| \phi[0] \|_{H^{s_{0}}}$ 的大小的 $T > 0$, 以及定义在片 $[0,  T] \times \mathbb{R}^{n}$ 上的系统 (31)、(32) 的唯一解 $\phi$, 满足
+
+\[
+\| \phi [ t ] \| _ {H ^ {s}} \leq C \| \phi [ 0 ] \| _ {H ^ {s}}
+\]
+
+对所有 $t \in [0,  T]$ 成立, 其中 $C$ 是只依赖于 $T$、$s$、$s_{0} - \frac{n}{2}$ 与 $n$ 的常数. 
+\end{theorem}
+
+\begin{proof}
+我们使用 \cite{gfref70} 的 Littlewood-Paley 记号. 于是, 对函数 $\phi(t, x)$, 记投影 $P_{k}\phi(t, x)=\int e^{ix\cdot\xi}\chi(2^{-k}\xi)\widehat{\phi}(t, \xi)d\xi$, 其中 $\widehat{\phi}(t, \xi)$ 是 $\phi$ 的空间 傅里叶变换, $\chi(\xi)=\eta(\xi)-\eta(2\xi)$, $\eta$ 是支集在 $|\xi|\leq 2$ 内、在球 $|\xi|\leq 1$ 上等于 1 的非负光滑 bump 函数. 因此 $\chi(\xi)$ 的支集在 $\{\frac{1}{2}\leq |\xi|\leq 2\}$ 内, 且对所有 $\xi\neq 0$ 有 $\sum_{k\in\mathbf{Z}}\chi(2^{-k}\xi)=1$. 我们还定义 $P_{\leq k}=\sum_{l\leq k}P_{l}$. 另外, 对任意区间 $I\subset\mathbf{Z}$, 以显然的方式定义 $P_{I}$. 
+
+\textbf{记号:} 我们将经常使用记号 $A \lesssim B$ 表示 $A \leq cB$, 其中常数 $c > 0$ 不依赖于我们估计中使用的任何重要参数. 
+
+仿照 \cite{gfref70}, 我们引入记号
+
+\begin{equation}
+\| \Phi \| _ {S _ {k}} = \sup _ {q,  r \in \mathcal {A}} 2 ^ {k (\frac {1}{q} + \frac {n}{r} - 1)} \left(\| \Phi \| _ {L _ {t} ^ {q} L _ {x} ^ {r}} + 2 ^ {- k} \| \partial_ {t} \Phi \| _ {L _ {t} ^ {q} L _ {x} ^ {r}} \right)\label{eq:cG-37}
+\end{equation}
+
+其中 $\mathcal{A}=\{(q, r) : 2\leq q, r\leq\infty, \frac{1}{q}+\frac{n-1}{2r}\leq\frac{n-1}{4}\}$ 是容许 Strichartz 指数集. 回顾, 
+
+\begin{proposition}[Strichartz 型估计]\label{prop:cG-2.19}
+对任意固定的整数 $k$ 以及 $\mathbb{R}\times\mathbb{R}^{n}$ 上的函数 $\phi(t, x)$, 若 $\hat{\phi}(t, \xi)$ 的支集包含在二进区域 $2^{k-1}\leq|\xi|\leq2^{k+1}$ 内, 则我们有估计
+
+\[
+\| \phi \| _ {S _ {k}} \lesssim \| \phi (0) \| _ {H ^ {\frac {n - 2}{2}}} + \| \partial_ {t} \phi (0) \| _ {H ^ {\frac {n - 4}{2}}} + 2 ^ {k \frac {n - 4}{2}} \| \Box \phi \| _ {L _ {t} ^ {1} L _ {x} ^ {2}}.
+\]
+\end{proposition}
+\end{proof}
+
+下面回顾 \cite{gfref70} 中给出的\newterm{frequency-envelope}{频率包络}{frequency envelope}的定义. 
+
+\begin{definition}\label{def:cG-2.20}
+频率包络是满足
+
+\begin{equation}
+c _ {k} \lesssim 2 ^ {\sigma | k - k ^ {\prime} |} c _ {k ^ {\prime}}\label{eq:cG-38}
+\end{equation}
+
+对所有 $k,  k' \in \mathbf{Z}$ 成立的 $l^2$ 序列 $c = (c_k)_{k \in \mathbf{Z}}$. 这里 $\sigma$ 是固定的正常数; 与 \cite{gfref70} 中一样, 取 $0 < \sigma < \frac{1}{2}$. 此外还需要 $0 < \sigma < \frac{n - 4}{4}$ 与 $0 < \sigma < \frac{n - 3}{4(n - 1)}$. 
+
+若函数 $f$ 在 $\mathbb{R}^n$ 上的 $\dot{H}^s$ 范数对所有 $k\in \mathbf{Z}$ 满足 $\| P_kf\|_{\dot{H}^s}\leq c_k$, 则称它位于包络 $c$ 之下. 在没有混淆之虞时, 记 $f \ll_s c$ 或简单地 $f \ll c$. 容易验证, 若 $\| f\|_{\dot{H}^s}\leq \varepsilon$, 则存在包络 $c\in l^2$, 使得 $\| c\|_{l^2}\lesssim \varepsilon$ 且 $f \ll_s c$. 事实上, 只需取 $c_{k} = \sum_{k^{\prime}\in \mathbf{Z}}2^{-\sigma |k - k^{\prime}|}\| P_{k^{\prime}}f\|_{\dot{H}^s}$. 
+\end{definition}
+
+\begin{definition}\label{def:cG-2.21}
+固定 $0 < \sigma < \min\left(\frac{1}{2},  \frac{n-4}{4},  \frac{n-3}{4(n-1)}\right)$, c 是频率包络. 若初值数据 $\phi[0] = \left(\phi(0) = \varphi,  \partial_t \phi(0) = \psi = \psi_0^a e_a\right)$ 相对于我们的标架 $e_a$ 对所有 $k \in \mathbf{Z}$ 满足
+
+\[
+\left\| P _ {k} \phi [ 0 ] \right\| _ {\dot {H} ^ {\frac {n}{2}}} \leq c _ {k}, 
+\]
+
+则称它位于 $c$ 之下. 我们将使用简写记号 $\phi[0] \ll c$. 
+\end{definition}
+
+我们主定理的证明可以容易地归结为如下命题:
+
+\begin{proposition}[主命题]\label{prop:cG-2.22}
+设 $c$ 是满足 $\| c \|_{l^2} \leq \varepsilon$ 的频率包络, \footnote{（原书脚注 12 文本缺失, 待补）}$0 < T < \infty$, $\Phi = (\phi_\alpha^a)$ 满足\eqref{eq:cG-31}、(32), 从而也满足 (34). 假设按照\defref{def:cG-2.21}, 初值数据满足小性条件 $\phi[0] \ll c$. 再假设\newterm{bootstrap}{自举}{bootstrap}假设
+
+\begin{equation}
+\left\| P _ {k} \Phi \right\| _ {S _ {k} ([ 0,  T ] \times \mathbb {R} ^ {n})} \leq 2 C c _ {k}\label{eq:cG-39}
+\end{equation}
+
+对所有 $k \in \mathbf{Z}$ 成立. 则事实上, 对充分小的 $\varepsilon$ 及所有 $k \in \mathbf{Z}$, 
+
+\begin{equation}
+\left\| P _ {k} \Phi \right\| _ {S _ {k} ([ 0,  T ] \times \mathbb {R} ^ {n})} \leq C c _ {k}.\label{eq:cG-40}
+\end{equation}
+\end{proposition}
+
+\begin{remark}\label{rem:cG-2.23}
+鉴于我们的方程与小性条件 $\phi[0] \ll c$ 的尺度不变性, 只需对 $k = 0$ 证明 (40). 设 $\Psi = P_0\Phi$. 我们需要证明, 
+
+\begin{equation}
+\left\| \Psi \right\| _ {S _ {0} ([ 0,  T ] \times \mathbb {R} ^ {n})} \leq C c _ {0}\label{eq:cG-41}
+\end{equation}
+\end{remark}
+
+\begin{remark}\label{rem:cG-2.24}
+为证明 (41), 我们希望把\propref{prop:cG-2.19} 应用于对 (34) 施加投影 $P_0$ 得到的方程, 即
+
+\[
+\Box \Psi = P _ {0} (R _ {\mu} \cdot \partial^ {\mu} \Phi + E).
+\]
+
+然而, 直接应用 Strichartz 不等式并不奏效. 事实上, 根据\propref{prop:cG-2.19}, 
+
+\[
+\| \Psi \| _ {S _ {0}} \leq c _ {0} + \| P _ {0} (R _ {\mu} \cdot \partial^ {\mu} \Phi + E) \| _ {L _ {t} ^ {1} L _ {x} ^ {2}}
+\]
+
+三次项 $E$ 没有困难, 问题出现在我们试图估计 $P_0(R_\mu \cdot \partial^\mu \Phi)$ 时, 更精确地说, 是它对应于 $R$ 的低频与 $\Phi$ 中与 $\Psi$ 频率相当的部分相互作用的那部分. 更精确地说, 最危险项具有 $\tilde{R} \cdot \partial \Psi$ 的形式, 其中 $\tilde{R} = P_{\leq -10}R$. 为了相对于可用的 Strichartz 范数估计 $\| \tilde{R} \cdot \partial \Psi \|_{L_t^1 L_x^2}$, 我们被迫把 $\Psi$ 取在能量范数 $L_t^\infty L_x^2$ 中. 这样 $\tilde{R}$ 就留在范数 $L_t^1 L_x^\infty$ 中, 而我们对它没有任何 Strichartz 估计. 
+\end{remark}
+
+\begin{definition}\label{def:cG-2.25}
+在下面的讨论中, 我们将采用 Tao 的约定, 把 $[0, T] \times \mathbb{R}^n$ 上满足
+
+\begin{equation}
+\left\| F \right\| _ {L _ {t} ^ {1} L _ {x} ^ {2} ([ 0,  T ] \times \mathbb {R} ^ {n})} \leq C ^ {3} \varepsilon c _ {0}\label{eq:cG-42}
+\end{equation}
+
+的任意函数或矩阵值函数 $F$ 称为\newterm{acceptable-error}{可接受误差}{acceptable error}. 
+\end{definition}
+
+\begin{proposition}\label{prop:cG-2.26}
+矩阵值函数 $P_0\Phi = \Psi$ 满足方程
+
+\begin{equation}
+\Box \Psi = - 2 \tilde {R} _ {\mu} \cdot \partial^ {\mu} \Psi + \mathrm{error}\label{eq:cG-43}
+\end{equation}
+
+其中 $\tilde{R}_{\mu} = P_{\leq -10}R_{\mu} = \Gamma \cdot \tilde{\Phi}_{\mu}$, $\tilde{\Phi}_{\alpha} = P_{\leq -10}\Phi_{\alpha}$. 这里"error"指 (42) 意义下的可接受误差项. 
+\end{proposition}
+
+\begin{proposition}\label{prop:cG-2.27}
+矩阵值函数 $\Psi$ 满足如下形式的方程, 
+
+\begin{equation}
+\Box \Psi = - 2 \partial_ {\mu} \tilde {\Delta} \cdot \partial^ {\mu} \Psi + \mathrm{error}\label{eq:cG-44}
+\end{equation}
+
+其中势 $\tilde{\Delta}$ 满足如下性质:
+
+\textbf{(i)} $N\times N$ 矩阵 $\tilde{\Delta}$ 是反对称的, 即 $\tilde{\Delta}^t = -\tilde{\Delta}$. $\tilde{\Delta}$ 每个分量的空间 傅里叶变换支集位于 $|\xi |\leq 2^{-10}$. 
+
+\textbf{(ii)} 对任意 $\tilde{\Delta}_k = P_k\tilde{\Delta}$, 如下估计成立:
+
+\begin{equation}
+\| \tilde {\Delta} _ {k} \| _ {S _ {k}} \lesssim 2 ^ {- k} C c _ {k}\label{eq:cG-45}
+\end{equation}
+
+\begin{equation}
+\| \partial \tilde {\Delta} _ {k} \| _ {S _ {k}} \lesssim C c _ {k}\label{eq:cG-46}
+\end{equation}
+
+此外, 
+
+\begin{equation}
+\| \Box \tilde {\Delta} _ {k} \| _ {S _ {k}} \lesssim 2 ^ {k} C c _ {k}\label{eq:cG-47}
+\end{equation}
+
+\textbf{(iii)} 置 $\bar{R}_{\mu} = \tilde{R}_{\mu} - \partial_{\mu}\tilde{\Delta}$. 对所有 $P_{k}\bar{R}$, 如下估计成立:
+
+\[
+\| P _ {k} \bar {R} \| _ {L _ {t} ^ {1} L _ {x} ^ {\infty}} \lesssim C ^ {2} c _ {k} ^ {2}
+\]
+
+\begin{equation}
+\| P _ {k} \bar {R} \| _ {L _ {t} ^ {\infty} L _ {x} ^ {\infty}} \lesssim 2 ^ {k} C ^ {2} c _ {k} ^ {2}\label{eq:cG-48}
+\end{equation}
+\end{proposition}
+
+设 $M$ 是依赖于 $T$ 的大整数, 将在下面选取. 定义实值 $N \times N$ 矩阵值函数 $U$ 为
+
+\begin{equation}
+U = I + \sum_ {- M < k \leq -10} U _ {k}\label{eq:cG-49}
+\end{equation}
+
+其中 $U_{k}$ 归纳地定义如下, 
+
+\begin{equation}
+\begin{array}{r c l}
+U _ {k} &=& 0 \qquad \text{对所有 } k < - M \\
+U _ {- M} &=& I \\
+U _ {k} &=& \tilde {\Delta} _ {k} \cdot U _ {< k} \qquad \text{对所有 } - M < k \leq -10
+\end{array}\label{eq:cG-50}
+\end{equation}
+
+其中 $U_{<k} = \sum_{k' < k} U_{k'}$. 由于矩阵 $\tilde{\Delta}_k = P_k \tilde{\Delta}$ 是反对称的, 我们得到恒等式
+
+\[
+U _ {k} ^ {t} \cdot U _ {< k} + U _ {< k} ^ {t} \cdot U _ {k} = 0
+\]
+
+由此得
+
+\begin{equation}
+U _ {< k} ^ {t} \cdot U _ {< k} - I = \sum_ {k ^ {\prime} < k} U _ {k ^ {\prime}} ^ {t} \cdot U _ {k ^ {\prime}}\label{eq:cG-51}
+\end{equation}
+
+利用这个恒等式, 我们可以归纳地证明
+
+\begin{equation}
+\begin{aligned}
+\| U _ {< k} \| _ {L _ {t} ^ {\infty} L _ {x} ^ {\infty}} &\leq 2 \\
+\| U _ {k} \| _ {L _ {t} ^ {\infty} L _ {x} ^ {\infty}} &\lesssim C c _ {k} \qquad \mathrm{for} \ k > - M
+\end{aligned}\label{eq:cG-52}
+\end{equation}
+
+以及
+
+\begin{equation}
+\| U _ {k} \| _ {L _ {t} ^ {2} L _ {x} ^ {\infty}} \lesssim C 2 ^ {- k / 2} c _ {k} \qquad \mathrm{for} \ k > - M.\label{eq:cG-53}
+\end{equation}
+
+此外, 
+
+\begin{equation}
+\begin{aligned}
+\| \partial U _ {< k} \|_{L _ {t} ^ {\infty} L _ {x} ^ {\infty}} &\lesssim 2 ^ {k} C ^ {2} c _ {k} \\
+\| \partial U _ {k} \|_{L _ {t} ^ {\infty} L _ {x} ^ {\infty}} &\lesssim 2 ^ {k} C ^ {2} c _ {k}
+\end{aligned}\label{eq:cG-54}
+\end{equation}
+
+且
+
+\begin{equation}
+\begin{aligned}
+\| \partial U _ {< k} \| _ {L _ {t} ^ {2} L _ {x} ^ {\infty}} &\lesssim 2 ^ {k / 2} C c _ {k} \\
+\| \partial U _ {k} \| _ {L _ {t} ^ {2} L _ {x} ^ {\infty}} &\lesssim 2 ^ {k / 2} C c _ {k}
+\end{aligned}\label{eq:cG-55}
+\end{equation}
+
+以及
+
+\begin{equation}
+\begin{aligned}
+\| \Box U _ {< k} \| _ {L _ {t} ^ {2} L _ {x} ^ {n - 1}} &\lesssim 2 ^ {k (\frac {3}{2} - \frac {n}{n - 1})} C c _ {k} \\
+\| \Box U _ {k} \| _ {L _ {t} ^ {2} L _ {x} ^ {n - 1}} &\lesssim 2 ^ {k (\frac {3}{2} - \frac {n}{n - 1})} C c _ {k}
+\end{aligned}\label{eq:cG-56}
+\end{equation}
+
+\begin{proposition}\label{prop:cG-2.28}
+假设 $\varepsilon$ 充分小(依赖于 C), M 充分大(依赖于 $T,  C,  \varepsilon$). 则矩阵 $U$ 满足如下性质:
+
+\textbf{(i)} 近似正交性:
+
+\begin{equation}
+\| U ^ {t} U - I \| _ {L _ {t} ^ {\infty} L _ {x} ^ {\infty}},  \| \partial (U ^ {t} U - I) \| _ {L _ {t} ^ {\infty} L _ {x} ^ {\infty}} \lesssim C ^ {2} \varepsilon\label{eq:cG-57}
+\end{equation}
+
+特别地, 对小的 $\varepsilon$, U 可逆, 且
+
+\begin{equation}
+\| U \| _ {L _ {t} ^ {\infty} L _ {x} ^ {\infty}},  \| U ^ {- 1} \| _ {L _ {t} ^ {\infty} L _ {x} ^ {\infty}} \lesssim 1\label{eq:cG-58}
+\end{equation}
+
+\textbf{(ii)} 近似规范条件:
+
+\begin{equation}
+\| \partial_ {\mu} U - \partial_ {\mu} \tilde {\Delta} \cdot U \| _ {L _ {t} ^ {1} L _ {x} ^ {\infty}} \lesssim C ^ {2} \varepsilon\label{eq:cG-59}
+\end{equation}
+
+\textbf{(iii)} 我们还有, 
+
+\begin{equation}
+\| \partial U \| _ {L _ {t} ^ {\infty} L _ {x} ^ {\infty}},  \| \partial U \| _ {L _ {t} ^ {1} L _ {x} ^ {\infty}} \lesssim C ^ {2} \varepsilon\label{eq:cG-60}
+\end{equation}
+
+\begin{equation}
+\left\| \Box U \right\| _ {L _ {t} ^ {2} L _ {x} ^ {n - 1}} \lesssim C ^ {2} \varepsilon\label{eq:cG-61}
+\end{equation}
+\end{proposition}
+
+仿照 \cite{gfref70}, 我们现在准备进行规范变换
+
+\begin{equation}
+\Psi = U \cdot W\label{eq:cG-62}
+\end{equation}
+
+W 满足方程
+
+\begin{equation}
+\begin{aligned}
+\Box W &= - 2 U ^ {- 1} (\partial_ {\mu} U - \partial_ {\mu} \tilde {\Delta} \cdot U) \partial^ {\mu} W \\
+&\quad - 2 U ^ {- 1} \partial_ {\mu} \tilde {\Delta} \cdot (\partial^ {\mu} U) U ^ {- 1} \Psi - U ^ {- 1} (\Box U) U ^ {- 1} \Psi + \mathrm{error}
+\end{aligned}\label{eq:cG-63}
+\end{equation}
+
+鉴于\propref{prop:cG-2.28}, 我们导出:
+
+\begin{proposition}\label{prop:cG-2.29}
+矩阵值函数 $W$ 满足如下形式的方程
+
+\[
+\Box W = \mathrm{error}.
+\]
+
+因此, 若 $\varepsilon$ 充分小, 
+
+\[
+\| \Psi \| _ {S _ {0}} \lesssim \| W \| _ {S _ {0}} \leq \| \Psi [ 0 ] \| _ {H ^ {\frac {n - 2}{2}}} + C C ^ {3} \varepsilon c _ {0} \leq C c _ {0}.
+\]
+
+这正是 (41), 它结束了主命题的证明. 
+\end{proposition}
+
+\subsection{第三讲：广义相对论与拟线性波动方程}
+
+我们从研究拟线性波动方程最优适定性问题的主要动机开始. 
+
+\mtsubsec{广义相对论中的 Cauchy 问题}
+
+Einstein 广义相对论的基本对象是时空. 它可以定义为可微、定向的四维 Lorentz 流形 $(\mathcal{M},  g)$ 的一个等价类. 若存在微分同胚 $\mathcal{M} \to \mathcal{M}'$ 使得 $g' = \Phi_* g$, 则称两个 Lorentz 流形 $(\mathcal{M},  g)$、$(\mathcal{M}',  g')$ 等价. 时空就是这种 Lorentz 流形的等价类. 时空度量 $g$ 必须满足 Einstein 场方程, 
+
+\[
+R _ {\alpha \beta} - \frac {1}{2} g _ {\alpha \beta} R = T _ {\alpha \beta}
+\]
+
+其中 $R_{\alpha\beta}$ 是 Ricci 曲率, R 是度量的标量曲率, $T_{\alpha\beta}$ 是定义在 $(\mathcal{M},  g)$ 上某个物质场的能量-动量张量. 我们限制于真空这一特殊情形, 即 $T \equiv 0$, 此时方程取如下形式, 
+
+\[
+R _ {\alpha \beta} = 0.
+\]
+
+Einstein 方程的演化特征比其他方程微妙得多, 因为不存在时间变量 $t$ 的内在定义. 因此, 谈论初值问题似乎同样含糊. 然而, 它可以如下定义:
+
+\begin{definition}\label{def:cG-3.2}
+一个\newterm{initial-data-set}{初值数据集}{initial data set}是三元组 $(\Sigma, \bar{g}, \bar{k})$, 由三维完备 Riemann 流形 $(\Sigma, \bar{g})$ 与 $\Sigma$ 上的 2-协变对称张量 $k$ 组成, 且满足\newterm{constraint-equations}{约束方程}{constraint equations}:
+
+\[
+\begin{aligned}
+\bar {\nabla} ^ {j} \bar {k} _ {i j} - \bar {\nabla} _ {i} \operatorname{tr} \bar {k} &= 0 \\
+\bar {R} - | \bar {k} | ^ {2} + (\operatorname{tr} \bar {k}) ^ {2} &= 0
+\end{aligned}
+\]
+
+其中 $\bar{\nabla}$ 是协变导数, $\bar{R}$ 是 $(\Sigma, \bar{g})$ 的标量曲率. 标量 $\operatorname{tr} \bar{k}$ 是 $\bar{k}$ 关于 $\bar{g}$ 的迹. 
+\end{definition}
+
+\begin{definition}\label{def:cG-3.3}
+若初值数据集对应于 Minkowski 空间中的完备类空超曲面及其\newterm{induced-metric}{诱导度量}{induced metric}与第二基本形式, 则称它是平坦的或平凡的. 若存在 $\Sigma$ 上无穷远邻域\footnote{为简单起见, 我们假设 $\Sigma$ 微分同胚于 $\mathbb{R}^n$.``无穷远邻域''指 $\Sigma$ 上某个足够大紧集的补集.}内定义的坐标系 $(x^{1},  x^{2},  x^{3})$, 使得当
+\[
+r = \sqrt {(x ^ {1}) ^ {2} + (x ^ {2}) ^ {2} + (x _ {3}) ^ {2}} \to \infty
+\]
+时度量 $\bar{g}$ 趋于 Euclid 度量而 $\bar{k}$ 趋于零, \footnote{由于约束方程, 渐近行为不能任意指定.渐近平坦的精确定义必须涉及 $(\Sigma, \bar{g})$ 的 ADM 质量.把质量考虑进来, 我们写 $g_{ij}=(1+\frac{2M}{r})\delta_{ij}+o(r^{-1})$.根据正质量定理, $M\ge 0$, 且 $M=0$ 意味着初始数据集是平坦的.}则称初值数据集是\newterm{asymptotically-flat}{渐近平坦}{asymptotically flat}的(AF). 
+\end{definition}
+
+\begin{definition}\label{def:cG-3.4}
+初值数据集 $(\Sigma, \bar{g}, \bar{k})$ 的 Cauchy 发展是满足 Einstein 方程的时空流形 $(\mathcal{M}, g)$, 连同嵌入\footnote{约束方程对应于嵌入的缩并 Codazzi 方程与两次缩并的 Gauss 方程.} $i:\Sigma\longrightarrow\mathcal{M}$, 使得 $\bar{g}, \bar{k}$ 是 $\Sigma$ 在 $M$ 中的第一与第二基本形式. 为保证解对数据的唯一依赖, 还要求发展是\newterm{globally-hyperbolic}{整体双曲}{globally hyperbolic}的. \footnote{$\mathcal{M}$ 中每条因果曲线与 $\Sigma$ 恰好相交于一点.}$(\Sigma, \bar{g}, \bar{k})$ 的未来发展由满足 Einstein 方程、带边界的整体双曲流形 $(\mathcal{M}, g)$ 以及如前将 $\Sigma$ 等同于 $M$ 的边界的嵌入 $i$ 组成. 
+\end{definition}
+
+关于初值问题所提出的最原始的问题——对非常广大的演化方程类已满意解决——是解的局部存在唯一性问题. 对 Einstein 方程, 这类结果最早由 Y. Choquet-Bruhat \cite{gfref7} 借助波坐标建立, 波坐标使她能够把 Einstein 方程写成非线性波动方程组的形式, 对其可以应用仅基于能量估计与 $H^s \subset L^{\infty}$ Sobolev 不等式的标准局部存在性理论. 
+
+\begin{definition}\label{def:cG-3.5}
+若 $\square_g x^\alpha = 0$, 则称坐标系 $x^{\alpha}$ 为波坐标. 给定这样的坐标系, Einstein 真空方程取如下形式, 
+
+\begin{equation}
+g ^ {\alpha \beta} \partial_ {\alpha} \partial_ {\beta} g _ {\mu \nu} = N _ {\mu \nu} (g _ {\alpha \beta},  \partial g _ {\alpha \beta})\label{eq:cG-64}
+\end{equation}
+\end{definition}
+
+对非线性微分方程组, 局部存在唯一性结果通过简单的延拓论证导向整体结果. 对 Einstein 方程, 同类型结果的表述要微妙一些; 它由 Y. Choquet-Bruhat 与 R.P. Geroch 在 \cite{gfref8} 中完成. 该结果断言:对每个初值数据集, 存在唯一的\newterm{maximal-future-development}{最大未来发展}{maximal future development}. 因此, 任何通过演化途径从特定初值数据集构造出来的东西, 必然包含在其最大发展之中. 可以说这解决了广义相对论中整体\footnote{（原书脚注 17 文本缺失, 待补）}存在唯一性问题; 所有进一步的问题可以说都是关于最大发展的定性性质. 核心问题是奇性的存在性及其性质. 首先, 我们可以把正则的最大发展定义为完备的发展, 即所有未来类时与零测地线都是完备的. Penrose 的一个著名定理断言, 在初值数据集的某些相当极端的条件下, \footnote{（原书脚注 18 文本缺失, 待补）}相应的未来最大发展必然不完备. 此外, 除平坦 Minkowski 空间本身外, Einstein 真空方程的所有显式 AF 解(如 Kerr 族)都被证明是奇性的. 在 Penrose 定理的另一端, 我们有以下完备性结果, 见 \cite{gfref12}. 
+
+\begin{theorem}[Minkowski 空间的整体稳定性]\label{thm:cG-3.6}
+任何充分接近\footnote{（原书脚注 19 文本缺失, 待补）}平凡初值数据集的渐近平坦初值数据集都有完备的最大未来发展 $(\mathcal{M},  g)$. 此外, 时空 $M$ 在如下意义下接近 Minkowski 空间:其曲率张量沿任意类时或零测地线趋于零. 然而, 其因果结构在渐近意义上是非平凡的. 
+\end{theorem}
+
+\begin{problem*}[Minkowski 空间的强稳定性]
+是否存在尺度不变的\newterm{strong-stability}{强稳定性}{strong stability}小性条件, \footnote{（原书脚注 20 文本缺失, 待补）}使得所有满足它的初值数据集 $(\Sigma,  g,  k)$ 的发展都有完备的最大未来发展?
+\end{problem*}
+
+\begin{remark}\label{rem:cG-3.7}
+\thmref{thm:cG-3.6} 的旧稳定性结果与强稳定性之间的关系, 可以同 Tao 的结果 \cite{gfref71} 之后波映射的情形相比较. 事实上, Sideris \cite{gfref63} 的一个较老的结果在包含大量导数的加权 Sobolev 范数中为充分小的数据提供了整体存在性. Tao 的新结果只要求包含初始映射最少导数个数的尺度不变范数足够小. 
+\end{remark}
+
+\begin{remark}\label{rem:cG-3.8}
+Minkowski 时空的强稳定性本身应被看作朝着证明著名的 Penrose \newterm{cosmic-censorship}{宇宙监督}{cosmic censorship}猜想的更高目标迈出的中间一步. 
+
+\textbf{Penrose 的宇宙监督猜想.} 我们将在第三讲的补充部分陈述这些猜想. 
+\end{remark}
+
+证明 Minkowski 空间的强稳定性是一个长期目标. 下面我们给出一个简单得多、但仍然极具挑战性的中间猜想, 它激发下一节内容. 
+
+\textbf{猜想(有限 $L^2$ 曲率猜想).} Bruhat-Geroch 结果可以推广到满足
+
+\[
+R (g) \in L _ {(l o c)} ^ {2} (\Sigma) \qquad \mathrm{and} \qquad k \in H _ {(l o c)} ^ {1} (\Sigma)
+\]
+
+的初值数据集 $(\Sigma,  g,  k)$. 
+
+$L^2$ 有界性猜想是此刻我们围绕 Minkowski 空间强稳定性猜想所能追求的最合理目标. 人们可以把它与 YM 方程在 $\mathbb{R}^{1 + 3}$ 中局部(在此情形下也是整体!)适定性的证明相比较, 见 \cite{gfref34}. 然而它解决起来会复杂得多. 我们或许应该先满足于一个更简单的目标:证明系统 (64) 在 $H^{2 + \epsilon}(\mathbb{R}^3)$ 中的适定性. 为稍微简化, 考虑如下形式的波动方程
+
+\begin{equation}
+G ^ {\alpha \beta} (\phi) \partial_ {\alpha} \partial_ {\beta} \phi = N (\phi ,  \partial \phi), \label{eq:cG-65}
+\end{equation}
+
+满足初值条件 $\phi[0]\in H^{s}$. 这里 $G^{\alpha\beta}(\phi)$ 是 $R^{1+3}$ 中的一族 Lorentz 度量, 在原点的小邻域内光滑依赖于 $\phi$, 而 $N$ 关于 $\partial\phi$ 是二次的. 我们要证明初值问题 (IVP) 对 $s>2+\epsilon$ 适定. 对如下形式的半线性波动方程
+
+\[
+\Box \phi = N (\phi ,  \partial \phi)
+\]
+
+的类似结果非常容易证明, \footnote{（原书脚注 21 文本缺失, 待补）}它只依赖于如下形式的 Strichartz 型估计:
+
+\begin{equation}
+\| \partial \psi \| _ {L _ {t} ^ {2} L _ {x} ^ {\infty} ([ 0,  T ] \times \mathbb {R} ^ {n})} \lesssim \| \phi [ 0 ] \| _ {H ^ {s} (\mathbb {R} ^ {n})}\label{eq:cG-66}
+\end{equation}
+
+对任意 $s > \frac{n}{2} + \frac{1}{2}$、$n = 3$ 成立. 特别是它不要求非线性项满足诸如零条件之类的任何特殊结构. 
+
+\mtsubsec{拟线性波动方程的最优适定性}
+
+我计划在这里报告我与 I. Rodnianski \cite{gfref42} 合作获得的关于拟线性波动方程最优适定性问题的最新结果. 受 (64) 与 (67) 形式的拟线性波动方程启发, 我们考虑 $\mathbb{R}^{n + 1}$、$n\geq 3$ 中如下形式的简化模型方程, 
+
+\begin{equation}
+\partial_ {t} ^ {2} \phi - g ^ {i j} (\phi) \partial_ {i} \partial_ {j} \phi = N (\phi ,  \partial \phi)\label{eq:cG-67}
+\end{equation}
+
+其中 $N$ 是关于 $\partial\phi$ 二次的光滑函数. 基于 $H^{s}$ 能量估计与 Sobolev 嵌入定理的经典局部存在唯一性结果表明, (67) 对任意 $s > \frac{n}{2} + 1$ 在 Sobolev 空间 $H^{s}$ 中局部适定. 通过标准分部积分与交换子引理得到的 $H^{s}$ 能量估计取如下形式
+
+\[
+\left\| \phi (t) \right\| _ {H ^ {s}} \leq M \left(\left\| \phi_ {0} \right\| _ {H ^ {s}} + \left\| \phi_ {1} \right\| _ {H ^ {s - 1}}\right)
+\]
+
+其中 $M$ 连续依赖于积分 $\int_{0}^{t}\|\partial\phi\|_{L_{x}^{\infty}}$. Sobolev 估计 $\|\partial\phi\|_{L^{\infty}}\leq c\|\phi\|_{H^{s}}$($s>\frac{n}{2}+1$)使我们能够得出结论:对充分小的时间 t, 上述不等式右端可以纯粹用 $\|\phi_{0}\|_{H^{s}}+\|\phi_{1}\|_{H^{s-1}}$ 界定. 这些对 $s>\frac{n}{2}+1$ 的局部先验估计可以容易地转化为局部存在唯一性结果. 
+
+关键量 $\int_{0}^{t}\|\partial\phi\|_{L_{x}^{\infty}}$ 可以借助 Strichartz 估计 (66) 得到更好的控制. 这导致上面提到的 $\frac{1}{2}$ 阶导数的增益. 
+
+在拟线性情形, 度量 $g^{ij}$ 依赖于解 $\phi$, 因此只能具有与 $\phi$ 相同的正则性. 于是需要解决带粗糙系数的线性波动方程 $\Box_{g}\phi = \partial_{t}^{2} - g^{ij}\partial_{i}\partial_{j}\phi = 0$ 的 Strichartz 估计的证明问题. 线性化波算子 $\Box_{g}$ 的系数 $g^{ij}$ 所需的条件必须与 (67) 中非线性系数 $g^{ij}(\phi)$ 对 $\phi$ 的依赖相容. 鉴于 Sobolev 范数 $\|\phi\|_{H^{s}}$ 的预期有界性, 我们可以假设\footnote{（原书脚注 22 文本缺失, 待补）}范数 $\|g\|_{H^{s}}$ 有界. 此外, 由于只要 $\int_{0}^{t}\|\partial\phi\|_{L_{x}^{\infty}}$ 有界, 拟线性问题 (67) 的解在时刻 $t$ 的 $H^{s}$ 范数就受初值数据的 $H^{s}$ 范数控制, 我们可以归纳地假设度量 $g^{ij} = g^{ij}(\phi)$ 还满足条件 $\int_{0}^{t}\|\partial g\|_{L_{x}^{\infty}} \leq B_{0}$. 鉴于我们在平坦空间中的 Strichartz 估计经验, 我们不期望能够直接获得 $\|\partial\phi\|_{L_{t}^{1}L_{x}^{\infty}}$ 的范数, 但在时间上局部地, 它可以由 $\|\partial\phi\|_{L_{t}^{2}L_{x}^{\infty}}$ 控制. 因此, 为了闭合论证并为 (67) 导出改进的局部存在唯一性结果, 我们需要证明 $H^{s}$ 范数的有界性, 以及线性化波动方程 $\Box_{g}\phi = 0$ 的解 $\phi$ 的局部 $L_{t}^{2}L_{x}^{\infty}$ Strichartz 估计. 
+
+\textbf{历史注记.} 关于带粗糙\footnote{对 $C^1$ 度量, Strichartz 估计由 Kapitanski \cite{gfref25} 与 Mockenhaupt--Seeger--Sogge \cite{gfref52} 证明.}系数的 $\Box_{g}\phi=0$ 解的第一篇重要 Strichartz 型估计工作归功于 H. Smith \cite{gfref60}. 他证明了对 $C^{1, 1}$ 系数的方程, 标准 Strichartz 估计成立. 然而, $C^{1, 1}$ 条件对拟线性方程的应用来说太强了. 此外, H. Smith 与 C. Sogge \cite{gfref61} 的一些重要反例表明, 若系数比 $C^{1, 1}$ 更粗糙, 标准 Strichartz 估计不成立. 
+
+这就是 H. Bahouri 与 J.-Y. Chemin 的重要突破之前的情形. 在 \cite{gfref1} 中, 他们证明了对系数比 $C^{1, 1}$ 更粗糙、与拟线性方程的应用相容的方程, Strichartz 估计的某个较弱形式仍然成立. 即, 他们能够建立带损失的 Strichartz 估计
+
+\begin{equation}
+\| \partial \psi \| _ {L _ {t} ^ {2} L _ {x} ^ {\infty}} \lesssim \| \psi [ 0 ] \| _ {H ^ {\frac {n}{2} + \frac {1}{2} + \sigma}}, \label{eq:cG-68}
+\end{equation}
+
+对带变系数波动方程 $\Box_{g}\psi = 0$ 的解成立, 其中系数满足上述类型的假设. 只要损失 $\sigma \leq \frac{1}{2}$, 这样的估计就可以用来证明这里考虑的拟线性问题的、强于经典结果的局部适定性结果. H. Bahouri 与 J.-Y. Chemin 的结果基于对线性化问题 $\Box_{g}\psi = 0$ 的损失 $\sigma > \frac{1}{4}$ 的 Strichartz 估计, 其中度量 $g$ 满足上述类型的条件. 后来, D. Tataru \cite{gfref72} 证明了 Strichartz 估计中的损失\footnote{（原书脚注 24 文本缺失, 待补）}可以改进为 $\sigma > \frac{1}{6}$. 事实上, \cite{gfref72} 给出了低于 $C^{1, 1}$ 的度量光滑性与 Strichartz 估计中相应损失之间的精确关系. 最近, H. Smith 与 D. Tataru \cite{gfref62} 证明了这些结果也是精确的, 因此纯线性理论没有希望改进 Tataru 的结果. 
+
+Bahouri-Chemin 与 Tataru 的结果都基于两个主要成分. 
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item 仿微分演算:考虑二进投影算子 $P_{\lambda}$, 它对应于空间频率 $\frac{\lambda}{2} \leq |\xi| \leq 2\lambda$、$\lambda \in 2^{N}$ 处的截断. 设 $\phi^{\lambda} = \phi_{\lambda} = P_{\lambda}\phi$. 我们有 $\phi = \sum_{\lambda} \phi_{\lambda}$. 若 $\phi$ 满足拟线性波动\eqref{eq:cG-67}, 则 $\phi^{\lambda}$ 满足方程
+\end{enumerate}
+
+\begin{equation}
+\Box_ {g _ {\leq \lambda^ {a}}} \phi^ {\lambda} = - \partial_ {t} ^ {2} \phi^ {\lambda} + g _ {\leq \lambda^ {a}} ^ {i j} \partial_ {i} \partial_ {j} \phi^ {\lambda} = R _ {\lambda} ^ {a}, \label{eq:cG-69}
+\end{equation}
+
+其中 $g_{\leq \lambda^a} = \sum_{\mu \leq \lambda^a} P_\mu g$, $0 < a < 1$, $R_\lambda$ 是容易控制的误差项. Bahouri-Chemin 的原始思想(后来被 Tataru 改进)是对 (69) 在依赖频率的时间区间 $I_{\lambda}$ 上证明无损失的 Strichartz 估计, 区间长度为 $|I_{\lambda}| \lesssim \lambda^{1-a}$. 正是时间区间 $I_{\lambda}$ 大小控制中的这个损失导致了 (71) 中可微阶数的损失. 
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{1}
+\item 色散不等式的基于\newterm{parametrix}{参数层}{parametrix}的证明:如我们所知, Strichartz 不等式证明中的主要困难成分是能量与色散不等式. Bahouri-Chemin 与 Tataru 都对近似线性化\eqref{eq:cG-69} 的解使用参数层构造. \footnote{Bahouri--Chemin 使用标准的行进波近似, 而 Tataru 使用基于 FBI 变换的拟基本解（parametrix）.}他们利用稳定相方法, 对由参数层构造提供的近似解的显式形式导出色散不等式. 
+\item 程函方程:两种方法的一个主要成分都是构造程函方程的解, 
+\end{enumerate}
+
+\begin{equation}
+u _ {t} ^ {2} - g _ {\leq \lambda^ {a}} ^ {i j} \partial_ {i} u \partial_ {j} u = 0,  \qquad u (0,  x,  \xi) = x \cdot \xi .\label{eq:cG-70}
+\end{equation}
+
+以及相关的\newterm{transport-equation}{输运方程}{transport equation}. 
+
+在 \cite{gfref30} 中, 我发展了一种不同的、更几何的方法来证明\eqref{eq:cG-69} 的色散不等式, 它基于对第一讲中讨论的向量场方法的修改. 确实, 回顾\propref{prop:cG-1.9}, 我们能够在没有任何显式解表示的情况下证明色散不等式, 仅需标准波动方程与伸缩、加速与角动量向量场的交换性质. 为了对 (69) 型拟线性方程实施这样的策略, 我们希望度量 $g_{\leq\lambda^{a}}$ 有类似的一族 Killing 与共形 Killing 向量场. 这当然是不可能的; 一般的度量没有任何对称性. 我们能做的最好是构造形变张量尽可能小的向量场. 在 \cite{gfref30} 中, 我概述了如何基于同一个程函方程 \eqref{eq:cG-79} 但不同的初值条件来作这样的构造, 其初值条件不再对应于一族零超平面, 而是对应于顶点在时间轴上的一族向外特征锥. 这一直接的几何方法使我能重新得到 Tataru 对三维拟线性波动方程的结果. 
+
+通过使用与 \cite{gfref30} 中类似的几何方法, 最近 Rodnianski 与本人 \cite{gfref42} 通过考虑\eqref{eq:cG-67} 的非线性特性, 改进了 Bahouri-Chemin 与 Tataru 的适定性结果. 我们不仅仅对 $\Box_g\phi = 0$ 的解证明带 $\| g\|_{H^s}$ 与 $\| \partial g\|_{L_t^1 L_x^\infty}$ 界限制的 Strichartz 估计, 而且本质地利用了\eqref{eq:cG-67} 的系数 $g^{ij}(\phi)$ 本身满足 $\Box_gg_{ij} = N$ 型方程这一事实, 其中 $N$ 只依赖于 $\phi$ 与 $\partial \phi$. 
+
+我们的主要结果包含在如下定理中. 
+
+\begin{theorem}\label{thm:cG-3.10}
+$\mathbb{R}^{3 + 1}$ 中的拟线性初值问题 (67) 对 $s_* > s_0 = 2 + \frac{2 - \sqrt{3}}{2}$ 在 $H^{s_*}$ 中局部适定. 即, 对任意初值数据 $\phi[0] \in H^{s_*}$, 存在充分小的区间 $[0,  T]$, 其中 $T = T(\|\phi[0]\|_{H^{s_*}})$, 使得问题 (67) 有唯一解 $\phi \in C([0,  T],  H^{s_*}) \cap C^1([0,  T],  H^{s_* - 1})$. 此外, $\phi$ 满足 Strichartz 型估计
+
+\begin{equation}
+\| \partial \phi \| _ {L _ {[ 0,  T ]} ^ {2} L _ {x} ^ {\infty}} \leq c T ^ {s _ {*} - s _ {0}} \| \phi [ 0 ] \| _ {H ^ {s _ {*}}}.\label{eq:cG-71}
+\end{equation}
+
+此外, 我们相信, 对 \cite{gfref42} 中证明作相对较小的修改, 我们现在已经拥有证明 Einstein 方程\footnote{（原书脚注 26 文本缺失, 待补）}在 $H^{2+\epsilon}$ 中局部适定所需的全部工具. 
+\end{theorem}
+
+\mtsubsec{\thmref{thm:cG-3.10} 的证明概要}
+
+经过一系列现在已是标准化的化简(见本讲的补充), 我们可以把定理的证明归结为如下情形:
+
+假设给定一族\footnote{度量 $h_\varepsilon$ 实际上是 (??) 中出现的 $g_{\tau\varepsilon a}$ 的重新伸缩, 更精确地, 我们有 $h_\varepsilon(t, x)=g_{\tau\varepsilon a}(\varepsilon^{-1}t, \varepsilon^{-1}x)$.}Riemann 度量 $h_{ij}^{\lambda}(t, x)dx^{i}dx^{j}$, 定义在时间片 $I_{\lambda}\times\mathbb{R}^{3}$ 上, 其中 $I_{\lambda}=[0, t_{*}]$, $t_{*}\leq\lambda^{a}$, 且满足如下条件
+
+\begin{equation}
+\| \partial^ {1 + m} h _ {\lambda} \| _ {L _ {I _ {\lambda}} ^ {1} L _ {x} ^ {\infty}} \lesssim \lambda^ {- (1 - a) (m + 1)}, \label{eq:cG-72}
+\end{equation}
+
+\begin{equation}
+\| \partial^ {1 + m} h _ {\lambda} \| _ {L _ {I _ {\lambda}} ^ {2} L _ {x} ^ {\infty}} \lesssim \lambda^ {- \frac {2 - a}{2} - (1 - a) m}, \label{eq:cG-73}
+\end{equation}
+
+\begin{equation}
+\| \partial^ {1 + m} h _ {\lambda} \| _ {L _ {I _ {\lambda}} ^ {\infty} L _ {x} ^ {\infty}} \lesssim \lambda^ {- 1 + \frac {a ^ {2}}{2} - (1 - a) m}, \label{eq:cG-74}
+\end{equation}
+
+\begin{equation}
+\left\| \partial_ {x} ^ {\frac {1}{2} + m} \left(\partial^ {2} h _ {\lambda}\right) \right\| _ {L _ {I _ {\lambda}} ^ {\infty} L _ {x} ^ {2}} \lesssim \lambda^ {- 1 + \frac {a ^ {2}}{2} - (1 - a) m}, \label{eq:cG-75}
+\end{equation}
+
+\begin{equation}
+\| \partial^ {m} \bar {\Box} _ {h _ {\lambda}} h _ {\lambda} \| _ {L _ {I _ {\lambda}} ^ {1} L _ {x} ^ {\infty}} \lesssim \lambda^ {- (2 - a) - (1 - a) m}, \label{eq:cG-76}
+\end{equation}
+
+这里 $\bar{\square}_{h_{\lambda}} = \partial_t^2 - h_{\lambda}^{ij}\partial_i\partial_j$. 我们需要证明如下协变波动方程
+
+\begin{equation}
+\Box_ {h _ {\lambda}} \psi = 0\label{eq:cG-77}
+\end{equation}
+
+的解的衰减估计, 其中
+
+\[
+\square_{h_\lambda}\psi = -\frac{1}{\sqrt{\det h_\lambda}}\partial_t\left(\sqrt{\det h_\lambda}\, \partial_t\psi\right) + \frac{1}{\sqrt{\det h_\lambda}}\partial_i\left(h_\lambda^{ij}\sqrt{\det h_\lambda}\, \partial_j\psi\right)
+\]
+
+\begin{theorem}\label{thm:cG-3.12}
+假设 $\psi$ 是 (77) 在 $[0,  t_{*}] \times \mathbb{R}^{n}$ 中的解, $t_{*}\leq\lambda^{a}$, 初值数据 $\psi[0]$ 支集在物理空间中以原点为中心、半径为 $\frac{1}{2}$ 的球内. 假设度量 $h_{\lambda}$ 以 $a < -1 + \sqrt{3}$ 满足 \eqref{eq:cG-72}--\eqref{eq:cG-76}. 则对所有 $t \in [0,  t_{*}]$, 
+
+\begin{equation}
+\| \partial \psi (t) \| _ {L ^ {\infty}} \leq (1 + t) ^ {- 1 + \epsilon} \| \psi [ 0 ] \| _ {H ^ {k}}.\label{eq:cG-78}
+\end{equation}
+
+证明基于第一讲补充部分讨论的\propref{prop:cG-4.11} 的弯曲时空类比. 在陈述它之前, 我们需要作一些定义:
+\end{theorem}
+
+\begin{definition}\label{def:cG-3.13}
+一个零对由两个向量场 $L,  \underline{L}$ 组成, 满足
+
+\[
+H (L,  L) = H (\underline {L},  \underline {L}) = 0,  \quad H (L,  \underline {L}) = - 2.
+\]
+
+与零对 $L,  \underline{L}$ 相联的零标架由 4 个线性无关向量 $e_1,  e_2,  e_3 = \underline{L},  e_4 = L$ 组成, 满足
+
+\[
+H (e _ {A},  L) = H (e _ {A},  \underline {L}) = 0,  \quad H (e _ {A},  e _ {B}) = \delta_ {A B},  \quad \mathrm{for} \ A = 1,  2.
+\]
+\end{definition}
+
+\begin{definition}\label{def:cG-3.14}
+\newterm{optical-function}{光学函数}{optical function}\footnote{在下面我们省去 $h_\varepsilon$ 的下标.我们用 $\mathbf{H}$ 记时空度量 $dt^2+h_{ij}\, dx^i\, dx^j$.}u 定义为程函方程
+
+\begin{equation}
+H ^ {\alpha \beta} \partial_ {\alpha} u \partial_ {\beta} u = 0,  \qquad \mathrm{or} \quad \partial_ {t} u = | \nabla u | _ {h}\label{eq:cG-79}
+\end{equation}
+
+的满足时间轴上边界条件 u = t 的唯一前向解. 时间函数 $t$ 的水平超曲面 $\Sigma_{t}$ 与 $u$ 的水平超曲面 $C_{u}$ 的交面记为 $S_{t, u}$. 
+\end{definition}
+
+\begin{definition}\label{def:cG-3.15}
+给定这样的 u, 我们如下定义典范零对:
+
+\begin{equation}
+L = T + N \qquad \underline {L} = T - N\label{eq:cG-80}
+\end{equation}
+
+其中, 
+
+\[
+T = \partial_ {t},  \qquad N = - \frac {h ^ {i j} \partial_ {j} u}{| \nabla u | _ {h}} \partial_ {i}.
+\]
+
+注意到 $T \pm N$ 是零锥 $C_{u}$ 的生成法向量. 我们可以补充 $L$、$\underline{L}$ 以构成张成整个切空间的零标架. 这可以通过在 $S_{t, u} = C_{u} \cap \Sigma_{t}$ 上选取任意标准正交标架 $e_{A}$ 来完成. 我们把完整的零标架改写为 $e_{1},  e_{2},  e_{3} = \underline{L},  e_{4} = L$. 
+\end{definition}
+
+我们还引入如下定义:
+
+\begin{enumerate}
+\def\labelenumi{\roman{enumi})}
+\item 能量-动量张量:$Q_{\alpha\beta} = \partial_{\alpha}\psi\partial_{\beta}\psi - \frac{1}{2}H_{\alpha\beta}(H^{\mu\nu}\partial_{\mu}\psi\partial_{\nu}\psi)$
+\item \newterm{modified-energy-momentum-tensor}{修正能量-动量张量}{Modified energy-momentum tensor}:$\bar{Q}_{\alpha \beta} = Q_{\alpha \beta} + (n - 1)t\psi \partial_{\beta}\psi - \frac{n - 1}{2}\psi^{2}$
+\item \newterm{modified-morawetz-vectorfield}{修正 Morawetz 向量场}{Modified Morawetz vectorfield}:置 $K = \frac{1}{2} (\underline{u}^2 L + u^2 \underline{L})$, 其中 $\underline{u} = 2t - u$
+\item 修正形变张量:$\bar{\pi} = ^{(K)}\pi - 4tH$
+\item \newterm{conformal-energy}{共形能量}{Conformal energy}:$\mathcal{Q}_0[\psi](t) = \int_{\Sigma_t}\bar{Q} (K, \partial_t)[\psi ]$
+\item 完全共形能量:$\mathcal{Q}[\psi](t) = \mathcal{Q}_0[\psi](t) + \mathcal{Q}_0[\partial_t\psi](t) + \mathcal{Q}_0[\partial_t^2\psi](t)$
+\item Q 的零分量:Q 相对于零标架的分量由下式给出:
+\end{enumerate}
+
+\begin{equation}
+Q _ {4 4} = (D _ {4} \psi) ^ {2},  \qquad Q _ {3 4} = | \nabla \psi | ^ {2}, \label{eq:cG-81}
+\end{equation}
+
+\begin{equation}
+Q _ {3 3} = (D _ {3} \psi) ^ {2},  \qquad Q _ {3 A} = D _ {3} \psi \vec {\nabla} _ {A} \psi , \label{eq:cG-82}
+\end{equation}
+
+\begin{equation}
+Q _ {4 A} = D _ {4} \psi \widetilde {\nabla} _ {A} \psi ,  \qquad Q _ {A B} = \widetilde {\nabla} _ {A} \psi \widetilde {\nabla} _ {B} \psi + \frac {1}{2} (D _ {3} \psi D _ {4} \psi - | \widetilde {\nabla} \psi | ^ {2}) \delta_ {A B}.\label{eq:cG-83}
+\end{equation}
+
+\begin{enumerate}
+\def\labelenumi{\roman{enumi})}
+\setcounter{enumi}{7}
+\item 共形能量密度:利用 vii) 我们容易算出:
+\end{enumerate}
+
+\[
+Q (K,  \partial_ {t}) [ \psi ] = \frac {1}{4} \big (\underline {u} ^ {2} (D _ {4} \psi) ^ {2} + u ^ {2} (D _ {3} \psi) ^ {2} + (\underline {u} ^ {2} + u ^ {2}) | \vec {\nabla} \psi | ^ {2} \big)
+\]
+
+\thmref{thm:cG-3.12} 的证明可以归结为如下:
+
+\begin{theorem}[有界性定理]\label{thm:cG-3.16}
+在与\thmref{thm:cG-3.12} 相同的假设下, 有
+
+\[
+\mathcal {Q} (t) \lesssim \mathcal {Q} (0).
+\]
+\end{theorem}
+
+下面我们概述有界性定理证明中的一些主要思想. 我们把自己限制于讨论 $\mathcal{Q}_{0}$ 的有界性. 
+
+\textbf{第 1 步.} 引入量
+
+\begin{equation}
+\mathcal {E} _ {0} [ \psi ] (t) = \int_ {\Sigma_ {t}} \left(\underline {u} ^ {2} (D _ {4} \psi) ^ {2} + u ^ {2} (D _ {3} \psi) ^ {2} + \underline {u} ^ {2} | \nabla \psi | ^ {2} + \psi^ {2}\right)\label{eq:cG-84}
+\end{equation}
+
+通过与\propref{prop:cG-4.11} 的 iii) 部分类似的简单\newterm{comparison-theorem}{比较定理}{comparison theorem}, 我们证明
+
+\begin{equation}
+\mathcal {E} _ {0} [ \psi ] (t) \lesssim \mathcal {Q} _ {0} [ \psi ] (t)\label{eq:cG-85}
+\end{equation}
+
+\textbf{第 2 步.} \thmref{thm:cG-3.16} 证明中的关键成分是第一讲补充中讨论的\propref{prop:cG-4.11} 的\newterm{generalized-conformal-identity}{广义共形恒等式}{generalized conformal identity}的如下弯曲时空版本. 
+
+\begin{proposition}[广义共形恒等式]\label{prop:cG-3.17}
+设 $\psi$ 是 $\square_h\psi = 0$ 的解. 则
+
+\begin{equation}
+\mathcal {Q} _ {0} [ \psi ] (t) = \mathcal {Q} _ {0} [ \psi ] (t _ {0}) - \frac {1}{2} \int_ {[ t _ {0},  t ] \times \mathbb {R} ^ {3}} Q ^ {\alpha \beta} \bar {\pi} _ {\alpha \beta} + \frac {n - 1}{2} \int_ {[ t _ {0},  t ] \times \mathbb {R} ^ {3}} \psi^ {2} \square_ {h} (t).\label{eq:cG-86}
+\end{equation}
+\end{proposition}
+
+\textbf{第 3 步.} 为证明有界性定理, 我们需要控制 $\int_{[t_0, t] \times \mathbb{R}^3} Q^{\alpha\beta} \bar{\pi}_{\alpha\beta}$. 相对于零标架展开, 我们有
+
+\[
+\begin{aligned}
+Q ^ {\alpha \beta} \bar {\pi} _ {\alpha \beta} &= \frac {1}{4} Q _ {4 4} \bar {\pi} _ {3 3} + \frac {1}{4} Q _ {3 3} \bar {\pi} _ {4 4} + \frac {1}{2} Q _ {3 4} \bar {\pi} _ {3 4} \\
+&\quad - Q _ {3 A} \bar {\pi} _ {4 A} - Q _ {4 A} \bar {\pi} _ {3 A} + Q _ {A B} \bar {\pi} _ {A B}
+\end{aligned}
+\]
+
+我们需要如下形式的估计, 
+
+\[
+\begin{aligned}
+\int_ {[ t _ {0},  t ] \times \mathbb {R} ^ {3}} Q ^ {\alpha \beta} \bar {\pi} _ {\alpha \beta} &\lesssim \lambda^ {- \epsilon} \sup _ {[ t _ {0},  t ]} \int_ {\Sigma_ {\tau}} \left(\underline {u} ^ {2} (D _ {4} \psi) ^ {2} + u ^ {2} (D _ {3} \psi) ^ {2} + \underline {u} ^ {2} | \nabla \psi | ^ {2} + \psi^ {2}\right) \\
+&= \lambda^ {- \epsilon} \sup _ {[ t _ {0},  t ]} \mathcal {E} _ {0} [ \psi ] (\tau) \lesssim \lambda^ {- \epsilon} \sup _ {[ t _ {0},  t ]} \mathcal {Q} _ {0} [ \psi ] (\tau)
+\end{aligned}
+\]
+
+其中 $\epsilon > 0$ 任意. 特别考虑项
+
+\[
+\int_ {[ t _ {0},  t ] \times \mathbb {R} ^ {3}} Q _ {3 3} \bar {\pi} _ {4 4} = \int_ {[ t _ {0},  t ] \times \mathbb {R} ^ {3}} | D _ {3} \psi | ^ {2} \bar {\pi} _ {4 4}
+\]
+
+为得到所需估计, 我们需要
+
+\[
+\left| \bar {\pi} _ {4 4} (\tau ,  \cdot) \right| \lesssim u ^ {2} \tau^ {- 1} \lambda^ {- \epsilon}.
+\]
+
+换言之, $\bar{\pi}_{44}$ 在波动区域 $|u|<<t$ 内必须非常小. 事实上, 为了估计 $\int_{[t_{0}, t]\times\mathbb{R}^{3}}Q^{\alpha\beta}\bar{\pi}_{\alpha\beta}$ 中的大多数项, 我们需要 $K$ 的修正形变张量 $\bar{\pi}$ 的如下估计:
+
+\begin{proposition}\label{prop:cG-3.18}
+K 的修正形变张量的零分量满足估计:
+
+\begin{align*}
+&| \bar {\pi} _ {4 4} | \leq u ^ {2} \lambda^ {- \epsilon} \tau^ {- 1} \qquad | \bar {\pi} _ {3 4} | \leq \underline {u} ^ {2} \lambda^ {- \epsilon} \tau^ {- 1}, \\
+&| \bar {\pi} _ {3 3} | \leq \underline {u} ^ {2} \lambda^ {- \epsilon} \tau^ {- 1},  \quad | \bar {\pi} _ {3 A} | \leq \underline {u} ^ {2} \lambda^ {- \epsilon} \tau^ {- 1}, \\
+&| \bar {\pi} _ {4 A} | \leq u \underline {u} \lambda^ {- \epsilon} \tau^ {- 1},  \quad | \bar {\pi} _ {A B} | \leq \underline {u} ^ {2} \lambda^ {- \epsilon} \tau^ {- 1}.
+\end{align*}
+\end{proposition}
+
+\textbf{第 4 步.} 上述估计可以处理除项
+
+\[
+\frac {1}{2} \int_ {[ t _ {0},  t ] \times \mathbb {R} ^ {3}} \bar {\pi} D _ {3} \psi D _ {4} \psi ,  \quad \mathrm{with} \qquad \bar {\pi} = \delta^ {A B} \bar {\pi} _ {A B}
+\]
+
+之外的所有项. 为估计这一项, 我们必须使用分部积分论证, 这将引入 $D_4\bar{\pi}$ 与 $\overline{\nabla}\bar{\pi}$, 对它们我们需要与\propref{prop:cG-3.18} 中类似的估计. 
+
+\textbf{第 5 步.} 我们需要证明\propref{prop:cG-3.18} 的渐近估计, 以及 $D_4\bar{\pi}$ 与 $\nabla \bar{\pi}$ 的类似估计. 这依赖于程函\eqref{eq:cG-79} 的分析. 事实上, 通过直接计算容易看出, $\bar{\pi}$ 依赖于时间叶状结构 $\Sigma_t$ 的第二基本形式 $k$, 更重要的是, 依赖于 Hessian $D^2 u$. 由于 $k_{ij} = -\frac{1}{2}\partial_t h_{ij}$, 我们对 $k$ 有非常好的控制. 另一方面, u 的 Hessian 满足如下 Riccati 型方程, 
+
+\[
+D _ {L} (D ^ {2} u) + D ^ {2} u \cdot D ^ {2} u = R (L,  L)
+\]
+
+其中 $R(L, L)$ 表示曲率张量 $R_{\alpha\beta\gamma\delta}$ 与 $L$ 两次缩并得到的分量. 乍一看, 似乎 $D^{2}u$ 具有与曲率张量 $R$ 相同的可微性质. 此外, 为估计某个时刻 $t$ 的 $D^{2}u$, 我们需要在零锥 $C_{u}$ 的一条测地生成线上积分 $R(L, L)$. 因此, 鉴于假设 \eqref{eq:cG-72}, 由于 $R$ 依赖于 $h$ 的二阶导数, 看来我们能期望的最佳估计是
+
+\[
+\begin{aligned}
+\| D ^ {2} u (t) \| _ {L ^ {\infty}} &\lesssim \int_ {0} ^ {t} | \partial^ {2} h (\tau ,  \cdot) | d \tau \\
+&\lesssim \lambda^ {- 2 (1 - a)}
+\end{aligned}
+\]
+
+沿这一思路的论证只会给出 Tataru 得到的最优结果. 要做得更好, 我们必须利用非线性假设 \eqref{eq:cG-76}. 能够利用该假设是我们几何方法的关键优势. 
+
+为此, 我们需要把 $D^{2}u$ 相对于我们的典范零标架分解. 这可以通过引入如下量来完成:
+
+\begin{equation}
+\chi_ {A B} = \langle D _ {A} e _ {4},  e _ {B} \rangle,  \quad \eta_ {A} = \frac {1}{2} \langle D _ {3} e _ {4},  e _ {A} \rangle\label{eq:cG-87}
+\end{equation}
+
+此外, 置
+
+\[
+b ^ {- 1} = \partial_ {t} u = | \nabla u | _ {h}
+\]
+
+我们还将 $\chi_{AB}$ 分解为 $\mathrm{tr}\chi = \delta^{AB}\chi_{AB}$ 与\newterm{traceless-part}{无迹部分}{traceless part} $\hat{\chi}_{AB}$. 它们满足如下方程:
+
+\begin{equation}
+L (b) = - b k _ {N N}, \label{eq:cG-88}
+\end{equation}
+
+\begin{equation}
+L (\mathrm{tr} \chi) + \frac {1}{2} (\mathrm{tr} \chi) ^ {2} = - | \hat {\chi} | ^ {2} - k _ {N N} \mathrm{tr} \chi - R _ {4 4}, \label{eq:cG-89}
+\end{equation}
+
+\begin{equation}
+\mathcal {P} _ {4} \hat {\chi} _ {A B} + \frac {1}{2} (\mathrm{tr} \chi) \hat {\chi} _ {A B} = - k _ {N N} \hat {\chi} _ {A B} - \hat {\alpha} _ {A B}, \label{eq:cG-90}
+\end{equation}
+
+\begin{equation}
+\mathcal {P} _ {4} \eta_ {A} + \frac {1}{2} (\mathrm{tr} \chi) \eta_ {A} = - (k _ {B N} + \eta_ {B}) \hat {\chi} _ {A B} - \frac {1}{2} (\mathrm{tr} \chi) k _ {A N} - \frac {1}{2} \beta_ {A}.\label{eq:cG-91}
+\end{equation}
+
+其中 $\alpha_{AB} = R_{A4B4}$, $\hat{\alpha} = \delta^{AB}\alpha_{AB}$, $\beta_A = R_{A43B}$. 若我们尝试从相应的输运\eqref{eq:cG-89}、(90) 与 (91) 估计 $\mathrm{tr}\chi$、$\hat{\chi}$、$\eta$, 就会遇到上面提到的完全相同的困难. 我们用如下两个思想绕过这些困难:
+
+\textbf{想法 1.} 注意到出现在 $tr\chi$ 输运方程中的曲率项 $R_{44}$ 具有特殊结构. 事实上, 我们有:
+
+\begin{lemma}[重要分解]\label{lem:cG-3.19}
+Ricci 曲率的 $R_{44} = e_{4}^{\mu} e_{4}^{\nu} R_{\mu\nu}$ 分量容许如下分解:
+
+\begin{equation}
+R _ {4 4} = L (z) - \frac {1}{2} e _ {4} ^ {\mu} e _ {4} ^ {\nu} \Box _ {h} H _ {\mu \nu} + \mathrm{Error}, \label{eq:cG-92}
+\end{equation}
+
+其中函数 $z$ 与 Error 满足逐点估计 $|z| \lesssim |\partial H|$, $|Error| \lesssim (\partial H)^2$. 
+\end{lemma}
+
+鉴于该引理, 我们可以把 $\mathrm{tr}\chi$ 的输运方程改写如下:
+
+\begin{align*}
+y &= \mathrm{tr} \chi - \frac {2}{s} \\
+s &= t - u \\
+L (y + z) + \mathrm{tr} \chi (y + z) &= \frac {1}{2} (y + z) ^ {2} + \frac {2}{s} z - \frac {1}{2} z ^ {2} - | \hat {\chi} | ^ {2} \\
+&\quad - k _ {N N} \mathrm{tr} \chi + \frac {1}{2} e _ {4} ^ {\nu} e _ {4} ^ {\mu} \square_ {h} H _ {\mu \nu} - \mathrm{Error}, 
+\end{align*}
+
+\textbf{想法 2.} $y + z$ 的方程看起来比 $tr\chi$ 的方程好得多. 不幸的是, 对 $\hat{\chi}$ 与 $\eta$ 不能使用同样的技巧. 此外, $y + z$ 的方程本身与 $\hat{\chi}$ 的输运方程耦合. 为解决这一问题, 我们诉诸一个完全不同的几何方程, 即 $\chi$ 的 Codazzi 方程. 它具有如下形式, 
+
+\begin{equation}
+(\mathrm{d} \nabla \hat {\chi}) _ {A} + \hat {\chi} _ {A B} k _ {B N} = \frac {1}{2} (\nabla_ {A} \mathrm{tr} \chi + k _ {A N} \mathrm{tr} \chi) - R _ {B 4 A B}\label{eq:cG-93}
+\end{equation}
+
+注意到方程 $\operatorname{div}\hat{\chi}_{A}=F_{A}$ 是曲面 $S_{t, u}$ 上的椭圆 Hodge 方程组. 利用上述 $y+z$ 输运方程与 (93) 之间的耦合系统, 我们导出如下类型的估计:
+
+\[
+\begin{aligned}
+| \mathrm{tr} \chi - \frac {2}{s} | &\lesssim \lambda^ {- \bar {a}} \\
+| \hat {\chi} | &\lesssim \lambda^ {- \bar {a}}
+\end{aligned}
+\]
+
+其中
+
+\[
+\bar {a} = 1 - \frac {a ^ {2}}{2}.
+\]
+
+这比以前得到的 $\lambda^{-2(1 - a)}$ 估计好得多. 
+
+\begin{remark}\label{rem:cG-3.21}
+对 $\eta$ 我们有类似的方法. 其思想是获得 $\eta$ 的散度-旋度方程组, 它耦合了一个与 $tr\chi$ 的输运方程类似的输运方程. 
+\end{remark}
+
+\begin{remark}\label{rem:cG-3.22}
+把耦合椭圆 Hodge 方程组与有利的输运方程结合使用的思想, 出现在 \cite{gfref12} 中一个非常不同的背景下, 即与 Minkowski 空间的整体稳定性相关. 
+\end{remark}

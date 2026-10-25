@@ -1,0 +1,255 @@
+% ============ 第4章 §4.3 Fourier变换(原书 pp.324-330) ============
+\section{Fourier 变换}\label{sec:4.3}
+\index{Fourier 变换}
+\index{Fourier 反演公式}
+\index{Fourier 变换!(缓增广义函数的)}
+\index{缓增广义函数}
+\index{缓增广义函数族}
+\index{速降函数}
+\index{速降函数族}
+\index{Plancherel 定理}
+\index{Parseval 等式}
+\index{Riemann--Lebesgue 定理}
+\index{卷积}
+
+
+本节中,定义 Fourier 变换,并确认其基本性质.对可积函数 $f \in L^{1}(\mathbb{R}^{n})$,其 Fourier 变换定义为
+\begin{equation*}
+\hat{f}(\xi) := \int_{\mathbb{R}^{n}}e^{-2\pi i x\cdot\xi}f(x)\dd x \quad (\xi \in \mathbb{R}^{n}).
+\end{equation*}
+这里,$x = (x_{1}, \ldots, x_{n}) \in \mathbb{R}^{n}$,$\xi = (\xi_{1}, \ldots, \xi_{n}) \in \mathbb{R}^{n}$ 的内积表为
+\begin{equation*}
+x\cdot\xi := x_{1}\xi_{1} + \ldots + x_{n}\xi_{n}.
+\end{equation*}
+
+\begin{proposition}\label{prop:4.3.1}
+设 $f \in L^{1}(\mathbb{R}^{n})$.
+
+(i)
+\begin{equation}
+\|\hat{f}\|_{\infty} \leq \|f\|_{1}\tag{4.3.1}
+\label{eq:4.3.1}\end{equation}
+成立.
+
+(ii) $\hat{f}(\xi)$ 是一致连续的函数.
+
+(iii) $\lim_{|\xi| \to \infty}\hat{f}(\xi) = 0$ 成立.称此为 Riemann--Lebesgue 定理.
+\end{proposition}
+
+\begin{proof}
+(i) 由定义显然.(ii) 来证明.固定 $\epsilon > 0$.首先选取足够大的 $R > 0$,使得
+\begin{equation*}
+\int_{|x| > R}|f(x)|\dd x \leq \frac{\epsilon}{4},
+\end{equation*}
+其次选取足够小的 $\delta > 0$,使得当 $|h| \leq \delta$($h \in \mathbb{R}^{n}$)时
+\begin{equation*}
+\left|e^{-2\pi i x\cdot h} - 1\right| \leq \frac{\epsilon}{2\|f\|_{1}} \quad (|x| \leq R).
+\end{equation*}
+利用这些,对 $\xi \in \mathbb{R}^{n}$,$|h| \leq \delta$,
+\begin{equation}
+\begin{aligned}
+|\hat{f}(\xi + h) - \hat{f}(\xi)| & = \left|\int_{\mathbb{R}^{n}}\left(e^{-2\pi i x\cdot h} - 1\right)e^{-2\pi i x\cdot\xi}f(x)\dd x\right| \\
+& \leq \int_{|x| \leq R}\left|e^{-2\pi i x\cdot h} - 1\right||f(x)|\dd x + 2\int_{|x| \geq R}|f(x)|\dd x \leq \epsilon.
+\end{aligned}
+\end{equation}
+故 $\hat{f}(\xi)$ 一致连续.(iii) 来证明.
+
+令
+\begin{equation*}
+I(\alpha) := \int_{a}^{b}e^{-2\pi i\theta\alpha}\dd\theta,
+\end{equation*}
+可以算出
+\begin{equation*}
+\lim_{|\alpha| \to \infty}I(\alpha) = 0.
+\end{equation*}
+由此可知,对任意立方体\footnote{所谓立方体,指各边与各坐标轴平行的立方体.}$Q \subset \mathbb{R}^{n}$ 的特征函数,(iii) 成立.用立方体特征函数的线性组合逼近 $f$,即得所证.
+\end{proof}
+
+\begin{definition}[速降函数]\label{def:4.3.2}
+无限次连续可微函数 $\phi \in C^{\infty}(\mathbb{R}^{n})$ 在满足
+\begin{equation}
+\sup_{x \in \mathbb{R}^{n}}\left|x^{\gamma}\partial^{\alpha}\phi(x)\right| < \infty\tag{4.3.2}
+\label{eq:4.3.2}\end{equation}
+(对任意多重指标 $\alpha, \gamma \in \mathbb{N}_{0}^{n}$)时,称为速降函数.速降函数全体构成的线性空间记为 $\mathcal{S}(\mathbb{R}^{n})$,称为速降函数族.这里,对
+\begin{equation*}
+\alpha = (\alpha_{1}, \ldots, \alpha_{n}), \quad \gamma = (\gamma_{1}, \ldots, \gamma_{n})
+\end{equation*}
+表为
+\begin{equation*}
+x^{\gamma} := (x_{1})^{\gamma_{1}}\ldots(x_{n})^{\gamma_{n}}, \quad \partial^{\alpha} := (\partial/\partial x_{1})^{\alpha_{1}}\ldots(\partial/\partial x_{n})^{\alpha_{n}}.
+\end{equation*}
+\end{definition}
+
+速降函数是 $L^{p}(\mathbb{R}^{n})$($1 \leq p \leq \infty$)中的函数.
+
+速降函数族 $\mathcal{S}(\mathbb{R}^{n})$ 由 \eqref{eq:4.3.2} 定义的半范数族成为 Fréchet 空间.对 $k \in \mathbb{N}$,$\phi \in \mathcal{S}(\mathbb{R}^{n})$,令
+\begin{equation*}
+p_{k}(\phi) := \sup\left\{\left|x^{\gamma}\partial^{\alpha}\phi(x)\right|: |\alpha|, |\gamma| \leq k, x \in \mathbb{R}^{n}\right\},
+\end{equation*}
+定义距离
+\begin{equation*}
+d(\phi, \psi) := \sum_{k=1}^{\infty}2^{-k}\min\{p_{k}(\phi - \psi), 1\},
+\end{equation*}
+则 $\mathcal{S}(\mathbb{R}^{n})$ 可以看作度量空间.
+
+令 $D_{j} := \frac{1}{2\pi i}(\partial/\partial x_{j})$.对 $\phi \in \mathcal{S}(\mathbb{R}^{n})$,由分部积分,
+\begin{equation*}
+\xi_{j}\hat{\phi}(\xi) = \int\left(-D_{j}e^{-2\pi i x\cdot\xi}\right)\phi(x)\dd x = \int e^{-2\pi i x\cdot\xi}D_{j}\phi(x)\dd x,
+\end{equation*}
+由积分与微分的交换,
+\begin{equation*}
+D_{j}\hat{\phi}(\xi) = \int e^{-2\pi i x\cdot\xi}(-x_{j})\phi(x)\dd x
+\end{equation*}
+成立.利用这些,
+\begin{equation*}
+\xi^{\alpha}D^{\gamma}\hat{\phi}(\xi) = \int e^{-2\pi i x\cdot\xi}D^{\alpha}\left((-x)^{\gamma}\phi(x)\right)\dd x.
+\end{equation*}
+进而
+\begin{equation}
+\begin{aligned}
+|\xi^{\alpha}D^{\gamma}\hat{\phi}(\xi)| & \leq \int\left|D^{\alpha}\left((-x)^{\gamma}\phi(x)\right)\right|\dd x \\
+& = \int\frac{(1 + |x|)^{n+1}}{(1 + |x|)^{n+1}}\left|D^{\alpha}\left((-x)^{\gamma}\phi(x)\right)\right|\dd x \\
+& \leq \sup_{y}\left\{(1 + |y|)^{n+1}\left|D^{\alpha}\left((-y)^{\gamma}\phi(y)\right)\right|\right\}\int\frac{1}{(1 + |x|)^{n+1}}\dd x \\
+& = C\sup_{y}\left\{(1 + |y|)^{n+1}\left|D^{\alpha}\left((-y)^{\gamma}\phi(y)\right)\right|\right\}.
+\end{aligned}
+\end{equation}
+对左端取上限,可知 Fourier 变换在 $\mathcal{S} \to \mathcal{S}$ 中连续.进而,由下面的定理可知 Fourier 变换是 $\mathcal{S} \to \mathcal{S}$ 的同胚.
+
+\begin{theorem}\label{thm:4.3.3}
+设 $\phi \in \mathcal{S}(\mathbb{R}^{n})$.对所有 $x \in \mathbb{R}^{n}$,Fourier 反演公式
+\begin{equation}
+\int_{\mathbb{R}^{n}}e^{2\pi i x\cdot\xi}\hat{\phi}(\xi)\dd\xi = \phi(x)\tag{4.3.3}
+\label{eq:4.3.3}\end{equation}
+成立.
+\end{theorem}
+
+为证明准备如下两个引理.
+
+\begin{lemma}\label{lem:4.3.4}
+若 $f, g \in L^{1}$,则
+\begin{equation*}
+\int_{\mathbb{R}^{n}}\hat{f}g\dd x = \int_{\mathbb{R}^{n}}f\hat{g}\dd x
+\end{equation*}
+成立.
+\end{lemma}
+
+\begin{lemma}\label{lem:4.3.5}
+设 $\epsilon > 0$,则
+\begin{equation*}
+\int_{\mathbb{R}^{n}}e^{-2\pi i x\cdot\xi}e^{-\pi\epsilon|x|^{2}}\dd x = \epsilon^{-n/2}e^{-\pi|\xi|^{2}/\epsilon}
+\end{equation*}
+成立.
+\end{lemma}
+
+引理~\ref{lem:4.3.4} 由 Fubini 定理显然.引理~\ref{lem:4.3.5} 由变量替换与下面的计算可知:
+\begin{equation*}
+\begin{aligned}
+\int_{-\infty}^{\infty}e^{-2\pi i t\tau}e^{-\pi t^{2}}\dd t & = e^{-\pi\tau^{2}}\int_{-\infty}^{\infty}e^{-\pi(t + i\tau)^{2}}\dd t \\
+& = e^{-\pi\tau^{2}}\int_{-\infty}^{\infty}e^{-\pi t^{2}}\dd t = e^{-\pi\tau^{2}}.
+\end{aligned}
+\end{equation*}
+
+\begin{proof}[定理~\ref{thm:4.3.3} 的证明]
+首先注意
+\begin{equation*}
+e^{2\pi i x\cdot\xi}\hat{\phi}(\xi) = \int e^{-2\pi i (y - x)\cdot\xi}\phi(y)\dd y = \int e^{-2\pi i y\cdot\xi}\phi(y + x)\dd y.
+\end{equation*}
+由这个等式与上面的两个引理,
+\begin{equation*}
+\int e^{2\pi i x\cdot\xi}\hat{\phi}(\xi)e^{-\pi\epsilon|\xi|^{2}}\dd\xi = \epsilon^{-n/2}\int\phi(y + x)e^{-\pi|y|^{2}/\epsilon}\dd y.
+\end{equation*}
+令 $\epsilon \to 0$,上式左端由 Lebesgue 收敛定理收敛到 \eqref{eq:4.3.3} 的左端;上式右端,由于
+\begin{equation*}
+\epsilon^{-n/2}\int e^{-\pi|y|^{2}/\epsilon}\dd y = 1,
+\end{equation*}
+可知 $\epsilon^{-n/2}e^{-\pi|y|^{2}/\epsilon}\dd y$ 是恒等逼近,故收敛到 $\phi(x)$.
+\end{proof}
+
+$f, g \in L^{1}$ 的卷积定义为
+\begin{equation*}
+(f * g)(x) := \int f(x - y)g(y)\dd y.
+\end{equation*}
+
+\begin{theorem}\label{thm:4.3.6}
+若 $\phi, \psi \in \mathcal{S}$,则
+\begin{equation}
+\int\hat{\phi}\,\overline{\widehat{\psi}}\dd x = \int\phi\,\overline{\psi}\dd x,\tag{4.3.4}
+\label{eq:4.3.4}\end{equation}
+以及
+\begin{equation}
+(\phi * \psi)^{\wedge}(\xi) = \hat{\phi}(\xi)\hat{\psi}(\xi)\tag{4.3.5}
+\label{eq:4.3.5}\end{equation}
+成立.
+\end{theorem}
+
+\begin{proof}
+令 $\eta = \overline{\hat{\psi}}$,由 Fourier 反演公式可知 $\hat{\eta} = \overline{\psi}$.应用引理~\ref{lem:4.3.4},即得 \eqref{eq:4.3.4}.其次,
+\begin{equation}
+\begin{aligned}
+(\phi * \psi)^{\wedge}(\xi) & = \int e^{-2\pi i x\cdot\xi}\int\phi(x - y)\psi(y)\dd y\dd x \\
+& = \int\int e^{-2\pi i (x - y)\cdot\xi}\phi(x - y)e^{-2\pi i y\cdot\xi}\psi(y)\dd y\dd x = \hat{\phi}(\xi)\hat{\psi}(\xi).
+\end{aligned}
+\end{equation}
+得 \eqref{eq:4.3.5}.
+\end{proof}
+
+为对更一般的函数考虑 Fourier 变换,定义缓增广义函数.
+
+\begin{definition}[缓增广义函数]\label{def:4.3.7}
+速降函数族 $\mathcal{S}(\mathbb{R}^{n})$ 的对偶空间记为 $\mathcal{S}'(\mathbb{R}^{n})$,称为缓增广义函数族.$\mathcal{S}'(\mathbb{R}^{n})$ 的元称为缓增广义函数.
+\end{definition}
+
+\begin{definition}\label{def:4.3.8}
+对 $u \in \mathcal{S}'(\mathbb{R}^{n})$,其 Fourier 变换定义为
+\begin{equation*}
+\hat{u}(\phi) = u(\hat{\phi}).
+\end{equation*}
+\end{definition}
+
+由引理~\ref{lem:4.3.4},若 $u \in L^{1}$,则 $u$ 作为广义函数的 Fourier 变换与作为函数的 Fourier 变换一致.由 Fourier 反演公式,Fourier 变换是 $\mathcal{S}' \to \mathcal{S}'$ 的同胚.特别地,若 $u \in L^{1}$ 且 $\hat{u} \in L^{1}$,则 Fourier 反演公式在 a.e. $x$ 成立.
+
+\begin{theorem}\label{thm:4.3.9}
+若 $f \in L^{2}$,则 $\hat{f} \in L^{2}$ 且
+\begin{equation}
+\|\hat{f}\|_{2} = \|f\|_{2}\tag{4.3.6}
+\label{eq:4.3.6}\end{equation}
+成立.称此为 Plancherel 定理.进而,若 $f, g \in L^{2}$,则
+\begin{equation}
+\int\widehat{f}\,\overline{\widehat{g}}\dd x = \int f\,\overline{g}\dd x\tag{4.3.7}
+\label{eq:4.3.7}\end{equation}
+成立.称此为 Parseval 等式.
+\end{theorem}
+
+\begin{proof}
+选取 $f_{j}, g_{j} \in \mathcal{S}$ 使得
+\begin{equation*}
+\|f_{j} - f\|_{2}, \quad \|g_{j} - g\|_{2} \to 0 \quad (j \to \infty).
+\end{equation*}
+此时,在 $\mathcal{S}'$ 的拓扑中 $f_{j} \to f$,故由 Fourier 变换的连续性,在 $\mathcal{S}'$ 的拓扑中 $\hat{f}_{j} \to \hat{f}$.由 \eqref{eq:4.3.4},
+\begin{equation*}
+\|\hat{f}_{j} - \hat{f}_{k}\|_{2} = \|f_{j} - f_{k}\|_{2} \to 0 \quad (j, k \to \infty),
+\end{equation*}
+故存在 $h \in L^{2}$ 使得在 $L^{2}$ 的拓扑中 $\hat{f}_{j} \to h$.这意味着在 $\mathcal{S}'$ 的拓扑中 $\hat{f}_{j} \to h$,从而 $\hat{f} = h \in L^{2}$.
+
+由
+\begin{equation*}
+\|\hat{f}_{j}\|_{2} = \|f_{j}\|_{2}
+\end{equation*}
+令 $j \to \infty$,即得 \eqref{eq:4.3.6}.
+
+\eqref{eq:4.3.7} 由 \eqref{eq:4.3.4} 得
+\begin{equation*}
+\int\hat{f}_{j}\,\overline{\widehat{g}_{j}}\dd x = \int f_{j}\,\overline{g_{j}}\dd x,
+\end{equation*}
+且已证明 $\hat{f}, \hat{g} \in L^{2}$,故显然.
+\end{proof}
+
+由 M. Riesz 插值定理插值 \eqref{eq:4.3.1} 与 \eqref{eq:4.3.6},得到下面的系.
+
+\begin{corollary}\label{cor:4.3.10}
+设 $1 \leq p \leq 2$,$p' = p/(p-1)$,则
+\begin{equation}
+\|\hat{f}\|_{L^{p'}(\mathbb{R}^{n})} \leq \|f\|_{L^{p}(\mathbb{R}^{n})}\tag{4.3.8}
+\label{eq:4.3.8}\end{equation}
+成立.
+\end{corollary}

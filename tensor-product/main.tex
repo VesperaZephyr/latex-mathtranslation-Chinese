@@ -1,0 +1,297 @@
+% !TeX program = xelatex
+% 数译（mathtranslations.org）数学中文译本排版模板（讲义 ctexart 版）
+% Keith Conrad: Tensor Products (Part I)
+%
+\documentclass[UTF8,12pt,fontset=none]{ctexart}
+
+% ---------- 页面、字体与数学 ----------
+\usepackage[paper=a4paper,left=2.5cm,right=2.5cm,top=2.8cm,bottom=2.8cm]{geometry}
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs,mathtools}
+\usepackage{graphicx,tikz,tikz-cd,titlesec}
+\usepackage{array,booktabs,longtable}
+\usepackage{etoolbox}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[
+    colorlinks=true,
+    bookmarksnumbered=true,
+    linkcolor=MidnightBlue,
+    citecolor=BrickRed,
+    urlcolor=MidnightBlue,
+    linktoc=all
+]{hyperref}
+
+% 允许版心稍微拉伸以避免孤立过宽行
+\setlength{\emergencystretch}{3em}
+
+% 英文：Computer Modern Unicode Serif
+\setmainfont{cmunrm.otf}[
+  BoldFont=cmunbx.otf,
+  ItalicFont=cmunti.otf,
+  BoldItalicFont=cmunbi.otf
+]
+
+% 中文：正文宋体；专用术语楷体；定理类环境仿宋
+\setCJKmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]
+\newCJKfontfamily\songfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]
+\newCJKfontfamily\termfont{FandolKai-Regular.otf}
+\newCJKfontfamily\theoremfont[AutoFakeBold=2]{FandolFang-Regular.otf}
+\setCJKsansfont{FandolHei-Regular.otf}[BoldFont=FandolHei-Bold.otf]
+\setCJKmonofont{FandolFang-Regular.otf}
+
+\pagestyle{plain}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt}
+\linespread{1.16}
+
+% ---------- 译本元信息 ----------
+\newcommand{\BookTitleCN}{张量积}
+\newcommand{\BookTitleEN}{Tensor Products}
+\newcommand{\OriginalAuthor}{Keith Conrad}
+\newcommand{\OriginalEdition}{Expository Notes}
+\newcommand{\OriginalPublisher}{University of Connecticut}
+\newcommand{\OriginalYear}{2024}
+\newcommand{\Translator}{数译}
+\newcommand{\ModelUsed}{GLM-5 / Codex}
+\newcommand{\TranslationDate}{\today}
+
+% ================================================================
+%                         术语系统
+% ================================================================
+\newcommand{\termcn}[1]{{\termfont #1}}
+
+\makeatletter
+\newcommand{\MTTermList}{}
+\newcommand{\MTRegisterTerm}[3]{%
+  \g@addto@macro\MTTermList{\MTTermRow{#1}{#2}{#3}}%
+}
+\newcommand{\MTTermRow}[3]{%
+  {\termfont #1} & #2 & \hyperref[#3]{\pageref*{#3}} \\
+}
+
+\newcommand{\newterm}[3]{%
+  \@ifundefined{MT@seen@#1}{%
+    \expandafter\gdef\csname MT@seen@#1\endcsname{}%
+    \phantomsection
+    \label{term:#1}%
+    \protected@write\@auxout{}{%
+      \string\MTRegisterTerm{\unexpanded{#2}}{\unexpanded{#3}}{term:#1}%
+    }%
+  }{}%
+  {\termfont #2}（#3）%
+}
+\makeatother
+
+\newcommand{\printterminology}{%
+  \clearpage
+  \phantomsection
+  \section*{术语索引}
+  \addcontentsline{toc}{section}{术语索引}
+
+  \vspace{0.5cm}
+  \begingroup
+  \renewcommand{\arraystretch}{1.28}
+  \begin{longtable}{>{\raggedright\arraybackslash}p{0.28\textwidth}>{\raggedright\arraybackslash}p{0.49\textwidth}>{\centering\arraybackslash}p{0.12\textwidth}}
+    \toprule
+    \textbf{中文术语} & \textbf{英文术语} & \textbf{页码} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{中文术语} & \textbf{英文术语} & \textbf{页码} \\
+    \midrule
+    \endhead
+    \MTTermList
+    \bottomrule
+  \end{longtable}
+  \endgroup
+}
+
+% ================================================================
+%                       定理类环境
+% ================================================================
+\newtheoremstyle{mtfang}%
+  {6pt}{6pt}%
+  {\theoremfont}%
+  {0pt}%
+  {\songfont\bfseries}%
+  {：}%
+  {0.5em}%
+  {}%
+
+\newtheoremstyle{mtsong}%
+  {6pt}{6pt}%
+  {\songfont}%
+  {0pt}%
+  {\songfont\bfseries}%
+  {：}%
+  {0.5em}%
+  {}%
+
+% 讲义中公式随节编号
+\numberwithin{equation}{section}
+
+% 所有定理类环境共用节级计数器，与原书完全一致
+\theoremstyle{mtfang}
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{proposition}[theorem]{命题}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{remark}[theorem]{注}
+
+\theoremstyle{mtsong}
+\newtheorem{example}[theorem]{例}
+\newtheorem{problem}[theorem]{问题}
+\newtheorem{question}[theorem]{问题}
+
+\newcommand{\envenddiamond}{%
+  \ifhmode
+    \unskip\nobreak\hfill\ensuremath{\diamond}%
+  \else
+    \noindent\hfill\ensuremath{\diamond}%
+  \fi
+  \par
+}
+\AtEndEnvironment{example}{\envenddiamond}
+\AtEndEnvironment{remark}{\envenddiamond}
+
+% proof 样式
+\makeatletter
+\renewcommand{\proofname}{证明}
+\renewenvironment{proof}[1][\proofname]{\par
+  \pushQED{\qed}%
+  \normalfont\songfont
+  \topsep6\p@\@plus6\p@\relax
+  \trivlist
+  \item[\hskip\labelsep\normalfont\songfont\bfseries #1：]\ignorespaces
+}{%
+  \popQED\endtrivlist\@endpefalse
+}
+\makeatother
+\renewcommand{\qedsymbol}{\ensuremath{\square}}
+
+% ================================================================
+%                      讲义节标题格式
+% ================================================================
+\titleformat{\section}[block]
+  {\normalfont\Large\bfseries}
+  {\S\,\thesection\quad}
+  {0pt}
+  {}
+\titlespacing*{\section}{0pt}{2ex plus 0.5ex minus .2ex}{1.2ex plus .2ex}
+
+\ctexset{
+  subsection={
+    format=\large\bfseries,
+    name={,.\quad},
+    number=\arabic{section}.\arabic{subsection}
+  }
+}
+
+% 常用数学记号
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\C}{\mathbf{C}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\Q}{\mathbf{Q}}
+\newcommand{\N}{\mathbf{N}}
+\newcommand{\F}{\mathbf{F}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\End}{\operatorname{End}}
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\im}{\operatorname{im}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\Tor}{\operatorname{Tor}}
+\newcommand{\Ext}{\operatorname{Ext}}
+\newcommand{\ann}{\operatorname{ann}}
+
+% 参考文献环境
+\renewcommand{\refname}{参考文献}
+
+\begin{document}
+
+% ================================================================
+%                             封面
+% ================================================================
+\begin{titlepage}
+    \thispagestyle{empty}
+    \flushleft
+
+    \rule{\textwidth}{1.2pt} \\[0.1cm]
+    \rule{\textwidth}{0.8pt} \\[1.5cm]
+
+    \hspace{2cm} {\fontsize{42pt}{52pt}\selectfont \bfseries \BookTitleCN} \\[0.8cm]
+    \hspace{2cm} {\fontsize{24pt}{28pt}\selectfont \textit{\BookTitleEN}} \\[1.5cm]
+
+    \rule{\textwidth}{0.6pt} \\[2cm]
+
+    \hspace{2cm} {\Huge \textsc{\OriginalAuthor}} \\[5cm]
+
+    \vfill
+
+    \noindent
+    \begin{minipage}[b]{0.46\textwidth}
+        \raggedright
+        \includegraphics[width=5.7cm]{logo.pdf}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.50\textwidth}
+        \raggedleft
+        {\small \OriginalEdition · \OriginalPublisher · \OriginalYear} \\[0.25cm]
+        {\normalsize \Translator\ 翻译及重排} \\[0.25cm]
+        {\small Model: \ModelUsed} \\
+        {\small Updated: \TranslationDate}
+    \end{minipage}
+
+    \vspace*{1cm}
+\end{titlepage}
+
+% ================================================================
+%                       译者说明与目录
+% ================================================================
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+\phantomsection
+\section*{译者说明}
+\addcontentsline{toc}{section}{译者说明}
+
+本讲义是康涅狄格大学（University of Connecticut）Keith Conrad 教授所撰写的高等代数著名讲义《张量积》（\textit{Tensor Products}）前篇（Part I）的中译本.
+Keith Conrad 的讲义以循序渐进、直观透彻与例题详实著称，是学习现代交换代数、模论与张量积普遍映射性质（Universal Mapping Property）的极佳教材.
+
+本次翻译与重排严格遵循以下原则：
+\begin{enumerate}
+    \item \textbf{忠实原著}：以 Keith Conrad 原讲义 PDF 为唯一权威，完整保留原讲义的所有定理、引理、例题、注记、历史渊源与参考文献体系；
+    \item \textbf{统一编号}：严格保持原讲义各定理类环境（定义、定理、例、注等）共用节级计数器的设计，确保中译本的所有引证编号与原讲义 1:1 精确对应；
+    \item \textbf{现代排版与超链接}：所有普遍映射性质的交换图均使用 \texttt{tikz-cd} 矢量重绘；全文公式与定理引用均已实现可点击的双向超链接；
+    \item \textbf{术语索引}：首次出现的专有名词使用 \texttt{\string\newterm} 标记，并在文末附有中英对照术语索引表.
+\end{enumerate}
+
+\vspace{0.5cm}
+\hfill \Translator
+
+\hfill \TranslationDate
+
+\newpage
+\begingroup
+\hypersetup{linkcolor=black}
+\tableofcontents
+\endgroup
+\clearpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\input{sections/sec1_intro.tex}
+\input{sections/sec2_bilinear.tex}
+\input{sections/sec3_construction.tex}
+\input{sections/sec4_examples.tex}
+\input{sections/sec5_properties.tex}
+\input{sections/sec6_base_ext.tex}
+\input{sections/sec7_physics.tex}
+\input{sections/bibliography.tex}
+
+\printterminology
+
+\end{document}

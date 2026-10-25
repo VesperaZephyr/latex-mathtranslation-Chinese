@@ -1,0 +1,233 @@
+% !TEX program = xelatex
+%
+% "代数:第 0 章"中译本
+% 原书: Paolo Aluffi, Algebra: Chapter 0,
+%       Graduate Studies in Mathematics, Volume 104,
+%       American Mathematical Society, 2009.
+% 使用 AJbook 模板重排.
+%
+% 编译方式: xelatex main -> biber main -> xelatex main -> xelatex main
+% 说明:
+%   - 原书共九章: 第一章 "Preliminaries: Set theory and categories", ..., 第九章 "Homological algebra".
+%   - 原书定理、定义、注记、例等环境共享一个计数器, 按节编号 (如 Lemma 7.8 表示第 7 节第 8 条),
+%     各节末尾另有按节独立编号的习题 (如 Exercise 3.1).
+%   - 习题以各节末尾的 "Exercises" 块形式出现.
+
+\documentclass[
+	11pt,
+	geometry=a4,
+	coverpage=cover,
+	fontsetup=font-setup-open,
+	titlesetup=titles-setup,
+]{AJbook}
+
+% ===== 常用数学命令与交换图 =====
+% 数集与常用算子 (\N \Z \Q \R \CC, \Ker \Coker \Image \Hom \End \id \Tor \Ext,
+% \cate{...} 等) 均由 mycommand.sty 提供, 正文中直接使用, 勿在此重复定义.
+% 本项目新加的自定义符号统一放在此处:
+\usepackage{mycommand}
+\usepackage{myarrows}
+\usepackage{tikz-cd}
+\usepackage{quiver}
+% 本项目新加的自定义数学算子 (勿改 mycommand.sty):
+\DeclareMathOperator{\cont}{cont}
+\DeclareMathOperator{\rk}{rk}
+\DeclareMathOperator{\Dim}{dim}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\pd}{pd}
+\DeclareMathOperator{\colim}{colim}
+\DeclareMathOperator{\Gr}{Gr}
+\DeclareMathOperator{\ev}{ev}
+\DeclareMathOperator{\image}{image}
+
+% amsmath 的 matrix/pmatrix 默认最多 10 列, 放宽上限以备长矩阵之用.
+\setcounter{MaxMatrixCols}{20}
+
+% 允许 TeX 适当放宽单词间距, 缓解长公式造成的 Overfull 行
+\setlength{\emergencystretch}{2em}
+
+% ===== 列表 (习题、enumerate 均用 enumitem) =====
+\usepackage{enumitem}
+
+% ===== 花体字母 (原书 \mathscr 记号, 如幂集 \mathscr{P}) =====
+\usepackage{mathrsfs}
+
+% ===== TikZ 库 =====
+\usetikzlibrary{arrows.meta,calc,positioning,decorations.markings,patterns,shapes.geometric}
+
+% ===== 定理编号: 与原书一致, 节.序号, 每节重置 =====
+% titles-setup.tex 在节标题排版后调用 \AJseccount, 子节标题后调用 \AJsubseccount.
+% 定理/推论/引理/命题/定义/例/注记等共享 theorem 计数器 (由 AJbook.cls 定义).
+\newcommand{\AJseccount}{%
+	\setcounter{theorem}{0}%
+	\renewcommand{\thetheorem}{\arabic{section}.\arabic{theorem}}%
+}
+\newcommand{\AJsubseccount}{%
+	\renewcommand{\thetheorem}{\arabic{section}.\arabic{theorem}}%
+}
+
+% 公式编号按节
+\numberwithin{equation}{section}
+\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
+
+% ===== 各节末尾的习题: 计数器按节独立编号 (如 3.1), 与定理计数器分开 =====
+\newcounter{probctr}[section]
+\renewcommand{\theprobctr}{\arabic{section}.\arabic{probctr}}
+% 习题条目环境: \begin{prob}\label{...} ... \end{prob}
+\newenvironment{prob}{%
+	\refstepcounter{probctr}\par\noindent\textbf{\theprobctr.}\enspace\ignorespaces
+}{\par\medskip}
+
+% ===== 官方勘误专用独立脚注系统 =====
+% 为区分原书编号为 1, 2, 3... 的脚注，官方勘误采用独立的字母编号系统 a, b, c, ...
+\newcounter{erratumfn}[chapter]
+\newcommand{\erratumalph}[1]{%
+  \ifcase\value{#1}%
+    \or a\or b\or c\or d\or e\or f\or g\or h\or i\or j%
+    \or k\or l\or m\or n\or o\or p\or q\or r\or s\or t%
+    \or u\or v\or w\or x\or y\or z%
+    \or aa\or bb\or cc\or dd\or ee\or ff\or gg\or hh\or ii\or jj%
+    \else ?\fi
+}
+\renewcommand{\theerratumfn}{\erratumalph{erratumfn}}
+
+\makeatletter
+\newcommand{\erratumfootnote}[1]{%
+  \refstepcounter{erratumfn}%
+  \mbox{\textsuperscript{\normalfont\bfseries\theerratumfn}}%
+  \begingroup
+    \def\@thefnmark{\normalfont\bfseries\theerratumfn}%
+    \@footnotetext{#1}%
+  \endgroup
+}
+\newcommand{\erratumfootnotemark}{%
+  \refstepcounter{erratumfn}%
+  \mbox{\textsuperscript{\normalfont\bfseries\theerratumfn}}%
+}
+\newcommand{\erratumfootnotetext}[1]{%
+  \begingroup
+    \def\@thefnmark{\normalfont\bfseries\theerratumfn}%
+    \@footnotetext{#1}%
+  \endgroup
+}
+\makeatother
+
+% ===== 参考文献数据库 (biblatex 已由 AJbook 载入, backend=biber) =====
+\addbibresource{references.bib}
+
+% ===== 索引 (xindy + imakeidx + splitindex) =====
+% 采用 xindy 排序: 名词索引按拼音分组, 符号索引按 -M numeric-sort 数值页码排序.
+% noautomatic=true: 不在 xelatex 内自动跑 texindy (避免 shell-escape 依赖,
+% 也便于 _build.sh 在 splitindex 拆分后调用 _fix_idx.py 修复空排序键再处理).
+% 真正的排序/合并由 _build.sh 中的 texindy 完成.
+\usepackage[xindy, splitindex, noautomatic]{imakeidx}
+\makeindex[program=truexindy, title={名词索引暨英译}, columns=2, intoc=true,%
+	options=-M texindy -I xelatex -C utf8]	% 名词索引 (中英双语)
+\makeindex[name=sym1, program=truexindy, title={符号索引}, columns=3, intoc=true,%
+	options=-M numeric-sort -M latex -M latex-loc-fmts -M makeindex -I xelatex -C utf8]	% 符号索引 (原书 Index of Notation)
+
+% ===== 超链接 (AJbook 在 AtEndPreamble 中依据 hyperref 设置链接色) =====
+\usepackage[bookmarksnumbered=true,hyperindex=true]{hyperref}
+% 内核在正文初始化时生成 theH 记号；在该步骤之后设置唯一链接锚点。
+% 印刷编号仍按原书的“节.条目”。
+\AddToHook{begindocument/end}{%
+    \renewcommand{\theHtheorem}{\arabic{chapter}.\arabic{section}.\arabic{theorem}}%
+    \renewcommand{\theHequation}{\arabic{chapter}.\arabic{section}.\arabic{equation}}%
+    \renewcommand{\theHprobctr}{\arabic{chapter}.\arabic{section}.\arabic{probctr}}%
+}
+
+\AtBeginDocument{%
+	% 补充定理类环境: Aluffi 常用的其余环境均由 AJbook.cls 提供.
+	\theorembodyfont{\fangsong}%
+	\newtheorem{claim}[theorem]{断言}%	% 原书 "Claim 5.5" 之类, 共享定理计数器
+	\newtheorem{joke}[theorem]{玩笑}%	% 原书 "Joke 1.1" 之类
+	\theorembodyfont{\songti}%
+	% cleveref 名称补充
+	\crefname{prob}{习题}{习题}%
+	\crefname{claim}{断言}{断言}%
+	\crefname{joke}{玩笑}{玩笑}%
+	% 初始编号格式 (进入各节标题后由 \AJseccount 再确认)
+	\renewcommand{\thetheorem}{\arabic{section}.\arabic{theorem}}%
+}
+
+% 本项目新加记号:
+\newcommand{\op}{^{\mathrm{op}}}	% 反范畴 / 反环等上标 op
+\newcommand{\ZZ}{\mathbb{Z}}	% 整数环/群 (第 IX 章复形/群上同调常用)
+\newcommand{\NN}{\mathbb{N}}	% 自然数
+\newcommand{\QQ}{\mathbb{Q}}	% 有理数
+\newcommand{\RR}{\mathbb{R}}	% 实数
+\DeclareMathOperator{\lcm}{lcm}	% 最小公倍数 (原书记法)
+\DeclareMathOperator{\Inn}{Inn}	% 内自同构群 (原书记法)
+% §8.4 张量幂、对称幂、外幂 (原书用 \mathbb{T},\mathbb{S},\mathbb{A})
+\newcommand{\Tpow}{\mathbb{T}}
+\newcommand{\Spow}{\mathbb{S}}
+\newcommand{\Apow}{\mathbb{A}}
+\DeclareMathOperator{\Rees}{Rees}	% Rees 代数
+
+% Young 图 (§4 置换群): \ydiag{行序号/该行方格数, ...} (第一行在最上).
+% 例: \ydiag{1/5,2/2,3/1} 为 [5,2,1]. 边界框放宽以容纳 5 行图.
+\newcommand{\ydiag}[1]{%
+	\begin{tikzpicture}[scale=0.34, line width=0.5pt, baseline=(current bounding box.north)]
+		\foreach \r/\n in {#1} {
+			\foreach \k in {1,...,\n} {
+				\draw (\k-1,-\r) rectangle (\k,1-\r);
+			}
+		}
+		\useasboundingbox (0,-6) rectangle (5.6,0.2);
+	\end{tikzpicture}}
+
+% 定理标题可能跨页；在标题实际进入段落后建立目标，避免借用上一页。
+\makeatletter
+\newif\ifbook@pendingtarget
+\let\book@refstepcounter\hyper@refstepcounter
+\def\hyper@refstepcounter#1{%
+  \edef\book@counter{#1}\def\book@theorem{theorem}%
+  \ifx\book@counter\book@theorem
+    \hyper@makecurrent{#1}%
+    \xdef\book@targetname{\@currentHref}%
+    \global\book@pendingtargettrue
+  \else
+    \book@refstepcounter{#1}%
+  \fi
+}
+\AddToHook{para/begin}{%
+  \ifbook@pendingtarget
+    \Hy@raisedlink{\hyper@anchorstart{\book@targetname}\hyper@anchorend}%
+    \global\book@pendingtargetfalse
+  \fi
+}
+\makeatother
+
+\begin{document}
+
+\frontmatter
+
+\include{preface}
+
+\mainmatter
+% 各章翻译完成后逐一启用:
+\include{chapters/ch1-预备知识}
+\include{chapters/ch2-群初次相遇}
+\include{chapters/ch3-环与模}
+\include{chapters/ch4-群再次相遇}
+\include{chapters/ch5-整环中的不可约性与因子分解}
+\include{chapters/ch6-线性代数}
+\include{chapters/ch7-域}
+\include{chapters/ch8-线性代数重温}
+\include{chapters/ch9-同调代数}
+
+\backmatter
+
+% ===== 参考文献 =====
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{参考文献}
+\index{Baker@Baker!Alan@Alan}\index{Stark@Stark!Harold@Harold}\index{Marcolli@Marcolli!Matilde@Matilde}\printbibliography[title=参考文献]
+
+% ===== 记号索引 + 名词索引 =====
+% 注: imakeidx 的 intoc 选项已自动将索引写入目录, 勿再重复 \addcontentsline.
+\cleardoublepage
+\printindex[sym1]	% 符号索引 (原书在名词索引之前)
+\printindex
+
+\end{document}

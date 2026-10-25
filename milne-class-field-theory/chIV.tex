@@ -1,0 +1,1221 @@
+% ============================================================
+% chIV.tex — 第四章: Brauer 群
+% 原书 Chapter IV, Brauer Groups (pp.111--138)
+% 约定:
+%   - 定理类环境共享 theorem 计数器, 按 节.序号 编号;
+%   - 叙述性编号条目 (1.8, 5.2) 不占定理计数器, 手排加粗编号,
+%     其后的 \setcounter{theorem}{N} 使下一条编号与原书一致;
+%   - 原书公式编号 (35)--(42) 跨节连续, 用 \tag 硬编码;
+%   - 标签前缀 iv.;
+%   - 勘误: 例 1.11 末句改引 GT 7.19(a); 例 2.1 删 "in its centre"
+%     (依 Milne errata, 正文取修正内容, 脚注注明原书错误).
+% ============================================================
+\chapter{Brauer 群}\label{ch:IV}\index{bulajunqun@Brauer 群(Brauer group)}
+\providecommand{\Br}{\operatorname{Br}}
+
+在本章中, 我定义一个域的 Brauer 群, 并证明它给出上同调群 $H^2(K^{\mathrm{al}}/K)$ 的一个具体解释. 除了澄清类域论之外, Brauer 群还有许多应用, 例如应用于有限群的表示论以及非代数闭域上半单代数群的分类.
+
+纵观全章, $k$ 是一个域, 并且所有 $k$ 上的向量空间都取有限维. \emph{$k$-代数}\index{kdaishu@k-代数(k-algebra)}是指一个环 $A$, 它在其中心中包含 $k$, 且作为 $k$-向量空间有限维. 我们不假定 $A$ 交换; 例如 $A$ 可以是 $k$ 上 $n\times n$ 矩阵环 $M_n(k)$. $k$-代数的 \emph{$k$-子代数}是指包含 $k$ 的子环. $k$-代数的同态 $\varphi\colon A\to B$ 是一个环同态, 且满足 $\varphi(a)=a$ 对所有 $a\in k$. $k$-代数 $A$ 的\emph{反代数}\index{fandaishu@反代数(opposite algebra)} $A^{\mathrm{opp}}$ 是与 $A$ 有相同底集与加法的代数, 但其乘法 $\cdot$ 定义为 $\alpha\cdot\beta=\beta\alpha$. 设 $e_1,\ldots,e_n$ 是 $A$ 作为 $k$-向量空间的一组基, 则
+\[
+e_{i}e_{j}=\sum_{l}a_{ij}^{l}e_{l}
+\]
+对某些 $a_{ij}^{l}\in k$ 成立, 这些元素称为 $A$ 相对于基 $(e_i)_i$ 的\emph{结构常数}\index{jiegouchangshu@结构常数(structure constants)}. 选定基之后, 代数 $A$ 由其结构常数唯一确定.
+
+\section{单代数; 半单模}\label{sec:IV.1}
+
+\subsection*{半单模}
+
+本节中 $A$ 是一个 $k$-代数.
+
+所谓 $A$-\emph{模}\index{mo@模(module)}, 是指有限生成的左 $A$-模 $V$. 特别地, 这意味着 $1v=v$ 对所有 $v\in V$. 这样的 $V$ 作为 $k$-向量空间也是有限维的, 因此给出一个 $A$-模就相当于给出一个 (有限维) $k$-向量空间连同一个 $k$-代数同态 $A\to\End_k(V)$, 即 $A$ 在 $V$ 上的一个\emph{表示}\index{biaoshi@表示(representation)}. 若该同态是单射, 即若 $ax=0$ 对所有 $x\in V$ 成立便蕴含 $a=0$, 则称该模是\emph{忠实的}\index{zhongshi@忠实(faithful)}.
+
+$A$-模 $V$ 称为\emph{单的}\index{danmu@单模(simple module)}, 如果它非零且除 $0$ 外没有真 $A$-子模; 称为\emph{半单的}\index{bandanmu@半单模(semisimple module)}, 如果它同构于若干单 $A$-模的直和; 称为\emph{不可分解的}\index{bukefenjiemu@不可分解模(indecomposable module)}, 如果它不能写成两个非零 $A$-模的直和. 于是单模是半单的, 而不可分解模是半单的当且仅当它是单的.\footnote{有些作者用「不可约」与「完全可约」分别指「单」与「半单」; 对他们而言, 「不可约」蕴含「完全可约」.}
+
+\begin{example}\label{ex:iv.1.1}
+设 $V=k^2$, 并设 $A=k[\alpha]$, 其中 $\alpha\in M_2(k)$. $V$ 的 $A$-子模就是在 $\alpha$ 下稳定的 $k$-子空间.
+
+若 $\alpha=\begin{pmatrix}a&1\\0&a\end{pmatrix}$, 则 $\left\{\begin{pmatrix}*\\0\end{pmatrix}\right\}$ 是 $V$ 的一个 $A$-子模. 事实上, 它是唯一的非平凡子模, 故 $V$ 不可分解但不半单.
+
+若 $\alpha=\begin{pmatrix}a&0\\0&b\end{pmatrix}$, $a\neq b$, 则在 $\alpha$ 下稳定的直线只有 $L_1\stackrel{\mathrm{def}}{=}\left\{\begin{pmatrix}*\\0\end{pmatrix}\right\}$ 与 $L_2\stackrel{\mathrm{def}}{=}\left\{\begin{pmatrix}0\\*\end{pmatrix}\right\}$. 由于 $V=L_1\oplus L_2$ (作为 $A$-模), 它是半单的.
+
+若 $\alpha=\begin{pmatrix}a&0\\0&a\end{pmatrix}$, 则 $V$ 仍分解为两条直线的直和, 但分解不再唯一.
+
+最后, 若 $A=M_2(k)$, 则 $V$ 是单 $A$-模: 对每个非零的 $v\in V$ 有 $V=M_2(k)\cdot v$.
+\end{example}
+
+\begin{theorem}\label{thm:iv.1.2}
+每个 $A$-模 $V$ 都有滤列
+\[
+V=V_0\supset\cdots\supset V_r=0,
+\]
+其商 $V_i/V_{i+1}$ 是单 $A$-模. 若
+\[
+V=W_0\supset\cdots\supset W_s=0
+\]
+是另一个这样的滤列, 则 $r=s$, 且存在 $\{0,\ldots,r-1\}$ 的一个置换 $\sigma$, 使得 $V_i/V_{i+1}\simeq W_{\sigma(i)}/W_{\sigma(i)+1}$ 对所有 $i$ 成立.
+\end{theorem}
+
+\begin{proof}
+若 $V$ 单, 则 $V\supset 0$ 就是这样一个滤列. 否则 $V$ 包含一个子模 $W$, $V\neq W\neq 0$, 于是可对 $V/W$ 与 $W$ 作同样的论证. 由于 $V$ 是有限维 $k$-向量空间, 此过程在有限步后终止.
+
+唯一性部分可以完全照 Jordan-H\"older 定理 (GT, 6.2) 的证明进行.
+\end{proof}
+
+\begin{corollary}\label{cor:iv.1.3}
+假设
+\[
+\begin{aligned}
+V&\simeq V_1\oplus\cdots\oplus V_r\\
+&\simeq W_1\oplus\cdots\oplus W_s,
+\end{aligned}
+\]
+其中所有 $A$-模 $V_i$ 与 $W_j$ 都是单模. 则 $r=s$, 且存在 $\{1,\ldots,r\}$ 的一个置换 $\sigma$, 使得 $V_i\simeq W_{\sigma(i)}$ 对所有 $i$ 成立.
+\end{corollary}
+
+\begin{proof}
+这些分解定义了 $A$-模的滤列, 其商分别为 $\{V_1,\ldots,V_r\}$ 与 $\{W_1,\ldots,W_s\}$.
+\end{proof}
+
+\begin{proposition}\label{prop:iv.1.4}
+设 $V$ 是 $A$-模. 若 $V$ 是单子模之和 (不必是直和), 比如 $V=\sum_{i\in I}S_i$, 则对 $V$ 的任何子模 $W$, 存在 $I$ 的子集 $J$, 使得
+\[
+V=W\oplus\bigoplus_{i\in J}S_i.
+\]
+\end{proposition}
+
+\begin{proof}
+在「和 $S_J=\sum_{j\in J}S_j$ 是直和且 $W\cap S_J=0$」的 $I$ 的子集中取一个极大的 $J$. 我断言 $W+S_J=V$ (从而 $V$ 是 $W$ 与诸 $S_j$ ($j\in J$) 的直和). 为证此, 只需证每个 $S_i$ 都含于 $W+S_J$. 由于 $S_i$ 单, $S_i\cap(W+S_J)$ 等于 $0$ 或 $S_i$. 在前一种情形, $W\cap(S_i+S_J)=0$, 因为否则存在向量 $w\in W$, $s_i\in S_i$, $s_J\in S_J$, 使 $w=s_i+s_J\neq 0$, 于是 $s_i=w-s_J\neq 0$, 与 $S_i\cap(W+S_J)=0$ 矛盾. 因此必是后一种情形, 即 $S_i\subset W+S_J$.
+\end{proof}
+
+\begin{corollary}\label{cor:iv.1.5}
+$A$-模 $V$ 的下列条件等价:
+
+\begin{enumerate}[(a)]
+\item $V$ 半单;
+\item $V$ 是单子模之和;
+\item $V$ 的每个子模都有补模.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+显然 (a) 蕴含 (b), 而命题表明 (b) 蕴含 (c). 设 (c) 成立. 若 $V$ 单, 则它半单. 否则它包含一个非零真子模 $W$, 它有补模 $W'$, 即 $V=W\oplus W'$. 若 $W$ 与 $W'$ 单, 则 $V$ 半单. 否则可继续此论证, 由于 $V$ 作为 $k$-向量空间是有限维的, 它在有限步后终止.
+\end{proof}
+
+\begin{corollary}\label{cor:iv.1.6}
+半单模的和、子模与商模都半单.
+\end{corollary}
+
+\begin{proof}
+每一个都是单模之和: 对和, 这由 (\ref{cor:iv.1.5}) 推出; 对商, 由 (\ref{prop:iv.1.4}) 推出; 对子模, 由每个子模有补模、从而也是一个商模这一事实推出.
+\end{proof}
+
+每个半单 $A$-模 $V$ 可以写成直和
+\begin{equation}
+V\simeq m_{1}S_{1}\oplus\cdots\oplus m_{r}S_{r}\tag{35}
+\end{equation}
+其中每个 $S_i$ 单, 且互不同构. 若一个 $A$-模同构于某个单模 $S$ 的若干副本的直和, 则称它为\emph{等型的}\index{dengxingmu@等型模(isotypic module)} (以 $S$ 的同构类为型). 分解 (35) 表明每个半单模 $V$ 是若干互不同型的等型模的直和, 这些直和项称为 $V$ 的\emph{等型分支}\index{dengxingfenzhi@等型分支(isotypic component)}. $V$ 对应于单模 $S$ 的等型分支是 $V$ 中同构于 $S$ 的所有单子模之和. 由这一描述可见, 半单 $A$-模的同态 $V\to V'$ 把 $V$ 的每个等型分支映入 $V'$ 的同型的等型分支.
+
+\begin{proposition}\label{prop:iv.1.7}
+设 $V$ 是半单 $A$-模. $V$ 的一个子模在 $V$ 的所有自同态下稳定, 当且仅当它是 $V$ 的若干等型分支之和.
+\end{proposition}
+
+\begin{proof}
+$V$ 的每个自同态都保持其等型分支, 这证明了充分性. 反之, 设 $W$ 是 $V$ 的一个在 $V$ 的所有自同态下稳定的子模, 并设 $S$ 是 $W$ 的一个单子模. 若 $S'$ 是 $V$ 的同构于 $S$ 的子模, 则 $V$ 的自同态
+\[
+V\xrightarrow{\ \text{投射}\ }S\xrightarrow{\ \simeq\ }S'\hookrightarrow V
+\]
+把 $W$ 映入 $W$, 从而 $S'\subset W$. 因此 $W$ 包含 $V$ 的以 $S$ 的同构类为型的等型分支.
+\end{proof}
+
+\noindent\phantomsection\hypertarget{item:iv.1.8}{}\textbf{1.8} 令 ${}_A A$ 表示视为左 $A$-模的 $A$. 用 $A$ 的元素 $a$ 作右乘 $x\mapsto xa$ 是 ${}_A A$ 的一个 $A$-线性自同态; 反之, 每个 $A$-线性映射 $\varphi\colon {}_A A\to {}_A A$ 都是这种形式, 其中 $a=\varphi(1)$. 于是
+\[
+\varphi\mapsto\varphi(1)\colon\End_A({}_A A)\xrightarrow{\ \simeq\ }A\qquad(\text{作为 $k$-向量空间}).
+\]
+令 $\varphi_a$ 为映射 $x\mapsto xa$, 则
+\[
+(\varphi_{a}\circ\varphi_{b})(1)\stackrel{\mathrm{def}}{=}\varphi_{a}(\varphi_{b}(1))=\varphi_{a}(b)=ba=\varphi_{ba}(1),
+\]
+从而
+\[
+\End_A({}_A A)\simeq A^{\mathrm{opp}}\qquad(\text{作为 $k$-代数}).
+\]
+更一般地, 若 $V$ 是秩 $n$ 的自由 $A$-模, 则 $V$ 的一组基的选择确定一个同构
+\[
+\End_A(V)\to M_n(A^{\mathrm{opp}}).
+\]
+
+$k$-代数 $A$ 称为\emph{半单的}\index{bandandaishu@半单代数(semisimple algebra)}, 若每个 $A$-模都半单. 由于每个 $A$-模都是若干个 ${}_A A$ 的直和的商, 只需验证 $A$-模 ${}_A A$ 半单.
+
+\setcounter{theorem}{8} % 1.8 为叙述性编号条目, 不占定理计数器; 调至 8 使下一条显示为 1.9
+
+\begin{proposition}\label{prop:iv.1.9}
+设 $A$ 是半单 $k$-代数. $A$-模 ${}_A A$ 的等型分支恰是 $A$ 的极小双侧理想. $A$ 的每个双侧理想都是极小双侧理想的直和.
+\end{proposition}
+
+\begin{proof}
+$A$ 的双侧理想就是 ${}_A A$ 的在用 $A$ 的元素作右乘下稳定的子模, 即 ${}_A A$ 的自同态 (见 \hyperlink{item:iv.1.8}{1.8}) 作用下稳定的子模, 因此它们是 ${}_A A$ 的等型分支之和 (见 \ref{prop:iv.1.7}). 特别地, 极小双侧理想恰是 ${}_A A$ 的等型分支. 第二个陈述由上述讨论显然.
+\end{proof}
+
+\subsection*{单 $k$-代数}
+
+$k$-代数 $A$ 称为\emph{单的}\index{dandaishu@单代数(simple algebra)}, 若它除 $0$ 外没有真双侧理想. 我们将频繁使用下述观察:
+
+$k$-代数同态 $f\colon A\to B$ 的核是 $A$ 中不含 $1$ 的理想; 因此若 $A$ 单, 则 $f$ 是单射.
+
+\begin{example}\label{ex:iv.1.10}
+若 $k$-代数 $A$ 的每个非零元素 $a$ 都有逆, 即存在 $b$ 使 $ab=1=ba$, 则称 $A$ 为\emph{可除代数}\index{kechudaishu@可除代数(division algebra)}. 于是可除代数满足成为域的全部公理, 只是不交换 (因此有时称为\emph{斜域}). 显然可除代数没有非零真理想 — 左的、右的或双侧的都没有 — 从而是单的.
+
+线性代数的许多内容并不要求域交换. 例如, 通常的论证表明可除代数 $D$ 上有限生成模 $V$ 有基, 且所有基的元素个数相同, 记为 $n$; $n$ 称为 $V$ 的\emph{维数}. 特别地, 所有有限生成 $D$-模都是自由的.
+\end{example}
+
+\begin{example}\label{ex:iv.1.11}
+设 $D$ 是 $k$ 上的可除代数, 考虑矩阵代数 $M_n(D)$. 对 $A,B\in M_n(D)$, $AB$ 的第 $j$ 列 $(AB)_j$ 等于 $AB_j$, 其中 $B_j$ 是 $B$ 的第 $j$ 列. 因此, 给定矩阵 $B$,
+\[
+B_{j}=0\Rightarrow(AB)_{j}=0,\qquad
+B_{j}\neq0\Rightarrow(AB)_{j}\ \text{任意}.
+\]
+由此可见, 形如 $L(I)$ 的集合是 $M_n(D)$ 中的左理想, 这里 $I$ 是 $\{1,2,\ldots,n\}$ 的子集, $L(I)$ 是第 $j$ 列 ($j\notin I$) 为零的矩阵之集.\footnote{并非 $M_n(D)$ 中所有左理想都形如 $L(I)$ — 例如, 对列施加一个线性关系即可定义 $M_n(D)$ 的一个左理想.} 此外, 每个 $L(\{j\})$ 是 $M_n(D)$ 中的极小左理想. 例如当 $n=4$ 时,
+\[
+L(\{1,3\})=\left\{\begin{pmatrix}*&0&*&0\\ *&0&*&0\\ *&0&*&0\\ *&0&*&0\end{pmatrix}\right\},\qquad
+L(\{3\})=\left\{\begin{pmatrix}0&0&*&0\\ 0&0&*&0\\ 0&0&*&0\\ 0&0&*&0\end{pmatrix}\right\}
+\]
+分别为一个左理想与一个极小左理想. 对右理想也有类似的陈述. 由此可知 $M_n(D)$ 的每个非零双侧理想都是整个环, 故 $M_n(D)$ 是单 $k$-代数 (GT, 7.19a).\erratum{原书末句给出一个直接论证; 依 Milne errata 改为引用 GT 7.19(a).}
+\end{example}
+
+\begin{example}\label{ex:iv.1.12}
+对 $a,b\in k^{\times}$, 设 $H(a,b)$ 是以 $1,i,j,ij$ 为基 (作为 $k$-向量空间)、且乘法由
+\[
+i^{2}=a,\qquad j^{2}=b,\qquad ij=-ji
+\]
+确定的 $k$-代数, 称为 $k$ 上的\emph{四元数代数}\index{siyuanshudaishu@四元数代数(quaternion algebra)}. 例如当 $k=\R$ 时, $H(-1,-1)$ 就是通常的四元数代数. 可以证明 (见习题\ref{ex:iv.5.7}) $H(a,b)$ 或是可除代数, 或是同构于 $M_2(k)$. 特别地, 它是单的.
+\end{example}
+
+\subsection*{中心化子}
+
+设 $A$ 是 $k$-代数 $B$ 的一个 $k$-子代数. $A$ 在 $B$ 中的\emph{中心化子}\index{zhongxinhuazi@中心化子(centralizer)}是
+\[
+C_{B}(A)=\{b\in B\mid ba=ab\ \text{对所有 }a\in A\};
+\]
+它仍是 $B$ 的 $k$-子代数.
+
+\begin{example}\label{ex:iv.1.13}
+以下例子中, 中心化子都取在 $M_n(k)$ 中.
+
+(a) 设 $A$ 为 $M_n(k)$ 中纯量矩阵之集, 即 $A=kI_n$. 显然 $C(A)=M_n(k)$.
+
+(b) 设 $A=M_n(k)$. 则 $C(A)$ 是 $M_n(k)$ 的中心, 我们现在来计算它. 设 $e_{ij}$ 是在 $(i,j)$ 位置为 $1$、其余位置为 $0$ 的矩阵, 则
+\[
+e_{i j}e_{l m}=\left\{\begin{array}{l l}{e_{i m}}&{\text{若 }j=l}\\ {0}&{\text{若 }j\neq l.}\end{array}\right.
+\]
+设 $\alpha=(a_{ij})\in M_n(k)$, 则 $\alpha=\sum_{i,j}a_{ij}e_{ij}$, 于是 $\alpha e_{lm}=\sum_i a_{il}e_{im}$, $e_{lm}\alpha=\sum_j a_{mj}e_{lj}$. 若 $\alpha$ 在 $M_n(k)$ 的中心中, 则 $\alpha e_{lm}=e_{lm}\alpha$, 从而 $a_{il}=0$ ($i\neq l$), $a_{mj}=0$ ($j\neq m$), $a_{ll}=a_{mm}$. 由此可知 $M_n(k)$ 的中心是 $k$ (等同于纯量矩阵之集).
+
+(c) 设 $A$ 为 $M_n(k)$ 中对角矩阵之集. 此时 $C(A)=A$.
+
+注意在所有三种情形中都有 $C(C(A))=A$.
+\end{example}
+
+\begin{theorem}[双中心化子定理]\label{thm:iv.1.14}
+设 $A$ 是 $k$-代数, $V$ 是忠实的半单 $A$-模. 则 $C(C(A))=A$ (中心化子取在 $\End_k(V)$ 中).
+\end{theorem}
+
+\begin{proof}
+令 $D=C(A)$, $B=C(D)$. 显然 $A\subset B$; 取 $v_1,\ldots,v_n$ 为 $V$ 作为 $k$-向量空间的生成元, 由下述引理即得反包含.
+\end{proof}
+
+\begin{lemma}\label{lem:iv.1.15}
+对任何 $v_1,\ldots,v_n\in V$ 与 $b\in B$, 存在 $a\in A$, 使得
+\[
+av_{1}=bv_{1},\quad av_{2}=bv_{2},\quad\ldots,\quad av_{n}=bv_{n}.
+\]
+\end{lemma}
+
+\begin{proof}
+先证 $n=1$ 的情形. 注意 $Av_1$ 是 $V$ 的 $A$-子模, 于是 (见 \ref{cor:iv.1.5}) 存在 $V$ 的 $A$-子模 $W$ 使 $V=Av_1\oplus W$. 设 $\pi\colon V\to V$ 为映射 $(av_1,w)\mapsto(av_1,0)$ (到 $Av_1$ 上的投射). 它是 $A$-线性的, 故属于 $D$, 且具有性质: $\pi(v)=v$ 当且仅当 $v\in Av_1$. 现在
+\[
+\pi(bv_{1})=b(\pi v_{1})=bv_{1},
+\]
+故 $bv_1\in Av_1$, 即为所求.
+
+再证一般情形. 设 $W$ 是 $V$ 的 $n$ 个副本的直和, $A$ 按对角方式作用, 即
+\[
+a(v_{1},\ldots,v_{n})=(av_{1},\ldots,av_{n}),\qquad a\in A,\ v_{i}\in V.
+\]
+则 $W$ 仍是半单 $A$-模 (\ref{cor:iv.1.6}). $A$ 在 $\End_k(W)$ 中的中心化子由矩阵 $(\gamma_{ij})_{1\le i,j\le n}$ 组成, 其中 $\gamma_{ij}\in\End_k(V)$ 且 $\gamma_{ij}\alpha=\alpha\gamma_{ij}$ 对所有 $\alpha\in A$ 成立, 即 $\gamma_{ij}\in D$. 换言之, $A$ 在 $\End_k(W)$ 中的中心化子是 $M_n(D)$. 与例\ref{ex:iv.1.13}(b) 中同样的论证 (利用在第 $ij$ 位置为 $\delta$、其余为 $0$ 的矩阵 $e_{ij}(\delta)$) 表明, $M_n(D)$ 在 $\End_k(W)$ 中的中心化子由对角矩阵
+\[
+\begin{pmatrix}\beta&0&\cdots&0\\ 0&\beta&\cdots&0\\ \vdots&\vdots&\ddots&\vdots\\ 0&0&\cdots&\beta\end{pmatrix}
+\qquad(\beta\in B)
+\]
+组成. 现在把引理的 $n=1$ 情形应用于 $A$、$W$、$b$ 与向量 $(v_1,\ldots,v_n)$ 即完成证明.
+\end{proof}
+
+\subsection*{单 $k$-代数的分类}
+
+\begin{lemma}[Schur 引理]\label{lem:iv.1.16}
+单 $A$-模的自同态代数是可除代数.
+\end{lemma}
+
+\begin{proof}
+设 $\gamma$ 是 $A$-线性映射 $S\to S$. 则 $\Ker(\gamma)$ 是 $S$ 的 $A$-子模, 从而是 $S$ 或 $0$. 前一种情形 $\gamma$ 为零; 后一种情形它是同构, 即它有逆, 且其逆也 $A$-线性.
+\end{proof}
+
+\begin{theorem}\label{thm:iv.1.17}
+每个单 $k$-代数 $A$ 都同构于 $M_n(D)$, 其中 $n$ 为某正整数, $D$ 为某个可除 $k$-代数.
+\end{theorem}
+
+\begin{proof}
+选取一个单 $A$-模 $S$, 例如取 $A$ 的任一极小左理想. 则 $A$ 在 $S$ 上忠实作用, 因为 $A\to\End_k(S)$ 的核将是 $A$ 中不含 $1$ 的双侧理想, 从而为 $0$.
+
+设 $D$ 是 $A$ 在 $k$-代数 $\End_k(S)$ ($S\to S$ 的 $k$-线性映射代数) 中的中心化子. 由双中心化子定理 (\ref{thm:iv.1.14}), $D$ 在 $\End_k(S)$ 中的中心化子是 $A$, 即 $A=\End_D(S)$. Schur 引理表明 $D$ 是可除代数. 因此 $S$ 是自由 $D$-模 (\ref{ex:iv.1.10}), 设 $S\simeq D^n$, 于是 $\End_D(S)\simeq M_n(D^{\mathrm{opp}})$ (见 \hyperlink{item:iv.1.8}{1.8}).
+\end{proof}
+
+\subsection*{单 $k$-代数上的模}
+
+设 $A$ 是 $k$-代数. ${}_A A$ 的子模就是 $A$ 中的左理想, 而 ${}_A A$ 的单子模就是极小左理想.
+
+\begin{proposition}\label{prop:iv.1.18}
+单 $k$-代数是半单的.
+\end{proposition}
+
+\begin{proof}
+设 $A$ 是单 $k$-代数. 只需证 $A$-模 ${}_A A$ 半单. 由定理\ref{thm:iv.1.17}, 可设 $A=M_n(D)$, $D$ 为可除代数. 我们在 \ref{ex:iv.1.11} 中看到, 集合 $L(\{i\})$ 是 $M_n(D)$ 中的极小左理想, 且 $M_n(D)=L(\{1\})\oplus\cdots\oplus L(\{n\})$ (作为 $M_n(D)$-模). 这表明 $A$ 半单.
+\end{proof}
+
+\begin{theorem}\label{thm:iv.1.19}
+设 $A$ 是半单 $k$-代数. 下列条件等价:
+
+\begin{enumerate}[(a)]
+\item $A$ 单;
+\item $A$-模 ${}_A A$ 是等型的;
+\item 任何两个单 $A$-模同构.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a) 与 (b) 的等价性由命题\ref{prop:iv.1.9} 推出, 而 (c) 显然蕴含 (b). 最后 (b) 蕴含 (c): 若 ${}_A A$ 等型, 则若干个 ${}_A A$ 的直和也等型, 而每个 $A$-模都是这种直和的商.
+\end{proof}
+
+\begin{corollary}\label{cor:iv.1.20}
+设 $A$ 是单 $k$-代数. $A$ 的任何两个极小左理想作为左 $A$-模同构, 且 $A$ 是它的极小左理想之直和.
+\end{corollary}
+
+\begin{proof}
+极小左理想是单 $A$-模, 故第一个陈述由定理 (c) 推出; 第二个陈述在 \ref{prop:iv.1.18} 的证明中已证.
+\end{proof}
+
+\begin{corollary}\label{cor:iv.1.21}
+设 $A$ 是单 $k$-代数, $S$ 是单 $A$-模. 每个 $A$-模都同构于若干个 $S$ 的直和. 在 $k$ 上维数相同的任何两个 $A$-模同构.
+\end{corollary}
+
+\begin{proof}
+由于 $A$ 半单, 第一个断言由定理 (c) 推出, 第二个断言由第一个推出.
+\end{proof}
+
+\begin{corollary}\label{cor:iv.1.22}
+定理\ref{thm:iv.1.17} 中的整数 $n$ 由 $A$ 唯一确定, 而 $D$ 在同构意义下唯一确定.
+\end{corollary}
+
+\begin{proof}
+若 $A\simeq M_n(D)$, 则对任何单 $A$-模 $S$ 有 $D^{\mathrm{opp}}\simeq\End_A(S)$, 而 $n$ 是 $S$ 作为 $D$-向量空间的维数. 由于任何两个单 $A$-模同构 (\ref{thm:iv.1.19}), 这就证明了断言.
+\end{proof}
+
+\section{Brauer 群的定义}\label{sec:IV.2}
+
+\subsection*{代数的张量积}
+
+设 $A$ 与 $B$ 为 $k$-代数, $A\otimes_k B$ 是 $A$ 与 $B$ 作为 $k$-向量空间的张量积. $A\otimes_k B$ 上有唯一的 $k$-双线性乘法使得
+\[
+(a\otimes b)(a^{\prime}\otimes b^{\prime})=aa^{\prime}\otimes bb^{\prime},\qquad a,a^{\prime}\in A,\ b,b^{\prime}\in B.
+\]
+当把 $k$ 等同于 $k\cdot(1\otimes 1)\subset A\otimes_k B$ 时, $A\otimes_k B$ 成为 $k$-代数. 若 $(e_i)_i$ 与 $(f_j)_j$ 分别是 $A$ 与 $B$ 作为 $k$-向量空间的基, 则 $(e_i\otimes f_j)_{i,j}$ 是 $A\otimes_k B$ 的一组基, 且 $A\otimes_k B$ 的结构常数可由 $A$ 与 $B$ 的结构常数经一个显然的公式得到. 我们将用到张量积的下述性质: 它按意义是交换的, 即对任意两个 $k$-代数 $A$ 与 $B$, 映射 $a\otimes b\mapsto b\otimes a$ 扩充为 $k$-代数同构
+\[
+A\otimes_{k}B\to B\otimes_{k}A;
+\]
+且按意义是结合的, 即对任意三个 $k$-代数 $A,B,C$, 映射 $a\otimes(b\otimes c)\mapsto(a\otimes b)\otimes c$ 扩充为 $k$-代数同构
+\[
+A\otimes_{k}(B\otimes_{k}C)\to(A\otimes_{k}B)\otimes_{k}C.
+\]
+
+\begin{example}\label{ex:iv.2.1}
+对每个 $k$-代数 $A$,
+\[
+A\otimes_{k}M_{n}(k)\simeq M_{n}(A).
+\]
+为看出这一点, 注意: 一个包含子环 $R$ 的环 $B$ 同构于 $M_n(R)$, 当且仅当它承认一组作为左 $R$-模的基 $(e_{ij})_{1\le i,j\le n}$, 满足
+\[
+e_{i j}e_{l m}=\left\{\begin{array}{l l}{e_{i m}}&{\text{若 }j=l}\\ {0}&{\text{若 }j\neq l,}\end{array}\right.
+\]
+且每个 $e_{ij}$ 与 $R$ 的元素交换.\erratum{原书还要求 $R$ 含于 $B$ 的中心; 这一条件过强 (它蕴含 $R$ 交换), 故在涉及 Brauer 群的应用中不适用. 依 Milne errata (M. Malcic) 改为: 只要求 $B$ 包含子环 $R$, 且诸 $e_{ij}$ 与 $R$ 的元素交换.}
+若 $(e_{ij})$ 是 $M_n(k)$ 的标准基, 则 $(1\otimes e_{ij})$ 是 $A\otimes M_n(k)$ 的具有上述性质的 $A$-基.
+
+更一般地,
+\begin{equation}
+A\otimes_{k}M_{n}(A^{\prime})\simeq M_{n}(A\otimes_{k}A^{\prime})\tag{36}
+\end{equation}
+对任意 $k$-代数 $A$ 与 $A^{\prime}$ 成立.
+\end{example}
+
+\begin{example}\label{ex:iv.2.2}
+对任意 $m,n$, $M_m(k)\otimes M_n(k)\simeq M_{mn}(k)$. 为看出这一点, 注意由前例, $M_m(k)\otimes_k M_n(k)\simeq M_m(M_n(k))$, 而元素为 $n\times n$ 矩阵的 $m\times m$ 矩阵就是一个 $mn\times mn$ 矩阵 (去掉内层括号). 或者, 设 $(e_{ij})$ 与 $(f_{i'j'})$ 分别是 $M_m(k)$ 与 $M_n(k)$ 的标准基, 直接验证 $(e_{ij}\otimes f_{i'j'})$ 具有正确的乘法性质.
+\end{example}
+
+\subsection*{张量积中的中心化子}
+
+下一命题表明, 子代数张量积的中心化子是它们中心化子的张量积.
+
+\begin{proposition}\label{prop:iv.2.3}
+设 $A$ 与 $A'$ 是 $k$-代数, 各有子代数 $B$ 与 $B'$, 并设 $C(B)$ 与 $C(B')$ 分别是 $B$ 在 $A$ 中、$B'$ 在 $A'$ 中的中心化子. 则 $B\otimes_k B'$ 在 $A\otimes_k A'$ 中的中心化子是 $C(B)\otimes_k C(B')$, 即
+\[
+C_{A\otimes_{k}A^{\prime}}(B\otimes_{k}B^{\prime})=C_{A}(B)\otimes_{k}C_{A^{\prime}}(B^{\prime}).
+\]
+\end{proposition}
+
+\begin{proof}
+显然 $C(B\otimes_k B')\supset C(B)\otimes_k C(B')$.
+
+设 $(f_i)_i$ 是 $A'$ 作为 $k$-向量空间的一组基, 则 $(1\otimes f_i)_i$ 是 $A\otimes_k A'$ 作为 $A$-模的一组基, 于是 $\alpha\in A\otimes_k A'$ 可唯一地写成 $\alpha=\sum_i\alpha_i\otimes f_i$, $\alpha_i\in A$. 设 $\beta\in B$, 则 $\alpha$ 与 $\beta\otimes 1$ 交换当且仅当 $\beta\alpha_i=\alpha_i\beta$ 对所有 $i$ 成立. 因此 $B\otimes 1$ 在 $A\otimes A'$ 中的中心化子是 $C(B)\otimes A'$. 类似地, $1\otimes B'$ 在 $C(B)\otimes A'$ 中的中心化子是 $C(B)\otimes C(B')$.
+
+显然 $C(B\otimes B')\subset C(B\otimes 1)$, 故 $C(B\otimes B')$ 包含于 $C(B)\otimes A'$, 事实上包含于 $1\otimes B'$ 在 $C(B)\otimes A'$ 中的中心化子, 即 $C(B)\otimes C(B')$ 中. 证毕.
+\end{proof}
+
+特别地, 两个 $k$-代数张量积的中心是它们中心的张量积: $Z(A\otimes_k B)=Z(A)\otimes_k Z(B)$.
+
+\begin{corollary}\label{cor:iv.2.4}
+单 $k$-代数的中心是域.
+\end{corollary}
+
+\begin{proof}
+显然可除代数的中心是域, 而 Wedderburn 定理 (\ref{thm:iv.1.17}) 表明每个单 $k$-代数都同构于 $M_n(D)$, $D$ 为某可除代数. 现在 $M_n(D)\simeq M_n(k)\otimes_k D$, 故 $Z(M_n(D))\simeq k\otimes_k Z(D)\simeq Z(D)$.
+\end{proof}
+
+若 $k$-代数 $A$ 的中心是 $k$, 则称它为\emph{中心的}\index{zhongxindaishu@中心代数(central algebra)}; 既中心又单的 $k$-代数称为\emph{中心单的}\index{zhongxindandaishu@中心单代数(central simple algebra)}. 该推论表明每个单 $k$-代数都是 $k$ 的某个有限扩张上的中心单代数.
+
+\subsection*{原始元素}
+
+在继续之前, 先回顾一点 Bourbaki《代数》第二版中的线性代数.
+
+设 $V$ 是 $k$-向量空间 (可以无穷维), $(e_i)_{i\in I}$ 是 $V$ 的一组基. 每个 $v\in V$ 可唯一写成 $v=\sum a_ie_i$, 定义
+\[
+J(v)=\{i\in I\mid a_{i}\neq0\};
+\]
+它是 $I$ 的有限子集, 且当且仅当 $v=0$ 时为空.
+
+设 $W$ 是 $V$ 的子空间. $W$ 的非零元素 $w$ 称为\emph{原始的}\index{yuanshiyuansu@原始元素(primitive element)} (相对于 $V$ 与基 $(e_i)_{i\in I}$), 如果 $J(w)$ 在诸集合 $J(w')$ ($w'$ 为 $W$ 的非零元素) 中极小, 且在表达式 $w=\sum a_ie_i$ 中至少有一个 $a_i=1$.
+
+\begin{proposition}\label{prop:iv.2.5}
+(a) 设 $w$ 是 $W$ 的非零元素, $J(w)$ 极小, 并设 $w'$ 是 $W$ 的另一个非零元素. 则 $J(w')\subset J(w)$ 当且仅当 $w'=cw$ 对某个非零 $c\in k$ 成立, 此时 $J(w')=J(w)$.
+
+(b) $W$ 的原始元素之集张成 $W$.
+\end{proposition}
+
+\begin{proof}
+(a) 若 $w'=cw$, $c\neq 0$, 则显然 $J(w')=J(w)$. 反之, 设 $w=\sum_{i\in J(w)}a_ie_i$ 与 $w'=\sum_{i\in J(w')}b_ie_i$ 是 $W$ 的非零元素, $J(w')\subset J(w)$. 取 $j\in J(w')$, 则 $J(w-a_jb_j^{-1}w')\subset J(w)\setminus\{j\}$, 故由 $J(w)$ 的极小性得 $w-a_jb_j^{-1}w'=0$.
+
+(b) 设 $w=\sum_{i\in J(w)}a_ie_i\in W$, 需证 $w$ 落在原始元素张成的子空间中. 不妨设 $w\neq 0$. 在满足 $J(w')\subset J(w)$ 的 $W$ 的非零元素 $w'$ 中, 取一个使 $J(w')$ 元素个数最少的; 其某个纯量倍数 $w_0$ 将是原始的, 设 $w_0=\sum_{i\in I(w_0)}b_ie_i$, 其中某个 $b_i=1$.
+
+现在 $w=a_jw_0+(w-a_jw_0)$, 其中 $w-a_jw_0\in W$ 且 $|J(w-a_jw_0)|<|J(w)|$. 若 $w-a_jw_0$ 是原始元素的 $k$-线性组合, 则 $w$ 亦然; 否则重复此过程. 由于 $|J(w)|$ 有限, 过程在有限步后终止.
+\end{proof}
+
+本节的结果 (与证明) 不要求 $k$ 交换, 即 $k$ 可以是可除代数.
+
+\subsection*{张量积的单性}
+
+\begin{proposition}\label{prop:iv.2.6}
+两个单 $k$-代数的张量积仍是单的, 只要其中至少一个是中心的.
+\end{proposition}
+
+\begin{proof}
+由 \ref{thm:iv.1.17}, 可设其中一个代数是 $M_n(D)$, 其中 $D$ 是中心为 $k$ 的可除代数. 设 $A$ 是另一个单 $k$-代数. 在下面的引理中我们证明 $A\otimes_k D$ 单. 因此 $A\otimes_k D\simeq M_m(D')$, $D'$ 为某可除代数, 从而
+\[
+A\otimes_{k}M_{n}(D)\simeq M_{n}(A\otimes_{k}D)\simeq M_{n}(M_{m}(D^{\prime}))\simeq M_{mn}(D^{\prime}),
+\]
+它是单的.
+\end{proof}
+
+\begin{lemma}\label{lem:iv.2.7}
+设 $A$ 是 $k$-代数, $D$ 是中心为 $k$ 的可除代数. 则 $A\otimes D$ 中任何双侧理想 $\mathfrak{A}$ 作为左 $D$-模由 $\mathfrak{a}\stackrel{\mathrm{def}}{=}\mathfrak{A}\cap(A\otimes 1)$ 生成.
+\end{lemma}
+
+\begin{proof}
+用规则
+\[
+\delta(\alpha\otimes\delta^{\prime})=\alpha\otimes\delta\delta^{\prime},\qquad \alpha\in A,\ \delta,\delta^{\prime}\in D
+\]
+使 $A\otimes_k D$ 成为左 $D$-模. 则 $A\otimes_k D$ 的理想 $\mathfrak{A}$ 特别地是 $A\otimes_k D$ 的 $D$-子模.
+
+设 $(e_i)$ 是 $A$ 作为 $k$-向量空间的基, 则 $(e_i\otimes 1)$ 是 $A\otimes_k D$ 作为左 $D$-向量空间的基. 设 $\alpha\in\mathfrak{A}$ 是相对于这组基的原始元素, 设
+\[
+\alpha=\sum_{i\in J(\alpha)}\delta_{i}(e_{i}\otimes1)=\sum_{i\in J(\alpha)}e_{i}\otimes\delta_{i}.
+\]
+对任何非零 $\delta\in D$, $\alpha\delta\in\mathfrak{A}$, 且 $\alpha\delta=\sum e_i\otimes\delta_i\delta=\sum_{i\in J(\alpha)}(\delta_i\delta)(e_i\otimes 1)$. 特别地 $J(\alpha\delta)=J(\alpha)$, 故 $\alpha\delta=\delta'\alpha$ 对某个 $\delta'\in D$ 成立 (见 \ref{prop:iv.2.5}a). 由于某个 $\delta_i=1$, 这蕴含 $\delta=\delta'$, 从而每个 $\delta_i$ 与每个 $\delta\in D$ 交换. 于是 $\delta_i$ 落在 $D$ 的中心 $k$ 中, 而 $\alpha\in A\otimes 1$. 我们已证明 $\mathfrak{A}$ 的每个原始元素都属于 $A\otimes 1$, 这就完成了证明, 因为 $\mathfrak{A}$ 作为 $D$-模由其原始元素生成 (见 \ref{prop:iv.2.5}b).
+\end{proof}
+
+\begin{corollary}\label{cor:iv.2.8}
+两个中心单 $k$-代数的张量积仍是中心单的.
+\end{corollary}
+
+\begin{proof}
+结合命题\ref{prop:iv.2.3} 与命题\ref{prop:iv.2.6}.
+\end{proof}
+
+设 $A$ 是 $k$ 上的中心单代数, $V$ 表示视为 $k$-向量空间的 $A$. 左乘使 $V$ 成为左 $A$-模, 右乘使它成为右 $A$-模, 或者说左 $A^{\mathrm{opp}}$-模. 这两个作用把 $A$ 与 $A^{\mathrm{opp}}$ 等同于 $\End_k(V)$ 中相互交换的子代数. 由张量积的泛性质, 得到一个同态
+\[
+a\otimes a^{\prime}\mapsto(v\mapsto ava^{\prime})\colon A\otimes_{k}A^{\mathrm{opp}}\to\End_{k}(V).
+\]
+由于 $A\otimes_k A^{\mathrm{opp}}$ 单, 且该同态的核不含 $1$, 它是单射. 比较维数:
+\[
+[A\otimes_{k}A^{\mathrm{opp}}:k]=[A:k]^{2}=(\dim V)^{2}=[\End_{k}(V):k],
+\]
+故该同态是同构. 我们证明了下述结果.
+
+\begin{corollary}\label{cor:iv.2.9}
+对中心单 $k$-代数 $A$,
+\[
+A\otimes_{k}A^{\mathrm{opp}}\simeq\End_{k}(A)\simeq M_{n}(k),\qquad n=[A:k].
+\]
+\end{corollary}
+
+\subsection*{Noether-Skolem 定理}
+
+\begin{theorem}[Skolem--Noether]\label{thm:iv.2.10}
+设 $f,g\colon A\to B$ 是从 $k$-代数 $A$ 到 $k$-代数 $B$ 的同态. 若 $A$ 单而 $B$ 中心单, 则存在可逆元素 $b\in B$, 使得 $f(a)=b\cdot g(a)\cdot b^{-1}$ 对所有 $a\in A$ 成立, 即 $f$ 与 $g$ 相差 $B$ 的一个内自同构.
+\end{theorem}
+
+\begin{proof}
+若 $B=M_n(k)=\End_k(k^n)$, 则这两个同态定义了 $A$ 在 $k^n$ 上的作用 — 用 $V_f$ 与 $V_g$ 分别表示带 $f$ 与 $g$ 所定义的作用的 $k^n$. 据 (\ref{cor:iv.1.21}), 具有相同维数的两个 $A$-模同构, 而同构 $b\colon V_g\to V_f$ 是满足 $f(a)\cdot b=b\cdot g(a)$ (对所有 $a\in A$) 的元素 $b\in M_n(k)$.
+
+一般情形, 考虑同态
+\[
+f\otimes1,\ g\otimes1\colon A\otimes_{k}B^{\mathrm{opp}}\to B\otimes_{k}B^{\mathrm{opp}}.
+\]
+由于 $B\otimes_k B^{\mathrm{opp}}$ 是 $k$ 上的矩阵代数, 证明的第一部分表明存在 $b\in B\otimes_k B^{\mathrm{opp}}$, 使得
+\[
+(f\otimes1)(a\otimes b^{\prime})=b\cdot(g\otimes1)(a\otimes b^{\prime})\cdot b^{-1}
+\]
+对所有 $a\in A$, $b'\in B^{\mathrm{opp}}$ 成立. 在此式中取 $a=1$, 得 $(1\otimes b^{\prime})=b\cdot(1\otimes b^{\prime})\cdot b^{-1}$ 对所有 $b'\in B^{\mathrm{opp}}$ 成立. 因此 (见 \ref{prop:iv.2.3}), $b\in C_{B\otimes_k B^{\mathrm{opp}}}(k\otimes B^{\mathrm{opp}})=B\otimes_k k$, 即 $b=b_0\otimes 1$, $b_0\in B$. 在式中取 $b'=1$, 得
+\[
+f(a)\otimes1=(b_{0}\cdot g(a)\cdot b_{0}^{-1})\otimes1
+\]
+对所有 $a\in A$ 成立, 故 $b_0$ 即所求元素.
+\end{proof}
+
+\begin{corollary}\label{cor:iv.2.11}
+设 $A$ 是 $k$ 上的中心单代数, $B_1$ 与 $B_2$ 是 $A$ 的单 $k$-子代数. 任何同构 $f\colon B_1\to B_2$ 都由 $A$ 的一个内自同构诱导, 即存在可逆元 $a\in A$, 使 $f(b)=aba^{-1}$ 对所有 $b\in B_1$ 成立.
+\end{corollary}
+
+\begin{proof}
+这是定理中两个映射为 $B_1\xrightarrow{J}B_2\hookrightarrow A$ 与 $B_1\xrightarrow{\mathrm{id}}B_1\hookrightarrow A$ 的特殊情形.
+\end{proof}
+
+\begin{corollary}\label{cor:iv.2.12}
+中心单 $k$-代数的所有自同构都是内自同构.
+
+例如, $M_n(k)$ 的自同构群是 $\mathrm{PGL}_n(k)\stackrel{\mathrm{def}}{=}\mathrm{GL}_n(k)/k^{\times}I_n$.
+\end{corollary}
+
+\subsection*{Brauer 群的定义}
+
+设 $A$ 与 $B$ 是 $k$ 上的中心单代数. 若对某些 $m,n$ 有 $A\otimes_k M_n(k)\simeq B\otimes_k M_m(k)$, 则称 $A$ 与 $B$ \emph{相似}\index{xiangsi@相似(similar)}, 记作 $A\sim B$. 这是一个等价关系: 它显然自反且对称, 而 \ref{ex:iv.2.2} 表明它传递. 定义 $\Br(k)$ 为 $k$ 上中心单代数的相似类之集, 并记 $[A]$ 为 $A$ 的相似类. 对类 $[A]$ 与 $[B]$, 定义
+\[
+[A][B]=[A\otimes_{k}B].
+\]
+这是良定义的 (即若 $A\sim A'$ 且 $B\sim B'$, 则 $A\otimes_k B\sim A'\otimes_k B'$), 而张量积的结合律与交换律表明它结合且交换. 对每个 $n$, $[M_n(k)]$ 是单位元, 又因 $A\otimes_k A^{\mathrm{opp}}\simeq M_n(k)$ (见 \ref{cor:iv.2.9}), $[A]$ 以 $[A^{\mathrm{opp}}]$ 为逆. 因此 $\Br(k)$ 是交换群, 称为 $k$ 的 \emph{Brauer 群}\index{bulajunqun@Brauer 群(Brauer group)}.
+
+\begin{remark}\label{rem:iv.2.13}
+(a) Wedderburn 定理 (\ref{thm:iv.1.17}, \ref{cor:iv.1.22}) 表明, $k$ 上每个中心单代数都同构于 $M_n(D)$, 其中 $D$ 是某个中心可除代数, 且 $D$ 由 $A$ (甚至由 $A$ 的相似类) 在同构意义下唯一确定. 因此每个相似类都由一个中心可除代数代表, 而两个中心可除代数代表同一相似类当且仅当它们同构.
+
+(b) 我们应当验证\footnote{我曾亲见 Brauer — 他通常态度温和 — 对无视集合与类之区别的「现代」数学家大发雷霆. 正如他指出, 若无视这一区别, 便会得到矛盾 (Russell 悖论); 而一旦系统中有了矛盾, 便能证明任何命题.}相似类构成一个集合, 而不仅仅是一个类. 对每个 $n>0$, 考虑族 $(a_{ij}^{l})_{1\le i,j,l\le n}$, $a_{ij}^{l}\in k$, 它们是 $k$ 上中心可除代数的结构常数. 显然这些族构成一个集合, 每个族定义一个 $k$ 上的中心可除代数, 而这些可除代数包含 $k$ 的 Brauer 群的一个代表集.
+\end{remark}
+
+\begin{example}\label{ex:iv.2.14}
+(a) 若 $k$ 代数闭, 则 $\Br(k)=0$. 为证此, 需证 $k$ 上任何中心可除代数 $D$ 都等于 $k$. 设 $\alpha\in D$, $k[\alpha]$ 是 $D$ 中由 $k$ 与 $\alpha$ 生成的子代数, 则 $k[\alpha]$ 是 $k$ 上有限次的交换域 (因为它是 $k$ 上有限次的整环). 于是 $k[\alpha]=k$, $\alpha\in k$. 由 $\alpha$ 任意, 得 $D=k$.
+
+(b) Frobenius 证明了 Hamilton 四元数代数是 $\R$ 上唯一的中心可除代数. 因此 $\R$ 的 Brauer 群是 $2$ 阶循环群, 等于 $\{[\R],[\mathbb{H}]\}$ (见下文 \S 4).
+
+(c) Wedderburn 证明了所有有限可除代数都交换. 因此有限域的 Brauer 群为零 (见下文定理\ref{thm:iv.4.1}).
+
+(d) Hasse 证明了非阿基米德局部域的 Brauer 群典范地同构于 $\Q/\Z$ (见下文 本书 p.\pageref{sec:IV.4}).
+
+(e) Albert、Brauer、Hasse 与 Noether 证明了, 对数域 $K$ 有正合列
+\[
+0\to\Br(K)\to\bigoplus_{v}\Br(K_{v})\xrightarrow{\ \sum\ }\Q/\Z\to0.
+\]
+和取遍 $K$ 的全部素点 (包括无穷素点). 这一陈述的深度与类域论主要定理相当 (见第 \ref{ch:VII}、\ref{ch:VIII} 章).
+\end{example}
+
+\subsection*{基域扩张}
+
+\begin{proposition}\label{prop:iv.2.15}
+设 $A$ 是 $k$ 上的中心单代数, $K$ 是包含 $k$ 的域 (不必在 $k$ 上有限次). 则 $A\otimes_k K$ 是 $K$ 上的中心单代数.
+\end{proposition}
+
+\begin{proof}
+与命题\ref{prop:iv.2.3} 证明中相同的论证表明 $A\otimes_k K$ 的中心是 $k\otimes_k K=K$ (该论证不要求 $K$ 在 $k$ 上有限次). 此外, 引理\ref{lem:iv.2.7} 的证明未用到 $D$ 在 $k$ 上有限维. 因此当 $A$ 是可除代数时, $A\otimes_k K$ 中每个双侧理想作为 $A$-模由它与 $K$ 的交生成, 从而为 $0$ 或 $A\otimes_k K$. 一般情形, $A\simeq M_n(D)$, 于是
+\[
+\begin{aligned}
+A\otimes_{k}K\simeq M_{n}(D)\otimes_{k}K&\simeq(M_{n}(k)\otimes_{k}D)\otimes_{k}K\\
+&\simeq M_{n}(k)\otimes_{k}(D\otimes_{k}K)\\
+&\simeq M_{n}(D\otimes_{k}K)\\
+&\simeq M_{n}(K)\otimes_{K}(D\otimes_{k}K),
+\end{aligned}
+\]
+它是单的.
+\end{proof}
+
+\begin{corollary}\label{cor:iv.2.16}
+对 $k$ 上的中心单代数 $A$, $[A:k]$ 是平方数.
+\end{corollary}
+
+\begin{proof}
+显然 $[A:k]=[A\otimes_k k^{\mathrm{al}}:k^{\mathrm{al}}]$, 而 $A\otimes_k k^{\mathrm{al}}\simeq M_n(k^{\mathrm{al}})$ 对某个 $n$ 成立.
+\end{proof}
+
+设 $L$ 是包含 $k$ 的域 (不必有限次), 则
+\[
+M_{n}(k)\otimes L\simeq M_{n}(L),
+\]
+且
+\[
+(A\otimes_{k}L)\otimes_{L}(A^{\prime}\otimes_{k}L)=A\otimes_{k}\bigl(L\otimes_{L}(A^{\prime}\otimes_{k}L)\bigr)=(A\otimes_{k}A^{\prime})\otimes_{k}L.
+\]
+因此映射 $A\mapsto A\otimes_k L$ 定义一个同态
+\[
+\Br(k)\to\Br(L).
+\]
+我们把这个同态的核记作 $\Br(L/k)$ — 它由这样的中心单 $k$-代数 $A$ 的相似类组成: $L$-代数 $A\otimes_k L$ 是矩阵代数.
+
+若中心单代数 $A$ (或其在 $\Br(k)$ 中的类) 满足 $A\otimes_k L$ 是 $L$ 上的矩阵代数, 则称 $A$ 被 $L$ \emph{分裂}\index{fenlieyu@分裂域(splitting field)}, 并称 $L$ 为 $A$ 的\emph{分裂域}. 于是 $\Br(L/k)$ 由被 $L$ 分裂的 $\Br(k)$ 的元素组成.
+
+\begin{proposition}\label{prop:iv.2.17}
+对每个域 $k$, $\Br(k)=\bigcup\Br(K/k)$, 其中 $K$ 遍历固定代数闭包 $k^{\mathrm{al}}$ 内所有包含 $k$ 的有限扩张.
+\end{proposition}
+
+\begin{proof}
+需证 $k$ 上每个中心单代数 $A$ 都被 $k$ 的一个有限扩张分裂. 我们知道 $A\otimes_k k^{\mathrm{al}}\simeq M_n(k^{\mathrm{al}})$, 即存在 $A\otimes_k k^{\mathrm{al}}$ 的基 $(e_{ij})_{1\le i,j\le n}$ 使 $e_{ij}e_{lm}=\delta_{jl}e_{im}$ 对所有 $i,j,l,m$ 成立. 由于 $A\otimes_k k^{\mathrm{al}}=\bigcup_{[K:k]<\infty}A\otimes_k K$, 诸 $e_{ij}$ 都落在某个 $A\otimes_k K$ 中, 从而 $A\otimes_k K\simeq M_n(K)$.
+\end{proof}
+
+\section{Brauer 群与上同调}\label{sec:IV.3}
+
+对域的 Galois 扩张 $L/k$, 令 $H^2(L/k)=H^2(\Gal(L/k),L^{\times})$. 我们将证明存在自然同构 $H^2(L/k)\simeq\Br(L/k)$, 但先需考察中心单代数的极大子域.
+
+\subsection*{极大子域}
+
+我们需要双中心化子定理的一个变体, 其中 $M_n(k)$ 被换成中心单代数.
+
+\begin{theorem}\label{thm:iv.3.1}
+设 $B$ 是中心单 $k$-代数 $A$ 的单 $k$-子代数. 则 $B$ 在 $A$ 中的中心化子 $C=C(B)$ 单, 且 $B$ 是 $C$ 的中心化子. 此外
+\[
+[B:k][C:k]=[A:k].
+\]
+\end{theorem}
+
+\begin{proof}
+设 $V$ 表示视为 $k$-向量空间的 $B$. 则 $B$ 与 $B^{\mathrm{opp}}$ 分别通过右乘与左乘作用在 $V$ 上, 且互为中心化子 (见 \hyperlink{item:iv.1.8}{1.8}).
+
+考虑中心单代数 $A\otimes_k\End_k(V)$. 命题\ref{prop:iv.2.3} 表明 $B\otimes 1$ 在此代数中的中心化子是 $C\otimes\End_k(V)$, 而 $1\otimes B$ 的中心化子是 $A\otimes B^{\mathrm{opp}}$. 对 $B$ 嵌入 $A\otimes_k\End_k(V)$ 的两个嵌入 $b\mapsto b\otimes 1$ 与 $b\mapsto 1\otimes b$ 应用 Noether-Skolem 定理 (\ref{thm:iv.2.10}, \ref{cor:iv.2.11}), 得到此 $k$-代数的一个可逆元 $u$, 使 $b\otimes 1=u(1\otimes b)u^{-1}$ 对所有 $b\in B$ 成立. 于是显然
+\[
+C(B\otimes1)=u\cdot C(1\otimes B)\cdot u^{-1}
+\]
+(中心化子取在 $A\otimes_k\End_k(V)$ 中), 这表明这些中心化子同构. 因此 $C\otimes_k\End_k(V)$ 单, 因为 $A\otimes_k B^{\mathrm{opp}}$ 单 (见 \ref{prop:iv.2.6}); 而这又蕴含 $C$ 本身单, 因为对 $C$ 的每个理想 $\mathfrak{a}$, $\mathfrak{a}\otimes_k\End_k(V)$ 是 $C\otimes_k\End_k(V)$ 的理想. 由于 $\End_k(V)$ 在 $k$ 上次数为 $[B:k]^2$,
+\[
+[C\otimes_{k}\End(V):k]=[C:k][B:k]^{2},
+\]
+且显然
+\[
+[A\otimes B^{\mathrm{opp}}:k]=[A:k][B:k].
+\]
+比较这些等式, 得
+\[
+[A:k]=[B:k][C:k].
+\]
+若 $B'$ 表示 $C$ 在 $A$ 中的中心化子, 则 $B'\supset B$. 但由上述, $[A:k]=[C:k][B':k]$, 故 $[B:k]=[B':k]$, 从而 $B=B'$.
+\end{proof}
+
+\begin{remark}\label{rem:iv.3.2}
+当 $A=\End_k(V)$ ($V$ 为 $k$-向量空间) 时, 定理\ref{thm:iv.3.1} 可由定理\ref{thm:iv.1.14} 推出, 因为此时 $V$ 是忠实的半单 $B$-模. 这一观察可用来给出定理的另一个证明, 因为基域经有限扩张后 $A$ 就具有这种形式 (见 \ref{prop:iv.2.17}).
+\end{remark}
+
+\begin{corollary}\label{cor:iv.3.3}
+若在定理的陈述中 $B$ 的中心是 $k$, 则 $C$ 的中心也是 $k$, 且典范同态 $B\otimes_k C\to A$ 是同构.
+\end{corollary}
+
+\begin{proof}
+$B$ 与 $C$ 的中心都等于 $B\cap C$, 故 $B$ 中心蕴含 $C$ 中心. 于是 $k$-代数 $B\otimes_k C$ 中心单, 这蕴含 $B\otimes_k C\to A$ 单射. 它是满射, 因为两代数在 $k$ 上维数相同.
+\end{proof}
+
+\begin{corollary}\label{cor:iv.3.4}
+设 $A$ 是 $k$ 上的中心单代数, $L$ 是 $A$ 中包含 $k$ 的子域. 下列条件等价:
+
+\begin{enumerate}[(a)]
+\item $L$ 等于它在 $A$ 中的中心化子;
+\item $[A:k]=[L:k]^2$;
+\item $L$ 是 $A$ 的极大交换 $k$-子代数.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+(a) $\iff$ (b). 由于 $L$ 交换, 它包含于其中心化子 $C(L)$ 中, 而
+\[
+[A:k]=[L:k][C(L):k],
+\]
+故 $C(L)=L$ 当且仅当 $[A:k]=[L:k]^2$.
+
+(b) $\implies$ (c). 设 $L'$ 是包含 $L$ 的极大交换子代数, 则 $L'\subset C(L)$, 于是
+\[
+[A:k]\ge[L:k][L^{\prime}:k]\ge[L:k]^{2}.
+\]
+故 (b) 蕴含 $[L':k]=[L:k]$.
+
+(c) $\implies$ (a). 若 $L\neq C(L)$, 则存在 $\gamma\in C(L)\setminus L$, 此时 $L[\gamma]$ 是 $A$ 的交换子代数, 与 $L$ 的极大性矛盾.
+\end{proof}
+
+\begin{corollary}\label{cor:iv.3.5}
+中心可除 $k$-代数 $D$ 的包含 $k$ 的极大子域恰是那些在 $k$ 上次数为 $\sqrt{[D:k]}$ 的子域.
+\end{corollary}
+
+\begin{proof}
+$D$ 的任何交换 $k$-子代数是 $k$ 上有限次的整环, 从而是域.
+\end{proof}
+
+\begin{corollary}\label{cor:iv.3.6}
+设 $A$ 是 $k$ 上的中心单代数. $k$ 上有限次的域 $L$ 分裂 $A$, 当且仅当存在与 $A$ 相似的代数 $B$ 包含 $L$ 且
+\begin{equation}
+[B:k]=[L:k]^{2}.\tag{37}
+\end{equation}
+特别地, $A$ 的每个在 $k$ 上次数为 $[A:k]^{1/2}$ 的子域 $L$ 都分裂 $A$.
+\end{corollary}
+
+\begin{proof}
+设 $L$ 分裂 $A$, 则 $L$ 也分裂 $A^{\mathrm{opp}}$, 设 $A^{\mathrm{opp}}\otimes_k L=\End_L(V)$. 该等式表明 $A^{\mathrm{opp}}\otimes_k L$ 是 $L$ 在 $\End_k(V)$ 中的中心化子, 故 $L$ 是 $A^{\mathrm{opp}}\otimes_k L$ 在 $\End_k(V)$ 中的中心化子 (见 \ref{thm:iv.3.1}). 设 $B$ 是 $A^{\mathrm{opp}}$ 在 $\End_k(V)$ 中的中心化子. 我断言 $B$ 满足所要求的条件. 显然 $B\supset L$, 且推论\ref{cor:iv.3.3} 表明 $B$ 中心单且 $B\otimes_k A^{\mathrm{opp}}\simeq\End_k(V)$. 用 $A$ 对两边作张量积并利用 $A\otimes_k A^{\mathrm{opp}}$ 是矩阵代数, 得 $B\sim A$.
+
+反之, 只需证 $L$ 分裂 $B$. 由于 $L$ 交换, $L=L^{\mathrm{opp}}\subset B^{\mathrm{opp}}$, 又因 $[L:k]=\sqrt{[B:k]}$, $L$ 等于它在 $B^{\mathrm{opp}}$ 中的中心化子. 因此 $1\otimes L$ 在 $B\otimes_k B^{\mathrm{opp}}$ 中的中心化子是 $B\otimes_k L$. 当我们把 $B\otimes_k B^{\mathrm{opp}}$ 等同于 $\End_k(B)$ ($B$ 作为 $k$-向量空间的自同态 — 见 \ref{cor:iv.2.9}) 时, $L$ 的中心化子便等同于 $\End_L(B)$ (作为 $L$-向量空间的自同态). 证毕.
+\end{proof}
+
+\begin{corollary}\label{cor:iv.3.7}
+设 $D$ 是 $k$ 上次数为 $n^2$ 的中心可除代数, $L$ 是 $k$ 上次数为 $n$ 的域. 则 $L$ 分裂 $D$ 当且仅当 $L$ 能嵌入 $D$ (即存在 $k$-代数同态 $L\to D$).
+\end{corollary}
+
+\begin{proof}
+若 $L$ 嵌入 $D$, 则上一推论表明它分裂 $D$. 反之, 若 $L$ 分裂 $D$, 则存在包含 $L$、与 $D$ 相似且次数为 $[L:k]^2$ 的 $k$ 上中心单代数 $B$. 但 $B\sim D$ 蕴含 $B\simeq M_m(D)$ 对某个 $m$ 成立 (见注记 \ref{rem:iv.2.13}a), 而次数条件蕴含 $m=1$.
+\end{proof}
+
+\begin{proposition}\label{prop:iv.3.8}
+$k$ 上的每个中心可除代数都包含一个在 $k$ 上可分的极大子域.
+\end{proposition}
+
+\begin{proof}
+设 $D$ 是 $k$ 上的中心可除代数, $L$ 是在 $D$ 的可分子域中极大的子域. 若 $L$ 不是 $D$ 的极大子域, 则其中心化子 $D'$ 是 $L$ 上不等于 $L$ 的中心可除代数 (见 \ref{thm:iv.3.1}). 下一个引理表明 $D'$ 包含一个真包含 $L$ 的可分子域, 与 $L$ 的定义矛盾.
+\end{proof}
+
+\begin{lemma}\label{lem:iv.3.9}
+$k$ 上每个不等于 $k$ 的中心可除代数都包含一个在 $k$ 上可分且不等于 $k$ 的子域.
+\end{lemma}
+
+\begin{proof}
+设 $D$ 是 $k$ 上的中心可除代数. 取 $D$ 的一组基 $(e_i)_{1\le i\le n^2}$, $e_1=1$, 并设 $x=\sum_i a_ie_i$ 是 $D$ 的元素. 对每个整数 $m$, $x^m=\sum_i P_i(m;a_1,\ldots,a_{n^2})e_i$, 其中诸 $P_i$ 是系数在 $k$ 中、只依赖 $D$ 的结构常数的多项式. 因此, 若 $K$ 是包含 $k$ 的域, 而
+\[
+x=\sum a_{i}(e_{i}\otimes1),\qquad a_{i}\in K
+\]
+是 $D\otimes_k K$ 的元素, 则 $x^m=\sum_i P_i(m;a_1,\ldots,a_{n^2})\,e_i\otimes 1$, 具有同样的多项式 $P_i$.
+
+当 $k$ 是完美域时引理已知, 故可设 $k$ 特征 $p\neq 0$ 且无限. 假设对每个 $a\in D$, $k[a]$ 都是 $k$ 上的纯不可分扩张, 则对某个 $r>0$ 有 $a^{p^r}\in k$, 且容易看出存在一个对 $D$ 的所有元素都适用的 $r$. 对这个特定的 $r$ 与 $i\neq 1$, $P_i(p^r;a_1,\ldots,a_{n^2})=0$ 对所有 $a_1,\ldots,a_{n^2}\in k$ 成立, 这蕴含 $P_i(p^r;X_1,\ldots,X_{n^2})$ 是零多项式 (见 FT, 5.18 的证明). 因此对 $D\otimes_k k^{\mathrm{al}}$ 的每个元素 $a$ 都有 $a^{p^r}\in k^{\mathrm{al}}$. 但 $D\otimes_k k^{\mathrm{al}}\simeq M_n(k^{\mathrm{al}})$, 于是
+\[
+\operatorname{diag}(1,0,\ldots,0)=\operatorname{diag}(1,0,\ldots,0)^{p^{r}}\in k^{\mathrm{al}},
+\]
+这蕴含 $n=1$.
+\end{proof}
+
+\begin{corollary}\label{cor:iv.3.10}
+Brauer 群 $\Br(k)=\bigcup\Br(L/k)$, 其中 $L/k$ 取遍 $k$ 的某个固定可分代数闭包中的有限 Galois 扩张.
+\end{corollary}
+
+\begin{proof}
+该命题表明 $\Br(k)$ 的每个元素都被一个有限可分扩张分裂, 从而被一个有限 Galois 扩张分裂.
+\end{proof}
+
+\subsection*{中心单代数与 2-上循环}
+
+取定 $k$ 的一个有限 Galois 扩张 $L$, 令 $G=\Gal(L/k)$. 定义 $\mathcal{A}(L/k)$ 为 $k$ 上包含 $L$ 且次数 $[A:k]=[L:k]^2$ (从而 $L$ 等于它在 $A$ 中的中心化子) 的中心单代数 $A$ 之类.
+
+取定 $A\in\mathcal{A}(L/k)$. 对每个 $\sigma\in G$, Noether-Skolem 定理的推论\ref{cor:iv.2.11} 表明存在元素 $e_{\sigma}\in A$, 使得
+\begin{equation}
+\sigma a=e_{\sigma}ae_{\sigma}^{-1}\qquad\text{对所有 }a\in L.\tag{38}
+\end{equation}
+此外, $e_\sigma$ 在 (38) 之下在相差乘以 $L^{\times}$ 中一个元素的意义下确定: 若 $f_\sigma$ 也具有该性质, 则 $f_\sigma^{-1}e_\sigma$ 中心化 $L$. 注意 (38) 可写成
+\begin{equation}
+e_{\sigma}\cdot a=\sigma a\cdot e_{\sigma}\qquad\text{对所有 }a\in L,\tag{39}
+\end{equation}
+这表明把 $e_\sigma$ 移过 $a\in L$ 时, $a$ 被 $\sigma a$ 替换. 显然 $e_\sigma e_\tau$ 具有 (38) 对 $\sigma\tau$ 的性质, 于是
+\begin{equation}
+e_{\sigma}e_{\tau}=\varphi(\sigma,\tau)e_{\sigma\tau}\tag{40}
+\end{equation}
+对某个 $\varphi(\sigma,\tau)\in L^{\times}$ 成立. 注意
+\[
+e_{\rho}(e_{\sigma}e_{\tau})=e_{\rho}\bigl(\varphi(\sigma,\tau)e_{\sigma\tau}\bigr)=\rho\varphi(\sigma,\tau)\cdot\varphi(\rho,\sigma\tau)\cdot e_{\rho\sigma\tau}
+\]
+而
+\[
+(e_{\rho}e_{\sigma})e_{\tau}=\varphi(\rho,\sigma)e_{\rho\sigma}e_{\tau}=\varphi(\rho,\sigma)\varphi(\rho\sigma,\tau)\cdot e_{\rho\sigma\tau}.
+\]
+因此结合律蕴含 $\varphi$ 是一个 2-上循环; 若取 $e_1=1$, 它甚至是规范的 2-上循环. 换一组 $e_\sigma$ 的选取得到上同调的 2-上循环, 于是我们有良定义的映射 $A\mapsto\gamma(A)\colon\mathcal{A}(L/k)\to H^2(L/k)$.
+
+\begin{theorem}\label{thm:iv.3.11}
+映射 $\gamma\colon\mathcal{A}(L/k)\to H^2(L/k)$ 是满射, 其纤维是同构类.
+\end{theorem}
+
+先需要一个引理.
+
+\begin{lemma}\label{lem:iv.3.12}
+设 $A\in\mathcal{A}(L/k)$, 并取 $e_\sigma$ 满足 (38). 则集合 $(e_\sigma)_{\sigma\in G}$ 是 $A$ 作为 $L$ 上左向量空间的基.
+\end{lemma}
+
+\begin{proof}
+注意
+\[
+\dim_{L}(A)=\frac{\dim_{k}(A)}{\dim_{k}(L)}=n,
+\]
+故只需证诸 $e_\sigma$ 线性无关. 假设不然, 设 $(e_\sigma)_{\sigma\in J}$ 是一个极大线性无关组. 若 $\tau\notin J$, 则
+\[
+e_{\tau}=\sum_{\sigma}a_{\sigma}e_{\sigma}
+\]
+对某些 $a_\sigma\in L$ 成立. 取 $a\in L$. 用两种方式计算 $e_\tau a$:
+\[
+e_{\tau}a=\tau a\cdot e_{\tau}=\sum_{\sigma\in J}\tau a\cdot a_{\sigma}e_{\sigma},
+\]
+\[
+e_{\tau}a=\sum_{\sigma\in J}a_{\sigma}e_{\sigma}\cdot a=\sum_{\sigma\in J}a_{\sigma}\cdot\sigma a\cdot e_{\sigma},
+\]
+比较得 $\tau a\cdot a_\sigma=\sigma a\cdot a_\sigma$ 对所有 $\sigma\in J$ 成立. 对至少一个 $\sigma\in J$ 有 $a_\sigma\neq 0$, 此时该方程表明 $\tau=\sigma$, 与 $\tau\notin J$ 矛盾. 因此 $J=G$.
+\end{proof}
+
+现在, $A$ 由下列性质唯一确定: $A\supset L$; $(e_\sigma)_{\sigma\in G}$ 是 $A$ 作为 $L$-向量空间的基; $A$ 中的乘法满足方程 (39) 与 (40).
+
+设 $A^{\prime}\in\mathcal{A}(L/k)$ 且 $\gamma(A)=\gamma(A')$. 该条件表明可选取 $A$ 与 $A'$ 的基 $(e_\sigma)$ 与 $(e'_\sigma)$, 使其满足 (39) 与 (40) 且具有同一个 2-上循环 $\varphi$. 映射 $\sum a_\sigma e_\sigma\mapsto\sum a_\sigma e'_\sigma$ 是 $k$-代数同构 $A\to A'$.
+
+反之, 设 $A$ 与 $A'$ 是 $\mathcal{A}(L/k)$ 中同构的元素. Noether-Skolem 定理允许我们选取同构 $f\colon A\to A'$, 使 $f(L)=L$ 且 $f|L$ 为恒等映射. 若 $e_\sigma$ 对 $A$ 满足条件 (39), 则 $f(e_\sigma)$ 对 $A'$ 满足 (39). 在选取 $(e_\sigma)$ 与 $(f(e_\sigma))$ 之下, $A$ 与 $A'$ 定义同一个上循环.
+
+这些论述表明映射 $A\mapsto\gamma(A)$ 定义一个单射
+\[
+\mathcal{A}(L/k)/\simeq\ \to H^{2}(L/k).
+\]
+为证该映射满, 我们构造其逆.
+
+设 $\varphi\colon G\times G\to L^{\times}$ 是规范 2-上循环. 定义 $A(\varphi)$ 为以 $(e_\sigma)_{\sigma\in G}$ 为基的 $L$-向量空间, 赋予由 (39) 与 (40) 给出的乘法. 则 $e_1$ 是乘法的单位元, 且上循环条件恰好表明
+\[
+e_{\rho}(e_{\sigma}e_{\tau})=(e_{\rho}e_{\sigma})e_{\tau}.
+\]
+由此 $A(\varphi)$ 是 $k$-代数. 我们把 $L$ 等同于 $A(\varphi)$ 的子域 $Le_1$.
+
+\begin{lemma}\label{lem:iv.3.13}
+代数 $A(\varphi)$ 在 $k$ 上中心单.
+\end{lemma}
+
+\begin{proof}
+设 $\alpha=\sum a_\sigma e_\sigma$ 中心化 $L$, 并设 $a\in L$. 比较 $a\alpha=\sum aa_\sigma\cdot e_\sigma$ 与 $\alpha a=\sum a_\sigma(\sigma a)\cdot e_\sigma$, 得 $a_\sigma=0$ ($\sigma\neq 1$), 故 $\alpha=a_1e_1\in L$. 因此 $L$ 在 $A(\varphi)$ 中的中心化子是 $L$.
+
+设 $\alpha$ 在 $A(\varphi)$ 的中心中. 则 $\alpha$ 中心化 $L$, 故 $\alpha\in L$, 设 $\alpha=ae_1$, $a\in L$. 比较 $e_\sigma\cdot\alpha=(\sigma a)e_\sigma$ 与 $\alpha\cdot e_\sigma=ae_\sigma$, 得 $\alpha\in k$. 因此 $A(\varphi)$ 中心.
+
+设 $\mathfrak{A}$ 是 $A(\varphi)$ 中的一个双侧理想; 特别地, 它是 $A(\varphi)$ 的 $L$-子空间. 若 $\mathfrak{A}$ 包含某个 $e_\sigma$, 则 (40) 表明它包含所有 $e_\sigma$, 从而等于 $A(\varphi)$. 设 $\mathfrak{A}\neq 0$, 并设 $\alpha=\sum a_\sigma e_\sigma$ 是 $\mathfrak{A}$ 的一个原始元素, 设 $a_{\sigma_0}=1$. 若 $a_{\sigma_1}\neq 0$, $\sigma_1\neq\sigma_0$, 则对每个 $a\in L$,
+\[
+(\sigma_{1}a)\cdot\alpha-\alpha\cdot a=\sum_{\sigma}a_{\sigma}(\sigma_{1}a-\sigma a)e_{\sigma}\in\mathfrak{A}.
+\]
+若选取 $a$ 使 $\sigma_1 a\neq\sigma_0 a$, 则该元素非零但非零系数比 $\alpha$ 少, 与 $\alpha$ 的原始性矛盾. 因此 $\alpha=e_{\sigma_0}$, 从而我们证明了 $\mathfrak{A}=A(\varphi)$.
+\end{proof}
+
+设 $\varphi$ 与 $\varphi'$ 是上同调的 2-上循环, 即
+\[
+a(\sigma)\cdot\sigma a(\tau)\cdot\varphi^{\prime}(\sigma,\tau)=a(\sigma\tau)\cdot\varphi(\sigma,\tau)
+\]
+对某个映射 $a\colon G\to L^{\times}$ 成立. 立即可验证, 把 $e_\sigma$ 送到 $a(\sigma)e'_\sigma$ 的 $L$-线性映射 $A(\varphi)\to A(\varphi')$ 是 $k$-代数同构. 因此 $\varphi\mapsto A(\varphi)$ 定义一个映射 $H^2(L/k)\to\mathcal{A}(L/k)/\simeq$, 它显然是 $A\mapsto\gamma(A)$ 的逆. 这完成了定理\ref{thm:iv.3.11} 的证明.
+
+代数 $A(\varphi)$ 称为\emph{交叉乘积代数}\index{jiaochachengjidaishu@交叉乘积代数(crossed-product algebra)}. 在群上同调出现之前, 2-上循环 $\varphi\colon G\times G\to L^{\times}$ 曾被称为\emph{因子集} (有时至今仍这样称呼).
+
+\begin{theorem}\label{thm:iv.3.14}
+对每个有限 Galois 扩张 $L/k$, 映射 $\varphi\mapsto[A(\varphi)]$ 定义交换群的同构 $H^2(L/k)\to\Br(L/k)$.
+\end{theorem}
+
+\begin{proof}
+为证该映射双射, 只需 (由定理\ref{thm:iv.3.11} 之后) 证明映射 $A\mapsto[A]\colon\mathcal{A}(L/k)/\simeq\to\Br(L/k)$ 双射.
+
+若 $A$ 与 $A'$ 是 $k$ 上相似的中心单代数, 则 (见 \ref{rem:iv.2.13}) 存在中心可除代数 $D$ 使 $A\sim D\sim A'$, 设 $A\simeq M_n(D)$, $A'\simeq M_{n'}(D)$. 若 $[A:k]=[A':k]$, 则 $n=n'$, 从而 $A\simeq A'$. 这证明了映射 $\mathcal{A}(L/k)/\simeq\to\Br(L/k)$ 单, 而 \ref{cor:iv.3.6} 证明它满.
+\end{proof}
+
+\begin{lemma}\label{lem:iv.3.15}
+对任意两个 2-上循环 $\varphi$ 与 $\varphi'$, 有 $A(\varphi+\varphi')\sim A(\varphi)\otimes_k A(\varphi')$.
+\end{lemma}
+
+\begin{proof}
+证明略显繁琐, 因为我们必须把 $A(\varphi)\otimes_k A(\varphi')$ 认作交叉乘积代数上的矩阵代数, 而非交叉乘积代数本身. 这里只给出证明梗概.\footnote{细节见 \cite{Blanchard1972}, pp.\,94--95, 或 \cite{FarbDennis1993}, p.\,126--128.}
+
+设 $A=A(\varphi)$, $B=A(\varphi')$, $C=A(\varphi+\varphi')$. 把 $A$ 与 $B$ 视为左 $L$-模 (用左乘), 定义
+\[
+V=A\otimes_{L}B.
+\]
+具体地, $V$ 是 $A\otimes_k B$ 的最大商空间, 使得
+\[
+la\otimes_{L}b=a\otimes_{L}lb
+\]
+对所有 $a\in A$, $b\in B$, $l\in L$ 成立.
+
+$k$-向量空间 $V$ 有唯一的右 $A\otimes_k B$-模结构使
+\[
+(a^{\prime}\otimes_{L}b^{\prime})(a\otimes_{k}b)=a^{\prime}a\otimes_{L}b^{\prime}b\qquad(a^{\prime},a\in A,\ b^{\prime},b\in B),
+\]
+以及唯一的左 $C$-模结构使
+\[
+(le_{\sigma}^{\prime\prime})(a\otimes_{L}b)=le_{\sigma}a\otimes_{L}e_{\sigma}^{\prime}b\qquad(l\in L,\ \sigma\in G,\ a\in A,\ b\in B).
+\]
+这里 $(e_\sigma)$, $(e'_\sigma)$, $(e''_\sigma)$ 分别是 $A=A(\varphi)$, $B=A(\varphi')$, $C=A(\varphi+\varphi')$ 的标准基.
+
+这两个作用交换, 于是 $A\otimes_k B$ 在 $V$ 上的右作用定义 $k$-代数同态
+\[
+f\colon(A\otimes_{k}B)^{\mathrm{opp}}\to\End_{C}(V).
+\]
+该同态单, 因为 $A\otimes_k B$ (从而其反代数) 单. 由于 $(A\otimes_k B)^{\mathrm{opp}}$ 与 $\End_C(V)$ 在 $k$ 上的次数都是 $n^4$, 其中 $n=[L:k]$, $f$ 是同构. 如 (\ref{cor:iv.1.21}) 中所证, 同一 $k$-维数的单环上的任意两模同构, 故作为 $C$-模有 $V\simeq C^n$. 从而
+\[
+\End_{C}(V)\simeq\End_{C}(C^{n})=M_{n}(C^{\mathrm{opp}}),
+\]
+把此同构与 $f$ 复合, 得 $k$-代数同构
+\[
+(A\otimes_{k}B)^{\mathrm{opp}}\to M_{n}(C)^{\mathrm{opp}}.
+\]
+同一映射又可解释为同构
+\[
+A\otimes_{k}B\to M_{n}(C).
+\]
+\end{proof}
+
+\begin{corollary}\label{cor:iv.3.16}
+对每个可分代数闭包 $k^{\mathrm{al}}$, 存在典范同构 $\Br(k)\to H^2(k^{\mathrm{al}}/k)$.
+\end{corollary}
+
+\begin{proof}
+对每个域塔 $E\supset L\supset k$ ($E$ 与 $L$ 均在 $k$ 上有限 Galois), 图表
+\[
+\begin{tikzcd}
+H^{2}(L/k)\ar[r,"\Inf"]\ar[d] & H^{2}(E/k)\ar[d]\\
+\Br(L/k)\ar[r,hook] & \Br(E/k)
+\end{tikzcd}
+\]
+交换 (竖直映射把 $\varphi$ 送到 $[A(\varphi)]$).\footnote{应当补一个该图表交换的证明. (原书作者自注)} 现在利用
+\[
+\Br(k)=\bigcup\Br(L/k),\qquad
+H^{2}(k^{\mathrm{al}}/k)=\bigcup H^{2}(L/k),
+\]
+其中两个并都取遍 $k^{\mathrm{al}}$ 中 $k$ 的有限 Galois 扩张 $L$.
+\end{proof}
+
+\begin{corollary}\label{cor:iv.3.17}
+对每个域 $k$, $\Br(k)$ 是挠群; 且对每个有限扩张 $L/k$, $\Br(L/k)$ 被 $[L:k]$ 零化.
+\end{corollary}
+
+\begin{proof}
+同样的陈述对上同调群成立.
+\end{proof}
+
+\section{特殊域的 Brauer 群}\label{sec:IV.4}
+
+上一节的结果使我们能把第 \ref{ch:III} 章的某些结果解释为关于一个域的 Brauer 群的陈述. 本节将独立于第 \ref{ch:III} 章 (但并非完全独立于第 \ref{ch:II} 章) 导出同样的结果.
+
+\subsection*{有限域}
+
+设 $k$ 是有限域. 我们在 III, \ref{lem:iii.1.4} 中看到, 对 $k$ 的每个有限扩张 $L$ 有 $H^{2}(L/k)=0$, 从而 $\Br(k)=0$. 以下是这一事实更直接的证明.
+
+\begin{theorem}[Wedderburn]\label{thm:iv.4.1}
+每个有限可除代数都交换.
+\end{theorem}
+
+\begin{proof}
+设 $D$ 是中心为 $k$ 的有限可除代数, $[D:k]=n^2$. $D$ 的每个元素都属于某个形如 $k[\alpha]$ 的子域, 从而属于某个极大子域. $D$ 的每个极大子域都有 $q^n$ 个元素, 因此彼此同构, 从而 (由 Noether-Skolem) 互相共轭. 于是对每个极大子域 $L$,
+\[
+D^{\times}=\bigcup_{\alpha}\alpha L^{\times}\alpha^{-1},
+\]
+但有限群不能等于一个真子群的全部共轭之并 (因为并的元素个数太少), 故 $D=L$.
+\end{proof}
+
+\subsection*{实数域}
+
+设 $G=\Gal(\CC/\R)=\{1,\sigma\}$, 则
+\[
+H^{2}(\CC/\R)\simeq H_{T}^{0}(G,\CC^{\times})=\R^{\times}/\Nm_{G}(\CC^{\times})=\{\pm1\},
+\]
+故 $\Br(\CC/\R)$ 是 $2$ 阶循环群. $H^2(\CC/\R)$ 的非零元由 2-上循环 $\varphi\colon G\times G\to\CC^{\times}$ 代表:
+\[
+\varphi(\rho,\tau)=\left\{\begin{array}{c l}-1&\text{若 }\rho=\sigma=\tau\\ 1&\text{其他情形}\end{array}\right.
+\]
+设 $\mathbb{H}$ 是 $\R$ 上通常的四元数代数, 则把 $x_\sigma$ 送到 $j$ 的 $\CC$-线性映射 $A(\varphi)\to\mathbb{H}$ 是 $\R$-代数同构. 由此, $\R$ 上每个中心单代数都同构于 $\R$ 上的矩阵代数或 $\mathbb{H}$ 上的矩阵代数.
+
+\subsection*{非阿基米德局部域}
+
+设 $K$ 是非阿基米德局部域. 在第 \ref{ch:III} 章定理\ref{thm:iii.2.1} 中我们定义了同构 $H^2(K^{\mathrm{al}}/K)\simeq\Q/\Z$, 从而有同构 $\Br(K)\simeq\Q/\Z$. 本小节说明如何更直接地构造这个同构.
+
+设 $D$ 是 $K$ 上的中心可除代数, $n^2=[D:K]$. 对 $D$ 中每个包含 $K$ 的子域 $L$, 绝对值 $|\cdot|$ 有到 $L$ 的唯一扩张. 由于 $D$ 的每个元素 $\alpha$ 都属于这样一个子域 (例如 $K[\alpha]$), 绝对值 $|\cdot|$ 有到 $D$ 的唯一扩张. 可以验证 $|\cdot|$ 是通常意义下 $D$ 上的非阿基米德绝对值, 即
+
+(a) $|\alpha|=0\iff\alpha=0$;
+
+(b) 对所有 $\alpha,\beta\in D$, $|\alpha\beta|=|\alpha||\beta|$;
+
+(c) 对所有 $\alpha,\beta\in D$, $|\alpha+\beta|\le\max\{|\alpha|,|\beta|\}$.
+
+设 $q$ 为 $K$ 的剩余类域 $k$ 的元素个数, 并用公式
+\[
+|\alpha|=(1/q)^{\mathrm{ord}(\alpha)}
+\]
+对 $\alpha\in D$ 定义 $\mathrm{ord}(\alpha)$. 则 $\mathrm{ord}$ 把 $K$ 上的加性赋值 $\mathrm{ord}_K$ (标准化为映 $K^{\times}$ 到 $\Z$ 上) 扩张到 $D$. 对 $D$ 中每个包含 $K$ 的子域 $L$, $[L:K]\le n$, 故 $\mathrm{ord}(L^{\times})\subset n^{-1}\Z$, 从而也有 $\mathrm{ord}(D^{\times})\subset n^{-1}\Z$.
+
+令
+\[
+\mathcal{O}_{D}=\{\alpha\in D\mid\mathrm{ord}(\alpha)\ge0\},\qquad
+\mathfrak{P}=\{\alpha\in D\mid\mathrm{ord}(\alpha)>0\}.
+\]
+则 $\mathcal{O}_D$ 是 $D$ 的子环, 称为\emph{整数环}. 对 $D$ 中每个包含 $K$ 的子域 $L$, $\mathcal{O}_D\cap L=\mathcal{O}_L$, 故 $\mathcal{O}_D$ 恰由 $D$ 中在 $\mathcal{O}_K$ 上整的元素组成. 此外 $\mathfrak{P}$ 是 $D$ 的极大双侧理想 (显然), 且 $\mathcal{O}_D$ 的非零双侧理想恰为 $\mathfrak{P}$ 的幂 (证明与交换情形相同). 于是对某个 $e$ 有 $\mathfrak{P}^e=\mathfrak{p}\mathcal{O}_D$. 此时 $\mathrm{ord}(D^{\times})=e^{-1}\Z$, 故 $e\le n$.
+
+显然, $\mathcal{O}_D$ 中不在 $\mathfrak{P}$ 内的元素都是单位. 因此 $d\stackrel{\mathrm{def}}{=}\mathcal{O}_D/\mathfrak{P}$ 仍是可除代数, 从而是域 (\ref{thm:iv.4.1}). 设 $f$ 为其在 $k$ 上的次数, 写 $d=k[a]$. 可把 $a$ 提升为 $\mathcal{O}_D$ 的元素 $\alpha$. 由于 $[K[\alpha]:K]\le n$, 得 $f\le n$.
+
+与交换情形相同的论证给出 $n^2=ef$: 即 $\mathcal{O}_D$ 是秩 $m$ 的自由 $\mathcal{O}_K$-模; 因 $\mathcal{O}_D\otimes_{\mathcal{O}_K}K=D$, 故 $m=n^2$; 又因 $\mathcal{O}_D\otimes_{\mathcal{O}_K}k=\mathcal{O}_D/\mathfrak{p}\mathcal{O}_D$, 它在 $k$ 上也是 $n^2$ 维自由模. 现在考虑 $k$-向量空间的滤列
+\[
+\mathcal{O}_{D}\supset\mathfrak{P}\supset\mathfrak{P}^{2}\supset\cdots\supset\mathfrak{P}^{e}=\mathfrak{p}\mathcal{O}_{D}.
+\]
+由 $f$ 的定义, $\mathcal{O}_D/\mathfrak{P}=d$ 作为 $k$-向量空间维数为 $f$, 而相邻商是 $d$ 上的一维向量空间. 故 $\mathcal{O}_D/\mathfrak{p}\mathcal{O}_D$ 在 $k$ 上维数为 $ef$, 从而 $ef=n^2$.
+
+由于 $e\le n$, $f\le n$, 等式 $ef=n^2$ 蕴含 $e=f=n$. 特别地, 每个不等于 $K$ 的中心可除代数都是分歧的. 再写 $d=k[a]$, 并把 $a$ 提升为 $D$ 中的元素 $\alpha$, 则 $K[\alpha]$ 是剩余类域为 $d$ 的域, 故 $[K[\alpha]:K]\ge[d:k]=n$. 因此 $K[\alpha]$ 在 $K$ 上次数为 $n$ 且非分歧. 它是极大子域, 从而分裂 $D$. 我们证明了 $\Br(K)$ 的每个元素都被一个非分歧扩张分裂, 即 $\Br(K)$ 等于其子群 $\Br(K^{\mathrm{un}}/K)$.
+
+下面定义映射
+\[
+\operatorname{inv}_{K}\colon\Br(K)\to\Q/\Z.
+\]
+$\Br(K)$ 的一个元素由 $K$ 上的一个中心可除代数 $D$ 代表 (在同构意义下唯一). 由刚才所证, $D$ 有一个在 $K$ 上非分歧的极大子域 $L$. 设 $\sigma$ 是 $L$ 的 Frobenius 自同构. 据 Noether-Skolem 定理, 存在 $\alpha\in D$ 使 $\sigma x=\alpha x\alpha^{-1}$ 对所有 $x\in L$ 成立. 若 $\alpha'$ 也具有此性质, 则 $\alpha'=c\alpha$ 对某个 $c\in L$ 成立, 于是
+\[
+\mathrm{ord}(\alpha^{\prime})=\mathrm{ord}(c)+\mathrm{ord}(\alpha)\equiv\mathrm{ord}(\alpha)\ \bmod\ \Z.
+\]
+我们定义
+\[
+\operatorname{inv}_{K}(D)=\mathrm{ord}(\alpha)\ \bmod\ \Z.
+\]
+它只依赖 $D$ 的同构类.
+
+\begin{example}\label{ex:iv.4.2}
+设 $L$ 是 $K$ 的 $n$ 次非分歧扩张, $\sigma$ 是 $L/K$ 的 Frobenius 自同构, 于是 $G\stackrel{\mathrm{def}}{=}\Gal(L/K)=\{\sigma^i\mid 0\le i\le n-1\}$. 设 $\varphi$ 为 2-上循环
+\[
+\varphi(\sigma^{i},\sigma^{j})=\left\{\begin{array}{l l}{1}&{\text{若 }i+j\le n-1}\\ {\pi}&{\text{若 }i+j>n-1,}\end{array}\right.
+\]
+其中 $\pi$ 是 $K$ 的素元 (见 III, \ref{prop:iii.1.9} 之前的讨论). 交叉乘积代数 $A(\varphi)$ 等于 $\bigoplus_{0\le i\le n-1}Le_i$, 其乘法由
+\[
+e_{i}\cdot a=\sigma^{i}a\cdot e_{i}\qquad(\text{所有 }a\in L)
+\]
+与
+\[
+e_{i}e_{j}=\left\{\begin{array}{l l}{e_{i+j}}&{\text{若 }i+j\le n-1}\\ {\pi e_{i+j-n}}&{\text{若 }i+j>n-1}\end{array}\right.
+\]
+确定. 我们通过把 $e_0$ 等同于 $1$ 把 $L$ 等同于 $A(\varphi)$ 的子域. 由于 $e_1ae_1^{-1}=\sigma a$ 对 $a\in L$ 成立, 可用 $e_1$ 计算 $A(\varphi)$ 的不变量. 由上述规则, $e_1^n=e_{n-1}e_1=\pi e_0=\pi$, 于是
+\[
+\operatorname{inv}_{K}(A(\varphi))=\mathrm{ord}(e_{1})=\tfrac{1}{n}\,\mathrm{ord}(e_{1}^{n})=\tfrac{1}{n}\,\mathrm{ord}(\pi)=\tfrac{1}{n},
+\]
+正如所料.
+\end{example}
+
+\begin{proposition}\label{prop:iv.4.3}
+刚定义的映射 $\operatorname{inv}_K\colon\Br(K)\to\Q/\Z$ 是双射.
+\end{proposition}
+
+\begin{proof}
+设 $L$ 是 $K$ 的 $n$ 次非分歧扩张 (包含在 $K$ 的某个固定代数闭包 $K^{\mathrm{al}}$ 中), $l/k$ 是相应的剩余类域扩张. 由于范映射 $l\to k$ 与 $l^{\times}\to k^{\times}$ 都是满射, 且 $U_L$ 有一个滤列, 其商为 $l^{\times}$ 或 $l$, 可知范映射 $U_L\to U_K$ 满 (见 III, \ref{prop:iii.1.2}). 因此 $H_T^0(G,U_L)=0$, 又 (由循环群上同调的周期性) 这蕴含 $H^2(G,U_L)=0$. 由于对 $K$ 的任意素元 $\pi$ 有 $L^{\times}=U_L\times\pi^{\Z}$,
+\[
+H^{2}(L/K)=H^{2}(G,\pi^{\Z}).
+\]
+考察
+\[
+0\to\Z\to\Q\to\Q/\Z\to0
+\]
+的上同调序列可知, $H^2(G,\pi^{\Z})$ 是 $n$ 阶循环群, 由上一例中考虑的上循环 $\varphi$ 的类生成 (见 III, \ref{prop:iii.1.9} 之前的讨论). 因此 $\Br(L/K)$ 是 $n$ 阶循环群, 由 $[A(\varphi)]$ 生成. 由此可知 $\operatorname{inv}_K\colon\Br(K^{\mathrm{un}}/K)\to\Q/\Z$ 是同构, 而前面已看到 $\Br(K^{\mathrm{un}}/K)=\Br(K^{\mathrm{al}}/K)$.
+\end{proof}
+
+\begin{remark}\label{rem:iv.4.4}
+(a) 例\ref{ex:iv.4.2} 中的计算表明, 本章定义的不变量映射与上一章用上同调定义的一致. 特别地, 这表明本章定义的映射是同态.
+
+(b) 与例\ref{ex:iv.4.2} 同样的计算给出 $\operatorname{inv}_K(A(\varphi^i))=\frac{i}{n}\bmod\Z$. 我断言: 若 $i$ 与 $n$ 互素, 则 $A(\varphi^i)$ 是中心可除代数. 若不然, 则 $A(\varphi^i)\simeq M_r(D)$, $D$ 为某个次数 $m^2$ ($m<n$) 的中心可除代数, 而 $\operatorname{inv}_K(A(\varphi^i))=\operatorname{inv}_K(D)\in\frac{1}{m}\Z/\Z$, 矛盾. 由此可知, $K$ 上每个中心可除代数都同构于恰好一个形如 $A(\varphi^i)$ 的可除代数 (对某个 $n\ge 1$ 及某个与 $n$ 互素的 $i$). 特别地, 对中心可除代数 $D$, $[D]$ 在 $\Br(K)$ 中的阶是 $\sqrt{[D:K]}$.
+
+(c) 设 $D$ 是 $K$ 上次数为 $n^2$ 的中心可除代数. 由于映射 $\Br(K)\to\Br(L)$ 把不变量乘以 $[L:K]$ (见 III, \ref{thm:iii.2.1}), $D$ 被 $K$ 的每个 $n$ 次扩张 $L$ 分裂. 因此每个这样的 $L$ 都能嵌入 $D$ (由 \ref{cor:iv.3.7}). 换言之, $K[X]$ 中每个 $n$ 次不可约多项式在 $D$ 中都有根.
+\end{remark}
+
+\begin{NOTES}\label{note:iv.4}
+关于有限域、实数域与非阿基米德局部域的结果分别归功于 Wedderburn、Frobenius 与 Hasse. 非阿基米德局部域的 Brauer 群的计算本质上就是 Hasse 原来的 (前上同调的) 证明.
+\end{NOTES}
+
+\section{补充}\label{sec:IV.5}
+
+\subsection*{半单代数}
+
+回忆: 若每个 $A$-模都半单, 则称 $k$-代数 $A$ 半单. 单 $k$-代数半单 (\ref{prop:iv.1.18}), 而 Maschke 定理 (GT, 7.4) 表明, 当 $G$ 的阶不被 $k$ 的特征整除时, 群代数 $k[G]$ 半单.
+
+\begin{example}\label{ex:iv.5.1}
+设 $A$ 是若干单 $k$-代数的有限乘积. 单因子的每个极小左理想都是 ${}_A A$ 的单 $A$-子模, 故 $A$ 是单 $A$-模之和, 从而半单. 由于每个 $A$-模都是若干个 ${}_A A$ 的直和的商, 这表明 $A$ 半单.
+\end{example}
+
+在陈述本节主要结果之前, 先回顾一些初等的模论.
+
+\noindent\textbf{5.2} 设 $A$ 是 $k$-代数, 考虑模
+\[
+M=M_{1}\oplus\cdots\oplus M_{n},\qquad
+N=N_{1}\oplus\cdots\oplus N_{m}.
+\]
+设 $\alpha$ 是 $A$-线性映射 $M\to N$. 对 $x_j\in M_j$, 设
+\[
+\alpha(0,\ldots,0,x_{j},0,\ldots,0)=(y_{1},\ldots,y_{m}),
+\]
+则 $x_j\mapsto y_i$ 是 $A$-线性映射 $M_j\to N_i$, 记作 $\alpha_{ij}$. 于是 $\alpha$ 定义一个 $m\times n$ 矩阵, 其 $ij$ 系数是 $A$-线性映射 $M_j\to N_i$. 反之, 每个这样的矩阵 $(\alpha_{ij})$ 定义一个 $A$-线性映射 $M\to N$, 即
+\[
+\begin{pmatrix}x_{1}\\ \vdots\\ x_{j}\\ \vdots\\ x_{n}\end{pmatrix}\mapsto
+\begin{pmatrix}\alpha_{11}&\cdots&\alpha_{1j}&\cdots&\alpha_{1n}\\ \vdots&&\vdots&&\vdots\\ \alpha_{i1}&\cdots&\alpha_{ij}&\cdots&\alpha_{jn}\\ \vdots&&\vdots&&\vdots\\ \alpha_{m1}&\cdots&\alpha_{mj}&\cdots&\alpha_{mn}\end{pmatrix}
+\begin{pmatrix}x_{1}\\ \vdots\\ x_{j}\\ \vdots\\ x_{n}\end{pmatrix}
+\stackrel{\mathrm{def}}{=}
+\begin{pmatrix}\alpha_{11}(x_{1})+\cdots+\alpha_{1n}(x_{n})\\ \vdots\\ \alpha_{i1}(x_{1})+\cdots+\alpha_{in}(x_{n})\\ \vdots\\ \alpha_{m1}(x_{1})+\cdots+\alpha_{mn}(x_{n})\end{pmatrix}.
+\]
+于是可见
+\begin{equation}
+\Hom_{A}(M,N)\simeq\bigl(\Hom_{A}(M_{j},N_{i})\bigr)_{1\le j\le n,\,1\le i\le m}\tag{41}
+\end{equation}
+($k$-向量空间的同构). 当 $M=N$ 时, 它成为 $k$-代数同构. 例如, 若 $M$ 是 $m$ 个 $M_0$ 副本的直和, 则
+\begin{equation}
+\End_{A}(M)\simeq M_{m}\bigl(\End_{A}(M_{0})\bigr)\tag{42}
+\end{equation}
+(系数在环 $\End_A(M_0)$ 中的 $m\times m$ 矩阵).
+
+\setcounter{theorem}{2} % 5.2 为叙述性编号条目, 不占定理计数器; 调至 2 使下一条显示为 5.3
+
+\begin{theorem}\label{thm:iv.5.3}
+设 $V$ 是有限维 $k$-向量空间, $A$ 是 $\End_k(V)$ 的 $k$-子代数. 若 $V$ 作为 $A$-模半单, 则 $A$ 在 $\End_k(V)$ 中的中心化子是若干单 $k$-代数的乘积 (从而它是半单 $k$-代数).
+\end{theorem}
+
+\begin{proof}
+由假设可写 $V\simeq\bigoplus_i r_iS_i$, 其中诸 $S_i$ 是单 $A$-模, 互不同构. $A$ 在 $\End_k(V)$ 中的中心化子是 $\End_A(V)$, 而 $\End_A(V)\simeq\End_A\bigl(\bigoplus_i r_iS_i\bigr)$. 由于 $\Hom_A(S_j,S_i)=0$ ($i\neq j$),
+\[
+\begin{aligned}
+\End_{A}\Bigl(\bigoplus_i r_{i}S_{i}\Bigr)&\simeq\prod_{i}\End_{A}(r_{i}S_{i})\quad\text{由 (41)}\\
+&\simeq\prod_{i}M_{r_{i}}(D_{i})\qquad\ \ \text{由 (42)},
+\end{aligned}
+\]
+其中 $D_i=\End_A(S_i)$. 据 Schur 引理 (\ref{lem:iv.1.16}), $D_i$ 是可除代数, 故 $M_{r_i}(D_i)$ 是单 $k$-代数 (\ref{ex:iv.1.11}).
+\end{proof}
+
+\begin{theorem}\label{thm:iv.5.4}
+每个半单 $k$-代数都同构于若干单 $k$-代数的乘积.
+\end{theorem}
+
+\begin{proof}
+选取一个 $A$ 忠实作用的 $A$-模 $V$, 例如 $V={}_A A$. 则 $A$ 等于它在 $\End_k(V)$ 中的双中心化子 $C(C(A))$ (见 \ref{thm:iv.1.14}). 据定理\ref{thm:iv.5.3}, $C(A)$ 半单, 故 $C(C(A))$ 是若干单代数的乘积 (\ref{thm:iv.5.3}).
+\end{proof}
+
+\subsection*{半单 $k$-代数上的模}
+
+设 $A=B\times C$ 是若干 $k$-代数的乘积. $B$-模 $M$ 通过作用 $(b,c)m=bm$ 成为 $A$-模.
+
+\begin{theorem}\label{thm:iv.5.5}
+设 $A$ 是半单 $k$-代数, 设 $A=A_1\times\cdots\times A_t$, 诸 $A_i$ 单. 对每个 $A_i$, 设 $S_i$ 是一个单 $A_i$-模.
+
+(a) 每个 $S_i$ 都是单 $A$-模, 且每个单 $A$-模都恰好同构于其中一个 $S_i$.
+
+(b) 每个 $A$-模都同构于 $\bigoplus r_iS_i$ (某些 $r_i\in\N$), 而两个模 $\bigoplus r_iS_i$ 与 $\bigoplus r'_iS_i$ 同构当且仅当 $r_i=r'_i$ 对所有 $i$ 成立.
+\end{theorem}
+
+\begin{proof}
+(a) 显然每个 $S_i$ 视为 $A$-模时单, 且互不同构. 由 \ref{cor:iv.1.20}, ${}_A A\simeq\bigoplus r_iS_i$ (某些 $r_i\in\N$). 设 $S$ 是单 $A$-模, $x$ 是 $S$ 的非零元素, 则映射 $a\mapsto ax\colon {}_A A\to S$ 满射, 于是它限制到 ${}_A A$ 的某个 $S_i$ 上非零, 从而是同构.
+
+(b) 第一部分由 (a) 与半单环的定义推出, 第二部分由 \ref{cor:iv.1.3} 推出.
+\end{proof}
+
+\begin{proposition}\label{prop:iv.5.6}
+设 $A$ 是半单 $k$-代数, $k'$ 是 $k$ 的可分扩张, 则 $A\otimes_k k'$ 半单.
+\end{proposition}
+
+\begin{proof}
+不妨设 $A$ 单, 则 $A$ 的中心 $F$ 是域. 由于 $k'/k$ 可分, $F\otimes_k k'$ 是若干域 $F_i$ 的乘积. 现在
+\[
+A\otimes_{k}k^{\prime}\simeq A\otimes_{F}(F\otimes_{k}k^{\prime})\simeq A\otimes_{F}\Bigl(\prod F_{i}\Bigr)\simeq\prod A\otimes_{F}F_{i},
+\]
+而每个代数 $A\otimes_F F_i$ 单 (\ref{prop:iv.2.15}).
+\end{proof}
+
+\subsection*{代数、上同调与群扩张}
+
+设 $A$ 是 $k$ 上次数为 $n^2$ 的中心单代数, 并设 $A$ 包含一个在 $k$ 上次数为 $n$ 的 Galois 域 $L$. 令 $E$ 为满足 $\alpha L\alpha^{-1}=L$ 的可逆元素 $\alpha\in A$ 之集. 每个 $\alpha\in E$ 定义 $\Gal(L/k)$ 的元素 $x\mapsto\alpha x\alpha^{-1}$, 而 Noether-Skolem 定理蕴含 $\Gal(L/k)$ 的每个元素都来自某个 $\alpha\in E$. 由于 $[L:k]=\sqrt{[A:k]}$, $L$ 的中心化子是 $L$ 本身, 于是序列
+\[
+1\to L^{\times}\to E^{\times}\to\Gal(L/k)\to1
+\]
+正合. 不难证明, 把 $A$ 送到这个序列的映射定义了从 $\mathcal{A}(L/k)$ 到 $\Gal(L/k)$ 被 $L^{\times}$ 扩张的同构类之集的同构, 从而到 $H^2(L/k)$ 的同构 (见 II, \ref{ex:ii.1.18}). 参见 Serre 1950/51.
+
+\subsection*{Brauer 群与 K-理论}
+
+设 $k$ 是包含 $n$ 次本原单位根 $\zeta$ 的域. 对元素 $a,b\in k^{\times}$, 可以配一个具有生成元 $i,j$ 与关系
+\[
+i^{n}=a,\qquad j^{n}=b,\qquad ij=\zeta ji
+\]
+的 $k$-代数 $A(a,b;\zeta)$. 它是 $k$ 上的中心单代数.
+
+域 $F$ 的 \emph{Milnor K-群}\index{milnorkqun@Milnor K-群(Milnor K-group)} $K_2F$ 定义为 $F^{\times}\otimes_{\Z}F^{\times}$ 除以由形如 $u\otimes(1-u)$ 的元素生成的子群, 其中 $u\in F^{\times}$ 且 $1-u\in F^{\times}$. 于是 $K_2F$ 以元素对 $\{a,b\}$ (每对 $F^{\times}$ 中的元素一个) 为生成元, 具有关系
+\[
+\{ab,c\}=\{a,c\}\{b,c\},\qquad
+\{a,bc\}=\{a,b\}\{a,c\},\qquad
+\{u,1-u\}=1.
+\]
+已知这些关系蕴含
+\[
+\{u,v\}=\{v,u\}^{-1},\qquad
+\{u,-u\}=1
+\]
+(见 \cite{Rosenberg1994}, p.\,214).
+
+不难证明, 视为 $\Br(k)$ 中元素的 $A(a,b;\zeta)$ 满足这些关系, 于是有良定义的同态
+\[
+K_{2}k\to\Br(k).
+\]
+引人注目的是, 已被证明 (Merkurjev--Suslin 定理, 1980 年代初) 这个映射定义了从 $K_2k/nK_2k$ 到 $\Br(k)$ 中被 $n$ 零化的元素所成子群的同构, 从而我们有了 $\Br(k)_n$ 的一个生成元与关系式的显式描述.\footnote{参见 Merkurjev, A.~S.; Suslin, A.~A., \emph{K-cohomology of Severi-Brauer varieties and the norm residue homomorphism} (俄文), Izv.\ Akad.\ Nauk SSSR Ser.\ Mat.\ 46 (1982), no.~5, 1011--1046, 1135--1136. 该定理在 Kersten, Ina, \emph{Brauergruppen von K\"orpern}, Aspects of Mathematics, D6, Friedr.\ Vieweg \& Sohn, Braunschweig, 1990 一书中有讨论.}
+
+\begin{exercise}\label{ex:iv.5.7}
+设 $F$ 是特征 $\neq 2$ 的域, 并按 (\ref{ex:iv.1.12}) 定义四元数代数 $H(a,b)$. 于是 $H(a,b)$ 有基 $1,i,j,k$, 且 $i^2=a$, $j^2=b$, $k=ij=-ji$. 它是 $F$ 上的中心单代数.
+
+(a) 证明 $k$ 上每个 $4$ 维中心单代数都同构于某个 $H(a,b)$ ($a,b\in F^{\times}$).
+
+(b) 据 Wedderburn 定理, $H(a,b)\simeq M_2(F)$ 或 $H(a,b)$ 是可除代数. 证明第一种情形出现当且仅当 $w^2-ax^2-by^2+abz^2$ 在 $F$ 中有非平凡零点. (提示: 对 $\alpha=w+xi+yj+zk$, 令 $\bar{\alpha}=w-xi-yj-zk$, 注意 $\alpha\bar{\alpha}=w^2-ax^2-\cdots$.)
+
+(c) 证明 $H(1,1)\simeq M_2(F)$. (提示: 考虑矩阵 $e_{12}+e_{21}$ 与 $e_{11}-e_{22}$.)
+
+(d) 证明对任意 $x,y\in F^{\times}$ 有 $H(a,b)\simeq H(ax^2,by^2)$.
+
+(e) 证明 $H(a,b)\otimes_F L$ 就是由视 $a,b$ 为 $L$ 中元素所定义的 $L$ 上四元数代数.
+
+(f) 验证 $H(a,b)$ 事实上在 $F$ 上中心单.
+
+(g) 证明当 $a,\,1-a\in F^{\times}$ 时, $H(a,1-a)\simeq M_2(F)$.
+
+(h) 证明 $H(1,b)\simeq H(a,-a)\simeq M_2(F)$. (提示: 考虑 $j+k$ 与 $i+j$.)
+
+(i) 证明 $H(a,b)\simeq H(a,b)^{\mathrm{opp}}$.
+
+(j) 证明 $H(a,b)\simeq M_2(F)$ 当且仅当 $a\in\Nm(F[\sqrt{b}])$.
+
+(k) 证明映射 $\{a,b\}\mapsto[H(a,b)]\colon K_2F\to\Br(F)$ 良定义.
+\end{exercise}
+
+\begin{exercise}\label{ex:iv.5.8}
+对给定的 $\Q$ 上中心可除代数 $D$, 确定能嵌入 $D$ 的数域.
+\end{exercise}
+
+\begin{exercise}\label{ex:iv.5.9}
+确定能嵌入 $\Q$ 上某个中心可除代数的数域.
+
+习题\ref{ex:iv.5.8} 与 \ref{ex:iv.5.9} 的解见 \sx{178999}.
+\end{exercise}
+
+\begin{NOTES}\label{note:iv.5}
+Brauer 群由 R.~Brauer 引入并研究, 随后 Albert、Brauer、Noether、Hasse 等人自二十世纪二十年代起继续研究. 经典的论述是:
+
+Artin, E., Nesbitt, C., and Thrall, R., \emph{Rings with Minimum Condition}, University of Michigan Press, 1944.
+
+除了古怪的术语 (例如把张量积称为 Kronecker 积) 之外, 后者至今仍是一本优秀的书.
+
+其他著作包括 \cite{Blanchard1972}、\cite{FarbDennis1993} 与 \cite{Herstein1968}. 这些书都论及 Brauer 群, 但也涵盖更多内容 (不过没有数论). 其中第二本有大量习题.
+
+在撰写本章第一版时, 我发现下述文献特别有用:
+
+Serre, J-P., \emph{Applications alg\'ebriques de la cohomologie des groupes}, I, II, S\'eminaire Henri Cartan, 1950/51 (现可在 www.numdam.org 获取).
+\end{NOTES}

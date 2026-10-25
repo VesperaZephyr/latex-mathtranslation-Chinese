@@ -1,0 +1,152 @@
+% chapters/ch01.tex - 第 1 章: 导论
+
+\chapter{导论}\label{ch:01}
+
+\section{什么是微局部分析?}\label{sec:1.1}
+\index{weijubufenxi@微局部分析 (microlocal analysis)}%
+\index{xiangkongjian@相空间 (phase space)}%
+\index{boqianji@波前集 (wave front set)}%
+微局部分析关心的是相空间中分布的研究——特别是分布的奇性或其缺失.
+
+其核心概念是分布的\textbf{波前集} (wave front set). 我们通过两个例子来说明这一点.
+\begin{enumerate}
+    \item 考虑 $\R^n$ 上的函数 $u(x) \defeq |x|^\alpha$, 其中 $\alpha \in (-n, 0)$. 此时 $u \in L^1_{\mathrm{loc}}(\R^n)$, 因而是一个良定义的分布, 而且 $u$ 事实上在所有非零的 $x$ 处光滑. 然而 $u$ 在 $x = 0$ 处并不光滑. 由于 $u$ 具有旋转对称性, 人们会希望说 $u$ 在 $x = 0$ 处沿所有方向都是奇异的. $\delta$-分布具有相同的特征.
+    \item 设 $\Omega \subset \R^n$ 为具有光滑边界的有界区域, 并设 $v = 1_\Omega$ 为 $\Omega$ 的特征函数. 该函数在 $\Omega$ 上以及在 $\R^n \setminus \bar{\Omega}$ 上光滑, 而在 $\partial\Omega$ 处奇异. 然而, 对于点 $x_0 \in \partial\Omega$, 函数 $v$ 在 $x_0$ 处沿各个方向的行为并不相同: 在与 $\partial\Omega$ 相切的方向上, $v$ 并没有特别的不规则性; 但在与 $\partial\Omega$ 垂直的方向上, $v$ 具有跳跃间断.
+\end{enumerate}
+
+与其使用``方向'' (即切向量), 我们更应当使用``余方向'' (即余切向量). 此时这两个例子的波前集分别为
+\begin{equation}\label{eq:1.1}
+    \begin{aligned}
+        \WF(u) &= \{0\} \times (\R^n \setminus \{0\}) = T^*_0 \R^n \setminus o, \\
+        \WF(v) &= N^* \partial\Omega \setminus o.
+    \end{aligned}
+\end{equation}
+(这里 $T^* \R^n = \R^n_x \times \R^n_\xi$ 是经典相空间, 而 $N^* \partial\Omega$ 由所有满足 $x \in \partial\Omega$ 且 $\xi$ 为 $\partial\Omega$ 在 $x$ 处的余法向量的对 $(x, \xi)$ 构成. 由于我们关心的是余方向, 我们排除零截面 $o = \{(x, \xi) : \xi = 0\}$.)
+
+波前集的定义十分优雅, 因此我们立即勾勒其梗概: 点 $(x_0, \xi_0)$ 不属于 $\WF(u)$——即 $u$ 在位置 $x_0$ 处、沿由 $\xi_0 \neq 0$ 确定的动量方向是微局部光滑的——当且仅当存在一个光滑紧支函数 $\phi \in \SmoothComp(\R^n)$ 满足 $\phi(x_0) \neq 0$, 使得 $\phi u$ 的 Fourier 变换 $\mathcal{F}(\phi u)$ 在以 $\xi_0$ 为中心的某个锥内快速衰减 (见命题~\ref{prop:6.21}). 若 $u$ 在 $x_0$ 附近光滑, 则 $\phi u$ 光滑且具紧支集, 而初等 Fourier 分析告诉我们其 Fourier 变换沿所有方向快速递减. 因此, $\WF(u)$ 是 $u$ 的奇异支集的一个细化, 后者是 $u$ 在位形空间中的奇性集合.
+
+微局部分析的主要工具是\textbf{伪微分算子} (pseudodifferential operator, 常简记为 ps.d.o.) 代数. 正如乘以一个函数 $\phi \in \SmoothComp(\R^n)$ 可以让人在位形空间 (即 $x$ 变量) 中局部化一个分布 $u$ 一样, 一个伪微分算子可以让人在相空间中对分布作微局部化: 在位形空间的局部化之后, 接着在 Fourier 变换一侧对动量方向作局部化. 也就是说, 对于 $\phi \in \SmoothComp(\R^n)$ 及 $\psi \in \Smooth(\mathbb{S}^{n-1})$, 我们把 $\R^n$ 上的分布 $u$ 映为
+\begin{equation}\label{eq:1.2}
+    v \defeq \mathcal{F}^{-1} \left( \psi\Bigl(\frac{\xi}{|\xi|}\Bigr) \mathcal{F}(\phi u)(\xi) \right).
+\end{equation}
+此时 $\WF(v) \subset S \defeq \supp\bigl(\phi(x) \psi(\frac{\xi}{|\xi|})\bigr)$, 即 $v$ 被微局部化在 $S$ 中. 将式~\eqref{eq:1.2} 中的 (逆) Fourier 变换写出, 可将 $v$ 表为
+\begin{equation}\label{eq:1.3}
+    \Op(a) u(x) = (2\pi)^{-n} \iint_{\R^n \times \R^n} \ee^{\ii (x-y)\cdot\xi} a(x, y, \xi) u(y) \,\dd y \,\dd\xi,
+\end{equation}
+其中 $a(x, y, \xi) = \psi\bigl(\frac{\xi}{|\xi|}\bigr) \phi(y)$. 算子类 $\Op(a)$ 除包含微局部化算子之外, 还包含所有微分算子 (即当 $a$ 是关于 $\xi$ 的多项式时). 当函数 $a$ 是符号 (即在 $x, y$ 中具有某种正则性、在 $\xi$ 中具有界) 时, $\Op(a)$ 就是一个伪微分算子.
+
+尽管上述讨论是在 $\R^n$ 上进行的, 但波前集与伪微分算子的概念可以转移到任意光滑流形上.
+
+微局部分析中的典型定理, 由 $\WF(f)$ 以及 $P$ (的符号) 的性质, 给出线性偏微分方程
+\begin{equation}\label{eq:1.4}
+    P u = f
+\end{equation}
+的解 $u$ 的 $\WF(u)$ 的信息. 作为第一个例子, 考虑\textbf{椭圆型算子} $P$ (例如 $\R^n$ 上的 Laplace 算子, 或 $\mathbb{C} = \R^2$ 上的 Cauchy--Riemann 算子). 此时 $\WF(u) = \WF(f)$. 因此, $f$ 微局部光滑之处, $u$ 也微局部光滑. 这是标准椭圆正则性 (若 $f$ 光滑, 则 $u$ 也光滑) 的一个精确版本.
+
+更一般地, 考虑微分算子
+\begin{equation}\label{eq:1.5}
+    P = \sum_{|\alpha| \le m} p_\alpha(x) D^\alpha, \qquad D \defeq \frac{1}{\ii} \partial,
+\end{equation}
+并定义其\textbf{主符号} (principal symbol) 为
+\begin{equation}\label{eq:1.6}
+    p(x, \xi) = \sigma_m(P)(x, \xi) \defeq \sum_{|\alpha| = m} p_\alpha(x) \xi^\alpha;
+\end{equation}
+它刻画了算子 $P$ 的最高阶部分. 一个简单的非椭圆例子是输运算子 $P = D_{x_1} - D_{x_2}$, 其 $p(x, \xi) = \xi_1 - \xi_2$. 此时上述椭圆正则性结果可以大幅推广为如下的\textbf{微局部椭圆正则性}陈述:
+\begin{equation}\label{eq:1.7}
+    \WF(f) \subset \WF(u) \subset \WF(f) \cup \Char(P), \qquad \Char(P) \defeq p^{-1}(0) \cap (T^* \R^n \setminus o).
+\end{equation}
+特征集 (characteristic set) $\Char(P)$ 记录了相空间中 $P$ 非椭圆、椭圆正则性不适用的位置. 对输运算子而言, $\Char(P)$ 是余维数为 $1$ 的超曲面, 因此 $P$ 事实上在大多数位置处是椭圆的!
+
+一个自然的问题是: 在 $\Char(P)$ 内部, 关于 $\WF(u)$ 的性质能说些什么? 对于输运算子 $P$, 由于可以通过积分给出 $u$ 用 $f$ 表示的公式, 人们会期望奇性沿着向量场 $H_p \defeq \partial_{x_1} - \partial_{x_2}$ 的积分曲线传播; 而当 $f$ 光滑时, $\WF(u) \cap \Char(P)$ 确实在该向量场的流下不变. ($f$ 在 $\Char(P)$ 中的奇性可能产生或消灭 $u$ 的奇性.)
+
+作为更高级的例子, 考虑波动算子 $P = -D_{x_1}^2 + \sum_{j=2}^n D_{x_j}^2$, 其主符号 $p(x, \xi) = -\xi_1^2 + \sum_{j=2}^n \xi_j^2$ 在 $T^* \R^n \setminus o$ 的每个纤维中的光锥汇集 $\Char(P)$ 上为零. 显式解公式提示, 奇性应当沿着方向 $(\xi_1, \ldots, \xi_n)$ 满足 $|\xi_1| = |(\xi_2, \ldots, \xi_n)|$ 的直线传播. 精确的陈述如下: 当 $f$ 光滑时,
+\begin{equation}\label{eq:1.8}
+    \WF(u) \cap \Char(P) \quad \text{在相空间中向量场 } H_p \text{ 的流下不变};
+\end{equation}
+这里 $H_p \defeq -2\xi_1 \partial_{x_1} + 2 \sum_{j=2}^n \xi_j \partial_{x_j}$.
+
+Hörmander 关于奇性传播的著名定理指出: 对具有实主符号的一般算子 $P$, 当 $H_p$ 取为与 $p$ 相伴的 \textbf{Hamilton 向量场}时, 上述结论成立——这是典型微局部定理的第二个例子. 偏微分算子 $P$ 与相伴的经典力学系统 $(T^* \R^n, H_p)$ 之间的这一联系, 是本书所发展的许多微局部理论的核心.
+
+\section{主旨与核心论题}\label{sec:1.2}
+
+我们将先发展伪微分算子 (ps.d.o.) 理论, 然后再转向微局部分析本身.
+
+\subsection*{论题 I: 伪微分算子作为微分算子的推广与拟逆}
+即使没有微局部的动机, 伪微分算子在微分算子的研究中也会自然地出现. 作为一个简单的例子, 考虑 $\R^n$ 上的二阶微分算子
+\begin{equation}\label{eq:1.9}
+    P = \Delta + 1, \qquad \Delta = \sum_{j=1}^n D_{x_j}^2.
+\end{equation}
+当作用在 $L^2(\R^n)$ 或 Schwartz 函数空间 $\Schwartz(\R^n)$ 上时, $P$ 可逆, 并且其逆可以用 Fourier 变换求出: 注意到 $P u = \mathcal{F}^{-1}\bigl((|\xi|^2 + 1) \mathcal{F} u\bigr)$, 我们有
+\begin{equation}\label{eq:1.10}
+    P^{-1} f = \mathcal{F}^{-1}\bigl((|\xi|^2 + 1)^{-1} \mathcal{F} f\bigr).
+\end{equation}
+将其显式写出可知, 在式~\eqref{eq:1.3} 的记号下
+\begin{equation}\label{eq:1.11}
+    P^{-1} = \Op(a), \qquad a(x, y, \xi) = (|\xi|^2 + 1)^{-1};
+\end{equation}
+这是一个阶数为 $-2$ 的伪微分算子.
+
+在这个例子中 $P$ 是常系数算子, 而变系数算子也可以容易地处理: 若形如式~\eqref{eq:1.5} 的算子 $P$ 是椭圆型的, 即其主符号 $p(x, \xi)$ (见式~\eqref{eq:1.6}) 在 $\xi \neq 0$ 时不等于零, 那么取 $\chi \in \Smooth(\R^n)$ 在 $\xi = 0$ 附近等于 $0$、在 $|\xi| \ge 1$ 时等于 $1$, 则 $Q = \Op(q)$, $q(x, \xi) \defeq \chi(\xi) p(x, \xi)^{-1}$, 是 $P$ 的一个近似逆 (拟逆, parametrix). (这里所谓的拟逆是指: $I - Q P$ 与 $I - P Q$ 作用在分布上会获得正则性.) 注意, $\Op\bigl(\chi(\xi) p(x_0, \xi)^{-1}\bigr)$ 是由 $P$ 在 $x_0$ 处冻结系数所得算子 $\sum_{|\alpha| \le m} p_\alpha(x_0) D^\alpha$ 的近似逆. 因此, $\Op(q)$ 把 $P$ 的各个冻结系数模型的``局部'' (近似) 逆组装为单个算子.
+
+由此可见, 伪微分算子作为某些椭圆微分算子的 (近似) 逆自然产生. 知道一个算子可以被伪微分算子 (精确或近似地) 求逆, 其用处在于: 伪微分算子在一系列有用的函数空间之间定义了有界映射——除光滑函数空间与分布空间之外, 还包括基于 $L^2$ 的 Sobolev 空间 $H^s(\R^n)$, 后者将在本书中反复使用 (第~\ref{sec:4.8}~节).
+
+一个特别干净的情形是闭流形 (紧致且无边界) 上的椭圆算子 $P$: 这样的 $P$ 是 Fredholm 算子, 即具有有限维的核与余核; 而且它们的广义逆是伪微分算子 (定理~\ref{thm:5.52}). 注意, 椭圆性只是一个涉及 $P$ 最高阶部分的条件. 这把我们引向第二个论题.
+
+\subsection*{论题 II: 通过主符号认识算子 $P$}
+(伪) 微分算子代数是不可交换的. 另一方面, 算子乘积 (复合) 的主符号是主符号的乘积 (这是椭圆正则性, 即式~\eqref{eq:1.7}, 的基础). 此外, 交换子 $[P, Q]$ 的主符号是 $P$ 与 $Q$ 的主符号的 Poisson 括号的 $\frac{1}{\ii}$ 倍 (这是传播性陈述~\eqref{eq:1.8} 的基础). 本书中证明的许多结果, 只依赖于有关算子主符号的信息. 闭流形上椭圆算子的 Fredholm 性质就是一个例子: 主符号的一个整体性质决定了算子的映射性质, 具体地说, 在模去有限维障碍的意义下决定了光滑函数空间或 Sobolev 空间上解的存在性与唯一性 (第~\ref{sec:5.9}~节与第~\ref{sec:5.11}~节). 另一个例子由 de Sitter 空间上波动方程的谱族给出, 其 Fredholm 性质可由 Hamilton 向量场 $H_p$ 的流的整体性质推出 (第~\ref{ch:11}~章).
+
+当然, 偏微分方程 $P u = f$ 的可解性不仅仅依赖于 $P$ 的主符号. 例如在无边界的紧 Riemann 流形 $(M, g)$ 上, 方程 $\Delta_g u = 1$ 无解, 而方程 $(\Delta_g + 1) u = 1$ 有解 (命题~\ref{prop:5.53} 与例~\ref{eg:5.54}). 因此, 算子的 Fredholm 性质是人们纯粹基于主符号的论证所能期望推出的最强结论 (除非存在额外的小参数或大参数, 如半经典问题中那样).
+
+\subsection*{论题 III: 微局部结果的模块化特性}
+微局部结果关心的是: 在给定 $P u = f$ 时, $u$ 的波前集在相空间的子集 $S$ 中的状况. 对于本书所证明的结果, 结论只依赖于算子 $P$ 在 $S$ 附近的行为. 例如, 若 $S \cap \Char(P) = \emptyset$ (即 $P$ 在 $S$ 处是椭圆的), 则由 $\WF(f) \cap S = \emptyset$ 可推出 $\WF(u) \cap S = \emptyset$ (见式~\eqref{eq:1.7}).
+
+微局部结果的这种高度 (微) 局部化的特征, 意味着在研究 $u$ 的奇性时, 它们可以被当作``黑箱''式的构件来使用, 而且常常是一个接一个地串联起来. 这也把我们引向第四个论题.
+
+\subsection*{论题 IV: 奇性追踪}
+为粗略说明奇性追踪与 PDE 分析者的典型目标——即求解偏微分方程——之间的联系, 假设我们希望在紧流形 $M$ 上求解偏微分方程 $P u = f$, 其中比如说 $f \in L^2(M)$. 假设 $u$ 是一个先验正则性很低的分布 (比如说具有 Sobolev 正则性 $H^{-N}(M)$).
+
+假设由此信息可以推出, $u$ 事实上属于某个 $H^s(M)$, 其中 $s > -N$, 并且可以证明估计
+\begin{equation}\label{eq:1.12}
+    \|u\|_{H^s} \le C \left( \|f\|_{L^2} + \|u\|_{H^{-N}} \right)
+\end{equation}
+成立. (这是``$u$ 没有 $H^s$-奇性''这一陈述的定量版本; 微局部分析学者可能通过证明 $u$ 的 $H^s$ 波前集为空来证明它.)
+
+于是由这一估计, 已经可以推出算子 $P$ 在 $H^s$ 上的核具有有限维数, 以及在满足 $P u \in L^2$ 的 $u \in H^s$ 所成空间上具有闭值域性质 (见命题~\ref{prop:5.74}). 若能对 $P$ 的伴随算子 $P^*$ 证明类似的估计, 则对 $P^*$ 也能得到相应的结论; 再通过对偶/Hahn--Banach 论证, 便得到 $P u = f$ 的可解性. 简言之: 知道了 $P u = f$ 与 $P^* u^* = f^*$ 的解的奇性 (及其强度), 就意味着能够求解该偏微分方程.
+
+\subsection*{论题 V: 半经典问题}
+我们将对大多数概念与结果描述其半经典对应版本. 半经典算子是依赖于 $h \in (0, 1)$ 的算子族, 在微分算子的情形下形如
+\[
+    \sum_{|\alpha| \le m} p_\alpha(h, x) (h D)^\alpha;
+\]
+人们关心的是它们在 $h \to 0$ 时的性质, 即当 $h_0 > 0$ 充分小时对 $h < h_0$ 的性质. 这类算子的主符号所包含的关于算子族 $(P_h)_{h \in (0, 1)}$ 的信息, 多于仅仅收集所有 $P_h$ 的主符号所得到的信息; 其性质可以翻译为关于底层算子族的相当强的陈述. 例如, 若半经典算子族 $(P_h)_{h \in (0, 1)}$ 是半经典椭圆的, 则当 $h$ 小时 $P_h$ 可逆 (而不仅仅是 Fredholm 的).
+
+\subsection*{论题 VI: 波动方程}
+微局部分析的一个主要目的是研究非椭圆型偏微分方程. 出于作者本人的偏好, \textbf{波动方程} (wave equations) 将是本书中有趣的非椭圆例子与微局部结果应用的主要来源: 它们可用来阐明奇性传播结果, 并且是第~\ref{ch:11}~章关于 de Sitter 空间上波的渐近性这一重要应用的核心.
+
+\section{全书概览}\label{sec:1.3}
+
+线性偏微分方程的分析最好在分布理论的框架中完成. 第~\ref{ch:02}~章快速概述 Schwartz 函数, 缓增分布, Fourier 变换以及 Schwartz 核定理.
+
+本书的其余部分大致可分为三部分. 在第一部分 (第~\ref{ch:03}--\ref{ch:05}~章) 中, 我们发展 $\R^n$ 上与流形上伪微分算子的基本性质; 这一部分对全书其余内容是基础性的. 大致说来, 这一部分为读者提供了处理 Laplace 方程等椭圆型 PDE 时特别有效的技术.
+\begin{itemize}[leftmargin=2em]
+    \item 第~\ref{ch:03}~章. 我们引入符号类, 即我们之后能够用公式~\eqref{eq:1.3} 加以``量化''的那一类函数.
+    \item 第~\ref{ch:04}~章. 欧氏空间 $\R^n$ 上的伪微分算子按式~\eqref{eq:1.3} 中的``量化''来定义. 我们证明伪微分算子可以复合, 并在 Sobolev 空间之间有界作用. 我们定义伪微分算子的主符号这一关键概念. 此外, 我们证明伪微分算子空间包含椭圆算子的拟逆 (近似逆), 并以此证明关于椭圆型 PDE 解的正则性的结果.
+    \item 第~\ref{ch:05}~章. 在证明伪微分算子在坐标变换下有良好的变换性质之后, 我们在任意光滑流形上定义伪微分算子. $\R^n$ 上的所有结果在流形上都有自然的对应版本. 伪微分算子理论的一个亮点是如下证明的极其简洁: 闭流形 (紧致无边界) 上的椭圆线性偏微分算子 $P$ 是 Fredholm 算子, 即 $P u = f$ 的解在有限维障碍之外存在且唯一.
+\end{itemize}
+
+在本书的第二部分 (第~\ref{ch:06}--\ref{ch:10}~章) 中, 我们转向微局部分析本身. 这一部分提供的工具在处理波动方程等双曲型 PDE 时特别有效.
+\begin{itemize}[leftmargin=2em]
+    \item 第~\ref{ch:06}~章. 我们定义分布波前集这一核心概念, 并证明椭圆正则性的一个微局部版本. 作为波前集的另一个应用, 我们给出分布可以相乘、或可以限制到子流形上的相当精确的判别准则.
+    \item 第~\ref{ch:07}~章. 双曲型演化方程, 如输运方程或波动方程, 可以借助伪微分算子的机制相当容易地求解. 我们进一步证明初始数据中的奇性沿着与 PDE 相伴的主符号的 Hamilton 流传播. 这是经典力学与 PDE 解的奇性之间对应的第一个深刻实例.
+    \item 第~\ref{ch:08}~章. 我们证明关于实主型方程 (如波动方程) 解的奇性传播这一著名结果. 我们使用重要的正对易子方法 (positive commutator method) 来完成证明, 现代微局部分析中的许多证明都以它为基础.
+    \item 第~\ref{ch:09}~章. 为了给读者一个可以把握的具体框架, 我们说明如何用微局部方法求解时空上的波动型方程. 我们在 Lorentz 几何语言下发展经典能量方法, 其程度足以证明一个基本的能量估计. 在此之后, 微局部分析接手, 给出完整的存在性, 唯一性与正则性理论.
+    \item 第~\ref{ch:10}~章. 第~\ref{ch:08}~章所证明的奇性传播结果在\textbf{径向集} (radial sets) 处是空洞的, 因为在那里 Hamilton 向量场是相空间中纤维伸缩生成元的倍数. 利用正对易子方法, 我们得到源型与汇型径向集附近微局部正则性传播的结果. 这类径向集在散射理论的应用中经常出现.
+\end{itemize}
+
+前两部分中的每一章主要讨论``标准''的伪微分算子与微局部分析, 这里的``标准''是指除动量变量 $\xi$ 之外不存在任何大 (或小) 参数. 不过, 修改定义与证明以纳入半经典参数 $h \to 0$ 并不困难. 相应地, 除第~\ref{ch:07}~章外, 每章末尾都详细描述了相关的修改, 并在必要处补充了证明. 我们强调, 半经典伪微分算子与半经典微局部分析只在本书最后一章中起作用——但作用是重要的——在那里它们被用来分析散射并证明高能下的预解式估计. 低能读者因此可以安全地跳过所有半经典小节.
+
+在本书 (简短的) 第三部分 (第~\ref{ch:11}~章) 中, 我们给出一个关于波渐近性的应用, 它用到了迄今发展的 (几乎) 全部材料.
+\begin{itemize}[leftmargin=2em]
+    \item 第~\ref{ch:11}~章. 我们研究 de Sitter 空间——广义相对论中一个令人感兴趣的时空——上线性波动型方程解的长时间行为. 在时间上作 Fourier 变换后, 问题归结为研究带边紧流形上一个依赖于谱参数的算子族. 我们将结合第~\ref{ch:06}, \ref{ch:08}, \ref{ch:10}~章的微局部结果以及第~\ref{ch:09}~章的波动方程估计来研究这个算子族; 我们证明它是具有亚纯逆的一族 (非椭圆) Fredholm 算子. 逆的极点称为\textbf{谐振} (resonances), 它们决定波动方程解的迟时行为. 我们在本书中发展半经典方法, 其主要目的正是在高能区域 (即谱参数趋于实无穷) 分析这个谱族.
+\end{itemize}
+

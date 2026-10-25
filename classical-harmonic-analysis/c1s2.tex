@@ -1,0 +1,694 @@
+% ============ 第1章 §1.2 Fourier变换(原书 pp.9-29 = PDF pp.21-41) ============
+\section{Fourier 变换}\label{sec:1.2}
+\index{Fourier 变换}
+\index{Fourier 变换!逆 Fourier 变换}
+\index{Fourier 变换!(L2(R) 意义下的)}
+\index{逆 Fourier 变换!(L2(R) 意义下的)}
+\index{Riemann--Lebesgue 定理}
+\index{Hausdorff--Young 不等式}
+\index{Parseval 等式}
+\index{Plancherel 等式}
+\index{卷积}
+\index{Riesz--Thorin 定理}
+\index{Young 不等式}
+\index{插值定理!M. Riesz--Thorin 的}
+
+
+\subsection{\texorpdfstring{$L^1(\mathbb{R})$ 函数与速降函数的 Fourier 变换}{L1(R) 函数与速降函数的 Fourier 变换}}\label{sec:1.2.1}
+
+\begin{definition}\label{def:1.2.1}
+对 $f(x) \in L^{1}(\mathbb{R})$,
+\begin{equation*}
+\hat{f}(\xi) = \mathcal{F}f(\xi) = \int_{-\infty}^{\infty} f(x)e^{-ix\xi}\dd x
+\end{equation*}
+称为 $f$ 的 Fourier 变换.此外,
+\begin{equation*}
+\check{f}(x) = \mathcal{F}^{-1}f(x) = \frac{1}{2\pi}\int_{-\infty}^{\infty} f(\xi)e^{ix\xi}\dd \xi
+\end{equation*}
+称为 $f$ 的逆 Fourier 变换.由定义
+\begin{equation*}
+\mathcal{F}^{-1}f(x) = \frac{1}{2\pi}\mathcal{F}\bigl(f(-\,\cdot)\bigr)(x) = \frac{1}{2\pi}\mathcal{F}f(-x).
+\end{equation*}
+\end{definition}
+
+下面举出以后经常使用的 Fourier 变换的具体例子.
+
+\begin{example}\label{exa:1.2.2}
+\begin{equation}\tag{1.2.1}
+\mathcal{F}\bigl(e^{-\frac{x^{2}}{2}}\bigr)(\xi) = \sqrt{2\pi}\,e^{-\frac{\xi^{2}}{2}}.
+\label{eq:1.2.1}\end{equation}
+\begin{equation}\tag{1.2.2}
+\mathcal{F}^{-1}\mathcal{F}\bigl(e^{-\frac{x^{2}}{2}}\bigr) = e^{-\frac{x^{2}}{2}}.
+\label{eq:1.2.2}\end{equation}
+\end{example}
+
+\begin{proof}
+\begin{align*}
+\mathcal{F}\bigl(e^{-\frac{x^{2}}{2}}\bigr)(\xi) & = \int_{-\infty}^{\infty} e^{-\frac{x^{2}}{2}}e^{-ix\xi}\dd x = \int_{-\infty}^{\infty} e^{-\frac{1}{2}(x^{2} + 2ix\xi)}\dd x \\
+& = \int_{-\infty}^{\infty} e^{-\frac{1}{2}(x + i\xi)^{2} - \frac{\xi^{2}}{2}}\dd x = e^{-\frac{\xi^{2}}{2}}\int_{-\infty}^{\infty} e^{-\frac{1}{2}(x + i\xi)^{2}}\dd x \\
+& = e^{-\frac{\xi^{2}}{2}}\int_{-\infty}^{\infty} e^{-\frac{x^{2}}{2}}\dd x = \sqrt{2\pi}\,e^{-\frac{\xi^{2}}{2}}.
+\end{align*}
+第 5 个等式是简单的复函数论习题.
+
+等式~\eqref{eq:1.2.2} 使用等式~\eqref{eq:1.2.1} 与定义~\ref{def:1.2.1} 中逆 Fourier 变换的定义,得到
+\begin{equation*}
+\begin{aligned}
+\mathcal{F}^{-1}\mathcal{F}\bigl(e^{-\frac{x^{2}}{2}}\bigr) &= \mathcal{F}^{-1}\bigl(\sqrt{2\pi}\,e^{-\frac{\xi^{2}}{2}}\bigr)(x) = \sqrt{2\pi}\,\mathcal{F}^{-1}\bigl(e^{-\frac{\xi^{2}}{2}}\bigr)(x) \\
+&= \sqrt{2\pi}\cdot\frac{1}{2\pi}\mathcal{F}\bigl(e^{-\frac{(-\xi)^{2}}{2}}\bigr)(x) = e^{-\frac{x^{2}}{2}}.
+\end{aligned}
+\end{equation*}
+\end{proof}
+
+作为 $L^{1}$ 函数 Fourier 变换的基本定理,从下面的定理开始.
+
+\begin{theorem}\label{thm:1.2.3}
+若 $f \in L^{1}(\mathbb{R})$,则
+\begin{enumerate}[(i)]
+\item $|\mathcal{F}f(\xi)| \leq \int_{-\infty}^{\infty}|f(x)|\dd x$($\xi \in \mathbb{R}$),且 $\mathcal{F}f(\xi)$ 在 $\mathbb{R}$ 上一致连续.
+\item $\lim_{|\xi| \to \infty}\mathcal{F}f(\xi) = 0$(Riemann--Lebesgue 定理).
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) 第一个估计是显然的,我们来证明一致连续性.
+\begin{align*}
+|\hat{f}(\xi + h) - \hat{f}(\xi)| & = \left|\int_{-\infty}^{\infty}\bigl(e^{-ix(\xi+h)} - e^{-ix\xi}\bigr)f(x)\dd x\right| \\
+& \leq \int_{-\infty}^{\infty}\left|e^{-ix(\xi+h)} - e^{-ix\xi}\right||f(x)|\dd x \\
+& = \int_{-\infty}^{\infty}\left|e^{-ixh} - 1\right||f(x)|\dd x.
+\end{align*}
+于是令 $h \to 0$.由于 $|(e^{ixh} - 1)f(x)| \leq 2|f(x)| \in L^{1}(\mathbb{R})$,故可用 Lebesgue 收敛定理,且与 $\xi$ 无关地
+\begin{equation*}
+\lim_{h \to 0}|\hat{f}(\xi + h) - \hat{f}(\xi)| = 0.
+\end{equation*}
+因此,$\mathcal{F}f(\xi)$ 在 $\mathbb{R}$ 上一致连续.
+
+(ii) 任意固定正数 $\varepsilon$.由于 $C_{c}^{\infty}(\mathbb{R})$ 在 $L^{1}(\mathbb{R})$ 中稠密,存在满足
+\begin{equation*}
+\| f - f_{0} \|_{L^{1}} < \varepsilon
+\end{equation*}
+的 $f_{0} \in C_{c}^{1}(\mathbb{R})$.
+\begin{align*}
+\mathcal{F}f(\xi) & = \int_{-\infty}^{\infty}e^{-ix\xi}\bigl(f(x) - f_{0}(x)\bigr)\dd x + \int_{-\infty}^{\infty}e^{-ix\xi}f_{0}(x)\dd x \\
+& = \int_{-\infty}^{\infty}e^{-ix\xi}\bigl(f(x) - f_{0}(x)\bigr)\dd x + \frac{1}{i\xi}\int_{-\infty}^{\infty}e^{-ix\xi}f_{0}'(x)\dd x.
+\end{align*}
+因此,若 $|\xi| > \frac{1}{\varepsilon}\int_{-\infty}^{\infty}|f_{0}'(x)|\dd x$,则
+\begin{align*}
+|\mathcal{F}f(\xi)| &\leq \int_{-\infty}^{\infty}|f(x) - f_{0}(x)|\dd x + \frac{1}{|\xi|}\int_{-\infty}^{\infty}|f_{0}'(x)|\dd x \\
+&< \varepsilon + \varepsilon = 2\varepsilon.
+\end{align*}
+因此
+\begin{equation*}
+\lim_{|\xi| \to \infty}\mathcal{F}f(\xi) = 0.
+\end{equation*}
+\end{proof}
+
+\begin{lemma}\label{lem:1.2.4}
+若 $f, g \in L^{1}(\mathbb{R})$,则
+\begin{equation*}
+\int f(x)\mathcal{F}g(x)\dd x = \int \mathcal{F}f(x)g(x)\dd x.
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+由于 $e^{-ix\xi}f(x)g(\xi) \in L^{1}(\mathbb{R}\times\mathbb{R})$,由 Fubini 定理
+\begin{align*}
+\int f(x)\mathcal{F}g(x)\dd x & = \int f(x)\left(\int e^{-ix\xi}g(\xi)\dd \xi\right)\dd x \\
+& = \int g(\xi)\left(\int e^{-ix\xi}f(x)\dd x\right)\dd \xi = \int \mathcal{F}f(x)g(x)\dd x.
+\end{align*}
+\end{proof}
+
+\begin{theorem}\label{thm:1.2.5}
+若 $f \in L^{1}(\mathbb{R})$ 且 $\mathcal{F}f \in L^{1}(\mathbb{R})$,则
+\begin{equation*}
+f(x) = \mathcal{F}^{-1}\mathcal{F}f(x) \quad (\text{a.e. } x \in \mathbb{R}),
+\end{equation*}
+并且,在测度为 $0$ 的集合上修正 $f(x)$ 后,
+\begin{equation*}
+f(x) \in C_{0}(\mathbb{R}) \cap L^{\infty}(\mathbb{R}).
+\end{equation*}
+\end{theorem}
+
+\begin{proof}
+设 $g \in L^{1}(\mathbb{R})$ 且 $\mathcal{F}g \in L^{1}(\mathbb{R})$.于是,由于 $f \in L^{1}(\mathbb{R})$,$\mathcal{F}g \in L^{1}(\mathbb{R})$,故 $e^{-iy\xi}f(y)e^{ix\xi}\mathcal{F}g(\xi) \in L^{1}(\mathbb{R}_{y}\times\mathbb{R}_{\xi})$.因此,使用 Fubini 定理
+\begin{align}
+\int e^{ix\xi}\mathcal{F}f(\xi)\mathcal{F}g(\xi)\dd\xi
+&= \int e^{ix\xi}\mathcal{F}g(\xi)\left(\int e^{-iy\xi}f(y)\dd y\right)\dd\xi = \int\left(\int e^{i(x-y)\xi}\mathcal{F}g(\xi)\dd\xi\right)f(y)\dd y \tag{1.2.3}\label{eq:1.2.3}\\
+&= 2\pi\int\mathcal{F}^{-1}(\mathcal{F}g)(x-y)f(y)\dd y = 2\pi\int\mathcal{F}^{-1}(\mathcal{F}g)(y)f(x-y)\dd y. \tag{1.2.5}\label{eq:1.2.5}
+\end{align}
+
+再者,由于 $g \in L^{1}(\mathbb{R})$,$\mathcal{F}f \in L^{1}(\mathbb{R})$,交换 $f$ 与 $g$ 的角色,得到下述等式:
+\begin{equation}\tag{1.2.6}
+\int\mathcal{F}^{-1}(\mathcal{F}g)(x-y)f(y)\dd y = \int\mathcal{F}^{-1}(\mathcal{F}f)(y)g(x-y)\dd y.
+\label{eq:1.2.6}\end{equation}
+
+这里,令 $g(x) = e^{-\frac{1}{2}\left(\frac{x}{t}\right)^{2}}$($t > 0$).由于 $g \in L^{1}(\mathbb{R})$,$\mathcal{F}g \in L^{1}(\mathbb{R})$,等式~\eqref{eq:1.2.6} 成立.进一步,由例~\ref{exa:1.2.2} 与变量替换得
+\begin{equation*}
+\mathcal{F}g(\xi) = t\mathcal{F}\bigl(e^{-x^{2}/2}\bigr)(t\xi) = \sqrt{2\pi}\,t\,e^{-\frac{(t\xi)^{2}}{2}}.
+\end{equation*}
+再次使用变量替换与例~\ref{exa:1.2.2},
+\begin{align*}
+\mathcal{F}^{-1}(\mathcal{F}g)(x) & = \frac{1}{2\pi}\mathcal{F}(\mathcal{F}g)(-x) = \frac{t}{\sqrt{2\pi}}\mathcal{F}\bigl(e^{-\frac{(t\xi)^{2}}{2}}\bigr)(-x) \\
+& = \frac{t}{\sqrt{2\pi}}\cdot\frac{1}{t}\mathcal{F}\bigl(e^{-\frac{\xi^{2}}{2}}\bigr)\left(-\frac{x}{t}\right) = \frac{1}{\sqrt{2\pi}}\cdot\sqrt{2\pi}\,e^{-\frac{1}{2}\left(\frac{x}{t}\right)^{2}} = e^{-\frac{1}{2}\left(\frac{x}{t}\right)^{2}}.
+\end{align*}
+因此,由式~\eqref{eq:1.2.6}
+\begin{equation}\tag{1.2.7}
+\frac{1}{\sqrt{2\pi}\,t}\int e^{-\frac{1}{2}\left(\frac{x-y}{t}\right)^{2}}f(y)\dd y = \frac{1}{\sqrt{2\pi}\,t}\int e^{-\frac{1}{2}\left(\frac{x-y}{t}\right)^{2}}\mathcal{F}^{-1}(\mathcal{F}f)(y)\dd y.
+\label{eq:1.2.7}\end{equation}
+这里,令 $\varphi(x) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^{2}}{2}}$,$\varphi_{t}(x) = \frac{1}{t}\varphi\left(\frac{x}{t}\right)$,则
+\begin{equation*}
+\int|\varphi(x)|\dd x = \int\varphi(x)\dd x = \frac{1}{\sqrt{2\pi}}\int e^{-\frac{x^{2}}{2}}\dd x = 1
+\end{equation*}
+所以,如例~\ref{exa:1.1.10} 所述,$\varphi(x)$ 满足定理~\ref{thm:1.1.9} 的假设.于是应用定理~\ref{thm:1.1.9},在式~\eqref{eq:1.2.7} 中令 $t \to 0$,得
+\begin{equation*}
+f(x) = \mathcal{F}^{-1}(\mathcal{F}f)(x) \quad (\text{a.e. } x \in \mathbb{R}).
+\end{equation*}
+由于 $\mathcal{F}f \in L^{1}(\mathbb{R})$,由定理~\ref{thm:1.2.3},$\mathcal{F}^{-1}\mathcal{F}f \in C_{0}(\mathbb{R}) \cap L^{\infty}(\mathbb{R})$.
+\end{proof}
+
+\begin{lemma}\label{lem:1.2.6}
+若 $f \in L^{1}(\mathbb{R})$ 且 $\mathcal{F}f = 0$,则 $f = 0$.
+\end{lemma}
+
+\begin{proof}
+由于 $f \in L^{1}(\mathbb{R})$ 且 $\mathcal{F}f = 0 \in L^{1}(\mathbb{R})$,由定理~\ref{thm:1.2.5},
+\begin{equation*}
+f(x) = \mathcal{F}^{-1}(\mathcal{F}f)(x) = 0 \quad (\text{a.e. } x \in \mathbb{R}).
+\end{equation*}
+\end{proof}
+
+为了研究速降函数 Fourier 变换的基本性质,先从下面这个简单的事实开始.
+
+\begin{lemma}\label{lem:1.2.7}
+设 $k \in \mathbb{N}$.若 $f(x) \in \mathcal{S}(\mathbb{R})$,$g(x) \in C^{k}(\mathbb{R})$,且 $|g^{(k-1)}(x)| \leq C_{k-1}(1 + |x|)^{m_{k-1}}$($C_{k-1}$ 为正常数,$m_{k-1} \in \mathbb{N}_{0}$),则对 $0 \leq \ell \leq k$,
+\begin{equation}\tag{1.2.8}
+\int_{-\infty}^{\infty} f^{(\ell)}(x)g(x)\dd x = (-1)^{\ell}\int_{-\infty}^{\infty} f(x)g^{(\ell)}(x)\dd x.
+\label{eq:1.2.8}\end{equation}
+\end{lemma}
+
+\begin{proof}
+由 $\mathcal{S}(\mathbb{R})$ 的定义与 $|g^{(k-1)}(x)| \leq C_{k-1}(1 + |x|)^{m_{k-1}}$,可得 $|g^{(\ell)}(x)| \leq C_{\ell}(1 + |x|)^{m_{\ell}}$($0 \leq \ell \leq k - 1$),从而注意到 $\lim_{|x| \to \infty}|f^{(m)}(x)g^{(\ell-m)}(x)| = 0$($0 \leq m < \ell$),分部积分即可.
+\end{proof}
+
+\begin{theorem}\label{thm:1.2.8}
+对 $f \in \mathcal{S}(\mathbb{R})$ 成立下列性质:
+\begin{enumerate}[(i)]
+\item $|\mathcal{F}f(\xi)| \leq \| f \|_{L^{1}}$ $(\xi \in \mathbb{R})$,
+\item $\mathcal{F}(f^{(k)})(\xi) = (i\xi)^{k}\mathcal{F}f(\xi)$ $(k \in \mathbb{N}_{0}, \xi \in \mathbb{R})$,
+\item $(\mathcal{F}f)^{(k)}(\xi) = \mathcal{F}\bigl((-ix)^{k}f(x)\bigr)(\xi)$ $(k \in \mathbb{N}_{0}, \xi \in \mathbb{R})$,
+\item $\mathcal{F}\bigl(f(x)e^{ixh}\bigr)(\xi) = \mathcal{F}f(\xi - h)$ $(h \in \mathbb{R}, \xi \in \mathbb{R})$,
+\item $\mathcal{F}\bigl(f(x - h)\bigr)(\xi) = e^{-ih\xi}\mathcal{F}f(\xi)$ $(h \in \mathbb{R}, \xi \in \mathbb{R})$,
+\item $\mathcal{F}(f(tx))(\xi) = \frac{1}{|t|}\mathcal{F}f\left(\frac{\xi}{t}\right)$ $(t \in \mathbb{R}\setminus\{0\}, \xi \in \mathbb{R})$,
+\item $\mathcal{F}f \in \mathcal{S}(\mathbb{R})$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i)
+\begin{equation*}
+|\mathcal{F}f(\xi)| = \left|\int_{-\infty}^{\infty} f(x)e^{-ix\xi}\dd x\right| \leq \int_{-\infty}^{\infty}|f(x)|\dd x = \| f \|_{L^{1}}.
+\end{equation*}
+
+(ii) 使用引理~\ref{lem:1.2.7},
+\begin{align*}
+\mathcal{F}(f')(\xi) & = \int_{-\infty}^{\infty} e^{-ix\xi}f'(x)\dd x = -\int_{-\infty}^{\infty}\left(\frac{\dd}{\dd x}e^{-ix\xi}\right)f(x)\dd x \\
+& = i\xi\int_{-\infty}^{\infty} e^{-ix\xi}f(x)\dd x = i\xi\mathcal{F}f(\xi).
+\end{align*}
+以下对一般的 $k$ 用归纳法即可证明.
+
+(iii)
+\begin{equation*}
+\left|e^{-ix\xi}f(x)\right| = |f(x)| \in L^{1}(\mathbb{R}),
+\end{equation*}
+\begin{equation*}
+\left|\frac{\partial}{\partial \xi}e^{-ix\xi}f(x)\right| = |-ix\,e^{-ix\xi}f(x)| = |xf(x)| \leq \frac{C_{3,0}|x|}{(1 + |x|)^{3}} \in L^{1}(\mathbb{R})
+\end{equation*}
+所以可用积分号下的微分定理~\ref{thm:1.1.4},
+\begin{align*}
+(\mathcal{F}f)'(\xi) & = \frac{\dd}{\dd \xi}\left(\int_{-\infty}^{\infty} e^{-ix\xi}f(x)\dd x\right) = \int_{-\infty}^{\infty}\frac{\partial}{\partial \xi}\bigl(e^{-ix\xi}f(x)\bigr)\dd x \\
+& = \int_{-\infty}^{\infty} -ix\,e^{-ix\xi}f(x)\dd x = \mathcal{F}\bigl(-ixf(x)\bigr)(\xi).
+\end{align*}
+以下对一般的 $k$ 用归纳法即可证明.
+
+(iv)
+\begin{align*}
+\mathcal{F}\bigl(f(x)e^{ixh}\bigr)(\xi) & = \int_{-\infty}^{\infty} e^{-ix\xi}f(x)e^{ixh}\dd x \\
+& = \int_{-\infty}^{\infty} e^{-ix(\xi - h)}f(x)\dd x = \mathcal{F}f(\xi - h).
+\end{align*}
+
+(v) 使用变量替换 $y = x - h$,
+\begin{align*}
+\mathcal{F}\bigl(f(x - h)\bigr)(\xi) & = \int_{-\infty}^{\infty} e^{-ix\xi}f(x - h)\dd x = \int_{-\infty}^{\infty} e^{-i(y+h)\xi}f(y)\dd y \\
+& = e^{-ih\xi}\int_{-\infty}^{\infty} e^{-ix\xi}f(x)\dd x = e^{-ih\xi}\mathcal{F}f(\xi).
+\end{align*}
+
+(vi) 与 (v) 相同,使用变量替换 $y = tx$,
+\begin{align*}
+\mathcal{F}(f(tx))(\xi) & = \int_{-\infty}^{\infty} e^{-ix\xi}f(tx)\dd x = \int_{-\infty}^{\infty} e^{-i\frac{y}{t}\xi}f(y)\frac{\dd y}{|t|} \\
+& = \frac{1}{|t|}\int_{-\infty}^{\infty} e^{-iy\frac{\xi}{t}}f(y)\dd y = \frac{1}{|t|}\mathcal{F}f\left(\frac{\xi}{t}\right).
+\end{align*}
+
+(vii) 由 (iii) 可知 $\mathcal{F}f \in C^{\infty}(\mathbb{R})$.又,对任意 $k, \ell \in \mathbb{N}_{0}$,由 (ii),(iii),
+\begin{equation*}
+(i\xi)^{k}(\mathcal{F}f)^{(\ell)}(\xi) = (i\xi)^{k}\mathcal{F}\bigl((-ix)^{\ell}f(x)\bigr)(\xi) = \mathcal{F}\bigl(\bigl[(-ix)^{\ell}f(x)\bigr]^{(k)}\bigr)(\xi).
+\end{equation*}
+因此,使用 (i) 与 Leibniz 公式,并注意 $\mathcal{S}(\mathbb{R})$ 的定义,则
+\begin{align*}
+|(i\xi)^{k}(\mathcal{F}f)^{(\ell)}(\xi)|&\leq \left\| \bigl[(-ix)^{\ell}f(x)\bigr]^{(k)} \right\|_{L^{1}} = \left\| \sum_{j=0}^{k}\binom{k}{j}\bigl[(-ix)^{\ell}\bigr]^{(j)}f^{(k-j)} \right\|_{L^{1}}  \\
+&\leq C\left\| (1 + |x|)^{\ell}\sum_{j=0}^{k}|f^{(j)}(x)| \right\|_{L^{1}} \leq C\left\| (1 + |x|)^{\ell}\sum_{j=0}^{k}\frac{C_{\ell+2,j}}{(1 + |x|)^{\ell+2}} \right\|_{L^{1}} \\
+&\leq C\sum_{j=0}^{k}C_{\ell+2,j}\left\| \frac{1}{(1 + |x|)^{2}} \right\|_{L^{1}} < \infty
+\end{align*}
+由此证明了 $\mathcal{F}f \in \mathcal{S}(\mathbb{R})$.
+\end{proof}
+
+\begin{theorem}\label{thm:1.2.9}
+(i) $\mathcal{F}^{-1}\mathcal{F}f = f$,$\mathcal{F}\mathcal{F}^{-1}f = f$ $(f \in \mathcal{S}(\mathbb{R}))$.
+
+(ii) $\int_{-\infty}^{\infty} f(x)\overline{g(x)}\dd x = \frac{1}{2\pi}\int_{-\infty}^{\infty}\mathcal{F}f(\xi)\overline{\mathcal{F}g(\xi)}\dd \xi$ $(f, g \in \mathcal{S}(\mathbb{R}))$(Parseval 等式).
+
+(iii) $\int_{-\infty}^{\infty}|f(x)|^{2}\dd x = \frac{1}{2\pi}\int_{-\infty}^{\infty}|\mathcal{F}f(\xi)|^{2}\dd \xi$ $(f \in \mathcal{S}(\mathbb{R}))$(Plancherel 等式).
+\end{theorem}
+
+\begin{proof}
+(i) 由于 $f \in \mathcal{S}(\mathbb{R})$,由定理~\ref{thm:1.2.8}(vii) 有 $\mathcal{F}f \in \mathcal{S}(\mathbb{R})$;又因 $\mathcal{S}(\mathbb{R}) \subset L^{1}(\mathbb{R})$,由定理~\ref{thm:1.2.5},
+\begin{equation*}
+f(x) = \mathcal{F}^{-1}(\mathcal{F}f)(x) \quad (\text{a.e. } x \in \mathbb{R}).
+\end{equation*}
+但是,$f$ 连续,且 $\mathcal{F}f \in \mathcal{S}(\mathbb{R}) \subset L^{1}(\mathbb{R})$,故由定理~\ref{thm:1.2.3},$\mathcal{F}^{-1}(\mathcal{F}f) \in C(\mathbb{R})$,因此
+\begin{equation*}
+f(x) = \mathcal{F}^{-1}(\mathcal{F}f)(x) \quad (x \in \mathbb{R}).
+\end{equation*}
+此外,
+\begin{align*}
+\mathcal{F}(\mathcal{F}^{-1}f)(x) & = \mathcal{F}\left(\frac{1}{2\pi}\mathcal{F}f(-\xi)\right)(x) = \frac{1}{2\pi}\mathcal{F}\bigl(\mathcal{F}f(\xi)\bigr)(-x) \\
+& = \mathcal{F}^{-1}(\mathcal{F}f)(x) = f(x).
+\end{align*}
+
+(ii) 由于 $f, g \in \mathcal{S}(\mathbb{R})$,它们满足定理~\ref{thm:1.2.5} 证明中关于 $f$,$g$ 的条件,故在式~\eqref{eq:1.2.5} 中令 $x = 0$,并利用 $\mathcal{F}^{-1}(\mathcal{F}g) = g$,得
+\begin{equation*}
+\int\mathcal{F}f(\xi)\mathcal{F}g(\xi)\dd \xi = 2\pi\int f(y)\mathcal{F}^{-1}(\mathcal{F}g)(-y)\dd y = 2\pi\int f(y)g(-y)\dd y.
+\end{equation*}
+因此
+\begin{equation*}
+\int f(y)\overline{g(y)}\dd y = \int f(y)\overline{g(-(-y))}\dd y = \frac{1}{2\pi}\int\mathcal{F}f(\xi)\mathcal{F}\bigl(\overline{g(-x)}\bigr)(\xi)\dd \xi.
+\end{equation*}
+这里,由 Fourier 变换的定义与变量替换 $y = -x$,
+\begin{align*}
+\mathcal{F}\bigl(\overline{g(-x)}\bigr)(\xi) &= \int e^{-ix\xi}\overline{g(-x)}\dd x = \int e^{iy\xi}\overline{g(y)}\dd y = \overline{\int e^{-iy\xi}g(y)\dd y} \\
+&= \overline{\mathcal{F}g(\xi)}.
+\end{align*}
+因此
+\begin{equation*}
+\int f(y)\overline{g(y)}\dd y = \frac{1}{2\pi}\int\mathcal{F}f(\xi)\overline{\mathcal{F}g(\xi)}\dd \xi
+\end{equation*}
+成立.
+
+(iii) 在 (ii) 中令 $g = f$ 即可.
+\end{proof}
+
+\begin{definition}\label{def:1.2.10}
+对 $f, g \in L^{1}(\mathbb{R})$,
+\begin{equation*}
+f * g(x) := \int f(y)g(x - y)\dd y = \int f(x - y)g(y)\dd y
+\end{equation*}
+称为 $f$ 与 $g$ 的卷积(convolution).
+\end{definition}
+
+\begin{lemma}\label{lem:1.2.11}
+若 $f, g \in L^{1}(\mathbb{R})$,则
+\begin{equation*}
+\mathcal{F}(f * g)(\xi) = \mathcal{F}f(\xi)\mathcal{F}g(\xi).
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+设 $f, g \in L^{1}(\mathbb{R})$.由于
+\begin{equation*}
+\iint |e^{-ix\xi}f(x - y)g(y)|\dd x\dd y = \int\left(\int |f(x - y)|\dd x\right)|g(y)|\dd y = \int |f(x)|\dd x\int |g(y)|\dd y < \infty,
+\end{equation*}
+使用 Fubini 定理后,作变量替换 $z = x - y$,得
+\begin{align*}
+\mathcal{F}(f * g)(\xi) & = \int e^{-ix\xi}\left(\int f(x - y)g(y)\dd y\right)\dd x \\
+& = \int\left(\int f(x - y)e^{-ix\xi}\dd x\right)g(y)\dd y \\
+& = \int\left(\int f(x - y)e^{-i(x-y)\xi}\dd x\right)e^{-iy\xi}g(y)\dd y
+\end{align*}
+\begin{align*}
+&= \int\left(\int f(z)e^{-iz\xi}\dd z\right)e^{-iy\xi}g(y)\dd y \\
+&= \int\mathcal{F}f(\xi)e^{-iy\xi}g(y)\dd y = \mathcal{F}f(\xi)\mathcal{F}g(\xi).
+\end{align*}
+\end{proof}
+
+\begin{theorem}\label{thm:1.2.12}
+对 $f, g \in \mathcal{S}(\mathbb{R})$,
+\begin{enumerate}[(i)]
+\item $\mathcal{F}(f * g)(\xi) = (\mathcal{F}f)(\xi)(\mathcal{F}g)(\xi)$,
+\begin{equation*}
+\mathcal{F}^{-1}(f * g)(x) = 2\pi(\mathcal{F}^{-1}f)(x)(\mathcal{F}^{-1}g)(x);
+\end{equation*}
+\item $\mathcal{F}(fg)(\xi) = \frac{1}{2\pi}\mathcal{F}f * \mathcal{F}g(\xi)$,$\mathcal{F}^{-1}(fg)(x) = \mathcal{F}^{-1}f * \mathcal{F}^{-1}g(x)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+设 $f, g \in \mathcal{S}(\mathbb{R})$.
+
+(i) 由于 $f, g \in L^{1}(\mathbb{R})$,由引理~\ref{lem:1.2.11} 得第一个等式.
+
+再者,因 $\mathcal{F}^{-1}f(x) = \frac{1}{2\pi}\mathcal{F}f(-x)$,故
+\begin{align*}
+\mathcal{F}^{-1}(f * g)(x) & = \frac{1}{2\pi}\mathcal{F}(f * g)(-x) \\
+& = \frac{1}{2\pi}\mathcal{F}f(-x)\mathcal{F}g(-x) = 2\pi(\mathcal{F}^{-1}f)(x)(\mathcal{F}^{-1}g)(x).
+\end{align*}
+
+(ii) 由于 $\mathcal{F}f, \mathcal{F}g \in \mathcal{S}(\mathbb{R})$,由 (i),
+\begin{equation*}
+\mathcal{F}^{-1}(\mathcal{F}f * \mathcal{F}g)(x) = 2\pi\mathcal{F}^{-1}\mathcal{F}f(x)\mathcal{F}^{-1}\mathcal{F}g(x) = 2\pi f(x)g(x).
+\end{equation*}
+又因 $f, g \in \mathcal{S}(\mathbb{R})$,故 $\mathcal{F}f, \mathcal{F}g \in L^{1}(\mathbb{R})$,$fg \in \mathcal{S}(\mathbb{R}) \subset L^{1}(\mathbb{R})$;进而 $\mathcal{F}f * \mathcal{F}g \in C(\mathbb{R})$ 也容易看出.因此,如 (i) 中所用,若 $h$,$\mathcal{F}h \in L^{1}(\mathbb{R})$ 则 $\mathcal{F}\mathcal{F}^{-1}h = h$(a.e.),于是
+\begin{equation*}
+\mathcal{F}(fg)(\xi) = \frac{1}{2\pi}\mathcal{F}\bigl(\mathcal{F}^{-1}(\mathcal{F}f * \mathcal{F}g)\bigr)(\xi) = \frac{1}{2\pi}(\mathcal{F}f * \mathcal{F}g)(\xi)
+\end{equation*}
+同样地,
+\begin{align*}
+\mathcal{F}^{-1}(fg)(x) & = \mathcal{F}^{-1}\bigl((\mathcal{F}\mathcal{F}^{-1}f)(\mathcal{F}\mathcal{F}^{-1}g)\bigr)(x) = \mathcal{F}^{-1}\bigl(\mathcal{F}(\mathcal{F}^{-1}f * \mathcal{F}^{-1}g)\bigr)(x) \\
+& = \bigl(\mathcal{F}^{-1}\mathcal{F}(\mathcal{F}^{-1}f * \mathcal{F}^{-1}g)\bigr)(x) = \mathcal{F}^{-1}f * \mathcal{F}^{-1}g(x).
+\end{align*}
+\end{proof}
+
+\subsection{\texorpdfstring{$L^2$ 函数的 Fourier 变换}{L2 函数的 Fourier 变换}}\label{sec:1.2.2}
+
+\begin{lemma}\label{lem:1.2.13}
+若 $f \in L^{2}(\mathbb{R})$,则对一切满足 $\lim_{j \to \infty}\|f_{j} - f\|_{L^{2}} = 0$ 的 $f_{j} \in \mathcal{S}(\mathbb{R})$($j = 1, 2, \ldots$),存在唯一的 $g \in L^{2}(\mathbb{R})$ 使得 $\lim_{j \to \infty}\|\mathcal{F}f_{j} - g\|_{L^{2}} = 0$.
+\end{lemma}
+
+\begin{proof}
+设 $f_{j} \in \mathcal{S}(\mathbb{R})$ 且 $\lim_{j \to \infty}\|f_{j} - f\|_{L^{2}} = 0$.由对 $\mathcal{S}(\mathbb{R})$ 的 Plancherel 等式(定理~\ref{thm:1.2.9}(iii)),
+\begin{align*}
+\lim_{j, \ell \to \infty}\|\mathcal{F}f_{j} - \mathcal{F}f_{\ell}\|_{L^{2}} & = \lim_{j, \ell \to \infty}\sqrt{2\pi}\,\|f_{j} - f_{\ell}\|_{L^{2}} \\
+& \leq \lim_{j \to \infty}\sqrt{2\pi}\,\|f_{j} - f\|_{L^{2}} + \lim_{\ell \to \infty}\sqrt{2\pi}\,\|f - f_{\ell}\|_{L^{2}} \\
+& = 0.
+\end{align*}
+因此,函数列 $\{\mathcal{F}f_{j}\}_{j=1}^{\infty}$ 是 $L^{2}(\mathbb{R})$ 中的 Cauchy 列.由于 $L^{2}(\mathbb{R})$ 完备,存在 $g \in L^{2}(\mathbb{R})$ 使得
+\begin{equation*}
+\lim_{j \to \infty}\|\mathcal{F}f_{j} - g\|_{L^{2}} = 0.
+\end{equation*}
+
+其次,设 $h_{j} \in \mathcal{S}(\mathbb{R})$ 且 $\lim_{j \to \infty}\|h_{j} - f\|_{L^{2}} = 0$.与上面相同,存在 $k \in L^{2}(\mathbb{R})$ 使得 $\lim_{j \to \infty}\|\mathcal{F}h_{j} - k\|_{L^{2}} = 0$.于是,由对 $\mathcal{S}(\mathbb{R})$ 的 Plancherel 等式,
+\begin{align*}
+\| g - k \|_{L^{2}} & = \lim_{j \to \infty}\|\mathcal{F}f_{j} - \mathcal{F}h_{j}\|_{L^{2}} = \lim_{j \to \infty}\sqrt{2\pi}\,\|f_{j} - h_{j}\|_{L^{2}} \\
+& \leq \lim_{j \to \infty}\sqrt{2\pi}\,\|f_{j} - f\|_{L^{2}} + \lim_{j \to \infty}\sqrt{2\pi}\,\|f - h_{j}\|_{L^{2}} = 0.
+\end{align*}
+因此,
+\begin{equation*}
+g(x) = k(x) \quad (\text{a.e. } x \in \mathbb{R}).
+\end{equation*}
+\end{proof}
+
+由于 $\mathcal{S}(\mathbb{R})$ 在 $L^{2}(\mathbb{R})$ 中稠密,对 $f \in L^{2}(\mathbb{R})$ 可如下定义 $f$ 的 Fourier 变换.
+
+\begin{definition}\label{def:1.2.14}
+对 $f \in L^{2}(\mathbb{R})$,取满足 $\lim_{j \to \infty}\|f_{j} - f\|_{L^{2}} = 0$ 的 $f_{j} \in \mathcal{S}(\mathbb{R})$,把满足 $\lim_{j \to \infty}\|\mathcal{F}f_{j} - g\|_{L^{2}} = 0$ 的 $g \in L^{2}(\mathbb{R})$ 称为 $f$ 的(在 $L^{2}(\mathbb{R})$ 意义下的)Fourier 变换,记作 $\mathcal{F}_{L^{2}}f$.又,把满足 $\lim_{j \to \infty}\|\mathcal{F}^{-1}f_{j} - g\|_{L^{2}} = 0$ 的 $g \in L^{2}(\mathbb{R})$ 称为 $f$ 的(在 $L^{2}(\mathbb{R})$ 意义下的)逆 Fourier 变换,记作 $\mathcal{F}_{L^{2}}^{-1}f$.
+\end{definition}
+
+\begin{theorem}\label{thm:1.2.15}
+成立下列性质.
+\begin{enumerate}[(i)]
+\item $\mathcal{F}_{L^{2}}: L^{2}(\mathbb{R}) \to L^{2}(\mathbb{R})$ 是从 $L^{2}(\mathbb{R})$ 映到 $L^{2}(\mathbb{R})$ 上的一一且连续的线性映射.
+\item $\mathcal{F}_{L^{2}}^{-1}: L^{2}(\mathbb{R}) \to L^{2}(\mathbb{R})$ 也是从 $L^{2}(\mathbb{R})$ 映到 $L^{2}(\mathbb{R})$ 上的一一且连续的线性映射.
+\item $\mathcal{F}_{L^{2}}^{-1}\mathcal{F}_{L^{2}}f = f$,$\mathcal{F}_{L^{2}}\mathcal{F}_{L^{2}}^{-1}f = f$ $(f \in L^{2}(\mathbb{R}))$.
+\item $\int_{-\infty}^{\infty} f(x)\overline{g(x)}\dd x = \frac{1}{2\pi}\int_{-\infty}^{\infty}\mathcal{F}_{L^{2}}f(\xi)\overline{\mathcal{F}_{L^{2}}g(\xi)}\dd \xi$ $(f, g \in L^{2}(\mathbb{R}))$(Parseval 等式).
+\item $\int_{-\infty}^{\infty}|f(x)|^{2}\dd x = \frac{1}{2\pi}\int_{-\infty}^{\infty}|\mathcal{F}_{L^{2}}f(\xi)|^{2}\dd \xi$ $(f \in L^{2}(\mathbb{R}))$(Plancherel 等式).
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(iii) 首先确认 $\mathcal{F}_{L^{2}}^{-1}\mathcal{F}_{L^{2}}f = f$.设 $f \in L^{2}(\mathbb{R})$,取满足 $\lim_{j \to \infty}\|f_{j} - f\|_{L^{2}} = 0$ 的 $f_{j} \in \mathcal{S}(\mathbb{R})$.由 $L^{2}$ 函数 Fourier 变换的定义,
+\begin{equation*}
+\lim_{j \to \infty}\|\mathcal{F}f_{j} - \mathcal{F}_{L^{2}}f\|_{L^{2}} = 0
+\end{equation*}
+因此,再由 $L^{2}$ 函数逆 Fourier 变换的定义,
+\begin{equation*}
+\lim_{j \to \infty}\|\mathcal{F}^{-1}\mathcal{F}f_{j} - \mathcal{F}_{L^{2}}^{-1}\mathcal{F}_{L^{2}}f\|_{L^{2}} = 0.
+\end{equation*}
+但是,由于 $f_{j} \in \mathcal{S}(\mathbb{R})$,由定理~\ref{thm:1.2.9}(i),$\mathcal{F}^{-1}\mathcal{F}f_{j} = f_{j}$.因此
+\begin{equation*}
+f(x) = \mathcal{F}_{L^{2}}^{-1}\mathcal{F}_{L^{2}}f(x) \quad (\text{a.e. } x \in \mathbb{R}),
+\end{equation*}
+即 $\mathcal{F}_{L^{2}}^{-1}\mathcal{F}_{L^{2}}f = f$.同样地,可证 $\mathcal{F}_{L^{2}}\mathcal{F}_{L^{2}}^{-1}f = f$.
+
+(iv) 设 $f, g \in L^{2}(\mathbb{R})$,取满足 $\lim_{j \to \infty}\|f_{j} - f\|_{L^{2}} = 0$,$\lim_{j \to \infty}\|g_{j} - g\|_{L^{2}} = 0$ 的 $f_{j}, g_{j} \in \mathcal{S}(\mathbb{R})$.由于 $\|f\|_{L^{2}} - \|f_{j} - f\|_{L^{2}} \leq \|f_{j}\|_{L^{2}} \leq \|f_{j} - f\|_{L^{2}} + \|f\|_{L^{2}}$,故 $\lim_{j \to \infty}\|f_{j}\|_{L^{2}} = \|f\|_{L^{2}}$.因此,使用 Cauchy--Schwarz 不等式,
+\begin{align*}
+& \left|\int_{\mathbb{R}} f(x)\overline{g(x)}\dd x - \int_{\mathbb{R}} f_{j}(x)\overline{g_{j}(x)}\dd x\right| \\
+& \quad \leq \left|\int_{\mathbb{R}} (f(x) - f_{j}(x))\overline{g(x)}\dd x\right| + \left|\int_{\mathbb{R}} f_{j}(x)\overline{(g(x) - g_{j}(x))}\dd x\right| \\
+& \quad \leq \| f - f_{j} \|_{L^{2}}\| g \|_{L^{2}} + \| f_{j} \|_{L^{2}}\| g - g_{j} \|_{L^{2}}
+\end{align*}
+令 $j \to \infty$,得
+\begin{equation*}
+\lim_{j \to \infty}\int_{\mathbb{R}} f_{j}(x)\overline{g_{j}(x)}\dd x = \int_{\mathbb{R}} f(x)\overline{g(x)}\dd x.
+\end{equation*}
+同样地,由引理~\ref{lem:1.2.13},$\lim_{j \to \infty}\|\mathcal{F}f_{j} - \mathcal{F}_{L^{2}}f\|_{L^{2}} = 0$,$\lim_{j \to \infty}\|\mathcal{F}g_{j} - \mathcal{F}_{L^{2}}g\|_{L^{2}} = 0$,所以
+\begin{equation*}
+\int_{\mathbb{R}}\mathcal{F}_{L^{2}}f(\xi)\overline{\mathcal{F}_{L^{2}}g(\xi)}\dd \xi = \lim_{j \to \infty}\int_{\mathbb{R}}\mathcal{F}f_{j}(\xi)\overline{\mathcal{F}g_{j}(\xi)}\dd \xi.
+\end{equation*}
+由于 $f_{j}, g_{j} \in \mathcal{S}(\mathbb{R})$,由对 $\mathcal{S}(\mathbb{R})$ 的 Plancherel 等式(定理~\ref{thm:1.2.9}(iii)),
+\begin{align*}
+\int_{\mathbb{R}} f(x)\overline{g(x)}\dd x & = \lim_{j \to \infty}\int_{\mathbb{R}} f_{j}(x)\overline{g_{j}(x)}\dd x \\
+& = \lim_{j \to \infty}\frac{1}{2\pi}\int_{\mathbb{R}}\mathcal{F}f_{j}(\xi)\overline{\mathcal{F}g_{j}(\xi)}\dd \xi \\
+& = \frac{1}{2\pi}\int_{\mathbb{R}}\mathcal{F}_{L^{2}}f(\xi)\overline{\mathcal{F}_{L^{2}}g(\xi)}\dd \xi.
+\end{align*}
+
+(v) 在 (iv) 中令 $g(x) = f(x)$ 即可.
+
+(i) $\mathcal{F}_{L^{2}}$ 的线性是显然的.连续性由 (v) 得出.由 (iii) 可知它是从 $L^{2}(\mathbb{R})$ 映到 $L^{2}(\mathbb{R})$ 上的一一对应.
+\end{proof}
+
+\begin{theorem}\label{thm:1.2.16}
+(i) 若 $f \in L^{1}(\mathbb{R}) \cap L^{2}(\mathbb{R})$,则 $\mathcal{F}f(\xi) = \mathcal{F}_{L^{2}}f(\xi)$(a.e. $\xi \in \mathbb{R}$).因此,自本定理的证明以后,$\mathcal{F}_{L^{2}}$ 也记作 $\mathcal{F}$.
+
+(ii) 若 $f \in L^{2}(\mathbb{R})$,则
+\begin{equation*}
+\lim_{A \to \infty}\left\| \int_{-A}^{A} e^{-ix\xi}f(x)\dd x - \mathcal{F}_{L^{2}}f(\xi) \right\|_{L^{2}} = 0.
+\end{equation*}
+\end{theorem}
+
+\begin{proof}
+(i) 设 $f \in L^{1}(\mathbb{R}) \cap L^{2}(\mathbb{R})$.
+\begin{equation*}
+f_{j}(x) = \left\{ \begin{array}{l l}
+f(x) & (|x| \leq j) \\
+0 & (|x| > j)
+\end{array} \right.
+\end{equation*}
+则
+\begin{equation*}
+\lim_{j \to \infty}\|f_{j} - f\|_{L^{1}} = 0, \quad \lim_{j \to \infty}\|f_{j} - f\|_{L^{2}} = 0.
+\end{equation*}
+这里,取一个满足 $\int_{\mathbb{R}}\varphi(x)\dd x = 1$ 的 $\varphi \in C_{c}^{\infty}(\mathbb{R})$.由例~\ref{exa:1.1.10},对每个 $j \in \mathbb{N}$,存在 $t_{j} > 0$ 使得
+\begin{equation*}
+\| f_{j} - \varphi_{t_{j}} * f_{j} \|_{L^{1}} \leq \frac{1}{j}, \quad \| f_{j} - \varphi_{t_{j}} * f_{j} \|_{L^{2}} \leq \frac{1}{j}.
+\end{equation*}
+令 $g_{j} = \varphi_{t_{j}} * f_{j}$,则 $g_{j} \in C_{c}^{\infty}(\mathbb{R}) \subset \mathcal{S}(\mathbb{R})$,且
+\begin{equation*}
+\| g_{j} - f \|_{L^{1}} \leq \| g_{j} - f_{j} \|_{L^{1}} + \| f_{j} - f \|_{L^{1}} \leq \frac{1}{j} + \| f_{j} - f \|_{L^{1}}
+\end{equation*}
+\begin{equation*}
+\| g_{j} - f \|_{L^{2}} \leq \| g_{j} - f_{j} \|_{L^{2}} + \| f_{j} - f \|_{L^{2}} \leq \frac{1}{j} + \| f_{j} - f \|_{L^{2}}
+\end{equation*}
+故
+\begin{equation*}
+\lim_{j \to \infty}\| g_{j} - f \|_{L^{1}} = 0, \quad \lim_{j \to \infty}\| g_{j} - f \|_{L^{2}} = 0.
+\end{equation*}
+由 $L^{1}$ 收敛性,根据定理~\ref{thm:1.2.3},对一切 $\xi \in \mathbb{R}$,
+\begin{equation*}
+\mathcal{F}g_{j}(\xi) \to \mathcal{F}f(\xi) = \int_{-\infty}^{\infty} f(x)e^{ix\xi}\dd x \quad (j \to \infty)
+\end{equation*}
+又由 $L^{2}$ 收敛性,根据对 $L^{2}(\mathbb{R})$ 的 Plancherel 等式(定理~\ref{thm:1.2.15}(v)),
+\begin{equation*}
+\|\mathcal{F}g_{j} - \mathcal{F}_{L^{2}}f\|_{L^{2}} \to 0 \quad (j \to \infty)
+\end{equation*}
+所以
+\begin{equation*}
+\mathcal{F}_{L^{2}}f(\xi) = \mathcal{F}f(\xi) = \int_{-\infty}^{\infty} e^{-ix\xi}f(x)\dd x \quad (\text{a.e. } \xi \in \mathbb{R}).
+\end{equation*}
+
+(ii) 设 $f \in L^{2}(\mathbb{R})$.
+\begin{equation*}
+f_{A}(x) = \left\{ \begin{array}{l l}
+f(x) & (|x| \leq A) \\
+0 & (|x| > A)
+\end{array} \right.
+\end{equation*}
+则
+\begin{equation*}
+f_{A} \in L^{1}(\mathbb{R}) \cap L^{2}(\mathbb{R}) \quad \text{且} \quad \lim_{A \to \infty}\|f_{A} - f\|_{L^{2}} = 0.
+\end{equation*}
+因此,由 (i),
+\begin{equation*}
+\mathcal{F}_{L^{2}}f_{A}(\xi) = \mathcal{F}f_{A}(\xi) = \int_{-\infty}^{\infty} f_{A}(x)e^{-ix\xi}\dd x = \int_{-A}^{A} e^{-ix\xi}f(x)\dd x.
+\end{equation*}
+另一方面,由于 $\lim_{A \to \infty}\|f_{A} - f\|_{L^{2}} = 0$,根据对 $L^{2}(\mathbb{R})$ 的 Plancherel 等式(定理~\ref{thm:1.2.15}(v)),
+\begin{equation*}
+\lim_{A \to \infty}\|\mathcal{F}_{L^{2}}f_{A} - \mathcal{F}_{L^{2}}f\|_{L^{2}} = 0.
+\end{equation*}
+因此
+\begin{equation*}
+\lim_{A \to \infty}\left\| \int_{-A}^{A} e^{-ix\xi}f(x)\dd x - \mathcal{F}_{L^{2}}f(\xi) \right\|_{L^{2}} = 0.
+\end{equation*}
+\end{proof}
+
+在本节的最后,请注意以下事实.由定理~\ref{thm:1.2.3}(i),Fourier 变换是从 $L^{1}(\mathbb{R})$ 到 $L^{\infty}(\mathbb{R})$ 的有界线性算子;由定理~\ref{thm:1.2.15},它又是从 $L^{2}(\mathbb{R})$ 到 $L^{2}(\mathbb{R})$ 的有界线性算子.由这两个事实可知,当 $1 \leq p \leq 2$ 时,Fourier 变换是从 $L^{p}(\mathbb{R})$ 到 $L^{p'}(\mathbb{R})$ 的有界线性算子(其中 $1/p + 1/p' = 1$).这一点由下面的 Riesz--Thorin 插值定理来保证.
+
+\begin{theorem}[M. Riesz--Thorin 插值定理]\label{thm:1.2.17}
+设 $(X, \mu)$,$(Y, \nu)$ 是测度空间,$S(X)$,$S(Y)$ 分别是 $X$ 上($Y$ 上)的 $\mu$-($\nu$-)可积简单函数的全体,$L(Y)$ 是 $\nu$-可测函数的全体.
+
+设 $T$ 是从 $S(X)$ 到 $L(Y)$ 的线性算子,即满足
+\begin{equation}\tag{1.2.9}
+T(af + bg) = aT(f) + bT(g) \quad (a, b \in \mathbb{C}, \ f, g \in S(X)).
+\label{eq:1.2.9}\end{equation}
+进一步,设 $1 \leq p_{1}, p_{2} \leq \infty$,$1 \leq q_{1}, q_{2} \leq \infty$,且
+\begin{equation}\tag{1.2.10}
+\| Tf \|_{L^{q_{1}}(Y, \nu)} \leq M_{1}\| f \|_{L^{p_{1}}(X, \mu)} \quad (f \in S(X)),
+\label{eq:1.2.10}\end{equation}
+\begin{equation}\tag{1.2.11}
+\| Tf \|_{L^{q_{2}}(Y, \nu)} \leq M_{2}\| f \|_{L^{p_{2}}(X, \mu)} \quad (f \in S(X)).
+\label{eq:1.2.11}\end{equation}
+此时,对 $0 \leq t \leq 1$,由 $1/p = (1 - t)/p_{1} + t/p_{2}$,$1/q = (1 - t)/q_{1} + t/q_{2}$ 定义 $p$,$q$,则
+\begin{equation}\tag{1.2.12}
+\| Tf \|_{L^{q}(Y, \nu)} \leq M_{1}^{1-t}M_{2}^{t}\| f \|_{L^{p}(X, \mu)} \quad (f \in S(X)).
+\label{eq:1.2.12}\end{equation}
+
+特别地,当 $1 \leq p < \infty$ 时,$T$ 可唯一扩张为从 $L^{p}(X, \mu)$ 到 $L^{q}(Y, \nu)$ 的有界线性算子.
+\end{theorem}
+
+\begin{proof}
+当 $t = 0$ 或 $t = 1$ 时无须证明,故设 $0 < t < 1$,并对 $z \in \mathbb{C}$ 令
+\begin{equation*}
+\alpha(z) = \frac{1 - z}{p_{1}} + \frac{z}{p_{2}}, \quad \beta(z) = \frac{1 - z}{q_{1}} + \frac{z}{q_{2}}.
+\end{equation*}
+则 $\alpha(0) = 1/p_{1}$,$\alpha(1) = 1/p_{2}$,$\alpha(t) = 1/p$;$\beta(0) = 1/q_{1}$,$\beta(1) = 1/q_{2}$,$\beta(t) = 1/q$.令 $B = \{z \in \mathbb{C};\ 0 < \operatorname{Re} z < 1\}$,$\overline{B} = \{z \in \mathbb{C};\ 0 \leq \operatorname{Re} z \leq 1\}$.对 $f \in S(X)$,
+\begin{equation*}
+\| Tf \|_{L^{q}(Y, \nu)} = \sup_{g \in S(Y),\, \| g \|_{L^{q'}(Y, \nu)} = 1}\left|\int_{Y} Tf(y)g(y)\dd \nu(y)\right|
+\end{equation*}
+所以,只需对满足 $\|f\|_{L^{p}(X, \mu)} = 1$ 的 $f \in S(X)$ 与满足 $\|g\|_{L^{q'}(Y, \nu)} = 1$ 的 $g \in S(Y)$ 证明
+\begin{equation*}
+\left|\int_{Y} Tf(y)g(y)\dd \nu(y)\right| \leq M_{1}^{1-t}M_{2}^{t}.
+\end{equation*}
+
+(イ)首先处理 $1 \leq p < \infty$,$1 < q \leq \infty$ 的情形.可设 $f$,$g$ 都不是零函数,故 $f$,$g$ 可设为如下形状:
+\begin{equation*}
+f(x) = \sum_{j=1}^{\ell} a_{j}\chi_{E_{j}}(x), \quad g(y) = \sum_{k=1}^{m} b_{k}\chi_{F_{k}}(y).
+\end{equation*}
+其中,$a_{j}, b_{k} \in \mathbb{C}\setminus\{0\}$;$E_{j}$ 是满足 $0 < \mu(E_{j}) < \infty$ 的 $\mu$ 可测集,$F_{k}$ 是满足 $0 < \nu(F_{k}) < \infty$ 的 $\nu$ 可测集;且 $E_{j}$ 两两互不相交,$F_{k}$ 也两两互不相交($j = 1, \ldots, \ell;\ k = 1, \ldots, m$).于是令
+\begin{align}
+F_{z}(x) & = \sum_{j=1}^{\ell}|a_{j}|^{p\alpha(z)}e^{i\arg a_{j}}\chi_{E_{j}}(x), \notag \\
+G_{z}(y) & = \sum_{k=1}^{m}|b_{k}|^{q'(1 - \beta(z))}e^{i\arg b_{k}}\chi_{F_{k}}(y) \tag{1.2.13}\label{eq:1.2.13}
+\end{align}
+并考虑
+\begin{equation*}
+\Phi(z) = \int_{Y} T(F_{z})(y)G_{z}(y)\dd \nu(y).
+\end{equation*}
+由于 $F_{t}(x) = f(x)$,$G_{t}(y) = g(y)$,
+\begin{equation}\tag{1.2.14}
+\Phi(t) = \int_{Y} T(F_{t})(y)G_{t}(y)\dd \nu(y) = \int_{Y} T(f)(y)g(y)\dd \nu(y).
+\label{eq:1.2.14}\end{equation}
+进一步,由 $T$ 与积分的线性,
+\begin{equation*}
+\Phi(z) = \sum_{j=1}^{\ell}\sum_{k=1}^{m}|a_{j}|^{p\alpha(z)}e^{i\arg a_{j}}|b_{k}|^{q'(1 - \beta(z))}e^{i\arg b_{k}}\int_{Y} T(\chi_{E_{j}})(y)\chi_{F_{k}}(y)\dd \nu(y)
+\end{equation*}
+且
+\begin{align*}
+\left|\int_{Y} T(\chi_{E_{j}})(y)\chi_{F_{k}}(y)\dd \nu(y)\right| & \leq \| T(\chi_{E_{j}}) \|_{L^{q_{1}}(Y, \nu)}\| \chi_{F_{k}} \|_{L^{q_{1}'}(Y, \nu)} \\
+& \leq M_{1}\| \chi_{E_{j}} \|_{L^{p_{1}}(X, \mu)}\| \chi_{F_{k}} \|_{L^{q_{1}'}(Y, \nu)} \\
+& \leq M_{1}(\mu(E_{j}))^{1/p_{1}}(\nu(F_{k}))^{1/q_{1}'} < \infty
+\end{align*}
+所以 $\Phi(z)$ 在 $\overline{B}$ 上有界连续,在 $B$ 内正则.因此,由复函数论中的 Hadamard 三线定理,
+\begin{equation}\tag{1.2.15}
+|\Phi(t)| \leq \left(\sup_{\operatorname{Re} z = 0}|\Phi(z)|\right)^{1-t}\left(\sup_{\operatorname{Re} z = 1}|\Phi(z)|\right)^{t}.
+\label{eq:1.2.15}\end{equation}
+现在,当 $\operatorname{Re} z = 0$ 时,
+\begin{equation*}
+|\Phi(z)| \leq \| T(F_{z}) \|_{L^{q_{1}}(Y, \nu)}\| G_{z} \|_{L^{q_{1}'}(Y, \nu)} \leq M_{1}\| F_{z} \|_{L^{p_{1}}(X, \mu)}\| G_{z} \|_{L^{q_{1}'}(Y, \nu)}
+\end{equation*}
+且
+\begin{align*}
+\| F_{z} \|_{L^{p_{1}}(X, \mu)} &= \left(\int_{X}\sum_{j=1}^{\ell}\left(|a_{j}|^{p/p_{1}}\right)^{p_{1}}\chi_{E_{j}}(x)\dd \mu(x)\right)^{1/p_{1}} \\
+&= \left(\int_{X}|f(x)|^{p}\dd \mu(x)\right)^{1/p_{1}} = \left(\| f \|_{L^{p}(X, \mu)}\right)^{p/p_{1}} = 1^{p/p_{1}} = 1,
+\end{align*}
+\begin{align*}
+\| G_{z} \|_{L^{q_{1}'}(Y, \nu)} & = \left(\int_{Y}\sum_{k=1}^{m}\left(|b_{k}|^{q'/q_{1}'}\right)^{q_{1}'}\chi_{F_{k}}(y)\dd \nu(y)\right)^{1/q_{1}'} \\
+& = \left(\int_{Y}|g(y)|^{q'}\dd \nu(y)\right)^{1/q_{1}'} = \left(\| g \|_{L^{q'}(Y, \nu)}\right)^{q'/q_{1}'} = 1^{q'/q_{1}'} = 1
+\end{align*}
+所以
+\begin{equation*}
+|\Phi(z)| \leq M_{1} \quad (\operatorname{Re} z = 0).
+\end{equation*}
+同样地,也能证明
+\begin{equation*}
+|\Phi(z)| \leq M_{2} \quad (\operatorname{Re} z = 1),
+\end{equation*}
+故由 \eqref{eq:1.2.14},\eqref{eq:1.2.15},
+\begin{equation*}
+\left|\int_{Y} T(f)(y)g(y)\dd \nu(y)\right| = |\Phi(t)| \leq M_{1}^{1-t}M_{2}^{t},
+\end{equation*}
+从而 $1 \leq p < \infty$,$1 < q \leq \infty$ 的情形得证.
+
+(ロ)$q = 1$ 的情形.此时 $q_{1} = q_{2} = q = 1$.若 $p_{1} = p_{2} = \infty$,则 $p = \infty$,定理以 $M_{1} = M_{2}$ 成立.所以可设 $p_{1}$,$p_{2}$ 中至少有一个不是 $\infty$.因此设 $1 \leq p < \infty$.于是,$F_{z}$ 保持(イ)中式~\eqref{eq:1.2.13} 不变,令 $G_{z} = g$,其余按(イ)的相同步骤进行即可.
+
+(ハ)$p = \infty$ 的情形.此时 $p_{1} = p_{2} = p = \infty$.若 $q_{1} = q_{2} = 1$,则 $q = 1$,定理以 $M_{1} = M_{2}$ 成立.所以可设 $q_{1}$,$q_{2}$ 中至少有一个不是 $1$.因此设 $1 < q \leq \infty$.于是,令 $F_{z} = f$,$G_{z}$ 保持(イ)中式~\eqref{eq:1.2.13} 不变,其余按(イ)的相同步骤进行即可.
+
+(ニ)当 $1 \leq p < \infty$ 时,$S(X)$ 在 $L^{p}(X, \mu)$ 中稠密,故如泛函分析中所熟知的那样,$T$ 可唯一扩张为从 $L^{p}(X, \mu)$ 到 $L^{q}(Y, \nu)$ 的有界线性算子,且
+\begin{equation*}
+\| Tf \|_{L^{q}(Y, \nu)} \leq M_{1}^{1-t}M_{2}^{t}\| f \|_{L^{p}(X, \mu)} \quad (f \in L^{p}(X, \mu)).
+\end{equation*}
+\end{proof}
+
+由此导出:当 $1 \leq p \leq 2$ 时,Fourier 变换是从 $L^{p}(\mathbb{R})$ 到 $L^{p'}(\mathbb{R})$ 的有界线性算子,即 Hausdorff--Young 不等式.
+
+\begin{theorem}[Hausdorff--Young 不等式]\label{thm:1.2.18}
+设 $1 \leq p \leq 2$.则 Fourier 变换是从 $L^{p}(\mathbb{R})$ 到 $L^{p'}(\mathbb{R})$ 的有界线性算子,且
+\begin{equation*}
+\| \mathcal{F}f \|_{L^{p'}} \leq (2\pi)^{1/p'}\| f \|_{L^{p}} \quad (f \in L^{p}(\mathbb{R})).
+\end{equation*}
+其中,$1/p + 1/p' = 1$.
+\end{theorem}
+
+\begin{proof}
+$p = 1$ 与 $p = 2$ 的情形已知,故设 $1 < p < 2$.Fourier 变换 $\mathcal{F}$ 的线性是显然的;由定理~\ref{thm:1.2.3},它是从可积简单函数的全体到 $L^{\infty}(\mathbb{R})$ 的线性算子,因而也是到可测函数全体的线性算子,且以 $p_{1} = 1$,$q_{1} = \infty$,$M_{1} = 1$ 满足 Riesz--Thorin 插值定理的条件 \eqref{eq:1.2.10}.又,可积简单函数也是平方可积的,故由定理~\ref{thm:1.2.15},它以 $p_{2} = q_{2} = 2$,$M_{2} = \sqrt{2\pi}$ 满足 Riesz--Thorin 插值定理的条件 \eqref{eq:1.2.11}.当 $1 < p < 2$ 时,由于 $1/p = (1 - 2(1 - 1/p)) + 2(1 - 1/p)/2$,故对 $1/q = (1 - 2(1 - 1/p))/\infty + 2(1 - 1/p)/2 = 1 - 1/p = 1/p'$,可用 Riesz--Thorin 插值定理,得
+\begin{equation*}
+\| \mathcal{F}f \|_{L^{p'}} \leq (2\pi)^{1/p'}\| f \|_{L^{p}}.
+\end{equation*}
+\end{proof}
+
+\begin{note}\label{note:1.2.19}
+当 $1 < p < 2$ 时,对 $f \in L^{p}(\mathbb{R})$,作分解 $f = f\chi_{\{|f| \leq 1\}} + f\chi_{\{|f| > 1\}}$.由于 $f\chi_{\{|f| \leq 1\}} \in L^{2}(\mathbb{R})$,$f\chi_{\{|f| > 1\}} \in L^{1}(\mathbb{R})$,由 $\mathcal{F}$ 作为从可积简单函数的全体到 $L^{p}(\mathbb{R})$ 的有界线性算子的扩张的唯一性,
+\begin{equation*}
+\mathcal{F}f = \mathcal{F}_{L^{2}}(f\chi_{\{|f| \leq 1\}}) + \mathcal{F}_{L^{1}}(f\chi_{\{|f| > 1\}}).
+\end{equation*}
+\end{note}
+
+作为 Riesz--Thorin 插值定理的另一个应用,我们给出关于卷积的 Young 不等式.它是定理~\ref{thm:1.1.8} 的一般形式.
+
+\begin{theorem}[Young 不等式]\label{thm:1.2.20}
+设 $1 \leq p, q \leq \infty$,$0 \leq 1/r = 1/p + 1/q - 1 \leq 1$,则
+\begin{equation*}
+\| f * g \|_{L^{r}} \leq \| f \|_{L^{p}}\| g \|_{L^{q}} \quad (f \in L^{p}(\mathbb{R}),\ g \in L^{q}(\mathbb{R})).
+\end{equation*}
+\end{theorem}
+
+\begin{proof}
+设 $1 \leq q \leq \infty$,$g \in L^{q}(\mathbb{R})$.对这个 $g$ 令
+\begin{equation*}
+T(f) = f * g.
+\end{equation*}
+则,由定理~\ref{thm:1.1.8},$T$ 是从 $L^{1}(\mathbb{R})$ 到 $L^{q}(\mathbb{R})$ 的有界线性算子,且
+\begin{equation*}
+\| T(f) \|_{L^{q}} \leq \| g \|_{L^{q}}\| f \|_{L^{1}}.
+\end{equation*}
+又,应用 Hölder 不等式可知,$T$ 是从 $L^{q'}(\mathbb{R})$ 到 $L^{\infty}(\mathbb{R})$ 的有界线性算子,且
+\begin{equation*}
+\| T(f) \|_{L^{\infty}} \leq \| g \|_{L^{q}}\| f \|_{L^{q'}}.
+\end{equation*}
+当 $1 < p < q'$ 时,若 $f \in L^{p}(\mathbb{R})$,则可分解为 $f = f_{1} + f_{2}$,$f_{1} \in L^{1}(\mathbb{R})$,$f_{2} \in L^{q'}(\mathbb{R})$,故可定义 $T(f) = T(f_{1}) + T(f_{2})$,并且可看出这与 $f$ 的分解方式无关.进一步,当 $f$ 是可积简单函数时,$T(f) = f * g$.由于 $1/q > 1/p + 1/q - 1 = 1/p - 1/q' > 0$,令 $1/r = 1/p + 1/q - 1$,则 $q < r < \infty$;又令 $1/p = (1 - t) + t/q'$,则 $t = q(1 - 1/p)$,故 $(1 - t)/q = 1/q - (1 - 1/p) = 1/r$,因此由 Riesz--Thorin 插值定理,$T$ 是从 $L^{p}(\mathbb{R})$ 到 $L^{r}(\mathbb{R})$ 的有界线性算子,且
+\begin{equation*}
+\| f * g \|_{L^{r}} = \| T(f) \|_{L^{r}} \leq \| g \|_{L^{q}}\| f \|_{L^{p}}.
+\end{equation*}
+\end{proof}

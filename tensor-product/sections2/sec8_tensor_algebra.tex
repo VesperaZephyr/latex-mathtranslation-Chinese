@@ -1,0 +1,72 @@
+% sections2/sec8_tensor_algebra.tex
+\section{\texorpdfstring{$R$}{R}-模的张量代数}
+\label{sec:tensor-algebra}
+
+一般的 $R$-模上并没有乘法运算.然而，存在一种典范构造，能够以``最自由、最通用''的方式将任意 $R$-模 $M$ 嵌入为一个 $R$-代数的生成元集.这个代数就是 $M$ 的\newterm{tensor-algebra}{张量代数}{tensor algebra} $T(M)$.
+
+设 $M$ 为 $R$-模.对于 $m_1, m_2 \in M$，其最一般、满足双线性的形式积应当是简单张量 $m_1 \otimes m_2 \in M^{\otimes 2}$；类似地，五个元素的积应当属于 $M^{\otimes 5}$.这启发我们考虑所有张量幂的无限直和：
+\begin{equation}
+  T(M) := \bigoplus_{k \geq 0} M^{\otimes k} = R \oplus M \oplus M^{\otimes 2} \oplus M^{\otimes 3} \oplus \dots,
+\end{equation}
+其中约定 $M^{\otimes 0} = R$，$M^{\otimes 1} = M$.其元素为几乎处处为零的形式和 $\sum_{k \geq 0} t_k$（$t_k \in M^{\otimes k}$）.
+
+\begin{theorem}[分次代数构造定理]\label{thm:graded-algebra-construction}
+设 $\{M_k\}_{k \geq 0}$ 是一列 $R$-模，其中 $M_0 = R$.若存在一族 $R$-双线性映射 $\mu_{k, \ell} \colon M_k \times M_\ell \to M_{k+\ell}$，满足：
+\begin{enumerate}
+  \item 与 $R$ 的标量乘法相容：$\mu_{k, 0}(x, r) = rx$ 且 $\mu_{0, \ell}(r, y) = ry$；
+  \item 满足结合律：$\mu_{k, \ell+n}(x, \mu_{\ell, n}(y, z)) = \mu_{k+\ell, n}(\mu_{k, \ell}(x, y), z)$；
+\end{enumerate}
+则直和 $\bigoplus_{k \geq 0} M_k$ 在乘法规则
+\begin{equation}
+  \left(\sum_{k \geq 0} m_k\right) \cdot \left(\sum_{\ell \geq 0} m'_\ell\right) = \sum_{n \geq 0} \left(\sum_{k+\ell=n} \mu_{k, \ell}(m_k, m'_\ell)\right)
+\end{equation}
+下构成一个具有幺元 $1 \in M_0$ 的结合 $R$-代数（称为\newterm{graded-algebra}{分次代数}{graded algebra}）.
+\end{theorem}
+
+\begin{lemma}\label{lem:tensor-power-bilinear}
+对任意 $k, \ell \geq 0$，存在唯一的双线性映射 $\beta_{k, \ell} \colon M^{\otimes k} \times M^{\otimes \ell} \to M^{\otimes (k+\ell)}$，在简单张量上满足
+\[
+  (m_1 \otimes \dots \otimes m_k, m'_1 \otimes \dots \otimes m'_\ell) \mapsto m_1 \otimes \dots \otimes m_k \otimes m'_1 \otimes \dots \otimes m'_\ell.
+\]
+\end{lemma}
+
+\begin{definition}\label{def:tensor-algebra}
+由定理~\ref{thm:graded-algebra-construction} 与引理~\ref{lem:tensor-power-bilinear} 赋予乘法结构的分次代数
+\[
+  T(M) = \bigoplus_{k \geq 0} M^{\otimes k}
+\]
+称为 $R$-模 $M$ 的\termcn{张量代数}.
+\end{definition}
+
+\begin{example}\label{ex:free-tensor-algebra}
+\begin{enumerate}
+  \item 若 $M = R$，则 $M^{\otimes k} \cong R$，其张量代数同构于单变元多项式代数：$T(R) \cong R[X]$；
+  \item 若 $M$ 是以 $e_1, \dots, e_n$ 为基的有限自由模，则 $T(M)$ 是 $n$ 个\textbf{非交换自由不定元}的多项式代数 $R\langle e_1, \dots, e_n\rangle$（因为当 $i \neq j$ 时，$e_i \otimes e_j \neq e_j \otimes e_i$）.
+\end{enumerate}
+\end{example}
+
+通过规范嵌入 $i \colon M \hookrightarrow T(M)$（映至 $k = 1$ 的次数 $1$ 次分量），可将 $M$ 自然视作 $T(M)$ 的子模.张量代数满足以下核心普遍性质：
+
+\begin{theorem}[张量代数的普遍映射性质]\label{thm:tensor-algebra-ump}
+设 $M$ 为 $R$-模.对于任意结合 $R$-代数 $A$ 以及任意 $R$-线性映射 $f \colon M \to A$，存在唯一的 $R$-代数同态 $F \colon T(M) \to A$ 使得如下交换图成立：
+\begin{equation}
+\begin{tikzcd}[row sep=large, column sep=large]
+M \arrow[r, "i", hook] \arrow[dr, "f"'] & T(M) \arrow[d, "\exists!\,F", dashed] \\
+& A
+\end{tikzcd}
+\end{equation}
+其在简单张量上的显式表达式为：
+\[
+  F(m_1 \otimes \dots \otimes m_k) = f(m_1) f(m_2) \dots f(m_k).
+\]
+\end{theorem}
+
+定理~\ref{thm:tensor-algebra-ump} 表明：\textbf{从模 $M$ 到任意代数的线性映射，都能唯一地提升为从张量代数 $T(M)$ 出发的代数同态}.在范畴论中，这表明张量代数函子 $T(-)$ 是从代数范畴到模范畴的遗忘函子的左伴随函子.
+
+张量代数是现代多重线性代数与几何学的基础构造源泉：
+\begin{itemize}
+  \item 将 $T(M)$ 对由所有形如 $m \otimes m$ 生成的双边理想作商，即得到模 $M$ 的\newterm{exterior-algebra}{外代数}{exterior algebra} $\bigwedge(M)$；
+  \item 将 $T(M)$ 对由所有形如 $m_1 \otimes m_2 - m_2 \otimes m_1$ 生成的双边理想作商，即得到模 $M$ 的\newterm{symmetric-algebra}{对称代数}{symmetric algebra} $\operatorname{Sym}(M)$；
+  \item 将切空间张量代数对 Clifford 关系作商，即生成\newterm{clifford-algebra}{Clifford 代数}{Clifford algebra}；对李代数的对易子关系作商，即构造出著名的\newterm{universal-enveloping}{万有包络代数}{universal enveloping algebra} $U(\mathfrak{g})$.
+\end{itemize}
+所有这些近代几何与现代物理学不可或缺的代数系统，均根植于张量积与张量代数这一坚不可摧的坚实基石之上.

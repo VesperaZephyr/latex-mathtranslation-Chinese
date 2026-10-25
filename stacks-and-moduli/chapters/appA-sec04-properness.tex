@@ -1,0 +1,116 @@
+\section{固有性与赋值判别法}\label{src:A.4}
+\begin{epigraph}
+每天学一点新东西, 同样重要的是, 重新学一点旧东西.
+\epigraphauthor{Robert Brault}
+\end{epigraph}
+固有性, 分离性和普遍闭性可以用赋值判别法 (\bookref{4.8.7}) 检验. 上完第一门代数几何课程后, 赋值判别法的重要性或许尚不明显; 但它在模理论中不可或缺, 因为它提供了检验分离性, 固有性和普遍闭性的几何策略. 本书使用赋值判别法证明 $\overline{\mathcal M}_g$ 固有 (定理 \bookref{6.5.23}), 以及 $\cBun_{r,d}^{\mathrm{ss}}(C)$ 普遍闭.
+
+\subsection{赋值判别法}\label{src:A.4.1-subsection}
+由于定理 \bookref{4.8.7} 把判别法推广到代数叠, 这里简要回顾如何对概形建立赋值判别法 (\bookref{A.4.5}). 证明的起点是下面关于拟紧态射为闭映射的提升判别法.
+\begin{lemma}\label{src:A.4.1}
+概形的拟紧态射 $f:X\to Y$ 为闭映射, 当且仅当对每个点 $x\in X$, $Y$ 中的每个特殊化 $f(x)\leadsto y_0$ 都提升为 $X$ 中的特殊化 $x\leadsto x_0$:
+\[
+\begin{tikzcd}[column sep=2.5em,row sep=2em]
+X\arrow[d,"f"']&x\arrow[r,rightsquigarrow]\arrow[d,mapsto]&x_0\arrow[d,mapsto]\\
+Y&f(x)\arrow[r,rightsquigarrow]&y_0.
+\end{tikzcd}
+\]
+\end{lemma}
+\begin{proof}
+($\Rightarrow$) 显然, 因为 $f(\overline{\{x\}})\subseteq Y$ 闭. 对于逆向, 把 $X$ 换成闭子概形后, 只需证明 $f(X)$ 闭. 可以假设 $X=\Spec A$ 和 $Y=\Spec B$ 仿射 (因为 $f$ 拟紧), 且约化 (因为问题是拓扑性的). $\Spec A\to\Spec B$ 的概形论像由 $I:=\ker(B\to A)$ 定义. 把 $B$ 换成 $B/I$, 可假设 $B\to A$ 为单射. 对每个极小素理想 $\mathfrak p\in\Spec B$, 局部化 $B_{\mathfrak p}$ 为域, 且映射 $B_{\mathfrak p}\to A_{\mathfrak p}$ 为单射. 因而 $A_{\mathfrak p}\neq0$, 纤维 $f^{-1}(\mathfrak p)=\Spec A_{\mathfrak p}$ 非空. 由于 $f(X)$ 包含所有极小素理想且对特殊化封闭, $f(X)=Y$ 闭.
+\end{proof}
+Noether 情形的赋值判别法依赖以下代数事实:
+\begin{proposition}\label{src:A.4.2}
+设 $(A,\mathfrak m_A)$ 为分式域为 $K$ 的 Noether 局部整环, 且 $A$ 不是域. 若 $K\to L$ 为有限生成域扩张, 则存在分式域为 $L$ 的离散赋值环 $R$, 它支配 $A$ (即 $A\subseteq R$ 且 $\mathfrak m_A\cap K=\mathfrak m_R$).
+\end{proposition}
+\begin{proof}
+选取 $L$ 在 $K$ 上的超越基 $x_1,\ldots,x_n\in L$, 把 $A$ 换成 $A[x_1,\ldots,x_n]_{\mathfrak n}$, 其中 $\mathfrak n=\mathfrak m_A A[x_1,\ldots,x_n]+(x_1,\ldots,x_n)$, 便归结为 $K\to L$ 为有限域扩张的情形. 令 $B$ 为 $\Spec A$ 在 $\mathfrak m_A$ 处的爆破, $E\subseteq B$ 为例外除子. 若 $\xi\in E$ 为一般点, 则 $\mathcal O_{B,\xi}$ 为维数 $1$ 的 Noether 整环 (由 Krull 主理想定理), 分式域为 $K$. 现在令 $R\subseteq L$ 为 $\mathcal O_{B,\xi}$ 在 $L$ 中的整闭包. 由 Krull--Akizuki 定理 (\bookref{A.4.3}), $R$ 为 Noether 环. 由于 $R$ 还正规且维数为 $1$, 它是离散赋值环.
+\end{proof}
+\begin{proposition}[Krull--Akizuki]\label{src:A.4.3}
+设 $R$ 为维数 $1$, 分式域为 $K$ 的 Noether 整环. 若 $K\to L$ 为有限域扩张, 则每个满足 $R\subseteq A\subseteq L$ 的环 $A$ 都是 Noether 环.
+\end{proposition}
+\begin{proof}
+见 \cite[第 $115$ 页]{Nag62} 或 \cite[Tag 00PG]{SP}.
+\end{proof}
+命题 \bookref{A.4.2} 和 Krull--Akizuki 定理有如下几何推论.
+\begin{proposition}\label{src:A.4.4}
+若 $f:X\to Y$ 为 Noether 概形之间的有限型态射, $x\in X$, $f(x)\leadsto y_0$ 为特殊化, 则存在交换图
+\[
+\begin{tikzcd}[column sep=2.5em,row sep=2em]
+\Spec K\arrow[r]\arrow[d]&X\arrow[d,"f"]&x\arrow[d,mapsto]\\
+\Spec R\arrow[r]&Y&f(x)\arrow[r,rightsquigarrow]&y_0,
+\end{tikzcd}
+\]
+其中 $R$ 为分式域为 $K$ 的离散赋值环, $\Spec K\to X$ 的像为 $x$, 而 $\Spec R\to Y$ 实现特殊化 $f(x)\leadsto y_0$. 特别地, Noether 概形中的每个特殊化 $x\leadsto x_0$ 都由来自离散赋值环的映射 $\Spec R\to X$ 实现.
+\end{proposition}
+\begin{proof}
+把 $X$ 换成 $\overline{\{f(x)\}}$, 把 $Y$ 换成 $\overline{\{x\}}$, 可假设 $X$ 和 $Y$ 为整概形, 一般点分别为 $x$ 和 $f(x)$. 则 $\mathcal O_{Y,y_0}$ 为分式域为 $\kappa(f(x))$ 的 Noether 局部整环. 对域扩张 $\kappa(f(x))\to\kappa(x)$ 应用命题 \bookref{A.4.2}, 得到支配 $\mathcal O_{Y,y_0}$, 分式域为 $\kappa(x)$ 的离散赋值环 $R$, 从而得到所需的图.
+\end{proof}
+我们仅陈述赋值判别法的 Noether 版本.
+\begin{theorem}[固有/分离/普遍闭态射的赋值判别法]\label{src:A.4.5}
+设 $f:X\to Y$ 为 Noether 概形之间的拟紧态射. 考虑由实线箭头组成的交换图
+\begin{equation}\label{src:A.4.6}
+\begin{tikzcd}[column sep=3em,row sep=2em]
+\Spec K\arrow[r]\arrow[d]&X\arrow[d,"f"]\\
+\Spec R\arrow[r]\arrow[ur,dashed]&Y
+\end{tikzcd}
+\end{equation}
+其中 $R$ 为分式域为 $K$ 的离散赋值环. 则
+\begin{enumerate}[(1)]
+\item $f$ 固有, 当且仅当 $f$ 有限型, 且对每个图 \bookeqref{A.4.6} 都存在唯一提升;
+\item $f$ 分离, 当且仅当对每个图 \bookeqref{A.4.6}, 任意两个提升都相等;
+\item $f$ 普遍闭, 当且仅当对每个图 \bookeqref{A.4.6} 都存在提升.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+首先断言, 只需处理普遍闭的情形. 事实上, 态射 $X\to Y$ 分离, 当且仅当对角态射 $X\to X\times_Y X$ 普遍闭; 而 $X\to Y$ 的赋值判别法中两个提升相等, 对应于 $X\to X\times_Y X$ 的赋值判别法中存在提升.
+
+假设 $X\to Y$ 满足普遍闭性的赋值判别法. 要证明 $X\to Y$ 普遍闭, 只需对每个有限型态射 $T\to Y$ 检查基变换 $X_T\to T$ 为闭映射. 事实上, 假设某个映射 $T\to Y$ 的 $f_T:X_T\to T$ 不是闭映射. 由引理 \bookref{A.4.1}, 存在 $x\in X_T$ 和特殊化 $f_T(x)\leadsto t_0$, 不能提升为特殊化 $x\leadsto x_0$. 这意味着 $Z=\overline{\{x\}}\subseteq X_T$ 与纤维 $(X_T)_{t_0}$ 不交. 应用引理 \bookref{A.4.8}, 把 $T$ 换成 $t_0$ 的开邻域后, 得到交换图
+\[
+\begin{tikzcd}[column sep=2em,row sep=2em]
+x\arrow[d,mapsto]&&X_T\arrow[r]\arrow[d,"f_T"']&X_{T'}\arrow[r]\arrow[d,"f_{T'}"']&X\arrow[d,"f"]\\
+f_T(x)\arrow[r,rightsquigarrow]&t_0&T\arrow[r,"g"']&T'\arrow[r]&Y
+\end{tikzcd}
+\]
+其中 $T'\to Y$ 有限型, 并有闭子概形 $Z'\subseteq X_{T'}$, 使得 $f_{T'}(Z')$ 包含 $g(f_T(x))$ 而不包含 $g(t_0)$. 这说明 $f_{T'}:X_{T'}\to T'$ 不是闭映射.
+
+由于 $X\to Y$ 满足赋值判别法, Noether 概形之间的态射 $X_T\to T$ 也满足它. 因此只需证明 $X\to Y$ 为闭映射. 由引理 \bookref{A.4.1}, 只需证明给定 $x\in X$ 时, 每个特殊化 $f(x)\leadsto y_0$ 都提升为特殊化 $x\leadsto x_0$. 由命题 \bookref{A.4.4}, 存在图 \bookeqref{A.4.6}, 使得 $\Spec R\to Y$ 实现 $f(x)\leadsto y_0$, 且提升 $\Spec K\to X$ 的像为 $x$. 赋值判别法意味着存在提升 $\Spec R\to X$, 它又给出提升 $f(x)\leadsto y_0$ 的特殊化 $x\leadsto x_0$.
+
+反之, 假设 $f:X\to Y$ 普遍闭, 并给定图 \bookeqref{A.4.6}. 把 $Y$ 换成 $\Spec R$, 把 $X$ 换成 $X\times_Y\Spec R$, 可假设 $Y=\Spec R$, 且有图
+\[
+\begin{tikzcd}[column sep=3em,row sep=2em]
+\Spec K\arrow[r,"x"]\arrow[d]&X\arrow[dl]\\
+\Spec R&
+\end{tikzcd}
+\]
+把 $X$ 换成 $\overline{\{x\}}$, 可假设 $X$ 为一般点为 $x$ 的整概形. 由于 $X\to\Spec R$ 为闭映射, 存在 $X$ 中的特殊化 $x\leadsto x_0$, 位于 $\Spec R$ 中一般点到闭点的特殊化上方. 这给出 $K$ 中局部环的包含 $R\hookrightarrow\mathcal O_{X,x_0}$. 由于 $R$ 为分式域为 $K$ 的赋值环 (即在真包含于 $K$ 的局部环中极大), 可知 $R=\mathcal O_{X,x_0}$, 而包含映射 $\Spec\mathcal O_{X,x_0}\to X$ 给出所需提升.
+
+另见 \cite[定理 $4.7$, 习题 II.$4.11$]{Har77}, \cite[\S II.$7$]{EGA} 和 \cite[Tags 0BX4, 0CM1]{SP}.
+\end{proof}
+\begin{remark}\label{src:A.4.7}
+$f$ (相应地, $\Delta_f$, $\Delta_{\Delta_f}$) 的拟紧性在普遍闭性 (相应地, 分离性, 对角线分离性) 的赋值判别法中必不可少. 事实上, 普遍闭态射必定拟紧 \cite[Tag 04XU]{SP}.
+\end{remark}
+下面的引理已用于上述证明, 也用于代数叠的赋值判别法 (\bookref{4.8.7}) 的证明.
+\begin{lemma}\label{src:A.4.8}
+设 $f:X\to Y$ 为拟紧概形态射. 设 $T\to Y$ 为概形态射, $t_0\in T$ 为点, $Z\subseteq X_T$ 为满足 $Z\cap(X_T)_{t_0}=\varnothing$ 的闭子概形. 则把 $T$ 换成 $t_0$ 的开邻域后, 存在有限型概形态射 $T'\to Y$, 分解 $T\xrightarrow{g}T'\to Y$ 和闭子概形 $Z'\subseteq X_{T'}$, 使得 $Z'\cap(X_{T'})_{g(t_0)}=\varnothing$ 且 $\im(Z\hookrightarrow X_T\to X_{T'})\subseteq Z'$.
+\end{lemma}
+\begin{proof}
+归结为仿射情形 $T=\Spec B\to Y=\Spec A$ 后, 把 $B$ 写成有限型 $A$-代数 $B_\lambda$ 的余极限. 用类似于概形的极限 (\S\bookref{B.3}) 的方法, 可证明对 $\lambda\gg0$, 存在具有所需性质的子概形 $Z_\lambda\subseteq X_{B_\lambda}$. 细节不难, 但也并不令人振奋. 见 \cite[Tag 05BD]{SP}.
+\end{proof}
+
+\subsection{普遍浸没态射}\label{src:A.4.2-subsection}
+称概形态射 $f:X\to Y$ \newterm{浸没}{submersive}, 如果 $f$ 满射且 $Y$ 带有商拓扑, 即子集 $U\subseteq Y$ 开当且仅当 $f^{-1}(U)$ 开. 称 $f:X\to Y$ \newterm{普遍浸没}{universally submersive}, 如果对每个映射 $Y'\to Y$, 基变换 $X\times_Y Y'\to Y'$ 浸没.
+\begin{exercise}\label{src:A.4.9}
+\begin{enumerate}[(1)]
+\item 证明 Noether 概形态射 $f:X\to Y$ 普遍浸没, 当且仅当每个来自离散赋值环的映射 $\Spec R\to Y$ 都有提升
+\[
+\begin{tikzcd}[column sep=3em,row sep=2em]
+\Spec R'\arrow[r,dashed]\arrow[d,dashed]&X\arrow[d,"f"]\\
+\Spec R\arrow[r]&Y,
+\end{tikzcd}
+\]
+其中 $R\to R'$ 为离散赋值环之间的局部同态.
+\item 证明 Noether 概形之间的普遍闭态射普遍浸没.
+\item 证明每个概形的 fpqc 态射普遍浸没.
+\end{enumerate}
+\end{exercise}

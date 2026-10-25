@@ -1,0 +1,103 @@
+% ============ cover.tex —— 封面与“关于本重排版”页 ============
+% 由 AJbook.cls 的 coverpage 选项（coverpage=cover）引入
+% 设计仿自《代数学方法》封面风格（李文威），图案改为调和分析主题
+
+\setCJKfamilyfont{coverfont}{SimHei}	% 设置书名字体（Fandol 环境下回退）
+\setCJKfamilyfont{cover-author-font}{SimHei}
+\colorlet{octa}{cyan!50!gray}
+\definecolor{ANTnavy}{HTML}{16223B}
+\definecolor{ANTgold}{HTML}{B08D57}
+\definecolor{ANTgoldlight}{HTML}{D9C29B}
+\definecolor{ANTgrey}{HTML}{8C93A6}
+
+\begin{titlepage}
+\begin{tikzpicture}[remember picture, overlay]
+
+  % ---------- outer frame ----------
+  \draw[ANTnavy, line width=1.1pt]
+       ($(current page.north west)+(1.4cm,-1.4cm)$) rectangle
+       ($(current page.south east)+(-1.4cm,1.4cm)$);
+  \draw[ANTgold, line width=0.4pt]
+       ($(current page.north west)+(1.6cm,-1.6cm)$) rectangle
+       ($(current page.south east)+(-1.6cm,1.6cm)$);
+
+  % ---------- corner ornaments ----------
+  \begin{scope}[shift={($(current page.north west)+(1.4cm,-1.4cm)$)}]
+    \draw[ANTgold, line width=0.9pt] (0,0) -- (0.55,0);
+    \draw[ANTgold, line width=0.9pt] (0,0) -- (0,-0.55);
+    \filldraw[ANTgold] (0,0) circle (1.6pt);
+  \end{scope}
+  \begin{scope}[shift={($(current page.north east)+(-1.4cm,-1.4cm)$)}]
+    \draw[ANTgold, line width=0.9pt] (0,0) -- (-0.55,0);
+    \draw[ANTgold, line width=0.9pt] (0,0) -- (0,-0.55);
+    \filldraw[ANTgold] (0,0) circle (1.6pt);
+  \end{scope}
+  \begin{scope}[shift={($(current page.south west)+(1.4cm,1.4cm)$)}]
+    \draw[ANTgold, line width=0.9pt] (0,0) -- (0.55,0);
+    \draw[ANTgold, line width=0.9pt] (0,0) -- (0,0.55);
+    \filldraw[ANTgold] (0,0) circle (1.6pt);
+  \end{scope}
+  \begin{scope}[shift={($(current page.south east)+(-1.4cm,1.4cm)$)}]
+    \draw[ANTgold, line width=0.9pt] (0,0) -- (-0.55,0);
+    \draw[ANTgold, line width=0.9pt] (0,0) -- (0,0.55);
+    \filldraw[ANTgold] (0,0) circle (1.6pt);
+  \end{scope}
+
+  % ---------- top ornament: Hardy--Littlewood 极大函数的分段常数示意 ----------
+  \begin{scope}[shift={($(current page.north)+(0,-5.8cm)$)}]
+    \begin{scope}
+      \clip (-3.3,-1.9) rectangle (3.3,1.9);
+      \draw[ANTgrey, line width=0.5pt] (-3.3,0) -- (3.3,0);
+      \draw[ANTgrey, line width=0.5pt] (0,-1.9) -- (0,1.9);
+      % 原函数 f(x) = (1+|x|)^{-1}, 近似曲线
+      \draw[ANTgrey, line width=0.7pt, domain=-3.1:3.1, samples=200]
+           plot (\x, {1.6/(1+abs(\x))});
+      % 逐段平均(极大函数)阶梯线
+      \draw[ANTgold, line width=0.7pt] (-3.1,0.35) -- (-1.6,0.35) -- (-1.6,0.62) -- (-0.8,0.62)
+           -- (-0.8,1.02) -- (-0.15,1.02) -- (-0.15,1.5) -- (0.15,1.5) -- (0.15,1.02)
+           -- (0.8,1.02) -- (0.8,0.62) -- (1.6,0.62) -- (1.6,0.35) -- (3.1,0.35);
+      \draw[ANTnavy, line width=0.9pt, domain=-3.1:3.1, samples=200]
+           plot (\x, {1.6*ln(1+abs(\x))/abs(\x)});
+    \end{scope}
+    \node[ANTnavy, font=\scriptsize] at (0,-2.25) {$\displaystyle M f(x) = \sup_{r > 0} \frac{1}{2r} \int_{x-r}^{x+r} |f(y)|\, \dd y$};
+  \end{scope}
+
+  % ---------- title block ----------
+  \node[ANTgold, font=\scriptsize\sffamily] at ($(current page.center)+(0,1.9cm)$) {S\,G\,C \quad L\,I\,B\,R\,A\,R\,Y \quad 174};
+
+  \draw[ANTgold, line width=0.5pt] ($(current page.center)+(-2.6cm,1.55cm)$) -- ($(current page.center)+(2.6cm,1.55cm)$);
+
+  \node[ANTnavy, align=center] at ($(current page.center)+(0,0.55cm)$)
+       {\Huge\bfseries 调和分析入门\\ \large 为深入理解函数的性质};
+
+  \draw[ANTgold, line width=0.5pt] ($(current page.center)+(-2.6cm,-0.65cm)$) -- ($(current page.center)+(2.6cm,-0.65cm)$);
+
+  \node[ANTnavy, font=\normalsize\itshape] at ($(current page.center)+(0,-1.15cm)$)
+       {An Invitation to Harmonic Analysis \\ 极大函数 \,\textbullet\, 奇异积分 \,\textbullet\, Fourier 变换 \,\textbullet\, Littlewood--Paley 理论};
+
+  % ---------- bottom : author / date ----------
+  \node[ANTnavy, font=\large] at ($(current page.south)+(0,5.0cm)$) {泽野嘉宏};
+  \node[ANTgrey, font=\large] at ($(current page.south)+(0,4.2cm)$) {\today};
+
+  \node[ANTgold, font=\small] at ($(current page.south)+(0,3.3cm)$)
+       {$\displaystyle \| f \|_{L^{p}} = \left(\int_{\mathbb{R}^n} |f(x)|^{p}\, \dd x\right)^{1/p}$};
+
+\end{tikzpicture}
+\vfill
+
+\cleardoublepage
+\end{titlepage}
+
+% ---------- 关于本重排版 ----------
+\thispagestyle{empty}
+\begin{center}
+    \small
+    \noindent\emph{关于本重排版}\\[0.5em]
+    本文件为《調和解析への招待 関数の性質を深く理解するために》（サイエンス社，2022 年刊行）
+    的中文非官方 \LaTeX{} 重排版，\\
+    内容忠实于原书（并依据出版社勘误表作了修正），未作任何内容删改。
+    重排版仅用于学习交流，原书版权归作者与原出版社所有。\\
+    \vspace{0.5cm}
+    原书：澤野嘉宏，《調和解析への招待 関数の性質を深く理解するために》，\\
+    サイエンス社，2022 年（SGC ライブラリ-174，ISBN 978-4-7819-1538-8）。
+\end{center}

@@ -1,0 +1,1082 @@
+% ==== part06a1 第 6 章 基本泛函不等式(第 1--2 节) ====
+% 源: MinerU_latex_lecture nots.tex 第 7789--9184 行;pdf_text.txt 第 6456--7557 行(PDF 第 121--140 页)
+%
+% 术语(新增,键=中文=英文):
+%   interpolation=插值、multiplier=乘子、distribution-function=分布函数、simple-function=简单函数、
+%   analytic-family-of-operators=解析算子族、sublinear-operator=次线性算子、weak-lp=弱 L^p、
+%   maximal-function=极大函数、covering-lemma=覆盖引理、regularity=正则性、
+%   dyadic-decomposition=二进分解、sobolev-space=Sobolev 空间、embedding-theorem=嵌入定理、
+%   holder-space=Hölder 空间、trace-operator=迹算子、trace-theorem=迹定理、
+%   characteristic-function=特征函数(键复用 part03)、extension=延拓
+% 注: 傅里叶变换、Plancherel/Parseval 恒等式、Hölder 不等式、Chebyschev 不等式、Minkowski 不等式、
+%   Banach/Hilbert 空间、Lebesgue 测度、Borel 测度、卷积、特征函数、截断函数、局部可积、检验函数、
+%   Lipschitz 函数、缓增分布等经典术语按普通中文书写(可能由其他部分首次引入,待协调).
+%
+% REFS(需跨章/待解析项):
+%   - 源 7822 行 "the integral representation (168)" → \eqref{eq:c5-168},公式 (168) 位于第 6 章引言
+%     (本部分之前的部分),标签需由前一部分定义.
+%   - 源 8623 行 "For this we refer to (***)" → 按原文保留 "(***)"(原书占位引用).
+%   - 源 8745 行 "Following Nirenberg, [?]" → 正文写"参照 Nirenberg 的著作[?]"([?] 为原书破损文献号).
+%   - 源 8867、8959 行 "Evans ([E], ch. 5)"、"see [E], section 5.6.2" → 文献 [E] = Evans 著作,照原样保留.
+%   - 源 8704 行末尾的 "27" 为 OCR 噪音(pdf_text 对应行无此标记,原书该处无脚注),已删除.
+%   - 脚注: 本部分四处原书脚注均按 pdf_text.txt 译入 \footnote:
+%     ① 源 7859 行 "measure μ^1"(PDF 页 122);② 源 8124 行 "form^2"(页 125);
+%     ③ 源 8375 行 "proved below^3"(页 128,Vitali 覆盖引理);④ 源 8836 行 "weak^4"(页 135).
+%   - 源 7811 行 "Young-Hausdorf inequality" 按 pdf_text 译 "Young-Hausdorff 不等式"(原书拼写).
+%
+% 编号说明:
+%   - 第 1 节: 1.1、1.2、1.3、1.5、1.9、1.11 为带编号子标题(\mtsubsec),自然推进共享计数器,
+%     故 Lemma 1.4、Definition 1.6、Remark 1.7、Theorem 1.8、Theorem 1.10、Definition 1.12、
+%     Theorem 1.13 编号与原书一致;三处未编号 Remark 用 remark* 环境,未编号习题用 \textbf{习题.}.
+%   - 第 2 节: 2.1、2.6、2.8、2.10、2.12、2.15、2.17--2.19(原书 "Exercise 2.17/2.18/2.19",
+%     处于共享序列中,以 \mtsubsec{习题} 推进计数器)、2.21、2.23、2.26 为子标题,其余编号对象
+%     (2.2--2.5、2.7、2.9、2.11、2.13、2.14、2.16、2.20、2.22、2.24、2.25、2.27)自动对齐原书.
+%   - 公式 (179)--(213) 共 35 个,按原书顺序以 \begin{equation} 自动编号,正文引用用 \eqref{eq:c6-NNN}.
+% ====
+
+\chapter{基本泛函不等式}
+
+\section{基本插值理论}
+
+\mtsubsec{引言}
+
+把 傅里叶变换视为线性算子 $\mathcal{F}:\mathcal{S}(\mathbb{R}^n)\to\mathcal{S}(\widehat{\mathbb{R}}^n)$.根据 Plancherel 恒等式, 有 $\|\mathcal{F}(f)\|_{L^2}\le\|f\|_{L^2}$.另一方面, 有 $\|\mathcal{F}(f)\|_{L^\infty}\le\|f\|_{L^1}$.我们能否得到其他类型的界 $\|\mathcal{F}(f)\|_{L^q}\lesssim\|f\|_{L^p}$?事实证明, 这类估计可以通过在上述两个估计之间插值而轻易建立.复\newterm{interpolation}{插值}{interpolation}使我们能够对满足 $p^{-1}+q^{-1}=1$ 且 $q\ge 2$ 的任意 $p$、$q$ 值推出 $L^p$ 到 $L^q$ 的估计.这就是所谓的 Young-Hausdorff 不等式.插值理论对形如
+
+\[
+\widehat{T_m f}(\xi) = m(\xi)\hat{f}(\xi)
+\]
+
+的线性\newterm{multiplier}{乘子}{multiplier}算子特别有用, 其中 $m$ 是有界乘子.根据 Parseval 恒等式, 很容易验证 $L^2$-$L^2$ 估计 $\|T_m f\|_{L^2}\lesssim\|f\|_{L^2}$.为获得更多的估计, 我们通常使用积分表示 \eqref{eq:c5-168}:$T_m f(x) = f*K(x) = \int f(x-y)K(y)\, dy$, 其中 $K$ 是 $m$ 的逆 傅里叶变换.例如, 若能建立 $K\in L^1$, 则容易推出 $\|T_m f\|_{L^1}\lesssim\|f\|_{L^1}$, 因为 $\|f*K\|_{L^1}\le\|f\|_{L^1}\cdot\|K\|_{L^1}$.于是我们对 $T_m$ 同时有 $L^1$-$L^1$ 与 $L^2$-$L^2$ 估计, 因而有理由猜测对一切 $1\le p\le 2$ 都可能存在 $L^p$-$L^p$ 估计.这样的估计确实成立, 它可由插值得到.另一方面, 若能建立 $K\in L^\infty$, 则 $\|f*K\|_{L^\infty}\lesssim\|f\|_{L^1}$, 从而我们可以通过插值证明与 Hausdorff-Young 不等式相同的 $L^p$-$L^q$ 估计.
+
+\mtsubsec{$L^p$ 空间回顾}
+
+给定可测子集 $\Omega\subset\mathbb{R}^n$, 空间 $L^p(\Omega)$, $1\le p<\infty$, 由所有 $L^p$ 范数有限的可测函数 $f:\Omega\to\mathbb{C}$ 组成,
+
+\[
+\|f\|_{L^p} = \left(\int_\Omega |f(x)|^p\, dx\right)^{1/p} < \infty.
+\]
+
+空间 $L^\infty(\Omega)$ 由所有几乎处处有界的可测函数组成, 即
+
+\[
+\|f\|_{L^\infty} = \inf\left\{\alpha : \int_\Omega (|f(x)| > \alpha)\, dx = 0\right\} = \operatorname{ess\, sup}|f| < \infty.
+\]
+
+对一切 $1\le p\le\infty$, 空间 $L^p(\Omega)$ 都是 Banach 空间.当我们把 Lebesgue 测度 $dx$ 换成一般的正测度 $\mu$\footnote{不过, 当整个空间不能写成有限 $\mu$-测度子集的可数并时, 会出现一些复杂情况.这在本讲义中与我们无关.}时, $L^p$ 空间的理论依然成立.下面的不等式称为 Hölder 不等式
+
+\begin{equation}
+\|fg\|_{L^p} \le \|f\|_{L^q}\|g\|_{L^r}, \label{eq:c6-179}
+\end{equation}
+
+只要 $1/p = 1/q + 1/r$.指数之间的这种关系是必要的, 它保证两边关于测度都是 $\frac{1}{p}$ 次齐次的.特别地, 对 $p=1$,
+
+\[
+\|fg\|_{L^1} \le \|f\|_{L^q}\|g\|_{L^{q'}},
+\]
+
+其中满足 $\frac{1}{q'} = 1 - \frac{1}{q}$ 的 $q'$ 是与 $q$ 对偶的指数.该不等式意味着我们可以把每个元素 $g\in L^{q'}$ 等同于 Banach 空间 $L^q$ 上的有界线性泛函 $f\mapsto\int f(x)g(x)\, dx$.对一切 $1\le q<\infty$, 空间 $L^{q'}(\Omega)$ 是 $L^q(\Omega)$ 的对偶空间, 其含义是上述等同是等距的(特别地, $L^q$ 上每个有界线性泛函都以这种方式由唯一的 $g$ 产生), 而 $L^\infty(\Omega)$ 的对偶包含 $L^1(\Omega)$, 但远大于后者.常常扮演 $L^\infty$ 角色的是在无穷远处消失的连续函数空间 $\mathcal{C}_0(\mathbb{R}^n)$(因为它们在 $L^\infty$ 范数下构成 $\mathcal{C}_0^\infty$ 的闭包), 其对偶空间是 $\mathbb{R}^n$ 上有限 Borel 测度的集合.
+
+不同的 $L^p$ 范数度量函数大小的不同方面.较高 $L^p$ 范数(如 $\|f\|_{L^\infty}\lesssim 1$)的估计保证 $|f|$ 在局部不会过大, 而较低 $L^p$ 范数(如 $\|f\|_{L^1}\lesssim 1$)的估计则控制 $f$ 在无穷远处的行为.空间 $L^2(\Omega)$ 尤为重要, 因为它自对偶, 并且具有由内积
+
+\[
+\langle f, g\rangle = \int_\Omega f\, \bar{g}\, dx
+\]
+
+给出的 Hilbert 空间结构.
+
+\textbf{习题.} 证明对一切 $1\le p<\infty$, $\mathcal{C}_0^\infty(\Omega)$ 在 $L^p(\Omega)$ 中稠密.
+
+给定一个可测函数 $f$ 和一个正数 $\alpha$, 记 $\Lambda(f, \alpha)$ 为 $f$ 的\newterm{distribution-function}{分布函数}{distribution function}, 定义为
+
+\[
+\Lambda(f, \alpha) = |\{x\in\Omega : |f(x)| > \alpha\}|.
+\]
+
+对 $1\le p<\infty$, 我们有 Chebyschev 不等式
+
+\begin{equation}
+\Lambda(f, \alpha) \le \alpha^{-p}\|f\|_{L^p}^p, \label{eq:c6-180}
+\end{equation}
+
+它定量地表达了如下事实:$L^p$ 函数的上水平集具有有限测度.注意到(至少作为记忆手段)两边具有相同的量纲是有帮助的, 因为 $f$ 与 $\alpha$ 具有相同的量纲.
+
+\begin{proof}
+\[
+\Lambda(f, \alpha) = \int(|f(x)| > \alpha)\, d\mu(x) \le \int\left(\frac{|f(x)|^p}{\alpha^p}\right)\cdot(|f(x)| > \alpha)\, d\mu(x) \le \alpha^{-p}\|f\|_{L^p}^p.
+\]
+\end{proof}
+
+我们可以用分布函数来写出 $f$ 的 $L^p$ 范数.事实上, 积分 $\int|f|^p$ 就是由图形 $\{( \beta, x) : 0 < \beta < |f(x)|^p \}$ 围成的区域的测度, 因此
+
+\begin{equation}
+\int|f(x)|^p\, dx = \int\int_0^\infty (|f(x)|^p > \beta)\, d\beta\, dx = p\int_0^\infty \alpha^{p-1}\Lambda(f, \alpha)\, d\alpha, \label{eq:c6-181}
+\end{equation}
+
+其中最后一个积分由代换 $\beta = \alpha^p$ 得到.
+
+如果可测函数 $f:\Omega\to\mathbb{C}$ 的值域只包含 $\mathbb{C}$ 中的有限个点, 则称其为\newterm{simple-function}{简单函数}{simple function}, 即 $f = \sum_{i=1}^N a_i\chi_{A_i}$, 其中 $a_i\in\mathbb{C}$, $A_i\subset\Omega$ 可测.在本节中, 我们用 $S(\Omega)$ 表示 $\Omega$ 中所有简单函数组成的集合.回忆:对一切 $1\le p\le\infty$, $S(\Omega)$ 在 $L^p(\Omega)$ 中稠密.证明通常涉及用特征函数 $(f(x)\in E_\alpha)$ 的线性组合逼近给定的 $f(x)$, 并让集合族 $\{E_\alpha\}$ 趋于 $\mathbb{C}$ 的一个精细而完备的分割.
+
+\textbf{习题.} 设 $f(x, y)$ 是 $\Omega_1\times\Omega_2\subset\mathbb{R}^{n_1}\times\mathbb{R}^{n_2}$ 上的可测函数.证明下列形式的 Minkowski 不等式,
+
+\[
+\left\|\int_{\Omega_2} f(x, y)\, dy\right\|_{L_x^p(\Omega_1)} \le \int_{\Omega_2}\|f(x, y)\|_{L_x^p(\Omega_1)}\, dy
+\]
+
+对 $1\le p\le\infty$ 成立, 既用对偶方法, 也直接证明.
+
+\mtsubsec{三线引理}
+
+对作用在 $L^p$ 空间上的线性算子而言, 解析插值方法基于最大模定理在条形区域上的一个变体, 称为三线引理.考虑条形区域
+
+\[
+D = \{z\in\mathbb{C} : 0 < \operatorname{Re}(z) < 1\}.
+\]
+
+我们用 $\mathcal{A}_{BC}$ 表示 $D$ 的闭包上的有界连续函数中在 $D$ 上解析的函数所成的集合.
+
+\begin{lemma}[三线引理]\label{lem:c6-1.4}
+设 $f\in\mathcal{A}_{BC}$ 满足
+
+\[
+|f(0+ib)| \le M_0, \qquad |f(1+ib)| \le M_1,
+\]
+
+对一切 $b\in\mathbb{R}$ 成立.则对一切 $0<a<1$ 与 $b\in\mathbb{R}$, 有
+
+\[
+|f(a+ib)| \le M_0^{1-a}M_1^a.
+\]
+\end{lemma}
+
+\begin{remark*}
+回忆:当 $f$ 全纯(且非平凡)时, $\log|f(z)|$ 是次调和函数.两条带上的界保证 $\log|f(z)|$ 在 $D$ 的边界上取得小于调和函数 $\phi(a+bi) = (1-a)\log M_0 + a\log M_1$ 的值, 而三线引理的结论断言在区域 $D$ 内部有 $\log|f(a+bi)| \le \phi(a+bi)$;然而我们不能简单地应用弱最大原理, 因为它对无界区域并非完全成立(如 $D$ 上的例子 $z\mapsto e^{-ie^{i\pi z}}$ 所示).
+\end{remark*}
+
+\begin{proof}
+首先, 如有必要, 把 $f$ 换成 $\frac{f(z)}{M_0^{1-z}M_1^z}$, 我们可以假设 $M_0 = M_1 = 1$, 只需证明在整个区域上 $|f(z)|\le 1$.当 $f$ 在 $|\Im z|\to\infty$ 时衰减到 0, 则可以简单地对 $D$ 的足够大的子集应用通常的最大模原理, 得到在整个区域上 $|f(z)|\le 1$.若情况并非如此, 则(因为我们已假设 $|f(z)|$ 在 $|\Im z|\to\infty$ 时不会显著增长)可以对逼近函数 $F_\varepsilon(z) = e^{\varepsilon(1-z)z}f(z)$(它在 $|\Im z|$ 大时确实衰减)应用同样的论证, 得到
+
+\[
+|f(z)| = \lim_\varepsilon |F_\varepsilon(z)| \le 1
+\]
+
+在整个 $D$ 上成立.
+\end{proof}
+
+\mtsubsec{Stein-Riesz-Thorin 插值}
+
+\begin{definition}\label{def:c6-1.6}
+我们称一族由 $z\in D$ 指标化的线性算子 $T_z$ 为\newterm{analytic-family-of-operators}{解析算子族}{analytic family of operators}, 如果
+
+\begin{enumerate}
+\item $T_z$ 把简单函数映为可测函数;
+\item 对任意一对简单函数 $f, g\in S(\Omega)$, 映射 $z\mapsto\int g(x)T_z f(x)\, dx$ 属于 $\mathcal{A}_{BC}$.
+\end{enumerate}
+\end{definition}
+
+\begin{remark}\label{rem:c6-1.7}
+在前一定义中选择简单函数作为检验函数的原因是:它们易于操作, 并且在每个 $p\in[1, \infty)$ 的 $L^p$ 中构成稠密集合.
+\end{remark}
+
+\begin{theorem}\label{thm:c6-1.8}
+设 $T_z$ 是解析算子族, 并假设存在正常数 $M_0$、$M_1$, 使得对每个 $b\in\mathbb{R}$, 有
+
+\[
+\|T_{ib}f\|_{L^{q_0}(d\mu)} \le M_0\|f\|_{L^{p_0}(d\nu)}, \qquad \|T_{1+ib}f\|_{L^{q_1}(d\mu)} \le M_1\|f\|_{L^{p_1}(d\nu)},
+\]
+
+其中 $1\le q_0, p_0, q_1, p_1\le\infty$.则对 $z = a+ib\in D$, $T_z$ 延拓为从 $L^p(d\nu)$ 到 $L^q(d\mu)$ 的有界算子, 并且
+
+\[
+\|T_z f\|_{L^q(d\mu)} \le M_0^{1-a}M_1^a\|f\|_{L^p(d\nu)},
+\]
+
+其中
+
+\[
+\frac{1}{p} = \frac{1-a}{p_0} + \frac{a}{p_1}, \qquad \frac{1}{q} = \frac{1-a}{q_0} + \frac{a}{q_1}.
+\]
+\end{theorem}
+
+\begin{proof}
+通过把测度 $\mu$ 与 $\nu$ 本身乘以标量, 可以假设 $M_0 = M_1 = 1$.采用双线性表述, 我们需要证明
+
+\begin{equation}
+\left|\int g(x)T_z f(x)\, dx\right| \le 1\label{eq:c6-182}
+\end{equation}
+
+对每对满足 $\|f\|_{L^p} = \|g\|_{L^{q'}} = 1$ 的简单函数 $f, g$ 成立.固定这样一对 $f, g$, 考虑相关的(解析)简单函数族
+
+\[
+f_z(x) = |f(x)|^{\frac{p}{p(z)}-1}f(x), \qquad g_z(x) = |g(x)|^{\frac{q'}{q'(z)}-1}g(x),
+\]
+
+其中指数为
+
+\[
+\frac{1}{p(z)} = \frac{1-z}{p_0} + \frac{z}{p_1}, \qquad \frac{1}{q'(z)} = \frac{1-z}{q_0'} + \frac{z}{q_1'}.
+\]
+
+我们容易验证
+
+\[
+|f_{ib}| \le |f|^{p/p_0}, \quad |f_{1+ib}| \le |f|^{p/p_1}, \quad |g_{ib}| \le |g|^{q'/q_0'}, \quad |g_{1+ib}| \le |g|^{q'/q_1'}.
+\]
+
+这里我们使用约定 $1/\infty = 0$, 特别地, 若 $p_0 = p_1 = \infty$, 则 $p = p(z) = \infty$ 且 $f_z\equiv f$;类似地, 若 $q_0' = q_1' = \infty$, 则 $q' = q'(z) = \infty$ 且 $g_z\equiv g$.不难验证 $\|f_z\|_{L^{\operatorname{Re}(p(z))}} = \|f\|_{L^p} = 1$, 且 $\|g_z\|_{L^{\operatorname{Re}(q'(z))}} = \|g\|_{L^{q'}} = 1$.
+
+现在考虑定义在 $D$ 上的映射
+
+\[
+h(z) = \int g_z(x)T_z f_z(x)\, dx.
+\]
+
+根据我们的构造以及 $T_z$ 的线性与解析性质, 不难看出 $h\in\mathcal{A}_{BC}$.由假设(以及 Hölder 不等式), 对每个 $b\in\mathbb{R}$ 有 $|h(ib)|\le 1$ 与 $|h(1+ib)|\le 1$.由三线引理推出 $|h(z)|\le 1$, 特别地 \eqref{eq:c6-182}.
+\end{proof}
+
+\mtsubsec{Young 不等式}
+
+我们常常需要估计形如\footnote{事实上, Schwartz 核定理表明, 从 $\mathcal{C}_0^\infty(\Omega_1)$ 到 $\mathcal{D}'(\Omega_2)$ 的每个连续线性映射都具有 (183) 的形式, 其中 $k(x, y)\in\mathcal{D}'(\Omega_1\times\Omega_2)$ 是某个分布.}
+
+\begin{equation}
+Tf(x) = \int k(x, y)f(y)\, dy, \label{eq:c6-183}
+\end{equation}
+
+的积分算子.这类结果中最简单的是下面的 Young 定理.
+
+\begin{theorem}[Young 不等式]\label{thm:c6-1.10}
+设 $k(x, y)$ 是可测函数, 并假设对某个 $1\le r\le\infty$, 有
+
+\[
+\sup_x\|k(x, \cdot)\|_{L^r} \le 1, \qquad \sup_y\|k(\cdot, y)\|_{L^r} \le 1.
+\]
+
+则对 $1\le p\le r'$ 以及
+
+\begin{equation}
+1 + \frac{1}{q} = \frac{1}{r} + \frac{1}{p}, \label{eq:c6-184}
+\end{equation}
+
+有
+
+\begin{equation}
+\|Tf\|_{L^q} \le \|f\|_{L^p}.\label{eq:c6-185}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+由 Hölder 不等式,
+
+\begin{equation}
+\|Tf\|_{L^\infty} \le \|f\|_{L^{r'}}.\label{eq:c6-186}
+\end{equation}
+
+另一方面, 对偶算子 $T^*$ 与 $T$ 具有相同的形式,
+
+\[
+T^*g(y) = \int \overline{k(x, y)}g(x)\, dx,
+\]
+
+因此
+
+\[
+\|T^*g\|_{L^\infty} \le \|g\|_{L^{r'}},
+\]
+
+由对偶性给出另一个端点
+
+\begin{equation}
+\|Tf\|_{L^r} \le \|f\|_{L^1}.\label{eq:c6-187}
+\end{equation}
+
+现在, 我们可以用\thmref{thm:c6-1.8}(取 $T_z\equiv T$)在 \eqref{eq:c6-186} 与 \eqref{eq:c6-187} 之间插值, 得到 \eqref{eq:c6-185}.
+\end{proof}
+
+作为直接推论, 当 $k$ 平移不变, 即 $k(x, y) = k(x-y)$ 时, 我们得到著名的卷积估计:
+
+\begin{equation}
+\|k*f\|_{L^q} \le \|k\|_{L^r}\|f\|_{L^p}, \label{eq:c6-188}
+\end{equation}
+
+只要指数 $1\le p, q, r\le\infty$ 满足 \eqref{eq:c6-184}.注意, 指数之间的这种关系是必要的, 它保证两边关于测度具有相同的齐次次数.
+
+\textbf{习题.} 更一般地, 当 $\|k\|_{L_x^\infty L_y^r}\le 1$ 不成立, 且对 $\|k\|_{L_y^\infty L_x^r}$ 也类似时, 可以通过改变 $x$ 与 $y$ 变量中的测度, 归结为\thmref{thm:c6-1.10} 的假设.这样做, 你能得到怎样的"更一般"的 Young 不等式?
+
+\textbf{习题.} 用复插值证明 傅里叶变换 $\mathcal{F}$ 的 Hausdorff-Young 不等式,
+
+\[
+\|\mathcal{F}(f)\|_{L^q} \lesssim \|f\|_{L^p}, \qquad \text{对一切 } q\ge 2, \quad 1/q + 1/p = 1.
+\]
+
+\mtsubsec{Marcinkiewicz 插值}
+
+比函数 $f$ 的 $L^p$ 可积性稍弱一点的条件是所谓的弱-$L^p$ 性质.
+
+\begin{definition}\label{def:c6-1.12}
+对 $1\le p<\infty$, 如果对每个 $\alpha>0$ 都有 $\Lambda(f, \alpha)\lesssim\alpha^{-p}$, 则称 $f$ 属于\newterm{weak-lp}{弱 $L^p$}{weak-$L^p$}.若 $p = \infty$, 我们令弱-$L^\infty$ 与 $L^\infty$ 重合.
+\end{definition}
+
+由 Chebyschev 不等式 \eqref{eq:c6-180}, $L^p$ 中的任何函数也在弱-$L^p$ 中.下面是实插值最简单的例子.它适用于\newterm{sublinear-operator}{次线性算子}{sublinear operator}, 即满足
+
+\[
+|T(f+g)(x)| \lesssim |Tf(x)| + |Tg(x)|
+\]
+
+的算子.
+
+\begin{theorem}\label{thm:c6-1.13}
+考虑把 $X$ 上的可测函数映为 $Y$ 上的可测函数的次线性算子 $T$.假设 $T$ 把 $L^{p_i}(X)$ 映到弱-$L^{p_i}(Y)$, 带界
+
+\[
+\Lambda(Tf, \alpha) \lesssim \alpha^{-p_i}\|f\|_{L^{p_i}}^{p_i},
+\]
+
+其中 $i = 1, 2$, $1\le p_1 < p_2\le\infty$.则对任何满足 $p_1 < p < p_2$ 的 $p$, $T$ 把 $L^p(X)$ 映到 $L^p(Y)$, 带界
+
+\[
+\|Tf\|_{L^p} \lesssim \|f\|_{L^p}.
+\]
+\end{theorem}
+
+\begin{proof}
+给定 $f\in L^p(X)$ 与 $\alpha>0$, 我们写 $f = f^\alpha + f_\alpha$, 其中 $f^\alpha(x) = f(x)\cdot(|f(x)| > \alpha)$ 和 $f_\alpha(x) = f(x)\cdot(|f(x)| \le \alpha)$ 是 $f$ 的截断.特别地, 由 Hölder 不等式, $f^\alpha\in L^{p_1}$ 且 $f_\alpha\in L^{p_2}$.
+
+先考虑 $p_2<\infty$ 的情形.由对 $T$ 的假设, 有
+
+\begin{equation}
+\Lambda(Tf, 2\alpha) \lesssim \Lambda(Tf^\alpha, \alpha) + \Lambda(Tf_\alpha, \alpha) \lesssim \alpha^{-p_1}\|f^\alpha\|_{L^{p_1}}^{p_1} + \alpha^{-p_2}\|f_\alpha\|_{L^{p_2}}^{p_2}.\label{eq:c6-189}
+\end{equation}
+
+利用 $\|Tf\|_{L^p}$ 的分布刻画与 Fubini 定理, 我们推出
+
+\[
+\int|Tf(x)|^p\, dx \lesssim \int_{0<\alpha<|f(x)|}|f(x)|^{p_1}\alpha^{p-p_1-1}\, d\alpha\, dx + \int_{|f(x)|\le\alpha}|f(x)|^{p_2}\alpha^{p-p_2-1}\, d\alpha\, dx.
+\]
+
+但 $\int_0^{|f(x)|}\alpha^{p-p_1-1}\, d\alpha \simeq |f(x)|^{p-p_1}$, 因为 $p-p_1-1>-1$, 且 $\int_{|f(x)|}^\infty\alpha^{p-p_2-1}\, d\alpha \simeq |f(x)|^{p-p_2}$, 因为 $p-p_2-1<-1$, 结论随之而来.
+
+在 $p_2 = \infty$ 的情形, 证明实际上更简单.我们只需注意到 $|Tf(x)|\gg\alpha$ 蕴含 $|Tf^\alpha(x)|\gg\alpha$, 因为 $|Tf_\alpha(x)|\lesssim\|f_\alpha\|_{L^\infty}\le\alpha$.因此可以把 \eqref{eq:c6-189} 换成
+
+\[
+\Lambda(Tf, C\alpha) \lesssim \Lambda(Tf^\alpha, \alpha) \lesssim \alpha^{-p_1}\|f^\alpha\|_{L^{p_1}}^{p_1},
+\]
+
+其中 $C$ 是某个正常数, 证明如前进行.
+\end{proof}
+\section{极大函数、分数次积分及其应用}
+
+\mtsubsec{极大函数}
+
+对某个 $1\le p\le\infty$ 属于 $L^p(\mathbb{R}^n)$ 的函数 $f$, 可能具有非常差的\newterm{regularity}{正则性}{regularity}性质.给定 $\alpha>0$, $|f(x)|>\alpha$ 的点 $x$ 的集合可以仅仅是任意可测集(若 $p<\infty$ 则具有有限测度).人们常常希望用一个与 $f$ 具有(几乎)相同可积性性质、但具有更好局部正则性的正函数来代替 $f$.这可以通过考虑 $f$ 的极大平均来实现.
+
+\begin{definition}\label{def:c6-2.2}
+给定 $\mathbb{R}^n$ 上的可测函数, 我们定义其\newterm{maximal-function}{极大函数}{maximal function}为
+
+\[
+\mathcal{M}f(x) = \sup_{x\in B}\frac{1}{|B|}\int_B |f(y)|\, dy.
+\]
+
+这里的上确界取遍所有包含 $x$ 的 Euclid 球 $B$(不仅限于以 $x$ 为球心的球).
+\end{definition}
+
+\begin{remark}\label{rem:c6-2.3}
+由定义立即看出 $\mathcal{M}f$ 是下半连续的.事实上, 对每个 $\alpha\ge 0$, 集合 $E_\alpha = \{x\in\mathbb{R}^n : \mathcal{M}f(x) > \alpha\}$ 总是开集:若 $x\in E_\alpha$, 则存在包含 $x$ 的球 $B$, 使得
+
+\begin{equation}
+\frac{1}{|B|}\int_B |f(y)|\, dy > \alpha, \label{eq:c6-190}
+\end{equation}
+
+这也意味着对每个 $y\in B$ 有 $\mathcal{M}f(y) > \alpha$, 因此 $B\subset E_\alpha$.
+\end{remark}
+
+由三角不等式我们还看到, $f\mapsto\mathcal{M}f$ 是次加性算子,
+
+\begin{equation}
+\mathcal{M}(f+g)(x) \le \mathcal{M}f(x) + \mathcal{M}g(x).\label{eq:c6-191}
+\end{equation}
+
+平均过程可能改善局部正则性, 但由于上确界的缘故, $\mathcal{M}f$ 是否保持 $f$ 的可积性性质并不清楚.若 $f$ 本质有界, 则 $\mathcal{M}f$ 有界, 且
+
+\begin{equation}
+\|\mathcal{M}f\|_{L^\infty} \le \|f\|_{L^\infty}.\label{eq:c6-192}
+\end{equation}
+
+但是, 若 $f$ 是可积函数, 并不推出 $\mathcal{M}f$ 可积.例如取 $f = \chi_B\in L^1$, 即球的特征函数, 则 $\mathcal{M}f(x)\gtrsim(1+|x|)^{-n}$, 它勉强不属于 $L^1$.幸运的是, 极大函数仍然保留关于 $f$ 的可积性性质的大部分信息.
+
+\begin{theorem}\label{thm:c6-2.4}
+若 $f\in L^1$, 则 $\mathcal{M}f$ 弱属于 $L^1$, 其含义是:对 $\alpha>0$, 有
+
+\begin{equation}
+|E_\alpha| = \Lambda(\mathcal{M}f(x), \alpha) \lesssim \frac{1}{\alpha}\|f\|_{L^1}.\label{eq:c6-193}
+\end{equation}
+
+若 $1<p\le\infty$ 时 $f\in L^p$, 则 $\mathcal{M}f\in L^p$, 且
+
+\begin{equation}
+\|\mathcal{M}f\|_{L^p} \lesssim \|f\|_{L^p}.\label{eq:c6-194}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+命题的第二部分由第一部分以及极大算子的 $L^\infty$ 有界性, 通过 Marcinkiewicz 插值(\thmref{thm:c6-1.13})得出.因此, 我们只需证明 \eqref{eq:c6-193}.
+
+设 $f\in L^1$ 并固定 $\alpha>0$.由\remref{rem:c6-2.3} 中的讨论, 我们可以找到一族球 $\mathcal{B} = \{B\}$, 使得 $E_\alpha = \cup_{B\in\mathcal{B}}B$, 且每个球 $B$ 都满足 \eqref{eq:c6-190}.若这些球两两不相交, 则容易得出结论, 因为此时
+
+\[
+|E_\alpha| \le \sum_{B\in\mathcal{B}}|B| < \frac{1}{\alpha}\sum_B\int_B |f(y)|\, dy \le \frac{1}{\alpha}\int_{\mathbb{R}^n}|f(y)|\, dy.
+\]
+
+一般情形下这些球并不不相交, 我们必须更加小心.
+
+设 $K$ 是 $E_\alpha$ 的紧子集, 则可以在 $\mathcal{B}$ 中选择覆盖 $K$ 的有限子族 $\mathcal{B}'$.利用下面证明的\newterm{covering-lemma}{覆盖引理}{covering lemma}——\lemref{lem:c6-2.5}\footnote{这有时被称为 Vitali 覆盖引理.}, 我们可以从 $\mathcal{B}'$ 中的球里选出另一个由不相交球组成的有限子族 $\mathcal{B}''$(它可能不再覆盖 $K$), 使得
+
+\[
+|\cup_{B'\in\mathcal{B}'}B'| \lesssim \sum_{B''\in\mathcal{B}''}|B''|.
+\]
+
+然后如前进行, 我们得到
+
+\[
+|K| \lesssim \frac{1}{\alpha}\|f\|_{L^1},
+\]
+
+对所有可能的紧集 $K$ 取上确界, 最终得到 \eqref{eq:c6-193}.
+\end{proof}
+
+\begin{lemma}\label{lem:c6-2.5}
+设 $B_1, \ldots, B_N$ 是 $\mathbb{R}^n$ 中球的有限族, 则可以选出由不相交球组成的子族 $B_{j_1}, \ldots, B_{j_M}$, $M\le N$, 使得
+
+\[
+\left|\cup_{j=1}^N B_j\right| \lesssim \sum_{k=1}^M |B_{j_k}|.
+\]
+\end{lemma}
+
+\begin{proof}
+我们可以假设球 $B_j = B(x_j, r_j)$ 按半径非增的顺序标记, $r_1\ge r_2\ge\cdots\ge r_N$.
+
+取 $j_1 = 1$, 则 $B_{j_1}$ 是半径最大的球.然后归纳地定义 $j_{k+1}$ 为与前已选出的球 $B_{j_1}, \ldots, B_{j_k}$ 不相交的球 $B_j$ 中指标的最小者;若不存在这样的球, 则在第 $k$ 步停止.
+
+由这个构造, 每个球 $B_j$ 都与某个选出的球 $B_{j_k}$ 相交, 且 $r_j\le r_{j_k}$, 因此 $B_j\subset B(x_{j_k}, 3r_{j_k})$.这意味着
+
+\[
+\left|\cup_{j=1}^N B_j\right| \le \left|\cup_{k=1}^M B(x_{j_k}, 3r_{j_k})\right| \le 3^n\sum_{k=1}^M |B_{j_k}|.
+\]
+\end{proof}
+
+\mtsubsec{Lebesgue 微分定理}
+
+若函数 $f$ 连续, 则显然
+
+\begin{equation}
+\lim_{r\to 0}\frac{1}{|B(x, r)|}\int_{B(x, r)} f(y)\, dy = f(x).\label{eq:c6-195}
+\end{equation}
+
+作为\thmref{thm:c6-2.4} 的一个应用, 我们可以证明这个性质对局部可积函数仍然成立.
+
+\begin{corollary}[Lebesgue 微分定理]\label{cor:c6-2.7}
+若 $f\in L^1_{\mathrm{loc}}(\mathbb{R}^n)$, 则 \eqref{eq:c6-195} 对几乎每个 $x$ 成立.
+\end{corollary}
+
+\begin{proof}
+由于该论断是局部的, 我们可以假设 $f\in L^1$.
+
+设 $A_r$ 是由 $A_r f(x) = |B(x, r)|^{-1}\int_{B(x, r)} f(y)\, dy$ 定义的平均算子.证明分两步.首先证明当 $r\to 0$ 时在 $L^1$ 中 $A_r f\to f$, 然后只需证明 $\lim_{r\to 0}A_r f(x)$ 几乎处处存在.
+
+第一步:给定 $\epsilon>0$, 利用 $\mathcal{C}_0$ 在 $L^1$ 中的稠密性, 我们总能找到紧支撑的连续函数 $g$, 它在 $L^1$ 中逼近 $f$, 并且对 $r$ 一致地有 $\|A_r f - A_r g\|_{L^1}\le\|f-g\|_{L^1}<\epsilon$.然后由 $g$ 的一致连续性, 当 $r\to 0$ 时在 $L^1$ 中 $A_r g\to g$, 因此存在 $r_\epsilon$, 使得
+
+\[
+\|A_r f - f\|_{L^1} \le \|A_r f - A_r g\|_{L^1} + \|A_r g - g\|_{L^1} + \|f - g\|_{L^1} \le 3\epsilon,
+\]
+
+对 $r < r_\epsilon$ 成立.
+
+第二步:我们定义 $L^1$ 函数 $f$ 的振荡为
+
+\[
+\Omega f(x) = \limsup_{r\to 0}A_r f(x) - \liminf_{r\to 0}A_r f(x).
+\]
+
+振荡是次加性算子, $\Omega(f+g)\le\Omega f + \Omega g$, 并且被极大函数算子控制, $\Omega f\le 2\mathcal{M}f$;此外, 连续函数的振荡为零.若 $g$ 是在 $L^1$ 中逼近 $f$ 的连续函数, 则
+
+\[
+\Omega f \le \Omega(f-g) + \Omega g = \Omega(f-g) \le 2\mathcal{M}(f-g).
+\]
+
+现在我们可以应用极大函数的弱-$L^1$ 性质, 对任何正的 $\alpha$, 得到
+
+\[
+|\{x : \Omega f(x) > \alpha\}| \le |\{x : \mathcal{M}(f-g)(x) > \alpha/2\}| \lesssim \frac{1}{\alpha}\|f-g\|_{L^1}.
+\]
+
+由于 $\|f-g\|_{L^1}$ 可以任意小, 我们推出 $f$ 的振荡为正的点的集合是零测集.
+\end{proof}
+
+\mtsubsec{分数次积分}
+
+设 $T$ 是作用在 $\mathbb{R}^n$ 上定义的函数上的积分算子, 其核 $k$ 如 \eqref{eq:c6-183} 所示.若我们对 $k(x, y)$ 所知的唯一信息是形如
+
+\[
+|k(x, y)| \lesssim |x-y|^{-\gamma}
+\]
+
+的衰减估计(对某个 $\gamma>0$), 那么 Young 不等式(\thmref{thm:c6-1.10})不允许我们对 $Tf$ 获得好的控制, 因为函数 $|x|^{-\gamma}$ 勉强不属于 $L^{n/\gamma}$.然而, 卷积具有某种光滑化性质, 它蕴含一些肯定性结果, 包含在下面这个重要定理中, 该定理最初由 Hardy 与 Littlewood 对 $n=1$ 证明, 后来由 Sobolev 推广到 $n>1$.
+
+\begin{theorem}[Hardy--Littlewood--Sobolev 不等式]\label{thm:c6-2.9}
+设 $0<\gamma<n$, $1<p<q<\infty$, 使得
+
+\begin{equation}
+1 - \frac{\gamma}{n} = \frac{1}{p} - \frac{1}{q}, \label{eq:c6-196}
+\end{equation}
+
+则
+
+\begin{equation}
+\left\||\cdot|^{-\gamma}*f\right\|_{L^q(\mathbb{R}^n)} \lesssim \|f\|_{L^p(\mathbb{R}^n)}.\label{eq:c6-197}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+我们可以把与奇异核的卷积分成两部分:
+
+\[
+I_\gamma f(x) = |\cdot|^{-\gamma}*f(x) = \int_{|y|\ge R}\frac{f(x-y)}{|y|^\gamma}\, dy + \int_{|y|<R}\frac{f(x-y)}{|y|^\gamma}\, dy,
+\]
+
+其中半径 $R$ 是稍后要选取的正常数.我们只用 Hölder 不等式估计第一项,
+
+\[
+\left|\int_{|y|\ge R}\frac{f(x-y)}{|y|^\gamma}\, dy\right| \le \|f\|_{L^p}\left(\int_{|y|\ge R}|y|^{-\gamma p'}\, dy\right)^{1/p'} \lesssim R^{\frac{n}{p'}-\gamma}\|f\|_{L^p},
+\]
+
+这里需要可积性条件 $\gamma p' > n$, 由 \eqref{eq:c6-196} 它等价于 $q<\infty$.
+
+对第二部分, 我们在奇点周围作\newterm{dyadic-decomposition}{二进分解}{dyadic decomposition}, 得到用极大函数表达的估计:
+
+\[
+\begin{aligned}
+\left|\int_{|y|<R}\frac{f(x-y)}{|y|^\gamma}\, dy\right| &\le \sum_{k=0}^\infty\int_{2^{-k-1}\le\frac{|y|}{R}\le 2^{-k}}\frac{|f(x-y)|}{|y|^\gamma}\, dy \\
+&\lesssim \sum_{k=0}^\infty\frac{1}{(2^{-k}R)^\gamma}\int_{|y|\le 2^{-k}R}|f(x-y)|\, dy \\
+&\lesssim \sum_{k=0}^\infty(2^{-k}R)^{n-\gamma}\mathcal{M}f(x) \simeq R^{n-\gamma}\mathcal{M}f(x),
+\end{aligned}
+\]
+
+这里我们需要 $\gamma<n$ 以保证最后一个几何级数收敛.
+
+此时我们发现, 对每个 $x\in\mathbb{R}^n$ 与每个 $R>0$, 有
+
+\[
+\left||\cdot|^{-\gamma}*f(x)\right| \lesssim R^{\frac{n}{p'}-\gamma}\|f\|_{L^p} + R^{n-\gamma}\mathcal{M}f(x),
+\]
+
+常数与 $R$ 和 $x$ 无关.我们优化这个不等式:对每个 $x$, 选择半径 $R = R(x)$ 使右端两项相等,
+
+\[
+R^{\frac{n}{p'}-\gamma}\|f\|_{L^p} = R^{n-\gamma}\mathcal{M}f(x),
+\]
+
+即
+
+\[
+R(x) = \left(\frac{\|f\|_{L^p}}{\mathcal{M}f(x)}\right)^{p/n},
+\]
+
+又因为 $(n-\gamma)p/n = 1-p/q$, 我们有
+
+\[
+|I_\gamma f(x)| \lesssim \|f\|_{L^p}^{1-\frac{p}{q}}\mathcal{M}f(x)^{\frac{p}{q}}.
+\]
+
+然后两边取 $L^q$ 范数,
+
+\[
+\|I_\gamma f\|_{L^q} \lesssim \|f\|_{L^p}^{1-\frac{p}{q}}\|\mathcal{M}f\|_{L^p}^{\frac{p}{q}}.
+\]
+
+若 $p>1$, 我们可以利用极大函数的估计 \eqref{eq:c6-194} 得出结论.
+\end{proof}
+
+\begin{remark*}
+Hardy-Littlewood-Sobolev 不等式有等价的双线性表述:
+
+\[
+\iint\frac{f(x)g(y)}{|x-y|^\gamma}\, dx\, dy \lesssim \|f\|_{L^{p_1}}\|g\|_{L^{p_2}},
+\]
+
+其中 $0<\gamma<n$, $1<p_1, p_2<\infty$, 且
+
+\[
+\frac{1}{p_1'} + \frac{1}{p_2'} = \frac{\gamma}{n}.
+\]
+
+重要的是要理解, 指数之间的关系可以很快由尺度论证推出.若给变量 $x$ 赋予长度尺度 $L$, 则表达式
+
+\[
+\left\||\cdot|^{-\gamma}*f\right\|_{L^q(\mathbb{R}^n)} = \left\|\int|x-y|^{-\gamma}f(y)\, dy\right\|_{L_x^q(\mathbb{R}^n)}
+\]
+
+具有单位 $L^{-\gamma}\cdot L^n\cdot L^{\frac{n}{q}}$, 而 $\|f\|_{L^p}$ 具有单位 $L^{\frac{n}{p}}$.指数 $\gamma, q, p$ 必须以使两个量的指数匹配的方式相联系.事实上, 若非如此, 则可以取任意非平凡的 $f$ 并对其作尺度变换导出矛盾, 从而推出估计 \eqref{eq:c6-197} 不成立.
+\end{remark*}
+
+\begin{remark*}
+在我们对 \eqref{eq:c6-197} 的证明中, 并没有充分利用极大函数的力量(例如, 只考虑了以 $x$ 为球心的球).事实上, 把核 $|x-y|^{-\gamma}$ 换成任何具有相同分布函数的核 $k(x, y)$, 同样的估计仍然成立.沿着这条思路的证明需要建立 Lorentz 空间的理论以及更一般形式的 Marcinkiewicz 插值定理.对此我们参考 (***).
+\end{remark*}
+
+利用 Hardy-Littlewood-Sobolev 不等式, 我们现在说明可以给出 Sobolev 不等式的一个非常简短的证明,
+
+\[
+\|f\|_{L^q} \lesssim \|\partial f\|_{L^p},
+\]
+
+其中 $n/q = n/p-1$, 在非临界区域 $p>1$.与 Hardy-Littlewood-Sobolev 不等式一样, 指数可以通过考虑两边的长度尺度轻松导出.Sobolev 不等式定量地表达了如下直观事实:一个函数只有在它的导数以更坏的方式爆破时, 才可能在某个地方爆破.
+
+\begin{proof}
+假设 $f\in\mathcal{C}_0^\infty(\mathbb{R}^n)$.对每个单位向量 $\omega$, 有
+
+\[
+f(x) = -\int_0^\infty\frac{d}{dr}f(x+\omega r)\, dr.
+\]
+
+为了考虑 $f$ 可能增长的所有方向, 我们对整个球面求积分, 并回忆 $\mathbb{R}^n$ 中极坐标下的体积元为 $dy = r^{n-1}\, dr\, d\sigma_\omega$, 我们发现
+
+\[
+|f(x)| \lesssim \int\frac{|\partial f(y)|}{|x-y|^{n-1}}\, dy = (|\cdot|^{1-n}*|\partial f|)(x).
+\]
+
+我们取 $L^q$ 范数并利用 \eqref{eq:c6-197}, 得到
+
+\[
+\|f\|_{L^q} \lesssim \||\cdot|^{1-n}*|\partial f|\|_{L^q} \lesssim \|\partial f\|_{L^p},
+\]
+
+只要 $p>1$ 且
+
+\[
+1 - \frac{n-1}{n} = \frac{1}{p} - \frac{1}{q}.
+\]
+\end{proof}
+\mtsubsec{Sobolev 不等式}
+
+在上一小节中, 我们已经看到如何用 $f$ 的梯度的 $L^p$ 范数($1 - \frac{n-1}{n} = \frac{1}{p} - \frac{1}{q}$, $p>1$)来估计函数在 $L^q(\mathbb{R}^n)$ 中的范数.我们现在证明它的一个更强的版本.
+
+\begin{theorem}[Gagliardo--Nirenberg--Sobolev 不等式]\label{thm:c6-2.11}
+不等式
+
+\begin{equation}
+\|f\|_{L^q(\mathbb{R}^n)} \lesssim \|\partial^m f\|_{L^p(\mathbb{R}^n)}, \qquad f\in\mathcal{C}_0^\infty(\mathbb{R}^n), \label{eq:c6-198}
+\end{equation}
+
+在
+
+\begin{equation}
+\frac{1}{q} = \frac{1}{p} - \frac{m}{n} > 0, \qquad m\in\mathbb{N}, \qquad (1\le p < q < \infty)\label{eq:c6-199}
+\end{equation}
+
+时成立.而当 $q=\infty$ 时, 有
+
+\begin{equation}
+\|f\|_{L^\infty(\mathbb{R}^n)} \lesssim \sum_{k=0}^m\|\partial^k f\|_{L^p(\mathbb{R}^n)}, \qquad f\in\mathcal{C}_0^\infty(\mathbb{R}^n), \label{eq:c6-200}
+\end{equation}
+
+当 $\frac{n}{p} - m < 0$ 时成立.
+\end{theorem}
+
+\begin{remark*}
+我们不需要记住精确的条件 \eqref{eq:c6-199};它可以通过简单的量纲分析推出.由于估计是齐次的, 它必须在伸缩下不变, 而 \eqref{eq:c6-199} 只是说 \eqref{eq:c6-198} 两边具有相同的尺度.条件 $\frac{n}{p}-m<0$ 也是对 \eqref{eq:c6-200} 两边尺度的比较, 它排除了一个非常局部化、尖锐的反例.
+\end{remark*}
+
+\begin{remark*}
+估计 \eqref{eq:c6-198} 的下列非临界版本也对一切 $1\le p<q<\infty$ 且 $1/p - m/n < 1/q$ 成立:
+
+\begin{equation}
+\|f\|_{L^q(\mathbb{R}^n)} \lesssim \sum_{|\alpha|\le m}\|\partial^\alpha f\|_{L^p}, \qquad f\in\mathcal{C}_0^\infty(\mathbb{R}^n), \label{eq:c6-201}
+\end{equation}
+\end{remark*}
+
+\textbf{习题.} 举例说明不等式 \eqref{eq:c6-200} 在 $p = n/m$ 时可以不成立.利用\thmref{thm:c6-2.11} 的结果证明 $m=1$ 时的 \eqref{eq:c6-201}.
+
+\textbf{习题.} 用尺度论证说明:若不等式 \eqref{eq:c6-201} 在 $1/p = 1/q + m/n < 0$ 时成立, 则齐次不等式 \eqref{eq:c6-198} 也成立.
+
+\begin{proof}[证明 \eqref{eq:c6-198}]
+$m>1$ 的情形通过对 $m=1$ 的情形反复迭代得到.因此我们可以假设 $m=1$, 由 \eqref{eq:c6-199},
+
+\[
+1\le p < n, \qquad \frac{n}{n-1}\le q = \frac{np}{n-p}<\infty.
+\]
+
+一旦我们有了 $p=1$、$q = n/(n-1)$ 的估计, 则 $p>1$、$q > n/(n-1)$ 的情形只需应用 Hölder 不等式即可得到.事实上, 设 $q = \lambda n/(n-1)$, 其中 $\lambda>1$, 则
+
+\[
+\|f\|_{L^q}^\lambda = \||f|^\lambda\|_{L^{\frac{n}{n-1}}} \lesssim \||f|^{\lambda-1}\partial f\|_{L^1} \le \||f|^{\lambda-1}\|_{L^{p'}}\|\partial f\|_{L^p},
+\]
+
+我们只需验证
+
+\[
+(\lambda-1)p' = \frac{\frac{n-1}{n}q - 1}{1 - \frac{1}{n} - \frac{1}{q}} = q.
+\]
+
+但这本质上无需验证——由不等式的尺度性质, 指数必然匹配.
+
+现在只剩下证明特殊情形 $m=1$, $p=1$, $q = n/(n-1)$.参照 Nirenberg 的著作[?], 可以证明更强的结果:对 $f\in\mathcal{C}_0^\infty(\mathbb{R}^n)$, 有
+
+\begin{equation}
+\|f\|_{L^{\frac{n}{n-1}}(\mathbb{R}^n)} \lesssim \prod_{j=1}^n\|\partial_j f\|_{L^1(\mathbb{R}^n)}^{1/n}.\label{eq:c6-202}
+\end{equation}
+
+当 $n=1$ 时, 这容易由写出
+
+\[
+f(x) = \int_{-\infty}^x f'(y)\, dy
+\]
+
+得到.当 $n=2$ 时, 我们对每个变量做同样的事情, 然后相乘并积分:
+
+\[
+\begin{aligned}
+\iint|f(x_1, x_2)|^2\, dx_1\, dx_2 &\le \iiint|\partial_1 f(y_1, x_2)|\, dy_1\int|\partial_2 f(x_1, y_2)|\, dy_2\, dx_1\, dx_2 \\
+&= \|\partial_1 f\|_{L^1}\|\partial_2 f\|_{L^1}.
+\end{aligned}
+\]
+
+当 $n\ge 3$ 时事情变得更加棘手, 为了分离变量, 我们必须反复使用 Hölder 不等式.只看 $n=3$ 的情形.为简化记号, 令 $f_j = \partial_j f$, 并令 $\int\phi(x)\, dx_j = \int_j\phi(\hat{x}_j)$.我们从
+
+\[
+|f(x)|^{\frac{3}{2}} \le \left(\int_1|f_1(\cdot, x_2, x_3)|\right)^{\frac{1}{2}}\left(\int_2|f_2(x_1, \cdot, x_3)|\right)^{\frac{1}{2}}\left(\int_3|f_3(x_1, x_2, \cdot)|\right)^{\frac{1}{2}}
+\]
+
+开始.然后关于 $x_1$ 积分.右端第一个因子不依赖于 $x_1$, 而我们用 Hölder 把第二个与第三个因子分开:
+
+\[
+\int_1|f(\cdot, x_2, x_3)|^{\frac{3}{2}} \le \left(\int_1|f_1(\cdot, x_2, x_3)|\right)^{\frac{1}{2}}\left(\int_{1, 2}|f_2(\cdot, \cdot, x_3)|\right)^{\frac{1}{2}}\left(\int_{1, 3}|f_3(\cdot, x_2, \cdot)|\right)^{\frac{1}{2}}.
+\]
+
+对关于 $x_2$ 的积分同样进行:
+
+\[
+\int_{1, 2}|f(\cdot, \cdot, x_3)|^{\frac{3}{2}} \le \left(\int_{1, 2}|f_1(\cdot, \cdot, x_3)|\right)^{\frac{1}{2}}\left(\int_{1, 2}|f_2(\cdot, \cdot, x_3)|\right)^{\frac{1}{2}}\left(\int_{1, 2, 3}|f_3(\cdot)|\right)^{\frac{1}{2}},
+\]
+
+最后对 $x_3$ 也这样做:
+
+\[
+\int_{1, 2, 3}|f(\cdot)|^{\frac{3}{2}} \le \left(\int_{1, 2, 3}|f_1(\cdot)|\right)^{\frac{1}{2}}\left(\int_{1, 2, 3}|f_2(\cdot)|\right)^{\frac{1}{2}}\left(\int_{1, 2, 3}|f_3(\cdot)|\right)^{\frac{1}{2}}.
+\]
+
+当 $n>3$ 时, 过程完全相同.
+\end{proof}
+
+\begin{proof}[证明 \eqref{eq:c6-200}]
+显然只需考虑 $m=1$ 的情形, 因为 $m>1$ 的情形应用 \eqref{eq:c6-198} 即可由它推出.因此假设 $m=1$ 且 $p>n$, 我们要证明
+
+\[
+|f(0)| \lesssim \|f\|_{L^p} + \|Df\|_{L^p}.
+\]
+
+首先假设 $f$ 的支集包含在单位球 $B = \{|x|<1\}$ 中, 则
+
+\begin{equation}
+f(0) = -\int_0^1\frac{d}{dr}f(r\omega)\, dr, \qquad \omega\in\mathbb{S}^{n-1}.\label{eq:c6-203}
+\end{equation}
+
+关于 $\omega$ 积分, 然后应用 Hölder 不等式,
+
+\begin{equation}
+|f(0)| \lesssim \int_B\frac{|\partial f(x)|}{|x|^{n-1}}\, dx \lesssim \|\partial f\|_{L^p}\left(\int_B\frac{dx}{|x|^{(n-1)p'}}\right)^{1/p'} \lesssim \|\partial f\|_{L^p}, \label{eq:c6-204}
+\end{equation}
+
+这里需要的可积性条件是 $(n-1)p'<n$, 它正是 $p>n$.
+
+一般情形, 固定支集在 $B$ 中且 $\phi(0)=1$ 的截断函数 $\phi\in\mathcal{C}_0^\infty$, 则由上述讨论, $|f(0)| = |\phi(0)f(0)| \lesssim \|\partial(\phi f)\|_{L^p} \lesssim \|f\|_{L^p} + \|\partial f\|_{L^p}$.
+\end{proof}
+
+\mtsubsec{经典 Sobolev 空间}
+
+\thmref{thm:c6-2.11} 的 Sobolev 不等式引导我们引入\newterm{sobolev-space}{Sobolev 空间}{Sobolev space}.
+
+\begin{definition}\label{def:c6-2.13}
+设 $\Omega$ 是 $\mathbb{R}^n$ 的开子集.固定 $1\le p\le\infty$, 并设 $s\in\mathbb{N}$ 是非负整数.空间 $W^{s, p}(\Omega)$ 由 $\Omega$ 上所有局部可积的实值(或复值)函数 $u$ 组成, 使得对满足 $|\alpha|\le s$ 的所有多重指标 $\alpha$, 弱\footnote{即按分布意义理解的导数.}导数 $\partial^\alpha u$ 都属于 $L^p(\Omega)$.这些空间配备范数:
+
+\[
+\begin{aligned}
+\|u\|_{W^{s, p}(\Omega)} &= \left(\sum_{|\alpha|\le s}\|\partial^\alpha u\|_{L^p(\Omega)}^p\right)^{1/p}, \qquad \text{对 } 1\le p<\infty, \\
+\|u\|_{W^{s, \infty}(\Omega)} &= \sum_{|\alpha|\le s}\|\partial^\alpha u\|_{L^\infty(\Omega)}.
+\end{aligned}
+\]
+\end{definition}
+
+我们还用 $W_0^{k, p}(\Omega)$ 表示 $\mathcal{C}_0^\infty(\Omega)$ 在 $W^{k, p}(\Omega)$ 中的闭包.
+
+特别地, 当 $p=2$ 时, 我们记 $H^s(\Omega) = W^{s, 2}(\Omega)$.显然 $H^0(\Omega) = L^2(\Omega)$.我们也记 $H_0^s(\Omega) = W_0^{s, 2}(\Omega)$.这些空间因其 Hilbert 空间结构而尤为重要.
+
+特别地, 当 $p=\infty$ 时, 我们使用更小的空间 $\mathcal{C}^s(\overline{\Omega})\subset W^{s, \infty}(\Omega)$, 即 $s$ 次连续可微且具有有界 $\|\cdot\|_{W^{s, \infty}}$ 范数的函数所成的集合.
+
+\textbf{习题.} 证明对每个 $s\in\mathbb{N}$ 与 $1\le p\le\infty$, 空间 $W^{s, p}(\Omega)$ 都是 Banach 空间.
+
+关于区域 $\Omega\subset\mathbb{R}^n$ 上的 Sobolev 空间, 还有很多可说的.例如, 我们请读者参阅 Evans 的著作 (\cite{e}, 第 5 章).现在我们把注意力限制到 $\Omega = \mathbb{R}^n$ 的情形.
+
+\textbf{习题.} 证明空间 $W^{k, p}(\mathbb{R}^n)$ 与 $W_0^{k, p}(\mathbb{R}^n)$ 重合.这意味着 $\mathcal{C}_0^\infty$ 在 $W^{k, p}(\mathbb{R}^n)$ 中稠密.
+
+上一小节证明的 Sobolev 不等式可以解释为\newterm{embedding-theorem}{嵌入定理}{embedding theorem}.事实上, \eqref{eq:c6-198} 与 \eqref{eq:c6-201} 可以解释为:只要 $\frac{1}{p} - \frac{m}{n}\le\frac{1}{q}$, Sobolev 空间 $W^{m, p}(\mathbb{R}^n)$ 就包含在 Lebesgue 空间 $L^q(\mathbb{R}^n)$ 中.
+
+\begin{proposition}\label{prop:c6-2.14}
+下列包含关系是连续的:
+
+\[
+W^{m, p}(\mathbb{R}^n)\subset L^q(\mathbb{R}^n), \qquad \text{若 } \frac{1}{p} - \frac{m}{n}\le\frac{1}{q}.
+\]
+
+此外, 对 $q=\infty$, 只要 $m > n/p$, $W^{m, p}(\mathbb{R}^n)$ 就嵌入 $\mathbb{R}^n$ 上有界连续函数的空间.
+\end{proposition}
+
+\begin{proof}
+由\thmref{thm:c6-2.11} 以及 $\mathcal{C}_0^\infty(\mathbb{R}^n)$ 在 $W^{m, p}(\mathbb{R}^n)$ 中的稠密性得出.
+\end{proof}
+
+\mtsubsec{Hölder 空间}
+
+与 Sobolev 空间一起, \newterm{holder-space}{Hölder 空间}{Hölder space}在分析中起着非常重要的作用, 特别是在与椭圆方程的联系中.在引入这些空间之前, 我们先回顾 $m$ 次连续可微函数 $u:\Omega\to\mathbb{R}$ 的空间 $\mathcal{C}^m(\overline{\Omega})$ 的定义, 其中 $\Omega$ 是开区域, 且 $W^{m, \infty}$ 范数有界:
+
+\[
+\|u\|_{\mathcal{C}^m(\overline{\Omega})} = \sum_{|\alpha|\le m}\|\partial^\alpha u(x)\|_{L^\infty(\Omega)} < \infty.
+\]
+
+\begin{definition}\label{def:c6-2.16}
+设 $\Omega$ 是 $\mathbb{R}^n$ 中的开区域.如果
+
+\begin{equation}
+[u]_{\mathcal{C}^{0, \gamma}(\overline{\Omega})} = \sup_{x\neq y\in\Omega}\frac{|u(x)-u(y)|}{|x-y|^\gamma} < \infty, \label{eq:c6-205}
+\end{equation}
+
+则称函数 $u:\Omega\to\mathbb{R}$ 是指数为 $0<\gamma\le 1$ 的 Hölder 连续函数.
+\end{definition}
+
+Hölder 空间 $\mathcal{C}^{k, \gamma}(\overline{\Omega})$ 由所有满足范数
+
+\begin{equation}
+\|u\|_{\mathcal{C}^{k, \gamma}(\overline{\Omega})} = \|u\|_{\mathcal{C}^k(\overline{\Omega})} + \sum_{|\alpha|=k}[\partial^\alpha u]_{\mathcal{C}^{0, \gamma}(\overline{\Omega})}\label{eq:c6-206}
+\end{equation}
+
+有限的函数 $u\in\mathcal{C}^k(\overline{\Omega})$ 组成.
+
+\mtsubsec{习题}
+
+空间 $\mathcal{C}^{k, \gamma}(\overline{\Omega})$ 是 Banach 空间.
+
+\mtsubsec{习题}
+
+证明 $\mathcal{C}^{0, 1}((a, b))$(区间上的 Lipschitz 函数空间)恰好由那些导数属于 $L^\infty$ 的分布组成.
+
+\mtsubsec{习题}
+
+设 $f(x) = (a\le x\le b)$ 是区间的特征函数.证明七重卷积 $f*\cdots*f$ 属于 Hölder 类 $\mathcal{C}^{5, 1}$.
+
+下面的 $L^\infty$ 中 Sobolev 嵌入的更强版本在椭圆理论中很重要.和往常一样, 所涉指数之间的关系可以由量纲分析推出.
+
+\begin{theorem}[Morrey 不等式]\label{thm:c6-2.20}
+假设 $n<p\le\infty$.则对一切 $u\in\mathcal{C}_0^\infty(\mathbb{R}^n)$, 有
+
+\begin{equation}
+\|u\|_{\mathcal{C}^{0, \gamma}(\mathbb{R}^n)} \lesssim \|u\|_{W^{1, p}(\mathbb{R}^n)}, \label{eq:c6-207}
+\end{equation}
+
+只要 $\gamma = 1 - n/p$.
+\end{theorem}
+
+\begin{proof}
+在一维情形, 这是微积分基本定理与 Hölder 不等式的简单应用.一般情形见 \cite{e} 第 5.6.2 节.
+\end{proof}
+\mtsubsec{分数次 $H^s$-Sobolev 空间}
+
+考虑 Sobolev 空间
+
+\[
+H^s(\mathbb{R}^n) = \{u\in L^2 : \partial^\alpha u\in L^2, \quad \forall|\alpha|\le s\}.
+\]
+
+\begin{proposition}\label{prop:c6-2.22}
+Sobolev 空间 $H^s(\mathbb{R}^n)$ 与所有满足下列条件的缓增分布 $u\in\mathcal{S}'(\mathbb{R}^N)$ 所成的集合重合:$\hat{u}$ 局部可积, 且
+
+\begin{equation}
+\|u\|_{H^s}^2 = \int_{\mathbb{R}^N}(1+|\xi|^2)^s|\hat{u}(\xi)|^2 < \infty.\label{eq:c6-208}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+由 Parseval 恒等式、$\mathcal{C}_0^\infty$ 在每个空间中的稠密性以及 $\widehat{\partial_j f}(\xi) = i\xi_j\hat{f}(\xi)$ 这一事实容易得出.
+\end{proof}
+
+注意, \propref{prop:c6-2.22} 的等价定义不仅对正整数有意义, 而且对一切实数 $s$ 都有意义.因此我们可以谈论所有实数值 $s$ 的 Sobolev 空间 $H^s$.我们还将用到下列齐次 Sobolev 范数, 对一切 $s\ge 0$,
+
+\begin{equation}
+\|u\|_{\dot{H}^s}^2 = \int_{\mathbb{R}^N}|\xi|^{2s}|\hat{u}(\xi)|^2 < \infty.\label{eq:c6-209}
+\end{equation}
+
+\textbf{问题.} 为什么若把物理空间变量的单位视为 $L$, 则 $\|u\|_{\dot{H}^s}$ 具有单位 $L^{\frac{N}{2}-s}$?
+
+\textbf{习题.} 对 $s\in(0, 1)$, 空间 $H^s(\mathbb{R}^n)$ 与满足
+
+\begin{equation}
+\left(\int_{\mathbb{R}^n}\int_{\mathbb{R}^n}\frac{|u(x)-u(x+y)|^2}{|y|^{n+2s}}\, dx\, dy + \|u\|_{L^2(\mathbb{R}^n)}^2\right)^{1/2} < \infty\label{eq:c6-210}
+\end{equation}
+
+的局部可积函数所成的空间重合.
+
+\textbf{习题.} 证明对 $s > n/2$, Sobolev 空间 $H^s(\mathbb{R}^n)$ 嵌入有界连续函数的空间.
+
+\mtsubsec{一个迹定理}
+
+为了给偏微分方程中广义函数的边界值赋予意义, 重要的是证明限制运算(它对连续函数显然有意义)在函数不连续时仍然有意义.这样的定理称为迹定理.为简单起见, 考虑 $\mathbb{R}^n$ 中超平面 $x_n = 0$ 的情形, 定义\newterm{trace-operator}{迹算子}{trace operator},
+
+\begin{equation}
+Tf(x_1, \ldots, x_n) = f(x_1, \ldots, x_{n-1}, 0).\label{eq:c6-211}
+\end{equation}
+
+显然, 该算子对 $\mathbb{R}^n$ 中任何连续函数 $f$ 都有意义, 特别地对任何检验函数都有意义.
+
+\begin{theorem}\label{thm:c6-2.24}
+下列估计对任何检验函数 $f\in\mathcal{C}_0^\infty(\mathbb{R}^n)$, $n\ge 2$, 以及任何 $s>1/2$, 一致地成立:
+
+\begin{equation}
+\|Tf\|_{H^{s-\frac{1}{2}}(\mathbb{R}^{n-1})} \lesssim \|f\|_{H^s(\mathbb{R}^n)}.\label{eq:c6-212}
+\end{equation}
+
+因此 $T$ 延拓为线性映射 $T : H^s(\mathbb{R}^n)\to H^{s-1/2}(\mathbb{R}^{n-1})$.
+\end{theorem}
+
+\begin{remark*}
+注意这个结果在量纲上是尖锐的, 如果把它与 Sobolev 空间 $H^s(\mathbb{R})$ 到 $L^\infty(\mathbb{R})$ 的通常嵌入相比较, 这多少有些令人惊讶, 因为在那种情形我们知道尖锐情形 $s = 1/2$ 是不成立的.事实上, 上述迹定理在 $s = 1/2$ 的情形也不成立.
+\end{remark*}
+
+\begin{proof}
+取 $f$ 光滑, 令 $g(x') = f(x', 0)$.设 $\tilde{f}$ 是 $f$ 仅关于 $x_n$ 的 傅里叶变换, 而 $\hat{f}$、$\hat{g}$ 分别是 $f$ 与 $g$ 在 $\mathbb{R}^n$ 和 $\mathbb{R}^{n-1}$ 中的 傅里叶变换.
+
+即
+
+\[
+\tilde{f}(x', \xi_n) = \int_{-\infty}^{\infty}f(x', x_n)e^{-ix_n\xi_n}\, dx_n.
+\]
+
+应用(取 $x_n = 0$ 的)Fourier 反演, 然后作 傅里叶变换, 得到
+
+\[
+\begin{aligned}
+g(x') &= f(x', 0) = \frac{1}{2\pi}\int_{-\infty}^{\infty}\tilde{f}(x', \xi_n)\, d\xi_n, \\
+\hat{g}(\xi') &= \frac{1}{2\pi}\int_{-\infty}^{\infty}\hat{f}(\xi', \xi_n)\, d\xi_n.
+\end{aligned}
+\]
+
+然后, 利用我们对分数次 $H^s$ 空间的了解以及 Cauchy-Schwartz 不等式, 可以看到:
+
+\[
+\begin{aligned}
+\|g\|_{H^{s-1/2}(\mathbb{R}^{n-1})} &\lesssim \int_{\mathbb{R}^{n-1}}|\hat{g}(\xi')|^2(1+|\xi'|^2)^{s-1/2}\, d\xi' \\
+&\lesssim \int_{\mathbb{R}^{n-1}}\left|\int_{-\infty}^{\infty}\hat{f}(\xi)\, d\xi_n\right|^2(1+|\xi'|^2)^{s-1/2}\, d\xi' \\
+&\lesssim \int_{\mathbb{R}^{n-1}}(1+|\xi'|^2)^{s-1/2}\left(\int_{-\infty}^{\infty}|\hat{f}(\xi)|^2(1+|\xi|^2)^s\, d\xi_n\right)J(\xi')\, d\xi',
+\end{aligned}
+\]
+
+其中
+
+\[
+J(\xi') = \int_{-\infty}^{\infty}(1+|\xi|^2)^{-s}\, d\xi_n.
+\]
+
+又因为 $s>1/2$, 我们有
+
+\[
+\begin{aligned}
+J(\xi') &= \int_{-\infty}^{\infty}(1+|\xi|^2)^{-s}\, d\xi_n = \int_{-\infty}^{\infty}(1+|\xi'|^2+|\xi_n|^2)^{-s}\, d\xi_n \\
+&= (1+|\xi'|^2)^{-s+1/2}\int_{-\infty}^{\infty}(1+y^2)^{-s}\, dy.
+\end{aligned}
+\]
+
+把它代入上面关于 $\|g\|_{H^{s-1/2}}$ 的估计, 就证明了结果.
+\end{proof}
+
+对于更高余维超曲面上的迹, 也有类似的结果.下面就是这样一个结果, 它可以用初等方法证明.
+
+\begin{proposition}\label{prop:c6-2.25}
+考虑 $\mathbb{R}^3$ 中的迹算子 $T$, 它把连续函数 $f(t, x^1, x^2)$ 映为 $Tf(t) = f(t, 0, 0)$.对任何检验函数 $f$, 有
+
+\begin{equation}
+\|\partial_t(Tf)\|_{L^2(\mathbb{R})} \lesssim \|\partial^2 f\|_{L^2(\mathbb{R}^3)}.\label{eq:c6-213}
+\end{equation}
+
+因此 $T$ 延拓为以 $H^2(\mathbb{R}^3)$ 为定义域、取值于 $H^1(\mathbb{R})$ 的有界线性算子.
+\end{proposition}
+
+\begin{proof}
+
+\[
+\begin{aligned}
+\int_{\mathbb{R}}|\partial_t f(t, 0, 0)|^2\, dt &= \int_0^\infty dx^1\int_0^\infty dx^2\left(\partial_1\partial_2\int_{\mathbb{R}}\partial_t f(t, x)\partial_t f(t, x)\, dt\right) \\
+&= 2\int_0^\infty dx^1\int_0^\infty dx^2\left(\int_{\mathbb{R}}\partial_1\partial_2\partial_t f(t, x)\partial_t f(t, x)\, dt\right) \\
+&\quad + 2\int_0^\infty dx^1\int_0^\infty dx^2\left(\int_{\mathbb{R}}\partial_1\partial_t f(t, x)\partial_2\partial_t f(t, x)\, dt\right).
+\end{aligned}
+\]
+
+显然,
+
+\[
+\left|\int_0^\infty dx^1\int_0^\infty dx^2\left(\int_{\mathbb{R}}\partial_1\partial_t f(t, x)\partial_2\partial_t f(t, x)\, dt\right)\right| \lesssim \|\partial^2 f\|_{L^2(\mathbb{R}^3)}^2.
+\]
+
+另一方面, 关于 $t$ 分部积分,
+
+\[
+\int_{\mathbb{R}}\partial_1\partial_2\partial_t f(t, x)\partial_t f(t, x)\, dt = -\int_{\mathbb{R}}\partial_1\partial_2 f(t, x)\partial_t^2 f(t, x)\, dt.
+\]
+
+因此,
+
+\[
+\left|\int_0^\infty dx^1\int_0^\infty dx^2\left(\int_{\mathbb{R}}\partial_1\partial_2\partial_t f(t, x)\partial_t f(t, x)\, dt\right)\right| \lesssim \|\partial^2 f\|_{L^2(\mathbb{R}^3)}.
+\]
+
+如所期望.
+\end{proof}
+
+\textbf{习题.} 用 傅里叶变换证明同样的结果, 并将其推广到所有维数与一般的 $H^s$ 空间.
+
+\textbf{习题.} 把该结果推广到有界区间上的 $t$.
+
+\mtsubsec{延拓}
+
+为了把对 $\mathbb{R}^n$ 中函数成立的结论推广到 $\mathbb{R}^n$ 中的区域, 我们需要以受控的方式\newterm{extension}{延拓}{extension}这些函数.我把讨论限制在半空间 $\mathbb{R}_+^n = \{x\in\mathbb{R}^n / x^n\ge 0\}$ 的情形.考虑 Sobolev 空间 $W^{1, p}(\mathbb{R}_+^n)$.我们要证明如下结论.
+
+\begin{proposition}\label{prop:c6-2.27}
+存在有界线性算子 $E : W^{1, p}(\mathbb{R}_+^n)\to W^{1, p}(\mathbb{R}^n)$, 使得对任何连续的 $f$, 有
+
+\[
+Ef|_{\mathbb{R}_+^n} = f
+\]
+
+并且
+
+\[
+\|Ef\|_{W^{1, p}(\mathbb{R}^n)} \lesssim \|f\|_{W^{1, p}(\mathbb{R}_+^n)}.
+\]
+\end{proposition}
+
+\begin{proof}
+只需对函数 $f\in\mathcal{C}^1(\mathbb{R}_+^n)$ 证明该结果.给定这样的函数, 我们利用其高阶反射定义其延拓 $\bar{f}$, 它在 $\mathbb{R}_+^n$ 中与 $f$ 重合, 并且对所有 $x^n<0$,
+
+\[
+\bar{f}(x', x^n) = -3f(x', -x^n) + 4f\left(x', -\frac{1}{2}x^n\right).
+\]
+
+首先注意到 $\bar{f}$ 也是 $\mathcal{C}^1$ 的.事实上, $\bar{f}$ 在 $x^n = 0$ 处连续, 其关于变量 $x' = (x^1, \ldots, x^{n-1})$ 的导数也连续.另一方面, 对 $x^n<0$,
+
+\[
+\partial_n\bar{f}(x', x^n) = 3\partial_n f(x', -x^n) - 2\partial_n f\left(x', -\frac{1}{2}x^n\right).
+\]
+
+因此, 令 $x^n$ 从 $x^n<0$ 趋于零,
+
+\[
+(\partial_n\bar{f})^-(x', 0) = \partial_n f(x', 0).
+\]
+
+利用这些计算, 我们立刻得到所需的估计.
+\end{proof}
+
+\textbf{习题.} 把该结果推广到 $s\in\mathbb{N}$ 的 $W^{s, p}$ 空间.分数次 $H^s$ 空间又如何?

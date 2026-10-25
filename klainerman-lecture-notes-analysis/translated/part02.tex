@@ -1,0 +1,459 @@
+% ==== part02 第 2 章:一般方程 (General Equations) ====
+% 源: MinerU_latex_lecture nots.tex 2577-3674 行(pdf_text.txt 1963-2788,PDF 第 39-54 页)
+% 术语(新增,键=中文=英文):
+%   quasi-linear=拟线性, semi-linear=半线性, fully-nonlinear=完全非线性,
+%   characteristic-curve=特征曲线, bicharacteristic=双特征曲线, characteristic-hypersurface=特征超曲面,
+%   non-characteristic=非特征的, overdetermined=超定的, underdetermined=欠定的,
+%   well-posed=适定的, blow-up=爆破, hamilton-jacobi=Hamilton-Jacobi 方程,
+%   hamiltonian-system=Hamiltonian 方程组, eikonal=eikonal 方程, harmonic-oscillator=谐振子,
+%   geometric-optics=几何光学, isometric-embedding=等距嵌入, signature=符号差,
+%   picard-iteration=Picard 迭代, cauchy-kowalewski=Cauchy-Kowalewski 定理
+% REFS(跨章/待解析项):
+%   - 公式 (1)-(5)、(3)、(6)、(20)、(24) 为导言(第 0 章)公式,已按 part00 标签写 \eqref{eq:c0-*}(可解析,协调员复核).
+%   - "Eikonal equation (149)"(源 2711、3429 行)与脚注 9 中 "(148)": 属第 3 章公式,标签未知 → 正文按原文写 (149)/(148) 纯文本,待解析.
+%   - 源 3442 行 "As particular solutions of (429)": 原书(pdf_text 同)即作 (429),疑为 (120) 之笔误 → 按原文保留 (429) 纯文本.【已核对: 新版 PaddleOCR 确认原书即作 (429), 照录无误】
+%   - 源 3450 行 "ω ∈ R^3"(例 2 光线): 两源一致作 R^3,数学上应为 R^d → 照录 R^3.【已核对: 新版 PaddleOCR 确认原书作 R^3, 照录无误; 数学上严格应为 R^d, 忠实原文保留】
+%   - 源 3512 行 "the Dirichlet condition for (??)": 原书引用即 (??) 未解析 → 按原文保留 "(??)",待人工确认.
+%   - 源 3338 行 (113) 求和上限: 源与 pdf 均作 ∑_{i=1}^{n},按数学含义改为 ∑_{i=1}^{d}.
+%   - 脚注 1-14 全部按 pdf_text.txt 页尾(第 39-54 页)找回并翻译为 \footnote.
+% 编号说明: 公式 (81)-(126) 共 46 个,按原书顺序用 equation 环境自动编号并加 \label{eq:c2-编号};
+%   其余行间公式(原书未编号)用 \[ \]. "Remark 1./2."(引言)、"例 1./2."(第 3 节)及
+%   "注 1.-注 4."(第 3 节末)为原书手工编号(无节前缀),按规范写为 \noindent\textbf{...};
+%   "Propagation of singularities^10." 为加粗段首词+脚注 10;Theorem 4.1(Holmgren 唯一性)为第 4 节
+%   唯一编号对象,自动显示 4.1,加 \label{thm:c2-4.1};未编号定义/定理/注/例用带 * 环境;
+%   第 2 节定理[常微分方程基本定理]与第 4 节定理[Cauchy-Kowalevsky (CK)]原书均未编号 → theorem*;
+%   源 3148 行 "...... To fill in the proof....." 为作者占位符,照译保留.
+% ====
+
+\chapter{一般方程}
+
+\section*{引言}
+
+把 PDE 定义为一门研究所有偏微分方程的学科, 是很有诱惑力的, 正如, 比如说, 代数几何处理所有多项式方程一样.按照这种观点, 这门学科的目标, 是找到关于所有 PDE、或非常一般的 PDE 类的普遍理论.尽管这种观点已经相当过时, 它仍然具有重要的价值, 我希望在下面加以说明.为了看到一般理论的完整威力, 我们至少需要写下一般方程, 同时将确保在简化情形下解释主要思想.我们考虑 $\mathbb{R}^{d}$ 中的方程或方程组, 变量为 $x = (x^{1}, x^{2}, \ldots, x^{d})$.同前, 我们用
+$\partial_{i} = \frac{\partial}{\partial x^{i}}$
+表示关于坐标 $x^{i}$ 的偏导数, 并用
+$\partial^{\alpha} = \partial_{1}^{\alpha_{1}} \partial_{2}^{\alpha_{2}} \cdots \partial_{d}^{\alpha_{d}}$
+表示对应于多重指标 $\alpha = (\alpha_{1}, \alpha_{2}, \ldots, \alpha_{d}) \in \mathbb{N}^{d}$ 的混合偏导数.我们用 $\partial^{k}$ 表示所有满足 $|\alpha| = \alpha_{1} + \cdots + \alpha_{d} = k$ 的偏导数 $\partial^{\alpha}$ 组成的向量.最后我们用
+$\Lambda^{k} u = (u, \partial u, \ldots, \partial^{k} u)$
+表示所有阶数小于或等于 $k$ 的偏导数组成的集合.在大多数有趣的例子中, k 是 1 或 2.
+
+\begin{example*}
+为了更清楚地说明这些记号, 考虑 $\mathbb{R}^{2}$ 的情形和坐标 $x^{1}, x^{2}$.对于多重指标 $\alpha = (2, 0)$, 我们有
+$\partial^{\alpha} u = \frac{\partial}{\partial x^{1}} \frac{\partial}{\partial x^{1}} u = \partial_{1}^{2} u$,
+而对于 $\alpha = (1, 1)$ 我们有
+$\partial^{\alpha} u = \frac{\partial}{\partial x^{1}} \frac{\partial}{\partial x^{2}} u = \partial_{1} \partial_{2} u$.又有
+\[
+\partial^{2} u = \left( \frac{\partial}{\partial x^{1}} \frac{\partial}{\partial x^{1}} u, \frac{\partial}{\partial x^{1}} \frac{\partial}{\partial x^{2}} u, \frac{\partial}{\partial x^{2}} \frac{\partial}{\partial x^{2}} u \right) = (\partial_{1}^{2} u, \partial_{1} \partial_{2} u, \partial_{2}^{2} u),
+\]
+以及
+$\Lambda^{2} u = (u, \partial_{1} u, \partial_{2} u, \partial_{1}^{2} u, \partial_{1} \partial_{2} u, \partial_{2}^{2} u)$.
+\end{example*}
+
+利用这些记号, $\mathbb{R}^{d}$ 中的 Laplace 算子具有形式
+$\Delta = \partial_{1}^{2} + \partial_{2}^{2} + \cdots + \partial_{d}^{2}$,
+而 Minkowski 空间 $\mathbb{R}^{d+1}$ 中的 D'Alembert 算子(D'Alembertian)具有形式
+$\Box = -\partial_{t}^{2} + \partial_{1}^{2} + \cdots + \partial_{d}^{2}$.要使一个出现直至 $k$ 阶偏导数的方程有意义, 我们需要处理在每个点 $k$ 次可微的函数.采用函数类 $C^{k}$——即连续、且所有阶数 $| \alpha | \leq k$ 的偏导数 $\partial^{\alpha} u$ 均连续的函数——是方便的.
+
+\begin{definition*}
+$\mathbb{R}^{d}$ 中 $k$ 阶一般偏微分方程具有如下形式,
+\begin{equation}
+F\bigl(x, \Lambda^{k} u(x)\bigr) = 0, \label{eq:c2-81}
+\end{equation}
+其中 $F$ 是指定的函数.我们还考虑 $N \times N$ 方程组\footnote{即 $N$ 个方程、$N$ 个未知数的确定方程组.}, 此时 $F$ 和 $u$ 是列 $N$ 维向量.若 $C^{k}$ 类函数 $u$ 在 $\mathbb{R}^{d}$ 的某个指定区域的所有点 $x$ 处满足方程 \eqref{eq:c2-81}, 则称它为经典解\footnote{我们称之为经典解, 以区别于将在后面各节中讨论的广义解.}.
+\end{definition*}
+
+首先考虑一维情形 $d = 1$, 此时 \eqref{eq:c2-81} 成为常微分方程 (ODE), 或 ODE 方程组.为进一步简化, 取 $k = 1$ 和 $N = 1$, 即一阶($k = 1$)常微分方程的情形.于是 \eqref{eq:c2-81} 就是 $F(x, u(x), \partial_{x} u(x)) = 0$, 其中 $F$ 是三个变量 $x$、$u$ 和 $p = \partial_{x} u$ 的给定函数, 例如 $F(x, u, p) = x \cdot p + u^{3} - \sin x$.此时求解方程 \eqref{eq:c2-81} 就是找一个 $C^{1}$ 函数 u(x), 使得
+\begin{equation}
+x \cdot \partial_{x} u(x) + u^{3} = \sin x. \label{eq:c2-82}
+\end{equation}
+
+现在考虑二阶 ODE 的情形, 即 $d = N = 1$ 且 $k = 2$.于是 \eqref{eq:c2-81} 成为 $F(x, u(x), \partial_{x} u(x), \partial_{x}^{2} u(x)) = 0$, 其中 $F$ 现在依赖于四个变量 $x, u, p = \partial_{x} u, q = \partial_{x}^{2} u$.作为例子取 $F = q^{2} + V'(u)$, 其中 $V = V(u)$ 是给定的函数, 此时 \eqref{eq:c2-81} 成为非线性\newterm{harmonic-oscillator}{谐振子}{harmonic oscillator}方程,
+\begin{equation}
+\partial_{x}^{2} u(x) + V'(u(x)) = 0. \label{eq:c2-83}
+\end{equation}
+
+转到 ODE 方程组, 取 $d = 1, k = 1$ 且 $N = 2$, 我们需要向量函数 $F = (F_{1}, F_{2})$, 其中 $F_{1}$ 和 $F_{2}$ 都依赖于五个变量 $x, u_{1}, u_{2}, p_{1} = \partial_{x} u_{1}, p_{2} = \partial_{x} u_{2}$.于是 \eqref{eq:c2-81} 成为,
+\[
+\begin{aligned}
+F_{1}\bigl(x, u_{1}(x), u_{2}(x), \partial_{x} u_{1}(x), \partial_{x} u_{2}(x)\bigr) &= 0 \\
+F_{2}\bigl(x, u_{1}(x), u_{2}(x), \partial_{x} u_{1}(x), \partial_{x} u_{2}(x)\bigr) &= 0.
+\end{aligned}
+\]
+
+PDE 的情形要稍微复杂一些, 因为定义 $F$ 时涉及的变量数目很大.于是, 对于两个空间维数($d = 2$)下的一阶($k = 1$)标量方程($N = 1$), 我们需要依赖于两个空间变量 $x^{1}, x^{2}$ 以及 $u, p_{1} = \partial_{1} u$ 和 $p_{2} = \partial_{2} u$ 的函数 F.对于给定的五变量函数 $F = F(x, u, p)$, 两个空间维数中的一般一阶 PDE 具有如下形式,
+\begin{equation}
+F(x, u(x), \partial_{1} u(x), \partial_{2} u(x)) = 0. \label{eq:c2-84}
+\end{equation}
+作为特例取 $F = p_{1}^{2} + p_{2}^{2} - 1$.相应的方程是,
+\begin{equation}
+(\partial_{1} u(x))^{2} + (\partial_{2} u(x))^{2} = 1, \label{eq:c2-85}
+\end{equation}
+它在\newterm{geometric-optics}{几何光学}{geometric optics}中起重要作用.方程的经典解是 $C^{1}$ 函数 $u = u(x^{1}, x^{2})$, 它在区域 $D \subset \mathbb{R}^{2}$ 的所有点处满足 \eqref{eq:c2-85}.一个类似的例子是 eikonal \eqref{eq:c4-149} 给出的例子.
+
+\noindent\textbf{注 1.}\quad 尽管超定的(即方程数目多于未知量数目)或欠定的(即方程数目少于未知量数目)方程组对几何和物理有显而易见的兴趣, 我们仍把它们排除在我们的定义之外.例如, Einstein 真空方程 \eqref{eq:c0-24} 乍一看是欠定的.一旦我们固定一个特定的坐标条件, 如引言中提到的波坐标条件, 它们就变成确定的.规范场论, 如 Yang-Mills, 具有类似的结构.另一方面, 由 $\mathbb{R}^{n}$ 的开集上的 De Rham 复形定义的方程构成一个超定方程组.例如, 给定一个一次形式 $\omega = \omega_{i} dx^{i}$, 方程组 $df = \omega$ 是超定的, 并且只有当 $\omega$ 的外微分消失, 即 $d\omega = 0$ 时才能局部求解.
+
+\noindent\textbf{注 2.}\quad 事实上, 所有高阶标量方程或方程组都可以重新表述为一阶方程组, 即 $k = 1$, 方法很简单:把 $u$ 的所有高阶导数连同偏导数之间显然的相容关系一起作为未知量引入.作为例子, 考虑方程 \eqref{eq:c2-83} 并令 $v = \partial_{x} u$.于是我们可以把这个方程改写为 $N = 2$ 的一阶方程组, 即 $\partial_{x} v + V'(u) = 0$, $\partial_{x} u - v = 0$.
+
+一个方程或方程组, 若关于最高阶导数是线性的, 则称为\newterm{quasi-linear}{拟线性}{quasi-linear}的.$\mathbb{R}^{d}$ 中一阶($k = 1$)拟线性方程组可以写成如下形式,
+\begin{equation}
+\sum_{i = 1}^{d} A^{i}(x, u(x)) \partial_{i} u = F(x, u(x)). \label{eq:c2-86}
+\end{equation}
+这里 $u$ 和 $F$ 是列 $N$ 维向量, 系数 $A^{1}, A^{2}, \ldots, A^{d}$ 是 $N \times N$ 矩阵值函数.
+
+极小曲面方程是两个空间维数中二阶($k = 2$)拟线性标量方程($N = 1$)的一个例子.确实, 利用坐标 $x^{1}, x^{2}$ 而不是 x, y, 我们可以在 Leibniz 公式的帮助下处理 \eqref{eq:c0-6} 并将其改写成如下形式,
+\begin{equation}
+\sum_{i, j = 1, 2} h^{ij}(\partial u) \partial_{i} \partial_{j} u = 0, \label{eq:c2-87}
+\end{equation}
+其中
+$h^{11}(\partial u) = 1 + (\partial_{2} u)^{2}$, $h^{22}(\partial u) = 1 + (\partial_{1} u)^{2}$, $h^{12}(\partial u) = h^{21}(\partial u) = -\partial_{1} u \cdot \partial_{2} u$,
+这显然是二阶拟线性方程.
+
+在拟线性方程的最高阶系数, 即对应于最高阶导数的那些系数, 只依赖于空间变量 $x \in \mathbb{R}^{d}$ 的特殊情形下, 该方程或方程组称为\newterm{semi-linear}{半线性}{semi-linear}的.例如, 在单值化定理的背景下导出的方程 \eqref{eq:c0-20} 就是半线性的.
+
+k 阶线性方程或方程组可以写成如下形式,
+\begin{equation}
+\sum_{|\alpha| \leq k} A_{\alpha}(x) \partial^{\alpha} u(x) = F(x). \label{eq:c2-88}
+\end{equation}
+注意左边的微分算子在我们引言中所讨论的意义下确实是线性的.此外, 若系数 $A_{\alpha}$ 不依赖于 x, 则方程组称为常系数线性方程组.引言中讨论的五个基本方程 \eqref{eq:c0-1}–\eqref{eq:c0-5} 都是常系数线性的.典型地, 这些是唯一可以显式求解的方程.
+
+这样我们就有了第一个有用的、确实是非常有用的 PDE 分类:完全非线性、拟线性、半线性和线性.\newterm{fully-nonlinear}{完全非线性}{fully nonlinear}方程关于最高阶导数是非线性的.典型的例子是 Monge-Ampère 方程.为简单起见, 考虑 $\mathbb{R}^{2}$ 中两个变量的函数 $u(x^{1}, x^{2})$, 其 Hessian 为 $\partial^{2} u = (\partial_{i} \partial_{j} u)_{i, j = 1, 2}$.显然, 行列式
+$\det(\partial^{2} u) = (\partial_{1}^{2} u) \cdot (\partial_{2}^{2} u) - (\partial_{1} \partial_{2} u)^{2}$
+关于 $u$ 的二阶导数是二次的.因此 Monge-Ampère 方程,
+\begin{equation}
+\det(\partial^{2} u) = f(x, u, \partial u), \label{eq:c2-89}
+\end{equation}
+其中 $f$ 是定义在 $\mathbb{R}^{2} \times \mathbb{R} \times \mathbb{R}^{2}$ 上的给定函数, 是完全非线性的.这个方程在几何中起重要作用, 它与\newterm{isometric-embedding}{等距嵌入}{isometric embedding}问题以及在 $\mathbb{R}^{2}$ 中寻找具有给定 Gauss 曲率的曲面的问题有关.Monge-Ampère 方程的一个针对复值函数的变体, 在复几何中与 Calabi-Yau 流形相关的部分起着核心作用.另一方面, Calabi-Yau 流形是弦论中核心的数学对象.
+
+\begin{remark*}
+物理学中的大多数基本方程, 如 Einstein 方程组, 都是拟线性的.然而, 完全非线性方程出现在与线性 PDE 的特征理论(我们将在下面详细讨论)或几何相关的背景中.
+\end{remark*}
+
+\section{一阶标量方程}
+
+对这个经典课题给出系统的处理是没有意义的, 因为有许多 PDE 著作在这方面做得很好, 如 \cite{e} 或 \cite{j}.下面我只打算给出该理论背后的主要思想.事实证明, d 个空间维数中的标量($N = 1$)一阶($k = 1$)PDE 可以化归为一阶 ODE 方程组.
+
+作为这一重要事实的简单说明, 考虑两个空间维数中的如下方程,
+\begin{equation}
+a^{1}(x^{1}, x^{2}) \partial_{1} u(x^{1}, x^{2}) + a^{2}(x^{1}, x^{2}) \partial_{2} u(x^{1}, x^{2}) = f(x^{1}, x^{2}), \label{eq:c2-90}
+\end{equation}
+其中 $a^{1}, a^{2}, f$ 是变量 $x = (x^{1}, x^{2}) \in \mathbb{R}^{2}$ 的给定实函数.我们给 \eqref{eq:c2-90} 配上如下一阶 $2 \times 2$ 方程组,
+\begin{equation}
+\frac{d x^{1}}{d s}(s) = a^{1}(x^{1}(s), x^{2}(s)), \quad \frac{d x^{2}}{d s} = a^{2}(x^{1}(s), x^{2}(s)). \label{eq:c2-91}
+\end{equation}
+为简化起见我们假设 $f = 0$.注意 \eqref{eq:c2-90}(其中 $f = 0$)的任意解 $u = u(x^{1}, x^{2})$ 沿 \eqref{eq:c2-91} 的任意解 $x(s) = (x^{1}(s), x^{2}(s))$ 是常数, 即
+\[
+\frac{d}{d s} u\bigl(x^{1}(s), x^{2}(s)\bigr) = 0.
+\]
+于是, 原则上, 知道 \eqref{eq:c2-91} 的解——称为 \eqref{eq:c2-90} 的\newterm{characteristic-curve}{特征曲线}{characteristic curve}——就能使我们找到 \eqref{eq:c2-90} 的所有解.我说"原则上", 是因为一般而言非线性方程组 \eqref{eq:c2-91} 并不那么容易求解.然而 ODE 更容易处理, 而且 ODE 基本定理——我们将在本节后面讨论——允许我们求解 \eqref{eq:c2-91}, 至少在 $s$ 的一个小区间内局部求解.u 沿特征曲线的常值性使我们能够获得重要的定性信息, 即使当我们找不到显式解时也是如此.例如, 假设系数 $a^{1}, a^{2}$ 是光滑的(或实解析的), 且初始数据在 $H$ 上处处光滑(或实解析), 只在某点 $x_{0} \in \mathcal{H}$ 处不连续.那么, 显然, 只要 \eqref{eq:c2-91} 的轨线定义良好且互不相同, 解 $u$ 就在所有点处保持光滑(或实解析), 除了沿从 $x_{0}$ 出发的特征曲线 $\Gamma$, 即沿 \eqref{eq:c2-91} 的满足初始条件 $x(0) = x_{0}$ 的解.$x_{0}$ 处的不连续性恰好沿 $\Gamma$ 传播.我们在这里看到一条一般原理最简单的表现, 我们将在后面陈述它: PDE 解的奇异性沿特征传播.
+
+可以将方程 \eqref{eq:c2-90} 推广, 允许系数 $a^{1}, a^{2}$ 和 $f$ 不仅依赖于 $x = (x^{1}, x^{2})$, 还依赖于 u,
+\begin{equation}
+a^{1}(x, u(x)) \partial_{1} u(x) + a^{2}(x, u(x)) \partial_{2} u(x) = f(x, u(x)). \label{eq:c2-92}
+\end{equation}
+相应的特征方程组变为,
+\begin{equation}
+\frac{d x^{1}}{d s}(s) = a^{1}\bigl(x(s), u(s, x(s))\bigr), \quad \frac{d x^{2}}{d s} = a^{2}\bigl(x(s), u(s, x(s))\bigr). \label{eq:c2-93}
+\end{equation}
+于是, 与前面的情形一样,
+\begin{equation}
+\frac{d}{d s} u(x^{1}(s), x^{2}(s)) = f\bigl(x^{1}(s), x^{2}(s), u(x^{1}(s), x^{2}(s))\bigr). \label{eq:c2-94}
+\end{equation}
+然而与前面的情形不同, \eqref{eq:c2-93} 是不确定的;我们现在需要考虑扩大的 ODE 方程组 \eqref{eq:c2-93}–\eqref{eq:c2-94}, 其中未知量是 $x^{1}(s), x^{2}(s), u(s) = u(x^{1}(s), x^{2}(s))$.作为 \eqref{eq:c2-92} 的一个特殊例子, 考虑两个空间维数中的标量方程,
+\begin{equation}
+\partial_{t} u + u \partial_{x} u = 0, \qquad u(0, x) = u_{0}(x), \label{eq:c2-95}
+\end{equation}
+称为 Burger 方程.由于 $a^{1} = 1, a^{2} = u$, 我们可以在 \eqref{eq:c2-93} 中令 $x^{1}(s) = s$, $x^{2}(s) = x(s)$, 从而把其特征方程推导为如下形式,
+\begin{equation}
+\frac{d x}{d s}(s) = u(s, x(s)). \label{eq:c2-96}
+\end{equation}
+注意, 对于 \eqref{eq:c2-95} 的任意给定解 $u$ 和任意特征曲线 $(s, x(s))$, 我们有 $\frac{d}{d s} u(s, x(s)) = 0$.于是, 原则上, 知道 \eqref{eq:c2-96} 的解将允许我们确定 \eqref{eq:c2-95} 的解.然而, 这似乎是循环的, 因为 $u$ 本身出现在 \eqref{eq:c2-96} 中.为了看清如何绕开这个困难, 考虑 \eqref{eq:c2-95} 的初值问题, 即寻找满足 $u(0, x) = u_{0}(x)$ 的解 u.考虑一条相关的特征曲线 $x(s)$, 使得初始时 $x(0) = x_{0}$.那么, 由于 $u$ 沿该曲线为常数, 我们必有 $u(s, x(s)) = u_{0}(x_{0})$.因此, 回到 \eqref{eq:c2-96}, 我们推得 $\frac{d x}{d s} = u_{0}(x_{0})$, 从而 $x(s) = x_{0} + s u_{0}(x_{0})$.我们于是推得,
+\begin{equation}
+u(s, x_{0} + s u_{0}(x_{0})) = u_{0}(x_{0}), \label{eq:c2-97}
+\end{equation}
+这隐式地给出了解 $u$ 的形式.我们再一次从 \eqref{eq:c2-97} 看到, 如果初始数据在直线 $t = 0$ 上除某点 $x_{0}$ 外处处光滑(或实解析), 那么相应的解也在 $x_{0}$ 的某个小邻域 $V$ 内处处光滑(或实解析), 除了沿从 $x_{0}$ 出发的特征曲线.这里 $V$ 的小性是有必要的, 因为在整体上会形成新的奇异性.确实注意, u 必须沿直线 $x + s u_{0}(x)$ 为常数, 而这些直线的斜率依赖于 $u_{0}(x)$.在这些直线相交的点处, 我们会得到 $u$ 的不同值, 除非 $u$ 在该点变为奇异, 否则这是不可能的.事实上, 可以证明一阶导数 $u_{x}$ 在第一个奇异点, 即 $|t|$ 取最小值的那个奇异点处变为无穷.这种\newterm{blow-up}{爆破}{blow-up}现象对任何光滑、非恒定的初始数据 $u_{0}$ 都会发生.
+
+\begin{remark*}
+线性方程 \eqref{eq:c2-90} 与拟线性方程 \eqref{eq:c2-92} 之间有一个重要差别.前者的特征只依赖于系数 $a^{1}(x), a^{2}(x)$, 而后者的特征显式地依赖于方程的一个特定解 u.在这两种情形中, 奇异性都只能沿方程的特征曲线传播.然而, 对于非线性方程, 新的奇异性可以在整体上形成, 与数据的光滑性无关.
+\end{remark*}
+
+上述过程可以推广到 $\mathbb{R}^{d}$ 中如下形式的完全非线性标量方程,
+\begin{equation}
+\partial_{t} u + H(x, \partial u) = 0, \quad u(0, x) = u_{0}(x), \label{eq:c2-98}
+\end{equation}
+其中 $H = H(x, p)$ 是变量 $x = (x^{1}, x^{2}, \ldots, x^{d})$ 和 $p = (p_{1}, p_{2}, \ldots, p_{d})$ 的给定函数, 称为系统的 Hamiltonian, 而 $\partial u = (\partial_{1} u, \partial_{2} u, \ldots, \partial_{d} u)$.我们给 \eqref{eq:c2-98} 配上如下 ODE 方程组, 其中 $i = 1, 2, \ldots, d$,
+\begin{equation}
+\frac{d x^{i}}{d t} = \frac{\partial}{\partial p_{i}} H(x(t), p(t)), \quad \frac{d p_{i}}{d t} = -\frac{\partial}{\partial x^{i}} H(x(t), p(t)). \label{eq:c2-99}
+\end{equation}
+方程 \eqref{eq:c2-98} 称为\newterm{hamilton-jacobi}{Hamilton-Jacobi 方程}{Hamilton-Jacobi equation}, 而 \eqref{eq:c2-99} 称为\newterm{hamiltonian-system}{Hamiltonian 方程组}{Hamiltonian system}.它们之间的关系比前面讨论过的情形稍微复杂一些.为简化下面的计算, 我们假设 $d = 1$, 于是 $H = H(x, p)$ 只是两个变量的函数.设 $u$ 是 \eqref{eq:c2-98} 的解.对 \eqref{eq:c2-98} 关于 $x$ 求导并应用链式法则, 我们推得,
+\begin{equation}
+\partial_{t} \partial_{x} u + \partial_{p} H(x, \partial_{x} u) \partial_{x}^{2} u = -\partial_{x} H(x, \partial_{x} u). \label{eq:c2-100}
+\end{equation}
+现在取 $x(t)$ 为方程 $\frac{d x}{d t} = \partial_{p} H(x(t), \partial_{x} u(x(t)))$ 的解, 并令 $p(t) := \partial_{x} u(t, x(t))$.那么, 先使用链式法则, 再使用方程 \eqref{eq:c2-100}, 我们推得,
+\[
+\begin{aligned}
+\frac{d p}{d t} &= \partial_{x} \partial_{t} u(t, x(t)) + \partial_{x}^{2} u(t, x(t)) \partial_{p} H(x(t), p(t)) \\
+&= -\partial_{x} H(x(t), \partial_{x} u(t, x(t))) = -\partial_{x} H(x(t), p(t)).
+\end{aligned}
+\]
+因此 $x(t), p(t)$ 满足 Hamilton 方程
+\[
+\frac{d x}{d t} = \partial_{p} H(x(t), p(t)), \quad \frac{d p}{d t} = -\partial_{x} H(x(t), p(t)).
+\]
+另一方面,
+$\frac{d}{d t} u(t, x(t)) = \partial_{t} u(t, x(t)) + \partial_{x} u(t, x(t)) \partial_{p} H(x(t), p(t))$,
+并且, 利用方程 \eqref{eq:c2-98}, $\partial_{t} u(t, x(t)) = -H(x(t), \partial_{x} u(t, x(t))) = -H(x(t), p(t))$.于是,
+\[
+\frac{d}{d t} u(t, x(t)) = -H(x(t), p(t)) + p(t) \partial_{p} H(x(t), p(t)),
+\]
+由此我们看到, 原则上, 如何仅基于解 $x(t), p(t)$——称为非线性 PDE 的\newterm{bicharacteristic}{双特征曲线}{bicharacteristic curve}——的知识来构造 u.再一次, 奇异性只能沿双特征传播.与 Burger 方程的情形一样, 奇异性本质上对一切光滑数据都会发生;因此经典解, 即连续可微的解, 只能在时间上局部构造.Hamilton-Jacobi 方程和 Hamiltonian 方程组在经典力学以及线性 PDE 中奇异性的传播理论中都起着基本作用.Hamiltonian 方程组与一阶 Hamilton-Jacobi 方程之间的深刻联系, 在量子力学中 Schrödinger 方程的引入中起过重要作用.
+
+\section{ODE 的初值问题}
+
+要进一步展开我们的一般论述, 需要讨论初值问题.为简单起见, 我们从一个一阶 ODE 开始,
+\begin{equation}
+\partial_{x} u(x) = f(x, u(x)), \label{eq:c2-101}
+\end{equation}
+并附带初始条件
+\begin{equation}
+u(x_{0}) = u_{0}. \label{eq:c2-102}
+\end{equation}
+读者不妨假设, 为简单起见, \eqref{eq:c2-101} 是标量方程, 且 $f$ 是 $x$ 和 $u$ 的性质良好的函数, 如 $f(x, u) = u^{3} - u + 1 + \sin x$.注意, 知道初始数据 $u_{0}$ 就能使我们确定 $\partial_{x} u(x_{0})$.对方程 \eqref{eq:c2-101} 关于 $x$ 求导并应用链式法则, 我们推得,
+\[
+\partial_{x}^{2} u(x) = \partial_{x} f(x, u(x)) + \partial_{u} f(x, u(x)) \partial_{x} u(x) = \cos x + 3 u^{2}(x) \partial_{x} u(x) - \partial_{x} u(x).
+\]
+因此, $\partial_{x}^{2} u(x_{0}) = \partial_{x} f(x_{0}, u_{0}) + \partial_{u} f(x_{0}, u_{0}) \partial_{x} u_{0}$, 而由于 $\partial_{x} u(x_{0})$ 已经确定, 我们推得 $\partial_{x}^{2} u(x_{0})$ 可以由初始数据 $u_{0}$ 显式算出.计算还涉及函数 $f$ 及其一阶偏导数.对方程 \eqref{eq:c2-101} 取更高阶导数, 我们可以递归地确定 $\partial_{x}^{3} u(x_{0})$ 以及 $u$ 在 $x_{0}$ 处的所有其他高阶导数.于是, 原则上, 可以借助 Taylor 级数
+$u(x) = \sum_{k \geq 0} \frac{1}{k!} \partial_{x}^{k} u(x_{0}) (x - x_{0})^{k} = u(x_{0}) + \partial_{x} u(x_{0}) (x - x_{0}) + \frac{1}{2!} \partial_{x}^{2} u(x_{0}) (x - x_{0})^{2} + \cdots$
+来确定 $u(x)$.我们说"原则上", 是因为不能保证级数收敛.然而有一个非常重要的定理, 称为\newterm{cauchy-kowalewski}{Cauchy-Kowalewski 定理}{Cauchy-Kowalewski theorem}, 它断言:若函数 $f$ 是实解析的——对我们的 $f(x, u) = u^{3} - u + 1 + \sin x$ 当然如此——那么存在 $x_{0}$ 的一个邻域 J, 在其中 Taylor 级数收敛到方程的一个实解析解 u.然后可以容易地证明, 这样得到的解是满足初始条件 \eqref{eq:c2-102} 的方程 \eqref{eq:c2-101} 的唯一解.
+
+如果我们考虑更一般形式的方程, 同样的结论不一定成立,
+\begin{equation}
+a(x, u(x)) \partial_{x} u = f(x, u(x)), \qquad u(x_{0}) = u_{0}. \label{eq:c2-103}
+\end{equation}
+事实上, 上述递归论证在标量方程 $(x - x_{0}) \partial_{x} u = f(x, u)$ 的情形中失效, 原因很简单:我们甚至无法从初始条件 $u(x_{0}) = u_{0}$ 确定 $\partial_{x} u(x_{0})$.方程 $(u - u_{0}) \partial_{x} u = f(x, u)$ 也出现类似的问题.允许我们把前面的递归论证推广到 \eqref{eq:c2-103} 的一个显然条件是 $a(x_{0}, u_{0}) \neq 0$.否则我们称初值问题 \eqref{eq:c2-103} 是特征的.若 $a$ 和 $f$ 也都是实解析的, 则 Cauchy-Kowalewski 定理适用, 我们得到 \eqref{eq:c2-103} 在 $x_{0}$ 的某个小邻域内的唯一实解析解.对于 $N \times N$ 方程组,
+\begin{equation}
+A(x, u(x)) \partial_{x} u = F(x, u(x)), \qquad u(x_{0}) = u_{0}, \label{eq:c2-104}
+\end{equation}
+其中 $A = A(x, u)$ 是 $N \times N$ 矩阵, 非特征条件变为
+\begin{equation}
+\det A(x_{0}, u_{0}) \neq 0. \label{eq:c2-105}
+\end{equation}
+事实证明——这一点极为重要——尽管非退化条件 \eqref{eq:c2-105} 对获得方程的唯一解是本质的, 但在 ODE 的情形中, 解析性条件一点也不重要.它可以被 $A$ 和 $F$ 的简单局部 Lipschitz 条件所取代, 即只需假设, 例如, 它们的一阶偏导数存在并且只是局部有界的.如果 $A$、$F$ 的一阶导数连续, 这一点总成立.
+
+下面的局部存在唯一性 (LEU) 定理称为 ODE 基本定理.
+
+\begin{theorem*}[常微分方程基本定理]
+若矩阵 $A(x_{0}, u_{0})$ 可逆, 且 $A$、$F$ 连续并具有局部有界的一阶导数, 那么存在一个时间区间 $x_{0} \in J \subset \mathbb{R}$ 和在 $J$ 上定义的唯一解\footnote{由于我们不对 $A$、$F$ 假定解析性, 解可能不解析, 但它具有连续的一阶导数.} u, 满足初始条件 $u(x_{0}) = u_{0}$.
+\end{theorem*}
+
+\begin{proof}
+定理的证明基于\newterm{picard-iteration}{Picard 迭代}{Picard iteration}法.其思想是构造一列逼近解 $u_{(n)}(x)$, 它们收敛到所求的解.不失一般性, 我们可以假设 $A$ 是单位矩阵\footnote{由于 $A$ 可逆, 我们可以用逆矩阵 $A^{-1}$ 乘方程两边.}.首先令 $u_{(0)}(x) = u_{0}$, 然后递归地定义,
+\begin{equation}
+\partial_{x} u_{(n)}(x) = F(x, u_{(n-1)}(x)), \qquad u_{(n-1)}(x_{0}) = u_{0}. \label{eq:c2-106}
+\end{equation}
+注意在每一步我们只需要求解一个非常简单的线性问题, 这使得 Picard 迭代在数值上易于实现.我们将在下面看到, 该方法的变体也用于求解非线性 PDE.
+
+\ldots\ldots{} 填补证明\ldots\ldots
+\end{proof}
+
+\begin{remark*}
+局部存在性定理一般而言是精确的.事实上我们已经看到, $A(x_{0}, u_{0})$ 的可逆性条件是必要的.而且, 一般而言, 存在区间 $J$ 不能延拓到整条实直线.作为例子, 考虑非线性方程 $\partial_{x} u = u^{2}$, 初始数据为 $x = 0$ 处 $u = u_{0}$, 其解 $u = \frac{u_{0}}{1 - x u_{0}}$ 在有限时间内变为无穷, 即发生爆破.
+\end{remark*}
+
+一旦建立了 LEU 结果, 就可以把 ODE 数学理论的主要目标规定为:
+\begin{enumerate}
+\item 寻找全局存在的判据.在爆破的情形, 描述极限行为.
+\item 在全局存在的情形, 描述解和解族的渐近行为.
+\end{enumerate}
+虽然要发展一个同时回答这两个目标的一般理论是不可能的(在实践中, 人们不得不局限于由应用所启发的特殊方程类), 上述一般 LEU 定理给出了一个有力的统一主题.如果对一般 PDE 也有类似的情形成立, 那将是极有帮助的, 确实非常美妙.
+
+\section{PDE 的初值问题}
+
+与一维情形类比, 自然要考虑的不是点, 而是用于规定 $u$ 的初始条件的超曲面 $\mathcal{H} \subset \mathbb{R}^{d}$.对于 $k$ 阶一般方程, 即涉及 $k$ 个导数的方程, 我们需要规定 $u$ 及其对 $H$ 的前 $k - 1$ 个法向导数\footnote{即沿 $H$ 的法线方向的导数.}的值.例如, 对于二阶波动方程 \eqref{eq:c0-3}, 我们需要在超曲面 $t = 0$ 上规定 $u$ 和 $\partial_{t} u$ 的初始数据.在这一点上不深入细节, 我们可以给出如下一般定义.
+
+\begin{definition*}
+我们说, 一个 $k$ 阶拟线性方程组的初值问题——其中我们把解 $u$ 沿 $H$ 的前 $k - 1$ 个法向导数作为数据加以规定——在 $H$ 的一点 $x_{0}$ 处是\newterm{non-characteristic}{非特征的}{non-characteristic}, 如果我们可以用这些数据形式地、唯一地确定 $u$ 在 $x_{0}$ 处的所有其他高阶偏导数.
+\end{definition*}
+
+为了理解这个定义(在这一点上它可能显得过于一般), 考虑简单得多的情形 $k = 1, N = 1$.此时我们只需要规定 $u$ 在 $H$ 上的限制 $u|_{\mathcal{H}} = u_{0}$.我们的初值问题具有如下形式,
+\begin{equation}
+\sum_{i = 1}^{d} a^{i}(x, u(x)) \partial_{i} u(x) = f(x, u(x)), \quad u|_{\mathcal{H}} = u_{0}, \label{eq:c2-107}
+\end{equation}
+其中 $a^{i}, f$ 是 $x \in \mathbb{R}^{d}$ 和 $u \in \mathbb{R}$ 的实值函数.为进一步简化, 取 $d = 2$, 即我们有关于 $x = (x^{1}, x^{2})$ 的方程,
+\begin{equation}
+a^{1}(x, u(x)) \partial_{1} u(x) + a^{2}(x, u(x)) \partial_{2} u(x) = f(x, u(x)), \label{eq:c2-108}
+\end{equation}
+即我们早先在 \eqref{eq:c2-92} 中遇到的方程.考虑 $\mathbb{R}^{2}$ 中的一条曲线 H, 参数化为 $x^{1} = x^{1}(s), x^{2} = x^{2}(s)$, 其切向量 $V(s) = (\frac{d x^{1}}{d s}, \frac{d x^{2}}{d s})$ 非退化, 即 $|V(s)| = (|\frac{d x^{1}}{d s}|^{2} + |\frac{d x^{2}}{d s}|^{2})^{1/2} \neq 0$.它有定义良好的单位法向量 $N(s) = (n_{1}(s), n_{2}(s))$, 满足条件,
+\[
+N(s) \cdot V(s) = 0, \qquad N(s) \cdot N(s) = 1.
+\]
+注意, \eqref{eq:c2-108} 中的系数 $a^{1}, a^{2}$ 可以沿着 $H$ 由初始条件 $u_{0} = u_{0}(s)$ 的知识完全确定.考虑沿 $H$ 取值的一阶导数 $(\partial_{1} u, \partial_{2} u)$, 即 $U(s) = \bigl(\partial_{1} u(x(s)), \partial_{2} u(x(s))\bigr)$.在 $H$ 的每一点, 我们的方程写作,
+\begin{equation}
+A(s) \cdot U(s) = f(s), \label{eq:c2-109}
+\end{equation}
+其中 $A(s) = \bigl(a^{1}(x(s), u_{0}(s)), a^{2}(x(s), u_{0}(s))\bigr)$ 和 $f(s) = f\bigl(x(s), u_{0}(s)\bigr)$ 完全由数据 $u_{0}(s)$ 确定.对 $u(x(s)) = u_{0}(s)$ 关于 $s$ 求导, 我们推得,
+\[
+U(s) \cdot V(s) = U_{0}(s), \qquad U_{0}(s) = \frac{d}{d s} u_{0}(s).
+\]
+要完全确定 $U(s)$, 剩下的问题是确定它在法向量 $N(s)$ 上的投影, 即 $U(s) \cdot N(s)$.事实上, 由于 $V(x)$ 和 $N(x)$ 张成 $\mathbb{R}^{2}$, 在我们曲线的所有点 $x = (x^{1}(s), x^{2}(s))$ 处, 我们有
+\begin{equation}
+U(s) = (U \cdot V)(s) \frac{V(s)}{|V(s)|^{2}} + (U \cdot N)(s) N(s). \label{eq:c2-110}
+\end{equation}
+因此, 由方程 \eqref{eq:c2-109},
+\[
+f(s) = A(s) \cdot U(s) = (U(s) \cdot V(s)) \frac{A(s) \cdot V(s)}{|V(s)|^{2}} + (U(s) \cdot N(s)) A(s) \cdot N(s),
+\]
+由此我们可以确定 $U(s) \cdot N(s)$, 只要
+\begin{equation}
+A(s) \cdot N(s) \neq 0. \label{eq:c2-111}
+\end{equation}
+另一方面, 若 $A(s) \cdot N(s) = 0$, 那么由于 $V(s) \cdot N(s) = 0$, 我们推得向量 $A(s)$ 和 $V(s) = \frac{d x}{d s}$ 必须成比例, 即 $\frac{d x}{d s} = \lambda(s) A(s)$.于是可以重新参数化曲线 $\mathcal{H}$, 即引入另一个参数 $s' = s'(s)$, 满足 $\frac{d s'}{d s} = \lambda(s)$, 使得相对于新参数有 $\lambda = 1$.这导致方程,
+\[
+\frac{d x^{1}}{d s} = a^{1}\bigl(x(s), u(x(s))\bigr), \quad \frac{d x^{2}}{d s} = a^{2}\bigl(x(s), u(x(s))\bigr),
+\]
+这正是特征方程组 \eqref{eq:c2-93}.于是,
+
+沿特征曲线, 方程 \eqref{eq:c2-108} 是退化的, 即我们不能用数据 $u_{0}$ 唯一确定 $u$ 的一阶导数.另一方面, 非退化条件,
+\begin{equation}
+A(s_{0}) \cdot N(s_{0}) \neq 0, \quad \text{即} \quad a^{1}(x_{0}, u(x_{0})) n_{1}(x_{0}) + a^{2}(x_{0}, u(x_{0})) n_{2}(x_{0}) \neq 0, \label{eq:c2-112}
+\end{equation}
+在某个点 $x_{0} = x(s_{0}) \in \mathcal{H}$ 处, 允许我们用数据 $u_{0}$ 唯一确定 $u$ 在 $x_{0}$ 处的所有高阶导数.
+
+事实上, 若条件 $A(s_{0}) \cdot N(s_{0}) \neq 0$ 在 $x_{0} = x(s_{0}) \in \mathcal{H}$ 处满足, 我们已经看到如何确定该点处的一阶导数 $\partial_{1} u, \partial_{2} u$.一旦有了这些, 确定 $u$ 的所有高阶导数并不困难.例如, 注意, 对方程 \eqref{eq:c2-108} 关于 $x^{1}$ 求导, 函数 $v = \partial_{1} u$ 满足如下形式的方程,
+\[
+a^{1}(x, u(x)) \partial_{1} v(x) + a^{2}(x, u(x)) \partial_{2} v = g(x, u(x), v(x)),
+\]
+其中函数 $g$ 可以容易地从系数 $a$ 和 $f$ 确定.我们现在可以像前面一样进行, 确定 $v$ 的一阶导数, 即 $\partial_{1}^{2} u, \partial_{2} \partial_{1} u$.于是, 递归地, 我们可以确定 $u$ 的任意阶的所有偏导数.
+
+我们可以容易地把上面的讨论推广到高维情形 \eqref{eq:c2-107}.给定 $\mathbb{R}^{d}$ 中的超曲面 H, 单位法向量为 $N = (n_{1}, n_{2}, \ldots, n_{d})$, 我们发现, H 在 $x_{0}$ 处对初值问题 \eqref{eq:c2-107} 是非特征的, 若
+\begin{equation}
+\sum_{i = 1}^{d} a^{i}(x_{0}, u_{0}(x_{0})) n_{i}(x_{0}) \neq 0. \label{eq:c2-113}
+\end{equation}
+
+再多做一些工作, 我们可以把讨论推广到一般高阶拟线性方程或方程组, 得到 Cauchy 问题为非特征的简单充分条件.对我们特别重要的是二阶($k = 2$)标量方程($N = 1$).为简单起见, 考虑 $\mathbb{R}^{d}$ 中一个二阶半线性方程,
+\begin{equation}
+\sum_{i, j = 1}^{d} a^{ij}(x) \partial_{i} \partial_{j} u = f(x, u(x), \partial u(x)), \label{eq:c2-114}
+\end{equation}
+以及由方程 $\psi(x) = 0$ 定义、梯度 $\partial \psi$ 不消失的超曲面 H.定义点 $x_{0} \in \mathcal{H}$ 处的单位法向量为 $N = \frac{\partial \psi}{|\partial \psi|}$, 或按分量 $n_{i} = \frac{\partial_{i} \psi}{|\partial \psi|}$.作为 \eqref{eq:c2-114} 的初始条件, 我们在 $H$ 上规定 $u$ 及其法向导数 $N u(x) \doteq n_{1}(x) \partial_{1} u(x) + n_{2}(x) \partial_{2} u(x) + \cdots + n_{d}(x) \partial_{d} u(x)$,
+\begin{equation}
+u(x) = u_{0}(x), \quad N u(x) = u_{1}(x), \qquad x \in \mathcal{H}. \label{eq:c2-115}
+\end{equation}
+我们需要找到 $H$ 上的一个条件, 使得我们可以从初始数据 $u_{0}, u_{1}$ 确定解 $u$ 在 $x_{0} \in \mathcal{H}$ 处的所有高阶导数.我们可以完全像前面一样进行, 发现只要
+\begin{equation}
+\sum_{i, j = 1}^{d} a^{ij}(x_{0}) n_{i}(x_{0}) n_{j}(x_{0}) \neq 0, \label{eq:c2-116}
+\end{equation}
+u 的所有二阶导数都可以在点 $x_{0} \in \mathcal{H}$ 处确定.确实容易看到, u 的唯一不能自动由 $u_{0}, u_{1}$ 确定的二阶导数是形如 $N^{2} u(x_{0}) = N(N(u))(x_{0})$ 的那一个.后者可以在 \eqref{eq:c2-116} 得到验证的前提下由方程 \eqref{eq:c2-114} 确定.做法是把 $u$ 的所有偏导数分解为切向分量和法向分量, 正如我们在 \eqref{eq:c2-110} 中所做的那样.然后可以递归地证明, u 的所有高阶导数也都可以确定.于是, \eqref{eq:c2-116} 正是我们所要寻找的非特征条件.
+
+另一方面, 若在所有点处 $\sum_{i, j = 1}^{d} a^{ij}(x) n_{i}(x) n_{j}(x) = 0$, 我们称 $H$ 是方程 \eqref{eq:c2-114} 的\newterm{characteristic-hypersurface}{特征超曲面}{characteristic hypersurface}.由于 $n_{i} = \frac{\partial_{i} \psi}{|\partial \psi|}$, 我们发现 $H$ 是特征的当且仅当,
+\begin{equation}
+\sum_{i, j = 1}^{d} a^{ij}(x) \partial_{i} \psi(x) \partial_{j} \psi(x) = 0. \label{eq:c2-117}
+\end{equation}
+
+\begin{remark*}
+注意, 在确定方程的特征曲面时, 只有 \eqref{eq:c2-114} 的左边\footnote{即含二阶导数的部分}, 即所谓主部\footnote{主部}, 才是相关的.
+\end{remark*}
+
+\noindent\textbf{例 1.}\quad 假设 \eqref{eq:c2-114} 的系数 $a$ 满足,
+\begin{equation}
+\sum_{i, j = 1}^{d} a^{ij}(x) \xi_{i} \xi_{j} > 0, \quad \forall \xi \in \mathbb{R}^{d}, \quad \forall x \in \mathbb{R}^{d}. \label{eq:c2-118}
+\end{equation}
+那么 $\mathbb{R}^{d}$ 中没有曲面可以是特征的.特别是方程 $\Delta u = f$ 就是这种情况.再考虑写成形式 \eqref{eq:c2-87} 的极小曲面方程.容易验证, 与对称矩阵 $h^{ij}(\partial u)$ 相关的二次型是正定的, 与 $\partial u$ 无关.确实,
+\[
+h^{ij}(\partial u) \xi_{i} \xi_{j} = (1 + |\partial u|^{2})^{-1/2} \bigl(|\xi|^{2} - (1 + |\partial u|^{2})^{-1} (\xi \cdot \partial u)^{2}\bigr) > 0.
+\]
+于是, 即使 \eqref{eq:c2-87} 不是线性的, 我们也看到 $\mathbb{R}^{2}$ 中的所有曲面都是非特征的.
+
+\noindent\textbf{例 2.}\quad 考虑 $\mathbb{R}^{1+d}$ 中的波动方程 $\Box u = f$.所有使得
+\begin{equation}
+(\partial_{t} \psi)^{2} = \sum_{i = 1}^{d} (\partial_{i} \psi)^{2}, \label{eq:c2-119}
+\end{equation}
+的超曲面 $\psi(t, x) = 0$ 都是特征的.这正是前面在 (149) 中出现过的同一个\newterm{eikonal}{eikonal 方程}{eikonal equation}.注意它分裂成两个 Hamilton-Jacobi 方程, 见 \eqref{eq:c2-98},
+\begin{equation}
+\partial_{t} \psi = \pm \Bigl(\sum_{i = 1}^{d} (\partial_{i} \psi)^{2}\Bigr)^{1/2}. \label{eq:c2-120}
+\end{equation}
+相应 Hamiltonian 的双特征曲线称为波动方程的双特征曲线.作为 (429) 的特解, 我们找到 $\psi_{+}(t, x) = (t - t_{0}) + |x - x_{0}|$ 和 $\psi_{-}(t, x) = (t - t_{0}) - |x - x_{0}|$, 它们的水平曲面 $\psi_{\pm} = 0$ 对应于顶点在 $p = (t_{0}, x_{0})$ 的前向和后向光锥.在物理上, 这些表示从 $p$ 处的点源发出的所有光线的并集.光线由方程 $(t - t_{0}) \omega = (x - x_{0})$ 给出, 其中 $\omega \in \mathbb{R}^{3}$ 且 $|\omega| = 1$, 它们恰好是 Hamilton-Jacobi 方程 \eqref{eq:c2-120} 的双特征曲线的 (t, x) 分量.
+
+更一般地, 考虑线性波动方程,
+\begin{equation}
+g^{\alpha \beta} \partial_{\alpha} \partial_{\beta} \phi = 0, \label{eq:c2-121}
+\end{equation}
+其中 $g^{\alpha \beta}$ 是一般 Lorentz 度量 $g_{\alpha \beta}$\footnote{即 $g_{\alpha \beta} = g_{\beta \alpha}$, 且相应的二次型 $g_{\alpha \beta}(p) X^{\alpha} X^{\beta}$ 在每一点 $p$ 非退化, 并有\newterm{signature}{符号差}{signature} $(-1, 1, \ldots, 1)$.} 的逆.\eqref{eq:c2-121} 的特征曲面由 eikonal 方程给出,
+\begin{equation}
+g^{\alpha \beta} \partial_{\alpha} \psi \partial_{\beta} \psi = 0. \label{eq:c2-122}
+\end{equation}
+它们也称为度量 $g$ 的零超曲面.
+
+\begin{remark*}
+在 $g_{01} = \cdots = g_{0n} = 0$, $g_{00} < 0$ 且 $g_{ij}$ 正定的特殊情形下, \eqref{eq:c2-121} 具有形式,
+\begin{equation}
+-a^{00}(t, x) \partial_{t}^{2} u + \sum_{i, j} a^{ij}(t, x) \partial_{i} \partial_{j} u = 0, \label{eq:c2-123}
+\end{equation}
+其中 $a_{00} = -g_{00}^{-1}$, $a^{ij} g_{jk} = \delta_{k}^{i}$.于是特征方程具有形式 $-a^{00}(t, x) (\partial_{t} \psi)^{2} + a^{ij}(x) \partial_{i} \psi \partial_{j} \psi = 0$, 或
+\begin{equation}
+\partial_{t} \psi = \pm \Bigl((a^{00})^{-1} \sum_{i, j} a^{ij}(x) \partial_{i} \psi \partial_{j} \psi\Bigr)^{1/2}. \label{eq:c2-124}
+\end{equation}
+于是, 通过 $\mathbb{R}^{1+n}$ 中的任何点 $p$ 都有两个不同的特征曲面经过.一般情形也是如此.
+\end{remark*}
+
+相应 Hamiltonian 方程组的双特征称为 \eqref{eq:c2-123} 的双特征曲线.
+
+\begin{remark*}
+对于一阶标量方程 \eqref{eq:c2-90}, 我们已经看到如何利用特征的知识隐式地找到一般解.我们特别证明了奇异性只沿特征传播.对于二阶方程, 情形更复杂.特征通常\footnote{然而, 特征会以显式形式出现在标准波方程基本解的表达式里.这在从假设 (148) 出发的推导中尤为明显.它们在构造变系数波方程(如 \eqref{eq:c2-123})的近似解方面也起着重要作用.}不足以求解方程, 但它们继续提供重要的信息, 如奇异性的传播.例如, 对于波动方程 $\Box u = 0$, 初始数据 $u_{0}$、$u_{1}$ 除一点 $p = (t_{0}, x_{0})$ 外处处光滑, 解 $u$ 在顶点为 $p$ 的光锥 $-(t - t_{0})^{2} + |x - x_{0}|^{2} = 0$ 的所有点处都有奇异性.这一事实的一个更精细的版本表明, 奇异性沿双特征传播.这里的一般原理是, 奇异性沿 PDE 的特征超曲面传播.由于这是非常重要的原理, 值得给出一个更精确的表述, 它推广到一般的边界条件, 如 (??) 的 Dirichlet 条件.
+\end{remark*}
+
+\noindent\textbf{奇异性传播}\footnote{该原理的一个更精确的版本把奇异性的传播与双特征曲线联系起来.}\quad 若具有光滑(或实解析)系数的线性 PDE 的边界条件或系数在某个点 $p$ 处是奇异的, 而在 $p$ 之外某个小邻域 $V$ 内光滑(或实解析), 那么方程的解在 $V$ 中只能沿经过 $p$ 的特征超曲面奇异.若不存在这样的特征超曲面, 则方程的任何解在 $V \setminus \{p\}$ 中必为光滑(或实解析)的.
+
+\noindent\textbf{注 1.}\quad 如上陈述的原理过于一般, 只有在算子的象征上作出具体假设时才能证明.然而, 它应被视为对合理方程可以预期的东西.
+
+\noindent\textbf{注 2.}\quad 在对解作出特定的最小正则性假设下, 该原理可以推广到非线性情形.然而它在整体上是无效的.事实上, 正如我们在 Burger 方程的情形中所示, 非线性发展方程的解可以发展出与初始条件的光滑性无关的新奇异性.对于线性方程, 可以基于方程的双特征陈述该原理的全局版本, 见下文注 3.
+
+\noindent\textbf{注 3.}\quad 根据该原理, 方程 $\Delta u = f$ 的任何满足边界条件 $u|_{\partial D} = u_{0}$ 的解——其中边界值 $u_{0}$ 只是连续的——只要 $f$ 本身在 $D$ 内部光滑, 就必然在 $D$ 内部处处光滑.而且, 若 $f$ 是实解析的, 则解是实解析的.
+
+\noindent\textbf{注 4.}\quad 这一在一般理论中起基本作用的原理, 对线性方程可以给出更精确的版本.例如, 对于一般波动方程 \eqref{eq:c2-123}, 可以证明奇异性沿双特征传播.这些是与 Hamilton-Jacobi 方程 \eqref{eq:c2-124} 相关的双特征曲线.
+
+\section{Cauchy-Kowalevsky 定理}
+
+在 ODE 的情形中, 我们已经看到非特征初值问题总是有局部(在时间上)解.这一事实有没有高维的类比?答案是肯定的, 只要我们把自己限制在 Cauchy-Kowalewski 定理的一个推广上.更精确地说, 可以考虑具有实解析系数、实解析超曲面 $\mathcal{H}$ 以及 $H$ 上实解析初始数据的一般拟线性方程或方程组.
+
+\begin{theorem*}[Cauchy-Kowalevsky 定理]
+若上面作出的所有实解析性条件都满足, 且 $H$ 在 $x_{0}$\footnote{对于 \eqref{eq:c2-114} 型二阶方程, 这恰是条件 \eqref{eq:c2-116}.} 处是非特征的, 那么在 $x_{0}$ 的一个邻域内局部存在唯一的实解析解 u(x), 满足该方程组及相应的初始条件.
+\end{theorem*}
+
+CK 定理证实了通过形式展开
+$u(x) = \sum_{\alpha} C_{\alpha} (x - x_{0})^{\alpha}$
+(其中常数 $C_{\alpha}$ 可以由方程和 $\mathcal{H}$ 上的初始条件, 仅利用非特征条件和解析性假设, 通过简单的代数公式递归确定)寻找解的最直接的尝试.事实上, 该定理保证了以这种方式得到的朴素展开在 $x_{0} \in \mathcal{H}$ 的某个小邻域内收敛.
+
+\begin{proof}
+见 \cite{e} 或 \cite{j}.
+\end{proof}
+
+在特殊情形——线性方程 \eqref{eq:c2-88}——中, 一个重要的配套定理, 归功于 Holmgren, 断言 CK 定理给出的解析解在所有光滑解和光滑非特征超曲面 $H$ 组成的类中是唯一的.
+
+\begin{theorem}[Holmgren 唯一性定理]\label{thm:c2-4.1}
+考虑具有解析系数的 \eqref{eq:c2-88} 型线性方程的初值问题.若超曲面 $H$ 也是解析的, 且在 $x_{0} \in \mathcal{H}$ 处非特征, 那么相应的 Cauchy 问题在 $x_{0}$ 的某个小邻域内的光滑解类中是唯一的.
+\end{theorem}
+
+\begin{proof}
+见 \cite{j}.
+\end{proof}
+
+\begin{remark*}
+Holmgren 定理的引人注目之处在于, 即使在不能保证解存在的情形下, 它也证明唯一性.于是, 我们将在下面看到, 在超平面 $x^{1} = 0$ 上给定数据的波动方程 Cauchy 问题一般而言没有解, 然而 Holmgren 定理断言, 若解存在, 则它必唯一.
+\end{remark*}
+
+乍一看, CK 定理似乎是 ODE 基本定理的完美类比.然而事实证明, CK 定理所要求的解析性条件过于严格, 因此该结果表面的普遍性是误导性的.第一个局限性在我们考虑波动方程 $\Box u = 0$ 时立刻变得明显, 其有限传播速度的基本特征\footnote{粗略地说, 这意味着若解 $u$ 在某个 $t$ 值处具有紧支集, 则它在所有更晚的时刻也都具有紧支集.解析函数若不全恒为零, 则不可能具有紧支集.}在实解析解类中无法理解.一个相关的问题, 最早由 Hadamard 指出, 涉及在许多重要情形中, 对任意光滑、非解析的数据求解 Cauchy 问题的不可行性.例如, 考虑 $\mathbb{R}^{d}$ 中的 Laplace 方程 $\Delta u = 0$.正如我们上面所确立的, 任何超曲面 $H$ 都是非特征的, 然而对任意光滑初始条件 $u_{0}, u_{1}$, Cauchy 问题 $u|_{\mathcal{H}} = u_{0}$, $N(u)|_{\mathcal{H}} = u_{1}$ 在 $H$ 的任何一点的邻域内都可能没有局部解.事实上, 取 $H$ 为超平面 $x_{1} = 0$, 并假设对于一个给定的、非解析的光滑数据, Cauchy 问题在一个包含以原点为中心的闭球 $B$ 的区域中可以求解.相应的解也可以解释为 $B$ 中的 Dirichlet 问题的解, 其中 $u$ 的值在边界 $\partial B$ 上给定.但根据我们的启发式原理\footnote{在此情形下这一点可以很容易地严格化.}, 后者在 $B$ 的内部处处实解析, 这与我们的初始数据假设矛盾.
+
+另一方面, 波动方程 $\Box u = 0$ 在 $\mathbb{R}^{d+1}$ 中的 Cauchy 问题, 对在类空超曲面上给定的任何光滑初始数据 $u_{0}, u_{1}$ 都有唯一解, 这里类空超曲面是指这样的超曲面 $\psi(t, x) = 0$:它在每一点 $p = (t_{0}, x_{0})$ 处的法向量都指向经过该点的前向或后向光锥的内部.形式上这意味着,
+\begin{equation}
+|\partial_{t} \psi(p)| > \left(\sum_{i = 1}^{d} |\partial_{i} \psi(p)|^{2}\right)^{1/2}. \label{eq:c2-125}
+\end{equation}
+$t = t_{0}$ 的超曲面显然满足该条件, 但任何与之接近的其他超曲面也是类空的.另一方面, 对于类时超曲面, 即满足
+\begin{equation}
+|\partial_{t} \psi(p)| < \left(\sum_{i = 1}^{d} |\partial_{i} \psi(p)|^{2}\right)^{1/2} \label{eq:c2-126}
+\end{equation}
+的超曲面, IVP 是病态的, 即不适定的.在这种情况下, 对一般的非实解析初始条件, 我们无法找到 IVP 的解.类时超曲面的一个例子由超平面 $x^{1} = 0$ 给出.
+
+\begin{definition*}
+若对属于某个指定的、包含光滑函数类\footnote{这里我们必然有些含糊.在每个具体情形下可以指定一个精确的空间.}的大函数空间的任意数据, 都能建立解的存在性和唯一性, 则称 PDE 的一个给定问题是\newterm{well-posed}{适定的}{well posed}的.此外, 解必须连续依赖于数据.
+\end{definition*}
+
+数据的连续依赖性非常重要.事实上, 如果初始条件的极小改变会立即导致相应解的极大改变, 那么 PDE 的 IVP 的解就没有什么用处.只有在光滑解类中, PDE 理论才变得真正有趣、相关和富有挑战性.这意味着我们必须放弃包罗万象的结果的希望, 转而寻找具有共同特征的方程的特殊类, 或者干脆专注于特殊的重要方程.正是在这个意义上, CK 定理的普遍性确实是一种幻觉.偏微分方程的真正研究只有在我们放弃解析性时才开始.在下一章中, 我们将详细分析最简单方程——如 Cauchy-Riemann、Laplace、热方程和波动方程——利用它们相应的基本解的主要解析性质.为此, 我们首先需要回顾分布理论.

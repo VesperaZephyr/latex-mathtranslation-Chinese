@@ -1,0 +1,149 @@
+% !TeX program = xelatex
+% 《Bochner-Riesz 平均讲义》中文译本
+% 原书: K. M. Davis & Y.-C. Chang, Lectures on Bochner-Riesz Means,
+%       LMS Lecture Note Series 114, Cambridge University Press, 1987.
+\documentclass[
+    ThemeColor=MidnightBlue,
+    PaperSize=a4paper,
+    BookTitleCN={Bochner--Riesz 平均讲义},
+    BookTitleEN={Lectures on Bochner-Riesz Means},
+    OriginalAuthor={Katherine Michelle Davis, Yang-Chun Chang},
+    OriginalEdition={LMS Lecture Note Series 114},
+    OriginalPublisher={Cambridge University Press},
+    OriginalYear={1987},
+    Translator={数译},
+    ModelUsed={GLM-5.3-Flash},
+    TranslationDate={2026年9月2日},
+    BibStyle={numeric-comp}
+]{mathtranslation}
+
+% ---------- 参考文献bibLaTeX ----------
+% biblatex 由 mathtranslation.cls v3.1 统一加载
+%   (backend=biber, style=\MT@BibStyle, sorting=nyt,
+%    giveninits=true, maxalphanames=2, maxbibnames=99)
+% 本书只需补上 backref 并挂上资源文件；此处再 \usepackage 会触发选项冲突。
+\ExecuteBibliographyOptions{backref=true, backrefstyle=three}
+\addbibresource{refs.bib}
+
+% ---------- 索引 ----------
+\usepackage[xindy]{imakeidx}
+\makeindex[
+    columns=2,
+    program=xindy,
+    intoc=true,
+    options=-M texindy -I xelatex -C utf8,
+    title={名词索引暨英译}]
+
+% ---------- 定理编号: 与原书一致, 各环境共用每章一个计数器 ----------
+% 原书编号形如 0.1, 2.14, 8.5 (章.序号), 定理/引理/命题/定义/注/例共用一个序号列.
+\makeatletter
+\newcounter{mtthm}[chapter]
+\renewcommand\themtthm{\thechapter.\arabic{mtthm}}
+% v3.1 把定理类环境注册为 [section] 计数（旧版为 [chapter]）。本书要求
+% 各环境共用“章.序号”的同一个序号列，故先解除按节重置，再把显示切到
+% \themtthm；寄存器本身仍沿用类文件声明，amsthm 样式与 cref 名称照旧。
+\@removefromreset{theorem}{section}
+\@removefromreset{definition}{section}
+\@removefromreset{lemma}{section}
+\@removefromreset{corollary}{section}
+\@removefromreset{proposition}{section}
+\@removefromreset{remark}{section}
+\@removefromreset{example}{section}
+\let\c@theorem\c@mtthm
+\let\c@definition\c@mtthm
+\let\c@lemma\c@mtthm
+\let\c@corollary\c@mtthm
+\let\c@proposition\c@mtthm
+\let\c@remark\c@mtthm
+\let\c@example\c@mtthm
+\renewcommand{\thetheorem}{\themtthm}
+\renewcommand{\thedefinition}{\themtthm}
+\renewcommand{\thelemma}{\themtthm}
+\renewcommand{\thecorollary}{\themtthm}
+\renewcommand{\theproposition}{\themtthm}
+\renewcommand{\theremark}{\themtthm}
+\renewcommand{\theexample}{\themtthm}
+\makeatother
+
+% 原书第 5 章使用的 FACT 环境 (编号 5.0 起)
+\newtheorem{fact}{事实}[chapter]
+\makeatletter
+\let\c@fact\c@mtthm
+\makeatother
+
+% 原书第 8 章使用的 NOTATION 环境
+\newtheorem{ntn}{记号}[chapter]
+\makeatletter
+\let\c@ntn\c@mtthm
+\makeatother
+\newenvironment{notation}{\begin{ntn}}{\end{ntn}}
+\crefname{ntn}{记号}{记号}
+
+% ---------- 原书带编号的短论标题 (如 2.5, 2.21), 占用条目计数器 ----------
+\newcommand{\essayhead}[2]{%
+  \par\vspace{1.2em}%
+  \refstepcounter{mtthm}\label{#1}%
+  {\noindent{\headfont \themtthm\quad #2}\par}%
+  \vspace{0.4em}\nobreak}
+
+% 原书正文中出现的引用编号在本书参考文献表中按字母序重新编号,
+% 引用均由 \cite 自动生成, 并附 backref.
+
+% ---------- 封面 ----------
+% v3.1 的 \makecover 已按制作规范在出版社信息下方印出“译者 xx 翻译及重排”，
+% 旧版针对 v1.2 封面宏的 patchcmd 已无标的，故整体移除。
+
+% ---------- 其他 ----------
+% headheight 由 mathtranslation.cls 的 geometry 统一设为 15pt，不再单独覆盖。
+\usetikzlibrary{patterns}
+\usepackage{enumitem}
+\allowdisplaybreaks
+
+% 图编号与原书一致: 原书全书按出现顺序连续编号 (图 1-16), 不随章重置.
+% \counterwithout 现由 LaTeX 内核提供，无需再加载 chngcntr。
+\counterwithout{figure}{chapter}
+% 中文正文段落在个别行内公式/西文连字符处缺少可行断点时会轻微超出版心,
+% \emergencystretch 仅在需要时给段落提供额外伸张, 不改动文字与标点.
+\emergencystretch=1.5em
+
+\begin{document}
+
+\makecover
+% 封面之后的空白页 (封面背面) 若沿用页面样式会显示孤立的页码,
+% 此页不设页眉页脚, 使其真正留白.
+\thispagestyle{empty}
+
+\frontmatter
+\input{frontmatter/preface}
+
+\mainmatter
+\input{chapters/chapter0}
+\input{chapters/chapter1}
+\input{chapters/chapter2}
+\input{chapters/chapter3}
+\input{chapters/chapter4}
+\input{chapters/chapter5}
+\input{chapters/chapter6}
+\input{chapters/chapter7}
+\input{chapters/chapter8}
+
+% ---------- 参考文献 ----------
+% 模板提供 \makebibliography：\chapter{参考文献} + \printbibliography[heading=none]
+% \chapter 自带 \cleardoublepage，此处不再前置，以免多出一张空白页。
+% 印刷保持编号章与页眉; 但 PDF 书签要求不带章号: 先手工放置根级书签,
+% 再局部令 \addcontentsline 失效, 使该 \chapter 不生成“第九章”自动书签.
+% \cleardoublepage 须在书签之前, 使书签锚点落在文献首页; 其后 \chapter
+% 自带的清页在空页上是空操作, 不会多出空白页.
+\begingroup
+\makeatletter
+\long\def\addcontentsline#1#2#3{}%
+\makeatother
+\cleardoublepage
+\pdfbookmark[0]{参考文献}{chap:bib}%
+\makebibliography
+\endgroup
+
+% ---------- 索引 ----------
+\printindex
+
+\end{document}

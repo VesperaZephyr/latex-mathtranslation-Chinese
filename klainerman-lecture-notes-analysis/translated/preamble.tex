@@ -1,0 +1,148 @@
+% ================================================================
+% 《分析讲义》中译本 —— 类文件之上的兼容层（mathtranslation.cls v3.1）
+% ----------------------------------------------------------------
+% mathtranslation.cls v3.1 基于 ctexbook，已原生提供 \chapter/\part/\appendix、
+% 元信息命令 \BookTitleCN 等、\newterm/\addterm 术语系统、\printterminology、
+% \headfont 标题字体、\makecover 封面、\longproof、\exercises/\answers、
+% mtfang/mtsong 定理样式与 envenddiamond 结束标记。
+%
+% 因此本文件只保留 v3.1 未提供、且本书确需的部分；不改动正文内容：
+%   1. 定理类环境共享同一计数器，编号“节号.序号”（与原书一致）。
+%   2. \mtsubsec{标题} / \mtsubsecn{数字}{标题}：节内带编号/独立编号子标题。
+%   3. 未编号环境 theorem* / definition* / ...（原书未编号对象用）。
+%   4. \thmref 等按类型引用命令。
+%   5. mybibliography 兼容环境（v3.0 起类文件只提供 \makebibliography）。
+% ================================================================
+% ---------- 1. 元信息命令 ----------
+% v3.1 已把 \BookTitleCN / \OriginalAuthor / \Translator 等全部暴露为公开命令
+% （见类文件第 7 节），旧版为 v1.2 写的 \MT@ 别名层在此整体删除。
+
+% ---------- 2. 共享定理计数器 ----------
+% v3.1 把定理类环境各自注册为 [section] 计数，各环境互相独立。本书要求它们
+% 共用同一计数器，编号显示为“节号.序号”，且序号全书连续（与原书一致）。
+% 故在此解除原定义并重建。
+%
+% 只 \let 环境命令，不释放 \c@theorem 等计数器本身：v3.1 已把这些计数器登记
+% 进 \cl@section 的重置链，销毁计数器会让后续 \section 报
+% “No counter 'definition' defined.”（报错位置会被误指到 \section 一行）。
+\makeatletter
+\let\theorem\relax\let\endtheorem\relax
+\let\definition\relax\let\enddefinition\relax
+\let\lemma\relax\let\endlemma\relax
+\let\corollary\relax\let\endcorollary\relax
+\let\proposition\relax\let\endproposition\relax
+\let\remark\relax\let\endremark\relax
+\let\example\relax\let\endexample\relax
+\let\problem\relax\let\endproblem\relax
+\makeatother
+
+% 共享计数器：全书连续（不随 chapter/section 重置），显示“节号.序号”。
+\newcounter{mtthm}
+\renewcommand{\themtthm}{\arabic{section}.\arabic{mtthm}}
+
+% 定理样式直接沿用类文件的 mtfang / mtsong（例、问题用宋体），不再另行定义。
+\theoremstyle{mtfang}
+\newtheorem{theorem}[mtthm]{定理}
+\newtheorem{definition}[mtthm]{定义}
+\newtheorem{lemma}[mtthm]{引理}
+\newtheorem{corollary}[mtthm]{推论}
+\newtheorem{proposition}[mtthm]{命题}
+\newtheorem{remark}[mtthm]{注}
+\theoremstyle{mtsong}
+\newtheorem{example}[mtthm]{例}
+\newtheorem{problem}[mtthm]{问题}
+
+% 未编号版本（原书未编号的定义、定理、注等）。声明顺序照旧，因此它们沿用
+% 上面生效的 mtsong 样式（宋体），与原书观感一致。
+\newtheorem*{theorem*}{定理}
+\newtheorem*{definition*}{定义}
+\newtheorem*{lemma*}{引理}
+\newtheorem*{corollary*}{推论}
+\newtheorem*{proposition*}{命题}
+\newtheorem*{remark*}{注}
+\newtheorem*{example*}{例}
+\newtheorem*{problem*}{问题}
+\newtheorem*{conjecture*}{猜想}
+
+% 类文件已用 \AtEndEnvironment 给 example/remark 挂了菱形结束标记（钩子存于
+% \@end@<env>@hook，由通用 \end 调用，故不必也不可重复挂载，否则会出现双菱形）。
+% 下面只为新定义的带 * 未编号环境补挂，保持与编号版本外观一致。
+\AtEndEnvironment{example*}{\envenddiamond}
+\AtEndEnvironment{remark*}{\envenddiamond}
+
+% 节标题显示为“节号.”（原书样式，不带章号）。
+\renewcommand{\thesection}{\arabic{section}.}
+
+% ---------- 3. 节内子标题 ----------
+% 带编号子标题: 推进共享计数器并显示 "节号.序号 标题".
+\newcommand{\mtsubsec}[1]{%
+  \par\medskip\noindent\refstepcounter{mtthm}%
+  {\headfont\arabic{section}.\arabic{mtthm}\quad #1}\par\smallskip
+}
+% 独立编号子标题: 只显示 "数字. 标题", 不推进计数器.
+% 用法: \mtsubsecn{数字}{标题}(数字为 0 或空时只显示标题).
+\newcommand{\mtsubsecn}[2]{%
+  \par\medskip\noindent%
+  {\headfont\ifx\relax#1\relax\else #1.\quad\fi#2}\par\smallskip
+}
+
+% ---------- 4. 按类型区分的引用命令 ----------
+% 所有定理类环境共享同一计数器, 故 \autoref 无法区分类型(一律显示"定理").
+% 引用时用下列命令: \thmref{...} → "定理 N", \lemref{...} → "引理 N" 等.
+\newcommand{\thmref}[1]{定理~\ref{#1}}
+\newcommand{\lemref}[1]{引理~\ref{#1}}
+\newcommand{\defref}[1]{定义~\ref{#1}}
+\newcommand{\propref}[1]{命题~\ref{#1}}
+\newcommand{\corref}[1]{推论~\ref{#1}}
+\newcommand{\remref}[1]{注~\ref{#1}}
+\newcommand{\exref}[1]{例~\ref{#1}}
+\newcommand{\probref}[1]{问题~\ref{#1}}
+
+% ---------- 5. 术语系统 ----------
+% v3.1 的 \newterm{键}{中文}{英文} 与旧版行为完全一致（首次出现自动注册、
+% 自动取页码、自动去重，并输出到 \MTTermList），故删除此处为 v1.2 写的
+% 重新实现，直接使用类文件版本。
+
+% ---------- 6. 公式/图表编号 ----------
+% ctexbook（book 基类）默认把 equation / figure / table 按章编号（\theequation =
+% 章号.序号）。原书与旧版 ctexart 类均为全书连续编号（公式 (1)--(446)，见"译者
+% 说明"），故解除按章重置、恢复连续编号，保持与原文及既有成果一致。
+\makeatletter
+\@removefromreset{equation}{chapter}
+\renewcommand{\theequation}{\arabic{equation}}
+\@removefromreset{figure}{chapter}
+\renewcommand{\thefigure}{\arabic{figure}}
+\@removefromreset{table}{chapter}
+\renewcommand{\thetable}{\arabic{table}}
+\makeatother
+
+% ---------- 6b. mybibliography 兼容环境 ----------
+% v1.0 提供 mybibliography（参考文献列表，标题由正文手动 \section* 给出）。
+% v1.2 已删除该环境；此处按 v1.2 的 thebibliography 的列表部分重建（不含标题），
+% 供 partapx.tex 的"参考文献"使用。
+\makeatletter
+\newenvironment{mybibliography}[1]{%
+  \begingroup
+  \list{\@biblabel{\@arabic\c@enumiv}}%
+       {\settowidth\labelwidth{\@biblabel{#1}}%
+        \leftmargin\labelwidth
+        \advance\leftmargin\labelsep
+        \@openbib@code
+        \usecounter{enumiv}%
+        \let\p@enumiv\@empty
+        \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+  \sloppy
+  \clubpenalty4000
+  \@clubpenalty \clubpenalty
+  \widowpenalty4000%
+  \sfcode`\.\@m
+}{%
+  \def\@noitemerr{\@latex@warning{Empty bibliography environment}}%
+  \endlist
+  \endgroup
+}
+\makeatother
+
+% ---------- 7. 封面 ----------
+% v3.1 的 \makecover 已按制作规范印出“译者 xx 翻译及重排”，并逐项拼接
+% 版次·出版社·年份（空字段自动跳过），旧版为 v1.2 重写的封面宏在此整体删除。

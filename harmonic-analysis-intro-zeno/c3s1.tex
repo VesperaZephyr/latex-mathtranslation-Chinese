@@ -1,0 +1,243 @@
+% ============ 第3章 §3.1 Hardy--Littlewood 极大函数 (原书 pp.61-66) ============
+
+可测函数的分析一般来说是极为困难的. 实际上, 作为无法把握可测函数这一概念的原因之一, 可以举出实在是有各种各样的东西都会成为可测的这一点. 因此, 寻找一种将可测函数在一定程度上放大, 使得变换后的函数易于处理的变换, 是很自然的. 作为这样的变换, 可以举出 Hardy--Littlewood 极大函数. 这里, 我们考察 Hardy--Littlewood 极大函数的性质, 并作为应用证明 Lebesgue 微分定理.
+
+\section{Hardy--Littlewood 极大函数}\label{sec:3.1}
+\index{W@5r 覆盖引理}
+
+\index{H@Hardy--Littlewood 极大算子}
+
+\index{H@Hardy--Littlewood 弱 (1,1) 极大不等式}
+
+
+
+
+
+
+
+
+用积分定义的算子称为积分算子, 作为研究这些算子的基本工具, 有 Hardy--Littlewood 极大算子. 这里给出其定义, 并考察简单的例子. 特别是, 遗憾的是积分算子的像并不是可积函数, 因此考察取而代之能说些什么. 这时要使用称为覆盖引理的几何工具. 一般地, 经验上已知覆盖引理对研究函数的可微性是有用的, 而这一侧面到后面会变得清晰. 所谓立方体, 是指边与坐标轴平行的立方体.
+
+\begin{definition}[Hardy--Littlewood 极大算子 I]\label{def:3.1}
+对可测函数 $f: \mathbb{R}^{n} \to \mathbb{C}$, 函数 $Mf$ 由
+\[
+Mf(x) \equiv \sup\left\{\frac{1}{|Q|}\int_{Q}|f(y)|\dd y : Q \text{ 为包含 } x \text{ 的立方体}\right\}
+\]
+定义. 映射 $M: f \mapsto Mf$ 称为 Hardy--Littlewood 极大算子.
+\end{definition}
+
+通过将立方体稍微膨胀, 定义也可以改写为下面的形式.
+
+\begin{definition}[Hardy--Littlewood 极大算子 II]\label{def:3.2}
+对可测函数 $f: \mathbb{R}^{n} \to \mathbb{C}$, 函数 $Mf$ 由
+\begin{equation}\tag{3.1}
+Mf(x) \equiv \sup_{Q}\frac{\chi_{Q}(x)}{|Q|}\int_{Q}|f(y)|\dd y
+\label{eq:3.1}
+\end{equation}
+定义. $Q$ 遍历其内部包含 $x$ 的全体立方体.
+\end{definition}
+
+\begin{example}\label{exa:3.1}
+设 $n = 1$, $f = \chi_{[-1,1]}$, 则 $Mf(x) = \min\left(1, \frac{2}{1+|x|}\right)$. 实际上, 因为
+\[
+Mf(x) = \sup_{I \text{ 为区间}}\chi_{I}(x)\frac{|I \cap [-1,1]|}{|I|}.
+\]
+\end{example}
+
+如这个例子所示(也参照练习题~\ref{exer:3.1}), 即使 $f \in L^{1}(\mathbb{R}^{n})$, $Mf \in L^{1}(\mathbb{R}^{n})$ 也未必成立. 另外, 对任意可测函数 $f: \mathbb{R}^{n} \to \mathbb{C}$, 有 $Mf(x) \leq \|f\|_{L^{\infty}}, x \in \mathbb{R}^{n}$.
+
+那么, 当 $f \in L^{1}(\mathbb{R}^{n})$ 时, $Mf$ 满足什么呢? 回答这一问题的, 就是下面的覆盖引理.
+
+\begin{theorem}[5r-覆盖引理]\label{thm:3.1}
+在距离空间 $(X,d)$ 中给定由 $J$ 个球组成的族 $\{B_{\lambda}\}_{\lambda \in \Lambda}$ 时, 将下标重新编号为 $1, 2, \ldots, J$, 对重新编号后的球族 $B_{1}, B_{2}, \ldots, B_{J}$, 可以做到存在某个 $1 \leq K \leq J$ 满足下面的条件.
+
+(1) 最初的 $K$ 个互不相交. 即 $B_{1}, B_{2}, \ldots, B_{K}$ 彼此没有公共部分.
+
+(2) 存在某个映射 $\iota: \{1, 2, \ldots, J\} \to \{1, 2, \ldots, K\}$, 使得 $B_{j} \subset 3B_{\iota(j)}$ 成立.
+\end{theorem}
+
+\begin{note}\label{note:3.1}
+所谓 5r, 是半径 $r$ 的 5 倍 (five times radius) 之意. 这里因为是有限族, 3 倍就足够了, 但若是无限族, 则需要 $3 + \varepsilon$ 倍. 典型地取 $\varepsilon = 2$, 因此总称为 5r.
+\end{note}
+
+粗略地说, 证明是反复进行「取最大半径的.」「舍弃最大半径的球以及包含在最大半径的球的 3 倍中的那些.」「在被舍弃的当中取最大半径的.」「舍弃最大半径的球以及包含在最大半径的球的 3 倍中的那些.」「在被舍弃的当中取最大半径的.」「舍弃最大半径的球以及包含在最大半径的球的 3 倍中的那些.」来推进的.
+
+\begin{proof}
+用关于 $J$ 的归纳法证明. 当 $J = 1$ 时, 实际上只要取 $K = 1$ 即可, 因此定理~\ref{thm:3.1} 成立.
+
+归纳假设如下.
+
+设 $J \leq J_{0}$. 假设当给定由 $J$ 个球组成的有限族 $\{B_{\lambda}^{*}\}_{\lambda \in \Lambda}$ 时, 将下标重新编号为 $1, 2, \ldots, J$ 后, 对重新编号的球族 $B_{1}^{*}, B_{2}^{*}, \ldots, B_{J}^{*}$, 可以做到满足下面的条件.
+
+(1) 最初的 $K$ 个互不相交. 即 $B_{1}^{*}, B_{2}^{*}, \ldots, B_{K}^{*}$ 彼此没有公共部分.
+
+(2) 存在某个映射 $\iota: \{1, 2, \ldots, J\} \to \{1, 2, \ldots, K\}$, 使得 $B_{j}^{*} \subset 3B_{\iota(j)}^{*}$ 成立.
+
+于是设给定由 $J_{0}+1$ 个球组成的族. 取 $B_{1}$ 为半径最大的一个, 适当编号为 $B_{1}, B_{2}, \ldots, B_{J_{0}+1}$. 此后, 根据需要, 变更 $B_{2}, B_{3}, \ldots, B_{J_{0}+1}$ 的编号. 如果给出半径最大值的球有多个, 则从中任选一个. 对与 $B_{1}$ 相交的球 $B_{j}$ ($j = 2, 3, \ldots, J_{0}+1$), 由于 $r(B_{j}) \leq r(B_{1})$, 所以 $B_{j} \subset 3B_{1}$ 成立.
+
+因此, $\{B_{j}\}_{j=1}^{J_{0}+1}$ 中不满足 $B_{j} \subset 3B_{1}$ 的($B_{1}$ 自动被排除)至多有 $J_{0}$ 个, 这些球与 $B_{1}$ 不相交. 所以, 将 $\{B_{j}\}_{j=1}^{J_{0}+1}$ 中满足 $B_{j} \cap B_{1} = \emptyset$ 的全体重新编号为 $\{B_{j}\}_{j=2}^{J+1}$, 将满足 $B_{j} \cap B_{1} \neq \emptyset$ 的全体重新编号为 $\{B_{j}\}_{j=J+2}^{J_{0}+1}$. 此时, 由 $J$ 的取法, 当 $j > J+1$ 时, $B_{j} \subset 3B_{1}$ 成立.
+
+对 $\{B_{j}\}_{j=2}^{J+1}$ 使用归纳假设, 通过交换编号, 存在互不相交的球族 $B_{2}, \ldots, B_{K}$, 使得对 $2 \leq j \leq J+1$, 存在 $J(j) = 2, 3, \ldots, K$ 满足 $B_{j} \subset 3B_{J(j)}$. 此时, 令
+\begin{equation}\tag{3.2}
+\iota(j) \equiv \begin{cases} 1 & (j = 1 \text{ 时}) \\ J(j) & (2 \leq j \leq J+1 \text{ 时}) \\ 1 & (j > J+1 \text{ 时}) \end{cases}
+\label{eq:3.2}
+\end{equation}
+即可知 $B_{1}, B_{2}, \ldots, B_{K}$ 满足定理的条件.
+
+由此, 归纳法的证明完成.
+\end{proof}
+
+\begin{theorem}[Hardy--Littlewood 弱 (1,1) 极大不等式]\label{thm:3.2}
+对 $f \in L^{1}(\mathbb{R}^{n})$, $\lambda > 0$, 有
+\begin{equation}\tag{3.3}
+|\{Mf > \lambda\}| \leq \frac{3^{n}}{\lambda}\int_{\mathbb{R}^{n}}|f(x)|\dd x
+\label{eq:3.3}
+\end{equation}
+成立.
+\end{theorem}
+
+一般地, $\mathrm{w}L^{1}(\mathbb{R}^{n})$ 是指满足
+\[
+\|f\|_{\mathrm{w}L^{1}} = \sup_{\lambda > 0}\lambda\|\chi_{\{|f| > \lambda\}}\|_{L^{1}} = \sup_{\lambda > 0}\lambda|\{|f| > \lambda\}| < \infty
+\]
+的可测函数 $f: \mathbb{R}^{n} \to \mathbb{C}$ 所组成的线性空间. 对可测函数 $f: \mathbb{R}^{n} \to \mathbb{C}$, 有
+\[
+\|f\|_{\mathrm{w}L^{1}} \leq \|f\|_{L^{1}}.
+\]
+这个空间与 $L^{1}(\mathbb{R}^{n})$ 之间有包含关系 $\mathrm{w}L^{1}(\mathbb{R}^{n}) \supset L^{1}(\mathbb{R}^{n})$, 因此可知 $L^{1}(\mathbb{R}^{n})$ 是 $\mathrm{w}L^{1}(\mathbb{R}^{n})$ 的子集. 进而, 由于 $|\cdot|^{-n} \in \mathrm{w}L^{1}(\mathbb{R}^{n})$, $L^{1}(\mathbb{R}^{n})$ 是 $\mathrm{w}L^{1}(\mathbb{R}^{n})$ 的真子集. 基于这样的缘由, $\mathrm{w}L^{1}(\mathbb{R}^{n})$ 被称为弱 $L^{1}$ 空间, 从 $L^{1}(\mathbb{R}^{n})$ 到 $\mathrm{w}L^{1}(\mathbb{R}^{n})$ 的连续映射被称为弱 (1,1) 连续映射, 或具有弱 $L^{1}$ 有界性, 在 $L^{1}(\mathbb{R}^{n})$ 中弱有界, 具有弱 (1,1) 有界性的映射, 等等.
+
+\begin{proof}
+由 Lebesgue 测度的内正则性, 只需对满足 $K \subset \{Mf > \lambda\}$ 的任意紧集 $K$ 证明
+\begin{equation}\tag{3.4}
+|K| \leq \frac{3^{n}}{\lambda}\int_{\mathbb{R}^{n}}|f(x)|\dd x
+\label{eq:3.4}
+\end{equation}
+即可. 设 $x \in K$. 由 $M$ 的定义, 存在(在内部)包含 $x$ 的立方体 $Q_{x}$, 使得
+\begin{equation}\tag{3.5}
+\frac{1}{|Q_{x}|}\int_{Q_{x}}|f(y)|\dd y > \lambda
+\label{eq:3.5}
+\end{equation}
+成立. 由 $K$ 的紧性, 存在有限个点 $x_{1}, x_{2}, \ldots, x_{J}$, 使得 $K \subset \bigcup_{j=1}^{J}Q_{x_{j}}$ 成立. 为简化记号, 令 $Q_{j} \equiv Q_{x_{j}}$. 由定理~\ref{thm:3.1}, 重新编号后, 可以做到存在某个 $L \leq J$ 满足下面的条件.
+
+(1) $\{Q_{j}\}_{j=1}^{L}$ 互不相交. 即
+\begin{equation}\tag{3.6}
+\sum_{j=1}^{L}\chi_{Q_{j}} \leq 1
+\label{eq:3.6}
+\end{equation}
+成立.
+
+(2) 关于 $K$ 的如下包含关系成立.
+\begin{equation}\tag{3.7}
+K \subset \bigcup_{j=1}^{J}Q_{j} \subset \bigcup_{j=1}^{L}3Q_{j}.
+\label{eq:3.7}
+\end{equation}
+
+因此,
+\[
+\sum_{j=1}^{L}|3Q_{j}| = 3^{n}\sum_{j=1}^{L}|Q_{j}|
+\]
+所以依次使用式~\eqref{eq:3.7}, 式~\eqref{eq:3.5}, 式~\eqref{eq:3.6},
+\begin{align*}
+|K| &\leq \sum_{j=1}^{L}|3Q_{j}| \leq \sum_{j=1}^{L}\frac{3^{n}}{\lambda}\int_{Q_{j}}|f(y)|\dd y \\
+&\leq \frac{3^{n}}{\lambda}\int_{\mathbb{R}^{n}}|f(y)|\dd y,
+\end{align*}
+定理得证.
+\end{proof}
+
+下面用例子来考虑 Hardy--Littlewood 极大函数是如何被使用的.
+
+\begin{lemma}\label{lem:3.1}
+设 $\Theta: \mathbb{R} \to [0, \infty)$ 是在 $(0, \infty)$ 上单调递减的偶函数, 且 $C^{1}$ 级并可积, 则对非负值局部可积函数 $F: \mathbb{R} \to [0, \infty)$, 有
+\[
+\int_{\mathbb{R}}\Theta(y)F(x-y)\dd y \leq MF(x)\|\Theta\|_{L^{1}} \quad (x \in \mathbb{R})
+\]
+成立. 特别地, 记在 $(0, \infty)$ 上单调递减、$C^{1}$ 级且 $L^{1}$ 范数不超过 $1$ 的偶函数的全体所组成的集合为 $\mathcal{Z}$. 此时, 对任意非负值可积函数 $F$, 有
+\[
+\left|\left\{x \in \mathbb{R}: \sup_{\Theta \in \mathcal{Z}}\int_{\mathbb{R}}\Theta(y)F(x-y)\dd y > \lambda\right\}\right| \leq \frac{3}{\lambda}\|F\|_{L^{1}}
+\]
+成立.
+\end{lemma}
+
+\begin{proof}
+实际上, 由于 $\lim_{y \to \infty}\Theta(y) = 0$, 由分部积分得
+\begin{align*}
+\int_{\mathbb{R}}\Theta(y)F(x-y)\dd y &= \int_{\mathbb{R}}\Theta(y)\left(\frac{\dd}{\dd y}\int_{0}^{y}F(x-z)\dd z\right)\dd y \\
+&= -\int_{\mathbb{R}}\Theta'(y)\left(\int_{0}^{y}F(x-z)\dd z\right)\dd y \\
+&\leq -\int_{\mathbb{R}}\Theta'(y)y\,MF(x)\dd y \\
+&= \int_{\mathbb{R}}\Theta(y)MF(x)\dd y = MF(x)\|\Theta\|_{L^{1}}.
+\end{align*}
+\end{proof}
+
+\begin{exercise}\label{exer:3.1}
+设 $n \in \mathbb{N}$. 设 $Q(x, r)$ 表示 $\mathbb{R}^{n}$ 中以 $x$ 为中心、体积为 $(2r)^{n}$ 的立方体.
+
+(1) 设 $x \in \mathbb{R}^{n}$. 通过计算 $[-1,1]^{n} \cap Q(x, |x|+2)$ 及其体积, 证明 $M\chi_{[-1,1]^{n}}(x) \geq \frac{2^{n}}{(|x|+2)^{n}}$. 【提示】取 $n = 2$, $x = (x_{1}, x_{2}) \in (0, \infty)^{2}$, 尝试在坐标平面上画出 $Q(x, |x|+2)$ 与 $[-1,1]^{n}$.
+
+(2) 利用 (1) 与 $(|x|+2)^{n} \geq \prod_{j=1}^{n}(|x_{j}|+2)$, 证明 $M\chi_{[-1,1]^{n}} \notin L^{1}(\mathbb{R}^{n})$.
+\end{exercise}
+
+\begin{exercise}\label{exer:3.2}
+设立方体 $Q$, 可测函数 $f$ 与 $\lambda > 0$ 满足
+\[
+\frac{1}{|Q|}\int_{Q}|f(x)|\dd x > \lambda.
+\]
+此时, 证明存在某个 $\varepsilon \in (0, \infty)$, 使得
+\[
+\frac{1}{|(1+\varepsilon)Q|}\int_{Q}|f(x)|\dd x > \lambda
+\]
+成立. 【提示】令
+\[
+A = \frac{1}{|Q|}\int_{Q}|f(x)|\dd x,
+\]
+则假设与应当判定的条件分别可读作
+\[
+A > \lambda, \quad \frac{A}{(1+\varepsilon)^{n}} > \lambda.
+\]
+尝试关于 $\varepsilon$ 解这个不等式, 会得到什么? 不过, 要注意 $A = \infty$ 的可能性.
+\end{exercise}
+
+\begin{exercise}\label{exer:3.3}
+对具有公共点的两个立方体 $Q$ 与 $Q'$, 证明 $Q' \subset 3Q$ 或 $Q \subset 3Q'$ 成立.
+\end{exercise}
+
+\begin{exercise}\label{exer:3.4}
+给定 $\mathbb{R}$ 中由 6 个开区间 $A = (10, 14)$, $B = (10, 18)$, $C = (10, 16)$, $D = (3, 11)$, $E = (1, 9)$, $F = (9, 16)$ 组成的族, 选出其中一部分 $K_{1}, K_{2}, \ldots, K_{L}$, 使得下面的条件成立. 不过, $L$ 的值可以自由选取以适合条件. 另外, $3K_{l}$ 是保持 $K_{l}$ 的中心的 3 倍放大.
+
+$\bullet$ $K_{1}, K_{2}, \ldots, K_{L}$ 互不相交.
+
+$\bullet$ 存在某个映射 $\iota: \{A, B, C, D, E, F\} \to \{1, 2, \ldots, L\}$, 使得 $A \subset 3K_{\iota(A)}$, $B \subset 3K_{\iota(B)}$, $C \subset 3K_{\iota(C)}$, $D \subset 3K_{\iota(D)}$, $E \subset 3K_{\iota(E)}$, $F \subset 3K_{\iota(F)}$ 成立.
+
+【注意】求出一组 $L, K_{1}, K_{2}, \ldots, K_{L}$ 以及 $\iota$.
+\end{exercise}
+
+\begin{exercise}\label{exer:3.5}
+对 $n = 1, 2, \ldots$, $k = 0, 1, \ldots, n$, 定义 $b_{n,k}(x) = {}_{n}C_{k}x^{k}(1-x)^{n-k}$. 对可积函数 $f: [0,1] \to \mathbb{R}$, 将 $n$ 次 Kantorovich 多项式 $K_{n}(f, \cdot)$ 定义为
+\[
+K_{n}(f, x) = (n+1)\sum_{k=0}^{n}b_{n,k}(x)\int_{k/(n+1)}^{(k+1)/(n+1)}f(t)\dd t.
+\]
+回答下面的问题.
+
+(1) 对 $x \in (0,1)$, $n \in \mathbb{N}$, 将 $k_{n,x} = 0, 1, \ldots, n$ 定义为满足 $k_{n,x} \leq (n+1)x < (k_{n,x}+1)$ 的唯一整数. 此时, 证明当 $k \leq k_{n,x}$ 时 $b_{n,k}(x) \leq b_{n,k+1}(x)$ 成立, 当 $k > k_{n,x}$ 时 $b_{n,k}(x) \geq b_{n,k+1}(x)$ 成立.
+
+(2) 将函数 $K_{n}(x, t): [0,1] \times [0,1] \to [0, \infty)$ 定义为
+\[
+K_{n}(x, t) = (n+1)\sum_{k=0}^{n}b_{n,k}(x)\chi_{(k/(n+1), (k+1)/(n+1)]}(t).
+\]
+此时, 证明 $K_{n}(x, \cdot)$ 在 $t \leq x$ 上单调递增, 在 $t \geq x$ 上单调递减.
+
+(3) 将符号测度 $\mu$ 定义为
+\[
+\mu_{x} = (n+1)\sum_{k=0}^{n}b_{n,k}(x)(\delta_{(k+1)/(n+1)} - \delta_{k/(n+1)}).
+\]
+这里 $\delta_{a}$ 是 $a$ 处的 Dirac delta. 此时, 对 $x \in [0,1]$ 与可积函数 $f: [0,1] \to \mathbb{R}$, 令 $F(t) = \int_{x}^{t}f(s)\dd s$, 证明
+\[
+K_{n}f(x, t) = \int_{[0,1]}F(t)\dd\mu_{x}(t)
+\]
+成立.
+
+(4) 将作用于 $f \in L^{1}([0,1])$ 的极大算子 $M$ 定义为
+\[
+Mf(x) = \sup_{0 \leq a \leq x \leq b \leq 1, a < b}\frac{1}{b-a}\int_{a}^{b}f(s)\dd s,
+\]
+证明 $|K_{n}(f, t)| \leq Mf(t)$ 成立.
+\end{exercise}

@@ -1,0 +1,145 @@
+% !TeX program = xelatex
+% ================================================================
+%  末尾论文《非线性波动方程的几何与傅里叶方法》独立重排
+%  —— 独立文档，复用 mathtranslation.cls v3.1 的字体、定理环境与中文排版
+%
+%  层级对应: 每“讲”为一个 \chapter，讲内小节为 \section*。
+%  (mathtranslation.cls v3.1 基于 ctexbook，顶层为 \chapter；
+%   原文每“讲”即本文的最高层级，故由旧 ctexart 版的 \section 上移为 \chapter。)
+% ================================================================
+\documentclass[Biblatex=false]{mathtranslation}
+\usepackage{enumitem}
+
+% ---------- 定理类环境：按“讲”（章）共享 X.N 计数器 ----------
+% mathtranslation.cls 默认各环境独立计数；本论文原书将命题/定理/引理/定义/注
+% 统一编号为“讲号.序号”，故在此解除原定义并重建。
+% 注意：只 \let 环境命令，不释放 \c@theorem 等计数器本身。
+\makeatletter
+\let\theorem\relax\let\endtheorem\relax
+\let\definition\relax\let\enddefinition\relax
+\let\lemma\relax\let\endlemma\relax
+\let\corollary\relax\let\endcorollary\relax
+\let\proposition\relax\let\endproposition\relax
+\let\remark\relax\let\endremark\relax
+\let\example\relax\let\endexample\relax
+\let\problem\relax\let\endproblem\relax
+\makeatother
+
+% 论文将命题/定理/引理/定义/注/问题/猜想统一按“讲号.序号”编号，
+% 故新建共享计数器 mtthm（按“讲”即章重置）；“例”用独立计数器 mtx。
+\newcounter{mtthm}[chapter]
+\renewcommand{\themtthm}{\arabic{chapter}.\arabic{mtthm}}
+\newcounter{mtx}[chapter]
+\renewcommand{\themtx}{\arabic{chapter}.\arabic{mtx}}
+
+\theoremstyle{mtfang}
+\newtheorem{theorem}[mtthm]{定理}
+\newtheorem{definition}[mtthm]{定义}
+\newtheorem{lemma}[mtthm]{引理}
+\newtheorem{corollary}[mtthm]{推论}
+\newtheorem{proposition}[mtthm]{命题}
+\newtheorem{remark}[mtthm]{注}
+\theoremstyle{mtsong}
+\newtheorem{example}[mtx]{例}
+\newtheorem{problem}[mtthm]{问题}
+\newtheorem{conjecture}[mtthm]{猜想}
+
+% 无编号环境（用于不编号的“定理”“问题”“猜想”等块）。
+% “例”“注”的菱形结束标记由类文件统一提供，此处不再重挂（重挂会出现双菱形）；
+% 仅为新定义的带 * 未编号环境补挂，保持与编号版本外观一致。
+\theoremstyle{mtfang}
+\newtheorem*{theorem*}{定理}
+\newtheorem*{definition*}{定义}
+\newtheorem*{lemma*}{引理}
+\newtheorem*{corollary*}{推论}
+\newtheorem*{proposition*}{命题}
+\newtheorem*{remark*}{注}
+\newtheorem*{problem*}{问题}
+\theoremstyle{mtsong}
+\newtheorem*{example*}{例}
+\newtheorem*{conjecture*}{猜想}
+\AtEndEnvironment{example*}{\envenddiamond}
+\AtEndEnvironment{remark*}{\envenddiamond}
+
+% ---------- 公式编号：全书连续，与原书一致 ----------
+% ctexbook（book 基类）默认把 equation 按章编号（\theequation = 章号.序号）。
+% 本论文原书公式连续编号 (1)--(170)，且正文中大量引用（如"方程 (16)""(67)"）
+% 为硬编码文本，故解除按章重置、恢复连续编号。
+\makeatletter
+\@removefromreset{equation}{chapter}
+\renewcommand{\theequation}{\arabic{equation}}
+\@removefromreset{figure}{chapter}
+\renewcommand{\thefigure}{\arabic{figure}}
+\makeatother
+
+% ---------- 按类型引用的命令 ----------
+\newcommand{\thmref}[1]{定理~\ref{#1}}
+\newcommand{\lemref}[1]{引理~\ref{#1}}
+\newcommand{\defref}[1]{定义~\ref{#1}}
+\newcommand{\propref}[1]{命题~\ref{#1}}
+\newcommand{\corref}[1]{推论~\ref{#1}}
+\newcommand{\remref}[1]{注~\ref{#1}}
+\newcommand{\exref}[1]{例~\ref{#1}}
+
+% ---------- 标题块（极简，不套用书籍封面）----------
+\title{非线性波动方程的几何与傅里叶方法}
+\author{Sergiu Klainerman\thanks{普林斯顿大学}\\[4pt] \small 译}
+\date{}
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{center}
+    {\LARGE\headfont \@title}\\[1.6em]
+    {\large \@author}%
+  \end{center}%
+  \vspace{1.2em}%
+  \@thanks
+}
+\makeatother
+
+% book 类无 abstract 环境，补一个极简版（居中“摘要”+ 缩进小字）。
+\newenvironment{abstract}{%
+  \par\medskip
+  \begin{center}{\headfont 摘\quad 要}\end{center}%
+  \begin{quote}\small\noindent
+}{%
+  \end{quote}\medskip
+}
+
+\begin{document}
+
+% ================================================================
+%                       前置：标题、摘要、目录
+% ================================================================
+\frontmatter
+\maketitle
+
+\begin{abstract}
+非线性波动方程这一课题，在过去的二十年间因三项根本性进展而发生了深刻变化：
+一、精密几何技巧的出现，即只涉及物理空间中几何构造的方法；
+二、Littlewood--Paley 分解的系统运用以及仿微分法的引入；
+三、傅里叶时空技巧的发展，如 Strichartz 型不等式与双线性估计。
+本讲稿旨在讨论这些进展中若干技术性问题，并通过它们所导出的重要新结果加以说明。
+我们也计划讨论若干最新进展，它们要求几何与傅里叶方法之间高度非平凡的合作，并预示着这两种看似不可调和的观点未来强有力的融合。
+\end{abstract}
+
+\newpage
+\begingroup
+\pagestyle{empty}
+\tableofcontents
+\clearpage
+\endgroup
+
+% ================================================================
+%                         正文
+% ================================================================
+\mainmatter
+
+\input{lec1}
+\input{lec2}
+\input{lec3}
+\input{lec4}
+\input{lec5}
+\input{lec6}
+\input{references}
+
+\end{document}

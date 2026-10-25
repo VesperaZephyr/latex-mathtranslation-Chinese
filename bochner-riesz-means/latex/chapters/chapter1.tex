@@ -1,0 +1,767 @@
+% 第 1 章 Multiplier Theory (原书第 7-26 页)
+\chapter{乘子理论}
+\label{chap:1}
+
+\section{\texorpdfstring{$L^p$}{Lp} 上的乘子}
+\label{sec:1.1}
+
+在对 Fourier 积分``求和''时会遇到一些问题; 本节的目的是看清这些问题是什么, 以及如何克服它们.
+
+若 $f\in L^2$, 预期的逆 Fourier 变换
+\[
+\check{f}=\int f(\xi)e^{2\pi ix\xi}\,d\xi
+\]
+根本不收敛. 传统的补救办法是转而考察``部分和'', 即有界区域上的积分; 这迫使积分收敛. 人们随后希望取极限并得到极限的收敛性. 我们定义部分和算子 $S_R$ 为
+\[
+S_Rf(x)=\int_{|\xi|\leq R}\hat{f}(\xi)e^{2\pi ix\xi}\,d\xi,
+\]
+它是绝对收敛的. 我们希望对所有的 $f\in L^2$, $\lim_{R\to\infty}S_Rf$ 在 $L^2$ 中存在, 并且极限就是 $f$. 第一个问题是, 我们甚至不知道 $S_Rf$ 是否属于 $L^2$, 更谈不上在 $L^2$ 中收敛. 于是我们从算子 $S_R$ 的泛函分析入手: 它们把 $L^2$ 函数映为 $L^2$ 函数吗? 我们令 $B$ 表示 $\mathbb{R}^n$ 中的单位球, 并令 $\chi_B\bigl(\frac{\xi}{R}\bigr)$ 为半径 $R$ 的球的特征函数. 由此可得
+\[
+S_Rf(x)=\int\chi_B\Bigl(\frac{\xi}{R}\Bigr)\hat{f}(\xi)e^{2\pi ix\xi}\,d\xi.
+\]
+这些就是我们要研究的算子.
+
+\begin{definition}\label{def:1.1}
+\index{Fourier 乘子 (Fourier multiplier)|emph}
+$L^p(\mathbb{R}^n)$ 上的 \emph{Fourier 乘子算子} (Fourier multiplier operator) 是指 $L^p$ 上的有界线性算子 $T$, 对它存在 $\mu\in L^\infty(\mathbb{R}^n)$, 使得对一切 Schwartz 函数 $f$ 有
+\[
+Tf(x)=\int\mu(\xi)\hat{f}(\xi)e^{2\pi ix\xi}\,d\xi.
+\]
+此时, $\mu$ 称为与算子 $T$ 相伴的 \emph{Fourier 乘子} (Fourier multiplier).
+\end{definition}
+
+\noindent\textbf{注:} 这个算子实际上是由一个泛函方程定义的: $\widehat{Tf}=\mu\hat{f}$, 这是十分间接的. 要真正使用乘子算子, 我们需要能停留在其中一侧的刻画: 要么停留在函数一侧, 要么停留在 Fourier 变换一侧.
+
+\begin{proposition}\label{prop:1.2}
+\index{卷积核 (convolution kernel)}
+设 $T$ 是 $L^p$ 的 Fourier 乘子. 则存在一个分布 $K$, 使得对一切 $f\in\mathcal{S}$ 有
+\[
+Tf(x)=K\star f(x).
+\]
+$K$ 称为 $T$ 的\emph{卷积核} (convolution kernel).
+\end{proposition}
+
+\begin{proof}
+为了看清发生了什么, 先设 $\mu\in\mathcal{S}$. 则
+\begin{align*}
+Tf(x)&=\int\mu(\xi)e^{2\pi ix\xi}\hat{f}(\xi)\,d\xi
+=\int\mu(\xi)e^{2\pi ix\xi}\int e^{-2\pi i\xi y}f(y)\,dy\,d\xi \\
+&=\iint\mu(\xi)e^{2\pi i\xi(x-y)}\,d\xi\, f(y)\,dy
+=\int\check{\mu}(x-y)f(y)\,dy=\check{\mu}\star f(x).
+\end{align*}
+由于所涉对象皆为 Schwartz 函数, 我们可以交换积分次序, 并取分布 $K$ 为函数 $\check{\mu}$. 要给出一般情形的证明, 需要许多分布方面的事实. 首先, 若 $f\in\mathcal{S}$, 则 $\hat{f}\in\mathcal{S}$, 又因 $\mu\in L^\infty$, 故 $\mu\hat{f}\in L^1$, 于是
+\[
+Tf(x)=\int e^{2\pi ix\xi}\mu(\xi)\hat{f}(\xi)\,d\xi
+\]
+对一切 $x$ 存在.
+
+分布 $K$ 定义为 $K(f)=(T\tilde{f})(0)$. $f$ 的积分表示表明这是一个分布: $f\mapsto\hat{f}$ 是 $\mathcal{S}$ 到 $\mathcal{S}$ 的连续映射, 而用 $L^\infty$ 函数作积分是众所周知的分布. 最后, 注意到
+\begin{align*}
+(K\star f)(x)&\equiv K(\tau_x\tilde{f})\equiv T\bigl(\widetilde{\tau_x\tilde{f}}\bigr)(0)
+=T(\tau_{-x}f)(0) \\
+&=\int\mu(\xi)\widehat{\tau_{-x}f}(\xi)\,d\xi
+=\int\mu(\xi)e^{2\pi ix\xi}\hat{f}(\xi)\,d\xi\equiv Tf(x);
+\end{align*}
+倒数第二个等号成立是因为
+\[
+\widehat{\tau_{-x}f}(\xi)=\int e^{-2\pi iy\xi}f(y+x)\,dy=e^{2\pi ix\xi}\hat{f}(\xi). \qedhere
+\]
+\end{proof}
+
+\begin{remark}\label{rem:1.3}
+\begin{enumerate}[label=\alph*)]
+\item 作为分布, $\tilde{K}$ 就是 $\mu$, 而 $\tilde{\mu}$ 就是 $K$.
+\item 分布 $K$ 可能非常糟糕; 看算子 $Tf=f$. 这里 Fourier 反演公式告诉我们 $\mu\equiv 1$. 给出这个算子的分布是什么? 与 $T$ 对应的分布是 Dirac $\delta$ 测度, $\delta(f)=f(0)$. 把形式步骤做一遍,
+\[
+(\delta\star f)(x)\equiv\delta(\tau_x\tilde{f})=(\tau_x\tilde{f})(0)=\tilde{f}(-x)=f(x).
+\]
+寓意在于: 即使是平凡的算子, 也可能产生出甚至不能用对某个函数的积分来表示的分布. 更糟的是, 下面我们勾画一个例子, 其中 $K$ 甚至不能用对某个有限测度的积分来表示. 设 $\mu$ 是 $L^\infty$ 函数 $i\,\mathrm{sign}(\xi)$, 那么我们将在注~\ref{rem:2.13} 中算出 $\check{\mu}(x)=\frac{1}{\pi x}$. 但必须承认, $\check{\mu}(f)=\frac{1}{\pi}\int\frac{1}{x}f(x)\,dx$ 通常并不收敛. 严格地说, 我们必须取主值积分
+\[
+\lim_{\epsilon\to0}\frac{1}{\pi}\int_{|x|\geq\epsilon}\frac{1}{x}f(x)\,dx.
+\]
+当乘子不是可积函数时, 就应当预期这类分布的出现.
+\end{enumerate}
+\end{remark}
+
+\begin{proposition}\label{prop:1.4}
+若 $T$ 是 $L^p$ 的乘子且 $f\in\mathcal{S}$, 则
+\[
+\widehat{Tf}(\xi)=\mu(\xi)\hat{f}(\xi).
+\]
+\end{proposition}
+
+\begin{proof}
+为此, 我们必须看到: 作为分布, $\widehat{Tf}$ 与 $\mu(\xi)\hat{f}(\xi)$ 的作用相同. 逐点的相等是立刻得到的, 因为这两个分布都由对函数的积分给出; 这正是取 $f\in\mathcal{S}$ 的全部意义所在: 此时 $\hat{f}\in\mathcal{S}$ 且 $\mu\hat{f}\in L^1$. 由此可知 $Tf$ 甚至是连续的. 好, 通过对 $g\in\mathcal{S}$ 积分来验证相等: 由定理~\ref{thm:0.2} 扩张到整个 $L^2$ 的结果,
+\[
+\int\widehat{Tf}\,g=\int Tf\,\hat{g}.
+\]
+但是
+\[
+\int\mu\hat{f}\,g=\iint\mu\hat{f}\,g=\int(\mu\hat{f})\check{g}=\int Tf\,\hat{g}. \qedhere
+\]
+\end{proof}
+
+三元组 $(T,K,\mu)$ 称为\emph{乘子三元组} (multiplier triple).\index{乘子三元组 (multiplier triple)} $T$ 是乘子算子, $K$ 是卷积核, $\mu$ 是乘子. 在本书的其余部分, 我们会经常使用诸如``设 $T$ 是以 $\mu$ 为乘子的算子''或``若 $\mu$ 是以 $K$ 为核的乘子''这样的措辞.
+
+\begin{proposition}\label{prop:1.5}
+设 $T$ 是 $L^2$ 上的乘子算子, 乘子为 $\mu$. 则
+\[
+{}_2\|T\|=\|\mu\|_{\infty}.
+\]
+\end{proposition}
+
+\begin{proof}
+由 Plancherel 定理,
+\[
+\|Tf\|_2=\|\widehat{Tf}\|_2=\|\mu\hat{f}\|_2\leq\|\mu\|_{\infty}\|\hat{f}\|_2=\|\mu\|_{\infty}\|f\|_2,
+\]
+故 ${}_2\|T\|\leq\|\mu\|_{\infty}$. 现在证明: 若 $\epsilon>0$, 则 ${}_2\|T\|\geq\|\mu\|_{\infty}-\epsilon$.
+
+由 $L^\infty$ 的定义, 集合 $E=\{\xi \mid |\mu(\xi)|\geq\|\mu\|_{\infty}-\epsilon\}$ 具有正测度; 我们可以选取 $E$ 的一个测度为正但有限的子集 $S$. 于是可以计算这个函数的范数: $\check{\chi}_S\in L^2$, 且 $\|\check{\chi}_S\|_2=\|\hat{\chi}_S\|_2=|S|^{\frac{1}{2}}$. 我们还能计算 $T$ 作用在这个函数上所得的范数:
+\begin{align*}
+{}_2\|T\|\,\|\check{\chi}_S\|_2={}_2\|T\|\,|S|^{\frac{1}{2}}&\geq\|T(\check{\chi}_S)\|_2=\|\mu\chi_S\|_2 \\
+&\geq\inf|\mu(\xi)\chi_S(\xi)|\,\|\chi_S\|_2
+\geq(\|\mu\|_{\infty}-\epsilon)|S|^{\frac{1}{2}}
+=(\|\mu\|_{\infty}-\epsilon)\|\check{\chi}_S\|_2. \qedhere
+\end{align*}
+\end{proof}
+
+\begin{remark}\label{rem:1.6}
+我们用到了 $T(\check{\chi}_S)=\mu\chi_S$ 这一结果. 我们实际上只在 $f\in\mathcal{S}$ 时证明了它, 但集合 $S$ 的特征函数当然不在 $\mathcal{S}$ 中. 这是折磨着本课题的那些琐碎技术问题的典型, 它们全都源于这样一个事实: 我们的乘子只定义在 $L^p$ 的一个稠密集上, 再由连续性延拓到其余部分. 在这条注记中, 我们想展示如何处理一个典型的琐碎问题.
+
+对 $f\in L^2$, 选取 $f_j\in\mathcal{S}$ 使 $f_j$ 在 $L^2$ 中收敛于 $f$. 由于 Fourier 变换在 $L^2$ 上连续, $\hat{f}_j$ 在 $L^2$ 中收敛于 $\hat{f}$. 由于 $T$ 是 $L^2$ 上的有界 (即连续) 算子, $Tf_j$ 在 $L^2$ 中收敛于 $Tf$, 且 $\widehat{Tf_j}$ 在 $L^2$ 中收敛于 $\widehat{Tf}$. 我们可以取子列 $j_k$, 使 $\widehat{Tf_{j_k}}$ 与 $\hat{f}_{j_k}$ 分别几乎处处逐点收敛于 $\widehat{Tf}$ 与 $\hat{f}$. 于是对几乎所有的 $\xi$,
+\[
+\widehat{Tf}(\xi)=\lim_{k\to\infty}\widehat{Tf_{j_k}}(\xi)
+=\lim_{k\to\infty}\mu(\xi)\hat{f}_{j_k}(\xi)=\mu(\xi)\hat{f}(\xi). \qedhere
+\]
+\end{remark}
+
+\begin{proposition}\label{prop:1.7}
+$T$ 是 $L^1$ 的乘子当且仅当卷积核 $K$ 是一个有限测度 $dm$; 此时
+\[
+{}_1\|T\|=\|dm\|.
+\]
+\end{proposition}
+
+\begin{proof}
+这个结果有一个简单的直观解释. Dirac $\delta$ 函数几乎是一个 $L^1$ 函数, 而且它的作用如同恒等算子. 于是 ${}_1\|T\|$ 应当类似于 $\|K\star\delta\|_1=\|K\|_1$. 这个证明展示了如何处理``$\delta$ 不是 $L^1$ 函数''这一``小小的''技术麻烦. 若我们假设 $K$ 是一个有限测度, 则
+\begin{align*}
+\|K\star f\|_1&=\|K(\tau_x\tilde{f})\|_1
+=\left\|\int(\tau_x\tilde{f})(y)\,dm(y)\right\|_1 \\
+&\leq\int\|(\tau_x\tilde{f})(\cdot)\|_1\,d|m|(y)=\|f\|_1\,\|dm\|.
+\end{align*}
+由此得 ${}_1\|T\|\leq\|dm\|$.
+
+对于另一个方向, 我需要触及 $\delta$ 函数, 尽管它不是 $L^1$ 函数. 我们将使用一个绝对标准的技术: 不直接使用 $\delta$, 而是用属于 $L^1$ 的函数逼近它. 我们选取 Gauss 核:
+\[
+\omega_t(x)=(2\pi t)^{-n}\exp\bigl[-(|x|/2t)^2\bigr];
+\]
+我们把它安排得使 $\|\omega_t\|_1=1$, $\omega_t\in\mathcal{S}$, 并且对每个 $f\in\mathcal{S}$, 当 $t$ 趋于零时 $\omega_t\star f$ 在 $\mathcal{S}$ 中收敛于 $f$. 当然我们得到
+\[
+\|T(\omega_t)\|_1\leq{}_1\|T\|\,\|\omega_t\|_1={}_1\|T\|;
+\]
+问题是我们能否得到 $T(\omega_t)=K\star\omega_t$ 收敛到 $dm$. 若 $K$ 是 $\mathcal{S}$ 中的函数, 这不成问题; 这里我们只知道 $T(\omega_t)$ 在 $L^1$ 中一致有界. 要从这类有界性信息得到收敛性信息, 显然需要某种紧性条件. 不幸的是, $L^1$ 中的单位球不是序列紧的, 于是我们只能耍花招、用骗术.
+
+$T(\omega_t)$ 属于 $L^1$, 并且可以把它们视为全变差范数被 $1$ 控制的有限测度. 令人惊奇的是, 有限测度空间 $\mathcal{M}$ 上存在一个拓扑, 使其中的闭有界集是序列紧的. 我们把 $\mathcal{M}$ 视为 $C_0$ (在无穷远处消失的连续函数空间) 的对偶. 我们在 $\mathcal{M}$ 上赋予的拓扑称为弱$^\star$拓扑: $\mu_j$ 收敛到 $\mu$ 意味着对所有的 $f\in C_0$, $\mu_j(f)$ 收敛到 $\mu(f)$. 于是 Alaoglu 定理 (Rudin~\cite{rudinfa}) 给出了所需的紧性: 存在子列 $T(\omega_{t_j})$ 弱$^\star$收敛到半径 ${}_1\|T\|$ 的球中的某个有限测度 $dm$. 我们已经知道了 $dm$ 是什么, 并且知道 $dm$ 的全变差范数被 ${}_1\|T\|$ 控制. 这幅美好图景中唯一欠缺的小细节, 是``分布 $K$ 由对 $dm$ 的积分给出''这一论断. 这正是弱$^\star$收敛的作用. 由于 $\mathcal{S}\subset C_0$, 对每个 $f\in\mathcal{S}$,
+\begin{align*}
+dm(f)&\equiv\int f\,dm=\lim_{j\to\infty}\int f\,T(\omega_{t_j})
+=\lim_{j\to\infty}\int f\,K\star\omega_{t_j} \\
+&=\lim_{j\to\infty}\int f(x)K\bigl(\tau_x\tilde{\omega}_{t_j}(y)\bigr)\,dx
+=\lim_{j\to\infty}K\left(\int f\,\omega_{t_j}(y-x)\,dx\right).
+\end{align*}
+最后一个等号成立是因为该积分可以用 Riemann 和逼近, 且逼近在 $\mathcal{S}$ 中收敛, 于是我们交换了逼近与分布的作用. 最后,
+\[
+\lim_{j\to\infty}K\bigl(\omega_{t_j}\bigr)\star f=K\Bigl(\lim_{j\to\infty}\omega_{t_j}\star f\Bigr)=K(f).
+\]
+这被称为一个``正则性''结果: 起初我们只知道 $K$ 是某个可能很糟糕的分布, 而事实上它不得不是一个好得多的对象——一个有限测度. 一个分布怎么会被突然强制成为一个测度呢? $L^1$ 范数的有界性迫使一列光滑逼近收敛. 这是我们看到的第一个``算子的 $L^p$ 有界性强制正则性''的例子; 请再次留意泛函分析所扮演的角色.
+\end{proof}
+
+\begin{lemma}\label{lem:1.8}
+若 $T$ 是 $L^p$ 的乘子, 则它也是 $L^{p'}$ 的乘子, 其中 $\frac{1}{p}+\frac{1}{p'}=1$.
+\end{lemma}
+
+\begin{proof}
+为了看清这里的想法, 回忆 $L^{p'}$ 是 $L^p$ 的对偶空间, 因此 $T$ 在 $L^p$ 上的有界性蕴含伴随算子 $T^{\ast}$ 在 $L^{p'}$ 上的有界性. 我们的目标是建立 $T$ 与 $T^{\ast}$ 的联系. 若 $T$ 由与某个足够好的函数 (比如说一个漂亮的 Schwartz 函数 $K$) 的卷积给出, 则我们可以计算:
+\begin{align*}
+\int Tf\,\bar{g}&=\int K\star f\,\bar{g}
+=\iint K(x-y)f(y)\bar{g}(x)\,dy\,dx \\
+&=\iint K(x-y)\bar{g}(x)f(y)\,dy\,dx
+=\int\bigl[K\star(\widetilde{\bar{g}})\bigr]f(y)\,dy \\
+&=\int f(y)\,\widetilde{K\star(\widetilde{\bar{g}})}(y)\,dy.
+\end{align*}
+这个计算意味着: 若我们用 $Jf=\bar{f}$ 定义 $L^p$ 上的等距算子 $J$, 则 $T^{\ast}=JTJ$. 由于 $J$ 是等距算子, 我们得到
+\[
+{}_p\|T\|={}_{p'}\|T^{\ast}\|={}_{p'}\|T\|.
+\]
+真正的困难在于当 $K$ 不是漂亮的 Schwartz 函数时交换积分次序. 我们将依照刚才给出的直观来做一些不愉快的分布计算.
+\begin{align*}
+\int Tf\,\bar{g}&=\int K\star f(x)\,\bar{g}(x)\,dx
+=\int K\bigl(\tau_x(\tilde{f})(y)\bigr)\bar{g}(x)\,dx \\
+&=K\left(\int(\tau_x\tilde{f})(y)\bar{g}(x)\,dx\right)
+=K\left(\int f(x-y)\bar{g}(x)\,dx\right) \\
+&=K\left(\int f(x)\bar{g}(x+y)\,dx\right)
+=K\left(\int f(x)(\tau_{-x}\bar{g})(y)\,dx\right) \\
+&=\int f(x)\bigl[K\star\tilde{\bar{g}}(x)\bigr]\,dx.
+\end{align*}
+等等, 等等.
+\end{proof}
+
+% 原书编号由 1.8 直接跳至 1.10, 此处跳过 1.9 以与原书一致.
+\addtocounter{mtthm}{1}
+
+\begin{lemma}\label{lem:1.10}
+若 $K\in L^1$, 则 $\|K\star f\|_p\leq\|K\|_1\|f\|_p$.
+\end{lemma}
+
+\begin{proof}
+与命题~\ref{prop:1.7} 的证明一样,
+\[
+\|K\star f\|_p=\left\|\int K(y)f(x-y)\,dy\right\|_p
+\leq\int|K(y)|\,\|f(x-y)\|_{p,x}\,dy=\|K\|_1\|f\|_p. \qedhere
+\]
+\end{proof}
+
+\begin{remark}\label{rem:1.11}
+现在我们对 $L^1$ 与 $L^2$ 上的乘子已经有了相当完整的了解; 我们希望对 $1<p<2$ 时的 $L^p$ 有更好的理解. 由对偶性, 即由引理~\ref{lem:1.8}, 我们将能把握 $2<p<\infty$ 时的 $L^p$ 乘子.
+
+想想恒等算子, 它在所有 $L^p$ 上有界. 如果我们了解了一个函数在 $L^1$ 与 $L^2$ 中的情形, 为什么这能告诉我们它在 $1<p<2$ 时的 $L^p$ 中的任何信息? 这里需要的是某种凸性: 若以图形的方式思考, $T$ 在 $L^p$ 上的算子范数应当位于 $L^1$ 与 $L^2$ 两点的连线之下. 而这恰好不成立. 看看 H\"older 不等式:
+\[
+\int|f|^{tp_0+(1-t)p_1}\leq\left(\int|f|^{p_0}\right)^{t}\left(\int|f|^{p_1}\right)^{1-t};
+\]
+它告诉我们 $\log\bigl(\int|f|^p\bigr)$ 是 $p$ 的凸函数.
+\end{remark}
+
+\section{\texorpdfstring{$L^{p'}$}{Lp'} 上的乘子}
+\label{sec:1.2}
+
+\begin{theorem}[三线定理]\label{thm:1.12}
+\index{三线定理 (three-lines theorem)}
+设 $S=\{z\in\mathbb{C} \mid 0\leq\operatorname{Re}(z)\leq 1\}$. 设 $F$ 在 $S$ 上有界连续, 在 $S$ 的内部解析. 令 $k_x=\sup_y|F(x+iy)|$. 则 $\log k_x$ 是 $x$ 的凸函数.
+\end{theorem}
+
+\textbf{证明思路}: 这是复变理论中的标准结果; 第一步是把 $F$ 重新调整到在 $0+iy$ 与 $1+iy$ 上以 $1$ 为界; 调整后的函数是 $G(z)=F(z)k_0^{z-1}k_1^{-z}$. 然后我们设法证明 $|G|\leq 1$ 处处成立. 若 $G$ 在 $|y|\to\infty$ 时消失, 我们构造一个矩形, 使 $|G|\leq 1$ 在其边界上成立, 在其内部应用最大模原理. 若 $G$ 在无穷远处不消失, 我们利用 $G$ 的有界性, 乘以一个趋于零的指数函数. 让这个指数函数越来越慢地趋于无穷, 便可恢复 $G$. 由此得出 $G(z)$ 处处以 $1$ 为界, 从而 $|F(z)|\leq k_0^{1-z}k_1^{z}$. 取上确界再取对数便得到所要的结果.
+
+\begin{theorem}\label{thm:1.13}
+设 $T$ 是在 $L^{p_i}$ ($i=0,1$) 上有界的线性算子. 则 $\log{}_p\|T\|$ 是 $\left[\frac{1}{p_0},\frac{1}{p_1}\right]$ 上的凸函数. 也就是说, 若 $\frac{1}{p}=\frac{t}{p_0}+\frac{1-t}{p_1}$, 其中 $0\leq t\leq 1$, 则
+\[
+{}_p\|T\|\leq{}_{p_0}\|T\|^{t}\,{}_{p_1}\|T\|^{1-t}.
+\]
+\end{theorem}
+
+\begin{proof}
+显然我们想使用定理~\ref{thm:1.12}, 并取 $F(z)=\int|Tf|^z$. 这在 $Tf(x)=0$ 的那些 $x$ 处会遇到技术困难, 而且我无法在不破坏积分有限性的前提下通过加上 $\epsilon$ 把 $T(f)$ 提升到 $0$ 以上. 再者, 这样也看不到 ${}_p\|T\|$. 我用一步解决所有这些问题: 我将用对一个 $L^{p'}$ 函数的积分来检验 $T(f)$ 的大小, 并通过对简单函数计算 $T$ 来避开零点问题. 于是, 设 $f,g$ 为满足
+\[
+\|f\|_p=\|g\|_{p'}=1
+\]
+的简单函数,
+\[
+f(x)=\sum|a_j|e^{i\theta_j}\chi_{E_j};\quad g(x)=\sum|b_k|e^{i\phi_k}\chi_{F_k}.
+\]
+这里 $E_j$, $F_k$ 是有限测度集; 我们将证明
+\[
+\int Tfg\leq{}_{p_0}\|T\|^{t}\,{}_{p_1}\|T\|^{1-t}.
+\]
+先令 $\alpha(z)=\frac{z}{p_0}+\frac{1-z}{p_1}$. 它把 $\frac{1}{p}$ 区间映入 $[0,1]$. 然后令
+\[
+F(z)=\int T\left(\sum|a_j|^{p\alpha}e^{i\theta_j}\chi_{E_j}\right)\left(\sum|b_k|^{p'(1-\alpha)}e^{i\phi_k}\chi_{F_k}\right).
+\]
+这并不是把 $Tf$ 升到 $z$ 次幂, 但它是带状区域 $S$ 内的 $z$ 的解析函数, 且有界连续. 注意到
+\[
+|F(x+iy)|\leq{}_{p_0}\|T\|\,\left\|\sum|a_j|^{p\alpha}e^{i\theta_j}\chi_{E_j}\right\|_{p_0}\left\|\sum|b_k|^{p'(1-\alpha)}e^{i\phi_k}\chi_{F_k}\right\|_{p'}.
+\]
+但是
+\[
+\left\|\sum|a_j|^{p\alpha}e^{i\theta_j}\chi_{E_j}\right\|_{p_0}
+=\left\|\sum|a_j|^{\operatorname{Re}(p\alpha)}\chi_{E_j}\right\|_{p_0},
+\]
+这是因为集合 $E_j$ 两两不交. 现在
+\[
+\operatorname{Re}(\alpha p)=p\operatorname{Re}\left[\frac{1-iy}{p_0}+\frac{iy}{p_1}\right];
+\]
+由此可得
+\begin{align*}
+\left\|\sum|a_j|^{\operatorname{Re}(p\alpha)}\chi_{E_j}\right\|_{p_0}
+&=\left\|\sum|a_j|^{\frac{p}{p_0}}\chi_{E_j}\right\|_{p_0} \\
+&=\left\|\sum|a_j|\chi_{E_j}\right\|_p^{\frac{p}{p_0}}=\|f\|_p^{\frac{p}{p_0}}=1.
+\end{align*}
+对第二项有类似的估计, 于是
+\[
+|F(0+iy)|\leq{}_{p_0}\|T\|;\quad |F(1+iy)|\leq{}_{p_1}\|T\|.
+\]
+定理现在由定理~\ref{thm:1.12} 得出.
+\end{proof}
+
+\noindent\textbf{注:} 这个结果称为 Riesz--Thorin 内插定理.\index{内插!Riesz--Thorin (Riesz--Thorin interpolation)}
+
+\begin{theorem}\label{thm:1.14}
+若 $1\leq p\leq 2$, 则 $\|\hat{f}\|_{p'}\leq\|f\|_p$.
+\end{theorem}
+
+\begin{proof}
+\begin{align*}
+\|Tf\|_{\infty}&=\|\hat{f}\|_{\infty}\leq\|f\|_1 \\
+\|Tf\|_2&=\|\hat{f}\|_2=\|f\|_2
+\end{align*}
+这两个情形表明, 在 $p=1$ 与 $p=2$ 这两个特殊情形, $T$ 把 $L^p$ 映入 $L^{p'}$. $p$ 与 $p'$ 的关系是线性的; 内插保持这一关系. 该映射在每个端点空间上范数以 $1$ 为界, 内插同样保持这一范数.
+\end{proof}
+
+\begin{remark}\label{rem:1.15}
+\begin{enumerate}[label=\alph*)]
+\item 最初, Fourier 变换只对 $L^1$ 函数有定义, 因为只有在那里积分才绝对收敛. Plancherel 定理使我们能把该算子扩张到 $L^2$, 但若 $f\in L^2$, $\hat{f}$ 只能几乎处处定义. 上面的结果称为 Hausdorff--Young 定理\index{Hausdorff--Young 定理 (Hausdorff--Young theorem)}, 它使我们能把定义扩张到 $1\leq p\leq 2$ 的 $L^p$. 这样, $L^p$ 中函数的 Fourier 变换就是 Schwartz 函数的 Fourier 变换在 $L^{p'}$ 中的极限.
+\item Hausdorff--Young 不等式差不多已是我们能做到的最好结果, 至少当大小用 $L^p$ 范数来度量时如此. 下面的技巧演示了这一点: 令 $f_{\delta}(x)=f(\delta x)$. 则对固定的 $f$,
+\begin{align*}
+\|f_{\delta}\|_p&=\|f\|_p\,\delta^{-\frac{n}{p}}=c\,\delta^{-\frac{n}{p}} \\
+\hat{f}_{\delta}(\xi)&=\delta^{-n}\hat{f}(\delta^{-1}\xi) \\
+\|\hat{f}_{\delta}\|_q&=c'\,\delta^{-\frac{n}{q'}}.
+\end{align*}
+因此, $\|\hat{f}\|_q\leq C\|f\|_p$ 要对某个 $f$ 成立, 必须
+\[
+c'\,\delta^{-\frac{n}{q'}}\leq c\,\delta^{-\frac{n}{p}}
+\]
+对所有的 $\delta>0$ 成立. 于是 $q'=p$.
+\end{enumerate}
+\end{remark}
+
+\begin{lemma}\label{lem:1.16}
+设 $(T,K,\mu)$ 是 $L^p$ 的乘子. 则
+\[
+\|\mu\|_{\infty}\leq{}_p\|T\|.
+\]
+\end{lemma}
+
+\begin{proof}
+注意 ${}_p\|T\|={}_{p'}\|T\|$, 于是我们可以在 $L^p$ 与 $L^{p'}$ 之间内插. $L^2$ 总是介于两者之间, 所以该算子在 $L^2$ 上总是有界的. 而且 $\frac{1}{2}=\frac{1}{2}\bigl(\frac{1}{p}+\frac{1}{p'}\bigr)$, 故
+\[
+\|\mu\|_{\infty}={}_2\|T\|\leq{}_p\|T\|^{\frac{1}{2}}\,{}_{p'}\|T\|^{\frac{1}{2}}={}_p\|T\|. \qedhere
+\]
+\end{proof}
+
+\begin{remark}\label{rem:1.17}
+注意到 ${}_p\|T\|\leq\|K\|_1$, 正如在引理~\ref{lem:1.10} 中所指出的, 尽管对 $L^p$ 的乘子而言卷积核的 $L^1$ 范数很可能不是有限的. 但我们现在确实得到了乘子三元组 $(T,K,\mu)$ 的三个分量之间的关系:
+\[
+\|\mu\|_{\infty}\leq{}_p\|T\|\leq\|K\|_1.
+\]
+当然, 这个关系对大多数用途而言毫无价值: 只有当两端相等, 即 $\|\mu\|_{\infty}=\|K\|_1$ 时, 我们才能指望这个估计是好的. 但这意味着 $\|\hat{K}\|_{\infty}=\|K\|_1$. 而一般地 $\|\hat{K}\|_{\infty}\leq\|K\|_1$. 另一方面, 若 $K$ 是正函数,
+\[
+\|K\|_1=\int K=\int K(x)e^{2\pi i0x}\,dx=\hat{K}(0)\leq\|\hat{K}\|_{\infty};
+\]
+于是对正的 $K$,
+\[
+\|\hat{K}\|_{\infty}=\|K\|_1={}_p\|T\|.
+\]
+因此, 对正的卷积核, 乘子的全部情况是一清二楚的: 它给出某个 $L^p$ 的乘子当且仅当它给出所有 $L^p$ 的乘子, 而且此时它的 $L^1$ 范数恰是它的 $L^p$ 算子范数. 另一方面, 我们在引言中看到, 真正最有意思的乘子算子有着极不正的卷积核. 对这类乘子, $\|K\|_1$ 与 $\|\hat{K}\|_{\infty}$ 之间的差距很大, 但为了控制 $T$ 的算子范数, 我们需要对二者同时加以控制.
+
+这是 Fourier 分析的中心问题之一: 需要对 $K$ 与 $\hat{K}$ 的同时控制.
+\end{remark}
+
+\begin{remark}\label{rem:1.18}
+对 $1<p<2$ 的 $L^p$ 函数还有别的控制手段. 最简单的就是把一个 $L^p$ 函数切成小块, 使每一块属于别的某个 Lebesgue 类. 其基本例子是取
+\[
+G=\{x \mid |f(x)|\leq 1\};\quad B=\{x \mid |f(x)|>1\}.
+\]
+则 $f=f\chi_G+f\chi_B=g+b$. 这是把 $f$ 分解为一个``好''函数 $g$ 与一个``坏''函数 $b$; 好的部分在于
+\begin{gather*}
+\|g\|_2^2=\int_G|f|^2=\int_G|f|^{2-p}|f|^p\leq\int_G|f|^p\leq\|f\|_p^p; \\
+\|b\|_1=\int|b|=\int_B|f|\leq|B|^{\frac{1}{p}}\|f\|_p.
+\end{gather*}
+于是我们看到, $1$ 与 $2$ 之间任一 $p$ 的 $L^p$ 中的任意函数都可以写成一个 $L^1$ 函数与一个 $L^2$ 函数之和. 若 $T$ 是线性算子, 那么仅知道 $T$ 在 $L^1$ 与 $L^2$ 上的行为, 我们便有希望追踪 $T$ 的 $L^p$ 有界性. 现在我们把这一切更仔细地做一遍.
+\end{remark}
+
+\begin{definition}\label{def:1.19}
+\index{弱 $L^p$ (weak $L^p$)|emph}
+可测函数 $f$ 属于\emph{弱 $L^p$} (weak $L^p$), 如果
+\[
+|\{x \mid |f(x)|>\lambda\}|\leq C\lambda^{-p},
+\]
+其中 $C$ 与 $\lambda$ 无关, $0<\lambda<\infty$.
+
+算子 $T$ 称为\emph{弱 $(p,p)$} 的, 如果
+\[
+|\{x \mid |Tf(x)|>\lambda\}|\leq C\frac{\|f\|_p^p}{\lambda^p},
+\]
+其中 $C$ 与 $\lambda$ 和 $f$ 无关.
+\end{definition}
+
+\begin{remark}\label{rem:1.20}
+\begin{enumerate}[label=\alph*)]
+\item 通常我们把 $|\{f>\lambda\}|$ 作为 $|\{x \mid |f(x)|>\lambda\}|$ 的缩写; 由于我们常可取正函数, 这种记法实际上从不引起问题. 这称为 $f$ 的\emph{分布函数} (distribution function)\index{分布函数 (distribution function)}, 常记作 $\lambda(f)$.
+\item 一个典型的属于弱 $L^1$ 但不属于 $L^1$ 的函数是 $f(x)=\frac{1}{x}$. 一个标准计算表明 $L^p$ 函数总是弱 $L^p$ 的:
+\begin{align*}
+\lambda^p|\{x \mid |f(x)|>\lambda\}|&=\int_{\{f>\lambda\}}\lambda^p\,dx \\
+&\leq\int_{\{f>\lambda\}}|f(x)|^p\,dx\leq\int|f|^p=\|f\|_p^p.
+\end{align*}
+\item 若弱 $L^p$ 想要在分析正经的 $L^p$ 函数时派上用场, 分布函数就必须与 $L^p$ 范数联系起来. 其关系为:
+\[
+\|f\|_p^p=p\int_0^{\infty}|\{x \mid |f(x)|>\lambda\}|\;\lambda^{p-1}\,d\lambda.
+\]
+最简单的证明使用简单函数, 这把整件事化为 $f=\chi_I$ (其中 $I$ 是一个区间) 的情形. 此时 $\|f\|_p^p=|I|$, 且当 $\lambda>1$ 时 $|\{x \mid |f(x)|>\lambda\}|=0$, 当 $0<\lambda\leq 1$ 时它等于 $|I|$. 于是该积分为
+\[
+p|I|\int_0^1\lambda^{p-1}\,d\lambda=|I|. \qedhere
+\]
+\end{enumerate}
+\end{remark}
+
+\begin{theorem}\label{thm:1.21}
+\index{内插!Marcinkiewicz (Marcinkiewicz interpolation)}
+设 $T$ 是弱 $(p_0,p_0)$ 且弱 $(p_1,p_1)$ 的线性算子. 则 $T$ 在介于 $p_0$ 与 $p_1$ 之间的 $p$ 上是有界算子.
+\end{theorem}
+
+\begin{proof}
+为了给作者们省点力气, 我们只做 $1\leq p_0<p<p_1<\infty$ 的情形. 如同在注~\ref{rem:1.18} 中那样, 令:
+\begin{gather*}
+G=\Bigl\{|f|\leq\frac{\lambda}{2}\Bigr\},\quad B=\Bigl\{|f|>\frac{\lambda}{2}\Bigr\}, \\
+g=f\chi_G;\quad b=f\chi_B,
+\end{gather*}
+并注意到 $|Tf|=|Tg+Tb|\leq|Tg|+|Tb|$. 不幸的是, 分布函数不是线性的, 所以 $Tf$ 的这个分解不能立即派上用场. 但线性有一个替代品:
+\begin{align*}
+|\{|Tf|>\lambda\}|&\leq|\{|Tg|+|Tb|>\lambda\}| \\
+&\leq\Bigl|\Bigl\{|Tg|>\frac{\lambda}{2}\Bigr\}\Bigr|+\Bigl|\Bigl\{|Tb|>\frac{\lambda}{2}\Bigr\}\Bigr| \\
+&\leq C_0\lambda^{-p_0}\int|b|^{p_0}+C_1\lambda^{-p_1}\int|g|^{p_1}.
+\end{align*}
+现在计算:
+\[
+\|Tf\|_p^p=p\int|\{|Tf|>\lambda\}|\,\lambda^{p-1}\,d\lambda,
+\]
+发现它被两项之和控制; 第一项是:
+\begin{align*}
+C_0p&\int_0^{\infty}\lambda^{p-p_0-1}\int_{\{|f|\geq\frac{\lambda}{2}\}}|f|^{p_0}\,dx\,d\lambda \\
+&=C_0p\iint_0^{2|f|}\lambda^{p-p_0-1}\,d\lambda\,|f(x)|^{p_0}\,dx
+=\frac{2^{p-1}p\,C_0}{p-p_0}\|f\|_p^p.
+\end{align*}
+类似地, 第二项被下式控制:
+\[
+\frac{2^{p-1}p\,C_1}{p_1-p}\|f\|_p^p.
+\]
+\end{proof}
+
+\noindent\textbf{注:} 这个结果归功于 Marcinkiewicz; 注意到当 $p$ 趋向 $p_0$ 或 $p_1$ 时, 对乘子的界变得非常糟糕. 它们变坏的速度在端点处提供了额外的信息. 要记住的基本例子是 $\frac{1}{x}$: 这里 $L^1$ 范数不是有限的, 但发散性由 $\log x$ 度量. 一个类似的结果在 Marcinkiewicz 内插定理中成立; 参见章末的评注.
+
+\begin{lemma}\label{lem:1.22}
+若 $f$, $g$ 属于 $\mathcal{S}$, 则
+\begin{enumerate}[label=\alph*)]
+\item $\widehat{\bar{f}}(\xi)=\overline{\hat{f}(-\xi)}$.
+\item 若 $f_{\delta}(x)=f(\delta x)$, 则 $\hat{f}_{\delta}(\xi)=\delta^{-n}\hat{f}(\delta^{-1}\xi)$.
+\item 若 $R$ 表示 $\mathbb{R}^n$ 的一个旋转, 且 $f_R(x)=f(Rx)$, 则 $\hat{f}_R(\xi)=\hat{f}(R^{-1}\xi)$.
+\item $\widehat{\tau_y f}(\xi)=e^{2\pi iy\xi}\hat{f}(\xi)$.
+\item $\widehat{fg}(\xi)=\hat{f}\star\hat{g}(\xi)$.
+\item $\widehat{f\star g}(\xi)=\hat{f}(\xi)\hat{g}(\xi)$.
+\item $D_{\xi_j}\hat{f}(\xi)=-2\pi i\,\widehat{x_j f}(\xi)$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+所有这些都可以由变量替换与定义直接得出. 以前没有见过这些结果的读者, 请务必亲手算出细节. 这就是在和 Fourier 变换交朋友.
+\end{proof}
+
+\begin{theorem}\label{thm:1.23}
+\index{de Leeuw 定理 (de Leeuw theorem)}
+\index{Lebesgue 点 (Lebesgue point)}
+设 $(T,\mu,K)$ 是 $L^p(\mathbb{R}^n)$ 的 Fourier 乘子三元组. 则:
+\begin{enumerate}[label=\alph*)]
+\item $\operatorname{Re}(\mu)$ 与 $\operatorname{Im}(\mu)$ 都是 $L^p$ 乘子.
+\item 设 $T_{\delta}$ 是以 $\mu(\delta\xi)$ 为乘子的算子. 则 ${}_p\|T_{\delta}\|={}_p\|T\|$.
+\item 设 $T_{\eta}$ 是以 $\mu(\xi-\eta)$ 为乘子的算子. 则 ${}_p\|T_{\eta}\|={}_p\|T\|$.
+\item 若 $\tilde{\psi}\in L^1$, 设 $T_{\psi}$ 是以 $\psi\mu$ 为乘子的算子. 则 ${}_p\|T_{\psi}\|\leq\|\psi\|_1\,{}_p\|T\|$.
+\item 若 $\psi\in L^1$, 设 $T_{\psi}$ 是以 $\psi\star\mu$ 为乘子的算子. 则 ${}_p\|T_{\psi}\|\leq\|\psi\|_1\,{}_p\|T\|$.
+\item 设 $\xi_1,\xi_2,\ldots,\xi_{n-k}$ 固定, 并定义
+\[
+\mathbb{R}^{k_0}=\{\xi\in\mathbb{R}^n \mid \xi_1\cdot\xi+\cdots+\xi_{n-k}\cdot\xi=\lambda\}.
+\]
+设 $\mu_0=\mu|_{\mathbb{R}^{k_0}}$, 并设 $T_0$ 是 $L^p(\mathbb{R}^{k_0})$ 上以 $\mu_0$ 为乘子的算子. 则对几乎所有的 $\lambda$, ${}_p\|T_0\|\leq{}_p\|T\|$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+a)--d) 的证明都是容易的, 而且都利用了这样一个事实: Fourier 变换在共轭、伸缩、旋转、平移等等变换下行为是可以预料的. 我们做一个典型的证明, 以期读者获得同样的体验:
+
+d)
+\begin{align*}
+T_{\eta}f(x)&=\int\mu(\xi-\eta)e^{2\pi ix\xi}\hat{f}(\xi)\,d\xi \\
+&=\int\mu(\xi)e^{2\pi ix(\xi+\eta)}\hat{f}(\xi+\eta)\,d\xi \\
+&=e^{2\pi ix\eta}\int\mu(\xi)e^{2\pi ix\xi}\,\widehat{\bigl(e^{-2\pi ix\eta}f(x)\bigr)}(\xi)\,d\xi=JTJ^{-1}(f),
+\end{align*}
+其中 $J$ 是乘以 $e^{2\pi ix\eta}$ 的等距算子.
+
+e) 我们将使用对偶性, 这是 Fourier 乘子游戏中一个非常标准的技巧. 选取 $\mathcal{S}$ 中的 $f$, $g$, 使 $\|f\|_p=\|g\|_{p'}=1$, 并计算:
+\begin{align*}
+\int T_{\psi}f\,\bar{g}&=\int\widehat{T_{\psi}f}\;\widehat{\bar{g}}
+=\int\psi\star\mu\,\hat{f}\;\widehat{\bar{g}} \\
+&=\iint\psi(\eta)\mu(\xi-\eta)\hat{f}(\xi)\widehat{\bar{g}}(\xi)\,d\eta\,d\xi
+=\int\psi(\eta)\int\mu(\xi-\eta)\hat{f}(\xi)\widehat{\bar{g}}(\xi)\,d\xi\,d\eta \\
+&\leq\|\psi\|_1\left\|\int\mu(\xi-\eta)\hat{f}(\xi)\widehat{\bar{g}}(\xi)\,d\xi\right\|_{\infty,\eta}\|g\|_{p'}
+\leq\|\psi\|_1\,{}_p\|T\|,
+\end{align*}
+最后一步用了上面的 d).
+
+f) 我们只对 $n=2$, $k=1$ 的情形给出证明, 并且甚至只限于 $\xi_1=(0,1)$. 更高维的情形非常类似, 只是记号要多得多; 而 $\mathbb{R}^2$ 中更一般的情形可以由这一情形经旋转与平移得到.
+
+在我们的特殊情形, $\mathbb{R}^{1_0}=\{(\cdot,\lambda)\}$, 我们必须证明: 对几乎所有的 $\lambda$, $\mu(\xi_1,\lambda)$ 是 $L^p(\mathbb{R}^1)$ 的乘子. 由于这个 $\lambda$ 可能会与先前的记号发生实实在在的摩擦, 我们干脆证明: 对几乎所有的 $\xi_2$, $\mu(\xi_1,\xi_2)$ 是 $L^p(\mathbb{R}^1)$ 的乘子.
+
+第一个痛点是 $\mu$ 只是可测的, 而 $\mu$ 在一维超平面上的限制并没有很好的定义. 我们将使用乘子理论中另一个标准技巧. 先假设 $\mu$ 连续. 设 $f_i$, $g_i$ ($i=1,2$) 满足 $\|f_i\|_p=\|g_i\|_{p'}=1$; 令 $f(x_1,x_2)=f_1(x_1)f_2(x_2)$, $g$ 类似. 则:
+\begin{align*}
+&\int\left[\int\mu(\xi_1,\xi_2)\hat{f}_1(\xi_1)\hat{g}_1(\xi_1)\,d\xi_1\right]\hat{f}_2(\xi_2)\hat{g}_2(\xi_2)\,d\xi_2 \\
+&\quad=\int\mu(\xi)\hat{f}(\xi)\hat{g}(\xi)\,d\xi \\
+&\quad=\int\widehat{Tf}\,\hat{g}=\int Tfg\leq\|Tf\|_p\|g\|_{p'}\leq{}_p\|T\|.
+\end{align*}
+定义
+\[
+\sigma(\xi_2)=\int\mu(\xi_1,\xi_2)\hat{f}_1(\xi_1)\hat{g}_1(\xi_1)\,d\xi_1.
+\]
+把上面的计算改写, 得到:
+\[
+\int\sigma(\xi_2)\hat{f}_2(\xi_2)\hat{g}_2(\xi_2)\,d\xi_2\leq{}_p\|T\|.
+\]
+因此, $\sigma$ 是 $L^p(\mathbb{R}^1)$ 的乘子. 但引理~\ref{lem:1.16} 告诉我们 $\|\sigma(\xi_2)\|_{\infty}\leq{}_p\|T\|$. 由于 $\mu$ 连续, $\sigma$ 也连续, 故对所有的 $\xi_2$, $\sigma(\xi_2)\leq{}_p\|T\|$. 改写一下,
+\begin{align*}
+\left|\int\mu(\xi_1,\xi_2)\hat{f}_1(\xi_1)\hat{g}_1(\xi_1)\,d\xi_1\right|&\leq{}_p\|T\| \\
+\left|\int\mu_0(\xi_1)\hat{f}_1(\xi_1)\hat{g}_1(\xi_1)\,d\xi_1\right|&\leq{}_p\|T\| \\
+\left|\int T_0f_1\,g_1\right|&\leq{}_p\|T\| \\
+{}_p\|T_0\|&\leq{}_p\|T\|.
+\end{align*}
+我们假设了 $\mu$ 连续; 现在用一个标准技巧把连续性假设换成几乎处处的条件. 设 $S$ 表示单位正方形, 并令 $\psi_{\delta}(\xi)=\delta^{-2}\chi_S(\delta^{-1}\xi)$. 则 $\psi_{\delta}\in L^1$, $\mu\in L^{\infty}$, 故 $\psi_{\delta}\star\mu$ 连续, 于是对每个 $\xi_2$,
+\begin{align*}
+\int\psi_{\delta}\star\mu\,(\xi_1,\xi_2)\hat{f}_1(\xi_1)\hat{g}_1(\xi_1)\,d\xi_1
+&\leq{}_p\|T\psi_{\delta}\| \\
+&\leq{}_p\|T\|\,\|\psi_{\delta}\|_1={}_p\|T\|.
+\end{align*}
+现在, 对几乎每个 $\xi_2$, 几乎每个 $\xi_1$ 都是 $\mu_0$ 的 Lebesgue 点. 定理中所说的 $\xi_2$ 正是这些; 取定一个. Lebesgue 点 $\xi_1$ 的定义是
+\begin{align*}
+\lim_{\delta\to0}\psi_{\delta}\star\mu(\xi_1,\xi_2)
+&=\lim_{\delta\to0}\delta^{-2}\int_{-\delta}^{\delta}\int_{-\delta}^{\delta}\mu(\eta_1-\xi_1,\eta_2-\xi_2)\,d\eta_1\,d\eta_2 \\
+&=\mu(\xi_1,\xi_2).
+\end{align*}
+对这个取定的 $\xi_2$, $\psi_{\delta}\star\mu(\xi_1,\xi_2)$ 在 $\xi_1$ 中几乎处处收敛于 $\mu(\xi_1,\xi_2)=\mu_0(\xi_1)$. 当然 $(\psi_{\delta}\star\mu)\hat{f}_1\hat{g}_1$ 也收敛; 要使积分收敛, 我需要控制收敛定理. 但是
+\begin{align*}
+|(\psi_{\delta}\star\mu)\hat{f}_1\hat{g}_1|&\leq\|\psi_{\delta}\star\mu\|_{\infty}\,|\hat{f}_1|\,|\hat{g}_1| \\
+&\leq\|\psi_{\delta}\|_1\|\mu\|_{\infty}\,|\hat{f}_1\hat{g}_1|.
+\end{align*}
+因此,
+\[
+\int\mu_0(\xi_1)\hat{f}_1(\xi_1)\hat{g}_1(\xi_1)\,d\xi_1
+=\lim_{\delta\to0}\int\psi_{\delta}\star\mu\,\hat{f}_1\hat{g}_1\leq{}_p\|T\|,
+\]
+从而对几乎所有的 $\xi_2$, ${}_p\|T_0\|\leq{}_p\|T\|$.
+\end{proof}
+
+\begin{remark}\label{rem:1.24}
+\index{乘子!的变形 (deformation of multipliers)}
+这些结果之所以重要, 是因为它们让我们能把乘子变形为我们能够处理的东西. 例如, 若 $\psi$ 属于 $\mathcal{S}$, $\mu$ 是一个乘子, 则 $\psi\mu$ 与 $\psi\star\mu$ 都是乘子. 我们在上面定理的证明中已经用过这一点: 我们把一个任意的乘子毫无副作用地变成了连续函数. 一般地, $\mu$ 只属于 $L^{\infty}$, $K$ 是某个分布; 但若我们用一个紧支集函数 $\psi$ 去修改它, 则 $K_{\psi}$ (即 $\psi\mu$ 的逆 Fourier 变换) 是一个连续函数. 在下面的讨论中, 把一个糟糕的分布变成一个漂亮正则的函数, 将是我们最喜爱的技巧.
+
+真正的重要性是哲学层面的. $(T,K,\mu)$ 的 $L^p$ 有界性受 $K$ 的大小影响, 而 $K$ 反映了 $\check{\mu}=K$ 的光滑性. 但对 $\hat{\mu}$ 的计算是 $\mu$ 关于所有指数函数的整体平均, 因此很难理解 $\mu$ 的局部性质如何能影响 Fourier 变换 $K$. 这正是要有 $\psi$ 或 $\psi\star\mu$ 在场的意义: 前者把 $\mu$ 变成紧支集函数, 后者把 $\mu$ 变成更光滑的函数.
+\end{remark}
+
+\section{乘子与级数的求和性}
+\label{sec:1.3}
+
+\begin{theorem}\label{thm:1.25}
+设 $\mu\in L^{\infty}(\mathbb{R}^n)$ 连续, 并令
+\[
+S_Rf(\theta)=\sum\mu\Bigl(\frac{n}{R}\Bigr)\hat{f}(n)e^{2\pi in\theta}.
+\]
+若算子 $S_R$ 在 $L^p(\mathbb{T}^n)$ ($R>0$) 上一致有界, 则 $\mu$ 是 $L^p(\mathbb{R}^n)$ 的乘子, 其算子为 $T$, 且
+\[
+{}_p\|T\|\leq\sup_R\,{}_p\|S_R\|.
+\]
+\end{theorem}
+
+\begin{proof}
+我们首先必须能从 $L^p(\mathbb{T}^n)$ 上的函数过渡到 $L^p(\mathbb{R}^n)$ 上的函数, 然后转移算子. 设 $f$ 与 $g$ 是 $\mathbb{R}^n$ 上光滑的紧支集函数, 注意到当 $R$ 充分大时 $f_R(x)=f(Rx)$ 支在 $\mathbb{R}^n$ 的单位立方体中, 因此可以把它看作生活在 $n$ 维环面上. 为今后使用, 我们计算这对 $L^p$ 范数的影响:
+\[
+\|f_R\|_p\,\|g_R\|_{p'}=R^{-n}\|f\|_p\,\|g\|_{p'}.
+\]
+要从 Fourier 级数过渡到 Fourier 积分, 我们使用一个古老的想法: Fourier 积分不过是周期非常大的 Fourier 级数; 关键在于
+\[
+R^{-n}\sum\mu\Bigl(\frac{n}{R}\Bigr)\hat{f}\Bigl(\frac{n}{R}\Bigr)\hat{g}\Bigl(\frac{n}{R}\Bigr)
+\]
+是 $\int\mu(\xi)\hat{f}(\xi)\hat{g}(\xi)\,d\xi$ 的 Riemann 和逼近. 我们要做的只是安排好参数. 具体安排如下:
+\[
+\int S_Rf_R(\theta)g_R(\theta)\,d\theta\leq{}_p\|S_R\|\,\|f_R\|_p\,\|g_R\|_{p'},
+\]
+因此
+\[
+R^n\int S_R(f_R)g_R\leq{}_p\|S_R\|\,\|f\|_p\,\|g\|_{p'};
+\]
+另一方面,
+\[
+R^n\int S_R(f_R)g_R=R^n\sum\mu\Bigl(\frac{n}{R}\Bigr)\hat{f}_R(n)\hat{g}_R(n);
+\]
+而且我们可以用 Fourier 积分把 $\hat{f}_R(n)$ 表示为
+\[
+\hat{f}_R(n)=R^{-n}\hat{f}\Bigl(\frac{n}{R}\Bigr).
+\]
+于是得到
+\[
+R^{-n}\sum\mu\Bigl(\frac{n}{R}\Bigr)\hat{f}\Bigl(\frac{n}{R}\Bigr)\hat{g}\Bigl(\frac{n}{R}\Bigr)
+\leq{}_p\|S_R\|\,\|f\|_p\,\|g\|_{p'}.
+\]
+鉴于左端收敛,
+\[
+\int\mu(\xi)\hat{f}(\xi)\hat{g}(\xi)\,d\xi\leq{}_p\|S_R\|\,\|f\|_p\,\|g\|_{p'},
+\]
+以及
+\[
+\int Tfg\leq\sup_R\,{}_p\|S_R\|\,\|f\|_p\,\|g\|_{p'}.
+\]
+这蕴含 $T$ 在 $L^p$ 上有界, 其范数不超过 ${}_p\|S_R\|$.
+\end{proof}
+
+\begin{theorem}\label{thm:1.26}
+设 $\mu$ 连续, 且 $T$ 是 $L^p$ 的乘子. 则
+\[
+Sf(\theta)=\sum\mu(n)\hat{f}(n)e^{2\pi in\theta}
+\]
+是 $L^p(\mathbb{T}^n)$ 上的有界算子.
+\end{theorem}
+
+\begin{lemma}\label{lem:1.27}
+设 $\omega_{\delta}(y)=e^{-\pi\delta|y|^2}$. 若 $f$ 连续且周期, 则
+\[
+\lim_{\epsilon\to0}\epsilon^{\frac{n}{2}}\int f(x)e^{-\epsilon\pi|x|^2}\,dx=\int f(x)\,dx.
+\]
+\end{lemma}
+
+\begin{lemma}\label{lem:1.28}
+设 $\mu$, $T$, $S$ 如定理~\ref{thm:1.26} 所述. 设 $P$ 与 $Q$ 为三角多项式. 若 $\alpha+\beta=1$, 则
+\[
+\lim_{\epsilon\to0}\epsilon^{\frac{n}{2}}\int T(P\omega_{\epsilon\alpha})\,\overline{[Q(x)\omega_{\epsilon\beta}]}(x)\,dx=\int(SP)(x)\bar{Q}(x)\,dx.
+\]
+\end{lemma}
+
+\begin{proof}[引理~\ref{lem:1.27} 的证明]
+由于结果对 $f$ 是线性的, 我们可以假设 $f$ 是三角多项式, 进而可以假设 $f(x)=e^{2\pi imx}$. $m=0$ 的情形是平凡的, 于是可以假设 $\int f(x)\,dx=0$. 但是
+\[
+\int e^{2\pi imx}e^{-\epsilon\pi|x|^2}\,dx=\epsilon^{-\frac{n}{2}}e^{-\pi\frac{|m|^2}{\epsilon}},
+\]
+故
+\[
+\lim_{\epsilon\to0}\epsilon^{\frac{n}{2}}\int f(x)e^{-\pi\epsilon|x|^2}\,dx=0. \qedhere
+\]
+\end{proof}
+
+\begin{proof}[引理~\ref{lem:1.28} 的证明]
+由于结果是线性的, 我们可以取
+\[
+P(x)=e^{2\pi imx};\quad Q(x)=e^{2\pi ikx}.
+\]
+则:
+\begin{align*}
+&\epsilon^{\frac{n}{2}}\int T(P\omega_{\epsilon\alpha})\,\overline{[Q(x)\omega_{\epsilon\beta}]}(x)\,dx \\
+&=\epsilon^{\frac{n}{2}}\int\mu(\xi)\,\widehat{(P\omega_{\epsilon\alpha})}(\xi)\,\overline{\widehat{Q\omega_{\epsilon\beta}}}(\xi)\,d\xi \\
+&=\epsilon^{\frac{n}{2}}\int\mu(\xi)e^{-\pi\frac{|\xi-m|^2}{\epsilon\alpha}}(\epsilon\alpha)^{-\frac{n}{2}}\,e^{-\pi\frac{|\xi-k|^2}{\epsilon\beta}}(\epsilon\beta)^{-\frac{n}{2}}\,d\xi.
+\end{align*}
+若 $m\neq k$, 这个极限可以算出为零, 于是我们得到
+\[
+\int S(P)\bar{Q}=\int\mu(m)e^{2\pi i(m-k)\theta}\,d\theta=0.
+\]
+若 $m=k$, 极限为
+\[
+\lim_{\epsilon\to0}(\epsilon\alpha\beta)^{-\frac{n}{2}}\int\mu(\xi)e^{-\pi|\xi-m|^2\bigl(\frac{1}{\alpha}+\frac{1}{\beta}\bigr)\frac{1}{\epsilon}}\,d\xi.
+\]
+由于我们把事情安排得使 $\alpha+\beta=1$, 故 $\frac{1}{\alpha}+\frac{1}{\beta}=\frac{1}{\alpha\beta}$, 于是极限为 $\mu(m)$. 但是
+\[
+\int S(P)\bar{Q}=\int\mu(m)e^{0}\,d\theta=\mu(m). \qedhere
+\]
+\end{proof}
+
+\begin{proof}[定理~\ref{thm:1.26} 的证明]
+三角多项式在 $L^p(\mathbb{T}^n)$ 中稠密, 因此我们可以用它们来计算算子范数. 于是
+\begin{align*}
+\int S(P)\bar{Q}&=\lim_{\epsilon\to0}\epsilon^{\frac{n}{2}}\int T(P\omega_{\epsilon\alpha})\,\bar{Q}\omega_{\epsilon\beta} \\
+&\leq\limsup\,{}_p\|T\|\,\epsilon^{\frac{n}{2}}\|P\omega_{\epsilon\alpha}\|_p\,\|Q\omega_{\epsilon\beta}\|_{p'} \\
+&=\limsup\,{}_p\|T\|\left(\epsilon^{\frac{n}{2}}\int|P(x)|^pe^{-\pi p\alpha|x|^2}\right)^{\frac{1}{p}}\left(\epsilon^{\frac{n}{2}}\int|Q|^{p'}e^{-\pi p'\beta|x|^2}\right)^{\frac{1}{p'}}.
+\end{align*}
+现在我们可以选取 $\alpha=\frac{1}{p}$, $\beta=\frac{1}{p'}$; 于是引理~\ref{lem:1.27} 告诉我们
+\[
+\int S(P)\bar{Q}\leq{}_p\|T\|\left(\int|P|^p\right)^{\frac{1}{p}}\left(\int|Q|^{p'}\right)^{\frac{1}{p'}}. \qedhere
+\]
+\end{proof}
+
+\begin{theorem}\label{thm:1.29}
+设 $\mu$ 连续, 且 $S_R$, $T$ 如上. 则 $S_R(f)$ 对所有 $f\in L^p(\mathbb{T}^n)$ 在 $L^p(\mathbb{T}^n)$ 中收敛, 当且仅当 $T$ 在 $L^p(\mathbb{R}^n)$ 上有界.
+\end{theorem}
+
+\begin{proof}
+共鸣定理正是为了告诉我们``一个过程在一大堆元素上收敛蕴含算子一致有界''而设计的. 在此情形, 假设 $S_R(f)$ 总是收敛. 则算子 $f\mapsto S_R(f)$ 在 $L^p$ 上一致有界. 由前面的引理, $T$ 在 $L^p(\mathbb{R}^n)$ 上有界.
+
+反之, 假设 $T$ 在 $L^p(\mathbb{R}^n)$ 上有界. 则如定理~\ref{thm:1.23}c) 中定义的 $T_{\epsilon}$ 也有界, 范数为 ${}_p\|T\|$; 于是由定理~\ref{thm:1.26}, 算子 $T_{\epsilon}$ 在 $L^p(\mathbb{T}^n)$ 上一致有界. $S_R(f)$ 在 $L^p(\mathbb{T}^n)$ 中的收敛现在可以由稠密集上的收敛得出. 设 $P$ 为三角多项式;
+\[
+\lim_{R\to\infty}S_RP(\theta)=\lim_{R\to\infty}\sum\mu\Bigl(\frac{n}{R}\Bigr)a_ne^{2\pi in\theta}
+=\mu(0)\sum a_ne^{2\pi in\theta}=\mu(0)P(\theta). \qedhere
+\]
+\end{proof}
+
+\begin{remark}\label{rem:1.30}
+至此我们完成了对收敛结果的分析; 我们心里应当想着这样的情形: 当 $|\xi|<1$ 时 $\mu(\xi)=1$, 当 $|\xi|\geq 1$ 时 $\mu(\xi)=0$. 此时 $S_R$ 表示 $f$ 的 Fourier 级数的第 $R$ 个部分和. Fourier 级数的 $L^p$ 收敛等价于一个 Fourier 乘子的 $L^p$ 有界性. 我们将在接下来几章中研究这种有界性.
+\end{remark}
+
+\section{第 1 章评注}
+\label{sec:1.4}
+
+\noindent (1.1):\quad 传统上, Fourier 乘子算子是以另一种方式定义的. 人们先分析在 $L^p$ 上有界且与平移交换的线性算子 $T$: $\tau(y)T=T\tau(y)$, 并证明这样的 $T$ 由与一个分布的卷积给出. 然后证明 $T$ 在 $L^{p'}$ 上也有界, 从而在 $L^2$ 上有界, 并且在 Fourier 变换一侧由一个乘法给出. 这种做法的一个优点是, 不必像我们这样一开始就假设 $\mu\in L^{\infty}$. 这一思路在 Stein 与 Weiss~\cite{steinweiss} 第~I 章第~3 节中被系统地采用.
+
+这引出了一个问题: 为什么与平移交换的算子应当由卷积给出? 原因是平移本身就是一个与平移交换的算子, 因为 $\mathbb{R}^n$ 是 Abel 群. 若我们用 $\delta_y(f)=f(y)$ 定义有限测度 $\delta_y$, 则
+\[
+(\delta_y\star f)(x)=\delta_y(\tau_x\tilde{f})(y)=\tilde{f}(y-x)=f(x-y).
+\]
+所以平移实际上由与一个有限测度的卷积给出. 对平移取和以及取和的极限, 我可以得到更多这类算子. 平移之和的极限可能恰好收敛于一个积分; 例如 $\int K(y)\delta_y\,dy$, 这个分布在函数上的作用是 $\int K(x-y)f(y)\,dy=(K\star f)(x)$. 寓意是: 卷积不过是平移的加权平均. 这是贯穿本书的一个重要直观想法; 一个典型的例子是关于区间特征函数的平均. 例如, 在证明微积分基本定理时, 必须计算
+\[
+\frac{1}{h}\int_x^{x+h}f(y)\,dy
+\]
+的极限. 若 $I$ 表示区间 $[0,h]$, 那么变量替换表明这等于 $\frac{1}{h}\int\chi_I(x-y)f(y)\,dy$. 所以微积分基本定理实际上分析的是卷积算子的极限.
+
+这种哲学的问题在于, 没有理由指望 Fourier 变换会进入这幅图景. 思考这些问题的最简单的场所是 $L^2(\mathbb{T}^n)$. 平移是 $L^2$ 上一族交换的有界自伴算子, 因此谱定理说它们可以被同时对角化. 由于
+\begin{align*}
+\tau_{\psi}\bigl(e^{2\pi in\theta}\bigr)&=e^{2\pi in(\theta-\psi)} \\
+&=e^{-2\pi in\psi}e^{2\pi in\theta},
+\end{align*}
+可知 $\mathbb{C}e^{2\pi in\theta}$ 是所有平移的联合特征空间. 由于指数函数在 $L^2$ 中完备, 这就是 $L^2$ 按特征空间的分解.
+
+沿着这条思路继续下去, 谱定理由 $f\in L^2$ 在各特征空间上的投影恢复出 $f$. 到由单位向量 $\Phi$ 张成的一维特征空间的投影一般由 $\langle f,\Phi\rangle\Phi$ 给出; 在此情形即为
+\[
+\left[\int f(\theta)\,\overline{\bigl(e^{2\pi in\theta}\bigr)}\,d\theta\right]e^{2\pi in\theta}=\hat{f}(n)e^{2\pi in\theta}.
+\]
+这意味着投影之和在 $L^2$ 中收敛于 $f$; 也就是说,
+\[
+\sum\hat{f}(n)e^{2\pi in\theta}\to f
+\]
+在 $L^2$ 中成立. 谱定理``解释''了 Fourier 级数收敛到原函数这一事实.
+
+仍在这个抽象的框架中, 取一个在 $L^2$ 上有界且与平移交换的算子 $T$. 那么 $T$ 保持平移算子的特征空间, 因此 $T$ 也被指数函数对角化. 对角算子由其特征值决定; 这些特征值由公式
+\[
+T\bigl(e^{2\pi in\theta}\bigr)=\mu(n)e^{2\pi in\theta}
+\]
+给出. $T$ 在一般函数 $f$ 上的作用可以借助对角化表示为
+\[
+T(f)(\theta)=\sum\mu(n)e^{2\pi in\theta},
+\]
+于是 $T$ 显露出是一个 Fourier 乘子算子. 我们会预期 $T$ 的 $L^2$ 范数是 $T$ 的最大特征值, 即诸数 $|\mu(n)|$ 中的最大者; 简言之: ${}_2\|T\|=\|\mu\|_{\infty}$.
+
+\noindent (1.12):\quad 三线定理的证明见 Stein 与 Weiss~\cite{steinweiss}, 第~V 章引理~1.4.
+
+\noindent (1.13):\quad 这个结果归功于 M.~Riesz; 这里的证明归功于 Thorin 与 Tamarkin 以及 Zygmund~\cite{zygmund}. 该结果通常称为 Riesz--Thorin 内插定理. 它可以扩张为从 $L^{p_i}$ 到 $L^{q_i}$ 的映射, 但带有限制 $p_i\leq q_i$.
+
+\noindent (1.19):\quad 弱 $L^p$ 空间是 Lorentz 空间的特例; 我们不是对分布函数的增长要求一致界, 而是施加可积性条件. 为 $L^p$ 与弱 $L^p$ 空间发展的大量理论都可以在 Lorentz 空间的框架中进行. 细致的讨论见 Stein 与 Weiss~\cite{steinweiss} 第~V 章, 或 Hunt~\cite{hunt}.
+
+\noindent (1.21):\quad 这个结果归功于 Marcinkiewicz~\cite{marcinkiewicz-multipliers}. 与 Riesz--Thorin 定理一样, 它可以扩张为从 $L^{p_i}$ 到 $L^{q_i}$ 的映射. 与 Riesz--Thorin 定理不同的是, 限制 $p_i\leq q_i$ 是不必要的.
+
+\noindent (1.23):\quad 这个结果归功于 K.~de Leeuw~\cite{deleeuw}; 这里的证明归功于 Jodeit~\cite{jodeit}. 整个结果在 $\mathbb{T}^n$ 上要清楚得多; 也就是,
+\begin{align*}
+\bigl(T_0f\bigr)(\theta_1)=\sum_{n_1}\mu(n_1,n_2)e^{2\pi in\theta_1}\hat{f}(\theta_1)
+  \\
+=\sum_{n_1}\sum_{n_2}\mu(n_1,n_2)e^{2\pi in\theta_1}\hat{f}(n_1)\bigl[e^{2\pi in_2\theta_2}\bigr](n_2)=T\bigl[f(\theta_1)e^{2\pi in_2\theta_2}\bigr].
+\end{align*}
+由于环面的测度为 $1$, 容易把一个变量的函数的 $L^p$ 范数与两个变量的函数的 $L^p$ 范数联系起来.
+
+\noindent (1.25), (1.26):\quad 这些结果最早出现在 Stein 与 Weiss 的工作中; 见~\cite{steinweiss} 第~VII 章. 注意, 如下陈述的结果并不适用于由 Fourier 级数求和产生的那些乘子; 在那种情形, 乘子 $\mu$ 是一个集合的特征函数. 更细心一点的表述表明, 它们适用于使 $\mathbb{Z}^n$ 中每个格点都是 Lebesgue 点的乘子.
+
+这整个一节引出了一个问题: 为什么要费心考察 $S_R$ 在 $L^p$ 中的收敛? 毕竟, 我真正想知道的是 $S_Rf(\theta)$ 对每个 $\theta$ 收敛到 $f(\theta)$. $L^p$ 与现实有什么关系?
+
+首先, 第~\ref{chap:0} 章中那个 Fourier 级数在一点不收敛的连续函数的例子表明, 逐点收敛是奢望. Georg Cantor 为构造其 Fourier 级数在越来越复杂的集合上发散的连续函数, 发展了他的可数集与不可数集理论. 该理论中基本的现代结果是: 给定一个零测集, 存在 $L^1$ 中的函数, 其 Fourier 级数在该集合上发散.
+
+有两条路可走. 第一条路是分析使函数的 Fourier 级数在一点收敛所需的最小正则性. 关于这个问题已有大量重要工作; 答案是复杂的, 正如与之类似的问题``一个实数列满足什么条件才能保证相应的级数收敛''的答案一样复杂. 正如学过收敛判别法的学生所知, 收敛级数与发散级数之间并没有一条清晰的分界线.
+
+我们选择另一条路: 既然几乎处处收敛已是我们所能期望的最好结果, 那么对 $f$ 施加什么样的大小条件才能保证 $f$ 的 Fourier 级数几乎处处收敛到 $f$? 这里有一组出人意料的简单答案. 第一个结果归功于 Calderón (见 Zygmund~\cite{zygmund}) 与 Stein~\cite{stein-limits}. 若 $1\leq p\leq 2$, 且 $S_Rf(\theta)$ 对 $L^p(\mathbb{T}^n)$ 中所有的 $f$ 对几乎每个 $\theta$ 收敛到 $f$, 则算子 $S^{\ast}f(\theta)=\sup_R|S_Rf(\theta)|$ 是弱 $(p,p)$ 的. 这正是你希望泛函分析为你做的事情: 你知道几乎处处收敛对某个稠密的函数集成立; 要扩张到所有函数, 就需要对某个量的一致估计. 由于我们想要的是逐点收敛, 正确的一致性不是算子在 $L^p$ 上的一致有界性, 而是某个逐点一致算子 $S^{\ast}$ 在 $L^p$ 中的有界性.
+
+但这有几个推论. 若收敛对某个 $p_0<2$ 的 $L^{p_0}$ 中所有函数成立, 则对满足 $p_0\leq p\leq\infty$ 的所有 $p$, 逐点收敛都会发生, 因为所有这些 $L^p$ 都包含于 $L^{p_0}$. 由 Marcinkiewicz 内插定理, $S^{\ast}$ 在 $p_0<p<2$ 时是强有界的. 但 $|S_Rf(\theta)|\leq S^{\ast}f(\theta)$, 于是算子 $S_R$ 在这个 $p$ 范围上也一致有界. 这种分析是 C.~Fefferman 证明多元 Fourier 级数发散的一个关键组成部分.
+
+寓意在于: $L^p$ 的结果不仅有助于得到逐点结果, 而且是必不可少的. 关于 Fourier 级数之外其他类似结果成立的领域的综述, 见 Gilbert~\cite{gilbert} 的文章.

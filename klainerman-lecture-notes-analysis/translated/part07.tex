@@ -1,0 +1,310 @@
+% ==== part07 第 7 章 衰减估计 (Decay estimates) ====
+% 源: MinerU_latex_lecture nots.tex 第 12107--12484 行;pdf_text.txt 第 9839--10174 行(PDF 第 181--186 页)
+%
+% 术语(新增,键=中文=英文):
+%   pseudodifferential-operator=伪微分算子、commuting-vectorfields=交换向量场、
+%   scaling-vector-field=伸缩向量场、inverted-translations=倒置平移、boost=加速算子、
+%   spherical-means=球平均、wave-zone=波区
+%   (注: 所附论文部分 partgf1 已用同键;倒置平移与附录 A 部分所用"逆平移"译名不一致,待协调)
+%
+% REFS(需跨章/待解析项):
+%   - "见附录 4.2"(Killing 与共形 Killing 向量场族) -> 目标: 附录 A(partapx)相应小节,标签待解析
+%   - "局部存在定理"(Remark 0.23) -> 原书所在章未知,正文纯文本
+%   - Remark 0.27 与 Prop 0.30 证明中的 "Proposition 0.26" 系原书对 Theorem 0.26 的误称,
+%     译文按原文写"命题 0.26",数字用 \ref{thm:c7-0.26} 可点击跳转
+%   - 原书 (312) 后 "slightly larger than W^{(n+1)/2}, 1." 中孤立 ", 1." 疑为排版残留,已省略
+%   - 原书 (318)/(320) 分母为 t-|x|,无外绝对值号(与 (316)/(317) 的 (1+|t-|x||) 不同),照原书
+%   - 原书 "[?]" 文献占位符缺失,保留 "[?]"
+%   - 原书 "and and"、"repeted" 等笔误按正常语义翻译;源 OCR "Proposition 0.28. Let ⋆φ = 0"
+%     按 PDF 还原为 □φ = 0;(311) 中 f'(ξ)、g'(ξ) 按 PDF 还原为 f̂(ξ)、ĝ(ξ)
+%   - 原书 (316) 后 "satisfy 315" 无括号,按上下文作 \eqref{eq:c7-315}
+%
+% 编号说明:
+%   - 本章无节,编号对象显示 "0.x";原书第一个编号对象为 Remark 0.23(0.1--0.22 在原书中不存在),
+%     故在 \section 后加 \setcounter{mtthm}{22} 使显示与原书一致(实测本模板 \section 会把
+%     subsection 与 theorem 计数器清零,若不设置则首对象会显示 0.1)
+%   - 原书第 8 章编号接续本章(第 8 章首个编号为 0.30.1/0.31),part08 需在 \section 后续接计数器
+%   - 公式 (307)--(325) 用 \begin{equation} 自动编号(本模板 [ \] 不编号,与 partapx 同法);
+%     其余行间公式用 [ \] 不占号
+% ====
+
+\chapter{衰减估计}
+
+\setcounter{mtthm}{22}% 原书本章从 Remark 0.23 开始(0.1--0.22 不存在)
+
+考虑 Minkowski 空间 $\mathbb{R}^{n+1}$ 中的标准波动方程
+
+\begin{equation}
+\Box\phi = 0.\label{eq:c7-307}
+\end{equation}
+
+$\mathbb{R}^{n+1}$ 中的标准惯性坐标记为 $x^{\mu}$, $\mu = 0, 1, \ldots, n$, 相对于这些坐标, Minkowski 度量取对角形式 $\mathbf{m}_{\mu\nu} = \mathrm{diag}(-1, 1, \ldots, 1)$.我们有 $x^0 = t$, 而 $x = (x^1, \ldots, x^n)$ 表示空间坐标.我们采用关于重复指标的标准求和约定, 以及关于向量和张量的指标升降的相应约定.特别地, 若 $x_{\mu} = m_{\mu\nu}x^{\nu}$, 则 $x_0 = -t$, $x_i = x^i$, $i = 1, \ldots, n$.我们用 $\Sigma_{t_0}$ 表示类空超平面 $t = t_0$.波算子定义为
+$\Box = \mathbf{m}^{\alpha\beta}\partial_{\alpha\beta} = -\partial_t^2 + \sum_i\partial_i^2$.
+我们研究如下初值问题,
+
+\begin{equation}
+\phi(0, x) = f(x), \quad\partial_t\phi(0, x) = g(x)\label{eq:c7-308}
+\end{equation}
+
+为方便起见, 记 $\phi[0] = (f, D^{-1}g)$, 其中 $D^{-1}$ 是以 $|\xi|^{-1}$ 为符号的\newterm{pseudodifferential-operator}{伪微分算子}{pseudodifferential operator}.设
+
+\begin{equation}
+E[\phi](t) = \int_{\Sigma_t}\left(|\partial_t\phi|^2 + \sum_i|\partial_i\phi|^2\right)dx\label{eq:c7-309}
+\end{equation}
+
+为 $\phi$ 在时刻 $t$ 的总能量.能量的守恒律为
+
+\begin{equation}
+E[\phi](t) = E[\phi](0)\label{eq:c7-310}
+\end{equation}
+
+作为推论, 对所有 $s\geq 0$ 有能量不等式
+
+\[
+\left\|\partial\phi(t)\right\|_{H^s(\mathbb{R}^n)} \leq \left\|\partial\phi(0)\right\|_{H^s(\mathbb{R}^n)}.
+\]
+
+能量恒等式既可用前面各节讨论过的几何技巧证明, 其中只涉及分部积分, 也可用 Fourier 方法证明, 后者使用 Plancherel 公式以及如下 Fourier 表示公式,
+
+\begin{equation}
+\phi(t, x) = (2\pi)^{-n}\int e^{ix\cdot\xi}\Big(\cos t|\xi|\, \hat{f}(\xi) + \frac{\sin t|\xi|}{|\xi|}\hat{g}(\xi)\Big)d\xi\label{eq:c7-311}
+\end{equation}
+
+\begin{remark}\label{rem:c7-0.23}
+标准 Sobolev 嵌入 $H^s(\mathbb{R}^n)\subset L^{\infty}(\mathbb{R}^n)$($s > \frac{n}{2}$)使我们无需使用显式表示即可得到 \eqref{eq:c7-307} 的解的 $L^{\infty}$ 界.这一方法可推广到非线性方程, 并在局部存在定理的证明中起重要作用.
+\end{remark}
+
+\begin{proposition}[色散不等式]\label{prop:c7-0.24}
+\eqref{eq:c7-307}、\eqref{eq:c7-308} 的解满足,
+
+\begin{equation}
+\|\phi(t)\|_{L^{\infty}} \leq c|t|^{-\frac{n-1}{2}}\|\phi[0]\|_{B_{1, 1}^{\frac{n+1}{2}}}\label{eq:c7-312}
+\end{equation}
+
+其中 $B_{1, 1}^{\frac{n+1}{2}}$ 是比 $W^{\frac{n+1}{2}}$ 稍大的 Besov 空间.更确切地说,
+
+\[
+\|f\|_{B_{1, 1}^{\frac{n+1}{2}}} \approx \sum_{k\in\mathbb{Z}}2^{k\frac{n+1}{2}}\|P_k f\|_{L^1(\mathbb{R}^n)}
+\]
+\end{proposition}
+
+\noindent\textbf{习题.}\quad 证明不等式 \eqref{eq:c7-312} 可由其频率局部化版本推出.换言之, 证明只需验证如下不等式,
+
+\begin{equation}
+\|\phi(t)\|_{L^{\infty}} \leq c|t|^{-\frac{n-1}{2}}\|\phi[0]\|_{L^1}\label{eq:c7-313}
+\end{equation}
+
+其中初值 $f, g$ 的 傅里叶变换局部化于 $\frac{1}{2}\leq|\xi|\leq 2$.
+
+\begin{proof}
+\eqref{eq:c7-312} 的标准证明基于对表示 \eqref{eq:c7-311} 应用稳定相方法.在奇数维中, 可以利用解的\newterm{spherical-means}{球平均}{spherical means}表示证明色散估计的一个相关形式.这在 $n = 3$ 时特别容易.我们将在后面讨论 \eqref{eq:c7-312} 的一个不依赖任何表示公式的推导.
+\end{proof}
+
+\begin{remark}\label{rem:c7-0.25}
+色散不等式提供两类信息.第一类涉及 $\|\phi(t)\|_{L^{\infty}}$ 当 $t\to\infty$ 时的精确衰减率, 第二类提供 $\|\phi(t)\|_{L^{\infty}}$ 对 $t>0$ 的正则性性质的信息.就改善正则性而言, 与 Sobolev 嵌入 $L^{\infty}(\mathbb{R}^n)\subset W^{1, n}(\mathbb{R}^n)$ 相比, 估计 \eqref{eq:c7-312} 对 $t>0$ 增益了 $\frac{n-1}{2}$ 阶导数.
+\end{remark}
+
+在许多应用中, 尤其是对非线性方程的应用中, \eqref{eq:c7-312} 并不十分有用.推导波动方程解的渐近性质的更有效方法, 是基于广义能量估计, 它由\newterm{commuting-vectorfields}{交换向量场}{commuting vectorfields}方法结合整体 Sobolev 不等式得到.下面我们回顾用于推导上述衰减率估计的交换向量场方法.其思想是将能量恒等式 \eqref{eq:c7-310} 与和波算子交换的向量场以及经典 Sobolev 不等式的整体形式结合使用.我们请读者参阅 [?] 与 [?] 以了解细节.
+
+Minkowski 时空 $\mathbb{R}^{n+1}$ 配备一族 Killing 与共形 Killing 向量场(见附录 4.2):平移 $\mathbf{T}_{\mu} = \partial_{\mu}$、Lorentz 旋转 $\mathbf{L}_{\mu\nu} = x_{\mu}\partial_{\nu} - x_{\nu}\partial_{\mu}$、\newterm{scaling-vector-field}{伸缩向量场}{scaling vector field} $\mathbf{S} = t\partial_t + x^i\partial_i$ 以及\newterm{inverted-translations}{倒置平移}{inverted translations} $\mathbf{K}_{\mu} = -2x_{\mu}\mathbf{S} + \langle x, x\rangle\partial_{\mu}$.回顾 $x^{\mu}$ 表示标准变量 $x^0 = t$, $x^1, \ldots, x^n$, 而 $x_{\mu} = m_{\mu\nu}x^{\nu}$.Killing 向量场 $\mathbf{T}_{\mu}$ 与 $\mathbf{L}_{\mu\nu}$ 与 $\Box$ 交换, 而 $\mathbf{S}$ 保持解空间, 其含义是:$\Box\phi = 0$ 蕴含 $\Box S\phi = 0$, 因为 $[\Box, S] = 2\Box$.我们可以把算子 $\mathbf{L}_{\mu\nu}$ 分解为角旋转算子 $^{(ij)}\mathbf{O} = x_i\partial_j - x_j\partial_i$ 与\newterm{boost}{加速算子}{boost} $^{(i)}\mathbf{L} = x_i\partial_t + t\partial_i$, 其中 $i, j, k = 1, \ldots, n$.回顾 \eqref{eq:c7-309} 中的能量表达式.基于上述交换性质, 我们定义如下``广义能量'':
+
+\begin{equation}
+E_k[\phi] = \sum_{X_{i_1}, \ldots, X_{i_j}}E[X_{i_1}X_{i_2}\cdots X_{i_j}\phi]\label{eq:c7-314}
+\end{equation}
+
+其中求和取遍 $0\leq j\leq k$ 以及所有 Killing 向量场 $\mathbf{T}$、$\mathbf{L}_{\mu\nu}$ 以及伸缩向量场 $\mathbf{S}$.交换向量场方法的关键在于, 量 $E_k$, $k\geq 1$, 被 \eqref{eq:c7-307} 的解保持.因此, 若
+
+\begin{equation}
+\sum_{0\leq k\leq s}\int(1+|x|)^{2k}\left(|\nabla^{k+1}f(x)|^2 + |\nabla^k g(x)|^2\right)dx \leq C_s < \infty\label{eq:c7-315}
+\end{equation}
+
+则对所有 $t$ 有 $E_s[\phi](t)\leq C_s$.\eqref{eq:c7-307} 的解的期望衰减估计现在可以从如下整体形式的 Sobolev 不等式(见 [?]、[?])导出:
+
+\begin{theorem}[全局 Sobolev 估计]\label{thm:c7-0.26}
+设 $\phi$ 是 $\mathbb{R}^{n+1}$ 中的任意函数, 使得对某个整数 $s > \frac{n}{2}$, $E_s[\phi]$ 有限.则
+
+\begin{equation}
+|\partial\phi(t, x)| \lesssim (1+t+|x|)^{-\frac{n-1}{2}}(1+|t-|x||)^{-\frac{1}{2}}\sup_{0\leq t'\leq t}E_s[\phi](t')\label{eq:c7-316}
+\end{equation}
+
+对所有 $t>0$ 成立.因此, 若 \eqref{eq:c7-307} 中的数据 $f, g$ 满足 \eqref{eq:c7-315}, 且 $s > \frac{n}{2}$, 则对所有 $t\geq 0$,
+
+\begin{equation}
+|\partial\phi(t, x)| \lesssim \frac{1}{(1+t+|x|)^{\frac{n-1}{2}}(1+|t-|x||)^{\frac{1}{2}}}\label{eq:c7-317}
+\end{equation}
+\end{theorem}
+
+\begin{remark}\label{rem:c7-0.27}
+显然, 该估计(其证明纯粹是几何的\footnote{特别是, 它不需要任何解的显式表示.})蕴含色散不等式 \eqref{eq:c7-312} 给出的衰减性质.事实上, 它在\newterm{wave-zone}{波区}{wave zone} $|x|\sim t$ 之外提供了更多信息, 这与线性方程 $\Box\phi = 0$ 的预期传播性质非常吻合.另一方面, 由于 \eqref{eq:c7-316} 确实是 Sobolev 不等式的整体形式, 命题 0.26 的估计似乎与 \eqref{eq:c7-312} 的改进正则性特征无关.然而事实并非完全如此, 我们将在后面看到.
+\end{remark}
+\begin{proof}
+下面我们只概述证明的主要思想.考虑标准零对 $L_{\pm} = \partial_t\pm\partial_r$, 相应的零标架 $e_1, \ldots, e_{n-1}$, $e_n = L_-$, $e_{n+1} = L_+$, 以及角向量场 $A_i = \partial_i - \frac{x_i}{r}\partial_r$.显然,
+
+\[
+\sum_i|A_i\phi| \lesssim |\nabla\!\!\!/\phi| \lesssim \sum_i|A_i\phi|.
+\]
+
+其中 $|\nabla\!\!\!/\phi|^2 = \sum_{i=1}^{n-1}|e_i(\phi)|^2$.此外,
+
+\[
+|\partial_r\phi| + \sum_i|A_i\phi| \lesssim |\nabla\phi| \lesssim |\partial_r\phi| + \sum_i|A_i\phi|.
+\]
+
+我们还可以容易地验证如下简单的代数恒等式,
+
+\[
+\begin{aligned}
+\frac{1}{2}\big((t+r)L_+ + (t-r)L_-\big) &= \mathbf{S} \\
+\frac{1}{2}\big((t+r)L_+ - (t-r)L_-\big) &= \sum_i\frac{x_i}{|x|}\mathbf{L}_i \\
+tA_i &= L_i - \frac{x_i}{|x|}\sum_j\frac{x_j}{|x|}L_j \\
+t\mathbf{O}_{ij} &= x_i\mathbf{L}_j - x_j\mathbf{L}_i
+\end{aligned}
+\]
+
+由前两个恒等式我们容易推出,
+
+\begin{equation}
+\begin{aligned}
+|L_+\phi(t, x)| &\lesssim \frac{1}{t}|\Gamma\phi(t, x)| \\
+|L_-\phi(t, x)| &\lesssim \frac{1}{t-|x|}|\Gamma\phi(t, x)|
+\end{aligned}\label{eq:c7-318}
+\end{equation}
+
+其中 $|\Gamma\phi| = |\mathbf{S}\phi| + |\mathbf{L}\phi|$.
+
+\begin{equation}
+|\nabla\!\!\!/\phi(t, x)| \lesssim \frac{1}{t}|\Gamma\phi(t, x)|.\label{eq:c7-319}
+\end{equation}
+
+显然我们还有,
+
+\[
+|\partial\phi(t, x)| \lesssim \frac{1}{t-|x|}|\Gamma\phi(t, x)|
+\]
+
+或更一般地,
+
+\begin{equation}
+|\partial^N\phi(t, x)| \lesssim \frac{1}{(t-|x|)^N}|\Gamma^N\phi(t, x)|\label{eq:c7-320}
+\end{equation}
+
+其中 $|\Gamma^N\phi| = \sum|\Gamma_1\cdots\Gamma_N\phi|$, $\Gamma_1, \ldots, \Gamma_N$ 是向量场 $S, L_1, \ldots, L_n$ 中的任意一个.
+
+将上述不等式与我们范数的定义结合, 我们推出
+
+\[
+\begin{aligned}
+t\|E_+\phi(t)\|_{L^2} &\lesssim \|\Gamma\phi(t)\|_{L^2(\mathbb{R}^n)} \\
+t\|\nabla\!\!\!/\phi(t)\|_{L^2} &\lesssim \|\Gamma\phi(t)\|_{L^2(\mathbb{R}^n)} \\
+\|uE_-\phi(t)\|_{L^2} &\lesssim \|\Gamma\phi(t)\|_{L^2(\mathbb{R}^n)}
+\end{aligned}
+\]
+
+其中 $u = |t-|x||$.剩下的任务是从上述 $L^2$ 估计推出 sup 范数估计.
+\end{proof}
+
+\begin{proposition}\label{prop:c7-0.28}
+设 $\Box\phi = 0$, 其初值满足上述假设.则对所有 $t\geq 0$, $s > \frac{n}{2}$,
+
+\begin{equation}
+\|\phi(t)\|_{L^{\infty}} \lesssim \left(\frac{1}{t}\right)^{\frac{n-1}{2}}\|\Gamma^s\phi(t)\|_{L^2(\mathbb{R}^n)}\label{eq:c7-321}
+\end{equation}
+
+\begin{equation}
+\|(1+|u|)^k\partial^k\phi(t)\|_{L^{\infty}} \lesssim \left(\frac{1}{t}\right)^{\frac{n-1}{2}}\|\Gamma^s\phi(t)\|_{L^2(\mathbb{R}^n)}\label{eq:c7-322}
+\end{equation}
+
+此外,
+
+\[
+\begin{aligned}
+\|E_+\phi(t)\|_{L^{\infty}} &\lesssim \left(\frac{1}{t}\right)^{\frac{n+1}{2}}\|\Gamma^{s+1}\phi(t)\|_{L^2(\mathbb{R}^n)} \\
+\|\nabla\!\!\!/\phi(t)\|_{L^{\infty}} &\lesssim \left(\frac{1}{t}\right)^{\frac{n+1}{2}}\|\Gamma^{s+1}\phi(t)\|_{L^2(\mathbb{R}^n)} \\
+\|(1+|u|)E_-\phi(t)\|_{L^{\infty}} &\lesssim \left(\frac{1}{t}\right)^{\frac{n-1}{2}}\|\Gamma^{s+1}\phi(t)\|_{L^2(\mathbb{R}^n)}
+\end{aligned}
+\]
+\end{proposition}
+
+证明基于如下引理.
+
+\begin{lemma}\label{lem:c7-0.29}
+设 $u(x)$ 是 $\mathbb{R}^n$($n\geq 2$)上的光滑、紧支撑函数.我们有,
+
+\begin{equation}
+|u(x)| \leq C\frac{1}{|x|^{n-1}}\left(\|\partial_r u\|_{L^1} + \|(r\nabla\!\!\!/)^{n-1}\partial_r u\|_{L^1}\right)\label{eq:c7-323}
+\end{equation}
+\end{lemma}
+
+\begin{proposition}[交换向量场方法]\label{prop:c7-0.30}
+交换向量场方法蕴含色散不等式 \eqref{eq:c7-312}(见 [?]).
+\end{proposition}
+
+\begin{proof}
+不失一般性, 可假设 $\partial_t\phi = g = 0$, 且 $f = \phi(0)$ 的 傅里叶变换支集位于壳层 $\frac{\lambda}{2}\leq|\xi|\leq 2\lambda$ 内, 其中 $\lambda\in 2^{\mathbf{N}}$.通过简单的伸缩论证, 我们事实上可以假设 $\lambda = 1$.对 Fourier 支集限制在 $1/2\leq|\xi|\leq 2$ 内的这类初值条件, 只需证明
+
+\[
+\|\phi(t)\|_{L^{\infty}} \lesssim (1+|t|)^{-\frac{n-1}{2}}\|f\|_{L^1(\mathbb{R}^n)}.
+\]
+
+由于 $\hat{\phi}$——$\phi$ 关于空间变量 $x$ 的 傅里叶变换——的支集也位于同一壳层内, 只需证明对 $\nabla\phi$ 的估计即可, 而非对 $\phi$ 本身.
+
+接下来我们用中心位于整数坐标点 $I\in\mathbb{Z}^n$ 的圆盘 $D_I$ 覆盖 $\mathbb{R}^n$, 使得每个 $D_I$ 至多与有限个 $c_n$ 个圆盘 $D_J$ 相交, 其中 $c_n$ 只依赖于维数 $n$.考虑一个光滑的单位分解 $(\chi_I)_{I\in\mathbb{Z}^n}$, 满足 $\operatorname{supp}\chi_I\subset D_I$, 且每个 $\chi_I$ 非负.显然我们可以安排, 对所有 $k$,
+
+\begin{equation}
+\sum_{I\in\mathbb{Z}^n}|\nabla^k\chi_I(x)| \leq C_{k, n}\label{eq:c7-324}
+\end{equation}
+
+关于 $x\in\mathbb{R}^n$ 一致成立, 其中常数 $C_{n, k}$ 只依赖于 $n$ 与 $k$.现在设 $f_I = \chi_I\cdot f$, 并令 $\phi_I$ 为 \eqref{eq:c7-307} 的以 $\phi_I(0) = f_I$, $\partial_t\phi_I(0) = 0$ 为数据的相应解.显然 $f = \sum_I f_I$, $\phi = \sum_I\phi_I$.只需证明对所有 $I$,
+
+\begin{equation}
+\|\nabla^k\phi_I(t)\|_{L^{\infty}} \lesssim (1+t)^{-\frac{n-1}{2}}\sum_{j=0}^{n+k+1}\|D^j f_I\|_{L^1}\label{eq:c7-325}
+\end{equation}
+
+事实上, 若 \eqref{eq:c7-325} 成立, 我们容易推出
+
+\[
+\|\nabla^k\phi(t)\|_{L^{\infty}} \leq \sum_I\|\nabla^k\phi_I(t)\|_{L^{\infty}} \lesssim (1+t)^{-\frac{n-1}{2}}\sum_{j=0}^{n+k+1}\sum_I\|D^j f_I\|_{L^1}.
+\]
+
+根据 \eqref{eq:c7-324} 我们有,
+
+\[
+\begin{aligned}
+\sum_I\|D^j f_I\|_{L^1} &= \sum_I\|D^j(\chi_I f)\|_{L^1} \lesssim \sum_I\sum_{0\leq i\leq j}\int_{\mathbb{R}^n}|D^i\chi_I(x)||D^{j-i}f(x)|dx \\
+&= \sum_{0\leq i\leq j}\int_{\mathbb{R}^n}\Big(\sum_I|D^i\chi_I(x)|\Big)|D^{j-i}f(x)|dx \\
+&\lesssim \sum_{0\leq i\leq j}c_{i, n}\|D^{j-i}f\|_{L^1(\mathbb{R}^n)} \lesssim \|f\|_{L^1(\mathbb{R}^n)}.
+\end{aligned}
+\]
+
+因此,
+
+\[
+\|\nabla^k\phi(t)\|_{L^{\infty}} \lesssim (1+t)^{-\frac{n-1}{2}}\|f\|_{L^1(\mathbb{R}^n)},
+\]
+
+如所期望.
+
+于是只需验证 \eqref{eq:c7-325}.不失一般性, 通过空间平移, 可假设 $I = 0$.将命题~\ref{thm:c7-0.26} 应用于 $\psi = \nabla\phi_0$, 对 $s_*$——严格大于 $\frac{n}{2}$ 的第一个整数——推得
+
+\[
+\begin{aligned}
+\|\psi(t)\|_{L^{\infty}} &\leq c(1+t)^{-\frac{n-1}{2}}E_{s_*}[\phi_0](t) \\
+&\leq c(1+t)^{-\frac{n-1}{2}}E_{s_*}[\phi_0](0).
+\end{aligned}
+\]
+
+由于 $\phi_0$ 的支集包含在以原点为中心、半径为 1 的球内, 我们有
+
+\[
+E_{s_*}[\phi_0](0) \leq C_n\sum_{j=0}^{s_*+1}\|D^j f_0\|_{L^2}.
+\]
+
+最后, 根据 $\mathbb{R}^n$ 中的标准 Sobolev 不等式 $\|f\|_{L^2} \leq c\|\nabla^{\frac{n}{2}}f\|_{L^1}$, 我们得出结论:
+
+\[
+\|\psi(t)\|_{L^{\infty}} \leq c(1+t)^{-\frac{n-1}{2}}\sum_{j=0}^{n+2}\|D^j f_0\|_{L^1},
+\]
+
+如所期望.
+\end{proof}
+

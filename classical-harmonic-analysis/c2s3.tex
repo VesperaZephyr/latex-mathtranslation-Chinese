@@ -1,0 +1,86 @@
+% ============ 第2章 §2.3 径向极限与Fatou定理(原书 pp.130-132) ============
+\section{径向极限与 Fatou 定理}\label{sec:2.3}
+\index{Fatou 定理}
+\index{径向极限}
+
+
+本节证明:由 Poisson--Stieltjes 积分表示的函数 $u$ 属于 $h^{1}$,且 $\lim_{r \to 1}u(re^{i\theta})$ 关于 $\theta$ 几乎处处存在.这个极限称为径向极限(radial limit).定理~\ref{thm:2.3.2} 称为 Fatou 定理.
+
+\begin{theorem}\label{thm:2.3.1}
+设 $\mu$ 为 $[-\pi, \pi]$ 上的(有界)实测度,且
+\begin{equation*}
+u(re^{i\theta}) = \frac{1}{2\pi}\int_{-\pi}^{\pi}P(r, \theta - t)\dd\mu(t),
+\end{equation*}
+则 $u$ 属于 $h^{1}$.
+\end{theorem}
+
+\begin{proof}
+$u \in h(D)$ 已在 2.2 节注意到.为证明 $u \in h^{1}$,由定义只需证明 $\sup_{0 \leq r < 1}M_{1}(r, u) < \infty$.由于 $L^{1}$ 的对偶空间是 $L^{\infty}$,
+\begin{equation*}
+M_{1}(r, u) = \sup\left\{\left|\frac{1}{2\pi}\int_{-\pi}^{\pi}u(re^{i\theta})g(\theta)\dd\theta\right|;\ g \in L^{\infty} \text{ 且 } \|g\|_{\infty} \leq 1\right\},
+\end{equation*}
+由下列不等式可证明 $\sup_{0 \leq r < 1}M_{1}(r, u) \leq |\mu|([-\pi, \pi]) < \infty$.设 $g \in L^{\infty}$,由 Fubini 定理与命题~\ref{prop:2.2.1},
+\begin{align*}
+\left|\int_{-\pi}^{\pi}u(re^{i\theta})g(\theta)\dd\theta\right| & = \left|\frac{1}{2\pi}\int_{-\pi}^{\pi}\dd\mu(t)\int_{-\pi}^{\pi}P(r, \theta - t)g(\theta)\dd\theta\right| \\
+& \leq \int_{-\pi}^{\pi}\dd|\mu|(t)\frac{1}{2\pi}\int_{-\pi}^{\pi}P(r, \theta - t)\|g\|_{\infty}\dd\theta \\
+& = \|g\|_{\infty}|\mu|([-\pi, \pi]).
+\end{align*}
+\end{proof}
+
+对实测度 $\mu \in M[-\pi, \pi]$ 令
+\begin{equation*}
+\mu(\theta) = \int_{0}^{\theta}\dd\mu(t).
+\end{equation*}
+即 $\mu(\theta)$ 表示区间 $[0, \theta]$ 或区间 $[\theta, 0]$ 关于 $\mu$ 的积分.
+
+\begin{theorem}[Fatou]\label{thm:2.3.2}
+$\mu \in M[-\pi, \pi]$ 是实测度且 $\mu'(\theta_{0})$ 存在时,设
+\begin{equation*}
+u(re^{i\theta}) = \frac{1}{2\pi}\int_{-\pi}^{\pi}P(r, \theta - t)\dd\mu(t),
+\end{equation*}
+则 $\lim_{r \to 1}u(re^{i\theta_{0}}) = \mu'(\theta_{0})$ 成立.
+\end{theorem}
+
+\begin{proof}
+为简化记号,设 $\theta_{0} = 0$.令 $d\nu(t) = d\mu(t) - \mu'(0)\dd t$ 且 $d\lambda(t) = (\partial P(r, t)/\partial t)\dd t$,则分部积分得
+\begin{align*}
+& u(r) - \mu'(0) - \frac{1}{2\pi}\bigl[P(r, t)\nu(t)\bigr]_{-\pi}^{\pi} \\
+& \quad = \frac{1}{2\pi}\int_{-\pi}^{\pi}P(r, t)\dd\nu(t) - \frac{1}{2\pi}\bigl[P(r, t)\nu(t)\bigr]_{-\pi}^{\pi} \\
+& \quad = -\frac{1}{2\pi}\int_{-\pi}^{\pi}\nu(t)\dd\lambda(t) \\
+& \quad = -\frac{1}{2\pi}\int_{-\pi}^{\pi}\bigl(\mu(t) - \mu'(0)t\bigr)\left(\frac{\partial}{\partial t}P(r, t)\right)\dd t \\
+& \quad = -\frac{1}{2\pi}\int_{\delta < |t| < \pi}\bigl(\mu(t) - \mu'(0)t\bigr)\left(\frac{\partial}{\partial t}P(r, t)\right)\dd t \\
+& \qquad - \frac{1}{2\pi}\int_{|t| \leq \delta}\bigl(\mu(t) - \mu'(0)t\bigr)\left(\frac{\partial}{\partial t}P(r, t)\right)\dd t \\
+& \quad = I_{\delta}^{1} + I_{\delta}^{2}.
+\end{align*}
+此时,
+\begin{align*}
+|I_{\delta}^{1}| &\leq \sup_{\delta \leq |t| \leq \pi}\left|\frac{\partial}{\partial t}P(r, t)\right| \cdot \frac{1}{2\pi}\int_{\delta \leq |t| \leq \pi}|\mu(t) - \mu'(0)t|\dd t \\
+\quad &\leq \frac{2r(1 - r^{2})}{(1 - 2r\cos\delta + r^{2})^{2}} \cdot \frac{1}{2\pi}\int_{\delta \leq |t| \leq \pi}|\mu(t) - \mu'(0)t|\dd t \\
+\quad &\rightarrow 0 \quad (r \rightarrow 1).
+\end{align*}
+这是因为 $\mu$ 是有界实测度,所以 $\mu(t)$ 是 $[-\pi, \pi]$ 上的有界函数.另一方面,由 $\mu(0) = 0$,
+\begin{equation*}
+|I_{\delta}^{2}| \leq \sup_{|t| \leq \delta}\left|\frac{\mu(t) - \mu(0)}{t} - \mu'(0)\right|\frac{1}{2\pi}\int_{|t| \leq \delta}\left|t\frac{\partial}{\partial t}P(r, t)\right|\dd t.
+\end{equation*}
+对任意 $\varepsilon > 0$,把 $\delta$ 取得足够小,
+\begin{equation*}
+\sup_{|t| \leq \delta}\left|\frac{\mu(t) - \mu(0)}{t} - \mu'(0)\right| \leq \varepsilon
+\end{equation*}
+可以把 $r$ 取得足够接近 1,则
+\begin{equation*}
+|I_{\delta}^{2}| \leq \frac{\varepsilon}{2\pi}\int_{|t| \leq \delta}\left|t\frac{\partial}{\partial t}P(r, t)\right|\dd t < 2\varepsilon.
+\end{equation*}
+这里用到了
+\begin{align*}
+\frac{1}{2\pi}\int_{|t| \leq \delta}\left|t\frac{\partial}{\partial t}P(r, t)\right|\dd t & = \frac{1}{\pi}\int_{0}^{\delta}t\left(-\frac{\partial}{\partial t}P(r, t)\right)\dd t \\
+& = \frac{1}{\pi}\left(-\delta P(r, \delta) + \int_{0}^{\delta}P(r, t)\dd t\right).
+\end{align*}
+
+另外,$\lim_{r \to 1}\bigl[P(r, t)\nu(t)\bigr]_{-\pi}^{\pi} = 0$,所以对任意 $\varepsilon > 0$,把 $r$ 取得足够接近 1,则可使 $|u(r) - \mu'(0)| \leq |I_{\delta}^{1}| + |I_{\delta}^{2}| < 3\varepsilon$.
+\end{proof}
+
+定理~\ref{thm:2.3.2} 中若 $d\mu = f(t)\dd t$,则
+\begin{equation*}
+\mu(\theta) = \int_{0}^{\theta}\dd\mu(t) = \int_{0}^{\theta}f(t)\dd t,
+\end{equation*}
+故 $\mu'(\theta) = f(\theta)$ a.e. $\theta \in [-\pi, \pi]$.因此 $\lim_{r \to 1}u(re^{i\theta}) = f(\theta)$ a.e. $\theta \in [-\pi, \pi]$.

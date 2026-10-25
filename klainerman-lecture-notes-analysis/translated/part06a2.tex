@@ -1,0 +1,635 @@
+% ==== part06a2 第 6 章 基本函数不等式(第 3--4 节)====
+% 源: MinerU_latex_lecture nots.tex 第 9185--9902 行(第 5 节自第 9904 行起归 part06b);
+%     pdf_text.txt 第 7558--8150 行(PDF 第 140--150 页)
+%
+% 术语(新增,键=中文=英文):
+%   littlewood-paley-theory=Littlewood-Paley 理论、dyadic-annulus=二进环带、
+%   scaling-identity=伸缩恒等式、cutoff-operator=截断算子、almost-orthogonality=几乎正交性、
+%   finite-band-property=有限带宽性质、commutator=换位子、square-function=平方函数、
+%   maximal-function=极大函数、multiplier=乘子、besov-space=Besov 空间、
+%   triebel-space=Triebel 空间、trichotomy-formula=三分公式、paradifferential-calculus=仿微分演算、
+%   product-estimate=乘积估计、wedge-product=楔积、hodge-duality=Hodge 对偶、
+%   canonical-solution=典范解、wentes-inequality=Wente 不等式
+% 注: 隆起函数(bump function)、截断函数(cutoff function)已在第 3 章(part03)定义,不再重复 \newterm.
+%
+% REFS(需跨章/待解析项):
+%   - 同章公式引用: 卷积不等式 (188)、Sobolev 不等式 (201) 在第 6 章第 1--2 节(part06a1)中,
+%     本部分以 \eqref{eq:c6-188}、\eqref{eq:c6-201} 引用,依赖 part06a1 定义相应标签.
+%   - 脚注(2 处,已译入 \footnote): ① 第 9288 行 "cut-off operator^5"(pdf_text 第 7651--7653 行);
+%     ② 第 9754 行 "The proof^6"(pdf_text 第 8018 行).
+%   - OCR-BROKEN: 原书 Theorem 4.1 在源 OCR 中缺失(第 9821--9830 行之间),已按 pdf_text
+%     第 8079--8080 行还原为 \label{thm:c6-4.1}.
+%   - 源第 9199 行 "ξ≠0 2"、第 9586 行 "1/q . 8"、第 9747 行 "s>n/2 19" 中孤立的数字 2/8/19
+%     经与 pdf_text 核对均为 OCR 噪音(原书无对应脚注),已删除.
+%
+% 编号说明:
+%   - 第 3 节编号对象: Theorem 3.1 → 3.2--3.5 为带编号子标题(\mtsubsec)→ Lemma 3.6 → Theorem 3.7.
+%   - 第 4 节编号对象: Theorem 4.1(OCR 缺失已还原)→ Lemma 4.2.
+%   - 本部分显式编号公式为原书 (214)--(245),按项目约定全部行间公式 \[...\] 自动编号,
+%     显式编号公式加 \label{eq:c6-NNN};正文引用用 \eqref.
+%   - 原书无编号的 Definition(乘子算子相似性、Besov 空间)与全部 Remark 用带 * 环境.
+
+\section{Littlewood-Paley 理论}
+
+在其最简单的形式中, \newterm{littlewood-paley-theory}{Littlewood-Paley 理论}{Littlewood-Paley theory}是一种系统且非常有用的方法:把定义在 $\mathbb{R}^n$ 上的函数 $f$ 分解为无穷二进和 $f = \sum_{k\in\mathbb{Z}} f_k$, 其中频率局部化的分量 $f_k$ 满足:对\newterm{dyadic-annulus}{二进环带}{dyadic annulus} $2^{k-1} \leq |\xi| \leq 2^{k+1}$ 之外的所有 $\xi$, 都有 $\hat{f}_k(\xi) = 0$.这样的分解很容易实现:在 Fourier 空间中选取一个支集在 $\frac{1}{2} \leq |\xi| \leq 2$ 中的检验函数 $\chi(\xi)$, 使得对所有 $\xi \neq 0$,
+
+\begin{equation}
+\sum_{k\in\mathbb{Z}} \chi(2^{-k}\xi) = 1.\label{eq:c6-214}
+\end{equation}
+
+事实上, 取 $\phi(\xi)$ 为支集在 $|\xi| \leq 2$ 中的实值径向隆起函数, 它在球 $|\xi| \leq 1$ 上等于 1.则函数 $\chi(\xi) = \phi(\xi) - \phi(2\xi)$ 具有所要求的性质.
+
+现在我们定义
+
+\begin{equation}
+\widehat{P_k f}(\xi) = \chi(\xi/2^k)\hat{f}(\xi), \label{eq:c6-215}
+\end{equation}
+
+或者, 在物理空间中,
+
+\begin{equation}
+P_k f = f_k = m_k * f, \label{eq:c6-216}
+\end{equation}
+
+其中 $m_k(x) = 2^{nk} m(2^k x)$, 而 $m(x)$ 是 $\chi$ 的逆 傅里叶变换.显然, 由 \eqref{eq:c6-214},
+
+\begin{equation}
+f = \sum_{k\in\mathbb{Z}} P_k f, \label{eq:c6-217}
+\end{equation}
+
+正是所要求的.把"乘以 $2^{-k}$"的映射记作 $2^{-k}$, 我们还有重要的\newterm{scaling-identity}{伸缩恒等式}{scaling identity}
+
+\begin{equation}
+(P_k f) \circ 2^{-k} = P_0(f \circ 2^{-k}).\label{eq:c6-218}
+\end{equation}
+
+注意到 $P_k f$ 的 傅里叶变换的支集在二进区间 $2^{k-1} \leq |\xi| \leq 2^{k+1}$ 中, 因此
+
+\[
+P_{k'} P_k f = 0, \quad \forall\, k, k'\in\mathbb{Z}, \quad |k-k'| > 2.
+\]
+
+于是
+
+\[
+P_k f = \sum_{k'\in\mathbb{Z}} P_{k'}(P_k f) = \sum_{|k-k'|\leq 1} P_{k'} P_k f.
+\]
+
+从而, 由于 $P_{k-1}, P_k, P_{k+1}$ 彼此相差不大, 我们可以写
+
+\[
+P_k = \sum_{|k-k'|\leq 1} P_{k'} P_k \approx P_k^2.
+\]
+
+正因如此, \newterm{cutoff-operator}{截断算子}{cut-off operator} $P_k$ 才被(不严格地)称为 LP 投影.
+
+对所有区间 $J \subset \mathbb{Z}$, 记 $P_J = \sum_{k\in J} P_k$.特别地, 我们写 $P_{\leq k} = P_{(-\infty, k]}$, $P_{<k} = P_{\leq k-1}$.显然, $P_k = P_{\leq k} - P_{<k}$.
+
+下列 LP 投影的性质处于经典 LP 理论的核心地位:
+
+\begin{theorem}\label{thm:c6-3.1}
+LP 投影具有下列性质:
+
+LP 1. \newterm{almost-orthogonality}{几乎正交性}{almost orthogonality}.算子 $P_k$ 是自伴的, 并且对一切满足 $|k_1 - k_2| \geq 2$ 的整数对, 有 $P_{k_1} P_{k_2} = 0$.特别地,
+
+\begin{equation}
+\|f\|_{L^2}^2 \approx \sum_k \|P_k f\|_{L^2}^2.\label{eq:c6-219}
+\end{equation}
+
+LP 2. $L^p$ 有界性:对任意 $1 \leq p \leq \infty$ 与任意区间 $J \subset \mathbb{Z}$,
+
+\begin{equation}
+\|P_J f\|_{L^p} \lesssim \|f\|_{L^p}.\label{eq:c6-220}
+\end{equation}
+
+LP 3. \newterm{finite-band-property}{有限带宽性质}{finite band property}.任何偏导数 $\partial P_k f$ 都可以写成 $\partial P_k f = 2^k \tilde{P}_k f$ 的形式, 而 $\tilde{P}_k$ 的象征是一个满足性质 LP2 的截断算子\footnote{它与一个稍不同的检验函数 $\tilde{\chi}$ 相关联, 该函数仍保持支集在 $\frac{1}{2} \leq |\xi| \leq 2$ 中, 但可能不满足 \eqref{eq:c6-214}.}.特别地, 对任意 $1 \leq p \leq \infty$,
+
+\begin{equation}
+\|\partial P_k f\|_{L^p} \lesssim 2^k \|f\|_{L^p}, \label{eq:c6-221}
+\end{equation}
+
+\begin{equation}
+2^k \|P_k f\|_{L^p} \lesssim \|\partial f\|_{L^p}.\label{eq:c6-222}
+\end{equation}
+
+LP 4. Bernstein 不等式.对任意 $1 \leq p \leq q \leq \infty$, 我们有 Bernstein 不等式
+
+\begin{equation}
+\|P_k f\|_{L^q} \lesssim 2^{kn(1/p-1/q)} \|f\|_{L^p}, \quad \forall\, k\in\mathbb{Z}, \label{eq:c6-223}
+\end{equation}
+
+\begin{equation}
+\|P_{\leq 0} f\|_{L^q} \lesssim \|f\|_{L^p}.\label{eq:c6-224}
+\end{equation}
+
+特别地,
+
+\[
+\|P_k f\|_{L^\infty} \lesssim 2^{kn/p} \|f\|_{L^p}.
+\]
+
+LP5. \newterm{commutator}{换位子}{commutator}估计.考虑换位子
+
+\[
+[P_k, f] \cdot g = P_k(f \cdot g) - f \cdot P_k g,
+\]
+
+其中 $f, g \in \mathcal{C}_0^\infty(\mathbb{R}^n)$.我们有
+
+\[
+\|[P_k, f] \cdot g\|_{L^p} \lesssim 2^{-k} \|\nabla f\|_{L^\infty} \|g\|_{L^p}.
+\]
+
+LP6. \newterm{square-function}{平方函数}{square function}不等式.设 $Sf$ 为向量值函数 $\mathbf{S}f = (P_k f)_{k\in\mathbb{Z}}$.量
+
+\begin{equation}
+Sf(x) = |\mathbf{S}f(x)| = \big(\sum_{k\in\mathbb{Z}} |P_k f(x)|^2\big)^{1/2}\label{eq:c6-225}
+\end{equation}
+
+称为 Littlewood-Paley 平方函数.对每个 $1 < p < \infty$, 存在依赖于 $p$ 的常数, 使得对所有 $f \in \mathcal{C}_0^\infty$,
+
+\begin{equation}
+\|f\|_{L^p} \lesssim \|Sf\|_{L^p} \lesssim \|f\|_{L^p}.\label{eq:c6-226}
+\end{equation}
+\end{theorem}
+\begin{proof}
+只有 LP6 的证明不是直截了当的, 我们把它推迟到下一节. LP1 的证明是直接的.事实上, 我们只需验证 \eqref{eq:c6-219}.显然,
+
+\[
+\begin{aligned}
+\|f\|_{L^2}^2 &= \|\sum_k P_k f\|_{L^2}^2 = \sum_{|k-k'|\leq 1} \langle P_k f, P_{k'} f\rangle_{L^2}\\
+&\leq \sum_{|k-k'|\leq 1} \|P_k f\|_{L^2} \|P_{k'} f\|_{L^2}\\
+&\lesssim \sum_k \|P_k f\|_{L^2}^2
+\end{aligned}
+\]
+
+要证明 $\sum_k \|P_k f\|_{L^2}^2 \lesssim \|f\|_{L^2}^2$, 我们只需利用 Parseval 恒等式以及投影 $P_k$ 的定义.
+
+证明 LP2 只需对形如 $J = (-\infty, k] \subset \mathbb{Z}$ 的区间进行, 即证明 $P_{\leq k}$ 的 $L^p$ 有界性.若 $\chi(\xi) = \phi(\xi) - \phi(2\xi)$, 则 $\widehat{P_{\leq k} f} = \phi(\xi/2^k)\hat{f}(\xi)$.因此
+
+\[
+P_{\leq k} f = \bar{m}_k * f,
+\]
+
+其中 $\bar{m}_k(x) = 2^{nk} \bar{m}(2^k x)$, 而 $\bar{m}(x)$ 是 $\phi$ 的逆 傅里叶变换.注意到 $\|\bar{m}_k\|_{L^1} = \|\bar{m}\|_{L^1} \lesssim 1$.于是, 利用卷积不等式 \eqref{eq:c6-188},
+
+\[
+\|P_{\leq k} f\|_{L^p} \leq \|\bar{m}_k\|_{L^1} \|f\|_{L^p} \lesssim \|f\|_{L^p},
+\]
+
+正是所要求的.
+
+为证明 LP3, 我们写 $\partial_i(P_k f) = 2^k (\partial_i m)_k * f$, 其中 $(\partial_i m)_k(x) = 2^{nk} \partial_i m(2^k x)$.显然 $\|(\partial_i m)_k\|_{L^1} = \|\partial_i m\|_{L^1} \lesssim 1$.因此,
+
+\[
+\|\partial_i(P_k f)\|_{L^p} \lesssim 2^k \|f\|_{L^p},
+\]
+
+这就建立了 \eqref{eq:c6-221}.为证明 \eqref{eq:c6-222}, 我们写 $\hat{f}(\xi) = \sum_{j=1}^n \frac{\xi_j}{i|\xi|^2} \widehat{\partial_{x_j} f}(\xi)$.于是,
+
+\[
+2^k \widehat{P_k f}(\xi) = \sum_{j=1}^n 2^k \frac{\xi_j}{i|\xi|^2} \chi(\xi/2^k) \widehat{\partial_{x_j} f}(\xi) = \sum_{j=1}^n 2^k \psi_j(\xi/2^k) \widehat{\partial_{x_j} f}(\xi),
+\]
+
+其中 $\psi_j(\xi) = \frac{\xi_j}{i|\xi|^2} \chi(\xi)$.于是, 在物理空间中,
+
+\[
+2^k P_k f = \sum_{j=1}^n ({}^j\bar{m})_k * \partial_j f,
+\]
+
+其中 $({}^j\bar{m})_k(x) = 2^{nk} \cdot {}^j\bar{m}(2^k x)$, 而 ${}^j\bar{m}$ 是 $\psi_j$ 的逆 傅里叶变换.于是, 如前,
+
+\[
+2^k \|P_k f\|_{L^p} \lesssim \sum_{j=1}^n \|\partial_j f\|_{L^p} = \|\partial f\|_{L^p},
+\]
+
+正是所要求的.
+
+性质 LP4 是物理空间表示 \eqref{eq:c6-216} 与卷积不等式 \eqref{eq:c6-188} 的直接推论:
+
+\[
+\|P_k f\|_{L^q} = \|m_k * f\|_{L^q} \lesssim \|m_k\|_{L^r} \|f\|_{L^p},
+\]
+
+其中 $1 + q^{-1} = r^{-1} + p^{-1}$.现在,
+
+\[
+\|m_k\|_{L^r} = 2^{nk} \big(\int_{\mathbb{R}^n} |m(2^k x)|^r\, dx\big)^{1/r} = 2^{nk} 2^{-nk/r} \|m\|_{L^r} \lesssim 2^{nk(1-1/r)} \lesssim 2^{nk(1/p-1/q)}.
+\]
+
+只剩下证明 LP5.由 \eqref{eq:c6-216}, 我们可以写
+
+\[
+P_k(fg)(x) - f(x) P_k g(x) = \int_{\mathbb{R}^n} m_k(x-y)\big(f(y) - f(x)\big) g(y)\, dy.
+\]
+
+另一方面,
+
+\[
+\begin{aligned}
+|f(y) - f(x)| &\lesssim \big|\int_0^1 \frac{d}{ds} f(x + s(y-x))\, ds\big|\\
+&\lesssim |x-y| \|\partial f\|_{L^\infty}
+\end{aligned}
+\]
+
+因此,
+
+\[
+|P_k(fg)(x) - f(x) P_k g(x)| \lesssim 2^{-k} \|\partial f\|_{L^\infty} \int_{\mathbb{R}^n} |\bar{m}_k(x-y)|\, |g(y)|\, dy,
+\]
+
+其中 $\bar{m}_k(x) = 2^{nk} \bar{m}(2^k x)$, $\bar{m}(x) = |x| m(x)$.于是,
+
+\[
+\|P_k(fg) - f P_k g\|_{L^p} \lesssim 2^{-k} \|\partial f\|_{L^\infty} \|g\|_{L^p}.
+\]
+
+我们把性质 LP6 的证明留到下一节.
+\end{proof}
+
+\begin{remark*}
+在前面的证明中, 如果只证明性质 LP2--4 在 $k = 0$ 的情形, 再通过伸缩恒等式 \eqref{eq:c6-218} 推出更一般的估计, 事情会更简单.特别地, 注意 Bernstein 不等式无非是说:当 $f$ 在频率空间局部化时(与相反的情形——即 $f$ 在物理空间局部化时——相对), 较低的 $L^p$ 范数控制较高的 $L^p$ 范数.这与我们对 $L^p$ 范数的直觉一致:虽然频率局部化的函数在物理空间的无穷远处可能太大而不可能可积, 但我们不必担心函数在局部爆炸的突然跳跃或尖峰, 因此只需控制前一种现象.
+\end{remark*}
+
+\begin{definition*}
+我们说一个乘子算子 $\tilde{P}_k$ 与标准的 LP 投影 $P_k$ 相似, 如果它的象征 $\tilde{\chi}_k$ 是适应二进区域 $|\xi| \sim 2^k$ 的隆起函数.更精确地说, 对某个支集在区域 $c^{-1} 2^k \lesssim |\xi| \leq c 2^k$ 中的隆起函数 $\tilde{\chi}$, 其中 $c > 0$ 固定, 我们可以写 $\tilde{\chi}_k(\xi) = \tilde{\chi}\big(\frac{\xi}{2^k}\big)$.
+\end{definition*}
+
+\begin{remark*}
+注意到不等式 $\|P_k f\|_{L^p} \lesssim \|f\|_{L^p}$ 对每个与 $P_k$ 相似的算子 $\tilde{P}_k$ 都成立.性质 LP3、LP4 与 LP5 亦然.
+\end{remark*}
+
+\begin{remark*}
+关于算子 $\tilde{P}_k$ 与极大函数, 我们有如下的逐点关系:
+
+\begin{equation}
+|\tilde{P}_{\leq k} f| \lesssim \mathcal{M} f(x).\label{eq:c6-227}
+\end{equation}
+
+事实上, 如前,
+
+\[
+\tilde{P}_{\leq k} f = \tilde{m}_k * f,
+\]
+
+其中 $\tilde{m}_k(x) = 2^{nk} \tilde{m}(2^k x)$, $\tilde{m}(x) \in \mathcal{S}(\mathbb{R}^n)$.因此,
+
+\[
+\begin{aligned}
+|\tilde{P}_{\leq k} f| &\lesssim 2^{nk} \int |f(y)| \tilde{m}\big(2^k(x-y)\big)\, dy \lesssim 2^{nk} \int |f(y)| (1 + 2^k |x-y|)^{-n-1}\, dy\\
+&\lesssim 2^{nk} \int_{B(x, 2^{-k})} |f(y)| (1 + 2^k |x-y|)^{-n-1}\, dy\\
+&\quad + 2^{nk} \sum_{j=0}^\infty \int_{2^j \leq 2^k |x-y| \leq 2^{j+1}} |f(y)| (1 + 2^k |x-y|)^{-n-1}\, dy\\
+&\lesssim 2^{nk} \big(\int_{B(x, 2^{-k})} |f(y)|\, dy + \sum_{j \geq 0} 2^{-(n+1)j} \int_{|x-y| \leq 2^{j+1-k}} |f(y)|\, dy\big)\\
+&\lesssim \mathcal{M} f(x) + \sum_{j > 0} 2^{-(n+1)j} 2^{nk} 2^{n(j+1-k)} \frac{1}{|B(x, 2^{-k+j+1})|} \int_{B(x, 2^{-k+j+1})} |f(y)|\, dy\\
+&\lesssim \mathcal{M} f(x) + 2^n \sum_{j > 0} 2^{-j} \mathcal{M} f(x) \lesssim \mathcal{M} f(x)
+\end{aligned}
+\]
+
+正是所要求的.
+\end{remark*}
+
+性质 LP3--LP4 在很大程度上解释了为什么 LP 理论是偏微分方程如此有用的工具.有限带宽性质使我们可以把二进分量 $f_k$ 的导数换成与 $2^k$ 相乘.$L^p \to L^\infty$ Bernstein 不等式是 Sobolev 空间 $W^{\frac{n}{p}, p}(\mathbb{R}^n)$ 到 $L^\infty(\mathbb{R}^n)$ 的嵌入失效的一种二进补救.事实上, 鉴于有限带宽性质, Bernstein 不等式确实对每个 LP 分量 $f_k$ 蕴含所要求的 Sobolev 不等式;对 $f$ 而言 Sobolev 不等式失效的原因在于求和 $f = \sum_k f_k$.
+
+下面我们给出 LP 演算的几个应用.
+
+\mtsubsec{插值不等式}
+
+下列不等式对 $\mathcal{C}_0^\infty(\mathbb{R}^n)$ 中的任意函数和任意整数 $0 \leq i \leq m$ 成立:
+
+\begin{equation}
+\|\partial^i f\|_{L^p} \lesssim \|f\|_{L^p}^{1-i/m} \|\partial^m f\|_{L^p}^{i/m}.\label{eq:c6-228}
+\end{equation}
+
+为证明它, 我们分解 $f = P_{\leq k} f + P_{> k} f = f_{\leq k} + f_{> k}$.现在, 利用 LP2--LP4, 对任意固定的 $k \in \mathbb{Z}$,
+
+\[
+\begin{aligned}
+\|\partial^i f\|_{L^p} &\leq \|\partial^i f_{\leq k}\|_{L^p} + \|\partial^i f_{> k}\|_{L^p}\\
+&\leq 2^{ki} \|f\|_{L^p} + 2^{k(i-m)} \|\partial^m f\|_{L^p}
+\end{aligned}
+\]
+
+因此,
+
+\[
+\|\partial^i f\|_{L^p} \leq \lambda^i \|f\|_{L^p} + \lambda^{i-m} \|\partial^m f\|_{L^p}
+\]
+
+对任意 $\lambda \in 2^{\mathbb{Z}}$.为了完成证明, 我们希望选取 $\lambda$, 使得右端两项相等, 即
+
+\[
+\lambda_0 = \left(\frac{\|\partial^m f\|_{L^p}}{\|f\|_{L^p}}\right)^{1/m}.
+\]
+
+由于我们限于 $\lambda \in 2^{\mathbb{Z}}$, 我们选取二进数 $\lambda \in 2^{\mathbb{Z}}$, 使得 $\lambda \leq \lambda_0 \leq 2\lambda$.于是,
+
+\[
+\|\partial^i f\|_{L^p} \leq \lambda_0^i \|f\|_{L^p} + \left(\frac{2}{\lambda_0}\right)^{m-i} \|\partial^m f\|_{L^p} \lesssim \|f\|_{L^p}^{1-i/m} \|\partial^m f\|_{L^p}^{i/m}.
+\]
+
+一般地, 当关于 $\mathbb{R}^n$ 上函数的某个估计在量纲上不一致时(即两边的伸缩不相同), 这样的估计可以被"放大"为一个看似更强的估计(或者被证明是错误的).
+
+\textbf{习题.} 假定不等式
+
+\[
+\|\partial^i f\|_{L^p} \lesssim \|f\|_{L^p} + \|\partial^m f\|_{L^p},
+\]
+
+通过考虑伸缩 $f \mapsto f \circ \lambda$ 推导估计 \eqref{eq:c6-228}.
+
+\mtsubsec{非临界 Sobolev 不等式}
+
+我们将证明不等式 \eqref{eq:c6-201} 的一个稍加改进的版本:对函数 $f \in C_0^\infty(\mathbb{R}^n)$ 与指数 $1 \leq p < q < \infty$, $1/p - m/n < 1/q$,
+
+\[
+\|f\|_{L^q(\mathbb{R}^n)} \lesssim \|f\|_{L^p} + \|\partial^m f\|_{L^p}.
+\]
+
+我们分解 $f = P_{\leq 0} f + \sum_{k\in\mathbb{N}} P_k f = f_{< 0} + \sum_{k > 0} f_k$.于是, 先用 LP4, 再用 LP3,
+
+\[
+\begin{aligned}
+\|f\|_{L^q} &\leq \|f_{< 0}\|_{L^q} + \sum_{k > 0} \|f_k\|_{L^q} \lesssim \|f\|_{L^p} + \sum_{k > 0} 2^{kn(1/p-1/q)} \|f\|_{L^p}\\
+&\lesssim \|f\|_{L^p} + \sum_{k > 0} 2^{kn(m/n-\varepsilon)} \|f\|_{L^p} \lesssim \|f\|_{L^p} + \sum_{k > 0} 2^{-kn\varepsilon} \|\partial^m f\|_{L^p}\\
+&\lesssim \|f\|_{L^p} + \|\partial^m f\|_{L^p}
+\end{aligned}
+\]
+\mtsubsec{函数空间}
+
+Littlewood-Paley 理论既可以用来给出 Sobolev 空间的等价描述, 也可以引入新的、更精细的函数空间.我们首先注意到, 鉴于几乎正交性性质 LP1,
+
+\[
+\begin{aligned}
+\|f\|_{L^2}^2 &= \|\sum_{k\in\mathbb{Z}} P_k f\|_{L^2}^2 \lesssim \sum_{k\in\mathbb{Z}} \|P_k f\|_{L^2}^2\\
+\sum_{k\in\mathbb{Z}} \|P_k f\|_{L^2}^2 &\lesssim \|f\|_{L^2}
+\end{aligned}
+\]
+
+于是我们可以给出齐次 Sobolev 范数 $\|\cdot\|_{\dot{H}^s(\mathbb{R}^n)}$ 的一个 LP 描述:
+
+\begin{equation}
+\|f\|_{\dot{H}^s}^2 \approx \sum_{k\in\mathbb{Z}} 2^{2ks} \|P_k f\|_{L^2}^2.\label{eq:c6-229}
+\end{equation}
+
+对 $k \in \mathbb{Z}^+$, 定义算子 $\Delta_k = P_k$(若 $k > 0$), $\Delta_0 = P_{\leq 0}$.对 $H^s$ 范数, 还有
+
+\begin{equation}
+\|f\|_{H^s}^2 \approx \sum_{k=0}^\infty 2^{2ks} \|\Delta_k f\|_{L^2}^2.\label{eq:c6-230}
+\end{equation}
+
+Littlewood-Paley 分解可以用来定义新的函数空间, 如\newterm{besov-space}{Besov 空间}{Besov space}.
+
+\begin{definition*}
+Besov 空间 $B_{p, q}^s(\mathbb{R}^n)$ 是 $\mathcal{C}_0^\infty(\mathbb{R}^n)$ 关于范数
+
+\begin{equation}
+\|f\|_{B_{p, q}^s} = \big(\sum_{k=0}^\infty 2^{ksq} \|\Delta_k f\|_{L^p}^q\big)^{1/q}\label{eq:c6-231}
+\end{equation}
+
+的闭包.
+\end{definition*}
+
+相应的齐次 Besov 范数定义为
+
+\begin{equation}
+\|f\|_{\dot{B}_{p, q}^s} = \big(\sum_{k\in\mathbb{Z}} 2^{sqk} \|P_k f\|_{L^p}^q\big)^{1/q}, \label{eq:c6-232}
+\end{equation}
+
+类似地, 把 \eqref{eq:c6-231} 中的 $L^p$ 范数与 $l^q$ 范数对调, 可以定义\newterm{triebel-space}{Triebel 空间}{Triebel space} $F_{p, q}^s$.于是, 例如, $H^s$ 范数与 Besov 范数 $B_{2, 2}^s$ 等价.注意到 $H^s \subset B_{2, 1}^s$.更大的空间 $B_{2, 1}^s$ 之所以有用, 原因之一是下列事实:
+
+\begin{equation}
+\|f\|_{L^\infty} \lesssim \|f\|_{\dot{B}_{2, 1}^{n/2}}, \label{eq:c6-233}
+\end{equation}
+
+它由 Bernstein 不等式 LP4 推出.\eqref{eq:c6-233} 将在下一节中起关键作用.使用 Besov 范数 $B_{2, 1}^s$ 的另一个原因将在下一节讨论乘积估计时变得清楚.
+
+\mtsubsec{乘积估计}
+
+LP 演算对非线性估计特别有用.设 $f, g$ 是 $\mathbb{R}^n$ 上的两个函数.考虑
+
+\begin{equation}
+P_k(fg) = \sum_{k', k''\in\mathbb{Z}} P_k(P_{k'} f\, P_{k''} g).\label{eq:c6-234}
+\end{equation}
+
+现在, 由于 $P_{k'} f$ 的 Fourier 支集在集合 $D' = 2^{k'-1} \leq |\xi| \leq 2^{k'+1}$ 中, $P_{k''} f$ 的 Fourier 支集在 $D'' = 2^{k''-1} \leq |\xi| \leq 2^{k''+1}$ 中, 可知 $P_{k'} f\, P_{k''} g$ 的 Fourier 支集在 $D' + D''$ 中.只有当 $D' + D''$ 与 $2^{k-1} \leq |\xi| \leq 2^{k+1}$ 相交时, 和式 \eqref{eq:c6-234} 中才得到非零贡献.因此, 记 $f_k = P_k f$, $f_{< k} = P_{< k} f$, 并对任意区间 $J \subset \mathbb{Z}$ 记 $f_J = P_J f$, 我们得到
+
+\begin{lemma}\label{lem:c6-3.6}
+给定函数 $f, g$, 我们有如下分解:
+
+\begin{equation}
+\begin{aligned}
+P_k(f \cdot g) &= HH_k(f, g) + LL_k(f, g) + LH_k(f, g) + HL_k(f, g)\\
+HH_k(f, g) &= \sum_{k', k'' > k+5, \, |k'-k''| \leq 3} P_k\big(f_{k'} \cdot P_{k''} g\big)\\
+LL_k(f, g) &= P_k\big(f_{[k-5, k+5]} \cdot g_{[k-5, k+5]}\big)\\
+LH_k(f, g) &= P_k\big(f_{\leq k-5} \cdot g_{[k-3, k+3]}\big)\\
+HL_k(f, g) &= P_k\big(f_{[k-3, k+3]} \cdot g_{\leq k-5}\big)
+\end{aligned}\label{eq:c6-235}
+\end{equation}
+\end{lemma}
+
+项 $HH_k(f, g)$ 对应高-高相互作用.更精确地说, 定义 $HH_k(f, g)$ 的和式中每一项的频率为 $\sim 2^m$, 其中某个 $2^m \gg 2^k$.我们将示意性地写
+
+\begin{equation}
+HH_k(f, g) = P_k\big(\sum_{m > k} f_m \cdot g_m\big).\label{eq:c6-236}
+\end{equation}
+
+项 $LL_k(f, g)$ 由有限多项组成, 通常可以忽略.事实上, 在任何估计中, 它们既可以当作有限多个 HH 项, 也可以当作有限多个 LH 与 HL 项来处理.我们示意性地写
+
+\begin{equation}
+LL_k(f, g) = 0.\label{eq:c6-237}
+\end{equation}
+
+最后, $LH_k$ 与 $HL_k$ 项分别由低-高与高-低相互作用组成.我们示意性地写
+
+\begin{equation}
+LH_k(f, g) = P_k\big(f_{< k} \cdot g_k\big), \label{eq:c6-238}
+\end{equation}
+
+\begin{equation}
+HL_k(f, g) = P_k\big(f_k \cdot g_{< k}\big).\label{eq:c6-239}
+\end{equation}
+
+\begin{remark*}
+在 \eqref{eq:c6-235} 给出的 $LH_k$ 的精确表达式中, 形如 $f_{\leq k-5} \cdot g_{k''}$, $k'' \in [k-3, k+3]$ 的项, 其 Fourier 支集在二进区域 $\sim 2^k$ 中.因此 $P_k$ 可以安全地忽略, 我们可以写
+
+\[
+LH_k(f, g) \sim f_{< k} \cdot g_k.
+\]
+
+我们从而建立了著名的\newterm{trichotomy-formula}{三分公式}{trichotomy formula}
+
+\begin{equation}
+P_k(f \cdot g) = LH_k(f, g) + HL_k(f, g) + HH_k(f, g), \label{eq:c6-240}
+\end{equation}
+
+它是\newterm{paradifferential-calculus}{仿微分演算}{paradifferential calculus}的基础.在实际应用中, 每当我们应用公式 \eqref{eq:c6-240} 时, 都必须记住公式 \eqref{eq:c6-237}--\eqref{eq:c6-239} 只是近似的;精确的定义由 \eqref{eq:c6-235} 给出.然而在任何估计中, 我们都可以安全地忽略额外的项, 因为它们的估计方式与我们保留的项完全一样.
+\end{remark*}
+
+我们现在利用三分公式来证明一个\newterm{product-estimate}{乘积估计}{product estimate}.
+
+\begin{theorem}\label{thm:c6-3.7}
+下列估计对所有 $s > 0$ 成立:
+
+\begin{equation}
+\|fg\|_{H^s} \lesssim \|f\|_{L^\infty} \|g\|_{H^s} + \|g\|_{L^\infty} \|f\|_{H^s}.\label{eq:c6-241}
+\end{equation}
+
+因此对所有 $s > n/2$,
+
+\begin{equation}
+\|fg\|_{H^s} \lesssim \|f\|_{H^s} \|g\|_{H^s}.\label{eq:c6-242}
+\end{equation}
+\end{theorem}
+
+下面我们给出\thmref{thm:c6-3.7} 的一个相当简单且很有启发性的证明.这个证明\footnote{我感谢 Igor Rodnianski 为我指出这一论证.}表明, 有时最好不要依赖完整的分解 \eqref{eq:c6-235}, 而是在需要时节省地使用分解.事实上, 我们写
+
+\[
+\|fg\|_{\dot{H}^s}^2 \lesssim \sum_k 2^{2ks} \|P_k(fg)\|_{L^2}^2 \lesssim \sum_k 2^{2ks} \|P_k(f_{< k} g)\|_{L^2}^2 + \sum_k 2^{2ks} \|P_k(f_{\geq k} g)\|_{L^2}^2.
+\]
+
+现在,
+
+\[
+\begin{aligned}
+\sum_k 2^{2ks} \|P_k(f_{\geq k} g)\|_{L^2}^2 &\lesssim \|g\|_{L^\infty}^2 \sum_k 2^{2ks} \|f_{\geq k}\|_{L^2}^2\\
+&\lesssim \|g\|_{L^\infty}^2 \sum_k \sum_{k' \geq k} 2^{2(k-k')s} \|2^{k's} f_{k'}\|_{L^2}^2\\
+&= \|g\|_{L^\infty}^2 \sum_{k'} \big(\sum_{k \leq k'} 2^{2(k-k')s}\big) \|2^{k's} f_{k'}\|_{L^2}^2\\
+&\lesssim \|g\|_{L^\infty}^2 \|f\|_{H^s}^2
+\end{aligned}
+\]
+
+为了估计 $\sum_k 2^{2ks} \|P_k(f_{\leq k} g)\|_{L^2}^2$, 我们将进一步分解, 仿照分解 \eqref{eq:c6-235} 进行.但首先注意到, 项 $\sum_k 2^{2ks} \|P_k(f_{[k-3, k]} g)\|_{L^2}^2$ 可以像 $\sum_k 2^{2ks} \|P_k(f_{> k} g)\|_{L^2}^2$ 一样精确地处理.事实上, 我们还不如直接估计 $\sum_k 2^{2ks} \|P_k(f_{> k-3} g)\|_{L^2}^2$.现在,
+
+\[
+\begin{aligned}
+P_k(f_{\leq k-3} g) &= \sum_{k'} P_k(f_{\leq k-3} g_{k'}) = \sum_{k' < k-2} P_k(f_{\leq k-3} g_{k'}) + \sum_{k-2 \leq k' \leq k+2} P_k(f_{\leq k-3} g_{k'})\\
+&\quad + \sum_{k' > k+2} P_k(f_{\leq k-3} g_{k'})
+\end{aligned}
+\]
+
+注意到第一项与最后一项为零, 因此,
+
+\[
+P_k(f_{\leq k-3} g) = \sum_{k-2 \leq k' \leq k+2} P_k(f_{\leq k-3} g_{k'}) \approx P_k(f_{\leq k-3} g_k).
+\]
+
+为简单起见, 我们常常直接写
+
+\begin{equation}
+P_k(f_{< k} g) \approx f_{< k} \cdot g_k.\label{eq:c6-243}
+\end{equation}
+
+当然, 这个公式并不完全正确, 但在精神上是正确的.现在,
+
+\[
+\begin{aligned}
+\sum_k 2^{2ks} \|P_k(f_{< k} g)\|_{L^2}^2 &= \sum_k 2^{2ks} \|f_{< k} g_k\|_{L^2}^2\\
+&\lesssim \|f\|_{L^\infty}^2 \sum_k 2^{2ks} \|g_k\|_{L^2}^2 = \|f\|_{L^\infty}^2 \|g\|_{\dot{H}^s}^2
+\end{aligned}
+\]
+
+正是所要求的.
+
+\begin{remark*}
+鉴于 \eqref{eq:c6-243}, 我们有如下的部分分解公式
+
+\begin{equation}
+P_k(fg) = f_{< k} g_k + P_k(f_{\geq k} g) = LH_k(f, g) + P_k(f_{\geq k} g), \label{eq:c6-244}
+\end{equation}
+
+把它与完整的三分分解 \eqref{eq:c6-240} 对比.
+\end{remark*}
+
+类似的估计在 Besov 空间中成立, 而且更容易证明.事实上, 对每个 $s > 0$, 我们有
+
+\begin{equation}
+\|fg\|_{B_{2, 1}^s} \lesssim \|f\|_{L^\infty} \|g\|_{B_{2, 1}^s} + \|g\|_{L^\infty} \|f\|_{B_{2, 1}^s}.\label{eq:c6-245}
+\end{equation}
+
+\textbf{习题.} 证明估计 \eqref{eq:c6-245}.
+
+\section{Wente 不等式}
+
+在本节中, 我们作为 Littlewood-Paley 理论的一个应用来证明\newterm{wentes-inequality}{Wente 不等式}{Wente's inequality}.下面给定 $\mathbb{R}^2$ 中的两个函数 $f, g$, 我们考虑双线性表达式 $(df \wedge dg)^* = \partial_x f\, \partial_y g - \partial_y f\, \partial_x g$, 其中 $*$ 表示 $\mathbb{R}^2$ 中平凡的\newterm{hodge-duality}{Hodge 对偶}{Hodge duality}.为了语言上的方便, 下面我们略去对偶记号, 直接写 $df \wedge dg$, 其中 $\wedge$ 表示\newterm{wedge-product}{楔积}{wedge product}.
+
+\begin{theorem}\label{thm:c6-4.1}
+在 $\mathbb{R}^2$ 上, 设 $f, g \in H^1(\mathbb{R}^2)$, $\Delta u = (df \wedge dg)$.则 $u \in L^\infty$, 事实上是连续的.
+\end{theorem}
+
+\begin{remark*}
+事实上, 若把 $\wedge$ 换成普通乘法, 我们至多能得到 $df \cdot dg \in L^1$.这显然不足以得到 $u \in L^\infty$.然而, 事实证明 $df \wedge dg$ 具有特殊的结构, 使我们能够导出所要求的估计.在上述定理中, 我们指的是通过\newterm{canonical-solution}{典范解}{canonical solution}得到的典范解 $u = \Delta^{-1}(df \wedge dg)$.
+\end{remark*}
+
+\begin{proof}
+由有限带宽性质容易看出, $\Delta$ 是从 $\dot{B}_{p, 1}^s$ 到 $\dot{B}_{p, 1}^{s-2}$ 的等距算子.事实上, 我们将取 $p = 2$.鉴于 Sobolev 不等式 \eqref{eq:c6-233}, 只需证明 $df \wedge dg \in \dot{B}_{2, 1}^{-1}(\mathbb{R}^2)$.利用三分公式以及 LP 投影 $P_k$ 与 $d$ 交换这一事实, 我们写
+
+\[
+\begin{aligned}
+I &= df \wedge dg = LH_k + HL_k + HH_k\\
+LH_k &= dP_{< k} f \wedge dP_k g\\
+HL_k &= dP_k \wedge dP_{< k} g\\
+HH_k &= P_k\big(\sum_{m \geq k} (dP_m f \wedge dP_m g)\big)
+\end{aligned}
+\]
+
+由对称性, 我们只需处理 LH 与 HH.$LH$ 项不用楔积的特殊结构就能平凡地估计.利用 Bernstein 不等式, 我们写
+
+\[
+\begin{aligned}
+2^{-k} \|LH_k\|_{L^2} &\lesssim 2^{-k} \sum_{l < k} \|dP_l f\|_{L^\infty} \|dP_k(g)\|_{L^2}\\
+&\lesssim \sum_{l < k} 2^{l-k} \|DP_l f\|_{L^2} \|DP_k f\|_{L^2}
+\end{aligned}
+\]
+
+证明接下来用 Young 不等式的如下离散版本.
+
+\begin{lemma}\label{lem:c6-4.2}
+设 $f(k) \in l^1(\mathbb{Z})$, $g(k), h(k) \in l^2(\mathbb{Z})$.则
+
+\[
+\sum_{k, l} f(k-l)\, g(l)\, h(k) \leq \|f\|_{l^1} \|g\|_{L^2} \|h\|_{l^2}.
+\]
+\end{lemma}
+
+利用该引理, 我们导出
+
+\[
+\begin{aligned}
+\sum_k 2^{-k} \|LH_k\|_{L^2} &\lesssim \big(\sum_l \|DP_l f\|_{L^2}^2\big)^{1/2} \big(\sum_k \|DP_k f\|_{L^2}^2\big)^{1/2}\\
+&\lesssim \|Df\|_{L^2} \|Dg\|_{L^2}
+\end{aligned}
+\]
+
+现在我们考虑 $HH_k$.正是在这里我们需要利用楔积的特殊结构.事实上, 我们只需利用恒等式 $df \wedge dg = d(f \wedge dg)$.于是,
+
+\[
+\begin{aligned}
+HH_k &= \sum_{m \geq k} P_k(dP_m f \wedge dP_m g)\\
+&= \sum_{m \geq k} dP_k(P_m f \wedge dP_m g)
+\end{aligned}
+\]
+
+于是, 利用有限带宽性质与 Bernstein 不等式,
+
+\[
+\begin{aligned}
+\|HH_k\|_{L^2} &\lesssim 2^{2k} \|P_m f \wedge dP_m g\|_{L^1}\\
+&\lesssim 2^{2k} \|P_m f\|_{L^2} \|DP_m g\|_{L^2}\\
+&\lesssim 2^{2k-m} \|DP_m f\|_{L^2} \|DP_m g\|_{L^2}
+\end{aligned}
+\]
+
+因此,
+
+\[
+2^{-k} \|HH_k\|_{L^2} \lesssim 2^{k-m} \|DP_m f\|_{L^2} \|DP_m g\|_{L^2}.
+\]
+
+于是, 再次利用上面引理中的离散 Young 不等式,
+
+\[
+\sum_k 2^{-k} \|LH_k\|_{L^2} \lesssim \|Df\|_{L^2} \|Dg\|_{L^2},
+\]
+
+正是所要求的.
+\end{proof}

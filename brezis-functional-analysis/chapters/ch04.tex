@@ -1,0 +1,2587 @@
+% chapters/ch04.tex
+% 第~
+% \ref{chap:4}~章 $L^p$ 空间
+% 源: 原书 PDF 第 98--139 页 (印刷页 89--130)
+
+\chapter{$L^p$ 空间}
+\label{chap:4}
+
+设 $(\Omega,\mathcal{M},\mu)$ 表示一个\emph{测度空间}, 即 $\Omega$ 是一个集合, 并且
+
+\begin{enumerate}[label=(\roman*), leftmargin=2.6em, itemsep=0.25em]
+	\item $\mathcal{M}$ 是 $\Omega$ 中的一个 \emph{$\sigma$-代数}, 即 $\mathcal{M}$ 是由
+	      $\Omega$ 的子集组成的一个族, 使得:
+	      \begin{enumerate}[label=(\alph*), leftmargin=2.4em, itemsep=0.15em]
+	      	\item $\emptyset\in\mathcal{M}$,
+	      	\item $A\in\mathcal{M}\ \Rightarrow\ A^c\in\mathcal{M}$,
+	      	\item $\bigcup_{n=1}^\infty A_n\in\mathcal{M}$, 只要 $A_n\in\mathcal{M}\ \forall n$;
+	      \end{enumerate}
+	\item $\mu$ 是一个\emph{测度}, 即 $\mu:\mathcal{M}\to[0,\infty]$ 满足
+	      \begin{enumerate}[label=(\alph*), leftmargin=2.4em, itemsep=0.15em]
+	      	\item $\mu(\emptyset)=0$,
+	      	\item $\mu\Bigl(\bigcup_{n=1}^\infty A_n\Bigr)=\sum_{n=1}^\infty\mu(A_n)$,
+	      	      只要 $(A_n)$ 是 $\mathcal{M}$ 的成员构成的互不相交的可数族.
+	      \end{enumerate}
+\end{enumerate}
+
+$\mathcal{M}$ 的成员称为\emph{可测集}.有时我们用 $|A|$ 代替 $\mu(A)$.我们还将
+假设——尽管这并非本质的——以下条件成立:
+
+\begin{enumerate}[label=(\roman*), leftmargin=2.6em, start=3, itemsep=0.25em]
+	\item $\Omega$ 是 \emph{$\sigma$-有限的}, 即存在 $\mathcal{M}$ 中的可数族
+	      $(\Omega_n)$, 使得 $\Omega=\bigcup_{n=1}^\infty\Omega_n$ 且
+	      $\mu(\Omega_n)<\infty\ \forall n$.
+\end{enumerate}
+
+满足 $\mu(E)=0$ 的集合 $E\in\mathcal{M}$ 称为\emph{零测集}.若一个性质在 $\Omega$
+上除一个零测集外处处成立, 则说该性质\emph{几乎处处}成立 (或对\emph{几乎所有的}
+$x\in\Omega$ 成立), 简记为 a.e..
+
+我们假定读者熟悉可测函数与可积函数 $f:\Omega\to\R$ 的概念; 参见例如
+H.~L.~Royden \bref{Royden}{1}, G.~B.~Folland \bref{Folland}{2}, A.~Knapp \bref{Knapp}{1}, D.~L.~Cohn \bref{Cohn}{1}, A.~Friedman \bref{Friedman}{3}, W.~Rudin \bref{Rudin}{2}, P.~Halmos \bref{Halmos}{1}, E.~Hewitt--K.~Stromberg \bref{HewittStromberg}{1}, R.~Wheeden--A.~Zygmund \bref{WheedenZygmund}{1}, J.~Neveu \bref{Neveu}{1}, P.~Malliavin \bref{Malliavin}{1}, A.~J.~Weir \bref{Weir}{1}, A.~Kolmogorov--S.~Fomin \bref{KolmogorovFomin}{1}, I.~Fonseca--G.~Leoni \bref{FonsecaLeoni}{1}.我们用 $L^1(\Omega,\mu)$, 或简记为
+$L^1(\Omega)$ (或干脆记作 $L^1$), 表示由 $\Omega$ 到 $\R$ 的可积函数构成的
+空间.
+
+我们常把 $\int_\Omega f\,d\mu$ 写成 $\int f$, 并采用记号
+\begin{equation*}
+\norm{f}_{L^1}=\norm{f}_1=\int_\Omega\abs{f}\,d\mu=\int\abs{f}.
+\end{equation*}
+按惯例, 我们把几乎处处相等的两个函数视为同一函数.下面回顾一些基本事实.
+
+\section{人人都必须知道的一些积分结果}
+\label{sec:4.1}
+
+\begin{keytheorem}[单调收敛定理, Beppo Levi]
+\label{thm:4.1}
+设 $(f_n)$ 为 $L^1$ 中的函数序列, 满足
+\begin{enumerate}[label=(\alph*), leftmargin=2.2em, itemsep=0.1em]
+	\item $f_1\le f_2\le\cdots\le f_n\le f_{n+1}\le\cdots$ 在 $\Omega$ 上几乎处处成立,
+	\item $\sup_n\int f_n<\infty$.
+\end{enumerate}
+则 $f_n(x)$ 在 $\Omega$ 上几乎处处收敛于一个有限极限, 记作 $f(x)$; 函数
+$f$ 属于 $L^1$, 且 $\norm{f_n-f}_1\to0$.
+\end{keytheorem}
+
+\begin{keytheorem}[控制收敛定理, Lebesgue]
+\label{thm:4.2}
+设 $(f_n)$ 为 $L^1$ 中的函数序列, 满足
+\begin{enumerate}[label=(\alph*), leftmargin=2.2em, itemsep=0.1em]
+	\item $f_n(x)\to f(x)$ 在 $\Omega$ 上几乎处处成立,
+	\item 存在函数 $g\in L^1$, 使得对一切 $n$ 都有 $\abs{f_n(x)}\le g(x)$
+	      在 $\Omega$ 上几乎处处成立.
+\end{enumerate}
+则 $f\in L^1$, 且 $\norm{f_n-f}_1\to0$.
+\end{keytheorem}
+
+\begin{lemma}[Fatou 引理]
+\label{lem:4.1}
+设 $(f_n)$ 为 $L^1$ 中的函数序列, 满足
+\begin{enumerate}[label=(\alph*), leftmargin=2.2em, itemsep=0.1em]
+	\item 对一切 $n$ 都有 $f_n\ge0$ 几乎处处成立,
+	\item $\sup_n\int f_n<\infty$.
+\end{enumerate}
+对几乎所有的 $x\in\Omega$, 令 $f(x)=\liminf_{n\to\infty}f_n(x)\le+\infty$.则
+$f\in L^1$, 且
+\begin{equation*}
+\int f\le\liminf_{n\to\infty}\int f_n.
+\end{equation*}
+\end{lemma}
+
+一个基本的例子是 $\Omega=\R^N$, $\mathcal{M}$ 由 Lebesgue 可测集组成,
+$\mu$ 为 $\R^N$ 上的 Lebesgue 测度.
+
+\begin{notation}
+我们用 $C_c(\R^N)$ 表示 $\R^N$ 上具有紧支集的连续函数构成的空间, 即
+\begin{equation*}
+C_c(\R^N)=\{f\in C(\R^N);\ f(x)=0\ \ \forall x\in\R^N\setminus K,\
+\text{其中}\ K\ \text{紧}\}.
+\end{equation*}
+\end{notation}
+
+\begin{theorem}[稠密性]
+\label{thm:4.3}
+空间 $C_c(\R^N)$ 在 $L^1(\R^N)$ 中稠密; 即
+\begin{equation*}
+\forall f\in L^1(\R^N)\ \ \forall\varepsilon>0\ \ \exists f_1\in C_c(\R^N)\
+\text{使得}\ \norm{f-f_1}_1\le\varepsilon.
+\end{equation*}
+\end{theorem}
+
+设 $(\Omega_1,\mathcal{M}_1,\mu_1)$ 与 $(\Omega_2,\mathcal{M}_2,\mu_2)$ 为两个
+$\sigma$-有限的测度空间.按标准方式可以在 Cartesian 积
+$\Omega=\Omega_1\times\Omega_2$ 上定义测度空间的结构
+$(\Omega,\mathcal{M},\mu)$.
+
+\begin{theorem}[Tonelli]
+\label{thm:4.4}
+设 $F(x,y):\Omega_1\times\Omega_2\to\R$ 为可测函数, 满足
+\begin{equation*}
+\text{(a)}\ \ \int_{\Omega_2}\abs{F(x,y)}\,d\mu_2<\infty\ \ \text{对几乎所有的}
+\ x\in\Omega_1,
+\end{equation*}
+以及
+\begin{equation*}
+\text{(b)}\ \ \int_{\Omega_1}d\mu_1\int_{\Omega_2}\abs{F(x,y)}\,d\mu_2<\infty.
+\end{equation*}
+则 $F\in L^1(\Omega_1\times\Omega_2)$.
+\end{theorem}
+
+\begin{theorem}[Fubini]
+\label{thm:4.5}
+假设 $F\in L^1(\Omega_1\times\Omega_2)$.则对几乎所有的 $x\in\Omega_1$,
+$F(x,y)\in L^1_y(\Omega_2)$, 且 $\int_{\Omega_2}F(x,y)\,d\mu_2\in
+L^1_x(\Omega_1)$.同样, 对几乎所有的 $y\in\Omega_2$,
+$F(x,y)\in L^1_x(\Omega_1)$, 且 $\int_{\Omega_1}F(x,y)\,d\mu_1\in
+L^1_y(\Omega_2)$.此外还有
+\begin{equation*}
+\int_{\Omega_1}d\mu_1\int_{\Omega_2}F(x,y)\,d\mu_2
+=\int_{\Omega_2}d\mu_2\int_{\Omega_1}F(x,y)\,d\mu_1
+=\iint_{\Omega_1\times\Omega_2}F(x,y)\,d\mu_1d\mu_2.
+\end{equation*}
+\end{theorem}
+
+\section{$L^p$ 空间的定义与初等性质}
+\label{sec:4.2}
+
+\begin{definition}
+设 $p\in\R$, $1<p<\infty$; 令
+\begin{equation*}
+L^p(\Omega)=\bigl\{f:\Omega\to\R;\ f\ \text{可测且}\ \abs{f}^p\in L^1(\Omega)\bigr\}
+\end{equation*}
+并置
+\begin{equation*}
+\norm{f}_{L^p}=\norm{f}_p=\Bigl(\int_\Omega\abs{f(x)}^p\,d\mu\Bigr)^{1/p}.
+\end{equation*}
+\end{definition}
+
+稍后我们将验证 $\norm{\cdot}_p$ 是一个范数.
+
+\begin{definition}
+令
+\begin{equation*}
+L^\infty(\Omega)=\Bigl\{f:\Omega\to\R\ \Big|\ f\ \text{可测, 且存在常数}\ C\
+\text{使得}\ \abs{f(x)}\le C\ \text{在}\ \Omega\ \text{上几乎处处成立}\Bigr\},
+\end{equation*}
+并置
+\begin{equation*}
+\norm{f}_{L^\infty}=\norm{f}_\infty=\inf\{C;\ \abs{f(x)}\le C\
+\text{在}\ \Omega\ \text{上几乎处处成立}\}.
+\end{equation*}
+\end{definition}
+
+下面的注记说明 $\norm{\cdot}_\infty$ 是一个范数:
+
+\begin{remark}
+\label{rem:4.1}
+若 $f\in L^\infty$, 则
+\begin{equation*}
+\abs{f(x)}\le\norm{f}_\infty\quad\text{在}\ \Omega\ \text{上几乎处处成立}.
+\end{equation*}
+事实上, 存在序列 $C_n$, 使 $C_n\to\norm{f}_\infty$, 且对每个 $n$ 都有
+$\abs{f(x)}\le C_n$ 在 $\Omega$ 上几乎处处成立.于是存在零测集 $E_n$, 使得
+$\abs{f(x)}\le C_n$ 对一切 $x\in\Omega\setminus E_n$ 成立.令
+$E=\bigcup_{n=1}^\infty E_n$, 则 $|E|=0$, 且
+\begin{equation*}
+\abs{f(x)}\le C_n\quad\forall n,\ \ \forall x\in\Omega\setminus E;
+\end{equation*}
+由此推出 $\abs{f(x)}\le\norm{f}_\infty\ \forall x\in\Omega\setminus E$.
+\end{remark}
+
+\begin{notation}
+设 $1\le p\le\infty$; 我们用 $p'$ 表示\emph{共轭指数},
+\begin{equation*}
+\boxed{\frac1p+\frac1{p'}=1.}
+\end{equation*}
+\end{notation}
+
+\index{Hlderbudengshi@Hölder 不等式 (Holder inequality)}
+\begin{keytheorem}[Hölder 不等式]
+\label{thm:4.6}
+假设 $f\in L^p$, $g\in L^{p'}$, 其中 $1\le p\le\infty$.则 $fg\in L^1$, 且
+\begin{equation}
+\boxed{\int\abs{fg}\le\norm{f}_p\norm{g}_{p'}.}
+\label{eq:4.1}
+\end{equation}
+\end{keytheorem}
+
+\begin{proof}
+若 $p=1$ 或 $p=\infty$, 结论显然; 因此设 $1<p<\infty$.我们回顾 Young 不等式:\footnote{有时方便使用
+的形式是 $ab\le\varepsilon a^p+C_\varepsilon b^{p'}$, 其中
+$C_\varepsilon=\varepsilon^{-1/(p-1)}$.}
+\begin{equation}
+\boxed{ab\le\frac1pa^p+\frac1{p'}b^{p'}\quad\forall a\ge0,\ \ \forall b\ge0.}
+\label{eq:4.2}
+\end{equation}
+不等式 \eqref{eq:4.2} 是函数 $\log$ 在 $(0,\infty)$ 上凹这一事实的直接推论:
+\begin{equation*}
+\log\Bigl(\frac1pa^p+\frac1{p'}b^{p'}\Bigr)\ge\frac1p\log a^p+\frac1{p'}\log b^{p'}
+=\log ab.
+\end{equation*}
+我们有
+\begin{equation*}
+\abs{f(x)g(x)}\le\frac1p\abs{f(x)}^p+\frac1{p'}\abs{g(x)}^{p'}\quad
+\text{a.e.}\ x\in\Omega.
+\end{equation*}
+由此推出 $fg\in L^1$, 且
+\begin{equation}
+\int\abs{fg}\le\frac1p\norm{f}_p^p+\frac1{p'}\norm{g}_{p'}^{p'}.
+\label{eq:4.3}
+\end{equation}
+在 \eqref{eq:4.3} 中把 $f$ 换成 $\lambda f$ ($\lambda>0$), 得到
+\begin{equation}
+\int\abs{fg}\le\frac{\lambda^{p-1}}{p}\norm{f}_p^p
++\frac1{\lambda^{p'}p'}\norm{g}_{p'}^{p'}.
+\label{eq:4.4}
+\end{equation}
+选取 $\lambda=\norm{f}_p^{-1}\norm{g}_{p'}^{p'/p}$ (使 \eqref{eq:4.4} 的右端达到
+最小), 即得 \eqref{eq:4.1}.
+\end{proof}
+
+\begin{remark}
+\label{rem:4.2}
+记住 Hölder 不等式的下述推广是有益的: 假设 $f_1,f_2,\dots,f_k$ 是满足
+\begin{equation*}
+f_i\in L^{p_i},\ \ 1\le i\le k,\quad\text{其中}\
+\frac1p=\frac1{p_1}+\frac1{p_2}+\cdots+\frac1{p_k}\le1
+\end{equation*}
+的函数.则乘积 $f=f_1f_2\cdots f_k$ 属于 $L^p$, 且
+\begin{equation*}
+\norm{f}_p\le\norm{f_1}_{p_1}\norm{f_2}_{p_2}\cdots\norm{f_k}_{p_k}.
+\end{equation*}
+特别地, 若 $f\in L^p\cap L^q$, 其中 $1\le p\le q\le\infty$, 则对一切满足
+$p\le r\le q$ 的 $r$ 都有 $f\in L^r$, 且下述``插值不等式''成立:
+\begin{equation*}
+\norm{f}_r\le\norm{f}_p^\alpha\norm{f}_q^{1-\alpha},\quad
+\text{其中}\ \frac1r=\frac\alpha p+\frac{1-\alpha}q,\ 0\le\alpha\le1;
+\end{equation*}
+参见习题 4.4.
+\end{remark}
+
+\begin{theorem}
+\label{thm:4.7}
+对任意的 $p$, $1\le p\le\infty$, $L^p$ 是向量空间, 且 $\norm{\cdot}_p$ 是一个范数.
+\end{theorem}
+
+\begin{proof}
+$p=1$ 与 $p=\infty$ 的情形是清楚的.因此设 $1<p<\infty$, 并设
+$f,g\in L^p$.我们有
+\begin{equation*}
+\abs{f(x)+g(x)}^p\le\bigl(\abs{f(x)}+\abs{g(x)}\bigr)^p
+\le2^p\bigl(\abs{f(x)}^p+\abs{g(x)}^p\bigr).
+\end{equation*}
+从而 $f+g\in L^p$.另一方面,
+\begin{equation*}
+\norm{f+g}_p^p=\int\abs{f+g}^{p-1}\abs{f+g}
+\le\int\abs{f+g}^{p-1}\abs{f}+\int\abs{f+g}^{p-1}\abs{g}.
+\end{equation*}
+但 $\abs{f+g}^{p-1}\in L^{p'}$, 由 Hölder 不等式得到
+\begin{equation*}
+\norm{f+g}_p^p\le\norm{f+g}_p^{p-1}\bigl(\norm{f}_p+\norm{g}_p\bigr),
+\end{equation*}
+即 $\norm{f+g}_p\le\norm{f}_p+\norm{g}_p$.
+\end{proof}
+
+\index{FischerRieszdingli@Fischer--Riesz 定理 (Fischer--Riesz theorem)}
+\begin{keytheorem}[Fischer--Riesz]
+\label{thm:4.8}
+对任意的 $p$, $1\le p\le\infty$, $L^p$ 是 Banach 空间.
+\end{keytheorem}
+
+\begin{proof}
+我们区分 $p=\infty$ 与 $1\le p<\infty$ 两种情形.
+
+\emph{情形 1: $p=\infty$.}设 $(f_n)$ 是 $L^\infty$ 中的 Cauchy 序列.给定整数
+$k\ge1$, 存在整数 $N_k$, 使得 $\norm{f_m-f_n}_\infty\le\frac1k$ 对一切
+$m,n\ge N_k$ 成立.于是存在零测集 $E_k$, 使得
+\begin{equation}
+\abs{f_m(x)-f_n(x)}\le\frac1k\quad\forall x\in\Omega\setminus E_k,\ \
+\forall m,n\ge N_k.
+\label{eq:4.5}
+\end{equation}
+再令 $E=\bigcup_kE_k$——于是 $E$ 是零测集——我们看出对一切
+$x\in\Omega\setminus E$, 序列 $f_n(x)$ 是 Cauchy 序列 (在 $\R$ 中).因此
+$f_n(x)\to f(x)$ 对一切 $x\in\Omega\setminus E$ 成立.在 \eqref{eq:4.5} 中令
+$m\to\infty$ 取极限, 得到
+\begin{equation*}
+\abs{f(x)-f_n(x)}\le\frac1k\quad\text{对一切}\ x\in\Omega\setminus E,\ \
+\forall n\ge N_k.
+\end{equation*}
+我们由此断定 $f\in L^\infty$, 且 $\norm{f-f_n}_\infty\le\frac1k$
+$\forall n\ge N_k$; 因此 $f_n\to f$ 在 $L^\infty$ 中.
+
+\emph{情形 2: $1\le p<\infty$.}设 $(f_n)$ 是 $L^p$ 中的 Cauchy 序列.为得出结论,
+只须证明某个子列在 $L^p$ 中收敛.
+
+我们抽取子列 $(f_{n_k})$, 使得
+\begin{equation*}
+\norm{f_{n_{k+1}}-f_{n_k}}_p\le\frac1{2^k}\quad\forall k\ge1.
+\end{equation*}
+[做法如下: 取 $n_1$ 使 $\norm{f_m-f_n}_p\le\frac12$ 对一切 $m,n\ge n_1$ 成立;
+再取 $n_2\ge n_1$ 使 $\norm{f_m-f_n}_p\le\frac1{2^2}$ 对一切 $m,n\ge n_2$
+成立, 等等.] 我们断言 $f_{n_k}$ 在 $L^p$ 中收敛.为简化记号, 把 $f_{n_k}$
+写成 $f_k$, 于是有
+\begin{equation}
+\norm{f_{k+1}-f_k}_p\le\frac1{2^k}\quad\forall k\ge1.
+\label{eq:4.6}
+\end{equation}
+令
+\begin{equation*}
+g_n(x)=\sum_{k=1}^n\abs{f_{k+1}(x)-f_k(x)},
+\end{equation*}
+于是
+\begin{equation*}
+\norm{g_n}_p\le1.
+\end{equation*}
+由单调收敛定理, $g_n(x)$ 在 $\Omega$ 上几乎处处趋于一个有限极限, 记作 $g(x)$,
+且 $g\in L^p$.另一方面, 对 $m\ge n\ge2$ 有
+\begin{equation*}
+\abs{f_m(x)-f_n(x)}\le\abs{f_m(x)-f_{m-1}(x)}+\cdots+\abs{f_{n+1}(x)-f_n(x)}
+\le g(x)-g_{n-1}(x).
+\end{equation*}
+由此推出 $f_n(x)$ 在 $\Omega$ 上几乎处处是 Cauchy 序列, 且收敛于一个有限极限,
+记作 $f(x)$.在 $\Omega$ 上几乎处处有
+\begin{equation}
+\abs{f(x)-f_n(x)}\le g(x)\quad\text{对}\ n\ge2,
+\label{eq:4.7}
+\end{equation}
+特别地 $f\in L^p$.最后, 由控制收敛定理推出 $\norm{f_n-f}_p\to0$, 因为
+$\abs{f_n(x)-f(x)}^p\to0$ 几乎处处成立, 且
+$\abs{f_n-f}^p\le g^p\in L^1$.
+\end{proof}
+
+\begin{theorem}
+\label{thm:4.9}
+设 $(f_n)$ 为 $L^p$ 中的序列, $f\in L^p$ 满足 $\norm{f_n-f}_p\to0$.
+则存在子列 $(f_{n_k})$ 与函数 $h\in L^p$, 使得
+\begin{enumerate}[label=(\alph*), leftmargin=2.2em, itemsep=0.1em]
+	\item $f_{n_k}(x)\to f(x)$ 在 $\Omega$ 上几乎处处成立,
+	\item $\abs{f_{n_k}(x)}\le h(x)\ \forall k$, 在 $\Omega$ 上几乎处处成立.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+当 $p=\infty$ 时结论显然.因此设 $1\le p<\infty$.由于 $(f_n)$ 是 Cauchy 序列,
+我们可以回到定理  \ref{thm:4.8} 的证明, 考虑一个子列 $(f_{n_k})$——记作
+$(f_k)$——它满足 \eqref{eq:4.6}, 并且 $f_k(x)$ 几乎处处收敛于一个极限\footnote{先验地,
+应当把 $f$ 与 $f^\star$ 区分开: 按假设 $f_n\to f$ 在 $L^p$ 中, 而另一方面
+$f_{n_k}(x)\to f^\star(x)$ 几乎处处成立.} $f^\star(x)$, 其中 $f^\star\in L^p$.
+此外, 由 \eqref{eq:4.7} 有 $\abs{f^\star(x)-f_k(x)}\le g(x)\ \forall k$, 在
+$\Omega$ 上几乎处处成立, 其中 $g\in L^p$.由控制收敛定理知 $f_k\to f^\star$ 在
+$L^p$ 中, 从而 $f=f^\star$ 几乎处处成立.此外还有
+$\abs{f_k(x)}\le\abs{f^\star(x)}+g(x)$, 结论随之成立.
+\end{proof}
+
+\section{自反性. 可分性. $L^p$ 的对偶}
+\label{sec:4.3}
+
+我们分别考虑以下三种情形:
+\begin{enumerate}[label=(\Alph*), leftmargin=2.6em, itemsep=0.1em]
+	\item $1<p<\infty$,
+	\item $p=1$,
+	\item $p=\infty$.
+\end{enumerate}
+
+\subsection*{A. $1<p<\infty$ 时 $L^p(\Omega)$ 的研究}
+
+这种情形最为``有利'': $L^p$ 是自反的, 可分的, 且 $L^p$ 的对偶是 $L^{p'}$.
+
+\begin{keytheorem}
+\label{thm:4.10}
+对任意的 $p$, $1<p<\infty$, $L^p$ 是自反的.
+\end{keytheorem}
+
+证明分三步.
+
+\runin{第 1 步 (Clarkson 第一不等式).}
+设 $2\le p<\infty$.我们断言
+\begin{equation}
+\Bigl\|\frac{f+g}2\Bigr\|_p^p+\Bigl\|\frac{f-g}2\Bigr\|_p^p
+\le\frac12\bigl(\norm{f}_p^p+\norm{g}_p^p\bigr)\quad\forall f,g\in L^p.
+\label{eq:4.8}
+\end{equation}
+
+\emph{\eqref{eq:4.8} 的证明.}显然只须证明
+\begin{equation*}
+\Bigl|\frac{a+b}2\Bigr|^p+\Bigl|\frac{a-b}2\Bigr|^p
+\le\frac12\bigl(\abs{a}^p+\abs{b}^p\bigr)\quad\forall a,b\in\R.
+\end{equation*}
+首先注意
+\begin{equation*}
+\alpha^p+\beta^p\le(\alpha^2+\beta^2)^{p/2}\quad\forall\alpha,\beta\ge0
+\end{equation*}
+(由齐性可设 $\beta=1$, 并注意函数 $(x^2+1)^{p/2}-x^p-1$ 在 $[0,\infty)$ 上
+递增).取 $\alpha=\bigl|\frac{a+b}2\bigr|$, $\beta=\bigl|\frac{a-b}2\bigr|$,
+得到
+\begin{equation*}
+\begin{aligned}
+\Bigl|\frac{a+b}2\Bigr|^p+\Bigl|\frac{a-b}2\Bigr|^p
+&\le\Bigl[\Bigl|\frac{a+b}2\Bigr|^2+\Bigl|\frac{a-b}2\Bigr|^2\Bigr]^{p/2}
+=\Bigl(\frac{a^2}2+\frac{b^2}2\Bigr)^{p/2}\\
+&\le\frac12\bigl(\abs{a}^p+\abs{b}^p\bigr)
+\end{aligned}
+\end{equation*}
+(最后一个不等式来自函数 $x\mapsto\abs{x}^{p/2}$ 的凸性, 因为 $p\ge2$).
+
+\runin{第 2 步: $2\le p<\infty$ 时 $L^p$ 一致凸, 从而自反.}
+事实上, 设 $\varepsilon>0$, $f,g\in L^p$, 满足 $\norm{f}_p\le1$, $\norm{g}_p\le1$, 且 $\norm{f-g}_p>\varepsilon$.由 \eqref{eq:4.8} 推出
+\begin{equation*}
+\Bigl\|\frac{f+g}2\Bigr\|_p^p<1-\Bigl(\frac\varepsilon2\Bigr)^p,
+\end{equation*}
+从而 $\bigl\|\frac{f+g}2\bigr\|_p<1-\delta$, 其中
+$\delta=1-\bigl[1-\bigl(\frac\varepsilon2\bigr)^p\bigr]^{1/p}>0$.因此 $L^p$ 一致凸,
+由定理  \ref{thm:3.31} 知它自反.
+
+\runin{第 3 步: $1<p\le2$ 时 $L^p$ 自反.}
+
+\begin{proof}
+设 $1<p<\infty$.考虑如下定义的算子 $T:L^p\to(L^{p'})^\star$: 固定
+$u\in L^p$; 映射 $f\in L^{p'}\mapsto\int uf$ 是 $L^{p'}$ 上的连续线性泛函,
+因此它定义了 $(L^{p'})^\star$ 中的一个元素, 记作 $Tu$, 使得
+\begin{equation*}
+\dual{Tu}{f}=\int uf\quad\forall f\in L^{p'}.
+\end{equation*}
+我们断言
+\begin{equation}
+\norm{Tu}_{(L^{p'})^\star}=\norm{u}_p\quad\forall u\in L^p.
+\label{eq:4.9}
+\end{equation}
+事实上, 由 Hölder 不等式有
+\begin{equation*}
+\abs{\dual{Tu}{f}}\le\norm{u}_p\norm{f}_{p'}\quad\forall f\in L^{p'},
+\end{equation*}
+因此 $\norm{Tu}_{(L^{p'})^\star}\le\norm{u}_p$.
+
+另一方面, 令
+\begin{equation*}
+f_0(x)=\abs{u(x)}^{p-2}u(x)
+\end{equation*}
+(若 $u(x)=0$ 则 $f_0(x)=0$).显然
+\begin{equation*}
+f_0\in L^{p'},\quad\norm{f_0}_{p'}=\norm{u}_p^{p-1},
+\quad\text{且}\quad\dual{Tu}{f_0}=\norm{u}_p^p;
+\end{equation*}
+于是
+\begin{equation}
+\norm{Tu}_{(L^{p'})^\star}\ge\frac{\dual{Tu}{f_0}}{\norm{f_0}_{p'}}
+=\norm{u}_p.
+\label{eq:4.10}
+\end{equation}
+因此我们证明了 $T$ 是从 $L^p$ 到 $(L^{p'})^\star$ 的等距映射, 这意味着
+$T(L^p)$ 是 $(L^{p'})^\star$ 的闭子空间 (因为 $L^p$ 是 Banach 空间).
+
+现在设 $1<p\le2$.由于 $L^{p'}$ 自反 (由第 2 步), 故 $(L^{p'})^\star$ 也自反
+(推论  \ref{cor:3.21}).由命题  \ref{prop:3.20} 断定 $T(L^p)$ 自反, 从而 $L^p$
+也自反.
+\end{proof}
+
+\begin{remark}
+\label{rem:4.3}
+事实上, $1<p\le2$ 时 $L^p$ 也是一致凸的.这是 Clarkson 第二不等式的推论, 该不等式
+对 $1<p\le2$ 成立:
+\begin{equation*}
+\Bigl\|\frac{f+g}2\Bigr\|_{p'}^p+\Bigl\|\frac{f-g}2\Bigr\|_{p'}^p
+\le\Bigl(\frac12\norm{f}_p^p+\frac12\norm{g}_p^p\Bigr)^{1/(p-1)}
+\quad\forall f,g\in L^p.
+\end{equation*}
+这个不等式比 Clarkson 第一不等式更难证明 (参见例如问题 20 或
+E.~Hewitt--K.~Stromberg \bref{HewittStromberg}{1}).显然, 它蕴涵 $1<p\le2$ 时
+$L^p$ 一致凸; 另一种方法参见 C.~Morawetz \bref{Morawetz}{1} (习题 4.12) 或
+J.~Diestel \bref{Diestel}{1}.
+\end{remark}
+
+\begin{keytheorem}[Riesz 表示定理]
+\label{thm:4.11}
+设 $1<p<\infty$, $\varphi\in(L^p)^\star$.则存在唯一的函数 $u\in L^{p'}$,
+使得
+\begin{equation*}
+\dual{\varphi}{f}=\int uf\quad\forall f\in L^p.
+\end{equation*}
+此外,
+\begin{equation*}
+\norm{u}_{p'}=\norm{\varphi}_{(L^p)^\star}.
+\end{equation*}
+\end{keytheorem}
+
+\begin{remark}
+\label{rem:4.4}
+定理  \ref{thm:4.11} 非常重要.它说明 $1<p<\infty$ 时 $L^p$ 上的每个连续线性泛函
+都可以``具体地''表示为一个积分.映射 $\varphi\mapsto u$ 是一个线性满等距, 它使
+我们能够把``抽象''空间 $(L^p)^\star$ 与 $L^{p'}$ 等同起来.
+
+在下文中, 我们将系统地作等同
+\begin{equation*}
+\boxed{(L^p)^\star=L^{p'}.}
+\end{equation*}
+\end{remark}
+
+\begin{proof}
+考虑由 $\dual{Tu}{f}=\int uf\ \forall u\in L^{p'},\ \forall f\in L^p$ 定义的
+算子 $T:L^{p'}\to(L^p)^\star$.定理  \ref{thm:4.10} 证明 (第 3 步) 中所用的论证
+表明
+\begin{equation*}
+\norm{Tu}_{(L^p)^\star}=\norm{u}_{p'}\quad\forall u\in L^{p'}.
+\end{equation*}
+我们断言 $T$ 是满射.事实上, 令 $E=T(L^{p'})$.由于 $E$ 是闭子空间, 只须证明
+$E$ 在 $(L^p)^\star$ 中稠密.设 $h\in(L^p)^{\star\star}$ 满足
+$\dual{h}{Tu}=0\ \forall u\in L^{p'}$.由于 $L^p$ 自反, $h\in L^p$, 且满足
+$\int uh=0\ \forall u\in L^{p'}$.取 $u=\abs{h}^{p-2}h$, 即得 $h=0$.
+\end{proof}
+
+\begin{theorem}
+\label{thm:4.12}
+对任意的 $p$, $1\le p<\infty$, 空间 $C_c(\R^N)$ 在 $L^p(\R^N)$ 中稠密.
+\end{theorem}
+
+在证明定理  \ref{thm:4.12} 之前, 先引入一些记号.
+
+\begin{notation}
+\emph{截断}运算 $T_n:\R\to\R$ 定义为
+\begin{equation*}
+T_nr=\begin{cases}
+r & \text{若}\ \abs{r}\le n,\\[2pt]
+\dfrac{nr}{\abs{r}} & \text{若}\ \abs{r}>n.
+\end{cases}
+\end{equation*}
+给定集合 $E\subset\Omega$, 定义\emph{特征函数}\footnote{不要与第~
+\ref{chap:1}~章引入的示性函数
+$I_E$ 混淆.} $\chi_E$ 为
+\begin{equation*}
+\chi_E(x)=\begin{cases}
+1 & \text{若}\ x\in E,\\
+0 & \text{若}\ x\in\Omega\setminus E.
+\end{cases}
+\end{equation*}
+\end{notation}
+
+\begin{proof}
+首先我们断言: 给定 $f\in L^p(\R^N)$ 与 $\varepsilon>0$, 存在函数
+$g\in L^\infty(\R^N)$ 与 $\R^N$ 中的紧集 $K$, 使得 $g$ 在 $K$ 之外为零, 且
+\begin{equation}
+\norm{f-g}_p<\varepsilon.
+\label{eq:4.11}
+\end{equation}
+事实上, 设 $\chi_n$ 为 $B(0,n)$ 的特征函数, 令 $f_n=\chi_nT_nf$.由控制收敛定理
+看出 $\norm{f_n-f}_p\to0$, 因此可以取 $n$ 足够大的 $g=f_n$.其次, 给定
+$\delta>0$, 由定理  \ref{thm:4.3} 存在 $g_1\in C_c(\R^N)$, 使得
+\begin{equation*}
+\norm{g-g_1}_1<\delta.
+\end{equation*}
+我们总可以假设 $\norm{g_1}_\infty\le\norm{g}_\infty$; 否则用 $T_ng_1$ 代替
+$g_1$, 其中 $n=\norm{g}_\infty$.最后有
+\begin{equation*}
+\norm{g-g_1}_p\le\norm{g-g_1}_1^{1/p}\norm{g-g_1}_\infty^{1-(1/p)}
+\le\delta^{1/p}\bigl(2\norm{g}_\infty\bigr)^{1-(1/p)}.
+\end{equation*}
+选取 $\delta>0$ 足够小, 使
+\begin{equation*}
+\delta^{1/p}\bigl(2\norm{g}_\infty\bigr)^{1-(1/p)}<\varepsilon,
+\end{equation*}
+即得结论.
+\end{proof}
+
+\begin{definition}
+若存在 $\mathcal{M}$ 中成员构成的可数族 $(E_n)$, 使得由 $(E_n)$ 生成的
+$\sigma$-代数与 $\mathcal{M}$ 重合 (即 $\mathcal{M}$ 是包含一切 $E_n$ 的最小
+$\sigma$-代数), 则称测度空间 $\Omega$ 是\emph{可分的}.
+\end{definition}
+
+\begin{example}
+测度空间 $\Omega=\R^N$ 是可分的.事实上, 对 $(E_n)$ 可以取任意一族可数个开集,
+使得 $\R^N$ 中每个开集都能写成这些 $E_n$ 的并.更一般地, 若 $\Omega$ 是可分度量
+空间, 而 $\mathcal{M}$ 由 Borel 集组成 (即 $\mathcal{M}$ 是由 $\Omega$ 中的开集
+生成的 $\sigma$-代数), 则 $\Omega$ 是可分测度空间.
+\end{example}
+
+\begin{theorem}
+\label{thm:4.13}
+假设 $\Omega$ 是可分测度空间.则对任意的 $p$, $1\le p<\infty$,
+$L^p(\Omega)$ 是可分的.
+\end{theorem}
+
+我们只考虑 $\Omega=\R^N$ 的情形, 因为一般情形稍嫌麻烦.注意, 作为推论,
+对任意可测集 $\Omega\subset\R^N$, $L^p(\Omega)$ 也是可分的.事实上, 存在从
+$L^p(\Omega)$ 到 $L^p(\R^N)$ 的典范等距 (在 $\Omega$ 外作零延拓); 因此可以把
+$L^p(\Omega)$ 与 $L^p(\R^N)$ 的一个子空间等同起来, 从而 $L^p(\Omega)$ 可分
+(由命题  \ref{prop:3.25}).
+
+\begin{proof}[定理 \ref{thm:4.13}, $\Omega=\R^N$ 的情形]
+用 $\mathcal{R}$ 表示 $\R^N$ 中形如
+$R=\prod_{k=1}^N(a_k,b_k)$ ($a_k,b_k\in\Q$) 的集合构成的可数族.用 $E$ 表示由
+函数族 $(\chi_R)_{R\in\mathcal{R}}$ 在 $\Q$ 上生成的向量空间, 即 $E$ 由函数
+$\chi_R$ 的, 系数为有理数的有限线性组合组成, 因此 $E$ 是可数的.
+
+我们断言 $E$ 在 $L^p(\R^N)$ 中稠密.事实上, 给定 $f\in L^p(\R^N)$ 与
+$\varepsilon>0$, 存在 $f_1\in C_c(\R^N)$, 使得 $\norm{f-f_1}_p<\varepsilon$.
+取 $R\in\mathcal{R}$ 为任一包含 $\operatorname{supp}f_1$ ($f_1$ 的支集) 的方体.
+给定 $\delta>0$, 容易构造 $f_2\in E$, 使得 $\norm{f_1-f_2}_\infty<\delta$, 且
+$f_2$ 在 $R$ 之外为零: 只须把 $R$ 分成 $\mathcal{R}$ 中的小方体, 使 $f_1$ 在
+每个小方体上的振幅 (即 $\sup-\inf$) 小于 $\delta$.因此
+$\norm{f_1-f_2}_p\le\norm{f_1-f_2}_\infty\abs{R}^{1/p}<\delta\abs{R}^{1/p}$.
+只要选取 $\delta>0$ 使 $\delta\abs{R}^{1/p}<\varepsilon$, 便得到
+$\norm{f-f_2}_p<2\varepsilon$.
+\end{proof}
+
+\subsection*{B. $L^1(\Omega)$ 的研究}
+
+我们先描述 $L^1(\Omega)$ 的对偶空间.
+
+\begin{keytheorem}[Riesz 表示定理]
+\label{thm:4.14}
+设 $\varphi\in(L^1)^\star$.则存在唯一的函数 $u\in L^\infty$, 使得
+\begin{equation*}
+\dual{\varphi}{f}=\int uf\quad\forall f\in L^1.
+\end{equation*}
+此外,
+\begin{equation*}
+\norm{u}_\infty=\norm{\varphi}_{(L^1)^\star}.
+\end{equation*}
+\end{keytheorem}
+
+\begin{keyremark}
+\label{rem:4.5}
+定理  \ref{thm:4.14} 断言 $L^1$ 上的每个连续线性泛函都可以``具体地''表示为一个
+积分.映射 $\varphi\mapsto u$ 是一个线性满等距, 它使我们能够把``抽象''空间
+$(L^1)^\star$ 与 $L^\infty$ 等同起来.在下文中, 我们将系统地作等同
+\begin{equation*}
+\boxed{(L^1)^\star=L^\infty.}
+\end{equation*}
+\end{keyremark}
+
+\begin{proof}
+设 $(\Omega_n)$ 为 $\Omega$ 中的可测集序列, 使得
+$\Omega=\bigcup_{n=1}^\infty\Omega_n$ 且 $\abs{\Omega_n}<\infty\ \forall n$.令
+$\chi_n=\chi_{\Omega_n}$.
+
+$u$ 的唯一性是显然的.事实上, 设 $u\in L^\infty$ 满足
+\begin{equation*}
+\int uf=0\quad\forall f\in L^1.
+\end{equation*}
+取 $f=\chi_n\operatorname{sign}u$ (本书通篇采用约定 $\operatorname{sign}0=0$),
+即得 $u=0$ 在 $\Omega_n$ 上几乎处处成立, 从而 $u=0$ 在 $\Omega$ 上几乎处处成立.
+
+现在证明 $u$ 的存在性.首先, 我们构造一个函数 $\theta\in L^2(\Omega)$, 使得
+\begin{equation*}
+\theta(x)\ge\varepsilon_n>0\quad\forall x\in\Omega_n.
+\end{equation*}
+这样的函数 $\theta$ 的存在性是清楚的.事实上, 令 $\theta$ 在 $\Omega_1$ 上等于
+$\alpha_1$, 在 $\Omega_2\setminus\Omega_1$ 上等于 $\alpha_2$, …, 在
+$\Omega_n\setminus\Omega_{n-1}$ 上等于 $\alpha_n$, 等等, 并调整常数
+$\alpha_n>0$ 使 $\theta\in L^2$.
+
+映射 $f\in L^2(\Omega)\mapsto\dual{\varphi}{\theta f}$ 是 $L^2(\Omega)$ 上的连续
+线性泛函.由定理  \ref{thm:4.11} (取 $p=2$) 存在函数 $v\in L^2(\Omega)$, 使得
+\begin{equation}
+\dual{\varphi}{\theta f}=\int vf\quad\forall f\in L^2(\Omega).
+\label{eq:4.12}
+\end{equation}
+令 $u(x)=v(x)/\theta(x)$.显然 $u$ 有定义, 因为 $\theta>0$ 在 $\Omega$ 上; 此外
+$u$ 可测, 且 $u\chi_n\in L^2(\Omega)$.我们断言 $u$ 具有一切所需的性质.有
+\begin{equation}
+\dual{\varphi}{\chi_ng}=\int u\chi_ng\quad\forall g\in L^\infty(\Omega)\ \ \forall n.
+\label{eq:4.13}
+\end{equation}
+事实上, 只须在 \eqref{eq:4.12} 中取 $f=\chi_ng/\theta$ (注意 $f\in L^2(\Omega)$,
+因为 $f$ 在 $\Omega_n$ 上有界且在 $\Omega_n$ 外为零).
+
+其次, 我们断言 $u\in L^\infty(\Omega)$, 且
+\begin{equation}
+\norm{u}_\infty\le\norm{\varphi}_{(L^1)^\star}.
+\label{eq:4.14}
+\end{equation}
+固定任一常数 $C>\norm{\varphi}_{(L^1)^\star}$, 并令
+\begin{equation*}
+A=\{x\in\Omega;\ \abs{u(x)}>C\}.
+\end{equation*}
+我们来验证 $A$ 是零测集.事实上, 在 \eqref{eq:4.13} 中取
+$g=\chi_A\operatorname{sign}u$, 得到
+\begin{equation*}
+\int_{A\cap\Omega_n}\abs{u}\le\norm{\varphi}_{(L^1)^\star}\abs{A\cap\Omega_n},
+\end{equation*}
+从而
+\begin{equation*}
+C\abs{A\cap\Omega_n}\le\norm{\varphi}_{(L^1)^\star}\abs{A\cap\Omega_n}.
+\end{equation*}
+由此推出 $\abs{A\cap\Omega_n}=0\ \forall n$, 从而 $A$ 是零测集.\eqref{eq:4.14}
+的证明至此完成.
+
+最后, 我们断言
+\begin{equation}
+\dual{\varphi}{h}=\int uh\quad\forall h\in L^1(\Omega).
+\label{eq:4.15}
+\end{equation}
+事实上, 只须在 \eqref{eq:4.13} 中取 $g=T_nh$ ($h$ 的截断), 并注意
+$\chi_nT_nh\to h$ 在 $L^1(\Omega)$ 中.
+
+为完成定理  \ref{thm:4.14} 的证明, 只剩验证
+$\norm{u}_\infty=\norm{\varphi}_{(L^1)^\star}$.由 \eqref{eq:4.15} 有
+\begin{equation*}
+\abs{\dual{\varphi}{h}}\le\norm{u}_\infty\norm{h}_1\quad\forall h\in L^1(\Omega),
+\end{equation*}
+因此 $\norm{\varphi}_{(L^1)^\star}\le\norm{u}_\infty$.再结合 \eqref{eq:4.14}
+即得结论.
+\end{proof}
+
+\begin{keyremark}
+\label{rem:4.6}
+除 $\Omega$ 由有限个原子组成这一平凡情形 (此时 $L^1(\Omega)$ 是有限维的) 之外,
+空间 $L^1(\Omega)$ 绝不是自反的.事实上, 反设 $L^1(\Omega)$ 自反, 并考虑两种
+情形:
+\begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.1em]
+	\item $\forall\varepsilon>0\ \exists\omega\subset\Omega$ 可测, 使
+	      $0<\mu(\omega)<\varepsilon$.
+	\item $\exists\varepsilon>0$, 使得对一切满足 $\mu(\omega)>0$ 的可测集
+	      $\omega\subset\Omega$ 都有 $\mu(\omega)\ge\varepsilon$.
+\end{enumerate}
+在情形 (i) 中, 存在可测集的递减序列 $(\omega_n)$, 使得
+$\mu(\omega_n)>0\ \forall n$ 且 $\mu(\omega_n)\to0$ [先任取序列
+$(\omega'_k)$, 使 $0<\mu(\omega'_k)<1/2^k$, 再令
+$\omega_n=\bigcup_{k=n}^\infty\omega'_k$].令 $\chi_n=\chi_{\omega_n}$, 并定义
+$u_n=\chi_n/\norm{\chi_n}_1$.由于 $\norm{u_n}_1=1$, 存在子列——仍记作 $u_n$
+——以及某个 $u\in L^1$, 使得 $u_n\weakto u$ 在弱拓扑 $\sigma(L^1,L^\infty)$ 中
+(由定理  \ref{thm:3.18}), 即
+\begin{equation}
+\int u_n\varphi\to\int u\varphi\quad\forall\varphi\in L^\infty.
+\label{eq:4.16}
+\end{equation}
+另一方面, 对固定的 $j$ 与 $n>j$ 有 $\int u_n\chi_j=1$.令 $n\to\infty$ 取极限,
+得到 $\int u\chi_j=1\ \forall j$.最后注意 (由控制收敛定理)
+$\int u\chi_j\to0$ 当 $j\to\infty$——矛盾.
+
+在情形 (ii) 中, 空间 $\Omega$ 是纯原子的, 且由可数个互不相同的原子 $(a_n)$ 的并
+组成 (除非只有有限个原子!).此时 $L^1(\Omega)$ 同构于 $\ell^1$, 故只须证明
+$\ell^1$ 不自反.考虑典范基:
+\begin{equation*}
+e_n=(0,0,\dots,\underset{(n)}1,0,0\dots).
+\end{equation*}
+假设 $\ell^1$ 自反, 则存在子列 $(e_{n_k})$ 与某个 $x\in\ell^1$, 使得
+$e_{n_k}\weakto x$ 在弱拓扑 $\sigma(\ell^1,\ell^\infty)$ 中, 即
+\begin{equation*}
+\dual{\varphi}{e_{n_k}}\xrightarrow[k\to\infty]{}\dual{\varphi}{x}
+\quad\forall\varphi\in\ell^\infty.
+\end{equation*}
+取
+\begin{equation*}
+\varphi=\varphi_j=(0,0,\dots,\underset{(j)}1,1,1,\dots),
+\end{equation*}
+便得到 $\dual{\varphi_j}{x}=1\ \forall j$.另一方面, 当 $j\to\infty$ 时
+$\dual{\varphi_j}{x}\to0$ (因为 $x\in\ell^1$)——矛盾.
+\end{keyremark}
+
+\subsection*{C. $L^\infty$ 的研究}
+
+我们已经知道 (定理  \ref{thm:4.14}) $L^\infty=(L^1)^\star$.作为对偶空间,
+$L^\infty$ 享有若干良好的性质.特别地, 有:
+
+\begin{enumerate}[label=(\roman*), leftmargin=2.6em, itemsep=0.2em]
+	\item 闭单位球 $B_{L^\infty}$ 在\wstar{}拓扑 $\sigma(L^\infty,L^1)$ 中紧
+	      (由定理  \ref{thm:3.16}).
+	\item 若 $\Omega$ 是 $\R^N$ 中的可测子集, $(f_n)$ 是 $L^\infty(\Omega)$ 中的
+	      有界序列, 则存在子列 $(f_{n_k})$ 与某个 $f\in L^\infty(\Omega)$, 使得
+	      $f_{n_k}\weakstar f$ 在\wstar{}拓扑 $\sigma(L^\infty,L^1)$ 中 (这是推论
+	       \ref{cor:3.30} 与定理  \ref{thm:4.13} 的推论).
+\end{enumerate}
+
+然而, 除 $\Omega$ 由有限个原子组成这一平凡情形外, $L^\infty(\Omega)$ 不自反;
+否则 $L^1(\Omega)$ 将自反 (由推论  \ref{cor:3.21}), 而我们知道 $L^1$ 不自反
+(注记 \ref{rem:4.6}).由此推出 $L^\infty$ 的对偶空间 $(L^\infty)^\star$ 包含
+$L^1$ (因为 $L^\infty=(L^1)^\star$), 且 $(L^\infty)^\star$ 严格大于 $L^1$.
+换言之, 存在 $L^\infty$ 上的连续线性泛函 $\varphi$, 它们不能表示为
+\begin{equation*}
+\dual{\varphi}{f}=\int uf\quad\forall f\in L^\infty
+\end{equation*}
+的形式, 其中 $u\in L^1$.
+
+事实上, 我们来描述这样一个泛函的``具体''例子.令
+$\varphi_0:C_c(\R^N)\to\R$ 定义为
+\begin{equation*}
+\varphi_0(f)=f(0)\quad\text{对}\ f\in C_c(\R^N).
+\end{equation*}
+显然 $\varphi_0$ 是 $C_c(\R^N)$ 上关于 $\norm{\cdot}_\infty$ 范数的连续线性
+泛函.由 Hahn--Banach 定理, 可以把 $\varphi_0$ 延拓为 $L^\infty(\R^N)$ 上的
+连续线性泛函 $\varphi$, 并且有
+\begin{equation}
+\dual{\varphi}{f}=f(0)\quad\forall f\in C_c(\R^N).
+\label{eq:4.17}
+\end{equation}
+我们来验证不存在函数 $u\in L^1(\R^N)$ 使得
+\begin{equation}
+\dual{\varphi}{f}=\int uf\quad\forall f\in L^\infty(\R^N).
+\label{eq:4.18}
+\end{equation}
+反设这样的函数 $u$ 存在.由 \eqref{eq:4.17} 与 \eqref{eq:4.18} 推出
+\begin{equation*}
+\int uf=0\quad\forall f\in C_c(\R^N)\ \text{且}\ f(0)=0.
+\end{equation*}
+对 $\Omega=\R^N\setminus\{0\}$ 应用推论  \ref{cor:4.24}, 看出 $u=0$ 在
+$\R^N\setminus\{0\}$ 上几乎处处成立, 从而 $u=0$ 在 $\R^N$ 上几乎处处成立.
+由 \eqref{eq:4.18} 断定
+\begin{equation*}
+\dual{\varphi}{f}=0\quad\forall f\in L^\infty(\R^N),
+\end{equation*}
+这与 \eqref{eq:4.17} 矛盾.
+
+\begin{starremark}
+\label{rem:4.7}
+$L^\infty$ 的对偶空间与 $L^1$ 并不重合, 但我们仍可以问: $(L^\infty)^\star$ 究竟
+是什么样子? 为此, 把 $L^\infty(\Omega;\CC)$ 看作交换 $C^\star$-代数是有益的
+(参见例如 W.~Rudin \bref{Rudin}{1}).由 Gelfand 定理,
+$L^\infty(\Omega;\CC)$ 同构且等距于某个紧拓扑空间 $K$ 上连续复值函数构成的空间
+$C(K;\CC)$ ($K$ 是代数 $L^\infty$ 的谱; 除 $\Omega$ 由有限个原子组成的情形外,
+$K$ 不可度量化).因此 $(L^\infty(\Omega;\CC))^\star$ 可以等同于 $K$ 上的复值
+Radon 测度构成的空间, 而 $(L^\infty(\Omega;\R))^\star$ 可以等同于 $K$ 上的实值
+Radon 测度构成的空间; 更多细节见本章末评注 3, W.~Rudin \bref{Rudin}{1} 以及
+K.~Yosida \bref{Yosida}{1} (第 118 页).
+\end{starremark}
+
+\begin{remark}
+\label{rem:4.8}
+除 $\Omega$ 由有限个原子组成的情形外, 空间 $L^\infty(\Omega)$ 不可分.为证明
+这一事实, 使用下述结论是方便的.
+\end{remark}
+
+\begin{lemma}
+\label{lem:4.2}
+设 $E$ 为 Banach 空间.假设存在族 $(O_i)_{i\in I}$, 使得
+\begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.1em]
+	\item 对每个 $i\in I$, $O_i$ 是 $E$ 的非空开子集,
+	\item 若 $i\ne j$ 则 $O_i\cap O_j=\emptyset$,
+	\item $I$ 不可数.
+\end{enumerate}
+则 $E$ 不可分.
+\end{lemma}
+
+\begin{proof}[引理 \ref{lem:4.2}]
+反设 $E$ 可分.用 $(u_n)_{n\in\N}$ 表示 $E$ 中一个可数稠密集.对每个
+$i\in I$, 集合 $O_i\cap(u_n)_{n\in\N}\ne\emptyset$, 故可以选取 $n(i)$ 使
+$u_{n(i)}\in O_i$.映射 $i\mapsto n(i)$ 是单射; 事实上, 若 $n(i)=n(j)$, 则
+$u_{n(i)}=u_{n(j)}\in O_i\cap O_j$, 从而 $i=j$.因此 $I$ 可数——矛盾.
+\end{proof}
+
+现在证明 $L^\infty(\Omega)$ 不可分.我们断言存在 $\Omega$ 中可测集构成的不可数族
+$(\omega_i)_{i\in I}$, 其中各集合互不相同, 即当 $i\ne j$ 时对称差
+$\omega_i\triangle\omega_j$ 的测度为正.然后对由
+\begin{equation*}
+O_i=\{f\in L^\infty(\Omega);\ \norm{f-\chi_{\omega_i}}_\infty<1/2\}
+\end{equation*}
+定义的族 $(O_i)_{i\in I}$ 应用引理  \ref{lem:4.2} 即得结论 (注意: 若 $\omega$ 与
+$\omega'$ 互不相同, 则 $\norm{\chi_\omega-\chi_{\omega'}}_\infty=1$).当 $\Omega$
+是 $\R^N$ 中的开集时, 不可数族 $(\omega_i)$ 的存在性是显然的, 因为可以考虑所有
+球 $B(x_0,r)$, 其中 $x_0\in\Omega$ 而 $r>0$ 足够小.
+
+当 $\Omega$ 是一般的测度空间时, 把 $\Omega$ 分成它的原子部分 $\Omega_a$ 与非原子
+(= 弥散) 部分 $\Omega_d$; 然后区分两种情形:
+\begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.1em]
+	\item $\Omega_d$ 不是零测集.
+	\item $\Omega_d$ 是零测集.
+\end{enumerate}
+在情形 (i) 中, 对每个实数 $t$, $0<t<\mu(\Omega_d)$, 存在可测集 $\omega$ 使
+$\mu(\omega)=t$; 参见例如 P.~Halmos \bref{Halmos}{1}, A.~J.~Weir \bref{Weir}{1}
+或 J.~Neveu \bref{Neveu}{1}.这样就得到一个不可数的, 互不相同的可测集族.
+
+在情形 (ii) 中, $\Omega$ 由可数个互不相同的原子 $(a_n)$ 的并组成 (除非 $\Omega$
+由有限个原子组成).对任意整数集合 $A\subset\N$, 定义
+$\omega_A=\bigcup_{n\in A}a_n$.显然 $(\omega_A)$ 是一个不可数的, 互不相同的
+可测集族.
+
+下表总结了 $\Omega$ 为 $\R^N$ 的可测子集时空间 $L^p(\Omega)$ 的主要性质:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{|c|c|c|c|}
+\hline
+ & 自反 & 可分 & 对偶空间 \\
+\hline
+$L^p$, $1<p<\infty$ & 是 & 是 & $L^{p'}$ \\
+\hline
+$L^1$ & 否 & 是 & $L^\infty$ \\
+\hline
+$L^\infty$ & 否 & 否 & 严格大于 $L^1$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{卷积与正则化}
+\label{sec:4.4}
+
+我们先定义函数 $f\in L^1(\R^N)$ 与函数 $g\in L^p(\R^N)$ 的卷积乘积.
+
+\begin{keytheorem}[Young]
+\label{thm:4.15}
+设 $f\in L^1(\R^N)$, $g\in L^p(\R^N)$, 其中 $1\le p\le\infty$.则对几乎所有的
+$x\in\R^N$, 函数 $y\mapsto f(x-y)g(y)$ 在 $\R^N$ 上可积, 且我们定义
+\begin{equation*}
+\boxed{(f\star g)(x)=\int_{\R^N}f(x-y)g(y)\,dy.}
+\end{equation*}
+此外 $f\star g\in L^p(\R^N)$, 且
+\begin{equation*}
+\boxed{\norm{f\star g}_p\le\norm{f}_1\norm{g}_p.}
+\end{equation*}
+\end{keytheorem}
+
+\begin{proof}
+当 $p=\infty$ 时结论显然.考虑两种情形: (i) $p=1$, (ii) $1<p<\infty$.
+
+\emph{情形 (i): $p=1$.}令 $F(x,y)=f(x-y)g(y)$.对几乎所有的 $y\in\R^N$ 有
+\begin{equation*}
+\int_{\R^N}\abs{F(x,y)}\,dx=\abs{g(y)}\int_{\R^N}\abs{f(x-y)}\,dx
+=\abs{g(y)}\norm{f}_1<\infty,
+\end{equation*}
+并且
+\begin{equation*}
+\int_{\R^N}dy\int_{\R^N}\abs{F(x,y)}\,dx=\norm{g}_1\norm{f}_1<\infty.
+\end{equation*}
+由 Tonelli 定理 (定理  \ref{thm:4.4}) 推出 $F\in L^1(\R^N\times\R^N)$.应用
+Fubini 定理 (定理  \ref{thm:4.5}), 看出
+\begin{equation*}
+\int_{\R^N}\abs{F(x,y)}\,dy<\infty\quad\text{对几乎所有的}\ x\in\R^N,
+\end{equation*}
+并且
+\begin{equation*}
+\int_{\R^N}dx\int_{\R^N}\abs{F(x,y)}\,dy
+=\int_{\R^N}dy\int_{\R^N}\abs{F(x,y)}\,dx=\norm{f}_1\norm{g}_1.
+\end{equation*}
+这正是 $p=1$ 时定理  \ref{thm:4.15} 的结论.
+
+\emph{情形 (ii): $1<p<\infty$.}由情形 (i) 知, 对几乎所有的固定 $x\in\R^N$,
+函数 $y\mapsto\abs{f(x-y)}\abs{g(y)}^p$ 在 $\R^N$ 上可积, 即
+\begin{equation*}
+\abs{f(x-y)}^{1/p}\abs{g(y)}\in L^p_y(\R^N).
+\end{equation*}
+由于 $\abs{f(x-y)}^{1/p'}\in L^{p'}_y(\R^N)$, 由 Hölder 不等式推出
+\begin{equation*}
+\abs{f(x-y)}\abs{g(y)}=\abs{f(x-y)}^{1/p'}\abs{f(x-y)}^{1/p}\abs{g(y)}
+\in L^1_y(\R^N),
+\end{equation*}
+且
+\begin{equation*}
+\int_{\R^N}\abs{f(x-y)}\abs{g(y)}\,dy
+\le\norm{f}_1^{1/p'}\Bigl(\int_{\R^N}\abs{f(x-y)}\abs{g(y)}^p\,dy\Bigr)^{1/p},
+\end{equation*}
+即
+\begin{equation*}
+\abs{(f\star g)(x)}^p\le\norm{f}_1^{p/p'}\bigl(\abs{f}\star\abs{g}^p\bigr)(x).
+\end{equation*}
+由情形 (i) 断定 $f\star g\in L^p(\R^N)$, 且
+\begin{equation*}
+\norm{f\star g}_p^p\le\norm{f}_1^{p/p'}\norm{f}_1\norm{g}_p^p,
+\end{equation*}
+即 $\norm{f\star g}_p\le\norm{f}_1\norm{g}_p$.
+\end{proof}
+
+\begin{notation}
+给定 $\R^N$ 上的函数 $f$, 令 $\check f(x)=f(-x)$.
+\end{notation}
+
+\begin{proposition}
+\label{prop:4.16}
+设 $f\in L^1(\R^N)$, $g\in L^p(\R^N)$, $h\in L^{p'}(\R^N)$.则
+\begin{equation*}
+\int_{\R^N}(f\star g)h=\int_{\R^N}g(\check f\star h).
+\end{equation*}
+\end{proposition}
+
+\begin{proof}
+函数 $F(x,y)=f(x-y)g(y)h(x)$ 属于 $L^1(\R^N\times\R^N)$, 因为由定理
+ \ref{thm:4.15} 与 Hölder 不等式有
+\begin{equation*}
+\int\abs{h(x)}\,dx\int\abs{f(x-y)}\abs{g(y)}\,dy<\infty.
+\end{equation*}
+因此
+\begin{equation*}
+\begin{aligned}
+\int(f\star g)(x)h(x)\,dx
+&=\int dx\int F(x,y)\,dy=\int dy\int F(x,y)\,dx\\
+&=\int g(y)(\check f\star h)(y)\,dy.
+\end{aligned}
+\end{equation*}
+\end{proof}
+
+\runin{支集与卷积.}
+函数 $f$ 的支集的概念是标准的: $\operatorname{supp}f$ 是使 $f$ 为零的最大开集的
+补集; 换言之, $\operatorname{supp}f$ 是集合 $\{x;\ f(x)\ne0\}$ 的闭包.在处理
+等价类 (例如空间 $L^p$) 时, 这个概念并不合适.我们需要一个内蕴的定义, 即当
+$f_1=f_2$ 几乎处处成立时, $\operatorname{supp}f_1$ 与 $\operatorname{supp}f_2$
+应当相同 (或只相差一个零测集).读者容易承认, 通常的概念对 $\R$ 上的
+$f=\chi_\Q$ 没有意义.在下面的命题中我们引入合适的定义.
+
+\begin{proposition}[以及支集的定义]
+\label{prop:4.17}
+设 $f:\R^N\to\R$ 为任一函数.考虑 $\R^N$ 上满足下述条件的开集构成的族
+$(\omega_i)_{i\in I}$: 对每个 $i\in I$, $f=0$ 在 $\omega_i$ 上几乎处处成立.令
+$\omega=\bigcup_{i\in I}\omega_i$.则 $f=0$ 在 $\omega$ 上几乎处处成立.
+
+按定义, $\operatorname{supp}f$ 是 $\omega$ 在 $\R^N$ 中的补集.
+\end{proposition}
+
+\begin{remark}
+\label{rem:4.9}
+(a) 假设 $f_1=f_2$ 在 $\R^N$ 上几乎处处成立; 显然
+$\operatorname{supp}f_1=\operatorname{supp}f_2$.因此我们可以谈论 $f\in L^p$ 的
+$\operatorname{supp}f$——无须指明在等价类中选取了哪个代表元.
+
+(b) 若 $f$ 是 $\R^N$ 上的连续函数, 则容易验证 $\operatorname{supp}f$ 的新定义与
+通常的定义一致.
+\end{remark}
+
+\begin{proof}[命题 \ref{prop:4.17}]
+由于集合 $I$ 不必可数, 所以 $f=0$ 在 $\omega$ 上几乎处处成立这一点并不显然.
+但可以如下归到可数情形.存在 $\R^N$ 中开集构成的可数族 $(O_n)$, 使得 $\R^N$ 中
+每个开集都是某些 $O_n$ 的并.写 $\omega_i=\bigcup_{n\in A_i}O_n$, 且
+$\omega=\bigcup_{n\in B}O_n$, 其中 $B=\bigcup_{i\in I}A_i$.由于对每个
+$n\in B$, $f=0$ 在 $O_n$ 上几乎处处成立, 断定 $f=0$ 在 $\omega$ 上几乎处处
+成立.
+\end{proof}
+
+\begin{keyproposition}
+\label{prop:4.18}
+设 $f\in L^1(\R^N)$, $g\in L^p(\R^N)$, 其中 $1\le p\le\infty$.则
+\begin{equation*}
+\boxed{\operatorname{supp}(f\star g)\subset\overline{\operatorname{supp}f
++\operatorname{supp}g}.}
+\end{equation*}
+\end{keyproposition}
+
+\begin{proof}
+固定 $x\in\R^N$, 使函数 $y\mapsto f(x-y)g(y)$ 可积 (见定理  \ref{thm:4.15}).有
+\begin{equation*}
+(f\star g)(x)=\int f(x-y)g(y)\,dy
+=\int_{(x-\operatorname{supp}f)\cap\operatorname{supp}g}f(x-y)g(y)\,dy.
+\end{equation*}
+若 $x\notin\operatorname{supp}f+\operatorname{supp}g$, 则
+$(x-\operatorname{supp}f)\cap\operatorname{supp}g=\emptyset$, 从而
+$(f\star g)(x)=0$.于是 $(f\star g)(x)=0$ 在
+$(\operatorname{supp}f+\operatorname{supp}g)^c$ 上几乎处处成立.特别地,
+\begin{equation*}
+(f\star g)(x)=0\quad\text{a.e. 在}\
+\operatorname{Int}\bigl[(\operatorname{supp}f+\operatorname{supp}g)^c\bigr]
+\ \text{上},
+\end{equation*}
+因此
+\begin{equation*}
+\operatorname{supp}(f\star g)\subset\overline{\operatorname{supp}f
++\operatorname{supp}g}.
+\end{equation*}
+\end{proof}
+
+\begin{keyremark}
+\label{rem:4.10}
+若 $f$ 与 $g$ 都具有紧支集, 则 $f\star g$ 也具有紧支集.然而, 若两者中只有一个
+具有紧支集, 则 $f\star g$ 未必具有紧支集.
+\end{keyremark}
+
+\begin{definition}
+设 $\Omega\subset\R^N$ 为开集, $1\le p\le\infty$.若对每个紧集 $K\subset\Omega$
+都有 $f\chi_K\in L^p(\Omega)$, 则称函数 $f:\Omega\to\R$ 属于
+$L^p_{\mathrm{loc}}(\Omega)$.
+
+注意: 若 $f\in L^p_{\mathrm{loc}}(\Omega)$, 则 $f\in L^1_{\mathrm{loc}}(\Omega)$.
+\end{definition}
+
+\begin{proposition}
+\label{prop:4.19}
+设 $f\in C_c(\R^N)$, $g\in L^1_{\mathrm{loc}}(\R^N)$.则 $(f\star g)(x)$ 对每个
+$x\in\R^N$ 都有定义, 并且 $(f\star g)\in C(\R^N)$.
+\end{proposition}
+
+\begin{proof}
+注意对每个 $x\in\R^N$, 函数 $y\mapsto f(x-y)g(y)$ 在 $\R^N$ 上可积, 因此
+$(f\star g)(x)$ 对每个 $x\in\R^N$ 都有定义.
+
+设 $x_n\to x$, 并取 $\R^N$ 中固定的紧集 $K$, 使
+$(x_n-\operatorname{supp}f)\subset K\ \forall n$.于是
+$f(x_n-y)=0\ \forall n,\ \forall y\notin K$.由 $f$ 的一致连续性推出
+\begin{equation*}
+\abs{f(x_n-y)-f(x-y)}\le\varepsilon_n\chi_K(y)\quad\forall n,\ \forall y\in\R^N,
+\end{equation*}
+其中 $\varepsilon_n\to0$.于是
+\begin{equation*}
+\abs{(f\star g)(x_n)-(f\star g)(x)}\le\varepsilon_n\int_K\abs{g(y)}\,dy
+\xrightarrow{\ }0.
+\end{equation*}
+\end{proof}
+
+\begin{notation}
+设 $\Omega\subset\R^N$ 为开集.
+
+$C(\Omega)$ 是 $\Omega$ 上连续函数构成的空间.
+
+$C^k(\Omega)$ 是 $\Omega$ 上 $k$ 次连续可微函数构成的空间 ($k\ge1$ 为整数).
+
+$C^\infty(\Omega)=\bigcap_kC^k(\Omega)$.
+
+$C_c(\Omega)$ 是 $\Omega$ 上在 $\Omega$ 内具有紧支集的连续函数构成的空间, 即在某个
+紧集 $K\subset\Omega$ 之外为零的函数构成的空间.
+
+$C_c^k(\Omega)=C^k(\Omega)\cap C_c(\Omega)$.
+
+$C_c^\infty(\Omega)=C^\infty(\Omega)\cap C_c(\Omega)$
+
+(有些作者用 $\mathcal{D}(\Omega)$ 或 $C_0^\infty(\Omega)$ 代替
+$C_c^\infty(\Omega)$).
+
+若 $f\in C^1(\Omega)$, 其梯度定义为
+\begin{equation*}
+\nabla f=\Bigl(\frac{\partial f}{\partial x_1},
+\frac{\partial f}{\partial x_2},\dots,\frac{\partial f}{\partial x_N}\Bigr).
+\end{equation*}
+若 $f\in C^k(\Omega)$, 而 $\alpha=(\alpha_1,\alpha_2,\dots,\alpha_N)$ 是长度
+$\abs{\alpha}=\alpha_1+\alpha_2+\cdots+\alpha_N$ 小于 $k$ 的多重指标, 则写
+\begin{equation*}
+D^\alpha f=\frac{\partial^{\alpha_1}}{\partial x_1^{\alpha_1}}
+\frac{\partial^{\alpha_2}}{\partial x_2^{\alpha_2}}\cdots
+\frac{\partial^{\alpha_N}}{\partial x_N^{\alpha_N}}f.
+\end{equation*}
+\end{notation}
+
+\begin{keyproposition}
+\label{prop:4.20}
+设 $f\in C_c^k(\R^N)$ ($k\ge1$), $g\in L^1_{\mathrm{loc}}(\R^N)$.则
+$f\star g\in C^k(\R^N)$, 且
+\begin{equation*}
+\boxed{D^\alpha(f\star g)=(D^\alpha f)\star g\quad\forall\alpha,\
+\abs{\alpha}\le k.}
+\end{equation*}
+特别地, 若 $f\in C_c^\infty(\R^N)$, $g\in L^1_{\mathrm{loc}}(\R^N)$, 则
+$f\star g\in C^\infty(\R^N)$.
+\end{keyproposition}
+
+\begin{proof}
+由归纳法只须考虑 $k=1$ 的情形.给定 $x\in\R^N$, 我们断言 $f\star g$ 在 $x$ 处
+可微, 且
+\begin{equation*}
+\nabla(f\star g)(x)=(\nabla f)\star g(x).
+\end{equation*}
+设 $h\in\R^N$, $\abs{h}<1$.则对一切 $y\in\R^N$,
+\begin{equation*}
+\begin{aligned}
+&\abs{f(x+h-y)-f(x-y)-h\cdot\nabla f(x-y)}\\
+&\quad=\Bigl|\int_0^1\bigl[h\cdot\nabla f(x+sh-y)-h\cdot\nabla f(x-y)\bigr]ds
+\Bigr|\le\abs{h}\varepsilon(\abs{h}),
+\end{aligned}
+\end{equation*}
+其中 $\varepsilon(\abs{h})\to0$ 当 $\abs{h}\to0$ (因为 $\nabla f$ 在 $\R^N$ 上
+一致连续).
+
+取 $\R^N$ 中固定的紧集 $K$, 使其足够大, 以致
+$x+B(0,1)-\operatorname{supp}f\subset K$.有
+\begin{equation*}
+f(x+h-y)-f(x-y)-h\cdot\nabla f(x-y)=0\quad\forall y\notin K,\
+\forall h\in B(0,1),
+\end{equation*}
+因此
+\begin{equation*}
+\abs{f(x+h-y)-f(x-y)-h\cdot\nabla f(x-y)}\le\abs{h}\varepsilon(\abs{h})\chi_K(y)
+\quad\forall y\in\R^N,\ \forall h\in B(0,1).
+\end{equation*}
+于是对 $h\in B(0,1)$,
+\begin{equation*}
+\abs{(f\star g)(x+h)-(f\star g)(x)-h\cdot(\nabla f\star g)(x)}
+\le\abs{h}\varepsilon(\abs{h})\int_K\abs{g(y)}\,dy.
+\end{equation*}
+由此推出 $f\star g$ 在 $x$ 处可微, 且
+$\nabla(f\star g)(x)=(\nabla f)\star g(x)$.
+\end{proof}
+
+\subsection*{磨光核}
+
+\begin{definition}
+\emph{\index{moguanghe@磨光核 (mollifier)}
+磨光核序列} $(\rho_n)_{n\ge1}$ 是指 $\R^N$ 上满足下述条件的任一函数序列:
+\begin{equation*}
+\rho_n\in C_c^\infty(\R^N),\quad
+\operatorname{supp}\rho_n\subset\overline{B(0,1/n)},\quad
+\int\rho_n=1,\quad\rho_n\ge0\ \text{在}\ \R^N\ \text{上}.
+\end{equation*}
+在下文中, 我们将系统地使用记号 $(\rho_n)$ 表示一个磨光核序列.
+\end{definition}
+
+从一个单一的函数 $\rho\in C_c^\infty(\R^N)$ 出发 (要求
+$\operatorname{supp}\rho\subset\overline{B(0,1)}$, $\rho\ge0$ 在 $\R^N$ 上, 且
+$\rho$ 不恒为零) 容易生成一个磨光核序列——例如函数
+\begin{equation*}
+\rho(x)=\begin{cases}
+e^{1/(\abs{x}^2-1)} & \text{若}\ \abs{x}<1,\\
+0 & \text{若}\ \abs{x}>1.
+\end{cases}
+\end{equation*}
+令 $\rho_n(x)=Cn^N\rho(nx)$, 其中 $C=1/\int\rho$, 便得到磨光核序列.
+
+\begin{proposition}
+\label{prop:4.21}
+假设 $f\in C(\R^N)$.则 $(\rho_n\star f)\xrightarrow[n\to\infty]{}f$ 在 $\R^N$
+的紧集上一致收敛.
+\end{proposition}
+
+\begin{proof}\footnote{用卷积作正则化的技巧最初由 Leray 与 Friedrichs 引入.}
+设 $K\subset\R^N$ 为固定的紧集.给定 $\varepsilon>0$, 存在 $\delta>0$ (依赖于
+$K$ 与 $\varepsilon$), 使得
+\begin{equation*}
+\abs{f(x-y)-f(x)}<\varepsilon\quad\forall x\in K,\ \forall y\in B(0,\delta).
+\end{equation*}
+对 $x\in\R^N$ 有
+\begin{equation*}
+\begin{aligned}
+(\rho_n\star f)(x)-f(x)
+&=\int\bigl[f(x-y)-f(x)\bigr]\rho_n(y)\,dy\\
+&=\int_{B(0,1/n)}\bigl[f(x-y)-f(x)\bigr]\rho_n(y)\,dy.
+\end{aligned}
+\end{equation*}
+当 $n>1/\delta$ 且 $x\in K$ 时得到
+\begin{equation*}
+\abs{(\rho_n\star f)(x)-f(x)}\le\varepsilon\int\rho_n=\varepsilon.
+\end{equation*}
+\end{proof}
+
+\begin{keytheorem}
+\label{thm:4.22}
+假设 $f\in L^p(\R^N)$, $1\le p<\infty$.则
+$(\rho_n\star f)\xrightarrow[n\to\infty]{}f$ 在 $L^p(\R^N)$ 中.
+\end{keytheorem}
+
+\begin{proof}
+给定 $\varepsilon>0$, 固定函数 $f_1\in C_c(\R^N)$, 使
+$\norm{f-f_1}_p<\varepsilon$ (见定理  \ref{thm:4.12}).由命题  \ref{prop:4.21} 知
+$(\rho_n\star f_1)\to f_1$ 在 $\R^N$ 的每个紧集上一致收敛.另一方面, 由命题
+ \ref{prop:4.18} 有
+\begin{equation*}
+\operatorname{supp}(\rho_n\star f_1)\subset B(0,1/n)+\operatorname{supp}f_1
+\subset B(0,1)+\operatorname{supp}f_1,
+\end{equation*}
+这是一个固定的紧集.由此推出
+\begin{equation*}
+\norm{(\rho_n\star f_1)-f_1}_p\xrightarrow[n\to\infty]{}0.
+\end{equation*}
+最后, 写
+\begin{equation*}
+(\rho_n\star f)-f=\bigl[\rho_n\star(f-f_1)\bigr]
++\bigl[(\rho_n\star f_1)-f_1\bigr]+[f_1-f],
+\end{equation*}
+于是
+\begin{equation*}
+\norm{(\rho_n\star f)-f}_p\le2\norm{f-f_1}_p+\norm{(\rho_n\star f_1)-f_1}_p
+\end{equation*}
+(由定理  \ref{thm:4.15}).我们断定
+\begin{equation*}
+\limsup_{n\to\infty}\norm{(\rho_n\star f)-f}_p\le2\varepsilon
+\quad\forall\varepsilon>0,
+\end{equation*}
+因此 $\lim_{n\to\infty}\norm{(\rho_n\star f)-f}_p=0$.
+\end{proof}
+
+\begin{keycorollary}
+\label{cor:4.23}
+设 $\Omega\subset\R^N$ 为开集.则对任意的 $1\le p<\infty$,
+$C_c^\infty(\Omega)$ 在 $L^p(\Omega)$ 中稠密.
+\end{keycorollary}
+
+\begin{proof}
+给定 $f\in L^p(\Omega)$, 令
+\begin{equation*}
+\bar f(x)=\begin{cases}
+f(x) & \text{若}\ x\in\Omega,\\
+0 & \text{若}\ x\in\R^N\setminus\Omega,
+\end{cases}
+\end{equation*}
+于是 $\bar f\in L^p(\R^N)$.
+
+取 $\R^N$ 中紧集构成的序列 $(K_n)$, 使得
+\begin{equation*}
+\bigcup_{n=1}^\infty K_n=\Omega
+\quad\text{且}\quad\dist(K_n,\Omega^c)\ge2/n\quad\forall n.
+\end{equation*}
+[例如可以取
+$K_n=\{x\in\R^N;\ \abs{x}\le n\ \text{且}\ \dist(x,\Omega^c)\ge2/n\}$.]
+令 $g_n=\chi_{K_n}\bar f$, $f_n=\rho_n\star g_n$, 于是
+\begin{equation*}
+\operatorname{supp}f_n\subset B(0,1/n)+K_n\subset\Omega.
+\end{equation*}
+由此推出 $f_n\in C_c^\infty(\Omega)$.另一方面有
+\begin{equation*}
+\begin{aligned}
+\norm{f_n-f}_{L^p(\Omega)}=\norm{f_n-\bar f}_{L^p(\R^N)}
+&\le\norm{(\rho_n\star g_n)-(\rho_n\star\bar f)}_{L^p(\R^N)}
++\norm{(\rho_n\star\bar f)-\bar f}_{L^p(\R^N)}\\
+&\le\norm{g_n-\bar f}_{L^p(\R^N)}
++\norm{(\rho_n\star\bar f)-\bar f}_{L^p(\R^N)}.
+\end{aligned}
+\end{equation*}
+最后注意 $\norm{g_n-\bar f}_{L^p(\R^N)}\to0$ (由控制收敛定理),
+而 $\norm{(\rho_n\star\bar f)-\bar f}_{L^p(\R^N)}\to0$ (由定理
+ \ref{thm:4.22}).我们断定 $\norm{f_n-f}_{L^p(\Omega)}\to0$.
+\end{proof}
+
+\begin{corollary}
+\label{cor:4.24}
+设 $\Omega\subset\R^N$ 为开集, $u\in L^1_{\mathrm{loc}}(\Omega)$ 满足
+\begin{equation*}
+\int uf=0\quad\forall f\in C_c^\infty(\Omega).
+\end{equation*}
+则 $u=0$ 在 $\Omega$ 上几乎处处成立.
+\end{corollary}
+
+\begin{proof}
+设 $g\in L^\infty(\R^N)$, 其支集 $\operatorname{supp}g$ 是包含在 $\Omega$ 中的
+紧集.令 $g_n=\rho_n\star g$, 则当 $n$ 足够大时 $g_n\in C_c^\infty(\Omega)$.
+因此有
+\begin{equation}
+\int ug_n=0\quad\forall n.
+\label{eq:4.19}
+\end{equation}
+由于 $g_n\to g$ 在 $L^1(\R^N)$ 中 (由定理  \ref{thm:4.22}), 存在子列——仍记作
+$g_n$——使得 $g_n\to g$ 在 $\R^N$ 上几乎处处成立 (见定理  \ref{thm:4.9}).此外,
+$\norm{g_n}_{L^\infty(\R^N)}\le\norm{g}_{L^\infty(\R^N)}$.在 \eqref{eq:4.19}
+中取极限 (由控制收敛定理), 得到
+\begin{equation}
+\int ug=0.
+\label{eq:4.20}
+\end{equation}
+
+设 $K$ 为包含在 $\Omega$ 中的紧集.取函数 $g$ 为
+\begin{equation*}
+g=\begin{cases}
+\operatorname{sign}u & \text{在}\ K\ \text{上},\\
+0 & \text{在}\ \R^N\setminus K\ \text{上}.
+\end{cases}
+\end{equation*}
+由 \eqref{eq:4.20} 推出 $\int_K\abs{u}=0$, 从而 $u=0$ 在 $K$ 上几乎处处成立.
+由于这对任一紧集 $K\subset\Omega$ 都成立, 断定 $u=0$ 在 $\Omega$ 上几乎处处成立.
+\end{proof}
+
+\section{$L^p$ 中强紧性的判别准则}
+\label{sec:4.5}
+
+判断 $L^p(\Omega)$ 中的一族函数是否在 $L^p(\Omega)$ 中 (就强拓扑而言) 具有紧闭包,
+是重要的.我们回顾: Ascoli--Arzel\`a 定理回答了 $C(K)$——紧度量空间 $K$ 上取值于
+$\R$ 的连续函数空间——中的同一问题.
+
+\begin{keytheorem}[Ascoli--Arzel\`a]
+\label{thm:4.25}
+设 $K$ 为紧度量空间, $H$ 为 $C(K)$ 的有界子集.假设 $H$ 一致等度连续, 即
+\begin{equation}
+\forall\varepsilon>0\ \exists\delta>0\ \text{使得}\ d(x_1,x_2)<\delta
+\Rightarrow\abs{f(x_1)-f(x_2)}<\varepsilon\quad\forall f\in H.
+\label{eq:4.21}
+\end{equation}
+则 $H$ 在 $C(K)$ 中的闭包紧.
+\end{keytheorem}
+
+Ascoli--Arzel\`a 定理的证明可参见例如 W.~Rudin \bref{Rudin}{1}, \bref{Rudin}{2}, A.~Knapp \bref{Knapp}{1}, J.~Dixmier \bref{Dixmier}{1}, A.~Friedman \bref{Friedman}{3}, G.~Choquet \bref{Choquet}{1}, K.~Yosida \bref{Yosida}{1}, H.~L.~Royden \bref{Royden}{1}, J.~R.~Munkres \bref{Munkres}{1}, G.~B.~Folland \bref{Folland}{2} 等.
+
+\begin{notation}[函数的平移]
+令 $(\tau_hf)(x)=f(x+h)$, $x\in\R^N$, $h\in\R^N$.
+\end{notation}
+
+下面这个定理及其推论是 Ascoli--Arzel\`a 定理的``$L^p$ 版本''.
+
+\begin{keytheorem}[Kolmogorov--M. Riesz--Fr\'echet]
+\label{thm:4.26}
+设 $\mathcal{F}$ 为 $L^p(\R^N)$ 的有界集, $1\le p<\infty$.假设\footnote{假设
+\eqref{eq:4.22} 应与 \eqref{eq:4.21} 比较.它是一个``积分型''等度连续性假设.}
+\begin{equation}
+\lim_{\abs{h}\to0}\norm{\tau_hf-f}_p=0\quad\text{关于}\ f\in\mathcal{F}\
+\text{一致},
+\label{eq:4.22}
+\end{equation}
+即 $\forall\varepsilon>0\ \exists\delta>0$ 使得
+$\norm{\tau_hf-f}_p<\varepsilon\ \forall f\in\mathcal{F},\ \forall h\in\R^N$,
+$\abs{h}<\delta$.
+
+则对任一测度有限的 $\R^N$ 的可测子集 $\Omega$, $\mathcal{F}|_\Omega$ 在
+$L^p(\Omega)$ 中的闭包紧.
+
+[这里 $\mathcal{F}|_\Omega$ 表示 $\mathcal{F}$ 中函数在 $\Omega$ 上的限制.]
+\end{keytheorem}
+
+证明分四步.
+
+\runin{第 1 步.}我们断言
+\begin{equation}
+\norm{(\rho_n\star f)-f}_{L^p(\R^N)}\le\varepsilon\quad\forall f\in\mathcal{F},\
+\forall n>1/\delta.
+\label{eq:4.23}
+\end{equation}
+事实上, 由 Hölder 不等式有
+\begin{equation*}
+\begin{aligned}
+\abs{(\rho_n\star f)(x)-f(x)}
+&\le\int\abs{f(x-y)-f(x)}\rho_n(y)\,dy\\
+&\le\Bigl(\int\abs{f(x-y)-f(x)}^p\rho_n(y)\,dy\Bigr)^{1/p}.
+\end{aligned}
+\end{equation*}
+于是
+\begin{equation*}
+\begin{aligned}
+\int\abs{(\rho_n\star f)(x)-f(x)}^p\,dx
+&\le\iint\abs{f(x-y)-f(x)}^p\rho_n(y)\,dx\,dy\\
+&=\int_{B(0,1/n)}\rho_n(y)\,dy\int\abs{f(x-y)-f(x)}^p\,dx\le\varepsilon^p,
+\end{aligned}
+\end{equation*}
+只要 $1/n<\delta$.
+
+\runin{第 2 步.}我们断言
+\begin{equation}
+\norm{\rho_n\star f}_{L^\infty(\R^N)}\le C_n\norm{f}_{L^p(\R^N)}
+\quad\forall f\in\mathcal{F}
+\label{eq:4.24}
+\end{equation}
+且
+\begin{equation}
+\abs{(\rho_n\star f)(x_1)-(\rho_n\star f)(x_2)}\le C_n\norm{f}_p\abs{x_1-x_2}
+\quad\forall f\in\mathcal{F},\ \forall x_1,x_2\in\R^N,
+\label{eq:4.25}
+\end{equation}
+其中 $C_n$ 只依赖于 $n$.
+
+不等式 \eqref{eq:4.24} 由 Hölder 不等式得到, 其中 $C_n=\norm{\rho_n}_{p'}$.
+另一方面, $\nabla(\rho_n\star f)=(\nabla\rho_n)\star f$, 因此
+\begin{equation*}
+\norm{\nabla(\rho_n\star f)}_{L^\infty(\R^N)}
+\le\norm{\nabla\rho_n}_{L^{p'}(\R^N)}\norm{f}_{L^p(\R^N)}.
+\end{equation*}
+于是得到 \eqref{eq:4.25}, 其中 $C_n=\norm{\nabla\rho_n}_{L^{p'}(\R^N)}$.
+
+\runin{第 3 步.}给定 $\varepsilon>0$ 与测度有限的 $\Omega\subset\R^N$, 存在
+$\Omega$ 的有界可测子集 $\omega$, 使得
+\begin{equation}
+\norm{f}_{L^p(\Omega\setminus\omega)}<\varepsilon\quad\forall f\in\mathcal{F}.
+\label{eq:4.26}
+\end{equation}
+事实上, 写
+\begin{equation*}
+\norm{f}_{L^p(\Omega\setminus\omega)}
+\le\norm{f-(\rho_n\star f)}_{L^p(\R^N)}
++\norm{\rho_n\star f}_{L^p(\Omega\setminus\omega)}.
+\end{equation*}
+由 \eqref{eq:4.24}, 只须选取 $\omega$ 使 $\abs{\Omega\setminus\omega}$ 足够小.
+
+\runin{第 4 步: 结论.}由于 $L^p(\Omega)$ 完备, 只须 (参见例如 A.~Knapp
+\bref{Knapp}{1} 或 J.~R.~Munkres \bref{Munkres}{1} 第~\ref{sec:7.3}~节) 证明
+$\mathcal{F}|_\Omega$ 全有界, 即给定任一 $\varepsilon>0$, 存在
+$\mathcal{F}|_\Omega$ 的有限个半径为 $\varepsilon$ 的球覆盖.给定
+$\varepsilon>0$, 取有界可测集 $\omega$ 使 \eqref{eq:4.26} 成立, 并取
+$n>1/\delta$.族 $H=(\rho_n\star\mathcal{F})|_{\bar\omega}$ 满足
+Ascoli--Arzel\`a 定理的全部假设 (由第 2 步).因此 $H$ 在 $C(\bar\omega)$ 中的
+闭包紧; 从而 $H$ 在 $L^p(\omega)$ 中的闭包也紧.于是可以用有限个
+$L^p(\omega)$ 中半径为 $\varepsilon$ 的球覆盖 $H$, 即
+\begin{equation*}
+H\subset\bigcup_iB(g_i,\varepsilon)\quad\text{其中}\ g_i\in L^p(\omega).
+\end{equation*}
+考虑由
+\begin{equation*}
+\bar g_i=\begin{cases}
+g_i & \text{在}\ \omega\ \text{上},\\
+0 & \text{在}\ \Omega\setminus\omega\ \text{上}
+\end{cases}
+\end{equation*}
+定义的函数 $\bar g_i:\Omega\to\R$, 以及 $L^p(\Omega)$ 中的球
+$B(\bar g_i,3\varepsilon)$.
+
+我们断言这些球覆盖 $\mathcal{F}|_\Omega$.事实上, 给定 $f\in\mathcal{F}$, 存在
+某个 $i$ 使
+\begin{equation*}
+\norm{(\rho_n\star f)-g_i}_{L^p(\omega)}<\varepsilon.
+\end{equation*}
+由于
+\begin{equation*}
+\norm{f-\bar g_i}_{L^p(\Omega)}^p=\int_{\Omega\setminus\omega}\abs{f}^p
++\int_\omega\abs{f-g_i}^p,
+\end{equation*}
+由 \eqref{eq:4.26} 有
+\begin{equation*}
+\begin{aligned}
+\norm{f-\bar g_i}_{L^p(\Omega)}
+&\le\varepsilon+\norm{f-g_i}_{L^p(\omega)}\\
+&\le\varepsilon+\norm{f-(\rho_n\star f)}_{L^p(\R^N)}
++\norm{(\rho_n\star f)-g_i}_{L^p(\omega)}<3\varepsilon.
+\end{aligned}
+\end{equation*}
+我们断定 $\mathcal{F}|_\Omega$ 在 $L^p(\Omega)$ 中的闭包紧.
+
+\begin{remark}
+\label{rem:4.11}
+当试图证明 $L^p(\Omega)$ ($\Omega$ 有界) 中的一族函数 $\mathcal{F}$ 在
+$L^p(\Omega)$ 中具有紧闭包时, 通常方便的做法是先把函数延拓到整个 $\R^N$ 上, 然后
+应用定理  \ref{thm:4.26}, 再考虑它们在 $\Omega$ 上的限制.
+\end{remark}
+
+\begin{remark}
+\label{rem:4.12}
+在定理  \ref{thm:4.26} 的假设下, 一般不能断定 $\mathcal{F}$ 本身在
+$L^p(\R^N)$ 中具有紧闭包 (可构造例子, 或参见习题 4.33).还需要一个附加假设;
+我们下面来叙述它:
+\end{remark}
+
+\begin{corollary}
+\label{cor:4.27}
+设 $\mathcal{F}$ 为 $L^p(\R^N)$ 的有界集, $1\le p<\infty$.假设
+\eqref{eq:4.22} 成立, 并且
+\begin{equation}
+\begin{cases}
+\forall\varepsilon>0\ \exists\Omega\subset\R^N\ \text{有界, 可测, 使得}\\
+\norm{f}_{L^p(\R^N\setminus\Omega)}<\varepsilon\quad\forall f\in\mathcal{F}.
+\end{cases}
+\label{eq:4.27}
+\end{equation}
+则 $\mathcal{F}$ 在 $L^p(\R^N)$ 中的闭包紧.
+\end{corollary}
+
+\begin{proof}
+给定 $\varepsilon>0$, 取有界可测集 $\Omega\subset\R^N$ 使 \eqref{eq:4.27} 成立.
+由定理  \ref{thm:4.26} 知 $\mathcal{F}|_\Omega$ 在 $L^p(\Omega)$ 中的闭包紧.
+于是可以用有限个 $L^p(\Omega)$ 中半径为 $\varepsilon$ 的球覆盖
+$\mathcal{F}|_\Omega$, 即
+\begin{equation*}
+\mathcal{F}|_\Omega\subset\bigcup_iB(g_i,\varepsilon)\quad\text{其中}\
+g_i\in L^p(\Omega).
+\end{equation*}
+令
+\begin{equation*}
+\bar g_i(x)=\begin{cases}
+g_i(x) & \text{在}\ \Omega\ \text{中},\\
+0 & \text{在}\ \R^N\setminus\Omega\ \text{上}.
+\end{cases}
+\end{equation*}
+显然 $\mathcal{F}$ 被 $L^p(\R^N)$ 中的球 $B(\bar g_i,2\varepsilon)$ 覆盖.
+\end{proof}
+
+\begin{remark}
+\label{rem:4.13}
+推论  \ref{cor:4.27} 的逆命题也成立 (见习题 4.34).因此我们得到了
+$L^p(\R^N)$ 中紧集的完全刻画.
+\end{remark}
+
+最后给出定理  \ref{thm:4.26} 的一个有用应用:
+
+\begin{corollary}
+\label{cor:4.28}
+设 $G$ 为 $L^1(\R^N)$ 中固定的函数, 并令
+\begin{equation*}
+\mathcal{F}=G\star B,
+\end{equation*}
+其中 $B$ 是 $L^p(\R^N)$ 中的有界集, $1\le p<\infty$.则对任一测度有限的可测集
+$\Omega$, $\mathcal{F}|_\Omega$ 在 $L^p(\Omega)$ 中的闭包紧.
+\end{corollary}
+
+\begin{proof}
+显然 $\mathcal{F}$ 在 $L^p(\R^N)$ 中有界.另一方面, 若写 $f=G\star u$, 其中
+$u\in B$, 则
+\begin{equation*}
+\norm{\tau_hf-f}_p=\norm{(\tau_hG-G)\star u}_p\le C\norm{\tau_hG-G}_1,
+\end{equation*}
+再借助下述引理即得结论:
+\end{proof}
+
+\begin{lemma}
+\label{lem:4.3}
+设 $G\in L^q(\R^N)$, $1\le q<\infty$.则
+\begin{equation*}
+\lim_{h\to0}\norm{\tau_hG-G}_q=0.
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+给定 $\varepsilon>0$, 由定理  \ref{thm:4.12} 存在函数 $G_1\in C_c(\R^N)$, 使得
+$\norm{G-G_1}_q<\varepsilon$.写
+\begin{equation*}
+\begin{aligned}
+\norm{\tau_hG-G}_q
+&\le\norm{\tau_hG-\tau_hG_1}_q+\norm{\tau_hG_1-G_1}_q+\norm{G_1-G}_q\\
+&\le2\varepsilon+\norm{\tau_hG_1-G_1}_q.
+\end{aligned}
+\end{equation*}
+由于 $\lim_{h\to0}\norm{\tau_hG_1-G_1}_q=0$, 看出
+\begin{equation*}
+\limsup_{h\to0}\norm{\tau_hG-G}_q\le2\varepsilon\quad\forall\varepsilon>0.
+\end{equation*}
+\end{proof}
+
+\section*{第 4 章评注}
+\addcontentsline{toc}{section}{第 4 章评注}
+\markright{第 4 章评注}
+
+\cmtitem{1. Egorov 定理.}
+积分论的一些基本结果已在 \S\ref{sec:4.1} 中回顾.有一个未被提及的有用结果如下.
+
+\begin{startheorem}[Egorov]
+\label{thm:4.29}
+假设 $\Omega$ 是测度有限的测度空间.设 $(f_n)$ 为 $\Omega$ 上的可测函数序列,
+使得
+\begin{equation*}
+f_n(x)\to f(x)\quad\text{a.e. 在}\ \Omega\ \text{上}\quad
+(\text{其中}\ \abs{f(x)}<\infty\ \text{a.e.}).
+\end{equation*}
+则 $\forall\varepsilon>0\ \exists A\subset\Omega$ 可测, 使 $\abs{\Omega\setminus A}
+<\varepsilon$ 且 $f_n\to f$ 在 $A$ 上一致收敛.
+\end{startheorem}
+
+其证明见\index{Vitalishouliandingli@Vitali 收敛定理 (Vitali convergence theorem)}
+习题 4.14, P.~Halmos \bref{Halmos}{1}, G.~B.~Folland \bref{Folland}{2}, E.~Hewitt--K.~Stromberg \bref{HewittStromberg}{1}, R.~Wheeden--A.~Zygmund \bref{WheedenZygmund}{1}, K.~Yosida \bref{Yosida}{1}, A.~Friedman \bref{Friedman}{3} 等.
+
+\cmtitem{2. $L^1$ 中的弱紧集.}
+由于 $L^1$ 不自反, $L^1$ 的有界集关于弱拓扑 $\sigma(L^1,L^\infty)$ 并不起重要
+作用.下述结果给出了 $L^1$ 中弱紧集的一个有用刻画.
+
+\begin{startheorem}[Dunford--Pettis]
+\label{thm:4.30}
+设 $\mathcal{F}$ 为 $L^1(\Omega)$ 的有界集.则 $\mathcal{F}$ 在弱拓扑
+$\sigma(L^1,L^\infty)$ 中具有紧闭包, 当且仅当 $\mathcal{F}$ 等度可积, 即
+\begin{equation*}
+\text{(a)}\ \begin{cases}
+\forall\varepsilon>0\ \exists\delta>0\ \text{使得}\\
+\displaystyle\int_A\abs{f}<\varepsilon\quad
+\forall A\subset\Omega\ \text{可测, 且}\ \abs{A}<\delta,\ \forall f\in\mathcal{F},
+\end{cases}
+\end{equation*}
+并且
+\begin{equation*}
+\text{(b)}\ \begin{cases}
+\forall\varepsilon>0\ \exists\omega\subset\Omega\ \text{可测, 且}\
+\abs{\omega}<\infty\ \text{使得}\\
+\displaystyle\int_{\Omega\setminus\omega}\abs{f}<\varepsilon\quad\forall f\in\mathcal{F}.
+\end{cases}
+\end{equation*}
+\end{startheorem}
+
+定理  \ref{thm:4.30} 的证明与讨论见问题 23, 或 N.~Dunford--J.~T.~Schwartz
+\bref{DunfordSchwartz}{1}, B.~Beauzamy \bref{Beauzamy}{1}, J.~Diestel \bref{Diestel}{2}, I.~Fonseca--G.~Leoni \bref{FonsecaLeoni}{1};
+关于概率论方面, 还可见 J.~Neveu \bref{Neveu}{1}, C.~Dellacherie--P.~A.~Meyer \bref{DellacherieMeyer}{1}; 另见习题 4.36.
+
+\cmtitem{3. Radon 测度.}
+正如刚才所指出的, $L^1$ 的有界集不具有紧性性质.为克服这种紧性的缺失, 有时把
+$L^1$ 嵌入一个更大的空间——Radon 测度空间——是非常有用的.
+
+例如, 假设 $\Omega$ 是 $\R^N$ 中带 Lebesgue 测度的有界开集.考虑空间
+$E=C(\overline\Omega)$, 配以范数 $\norm{u}=\sup_{x\in\overline\Omega}\abs{u(x)}$.
+它的对偶空间记作 $\mathcal{M}(\overline\Omega)$, 称为 $\overline\Omega$ 上的
+\emph{Radon 测度}空间.$\mathcal{M}(\overline\Omega)$ 上的\wstar{}拓扑有时称为
+``淡''拓扑.
+
+我们把 $L^1(\Omega)$ 与 $\mathcal{M}(\overline\Omega)$ 的一个子空间等同起来.为此
+引入如下定义的映射 $L^1(\Omega)\to\mathcal{M}(\overline\Omega)$: 给定
+$f\in L^1(\Omega)$, 映射 $u\in C(\overline\Omega)\mapsto\int_\Omega fu\,dx$ 是
+$C(\overline\Omega)$ 上的连续线性泛函, 记作 $Tf$, 于是
+\begin{equation*}
+\dual{Tf}{u}_{E^\star,E}=\int_\Omega fu\,dx\quad\forall u\in E.
+\end{equation*}
+显然 $T$ 是线性的, 而且 $T$ 是等距, 因为
+\begin{equation*}
+\norm{Tf}_{\mathcal{M}(\overline\Omega)}
+=\sup_{\substack{u\in E\\ \norm{u}\le1}}\int_\Omega fu=\norm{f}_1
+\end{equation*}
+(见习题 4.26).
+
+利用 $T$ 可以把 $L^1(\Omega)$ 与 $\mathcal{M}(\overline\Omega)$ 的一个子空间
+等同起来.由于 $\mathcal{M}(\overline\Omega)$ 是可分空间 $C(\overline\Omega)$ 的
+对偶空间, 它在\wstar{}拓扑中具有某些紧性性质.特别地, 若 $(f_n)$ 是
+$L^1(\Omega)$ 中的有界序列, 则存在子列 $(f_{n_k})$ 与 Radon 测度 $\mu$, 使得
+$f_{n_k}\overset{\star}{\rightharpoonup}\mu$ 在\wstar{}拓扑
+$\sigma(E^\star,E)$ 中, 即
+\begin{equation*}
+\int_\Omega f_{n_k}u\to\dual{\mu}{u}\quad\forall u\in C(\overline\Omega).
+\end{equation*}
+例如, $L^1$ 中的序列可以关于\wstar{}拓扑收敛于一个 Dirac 测度.Radon 测度的
+一些进一步的性质见问题 24.
+
+``测度''这一术语由下述结果提供依据, 它把上述定义与集合论意义下标准的测度概念联系
+起来:
+
+\begin{theorem}[Riesz 表示定理]
+\label{thm:4.31}
+设 $\mu$ 为 $\Omega$ 上的 Radon 测度.则存在 $\Omega$ 上唯一的带号 Borel 测度
+$\nu$ (即定义在 $\Omega$ 的 Borel 集上的测度), 使得
+\begin{equation*}
+\dual{\mu}{u}=\int_\Omega u\,d\nu\quad\forall u\in C(\overline\Omega).
+\end{equation*}
+\end{theorem}
+
+通常方便的做法是把空间 $E=C(\overline\Omega)$ 换成子空间
+\begin{equation*}
+E_0=\{f\in C(\overline\Omega);\ f=0\ \text{在}\ \overline\Omega\ \text{的边界上}\}.
+\end{equation*}
+$E_0$ 的对偶记作 $\mathcal{M}(\Omega)$ (以区别于 $\mathcal{M}(\overline\Omega)$).
+Riesz 表示定理仍然成立, 只需附加条件 $\abs{\nu}(\overline\Omega\
+\text{的边界})=0$.
+
+关于这一广阔而经典的题材, 参见例如 H.~L.~Royden \bref{Royden}{1}, W.~Rudin \bref{Rudin}{2}, G.~B.~Folland \bref{Folland}{2}, A.~Knapp \bref{Knapp}{1}, P.~Malliavin \bref{Malliavin}{1}, P.~Halmos \bref{Halmos}{1}, I.~Fonseca--G.~Leoni \bref{FonsecaLeoni}{1}.
+
+\cmtitem{4. 向量值函数的 Bochner 积分.}
+设 $\Omega$ 为测度空间, $E$ 为 Banach 空间.空间 $L^p(\Omega;E)$ 由定义在
+$\Omega$ 上, 取值于 $E$ 的, 在某种适当意义下可测且满足
+$\int_\Omega\norm{f(x)}^p\,d\mu<\infty$ 的全部函数 $f$ 组成 (当 $p=\infty$ 时作
+通常的修改).\S\ref{sec:4.2} 与 \S\ref{sec:4.3} 中描述的大部分性质在对 $E$ 附加一些假设后仍然成立.
+例如, 若 $E$ 自反且 $1<p<\infty$, 则 $L^p(\Omega;E)$ 自反, 其对偶空间为
+$L^{p'}(\Omega;E^\star)$.更多细节见 K.~Yosida \bref{Yosida}{1}, D.~L.~Cohn \bref{Cohn}{1}, E.~Hille \bref{Hille}{1}, B.~Beauzamy \bref{Beauzamy}{1}, L.~Schwartz \bref{Schwartz}{3}.
+当 $\Omega$ 是 $\R$ 中的区间时, 空间 $L^p(\Omega;E)$ 在演化方程的研究中非常
+有用 (见第~
+\ref{chap:10}~章).
+
+\cmtitem{5. 插值理论.}
+开创插值理论的最引人注目的结果是下述定理.
+
+\begin{theorem}[Schur, M. Riesz, Thorin]
+\label{thm:4.32}
+假设 $\Omega$ 是测度空间, $\abs{\Omega}<\infty$, 且 $T:L^1(\Omega)\to
+L^1(\Omega)$ 是有界线性算子, 其范数为 $M_1=\norm{T}_{\mathcal{L}(L^1,L^1)}$.
+此外假设 $T:L^\infty(\Omega)\to L^\infty(\Omega)$ 是有界线性算子, 其范数为
+$M_\infty=\norm{T}_{\mathcal{L}(L^\infty,L^\infty)}$.
+
+则对一切 $1<p<\infty$, $T$ 是从 $L^p(\Omega)$ 到 $L^p(\Omega)$ 的有界算子,
+且其范数 $M_p$ 满足
+\begin{equation*}
+M_p\le M_1^{1/p}M_\infty^{1/p'}.
+\end{equation*}
+\end{theorem}
+
+插值理论最初由 I.~Schur, M.~Riesz, G.~O.~Thorin, J.~Marcinkiewicz 与
+A.~Zygmund 发现.许多作者作出了决定性的贡献, 其中包括 J.-L.~Lions, J.~Peetre, A.~P.~Calder\'on, E.~Stein 与 E.~Gagliardo.它已成为调和分析
+(参见例如 E.~Stein--G.~Weiss \bref{SteinWeiss}{1}, E.~Stein \bref{Stein}{1}, C.~Sadosky \bref{Sadosky}{1}) 与偏微分方程 (参见例如
+J.-L.~Lions--E.~Magenes \bref{LionsMagenes}{1}) 中的有用工具.关于这些问题,
+还可见 G.~B.~Folland \bref{Folland}{2}, N.~Dunford--J.~T.~Schwartz
+\bref{DunfordSchwartz}{1} (第 1 卷第 520 页), J.~Bergh--J.~L\"ofstr\"om
+\bref{BerghLofstrom}{1}, M.~Reed--B.~Simon \bref{ReedSimon}{1} (第 2 卷第 27
+页) 以及问题 22.
+
+\cmtitem{6. Young 不等式.}
+下面是定理  \ref{thm:4.15} 的一个推广.
+
+\begin{theorem}[Young]
+\label{thm:4.33}
+假设 $f\in L^p(\R^N)$, $g\in L^q(\R^N)$, 其中 $1\le p\le\infty$,
+$1\le q\le\infty$, 且
+\begin{equation*}
+\frac1r=\frac1p+\frac1q-1\ge0.
+\end{equation*}
+则 $f\star g\in L^r(\R^N)$, 且 $\norm{f\star g}_r\le\norm{f}_p\norm{g}_q$.
+\end{theorem}
+
+其证明参见例如习题 4.30.
+
+\cmtnum{7.}
+卷积的概念——它可推广到广义函数 (见 L.~Schwartz \bref{Schwartz}{1} 或
+A.~Knapp \bref{Knapp}{2})——在偏微分方程理论中起着基本作用.例如, 方程
+$P(D)u=f$ 在 $\R^N$ 中 (其中 $P(D)$ 是任一常系数微分算子) 有形式为
+$u=E\star f$ 的解, 其中 $E$ 是 $P(D)$ 的基本解 (Malgrange--Ehrenpreis 定理;
+另见第~
+\ref{chap:1}~章评注 2b).特别地, 方程 $\Delta u=f$ 在 $\R^3$ 中有形式为
+$u=E\star f$ 的解, 其中 $E(x)=-(4\pi\abs{x})^{-1}$.
+
+\section*{第 4 章习题}
+\addcontentsline{toc}{section}{第 4 章习题}
+\markright{第 4 章习题}
+
+除另有说明外, $\Omega$ 表示一个 $\sigma$-有限测度空间.
+
+\begin{exercise}
+\label{exer:4.1}
+设 $\alpha>0$, $\beta>0$.令
+\begin{equation*}
+f(x)=\bigl(1+\abs{x}^\alpha\bigr)^{-1}
+\bigl(1+\bigl|\log\abs{x}\bigr|^\beta\bigr)^{-1},\quad x\in\R^N.
+\end{equation*}
+$f$ 在什么条件下属于 $L^p(\R^N)$?
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.2}
+假设 $\abs{\Omega}<\infty$, $1\le p\le q\le\infty$.证明 $L^q(\Omega)\subset
+L^p(\Omega)$ 且嵌入连续.更确切地说, 证明
+\begin{equation*}
+\norm{f}_p\le\abs{\Omega}^{\frac1p-\frac1q}\norm{f}_q\quad\forall f\in L^q(\Omega).
+\end{equation*}
+[提示: 使用 Hölder 不等式.]
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.3}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 设 $f,g\in L^p(\Omega)$, $1\le p\le\infty$.证明
+	      \begin{equation*}
+	      h(x)=\max\{f(x),g(x)\}\in L^p(\Omega).
+	      \end{equation*}
+	\item 设 $(f_n)$ 与 $(g_n)$ 为 $L^p(\Omega)$ 中的两个序列, $1\le p\le\infty$,
+	      使得 $f_n\to f$ 在 $L^p(\Omega)$ 中, $g_n\to g$ 在 $L^p(\Omega)$ 中.
+	      令 $h_n=\max\{f_n,g_n\}$, 证明 $h_n\to h$ 在 $L^p(\Omega)$ 中.
+	\item 设 $(f_n)$ 为 $L^p(\Omega)$ 中的序列, $1\le p<\infty$; $(g_n)$ 为
+	      $L^\infty(\Omega)$ 中的有界序列.假设 $f_n\to f$ 在 $L^p(\Omega)$ 中,
+	      且 $g_n\to g$ 几乎处处.证明 $f_ng_n\to fg$ 在 $L^p(\Omega)$ 中.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.4}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 设 $f_1,f_2,\dots,f_k$ 是 $k$ 个函数, 满足 $f_i\in L^{p_i}(\Omega)\ \forall i$,
+	      其中 $1\le p_i\le\infty$, 且 $\sum_{i=1}^k\frac1{p_i}\le1$.令
+	      \begin{equation*}
+	      f(x)=\prod_{i=1}^kf_i(x).
+	      \end{equation*}
+	      证明 $f\in L^p(\Omega)$, 其中 $\frac1p=\sum_{i=1}^k\frac1{p_i}$, 且
+	      \begin{equation*}
+	      \norm{f}_p\le\prod_{i=1}^k\norm{f_i}_{p_i}.
+	      \end{equation*}
+	      [提示: 先对 $k=2$ 证明, 再用归纳法.]
+	\item 由此推出: 若 $f\in L^p(\Omega)\cap L^q(\Omega)$, 其中
+	      $1\le p\le\infty$, $1\le q\le\infty$, 则对 $p$ 与 $q$ 之间的每个 $r$
+	      都有 $f\in L^r(\Omega)$.更确切地说, 写
+	      \begin{equation*}
+	      \frac1r=\frac\alpha p+\frac{1-\alpha}q,\quad\text{其中}\ \alpha\in[0,1],
+	      \end{equation*}
+	      并证明
+	      \begin{equation*}
+	      \norm{f}_r\le\norm{f}_p^\alpha\norm{f}_q^{1-\alpha}.
+	      \end{equation*}
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.5}
+设 $1\le p<\infty$, $1\le q\le\infty$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 证明 $L^1(\Omega)\cap L^\infty(\Omega)$ 是 $L^p(\Omega)$ 的稠密子集.
+	\item 证明集合
+	      \begin{equation*}
+	      \bigl\{f\in L^p(\Omega)\cap L^q(\Omega);\ \norm{f}_q\le1\bigr\}
+	      \end{equation*}
+	      在 $L^p(\Omega)$ 中闭.
+	\item 设 $(f_n)$ 为 $L^p(\Omega)\cap L^q(\Omega)$ 中的序列, $f\in L^p(\Omega)$.
+	      假设 $f_n\to f$ 在 $L^p(\Omega)$ 中, 且 $\norm{f_n}_q\le C$.证明
+	      $f\in L^r(\Omega)$, 且对 $p$ 与 $q$ 之间的每个 $r$ ($r\ne q$) 都有
+	      $f_n\to f$ 在 $L^r(\Omega)$ 中.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.6}
+假设 $\abs{\Omega}<\infty$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 设 $f\in L^\infty(\Omega)$.证明 $\lim_{p\to\infty}\norm{f}_p=
+	      \norm{f}_\infty$.
+	\item 设 $f\in\bigcap_{1\le p<\infty}L^p(\Omega)$, 并假设存在常数 $C$, 使得
+	      \begin{equation*}
+	      \norm{f}_p\le C\quad\forall1\le p<\infty.
+	      \end{equation*}
+	      证明 $f\in L^\infty(\Omega)$.
+	\item 对 $\Omega=(0,1)$, 构造一个函数 $f\in\bigcap_{1\le p<\infty}L^p(\Omega)$
+	      的例子, 使得 $f\notin L^\infty(\Omega)$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.7}
+设 $1\le q\le p\le\infty$.设 $a(x)$ 为 $\Omega$ 上的可测函数.假设对每个函数
+$u\in L^p(\Omega)$ 都有 $au\in L^q(\Omega)$.
+
+证明 $a\in L^r(\Omega)$, 其中
+\begin{equation*}
+r=\begin{cases}
+\dfrac{pq}{p-q} & \text{若}\ p<\infty,\\[8pt]
+q & \text{若}\ p=\infty.
+\end{cases}
+\end{equation*}
+[提示: 使用闭图像定理.]
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.8}
+设 $X\subset L^1(\Omega)$ 是 $L^1(\Omega)$ 中的闭向量空间.假设
+\begin{equation*}
+X\subset\bigcup_{1<q\le\infty}L^q(\Omega).
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 证明存在某个 $p>1$, 使得 $X\subset L^p(\Omega)$.
+	      [提示: 对每个整数 $n\ge1$ 考虑集合
+	      \begin{equation*}
+	      X_n=\bigl\{f\in X\cap L^{1+(1/n)}(\Omega);\
+	      \norm{f}_{1+(1/n)}\le n\bigr\}.]
+	      \end{equation*}
+	\item 证明存在常数 $C$, 使得
+	      \begin{equation*}
+	      \norm{f}_p\le C\norm{f}_1\quad\forall f\in X.
+	      \end{equation*}
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Jensen 不等式]
+\label{exer:4.9}
+假设 $\abs{\Omega}<\infty$.设 $j:\R\to(-\infty,+\infty]$ 为凸的, 下半连续的
+函数, $j\not\equiv+\infty$.设 $f\in L^1(\Omega)$ 满足 $f(x)\in D(j)$ 几乎处处,
+且 $j(f)\in L^1(\Omega)$.证明
+\begin{equation*}
+j\Bigl(\frac1{\abs{\Omega}}\int_\Omega f\Bigr)
+\le\frac1{\abs{\Omega}}\int_\Omega j(f).
+\end{equation*}
+\end{exercise}
+
+\begin{exercise}[凸被积函数]
+\label{exer:4.10}
+假设 $\abs{\Omega}<\infty$.设 $1\le p<\infty$, $j:\R\to\R$ 为凸的连续函数.
+考虑由
+\begin{equation*}
+J(u)=\begin{cases}
+\displaystyle\int_\Omega j(u(x))\,dx & \text{若}\ j(u)\in L^1(\Omega),\\[8pt]
++\infty & \text{若}\ j(u)\notin L^1(\Omega)
+\end{cases}
+\end{equation*}
+定义的函数 $J:L^p(\Omega)\to(-\infty,+\infty]$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 证明 $J$ 是凸的.
+	\item 证明 $J$ 下半连续.
+	      [提示: 先考虑 $j\ge0$ 的情形, 并使用 Fatou 引理.]
+	\item 证明共轭函数 $J^\star:L^{p'}(\Omega)\to(-\infty,+\infty]$ 由
+	      \begin{equation*}
+	      J^\star(f)=\begin{cases}
+	      \displaystyle\int_\Omega j^\star(f(x))\,dx & \text{若}\ j^\star(f)\in L^1(\Omega),\\[8pt]
+	      +\infty & \text{若}\ j^\star(f)\notin L^1(\Omega)
+	      \end{cases}
+	      \end{equation*}
+	      给出.
+	      [提示: 当 $1<p<\infty$ 时考虑
+	      $J_n(u)=J(u)+\frac1n\int\abs{u}^p$, 并求出 $J_n^\star$.]
+	\item 用 $\partial j$ (相应地, $\partial J$) 表示 $j$ (相应地, $J$) 的次微分
+	      (见问题 2).设 $u\in L^p(\Omega)$, $f\in L^{p'}(\Omega)$; 证明
+	      \begin{equation*}
+	      f\in\partial J(u)\iff f(x)\in\partial j(u(x))\quad\text{a.e. 在}\
+	      \Omega\ \text{上}.
+	      \end{equation*}
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[空间 $L^\alpha(\Omega)$, $0<\alpha<1$]
+\label{exer:4.11}
+设 $0<\alpha<1$.令
+\begin{equation*}
+L^\alpha(\Omega)=\bigl\{u:\Omega\to\R;\ u\ \text{可测且}\
+\abs{u}^\alpha\in L^1(\Omega)\bigr\}
+\end{equation*}
+并置
+\begin{equation*}
+[u]_\alpha=\Bigl(\int\abs{u}^\alpha\Bigr)^{1/\alpha}.
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 验证 $L^\alpha$ 是向量空间, 但 $[\cdot]_\alpha$ 不是范数.更确切地说,
+	      证明: 若 $u,v\in L^\alpha(\Omega)$, $u\ge0$ 几乎处处, $v\ge0$ 几乎处处,
+	      则
+	      \begin{equation*}
+	      [u+v]_\alpha\ge[u]_\alpha+[v]_\alpha.
+	      \end{equation*}
+	\item 证明
+	      \begin{equation*}
+	      [u+v]_\alpha^\alpha\le[u]_\alpha^\alpha+[v]_\alpha^\alpha
+	      \quad\forall u,v\in L^\alpha(\Omega).
+	      \end{equation*}
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[$1<p\le2$ 时 $L^p$ 一致凸 (C. Morawetz 的方法)]
+\label{exer:4.12}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 设 $1<p<\infty$.证明存在只依赖于 $p$ 的常数 $C$, 使得
+	      \begin{equation*}
+	      \abs{a-b}^p\le C\bigl(\abs{a}^p+\abs{b}^p\bigr)^{1-s}
+	      \Bigl(\abs{a}^p+\abs{b}^p-2\Bigl|\frac{a+b}2\Bigr|^p\Bigr)^s
+	      \quad\forall a,b\in\R,
+	      \end{equation*}
+	      其中 $s=p/2$.
+	\item 由此推出 $1<p\le2$ 时 $L^p(\Omega)$ 一致凸.
+	      [提示: 使用第 1 问与 Hölder 不等式.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.13}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 验证
+	      \begin{equation*}
+	      \bigl|\abs{a+b}-\abs{a}-\abs{b}\bigr|\le2\abs{b}\quad\forall a,b\in\R.
+	      \end{equation*}
+	\item 设 $(f_n)$ 为 $L^1(\Omega)$ 中的序列, 满足
+	      \begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.1em]
+	      	\item $f_n(x)\to f(x)$ 几乎处处,
+	      	\item $(f_n)$ 在 $L^1(\Omega)$ 中有界, 即 $\norm{f_n}_1\le M\ \forall n$.
+	      \end{enumerate}
+	      证明 $f\in L^1(\Omega)$, 且
+	      \begin{equation*}
+	      \lim_{n\to\infty}\int\bigl\{\abs{f_n}-\abs{f_n-f}\bigr\}=\int\abs{f}.
+	      \end{equation*}
+	      [提示: 在第 1 问中取 $a=f_n-f$, $b=f$, 并考虑序列
+	      $\varphi_n=\bigl|\abs{f_n}-\abs{f_n-f}-\abs{f}\bigr|$.]
+	\item 设 $(f_n)$ 为 $L^1(\Omega)$ 中的序列, $f$ 为 $L^1(\Omega)$ 中的函数, 满足
+	      \begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.1em]
+	      	\item $f_n(x)\to f(x)$ 几乎处处,
+	      	\item $\norm{f_n}_1\to\norm{f}$.
+	      \end{enumerate}
+	      证明 $\norm{f_n-f}_1=0$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Egorov 与 Vitali 定理]
+\label{exer:4.14}
+假设 $\abs{\Omega}<\infty$.设 $(f_n)$ 为可测函数序列, 使得 $f_n\to f$ 几乎处处
+(其中 $\abs{f}<\infty$ 几乎处处).
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 设 $\alpha>0$ 固定.证明
+	      \begin{equation*}
+	      \operatorname{meas}\bigl[\abs{f_n-f}>\alpha\bigr]
+	      \xrightarrow[n\to\infty]{}0.
+	      \end{equation*}
+	\item 更确切地说, 令
+	      \begin{equation*}
+	      S_n(\alpha)=\bigcup_{k\ge n}\bigl[\abs{f_k-f}>\alpha\bigr].
+	      \end{equation*}
+	      证明 $\abs{S_n(\alpha)}\xrightarrow[n\to\infty]{}0$.
+	\item (Egorov). 证明
+	      \begin{equation*}
+	      \begin{cases}
+	      \forall\delta>0\ \ \exists A\subset\Omega\ \text{可测, 使得}\\
+	      \abs{A}<\delta\ \text{且}\ f_n\to f\ \text{在}\ \Omega\setminus A\
+	      \text{上一致收敛}.
+	      \end{cases}
+	      \end{equation*}
+	      [提示: 给定整数 $m\ge1$, 借助第 2 问证明存在可测集
+	      $\Omega_m\subset\Omega$, 使 $\abs{\Omega_m}<\delta/2^m$, 且存在整数
+	      $N_m$ 使得
+	      \begin{equation*}
+	      \abs{f_k(x)-f(x)}<\frac1m\quad\forall k\ge N_m,\
+	      \forall x\in\Omega\setminus\Omega_m.]
+	      \end{equation*}
+	\item (Vitali). 设 $(f_n)$ 为 $L^p(\Omega)$ 中的序列, $1\le p<\infty$.假设
+	      \begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.1em]
+	      	\item $\forall\varepsilon>0\ \exists\delta>0$ 使得
+	      	      $\int_A\abs{f_n}^p<\varepsilon\ \forall n$ 且对一切满足
+	      	      $\abs{A}<\delta$ 的可测集 $A\subset\Omega$;
+	      	\item $f_n\to f$ 几乎处处.
+	      \end{enumerate}
+	      证明 $f\in L^p(\Omega)$, 且 $f_n\to f$ 在 $L^p(\Omega)$ 中.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.15}
+设 $\Omega=(0,1)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 考虑由 $f_n(x)=ne^{-nx}$ 定义的函数序列 $(f_n)$.证明
+	      \begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.1em]
+	      	\item $f_n\to0$ 几乎处处;
+	      	\item $f_n$ 在 $L^1(\Omega)$ 中有界;
+	      	\item $f_n\not\to0$ 在 $L^1(\Omega)$ 中强收敛;
+	      	\item $f_n\not\weakto0$ 弱收敛于 $\sigma(L^1,L^\infty)$.
+	      \end{enumerate}
+	      更确切地说, 不存在弱收敛于 $\sigma(L^1,L^\infty)$ 的子列.
+	\item 设 $1<p<\infty$, 考虑由 $g_n(x)=n^{1/p}e^{-nx}$ 定义的函数序列
+	      $(g_n)$.证明
+	      \begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.1em]
+	      	\item $g_n\to0$ 几乎处处;
+	      	\item $(g_n)$ 在 $L^p(\Omega)$ 中有界;
+	      	\item $g_n\not\to0$ 在 $L^p(\Omega)$ 中强收敛;
+	      	\item $g_n\weakto0$ 弱收敛于 $\sigma(L^p,L^{p'})$.
+	      \end{enumerate}
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.16}
+设 $1<p<\infty$.设 $(f_n)$ 为 $L^p(\Omega)$ 中的序列, 满足
+\begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.1em]
+	\item $f_n$ 在 $L^p(\Omega)$ 中有界,
+	\item $f_n\to f$ 在 $\Omega$ 上几乎处处.
+\end{enumerate}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 证明 $f_n\weakto f$ 弱收敛于 $\sigma(L^p,L^{p'})$.
+	      [提示: 先证明: 若 $f_n\weakto\tilde f$ 弱收敛于
+	      $\sigma(L^p,L^{p'})$ 且 $f_n\to f$ 几乎处处, 则 $f=\tilde f$ 几乎处处
+	      (使用习题  \ref{exer:3.4}).]
+	\item 若把假设 (ii) 换成
+	      \begin{enumerate}[label=(\roman*)$'$, leftmargin=3.0em, itemsep=0.1em]
+	      	\item $\norm{f_n-f}_1\to0$,
+	      \end{enumerate}
+	      结论相同.
+	\item 现在假设 (i), (ii) 成立, 且 $\abs{\Omega}<\infty$.证明对每个满足
+	      $1\le q<p$ 的 $q$ 都有 $\norm{f_n-f}_q\to0$.
+	      [提示: 引入截断函数 $T_kf_n$, 或使用 Egorov 定理.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Brezis--Lieb 引理]
+\label{exer:4.17}
+设 $1<p<\infty$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 证明存在常数 $C$ (依赖于 $p$), 使得
+	      \begin{equation*}
+	      \bigl|\abs{a+b}^p-\abs{a}^p-\abs{b}^p\bigr|
+	      \le C\bigl(\abs{a}^{p-1}\abs{b}+\abs{a}\abs{b}^{p-1}\bigr)
+	      \quad\forall a,b\in\R.
+	      \end{equation*}
+	\item 设 $(f_n)$ 为 $L^p(\Omega)$ 中的有界序列, 使得 $f_n\to f$ 在 $\Omega$ 上
+	      几乎处处.证明 $f\in L^p(\Omega)$, 且
+	      \begin{equation*}
+	      \lim_{n\to\infty}\int_\Omega\bigl\{\abs{f_n}^p-\abs{f_n-f}^p\bigr\}
+	      =\int_\Omega\abs{f}^p.
+	      \end{equation*}
+	      [提示: 在第 1 问中取 $a=f_n-f$, $b=f$.注意由习题  \ref{exer:4.16},
+	      $\abs{f_n-f}\weakto0$ 在 $L^p$ 中弱收敛, 而 $\abs{f_n-f}^{p-1}
+	      \weakto0$ 在 $L^{p'}$ 中弱收敛.]
+	\item 由此推出: 若 $(f_n)$ 为 $L^p(\Omega)$ 中的序列, 满足
+	      \begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.1em]
+	      	\item $f_n(x)\to f(x)$ 几乎处处,
+	      	\item $\norm{f_n}_p\to\norm{f}_p$,
+	      \end{enumerate}
+	      则 $\norm{f_n-f}_p\to0$.
+	\item 为第 3 问找出另一种方法.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Rademacher 函数]
+\label{exer:4.18}
+设 $1\le p\le\infty$, $f\in L^p_{\mathrm{loc}}(\R)$.假设 $f$ 是 $T$-周期的,
+即 $f(x+T)=f(x)$ 对几乎所有的 $x\in\R$ 成立.令
+\begin{equation*}
+\bar f=\frac1T\int_0^Tf(t)\,dt.
+\end{equation*}
+考虑由
+\begin{equation*}
+u_n(x)=f(nx),\quad x\in(0,1)
+\end{equation*}
+定义的 $L^p(0,1)$ 中的序列 $(u_n)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 证明 $u_n\weakto\bar f$ 在 $L^p(0,1)$ 中关于拓扑 $\sigma(L^p,L^{p'})$
+	      弱收敛.
+	\item 求 $\lim_{n\to\infty}\norm{u_n-\bar f}_p$.
+	\item 考察下述例子:
+	      \begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.1em]
+	      	\item $u_n(x)=\sin nx$,
+	      	\item $u_n(x)=f(nx)$, 其中 $f$ 是 1-周期的, 且
+	      	      \begin{equation*}
+	      	      f(x)=\begin{cases}
+	      	      \alpha & \text{若}\ x\in(0,1/2),\\
+	      	      \beta & \text{若}\ x\in(1/2,1).
+	      	      \end{cases}
+	      	      \end{equation*}
+	      \end{enumerate}
+	      例 (ii) 中的函数称为 \emph{Rademacher 函数}.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.19}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 设 $(f_n)$ 为 $L^p(\Omega)$ 中的序列, $1<p<\infty$, $f\in L^p(\Omega)$.
+	      假设
+	      \begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.1em]
+	      	\item $f_n\weakto f$ 弱收敛于 $\sigma(L^p,L^{p'})$,
+	      	\item $\norm{f_n}_p\to\norm{f}_p$.
+	      \end{enumerate}
+	      证明 $f_n\to f$ 在 $L^p(\Omega)$ 中强收敛.
+	\item 构造 $L^1(0,1)$ 中的序列 $(f_n)$, $f_n\ge0$, 使得:
+	      \begin{enumerate}[label=(\roman*), leftmargin=2.4em, itemsep=0.1em]
+	      	\item $f_n\weakto f$ 弱收敛于 $\sigma(L^1,L^\infty)$,
+	      	\item $\norm{f_n}_1\to\norm{f}_1$,
+	      	\item $\norm{f_n-f}_1\not\to0$.
+	      \end{enumerate}
+	      与习题  \ref{exer:4.13} 的结果以及命题  \ref{prop:3.32} 作比较.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.20}
+假设 $\abs{\Omega}<\infty$.设 $1\le p<\infty$, $1\le q<\infty$.
+
+设 $a:\R\to\R$ 为连续函数, 使得
+\begin{equation*}
+\abs{a(t)}\le C\bigl\{\abs{t}^{p/q}+1\bigr\}\quad\forall t\in\R.
+\end{equation*}
+考虑由
+\begin{equation*}
+(Au)(x)=a(u(x)),\quad x\in\Omega
+\end{equation*}
+定义的 (非线性) 映射 $A:L^p(\Omega)\to L^q(\Omega)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 证明 $A$ 从 $L^p(\Omega)$ 强拓扑到 $L^q(\Omega)$ 强拓扑连续.
+	\item 取 $\Omega=(0,1)$, 并假设对每个满足 $u_n\weakto u$ 弱收敛于
+	      $\sigma(L^p,L^{p'})$ 的序列 $(u_n)$ 都有 $Au_n\weakto Au$ 弱收敛于
+	      $\sigma(L^q,L^{q'})$.证明 $a$ 是仿射函数.
+	      [提示: 使用 Rademacher 函数; 见习题  \ref{exer:4.18}.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.21}
+给定函数 $u_0:\R\to\R$, 令 $u_n(x)=u_0(x+n)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 假设 $u_0\in L^p(\R)$, $1<p<\infty$.证明 $u_n\weakto0$ 在 $L^p(\R)$
+	      中关于弱拓扑 $\sigma(L^p,L^{p'})$ 弱收敛.
+	\item 假设 $u_0\in L^\infty(\R)$, 且 $u_0(x)\to0$ 当 $\abs{x}\to\infty$ 在下述
+	      弱意义下成立: 对每个 $\delta>0$, 集合 $[\abs{u_0}>\delta]$ 的测度有限.
+	      证明 $u_n\overset{\star}{\rightharpoonup}0$ 在 $L^\infty(\R)$ 中关于
+	      \wstar{}拓扑 $\sigma(L^\infty,L^1)$ 弱收敛.
+	\item 取 $u_0=\chi_{(0,1)}$.证明不存在子列 $(u_{n_k})$ 在 $L^1(\R)$ 中关于
+	      $\sigma(L^1,L^\infty)$ 收敛.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.22}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 设 $(f_n)$ 为 $L^p(\Omega)$ 中的序列, $1<p\le\infty$, $f\in L^p(\Omega)$.
+	      证明下述性质等价:
+	      \begin{equation*}
+	      \text{(A)}\ \ f_n\weakto f\ \text{在}\ \sigma(L^p,L^{p'})\ \text{中},
+	      \end{equation*}
+	      \begin{equation*}
+	      \text{(B)}\ \begin{cases}
+	      \norm{f_n}_p\le C\quad\text{且}\\
+	      \displaystyle\int_Ef_n\to\int_Ef\quad\forall E\subset\Omega\ \text{可测, 且}\
+	      \abs{E}<\infty.
+	      \end{cases}
+	      \end{equation*}
+	\item 若 $p=1$ 且 $\abs{\Omega}<\infty$, 证明 (A) $\iff$ (B).
+	\item 假设 $p=1$ 且 $\abs{\Omega}=\infty$.证明 (A) $\Rightarrow$ (B).
+	      构造一个例子说明一般地 (B) $\not\Rightarrow$ (A).
+	      [提示: 使用习题  \ref{exer:4.21} 第 3 问.]
+	\item 设 $(f_n)$ 为 $L^1(\Omega)$ 中的序列, $f\in L^1(\Omega)$, 且
+	      $\abs{\Omega}=\infty$.假设
+	      \begin{enumerate}[label=(\alph*), leftmargin=2.4em, itemsep=0.1em]
+	      	\item $f_n\ge0\ \forall n$, 且 $f\ge0$ 在 $\Omega$ 上几乎处处,
+	      	\item $\int_\Omega f_n\to\int_\Omega f$,
+	      	\item $\int_Ef_n\to\int_Ef\ \forall E\subset\Omega$ 可测, 且
+	      	      $\abs{E}<\infty$.
+	      \end{enumerate}
+	      证明 $f_n\weakto f$ 在 $L^1(\Omega)$ 中弱收敛于 $\sigma(L^1,L^\infty)$.
+	      [提示: 证明 $\int_Ff_n\to\int_Ff\ \forall F\subset\Omega$ 可测, 且
+	      $\abs{F}\le\infty$.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.23}
+设 $f:\Omega\to\R$ 为可测函数, $1\le p\le\infty$.本习题的目的是证明集合
+\begin{equation*}
+C=\bigl\{u\in L^p(\Omega);\ u\ge f\ \text{a.e.}\bigr\}
+\end{equation*}
+在 $L^p(\Omega)$ 中关于拓扑 $\sigma(L^p,L^{p'})$ 闭.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 先假设 $1\le p<\infty$.证明 $C$ 在强 $L^p$ 拓扑中凸且闭.由此推出
+	      $C$ 在 $\sigma(L^p,L^{p'})$ 中闭.
+	\item 取 $p=\infty$, 证明
+	      \begin{equation*}
+	      C=\Bigl\{u\in L^\infty(\Omega)\ \Big|\ \int u\phi\ge\int f\phi\
+	      \forall\phi\in L^1(\Omega)\ \text{满足}\ f\phi\in L^1(\Omega)\
+	      \text{且}\ \phi\ge0\ \text{a.e.}\Bigr\}.
+	      \end{equation*}
+	      [提示: 先假设 $f\in L^\infty(\Omega)$; 一般情形下引入集合
+	      $\omega_n=[\abs{f}<n]$.]
+	\item 由此推出: 当 $p=\infty$ 时, $C$ 在 $\sigma(L^\infty,L^1)$ 中闭.
+	\item 设 $f_1,f_2\in L^\infty(\Omega)$, $f_1\le f_2$ 几乎处处.证明集合
+	      \begin{equation*}
+	      C=\bigl\{u\in L^\infty(\Omega);\ f_1\le u\le f_2\ \text{a.e.}\bigr\}
+	      \end{equation*}
+	      在 $L^\infty(\Omega)$ 中关于拓扑 $\sigma(L^\infty,L^1)$ 紧.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.24}
+设 $u\in L^\infty(\R^N)$.设 $(\rho_n)$ 为磨光核序列.设 $(\zeta_n)$ 为
+$L^\infty(\R^N)$ 中的序列, 使得
+\begin{equation*}
+\norm{\zeta_n}_\infty\le1\quad\forall n
+\quad\text{且}\quad\zeta_n\to\zeta\ \text{a.e. 在}\ \R^N\ \text{上}.
+\end{equation*}
+令
+\begin{equation*}
+v_n=\rho_n\star(\zeta_nu)\quad\text{且}\quad v=\zeta u.
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 证明 $v_n\overset{\star}{\rightharpoonup}v$ 在 $L^\infty(\R^N)$ 中关于
+	      \wstar{}拓扑 $\sigma(L^\infty,L^1)$ 弱收敛.
+	\item 证明对每个球 $B$ 都有 $\int_B\abs{v_n-v}\to0$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[$L^\infty(\Omega)$ 中函数的正则化]
+\label{exer:4.25}
+设 $\Omega\subset\R^N$ 为开集.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 设 $u\in L^\infty(\Omega)$.证明存在 $C_c^\infty(\Omega)$ 中的序列
+	      $(u_n)$, 使得
+	      \begin{enumerate}[label=(\alph*), leftmargin=2.4em, itemsep=0.1em]
+	      	\item $\norm{u_n}_\infty\le\norm{u}_\infty\ \forall n$,
+	      	\item $u_n\to u$ 在 $\Omega$ 上几乎处处,
+	      	\item $u_n\overset{\star}{\rightharpoonup}u$ 在 $L^\infty(\Omega)$ 中
+	      	      关于\wstar{}拓扑 $\sigma(L^\infty,L^1)$ 弱收敛.
+	      \end{enumerate}
+	\item 若 $u\ge0$ 在 $\Omega$ 上几乎处处, 证明还可以要求
+	      \begin{enumerate}[label=(\alph*), leftmargin=2.4em, start=4, itemsep=0.1em]
+	      	\item $u_n\ge0$ 在 $\Omega$ 上 $\forall n$.
+	      \end{enumerate}
+	\item 由此推出 $C_c^\infty(\Omega)$ 在 $L^\infty(\Omega)$ 中关于拓扑
+	      $\sigma(L^\infty,L^1)$ 稠密.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.26}
+设 $\Omega\subset\R^N$ 为开集, $f\in L^1_{\mathrm{loc}}(\Omega)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 证明 $f\in L^1(\Omega)$ 当且仅当
+	      \begin{equation*}
+	      A=\sup\Bigl\{\int f\phi;\ \phi\in C_c(\Omega),\
+	      \norm{\phi}_\infty\le1\Bigr\}<\infty.
+	      \end{equation*}
+	      若 $f\in L^1(\Omega)$, 证明 $A=\norm{f}_1$.
+	\item 证明 $f^+\in L^1(\Omega)$ 当且仅当
+	      \begin{equation*}
+	      B=\sup\Bigl\{\int f\phi;\ \phi\in C_c(\Omega),\
+	      \norm{\phi}_\infty\le1\ \text{且}\ \phi\ge0\Bigr\}<\infty.
+	      \end{equation*}
+	      若 $f^+\in L^1(\Omega)$, 证明 $B=\norm{f^+}_1$.
+	\item 把 $C_c(\Omega)$ 换成 $C_c^\infty(\Omega)$ 时, 同样的问题.
+	\item 由此推出
+	      \begin{equation*}
+	      \Bigl\{\int f\phi=0\ \forall\phi\in C_c^\infty(\Omega)\Bigr\}
+	      \Longrightarrow\bigl[f=0\ \text{a.e.}\bigr]
+	      \end{equation*}
+	      以及
+	      \begin{equation*}
+	      \Bigl\{\int f\phi\ge0\ \forall\phi\in C_c^\infty(\Omega),\
+	      \phi\ge0\Bigr\}\Longrightarrow\bigl[f\ge0\ \text{a.e.}\bigr].
+	      \end{equation*}
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.27}
+设 $\Omega\subset\R^N$ 为开集.设 $u,v\in L^1_{\mathrm{loc}}(\Omega)$, 且 $u\ne0$
+在一个测度为正的集合上几乎处处成立.假设
+\begin{equation*}
+\Bigl\{\phi\in C_c^\infty(\Omega)\ \text{且}\ \int u\phi>0\Bigr\}
+\Longrightarrow\Bigl\{\int v\phi\ge0\Bigr\}.
+\end{equation*}
+证明存在常数 $\lambda\ge0$, 使得 $v=\lambda u$.
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.28}
+设 $\rho\in L^1(\R^N)$, $\int\rho=1$.令 $\rho_n(x)=n^N\rho(nx)$.设
+$f\in L^p(\R^N)$, $1\le p<\infty$.证明 $\rho_n\star f\to f$ 在 $L^p(\R^N)$ 中.
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.29}
+设 $K\subset\R^N$ 为紧子集.证明存在 $C_c^\infty(\R^N)$ 中的函数序列 $(u_n)$,
+使得
+\begin{enumerate}[label=(\alph*), leftmargin=2.4em, itemsep=0.15em]
+	\item $0\le u_n\le1$ 在 $\R^N$ 上,
+	\item $u_n=1$ 在 $K$ 上,
+	\item $\operatorname{supp}u_n\subset K+B(0,1/n)$,
+	\item $\abs{D^\alpha u_n(x)}\le C_\alpha n^{\abs{\alpha}}\ \forall x\in\R^N$,
+	      对每个多重指标 $\alpha$ (其中 $C_\alpha$ 只依赖于 $\alpha$ 而不依赖于
+	      $n$).
+\end{enumerate}
+[提示: 设 $\chi_n$ 为 $K+B(0,1/2n)$ 的特征函数; 取
+$u_n=\rho_{2n}\star\chi_n$.]
+\end{exercise}
+
+\begin{exercise}[Young 不等式]
+\label{exer:4.30}
+设 $1\le p\le\infty$, $1\le q\le\infty$, 满足 $\frac1p+\frac1q\ge1$.令
+$\frac1r=\frac1p+\frac1q-1$, 于是 $1\le r\le\infty$.设
+$f\in L^p(\R^N)$, $g\in L^q(\R^N)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 证明对几乎所有的 $x\in\R^N$, 函数 $y\mapsto f(x-y)g(y)$ 在 $\R^N$ 上
+	      可积.
+	      [提示: 令 $\alpha=p/q'$, $\beta=q/p'$, 并写
+	      \begin{equation*}
+	      \abs{f(x-y)g(y)}=\abs{f(x-y)}^\alpha\abs{g(y)}^\beta
+	      \bigl[\abs{f(x-y)}^{1-\alpha}\abs{g(y)}^{1-\beta}\bigr].]
+	      \end{equation*}
+	\item 令
+	      \begin{equation*}
+	      (f\star g)(x)=\int_{\R^N}f(x-y)g(y)\,dy.
+	      \end{equation*}
+	      证明 $f\star g\in L^r(\R^N)$, 且 $\norm{f\star g}_r\le\norm{f}_p
+	      \norm{g}_q$.
+	\item 这里假设 $\frac1p+\frac1q=1$.证明
+	      \begin{equation*}
+	      f\star g\in C(\R^N)\cap L^\infty(\R^N),
+	      \end{equation*}
+	      并且, 若 $1<p<\infty$, 则当 $\abs{x}\to\infty$ 时
+	      $(f\star g)(x)\to0$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.31}
+设 $f\in L^p(\R^N)$, $1\le p<\infty$.对每个 $r>0$ 令
+\begin{equation*}
+f_r(x)=\frac1{\abs{B(x,r)}}\int_{B(x,r)}f(y)\,dy,\quad x\in\R^N.
+\end{equation*}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 证明 $f_r\in L^p(\R^N)\cap C(\R^N)$, 且当 $\abs{x}\to\infty$ 时
+	      $f_r(x)\to0$ ($r$ 固定).
+	\item 证明当 $r\to0$ 时 $f_r\to f$ 在 $L^p(\R^N)$ 中.
+	      [提示: 把 $f_r$ 写成 $\phi_r\star f$ 的形式, 其中 $\phi_r$ 取法适当.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.32}
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 设 $f,g\in L^1(\R^N)$, $h\in L^p(\R^N)$, $1\le p\le\infty$.证明
+	      $f\star g=g\star f$ 且 $(f\star g)\star h=f\star(g\star h)$.
+	\item 设 $f\in L^1(\R^N)$.假设 $f\star\phi=0\ \forall\phi\in
+	      C_c^\infty(\R^N)$.证明 $f=0$ 在 $\R^N$ 上几乎处处成立.对
+	      $f\in L^1_{\mathrm{loc}}(\R^N)$ 也有同样的问题.
+	\item 设 $a\in L^1(\R^N)$ 为固定函数.考虑由
+	      \begin{equation*}
+	      T_a(u)=a\star u
+	      \end{equation*}
+	      定义的算子 $T_a:L^2(\R^N)\to L^2(\R^N)$.验证 $T_a$ 有界, 且
+	      $\norm{T_a}_{\mathcal{L}(L^2)}\le\norm{a}_{L^1(\R^N)}$.计算
+	      $T_a\circ T_b$, 并证明 $T_a\circ T_b=T_b\circ T_a\
+	      \forall a,b\in L^1(\R^N)$.确定 $(T_a)^\star$, $T_a\circ(T_a)^\star$
+	      与 $(T_a)^\star\circ T_a$.在关于 $a$ 的什么条件下有
+	      $(T_a)^\star=T_a$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.33}
+固定函数 $\phi\in C_c(\R)$, $\phi\not\equiv0$, 并考虑函数族
+\begin{equation*}
+\mathcal{F}=\bigcup_{n=1}^\infty\{\phi_n\},
+\end{equation*}
+其中 $\phi_n(x)=\phi(x+n)$, $x\in\R$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 假设 $1\le p<\infty$.证明 $\forall\varepsilon>0\ \exists\delta>0$,
+	      使得
+	      \begin{equation*}
+	      \norm{\tau_hf-f}_p<\varepsilon\quad\forall f\in\mathcal{F}\
+	      \text{且}\ \forall h\in\R,\ \abs{h}<\delta.
+	      \end{equation*}
+	\item 证明 $\mathcal{F}$ 在 $L^p(\R)$ 中不具有紧闭包.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.34}
+设 $1\le p<\infty$, $\mathcal{F}\subset L^p(\R^N)$ 为 $L^p(\R^N)$ 的紧子集.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 证明 $\mathcal{F}$ 在 $L^p(\R^N)$ 中有界.
+	\item 证明 $\forall\varepsilon>0\ \exists\delta>0$, 使得
+	      \begin{equation*}
+	      \norm{\tau_hf-f}_p<\varepsilon\quad\forall f\in\mathcal{F}\
+	      \text{且}\ \forall h\in\R^N,\ \abs{h}<\delta.
+	      \end{equation*}
+	\item 证明 $\forall\varepsilon>0\ \exists\Omega\subset\R^N$ 有界, 开, 使得
+	      \begin{equation*}
+	      \norm{f}_{L^p(\R^N\setminus\Omega)}<\varepsilon\quad\forall f\in\mathcal{F}.
+	      \end{equation*}
+	      与推论  \ref{cor:4.27} 作比较.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.35}
+固定函数 $G\in L^p(\R^N)$, $1\le p<\infty$, 并令 $\mathcal{F}=G\star B$, 其中
+$B$ 是 $L^1(\R^N)$ 中的有界集.
+
+证明对任一测度有限的可测集 $\Omega\subset\R^N$, $\mathcal{F}|_\Omega$ 在
+$L^p(\Omega)$ 中的闭包紧.与推论  \ref{cor:4.28} 作比较.
+\end{exercise}
+
+\begin{exercise}[等度可积族]
+\label{exer:4.36}
+若子集 $\mathcal{F}\subset L^1(\Omega)$ 满足下述性质, 则称它是\emph{等度可积}
+的:\footnote{可以证明: 若测度空间 $\Omega$ 是弥散的 (即 $\Omega$ 没有原子), 则
+(a) 由 (b) 与 (c) 推出.例如考虑带 Lebesgue 测度的 $\Omega=\R^N$.}
+\begin{enumerate}[label=(\alph*), leftmargin=2.4em, itemsep=0.15em]
+	\item $\mathcal{F}$ 在 $L^1(\Omega)$ 中有界,
+	\item $\begin{cases}
+	      \forall\varepsilon>0\ \exists\delta>0\ \text{使得}\\
+	      \displaystyle\int_E\abs{f}<\varepsilon\quad\forall f\in\mathcal{F},\
+	      \forall E\subset\Omega\ \text{可测, 且}\ \abs{E}<\delta,
+	      \end{cases}$
+	\item $\begin{cases}
+	      \forall\varepsilon>0\ \exists\omega\subset\Omega\ \text{可测, 且}\
+	      \abs{\omega}<\infty\ \text{使得}\\
+	      \displaystyle\int_{\Omega\setminus\omega}\abs{f}<\varepsilon\quad
+	      \forall f\in\mathcal{F}.
+	      \end{cases}$
+\end{enumerate}
+设 $(\Omega_n)$ 为 $\Omega$ 中的非减可测集序列, $\abs{\Omega_n}<\infty\ \forall n$,
+且 $\Omega=\bigcup_n\Omega_n$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 证明 $\mathcal{F}$ 等度可积当且仅当
+	      \begin{equation*}
+	      \lim_{t\to\infty}\sup_{f\in\mathcal{F}}\int_{[\abs{f}>t]}\abs{f}=0
+	      \end{equation*}
+	      且
+	      \begin{equation*}
+	      \lim_{n\to\infty}\sup_{f\in\mathcal{F}}\int_{\Omega\setminus\Omega_n}
+	      \abs{f}=0.
+	      \end{equation*}
+	\item 证明: 若 $\mathcal{F}\subset L^1(\Omega)$ 紧, 则 $\mathcal{F}$ 等度
+	      可积.逆命题是否成立?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.37}
+固定函数 $f\in L^1(\R)$, 使得
+\begin{equation*}
+\int_{-\infty}^{+\infty}f(t)\,dt=0\quad\text{且}\quad
+\int_0^{+\infty}f(t)\,dt>0,
+\end{equation*}
+并对 $x\in I=(-1,+1)$ 令 $u_n(x)=nf(nx)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 证明
+	      \begin{equation*}
+	      \lim_{n\to\infty}\int_Iu_n(x)\phi(x)\,dx=0\quad
+	      \forall\phi\in C([-1,+1]).
+	      \end{equation*}
+	\item 验证序列 $(u_n)$ 在 $L^1(I)$ 中有界.证明 $(u_n)$ 的任一子列都不等度
+	      可积.
+	\item 证明不存在函数 $u\in L^1(I)$, 使得沿某个子列 $(u_{n_k})$ 有
+	      \begin{equation*}
+	      \lim_{k\to\infty}\int_Iu_{n_k}(x)\phi(x)\,dx
+	      =\int_Iu(x)\phi(x)\,dx\quad\forall\phi\in L^\infty(I).
+	      \end{equation*}
+	\item 与 Dunford--Pettis 定理作比较 (见问题 23 的 A3 问).
+	\item 证明存在子列 $(u_{n_k})$, 使得当 $k\to\infty$ 时 $u_{n_k}(x)\to0$
+	      在 $I$ 上几乎处处成立.
+	      [提示: 计算 $\int_{[n^{-1/2}<\abs{x}<1]}\abs{u_n(x)}\,dx$, 并应用定理
+	       \ref{thm:4.9}.]
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+\label{exer:4.38}
+令 $I=(0,1)$, 并考虑由
+\begin{equation*}
+u_n(x)=\begin{cases}
+n & \text{若}\ x\in\displaystyle\bigcup_{j=0}^{n-1}
+\Bigl(\frac jn,\frac jn+\frac1{n^2}\Bigr),\\[10pt]
+0 & \text{其他情形}
+\end{cases}
+\end{equation*}
+定义的 $L^1(I)$ 中的函数序列 $(u_n)$.
+\begin{enumerate}[label=\arabic*., leftmargin=2.2em, itemsep=0.35em]
+	\item 验证 $\abs{\operatorname{supp}u_n}=\frac1n$, $\norm{u_n}_1=1$.
+	\item 证明
+	      \begin{equation*}
+	      \lim_{n\to+\infty}\int_Iu_n(x)\phi(x)\,dx=\int_I\phi(x)\,dx
+	      \quad\forall\phi\in C([0,1]).
+	      \end{equation*}
+	      [提示: 先考虑 $\phi\in C^1([0,1])$ 的情形.]
+	\item 证明 $(u_n)$ 的任一子列都不等度可积.
+	\item 证明不存在函数 $u\in L^1(I)$, 使得沿某个子列 $(u_{n_k})$ 有
+	      \begin{equation*}
+	      \lim_{k\to\infty}\int_Iu_{n_k}(x)\phi(x)\,dx
+	      =\int_Iu(x)\phi(x)\,dx\quad\forall\phi\in L^\infty(I).
+	      \end{equation*}
+	      [提示: 取进一步的子列 $(u_{n'_k})$, 使
+	      $\sum_k\abs{\operatorname{supp}u_{n'_k}}<1$.]
+	\item 证明存在子列 $(u_{n_k})$, 使得当 $k\to\infty$ 时 $u_{n_k}(x)\to0$
+	      在 $I$ 上几乎处处成立.
+\end{enumerate}
+\end{exercise}

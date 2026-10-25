@@ -1,0 +1,3527 @@
+% 第六章 线性代数 --- 中译
+% 原书 pp. 306--... (Aluffi, Algebra: Chapter 0, Chapter VI).
+% 本文件进度: §6.1 自由模再探 ✅; §6.2 自由模的同态, I ✅; §6.3 自由模的同态, II ✅ (2026-08-30). 待续: §6.4 展示与分解.
+
+\chapter{线性代数}
+\label{chap:linear-algebra}
+
+
+% ===== 记号索引 v1 集中埋点 (页码参考原书书页; 首次出现位置待人工校对) =====
+% 本章记号条目（7 条）。OCR 已做最佳校正，但部分符号字形与首次
+% 出现位置仍待逐条人工复核（页码沿用原书第 699 页 Index of Notation）。
+% ===== /记号索引 =====
+\index[sym1]{$\Ann_R(M)$@$\Ann_R(M)$}
+\index[sym1]{$\Ass_R(M)$@$\Ass_R(M)$}
+\index[sym1]{$\dim_k V$@$\dim_k V$}
+\index[sym1]{$\mathbb{P}V$@$\mathbb{P}V$}
+\index[sym1]{$\rk_R M$@$\rk_R M$}
+\index[sym1]{$\Tor^R(M)$@$\Tor^R(M)$}
+\index[sym1]{$\tr(A)$@$\tr(A)$}
+在科学的若干分支中, ``代数'' 就是 ``线性代数'': 即向量空间与线性映射的研究, 也就是环 $R$ 上的模范畴在 $R$ 为域这一非常特殊的情形 (而且人们常常只关注非常特殊的域, 例如 $\R$ 或 $\CC$).
+
+\index{yu@域(field)!budong@不动(fixed)}这将是本章的主题之一. 然而, 我们要强调: 很多在域上能做的事情, 其实可以在更不特殊的环上进行. 事实上, 我们将论证: 在整环上发展一般理论会产生在域上工作时不可或缺的工具; 最突出的例子就是域上矩阵的典范形, 它将作为 PID 上有限生成模分类的推论而得到.
+
+在本章正文 (但不必在习题中) $R$ 总表示一个整环; 大部分理论不难推广到任意交换环\footnote{交换性假设非常方便, 因为它使我们能把左模与右模的概念等同起来, 而且整环有分式域这一事实简化了许多论证. 读者应当记住, 本章的许多结果都可以推广到更一般的环.}.
+
+\section{自由模再探}
+\label{sec:free-modules-revisited}
+
+\subsection{\texorpdfstring{$R$}{R}-Mod}
+\label{subsec:r-mod}
+
+关于模的一般性质, 参见 §III.\ref{subsec:modules-def}. 环 $R$ 上的模是一个阿贝尔群 $M$, 配上 $R$ 的一个作用. $r\in R$ 在 $m\in M$ 上的作用记作 $rm$: 这里有一个偏向左模的记号偏见 (但由于 $R$ 是交换的, 左模与右模的区别在这里无关紧要). 模的定义公理告诉我们, 对所有 $r_1,r_2,r\in R$ 与 $m,m_1,m_2\in M$,
+\begin{itemize}
+\item $(r_1+r_2)m = r_1m + r_2m$,
+\item $1m=m$ 且 $(r_1r_2)m = r_1(r_2m)$,
+\item $r(m_1+m_2) = rm_1 + rm_2$.
+\end{itemize}
+
+环 $R$ 上的模构成范畴 $R\dcate{Mod}$, 我们在第三章中已经遇见过它. 这个范畴反映了 $R$ 的深刻而重要的性质, 我们将试图揭示其中一些特征. 作为第一步近似, 我们考察 $R\dcate{Mod}$ 的 ``全子范畴'' (参见习题~I.\ref{ex:subcategory}), 其对象为自由模, 而态射为 $R\dcate{Mod}$ 中的寻常态射, 即 $R$-线性的群同态.
+
+本章前几节的目标是为这个子范畴给出一个非常具体的描述: 对有限生成自由模的情形, 这可以通过 $R$ 中元素构成的矩阵来实现. 在本章稍后, 我们还会看到矩阵也可以用来描述一些重要的非自由模类.
+
+\subsection{线性无关与基}
+\label{subsec:linear-independence-bases}
+
+读者可回顾 §III.\ref{subsec:free-modules} 中给出的自由 $R$-模的定义: $F^R(S)$ 表示一个包含给定集合 $S$ 的 $R$-模, 并且关于存在从 $S$ 到该模的集合映射具有泛性质. 我们曾证明 (断言~III.\ref{claim:free-module}) 模 $R^{\oplus S}$ (``对 $S$ 的每个元素有一个分量'') 给出了 $F^R(S)$ 的一个具体实现.
+
+本节的主要结论是: 对合理的环 $R$, 集合 $S$ 可以从自由模 $F^R(S)$ ``抽象地'' 复原\footnote{若 $R$ 不交换则未必如此.}. 例如, 容易推出 $R^m\cong R^n$ 当且仅当 $m=n$; 这是 (有限生成) 自由模的范畴确实允许简单描述的第一个迹象.
+
+我们的主要工具将是著名的线性无关子集与基的概念. 在定义这些概念时很容易不严谨. 为避免明显的陷阱, 我们将对``加标集合'' (参见 §I.\ref{subsec:multisets-indexed}) 给出定义, 即从一个 (非空) 指标集 $I$ 到给定模 $M$ 的函数 $i:I\to M$\erratumfootnote{根据官方勘误, 原书英文此处修正冠词 a 为 an (an indexing set).}. 读者应当把 $i$ 想象为选取 $M$ 中若干元素, 允许对应于 $\alpha\in I$ 的元素 $m_\alpha\in M$ 不一定互不相同.
+
+回忆, 对任意集合 $I$, 存在典范单射 $j:I\to F^R(I)$, 而任意函数 $i:I\to M$ 决定唯一的 $R$-模同态 $\varphi:F^R(I)\to M$ 使下图
+\[
+\begin{tikzcd}
+I \arrow[r, "j"] \arrow[dr, "i"'] & F^R(I) \arrow[d, "\varphi"] \\
+& M
+\end{tikzcd}
+\]
+交换: 这正是 $F^R(I)$ 满足的泛性质.
+
+\begin{definition}\label{def:linearly-independent}
+设 $i:I\to M$ 是一个加标集合. 若 $\varphi$ 是单射, 则称 $i$ 是\emph{线性无关的}\index{xianxingwuguan@线性无关(linearly independent)}; 否则称 $i$ 是\emph{线性相关的}\index{xianxingxiangguan@线性相关(linearly dependent)}. 若 $\varphi$ 是满射, 则称 $i$ \emph{生成}\index{shengcheng@生成(generates)} $M$.
+\end{definition}
+
+用稍微凌乱但或许更常见的方式来说, $M$ 中元素的加标集合 $S=\{m_\alpha\}_{\alpha\in I}$ 是线性无关的, 如果零线性组合
+\[
+\sum_{\alpha\in I} r_\alpha m_\alpha = 0
+\]
+只有当 $r_\alpha=0$ 对所有 $\alpha\in I$ 成立时才能得到; 否则 $S$ 是线性相关的. 该加标集合生成 $M$, 如果 $M$ 的每个元素都能写成 $\sum_{\alpha\in I} r_\alpha m_\alpha$ 的形式 (其中 $r_\alpha$ 可选取). (作为一个记号警告/提醒, 记住模中只定义有限和; 因此, 在此背景下记号 $\sum$ 表示有限和. 当在普通模中写 $\sum_{\alpha\in I} m_\alpha$ 时, 默认假定 $m_\alpha=0$ 对除有限多个 $\alpha\in I$ 之外的所有 $\alpha$ 成立.)
+
+在定义~\ref{def:linearly-independent} 中使用加标集合, 可以处理诸如 $m$ 与 $m$ 线性相关这样明显的特例, 因为 $1\cdot m + (-1)\cdot m = 0$: 如果 $i:I\to M$ 本身不是单射, 那么 $\varphi$ 肯定不是单射 (由图的交换性与 $j$ 的单射性), 所以此时 $i$ 线性相关. 由于这一事实, 一个线性无关的 $i:I\to M$ 相当于 (特别地) 选取了 $M$ 中一组互不相同的元素; 把 $I$ 的元素与 $M$ 中对应元素等同起来的诱惑在历史上不可抗拒, 而且本质上无害. 因此, 人们常说 $M$ 的线性相关/无关\emph{子集}. 我们将遵从这一常见做法; 读者应仔细理解相关陈述, 并纠正可能出现的明显不严谨之处.
+
+\index{Zorn@Zorn!Max@Max}Zorn 引理的一个简单应用表明, 每个模都有极大线性无关子集. 事实上, 它给出如下更方便的较强陈述:
+
+\begin{lemma}\label{lem:maximal-lin-independent}
+设 $M$ 是 $R$-模, 且 $S\subseteq M$ 是线性无关子集. 则存在 $M$ 的包含 $S$ 的极大线性无关子集.
+\end{lemma}
+
+\begin{proof}
+考虑 $M$ 的包含 $S$ 的线性无关子集族 $\mathcal{S}$, 按包含关系排序. 因为 $S$ 线性无关, 所以 $\mathcal{S}\neq\varnothing$. 由 Zorn 引理, 只需验证 $\mathcal{S}$ 中的每条链都有上界. 确实, 包含 $S$ 的线性无关子集的一条链的并仍然是线性无关的: 因为任何线性相关关系只涉及有限多个元素, 而这些元素都属于链中的某一个子集.
+\end{proof}
+
+\begin{remark}\label{rmk:zorn-equivalent-choice}
+\index{Zorn@Zorn!Max@Max!yinli@引理(lemma)}这一陈述事实上已知等价于选择公理; 因此, 以某种形式使用 Zorn 引理是不可绕过的.
+\end{remark}
+
+注意, 单点集 $\{2\}\subseteq\Z$ 是 $\Z$ 的一个``极大线性无关子集'', 但它不生成 $\Z$. 一般而言这是一个额外的要求, 从而引出基的定义.
+
+\begin{definition}\label{def:basis}
+一个加标集合 $B\to M$ 称为一个\emph{基}\index{ji@基(basis)}, 如果它生成 $M$ 且线性无关.
+\end{definition}
+
+同样, 人们常说基是模 $M$ 的``子集''; 由于所有 $b\in B$ 的像必然是互不相同的元素, 这相当无害. 当 $B$ 有限 (或至少可数) 时, 加标集合携带的额外信息可以通过给 $B$ 的元素排序来编码; 为强调这一点, 人们谈论\emph{有序基}\index{youxuji@有序基(ordered basis)}.
+
+\index{yu@域(field)!Galois@Galois}基必然是极大线性无关子集, 也必然是极小生成子集; 这对任意环都成立. 而使域上的模, 即向量空间, 如此特殊的是其逆命题也成立.
+
+无论如何, 只有非常特殊的模才有基:
+
+\begin{lemma}\label{lem:free-module-basis}
+$R$-模 $M$ 是自由的, 当且仅当它有一个基. 事实上, $B\subseteq M$ 是基当且仅当自然同态 $R^{\oplus B}\to M$ 是同构.
+\end{lemma}
+
+\begin{proof}
+这由定义~\ref{def:linearly-independent} 立得: 若 $B\subseteq M$ 线性无关且生成 $M$, 则相应同态 $R^{\oplus B}\to M$ 是单且满的. 反之, 若 $\varphi:R^{\oplus B}\to M$ 是同构, 则 $B$ 等同于 $M$ 的一个子集, 它生成 $M$ (因为 $\varphi$ 满) 且线性无关 (因为 $\varphi$ 单).
+\end{proof}
+
+由引理~\ref{lem:free-module-basis}, 为自由模 $M$ 选取一个基 $B$ 等同于选取一个同构 $R^{\oplus B}\cong M$; 在适当的时候这将是一个重要的观察 (例如 §\ref{subsec:change-of-basis}).
+
+一旦为自由模 $M$ 选取了基 $B$, 则每个元素 $m\in M$ 都能唯一地写成线性组合
+\[
+m = \sum_{b\in B} r_b b
+\]
+其中 $r_b\in R$. 一如既往, 记住在任何这样的表达式中, 除有限多个系数 $r_b$ 之外其余都是 $0$.
+
+\subsection{向量空间}\label{subsec:vector-spaces}
+
+引理~\ref{lem:free-module-basis} 足以证明如下基本观察: 域上的模必然是自由的. 回忆, 域 $k$ 上的模称为 $k$-\emph{向量空间}\index{xiangliangkongjian@向量空间(vector space)} (例~III.\ref{ex:vector-spaces}). 向量空间中的元素称为 (不出所料) \emph{向量}\index{xiangliang@向量(vector)}, 而域中的元素称为\emph{标量}\index{biaoliang@标量(scalar)}\footnote{这个术语也常用于任意环上的自由模.}.
+
+由引理~\ref{lem:free-module-basis}, 要证明向量空间是自由模, 只需证明它们有基; 引理~\ref{lem:maximal-lin-independent} 把问题归结为下述引理:
+
+\begin{lemma}\label{lem:maximal-is-basis}
+设 $R=k$ 是域, $V$ 是 $k$-向量空间. 设 $B$ 是 $V$ 的极大线性无关子集; 则 $B$ 是 $V$ 的一个基.
+\end{lemma}
+
+同样, 这与环上的情形形成对照: $\{2\}$ 是 $\Z$ 的极大线性无关子集, 但它不是基.
+
+\begin{proof}
+设 $v\in V$, $v\notin B$. 则由 $B$ 的极大性, $B\cup\{v\}$ 不是线性无关的; 因此存在 $c_0,\dots,c_t\in k$ 与 (互不相同的) $b_1,\dots,b_t\in B$ 使得
+\[
+c_0 v + c_1 b_1 + \dots + c_t b_t = 0,
+\]
+其中 $c_0,\dots,c_t$ 不全为 $0$. 现在 $c_0\neq 0$: 否则我们会得到 $B$ 中元素之间的一个线性相关关系. 由于 $k$ 是域, $c_0$ 是单位; 于是
+\[
+v = (-c_0^{-1}c_1)b_1 + \dots + (-c_0^{-1}c_t)b_t,
+\]
+表明 $v$ 在 $B$ 的\emph{张成}\index{zhangcheng@张成(span)}中. 由此可见 $B$ 生成 $V$, 如所需.
+\end{proof}
+
+总结如下:
+
+\begin{proposition}\label{prop:vector-space-basis}
+设 $R=k$ 是域, $V$ 是 $k$-向量空间. 设 $S$ 是 $V$ 的一组线性无关向量. 则存在 $V$ 的包含 $S$ 的基 $B$.
+
+特别地, $V$ 作为 $k$-模是自由的.
+\end{proposition}
+
+\begin{proof}
+把引理~\ref{lem:maximal-lin-independent}, 引理~\ref{lem:free-module-basis}, 与引理~\ref{lem:maximal-is-basis} 合起来.
+\end{proof}
+
+我们也可以从生成集这一``镜像''观点来审视这一情形:
+
+\begin{lemma}\label{lem:minimal-generating-basis}
+设 $R=k$ 是域, $V$ 是 $k$-向量空间. 设 $B$ 是 $V$ 的一个极小生成集; 则 $B$ 是 $V$ 的一个基.
+
+每个生成 $V$ 的集合都包含 $V$ 的一个基.
+\end{lemma}
+
+\begin{proof}
+习题~\ref{ex:minimal-generating-basis}.
+\end{proof}
+
+引理~\ref{lem:minimal-generating-basis} 在更一般的环上也不成立 (习题~\ref{ex:basis-over-domain}). 重申一遍, 在域上 (但不是在一般环上), 向量空间的子集 $B$ 是基 $\Longleftrightarrow$ 它是极大线性无关子集 $\Longleftrightarrow$ 它是极小生成集.
+
+\subsection{由 \texorpdfstring{$F^R(B)$}{FR(B)} 复原 \texorpdfstring{$B$}{B}}\label{subsec:recovering-basis}
+
+我们已经准备好由一个给定的自由模 $F^R(B)$ ``复原'' 集合 $B$ (只差一个双射!). 这个结论为向量空间的\emph{维数}\index{weishu@维数(dimension)}概念, 或更一般地自由模的\emph{秩}\index{zhi@秩(rank)}概念, 提供了依据. 我们再次证明一个稍强的陈述.
+
+\begin{proposition}\label{prop:independent-cardinality}
+设 $R$ 是整环, $M$ 是自由 $R$-模. 设 $B$ 是 $M$ 的极大线性无关子集, $S$ 是线性无关子集. 则\footnote{这里 $|A|$ 表示集合 $A$ 的基数, 希望读者对此概念已经熟悉. 读者只考虑 $B,S$ 为有限集的情形也不会损失太多; 但如论证所示, 该事实对``无限维空间''也成立.} $|S|\le |B|$.
+
+\index{ziyou@自由(free)!Abel qun@Abel 群(abelian group)}特别地, 整环上自由模的任意两个极大线性无关子集具有相同的基数.
+\end{proposition}
+
+\begin{proof}
+通过取分式域, 整环上的情形容易归结为域上向量空间的情形; 参见习题~\ref{ex:independence-frac-field}. 于是我们可以假设 $R=k$ 是域, 且 $M=V$ 是 $k$-向量空间.
+
+我们须证明存在单射 $j:S\hookrightarrow B$\erratumfootnote{根据官方勘误, 作者重写了本证明, 采用 N.J.S. Hughes (1965) 的构造.}. 给 $S$ 与 $B$ 都赋予良序 $\le$. 由引理~\ref{lem:maximal-is-basis}, $S$ 中的每个 $v$ 都属于 $B$ 的张成. 更进一步地, $v$ 属于 $B\cup\{w\in S\mid w<v\}$ 的张成, 故存在 $b\in B$ 使得
+\[
+v \in \langle w\in S\mid w<v\rangle + \langle a\in B\mid a\le b\rangle,
+\]
+其中 $\langle\cdots\rangle$ 表示张成. 因为 $B$ 是良序集, 存在最小的这样的 $b$. 定义 $j(v)$ 为这个元素 $b$.
+
+断言映射 $j$ 是单射. 确实, 反设存在 $b = j(v) = j(v')$ 且 $v < v'$. 则
+\[
+v = \sum_{w\in S, w<v} c_w w + \sum_{a\in B, a<b} c_a a + c_b b,\qquad v' = \sum_{w'\in S, w'<v'} c'_{w'} w' + \sum_{a'\in B, a'<b} c'_{a'} a' + c'_b b
+\]
+满足 $c_b\neq 0$ 且 $c'_b\neq 0$ (所有求和式均只含有限多个非零项). 从第一个恒等式解出 $b$ 并代入第二个式子, 表明对某个 $b'<b$ 有
+\[
+v' \in \langle w'\in S\mid w'<v'\rangle + \langle a'\in B\mid a'\le b'\rangle.
+\]
+但这不可能, 因为 $b=j(v')$ 是使该包含关系成立的 $B$ 中的最小元. 矛盾!
+\end{proof}
+
+本证明中函数 $j$ 的定义借自 N.J.S. Hughes\footnote{`Steinitz' exchange theorem for infinite bases. II', Comp. Math. 17 (1965-1966), p. 152-155.}. 一个微小的精化可保证: 若 $S$ 与 $B$ 有交集, 则 $j$ 在 $S\cap B$ 上作为恒同映射起作用.
+事实上, Hughes 证明了把 $B$ 中的 $j(S)$ 替换为 $S$ 所得的集合仍是极大线性无关集. 读者不妨尝试独立证明这一点! (提示: 若 $(B\setminus j(S))\cup S$ 线性相关, 则可在张成 $\langle a\in B\mid a<b\rangle + \langle w\in S\mid w\le v\rangle$ 中找到 $b\in B\setminus j(S)$, 使得 $v$ 极小. 利用定义 $j(v)$ 的表达式推翻 $v$ 的极小性. 要说明每个 $b\in j(S)$ 都属于 $\langle(B\setminus j(S))\cup S\rangle$, 反设结论不成立, 取反例中最小的 $b=j(v)$, 同样由定义 $j(v)$ 的表达式导出矛盾.)
+
+因此, 我们可以从任意给定的基 $B$ 和任意线性无关集 $S$ 出发, 通过将 $B$ 的一部分与 $S$ 交换来构造一组新的基. 该结果称为``交换引理''; 其有限维版本以 Ernst Steinitz 命名.
+
+\begin{example}\label{ex:uncountable-dependent}
+$\CC[x]$ 的任意不可数子集都必然线性相关. 事实上, $\CC[x]$ 在 $\CC$ 上有一个可数基: 例如 $\{1,x,x^2,x^3,\dots\}$.
+\end{example}
+
+\begin{corollary}\label{cor:free-module-isomorphism}
+设 $R$ 是整环, $A,B$ 是集合. 则
+\[
+F^R(A)\cong F^R(B) \iff \text{存在双射 } A\cong B.
+\]
+\end{corollary}
+
+\begin{proof}
+习题~\ref{ex:free-module-isomorphism}.
+\end{proof}
+
+\begin{remark}\label{rmk:completing-independent}
+我们在引理~\ref{lem:maximal-lin-independent} 中学到, 可以把每个线性无关子集 $S$ ``扩充'' 为一个极大线性无关子集. 命题~\ref{prop:independent-cardinality} 证明之后的评注表明\erratumfootnote{根据官方勘误, 此处修改为引用命题证明之后的评注 (The comments following the proof...).}, 我们事实上可以通过从一个给定的极大线性无关子集中``借用''元素来完成这种扩充.
+\end{remark}
+
+\begin{remark}\label{rmk:IBN}
+作为推论~\ref{cor:free-module-isomorphism} 的特例, 我们看到若 $R$ 是整环, 则 $R^m\cong R^n$ 当且仅当 $m=n$. 这就是说, 整环满足 ``IBN (Invariant Basis Number, 不变基数) 性质''.
+
+\index{bubianjishuliexingzhi@不变基数列性质(Invariant Basis Number property)}\index{IBN xingzhi@IBN 性质(IBN property)}尽管看起来显然, 这个显而易见的事实对任意环并不成立: 例如, 无限维向量空间的自同态环不满足 IBN 性质. 另一方面, 整环有些过度: 所有交换环都满足 IBN 性质 (习题~\ref{ex:commutative-IBN}).
+\end{remark}
+
+可以这样理解: (例如) 整环上有限生成自由模的范畴被 $\Z^{\ge 0}$ ``分类'': 对每个非负整数, 恰好有一个同构类下的有限生成自由模. 描述这个范畴的任务于是归结为描述对应于两个给定非负整数的对象之间的同态; 这将在 §\ref{subsec:matrices} 中完成.
+
+作为命题~\ref{prop:independent-cardinality} 的副产品, 我们现在可以给出如下重要定义.
+
+\begin{definition}\label{def:rank}
+设 $R$ 是整环. 自由 $R$-模 $M$ 的\emph{秩}, 记作 $\rk_R M$, 是 $M$ 的极大线性无关子集的基数. 向量空间的秩称为\emph{维数}, 记作 $\Dim_k V$.\index[sym1]{13@$\dim_k V$}\index[sym1]{57@$\rk_R M$}
+\end{definition}
+
+这个定义事实上将在 §\ref{subsec:classification-theorem} 中被采用到更一般的有限生成模上.
+
+固定域上的有限维向量空间构成一个范畴. 由于向量空间是自由模 (命题~\ref{prop:vector-space-basis}), 推论~\ref{cor:free-module-isomorphism} 推出两个有限维向量空间同构当且仅当它们有相同的维数.
+
+下标 $R,k$ 在上下文允许时经常省略. 但要注意, 例如把复数看成实向量空间时, $\Dim_\R\CC=2$, 而 $\Dim_\CC\CC=1$. 因此需要谨慎.
+
+命题~\ref{prop:independent-cardinality} 告诉我们, 自由 $R$-模 $M$ 的每个线性无关子集 $S$ 的基数都不大于 $\rk_R M$. 类似地, 每个生成集的基数都不小于秩. 事实上,
+
+\begin{proposition}\label{prop:generating-contains-basis}
+设 $R$ 是整环, $M$ 是自由 $R$-模; 假设 $M$ 由 $S$ 生成: $M=\langle S\rangle$. 则 $S$ 包含 $M$ 的一个极大线性无关子集.
+\end{proposition}
+
+\begin{proof}
+由习题~\ref{ex:independence-frac-field}, 我们可以假设 $R=k$ 是域, 且 $M=V$ 是向量空间. 用 Zorn 引理得到 $S$ 的一个线性无关子集 $B\subseteq S$, 它在 $S$ 的子集中是极大的. 按引理~\ref{lem:maximal-is-basis} 证明中的方式论证可知 $S$ 在 $B$ 的张成中, 从而 $B$ 生成 $V$. 因此 $B$ 是基, 从而是 $V$ 的极大线性无关子集, 如所需.
+\end{proof}
+
+\begin{remark}\label{rmk:frac-field-trick-again}
+\index{yu@域(field)!zhongjian@中间(intermediate)}我们再次使用了从整环切换到其分式域的技巧. 论证的后半部分对任意整环不成立, 因为整环上的极大线性无关子集一般不是生成集.
+\end{remark}
+
+把关于任意交换环上的模的问题归结为向量空间问题的另一个标准方法是模掉一个极大理想; 参见习题~\ref{ex:mod-maximal-ideal} 及后续.
+
+\subsection*{习题}
+\phantomsection
+\addcontentsline{toc}{subsection}{习题}
+
+\begin{prob}
+\label{ex:RC-Q-vector-space}
+$\neg$ 证明 $\R$ 与 $\CC$ 作为 $\Q$-向量空间同构. (特别地, $(\R,+)$ 与 $(\CC,+)$ 作为群同构.) [II.\ref{ex:zqr-not-iso}]
+\end{prob}
+
+\begin{prob}
+\label{ex:dimensions-III-1-4}
+$\neg$ 证明习题~III.\ref{ex:matrix-ring-mn} 中列出的集合都是 $\R$-向量空间, 并计算它们的维数. [\ref{ex:su2-so3-R-vector-space}]
+\end{prob}
+
+\begin{prob}
+\label{ex:su2-so3-R-vector-space}
+证明 $\mathfrak{su}_2(\CC)\cong\mathfrak{so}_3(\R)$ 作为 $\R$-向量空间. (从习题~\ref{ex:dimensions-III-1-4} 的维数计算看, 这是显然的, 也不太有趣. 然而, 这两个空间可以分别看作 $\mathrm{SU}_2(\CC)$ 与 $\mathrm{SO}_3(\R)$ 在单位元 $I$ 处的切空间; 你在习题~II.\ref{ex:SO3-SU2} 中构造的满同态 $\mathrm{SU}_2(\CC)\to\mathrm{SO}_3(\R)$ 诱导出一个更有``意义''的同构 $\mathfrak{su}_2(\CC)\to\mathfrak{so}_3(\R)$. 你能找出这个同构吗?)
+\end{prob}
+
+\begin{prob}
+\label{ex:Lie-algebra-definition}
+设 $V$ 是域 $k$ 上的向量空间. $V$ 上的一个 \emph{Lie 括号}\index{Lie kuohao@Lie 括号(Lie bracket)} 是一个运算 $[\cdot,\cdot]:V\times V\to V$ 使得
+\begin{itemize}
+\item $(\forall u,v,w\in V)$, $(\forall a,b\in k)$,
+\[
+[au+bv,w] = a[u,w] + b[v,w], \quad [w,au+bv] = a[w,u] + b[w,v],
+\]
+\item $(\forall v\in V)$, $[v,v]=0$,
+\item 且 $(\forall u,v,w\in V)$, $[[u,v],w] + [[v,w],u] + [[w,u],v] = 0$.
+\end{itemize}
+(最后这条公理称为 Jacobi 恒等式.) 配有一个 Lie 括号的向量空间称为 \emph{Lie 代数}\index{Lie daishu@Lie 代数(Lie algebra)}. 对给定域定义 Lie 代数的一个范畴. 证明下列结论:
+\begin{itemize}
+\item 在 Lie 代数 $V$ 中, $[u,v]=-[v,u]$ 对所有 $u,v\in V$ 成立.
+\item 若 $V$ 是 $k$-代数 (定义~III.\ref{def:R-algebra}), 则 $[v,w]:=vw-wv$ 在 $V$ 上定义了一个 Lie 括号, 从而 $V$ 以自然的方式成为 Lie 代数.
+\item 这使 $\mathfrak{gl}_n(\R)$, $\mathfrak{gl}_n(\CC)$ 成为 Lie 代数. 习题~III.\ref{ex:matrix-ring-mn} 中列出的集合都是 Lie 代数, 其 Lie 括号由 $\mathfrak{gl}$ 诱导.
+\item $\mathfrak{su}_2(\CC)$ 与 $\mathfrak{so}_3(\R)$ 作为 $\R$ 上的 Lie 代数同构.
+\end{itemize}
+\end{prob}
+
+\begin{prob}
+\label{ex:basis-over-domain}
+$\triangleright$ 设 $R$ 是整环. 证明或否定下列命题:
+\begin{itemize}
+\item 自由 $R$-模的每个线性无关子集都可扩充为一个基.
+\item 自由 $R$-模的每个生成子集都包含一个基.
+\end{itemize}
+[§\ref{subsec:vector-spaces}]
+\end{prob}
+
+\begin{prob}
+\label{ex:minimal-generating-basis}
+$\triangleright$ 证明引理~\ref{lem:minimal-generating-basis}. [§\ref{subsec:vector-spaces}]
+\end{prob}
+
+\begin{prob}
+\label{ex:independence-frac-field}
+$\triangleright$ 设 $R$ 是整环, $M=R^{\oplus A}$ 是自由 $R$-模. 设 $K$ 是 $R$ 的分式域, 并按显然的方式把 $M$ 看作 $V=K^{\oplus A}$ 的子集. 证明子集 $S\subseteq M$ 在 $M$ 中 (对 $R$) 线性无关当且仅当它在 $V$ 中 (对 $K$) 线性无关. 推出 $M$ 的秩 (作为 $R$-模) 等于 $V$ 的维数 (作为 $K$-向量空间). 证明若 $S$ 生成 $M$ (对 $R$), 则它生成 $V$ (对 $K$). 其逆是否成立? [§\ref{subsec:recovering-basis}]
+\end{prob}
+
+\begin{prob}
+\label{ex:free-module-isomorphism}
+$\triangleright$ 由命题~\ref{prop:independent-cardinality} 推出推论~\ref{cor:free-module-isomorphism}. [§\ref{subsec:recovering-basis}]
+\end{prob}
+
+\begin{prob}
+\label{ex:mod-maximal-ideal}
+$\triangleright$ 设 $R$ 是交换环, $M$ 是 $R$-模. 设 $\mathfrak{m}$ 是 $R$ 的极大理想, 使得 $\mathfrak{m}M=0$ (即对所有 $r\in\mathfrak{m}$, $m\in M$ 有 $rm=0$). 用自然的方式在 $M$ 上定义一个 $R/\mathfrak{m}$-向量空间结构. [§\ref{subsec:recovering-basis}]
+\end{prob}
+
+\begin{prob}
+\label{ex:free-mod-mF}
+$\neg$ 设 $R$ 是交换环, $F=R^{\oplus B}$ 是 $R$ 上的自由模. 设 $\mathfrak{m}$ 是 $R$ 的极大理想, $k=R/\mathfrak{m}$ 是商域. 证明 $F/\mathfrak{m}F\cong k^{\oplus B}$ 作为 $k$-向量空间. [\ref{ex:commutative-IBN}]
+\end{prob}
+
+\begin{prob}
+\label{ex:commutative-IBN}
+$\triangleright$ 证明交换环满足 IBN 性质. (利用命题~V.\ref{prop:maximal-ideal-exists} 与习题~\ref{ex:free-mod-mF}.) [§\ref{subsec:recovering-basis}]
+\end{prob}
+
+\begin{prob}
+\index{zitongtai@自同态(endomorphism)!deji@的迹(trace of an)}\index{zitongtai@自同态(endomorphism)!dehanglieshi@的行列式(determinant of an)}\index{zitongtai@自同态(endomorphism)!tezhengduoxiangshi@特征多项式(characteristic polynomial)}\label{ex:endomorphism-IBN}
+设 $V$ 是域 $k$ 上的向量空间, $R=\End_{k\dcate{Vect}}(V)$ 是它的自同态环 (参见习题~III.\ref{ex:end-algebra}). (注意 $R$ 一般不交换.)
+\begin{itemize}
+\item 证明 $\End_{k\dcate{Vect}}(V\oplus V)\cong R^4$ 作为 $R$-模.
+\item 证明若 $V=k^{\oplus\N}$, 则 $R$ 不满足 IBN 性质.
+\end{itemize}
+(注意此时 $V\cong V\oplus V$.)
+\end{prob}
+
+\begin{prob}
+\label{ex:abelian-group-end-field}
+$\neg$ 设 $A$ 是阿贝尔群, 使得 $\End_{\cate{Ab}}(A)$ 是特征为 $0$ 的域. 证明 $A\cong\Q$. (提示: 证明 $A$ 带有 $\Q$-向量空间结构; 它的维数必须是什么?) [IX.\ref{ex:2.13}]
+\end{prob}
+
+\begin{prob}
+\label{ex:stable-kernel-image}
+$\neg$ 设 $V$ 是有限维向量空间, $\varphi:V\to V$ 是向量空间同态. 证明存在整数 $n$ 使得 $\ker\varphi^{n+1}=\ker\varphi^n$ 且 $\Image\varphi^{n+1}=\Image\varphi^n$.
+
+证明若 $V$ 无限维, 则这两个结论都可能不成立. [\ref{ex:stable-kernel-image-domain}]
+\end{prob}
+
+\begin{prob}
+\label{ex:stable-kernel-image-domain}
+考虑习题~\ref{ex:stable-kernel-image} 的问题对有限秩自由 $R$-模 $F$ 的情形, 其中 $R$ 是整环但不是域. 设 $\varphi:F\to F$ 是 $R$-模同态.
+
+$R$ 的什么性质立刻保证对 $n\gg0$ 有 $\ker\varphi^{n+1}=\ker\varphi^n$?
+
+证明存在 $R$-模同态 $\varphi:F\to F$ 使得对所有 $n\ge0$ 有 $\Image\varphi^{n+1}\subsetneq\Image\varphi^n$.
+\end{prob}
+
+\begin{prob}
+\label{ex:module-Jordan-Holder}
+$\neg$ 设 $M$ 是环 $R$ 上的模. $M$ 的一个\emph{有限合成列}\index{youxianhecheng-lie@有限合成列(finite composition series)} (若存在) 是一串递降的子模
+\[
+M = M_0 \supsetneq M_1 \supsetneq \dots \supsetneq M_m = \langle 0\rangle
+\]
+其中所有商 $M_i/M_{i+1}$ 都是单 $R$-模 (参见习题~III.\ref{ex:simple-modules}). 一个合成列的\emph{长度}\index{changdu@长度(length)} 是严格包含的个数. \emph{合成因子}\index{hecheng-yinzi@合成因子(composition factors)} 是商 $M_i/M_{i+1}$.
+
+证明模的 Jordan-Hölder 定理: 模的任意两个有限合成列具有相同的长度和相同的 (作为多重集的) 合成因子. (改编定理~IV.\ref{thm:jordan-holder} 的证明.)
+
+我们说 $M$ 有长度 $m$, 如果 $M$ 有一个长度为 $m$ 的有限合成列. 由你刚证明的结果, 这个定义是良定的. [\ref{ex:length-finite-dim}, \ref{ex:length-submodule}, \ref{ex:grothendieck-finite-length}, \ref{ex:complete-flag}]
+\end{prob}
+
+\begin{prob}
+\label{ex:length-finite-dim}
+证明 $k$-向量空间 $V$ 作为 $k$-模有有限长度 (参见习题~\ref{ex:module-Jordan-Holder}) 当且仅当它是有限维的, 且此时它的长度等于其维数.
+\end{prob}
+
+\begin{prob}
+\label{ex:length-submodule}
+设 $M$ 是长度为 $m$ 的 $R$-模 (参见习题~\ref{ex:module-Jordan-Holder}).
+\begin{itemize}
+\item 证明 $M$ 的每个子模 $N$ 都有有限长度 $n\le m$. (改编命题~IV.\ref{prop:composition-length} 的证明.)
+\item 证明 $M$ 满足子模的 ``降链条件'' (d.c.c.). (对长度作归纳.)
+\item 证明若 $R$ 是整环但不是域, $F$ 是自由 $R$-模, 则 $F$ 有有限长度当且仅当 $F$ 是零模.
+\end{itemize}
+\end{prob}
+
+\begin{prob}
+\label{ex:prime-exponents}
+设 $k$ 是域, $f(x)\in k[x]$ 是任意多项式. 证明存在 $f(x)$ 的一个非零倍数\erratumfootnote{根据官方勘误, 明确要求非零倍数 (nonzero multiple).}, 其中所有非零单项式的指数都是素整数. (例子: 对 $f(x)=1+x^5+x^6$,
+\begin{multline*}
+(1+x^5+x^6)(2x^2-x^3+x^5-x^8+x^9-x^{10}+x^{11}) \\
+= 2x^2-x^3+x^5+2x^7+2x^{11}-x^{13}+x^{17}.)
+\end{multline*}
+(提示: $k[x]/(f(x))$ 是有限维 $k$-向量空间.)
+\end{prob}
+
+\begin{prob}
+\label{ex:free-groups-isomorphic}
+$\neg$ 设 $A,B$ 是集合. 证明自由群 $F(A)$, $F(B)$ (§II.\ref{subsec:free-groups}) 同构当且仅当存在双射 $A\cong B$. (有趣的方向: 记住 $F(A)\cong F(B) \Rightarrow F^{\mathrm{ab}}(A)\cong F^{\mathrm{ab}}(B)$, 由习题~II.\ref{ex:free-commutator}.) 这将习题~II.\ref{ex:free-groups-rigid} 的结果推广到可能无限的集合 $A,B$. [II.\ref{ex:Fab-mod-2}]
+\end{prob}
+
+\section{自由模的同态, I}
+\label{sec:homomorphisms-free-modules-I}
+
+\subsection{矩阵}
+\label{subsec:matrices}
+
+正如 §\ref{sec:free-modules-revisited} 中指出的, 推论~\ref{cor:free-module-isomorphism} 等价于整环上自由模的一个分类: 若 $F$ 是自由模, 则存在集合 $A$ (在同构意义下唯一确定) 使得 $F\cong R^{\oplus A}$. 选取这样一个同构, 恰恰等于为 $F$ 选取一个基 (引理~\ref{lem:free-module-basis}).
+
+这既是好消息也是坏消息. 好消息是: 若 $F_1,F_2$ 是自由的, 则一定有可能借由相应的集合 $A_1,A_2$ (满足 $F_1\cong R^{\oplus A_1}$, $F_2\cong R^{\oplus A_2}$) 来``理解''\footnote{为记号简便, 我们将把 $\Hom_{R\dcate{Mod}}(M,N)$ 记作 $\Hom_R(M,N)$; 这很常见, 且不会引起混淆.} $\Hom_R(F_1,F_2)$: 也就是说, $R\dcate{Mod}$ 中这个态射集合可以与 $\Hom_R(R^{\oplus A_1},R^{\oplus A_2})$ 等同.
+
+坏消息是: 这个等同 $\Hom_R(F_1,F_2)\cong\Hom_R(R^{\oplus A_1},R^{\oplus A_2})$ 不是``典范的'', 因为它依赖于所选的同构 $F_1\cong R^{\oplus A_1}$, $F_2\cong R^{\oplus A_2}$, 也就是依赖于基的选取. 因此我们将不得不做点工作来处理这种歧义 (在 §\ref{subsec:change-of-basis} 中).
+
+本小节的要点是处理好消息, 即描述 $\Hom_R(R^{\oplus A_1},R^{\oplus A_2})$. 当自由模是有限生成时, 这可以特别方便地做到, 而这也正是我们要更仔细分析的情形. 还要回忆 (由 §III.\ref{subsec:R-Mod-hom}), 范畴 $R\dcate{Mod}$ 的一个好处是: 两个 $R$-模之间的态射集合 $\Hom_R(M,N)$ 本身以自然的方式成为一个 $R$-模. 于是任务就是, 对每个 $m,n\in\Z^{\ge0}$, 尽可能显式地\footnote{我们现在把 $R^n$ 写作之前章节中记作 $R^{\oplus n}$ 的东西. 这是一种轻微的语言滥用, 但它使排版更轻松.} 把 $\Hom_R(R^n,R^m)$ 描述为一个 $R$-模.
+
+这将借助 $R$ 中元素构成的矩阵来完成. 我们相信读者已经熟悉 $m\times n$ 矩阵的一般概念; 我们在前面各章的例题中已经偶尔用到矩阵, 它们也出现在若干习题中. 一个元素属于 $R$ 的 $m\times n$ 矩阵, 无非是对 $R$ 的 $mn$ 个元素的一个选取. 习惯上把这些元素排成一个含 $m$ 行 $n$ 列的阵列:
+\[
+(r_{ij})_{\substack{i=1,\dots,m\\ j=1,\dots,n}} = \begin{pmatrix}
+r_{11} & r_{12} & \dots & r_{1n}\\
+r_{21} & r_{22} & \dots & r_{2n}\\
+\vdots & \vdots & \ddots & \vdots\\
+r_{m1} & r_{m2} & \dots & r_{mn}
+\end{pmatrix}
+\]
+其中 $r_{ij}\in R$. 对任意给定的 $m,n$, 元素属于 $R$ 的 $m\times n$ 矩阵的集合 $\mathcal{M}_{m,n}(R)$ 在逐项加法\footnote{注意我们将略去给出指标范围的额外下标, 而写作 $(r_{ij})$ 而非 $(r_{ij})_{i=1,\dots,m;\,j=1,\dots,n}$: 这些下标有碍观瞻, 且上下文通常使该信息冗余.}
+\[
+(a_{ij})+(b_{ij}) := (a_{ij}+b_{ij})
+\]
+下成为一个阿贝尔群 (参见例~II.\ref{ex:GLn}); 事实上, 在作用
+\[
+r(a_{ij}) := (r a_{ij})
+\]
+下它还是一个 $R$-模, 其中 $r\in R$. 从这个观点看, $m\times n$ 矩阵的集合无非是 $R$-模 $R^{mn}$ 的一个副本.
+
+然而, 这些集合上还有别的有趣运算. 若 $A=(a_{ik})$ 是一个 $m\times p$ 矩阵, $B=(b_{kj})$ 是一个 $p\times n$ 矩阵, 则可以定义 $A$ 与 $B$ 的乘积为
+\[
+A\cdot B = (a_{ik})\cdot(b_{kj}) := \Bigl(\sum_{k=1}^{p} a_{ik}b_{kj}\Bigr);
+\]
+这个运算 (显然) 对加法满足分配律, 并且与 $R$-模结构相容. 验证它的结合性只稍微麻烦一点: 即若 $A,B,C$ 分别是大小为 $m\times p$, $p\times q$, $q\times n$ 的矩阵, 则
+\[
+(A\cdot B)\cdot C = A\cdot(B\cdot C).
+\]
+读者应能毫无困难地重构这一事实的证明 (习题~\ref{ex:matrix-mult-associative}).
+
+特别地, 我们在 $n\times n$ 方阵的集合 $\mathcal{M}_n(R)$ 上有一个二元运算, 它是结合的, 对 $+$ 满足分配律, 并且具有单位元
+\[
+\begin{pmatrix}
+1 & 0 & \dots & 0\\
+0 & 1 & \dots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \dots & 1
+\end{pmatrix}
+\]
+(单位矩阵, 记作 $I_n$). 也就是说, $\mathcal{M}_n(R)$ 是一个环 (例~III.\ref{ex:matrix-ring}), 事实上还是一个 $R$-代数 (习题~\ref{ex:matrix-R-algebra}). 除非常特殊的情形 (例如 $n=1$), 这个环不是交换的.
+
+类型为 $n\times 1$ 的矩阵称为列 $n$-向量; 类型为 $1\times m$ 的矩阵称为行 $m$-向量, 理由不言自明. 自由 $R$-模 $R^n$ 的一个元素, 无非是对 $R$ 的 $n$ 个元素的一个选取, 如果我们乐意, 可以把它们排成行向量或列向量; 标准的做法是把它们表示成列向量:
+\[
+\mathbf{v} = \begin{pmatrix} v_1\\ v_2\\ \vdots\\ v_n\end{pmatrix} \in R^n.
+\]
+\index{biaozhunji@标准基(standard basis)}我们将用 $\mathbf{e}_i$ 记 $R^n$ 的``标准基''的元素:
+\[
+\mathbf{e}_1 = \begin{pmatrix} 1\\ 0\\ \vdots\\ 0\end{pmatrix},\quad
+\mathbf{e}_2 = \begin{pmatrix} 0\\ 1\\ \vdots\\ 0\end{pmatrix},\quad \dots,\quad
+\mathbf{e}_n = \begin{pmatrix} 0\\ 0\\ \vdots\\ 1\end{pmatrix},
+\]
+使得
+\[
+\mathbf{v} = \begin{pmatrix} v_1\\ \vdots\\ v_n\end{pmatrix} = \sum_{j=1}^{n} v_j\mathbf{e}_j.
+\]
+元素 $v_j\in R$ 是 $\mathbf{v}$ 的``分量''.
+
+把 $R^n$ 的元素解释为列向量, 我们就可以用一个 $m\times n$ 矩阵从左乘来作用在 $R^n$ 上: 若 $A=(a_{ij})$ 是一个 $m\times n$ 矩阵, 且 $\mathbf{v}\in R^n$ 是列向量, 则乘积是 $R^m$ 中的一个列向量:
+\[
+A\cdot\mathbf{v} = \begin{pmatrix}
+a_{11} & a_{12} & \dots & a_{1n}\\
+a_{21} & a_{22} & \dots & a_{2n}\\
+\vdots & \vdots & \ddots & \vdots\\
+a_{m1} & a_{m2} & \dots & a_{mn}
+\end{pmatrix}
+\begin{pmatrix} v_1\\ v_2\\ \vdots\\ v_n\end{pmatrix}
+= \begin{pmatrix}
+a_{11}v_1+a_{12}v_2+\dots+a_{1n}v_n\\
+a_{21}v_1+a_{22}v_2+\dots+a_{2n}v_n\\
+\vdots\\
+a_{m1}v_1+a_{m2}v_2+\dots+a_{mn}v_n
+\end{pmatrix} \in R^m.
+\]
+
+\begin{lemma}\label{lem:matrix-hom}
+对所有的元素属于 $R$ 的 $m\times n$ 矩阵 $A$:
+\begin{itemize}
+\item 由 $\varphi(\mathbf{v})=A\cdot\mathbf{v}$ 定义的函数 $\varphi:R^n\to R^m$ 是一个 $R$-模同态.
+\item 每个 $R$-模同态 $R^n\to R^m$ 都以此方式被一个唯一的 $m\times n$ 矩阵所决定.
+\end{itemize}
+\end{lemma}
+
+\begin{proof}
+第一点由上面对矩阵乘法的初等性质的回顾立即得出: 对所有 $r,s\in R$, 所有 $\mathbf{v},\mathbf{w}\in R^n$,
+\[
+\varphi(r\mathbf{v}+s\mathbf{w}) = A\cdot(r\mathbf{v}+s\mathbf{w}) = rA\cdot\mathbf{v}+sA\cdot\mathbf{w} = r\varphi(\mathbf{v})+s\varphi(\mathbf{w}),
+\]
+如所需.
+
+对第二点, 设 $\varphi:R^n\to R^m$ 是一个 $R$-模同态; 设 $a_{ij}$ 是 $\varphi(\mathbf{e}_j)$ 的第 $i$ 个分量, 于是
+\[
+\varphi(\mathbf{e}_j) = \begin{pmatrix} a_{1j}\\ \vdots\\ a_{mj}\end{pmatrix}.
+\]
+则 $A=(a_{ij})$ 是一个 $m\times n$ 矩阵, 且对所有分量为 $v_j$ 的 $\mathbf{v}\in R^n$,
+\[
+A\cdot\mathbf{v} = \begin{pmatrix}
+a_{11}v_1+a_{12}v_2+\dots+a_{1n}v_n\\
+a_{21}v_1+a_{22}v_2+\dots+a_{2n}v_n\\
+\vdots\\
+a_{m1}v_1+a_{m2}v_2+\dots+a_{mn}v_n
+\end{pmatrix}
+= \sum_{j=1}^{n}\begin{pmatrix} a_{1j}v_j\\ a_{2j}v_j\\ \vdots\\ a_{mj}v_j\end{pmatrix}
+= \sum_{j=1}^{n} v_j\varphi(\mathbf{e}_j)
+= \varphi\Bigl(\sum_{j=1}^{n}v_j\mathbf{e}_j\Bigr) = \varphi(\mathbf{v}),
+\]
+如所需. 一个非零矩阵诱导的同态显然非平凡; 这说明对应于同态 $\varphi$ 的矩阵 $A$ 由 $\varphi$ 唯一决定.
+\end{proof}
+
+读者应努力记住引理~\ref{lem:matrix-hom} 证明中把矩阵 $A$ 联系于同态 $\varphi$ 的法则: $A$ 的第 $j$ 列就是列向量 $\varphi(\mathbf{e}_j)$. 这些向量的整体决定了 $\varphi$ —— 因为同态由它在生成集上的作用所决定.
+
+引理~\ref{lem:matrix-hom} 给出了所承诺的 $\Hom_R(R^n,R^m)$ 的显式描述:
+
+\begin{corollary}\label{cor:matrix-hom-isomorphism}
+引理~\ref{lem:matrix-hom} 引入的对应给出一个 $R$-模的同构
+\[
+\mathcal{M}_{m,n}(R) \cong \Hom_R(R^n,R^m).
+\]
+\end{corollary}
+
+\begin{proof}
+读者将验证这个对应是一个双射的 $R$-模同态; 由习题~III.\ref{ex:bijection-iso}, 这就足够了.
+\end{proof}
+
+这是非常好的消息, 而且还会更好. 不要忘记 $R\dcate{Mod}$ 是一个范畴; 也就是说, 我们可以复合态射. 因此存在一个函数\footnote{这里我们把左边的 $\Hom$ 集的顺序相对于定义~I.\ref{def:category} 中使用的约定颠倒了.}
+\[
+\Hom_R(R^p,R^m)\times\Hom_R(R^n,R^p)\to\Hom_R(R^n,R^m),
+\]
+把 $(\varphi,\psi)$ 映到 $\varphi\circ\psi$; 另一方面, 矩阵乘积给出一个函数
+\[
+\mathcal{M}_{m,p}(R)\times\mathcal{M}_{p,n}(R)\to\mathcal{M}_{m,n}(R),
+\]
+把 $(A,B)$ 映到 $A\cdot B$. 也就是说, 我们有交换图
+\[
+\begin{tikzcd}
+\mathcal{M}_{m,p}(R)\times\mathcal{M}_{p,n}(R) \arrow[r] \arrow[d, "\sim"'] & \mathcal{M}_{m,n}(R) \arrow[d, "\sim"] \\
+\Hom_R(R^p,R^m)\times\Hom_R(R^n,R^p) \arrow[r] & \Hom_R(R^n,R^m)
+\end{tikzcd}
+\]
+其中竖直箭头是 (由) 推论~\ref{cor:matrix-hom-isomorphism} 得到的同构 (所诱导的).
+
+\begin{lemma}\label{lem:matrix-composition-commutes}
+这个图交换. 也就是说, 对应于复合 $\varphi\circ\psi$ 的矩阵, 就是对应于 $\varphi$ 与 $\psi$ 的矩阵的乘积.
+\end{lemma}
+
+\begin{proof}
+这由矩阵乘法的结合性立即得出: 对 $\mathbf{v}\in R^n$ 与 $A\in\mathcal{M}_{m,p}(R)$, $B\in\mathcal{M}_{p,n}(R)$,
+\[
+A\cdot(B\cdot\mathbf{v}) = (A\cdot B)\cdot\mathbf{v};
+\]
+也就是说, $B$ 与 $A$ 的相继作用等价于 $A\cdot B$ 的作用.
+\end{proof}
+
+这里是对情形的一个总结. 给定整环 $R$, 我们可以如下构造一个``玩具范畴'': 令 $\Z^{\ge0}$ 为对象的集合, 并定义态射集合 $\Hom(n,m)$ 为矩阵的集合 $\mathcal{M}_{m,n}(R)$, 其复合由矩阵乘积给出 (参见习题~I.\ref{ex:matrix-category}). 于是我们验证了: 这个玩具范畴与有限生成自由 $R$-模及 $R$-模同态的范畴``本质上相同''\footnote{读者不应太认真地看待这一陈述: 我们把所有同构于一个给定自由模的自由模等同在一起, 这是一个相当剧烈的操作. 我们将在例~VIII.\ref{ex:matrices-fd-vect} 中更正式地考察这一情形.}.
+
+例如, 由命题~\ref{prop:vector-space-basis}, 若 $R=k$ 是域, 则 $R\dcate{Mod}=k\dcate{Vect}$ 完全由自由 $k$-模组成. 我们刚描述的玩具范畴是有限维 $k$-向量空间范畴的一个忠实的快照.
+
+\subsection{基变换}
+\label{subsec:change-of-basis}
+
+是时候处理坏消息了.
+
+正如任何满足泛性质的结构一样, 自由模只定义到同构. 把一个自由模写成直和 $R^{\oplus A}$, 等同于做出一个特定实现的选择. 正如我们在 §\ref{subsec:linear-independence-bases} 末尾指出的, 由引理~\ref{lem:free-module-basis}, 这个选择等价于为模选取一个基.
+
+\index{ziyou@自由(free)!zuoyong@作用(action)}用矩阵表示自由模的同态, 所付出的代价是这个对应依赖于基的选取: 我们说它不是典范的. 能够追踪这个选取是至关重要的. 对有限生成自由模, 这同样归结为 (正如我们即将看到的) 一个矩阵的作用.
+
+设 $F$ 是一个自由模, 并为 $F$ 选取两个基 $A,B$; 假设 $F$ 是有限生成的, 从而 $A,B$ 是有限集, 并且由命题~\ref{prop:independent-cardinality}, $|A|=|B|\,(=\rk_R F)$. 这两个基对应于两个同构
+\[
+R^{\oplus A}\xrightarrow{\ \varphi\ } F,\qquad R^{\oplus B}\xrightarrow{\ \psi\ } F.
+\]
+于是
+\[
+R^{\oplus A}\xrightarrow{\ \psi^{-1}\circ\varphi\ } R^{\oplus B}
+\]
+是一个同构, 它如引理~\ref{lem:matrix-hom} 所见对应于一个矩阵; 我们可以称这个矩阵为 $N_A^B$. 确切地说, $N_A^B$ 的第 $j$ 列是 $A$ 的第 $j$ 个元素在 $R^{\oplus B}$ 中看成的列向量的像. 也就是说, 记\footnote{给一个基的元素排序是方便的, 例如因为它允许我们谈论基的``第 $j$ 个元素''. 因此我们采用``元组''记号.}
+\[
+A=(\mathbf{a}_1,\dots,\mathbf{a}_r),\quad B=(\mathbf{b}_1,\dots,\mathbf{b}_r),
+\]
+我们有 $N_A^B=(n_{ij})_{\substack{i=1,\dots,r\\ j=1,\dots,r}}$, 满足
+\[
+\psi^{-1}\circ\varphi(\mathbf{a}_j) = \sum_{i=1}^{r} n_{ij}\mathbf{b}_i.
+\]
+这个等式写在 $R^{\oplus B}$ 中; 在实践中, 人们把基向量 $\mathbf{a}_j$, $\mathbf{b}_i$ 看作 $F$ 中的向量, 因此会直接写成
+\[
+\mathbf{a}_j = \sum_{i=1}^{r} n_{ij}\mathbf{b}_i,
+\]
+也就是 $F$ 中相应的等式.
+
+\begin{definition}\label{def:change-of-basis-matrix}
+矩阵 $N_A^B$ 称为\emph{基变换矩阵}\index{jibianhuan juzhen@基变换矩阵(matrix of change of basis)}.
+\end{definition}
+
+由于它表示同构, 基变换矩阵必然是可逆矩阵.
+
+就我们所知, 对这个矩阵并没有约定俗成的记号, 而且无论如何我们都会觉得去记住任何此类约定是徒劳的. 任何记号的选择都会导出一个令人愉快的``演算'': 例如, 上面给出的定义立即推出 $N_B^A=(N_A^B)^{-1}$ 以及 $N_B^C N_A^B = N_A^C$. 依我们的经验, 任何这样的操作只要把同构显式写出就会立即变得清晰, 所以不需要约定.
+
+例如, 让我们来算出基变换对同态 $\alpha:F\to G$ 的矩阵表示的作用, 其中 $F,G$ 是两个自由模. 处理所需操作的图是
+\[
+\begin{tikzcd}[row sep=1.4em,column sep=2.4em]
+R^{\oplus A} \ar[dr,"\varphi"] \ar[dd,"\nu_A^B"'] & & & R^{\oplus C} \ar[dl,"\rho"'] \ar[dd,"\mu_C^D"] \\
+& F \ar[r,"\alpha"] & G & \\
+R^{\oplus B} \ar[ur,"\psi"'] & & & R^{\oplus D} \ar[ul,"\sigma"]
+\end{tikzcd}
+\]
+设 $N_A^B$ 为 $\nu_A^B=\psi^{-1}\circ\varphi$ 的矩阵, 如上所述, 并设 $M_C^D$ 为 $\mu_C^D=\sigma^{-1}\circ\rho$ 的矩阵.
+
+为 $F$ 选取基 $A$, 为 $G$ 选取基 $C$. 则代表 $\alpha$ 的矩阵将是对应于
+\[
+\rho^{-1}\circ\alpha\circ\varphi : R^{\oplus A}\to R^{\oplus C}
+\]
+的矩阵 $P$.
+
+另一方面, 若我们为 $F$ 选取基 $B$, 为 $G$ 选取基 $D$, 则我们用对应于
+\[
+\sigma^{-1}\circ\alpha\circ\psi : R^{\oplus B}\to R^{\oplus D}
+\]
+的矩阵 $Q$ 来代表 $\alpha$.
+
+现在,
+\[
+\sigma^{-1}\circ\alpha\circ\psi = (\mu_C^D\circ\rho^{-1})\circ\alpha\circ(\varphi\circ(\nu_A^B)^{-1}) = \mu_C^D\circ(\rho^{-1}\circ\alpha\circ\varphi)\circ(\nu_A^B)^{-1},
+\]
+并由引理~\ref{lem:matrix-composition-commutes} 这表明
+\[
+Q = M_C^D\cdot P\cdot (N_A^B)^{-1} = M_C^D\cdot P\cdot N_B^A.
+\]
+这当然毫不奇怪: 从一个表示成 $\mathbf{b}$ 的线性组合向量出发, $N_B^A$ 把它变成 $\mathbf{a}$ 的线性组合; $P$ 作用在它上面, 给出它在 $\alpha$ 下的像, 成为 $\mathbf{c}$ 的线性组合; 而 $M_C^D$ 把它变成 $\mathbf{d}$ 的线性组合. 这就完成了 $Q$ 的工作, 理应如此.
+
+总结上述讨论:
+
+\begin{proposition}\label{prop:change-of-basis-form}
+设 $\alpha:F\to G$ 是有限生成自由模的一个同态, 并设 $P$ 是它关于 $F$ 与 $G$ 的任意一组基的矩阵表示. 则代表 $\alpha$ 的关于任意其他基选取的矩阵, 恰好就是所有形如
+\[
+M\cdot P\cdot N
+\]
+的矩阵, 其中 $M$ 与 $N$ 是可逆矩阵.
+\end{proposition}
+
+\begin{definition}\label{def:equivalent-matrices}
+两个矩阵 $P,Q\in\mathcal{M}_{m,n}(R)$ 是\emph{等价的}\index{dengjia juzhen@等价矩阵(equivalent matrices)}, 如果它们表示同一个自由模同态 $R^n\to R^m$ (模去基的选取).
+\end{definition}
+
+这显然是一个等价关系. 严格地说, ``抽象的'' 同态 $\alpha:F\to G$ 不是由一个矩阵表示, 而是由关于这个关系的整个等价类表示. 命题~\ref{prop:change-of-basis-form} 给出了矩阵等价的一个计算解释: $P$ 与 $Q$ 等价当且仅当存在可逆的 $M$ 与 $N$ 使得 $Q=MPN$.
+
+\subsection{初等变换与 Gauss 消元}
+\label{subsec:elementary-operations}
+
+现在的想法是利用命题~\ref{prop:change-of-basis-form}, 如下: 给定两个自由模之间的一个同态 $\alpha:F\to G$, 在 $F$ 与 $G$ 中找``特殊''的基, 使得 $\alpha$ 的矩阵取特别方便的形式. 也就是说, 在定义~\ref{def:equivalent-matrices} 引入的关系下, 在每个等价类中找一个特别方便的矩阵.
+
+为此, 我们可以从 $F$ 与 $G$ 中的随机基出发, 用矩阵 $P$ 表示 $\alpha$, 然后 (由命题~\ref{prop:change-of-basis-form}) 在右边和左边用可逆矩阵乘 $P$, 从而把 $P$ 变成最适合我们需要的形式.
+
+还有一种更具体的方式从计算上处理等价. 考虑可以在矩阵 $P$ 上执行的如下三种``初等 (行/列) 变换'':
+\begin{itemize}
+\item 交换 $P$ 的两行 (或两列);
+\item 把一行 (相应地, 一列) 的另一行 (相应地, 另一列) 的倍数加到这一行 (相应地, 这一列) 上;
+\item 用 $R$ 的一个单位乘 $P$ 的某一行 (或某一列) 的所有元素.
+\end{itemize}
+
+\begin{proposition}\label{prop:elementary-operations-equivalent}
+两个矩阵 $P,Q\in\mathcal{M}_{m,n}(R)$ 是等价的, 如果 $Q$ 可以由 $P$ 经一串初等变换得到.
+\end{proposition}
+
+\begin{proof}
+要说明初等变换产生等价矩阵, 只须 (由命题~\ref{prop:change-of-basis-form}) 把它们表示成在左边或右边\footnote{左边乘作用于矩阵的行; 右边乘作用于它的列.} 乘以可逆矩阵. 确实, 这些操作可以通过用对单位矩阵执行同样操作所得到的矩阵去适当地乘来实现. 例如, 在左边乘以
+\[
+\begin{pmatrix}
+1 & 0 & 0 & 0\\
+0 & 0 & 0 & 1\\
+0 & 0 & 1 & 0\\
+0 & 1 & 0 & 0
+\end{pmatrix}
+\]
+会交换一个 $4\times n$ 矩阵的第二行与第四行; 在右边乘以
+\[
+\begin{pmatrix}
+1 & 0 & c\\
+0 & 1 & 0\\
+0 & 0 & 1
+\end{pmatrix}
+\]
+会把一个 $m\times 3$ 矩阵的第一列的 $c$ 倍加到第三列. 勤勉的读者将把这一讨论形式化, 并证明所有这些矩阵确实都是可逆的 (习题~\ref{ex:prove-prop-2-7}).
+\end{proof}
+
+对应于初等变换的矩阵称为\emph{初等矩阵}\index{chudeng juzhen@初等矩阵(elementary matrix)}. 如果命题~\ref{prop:elementary-operations-equivalent} 是一个``当且仅当''的陈述, 那么任意环上的线性代数就会简单得多. 这归结为如下问题: 每个可逆矩阵是否都可以写成初等矩阵的乘积, 也就是初等矩阵是否生成``一般线性群''.
+
+\begin{definition}\label{def:general-linear-group}
+环 $R$ 上的第 $n$ 个\emph{一般线性群}\index{yiban xianxing qun@一般线性群(general linear group)}, 记作 $\mathrm{GL}_n(R)$, 是 $\mathcal{M}_n(R)$ 中的单位群, 也就是元素属于 $R$ 的可逆 $n\times n$ 矩阵组成的群.
+\end{definition}
+
+对这个概念的简短提及已经出现过; 参见例~II.\ref{ex:GLn} 以及前面各章的若干习题.
+
+初等矩阵是 $\mathrm{GL}_n(R)$ 的元素; 事实上, 一个初等矩阵的逆 (当然) 仍是一个初等矩阵. 如下观察读者必定以某种形式熟知; 鉴于前面的考虑, 它表明定义~\ref{def:equivalent-matrices} 引入的关系在域上是受良好控制的.
+
+\begin{proposition}\label{prop:GL-generated-by-elementary-field}
+设 $R=k$ 是域, 并设 $n\ge0$ 是一个整数. 则 $\mathrm{GL}_n(k)$ 由初等矩阵生成.
+
+\index{yu@域(field)!fenshihuande@分式环的(of a ring)}因此, 在域上两个矩阵等价当且仅当它们被一串初等变换连接.
+\end{proposition}
+
+\begin{proof}
+设 $A=(a_{ij})$ 是一个 $n\times n$ 可逆矩阵. 特别地, $A$ 的第一列中某个元素非零; 如有必要通过一次行交换, 我们可以假设 $a_{11}$ 非零. 用 $a_{11}^{-1}$ 乘第一行, 我们可以假设 $a_{11}=1$:
+\[
+\begin{pmatrix}
+1 & a_{12} & \dots & a_{1n}\\
+a_{21} & a_{22} & \dots & a_{1n}\\
+\vdots & \vdots & \ddots & \vdots\\
+a_{n1} & a_{n2} & \dots & a_{nn}
+\end{pmatrix}.
+\]
+把第一行的 $(-a_{21})$ 倍加到第二行, 清除 $(2,1)$ 元素. 在对所有行执行类似的操作后, 我们可以假设第一列中唯一的非零元素就是 $(1,1)$ 元素:
+\[
+\begin{pmatrix}
+1 & a_{12} & \dots & a_{1n}\\
+0 & a'_{22} & \dots & a'_{1n}\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & a'_{n2} & \dots & a'_{nn}
+\end{pmatrix}.
+\]
+类似地, 把第一列的 $(-a_{12})$ 倍加到第二列, 清除 $(1,2)$ 元素. 对所有列执行这一操作, 把矩阵约化成形式
+\[
+\begin{pmatrix}
+1 & 0 & \dots & 0\\
+0 & a'_{22} & \dots & a'_{1n}\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & a'_{n2} & \dots & a'_{nn}
+\end{pmatrix}
+= \left(\begin{array}{c|c} 1 & 0\\ \hline 0 & A'\end{array}\right),
+\]
+其中 $A'$ 记一个 (显然可逆的) $(n-1)\times(n-1)$ 矩阵\footnote{这些竖线和横线提醒读者, 矩阵的各个区块本身也是矩阵; 这种记号称为\emph{分块矩阵}\index{fenkuai juzhen@分块矩阵(block matrix)}.}.
+
+对 $A'$ 以及随后的更小的矩阵重复这一过程, 把 $A$ 约化为单位矩阵 $I_n$. 换句话说, $I_n$ 可以由 $A$ 经一串初等变换得到:
+\[
+I_n = M\cdot A\cdot N,
+\]
+其中 $M$ 与 $N$ 是初等矩阵的乘积. 但于是
+\[
+A = M^{-1}\cdot N^{-1}
+\]
+本身就是初等矩阵的乘积, 得出所要的结论.
+\end{proof}
+
+注意, 采用前面证明中的记号, $A^{-1}=N\cdot M$; 因此, 证明中解释的过程可以用来计算一个矩阵的逆 (亦参见习题~\ref{ex:inverse-by-row-ops}).
+
+当只应用于矩阵的行时, 借助初等运算对矩阵做的化简称为\emph{Gauss 消元}\index{Gauss xiaoyuan@Gauss 消元(Gaussian elimination)}. 这对应于在左边用初等矩阵的乘积去乘给定矩阵, 并且它足以把任意方阵可逆矩阵约化为单位矩阵 (习题~\ref{ex:invertible-equiv-identity}).
+
+\index{Gauss@Gauss!Carl Friedrich@Carl Friedrich!xiaoqu@消去(cancellation)}我们将不严谨地把包含列运算以及行运算的更彻底的过程也称为``Gauss 消元''; 这与我们关注等价而非``行等价''是一致的. 应用于任意矩形矩阵, 这个过程给出如下结果:
+
+\begin{proposition}\label{prop:field-matrix-canonical-form}
+在域上, 每个 $m\times n$ 矩阵都等价于一个形如
+\[
+\begin{pmatrix} I_r & 0\\ \hline 0 & 0\end{pmatrix}
+\]
+的矩阵 (其中 $r\le\min(m,n)$, 而 ``0'' 代表适当大小的零矩阵).
+\end{proposition}
+
+命题~\ref{prop:field-matrix-canonical-form} 中显示的这种类型的不同矩阵是互不等价的 (例如由秩的考虑; 参见 §\ref{subsec:rank-nullity}). 因此, 命题~\ref{prop:field-matrix-canonical-form} 描述了域上矩阵的所有等价类, 并表明对任意给定的 $m,n$, 实际上只有有限多个这样的类 (在域上!).
+
+\subsection{Euclid 整环上的 Gauss 消元}
+\label{subsec:gaussian-euclidean}
+
+谨慎起见, Gauss 消元可以在每个 Euclid 整环上执行. 一个 $2\times2$ 的例子足以说明一般情形: 设
+\[
+\begin{pmatrix} a & b\\ c & d\end{pmatrix}\in\mathcal{M}_2(R),
+\]
+其中 $R$ 是 Euclid 整环, 带有 Euclid 赋值 $N$. 在必要时交换行和/或列之后, 我们可以假设 $N(a)$ 是所有元素赋值的最小值. 带余除法给出
+\[
+b = aq + r
+\]
+其中 $r=0$ 或 $N(r)<N(a)$. 把第一列的 $(-q)$ 倍加到第二列, 产生矩阵
+\[
+\begin{pmatrix} a & r\\ c & d-qc\end{pmatrix}.
+\]
+如果 $r\neq0$, 从而 $N(r)<N(a)$, 我们重新开始, 并打乱行和列使得 $(1,1)$ 元素具有最小赋值. 这个过程可以重复, 但在有限步之后 $(1,2)$ 元素必然消失: 因为赋值是非负整数, 且在每次迭代中 $(1,1)$ 元素的赋值都会减小.
+
+同一个过程的平凡变体也会清除 $(2,1)$ 元素, 产生矩阵
+\[
+\begin{pmatrix} e & 0\\ 0 & f\end{pmatrix}.
+\]
+现在 (这是最巧妙的部分) 我们断言可以假设 $e$ 在 $R$ 中整除 $f$, 没有余式. 确实, 否则我们可以把第二行加到第一行,
+\[
+\begin{pmatrix} e & f\\ 0 & f\end{pmatrix},
+\]
+并以这个新的矩阵重新开始. 同样, 所有操作的效果都是减小 $(1,1)$ 元素的赋值, 所以在有限步之后我们必须达到条件 $e\mid f$.
+
+读者会很高兴地描述这个过程在一般情形下的样子. 最终结果是有用的如下注记:
+
+\begin{proposition}\label{prop:smith-normal-form}
+设 $R$ 是 Euclid 整环, 并设 $P\in\mathcal{M}_{m,n}(R)$. 则 $P$ 等价于一个形如\footnote{这里 $r\le\min(m,n)$, 右下角的 $0$ 代表一个零的 $(m-r)\times(n-r)$ 矩阵, 等等.}
+\[
+\begin{pmatrix}
+d_1 & & 0 & 0\\
+\vdots & \ddots & \vdots & \vdots\\
+0 & \dots & d_r & 0\\
+\hline
+0 & \dots & 0 & 0
+\end{pmatrix}
+\]
+的矩阵, 其中 $d_1\mid\cdots\mid d_r$.
+\end{proposition}
+
+\index{Smith zhengguixingshi@Smith 正规形式(Smith normal form)}这称为矩阵的\emph{Smith 正规形}\index{Smith zhengguixing@Smith 正规形(Smith normal form)}.
+
+\index{Gauss xiaoqu@Gauss 消去(Gaussian elimination)}\index{Gauss xiaoqu@Gauss 消去(Gaussian elimination)!zai Euclid zhenghuanshang@在 Euclid 整环上(over Euclidean domains)}命题~\ref{prop:smith-normal-form} 足以证明我们的一个主要目标 (PID 上有限生成模的分类定理) 的一个弱形式在 Euclid 整环上成立; 这希望在不远的将来变得清晰, 但读者可以通过把命题~\ref{prop:smith-normal-form} 与有限阿贝尔群的分类对照而立刻获得所需的洞察 (习题~\ref{ex:smith-finite-abelian}).
+
+\begin{remark}\label{rmk:GL-euclidean-elementary}
+作为前面考虑的结果, 并如命题~\ref{prop:GL-generated-by-elementary-field} 证明中那样论证, 我们看到若 $R$ 是 Euclid 整环, 则 $\mathrm{GL}_n(R)$ 由初等矩阵生成. 读者可能认为处理 Gauss 消元的一些巧妙做法可以把这推广到更一般的环, 但这走不了太远: 存在这样的 PID $R$ 的例子, 使得 $\mathrm{GL}_n(R)$ 不是由初等矩阵生成的.
+
+另一方面, 一些巧妙做法确实能为元素属于一个 PID 的任意矩阵产生 Smith 正规形: 一个好的最大公因数的存在足以改造上面勾画的步骤 (但可能不仅需要初等行和列运算). 我们将在 §\ref{sec:pid-fg-classification} 直接处理这个问题.
+\end{remark}
+
+\subsection*{习题}
+\phantomsection
+\addcontentsline{toc}{subsection}{习题}
+
+\begin{prob}
+\label{ex:matrix-group-upper-tri}
+证明 $\mathcal{M}_2(R)$ 中形如
+\[
+\begin{pmatrix} 1 & 0\\ r & 1\end{pmatrix}
+\]
+的矩阵组成的集合在矩阵乘法下是一个群, 并且同构于 $(R,+)$.
+\end{prob}
+
+\begin{prob}
+\label{ex:matrix-mult-associative}
+$\triangleright$ 证明矩阵乘法是结合的. [§\ref{subsec:matrices}]
+\end{prob}
+
+\begin{prob}
+\label{ex:matrix-R-algebra}
+$\triangleright$ 证明 $\mathcal{M}_n(R)$ 与 $\Hom_R(R^n,R^n)$ 都自然地是 $R$-代数, 并且推论~\ref{cor:matrix-hom-isomorphism} 的同构 $\Hom_R(R^n,R^n)\cong\mathcal{M}_n(R)$ 是一个 $R$-代数同构. (回顾我们默认 $R$ 交换. 参见习题~III.\ref{ex:end-algebra}.) 特别地, 若矩阵 $M$ 对应于同态 $\varphi:R^n\to R^n$, 则 $M$ 在 $\mathcal{M}_n(R)$ 中可逆当且仅当 $\varphi$ 是同构. [§\ref{subsec:matrices}, §\ref{subsec:determinant}, §~\ref{subsec:endomorphisms-similarity}]
+\end{prob}
+
+\begin{prob}
+\label{ex:prove-cor-2-2}
+证明推论~\ref{cor:matrix-hom-isomorphism}.
+\end{prob}
+
+\begin{prob}
+\label{ex:prove-prop-2-7}
+$\triangleright$ 给出证明命题~\ref{prop:elementary-operations-equivalent} 的形式化论证. [§\ref{subsec:elementary-operations}]
+\end{prob}
+
+\begin{prob}
+\label{ex:row-echelon-form}
+\index{jietixing@阶梯形(echelon form)!juzhende@矩阵的(of a matrix)}\index{jietixing@阶梯形(echelon form)}$\neg$ 一个元素属于域的矩阵是\emph{行阶梯形}\index{hangjietixing@行阶梯形(row echelon form)}, 如果
+\begin{itemize}
+\item 它的非零行都在零行之上, 且
+\item 每一行最左边的非零元素是 $1$, 并且严格地位于上一行最左边非零元素的右边.
+\end{itemize}
+如果进一步满足
+\begin{itemize}
+\item 每一行最左边的非零元素是它所在列中唯一的非零元素,
+\end{itemize}
+则称该矩阵是\emph{约化行阶梯形}\index{yuehua hangjietixing@约化行阶梯形(reduced row echelon form)}.
+
+\index{zhuyuan@主元(pivot)}行阶梯形矩阵中最左边的非零元素称为\emph{主元}\index{zhuyuan@主元(pivot)}.
+
+\index{Gauss@Gauss!Carl Friedrich@Carl Friedrich!yinli@引理(lemma)}证明任意元素属于域的矩阵都可以通过对行的一串初等运算化为约化行阶梯形. (这才是更严格意义上的 Gauss 消元.) [\ref{ex:reduced-echelon-independent}, \ref{ex:unique-reduced-echelon}]
+\end{prob}
+
+\begin{prob}
+\label{ex:reduced-echelon-independent}
+$\neg$ 设 $M$ 是一个元素属于域且处于约化行阶梯形的矩阵 (习题~\ref{ex:row-echelon-form}). 证明若行向量 $\mathbf{r}$ 是 $M$ 的非零行的线性组合 $\sum_i a_i\mathbf{r}_i$, 则 $a_i$ 等于 $\mathbf{r}$ 在 $M$ 的第 $i$ 行主元所在位置的分量. 推出 $M$ 的非零行线性无关. [\ref{ex:unique-reduced-echelon}]
+\end{prob}
+
+\begin{prob}
+\label{ex:row-equivalence}
+$\neg$ 两个矩阵 $M,N$ 是\emph{行等价}\index{hangdengjia@行等价(row equivalent)}的, 如果存在可逆矩阵 $P$ 使得 $M=PN$. 证明这确实是一个等价关系, 并且两个元素属于域的矩阵行等价当且仅当其中一个可以由另一个经一串对行的初等运算得到. [\ref{ex:unique-reduced-echelon}, \ref{ex:grassmannian-bijection}]
+\end{prob}
+
+\begin{prob}
+\label{ex:unique-reduced-echelon}
+$\neg$ 设 $k$ 是域, 并在 $m\times n$ 矩阵的集合 $\mathcal{M}_{m,n}(k)$ 上考虑行等价 (习题~\ref{ex:row-equivalence}). 证明每个等价类恰含一个处于约化行阶梯形的矩阵 (习题~\ref{ex:row-echelon-form}). (提示: 为证唯一性, 用反证法. 设 $M,N$ 是不同的行等价约化行阶梯形矩阵; 假设它们具有此性质的最少列数. 若 $M$ 与 $N$ 首次不同的最左边一列是第 $k$ 列, 利用极小性证明可以假设 $M,N$ 形如
+\[
+\begin{pmatrix} I_{k-1} & *\\ \hline 0 & *\end{pmatrix}
+\quad\text{或}\quad
+\begin{pmatrix} I_{k-1} & *\end{pmatrix}.
+\]
+利用习题~\ref{ex:reduced-echelon-independent} 得到矛盾.)
+
+与给定矩阵 $M$ 行等价的约化行阶梯形矩阵称为 $M$ 的\emph{约化阶梯形}\index{yuehua jietixing@约化阶梯形(reduced echelon form)}. [\ref{ex:row-space-dimension}]
+\end{prob}
+
+\begin{prob}
+\label{ex:row-column-space}
+$\triangleright$ 矩阵 $M$ 的\emph{行空间}\index{hangkongjian@行空间(row space)}是它的行的张成; $M$ 的\emph{列空间}\index{liekongjian@列空间(column space)}是它的列的张成\erratumfootnote{根据官方勘误, 原书英文此处修正 columns 拼写.}. 证明行等价的矩阵具有相同的行空间, 并且具有同构的列空间. [\ref{ex:grassmannian-bijection}, §\ref{subsec:rank-nullity}]
+\end{prob}
+
+\begin{prob}
+\label{ex:row-space-dimension}
+设 $k$ 是域, $M\in\mathcal{M}_{m,n}(k)$. 证明由 $M$ 的行张成的空间的维数等于 $M$ 的约化行阶梯形中非零行的个数 (参见习题~\ref{ex:unique-reduced-echelon}).
+\end{prob}
+
+\begin{prob}
+\index{Grassmann liuxing@Grassmann 流形(Grassmannian)}\label{ex:grassmannian-bijection}
+$\neg$ 设 $k$ 是域, 并考虑 $\mathcal M_{m,n}(k)$ 上的行等价关系 (习题~\ref{ex:row-equivalence}). 由习题~\ref{ex:row-column-space}, 行等价矩阵有相同的行空间. 证明反过来, 对 $k^n$ 的每个维数不大于 $m$ 的子空间, $\mathcal M_{m,n}(k)$ 中恰有一个行等价类. [\ref{ex:grassmannian-cells}, \ref{ex:grassmannian-24}]
+\index{Grassmann guan@Grassmann 簇(Grassmannian)}
+\end{prob}
+
+\begin{prob}
+\label{ex:grassmannian-cells}
+$\neg$ 固定向量空间中给定维数的子空间组成的集合称为\emph{Grassmann 簇}. 在习题~\ref{ex:grassmannian-bijection} 中你构造了 $k^n$ 的 $r$ 维子空间的 Grassmann 簇与具有 $n$ 列和 $r$ 个非零行的约化行阶梯形矩阵集合之间的一个双射.
+
+当 $r=1$ 时, Grassmann 簇称为\emph{射影空间}\index{sheying kongjian@射影空间(projective space)}. 对向量空间 $V$, 相应的射影空间 $\PP V$ 是 $V$ 中``直线'' ($1$ 维子空间) 的集合. 对 $V=k^n$, $\PP V$ 可记作 $\PP_k^{n-1}$, 若上下文清楚则 $k$ 可省略. 证明 $\PP_k^{n-1}$ 可以写成并集 $k^{n-1}\cup k^{n-2}\cup\cdots\cup k^1\cup k^0$, 并``几何地''描述这些子集中的每一个.
+
+于是 $\PP^{n-1}$ 是 $n$ 个``胞腔''\footnote{这里的一个胞腔只是一个与某个 $k^\ell$ 有自然双射的子集.}\index{baoqiang@胞腔(cell)}的并集, 最大的一个维数为 $n-1$ (这解释了记法的选择). 类似地, 所有 Grassmann 簇都可以写成胞腔的并集. 这些称为\emph{Schubert 胞腔}\index{Schubert baoqiang@Schubert 胞腔(Schubert cell)}.
+
+证明 $k^n$ 的 $(n-1)$ 维子空间的 Grassmann 簇承认一个与 $\PP_k^{n-1}$ 完全类似的胞腔分解. (这一现象将在习题~VIII.\ref{ex:grassmannian-dual} 中得到解释.) [VII.\ref{ex:projective-cover}, VIII.\ref{ex:plucker-embedding}, VIII.\ref{ex:grassmannian-dual}]
+\end{prob}
+
+\begin{prob}
+\label{ex:grassmannian-24}
+$\triangleright$ 证明 $k^4$ 的 $2$ 维子空间的 Grassmann 簇 $\mathrm{Gr}_k(2,4)$ 是 $6$ 个 Schubert 胞腔的并集: $k^4\cup k^3\cup k^2\cup k^2\cup k^1\cup k^0$. (利用习题~\ref{ex:grassmannian-bijection}; 列出所有可能的约化行阶梯形.) [VIII.\ref{ex:plucker-equations}]
+\end{prob}
+
+\begin{prob}
+\label{ex:invertible-equiv-identity}
+$\triangleright$ 证明一个元素属于域的方阵可逆, 当且仅当它等价于单位矩阵, 当且仅当它行等价于单位矩阵, 当且仅当它的约化行阶梯形是单位矩阵. [§\ref{subsec:elementary-operations}, \ref{ex:inverse-by-row-ops}]
+\end{prob}
+
+\begin{prob}
+\label{ex:prove-prop-2-10}
+证明命题~\ref{prop:field-matrix-canonical-form}.
+\end{prob}
+
+\begin{prob}
+\label{ex:prove-prop-2-11}
+证明命题~\ref{prop:smith-normal-form}.
+\end{prob}
+
+\begin{prob}
+\label{ex:smith-bases-Z3Z2}
+设 $\alpha:\Z^3\to\Z^2$ 关于标准基由矩阵
+\[
+\begin{pmatrix} -6 & 12 & 18\\ -15 & 36 & 54\end{pmatrix}
+\]
+表示. 找出 $\Z^3$, $\Z^2$ 的基, 使得关于这些基 $\alpha$ 由命题~\ref{prop:smith-normal-form} 中得到的形式的矩阵给出.
+\end{prob}
+
+\begin{prob}
+\label{ex:smith-finite-abelian}
+$\triangleright$ 作为命题~\ref{prop:smith-normal-form} 的推论, 再次证明推论~IV.\ref{cor:abelian-cyclic-sum}. 事实上, 证明更一般的事实: 每个有限生成阿贝尔群都是循环群的一个直和. [§II.\ref{subsec:subgroups-generated}, §IV.\ref{subsec:classification-fag}, §IV.\ref{subsec:fag-application}, §\ref{subsec:gaussian-euclidean}, §\ref{subsec:torsion}, §\ref{subsec:reading-presentation}]
+\end{prob}
+
+\section{自由模的同态, II}
+\label{sec:hom-free-modules-II}
+
+§\ref{sec:homomorphisms-free-modules-I} 中的工作达成了描述 $\Hom_R(F,G)$ 的目标, 其中 $F$ 与 $G$ 是有限秩自由 $R$-模; 正如我们已经看到的, 如果例如 $R$ 是域或 Euclid 整环, 这个描述可以做得最为具体. 不过我们还没有完全结束: 即便在域上, ``理解答案'' 也很重要——也就是说, 审视 §\ref{subsec:elementary-operations} 末尾强调的把同态分类为有限多类的做法. 此外, 可逆矩阵频繁出现, 使得有必要发展一些判据, 以判断一个给定矩阵是否属于一般线性群 (定义~\ref{def:general-linear-group}). 我们从指出同态分类的一个直接应用开始.
+
+\subsection{线性方程组求解}
+\label{subsec:linear-systems}
+
+稍加思索就会发现, Gauss 消元, 借助诸如命题~\ref{prop:GL-generated-by-elementary-field} 这样的陈述, 给了我们一个在域或 Euclid 整环\footnote{当然, 通过把 $R$ 嵌入其分式域而化到域的情形, 人们可以处理任意整环 $R$ 上的方程组.}上求解线性方程组的工具. 这是又一个似乎不值得仔细处理或记忆体操的点: 仔细地把式子写出来, 应当足以在需要时产生所需的工具. 为描述一个典型情形, 假设
+\[
+\left\{\begin{array}{c}
+a_{11}x_1+\cdots+a_{1n}x_n=b_1\\
+\dots\\
+a_{m1}x_1+\cdots+a_{mn}x_n=b_m
+\end{array}\right.
+\]
+是由 $n$ 个未知量构成的 $m$ 个方程组成的方程组, 其中 $a_{ij}$, $b_i$ 属于一个 Euclid 整环 $R$. 我们想找出 $R$ 中全部解 $x_1,\ldots,x_n$.
+
+令 $A=\begin{pmatrix} a_{11}&\cdots&a_{1n}\\ \vdots&\ddots&\vdots\\ a_{m1}&\cdots&a_{mn}\end{pmatrix}$, $\mathbf{b}=\begin{pmatrix} b_1\\ \vdots\\ b_m\end{pmatrix}$, $\mathbf{x}=\begin{pmatrix} x_1\\ \vdots\\ x_n\end{pmatrix}$, 这等价于在矩阵方程
+\[
+A\cdot\mathbf{x}=\mathbf{b}
+\]
+中``求解 $\mathbf{x}$''.
+
+当然, 如果 $m=n$ 且矩阵 $A$ 是方阵可逆的, 那么解简单地由
+\[
+\mathbf{x}=A^{-1}\cdot\mathbf{b}
+\]
+给出. 这里 $A^{-1}$ 可以通过 Gauss 消元 (参见命题~\ref{prop:GL-generated-by-elementary-field}) 或行列式 ($\S\ref{subsec:determinant}$) 得到.
+
+即使对``系数矩阵'' $A$ 不作任何特殊要求, 行运算与列运算也会把它化为命题~\ref{prop:smith-normal-form} 中给出的标准形; 也就是说, 它们会产生可逆矩阵 $M$, $N$ 使得
+\[
+M\cdot A\cdot N=\begin{pmatrix} d_1&\dots&0&0\\ \vdots&\ddots&\vdots&\vdots\\ 0&\dots&d_r&0\\ \hline 0&\dots&0&0\end{pmatrix},
+\]
+记号如命题~\ref{prop:smith-normal-form}. Gauss 消元是一个构造性过程: 在你交换/合并行或列时观察自己, 就会显式地产生 $M$ 与 $N$. 现在, 令 $\mathbf{y}=(y_j)$ 且 $\mathbf{c}=M\mathbf{b}$, 则方程组
+\[
+(M\cdot A\cdot N)\cdot\mathbf{y}=\mathbf{c}
+\]
+自行解出:
+\[
+\left\{\begin{array}{c}
+d_1y_1=c_1\\
+\dots\\
+d_ry_r=c_r\\
+0=c_{r+1}\\
+\dots
+\end{array}\right.
+\]
+有解当且仅当对所有 $j$ 有 $d_j\mid c_j$ 且对 $j>r$ 有 $c_j=0$; 且在此情形下, 对 $j=1,\ldots,r$, $y_j$ 是 $R$ 中满足 $c_j = d_j y_j$ 的唯一元素, 而对 $j>r$, $y_j$ 任意\erratumfootnote{根据官方勘误, 明确在整环中 $y_j$ 是满足 $c_j = d_j y_j$ 的唯一元素 (the unique element of $R$ such that $c_j = d_j y_j$).}. 这给出 $\mathbf{y}$, 而读者将验证 $\mathbf{x}=N\mathbf{y}$ 给出原方程组的全部解.
+
+\index{xianxing@线性(linear)!yingshe@映射(map)}这样的论证可以打包成方便的显式过程来求解线性方程组. 再次说明, 列举 (或试图记忆) 任何一个这样的过程似乎都是徒劳的; 似乎更重要的是知道这类技巧背后的原理, 以便在需要时能够想出一个来.
+
+\index{Cramer@Cramer!Gabriel@Gabriel!faze@法则(rule)}\index{Cramer@Cramer!Gabriel@Gabriel}无论如何, 读者应当能够为这样的法则严格地辩护. 最著名的一个大概是 Cramer 法则 (命题~\ref{prop:cramers-rule}), 它依赖行列式, 而且顺便说, 对于任何像样规模的问题在实践中基本上没用.
+
+\subsection{行列式}
+\label{subsec:determinant}
+
+设 $\alpha:F\to G$ 是相同秩的自由 $R$-模之间的一个同态, 并设 $A$ 是 $\alpha$ 关于 $F$ 与 $G$ 的一组基的选取所表示的矩阵. 作为引理~\ref{lem:matrix-composition-commutes} (参见习题~\ref{ex:matrix-R-algebra}) 的推论, $\alpha$ 是同构当且仅当 $A$ 是 $\mathcal{M}_n(R)$ 中的单位, 也就是说, 当且仅当它作为元素属于 $R$ 的矩阵是可逆的. 这一点可以通过计算 $A$ 的行列式来检测.
+
+\begin{definition}\label{def:determinant}
+设 $A=(a_{ij})\in\mathcal{M}_n(R)$ 是一个方阵. 则 $A$ 的\emph{行列式}\index{hanglieshi@行列式(determinant)}是元素
+\[
+\det(A)=\sum_{\sigma\in S_n}(-1)^\sigma\prod_{i=1}^n a_{i\sigma(i)}\in R.
+\]
+\end{definition}
+
+这里 $S_n$ 表示 $\{1,\ldots,n\}$ 上的对称群, 并且我们对 $\sigma\in S_n$ 在 $i\in\{1,\ldots,n\}$ 上的作用记作 $\sigma(i)$\footnote{此处选择左作用, 如同 \S~IV.\ref{sec:symmetric-group}. 若按右作用并写作 $i\sigma$, 则会导致诸如 `$a_{ii\sigma}$' 这样的记号, 极难解析\erratumfootnote{根据官方勘误, 明确说明此处选用左作用, 并修正原书拼写为 $a_{ii\sigma}$.}.}; $(-1)^\sigma$ 是置换的符号 (定义~IV.\ref{def:sign}, 引理~IV.\ref{lem:transposition-parity}).
+
+\index{yu@域(field)!shangde@商的(of a quotient)}读者必定熟悉行列式, 至少在域上的情形. 它们满足许多值得注意的性质; 这里是一份选录:
+\begin{itemize}
+\item 一个矩阵 $A$ 的行列式等于其\emph{转置}\index{zhuanzhi@转置(transpose)} $A^t=(a_{ij}^t)$ 的行列式, 后者由对所有 $i$ 与 $j$ 规定
+\[
+a_{ij}^t=a_{ji}
+\]
+来定义 (也就是说, $A^t$ 的行是 $A$ 的列). 确实,
+\[
+\det A^t=\sum_{\sigma\in S_n}(-1)^\sigma\prod_{i=1}^n a_{i\sigma(i)}^t=\sum_{\sigma\in S_n}(-1)^\sigma\prod_{i=1}^n a_{\sigma(i)i}=\sum_{\sigma\in S_n}(-1)^\sigma\prod_{i=1}^n a_{i\sigma^{-1}(i)}
+\]
+由 $R$ 中乘积的交换性; 并且当 $\sigma$ 遍历 $\{1,\ldots,n\}$ 的所有置换时, $\sigma^{-1}$ 也以相同的符号遍历所有置换, 所以最右端等于 $\det A$.
+\item 如果一个方阵 $A$ 的两行或两列相同, 则 $\det A=0$. 确实, 对匹配的列验证这一点就够了; 行的情形由应用前面的观察得到. 如果 $A$ 的列 $j$ 与 $j'$ 相等, 则来自 $\sigma\in S_n$ 的对 $\det A$ 的贡献与来自 $\sigma$ 与对换 $(jj')$ 之积的贡献大小相等而符号相反, 所以 $\det A=0$.
+\item 假设 $A=(a_{ij})$ 与 $B=(b_{ij})$ 至多在一行上不同: 对某个固定的 $k$ 与所有 $j$, 若 $i\neq k$ 则 $a_{ij}=b_{ij}$. 令对 $i\neq k$ 有 $c_{ij}:=a_{ij}=b_{ij}$, $c_{kj}:=a_{kj}+b_{kj}$, 并令 $C=(c_{ij})$. 则
+\[
+\det(C)=\det(A)+\det(B).
+\]
+这由定义~\ref{def:determinant} 与分配律立得. 把这一观察应用于转置矩阵, 就得到对至多在一列上不同的矩阵的类似陈述.
+\end{itemize}
+
+我们将更正式地记录初等变换对行列式的影响:
+
+\begin{lemma}\label{lem:det-elementary-ops}
+设 $A$ 是一个元素属于整环 $R$ 的方阵.
+\begin{itemize}
+\item 设 $A'$ 由 $A$ 通过交换两行或两列得到. 则 $\det(A')=-\det(A)$.
+\item 设 $A'$ 由 $A$ 通过将一行 (列) 的另一行 (列) 的倍数加到该行 (列) 得到. 则 $\det(A')=\det(A)$.
+\item 设 $A'$ 由 $A$ 通过将一行 (列) 乘以一个元素 $c\in R$\footnote{对初等运算而言, $c$ 应当是一个单位; 这一限制在这里并非必要.} 得到. 则 $\det(A')=c\det(A)$.
+\end{itemize}
+换句话说, 初等变换对 $\det A$ 的作用, 等于用相应的初等矩阵的行列式去乘 $\det A$.
+\end{lemma}
+
+\begin{proof}
+这些本质上都从定义~\ref{def:determinant} 立即得到. 例如, 交换两列相当于在定义中把每个 $\sigma$ 用一个固定的对换修正, 改变定义中那个 $\sum$ 的所有贡献的符号. 第三点由分配律立即得到. 把第三点与陈述前的两条注记结合起来就得到第二点. 细节留给读者 (习题~\ref{ex:det-lemma-details}).
+\end{proof}
+
+这一观察极大地简化了行列式理论. 如果 $R=k$ 是域且 $P\in\mathcal{M}_n(k)$, Gauss 消元 (命题~\ref{prop:field-matrix-canonical-form}) 表明
+\[
+A=E_1\cdots E_a\cdot\begin{pmatrix} I_r&0\\ \hline 0&0\end{pmatrix}\cdot E_1'\cdots E_b',
+\]
+其中 $r\le n$ 且 $E_i$, $E_j'$ 是初等矩阵. 于是引理~\ref{lem:det-elementary-ops} 给出
+\[
+\det(A)=\prod_i\det(E_i)\prod_j\det(E_j')\det\begin{pmatrix} I_r&0\\ \hline 0&0\end{pmatrix}.
+\]
+(特别地, 只有 $r=n$ 时才有 $\det A\neq0$.) 由这一注记可得关于行列式的若干有用事实. 例如,
+
+\begin{proposition}\label{prop:det-invertible-unit}
+设 $R$ 是交换环.
+\begin{itemize}
+\item 一个方阵 $A\in\mathcal{M}_n(R)$ 可逆当且仅当 $\det A$ 是 $R$ 中的单位.
+\item 行列式是一个同态\footnote{回忆 $(R^*,\cdot)$ 表示 $R$ 的单位群.}$\mathrm{GL}_n(R)\to(R^*,\cdot)$. 更一般地, 对 $A,B\in\mathcal{M}_n(R)$,
+\[
+\det(A\cdot B)=\det(A)\det(B).
+\]
+\end{itemize}
+\end{proposition}
+
+\begin{proof}
+如果 $R=k$ 是域, 我们可以用紧接陈述之前的考虑. 第一点被化到分块矩阵
+\[
+\begin{pmatrix} I_r&0\\ \hline 0&0\end{pmatrix}
+\]
+的情形, 此时它是显然的. 事实上, 这表明 $\det A=0$ 当且仅当对应于 $A$ 的线性映射 $k^n\to k^n$ 不是同构. 特别地, 对所有 $A$, $B$ 我们有 $\det(AB)=0$ 当且仅当 $AB$ 不是同构, 当且仅当 $A$ 或 $B$ 不是同构, 当且仅当 $\det(A)=0$ 或 $\det(B)=0$. 所以我们只需对可逆矩阵验证同态性质. 这些正是初等矩阵的乘积, 于是同态性质由引理~\ref{lem:det-elementary-ops} 推出.
+\end{proof}
+
+在给出到任意交换环情形的 (容易的) 推广之前, 指出如下显式公式是有帮助的. 从给定矩阵 $A$ 中去掉若干行与列而得到的``子矩阵''称为 $A$ 的一个\emph{子式}\index{zishi@子式(minor)}; 更严格地说, 这个术语指的是这样得到的方阵子矩阵的行列式. 如果 $A\in\mathcal{M}_n(R)$, 则 $A$ 的\emph{代数余子式}\index{yuzishi@代数余子式(cofactor)}是 $A$ 的 $(n-1)\times(n-1)$ 子式, 带一个符号修正. 更精确地, 对 $A=(a_{ij})$ 我们令
+\[
+A^{(ij)}:=(-1)^{i+j}\det\begin{pmatrix}
+a_{11}&\dots&a_{1,j-1}&a_{1,j+1}&\dots&a_{1n}\\
+\vdots&\ddots&\vdots&\vdots&\ddots&\vdots\\
+a_{i-1,1}&\dots&a_{i-1,j-1}&a_{i-1,j+1}&\dots&a_{i-1,n}\\
+a_{i+1,1}&\dots&a_{i+1,j-1}&a_{i+1,j+1}&\dots&a_{i+1,n}\\
+\vdots&\ddots&\vdots&\vdots&\ddots&\vdots\\
+a_{n1}&\dots&a_{n,j-1}&a_{n,j+1}&\dots&a_{nn}
+\end{pmatrix}.
+\]
+
+\begin{lemma}\label{lem:cofactor-expansion}
+沿用上述记号,
+\begin{itemize}
+\item 对所有 $i=1,\ldots,n$, $\det(A)=\sum_{j=1}^n a_{ij}A^{(ij)}$,
+\item 对所有 $j=1,\ldots,n$, $\det(A)=\sum_{i=1}^n a_{ij}A^{(ij)}$.
+\end{itemize}
+\end{lemma}
+
+\begin{proof}
+这是对 $n$ 的一个简单 (虽然略显杂乱) 的归纳, 我们留给勤勉的读者.
+\end{proof}
+
+当然, 引理~\ref{lem:cofactor-expansion} 只是在陈述那个著名的策略: 通过按你喜欢的某一行或某一列展开来计算一个行列式. 这对非常小的矩阵好用得奇妙, 而对大的矩阵则完全无用, 因为应用它所需的计算次数随矩阵大小阶乘式增长. 从计算的角度看, 应用 Gauss 消元并使用命题~\ref{prop:det-invertible-unit} 之前的考虑要有意义得多.
+
+但引理~\ref{lem:cofactor-expansion} 有如下重要的推论:
+
+\begin{corollary}\label{cor:adjoint-inverse}
+设 $R$ 是交换环, $A\in\mathcal{M}_n(R)$. 则
+\[
+A\cdot\begin{pmatrix} A^{(11)}&\dots&A^{(n1)}\\ \vdots&\ddots&\vdots\\ A^{(1n)}&\dots&A^{(nn)}\end{pmatrix}
+=\begin{pmatrix} A^{(11)}&\dots&A^{(n1)}\\ \vdots&\ddots&\vdots\\ A^{(1n)}&\dots&A^{(nn)}\end{pmatrix}\cdot A
+=\det(A)I_n.
+\]
+注意在余因子矩阵中 $i$ 与 $j$ 的角色发生了交换. 这个矩阵称为 $A$ 的\emph{伴随矩阵}\index{bansui juzhen@伴随矩阵(adjoint matrix)}.
+\end{corollary}
+
+\begin{proof}
+在等式右端的对角线上, 这是引理~\ref{lem:cofactor-expansion} 的重述. 不在对角线上时, 人们计算的是 (例如)
+\[
+\sum_{j=1}^n a_{i'j}A^{(ij)}
+\]
+对 $i'\neq i$. 由引理~\ref{lem:cofactor-expansion}, 这等于把第 $i$ 行替换为第 $i'$ 行后所得矩阵的行列式; 所得矩阵有两行相同, 所以它的行列式为 $0$, 正如所需.
+\end{proof}
+
+特别地, 推论~\ref{cor:adjoint-inverse} 证明: 如果我们能求一个矩阵的行列式的逆, 我们就能求那个矩阵的逆:
+\[
+A^{-1}=\det(A)^{-1}\begin{pmatrix} A^{(11)}&\dots&A^{(n1)}\\ \vdots&\ddots&\vdots\\ A^{(1n)}&\dots&A^{(nn)}\end{pmatrix};
+\]
+只要 $\det A$ 是单位, 这在任意交换环上都成立. 在实践中余因子的计算是``昂贵的'', 所以在任何具体的情形 Gauss 消元可能是更好的选择 (至少在域上); 参见习题~\ref{ex:inverse-by-row-ops}.
+
+但这个逆的公式具有良好的理论意义. 例如, 我们现在可以补全命题~\ref{prop:det-invertible-unit} 的证明.
+
+\begin{proof}
+命题~\ref{prop:det-invertible-unit} 在交换环上的证明. 第一点由第二点与刚刚看到的结论推出. 确实, 我们已经验证: 如果 $\det(A)$ 是 $R$ 中的单位, 则 $A\in\mathcal{M}_n(R)$ 承认一个逆 $A^{-1}\in\mathcal{M}_n(R)$; 反过来, 如果 $A$ 承认一个逆 $A^{-1}\in\mathcal{M}_n(R)$, 则
+\[
+\det(A)\det(A^{-1})=\det(AA^{-1})=\det(I_n)=1
+\]
+由第二点, 所以 $\det(A^{-1})$ 是 $\det(A)$ 在 $R$ 中的逆.
+
+于是, 我们只需验证第二点, 即行列式的同态性质. 为了在每个 (交换) 环上验证这一点, 只需对具有不定元的矩阵写出所宣称的等式而验证那个``泛''恒等式. 例如, 对 $n=2$ 该陈述是
+\[
+\det\begin{pmatrix} x_1&x_2\\ x_3&x_4\end{pmatrix}\det\begin{pmatrix} y_1&y_2\\ y_3&y_4\end{pmatrix}
+=\det\begin{pmatrix} x_1y_1+x_2y_3&x_1y_2+x_2y_4\\ x_3y_1+x_4y_3&x_3y_2+x_4y_4\end{pmatrix},
+\]
+它翻译成恒等式
+\[
+(x_1x_4-x_2x_3)(y_1y_4-y_2y_3)=(x_1y_1+x_2y_3)(x_3y_2+x_4y_4)-(x_1y_2+x_2y_4)(x_3y_1+x_4y_3);
+\]
+由于这个恒等式在 $\Z[x_1,\ldots,y_4]$ 中成立, 它必定在任何交换环中, 对 $x_1,\ldots,y_4$ 的任意选取都成立: 确实, $\Z$ 在 Ring 中是初对象的.
+
+现在, 我们已经验证了同态性质在域上成立; 特别地它在 $\Z[x_{11},\ldots,x_{nn},y_{11},\ldots,y_{nn}]$ 的分式域上成立. 由此推出它在 $\Z[x_{11},\ldots,x_{nn},y_{11},\ldots,y_{nn}]$ 中确实成立, 证毕.
+\end{proof}
+
+\index{yu@域(field)!youlihanshude@有理函数的(of a rational function)}把这个从域推广到任意交换环的``泛恒等式''论证是一个有用的手法, 读者被邀请仔细地思考它.
+
+作为行列式 (尤其是余因子) 的一个应用, 我们现在可以回到 §\ref{subsec:linear-systems} 中考虑的 $n$ 个方程 $n$ 个未知量的特殊情形
+\[
+A\cdot\mathbf{x}=\mathbf{b},
+\]
+其中 $\det A$ 是单位.
+
+\begin{proposition}[Cramer 法则]\label{prop:cramers-rule}
+假设 $\det(A)$ 是单位, 并设 $A^{(j)}$ 是把 $A$ 的第 $j$ 列替换为列向量 $\mathbf{b}$ 所得的矩阵. 则
+\[
+x_j=\det(A)^{-1}\det(A^{(j)}).
+\]
+\end{proposition}
+
+\begin{proof}
+利用引理~\ref{lem:cofactor-expansion}, 按第 $j$ 列展开 $\det(A^{(j)})$:
+\[
+\det(A^{(j)})=\sum_{i=1}^n A^{(ij)}b_i.
+\]
+因此
+\[
+\begin{aligned}
+&\begin{pmatrix} x_1\\ \vdots\\ x_n\end{pmatrix}\\
+&=A^{-1}\mathbf{b}\\
+&=\det(A)^{-1}\begin{pmatrix} A^{(11)}&\dots&A^{(n1)}\\ \vdots&\ddots&\vdots\\ A^{(1n)}&\dots&A^{(nn)}\end{pmatrix}\begin{pmatrix} b_1\\ \vdots\\ b_n\end{pmatrix}\\
+&=\det(A)^{-1}\begin{pmatrix} \sum_{i=1}^n A^{(i1)}b_i\\ \vdots\\ \sum_{i=1}^n A^{(in)}b_i\end{pmatrix}\\
+&=\begin{pmatrix} \det(A)^{-1}\det(A^{(1)})\\ \vdots\\ \det(A)^{-1}\det(A^{(n)})\end{pmatrix},
+\end{aligned}
+\]
+给出陈述.
+\end{proof}
+
+\subsection{秩与零度}
+\label{subsec:rank-nullity}
+
+根据命题~\ref{prop:field-matrix-canonical-form}, 域上矩阵的每个等价类都有一个形如
+\[
+\begin{pmatrix} I_r&0\\ \hline 0&0\end{pmatrix}
+\]
+的代表. 两个这种类型的不同 $m\times n$ 矩阵必定不等价的原因在于: 如果 $\alpha:V\to W$ (其中 $V$ 与 $W$ 是自由模, 在此情形下是向量空间) 被这种形式的矩阵表示, 则 $r$ 是 $\alpha$ 的像的维数. 因此, 具有不同 $r$ 的矩阵不能表示同一个 $\alpha$.
+
+这个整数 $r$ 称为矩阵的\emph{秩}, 值得一些关注. 我们将对元素属于域的矩阵讨论它, 把到更一般环的推广留给读者 (至少目前如此).
+
+域 $k$ 上矩阵 $P$ 的\emph{列 (行) 空间}是它的列 (行) 的张成. $P$ 的\emph{列 (行) 秩}\index{lieji@列秩(column rank)}\index{hangji@行秩(row rank)}是其列 (行) 空间的维数.
+
+\begin{proposition}\label{prop:row-col-rank-equal}
+域 $k$ 上矩阵的\emph{行秩}等于其\emph{列秩}.
+\end{proposition}
+
+\begin{proof}
+等价的矩阵具有相同的秩. 确实, 设 $P\in\mathcal{M}_{m,n}(k)$; $P$ 的行空间由所有行向量
+\[
+(a_1\ \dots\ a_n)=(v_1\ \dots\ v_m)\cdot P
+\]
+组成, 其中每个 $v_i$ 在 $k$ 中变化. 如果 $Q=MPN$, 其中 $M$ 与 $N$ 可逆, 令 $(w_1\ \dots\ w_m)=(v_1\ \dots\ v_m)\cdot M^{-1}$; 则
+\[
+(w_1\ \dots\ w_m)\cdot Q=(v_1\ \dots\ v_m)M^{-1}(MPN)=(a_1\ \dots\ a_n)\cdot N.
+\]\erratumfootnote{根据官方勘误, 原书公式两处的 $a_m$ 均更正为 $a_n$.}
+这表明右乘 $N$ 把 $P$ 的行空间 (同构地, 因为 $N$ 可逆) 映到 $Q$ 的行空间; 于是这两个空间具有相同的维数, 如所宣称. 同一论证的最小的变体表明 $P$ 与 $Q$ 的列秩也一致. (参见习题~\ref{ex:row-column-space}.)
+\end{proof}
+
+应用这一观察与命题~\ref{prop:field-matrix-canonical-form}, 就把问题化到了行秩 $=r=$ 列秩的矩阵
+\[
+\begin{pmatrix} I_r&0\\ \hline 0&0\end{pmatrix}
+\]
+的情形, 从而证明陈述.
+
+这个结果轻易地提升到任意整环 $R$ 上的矩阵 (应用把 $R$ 嵌入其分式域的惯用技巧).
+
+鉴于命题~\ref{prop:row-col-rank-equal}, 我们可以简单地谈论一个矩阵的\emph{秩}:
+
+\begin{definition}\label{def:rank-matrix}
+设 $M\in\mathcal{M}_{m,n}(k)$ 是域 $k$ 上的矩阵. $M$ 的\emph{秩}是其列空间 (或者等价地, 行空间) 的维数.
+\end{definition}
+
+重述命题~\ref{prop:field-matrix-canonical-form} 的一种方式就是: 域上的矩阵按它们的秩分类 (直到等价).
+
+上述考虑对域 $k$ 上有限维向量空间之间的线性映射 $\alpha:V\to W$ 翻译为漂亮的抽象术语. 使用 §III.\ref{subsec:complexes} 引入的方便语言, 注意每个 $\alpha$ 决定一个向量空间的\emph{正合列}
+\[
+\begin{tikzcd}[column sep=.9em]
+0 \ar[r] & \ker\alpha \ar[r] & V \ar[r] & \Image\alpha \ar[r] & 0
+\end{tikzcd}.
+\]
+
+\begin{definition}\label{def:rank-nullity-map}
+$\alpha$ 的\emph{秩}, 记作 $\rk\alpha$, 是 $\Image\alpha$ 的维数. $\alpha$ 的\emph{零度}\index{lingdu@零度(nullity)}是 $\Dim(\ker\alpha)$.
+\end{definition}
+
+\begin{claim}\label{claim:rank-nullity}
+设 $\alpha:V\to W$ 是有限维向量空间之间的线性映射. 则
+\[
+(\text{$\alpha$ 的秩})+(\text{$\alpha$ 的零度})=\Dim V.
+\]
+\end{claim}
+
+\begin{proof}
+设 $n=\Dim V$, $m=\Dim W$. 由命题~\ref{prop:field-matrix-canonical-form} 我们可以把 $\alpha$ 表示为一个 $m\times n$ 矩阵, 形如
+\[
+\begin{pmatrix} I_r&0\\ \hline 0&0\end{pmatrix}.
+\]
+由这个表示立即可得 $\rk\alpha=r$ 且 $\alpha$ 的零度为 $n-r$, 得出所宣称的后果.
+\end{proof}
+
+总而言之, $\rk\alpha$ 等于表示 $\alpha$ 的任意矩阵 $P$ 的 (列) 秩; 类似地, $\alpha$ 的零度等于 ``$\Dim V$ 减去 $P$ 的 (行) 秩''. 断言~\ref{claim:rank-nullity} 是行秩等于列秩这一事实的抽象版本.
+
+\subsection{Euler 示性数与 Grothendieck 群}
+\label{subsec:euler-grothendieck}
+
+虽然我们尽了最大努力, 还是忍不住要把这些简单的观察推广到更一般的复形. 断言~\ref{claim:rank-nullity} 可以重述如下:
+
+\begin{proposition}\label{prop:dim-additive-ses}
+设
+\[
+\begin{tikzcd}[column sep=.9em]
+0 \ar[r] & U \ar[r] & V \ar[r] & W \ar[r] & 0
+\end{tikzcd}
+\]
+\index{xiangliang@向量(vector)!kongjian@空间(space)}是有限维向量空间的一个短正合列. 则
+\[
+\Dim(V)=\Dim(U)+\Dim(W).
+\]
+\end{proposition}
+
+等价地, 这相当于关系 $\Dim(V/U)=\Dim(V)-\Dim(U)$.
+
+\index{xianxing@线性(linear)!yingshe@映射(map)!xiangsi@相似(similar)}于是考虑有限维向量空间与线性映射的一个复形:
+\[
+V_\bullet:\quad\begin{tikzcd}[column sep=.9em,font=\small]
+0 \ar[r] & V_N \ar[r,"\alpha_N"] & V_{N-1} \ar[r,"\alpha_{N-1}"] & \dots \ar[r,"\alpha_2"] & V_1 \ar[r,"\alpha_1"] & V_0 \ar[r] & 0
+\end{tikzcd}
+\]
+(参见 §III.\ref{subsec:complexes}). 于是对于所有 $i$ 有 $\alpha_{i-1}\circ\alpha_i=0$. 这个条件等价于要求 $\Image(\alpha_{i+1})\subseteq\ker(\alpha_i)$; 回忆这个复形的同调定义为这些空间的集合
+\[
+H_i(V_\bullet)=\frac{\ker(\alpha_i)}{\Image(\alpha_{i+1})}.
+\]
+如果对所有 $i$ 有 $\Image(\alpha_{i+1})=\ker(\alpha_i)$, 也就是说如果对所有 $i$ 有 $H_i(V_\bullet)=0$, 则这个复形是\emph{正合的}.
+
+\begin{definition}\label{def:euler-characteristic}
+$V_\bullet$ 的\emph{Euler 示性数}\index{Euler shixing shu@Euler 示性数(Euler characteristic)}是
+\[
+\chi(V_\bullet):=\sum_i(-1)^i\Dim(V_i).
+\]
+\end{definition}
+
+\index{Euler@Euler!Leonhard@Leonhard}引入这个数的原始动机是拓扑的: 在适当的位置下, 这个 Euler 示性数等于通过把一个流形三角剖分, 然后计算该三角剖分的顶点数减去边数加上面数等等而得到的 Euler 示性数.
+
+如下简单的结果是命题~\ref{prop:dim-additive-ses} 的一个直接 (且非常有用) 的推广:
+
+\begin{proposition}\label{prop:euler-characteristic-homology}
+沿用上述记号,
+\[
+\chi(V_\bullet)=\sum_{i=0}^N(-1)^i\Dim(H_i(V_\bullet)).
+\]
+特别地, 如果 $V_\bullet$ 正合, 则 $\chi(V_\bullet)=0$.
+\end{proposition}
+
+\begin{proof}
+对 $N=0$ 没什么可证的, 而对 $N=1$ 结果由命题~\ref{prop:dim-additive-ses} 直接得到 (习题~\ref{ex:euler-char-N1}). 用归纳法, 给定一个复形
+\[
+V_\bullet:\quad\begin{tikzcd}[column sep=.9em,font=\small]
+0 \ar[r] & V_N \ar[r,"\alpha_N"] & V_{N-1} \ar[r,"\alpha_{N-1}"] & \dots \ar[r,"\alpha_2"] & V_1 \ar[r,"\alpha_1"] & V_0 \ar[r] & 0
+\end{tikzcd},
+\]
+我们可以假设结果对``更短''的复形已知. 于是考虑截断
+\[
+V_\bullet':\quad\begin{tikzcd}[column sep=.9em]
+0 \ar[r] & V_{N-1} \ar[r,"\alpha_{N-1}"] & \dots \ar[r,"\alpha_2"] & V_1 \ar[r,"\alpha_1"] & V_0 \ar[r] & 0
+\end{tikzcd}.
+\]
+则
+\[
+\chi(V_\bullet)=\chi(V_\bullet')+(-1)^N\Dim(V_N),
+\]
+且对 $0\le i\le N-2$ 有
+\[
+H_i(V_\bullet)=H_i(V_\bullet'),
+\]
+而
+\[
+H_{N-1}(V_\bullet')=\ker(\alpha_{N-1}),\qquad H_{N-1}(V_\bullet)=\frac{\ker(\alpha_{N-1})}{\Image(\alpha_N)},\qquad H_N(V_\bullet)=\ker(\alpha_N).
+\]
+由命题~\ref{prop:dim-additive-ses} (参见断言~\ref{claim:rank-nullity}),
+\[
+\Dim(V_N)=\Dim(\Image(\alpha_N))+\Dim(\ker(\alpha_N))
+\]
+且
+\[
+\Dim(H_{N-1}(V_\bullet))=\Dim(\ker(\alpha_{N-1}))-\Dim(\Image(\alpha_N));
+\]
+因此
+\[
+\Dim(H_{N-1}(V_\bullet'))-\Dim(V_N)=\Dim(H_{N-1}(V_\bullet))-\Dim(H_N(V_\bullet)).
+\]
+\index{guina@归纳(induction)!chaoxian@超限(transfinite)}把所有这些与归纳假设放在一起,
+\[
+\chi(V_\bullet')=\sum_{i=0}^{N-1}(-1)^i\Dim(H_i(V_\bullet')),
+\]
+给出
+\[
+\begin{aligned}
+\chi(V_\bullet)&=\chi(V_\bullet')+(-1)^N\Dim(V_N)\\
+&=\sum_{i=0}^{N-1}(-1)^i\Dim(H_i(V_\bullet'))+(-1)^N\Dim(V_N)\\
+&=\sum_{i=0}^{N-2}(-1)^i\Dim(H_i(V_\bullet'))+(-1)^{N-1}\bigl(\Dim(H_{N-1}(V_\bullet'))-\Dim(V_N)\bigr)\\
+&=\sum_{i=0}^{N-2}(-1)^i\Dim(H_i(V_\bullet))+(-1)^{N-1}\bigl(\Dim(H_{N-1}(V_\bullet))-\Dim(H_N(V_\bullet))\bigr)\\
+&=\sum_{i=0}^N(-1)^i\Dim(H_i(V_\bullet)),
+\end{aligned}
+\]
+如所需.
+\end{proof}
+
+\index{Betti shu@Betti 数(Betti numbers)}就上面回顾的拓扑动机而言, 命题~\ref{prop:euler-characteristic-homology} 告诉我们, 一个流形的 Euler 示性数可以计算为其同调的秩的交错和, 也就是其 Betti 数.
+
+走到这么远, 我们无法克制地要提到下一个同样简单的推广. 读者必定已经注意到, 在命题~\ref{prop:euler-characteristic-homology} 的证明中使用的唯一工具是维数的``可加性''性质, 即命题~\ref{prop:dim-additive-ses} 所确立的: 如果
+\[
+\begin{tikzcd}[column sep=.9em]
+0 \ar[r] & U \ar[r] & V \ar[r] & W \ar[r] & 0
+\end{tikzcd}
+\]
+正合, 则
+\[
+\Dim(V)=\Dim(U)+\Dim(W).
+\]
+命题~\ref{prop:euler-characteristic-homology} 是 $\Dim$ 的这一条性质的形式推论.
+
+有鉴于此, 我们可以以如下奇特的方式重新解释刚刚所做的事情. 考虑有限维 $k$-向量空间范畴 $k\dcate{Vect}^{\mathrm f}$. $k\dcate{Vect}^{\mathrm f}$ 的每个对象 $V$ 决定一个同构类 $[V]$. 令 $F(k\dcate{Vect}^{\mathrm f})$ 是以这些同构类组成的集合为基的自由阿贝尔群; 进一步, 令 $E$ 是由对所有短正合列
+\[
+\begin{tikzcd}[column sep=.9em]
+0 \ar[r] & U \ar[r] & V \ar[r] & W \ar[r] & 0
+\end{tikzcd}
+\]
+在 $k\dcate{Vect}^{\mathrm f}$ 中的元素
+\[
+[V]-[U]-[W]
+\]
+\index{ziqun@子群(subgroup)!zhengguihuazi@正规化子(normalizer)}生成的子群. 商群
+\[
+K(k\dcate{Vect}^{\mathrm f}):=\frac{F(k\dcate{Vect}^{\mathrm f})}{E}
+\]
+称为范畴 $k\dcate{Vect}^{\mathrm f}$ 的\emph{Grothendieck 群}\index{Grothendieck qun@Grothendieck 群(Grothendieck group)}. $V$ 在 Grothendieck 群中决定的元素仍记作 $[V]$.
+
+\index{Grothendieck@Grothendieck!Alexander@Alexander}更一般地, 对于任意容许正合列概念的范畴都可以定义 Grothendieck 群.
+
+每个复形 $V_\bullet$ 在 $K(k\dcate{Vect}^{\mathrm f})$ 中决定一个元素, 即
+\[
+\chi_K(V_\bullet):=\sum_i(-1)^i[V_i]\in K(k\dcate{Vect}^{\mathrm f}).
+\]
+
+\begin{claim}\label{claim:grothendieck-universal}
+沿用上述记号, 我们有如下结论:
+\begin{itemize}
+\item $\chi_K$ ``是一个 Euler 示性数'', 在它满足命题~\ref{prop:euler-characteristic-homology} 给出的公式的意义上:
+\[
+\chi_K(V_\bullet)=\sum_i(-1)^i[H_i(V_\bullet)].
+\]
+\item $\chi_K$ 是一个``普适 Euler 示性数'', 在如下意义上. 设 $G$ 是一个阿贝尔群, 并设 $\delta$ 是一个把每个有限维向量空间映到 $G$ 中一个元素的函数, 使得如果 $V\cong V'$ 则 $\delta(V)=\delta(V')$, 且 $\delta(V/U)=\delta(V)-\delta(U)$. 对复形 $V_\bullet$, 定义
+\[
+\chi_G(V_\bullet)=\sum_i(-1)^i\delta(V_i).
+\]
+则 $\delta$ 诱导一个 (唯一的) 群同态
+\[
+K(k\dcate{Vect}^{\mathrm f})\to G
+\]
+把 $\chi_K(V_\bullet)$ 映到 $\chi_G(V_\bullet)$.
+\item 特别地, $\delta=\Dim$ 诱导一个群同态
+\[
+K(k\dcate{Vect}^{\mathrm f})\to\Z
+\]
+使得 $\chi_K(V_\bullet)\mapsto\chi(V_\bullet)$.
+\item 这事实上是一个同构.
+\end{itemize}
+\end{claim}
+
+说服读者这个令人印象深刻的断言完全平凡的最佳方式, 是把它的证明留给读者 (习题~\ref{ex:grothendieck-claim-proof}). 第一点通过改编命题~\ref{prop:euler-characteristic-homology} 的证明得到; 第二点是泛性质的一个无害的混合; 第三点由第二点推出; 最后一点由 $\Dim(k)=1$ 与 IBN 性质推出.
+
+最后一点实际上是相当令人泄气的: 如果令人印象深刻的抽象的 Grothendieck 群结果只是整数的一份拷贝, 何必费心定义它? 答案当然是, 这仅仅强调了范畴 $k\dcate{Vect}^{\mathrm f}$ 有多么特殊. Grothendieck 群的定义可以在任何有复形与正合性概念的情境中给出 (例如, 在任意环上有限生成\footnote{注意某个有限性条件大抵是必要的. 我们无法定义 `$k\dcate{Vect}$ 的 Grothendieck 群', 因为 $k\dcate{Vect}$ 中对象的同构类不构成一个集合: 对每个基数都有一个, 而基数不构成集合.}模的范畴中). 证明断言~\ref{claim:grothendieck-universal} 的形式论证会在任何这样的情境中通行, 并给我们提供一个有用的``普适 Euler 示性数''概念.
+
+我们将在第九章回到复形与同调.
+
+\subsection*{习题}
+\phantomsection
+\addcontentsline{toc}{subsection}{习题}
+
+\begin{prob}
+\label{ex:gaussian-integer-system}
+使用 Gauss 消元求方程组
+\[
+\left\{\begin{array}{c}
+7x-36y+12z=1,\\
+-8x+42y-14z=2.
+\end{array}\right.
+\]
+的全部整数解.
+\end{prob}
+
+\begin{prob}
+\label{ex:det-lemma-details}
+$\triangleright$ 给出引理~\ref{lem:det-elementary-ops} 证明的细节. [§\ref{subsec:determinant}]
+\end{prob}
+
+\begin{prob}
+\label{ex:redo-ex-II-8-8}
+重做习题~II.\ref{ex:SL-normal}.
+\end{prob}
+
+\begin{prob}
+\label{ex:universal-identities}
+把``普适恒等式''的讨论形式化: 由哪些泛性质的组合可以推出, 如果一个恒等式在 $\Z[x_1,\ldots,x_r]$ 中成立, 那么它就在每个交换环 $R$ 上, 对 $x_i\in R$ 的任意选取都成立? ($R$ 的交换性是必要的吗?)
+\end{prob}
+
+\begin{prob}
+\label{ex:inverse-by-row-ops}
+$\triangleright$ 设 $A$ 是一个元素属于域的 $n\times n$ 可逆方阵, 并考虑通过把单位矩阵放在 $A$ 旁边得到的 $n\times(2n)$ 矩阵 $B=(A\mid I_n)$. 对 $B$ 作初等行运算把 $A$ 化为 $I_n$ (参见习题~\ref{ex:invertible-equiv-identity}). 证明这将把 $B$ 变为 $(I_n\mid A^{-1})$.
+
+(这比在 §\ref{subsec:determinant} 中那样用行列式计算一个矩阵的逆要高效得多.) [§\ref{subsec:elementary-operations}, §\ref{subsec:determinant}]
+\end{prob}
+
+\begin{prob}
+\label{ex:detA-annihilates}
+$\neg$ 设 $R$ 是交换环, $M=\langle m_1,\ldots,m_r\rangle$ 是一个有限生成 $R$-模. 设 $A\in\mathcal{M}_r(R)$ 是一个矩阵使得
+\[
+A\cdot\begin{pmatrix} m_1\\ \vdots\\ m_r\end{pmatrix}=\begin{pmatrix} 0\\ \vdots\\ 0\end{pmatrix}.
+\]
+证明对所有的 $m\in M$ 有 $\det(A)m=0$. (提示: 乘以伴随矩阵.) [\ref{ex:nakayama-ideal-version}]
+\end{prob}
+
+\begin{prob}
+\label{ex:nakayama-ideal-version}
+$\neg$ 设 $R$ 是交换环, $M$ 是一个有限生成 $R$-模, 并设 $J$ 是 $R$ 的一个理想. 假设 $JM=M$. 证明存在元素 $b\in J$ 使得 $(1+b)M=0$. (令 $m_1,\ldots,m_r$ 是 $M$ 的一组生成元. 找一个元素属于 $J$ 的 $r\times r$ 矩阵 $B$ 使得 $\begin{pmatrix} m_1\\ \vdots\\ m_r\end{pmatrix}=B\cdot\begin{pmatrix} m_1\\ \vdots\\ m_r\end{pmatrix}$. 然后用习题~\ref{ex:detA-annihilates}.) [\ref{ex:nakayama-lemma}, VIII.\ref{ex:krull-intersection}]
+\end{prob}
+
+\begin{prob}
+\label{ex:nakayama-lemma}
+$\neg$ 设 $R$ 是交换环, $M$ 是一个有限生成 $R$-模, 并设 $J$ 是 $R$ 的一个包含于 $R$ 的 Jacobson 根 (习题~V.\ref{ex:jacobson-radical}) 中的理想. 证明 $M=0\iff JM=M$. (用习题~\ref{ex:nakayama-ideal-version}. 这就是 Nakayama 引理, 一个在交换代数与代数几何中有重要应用的结果. 它的一个特例曾作为习题~III.\ref{ex:nakayama-special} 给出.) [III.\ref{ex:nakayama-special}, \ref{ex:local-quotient-generators}, \ref{ex:local-direct-summand}]
+\end{prob}
+
+\begin{prob}
+\label{ex:local-quotient-generators}
+$\neg$ 设 $R$ 是交换局部环, 即带有唯一极大理想 $\mathfrak{m}$ 的环, 并设 $M$, $N$ 是有限生成 $R$-模. 证明如果 $M=\mathfrak{m}M+N$, 则 $M=N$. (把 Nakayama 引理, 即习题~\ref{ex:nakayama-lemma}, 应用于 $M/N$. 注意 $R$ 的 Jacobson 根是 $\mathfrak{m}$.) [\ref{ex:local-nakayama-gen}]
+\end{prob}
+
+\begin{prob}
+\label{ex:local-nakayama-gen}
+$\neg$ 设 $R$ 是交换局部环, 并设 $M$ 是一个有限生成 $R$-模. 注意 $M/\mathfrak{m}M$ 是域 $R/\mathfrak{m}$ 上的一个有限维向量空间; 令 $m_1,\ldots,m_r\in M$ 是一些元素, 它们的模 $\mathfrak{m}M$ 的陪集构成 $M/\mathfrak{m}M$ 的一组基. 证明 $m_1,\ldots,m_r$ 生成 $M$.
+
+(证明 $\langle m_1,\ldots,m_r\rangle+\mathfrak{m}M=M$; 然后应用习题~\ref{ex:local-quotient-generators} 形式的 Nakayama 引理.) [\ref{ex:local-direct-summand}, VIII.\ref{ex:flat-local-free}]
+\end{prob}
+
+\begin{prob}
+\label{ex:gaussian-row-col-space-bases}
+\index{yu@域(field)!wanbei@完备(complete)}解释如何使用 Gauss 消元来求域上矩阵的列空间与行空间的一组基.
+\end{prob}
+
+\begin{prob}
+\label{ex:more-cols-than-rows-dependent}
+$\neg$ 设 $R$ 是整环, 并设 $M\in\mathcal{M}_{m,n}(R)$, 其中 $m<n$. 证明 $M$ 的列在 $R$ 上线性相关. [\ref{ex:rk-leq-generators}]
+\end{prob}
+
+\begin{prob}
+\label{ex:rank-factorization}
+设 $k$ 是域. 证明一个矩阵 $M\in\mathcal{M}_{m,n}(k)$ 具有秩 $\le r$ 当且仅当存在矩阵 $P\in\mathcal{M}_{m,r}(k)$, $Q\in\mathcal{M}_{r,n}(k)$ 使得 $M=PQ$. (于是 $M$ 的秩是满足此条件的最小这样的整数.)
+\end{prob}
+
+\begin{prob}
+\label{ex:dim-additive-free-modules}
+把命题~\ref{prop:dim-additive-ses} 推广到任意整环上有限生成自由模的情形. (把整环嵌入其分式域.)
+\end{prob}
+
+\begin{prob}
+\label{ex:euler-char-N1}
+$\triangleright$ 证明命题~\ref{prop:euler-characteristic-homology} 在 $N=1$ 时的情形. [§\ref{subsec:euler-grothendieck}]
+\end{prob}
+
+\begin{prob}
+\label{ex:grothendieck-claim-proof}
+$\triangleright$ 证明断言~\ref{claim:grothendieck-universal}. [§\ref{subsec:euler-grothendieck}]
+\end{prob}
+
+\begin{prob}
+\label{ex:grothendieck-infinite-dim}
+把 §\ref{subsec:euler-grothendieck} 中给出的向量空间的 Grothendieck 群的定义推广到可数 (可能无限) 维向量空间的范畴, 并证明它是平凡群.
+\end{prob}
+
+\begin{prob}
+\label{ex:grothendieck-abelian-fg}
+设 $\mathrm{Ab}^{\mathrm{fg}}$ 是有限生成阿贝尔群范畴. 以 $K(k\dcate{Vect}^{\mathrm f})$ 的构造方式定义一个该范畴的 Grothendieck 群, 并证明 $K(\mathrm{Ab}^{\mathrm{fg}})\cong\Z$.
+\end{prob}
+
+\begin{prob}
+\label{ex:grothendieck-finite-abelian}
+$\neg$ 设 $\mathrm{Ab}^{\mathrm{f}}$ 是有限阿贝尔群范畴. 证明把每个有限阿贝尔群映到其阶, 可以扩张为从 Grothendieck 群 $K(\mathrm{Ab}^{\mathrm{f}})$ 到乘法群 $(\Q^*,\cdot)$ 的一个同态. [\ref{ex:grothendieck-finite-length}]
+\end{prob}
+
+\begin{prob}
+\label{ex:grothendieck-finite-length}
+设 $R\dcate{Mod}^{\mathrm f}$ 是有限长度 (参见习题~\ref{ex:module-Jordan-Holder}) 的 $R$-模范畴. 设 $G$ 是一个阿贝尔群, 并设 $\delta$ 是一个把每个单 $R$-模映到 $G$ 中一个元素的函数. 证明 $\delta$ 可以扩张为从 $R\dcate{Mod}^{\mathrm f}$ 的 Grothendieck 群到 $G$ 的一个同态.
+
+解释为什么习题~\ref{ex:grothendieck-finite-abelian} 是这一观察的一个特例.
+
+(作为另一个例子, 对每个单模 $M$ 令 $\delta(M)=1\in\Z$, 表明长度本身扩张为从 $R\dcate{Mod}^{\mathrm f}$ 的 Grothendieck 群到 $\Z$ 的一个同态.)
+\end{prob}
+
+\index{xiaojie@消解(resolution)!toushe@投射(projective)}\index{xiaojie@消解(resolution)!mode@模的(of a module)}\index{xiaojie@消解(resolution)!fuxingde@复形的(of a complex)}\index{xiaojie@消解(resolution)!neishe@内射(injective)}\index{xiaojie@消解(resolution)!wanquantoushe@完全投射(fully projective)}\index{xiaojie@消解(resolution)!Cartan–Eilenberg@Cartan–Eilenberg}\index{xiaojie@消解(resolution)}\section{展示与分解}\label{sec:presentations-resolutions}
+
+在自由模这块田园诗般的世界里稍作游历之后, 我们可以回到地面, 看看是否学到了对某些更一般的情形有用的东西. 域上的模必然是自由的 (命题~\ref{prop:vector-space-basis}), 但对更一般的环上的模则不然. 事实上, 这一性质最终将成为域的一个刻画 (命题~\ref{prop:field-all-fg-free}).
+
+\index{zugou@足够(enough)!toushe@投射(projective)}培养一些对非自由模的理解是很重要的. 本节我们将看到, 自由模的同态携带了足够的信息, 使我们可以处理许多非自由模.
+
+\subsection{挠元}\label{subsec:torsion}
+
+模 $M$ 可能不是自由的, 有若干种方式; 其中最引人注目的是 $M$ 可能有挠元.\index{挠元}
+
+\begin{definition}\label{def:torsion}
+设 $M$ 是一个 $R$-模. 一个元素 $m\in M$ 称为\emph{挠元}, 如果 $\{m\}$ 线性相关, 也就是说, 如果存在 $r\in R$, $r\neq 0$, 使得 $rm=0$. $M$ 中挠元的子集记作 $\Tor_R(M)$. 如果 $\Tor_R(M)=\{0\}$, 则称模 $M$ 是\emph{无挠}\index{无挠}的. 如果 $M$ 中每个元素都是挠元, 则称 $M$ 是一个\emph{挠模}.
+\end{definition}
+
+若无关于基环的歧义, 下标 $R$ 通常省略.
+
+交换环作为自身上的模是无挠的, 当且仅当它是一个整环; 这是我们在本章把讨论限制在整环上的一个好理由. 同样, 读者可以验证 (习题~\ref{ex:tor-submodule}) 若 $R$ 是整环, 则 $\Tor(M)$ 是 $M$ 的一个子模. 下面的观察同样容易:
+
+\begin{lemma}\label{lem:torsion-free-submodules}
+\index{ziyou@自由(free)!daishu@代数(algebra)}无挠模的子模与直和仍是无挠的. 整环上的自由模是无挠的.
+\end{lemma}
+
+\begin{proof}
+\index{huan@环(ring)!duoxiangshi@多项式(polynomial)}第一个结论显然; 第二个由第一个推出, 因为整环作为自身上的模是无挠的. \qed
+\end{proof}
+
+引理~\ref{lem:torsion-free-submodules} 给出了无挠模的一个好来源: 例如, 整环 $R$ 中的理想都是无挠的 (因为它们是自由模 $R^1$ 的子模). 事实上, 理想向我们提供了模不自由的另一种机制的例子.
+
+\begin{example}\label{ex:torsion-free-nonfree-ideal}
+设 $R=\Z[x]$, 并设 $I=(2,x)$. 则 $I$ 不是自由 $R$-模. 更一般地, 设 $I$ 是整环 $R$ 的任意非主理想; 则 $I$ 是一个无挠但非自由的模.
+\end{example}
+
+确实, 若 $I$ 自由, 则由命题~\ref{prop:independent-cardinality} (生成 $I$ 的一组基是 $R$ 中线性无关的子集, 而 $R$ 作为自身上的模秩为 $1$), 其秩至多为 $1$; 于是单个元素就足以生成 $I$, 从而 $I$ 为主理想.
+
+这个例子背后是对 PID 的一个刻画, 通过“秩 $1$ 自由模的无挠子模”来表述 (习题~\ref{ex:PID-submodule-free}). 这正是我们所致力于的主要结论——PID 上有限生成模的分类定理 (定理~\ref{thm:pid-classification})——的一个侧面. 这一分类的要点是, PID 上的有限生成模可以分解为循环模的直和. 对 Euclid 整环上的模, 我们实际上已经证明了这一事实 (它由命题~\ref{prop:smith-normal-form} 推出; 见习题~\ref{ex:smith-finite-abelian}), \index{qun@群(group)!p-qun@p-群(p-group)}并且已经详细考察了 $\Z$-模——亦即阿贝尔群——这一特例 (§IV.\ref{sec:finite-abelian-groups}); 我们差不多可以处理 PID 的一般情形了.
+
+\begin{definition}\label{def:cyclic-module}
+一个 $R$-模 $M$ 称为\emph{循环模}\index{循环模}, 如果它由单元素集生成, 也就是说, 如果 $M\cong R/I$ 对某个 $R$ 的理想 $I$ 成立.
+\end{definition}
+
+定义中的等价关系对我们的读者应当是清楚的, 它是模的第一同构定理 (推论~III.\ref{cor:module-first-iso}) 的直接推论. 若不清楚, 请回去 (重) 做习题~III.\ref{ex:cyclic-modules}.
+
+循环模见证了域与更一般环之间的差异: 在域 $k$ 上, 循环模只是一个 $1$ 维向量空间, 亦即“$k$ 的一份拷贝”; 在更一般的环上, 循环模可能非常有趣 (想想我们曾花多少时间沉思循环群). 事实上, 单看它的循环模就能判断一个环是不是域:
+
+\begin{lemma}\label{lem:cyclic-torsion-free-field}
+设 $R$ 是一个非零环\erratumfootnote{根据官方勘误, 假设条件由整环放宽为非零环 (nonzero ring).}. 假设每个循环 $R$-模都是无挠的. 则 $R$ 是一个域.
+\end{lemma}
+
+\begin{proof}
+设 $c\in R$, $c\neq 0$; 则 $M=R/(c)$ 是一个循环模. 注意 $\Tor(M)=M$: 确实, 对所有 $r\in R$, $r$ 在 $R/(c)$ 中的类是挠元, 因为 $c\cdot r\equiv 0\pmod{(c)}$ 且 $c\neq 0$\erratumfootnote{根据官方勘误, 严密化证明中对类为挠元的表述.}; 然而, 由假设 $M$ 是无挠的; 即 $\Tor(M)=\{0\}$. 因此 $M=\Tor(M)$ 是零模.
+
+这说明 $R/(c)$ 是零 $R$-模; 即 $(c)=(1)$. 因此 $c$ 是单位. 于是 $R$ 中每个非零元都是单位, 这就证明了 $R$ 是域. \qed
+\end{proof}
+
+引理~\ref{lem:cyclic-torsion-free-field} 是一个朴素的例子, 表明我们可以通过研究环 $R$ 上的模结构——亦即范畴 $R\dcate{Mod}$——来研究环 $R$, 而且我们甚至无需考察整个 $R\dcate{Mod}$ 就能对 $R$ 得出有力结论.
+
+\subsection{有限展示模与自由分解}\label{subsec:finitely-presented}
+
+看待一个循环 $R$-模 $M$ 的“正确”方式, 是把它看成一个容许从 $R$ 出发的满同态的模, 把后者视作秩 $1$ 自由 $R$-模\footnote{在上下文中, $R$-模正合列的正合性将被默认理解, 因此所显示的序列只是用来表记如下事实: 存在一个从 $R$ 到 $M$ 的满同态 $R$-模; 参见例~III.\ref{ex:exact-epi}. 同时请注意把 $R$ 视作自身上的模时记作 $R^1$ 的约定.}:\index{有限展示模}
+$$
+\begin{tikzcd}[column sep=.9em]
+R^1 \ar[r] & M \ar[r] & 0
+\end{tikzcd}.
+$$
+
+$M$ 被一个自由 $R$-模满射这一事实并无特别之处. 事实上, 每个模 $M$ 都容许这样的满同态:
+$$
+\begin{tikzcd}[column sep=.9em]
+R^{\oplus A} \ar[r] & M \ar[r] & 0
+\end{tikzcd}
+$$
+只要我们愿意取足够大的 $A$; 若实在没有办法, 取 $A=M$ 一定可行. 这由自由模的泛性质立得; 若读者不以为然, 是时候回去复习 §III.\ref{subsec:free-modules} 了. 循环模的特别之处仅在于 $A$ 可以取为单元素集.
+
+我们现在要关注一个同样特殊、但不像循环模那么极端的情形: 有限生成模是那些我们可以取 $A$ 为有限集的模 (参见 §III.\ref{subsec:noetherian-modules}). 因此, 我们将假设 $M$ 容许从一个有限秩自由模出发的满同态:
+$$
+\begin{tikzcd}[column sep=.9em]
+R^m \ar[r,"\pi"] & M \ar[r] & 0
+\end{tikzcd}
+$$
+对某个整数 $m$. $\pi$ 把一个 $R^m$ 的基中 $m$ 个向量映成的像, 是 $M$ 的一组生成元.
+
+有限生成模比任意模好处理得多. 例如, $R$ 的一个理想可以告诉我们一个有限生成模是否为挠模.
+
+\index{linghuazi@零化子(annihilator)!modelixiang@模的理想(ideal of a module)}\begin{definition}\label{def:annihilator}\index[sym1]{02@$\Ann_R(M)$}
+一个 $R$-模 $M$ 的\emph{零化子}\index{零化子}是
+$$
+\Ann_R(M):=\{r\in R\mid \forall m\in M,\ rm=0\}.
+$$
+下标通常省略. 读者可以验证 (习题~\ref{ex:annihilator}) $\Ann(M)$ 是 $R$ 的一个理想, 并且若 $M$ 是有限生成模且 $R$ 是整环, 则 $M$ 是挠模当且仅当 $\Ann(M)\neq 0$.
+\end{definition}
+
+我们希望发展处理有限生成模的工具. 结果表明, 矩阵允许我们描述相当大一类这样的模.
+
+\begin{definition}\label{def:finitely-presented}
+一个 $R$-模 $M$ 是\emph{有限展示}的, 如果存在正整数 $m,n$ 以及一个正合列
+$$
+\begin{tikzcd}[column sep=.9em]
+R^n \ar[r,"\varphi"] & R^m \ar[r] & M \ar[r] & 0
+\end{tikzcd}.
+$$
+这样的正合列称为 $M$ 的一个\emph{展示}\index{展示}.
+\end{definition}
+
+换言之, 有限展示模是有限生成自由模之间同态的余核 (参见 III.\ref{subsec:mod-ker-coker}). $M$ 的一切都必须编码在同态 $\varphi$ 中; 因此, 我们应当能通过研究对应于 $\varphi$ 的矩阵来描述模 $M$.
+
+\index{huan@环(ring)!shang@商(quotient)}有限展示模与有限生成模之间有一道鸿沟, 但在“合理的”环上这两个概念重合:
+
+\begin{lemma}\label{lem:noetherian-fg-presented}
+若 $R$ 是 Noether 环, 则每个有限生成 $R$-模都是有限展示的.
+\end{lemma}
+
+\begin{proof}
+若 $M$ 是有限生成模, 则存在某个 $m$ 使正合列
+$$
+\begin{tikzcd}[column sep=.9em]
+R^m \ar[r,"\pi"] & M \ar[r] & 0
+\end{tikzcd}
+$$
+成立. 由于 $R$ 是 Noether 环, $R^m$ 作为 $R$-模是 Noether 的 (推论~III.\ref{cor:noetherian-fg}). 于是 $\ker\pi$ 有限生成; 也就是说, 存在某个 $n$ 使正合列
+$$
+\begin{tikzcd}[column sep=.9em]
+R^n \ar[r] & \ker\pi \ar[r] & 0
+\end{tikzcd}
+$$
+成立. 把这两个正合列拼起来就得到 $M$ 的一个展示. \qed
+\end{proof}
+
+一旦我们迈出一步得到生成元, 再迈出两步得到展示, 我们自然应该想到继续下去:
+
+\begin{definition}\label{def:resolution}
+一个 $R$-模 $M$ 的\emph{自由分解}\index{自由分解}是由有限生成自由模组成的\emph{正合复形}\index{正合复形}
+$$
+\begin{tikzcd}[column sep=.9em,font=\small]
+\cdots \ar[r] & R^{m_3} \ar[r] & R^{m_2} \ar[r] & R^{m_1} \ar[r] & R^{m_0} \ar[r] & M \ar[r] & 0
+\end{tikzcd}.
+$$
+\end{definition}
+
+迭代证明引理~\ref{lem:noetherian-fg-presented} 的论证表明, 若 $R$ 是 Noether 环, 则每个有限生成模都有一个如定义~\ref{def:resolution} 中的分解.
+
+\index{ziyou@自由(free)!hanzi@函子(functor)!yiwanghanzidezuobansui@遗忘函子的左伴随(left-adjoint to forgetful)}认识到可以通过研究一个自由模的正合复形
+$$
+\begin{tikzcd}[column sep=.9em]
+\cdots \ar[r] & R^{m_3} \ar[r] & R^{m_2} \ar[r] & R^{m_1} \ar[r] & R^{m_0}
+\end{tikzcd}
+$$
+——它分解 $M$, 亦即 $M$ 是最后一个映射的余核——来研究 $M$, 这是概念上重要的一步. $R^{m_0}$ 这一项记录了 $M$ 的生成元; $R^{m_1}$ 记录了这些生成元之间的关系; $R^{m_2}$ 记录了关系之间的关系; 依此类推.
+
+充分一般地发展这一想法会把我们带得太远: 例如, 我们将不得不处理每个模都有许多不同分解的事实 (比如, 我们可以把复形中每一项都与一份 $R^1$ 做直和, 而该份 $R^1$ 由复形中的映射映到自身, 从而把每个 $m_i$ 都抬高 $1$). 我们以后会在第九章非常仔细地讨论这一点.
+
+然而, 我们已经可以通过考虑粗略的问题学到一些东西, 比如一个分解能“多长”. 先验地, 没有理由期待自由分解\erratumfootnote{根据官方勘误, 原书英文此处补齐名词 resolution.}是“有限的”, 即使得对充分大的 $i$ 有 $m_i=0$. 这样的有限性条件告诉我们基环 $R$ 的某种特殊性.
+
+这类问题中的第一个自然问题是: 对哪些环 $R$, 每个有限生成 $R$-模 $M$ 都有一个“长度 $0$”的自由分解, 即在 $m_0$ 处停止? 那将意味着存在正合列
+$$
+\begin{tikzcd}[column sep=.9em]
+0 \ar[r] & R^{m_0} \ar[r] & M \ar[r] & 0
+\end{tikzcd}.
+$$
+因此 $M$ 自身必须是自由的. 这对 $R$ 说明了什么?
+
+\begin{proposition}\label{prop:field-all-fg-free}
+设 $R$ 是一个整环. 则 $R$ 是域, 当且仅当每个有限生成 $R$-模都是自由的.
+\end{proposition}
+
+\begin{proof}
+若 $R$ 是域, 则每个 $R$-模都是自由的, 由命题~\ref{prop:vector-space-basis}. 反过来, 假设每个有限生成 $R$-模都是自由的; 特别地, 每个循环模都是自由的; 特别地, 每个循环模都是无挠的. 但由引理~\ref{lem:cyclic-torsion-free-field}, 这就推出 $R$ 是域. \qed
+\end{proof}
+
+下一个自然的问题关乎这样的环: 其有限生成模容许长度 $1$ 的自由分解. 把这个问法加强一些是方便的, 即要求对每个有限生成 $R$-模 $M$ 以及每个自由分解的开头
+$$
+\begin{tikzcd}[column sep=.9em]
+R^{m_0} \ar[r,"\pi"] & M \ar[r] & 0
+\end{tikzcd},
+$$
+该分解都能补成长度 $1$ 的自由分解. 这等价于要求存在整数 $m_1$ 与一个 $R$-模同态 $R^{m_1}\to R^{m_0}$, 使得序列
+$$
+\begin{tikzcd}[column sep=.9em]
+0 \ar[r] & R^{m_1} \ar[r] & R^{m_0} \ar[r,"\pi"] & M \ar[r] & 0
+\end{tikzcd}
+$$
+正合. 换言之, 这个条件要求 $m_0$ 个生成元之间的关系组成的模 $\ker\pi$ 必然是自由的.
+
+\begin{claim}\label{claim:pid-resolution-length1}
+设 $R$ 是满足上述性质的整环. 则 $R$ 是一个 PID.
+\end{claim}
+
+\begin{proof}
+设 $I$ 是 $R$ 的一个理想, 并把该条件应用于 $M=R/I$. 由于我们有满同态
+$$
+\begin{tikzcd}[column sep=.9em]
+R^1 \ar[r,"\pi"] & R/I \ar[r] & 0
+\end{tikzcd},
+$$
+该条件说 $\ker\pi$ 是自由的; 即 $I$ 是自由的. 由于 $I$ 是秩 $1$ 自由模 $R$ 的自由子模, 由命题~\ref{prop:independent-cardinality}, $I$ 的秩必然 $\leq 1$. 因此 $I$ 由一个元素生成, 正如所求. \qed
+\end{proof}
+
+我们反复提及的 PID 上有限生成模的分类定理 (定理~\ref{thm:pid-classification}), 本质上将是断言~\ref{claim:pid-resolution-length1} 的逆: 要求有限生成模的自由分解长度至多为 $1$ 的这个神秘条件, 结果正是 PID 的一个刻画, 正如长度 $0$ 的条件是域的刻画 (由命题~\ref{prop:field-all-fg-free} 所证). 我们将在 §\ref{subsec:pids-resolutions} 中展开.
+
+\subsection{读展示}\label{subsec:reading-presentation}
+
+\index{ziyou@自由(free)!qun@群(group)}让我们回到通过研究自由模的同态
+\begin{equation}\varphi:R^n\longrightarrow R^m\tag{*}\end{equation}
+——其中 $M=\Coker\varphi$——来研究有限展示模 $M$ 这个绝妙的想法. 如我们所知, 我们可以通过考虑表示 $\varphi$ 的一个矩阵 $A$ 来完全描述 $\varphi$, 因此我们也可以通过给出一个对应于 (某个对应于) 它的同态的矩阵, 来描述任意有限展示模.
+
+在许多情形下, 巧妙地运用 §\ref{sec:homomorphisms-free-modules-I} 中发展的材料, 我们可以显式地确定模 $M$. 例如, 取
+$$
+\begin{pmatrix} 1 & 3 \\ 2 & 3 \\ 5 & 9 \end{pmatrix};
+$$
+这个矩阵对应于一个同态 $\Z^2\to\Z^3$, 从而对应于一个 $\Z$-模, 亦即一个有限生成阿贝尔群 $G$. 读者应当在继续往下读之前, 弄清 $G$ 更明确是什么 (按照 §IV.\ref{sec:finite-abelian-groups} 的分类; 参见习题~\ref{ex:smith-finite-abelian}). 在本节余下部分, 我们只是把松散的线索收拢成一个更具体的操作方案, 来执行这些运算.
+
+\index{duoxiangshi@多项式(polynomial)!hanshu@函数(function)}顺便提一句, 许多软件包都能对模 (比如在多项式环上) 执行精细的运算; 我个人偏爱的是 Macaulay2. 这些软件包恰恰依赖于模与矩阵之间的对应: 只要小心, 模上的每个运算 (如直和, 张量积, 商等等) 都可以在对应的矩阵上执行. 例如,
+
+\begin{lemma}\label{lem:block-direct-sum-module}
+设 $A,B$ 是元素在整环 $R$ 中的矩阵, 并设 $M,N$ 表示对应的 $R$-模. 则 $M\oplus N$ 对应于块矩阵
+$$
+\begin{pmatrix} A & 0 \\ \hline 0 & B \end{pmatrix}.
+$$
+\end{lemma}
+
+\begin{proof}
+这由习题~\ref{ex:coker-direct-sum} 立得.
+\end{proof}
+
+回到 (*), 注意模 $M$ 无从知道我们为 $R^n$ 或 $R^m$ 选择了哪些基; 也就是说, $M=\Coker\varphi$ 真正依赖于同态 $\varphi$, 而非我们为 $\varphi$ 选定的具体矩阵表示. 这是我们已经遇到并已在 §\ref{subsec:change-of-basis} 及其后相当彻底地处理过的问题: “等价”的矩阵表示同一个同态, 从而表示同一个模. 在我们现在考察的语境中, 命题~\ref{prop:change-of-basis-form} 告诉我们, 两个矩阵 $A,B$ 表示同一个模 $M$, 如果存在可逆矩阵 $P,Q$ 使得 $B=PAQ$.
+
+但这还不是全部. 两个不同的同态 $\varphi_1,\varphi_2$ 可能有同构的余核, 即使它们作用于不同的模之间: 极端情形是任意同构
+$$
+R^m \longrightarrow R^m,
+$$
+其余核为 $0$ (无论该同构是什么, 也无论 $m$ 是多少). 因此, 若一个矩阵 $A'$ 对应于模 $M$, 则由引理~\ref{lem:block-direct-sum-module}, 块矩阵
+$$
+\begin{pmatrix} I_r & 0 \\ \hline 0 & A' \end{pmatrix}
+$$
+(其中 $I_r$ 是 $r\times r$ 单位矩阵, 而 $r$ 是任意非负整数) 也对应于 $M$; 事实上, 这里的 $I_r$ 也可以换成任意可逆矩阵.
+
+下面的命题试图把这些观察形式化.
+
+\begin{proposition}\label{prop:matrix-same-module}
+设 $A$ 是一个元素在整环 $R$ 中的矩阵, 并设 $B$ 是由 $A$ 经过下述任何一串操作得到的:
+
+\begin{itemize}
+\item 交换两行或两列;
+\item 把一行 (相应地, 一列) 的倍数加到另一行 (相应地, 另一列);
+\item 把一行 (或一列) 的所有元素乘以 $R$ 的一个单位;
+\item 若一个单位是一行 (或一列) 中唯一的非零元素, 则删去包含该元素的那一行和那一列.
+\end{itemize}
+
+则 $B$ 表示与 $A$ 同构的 $R$-模.
+\end{proposition}
+
+\begin{proof}
+前三种操作是 §\ref{subsec:elementary-operations} 的“初等变换”, 它们把一个矩阵变成与之等价的矩阵 (由命题~\ref{prop:elementary-operations-equivalent}); 如上所观察, 这不影响对应的模 (在同构意义下).
+
+至于第四种操作, 若 $u$ 是一个单位且是 (比如说) 某一行中唯一的非零元素, 则通过多次使用第二种初等变换, 我们可以假定 $u$ 也是其所在列中唯一的非零元素; 不失一般性可假定 $u$ 事实上位于矩阵的 $(1,1)$ 处; 即矩阵呈块形式:
+$$
+\begin{pmatrix} u & 0 \\ \hline 0 & A' \end{pmatrix}.
+$$
+但此时 $A$ 与 $A'$ 表示同一个模, 正如所求.
+\end{proof}
+
+\begin{example}\label{ex:read-presentation-139}
+具有整数元素的矩阵
+$$
+\begin{pmatrix} 1 & 3 \\ 2 & 3 \\ 5 & 9 \end{pmatrix}
+$$
+决定一个阿贝尔群 $G$. 从第二列减去第一列的 $3$ 倍, 得到
+$$
+\begin{pmatrix} 1 & 0 \\ 2 & -3 \\ 5 & -6 \end{pmatrix};
+$$
+$(1,1)$ 处的元素是一个单位且是第一行中唯一的非零元素, 于是我们可以删去第一行和第一列:
+$$
+\binom{-3}{-6};
+$$
+现在改变符号, 并从第二行减去第一行的 $2$ 倍, 留下
+$$
+\binom{3}{0}.
+$$
+因此 $G$ 同构于同态
+$$
+\varphi:\Z\longrightarrow \Z\oplus\Z
+$$
+的余核, 其中 $\varphi$ 把 $1$ 映到 $(3,0)$. 这个同态是单的, 并把 $\Z$ 等同于目标中的子群 $3\Z\oplus 0$. 因此
+$$
+G\cong \Coker\varphi \cong \frac{\Z\oplus\Z}{3\Z\oplus 0} \cong \frac{\Z}{3\Z}\oplus\Z.
+$$
+\end{example}
+
+借助 Gauss 消元, 命题~\ref{prop:matrix-same-module} 中隐式描述的“算法”在 Euclid 整环上 (例如, 在域上一元多项式环上) 必定奏效, 因为它会把对应于一个矩阵的有限生成模, 辨识为循环模的一个显式直和, 正如例~\ref{ex:read-presentation-139}. 在更一般的环上这未免期望过高, 因为一般说来初等变换并不生成 $GL$; 参见注记~\ref{rmk:GL-euclidean-elementary}.
+
+\subsection*{习题}
+\phantomsection
+\addcontentsline{toc}{subsection}{习题}
+
+\begin{prob}\label{ex:tor-submodule}
+$\triangleright$ 证明若 $R$ 是整环且 $M$ 是 $R$-模, 则 $\Tor(M)$ 是 $M$ 的一个子模. 举例说明 $R$ 是整环这一假设是必要的. [§\ref{subsec:torsion}]
+\end{prob}
+
+\begin{prob}\label{ex:hom-torsion-free}
+$\triangleright$ 设 $M$ 是整环 $R$ 上的模, 并设 $N$ 是无挠模. 证明 $\Hom_R(M,N)$ 是无挠的. 特别地, $\Hom_R(M,R)$ 是无挠的. (我们还会再遇到这个事实; 见命题~VIII.\ref{prop:dual-torsion-free}.) [§VIII.\ref{subsec:duals-matrices-biduality}]
+\end{prob}
+
+\begin{prob}\label{ex:PID-submodule-free}
+$\triangleright$ 证明整环 $R$ 是一个 PID, 当且仅当 $R$ 自身的每个子模都是自由的. [§\ref{subsec:torsion}, \ref{ex:pid-tf-free}]
+\end{prob}
+
+\begin{prob}\label{ex:annihilator}
+$\triangleright$ 设 $R$ 是交换环, $M$ 是 $R$-模.
+
+\begin{itemize}
+\item 证明 $\Ann(M)$ 是 $R$ 的一个理想.
+\item 若 $R$ 是整环且 $M$ 有限生成, 证明 $M$ 是挠模当且仅当 $\Ann(M)\neq 0$.
+\item 举一个整环上挠模 $M$ 的例子, 使得 $\Ann(M)=0$. (当然这个例子不可能是有限生成的!)
+\end{itemize}
+
+[§\ref{subsec:finitely-presented}, §\ref{subsec:classification-theorem}]
+\end{prob}
+
+\begin{prob}\label{ex:annihilator-element}
+$\neg$ 设 $M$ 是交换环 $R$ 上的模. 证明 $R$ 的一个理想 $I$ 是 $M$ 中某个元素的零化子, 当且仅当 $M$ 包含一个同构于 $R/I$ (视作 $R$-模) 的拷贝.
+
+$M$ 的\emph{相伴素理想}\index{相伴素理想}是那些形如 $\Ann(m)$ (对 $m\in M$) 的理想中的素理想. $M$ 的相伴素理想的集合记作 $\Ass_R(M)$. 注意 $\Ass_R(M)$ 中每个素理想都包含 $\Ann_R(M)$. [\ref{ex:associated-primes-maximal}, \ref{ex:prime-series}, \ref{ex:associated-primes-pid}]\index[sym1]{03@$\Ass_R(M)$}
+\end{prob}
+
+\begin{prob}\label{ex:associated-primes-maximal}
+$\neg$ 设 $M$ 是交换环 $R$ 上的非零模\erratumfootnote{根据官方勘误, 补充 $M$ 为非零模 (nonzero module) 的假设.}, 并考虑当 $m$ 取遍 $M$ 的非零元时得到的理想族 $\Ann(m)$. 证明这个族中的极大元是 $R$ 的素理想. 进而若 $R$ 是 Noether 环, 则 $\Ass_R(M)\neq\emptyset$ (参见习题~\ref{ex:annihilator-element}). [\ref{ex:prime-series}, \ref{ex:ass-union}]
+\end{prob}
+
+\begin{prob}\label{ex:prime-series}
+\index{zikongjianqi@子空间旗(flag of subspaces)}\index{lvlian@滤链(filtration)}$\neg$ 设 $R$ 是交换 Noether 环, $M$ 是 $R$ 上的有限生成模. 证明 $M$ 容许一个有限滤链
+$$
+M=M_0 \supsetneq M_1 \supsetneq \cdots \supsetneq M_m=\{0\}
+$$
+其中所有商 $M_i/M_{i+1}$ 都对某个素理想 $\mathfrak{p}$ 形如 $R/\mathfrak{p}$. (提示: 用习题~\ref{ex:annihilator-element} 和 \ref{ex:associated-primes-maximal} 证明 $M$ 包含一个同构于 $R/\mathfrak{p}_1$ 的拷贝 $M'$. 然后对 $M/M'$ 重复同样的构造, 得到 $M''\supseteq M'$, 使得 $M''/M'\cong R/\mathfrak p_2$ 对某个素理想 $\mathfrak p_2$ 成立. 为什么这一过程必在有限步后停止?) [\ref{ex:associated-primes-list}]
+\end{prob}
+
+\begin{prob}\label{ex:associated-primes-list}
+$\neg$ 设 $R$ 是交换 Noether 环, $M$ 是 $R$ 上的有限生成模. 证明 $\Ass_R(M)$ 中每个素理想都出现在习题~\ref{ex:prime-series} 所给出的过程中产生的素理想列表中. (若 $\mathfrak{p}$ 是一个相伴素理想, 则 $M$ 包含一个同构于 $R/\mathfrak{p}$ 的拷贝 $N$. 沿用习题~\ref{ex:prime-series} 提示中的记号, 证明要么 $\mathfrak{p}_1=\mathfrak{p}$, 要么 $N\cap M'=0$. 在后一种情形, $N$ 同构地映到 $M/M'$ 中 $R/\mathfrak{p}$ 的一份拷贝; 迭代此推理.)
+
+特别地, 若 $M$ 是 Noether 环上的有限生成模, 则 $\Ass(M)$ 有限.
+\end{prob}
+
+\begin{prob}\label{ex:ass-union}
+$\neg$ 设 $M$ 是交换 Noether 环 $R$ 上的模. 证明 $M$ 的所有非零元的零化子的并, 等于 $M$ 的所有相伴素理想的并. (用习题~\ref{ex:associated-primes-maximal}.)
+
+推得: Noether 环 $R$ (视作自身上的模) 的相伴素理想的并, 等于 $R$ 的零因子集合.
+\end{prob}
+
+\begin{prob}\label{ex:minimal-primes-ass}
+$\neg$ 设 $R$ 是交换 Noether 环. 可以证明 $\Ann(M)$ 的极小素理想 (参见习题~V.\ref{ex:min-primes-finite}) 都属于 $\Ass(M)$. 假设这一点, 证明 Noether 环 $R$ (视作自身上的模) 的相伴素理想的交, 等于 $R$ 的幂零根.
+\end{prob}
+
+\begin{prob}\label{ex:group-presentation}
+$\triangleright$ 复习群的展示的概念 (§II.\ref{subsec:presentations}), 并把它们与 §\ref{subsec:finitely-presented} 引入的展示概念联系起来.
+\end{prob}
+
+\begin{prob}\label{ex:finite-presentation-quotient}
+$\triangleright$ 设 $\mathfrak{p}$ 是域 $k$ 上多项式环 $k[x_1,\ldots,x_n]$ 的一个素理想, 并设 $R=k[x_1,\ldots,x_n]/\mathfrak{p}$. 证明 $R$ 上的每个有限生成模都有有限展示.
+\end{prob}
+
+\begin{prob}\label{ex:koszul-2}
+$\neg$ 设 $R$ 是交换环. 元素 $a_1,a_2,\ldots,a_n\in R$ 的一个元组称为\emph{正则序列}\index{正则序列}, 如果 $a_1$ 在 $R$ 中是非零因子, $a_2$ 在 $R/(a_1)$ 中是非零因子, $a_3$ 在 $R/(a_1,a_2)$ 中是非零因子, 依此类推 (也就是说, $a_2$ 在 $R/(a_1)$ 中的陪集是 $R/(a_1)$ 中的非零因子).
+
+对 $R$ 中的 $a,b$, 考虑如下 $R$-模复形:
+\begin{equation}\begin{tikzcd}[column sep=.9em]
+0 \ar[r] & R \ar[r,"d_2"] & R\oplus R \ar[r,"d_1"] & R \ar[r,"\pi"] & \frac{R}{(a,b)} \ar[r] & 0
+\end{tikzcd}\tag{*}\end{equation}
+其中 $\pi$ 是典范投影, $d_1(r,s)=ra+sb$, 而 $d_2(t)=(bt,-at)$. 换言之, $d_1$ 与 $d_2$ 分别对应于矩阵
+$$
+\begin{pmatrix} a & b \end{pmatrix},\quad \binom{b}{-a}.
+$$
+
+\begin{itemize}
+\item 证明对每个 $a,b$, 这确实是一个复形.
+\item 证明若 $(a,b)$ 是正则序列, 则这个复形正合.
+\end{itemize}
+
+复形 (*) 称为 $(a,b)$ 的\emph{Koszul 复形}\index{Koszul 复形}. 于是, 当 $(a,b)$ 是正则序列时, Koszul 复形给出了模 $R/(a,b)$ 的一个自由分解. [\ref{ex:koszul-3}, \ref{ex:krull-dim-atleast2}, VIII.\ref{ex:koszul-complex}]
+\end{prob}
+
+\begin{prob}\label{ex:koszul-3}
+$\neg$ 对任意交换环 $R$ 中元素序列 $a_1,\ldots,a_n$, 可以定义 Koszul 复形. 习题~\ref{ex:koszul-2} 中 $n=2$ 的情形, 以及这里复习的 $n=3$ 的情形, 但愿足以让人领会一般构造的要旨; 一般情形将在习题~VIII.\ref{ex:koszul-complex} 中给出.
+
+设 $a,b,c\in R$. 考虑如下复形:
+$$
+\begin{tikzcd}[column sep=.9em,font=\small]
+0 \ar[r] & R \ar[r,"d_3"] & R\oplus R\oplus R \ar[r,"d_2"] & R\oplus R\oplus R \ar[r,"d_1"] & R \ar[r,"\pi"] & \frac{R}{(a,b,c)} \ar[r] & 0
+\end{tikzcd}
+$$
+其中 $\pi$ 是典范投影, 而 $d_1,d_2,d_3$ 的矩阵分别为
+$$
+\begin{pmatrix} a & b & c \end{pmatrix},\quad
+\begin{pmatrix} 0 & -c & -b \\ -c & 0 & a \\ b & a & 0 \end{pmatrix},\quad
+\begin{pmatrix} a \\ -b \\ c \end{pmatrix}.
+$$
+
+\begin{itemize}
+\item 证明对每个 $a,b,c$, 这确实是一个复形.
+\item 证明若 $(a,b,c)$ 是正则序列, 则这个复形正合.
+\end{itemize}
+
+Koszul 复形在交换代数与代数几何中非常重要. [VIII.\ref{ex:koszul-complex}]
+\end{prob}
+
+\begin{prob}\label{ex:free-res-Z}
+$\triangleright$ 把 $\Z$ 视作环 $R=\Z[x,y]$ 上的模, 其中 $x$ 与 $y$ 都作用为 $0$. 求 $\Z$ 在 $R$ 上的一个自由分解. [VIII.\ref{ex:rees-symmetric}]
+\end{prob}
+
+\begin{prob}\label{ex:coker-direct-sum}
+$\triangleright$ 设 $\varphi:R^n\to R^m$ 与 $\psi:R^p\to R^q$ 是两个 $R$-模同态, 并设
+$$
+\varphi\oplus\psi:R^n\oplus R^p \to R^m\oplus R^q
+$$
+是由直和诱导的同态. 证明
+$$
+\Coker(\varphi\oplus\psi)=\Coker\varphi\oplus\Coker\psi.
+$$
+
+\end{prob}
+
+\begin{prob}\label{ex:read-matrix-kx}
+确定 (作为一个更熟悉的对象) 域上一元多项式环 $k[x]$ 上由矩阵
+$$
+\begin{pmatrix} 1+3x & 2x & 3x \\ 1+2x & 1+2x-x^2 & 2x \\ x & x^2 & x \end{pmatrix}
+$$
+表示的模.
+\end{prob}
+
+\section{PID 上有限生成模的分类}\label{sec:pid-fg-classification}
+
+终于可以证明任意 PID 上有限生成模的分类定理了. 我们在有限 $\Z$-模这个特例 (§IV.\ref{sec:finite-abelian-groups}) 中已经证明了这一结论, 而勤勉的读者已在习题~\ref{ex:smith-finite-abelian} 中对 Euclid 整环上有限生成模这一较一般的情形亲自给出了证明. 现在我们来攻克真正的一般情形.
+
+\subsection{自由模的子模}\label{subsec:submodules-free}
+
+回忆 (引理~\ref{lem:torsion-free-submodules}, 例~\ref{ex:torsion-free-nonfree-ideal}) 在一个任意整环 $R$ 上, 自由模的子模必然无挠, 但不一定是自由的. 例如, 理想 $I=(x,y)\subseteq R=k[x,y]$ (其中 $k$ 是一个域, 比如说) 作为 $R$-模是无挠的, 但不是自由的: 要使这一点变得一目了然, 当把 $x,y$ 视为 $I$ 中的元素时把它们重命名为 $a,b$ 是有帮助的, 这样就能观察到 $a$ 与 $b$ 在 $k[x,y]$ 上不是线性无关的, 因为 $ya-xb=0$.
+
+另一方面, 域上自由模的子模自动是自由的: 这仅仅是因为域上的模必然是自由的 (命题~\ref{prop:vector-space-basis}). 有理由预期, 介于``是一个域''与``是一个像 $k[x,y]$ 这样友好的 UFD''之间的某个性质, 将保证自由模的子模是自由的. 我们现在来证明, 这个性质恰恰就是为主理想整环.
+
+\begin{proposition}\label{prop:submodule-free-pid}
+设 $R$ 是 PID, $F$ 是 $R$ 上的有限生成自由模, 并设 $M\subseteq F$ 是一个子模. 则 $M$ 是自由的.
+\end{proposition}
+
+我们实际上将证明一个更精确的结果, 以呼应分类定理的完整表述: 我们将证明存在 $F$ 的一组基 $(x_1,\ldots,x_n)$ 以及 $R$ 中若干元素 $a_1,\ldots,a_m$ (其中 $m\le n$), 使得
+$$
+y_1=a_1x_1,\ldots,y_m=a_mx_m
+$$
+构成 $M$ 的一组基. 也就是说, 我们不仅证明 $M$ 是自由的, 而且说明 $F$ 与 $M$ 存在``相容''的基.
+
+为此, 我们当然可以假设 $M\neq 0$: 否则没有可证的. 大部分工作将用于证明: 若 $M\neq 0$, 则我们可以从 $M$ 中分出一个直和项; 迭代这一过程就将证明该命题\footnote{在一种松散的意义上, 这正是我们在 §IV.\ref{sec:finite-abelian-groups} 中证明有限交换群的分类结果时所采用的策略.}. 这正是用到 PID 条件的地方, 因此我们把主要的技术要点单列成如下陈述.
+
+\begin{lemma}\label{lem:split-direct-summand}
+设 $R$ 是 PID, $F$ 是 $R$ 上的有限生成自由模, 并设 $M\subseteq F$ 是非零子模. 则存在 $a\in R$, $x\in F$, $y\in M$, 以及子模 $F'\subseteq F$, $M'\subseteq M$, 使得 $y=ax\neq0$, $M'=F'\cap M$, 并且
+$$
+F=\langle x\rangle\oplus F',\quad M=\langle y\rangle\oplus M'.
+$$
+\end{lemma}
+
+读者不妨稍作停顿, 试着设想 PID 假设会如何进入这个引理的证明. PID 假设是关于 $R$ 的一个假设, 于是问题是: 我们可以把 $R$ 的哪一个特殊副本拿来应用它? 在你花一点时间思考之前, 不要往下读.
+
+我们很受诱惑地想在 $F=R^n$ 的``因子''中寻找这个 $R$ 的副本: 例如, 我们可以通过投影到第一个分量来把 $F$ 映到 $R$:
+$$
+\pi(r_1,\ldots,r_n)=r_1.
+$$
+但是 $R^n$ 的第一个分量并没有什么特殊之处; 事实上, 为 $F$ 选取的特定基, 亦即 $F$ 表为 $R^n$ 的特定表示, 也没有什么特殊之处. 因此, 这看起来不太有前途. 摆脱这一困境的出路在于, 以所有可能的方式``民主地''把 $F$ 映到 $R$: 我们考虑所有同态 $\varphi:F\to R$. 这是一个不依赖于任何额外选择的集合, 因此更有可能携带我们需要的信息.
+
+对每个 $\varphi\in\Hom_R(F,R)$, $\varphi(M)$ 是 $R$ 的一个子模, 亦即一个理想. 我们因此有希望利用 PID 假设而获益. 事实上, 仅仅 $R$ 是 Noether 环这一弱得多的条件, 就已经保证了存在某个同态 $\alpha$, 使得 $\alpha(M)$ 在所有理想 $\varphi(M)$ 中是极大的. 这个 $R$ 的副本, 亦即这样一个同态 $\alpha$ 的目标, 由于一个与无关紧要的选取无关的好理由而是特殊的. $R$ 是 PID 这一事实告诉我们 $\alpha(M)$ 是主理想, 于是我们显然步入了正轨.
+
+下面是形式化的论证:
+
+\begin{proof}
+对所有 $\varphi\in\Hom_R(F,R)$, $\varphi(M)$ 是 $R$ 的一个子模, 亦即一个理想. 所有这些理想的族非空, 而 PID 都是 Noether 环; 因此 (由命题~V.\ref{prop:noeth-acc}) 该族中存在一个极大元, 设为 $\alpha(M)$, 对应一个同态 $\alpha:M\to R$. $M\neq 0$ 这一事实立即推出某个 $\varphi(M)\neq 0$ (例如, 取 $\varphi$ 为到 $R^n$ 某个合适因子的投影); 从而 $\alpha(M)\neq 0$.
+
+由于 $R$ 是 PID, $\alpha(M)$ 是主理想: 对某个 $a\in R$, $a\neq 0$, 有 $\alpha(M)=(a)$. 由于 $a\in\alpha(M)$, 存在元素 $y\in M$ 使得 $\alpha(y)=a$. 这些就是陈述中提到的元素 $a,y$.
+
+我们断言, 对所有 $\varphi\in\Hom_R(F,R)$, $a$ 整除 $\varphi(y)$. 事实上, 令 $b$ 为 $(a,\varphi(y))$ 的一个生成元 (它存在是因为 $R$ 是 PID; 当然 $b$ 无非是 $a$ 与 $\varphi(y)$ 的一个最大公因子), 并令 $r,s\in R$ 使得 $b=ra+s\varphi(y)$; 考虑同态 $\psi:=r\alpha+s\varphi$. 由于 $a\in(b)$, 我们有 $\alpha(M)\subseteq(b)$. 另一方面
+$$
+b=ra+s\varphi(y)=(r\alpha+s\varphi)(y)=\psi(y)\in\psi(M);
+$$
+因此 $(b)\subseteq\psi(M)$. 由此得到 $\alpha(M)\subseteq\psi(M)$, 而由极大性有 $\alpha(M)=\psi(M)$; 从而 $(a)=(b)$, 特别地 $a$ 整除 $\varphi(y)$, 正如所断言.
+
+把 $y=(s_1,\ldots,s_n)$ 视为 $F=R^n$ 中的元素. 每个 $s_i$ 都是 $y$ 在某个同态 $F\to R$ (即第 $i$ 个投影) 下的像, 故由刚才所证, $a$ 整除它们全部. 因此存在 $r_1,\ldots,r_n\in R$ 使得 $s_i=ar_i$; 令
+$$
+x=(r_1,\dots,r_n)\in F.
+$$
+这就是陈述中提到的元素 $x$. 由构造, $y=ax$. 进而, $a=\alpha(y)=\alpha(ax)=a\alpha(x)$; 由于 $R$ 是整环且 $a\neq 0$, 这推出 $\alpha(x)=1$.
+
+最后, 令 $F'=\ker\alpha$ 且 $M'=F'\cap M$, 我们就可以着手验证所宣称的直和.
+
+首先, 每个 $z\in F$ 可以写成
+$$
+z=\alpha(z)x+(z-\alpha(z)x);
+$$
+\index{xianxing@线性(linear)!duoxiangshi@多项式(polynomial)}由线性性
+$$
+\alpha(z-\alpha(z)x)=\alpha(z)-\alpha(z)\alpha(x)=\alpha(z)-\alpha(z)=0,
+$$
+也就是说, $z-\alpha(z)x\in\ker\alpha$. 这说明 $F=\langle x\rangle+F'$. 另一方面, $rx\in F'\implies \alpha(rx)=0\implies r\alpha(x)=0\implies r=0$: 也就是说, $\langle x\rangle\cap F'=0$. 因此
+$$
+F=\langle x\rangle\oplus F',
+$$
+正如所宣称 (参见习题~\ref{ex:direct-sum-np}).
+
+其次, 若 $z\in M$, 则 $a$ 整除 $\alpha(z)$: 的确, $\alpha(z)\in\alpha(M)=(a)$. 写 $\alpha(z)=ca$, 我们有 $\alpha(z)x=cax=cy$; 如上拆分 $z$, 我们注意到
+$$
+z-\alpha(z)x=z-cy\in M\cap F'=M',
+$$
+而这如前导出
+$$
+M=\langle y\rangle\oplus M',
+$$
+完成证明.
+\end{proof}
+
+一旦引理~\ref{lem:split-direct-summand} 成立, 命题~\ref{prop:submodule-free-pid} 的证明就只是些琐碎的收尾工作:
+
+\begin{proof}
+若 $M=0$, 则证毕. 否则, 把引理~\ref{lem:split-direct-summand} 应用于 $M\subseteq F$ 就给出一个元素 $y_1\in M$ 与一个子模 $M^{(1)}\subseteq M$, 使得
+$$
+M=\langle y_1\rangle\oplus M^{(1)}.
+$$
+若 $M^{(1)}=0$, 则证毕; 否则, 再次应用引理~\ref{lem:split-direct-summand} (于 $M^{(1)}\subseteq F$) 得到 $y_2\in M^{(1)}$ 与 $M^{(2)}\subseteq M^{(1)}$, 使得
+$$
+M=\langle y_1\rangle\oplus\bigl(\langle y_2\rangle\oplus M^{(2)}\bigr).
+$$
+这个过程可以继续, 只要模 $M^{(m)}$ 非零, 就产生元素 $y_1,\ldots,y_m\in M$, 使得
+$$
+M=\langle y_1\rangle\oplus\dots\oplus\langle y_m\rangle\oplus M^{(m)}.
+$$
+然而, 由命题~\ref{prop:independent-cardinality} 我们知道 $m\le n$, 因为 $y_1,\ldots,y_m$ 在 $F$ 中线性无关. 由此可见该过程必然终止; 也就是说, 对某个 $m\le n$ 有 $M^{(m)}=0$. 即
+$$
+M=\langle y_1\rangle\oplus\dots\oplus\langle y_m\rangle
+$$
+\index{ziyou@自由(free)!jubu@局部(local)}是自由的, 如所求.
+\end{proof}
+
+注意证明并没有用到引理~\ref{lem:split-direct-summand} 结果的全部, 亦即没有用到 $M$ 的因子 $\langle y\rangle$ 是 $F$ 的对应因子 $\langle x\rangle$ 的子模这一事实. 这一点是必需的, 才能按命题~\ref{prop:submodule-free-pid} 陈述之后所提到的思路加强该命题. 下面是那个更强的陈述:
+
+\begin{corollary}\label{cor:smith-pid}
+设 $R$ 是 PID, $F$ 是 $R$ 上的有限生成自由模, 并设 $M\subseteq F$ 是一个子模. 则存在 $F$ 的一组基 $(x_1,\ldots,x_n)$ 以及 $R$ 中若干非零元素 $a_1,\ldots,a_m$ ($m\le n$), 使得 $(a_1x_1,\ldots,a_mx_m)$ 是 $M$ 的一组基. 进而, 我们可以假定 $a_1\mid a_2\mid\cdots\mid a_m$.
+\end{corollary}
+
+这一陈述应与命题~\ref{prop:smith-normal-form} 比较: 它相当于``PID 上的 Smith 正规形''; 参见注记~\ref{rmk:GL-euclidean-elementary}.
+
+\begin{proof}
+既然我们已经知道了自由模的子模是自由的, 可见引理~\ref{lem:split-direct-summand} 中得到的子模 $F'\subseteq F$ 是自由的. 陈述的第一部分于是由引理~\ref{lem:split-direct-summand}, 通过一个与命题~\ref{prop:submodule-free-pid} 的证明类似的归纳论证得到, 留给读者.
+
+陈述中最精细的部分是整除条件. 由归纳, 只需证明 $a_1\mid a_2$; 为此我们回到引理~\ref{lem:split-direct-summand} 的证明: 当 $\varphi$ 取遍所有同态 $F\to R$ 时, $(a_1)$ 在所有理想 $\varphi(M)$ 中是极大的. 于是考虑任意\footnote{为了在自由模 $F$ 上定义一个同态, 你可以先在 $F$ 的一组基上定义它, 再通过线性性延拓; 对于基元素的像可以作任意选取, 没有任何限制. 对此没有把握的读者应当回顾自由模的万有性质!}同态 $\varphi$ 使得 $\varphi(x_1)=\varphi(x_2)=1$. 由于 $\varphi(y_1)=\varphi(a_1x_1)=a_1$, 我们有 $(a_1)\subseteq\varphi(M)$; 由极大性, $(a_1)=\varphi(M)$. 因此 $a_2=\varphi(a_2x_2)=\varphi(y_2)\in\varphi(M)=(a_1)$, 证得 $a_1\mid a_2$, 如所求. \qed
+\end{proof}
+
+本节给出的论证逻辑多少有点绕: 需要引理~\ref{lem:split-direct-summand} 来证明命题~\ref{prop:submodule-free-pid}; 但随后又要靠命题~\ref{prop:submodule-free-pid} (证明 $F'$ 是自由的) 重新回到引理~\ref{lem:split-direct-summand}, 从中榨出更强的推论~\ref{cor:smith-pid}.
+
+\subsection{PID 与自由分解}\label{subsec:pids-resolutions}
+
+命题~\ref{prop:submodule-free-pid} 使我们得以补全在 §\ref{subsec:finitely-presented} 中开始的想法之环.
+
+\begin{proposition}\label{prop:pid-resolution}
+设 $R$ 是整环. 则 $R$ 是 PID, 当且仅当对每一个有限生成 $R$-模 $M$ 与每一个满同态
+$$
+\begin{tikzcd}[column sep=.9em]
+R^{m_0} \ar[r,"\pi_0"] & M \ar[r] & 0
+\end{tikzcd},
+$$
+都存在自由 $R$-模 $R^{m_1}$ 与一个同态 $\pi_1:R^{m_1}\to R^{m_0}$, 使得序列
+$$
+\begin{tikzcd}[column sep=.9em]
+0 \ar[r] & R^{m_1} \ar[r,"\pi_1"] & R^{m_0} \ar[r,"\pi_0"] & M \ar[r] & 0
+\end{tikzcd}
+$$
+正合.
+\end{proposition}
+
+\begin{proof}
+所陈述的条件蕴含 $R$ 是 PID, 这一点已在断言~\ref{claim:pid-resolution-length1} 中证明. 对另一方向, 设 $\pi_0:R^{m_0}\to M$ 是满同态; 则 $\ker\pi_0$ 由命题~\ref{prop:submodule-free-pid} 是自由的; 选取任意同构 $\pi_1:R^{m_1}\to\ker(\pi_0)$, 结论即由之得出. \qed
+\end{proof}
+
+命题~\ref{prop:pid-resolution} 的内容也许比它笨拙的表述更简单: 命题~\ref{prop:pid-resolution} 无非是对 PID 的一个刻画, 类似于在命题~\ref{prop:field-all-fg-free} 中给出的对域的刻画. 这是``我们可以通过考察 $R$-模范畴是如何拼成的来研究环 $R$''这一事实的又一个例子.
+
+读者不难想象出现在这些结果中的条件的``长度 $n$''版本: 我们可以问整环 $R$ 的如下一类, 对所有有限生成模 $M$ 与 $M$ 的所有部分自由分解,
+$$
+\begin{tikzcd}[column sep=.9em]
+R^{m_{n-1}} \ar[r,"\pi_{n-1}"] & \dots \ar[r,"\pi_1"] & R^{m_0} \ar[r,"\pi_0"] & M \ar[r] & 0
+\end{tikzcd},
+$$
+都存在同态 $\pi_n:R^{m_n}\to R^{m_{n-1}}$ 使得
+$$
+\begin{tikzcd}[column sep=.9em,font=\small]
+0 \ar[r] & R^{m_n} \ar[r,"\pi_n"] & R^{m_{n-1}} \ar[r,"\pi_{n-1}"] & \dots \ar[r,"\pi_1"] & R^{m_0} \ar[r,"\pi_0"] & M \ar[r] & 0
+\end{tikzcd}
+$$
+正合. 我们已经证明, 这个条件对 $n=0$ 刻画了域, 对 $n=1$ 刻画了 PID.
+
+警觉的读者现在应当有似曾相识之感, 因为我们已遇到过一个对域恰为 $0$、对 PID 恰为 $1$ 的不变量: 环的 Krull 维数; 参见例~III.\ref{ex:spec-kx}. 当然这并非巧合, 但 Krull 维数与自由分解长度上界之间的完整关系超出了本书的范围\footnote{最执着的读者可以在 §IX.\ref{sec:double-complexes} 的习题中更精细地考察这些界.}. ``大多数''环 (即便是有限 Krull 维数的环) 并不对所有模满足这样的上界. 满足上述对某个 $n$ 成立的有限性条件的局部环, 在代数几何的语言中对应于维数 $\le n$ 的代数簇上的``光滑''点.
+
+\subsection{分类定理}\label{subsec:classification-theorem}
+
+自由模的秩的概念 (定义~\ref{def:rank}) 自然可以推广到整环 $R$ 上的每一个有限生成模 $M$.
+
+\begin{definition}\label{def:rank-fg}
+设 $R$ 是整环. 有限生成 $R$-模 $M$ 的秩 $\rk M$ 是 $M$ 中线性无关元素的最大个数.
+\end{definition}
+
+应当清楚这个数是有限的 (习题~\ref{ex:rk-leq-generators}).
+
+\begin{theorem}\label{thm:pid-classification}
+设 $R$ 是 PID, $M$ 是有限生成 $R$-模. 则如下成立:
+\begin{enumerate}
+\item 存在互异的素理想 $(q_1),\ldots,(q_n)\subseteq R$, 正整数 $r_{ij}$, 以及一个同构
+\[
+M\cong R^{\rk M}\oplus\left(\bigoplus_{i,j}\frac{R}{(q_i^{r_{ij}})}\right).
+\]
+\item 存在 $R$ 中若干非零且非单位的理想 $(a_1),\ldots,(a_m)$, 使得 $(a_1)\supseteq(a_2)\supseteq\cdots\supseteq(a_m)$, 以及一个同构
+\[
+M\cong R^{\rk M}\oplus\frac{R}{(a_1)}\oplus\dots\oplus\frac{R}{(a_m)}.
+\]
+\end{enumerate}
+这些分解在显然的意义下是唯一的.
+\end{theorem}
+
+在我们所有的准备工作之后, 这个陈述几乎自己在证明自己. 我们将以概括的方式描述论证, 把细节留给肯下功夫的读者.
+
+定理所取的两种形式, 与阿贝尔群的情行一样, 分别称为不变因子\index{不变因子}与初等因子\index{初等因子}. 和阿贝尔群的情行一样, 两种表述之间的等价无非是细致的记账, 我们不会正式证明它; 关于如何从一个过渡到另一个, 参见 §IV.\ref{subsec:invariant-factors}. 在那个讨论中引理~IV.\ref{lem:abelian-prime-direct} 所扮演的角色, 在这个更一般的情形下由中国剩余定理, 即定理~V.\ref{thm:crt-general}, 接替.
+
+由于两种表述等价, 只需对定理~\ref{thm:pid-classification} 所给的两种分解中的任意一种, 证明其存在性与唯一性.
+
+存在性是 §\ref{subsec:submodules-free} 中结果的直接推论. 的确, 设 $M$ 是有限生成模; 于是存在一个满同态
+$$
+\begin{tikzcd}[column sep=.9em]
+R^n \ar[r,"\pi"] & M \ar[r] & 0
+\end{tikzcd},
+$$
+其中 $n$ 是 $M$ 的生成元个数. 把推论~\ref{cor:smith-pid} 应用于子模 $\ker\pi\subseteq R^n$: 存在 $R^n$ 的一组基 $(x_1,\ldots,x_n)$ 以及 $R$ 中若干非零元素 $a_1,\ldots,a_m$, 使得 $(a_1x_1,\ldots,a_mx_m)$ 是 $\ker\pi$ 的一组基, 并且进一步有 $a_1\mid\cdots\mid a_m$.
+
+也就是说, $M$ 由 $n\times m$ 矩阵
+$$
+\begin{pmatrix}
+a_1 & \dots & 0\\
+\vdots & \ddots & \vdots\\
+0 & \dots & a_m\\
+0 & \dots & 0\\
+\vdots & \ddots & \vdots\\
+0 & \dots & 0
+\end{pmatrix}
+$$
+展示. 由命题~\ref{prop:matrix-same-module}, 我们可以假定 $a_1,\ldots,a_m$ 都不是单位: 如果其中有某个是单位, 则矩阵中对应的行与列可以删去 (并相应修正 $n$). 由此得到
+$$
+M\cong\frac{R}{(a_1)}\oplus\dots\oplus\frac{R}{(a_m)}\oplus R^{(n-m)}
+$$
+其中 $a_1\mid\cdots\mid a_m$ 是非零非单位元, 正如定理~\ref{thm:pid-classification} 所规定, 存在性得证.
+
+至于表示方式的唯一性, 若
+$$
+M\cong R^r\oplus T,
+$$
+其中 $T$ 是一个挠模\footnote{回忆这意味着 $T$ 中每个元素都是挠元; 参见 §\ref{subsec:torsion}.}, 则 $r=\rk M$ 且 $T\cong\Tor_R(M)$ (习题~\ref{ex:rk-torsion-direct}). 于是, 定理~\ref{thm:pid-classification} 所给分解中的``自由部分''与``挠部分''是被唯一确定的.
+
+这就把唯一性问题化归为挠模的结构: 假设
+\begin{equation}\label{eq:pid-uniqueness-star}
+\bigoplus_{i,j}\frac{R}{(p_i^{r_{ij}})}\cong\bigoplus_{k,\ell}\frac{R}{(q_k^{s_{k\ell}})},
+\tag{*}
+\end{equation}
+其中 $p_i$, $q_k$ 是 $R$ 的不可约元, 任务是要证明指标的范围相同, 并且在重排之后对每个 $i,j$ 有 $(p_i)=(q_i)$ 且 $r_{ij}=s_{ij}$.
+
+由于一个有限生成模是挠模, 当且仅当它的零化子非零 (习题~\ref{ex:annihilator}), 有理由预期 $\Ann(M)$ 会在此派上用场.
+
+\begin{lemma}\label{lem:ann-pid}
+设 $M$ 是一个挠模, 按定理~\ref{thm:pid-classification} 表示 (其中 $\rk M=0$). 则 $\Ann(M)=(a_m)$. 进而, 那些素理想 $(q_i)$ 恰恰就是包含 $\Ann(M)$ 的 $R$ 的素理想.
+\end{lemma}
+
+\begin{proof}
+由假设
+$$
+M\cong\frac{R}{(a_1)}\oplus\dots\oplus\frac{R}{(a_m)},
+$$
+其中 $a_1\mid\cdots\mid a_m$. 若 $r\in\Ann(M)$, 则
+$$
+0=r(1,\dots,1)=(r,\dots,r).
+$$
+特别地 $r\equiv 0$ 模 $(a_m)$; 也就是说, $r\in(a_m)$. 于是 $\Ann(M)\subseteq(a_m)$. 对反包含, 设 $r\in(a_m)$ 且 $y\in M$. 把 $M$ 与其分解等同, 写 $y=(y_1,\ldots,y_m)$, 其中 $y_i\in R/(a_i)$. 由于 $r\in(a_m)\subseteq(a_i)$, 对所有 $i$ 有 $ry_i=0$; 因此 $ry=0$, 从而 $r\in\Ann(M)$, 如所求.
+
+对陈述的第二部分, 追迹定理~\ref{thm:pid-classification} 中两种分解之间的等价可见, 那些 $q_i$ 恰恰就是 $a_m$ 的不可约因子, 故断言由第一部分得出. \qed
+\end{proof}
+
+由引理~\ref{lem:ann-pid}, (*) 中出现的不可约元集合 $\{p_i\}$, $\{q_k\}$ 必须重合 (差一个无关紧要的单位): 它们生成的理想恰恰就是包含 $\Ann(M)$ 的素理想. 这一集合重合也可由如下观察得出: (*) 中的同构必须让相同的素理想匹配, 也就是说, 来源中因子
+$$
+\frac{R}{(p_i^{r_{ij}})}
+$$
+里的元素必须落在目标中由同一个素元 $p_i$ 的幂给出的商之组合中; 这通过比较零化子得出 (参见习题~\ref{ex:ann-submodule-hom}). 因此, 唯一性化归为单个不可约元 $q\in R$ 的情形: 只需证明若
+$$
+\frac{R}{(q^{r_1})}\oplus\dots\oplus\frac{R}{(q^{r_m})}\cong\frac{R}{(q^{s_1})}\oplus\dots\oplus\frac{R}{(q^{s_n})},
+$$
+其中 $r_1\ge\cdots\ge r_m$ 且 $s_1\ge\cdots\ge s_n$, 则 $m=n$ 且对所有 $i$ 有 $r_i=s_i$. 这一情形精确地重演了读者在阿贝尔群这一特例的唯一性证明中所用的关键步骤, 即习题~IV.\ref{ex:abelian-unique-decomp}. 当然, 这一次我们不会多给任何细节来扫读者的兴 (习题~\ref{ex:complete-uniqueness-5-6}).
+
+\begin{remark}\label{rmk:char-ideal}
+总结起来, 一个 PID 上的挠模所携带的信息, 等价于选取一组非零且非单位的理想 $(a_1),\ldots,(a_m)$, 使得
+$$
+(a_1)\supseteq(a_2)\supseteq\dots\supseteq(a_m).
+$$
+我们已经看到 $(a_m)$ 实际上就是该模的零化子理想; 要是我们可以对全部不变量 $(a_1),\ldots,(a_m)$ 也都给出一个同样明确的描述就好了. 作为后续内容的预告, 我们不妨把这个理想
+$$
+(a_1\cdots a_m)
+$$
+\index{huan@环(ring)!guiyue@归约(reduced)}称为模的\emph{特征理想}\footnote{警告: 这似乎不是标准术语.}. 在既能计算零化子又能计算特征理想的情形中, 比较二者可能对模得出很强的结论. 例如, 一个挠模是循环的, 当且仅当它的零化子理想与特征理想重合.
+
+进而, 出现在定理~\ref{thm:pid-classification} 中的那些素理想, 已被刻画为包含零化子理想的素理想. 它们同样也可以刻画为包含特征理想的素理想, 读者可自行验证 (习题~\ref{ex:prime-char-ideal-pid}).
+
+最后, 请注意从这一视角立即看出特征理想包含在零化子理想之中. 我们将在一个重要的应用 (定理~\ref{thm:cayley-hamilton}) 中再次遇到这一事实.
+\end{remark}
+
+\subsection*{习题}
+\phantomsection
+\addcontentsline{toc}{subsection}{习题}
+
+\begin{prob}\label{ex:direct-sum-np}
+$\triangleright$ 设 $N,P$ 是模 $M$ 的子模, 满足 $N\cap P=\{0\}$ 且 $M=N+P$. 证明 $M\cong N\oplus P$. (这是对模的情形逐字重复命题~IV.\ref{prop:normal-intersection-direct}.) [§\ref{subsec:submodules-free}]
+\end{prob}
+
+\begin{prob}\label{ex:torsion-rk-zero}
+$\neg$ 设 $R$ 是整环, $M$ 是有限生成 $R$-模. 证明 $M$ 是挠模当且仅当 $\rk M=0$.
+\end{prob}
+
+\begin{prob}\label{ex:complete-cor5-3}
+完成推论~\ref{cor:smith-pid} 的证明.
+\end{prob}
+
+\begin{prob}\label{ex:krull-dim-atleast2}
+设 $R$ 是整环, 并假设 $a,b\in R$ 满足 $a\neq 0$, $b\notin(a)$, 且 $R/(a)$, $R/(a,b)$ 都是整环.
+\begin{itemize}
+\item 证明 $R$ 的 Krull 维数至少为 $2$.
+\item 证明若 $R$ 满足 §\ref{subsec:pids-resolutions} 中讨论的, 对某个 $n$ 成立的有限性条件, 则 $n\ge 2$.
+\end{itemize}
+你可以通过诉诸命题~\ref{prop:pid-resolution} 来证明第二点. 对于一个更具体的论证, 你应该找一个容许长度为 $2$ 且不能缩短的自由分解的 $R$-模.
+\begin{itemize}
+\item 证明 $(a,b)$ 是 $R$ 中的正则序列 (习题~\ref{ex:koszul-2}).
+\item 证明 $R$-模 $R/(a,b)$ 有一个长度恰为 $2$ 的自由分解.
+\end{itemize}
+你能看出如何对 $n\ge 3$ 个元素 $a_1,\ldots,a_n$ 构造类似的情形吗?
+\end{prob}
+
+\begin{prob}\label{ex:local-direct-summand}
+$\neg$ 回忆 (习题~V.\ref{ex:local-ring}) 交换环称为局部的, 如果它只有一个极大理想 $\mathfrak{m}$. 设 $R$ 是局部环, $M$ 是有限生成自由 $R$-模的一个直和项: 也就是说, 存在 $R$-模 $N$ 使得 $M\oplus N$ 是自由 $R$-模.
+\begin{itemize}
+\item 选取元素 $m_1,\ldots,m_r\in M$, 使它们的模 $\mathfrak{m}M$ 的陪集构成 $M/\mathfrak{m}M$ 作为域 $R/\mathfrak{m}$ 上向量空间的一组基. 由 Nakayama 引理, $M=\langle m_1,\ldots,m_r\rangle$ (习题~\ref{ex:local-nakayama-gen}).
+\item 得到一个满同态 $\pi:F=R^{\oplus r}\to M$.
+\item 证明 $\pi$ 分裂, 从而给出同构 $F\cong M\oplus\ker\pi$. (把习题~III.\ref{ex:projective-free} 应用于满同态 $\pi$ 与自由模 $M\oplus N$, 得到一个分裂 $M\to F$; 然后用命题~III.\ref{prop:split-mono-epi}.)
+\item 证明 $\ker\pi/\mathfrak{m}\ker\pi=0$. 用 Nakayama 引理 (习题~\ref{ex:nakayama-lemma}) 推出 $\ker\pi=0$.
+\item 得出结论: $M\cong F$ 实际上是自由的. [VIII.\ref{ex:flat-local-free}, VIII.\ref{ex:local-fg-projective-flat}, VIII.\ref{ex:local-ring-fg-projective-free}]
+\end{itemize}
+总结起来, 在局部环上, 有限生成\footnote{有限秩的假设其实是不必要的, 但离开这个条件证明会更困难.}自由 $R$-模的每个直和项都是自由的. 用我们将在第八章引入的术语, 我们会说``局部环上的投射模都是自由的''. 这一结果在代数几何中有强烈的应用, 因为它构成了向量丛概念的基础.
+
+将此事实与命题~\ref{prop:submodule-free-pid} 对比, 后者表明在 PID 上, 有限生成自由模的每个子模都是自由的.
+\end{prob}
+
+\begin{prob}\label{ex:rk-leq-generators}
+$\triangleright$ 设 $R$ 是整环, $M=\langle m_1,\ldots,m_r\rangle$ 是有限生成模. 证明 $\rk M\le r$. (用习题~\ref{ex:more-cols-than-rows-dependent}.) [§\ref{subsec:classification-theorem}]
+\end{prob}
+
+\begin{prob}\label{ex:rk-quotient-tor}
+设 $R$ 是整环, $M$ 是有限生成 $R$-模. 证明 $\rk M=\rk(M/\Tor(M))$.
+\end{prob}
+
+\begin{prob}\label{ex:rk-free-submodule}
+设 $R$ 是整环, $M$ 是有限生成 $R$-模. 证明 $\rk M=r$ 当且仅当 $M$ 有一个自由子模 $N\cong R^r$, 使得 $M/N$ 是挠模. 若 $R$ 是 PID, 则可选取 $N$ 使得 $0\to N\to M\to M/N\to 0$ 分裂.
+\end{prob}
+
+\begin{prob}\label{ex:rank-ses}
+设 $R$ 是整环, 并设
+$$
+\begin{tikzcd}[column sep=.9em]
+0 \ar[r] & M_1 \ar[r] & M_2 \ar[r] & M_3 \ar[r] & 0
+\end{tikzcd}
+$$
+是有限生成 $R$-模的正合列. 证明 $\rk M_2=\rk M_1+\rk M_3$. 推出``秩''定义了一个从有限生成 $R$-模范畴的 Grothendieck 群到 $\Z$ 的同态 (参见 §\ref{subsec:euler-grothendieck}).
+\end{prob}
+
+\begin{prob}\label{ex:rk-torsion-direct}
+$\triangleright$ 设 $R$ 是整环, $M$ 是 $R$-模, 并假设 $M\cong R^r\oplus T$, 其中 $T$ 是挠模. 直接证明 (即不使用定理~\ref{thm:pid-classification}) $r=\rk M$ 且 $T\cong\Tor_R(M)$. [§\ref{subsec:classification-theorem}]
+\end{prob}
+
+\begin{prob}\label{ex:ann-submodule-hom}
+$\triangleright$ 设 $R$ 是整环, $M,N$ 是 $R$-模, $\varphi:M\to N$ 是同态. 对 $m\in M$, 证明 $\Ann(\langle m\rangle)\subseteq\Ann(\langle\varphi(m)\rangle)$. [§\ref{subsec:classification-theorem}]
+\end{prob}
+
+\begin{prob}\label{ex:complete-uniqueness-5-6}
+$\triangleright$ 完成定理~\ref{thm:pid-classification} 中唯一性部分的证明. (习题~IV.\ref{ex:abelian-unique-decomp} 中的提示可能有帮助.) [§\ref{subsec:classification-theorem}]
+\end{prob}
+
+\begin{prob}\label{ex:pid-tf-free}
+设 $M$ 是整环 $R$ 上的有限生成模. 证明若 $R$ 是 PID, 则 $M$ 无挠当且仅当它是自由的. 证明这一性质刻画了 PID. (参见习题~\ref{ex:PID-submodule-free}.)
+\end{prob}
+
+\begin{prob}\label{ex:non-cyclic-ds}
+\index{huan@环(ring)!dan@单(simple)}举一个整环上的有限生成模的例子, 它不同构于循环模的直和.
+\end{prob}
+
+\begin{prob}\label{ex:prime-char-ideal-pid}
+$\triangleright$ 证明在 PID 上挠模 $M$ 的分类定理 (初等因子形式) 中出现的素理想, 恰是包含注记~\ref{rmk:char-ideal} 所定义的 $M$ 的特征理想的那些素理想. [§\ref{subsec:classification-theorem}]
+\end{prob}
+
+\begin{prob}\label{ex:associated-primes-pid}
+证明 PID 上模 $M$ 的分类定理 (初等因子形式) 中出现的素理想, 恰是 $M$ 的相伴素理想 (如习题~\ref{ex:annihilator-element} 中所定义).
+\end{prob}
+
+\begin{prob}\label{ex:grothendieck-pid}
+设 $R$ 是 PID. 证明有限生成 $R$-模范畴的 Grothendieck 群 (参见 §\ref{subsec:euler-grothendieck}) 同构于 $\Z$.
+\end{prob}
+
+\section{自由模的线性变换}
+\label{sec:linear-transformations-free}
+
+PID 上有限生成模的分类定理的一个美妙应用, 是确定一个向量空间到自身的线性映射的矩阵的各种``特殊''形式.
+
+从一个向量空间到自身的线性映射这一般性的概念, 关联着若干基本概念, 我们将在本节中回顾它们. 不足为奇的是, 其中大部分讨论对任意整环 $R$ 上的自由模都可以进行, 而本节 (的大部分) 也将保持在这一般性的层面上. 当 $R$ 是域时, 定理~\ref{thm:pid-classification} 将被极为有效地加以利用, 见下一节.
+
+\subsection{自同态与相似}
+\label{subsec:endomorphisms-similarity}
+
+设 $R$ 是整环. 我们此前已经相当详细地考察过两个自由模之间 $R$-模同态 $F\to G$ 所构成的模 $\Hom_R(F,G)$. 例如, 我们论证过: 对有限生成自由模 $F$, $G$ 而言, 描述这样的同态相当于描述元素在 $R$ 中的矩阵, 且精确到``等价'': §\ref{subsec:change-of-basis} 中引入的等价关系体现了 (任意的) $F$ 与 $G$ 的基的选取.
+
+现在我们稍微转移一下焦点, 考虑 $F=G$ 的特殊情形, 即固定的自由 $R$-模 $F$ 的自同态\index{zitongtai@自同态(endomorphism)} $\alpha$ 所构成的 $R$-模 $\End_R(F)$:
+\[
+\alpha:F\longrightarrow F.
+\]
+
+注意 $\End_R(F)$ 实际上是一个 $R$-代数: 复合运算使它成为一个环, 且与 $R$-模结构相容 (参见习题~III.\ref{ex:end-algebra}).
+
+从第~\ref{sec:homomorphisms-free-modules-I} 节所推崇的观点看, 出现在 $\End_R(F)=\Hom_R(F,F)$ 中的两个 $F$ 的副本是互不相关的; 它们只是一个给定秩的自由模的 (任意) 同构代表. 然而, 在有些情形下, 我们确实需要选定一个代表元 $F$ 并坚持使用它: 也就是说, 把 $\alpha$ 视为从一个选定的自由模 $F$ 作用到它自身, 而不只是作用到它的某个同构副本上. 在这种情形下, 我们也说 $\alpha$ 是 $F$ 的一个\emph{线性变换 (linear transformation)}
+\index{xianxingbianhuan@线性变换(linear transformation)}
+, 或 $F$ 上的一个\emph{算子 (operator)}
+\index{suanzi@算子(operator)}
+.
+
+从这一不同的观点看, 比较 $F$ 中的元素在作用 $\alpha$ 之``前''与``后''的差异是有意义的; 例如, 我们可以问: 是否对某个 $v\in F$ 有 $\alpha(v)=\lambda v$ (其中 $\lambda\in R$), 或者更一般地, 是否 $F$ 的一个子模 $M$ 被 $\alpha$ 送到自身. 换言之, 我们可以把 $\alpha$ 的作用与恒等映射\footnote{恒等映射的存在性是范畴的一条公理; 偶尔援引它是很方便的.} $I:F\to F$ 作比较.
+
+就矩阵表示 (在有限秩的情形) 而言, $\alpha$ 的描述可以像第~\ref{sec:homomorphisms-free-modules-I} 节那样进行, 但有一个有趣的转折. 我们在 §\ref{subsec:change-of-basis} 中讨论过: 当改变源与靶中的基时, 一个同态的矩阵表示如何变化. 而由于我们现在把源与靶等同起来, 就必须为源和靶选取\emph{同一个}基. 这导致了矩阵的另一种等价概念:
+
+\begin{definition}\label{def:similar-matrices}
+两个方阵 $A,B\in\mathcal{M}_n(R)$ 称为\emph{相似的 (similar)}
+\index{xiangsi@相似(similar)}
+, 如果它们表示同一个同态 $F\to F$ 到自身, 其中 $F$ 是秩为 $n$ 的自由模, 且精确到 $F$ 的基的选取.
+\end{definition}
+
+这显然是一个等价关系. 容易得到这一新概念的与命题~\ref{prop:change-of-basis-form} 相应的命题:
+
+\begin{proposition}\label{prop:similar-conjugate}
+两个矩阵 $A,B\in\mathcal{M}_n(R)$ 相似, 当且仅当存在可逆矩阵 $P$ 使得
+\[
+B=PAP^{-1}.
+\]
+\end{proposition}
+
+真正理解了命题~\ref{prop:change-of-basis-form} 的读者不需要这一命题的任何详细证明: 只要盯着下面这个我们基本上是从 §\ref{subsec:change-of-basis} 照搬过来的蝴蝶图, 结论就应当一目了然了.
+
+\begin{center}
+\begin{tikzcd}[row sep=large, column sep=large]
+	R^n \arrow[dr, "\varphi"] \arrow[dd, "\pi"'] & & & & R^n \arrow[dl, "\varphi"'] \arrow[dd, "\pi"] \\
+	& F \arrow[rr, "\alpha"] & & F & \\
+R^n \ar[ur,"\psi"'] & & & & R^n \ar[ul,"\psi"]
+\end{tikzcd}
+\end{center}
+
+这里的差别在于, 我们为源和靶选取的是同一个基; 因此两个记录基变换的三角形是相同的. 设 $A$ (相应地, $B$) 表示 $\alpha$ 关于由 $\varphi$ (相应地, $\psi$) 所指定的基的选取的矩阵; 也就是说, $A$ (相应地, $B$) 是``上面'' (相应地, 下面) 的复合
+\[
+\varphi^{-1}\circ\alpha\circ\varphi:R^n\longrightarrow R^n
+\]
+(相应地, $\psi^{-1}\circ\alpha\circ\psi$) 的矩阵. 若 $P$ 是表示基变换 $\pi$ 的矩阵, 则 $B=PAP^{-1}$, 这仅仅是因为图表是交换的:
+\[
+\psi^{-1}\circ\alpha\circ\psi=(\pi\circ\varphi^{-1})\circ\alpha\circ(\varphi\circ\pi^{-1})=\pi\circ(\varphi^{-1}\circ\alpha\circ\varphi)\circ\pi^{-1}.
+\]
+
+命题~\ref{prop:similar-conjugate} 提示了自同态之间一个有用的等价关系:
+
+\begin{definition}\label{def:similar-endomorphisms}
+一个自由模 $F$ 到自身的两个 $R$-模同态
+\[
+\alpha,\beta:F\longrightarrow F
+\]
+称为\emph{相似的 (similar)}, 如果存在自同构 $\pi:F\to F$ 使得
+\[
+\beta=\pi\circ\alpha\circ\pi^{-1}.
+\]
+\end{definition}
+
+在有限秩的情形, 相似的自同态由相似的矩阵表示; 且两个自同态 $\alpha$, $\beta$ 相似, 当且仅当通过在 $F$ 上选取适当的 (可以不同的) 基, 它们可以由同一个矩阵表示. 由相似的自同态所确定的有趣的不变量, 结果 (并不意外地) 也是相同的.
+
+从群论的观点看, 相似性是一个极为自然的研究对象: 自由模的自同构群 $\GL(F)=\Aut_R(F)$ 通过共轭作用在 $\End_R(F)$ 上, 而两个自同态 $\alpha$, $\beta$ 相似, 当且仅当它们在此作用下位于同一个轨道中. 若读者偏好矩阵的语言, 则元素在 $R$ 中的可逆 $n\times n$ 矩阵之群 $\GL_n(R)$ 通过共轭作用在方阵 $n\times n$ 矩阵的模 $\mathcal{M}_n(R)$ 上, 而两个矩阵相似, 当且仅当它们位于同一个轨道中.
+
+这一语境下自然会产生一些问题. 例如, 我们应当寻找区分不同轨道的方法: 给定两个自同态 $\alpha$, $\beta$, 我们能否有效地判定 $\alpha$ 与 $\beta$ 是否相似? 处理这个问题的一种途径是确定能够区分不同轨道的不变量. 更好的做法是, 在每个轨道内 (即给定的相似类内) 寻找``特殊''的代表元. 换句话说, 给定一个自同态 $\alpha:F\to F$, 找到 $F$ 的一个基, 使得 $\alpha$ 关于它的矩阵描述具有某种特定的、可预测的形状. 于是 $\alpha$ 与 $\beta$ 相似, 当且仅当这些特殊的代表元重合.
+
+这正是我们最终要从定理~\ref{thm:pid-classification} 中榨取出来的东西, 当然是在固定域上的向量空间这一友好的情形下.
+
+\subsection{自同态的特征多项式与极小多项式}
+\label{subsec:char-min-poly}
+
+设 $\alpha\in\End_R(F)$ 是自由 $R$-模的一个自同态; 此后我们常常心照不宣地假定 $F$ 是有限生成的 (这无论如何都是必要的, 因为我们的目标是把所做的事情翻译成矩阵的语言). 我们想要找出 $\alpha$ 的相似类的不变量, 也就是说, 当我们用相似线性映射 $\beta\in\End_R(F)$ 替换 $\alpha$ 时保持不变的那些量.
+
+例如, 行列式就是这样一个量:
+
+\begin{definition}\label{def:det-endomorphism}
+设 $\alpha\in\End_R(F)$. $\alpha$ 的\emph{行列式 (determinant)}
+\index{hanglieshi@行列式(determinant)}
+定义为 $\det\alpha:=\det A$, 其中 $A$ 是 $\alpha$ 关于 $F$ 的任意一组基的表示矩阵.
+\end{definition}
+
+当然这里有一点需要验证, 即 $\det A$ 不依赖于基的选取. 但我们知道 (命题~\ref{prop:similar-conjugate}), $A$, $B$ 表示同一个自同态 $\alpha$, 当且仅当存在可逆矩阵 $P$ 使得 $B=PAP^{-1}$; 此时由命题~\ref{prop:det-invertible-unit}
+\[
+\det(B)=\det(PAP^{-1})=\det(P)\det(A)\det(P^{-1})=\det(A),
+\]
+故行列式确实不依赖于基的选取. 本质上同样的论证表明: 若 $\alpha$ 与 $\beta$ 是相似的线性变换, 则 $\det(\alpha)=\det(\beta)$ (习题~\ref{ex:similar-same-det-trace}).
+
+由命题~\ref{prop:det-invertible-unit}, 线性变换 $\alpha$ 可逆, 当且仅当 $\det\alpha$ 是 $R$ 中的单位. 若 $R$ 是域, 这当然只是说 $\det\alpha\neq0$. 即使 $R$ 不是域, $\det\alpha\neq0$ 也能说明一些有趣的事情:
+
+\begin{proposition}\label{prop:det-injective}
+设 $\alpha$ 是自由 $R$-模 $F\cong R^n$ 的线性变换. 则 $\det\alpha\neq0$ 当且仅当 $\alpha$ 是单射.
+\end{proposition}
+
+\begin{proof}
+把 $R$ 嵌入它的分式域 $K$, 并把 $\alpha$ 视为 $K^n$ 的线性变换; 注意 $\alpha$ 的行列式在 $R$ 上计算与在 $K$ 上计算是相同的. 于是 $\alpha$ 作为线性变换 $R^n\to R^n$ 是单射, 当且仅当它作为线性变换 $K^n\to K^n$ 是单射, 当且仅当它作为线性变换 $K^n\to K^n$ 是可逆的, 当且仅当 $\det\alpha\neq0$.
+\end{proof}
+
+当然, 在域以外的整环上, 即使 $\det\alpha\neq0$, $\alpha$ 也可能不是满射; 而且即使是在域上, 如果放弃自由模有限生成这一假设, 也需要小心 (参见习题~\ref{ex:injective-not-surjective} 与习题~\ref{ex:k[t]-injective-not-surjective}).
+
+另一个在相似变换下不变的量是迹. 方阵 $A=(a_{ij})\in\mathcal{M}_n(R)$ 的\emph{迹 (trace)}
+\index{ji@迹(trace)}
+是
+\[
+\tr(A):=\sum_{i=1}^n a_{ii},
+\]
+即它的对角元素之和.
+
+\begin{definition}\label{def:trace-endomorphism}
+设 $\alpha\in\End_R(F)$. $\alpha$ 的\emph{迹}定义为 $\tr\alpha:=\tr A$, 其中 $A$ 是 $\alpha$ 关于 $F$ 的任意一组基的表示矩阵.
+\end{definition}
+
+同样, 我们还要验证它不依赖于基的选取; 关键在于下面的计算.
+
+\begin{lemma}\label{lem:trace-of-product}
+设 $A,B\in\mathcal{M}_n(R)$. 则 $\tr(AB)=\tr(BA)$.
+\end{lemma}
+
+\begin{proof}
+\[
+\tr(AB)=\sum_{i=1}^n\sum_{k=1}^n a_{ik}b_{ki}.
+\]
+这个表达式关于 $A$, $B$ 是对称的, 因此它必定等于 $\tr(BA)$.
+\end{proof}
+
+有了这一点, 若 $B=PAP^{-1}$, 则
+\[
+\tr(B)=\tr((PA)P^{-1})=\tr(P^{-1}(PA))=\tr((P^{-1}P)A)=\tr(A),
+\]
+这说明 (由命题~\ref{prop:similar-conjugate}) 相似的矩阵具有相同的迹, 正如所需要的那样.
+
+同样, 读者会验证: 同样的论证表明相似的线性变换具有相同的迹.
+
+一个秩为 $n$ 的自由模的自同态 $\alpha$ 的迹与行列式, 实际上只是一列 $n$ 个不变量中的两个, 它们可以被漂亮地汇总到 $\alpha$ 的\emph{特征多项式}之中.
+
+\begin{definition}\label{def:char-polynomial}
+设 $F$ 是自由 $R$-模, $\alpha\in\End_R(F)$. 用 $I$ 表示恒等映射 $F\to F$. $\alpha$ 的\emph{特征多项式 (characteristic polynomial)}
+\index{tezhengduoxiangshi@特征多项式(characteristic polynomial)}
+是多项式
+\[
+P_\alpha(t):=\det(tI-\alpha)\in R[t].
+\]
+\end{definition}
+
+\begin{proposition}\label{prop:charpoly-coefficients}
+设 $F$ 是秩为 $n$ 的自由 $R$-模, $\alpha\in\End_R(F)$.
+\begin{itemize}
+	\item 特征多项式 $P_\alpha(t)$ 是次数为 $n$ 的首一多项式.
+	\item $P_\alpha(t)$ 中 $t^{n-1}$ 的系数等于 $-\tr(\alpha)$.
+	\item $P_\alpha(t)$ 的常数项等于 $(-1)^n\det(\alpha)$.
+	\item 若 $\alpha$ 与 $\beta$ 相似, 则 $P_\alpha(t)=P_\beta(t)$.
+\end{itemize}
+\end{proposition}
+
+\begin{proof}
+第一点是直接的, 第三点可通过令 $t=0$ 来验证. 为验证第二个论断, 设 $A=(a_{ij})$ 是 $\alpha$ 关于 $F$ 的任意一组基的表示矩阵, 于是
+\[
+P_\alpha(t)=\det\begin{pmatrix}
+t-a_{11}&-a_{12}&\cdots&-a_{1n}\\
+-a_{21}&t-a_{22}&\cdots&-a_{2n}\\
+\vdots&\vdots&\ddots&\vdots\\
+-a_{n1}&-a_{n2}&\cdots&t-a_{nn}
+\end{pmatrix}.
+\]
+按定义~\ref{def:determinant} 展开行列式 (或以任何其他方式), 我们看到对 $t^{n-1}$ 的系数的贡献只来自对角元素, 其形式为
+\[
+\sum_{i=1}^n t\cdots t\cdot(-a_{ii})\cdot t\cdots t,
+\]
+于是结论得证.
+
+最后, 假设 $\alpha$ 与 $\beta$ 相似. 则存在可逆的 $\pi$ 使得 $\beta=\pi\circ\alpha\circ\pi^{-1}$, 从而
+\[
+tI-\beta=\pi\circ(tI-\alpha)\circ\pi^{-1}
+\]
+(作为 $R[t]^n$ 的自同态) 是相似的. 由习题~\ref{ex:similar-same-det-trace}, 这两个变换必定有相同的行列式, 这就证明了第四点.
+\end{proof}
+
+由命题~\ref{prop:charpoly-coefficients}, 特征多项式
+\[
+t^n-(\tr\alpha)t^{n-1}+\cdots+(-1)^n(\det\alpha)
+\]
+中的所有系数都在相似变换下不变; 就我们所知, 其中只有迹与行列式有专门的名字.
+
+行列式、迹, 以及更一般的特征多项式, 能够很快地表明两个线性变换不相似; 但它们能否万无一失地告诉我们两个变换何时相似? 一般而言, 答案是否定的, 即使在域上也是如此. 例如, 两个矩阵
+\[
+I=\begin{pmatrix}1&0\\0&1\end{pmatrix},\qquad
+A=\begin{pmatrix}1&1\\0&1\end{pmatrix}
+\]
+都有特征多项式 $(t-1)^2$, 但它们并不相似. 确实, $I$ 是恒等变换, 而显然只有恒等变换与恒等变换相似: 对所有可逆矩阵 $P$ 都有 $PIP^{-1}=I$.
+
+因此, 由``两个变换具有相同的特征多项式''这一规定所定义的等价关系比相似更粗. 这提示: 必定还有其他与线性变换相关联、且在相似变换下不变的有趣的量.
+
+我们不久就会更透彻地理解这一点 (至少在域上), 但通过考虑另一种``多项式''信息, 我们已经可以获得一些洞察, 它同样也在相似变换下不变.
+
+由于 $\End_R(F)$ 是 $R$-代数, 我们可以在任何 $\alpha\in\End_R(F)$ 处求值每个多项式
+\[
+f(t)=r_mt^m+r_{m-1}t^{m-1}+\cdots+r_0\in R[t]:
+\]
+\[
+f(\alpha)=r_m\alpha^m+r_{m-1}\alpha^{m-1}+\cdots+r_0\in\End_R(F).
+\]
+
+换言之, 我们可以在环 $\End_R(F)$ 中进行这些运算; 乘以 $r\in R$ 相当于与 $rI\in\End_R(F)$ 复合, 而 $\alpha^k$ 表示 $\alpha$ 与自身复合 $k$ 次: $\alpha\circ\cdots\circ\alpha$. 使得 $f(\alpha)=0$ 的多项式之集是 $R[t]$ 的一个理想 (习题~\ref{ex:annihilator-ideal-of-endomorphism}), 我们将把它记作 $\mathcal{J}_\alpha$, 并称为 $\alpha$ 的\emph{零化子理想 (annihilator ideal)}
+\index{linghuazilixiang@零化子理想(annihilator ideal)}
+.
+
+\begin{lemma}\label{lem:similar-annihilator}
+若 $\alpha$ 与 $\beta$ 相似, 则 $\mathcal{J}_\alpha=\mathcal{J}_\beta$.
+\end{lemma}
+
+\begin{proof}
+由假设, 存在可逆的 $\pi$ 使得 $\beta=\pi\circ\alpha\circ\pi^{-1}$. 由于
+\[
+\beta^k=(\pi\circ\alpha\circ\pi^{-1})^k=(\pi\circ\alpha\circ\pi^{-1})\circ(\pi\circ\alpha\circ\pi^{-1})\circ\cdots\circ(\pi\circ\alpha\circ\pi^{-1})=\pi\circ\alpha^k\circ\pi^{-1},
+\]
+我们看到对所有的 $f(t)\in R[t]$ 都有
+\[
+f(\beta)=\pi\circ f(\alpha)\circ\pi^{-1}.
+\]
+由此立即得出 $f(\alpha)=0\iff f(\beta)=0$, 这就是所要证的.
+\end{proof}
+
+回到上面展示的简单例子, 多项式 $t-1$ 属于恒等变换的零化子理想, 而不属于矩阵 $A=\begin{pmatrix}1&1\\0&1\end{pmatrix}$ 的零化子理想.
+
+乐观的读者现在可能会猜测: 两个线性变换相似, 当且仅当它们的特征多项式与零化子理想都分别重合. 遗憾的是, 一般情形并非如此, 但我们保证情况很快就会变得清楚得多 (参见习题~\ref{ex:dim3-similarity-criterion}).
+
+无论如何, 即使上面给出的简单例子也让我们能够指出一个值得注意的事实. 注意 $I$ 与 $A$ 的 (公共) 特征多项式 $(t-1)^2$ 把二者都零化:
+\[
+(A-I)^2=\begin{pmatrix}0&1\\0&0\end{pmatrix}^2=\begin{pmatrix}0&0\\0&0\end{pmatrix}.
+\]
+这并非巧合: 对所有的线性变换 $\alpha$ 都有 $P_\alpha(t)\in\mathcal{J}_\alpha$. 也就是说,
+
+\begin{theorem}[Cayley--Hamilton]\label{thm:cayley-hamilton}
+设 $P_\alpha(t)$ 是线性变换 $\alpha\in\End_R(F)$ 的特征多项式. 则
+\[
+P_\alpha(\alpha)=0.
+\]
+\end{theorem}
+
+这一美妙的观察可以通过审慎地使用 Cramer 法则\footnote{这里有一个更``直接''的``证明'': $P_\alpha(\alpha)=\det(\alpha I-\alpha)=\det(0)=0$. 可惜这行不通: 在特征多项式的定义 $\det(tI-\alpha)$ 中, $t$ 被假定为起标量的作用, 不能被 $\alpha$ 替换. 应用 Cramer 法则可以绕过这一障碍.}, 以推论~\ref{cor:adjoint-inverse} 的形式, 直接得到证明; 参见习题~\ref{ex:prove-cayley-hamilton}. 无论如何, 一旦我们把线性代数的这些考虑与 PID 上有限生成模的分类定理联系起来, Cayley--Hamilton 定理就会变得几乎是显然的; 有冒险精神的读者现在就可以回头去看注记~\ref{rmk:char-ideal}, 并弄清为什么 Cayley--Hamilton 定理是显然的.
+
+若 $R$ 是任意整环, 我们对 $R[t]$ 不能期望太多, 而先验地关于 $\mathcal{J}_\alpha$ 说些什么似乎很难. 然而, 考虑 $R$ 的分式域 $K$ (§V.\ref{subsec:field-of-fractions}); 把 $\alpha$ 视为 $\End_K(K^n)$ 的元素 (也就是说, 把 $\alpha$ 的某个矩阵表示中的元素视为 $K$ 的元素而非 $R$ 的元素), $\alpha$ 将有一个``在 $K$ 上''的零化子理想 $\mathcal{J}_\alpha^{(K)}$, 并且显然有
+\[
+\mathcal{J}_\alpha=\mathcal{J}_\alpha^{(K)}\cap R[t].
+\]
+考虑 $\mathcal{J}_\alpha^{(K)}\subseteq K[t]$ 的好处在于 $K[t]$ 是 PID, 从而 $\mathcal{J}_\alpha^{(K)}$ 有一个 (唯一的) 首一生成元.
+
+\begin{definition}\label{def:minimal-polynomial}
+设 $F$ 是自由 $R$-模, $\alpha\in\End_R(F)$. 设 $K$ 是 $R$ 的分式域. $\alpha$ 的\emph{极小多项式 (minimal polynomial)}
+\index{jixiaoduoxiangshi@极小多项式(minimal polynomial)}
+是 $\mathcal{J}_\alpha^{(K)}$ 的首一生成元 $m_\alpha(t)\in K[t]$.
+\end{definition}
+
+有了这套术语, Cayley--Hamilton 定理就相当于断言: 极小多项式整除特征多项式, 即 $m_\alpha(t)\mid P_\alpha(t)$.
+
+当然, 至少从阐述的角度看, 如果 $R$ 本身是域, 情况就简化了: 此时 $K=R$, $m_\alpha(t)\in R[t]$, 且 $\mathcal{J}_\alpha=(m_\alpha(t))$. 这是我们最终要假定 $R$ 是域的原因之一.
+
+\subsection{特征值、特征向量、特征子空间}
+\label{subsec:eigenvalues-eigenvectors}
+
+\begin{definition}\label{def:eigenvalue}
+设 $F$ 是自由 $R$-模, $\alpha\in\End_R(F)$ 是 $F$ 的线性变换. 标量 $\lambda\in R$ 是 $\alpha$ 的一个\emph{特征值 (eigenvalue)}
+\index{tezhengzhi@特征值(eigenvalue)}
+, 如果存在 $v\in F$, $v\neq0$, 使得
+\[
+\alpha(v)=\lambda v.
+\]
+\end{definition}
+
+例如, $0$ 是 $\alpha$ 的特征值, 当且仅当 $\alpha$ 有非平凡的核.
+
+特征值的概念即使不是整个科学中最重要的概念, 也是数学中最重要的概念之一, 至少是线性代数中最重要的概念之一. 线性变换的特征值之集称为它的\emph{谱 (spectrum)}
+\index{pu@谱(spectrum)}
+. 算子的谱随处可见: 从数论到微分方程, 再到量子力学. 我们在 §III.\ref{subsec:prime-maximal-def} 中简要遇到的环的谱之所以如此命名, 是因为它 (在重要的动机性语境中) 可以被解释为定义~\ref{def:eigenvalue} 意义下的谱. ``氢原子的谱''也是这个意义上的谱.
+
+相似变换具有相同的谱, 这一点想必是显然的: 因为若 $\beta=\pi\circ\alpha\circ\pi^{-1}$ 且 $\alpha(v)=\lambda v$, 则
+\[
+\beta(\pi(v))=\pi\circ\alpha\circ\pi^{-1}(\pi(v))=\pi\circ(\alpha(v))=\pi(\lambda v)=\lambda\pi(v);
+\]
+由于 $v\neq0$ 时 $\pi(v)\neq0$, 这说明 $\alpha$ 的每个特征值都是 $\beta$ 的特征值.
+
+若 $F$ 是有限生成的, 则我们有如下关于特征值概念的有用翻译:
+
+\begin{lemma}\label{lem:eigenvalue-as-root}
+设 $F$ 是有限生成自由 $R$-模\erratumfootnote{根据官方勘误, 补充 $F$ 为自由模 (free module) 的假设.}, $\alpha\in\End_R(F)$. 则 $\alpha$ 的特征值之集恰好是特征多项式 $P_\alpha(t)$ 在 $R$ 中的根之集.
+\end{lemma}
+
+\begin{proof}
+这是命题~\ref{prop:det-injective} 的直接推论:
+\[
+\begin{aligned}
+\lambda \text{ 是 } \alpha \text{ 的特征值}
+&\iff \exists\,v\neq0 \text{ 使得 } \alpha(v)=\lambda I(v)\\
+&\iff \exists\,v\neq0 \text{ 使得 } (\lambda I-\alpha)(v)=0\\
+&\iff \lambda I-\alpha \text{ 不是单射}\\
+&\iff \det(\lambda I-\alpha)=0\\
+&\iff P_\alpha(\lambda)=0,
+\end{aligned}
+\]
+正如所断言的那样.
+\end{proof}
+
+由引理~\ref{lem:eigenvalue-as-root} 显然可见, 特征值的考量非常依赖于基环 $R$.
+
+\begin{example}\label{ex:rotation-no-real-eigenvalue}
+矩阵
+\[
+\begin{pmatrix}0&-1\\1&0\end{pmatrix}
+\]
+在 $\R$ 上没有特征值, 而在 $\CC$ 上有特征值: 确实, 特征多项式 $t^2+1$ 没有实根, 但有两个复根. 读者应当注意, 作为实平面 $\R^2$ 的线性变换, 这个矩阵对应于 $90^\circ$ 逆时针旋转; 这一变换没有 (实) 特征值的原因是: 经过 $90^\circ$ 旋转后, 平面中没有任何方向被保持.
+\end{example}
+
+\begin{example}\label{ex:irrational-slope-eigenvalue}
+一个风味不同的例子由矩阵
+\[
+\begin{pmatrix}0&2\\1&0\end{pmatrix}
+\]
+给出. 它的特征多项式是 $t^2-2$; 因此它在 $\R$ 上有特征值, 但在 $\Q$ 上没有. 几何上, 相应的变换关于一条直线翻转平面; 但那条直线有无理斜率, 因此它不包含任何具有有理分量的非零向量.
+\end{example}
+
+作为引理~\ref{lem:eigenvalue-as-root} 的另一个好处, 我们现在可以引入如下概念:
+
+\begin{definition}\label{def:algebraic-multiplicity}
+有限生成自由模的线性变换 $\alpha$ 的某个特征值的\emph{代数重数 (algebraic multiplicity)}
+\index{daishuchongshu@代数重数(algebraic multiplicity)}
+是它作为 $\alpha$ 的特征多项式的根的重数.
+\end{definition}
+
+例如, $F$ 上的恒等变换有唯一的特征值 $1$, 其 (代数) 重数等于 $F$ 的秩.
+
+代数重数之和以特征多项式的次数 (即空间的维数) 为界. 特别地,
+
+\begin{corollary}\label{cor:eigenvalue-count}
+$R^n$ 的线性变换的特征值个数至多为 $n$. 若基环 $R$ 是代数闭域, 则每个线性变换恰有 $n$ 个特征值 (计代数重数).
+\end{corollary}
+
+\begin{proof}
+由引理~\ref{lem:eigenvalue-as-root}、V.\ref{lem:roots-count} 以及 V.\ref{lem:alg-closed-chars} 立得.
+\end{proof}
+
+特征值的重数还有另一种概念, 它与相应的\footnote{如果我们真的要在任意整环上展开这套理论, 就会感到有必要把这个对象称为 $\alpha$ 的\emph{特征模}. 然而, 我们最终将把注意力限制在基环是域的情形, 因此就不费这个事了.}特征子空间可能有多大有关.
+
+\begin{definition}\label{def:eigenvector}
+设 $\lambda$ 是自由 $R$-模 $F$ 的线性变换 $\alpha$ 的一个特征值. 则非零的 $v\in F$ 是 $\alpha$ 的对应于特征值 $\lambda$ 的\emph{特征向量 (eigenvector)}
+\index{tezhengxiangliang@特征向量(eigenvector)}
+, 如果 $\alpha(v)=\lambda v$, 即 $v\in\ker(\lambda I-\alpha)$. 子模 $\ker(\lambda I-\alpha)$ 是对应于 $\lambda$ 的\emph{特征子空间 (eigenspace)}
+\index{tezhengzikongjian@特征子空间(eigenspace)}
+.
+\end{definition}
+
+\begin{definition}\label{def:geometric-multiplicity}
+特征值 $\lambda$ 的\emph{几何重数 (geometric multiplicity)}
+\index{jihechongshu@几何重数(geometric multiplicity)}
+是其特征子空间的秩.
+\end{definition}
+
+这在相似变换下显然是不变的 (习题~\ref{ex:geometric-mult-similar}). 几何重数与代数重数不一定相等: 例如, 矩阵
+\[
+\begin{pmatrix}1&1\\0&1\end{pmatrix}
+\]
+的特征多项式为 $(t-1)^2$, 因此它只有唯一的特征值 $1$, 代数重数为 $2$. 然而, 对向量 $v=\binom{v_1}{v_2}$,
+\[
+\begin{pmatrix}1&1\\0&1\end{pmatrix}\binom{v_1}{v_2}=\binom{v_1+v_2}{v_2}
+\]
+等于 $1v$ 当且仅当 $v_2=0$: 也就是说, 对应于唯一特征值 $1$ 的特征子空间由向量 $\binom{1}{0}$ 张成, 维数为 $1$. 因此, 在这个例子中该特征值的几何重数为 $1$.
+
+思考这个例子会使读者相信: 一个特征值的几何重数总是小于或等于\erratumfootnote{根据官方勘误, 修正为小于或等于 (less than or equal to), 并在最理想的情形下为简单起见假定基环为域, 空间为 $n$ 维向量空间 $V$.}它的代数重数. 在最理想的情形下, 为简单起见在域上工作, $n$ 维向量空间 $V$ 上的算子 $\alpha$ 可能使其全部 $n$ 个特征值都在基域中, 且每个代数重数都与相应的几何重数一致. 若如此, 则 $V$ 可以表示为特征子空间的直和, 产生所谓的由 $\alpha$ 确定的 $V$ 的\emph{谱分解 (spectral decomposition)}
+\index{pufenjie@谱分解(spectral decomposition)}
+(关于这种情形的具体实例, 参见习题~\ref{ex:distinct-eigenvectors-independent}). 此时 $\alpha$ 在 $F$ 上的作用是完全透明的, 因为它相当于在谱分解的每一块上分别施加一个 (可能不同的) 伸缩因子.
+
+若 $A$ 是表示 $\alpha\in\End_R(V)$ 关于任意一组基的矩阵, 则 $\alpha$ 有谱分解当且仅当 $A$ 相似于一个对角矩阵:
+\[
+A=P\begin{pmatrix}\lambda_1&0&\cdots&0\\0&\lambda_2&\cdots&0\\\vdots&\vdots&\ddots&\vdots\\0&0&\cdots&\lambda_n\end{pmatrix}P^{-1},
+\]
+其中 $\lambda_1,\ldots,\lambda_n$ 是 $\alpha$ 的特征值. 在这种情形下, 我们说 $A$ (或 $\alpha$) 是\emph{可对角化的 (diagonalizable)}. 稍加思考就会发现, 此时 $P$ 的各列构成 $V$ 的一组由 $\alpha$ 的特征向量组成的基.
+
+我们再次保证: 一旦把定理~\ref{thm:pid-classification} 引入这幅图景, 情况就会变得 (更加) 清楚.
+
+\subsection*{习题}
+\phantomsection
+\addcontentsline{toc}{subsection}{习题}
+
+以下习题中, $R$ 表示整环.
+
+\begin{prob}\label{ex:similarity-classes-infinite}
+设 $k$ 是无限域, $n$ 是任意正整数.
+\begin{itemize}
+	\item 证明 $\mathcal{M}_n(k)$ 中的矩阵只有有限多个等价类.
+	\item 证明 $\mathcal{M}_n(k)$ 中的矩阵有无穷多个相似类.
+\end{itemize}
+\end{prob}
+
+\begin{prob}\label{ex:det-multiplicative}
+设 $F$ 是秩为 $n$ 的自由 $R$-模, $\alpha,\beta\in\End_R(F)$. 证明 $\det(\alpha\circ\beta)=\det(\alpha)\det(\beta)$. 证明 $\alpha$ 可逆当且仅当 $\det(\alpha)$ 可逆.
+\end{prob}
+
+\begin{prob}\label{ex:similar-same-det-trace}
+$\triangleright$ 证明: 若 $\alpha$ 与 $\beta$ 在定义~\ref{def:similar-endomorphisms} 的意义下相似, 则 $\det(\alpha)=\det(\beta)$ 且 $\tr(\alpha)=\tr(\beta)$. (证明时不要使用命题~\ref{prop:charpoly-coefficients}!) [§\ref{subsec:char-min-poly}]
+\end{prob}
+
+\begin{prob}\label{ex:injective-not-surjective}
+$\triangleright$ 设 $F$ 是有限生成自由 $R$-模, $\alpha$ 是 $F$ 的线性变换. 给出一个单射但非满射的 $\alpha$ 的例子; 事实上, 证明 $\alpha$ 不是满射, 当且仅当 $\det\alpha$ 不是单位. [§\ref{subsec:char-min-poly}]
+\end{prob}
+
+\begin{prob}\label{ex:k[t]-injective-not-surjective}
+$\triangleright$ 设 $k$ 是域, 并把 $k[t]$ 以显然的方式视为 $k$ 上的向量空间. 给出一个单射但非满射的 $k$-线性变换 $k[t]\to k[t]$ 的例子; 给出一个满射但非单射的线性变换的例子. [§\ref{subsec:char-min-poly}, §VII.\ref{subsec:splitting-fields}]
+\end{prob}
+
+\begin{prob}\label{ex:2x2-charpoly-trace-det}
+证明两个 $2\times2$ 矩阵有相同的特征多项式, 当且仅当它们有相同的迹与行列式. 找出两个迹与行列式都相同但特征多项式不同的 $3\times3$ 矩阵.
+\end{prob}
+
+\begin{prob}\label{ex:annihilator-ideal-of-endomorphism}
+$\triangleright$ 设 $\alpha\in\End_R(F)$ 是自由 $R$-模 $F$ 上的线性变换. 证明使得 $f(\alpha)=0$ 的多项式 $f(t)\in R[t]$ 之集是 $R[t]$ 的一个理想. [§\ref{subsec:char-min-poly}]
+\end{prob}
+
+\begin{prob}\label{ex:transpose-same-charpoly}
+$\triangleright$ 设 $A\in\mathcal{M}_n(R)$ 是方阵, $A^t$ 是它的转置. 证明 $A$ 与 $A^t$ 有相同的特征多项式与相同的零化子理想. [§\ref{subsec:rational-canonical}]
+\end{prob}
+
+\begin{prob}\label{ex:prove-cayley-hamilton}
+$\triangleright$ 按如下方式证明 Cayley--Hamilton 定理. 回忆每个方阵 $M$ 都有\emph{伴随矩阵 (adjoint matrix)}, 我们将把它记作 $\operatorname{adj}(M)$, 并且我们证明了 (推论~\ref{cor:adjoint-inverse}) $\operatorname{adj}(M)\cdot M=\det(M)\cdot I$. 把它应用于 $M=tI-A$ (其中 $A$ 是 $\alpha\in\End_R(F)$ 的一个矩阵实现), 得到
+\begin{equation*}
+(\ast)\qquad\qquad \operatorname{adj}(tI-A)\cdot(tI-A)=P_\alpha(t)\cdot I.
+\end{equation*}
+证明存在矩阵 $B_k\in\mathcal{M}_n(R)$ 使得 $\operatorname{adj}(tI-A)=\sum_{k=0}^{n-1}B_kt^k$; 然后用 $(\ast)$ 得到 $P_\alpha(A)=0$, 从而证明 Cayley--Hamilton 定理. [§\ref{subsec:char-min-poly}]
+\end{prob}
+
+\begin{prob}\label{ex:charpoly-multiplicative-dsum}
+$\triangleright$ 设 $F_1$, $F_2$ 是有限秩的自由 $R$-模, $\alpha_1$ (相应地, $\alpha_2$) 是 $F_1$ (相应地, $F_2$) 的线性变换. 设 $F=F_1\oplus F_2$, 并设 $\alpha=\alpha_1\oplus\alpha_2$ 是 $F$ 的线性变换, 它在 $F_1$ 上限制为 $\alpha_1$, 在 $F_2$ 上限制为 $\alpha_2$.
+\begin{itemize}
+	\item 证明 $P_\alpha(t)=P_{\alpha_1}(t)P_{\alpha_2}(t)$. 也就是说, 特征多项式在直和下是可乘的.
+	\item 找出一个例子, 说明极小多项式在直和下不是可乘的.
+\end{itemize}
+[\ref{ex:invariant-subspace-charpoly}, §\ref{subsec:rational-canonical}]
+\end{prob}
+
+\begin{prob}\label{ex:invariant-subspace-charpoly}
+$\neg$ 设 $\alpha$ 是有限维向量空间 $V$ 的线性变换, $V_1$ 是一个不变子空间, 即 $\alpha(V_1)\subseteq V_1$. 设 $\alpha_1$ 是 $\alpha$ 在 $V_1$ 上的限制, $V_2=V/V_1$. 证明 $\alpha$ 诱导 $V_2$ 上的线性变换 $\alpha_2$, 并 (沿用习题~\ref{ex:charpoly-multiplicative-dsum} 的做法) 证明 $P_\alpha(t)=P_{\alpha_1}(t)P_{\alpha_2}(t)$. 再证明对所有 $r\ge0$ 有 $\tr\alpha^r=\tr\alpha_1^r+\tr\alpha_2^r$. [\ref{ex:trace-power-identity}]
+\end{prob}
+
+\begin{prob}\label{ex:trace-power-identity}
+设 $\alpha$ 是有限维 $\CC$-向量空间 $V$ 的线性变换. 证明系数在 $\CC$ 中的形式幂级数恒等式:
+\[
+\frac{1}{\det(1-\alpha t)}=\exp\left(\sum_{r=1}^\infty \tr\alpha^r\,\frac{t^r}{r}\right).
+\]
+(提示: 左端本质上是 $\alpha$ 的特征多项式的逆. 用习题~\ref{ex:invariant-subspace-charpoly} 证明等式两端对正合列 $0\to V_1\to V\to V_2\to 0$ 都是可乘的, 其中 $V_1$ 是不变子空间. 利用这一点, 以及 $\CC$ 是代数闭域因而 $\alpha$ 有非平凡不变子空间这一事实 (为什么?), 归结到 $\dim V=1$ 的情形, 此时该恒等式是一个初等的微积分练习.)
+
+小心处理的话, 这个恒等式可以在任意特征为 $0$ 的域上以同样的方式陈述并证明. 它是``Weil 猜想''的上同调解释的一个组成部分.
+\end{prob}
+
+\begin{prob}\label{ex:integer-rational-eigenvalue}
+设 $A$ 是元素为整数的方阵. 证明若 $\lambda$ 是 $A$ 的有理特征值, 则事实上 $\lambda\in\Z$. (提示: 命题~V.\ref{prop:rational-root-test}.)
+\end{prob}
+
+\begin{prob}\label{ex:geometric-mult-similar}
+$\triangleright$ 设 $\lambda$ 是两个相似变换 $\alpha$, $\beta$ 的特征值. 证明 $\lambda$ 关于 $\alpha$ 与 $\beta$ 的几何重数相等. [§\ref{subsec:eigenvalues-eigenvectors}]
+\end{prob}
+
+\begin{prob}\label{ex:distinct-eigenvectors-independent}
+$\triangleright$ 设 $\alpha$ 是自由 $R$-模 $F$ 上的线性变换, $v_1,\ldots,v_n$ 是对应于两两不同的特征值 $\lambda_1,\ldots,\lambda_n$ 的特征向量. 证明 $v_1,\ldots,v_n$ 线性无关. (提示: 若不然, 则存在最短的线性组合 $r_1v_{i_1}+\cdots+r_mv_{i_m}=0$, 其中所有 $r_j\in R$, $r_j\neq0$. 把 $\alpha$ 在这个线性组合上的作用与乘以 $\lambda_{i_1}$ 的结果作比较.)
+
+由此可得: 若向量空间 $V$ 的维数为 $n$ 且 $\alpha:V\to V$ 有 $n$ 个互不相同的特征值, 则 $\alpha$ 诱导 $V$ 的一个谱分解\erratumfootnote{根据官方勘误, 明确条件为向量空间 $V$ 的维数为 $n$, 且 $\alpha:V\to V$ 有 $n$ 个不同的特征值.}. [§\ref{subsec:eigenvalues-eigenvectors}, VII.\ref{ex:aut-linearly-independent}]
+\end{prob}
+
+\begin{prob}\label{ex:orthogonal-preserving}
+$\neg$ $V=\R^n$ 上的\emph{标准内积 (standard inner product)}
+\index{neiji@内积(inner product)!biaozhun@标准(standard)}
+是映射 $V\times V\to\R$, 定义为
+\[
+(v,w):=v^t\cdot w
+\]
+(把元素 $v\in V$ 视为列向量). $W=\CC^n$ 上的\emph{标准 Hermite 内积 (standard hermitian product)}
+\index{neiji@内积(inner product)!Hermite@Hermite}
+是映射 $W\times W\to\CC$, 定义为
+\[
+(v,w):=v^{\dagger}\cdot w,
+\]
+其中对任何矩阵 $M$, $M^{\dagger}$ 表示把转置 $M^t$ 的元素取复共轭所得的矩阵.
+
+这些内积满足显然的线性性质: 例如, 对 $\lambda\in\CC$ 与 $v,w\in W$ 有
+\[
+(\lambda v,w)=\overline{\lambda}(v,w).
+\]
+证明矩阵 $M\in\mathcal{M}_n(\R)$ 属于 $\Or_n(\R)$ 当且仅当它保持 $\R^n$ 上的标准内积\footnote{正交群 $\Or_n(\R)$ 与酉群 $\UU_n(\CC)$ 的定义见习题~II.\ref{ex:matrix-subgroups}. 我们相信读者熟悉内积的基本事实: 对 $v,w\in\R^n$, $(v,v)$ 等于 $v$ 的长度平方, 而 $(v,w)$ 等于 $v,w$ 的长度之积乘以夹角的余弦. 因而本题实质上要求验证 $M\in\Or_n(\R)$ 当且仅当 $M$ 保持长度和角度, 并检验复数情形中的类似陈述.}:
+\[
+(\forall v,w\in\R^n)\qquad (Mv,Mw)=(v,w).
+\]
+同样地, 证明矩阵 $M\in\mathcal{M}_n(\CC)$ 属于 $\UU_n(\CC)$ 当且仅当它保持 $\CC^n$ 上的标准 Hermite 内积. [\ref{ex:orthonormal-matrix}]
+\end{prob}
+
+\begin{prob}\label{ex:orthogonal-complement}
+$\neg$ 我们说 $\R^n$ 或 $\CC^n$ 中的两个向量 $v$, $w$ 是\emph{正交 (orthogonal)}
+\index{zhengjiao@正交(orthogonal)}
+的, 如果 $(v,w)=0$. 向量 $v$ 的\emph{正交补 (orthogonal complement)}
+\index{zhengjiao bu@正交补(orthogonal complement)}
+$v^\perp$ 是与 $v$ 正交的向量 $w$ 之集. 证明: 若 $V=\R^n$ 或 $\CC^n$ 中的 $v\neq0$, 则 $v^\perp$ 是 $V$ 的维数为 $n-1$ 的子空间. [\ref{ex:schur-form}, VIII.\ref{ex:annihilator-subspace}]
+\end{prob}
+
+\begin{prob}\label{ex:orthonormal-matrix}
+$\neg$ 设 $V=\R^n$, 并赋予习题~\ref{ex:orthogonal-preserving} 中定义的标准内积. 一组互不相同的向量 $v_1,\ldots,v_r$ 是\emph{标准正交的 (orthonormal)}
+\index{biaozhunzhengjiao@标准正交(orthonormal)}
+, 如果 $i\neq j$ 时 $(v_i,v_j)=0$, 而 $i=j$ 时为 $1$. 几何上, 这意味着每个向量的长度为 $1$, 且不同的向量彼此正交. 同样的术语可用于 $\CC^n$ 中关于标准 Hermite 内积的情形.
+
+证明 $M\in\Or_n(\R)$ 当且仅当 $M$ 的各列标准正交, 当且仅当 $M$ 的各行标准正交\footnote{群 $\Or_n(\R)$ 称为\emph{正交群 (orthogonal group)}
+\index{zhengjiaoqun@正交群(orthogonal group)}
+; 称为``标准正交群''或许更贴切.}.
+
+对 $\UU_n(\CC)$ 表述并证明类似的论断. (群 $\UU_n(\CC)$ 称为\emph{酉群 (unitary group)}
+\index{youqun@酉群(unitary group)}
+. 注意当 $n=1$ 时, 它由范数为 $1$ 的复数组成.) [\ref{ex:orthonormal-basis-projection}, \ref{ex:schur-form}, VIII.\ref{ex:nondegenerate-bilinear}]
+\end{prob}
+
+\begin{prob}\label{ex:orthonormal-basis-projection}
+$\neg$ 设 $v_1,\ldots,v_r$ 构成 $\R^n$ 中的一组标准正交向量.
+\begin{itemize}
+	\item 证明 $v_1,\ldots,v_r$ 线性无关; 因此它们构成它们所张成的空间 $V$ 的一组标准正交基.
+	\item 设 $w=a_1v_1+\cdots+a_rv_r$ 是 $V$ 中的向量. 证明 $a_i=(v_i,w)$.
+	\item 更一般地, 证明若 $w\in\R^n$, 则 $(v_i,w)$ 是 $v_i$ 在 $w$ 到 $V$ 的正交投影 $w_V$ 中的分量. (也就是说, 证明 $w-w_V$ 与 $V$ 的所有向量正交.)
+\end{itemize}
+\begin{center}
+\begin{tikzpicture}[scale=.85,>=Stealth]
+\draw[gray] (-1,-.8)--(3.2,-.8)--(4.7,.45)--(.5,.45)--cycle;
+\draw[->,thick] (.3,-.2)--(1.8,1.65) node[midway,above left] {$w$};
+\draw[->,thick] (.3,-.2)--(1.8,-.2) node[midway,below] {$w_V$};
+\draw[dashed] (1.8,1.65)--(1.8,-.2);
+\draw (1.6,-.2)--(1.6,0)--(1.8,0);
+\node at (4,-.5) {$V$};
+\end{tikzpicture}
+\end{center}
+出于诸如此类的原因, 使用标准正交基是很方便的. 注意由习题~\ref{ex:orthonormal-matrix}, 一个矩阵属于 $\Or_n(\R)$ 当且仅当它的各列构成 $\R^n$ 的一组标准正交基. 同样, 读者应当对 $\CC^n$ 中的 Hermite 内积表述类似的论断. [\ref{ex:gram-schmidt}]
+\end{prob}
+
+\begin{prob}\label{ex:gram-schmidt}
+Gram--Schmidt 过程\index{Gram–Schmidt guocheng@Gram–Schmidt 过程(Gram-Schmidt process)}以 $\R^n$ 中一组线性无关的向量 $v_1,\ldots,v_r$ 为输入, 输出张成同一个空间 $V$ (由 $v_1,\ldots,v_r$ 张成) 的向量 $w_1,\ldots,w_r$, 且满足 $i\neq j$ 时 $(w_i,w_j)=0$. 把每个 $w_i$ 按它的长度伸缩, 就得到 $V$ 的一组标准正交基.
+
+Gram--Schmidt 过程如下进行:
+\begin{itemize}
+	\item $w_1:=v_1$.
+	\item 对 $k\ge1$, $w_k:=v_k-v_k$ 到 $\langle w_1,\ldots,w_{k-1}\rangle$ 上的正交投影.
+\end{itemize}
+(参见习题~\ref{ex:orthonormal-basis-projection}.) 证明这一过程实现了所述的目标.
+\end{prob}
+
+\begin{prob}\label{ex:self-adjoint-matrices}
+$\neg$ 矩阵 $M\in\mathcal{M}_n(\R)$ 是\emph{对称的 (symmetric)}
+\index{duichen@对称(symmetric)}
+, 如果 $M^t=M$. 证明 $M$ 对称当且仅当 $(\forall \mathbf{v},\mathbf{w}\in\R^n)$, $(M\mathbf{v},\mathbf{w})=(\mathbf{v},M\mathbf{w})$.
+
+矩阵 $M\in\mathcal{M}_n(\CC)$ 是\emph{Hermite 的 (hermitian)}
+\index{Hermite juzhen@Hermite 矩阵(hermitian matrix)}
+, 如果 $M^{\dagger}=M$. 证明 $M$ 是 Hermite 的当且仅当 $(\forall \mathbf{v},\mathbf{w}\in\CC^n)$, $(M\mathbf{v},\mathbf{w})=(\mathbf{v},M\mathbf{w})$\erratumfootnote{根据官方勘误, 向量规范使用粗体记号 $\mathbf{v},\mathbf{w}$.}.
+
+在两种情形下, 都可以说 $M$ 是\emph{自伴的 (self-adjoint)}
+\index{ziban@自伴(self-adjoint)}
+; 这意味着把它从乘积的一侧移到另一侧不改变运算的结果. 元素为实数的 Hermite 矩阵是对称矩阵. 把实对称矩阵视为 Hermite 矩阵的特例, 事实上是很有用的. [\ref{ex:hermitian-real-eigenvalues}]
+\end{prob}
+
+\begin{prob}\label{ex:hermitian-real-eigenvalues}
+$\neg$ 证明 Hermite 矩阵 (习题~\ref{ex:self-adjoint-matrices}) 的特征值都是实数. 再证明: 若 $v$, $w$ 是 Hermite 矩阵对应于不同特征值的特征向量, 则 $(v,w)=0$. (于是, 实对称矩阵对应于不同特征值的特征向量是正交的.) [\ref{ex:real-symmetric-diagonalizable}]
+\end{prob}
+
+\section{标准形}
+\label{sec:canonical-forms}
+
+\subsection{自由模的线性变换; 多项式环的作用}
+\label{subsec:polyring-action}
+
+我们曾许诺要用定理~\ref{thm:pid-classification} 来更好地理解相似关系, 并得到元素在域中的方阵的特殊形式. 现在是我们兑现诺言的时候了.
+
+读者此刻想必正焦急地追问: PID 在哪里? 有限生成模在哪里? 为什么关于这些东西的分类定理会对矩阵有所教益? 一旦这些问题得到解答, 其余的一切都会轻而易举地随之而来. 从某种意义上说, 这正是我们在进行所有这些考量时需要牢记的一点: 一旦我们记得如何从一个向量空间的线性变换得到一个有趣的模, 剩下的部分本质上就是一些标准概念的直接推论.
+
+再说一次, 尽管主要的应用是关于域上的向量空间与矩阵的, 我们并不需要在触及关键点之前就把自己限制在特殊情形中. 因此, 让我们在我们给定的整环\footnote{事实上, $R$ 是整环以及 $F$ 是自由模这两个要求在这里都无关紧要; 参见习题~III.\ref{ex:Rx-module-structures}.} $R$ 上再工作一会儿.
+
+\begin{claim}\label{claim:linear-transformation-as-module}
+在自由 $R$-模 $F$ 上给出一个线性变换, 相当于在 $F$ 上给出一个与它的 $R$-模结构相容的 $R[t]$-模结构.
+\end{claim}
+
+这里 $R[t]$ 是环 $R$ 上关于一个未定元 $t$ 的多项式环. 这条断言远没有它听起来那么了不起; 事实上, 它是完全同义反复的. 在 $F$ 上给出一个与 $R$-模结构相容的 $R[t]$-模结构, 相当于给出一个 $R$-代数同态
+\[
+\varphi:R[t]\longrightarrow\End_R(F)
+\]
+(这只是对 §III.\ref{subsec:module-def} 中模的定义做了一个微不足道的升级). 由多项式环所满足的万有性质 (§III.\ref{subsec:poly-universal}, 尤其是例~III.\ref{ex:extension-property}), 把 $\varphi$ 作为 $\End_R(F)$ 的基本 $R$-代数结构的扩张给出, 恰恰相当于指定像 $\varphi(t)$, 即选取 $\End_R(F)$ 中的一个元素. 这正是该断言所陈述的内容.
+
+我们对某种语言的偏爱可能会使事情的真相变得模糊, 而它其实非常简单. 给定自由模 $F$ 的一个线性变换 $\alpha$, 我们可以如下定义多项式 $f(t)=r_mt^m+r_{m-1}t^{m-1}+\cdots+r_0\in R[t]$ 在 $F$ 上的作用: 对每个 $v\in F$, 令
+\[
+f(t)(v):=r_m\alpha^m(v)+r_{m-1}\alpha^{m-1}(v)+\cdots+r_0v,
+\]
+其中 $\alpha^k$ 表示 $\alpha$ 与自身复合 $k$ 次; 我们在 §\ref{subsec:char-min-poly} 中已经遇到过这一点. 反之, $R[t]$ 在 $F$ 上的一个作用特别地确定了一个映射 $\alpha:F\to F$, 即``乘以 $t$'':
+\[
+v\longmapsto tv;
+\]
+它与 $F$ 上 $R$-模结构的相容性恰恰告诉我们 $\alpha$ 是 $F$ 的一个线性变换. 这同样是断言~\ref{claim:linear-transformation-as-module} 的内容.
+
+断言~\ref{claim:linear-transformation-as-module} 尽管是同义反复的, 却包含了不少信息. 确实, 这个 $R[t]$-模``知道''关于相似性的一切:
+
+\begin{lemma}\label{lem:similarity-iso-modules}
+设 $\alpha$, $\beta$ 是自由 $R$-模 $F$ 的线性变换. 则 $F$ 上相应的两个 $R[t]$-模结构同构, 当且仅当 $\alpha$ 与 $\beta$ 相似.
+\end{lemma}
+
+\begin{proof}
+按断言~\ref{claim:linear-transformation-as-module}, 用 $F_\alpha$ 与 $F_\beta$ 表示由 $\alpha$, $\beta$ 在 $F$ 上定义的两个 $R[t]$-模.
+
+先假设 $\alpha$ 与 $\beta$ 相似. 则存在可逆的 $R$-线性变换 $\pi:F\to F$ 使得
+\[
+\beta=\pi\circ\alpha\circ\pi^{-1},
+\]
+即 $\pi\circ\alpha=\beta\circ\pi$. 我们可以把 $\pi$ 视为一个 $R$-线性映射
+\[
+\pi:F_\alpha\longrightarrow F_\beta.
+\]
+我们断言它是 $R[t]$-线性的: 事实上, 在 $F_\alpha$ 中乘以 $t$ 就是 $\alpha$, 在 $F_\beta$ 中就是 $\beta$, 所以
+\[
+\pi(tv)=\pi\circ\alpha(v)=\beta\circ\pi(v)=t\pi(v).
+\]
+因此 $\pi$ 是可逆的 $R[t]$-线性映射 $F_\alpha\to F_\beta$, 这就证明了 $F_\alpha$ 与 $F_\beta$ 作为 $R[t]$-模同构.
+
+反向的蕴含本质上是通过把这个论证倒过来跑而得到的, 留给读者完成 (习题~\ref{ex:complete-lemma-7-2}).
+\end{proof}
+
+\begin{corollary}\label{cor:similarity-correspondence}
+自由 $R$-模 $F$ 的 $R$-线性变换的相似类与 $F$ 上 $R[t]$-模结构的同构类之间存在一一对应.
+\end{corollary}
+
+当然, 在有限秩的情形, 对元素在 $R$ 中的方阵也有同样的论断.
+
+推论~\ref{cor:similarity-correspondence} 正是我们一直在寻找的工具, 它在``对线性变换或矩阵的相似类进行分类''与``对模进行分类''之间架起了桥梁. 现在的任务变成: 把我们在 §\ref{sec:linear-transformations-free} 中遇到的概念翻译成模的语言, 并看看这是否能教给我们一些新东西.
+
+无论如何, 既然我们已经分类了 PID 上的有限生成模, 显然我们将能够分类有限秩自由模的变换的相似类——只要 $R[t]$ 是 PID. 这正是``$R$ 是域''这一附加假设进入讨论的地方 (参见习题~V.\ref{ex:rx-pid-field}).
+
+\subsection{\texorpdfstring{$k[t]$}{k[t]}-模与有理标准形}
+\label{subsec:rational-canonical}
+
+现在终于到了特殊化的时候: $R=k$ 是域, 且 $F$ 有有限秩; 于是 $F=V$ 只是一个有限维向量空间. 记 $n=\dim V$.
+
+由前面的讨论, 选取 $V$ 的一个线性变换相当于给 $V$ 一个 (与其向量空间结构相容的) $k[t]$-模结构; 相似的线性变换对应于同构的 $k[t]$-模. 此时 $V$ 是 $k[t]$ 上的有限生成模, 而由于 $k$ 是域, $k[t]$ 是 PID (习题~III.\ref{ex:kx-pid} 与 §V.\ref{sec:ufds-pids-euclidean}); 因此我们恰好处于分类定理所覆盖的情形之中.
+
+甚至在写出应用定理~\ref{thm:pid-classification} 的结果之前, 我们就可以利用它的口号式版本: PID 上每个有限生成模都是循环模的直和. 这告诉我们: 只要理解了由一个循环 $k[t]$-模
+\[
+V=\frac{k[t]}{(f(t))}
+\]
+上``乘以 $t$''所给出的线性变换, 我们就能在相差相似的意义下理解有限维向量空间的所有线性变换, 其中 $f(t)$ 是一个非常值的首一多项式:
+\[
+f(t)=t^n+r_{n-1}t^{n-1}+\cdots+r_0.
+\]
+
+为这个``招牌''情形求得一个好的矩阵表示是值得的. 我们选取 $V$ 的基
+\[
+1,\quad t,\quad \ldots,\quad t^{n-1}
+\]
+(参见命题~III.\ref{prop:quotient-poly}). 回忆一下, 对应于一个变换的矩阵的各列由所选取的基的像组成 (参见推论~\ref{cor:matrix-hom-isomorphism} 之前的讨论). 由于 $V$ 上乘以 $t$ 的作用是
+\[
+\left\{
+\begin{aligned}
+1&\longmapsto t,\\
+t&\longmapsto t^2,\\
+&\;\;\vdots\\
+t^{n-1}&\longmapsto t^n=-r_{n-1}t^{n-1}-\cdots-r_0,
+\end{aligned}
+\right.
+\]
+对应于这个线性变换的矩阵是
+\[
+C_{f(t)}:=
+\begin{pmatrix}
+0&0&\cdots&0&-r_0\\
+1&0&\cdots&0&-r_1\\
+0&1&\cdots&0&-r_2\\
+\vdots&\vdots&\ddots&\vdots&\vdots\\
+0&0&\cdots&0&-r_{n-2}\\
+0&0&\cdots&1&-r_{n-1}
+\end{pmatrix}.
+\]
+
+\begin{definition}\label{def:companion-matrix}
+这个矩阵称为多项式 $f(t)$ 的\emph{友矩阵 (companion matrix)}
+\index{youjuzhen@友矩阵(companion matrix)}
+, 记作 $C_{f(t)}$.
+\end{definition}
+
+定理~\ref{thm:pid-classification} 告诉我们 (除其他事项外): 每个线性变换都允许一个分块矩阵表示, 其中每一块都是某个多项式的友矩阵. 定理~\ref{thm:pid-classification} 在这一语境下的陈述如下:
+
+\begin{theorem}\label{thm:module-canonical-form}
+设 $k$ 是域, $V$ 是有限维向量空间. 设 $\alpha$ 是 $V$ 上的线性变换, 并按断言~\ref{claim:linear-transformation-as-module} 赋予 $V$ 相应的 $k[t]$-模结构. 则以下结论成立:
+\begin{itemize}
+	\item 存在互不相同的首一不可约多项式 $p_1(t),\ldots,p_s(t)\in k[t]$ 以及正整数 $r_{ij}$, 使得
+	\[
+	V\cong\bigoplus_{i,j}\frac{k[t]}{(p_i(t)^{r_{ij}})}
+	\]
+	作为 $k[t]$-模同构.
+	\item 存在首一非常值多项式 $f_1(t),\ldots,f_m(t)\in k[t]$ 使得 $f_1(t)\mid\cdots\mid f_m(t)$, 且
+	\[
+	V\cong\frac{k[t]}{(f_1(t))}\oplus\cdots\oplus\frac{k[t]}{(f_m(t))}
+	\]
+	作为 $k[t]$-模同构.
+\end{itemize}
+通过这些同构, $\alpha$ 在 $V$ 上的作用对应于乘以 $t$.
+
+进而, 两个线性变换 $\alpha$, $\beta$ 相似当且仅当它们有相同的两组不变量 $p_i(t)^{r_{ij}}$ (``初等因子'') 与 $f_i(t)$ (``不变因子'').
+\end{theorem}
+
+\begin{proof}
+由于 $\dim V$ 有限, $V$ 作为 $k$-模是有限生成的, 因而更是有限生成的 $k[t]$-模. 这两个同构于是由应用定理~\ref{thm:pid-classification} 得到. 所有相关的多项式都可以取为首一的, 因为域上的每个多项式都是一个 (唯一的) 首一多项式的相伴元 (习题~III.\ref{ex:monic-unique}). 关于``$\alpha$ 的作用对应于乘以 $t$''这一事实, 恰恰就是 $V$ 上相应 $k[t]$-模结构的定义. 关于相似变换的论断由推论~\ref{cor:similarity-correspondence} 得到.
+\end{proof}
+
+定理~\ref{thm:module-canonical-form} (在域上) 回答了 §\ref{subsec:endomorphisms-similarity} 中提出的问题: 我们现在有了一列不变量, 它们完全刻画了一个线性变换的相似类. 进而, 这些不变量为我们提供了一个给定线性变换的特殊矩阵表示.
+
+\begin{definition}\label{def:rational-canonical-form}
+向量空间 $V$ 的线性变换 $\alpha$ 的\emph{有理标准形 (rational canonical form)}
+\index{youli biaozhunxing@有理标准形(rational canonical form)}
+是分块矩阵
+\[
+\begin{pmatrix}
+C_{f_1}&&\\
+&\ddots&\\
+&&C_{f_m}
+\end{pmatrix},
+\]
+其中 $f_1(t),\ldots,f_m(t)$ 是 $\alpha$ 的不变因子.
+\end{definition}
+
+方阵的有理标准形 (当然) 就是相应线性变换的有理标准形. 下面的论断是定理~\ref{thm:module-canonical-form} 的直接推论.
+
+\begin{corollary}\label{cor:rational-canonical-exists}
+每个线性变换都有有理标准形. 两个线性变换有相同的有理标准形, 当且仅当它们相似.
+\end{corollary}
+
+\begin{remark}\label{rmk:rational-name}
+有理标准形中的``有理''与 $\Q$ 毫无关系; 它意在提醒读者: 无需离开基域就能找到这个形式. 我们将遇到的另一种标准形, 其元素可能位于一个更大的域中, 在那里该变换的特征多项式完全分解.
+\end{remark}
+
+推论~\ref{cor:rational-canonical-exists} 明确地实现了 §\ref{subsec:endomorphisms-similarity} 末尾表达的另一个愿望, 即在矩阵/线性变换的每个相似类中找到一个特殊的代表元. 有理标准形就是这样一个代表元.
+
+接下来显然要问: 我们刚找到的这些不变量与我们在 §\ref{sec:linear-transformations-free} 中为产生相似变换的不变量所做的那些较为朴素的尝试有什么关系?
+
+\begin{proposition}\label{prop:invariants-minimal-charpoly}
+设 $f_1(t)\mid\cdots\mid f_m(t)$ 是向量空间 $V$ 上线性变换 $\alpha$ 的不变因子. 则极小多项式 $m_\alpha(t)$ 等于 $f_m(t)$, 而特征多项式 $P_\alpha(t)$ 等于乘积 $f_1(t)\cdots f_m(t)$.
+\end{proposition}
+
+\begin{proof}
+追索定义可知, $(m_\alpha(t))$ 就是把 $V$ 按断言~\ref{claim:linear-transformation-as-module} 视为经由 $\alpha$ 得到的 $k[t]$-模时 $V$ 的零化子理想. 因此, $m_\alpha(t)$ 与 $f_m(t)$ 的相等只是引理~\ref{lem:ann-pid} 的重新表述.
+
+关于特征多项式, 由习题~\ref{ex:charpoly-multiplicative-dsum} 只需在循环情形证明该论断: 也就是说, 只需证明若 $f(t)$ 是首一多项式, 则 $f(t)$ 等于友矩阵 $C_{f(t)}$ 的特征多项式. 具体地说, 设
+\[
+f(t)=t^n+r_{n-1}t^{n-1}+\cdots+r_0
+\]
+是首一多项式; 于是任务归结为证明
+\[
+\det\begin{pmatrix}
+t&-1&0&\cdots&0&0\\
+0&t&-1&\cdots&0&0\\
+\vdots&\vdots&\vdots&\ddots&\vdots&\vdots\\
+0&0&0&\cdots&t&-1\\
+r_0&r_1&r_2&\cdots&r_{n-2}&t+r_{n-1}
+\end{pmatrix}=f(t).
+\]
+这可以通过一个简单的归纳来完成, 留给读者 (习题~\ref{ex:companion-charpoly}).
+\end{proof}
+
+\begin{corollary}[Cayley--Hamilton]\label{cor:minpoly-divides-charpoly}
+线性变换的极小多项式整除它的特征多项式.
+\end{corollary}
+
+\begin{proof}
+如我们在 §\ref{subsec:char-min-poly} 中所许诺的, 这现在已经变得十分明显了.
+\end{proof}
+
+求给定矩阵 $A$ 的有理标准形, 相当于对按断言~\ref{claim:linear-transformation-as-module} 对应于 $A$ 的那个具体的 $k[t]$-模施行分类定理. 由于 $k[t]$ 实际上是一个 Euclid 整环, 我们知道这可以通过 Gauss 消元来完成 (参见 §\ref{subsec:gaussian-euclidean}). 在实践中, 这一过程包括把在 $k[t]$ 上通过初等运算将 $tI-A$ 对角化时所获得的信息汇总起来. 我们邀请读者要么给出一个原创的算法, 要么至少查阅一本标准参考书, 看看其中涉及些什么.
+
+一些重大的捷径可能会帮到我们. 例如, 若极小多项式与特征多项式重合, 则可以先验地知道相应的模是循环的 (参见注记~\ref{rmk:char-ideal}), 于是有理标准形就简单地是特征多项式的友矩阵.
+
+无论如何, 标准形的力量在于这样一个事实: 它使我们能够把一般性的事实归结为具体的、标准的情形. 例如, 下面的论断若仅知道定义的话会显得有些神秘, 但加一点有理标准形就变得几乎是平凡的:
+
+\begin{proposition}\label{prop:similar-to-transpose}
+设 $A\in\mathcal{M}_n(k)$ 是方阵. 则 $A$ 与它的转置相似.
+\end{proposition}
+
+\begin{proof}
+若 $B$ 与 $A$ 相似, 且我们能证明 $B$ 与它的转置 $B^t$ 相似, 则 $A$ 与它的转置 $A^t$ 相似: 因为由 $B=PAP^{-1}$ 与 $B^t=QBQ^{-1}$ 可得
+\[
+A^t=(P^tQP)A(P^tQP)^{-1}.
+\]
+因此, 只需对处于有理标准形的矩阵证明该论断. 进而, 对一个分块矩阵证明该论断显然只需对每一块证明即可; 所以我们可以假设 $A$ 是某个多项式 $f(t)$ 的友矩阵 $C$ (参见习题~\ref{ex:transpose-same-charpoly}). 由于 $C^t$ 的特征多项式与极小多项式都与 $C$ 的相同, 它们都等于 $f(t)$. 于是 $C^t$ 的有理标准形仍然是 $f(t)$ 的友矩阵; 因此 $C^t$ 与 $C$ 相似, 正如所需要的那样.
+\end{proof}
+
+\subsection{Jordan 标准形}
+\label{subsec:jordan-canonical}
+
+我们从对应于一个线性变换的模的不变因子导出了有理标准形. 一个有用的替代品可以从初等因子得到, 至少在该特征多项式在域 $k$ 上完全分解的情形是如此. 若并非如此, 则可以把 $k$ 扩大, 以包含特征多项式的所有根: 读者在习题~V.\ref{ex:splitting-extension} 中已经证明了这一点. 需要付出的代价是: 线性变换 $\alpha\in\End_k(V)$ 的 Jordan 标准形可能是元素位于比 $k$ 更大的域中的矩阵. 无论如何, 两个变换是否相似与基域无关 (习题~\ref{ex:similarity-over-extension}), 因此这不影响眼下的问题.
+
+给定 $\alpha\in\End_k(V)$, 按定理~\ref{thm:module-canonical-form} 得到相应的 $k[t]$-模的初等因子分解:
+\[
+V\cong\bigoplus_{i,j}\frac{k[t]}{(p_i(t)^{r_{ij}})}.
+\]
+由命题~\ref{prop:invariants-minimal-charpoly} 以及初等因子表述与不变因子表述之间的等价性立即可得: 特征多项式 $P_\alpha(t)$ 等于乘积
+\[
+\prod_{i,j}p_i(t)^{r_{ij}}.
+\]
+
+\begin{lemma}\label{lem:charpoly-factored-eigenvalues}
+假设特征多项式 $P_\alpha(t)$ 完全分解; 即
+\[
+P_\alpha(t)=\prod_{i=1}^s(t-\lambda_i)^{m_i},
+\]
+其中 $\lambda_i$, $i=1,\ldots,s$, 是 $\alpha$ 的互不相同的特征值 (而 $m_i$ 是它们的代数重数; 参见 §\ref{subsec:eigenvalues-eigenvectors}). 则 $p_i(t)=(t-\lambda_i)$, 且 $m_i=\sum_j r_{ij}$.
+
+在这种情形下, $\alpha$ 的极小多项式等于
+\[
+m_\alpha(t)=\prod_{i=1}^s(t-\lambda_i)^{\max_j\{r_{ij}\}}.
+\]
+\end{lemma}
+
+\begin{proof}
+第一个论断由分解的唯一性得到. 关于极小多项式的论断由命题~\ref{prop:invariants-minimal-charpoly} 以及定理~\ref{thm:module-canonical-form} 中两种表述的等价性所涉及的``记账''工作立即得到.
+\end{proof}
+
+初等因子分解把 $V$ 分裂成与不变因子分解不同的一组循环模: 现在基本的循环``砖块''具有形式 $k[t]/(p(t)^r)$, 其中 $p(t)$ 是首一素多项式; 由引理~\ref{lem:charpoly-factored-eigenvalues}, 若假设特征多项式在 $k$ 上完全分解, 则它们实际上具有形式
+\[
+\frac{k[t]}{((t-\lambda)^r)}
+\]
+其中 $\lambda\in k$ (它等于 $\alpha$ 的某个特征值), $r>0$. 正如我们对``友矩阵''所做的那样, 现在我们要寻找一组基, 使得 $\alpha$ (= 乘以 $t$; 请注意定理~\ref{thm:module-canonical-form} 中的细节) 关于它有一个特别简单的矩阵表示. 这一次我们选取基
+\[
+(t-\lambda)^{r-1},\quad(t-\lambda)^{r-2},\quad\ldots,\quad(t-\lambda)^0=1.
+\]
+在 $V$ 上乘以 $t$ 的作用是 (在第一行中, 利用 $(t-\lambda)^r=0$ 在 $V$ 中成立这一事实)
+\[
+\left\{
+\begin{aligned}
+(t-\lambda)^{r-1}&\longmapsto t(t-\lambda)^{r-1}=\lambda(t-\lambda)^{r-1}+(t-\lambda)^r=\lambda(t-\lambda)^{r-1},\\
+(t-\lambda)^{r-2}&\longmapsto t(t-\lambda)^{r-2}=(t-\lambda)^{r-1}+\lambda(t-\lambda)^{r-2},\\
+&\;\;\vdots\\
+1&\longmapsto t=(t-\lambda)+\lambda.
+\end{aligned}
+\right.
+\]
+因此, 关于这组基, 该线性变换的矩阵是
+\[
+\begin{pmatrix}
+\lambda&1&0&\cdots&0&0\\
+0&\lambda&1&\cdots&0&0\\
+\vdots&\vdots&\vdots&\ddots&\vdots&\vdots\\
+0&0&0&\cdots&\lambda&1\\
+0&0&0&\cdots&0&\lambda
+\end{pmatrix}.
+\]
+
+\begin{definition}\label{def:jordan-block}
+这个矩阵是大小为 $r$、对应于 $\lambda$ 的\emph{Jordan 块 (Jordan block)}
+\index{Jordan kuai@Jordan 块(Jordan block)}
+, 记作 $J_{\lambda,r}$.
+\end{definition}
+
+对给定的 $\lambda$, 我们可以把若干个块放在一起: 对 $(r_j)=(r_1,\ldots,r_l)$, 令
+\[
+J_{\lambda,(r_j)}:=
+\begin{pmatrix}
+J_{\lambda,r_1}&&\\
+&\ddots&\\
+&&J_{\lambda,r_l}
+\end{pmatrix}.
+\]
+
+有了这个记号, 我们就得到了给定线性变换的相似类的一些新的特殊代表元:
+
+\begin{definition}\label{def:jordan-canonical-form}
+向量空间 $V$ 的线性变换 $\alpha$ 的\emph{Jordan 标准形 (Jordan canonical form)}
+\index{Jordan biaozhunxing@Jordan 标准形(Jordan canonical form)}
+是分块矩阵
+\[
+\begin{pmatrix}
+J_{\lambda_1,(r_{1j})}&&\\
+&\ddots&\\
+&&J_{\lambda_s,(r_{sj})}
+\end{pmatrix},
+\]
+其中 $(t-\lambda_i)^{r_{ij}}$ 是 $\alpha$ 的初等因子 (参见引理~\ref{lem:charpoly-factored-eigenvalues}).
+\end{definition}
+
+这个标准形比有理标准形``稍微不那么标准'', 因为有理标准形是真正唯一的, 而 Jordan 标准形中仍留有一些含糊之处: 我们既没有特别的办法来选取不同块的次序, 也没有办法给特征值 $\lambda_1,\ldots,\lambda_s$ 排序\footnote{当然, 若基域是 $\Q$ 或 $\R$, 则我们可以按例如递增的次序来排列这些 $\lambda_i$. 然而在像 $\CC$ 这样的域上, 这就不是一个可选项了.}.
+
+因此, 推论~\ref{cor:rational-canonical-exists} 的对应物应当说: 两个线性变换相似, 当且仅当它们在把各块重新排序的意义下有相同的 Jordan 标准形. 如我们所见, 只要 $P_\alpha(t)$ 在 $k$ 上完全分解, 每个线性变换 $\alpha\in\End_k(V)$ 就有 Jordan 标准形; 例如, 我们总可以找到元素在 $k$ 的代数闭包中的 Jordan 标准形.
+
+\begin{example}\label{ex:jordan-classes-count}
+Jordan 标准形的一个用处是枚举具有给定特征值的变换的所有可能的相似类. 例如, 在 $4$ 维向量空间上, 具有唯一特征值 $\lambda$、代数重数为 $4$ 的线性变换有 $5$ 个相似类: 确实, 在 $4\times4$ 方阵中, 把对应于同一特征值的 Jordan 块摞在一起有 $5$ 种不同的方式:
+\[
+\begin{pmatrix}
+\lambda&0&0&0\\
+0&\lambda&0&0\\
+0&0&\lambda&0\\
+0&0&0&\lambda
+\end{pmatrix},\quad
+\begin{pmatrix}
+\lambda&1&0&0\\
+0&\lambda&0&0\\
+0&0&\lambda&0\\
+0&0&0&\lambda
+\end{pmatrix},\quad
+\begin{pmatrix}
+\lambda&1&0&0\\
+0&\lambda&0&0\\
+0&0&\lambda&1\\
+0&0&0&\lambda
+\end{pmatrix},
+\]
+\[
+\begin{pmatrix}
+\lambda&1&0&0\\
+0&\lambda&1&0\\
+0&0&\lambda&0\\
+0&0&0&\lambda
+\end{pmatrix},\quad
+\begin{pmatrix}
+\lambda&1&0&0\\
+0&\lambda&1&0\\
+0&0&\lambda&1\\
+0&0&0&\lambda
+\end{pmatrix}.
+\]
+\end{example}
+
+Jordan 标准形澄清了一个特征值的代数重数与几何重数之间的差别. 作为线性变换 $\alpha$ 的特征值, $\lambda$ 的代数重数 (当然) 是 $\lambda$ 在 $\alpha$ 的 Jordan 标准形中出现的次数. 回忆 $\lambda$ 的几何重数等于 $\lambda$ 的特征子空间的维数.
+
+\begin{proposition}\label{prop:geometric-mult-jordan-blocks}
+作为 $\alpha$ 的特征值, $\lambda$ 的几何重数等于 $\alpha$ 的 Jordan 标准形中对应于 $\lambda$ 的 Jordan 块的个数.
+\end{proposition}
+
+\begin{proof}
+由于几何重数在直和下显然是可加的, 只需证明: 对于对应于单个 Jordan 块
+\[
+J=\begin{pmatrix}
+\lambda&1&0&\cdots&0&0\\
+0&\lambda&1&\cdots&0&0\\
+\vdots&\vdots&\vdots&\ddots&\vdots&\vdots\\
+0&0&0&\cdots&\lambda&1\\
+0&0&0&\cdots&0&\lambda
+\end{pmatrix}
+\]
+的变换, $\lambda$ 的几何重数为 $1$.
+
+设 $v=\begin{pmatrix}v_1\\ \vdots\\ v_r\end{pmatrix}$ 是对应于 $\lambda$ 的一个特征向量. 则
+\[
+\begin{pmatrix}
+\lambda&1&0&\cdots&0\\
+0&\lambda&1&\cdots&0\\
+\vdots&\vdots&\vdots&\ddots&\vdots\\
+0&0&0&\cdots&\lambda
+\end{pmatrix}
+\begin{pmatrix}v_1\\ v_2\\ \vdots\\ v_r\end{pmatrix}
+=
+\begin{pmatrix}\lambda v_1+v_2\\ \lambda v_2+v_3\\ \vdots\\ \lambda v_r\end{pmatrix}
+=
+\begin{pmatrix}\lambda v_1\\ \lambda v_2\\ \vdots\\ \lambda v_r\end{pmatrix},
+\]
+从而 $v_2=\cdots=v_r=0$. 也就是说, $\lambda$ 的特征子空间由
+\[
+\begin{pmatrix}1\\0\\ \vdots\\ 0\end{pmatrix}
+\]
+生成, 维数为 $1$, 正如所需要的那样.
+\end{proof}
+
+\subsection{可对角化}
+\label{subsec:diagonalizable}
+
+向量空间 $V$ 的线性变换是\emph{可对角化的 (diagonalizable)}, 如果它可以用一个对角矩阵表示.
+
+一个给定的线性变换是否可对角化的问题既有趣又重要: 正如我们在 §\ref{subsec:eigenvalues-eigenvectors} 中已指出的, 当 $\alpha\in\End_k(V)$ 可对角化时, 向量空间 $V$ 就有一个相应的谱分解: $\alpha$ 可对角化当且仅当 $V$ 有一组由 $\alpha$ 的特征向量组成的基. 关于这个重要的主题还可以说很多, 但我们现在已经有能力给出可对角化的有用判别法了.
+
+例如, 表示 $\alpha$ 的对角矩阵必然是一个由大小为 $1$ 的块组成的 $\alpha$ 的 Jordan 标准形. 命题~\ref{prop:geometric-mult-jordan-blocks} 告诉我们, 这可以通过代数重数与几何重数之间的差别来检测, 于是我们得到可对角化变换的如下刻画:
+
+\begin{corollary}\label{cor:diagonalizable-criterion}
+假设 $\alpha\in\End_k(V)$ 的特征多项式在 $k$ 上完全分解. 则 $\alpha$ 可对角化, 当且仅当它所有特征值的几何重数与代数重数都相等.
+\end{corollary}
+
+同一结果的另一种看法如下:
+
+\begin{proposition}\label{prop:diagonalizable-minpoly}
+假设 $\alpha\in\End_k(V)$ 的特征多项式在 $k$ 上完全分解. 则 $\alpha$ 可对角化, 当且仅当 $\alpha$ 的极小多项式没有重根.
+\end{proposition}
+
+\begin{proof}
+同样地, 可对角化等价于 $\alpha$ 的 Jordan 标准形中所有 Jordan 块的大小都是 $1$. 因此, 若 $\alpha$ 的特征多项式完全分解, 则 $\alpha$ 可对角化当且仅当定理~\ref{thm:module-canonical-form} 中出现的所有指数 $r_{ij}$ 都等于 $1$. 由引理~\ref{lem:charpoly-factored-eigenvalues} 的第二部分, 这等价于要求 $\alpha$ 的极小多项式没有重根.
+\end{proof}
+
+这些论断中``可分解''的条件对于保证 Jordan 标准形的存在性是必要的. 不出所料, 一个矩阵是否可对角化依赖于基域. 例如,
+\[
+\begin{pmatrix}0&-1\\1&0\end{pmatrix}
+\]
+在 $\R$ 上不可对角化 (参见例~\ref{ex:rotation-no-real-eigenvalue}), 而在 $\CC$ 上可对角化.
+
+给向量空间 $V$ 赋予额外的结构 (例如内积) 会挑选出重要的算子类, 对它们可以就谱分解的存在性得到精确而细致的结果. 例如, 这可以用来证明实对称矩阵可对角化 (习题~\ref{ex:real-symmetric-diagonalizable}). 读者将在习题中领略这些``谱定理''的风味.
+
+\subsection*{习题}
+\phantomsection
+\addcontentsline{toc}{subsection}{习题}
+
+如上, $k$ 表示域.
+
+\begin{prob}\label{ex:complete-lemma-7-2}
+$\triangleright$ 完成引理~\ref{lem:similarity-iso-modules} 的证明. [§\ref{subsec:polyring-action}]
+\end{prob}
+
+\begin{prob}\label{ex:companion-charpoly}
+$\triangleright$ 证明首一多项式 $f(t)$ 的友矩阵的特征多项式等于 $f(t)$. [§\ref{subsec:rational-canonical}]
+\end{prob}
+
+\begin{prob}\label{ex:dim3-similarity-criterion}
+$\triangleright$ 证明维数 $\le3$ 的向量空间的两个线性变换相似, 当且仅当它们有相同的特征多项式与极小多项式. 这在维数 $4$ 时成立吗? [§\ref{subsec:char-min-poly}]
+\end{prob}
+
+\begin{prob}\label{ex:similarity-over-extension}
+$\triangleright$ 设 $k$ 是域, $K$ 是包含 $k$ 的域. 两个方阵 $A,B\in\mathcal{M}_n(k)$ 可以视为元素在更大的域 $K$ 中的矩阵. 证明 $A$ 与 $B$ 在 $k$ 上相似, 当且仅当它们在 $K$ 上相似. [§\ref{subsec:jordan-canonical}]
+\end{prob}
+
+\begin{prob}\label{ex:rational-canonical-of-diagonal}
+求对角矩阵
+\[
+\begin{pmatrix}
+\lambda_1&0&\cdots&0\\
+0&\lambda_2&\cdots&0\\
+\vdots&\vdots&\ddots&\vdots\\
+0&0&\cdots&\lambda_r
+\end{pmatrix}
+\]
+的有理标准形, 假设所有的 $\lambda_i$ 互不相同.
+\end{prob}
+
+\begin{prob}\label{ex:compute-rational-canonical}
+设
+\[
+A=\begin{pmatrix}
+6&-10&-10\\
+3&-5&-6\\
+-1&2&3
+\end{pmatrix}.
+\]
+\begin{itemize}
+	\item 计算 $A$ 的特征多项式.
+	\item 求 $A$ 的极小多项式 (使用 Cayley--Hamilton 定理!).
+	\item 求 $A$ 的不变因子.
+	\item 求 $A$ 的有理标准形.
+\end{itemize}
+\end{prob}
+
+\begin{prob}\label{ex:cyclic-vector-criterion}
+设 $V$ 是维数为 $n$ 的 $k$-向量空间, $\alpha\in\End_k(V)$. 证明 $\alpha$ 的极小多项式与特征多项式重合, 当且仅当存在向量 $v\in V$ 使得
+\[
+v,\quad\alpha(v),\quad\ldots,\quad\alpha^{n-1}(v)
+\]
+是 $V$ 的一组基.
+\end{prob}
+
+\begin{prob}\label{ex:charpoly-divides-minpoly-power}
+设 $V$ 是维数为 $n$ 的 $k$-向量空间, $\alpha\in\End_k(V)$. 证明特征多项式 $P_\alpha(t)$ 整除极小多项式 $m_\alpha(t)$ 的某个幂.
+\end{prob}
+
+\begin{prob}\label{ex:similarity-classes-single-eigenvalue}
+在一个 $n$ 维向量空间上, 具有唯一固定的、代数重数为 $n$ 的特征值 $\lambda$ 的线性变换有多少个不同的相似类?
+\end{prob}
+
+\begin{prob}\label{ex:idempotent-matrices}
+在相差相似的意义下分类所有满足 $A^2=A$ 的方阵 $A\in\mathcal{M}_n(k)$. 用``几何''的语言描述这类矩阵的作用.
+\end{prob}
+
+\begin{prob}\label{ex:nilpotent-matrices}
+方阵 $A\in\mathcal{M}_n(k)$ 是\emph{幂零的 (nilpotent)}
+\index{miling@幂零(nilpotent)}
+, 如果对某个整数 $k$ 有 $A^k=0$ (参见习题~V.\ref{ex:nilpotent-unit}).
+\begin{itemize}
+	\item 用 Jordan 标准形刻画幂零矩阵.
+	\item 证明: 若对某个整数 $k$ 有 $A^k=0$, 则对某个不超过 $n$ (= 矩阵的大小) 的整数 $k$ 有 $A^k=0$.
+	\item 证明幂零矩阵的迹为 $0$.
+\end{itemize}
+\end{prob}
+
+\begin{prob}\label{ex:invariant-subspace-restriction-diagonalizable}
+$\neg$ 设 $V$ 是有限维 $k$-向量空间, $\alpha\in\End_k(V)$ 是可对角化的线性变换. 假设 $W\subseteq V$ 是不变子空间, 于是 $\alpha$ 诱导出线性变换 $\alpha|_W\in\End_k(W)$. 证明 $\alpha|_W$ 也可对角化. (使用命题~\ref{prop:diagonalizable-minpoly}.) [\ref{ex:simultaneously-diagonalizable}]
+\end{prob}
+
+\begin{prob}\label{ex:commuting-with-diagonalizable}
+$\neg$ 设 $R$ 是整环. 假设 $A\in\mathcal{M}_n(R)$ 可对角化, 且有互不相同的特征值. 设 $B\in\mathcal{M}_n(R)$ 满足 $AB=BA$. 证明 $B$ 也可对角化, 而且事实上它关于 $A$ 的一组特征向量构成的基是对角的. (若 $P$ 使得 $PAP^{-1}$ 是对角矩阵, 注意 $PAP^{-1}$ 与 $PBP^{-1}$ 也交换.) [\ref{ex:simultaneously-diagonalizable}]
+\end{prob}
+
+\begin{prob}\label{ex:simultaneously-diagonalizable}
+按如下意义证明``交换的变换可以同时对角化''. 设 $V$ 是有限维向量空间, $\alpha,\beta\in\End_k(V)$ 是可对角化的变换. 假设 $\alpha\beta=\beta\alpha$. 证明 $V$ 有一组由 $\alpha$ 与 $\beta$ 的公共特征向量组成的基. (仿照习题~\ref{ex:commuting-with-diagonalizable} 的论证归结到 $V$ 是 $\alpha$ 的特征子空间的情形; 然后使用习题~\ref{ex:invariant-subspace-restriction-diagonalizable}.)
+\end{prob}
+
+\begin{prob}\label{ex:complete-flag}
+维数为 $n$ 的向量空间 $V$ 的一组\emph{完全旗 (complete flag)}
+\index{wanquanqi@完全旗(complete flag)}
+是嵌套子空间组成的序列
+\[
+0=V_0\subseteq V_1\subseteq\cdots\subseteq V_{n-1}\subseteq V_n=V
+\]
+其中 $\dim V_i=i$. 换句话说, 完全旗就是习题~\ref{ex:module-Jordan-Holder} 意义下的合成列.
+
+设 $V$ 是代数闭域上的有限维向量空间. 证明 $V$ 的每个线性变换 $\alpha$ 都保持一个完全旗: 也就是说, 存在如上所述的完全旗使得 $\alpha(V_i)\subseteq V_i$.
+
+找出 $\R^2$ 的一个不保持任何完全旗的线性变换.
+\end{prob}
+
+\begin{prob}\label{ex:schur-form}
+(Schur 形式) 设 $A\in\mathcal{M}_n(\CC)$. 证明存在酉矩阵 $P\in\UU_n(\CC)$ 使得
+\[
+A=P\begin{pmatrix}
+\lambda_1&*&\cdots&*\\
+0&\lambda_2&\cdots&*\\
+\vdots&\vdots&\ddots&\vdots\\
+0&0&\cdots&\lambda_n
+\end{pmatrix}P^{-1}.
+\]
+因此, $A$ 不仅相似于一个上三角矩阵 (这已由 Jordan 标准形保证), 而且把矩阵 $A$``三角化''的基变换矩阵 $P$ 事实上可以取在 $\UU_n(\CC)$ 中. (对 $n$ 作归纳. 由于 $\CC$ 是代数闭域, $A$ 至少有一个特征向量 $v_1$, 且我们可以假设 $(v_1,v_1)=1$. 对归纳步骤, 考虑正交补 $v_1^\perp$; 参见习题~\ref{ex:orthogonal-complement}, 并记住习题~\ref{ex:orthonormal-matrix}.)
+
+这个上三角矩阵是 $A$ 的一个\emph{Schur 形式 (Schur form)}. 它 (当然) 不是唯一的.
+\end{prob}
+
+\begin{prob}\label{ex:triangular-normal-diagonal}
+$\neg$ 矩阵 $M\in\mathcal{M}_n(\CC)$ 是\emph{正规的 (normal)}
+\index{zhenggui@正规(normal)}
+, 如果 $MM^{\dagger}=M^{\dagger}M$. 注意酉矩阵与 Hermite 矩阵都是正规的.
+
+证明三角的正规矩阵是对角矩阵. [\ref{ex:spectral-theorem-normal}]
+\end{prob}
+
+\begin{prob}\label{ex:spectral-theorem-normal}
+$\neg$ 证明正规算子的谱定理: 若 $M$ 是正规矩阵, 则存在由 $M$ 的特征向量组成的标准正交基. 因此, 正规算子可对角化; 它们确定了其作用所在的向量空间的一个谱分解. (考虑 $M$ 的 Schur 形式; 参见习题~\ref{ex:schur-form}. 使用习题~\ref{ex:triangular-normal-diagonal}.) [\ref{ex:normal-orthonormal-eigenbasis}, \ref{ex:real-symmetric-diagonalizable}]
+\end{prob}
+
+\begin{prob}\label{ex:normal-orthonormal-eigenbasis}
+证明矩阵 $M\in\mathcal{M}_n(\CC)$ 正规, 当且仅当它有一组由特征向量组成的标准正交基. (习题~\ref{ex:spectral-theorem-normal} 给出了一个方向; 请证明反向.)
+\end{prob}
+
+\begin{prob}\label{ex:real-symmetric-diagonalizable}
+$\triangleright$ 证明实对称矩阵可对角化, 并且存在由特征向量组成的标准正交基. (这是习题~\ref{ex:spectral-theorem-normal} 与习题~\ref{ex:hermitian-real-eigenvalues} 的直接推论.) [§\ref{subsec:diagonalizable}]
+\end{prob}

@@ -1,0 +1,216 @@
+﻿% ============ 13 Weil 因子正合序列与 G_m 的上同调 (原书 pp.84-88) ============
+\chapter{\texorpdfstring{Weil 因子正合序列与 $\mathbb{G}_{m}$ 的上同调}{Weil 因子正合序列与 G\_m 的上同调}}\label{sec:13}
+\index{Weil 因子}
+\index{素因子}
+\index{拟代数闭域}
+\index{Tsen 定理}
+\index{Lang 定理}
+\index{Brauer 群}
+\index{Hilbert 定理 90}
+
+我们在上一节看到 $H^{1}(X_{\mathrm{et}}, \mathbb{G}_{m}) = H^{1}(X_{\mathrm{zar}}, \mathcal{O}^{\times}_{X}) = \operatorname{Pic}(X)$，因此这个群是已知的(更准确地说，它有个名字，所以我们可以假装知道它).现在我们希望尝试对所有 $r$ 计算 $H^{r}(X_{\mathrm{et}}, \mathbb{G}_{m})$.这是一个关键情形，因为一旦知道 $H^{r}(X_{\mathrm{et}}, \mathbb{G}_{m})$，就能用 Kummer 序列 (7.9a) 对与剩余域特征互素的所有 $n$ 计算 $H^{r}(X_{\mathrm{et}}, \mu_n)$.
+
+\subsection*{Weil 因子正合序列}
+
+\textbf{环的正合序列} 我们将使用交换代数的一些结果.
+
+\begin{quote}
+\refstepcounter{theorem}\label{item:13.1}
+\textbf{13.1} 设 $A$ 是整闭整环.则
+\[
+A = \bigcap_{\mathrm{ht}(\mathfrak{p}) = 1} A_{\mathfrak{p}}
+\]
+(在 $A$ 的分式域 $K$ 中相交).
+\end{quote}
+
+回忆 Noether 环中素理想的高度 $\mathrm{ht}(\mathfrak{p})$ 是素理想链 $\mathfrak{p} = \mathfrak{p}_h \supset \mathfrak{p}_{h-1} \supset \cdots$ 的最大长度.因此，整环中高度 1 的素理想就是极小的非零素理想.对这样的素理想 $\mathfrak{p}$，$A_{\mathfrak{p}}$ 恰好有一个非零素理想.由于 $A_{\mathfrak{p}}$ 又整闭，它是离散赋值环.设 $\operatorname{ord}_{\mathfrak{p}}$ 是 $A_{\mathfrak{p}}$ 定义的 $K$ 上的赋值，即 $A_{\mathfrak{p}} = \{a \in K \mid \operatorname{ord}_{\mathfrak{p}}(a) \geq 0\}$.则 (\ref{item:13.1}) 说 $A = \{a \in K \mid \text{所有 } \mathfrak{p} \text{ 都有 } \operatorname{ord}_{\mathfrak{p}}(a) \geq 0\}$，这蕴含 $A^{\times} = \{a \in K \mid \text{所有 } \mathfrak{p} \text{ 都有 } \operatorname{ord}_{\mathfrak{p}}(a) = 0\}$.换言之，序列
+\[
+0 \to A^{\times} \to K^{\times} \xrightarrow{a \mapsto (\operatorname{ord}_{\mathfrak{p}}(a))} \bigoplus_{\mathrm{ht}(\mathfrak{p}) = 1} \mathbb{Z}
+\]
+正合.第二个映射一般不满.例如，当 $A$ 是 Dedekind 整环时，它的余核是代数数论意义下 $A$ 的理想类群.
+
+我们还需要交换代数的两个进一步结果.
+
+\begin{quote}
+\refstepcounter{theorem}\label{item:13.2}
+\textbf{13.2} (a) (Noether) 整环 $A$ 是唯一分解整环，当且仅当 $A$ 中每个高度 1 的素理想 $\mathfrak{p}$ 都是主理想.
+
+(b) 正则局部环是唯一分解整环.
+\end{quote}
+
+于是，当 $A$ 是整环时，
+\[
+0 \to A^{\times} \to K^{\times} \xrightarrow{(\operatorname{ord}_{\mathfrak{p}})} \bigoplus_{\mathrm{ht}(\mathfrak{p}) = 1} \mathbb{Z} \to 0
+\]
+正合，当且仅当 $A$ 是唯一分解整环.
+
+回忆唯一分解整环是整闭的.
+
+\textbf{Zariski 拓扑的正合序列} \footnote{另见 AG \S 10.}回忆簇(或概形)称为正规的，如果对每个连通开仿射 $U \subset X$，$\Gamma(U, \mathcal{O}_X)$ 是整闭整环，或者等价地，如果对所有 $x \in X$，$\mathcal{O}_{X, x}$ 是整闭整环.
+
+在本小节余下部分，我们假定 $X$ 连通且正规.则存在 $X$ 上的有理函数域 $K$，它是任何开仿射 $U \subset X$ 的 $\Gamma(U, \mathcal{O}_X)$ 的分式域---当 $X$ 是簇时，$K$ 记为 $k(X)$；当 $X$ 是概形时，记为 $R(X)$.
+
+$X$ 上的素(Weil)因子是余维数 1 的闭不可约子簇(或闭整子概形) $Z$，$X$ 上的(Weil)因子是由素因子生成的自由 Abel 群的元素 $D = \sum n_Z Z$.对 $X$ 的任何非空开子集 $U$，映射 $Z \mapsto Z \cap U$ 是从与 $U$ 相交的 $X$ 的素因子集合到 $U$ 的素因子集合的双射---逆映射把 $U$ 的素因子送到它在 $X$ 中的闭包.若 $U$ 是 $X$ 中的开仿射子集，设 $\Gamma(U, \mathcal{O}_X) = A$，则映射 $\mathfrak{p} \mapsto V(\mathfrak{p})$($\mathfrak{p}$ 的零集)是从 $A$ 的高度 1 的素理想集合到 $U$ 的素因子集合的双射---逆映射把 $U$ 的素因子 $Z$ 送到在 $Z$ 上为零的函数组成的理想 $\mathcal{I}(Z)$.
+
+特别地，$X$ 上的每个素因子 $Z$ 定义 $K$ 上的离散赋值 $\operatorname{ord}_{Z}$，即对应于理想 $\mathcal{I}(Z) \subset \Gamma(U, \mathcal{O}_X)$ 的那个赋值($U$ 是与 $Z$ 相交的开仿射).直观上，对 $f \in K$，$\operatorname{ord}_Z(f)$ 是 $f$ 沿 $Z$ 的零点(或极点)的阶.
+
+\begin{proposition}\label{prop:13.3}
+$X_{\mathrm{zar}}$ 上有层序列
+\[
+0 \to \mathcal{O}^{\times}_{X} \to \mathcal{K}^{\times} \to \mathcal{D}iv \to 0,
+\]
+其中对所有非空开集 $U$，$\Gamma(U, \mathcal{K}^{\times}) = K^{\times}$，而 $\mathcal{D}iv(U)$ 是 $U$ 上的因子群.该序列总是左正合，当 $X$ 正则(例如非奇异簇)时正合.
+\end{proposition}
+
+\begin{proof}
+对 $X$ 中的任何开仿射 $U$，设 $\Gamma(U, \mathcal{O}_X) = A$，则 $U$ 上的截面序列是前面讨论过的序列
+\[
+0 \to A^{\times} \to K^{\times} \to \bigoplus_{\mathrm{ht}(\mathfrak{p}) = 1} \mathbb{Z} \to 0.
+\]
+对任何 $x \in X$，$x$ 处的茎序列具有相同的形式，只把 $A$ 换成 $\mathcal{O}_{X, x}$.由于 $\mathcal{O}_{X, x}$ 是整闭整环，该序列总是左正合，若 $\mathcal{O}_{X, x}$ 正则则正合.
+\end{proof}
+
+回忆当把不可约簇 $X$ 看作概形时，它有一性质：属于 $X$ 的所有非空开子集的一般点 $\xi$.于是，若 $\mathcal{K}^{\times}$ 表示点 $\xi$ 上的常值层(Zariski 拓扑)，则对所有非空开集 $U \subset X$，$\Gamma(U, g_{*}\mathcal{K}^{\times}) = K^{\times}$，其中 $g \colon \xi \to X$ 是包含映射.类似地，设 $z$ 是素因子 $Z \subset X$ 的一般点，$i_z \colon z \to X$ 是 $z$ 到 $X$ 的包含.对开子集 $U \subset X$，$z \in U$，当且仅当 $U \cap Z$ 非空.按定义，$z$ 的 Zariski 闭包是余维数 1 的 $Z$，因此说 $z$ 有余维数 1.因此，
+\[
+\Gamma\left(U, \bigoplus_{\operatorname{codim}(z) = 1} i_{z*}\mathbb{Z}\right) = \mathcal{D}iv(U).
+\]
+把这些评注结合起来，看到 (\ref{prop:13.3}) 中的序列可以重写为
+\[
+0 \to \mathcal{O}^{\times}_{X} \to g_{*}\mathcal{K}^{\times} \to \bigoplus_{\operatorname{codim}(z) = 1} i_{z*}\mathbb{Z} \to 0.
+\]
+
+\textbf{平展拓扑的正合序列}
+
+\begin{proposition}\label{prop:13.4}
+对任何连通正规簇(或概形) $X$，$X_{\mathrm{et}}$ 上有层序列
+\[
+0 \to \mathbb{G}_{m} \to g_{*}\mathbb{G}_{m, K} \to \bigoplus_{\operatorname{codim}(z) = 1} i_{z*}\mathbb{Z} \to 0.
+\]
+它总是左正合，若 $X$ 正则(例如非奇异簇)则正合.
+\end{proposition}
+
+\begin{proof}
+对连通的平展映射 $U \to X$，该序列到 $U_{\mathrm{zar}}$ 上的限制是 (\ref{prop:13.3}) 中的序列.由于 $X$ 正则时 $U$ 也正则(见命题~\ref{prop:2.12})，论断成立.
+\end{proof}
+
+\subsection*{\texorpdfstring{应用：曲线上 $\mathbb{G}_{m}$ 的上同调}{应用：曲线上 G\_m 的上同调}}
+
+设 $X$ 是代数闭域 $k$ 上的完备非奇异代数曲线.我们将用 Weil 因子正合序列计算层 $\mathbb{G}_{m}$ 在 $X$ 上的上同调.
+
+为此，需要使用数论的一些结果.
+
+域 $k$ 称为\footnote{这样的域也称为 $C_1$；域 $C_r$ 的定义类似，但要求 $d^{r} < n$.}拟代数闭的，如果每个非常数齐次多项式 $f(T_1, \ldots, T_n) \in k[T_1, \ldots, T_n]$ 的次数 $d < n$ 在 $k^{n}$ 中有非平凡零点.代数闭域显然满足这个条件，因为若 $T_1$ 确实出现在 $f(T_1, \ldots, T_n)$ 中，则对 $T_i$ 的适当取值 $c_i$，多项式 $f(T_1, c_2, \ldots, c_n)$ 的次数 $> 1$，从而在 $k$ 中有零点.
+
+\begin{quote}
+\refstepcounter{theorem}\label{item:13.5}
+\textbf{13.5} 如下域是拟代数闭的：
+\begin{enumerate}
+  \item 有限域；
+  \item 代数闭域上的一维函数域；
+  \item 带代数闭剩余域的 Hensel 离散赋值环 $R$ 的分式域 $K$，只要 $K$ 的完备化在 $K$ 上可分.
+\end{enumerate}
+\end{quote}
+
+域 $K$ 称为子域 $k$ 上的 $n$ 个变量的函数域，如果它(作为域)在 $k$ 上有限生成且超越次数为 $n$.于是，这样的域作为 $k$ 上 $n$ 维连通簇上的有理函数域出现.(c) 中的可分性条件例如在 $R = \mathcal{O}^{\mathrm{h}}_{X, x}$($x$ 是域上有限型概形上的点)时成立，当然在 $K$ 特征为零时也成立.
+
+论断 (a) 由 E. Artin 猜想，由 Chevalley 证明(Shatz 1972, p.109).论断 (b) 是 Tsen 定理的重述，通常称为 Tsen 定理(同上，pp.108--109).论断 (c) 是 Lang 的定理(同上，p.116).
+
+这些结果与 Galois 上同调的相关性由如下命题表明.
+
+\begin{proposition}\label{prop:13.6}
+设 $k$ 是拟代数闭域，$G = \operatorname{Gal}(k^{\mathrm{sep}}/k)$.则：
+\begin{enumerate}
+  \item $k$ 的 Brauer 群为零，即 $H^{2}(G, (k^{\mathrm{sep}})^{\times}) = 0$；
+  \item 对 $r > 1$ 与任何挠离散 $G$-模 $M$，$H^{r}(G, M) = 0$；
+  \item 对 $r > 2$ 与任何离散 $G$-模 $M$，$H^{r}(G, M) = 0$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(a) 为证明 (a)，必须证明 $k$ 上的每个中心可除代数 $D$ 的次数为 1(见 CFT 第 IV 章).设 $[D \colon k] = n^{2}$，选取 $D$ 作为 $k$-向量空间的一组基 $e_1, \ldots, e_{n^2}$.则存在 $n$ 次齐次多项式 $f(X_1, \ldots, X_{n^2})$，使得 $f(a_1, \ldots, a_{n^2})$ 是元素 $\alpha = \sum a_i e_i \in D$ 的既约范数.$D$ 在 $k$ 上的既约范数是 $\operatorname{Nm}_{Q[\alpha]/Q}(\alpha)^{r}$($r = \frac{n}{[Q[\alpha] \colon Q]}$)，若 $\alpha \neq 0$ 则它非零(因为 $Q[\alpha]$ 是域).因此 $f(X_1, \ldots, X_{n^2})$ 无非平凡零点，由于 $k$ 拟代数闭，这蕴含 $n \geq n^{2}$.只有 $n = 1$ 才可能.
+
+(b) 首先证明若 $k$ 拟代数闭，则 $k$ 的任何有限扩张也拟代数闭(Shatz 1972, p.107).连同 (a)，这个评注表明对 $k$ 的有限扩张的有限 Galois 扩张 $L/K$，对 $r = 1, 2$，$H^{r}(\operatorname{Gal}(L/K), L^{\times}) = 0$.现在 Tate 定理(CFT II 3.11)蕴含对任何有限且 Galois 的 $L/k$ 与所有 $r > 0$，$H^{r}(\operatorname{Gal}(L/k), L^{\times}) = 0$.取逆向极限，发现对 $r > 0$，$H^{r}(G, (k^{\mathrm{sep}})^{\times}) = 0$.由 Kummer 序列
+\[
+0 \to \mu_n \to (k^{\mathrm{sep}})^{\times} \xrightarrow{n} (k^{\mathrm{sep}})^{\times} \to 0
+\]
+的上同调序列，发现对所有 $r > 1$ 与 $n$ 与 $k$ 的特征互素，$H^{r}(G, \mu_n) = 0$.
+
+设 $p$ 是 $\neq \operatorname{char}(k)$ 的素数.存在 $k$ 的次数与 $p$ 互素的有限 Galois 扩张 $K$，使得 $K$ 含本原 $p$ 次单位根.复合
+\[
+H^{r}(G, \mathbb{Z}/p\mathbb{Z}) \xrightarrow{\operatorname{Res}} H^{r}(H, \mathbb{Z}/p\mathbb{Z}) \xrightarrow{\text{核限制}} H^{r}(G, \mathbb{Z}/p\mathbb{Z}), \qquad H = \operatorname{Gal}(k^{\mathrm{sep}}/K),
+\]
+是乘以 $[K \colon k]$(见 CFT II 1.30)，从而是同构.由于 $H^{r}(H, \mathbb{Z}/p\mathbb{Z}) = H^{r}(H, \mu_p) = 0$，对 $r > 1$，$H^{r}(G, \mathbb{Z}/p\mathbb{Z}) = 0$(第一个评注然后表明这对 $G$ 的任何开子群也成立).
+
+直接由 Artin-Schreier 正合序列
+\[
+0 \to \mathbb{Z}/p\mathbb{Z} \to k \xrightarrow{t \mapsto t^{p} - t} k \to 0
+\]
+与 (CFT II 1.24)，发现对特征 $p$ 的任何域 $k$ 与 $r > 1$，$H^{r}(G, \mathbb{Z}/p\mathbb{Z}) = 0$.
+
+现在设 $M$ 是有限 $G$-模.我们希望证明对 $r > 1$，$H^{r}(G, M) = 0$.可以假定 $M$ 的阶是素数 $p$ 的幂.Sylow 定理与上面使用的限制-核限制论证允许我们假定 $G$ 通过有限的 $p$-群 $\bar{G}$ 作用在 $M$ 上.现在一个标准结果表明 $p$-幂阶的简单 $\bar{G}$-模只有带平凡作用的 $\mathbb{Z}/p\mathbb{Z}$，从而 $M$ 有商都为 $\mathbb{Z}/p\mathbb{Z}$ 的合成列.归纳论证现在表明对 $r > 1$，$H^{r}(G, M) = 0$.
+
+由于任何挠 $G$-模都是其有限子模的并，且上同调与正向极限交换，这完成了证明.
+
+(c) 我们省略证明.然而，也许值得注意，对有限域 $k$，
+\[
+H^{2}(G, \mathbb{Z}) \cong H^{1}(G, \mathbb{Q}/\mathbb{Z}) = \operatorname{Hom}_{\mathrm{conts}}(G, \mathbb{Q}/\mathbb{Z}) = \mathbb{Q}/\mathbb{Z} \neq 0.
+\]
+\end{proof}
+
+\begin{theorem}\label{thm:13.7}
+对代数闭域上的连通非奇异曲线 $X$，
+\[
+H^{r}(X_{\mathrm{et}}, \mathbb{G}_{m}) = \begin{cases}
+\Gamma(X, \mathcal{O}^{\times}_{X}), & r = 0;\\
+\operatorname{Pic}(X), & r = 1;\\
+0, & r > 1.
+\end{cases}
+\]
+\end{theorem}
+
+这将在我们证明下一个引理后由 Weil 因子正合序列推出(因为对任何正则概形 $X$，$\operatorname{Pic}(X) = \{$因子$\}/\{$主因子$\}$---见 Hartshorne, II.6.16).
+
+\begin{lemma}\label{lem:13.8}
+上同调群 $H^{r}(X_{\mathrm{et}}, g_{*}\mathbb{G}_{m, \xi})$ 与 $H^{r}(X_{\mathrm{et}}, \mathcal{D}iv_X)$ 对所有 $r > 0$ 都为零.
+\end{lemma}
+
+\begin{proof}
+对 $X$ 的闭点 $x$，$i_{x*}$ 正合，从而对 $x_{\mathrm{et}}$ 上的任意层 $F$，$H^{r}(X_{\mathrm{et}}, i_{x*}F) = H^{r}(x_{\mathrm{et}}, F) = 0$.因此对 $r > 0$，$H^{r}(X_{\mathrm{et}}, \mathcal{D}iv_X) = 0$.
+
+现在考虑 $R^{r}g_{*}\mathbb{G}_{m, \xi}$.由 (\ref{ex:12.4})，
+\[
+(R^{r}g_{*}\mathbb{G}_{m, \xi})_{\bar{y}} = \begin{cases}
+0 & \text{若 } y = \xi \text{ 且 } r > 0;\\
+H^{r}(\operatorname{Spec} K_{\bar{y}}, \mathbb{G}_{m}) & \text{若 } y = x \neq \xi.
+\end{cases}
+\]
+这里 $K_{\bar{x}}$ 是 Hensel 离散赋值环 $\mathcal{O}_{X, \bar{x}}$ 的分式域，因此 Lang 定理~\ref{item:13.5}(c) 表明对 $r > 0$，$H^{r}(\operatorname{Spec} K_{\bar{x}}, \mathbb{G}_{m}) = 0$.因此对 $r > 0$，$R^{r}g_{*}\mathbb{G}_{m, \xi} = 0$，从而 $g$ 的 Leray 谱序列表明对所有 $r$，$H^{r}(X_{\mathrm{et}}, g_{*}\mathbb{G}_{m, \xi}) = H^{r}(G, (K^{\mathrm{sep}})^{\times})$，其中 $G = \operatorname{Gal}(K^{\mathrm{sep}}/K)$.现在对 $r = 1$，由 Hilbert 定理 90（推论~\ref{cor:11.6}）, $H^{r}(G, (K^{\mathrm{sep}})^{\times}) = 0$；对 $r > 1$，由 Tsen 定理~\ref{item:13.5}(b) 与命题~\ref{prop:13.6} 的 (c), $H^{r}(G, (K^{\mathrm{sep}})^{\times}) = 0$.
+\end{proof}
+
+设 $X$ 是连通非奇异簇(或正则整拟紧概形), $K = k(X)$(或 $K = R(X)$).与上面类似的论证表明有正合序列
+\[
+0 \to H^{0}(X_{\mathrm{et}}, \mathbb{G}_{m}) \to K^{\times} \to \bigoplus_{\operatorname{codim}(x) = 1} \mathbb{Z} \to H^{1}(X_{\mathrm{et}}, \mathbb{G}_{m}) \to 0
+\]
+与
+\[
+0 \to H^{2}(X_{\mathrm{et}}, \mathbb{G}_{m}) \to H^{2}(K, \mathbb{G}_{m, \xi}).
+\]
+此外，对 $r > 1$，$H^{r}(X_{\mathrm{et}}, \mathbb{G}_{m})$ 是挠群.这里(及其他地方) $H^{r}(K, \cdot) = H^{r}(\operatorname{Spec}(K)_{\mathrm{et}}, \cdot)$.(见 EC III 2.22.)
+
+现在假定 $X$ 的维数为 1，它的剩余域完全，且 $K$ 特征为零或 $X$ 是域上的代数曲线(从而 Lang 定理中的可分性条件成立).则最后一个正合序列延拓为长序列
+\[
+0 \to H^{2}(X_{\mathrm{et}}, \mathbb{G}_{m}) \to H^{2}(K, \mathbb{G}_{m, \xi}) \to \bigoplus_{v} H^{1}(\kappa(v), \mathbb{Q}/\mathbb{Z}) \to \cdots
+\]
+\[
+\cdots \to H^{r}(X_{\mathrm{et}}, \mathbb{G}_{m}) \to H^{r}(K, \mathbb{G}_{m}) \to \bigoplus_{v} H^{r-1}(\kappa(v), \mathbb{Q}/\mathbb{Z}) \to \cdots
+\]
+这里求和遍历 $X$ 的闭点 $v$，$\kappa(v)$ 是 $v$ 处的剩余域.当 $\kappa(v)$ 有限时，对 $r > 1$，$H^{r}(\kappa(v), \mathbb{Q}/\mathbb{Z}) = 0$.
+
+设 $X = \operatorname{Spec} R$，其中 $R$ 是全虚数域 $K$ 的整数环.把上面的序列与整体类域论的基本序列(CFT VIII 4.2)
+\[
+0 \to H^{2}(K, \mathbb{G}_{m}) \to \bigoplus_{v} H^{2}(K_v, \mathbb{G}_{m}) \to \mathbb{Q}/\mathbb{Z} \to 0
+\]
+比较，发现
+\[
+H^{2}(X_{\mathrm{et}}, \mathbb{G}_{m}) = 0 \quad \text{且} \quad H^{3}(X_{\mathrm{et}}, \mathbb{G}_{m}) = \mathbb{Q}/\mathbb{Z}.
+\]

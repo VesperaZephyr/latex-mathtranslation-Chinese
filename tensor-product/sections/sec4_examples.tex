@@ -1,0 +1,258 @@
+% sections/sec4_examples.tex
+\section{张量积的实例}
+\label{sec:examples}
+
+\begin{theorem}\label{thm:cyclic-tensor}
+设 $a$ 与 $b$ 为正整数，令 $d = \gcd(a, b)$.则作为阿贝尔群有
+\[
+  \Z/a\Z \otimes_\Z \Z/b\Z \cong \Z/d\Z.
+\]
+特别地，$\Z/a\Z \otimes_\Z \Z/b\Z = 0$ 当且仅当 $\gcd(a, b) = 1$.
+\end{theorem}
+
+\begin{proof}
+由于 $1$ 生成 $\Z/a\Z$ 与 $\Z/b\Z$，根据定理~\ref{thm:spanning-tensor}，$1 \otimes 1$ 生成 $\Z/a\Z \otimes_\Z \Z/b\Z$.又由
+\[
+  a(1 \otimes 1) = a \otimes 1 = 0 \otimes 1 = 0 \quad\text{且}\quad b(1 \otimes 1) = 1 \otimes b = 1 \otimes 0 = 0,
+\]
+可知 $1 \otimes 1$ 的加法阶整除 $a$ 且整除 $b$，从而整除 $d = \gcd(a, b)$.因此 $|\Z/a\Z \otimes_\Z \Z/b\Z| \leq d$.
+
+为了证明 $\Z/a\Z \otimes_\Z \Z/b\Z$ 的阶至少为 $d$，我们在 $\Z/a\Z \otimes_\Z \Z/b\Z$ 上构造一个满的 $\Z$-线性映射到达 $\Z/d\Z$.由于 $d \mid a$ 且 $d \mid b$，自然存在典范约化 $\Z/a\Z \to \Z/d\Z$ 与 $\Z/b\Z \to \Z/d\Z$.考虑映射
+\[
+  B \colon \Z/a\Z \times \Z/b\Z \to \Z/d\Z, \quad B(x \bmod a, y \bmod b) = xy \bmod d.
+\]
+这在每个因子上先取模 $d$ 再相乘，它是显然良定义且 $\Z$-双线性的.因此由张量积的普遍映射性质，存在唯一的 $\Z$-线性映射 $f \colon \Z/a\Z \otimes_\Z \Z/b\Z \to \Z/d\Z$，使得交换图
+\begin{center}
+\begin{tikzcd}[row sep=large, column sep=large]
+\Z/a\Z \times \Z/b\Z \arrow[r, "\otimes"] \arrow[dr, "B"'] & \Z/a\Z \otimes_\Z \Z/b\Z \arrow[d, "f"] \\
+& \Z/d\Z
+\end{tikzcd}
+\end{center}
+成立，即对简单张量有 $f(x \otimes y) = xy \bmod d$.特别地，$f(x \otimes 1) = x \bmod d$，所以 $f$ 是满射.因此 $\Z/a\Z \otimes_\Z \Z/b\Z$ 的阶至少为 $d$，从而其阶恰好为 $d$，$f$ 是同构.
+\end{proof}
+
+\begin{example}\label{ex:3-5-collapse}
+阿贝尔群 $\Z/3\Z \otimes_\Z \Z/5\Z = 0$.初见张量积的这种``坍缩''（collapsing）现象常让人难以置信，但它有着极其具体的数学涵义：从 $\Z/3\Z \times \Z/5\Z$ 出发到达任何阿贝尔群 $A$ 的每个 $\Z$-双线性映射 $B$ 都恒为零.这很容易直接验证：
+\[
+  3B(a, b) = B(3a, b) = B(0, b) = 0 \quad\text{且}\quad 5B(a, b) = B(a, 5b) = B(a, 0) = 0,
+\]
+因此 $B(a, b)$ 被理想 $3\Z + 5\Z = \Z$ 零化.故而 $B(a, b)$ 被 $1$ 零化，即 $B(a, b) = 0$.
+
+在 $\Z/a\Z \otimes_\Z \Z/b\Z$ 中，所有张量都是简单张量：$x \otimes y = xy(1 \otimes 1)$，而 $1 \otimes 1$ 的倍数之和仍然是 $1 \otimes 1$ 的倍数，所以
+\[
+  \Z/a\Z \otimes_\Z \Z/b\Z = \Z(1 \otimes 1) = \{x \otimes 1 : x \in \Z\}.
+\]
+\end{example}
+
+请特别注意定理~\ref{thm:cyclic-tensor} 证明中是如何通过双线性映射 $B \colon \Z/a\Z \times \Z/b\Z \to \Z/d\Z$ 和张量积的普遍映射性质构造出线性映射 $f$ 的.要在 $M \otimes_R N$ 上定义一个把简单张量 $m \otimes n$ 送到指定目标的线性映射，\textbf{永远要退一步，先从 $M \times N$ 出发定义一个把 $(m, n)$ 送到该目标的双线性映射，并严格证明它是双线性的}！随后，普遍映射性质就会免费赋予你所期望的线性映射.正如一位匿名学生曾写道：``做张量积习题如果毫无头绪，那就先从 $M \times N$ 出发构造一个精心挑选的双线性映射，因为除此之外你基本上什么也做不了.''
+
+\begin{theorem}\label{thm:ideal-tensor}
+设 $I$ 与 $J$ 为环 $R$ 的理想.则存在唯一的 $R$-模同构
+\[
+  R/I \otimes_R R/J \cong R/(I + J),
+\]
+满足 $\bar{x} \otimes \bar{y} \mapsto \overline{xy}$.特别地，取 $I = J = 0$，有 $R \otimes_R R \cong R$（对应 $x \otimes y \mapsto xy$）.
+
+当 $R = \Z$ 且 $I, J$ 非零时，这正是定理~\ref{thm:cyclic-tensor}.
+\end{theorem}
+
+\begin{proof}
+从函数 $R/I \times R/J \to R/(I + J)$ 开始，定义为 $(x \bmod I, y \bmod J) \mapsto xy \bmod (I + J)$.该函数良定义且双线性，因此由张量积普遍映射性质得到线性映射 $f \colon R/I \otimes_R R/J \to R/(I + J)$，满足 $f(\bar{x} \otimes \bar{y}) = \overline{xy}$.
+
+为了构造逆映射，考虑映射 $R \to R/I \otimes_R R/J$（定义为 $r \mapsto r(\bar{1} \otimes \bar{1})$）.这是 $R$-线性的；当 $r \in I$ 时，其值为 $\bar{r} \otimes \bar{1} = \bar{0} \otimes \bar{1} = 0$.同理当 $r \in J$ 时其值亦为 $0$.因此其核包含 $I + J$，从而诱导出线性映射 $g \colon R/(I + J) \to R/I \otimes_R R/J$，满足 $g(r \bmod (I + J)) = r(\bar{1} \otimes \bar{1}) = \bar{r} \otimes \bar{1} = \bar{1} \otimes \bar{r}$.
+
+直接验证复合：$f(g(r \bmod (I + J))) = f(\bar{r} \otimes \bar{1}) = r \bmod (I + J)$.另一方面，在 $R/I \otimes_R R/J$ 中，简单张量为 $\bar{x} \otimes \bar{y} = xy(\bar{1} \otimes \bar{1})$，故所有张量皆为 $\bar{1} \otimes \bar{1}$ 的标量倍.直接计算即知 $g(f(t)) = t$ 对所有张量 $t$ 成立.因此 $f$ 与 $g$ 互为逆同构.
+\end{proof}
+
+\begin{remark}\label{rem:ideal-ops}
+对于理想 $I$ 与 $J$，常见的代数运算有 $I + J$、$I \cap J$ 与 $IJ$.交 $I \cap J$ 是线性映射 $R \to R/I \oplus R/J$（定义为 $r \mapsto (\bar{r}, \bar{r})$）的核.而定理~\ref{thm:ideal-tensor} 告诉我们，和 $I + J$ 正好是线性映射 $R \to R/I \otimes_R R/J$（定义为 $r \mapsto r(\bar{1} \otimes \bar{1})$）的核！
+\end{remark}
+
+\begin{theorem}\label{thm:quotient-tensor-m}
+设 $I$ 为 $R$ 的理想，$M$ 为 $R$-模.则存在唯一的 $R$-模同构
+\[
+  (R/I) \otimes_R M \cong M/IM,
+\]
+满足 $\bar{r} \otimes m \mapsto \overline{rm}$.特别地，取 $I = (0)$，有 $R \otimes_R M \cong M$（对应 $r \otimes m \mapsto rm$）；取 $M = R$，有 $R \otimes_R R \cong R$（对应 $r \otimes r' \mapsto rr'$）.
+\end{theorem}
+
+\begin{proof}
+从双线性映射 $(R/I) \times M \to M/IM$（定义为 $(\bar{r}, m) \mapsto \overline{rm}$）出发，由普遍映射性质诱导出线性映射 $f \colon (R/I) \otimes_R M \to M/IM$，满足 $f(\bar{r} \otimes m) = \overline{rm}$.
+
+逆映射由 $M \to (R/I) \otimes_R M$（定义为 $m \mapsto \bar{1} \otimes m$）诱导：该映射在 $M$ 上是线性的，并且零化 $IM$（因为对 $i \in I$，$\bar{1} \otimes im = \bar{i} \otimes m = \bar{0} \otimes m = 0$），故诱导出线性映射 $g \colon M/IM \to (R/I) \otimes_R M$，满足 $g(\bar{m}) = \bar{1} \otimes m$.容易验证 $f \circ g = \id$ 且 $g \circ f = \id$.
+\end{proof}
+
+\begin{example}\label{ex:an-a}
+对任意阿贝尔群 $A$，$(\Z/n\Z) \otimes_\Z A \cong A/nA$（通过 $\bar{m} \otimes a \mapsto \overline{ma}$）.
+\end{example}
+
+\begin{remark}\label{rem:r-tensor-m}
+同构 $R \otimes_R M \cong M$（通过 $r \otimes m \mapsto rm$）表明：从 $R \times M$ 出发的 $R$-双线性映射 $B$ 与从 $M$ 出发的 $R$-线性映射是一一对应的.因为由双线性有 $B(r, m) = B(1, rm)$，而 $B(1, -)$ 在第二个变元上是线性的.
+\end{remark}
+
+\begin{remark}\label{rem:ideal-mult-map}
+对于理想 $I \subset R$ 与模 $M$，存在典范满同态 $I \otimes_R M \to IM$（满足 $i \otimes m \mapsto im$）.但注意它\textbf{通常不是单射}！例如当 $R = \Z, I = a\Z, M = \Z/a\Z$（$a \geq 2$）时，$I \otimes_R M = (a\Z) \otimes_\Z (\Z/a\Z) \cong \Z/a\Z \neq 0$，然而 $IM = a(\Z/a\Z) = \{0\}$.
+\end{remark}
+
+\begin{theorem}\label{thm:free-tensor-basis}
+若 $F$ 与 $F'$ 为自由 $R$-模，分别具有基 $\{e_i\}_{i \in I}$ 与 $\{e'_j\}_{j \in J}$，则 $F \otimes_R F'$ 是自由 $R$-模，且以 $\{e_i \otimes e'_j\}_{(i, j) \in I \times J}$ 为一组基.
+\end{theorem}
+
+\begin{proof}
+若 $F$ 或 $F'$ 为 $0$，结论显然成立.以下设两者均非零（故 $R \neq 0$ 且指标集非空）.由定理~\ref{thm:spanning-tensor}，$\{e_i \otimes e'_j\}$ 生成 $F \otimes_R F'$.
+
+为证明线性无关性，设 $\sum_{i, j} c_{ij} (e_i \otimes e'_j) = 0$（非零项仅有限个）.任取固定的指标对 $(i_0, j_0)$.考虑双线性函数
+\[
+  F \times F' \to R, \quad (v, w) \mapsto v_{i_0} w_{j_0},
+\]
+其中 $v = \sum v_i e_i$ 与 $w = \sum w_j e'_j$ 是在给定基下的坐标.由普遍映射性质，存在线性函数 $f_0 \colon F \otimes_R F' \to R$，使得 $f_0(v \otimes w) = v_{i_0} w_{j_0}$.特别地，
+\[
+  f_0(e_{i_0} \otimes e'_{j_0}) = 1, \quad\text{且当 }(i, j) \neq (i_0, j_0)\text{ 时 } f_0(e_i \otimes e'_j) = 0.
+\]
+将 $f_0$ 作用于关系式 $\sum c_{ij} (e_i \otimes e'_j) = 0$，即得 $c_{i_0 j_0} = 0$.由于 $(i_0, j_0)$ 是任意的，所有系数皆为 $0$.
+\end{proof}
+
+\begin{example}\label{ex:vector-spaces-tensor}
+设 $K$ 为域，$V$ 与 $W$ 为有限维非零 $K$-向量空间，分别具有基 $\{e_1, \dots, e_m\}$ 与 $\{f_1, \dots, f_n\}$.定理~\ref{thm:free-tensor-basis} 表明 $V \otimes_K W$ 的每个元素均可唯一表示为 $\sum_{i,j} c_{ij} (e_i \otimes f_j)$，其维度为 $mn = (\dim V)(\dim W)$.
+\end{example}
+
+\begin{example}\label{ex:nonelementary}
+设 $R \neq 0$，$F$ 与 $F'$ 为秩 $\geq 2$ 的自由 $R$-模，基分别为 $\{e_1, \dots, e_m\}$ 与 $\{e'_1, \dots, e'_n\}$.在 $F \otimes_R F'$ 中，张量
+\[
+  t = e_1 \otimes e'_1 + e_2 \otimes e'_2
+\]
+绝不是简单张量.
+
+事实上，任何简单张量形如 $\left(\sum_{i=1}^m a_i e_i\right) \otimes \left(\sum_{j=1}^n b_j e'_j\right) = \sum_{i,j} a_i b_j (e_i \otimes e'_j)$.若它等于 $t$，比较基 $\{e_i \otimes e'_j\}$ 的系数可得：
+\[
+  a_1 b_1 = 1, \quad a_1 b_2 = 0, \quad a_2 b_1 = 0, \quad a_2 b_2 = 1.
+\]
+由 $a_1 b_1 = 1$ 与 $a_2 b_2 = 1$ 可知 $a_1$ 与 $b_2$ 均可逆，这与 $a_1 b_2 = 0$ 尖锐矛盾！因此 $e_1 \otimes e'_1 + e_2 \otimes e'_2$ 不是简单张量.类似地，$e_1 \otimes e'_2 + e_2 \otimes e'_1$ 也不是简单张量\footnote{当 $R = K$ 为域时，$K^n \otimes_K K^n$ 中的简单张量由二次多项式方程 $c_{ii} c_{jj} = c_{ij} c_{ji}$ 完全刻画（Segre 嵌入），详见 \cite{grone}.}.
+\end{example}
+
+\begin{example}\label{ex:poly-tensor}
+对于 $R \neq 0$，$R[X] \otimes_R R[Y]$ 是以 $\{X^i \otimes Y^j\}_{i,j \geq 0}$ 为基的自由 $R$-模，故作为 $R$-模有
+\[
+  R[X] \otimes_R R[Y] \cong R[X, Y], \quad X^i \otimes Y^j \mapsto X^i Y^j.
+\]
+更一般地，$R[X_1, \dots, X_k] \cong R[X]^{\otimes k}$.普通多项式乘法与张量积的区别，恰如将单变元多项式相乘写成 $f(T)g(T)$ 与二元多项式 $f(X)g(Y)$ 的区别.
+\end{example}
+
+\begin{example}\label{ex:mat-tensor}
+回到例~\ref{ex:rank-one}，对于 $v, w \in \R^n$，映射 $B(v, w) = vw^\top \in \mathrm{M}_n(\R)$ 是双线性的，因而诱导线性映射 $L \colon \R^n \otimes_\R \R^n \to \mathrm{M}_n(\R)$，满足 $L(v \otimes w) = vw^\top$.在例~\ref{ex:rank-one} 中我们看到秩 $1$ 矩阵的和不再是秩 $1$ 矩阵（$B$ 的像在加法下不封闭）.而在张量积中，
+\[
+  B(e_1, e_1) + B(e_2, e_2) = L(e_1 \otimes e_1 + e_2 \otimes e_2),
+\]
+它完全是张量积上线性映射的一个正常取值！此外，$L(e_i \otimes e_j) = E_{ij}$ 将标准基映为矩阵基，因此 $L$ 是向量空间的同构：$\R^n \otimes_\R \R^n \cong \mathrm{M}_n(\R)$.
+\end{example}
+
+\begin{theorem}\label{thm:free-power}
+若 $F$ 是以 $\{e_i\}_{i \in I}$ 为基的自由 $R$-模，则对 $k \geq 1$，$k$ 重张量幂 $F^{\otimes k}$ 是以 $\{e_{i_1} \otimes \dots \otimes e_{i_k}\}_{(i_1, \dots, i_k) \in I^k}$ 为基的自由 $R$-模.
+\end{theorem}
+
+\begin{theorem}\label{thm:m-tensor-free}
+若 $M$ 是任意 $R$-模，而 $F$ 是以 $\{e_i\}_{i \in I}$ 为基的自由 $R$-模，则 $M \otimes_R F$ 中的每个元素都可以\textbf{唯一}表示为
+\[
+  \sum_{i \in I} m_i \otimes e_i,
+\]
+其中几乎所有 $m_i$ 均为 $0$.换言之，有典范同构 $M \otimes_R F \cong \bigoplus_{i \in I} M$.
+\end{theorem}
+
+\begin{proof}
+由定理~\ref{thm:spanning-tensor} 与标量前移规则，每个元素均可写成有限和 $\sum_{i \in I} m_i \otimes e_i$.定义映射 $f \colon \bigoplus_{i \in I} M \to M \otimes_R F$ 为 $f((m_i)) = \sum m_i \otimes e_i$.
+
+逆映射构造如下：函数 $M \times F \to \bigoplus_{i \in I} M$ 定义为 $(m, \sum r_i e_i) \mapsto (r_i m)_{i \in I}$.这是双线性的，故诱导线性映射 $g \colon M \otimes_R F \to \bigoplus_{i \in I} M$.容易验证 $f \circ g = \id$ 与 $g \circ f = \id$.直和坐标的唯一性即蕴含了表示的唯一性.
+\end{proof}
+
+\begin{example}\label{ex:s-tensor-poly}
+对于含微环扩张 $S \supset R$，$S \otimes_R R[X]$ 中的元素具有唯一表示 $\sum_{n \geq 0} s_n \otimes X^n$，故作为 $R$-模有 $S \otimes_R R[X] \cong S[X]$.
+\end{example}
+
+\begin{remark}\label{rem:injectivity-caution}
+虽然验证恒等式 $f(g(t)) = t$ 只需在简单张量上检验（因加性），但\textbf{绝不能仅凭简单张量上的性质来证明线性映射 $f \colon M \otimes_R N \to P$ 是单射}！即使对所有简单张量都有 $f(m \otimes n) = 0 \implies m \otimes n = 0$，整个映射 $f$ 仍然完全可能不是单射，因为单射性不是加性性质.因此，证明张量积线性映射为同构最稳妥的途径，往往是显式构造逆映射并验证其双向复合为恒等映射.
+\end{remark}
+
+\begin{theorem}\label{thm:fg-power-nonzero}
+若 $M$ 是非零有限生成 $R$-模，则对任意 $k \geq 1$，张量幂 $M^{\otimes k} \neq 0$.
+\end{theorem}
+
+\begin{proof}
+必然有 $R \neq 0$.设 $M = R x_1 + \dots + R x_d$（其中生成元个数 $d \geq 1$ 最小）.令 $N = R x_1 + \dots + R x_{d-1}$（若 $d = 1$ 则 $N = 0$），故 $M = N + R x_d$ 且 $x_d \notin N$.令 $I = \{r \in R : r x_d \in N\}$，则 $I$ 是 $R$ 的真理想（$1 \notin I$）.
+
+任取 $m \in M$ 写成 $n + r x_d$（$n \in N, r \in R$），虽然 $r$ 本身不唯一，但 $r \bmod I$ 是完全良定义的.因此映射 $M^k \to R/I$，定义为
+\[
+  (n_1 + r_1 x_d, \dots, n_k + r_k x_d) \mapsto r_1 \dots r_k \bmod I,
+\]
+是良定义的多重线性映射.由普遍映射性质，诱导出 $R$-线性映射 $M^{\otimes k} \to R/I$，它将 $x_d \otimes \dots \otimes x_d$ 映为 $1 \bmod I \neq 0$.因此 $M^{\otimes k} \neq 0$.
+\end{proof}
+
+\begin{example}\label{ex:qz-powers}
+非有限生成模的张量幂可以完全消失：$(\Q/\Z)^{\otimes 2} = 0$（例~\ref{ex:torsion-collapse}）.这一例子的精妙之处在于：$\Q/\Z = \bigcup_{a \geq 1} (\frac{1}{a}\Z/\Z)$ 是循环子群的并，而每个子群自身的张量平方非零：$(\frac{1}{a}\Z/\Z)^{\otimes 2} \cong \frac{1}{a}\Z/\Z \neq 0$.这深刻揭示了双线性映射的特性：$(\frac{1}{5}) \otimes (\frac{1}{5})$ 在子模自身的张量积中非零，但在大模 $(\Q/\Z)^{\otimes 2}$ 中却坍缩为零！这说明简单张量必须置于具体的张量积背景模中来理解.
+\end{example}
+
+以下定理讨论当 $R$ 为整环（domain）时的张量积性质：
+
+\begin{theorem}\label{thm:frac-vector-tensor}
+设 $R$ 为整环，$K$ 为其分式域，$V$ 为 $K$-向量空间.则存在 $R$-模同构
+\[
+  K \otimes_R V \cong V, \quad x \otimes v \mapsto xv.
+\]
+\end{theorem}
+
+\begin{proof}
+乘法 $K \times V \to V$ 是 $R$-双线性的，由普遍映射性质诱导 $R$-线性映射 $f \colon K \otimes_R V \to V$（满足 $f(x \otimes v) = xv$）.显然 $f(1 \otimes v) = v$，故 $f$ 满.
+
+为证单射，我们先证明 $K \otimes_R V$ 中的每个张量都是简单张量且第一项可化为 $1$：设 $x = a/b$（$a, b \in R, b \neq 0$），则
+\[
+  x \otimes v = \frac{a}{b} \otimes v = \frac{1}{b} \otimes av = \frac{1}{b} \otimes \frac{ab}{b}v = \frac{b}{b} \otimes \frac{a}{b}v = 1 \otimes xv.
+\]
+这里巧妙利用了 $V$ 上的 $K$-数乘将标量在 $\otimes$ 两侧转移.因此每个张量均可写成 $1 \otimes v$ 的形式.若 $f(1 \otimes v) = 0$，则 $v = 0$，故核平凡，$f$ 为同构.
+\end{proof}
+
+\begin{example}\label{ex:q-tensor-q}
+当 $V = K$ 时，$K \otimes_R K \cong K$.例如 $\Q \otimes_\Z \Q \cong \Q$，以及 $\Q \otimes_\Z \R \cong \R$.
+\end{example}
+
+\begin{theorem}\label{thm:submodule-k-tensor}
+设 $R$ 为整环，$K$ 为其分式域，$V$ 为 $K$-向量空间.对 $K$ 内部的任意非零 $R$-子模 $M$，均有 $R$-模同构
+\[
+  M \otimes_R V \cong V, \quad m \otimes v \mapsto mv.
+\]
+特别地，对 $R$ 的任意非零理想 $I$，均有 $I \otimes_R K \cong K$.
+\end{theorem}
+
+\begin{example}\label{ex:ideal-nonprincipal}
+设 $R = \Z[\sqrt{10}], K = \Q(\sqrt{10})$.理想 $I = (2, \sqrt{10})$ 是非主理想，故作为 $R$-模 $I \not\cong R$.然而 $I \otimes_R K \cong R \otimes_R K \cong K$.
+\end{example}
+
+\begin{theorem}\label{thm:domain-free-tensor-nonzero}
+设 $R$ 为整环，$F$ 与 $F'$ 为自由 $R$-模.若 $x \in F$ 与 $x' \in F'$ 均非零，则在 $F \otimes_R F'$ 中恒有
+\[
+  x \otimes x' \neq 0.
+\]
+\end{theorem}
+
+\begin{proof}
+设 $\{e_i\}$ 与 $\{e'_j\}$ 分别为 $F$ 与 $F'$ 的基.将非零元展开为 $x = \sum a_i e_i$ 与 $x' = \sum a'_j e'_j$.存在非零系数 $a_{i_0}$ 与 $a'_{j_0}$.由于 $R$ 是整环，$a_{i_0} a'_{j_0} \neq 0$.故 $x \otimes x'$ 在基 $\{e_i \otimes e'_j\}$ 下具有非零坐标，因此 $x \otimes x' \neq 0$.
+\end{proof}
+
+\begin{remark}\label{rem:domain-counterexample}
+若 $R$ 不是整环，定理~\ref{thm:domain-free-tensor-nonzero} 不成立.例如设 $ab = 0$ 且 $a, b \neq 0$，则在 $R \otimes_R R$ 中 $a \otimes b = ab(1 \otimes 1) = 0$.
+\end{remark}
+
+\begin{theorem}\label{thm:domain-torsion-behavior}
+设 $R$ 为整环，$K$ 为其分式域，$V$ 为 $K$-向量空间.
+\begin{enumerate}
+  \item 对任意 $R$-模 $M$，存在 $R$-模同构 $V \otimes_R M \cong V \otimes_R (M/M_{\mathrm{tor}})$，其中 $M_{\mathrm{tor}}$ 为 $M$ 的扭子模.
+  \item 若 $M$ 是扭模，则 $V \otimes_R M = 0$；若 $M$ 不是扭模且 $V \neq 0$，则 $V \otimes_R M \neq 0$.
+  \item 若 $N \subset M$ 使得商模 $M/N$ 是扭模，则自然映射给出同构 $V \otimes_R N \cong V \otimes_R M$（通过 $v \otimes n \mapsto v \otimes n$）.
+\end{enumerate}
+\end{theorem}
+
+\begin{corollary}\label{cor:domain-zero-tensor}
+在定理~\ref{thm:domain-torsion-behavior} 的设定下，在 $V \otimes_R M$ 中 $v \otimes m = 0$ 当且仅当 $v = 0$ 或 $m \in M_{\mathrm{tor}}$.特别地，由 $m \mapsto 1 \otimes m$ 给出的映射 $M \to K \otimes_R M$ 的核恰好为 $M_{\mathrm{tor}}$.
+\end{corollary}
+
+\begin{example}\label{ex:dehn-hilbert}
+若 $x \in \R^\times$ 且 $y/\pi$ 为无理数，则在 $\R \otimes_\Z (\R/\pi\Z)$ 中 $x \otimes (y \bmod \pi\Z) \neq 0$.这在现代 Dehn 对 Hilbert 第三问题的解答中扮演了关键角色.
+\end{example}

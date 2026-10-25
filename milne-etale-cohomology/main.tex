@@ -1,0 +1,116 @@
+% ============ \emph{平展上同调讲义}中文翻译 LaTeX 重排版 ============
+% 原书: J.S. Milne, Lectures on Étale Cohomology (v2.21, March 22, 2013)
+% 模板: AJbook.cls (李文威\emph{代数学方法}书系模板)
+%       ★ 定理编号规则已按原书修改(见 AJbook.cls): 定理/推论/引理/命题/定义/
+%         例/注记/附记/问题/习题/注意 共享一个计数器, 按章(原书小节)编号
+% 结构: 记号与约定 + 预备知识与参考文献 + 致谢 + 评注
+%       + 第一部分 基本理论(§1-25) + 第二部分 Weil 猜想的证明(§26-34) + 索引
+%
+% 编号体系 (原书约定):
+%   - 章 = 原书小节: 1-34 连续阿拉伯编号 (跨两部分,
+%     \counterwithout{chapter}{part} + \renewcommand{\AJchapterttl})
+%   - 定理类: 共享计数器, 编号 N.M 与原书一致 (如 命题 2.1, 注记 2.3, 附记 3.6)
+%   - 公式: 原书绝大多数不编号, 少数按局部编号, 用显式 \tag{...}
+\documentclass[geometry=a4, fontsetup=font-setup-open.tex, titlesetup=titles-setup, coverpage=cover, CJKthechapter=false]{AJbook}
+
+% ============ 宏包 ============
+\usepackage{mycommand}      % 常用数学命令(\dd \R \Z \Q \CC \e \ii \Spec \Gm \Gal 等)
+\usepackage{myarrows}       % 可伸缩箭头
+\usepackage{amssymb}
+\usepackage{chngcntr}       % \counterwithout
+\usepackage{tikz-cd}        % 交换图
+\usepackage{imakeidx}
+\usepackage[bookmarksnumbered=true]{hyperref}
+\usetikzlibrary{calc}       % 封面坐标计算
+
+% ============ 编号体系 ============
+\counterwithout{chapter}{part}                  % 章(原书小节)编号 1-34 跨两部分连续
+\renewcommand{\AJchapterttl}[1]{#1}             % 章号显示为阿拉伯数字(与原书 "1 Introduction" 一致)
+
+% 天眉: "2 平展态射". AJbook.cls 在 \AtBeginDocument 里定义 \chaptermark, 故此处覆盖须放在其之后
+\AtBeginDocument{%
+  \renewcommand{\chaptermark}[1]{\markboth{\thechapter\quad #1}{}}%
+}
+
+% ============ 超链接 ============
+\hypersetup{
+    pdfauthor={J.S. Milne},
+    pdftitle={平展上同调讲义 (Lectures on Étale Cohomology)},
+    pdfsubject={代数几何},
+    colorlinks=true,
+    linkcolor=MidnightBlue,
+    citecolor=BrickRed,
+    urlcolor=MidnightBlue
+}
+
+% ============ 自定义命令 ============
+\newcommand{\Specm}{\operatorname{Specm}}       % 极大谱
+\newcommand{\Tgt}{\operatorname{Tgt}}           % 切空间/切锥
+\newcommand{\OX}{\mathcal{O}_X}                 % 结构层
+\newcommand{\Fbar}{\overline{\mathcal{F}}}
+\newcommand{\Qell}{\mathbb{Q}_{\ell}}           % ℓ 进数域
+\newcommand{\Zell}{\mathbb{Z}_{\ell}}           % ℓ 进整数环
+\newcommand{\etale}{平展}                        % (备用, 直接写中文亦可)
+
+% 索引 (intoc=false: 目录条目由 titlesec 无号章 after-code 添加, 避免重复)
+\makeindex[columns=2, intoc=false, title={索引}]
+
+% 全局断行弹性: 消除边界性 Overfull (与 Gelbart/古典调和分析项目同款)
+\emergencystretch=3em
+
+% ============ 文档开始 ============
+\begin{document}
+\frontmatter        % 封面(cover.tex) + 目录(模板自动处理, 罗马页码)
+
+% 前言部分 (原书 pp.4-6)
+\input{frontmatter}
+
+\mainmatter         % 正文(阿拉伯页码从 1 开始)
+
+\part{基本理论}
+\setcounter{footnote}{0}    % 脚注在每部分内连续编号(与原书一致: 第一部分 1-10+)
+\input{sec01}
+\input{sec02}
+\input{sec03}
+\input{sec04}
+\input{sec05}
+\input{sec06}
+\input{sec07}
+\input{sec08}
+\input{sec09}
+\input{sec10}
+\input{sec11}
+\input{sec12}
+\input{sec13}
+\input{sec14}
+\input{sec15}
+\input{sec16}
+\input{sec17}
+\input{sec18}
+\input{sec19}
+\input{sec20}
+\input{sec21}
+\input{sec22}
+\input{sec23}
+\input{sec24}
+\input{sec25}
+
+\part{Weil 猜想的证明}
+\setcounter{footnote}{0}    % 脚注编号重新开始(与原书一致: 第二部分从 1 重新计数)
+\input{sec26}
+\input{sec27}
+\input{sec28}
+\input{sec29}
+\input{sec30}
+\input{sec31}
+\input{sec32}
+\input{sec33}
+\input{sec34}
+
+% 2013 年 Abel 奖访谈 (原书 p.200, 无编号,不在目录中)
+\input{interview}
+
+% 索引
+\printindex
+
+\end{document}

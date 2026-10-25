@@ -1,0 +1,155 @@
+% sections2/sec2_linear_maps.tex
+\section{线性映射的张量积}
+\label{sec:linear-maps}
+
+若 $M \xrightarrow{\varphi} M'$ 与 $N \xrightarrow{\psi} N'$ 为 $R$-线性映射，则在直和之间存在由 $(\varphi \oplus \psi)(m, n) = (\varphi(m), \psi(n))$ 给出的线性映射 $M \oplus N \xrightarrow{\varphi \oplus \psi} M' \oplus N'$.我们希望在张量积之间同样定义一个线性映射 $M \otimes_R N \to M' \otimes_R N'$，使得简单张量满足
+\[
+  m \otimes n \mapsto \varphi(m) \otimes \psi(n).
+\]
+
+从映射 $M \times N \to M' \otimes_R N'$（定义为 $(m, n) \mapsto \varphi(m) \otimes \psi(n)$）出发，容易验证它是 $R$-双线性的.因此由张量积的普遍映射性质，存在唯一的 $R$-线性映射 $M \otimes_R N \xrightarrow{\varphi \otimes \psi} M' \otimes_R N'$，使得 $(\varphi \otimes \psi)(m \otimes n) = \varphi(m) \otimes \psi(n)$，更一般地作用在有限和张量上为：
+\[
+  (\varphi \otimes \psi)(m_1 \otimes n_1 + \dots + m_k \otimes n_k) = \varphi(m_1) \otimes \psi(n_1) + \dots + \varphi(m_k) \otimes \psi(n_k).
+\]
+我们称 $\varphi \otimes \psi$ 为 $\varphi$ 与 $\psi$ 的\newterm{tensor-prod-maps}{张量积映射}{tensor product of linear maps}.需要特别辨析的是：$\varphi \otimes \psi$ 并不是某个模张量积中的简单张量，它仅仅代表作用在 $M \otimes_R N$ 上的全新线性映射记号.
+
+特别地，当取其中一个映射为恒等映射时，映射 $N \otimes_R M \xrightarrow{1 \otimes \varphi} N \otimes_R M'$ 或 $M \otimes_R N \xrightarrow{\varphi \otimes 1} M' \otimes_R N$ 称为\termcn{与 $N$ 作张量积}（tensoring with $N$）.这一运算在第~\ref{sec:linear-base-ext}~节讨论基变换时具有基础性的核心地位.
+
+\begin{example}\label{ex:inclusion-tensor}
+考虑包含映射 $a\Z \xrightarrow{i} \Z$ 与 $\Z/b\Z$ 作张量积：$a\Z \otimes_\Z \Z/b\Z \xrightarrow{i \otimes 1} \Z \otimes_\Z \Z/b\Z$.在 $\Z \otimes_\Z \Z/b\Z \cong \Z/b\Z$ 中，$(i \otimes 1)(ax \otimes y \bmod b) = ax \otimes (y \bmod b) = 1 \otimes (axy \bmod b)$.若令 $d = \gcd(a, b)$，则 $i \otimes 1$ 的像由 $1 \otimes (d \bmod b)$ 生成.因此当 $\gcd(a, b) = 1$ 时 $i \otimes 1$ 是满射，而当 $b \mid a$ 时其像为 $0$.特别地，当 $a \geq 2$ 且 $\gcd(a, b) = 1$ 时，$i$ 本身不是满射，但张量积映射 $i \otimes 1$ 却变成了满射！
+\end{example}
+
+\begin{example}[Kronecker 积]\label{ex:kronecker-prod}
+设 $A = \begin{pmatrix} a & b \\ c & d \end{pmatrix}$ 与 $A' = \begin{pmatrix} a' & b' \\ c' & d' \end{pmatrix}$ 属于 $\mathrm{M}_2(R)$.它们均诱导线性映射 $R^2 \to R^2$.因此 $A \otimes A'$ 是 $(R^2)^{\otimes 2}$ 上的线性变换.在标准基 $\{e_1 \otimes e_1, e_1 \otimes e_2, e_2 \otimes e_1, e_2 \otimes e_2\}$ 下，计算 $A \otimes A'$ 的矩阵表示：
+\begin{align*}
+  (A \otimes A')(e_1 \otimes e_1) &= Ae_1 \otimes A'e_1 = (ae_1 + ce_2) \otimes (a'e_1 + c'e_2) \\
+  &= aa' e_1 \otimes e_1 + ac' e_1 \otimes e_2 + ca' e_2 \otimes e_1 + cc' e_2 \otimes e_2,
+\end{align*}
+类似地算出其余各列，得到 $4 \times 4$ 分块矩阵：
+\[
+  A \otimes A' = \begin{pmatrix}
+    aa' & ab' & ba' & bb' \\
+    ac' & ad' & bc' & bd' \\
+    ca' & cb' & da' & db' \\
+    cc' & cd' & dc' & dd'
+  \end{pmatrix} = \begin{pmatrix}
+    a A' & b A' \\
+    c A' & d A'
+  \end{pmatrix}.
+\]
+其迹满足 $\Tr(A \otimes A') = (\Tr A)(\Tr A')$.
+
+更一般地，对于 $A \in \mathrm{M}_m(R)$ 与 $B \in \mathrm{M}_n(R)$，分块矩阵 $(a_{ij} B)$ 称为 $A$ 与 $B$ 的\newterm{kronecker-product}{Kronecker 积}{Kronecker product}.
+\end{example}
+
+\begin{theorem}[特征值乘积定理]\label{thm:eigen-tensor}
+设 $K$ 为域，$A \in \mathrm{M}_m(K)$ 与 $B \in \mathrm{M}_n(K)$ 分别具有特征值 $\lambda$ 与 $\mu$.则 $A \otimes I_n + I_m \otimes B$ 具有特征值 $\lambda + \mu$，而 $A \otimes B$ 具有特征值 $\lambda \mu$.
+\end{theorem}
+
+\begin{proof}
+设 $Av = \lambda v$ 且 $Bw = \mu w$（$v, w \neq 0$）.则在简单张量 $v \otimes w \neq 0$ 上直接计算：
+\[
+  (A \otimes I_n + I_m \otimes B)(v \otimes w) = Av \otimes w + v \otimes Bw = \lambda(v \otimes w) + \mu(v \otimes w) = (\lambda + \mu)(v \otimes w),
+\]
+且 $(A \otimes B)(v \otimes w) = Av \otimes Bw = \lambda \mu(v \otimes w)$.
+\end{proof}
+
+\begin{example}\label{ex:poly-roots-tensor}
+$\sqrt{2}$ 与 $\sqrt{3}$ 分别为 $A = \begin{pmatrix} 0 & 2 \\ 1 & 0 \end{pmatrix}$ 与 $B = \begin{pmatrix} 0 & 3 \\ 1 & 0 \end{pmatrix}$ 的特征值.由定理~\ref{thm:eigen-tensor}，矩阵 $A \otimes I_2 + I_2 \otimes B$ 必定具有特征值 $\sqrt{2} + \sqrt{3}$.计算该 $4 \times 4$ 矩阵的特征多项式即得 $T^4 - 10T^2 + 1$，由此纯代数地给出了以 $\sqrt{2} + \sqrt{3}$ 为根的有理系数多项式！
+\end{example}
+
+\begin{theorem}\label{thm:hom-tensor-hom}
+存在自然的 $R$-线性映射
+\[
+  \Hom_R(M, M') \otimes_R \Hom_R(N, N') \to \Hom_R(M \otimes_R N, M' \otimes_R N'),
+\]
+将简单张量 $\varphi \otimes \psi$ 映为线性映射 $\varphi \otimes \psi$.当 $M, M', N, N'$ 均为有限生成自由模时，该映射为同构.
+\end{theorem}
+
+\begin{proof}
+从双线性映射 $(\varphi, \psi) \mapsto [\text{映射 } m \otimes n \mapsto \varphi(m) \otimes \psi(n)]$ 出发，由普遍映射性质即得正向线性映射.当模具有有限基时，初等矩阵基底的一一对应立即可知其将基映为基，故为同构.
+\end{proof}
+
+\begin{theorem}[函子性与复合律]\label{thm:functoriality}
+对于 $R$-模 $M$ 与 $N$，恒有 $\id_M \otimes \id_N = \id_{M \otimes_R N}$.对任意可复合的线性映射序列：
+\[
+  (\varphi' \otimes \psi') \circ (\varphi \otimes \psi) = (\varphi' \circ \varphi) \otimes (\psi' \circ \psi).
+\]
+\end{theorem}
+
+\begin{example}[张量积行列式公式]\label{ex:det-tensor-maps}
+设 $M, N$ 为有限自由 $R$-模，秩分别为 $k$ 与 $\ell$.对于线性算子 $\varphi \colon M \to M$ 与 $\psi \colon N \to N$，利用复合律可将 $\varphi \otimes \psi$ 分解为
+\[
+  \varphi \otimes \psi = (\varphi \otimes \id_N) \circ (\id_M \otimes \psi).
+\]
+选取适当基底可知 $\varphi \otimes \id_N$ 对应于对角线上由 $\ell$ 个矩阵块 $[\varphi]$ 构成的分块对角阵，故其行列式为 $(\det \varphi)^\ell$.因此：
+\begin{equation}
+  \det(\varphi \otimes \psi) = (\det \varphi)^\ell (\det \psi)^k. \label{eq:2.1}
+\end{equation}
+特别地，在例~\ref{ex:kronecker-prod} 中 $\det(A \otimes A') = (\det A)^2 (\det A')^2$.
+\end{example}
+
+\begin{corollary}\label{cor:tensor-power-det}
+设 $M$ 为秩 $k \geq 1$ 的自由模，$\varphi \colon M \to M$ 为线性算子.对所有 $i \geq 1$：
+\[
+  \det(\varphi^{\otimes i}) = (\det \varphi)^{i k^{i-1}}.
+\]
+\end{corollary}
+
+\begin{remark}\label{rem:kronecker-zehfuss}
+公式~\eqref{eq:2.1} 在矩阵层面上即为 $\det(A \otimes B) = (\det A)^\ell (\det B)^k$.虽然 $A \otimes B$ 通称为 Kronecker 积，但行列式公式在历史上最早是由 Zehfuss 给出的，参见 Henderson 与 Pukelsheim \cite{henderson-pukelsheim}.
+\end{remark}
+
+\begin{theorem}[同构与满射的保持性]\label{thm:iso-surj-preserved}
+\begin{enumerate}
+  \item 若 $\varphi \colon M \to M'$ 与 $\psi \colon N \to N'$ 均为同构，则 $\varphi \otimes \psi$ 为同构（其逆为 $\varphi^{-1} \otimes \psi^{-1}$）.
+  \item 若 $\varphi$ 与 $\psi$ 均为满射，则 $\varphi \otimes \psi$ 为满射.
+\end{enumerate}
+\end{theorem}
+
+\textbf{极其重要的核心反例：张量积通常不保持单射！}即使 $\varphi$ 与 $\psi$ 均单，$\varphi \otimes \psi$ 也完全可能不是单射.
+
+\begin{example}\label{ex:non-injective-tensor}
+设 $R = \Z$，考虑数乘映射 $\alpha \colon \Z/p\Z \to \Z/p^2\Z$（$\alpha(x) = px$）.显然 $\alpha$ 是单射.然而将其与 $\Z/p\Z$ 作张量积：
+\[
+  1 \otimes \alpha \colon \Z/p\Z \otimes_\Z \Z/p\Z \to \Z/p\Z \otimes_\Z \Z/p^2\Z, \quad a \otimes x \mapsto a \otimes px = pa \otimes x = 0.
+\]
+映射 $1 \otimes \alpha$ 恒等于零！由于定义域 $\Z/p\Z \otimes_\Z \Z/p\Z \cong \Z/p\Z \neq 0$，该映射绝不是单射.
+\end{example}
+
+这一根本特性说明：若 $M \subset M'$ 且 $N \subset N'$，\textbf{子模的张量积 $M \otimes_R N$ 通常不能直接视作 $M' \otimes_R N'$ 的子模}，因为自然包含映射的张量积可能出现灾难性的坍缩！
+
+\begin{example}\label{ex:tensor-square-not-injective}
+设 $R = A[X, Y]$（$A$ 为交换环），考虑理想 $I = (X, Y)$.包含映射 $i \colon I \hookrightarrow R$ 是单射，但其张量平方 $i^{\otimes 2} \colon I^{\otimes 2} \to R^{\otimes 2}$ 却\textbf{不是单射}.
+
+在 $R^{\otimes 2}$ 中，$X \otimes Y = XY(1 \otimes 1) = Y \otimes X$，故 $X \otimes Y - Y \otimes X = 0$.但在 $I^{\otimes 2}$ 中，$X \otimes Y \neq Y \otimes X$！因为映射 $(f, g) \mapsto f_X(0, 0)g_Y(0, 0)$ 是良定义的双线性映射并诱导线性映射 $I^{\otimes 2} \to A$，它把 $X \otimes Y$ 映为 $1$，而把 $Y \otimes X$ 映为 $0$.因此非零张量 $X \otimes Y - Y \otimes X$ 在包含映射下落入了核中.
+\end{example}
+
+\begin{remark}\label{rem:torsion-free-tensor-torsion}
+例~\ref{ex:tensor-square-not-injective} 中的理想 $I = (X, Y)$ 在整环上是无扭模，但 $I^{\otimes 2}$ 却带有非零扭元：$X(X \otimes Y - Y \otimes X) = 0$！因此\textbf{无扭模的张量积甚至未必是无扭的}.
+\end{remark}
+
+\begin{theorem}\label{thm:direct-summand-injective}
+设 $\varphi \colon M \to N$ 为单射，且 $\varphi(M)$ 是 $N$ 的直和项（即序列分裂）.则对任意 $k \geq 0$，$\varphi^{\otimes k} \colon M^{\otimes k} \to N^{\otimes k}$ 均为单射，且其像亦为直和项.
+\end{theorem}
+
+\begin{theorem}[满同态张量积的核]\label{thm:kernel-surjective-tensor}
+设 $\varphi \colon M \to M'$ 与 $\psi \colon N \to N'$ 均为满线性同态.则张量积映射 $\varphi \otimes \psi \colon M \otimes_R N \to M' \otimes_R N'$ 的核由所有满足 $\varphi(m) = 0$ 或 $\psi(n) = 0$ 的简单张量 $m \otimes n$ 生成：
+\[
+  \ker(\varphi \otimes \psi) = (i \otimes 1)((\ker \varphi) \otimes_R N) + (1 \otimes j)(M \otimes_R (\ker \psi)).
+\]
+\end{theorem}
+
+\begin{corollary}\label{cor:quotient-ideal-tensor}
+设 $I$ 为 $R$ 的理想，则
+\[
+  (M \otimes_R N) / I(M \otimes_R N) \cong (M/IM) \otimes_R (N/IN).
+\]
+\end{corollary}
+
+\begin{corollary}\label{cor:poly-quotient-base-ext}
+设 $f \colon R \to S$ 为环同态，$I$ 为多项式环 $R[X_1, \dots, X_n]$ 的理想.则作为 $S$-模（以及 $S$-代数）有
+\[
+  S \otimes_R \left(R[X_1, \dots, X_n] / I\right) \cong S[X_1, \dots, X_n] / (I \cdot S[X_1, \dots, X_n]).
+\]
+\end{corollary}

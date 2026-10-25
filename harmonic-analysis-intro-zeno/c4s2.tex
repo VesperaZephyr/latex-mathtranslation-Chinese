@@ -1,0 +1,165 @@
+% ============ 第4章 §4.2 Hilbert 变换及其 L^2 有界性 (原书 pp.77-81) ============
+
+\section{\texorpdfstring{Hilbert 变换及其 $L^{2}$ 有界性}{Hilbert 变换及其 L2 有界性}}\label{sec:4.2}
+
+应用 Cotlar 引理来考察 Hilbert 变换. 这里虽不涉及, 但 Hilbert 变换是分析 Fourier 级数的重要工具. Hilbert 变换属于称为奇异积分算子的数学变换的范畴, 因此积分核的处理很困难. 这里, 考察对具有紧支集的无穷次可微函数有什么样的性质, 并以此为立足点考察对 $L^{2}$ 函数的输入. Hilbert 变换是由
+\[
+Hf(x) = \lim_{\varepsilon \downarrow 0}\int_{|y| > \varepsilon}\frac{f(x-y)}{y}\dd y
+\]
+给出的变换.
+
+令
+\[
+H_{\varepsilon}f(x) = \int_{|y| > \varepsilon}\frac{f(x-y)}{y}\dd y.
+\]
+一般地, 函数 $f, g$ 的卷积由
+\[
+f * g(x) = \int_{\mathbb{R}}f(x-y)g(y)\dd y
+\]
+给出, 但现在的情形是 $g(y) = y^{-1}$, 所以分析困难. 例如, 若 $f \in L^{p}(\mathbb{R})$, $g \in L^{1}(\mathbb{R})$, $1 \leq p \leq \infty$, 则 $\|f * g\|_{L^{p}} \leq \|f\|_{L^{p}}\|g\|_{L^{1}}$, 因而好处理, 但 $g(y) = y^{-1}$ 不可积, 所以需要（非常糟糕的）技巧. 如此在 $y = 0$ 具有奇异性, 所以 Hilbert 变换是奇异积分算子.
+
+极限是否存在令人担心, 但至少 $f \in C_{\mathrm{c}}^{\infty}(\mathbb{R})$ 时极限存在. 实际上, 设 $\operatorname{supp}(f) \subset [-R, R]$, 令 $K = [|x|+1]$, 则 $x - y \in [-R, R]$ 时 $y \in [x-R, x+R] \subset [-K-R, K+R]$, 所以
+\[
+Hf(x) = \lim_{\varepsilon \downarrow 0}\int_{|y| > \varepsilon}\frac{f(x-y)}{y}\dd y = \lim_{\varepsilon \downarrow 0}\int_{\varepsilon < |y| < K+R}\frac{f(x-y)}{y}\dd y.
+\]
+注意到 $y^{-1}$ 是奇函数, 利用
+\[
+\int_{\varepsilon < |y| < R+K}\frac{\dd y}{y} = 0,
+\]
+得
+\[
+Hf(x) = \lim_{\varepsilon \downarrow 0}\int_{\varepsilon < |y| < K+R}\frac{f(x-y)-f(x)}{y}\dd y.
+\]
+这里, 由
+\[
+\lim_{y \to 0}\frac{f(x-y)-f(x)}{y} = -f'(x)
+\]
+可知, 插入 $-f(x)$ 后, $\frac{f(x-y)}{y}$ 在 $y = 0$ 的奇异性消失了. 因此,
+\begin{equation}\tag{4.7}
+Hf(x) = \int_{|y| < K+R}\frac{f(x-y)-f(x)}{y}\dd y
+\label{eq:4.7}
+\end{equation}
+成立.
+
+如此, 在可微的情形可知极限的存在, 但不可微的情形能说什么呢. 这是当前的目标. 这里先作为开端, 讨论在 $L^{2}(\mathbb{R})$ 中的极限.
+
+设 $C^{1}$ 级偶函数 $\rho: \mathbb{R} \to \mathbb{R}$ 满足
+\[
+\operatorname{supp}(\rho) \subset [1, 4] \cup [-4, -1], \quad \sum_{j=-\infty}^{\infty}\rho(2^{j}\cdot) = \chi_{\mathbb{R}\setminus\{0\}}.
+\]
+对 $j \in \mathbb{Z}$, $x \neq 0$, 令 $\rho_{j}(x) = \rho(2^{-j}x)$, $\tau_{j}(x) = x^{-1}\rho_{j}(x)$. 进而, 令 $\rho_{j}(0) = \tau_{j}(0) = 0$, 则 $\tau_{j}$ 是 $C^{1}$ 级函数.
+
+若忽略极限记号 $\lim_{\varepsilon \downarrow 0}$ 的存在性, 则 Hilbert 变换是与 $\frac{1}{x}$ 的卷积, 将此 $\frac{1}{x}$ 分解为
+\[
+\frac{1}{x} = \sum_{j=-\infty}^{\infty}\tau_{j}(x) \quad (x \neq 0).
+\]
+与此对应, 设想
+\begin{equation}\tag{4.8}
+Hf(x) = \sum_{j=-\infty}^{\infty}\tau_{j} * f(x)
+\label{eq:4.8}
+\end{equation}
+来考虑. 这个设想是否正当, 对属于 $C_{\mathrm{c}}^{\infty}(\mathbb{R})$ 的函数 $f$ 没有问题, 对其他函数以后考察. 令 $H_{j}f(x) = \tau_{j} * f(x)$. 证明 $\{H_{j}\}_{j=-\infty}^{\infty}$ 满足 Cotlar 引理的假设.
+
+由
+\[
+\int_{\mathbb{R}}H_{j}f(x)\overline{g(x)}\dd x = -\int_{\mathbb{R}}f(x)\overline{H_{j}g(x)}\dd x
+\]
+可知 $H_{j}^{*} = -H_{j}$, 所以考察 $H_{k}H_{j}$ 的算子范数. 由 Young 不等式 $\|f * g\|_{L^{2}} \leq \|f\|_{L^{2}}\|g\|_{L^{1}}$ 得 $\|H_{k}H_{j}\|_{L^{2} \to L^{2}} \leq \|\tau_{j} * \tau_{k}\|_{L^{1}}$. 卷积积的函数的支集可以由 Minkowski 和计算\footnote{设 $A, B$ 是线性空间 $V$ 的子集. Minkowski 和 $A+B$ 由 $A+B = \{a+b \in V : a \in A, b \in B\}$ 给出. 另外, $f$ 是具有紧支集的连续函数时, 对连续函数 $g$, $\operatorname{supp}(f * g) \subset \operatorname{supp}(f) + \operatorname{supp}(g)$ 成立.}, $\operatorname{supp}(\tau_{j} * \tau_{k}) \subset [-2^{\max(j,k)+3}, 2^{\max(j,k)+3}]$. 另一方面,
+\[
+\Theta_{j}(x) = \int_{-\infty}^{x}\tau_{j}(y)\dd y
+\]
+由 $\int_{\mathbb{R}}\tau_{j}(x)\dd x = 0$ 可知满足
+\[
+\operatorname{supp}(\Theta_{j}) \subset [-2^{j+2}, 2^{j+2}].
+\]
+因此, 由卷积公式 $(f * g)' = f' * g = f * g'$（练习题~\ref{exer:4.5} 参照）,
+\[
+\tau_{j} * \tau_{k} = (\Theta_{j})' * \tau_{k} = \Theta_{j} * (\tau_{k})'.
+\]
+这里, 仔细考察 $\tau_{k}$ 与 $\Theta_{j}$. 由 $\tau_{k}(x) = \frac{\rho(2^{-k}x)}{x}$,
+\[
+\tau_{k}'(x) = \frac{2^{-k}\rho'(2^{-k}x)}{x} - \frac{\rho(2^{-k}x)}{x^{2}},
+\]
+其结果是
+\[
+|\tau_{k}'| \leq C4^{-k}\chi_{[-2^{k+2}, 2^{k+2}]}.
+\]
+另一方面, 由变量替换
+\[
+\Theta_{j}(x) = \int_{-\infty}^{2^{-j}x}\frac{\rho(y)}{y}\dd y
+\]
+可知 $\|\Theta_{j}\|_{L^{\infty}} = -\Theta_{0}(1)$, 所以 $|\Theta_{j}| \leq C\chi_{[-2^{j+2}, 2^{j+2}]}$. 因此, 具体写出卷积可知
+\[
+\|\chi_{[-2^{j+2}, 2^{j+2}]} * \chi_{[-2^{k+2}, 2^{k+2}]}\|_{L^{\infty}} = \min(2^{j+3}, 2^{k+3}),
+\]
+所以由支集大小的关系,
+\[
+\|\tau_{j} * \tau_{k}\|_{L^{\infty}} \leq C2^{-2k}\|\chi_{[-2^{j+2}, 2^{j+2}]} * \chi_{[-2^{k+2}, 2^{k+2}]}\|_{L^{\infty}} \leq C2^{\min(j,k)-2k}.
+\]
+由于可以交换 $j, k$ 的角色,
+\[
+\|\tau_{j} * \tau_{k}\|_{L^{\infty}} \leq C2^{\min(j,k)-2\max(j,k)}.
+\]
+由刚才计算的支集大小的关系,
+\[
+\|\tau_{j} * \tau_{k}\|_{L^{1}} \leq C2^{\min(j,k)-\max(j,k)} = C2^{-|j-k|}
+\]
+可得. 因此, 由于满足 Cotlar 引理的假设,
+\[
+Hf(x) = \sum_{j=-\infty}^{\infty}H_{j} * f(x) = \sum_{j=-\infty}^{\infty}\tau_{j} * f(x)
+\]
+在 $L^{2}(\mathbb{R})$ 的拓扑下成立, 这一点得以证明.
+
+从以上的式子变形可以看出, $\pm$ 的相消反映在 $\Theta_{j}$ 具有紧支集这一点上, 再将其与分部积分结合, 得到了有效的估计. 在估计 $\tau_{j} * \tau_{k}$ 时, 不写成 $|\tau_{j} * \tau_{k}| \leq |\tau_{j}| * |\tau_{k}|$, 而是变形为 $|\tau_{j} * \tau_{k}| \leq |\Theta_{j}| * |\tau_{k}'|$, 再对 $\Theta_{j}$ 与 $\tau_{k}$ 作估计, 这是要点.
+
+作为这个事实的应用, 也能处理开头所述的 $\varepsilon \downarrow 0$ 的极限. 这里确认设想~\eqref{eq:4.8} 是正当的. 实际上, 对一般的 $f \in L^{2}(\mathbb{R})$, 存在不依赖于 $\varepsilon > 0$ 的一致常数 $C$, 使得
+\[
+\left|\int_{|y| > \varepsilon}\frac{f(x-y)}{y}\dd y - \sum_{j=[\log_{2}\varepsilon]}^{\infty}\tau_{j} * f(x)\right| \leq CMf(x)
+\]
+成立. 实际上, 将左边的函数表成 $K_{\varepsilon} * f$ 的形式时, 成立 $|K_{\varepsilon}(x)| \leq C\varepsilon^{-1}\chi_{[0,8\varepsilon]}(|x|)$ 这个估计, 原因就在于此. $f \in C_{\mathrm{c}}^{\infty}(\mathbb{R})$ 时, 由于
+\[
+\lim_{\varepsilon \downarrow 0}\sum_{j=[\log_{2}\varepsilon]}^{\infty}\tau_{j} * f(x) = \lim_{\varepsilon \downarrow 0}\int_{|y| > \varepsilon}\frac{f(x-y)}{y}\dd y,
+\]
+所以至少对 $f \in C_{\mathrm{c}}^{\infty}(\mathbb{R})$ 可以使用 Lebesgue 收敛定理, 在 $L^{2}(\mathbb{R})$ 中
+\[
+\lim_{\varepsilon \downarrow 0}\int_{|y| > \varepsilon}\frac{f(x-y)}{y}\dd y = \lim_{\varepsilon \downarrow 0}\sum_{j=[\log_{2}\varepsilon]}^{\infty}\tau_{j} * f(x)
+\]
+可得. 由 $C_{\mathrm{c}}^{\infty}(\mathbb{R})$ 在 $L^{2}(\mathbb{R})$ 中的稠密性, 这个关系式可以提升到 $L^{2}(\mathbb{R})$ 的一切元.
+
+\begin{exercise}\label{exer:4.2}
+必要时, 利用 $0 < \varepsilon < 1$ 时
+\[
+\int_{\varepsilon < |x| < 1}\frac{x_{j}}{|x|^{n+1}}\dd x = 0
+\]
+成立, 证明对 $f \in C_{\mathrm{c}}^{\infty}(\mathbb{R}^{n})$,
+\[
+\lim_{\varepsilon \downarrow 0}\int_{\mathbb{R}^{n}\setminus B(x, \varepsilon)}\frac{(x_{j}-y_{j})f(y)}{|x-y|^{n+1}}\dd y = \lim_{\varepsilon \downarrow 0}\int_{|x-y| > \varepsilon}\frac{(x_{j}-y_{j})f(y)}{|x-y|^{n+1}}\dd y
+\]
+的极限存在.
+\end{exercise}
+
+\begin{exercise}\label{exer:4.3}
+设 $C^{1}$ 级偶函数 $\rho: \mathbb{R} \to \mathbb{R}$ 满足
+\[
+(\star)\quad \sum_{j=-\infty}^{\infty}\rho(2^{j}\cdot) = \chi_{\mathbb{R}\setminus\{0\}}, \quad \operatorname{supp}(\rho) = [1, 3].
+\]
+回答下面的问题.
+
+(1) 证明 $t \in \mathbb{R}$ 的函数 $\varphi(t) = \max(0, t-1)^{3}\max(0, 3-t)^{3}$ 是 $C^{1}$ 级的. 并求 $\operatorname{supp}(\varphi)$.
+
+(2) 必要时参考 (1) 中考虑的 $\varphi$, 举出实际满足这样的 $(\star)$ 的 $\rho$ 的例子.
+
+(3) $t \neq 0$ 时, 令 $\tau(t) = t^{-1}\rho(t)$. 进而令 $\tau(0) = 0$, 证明 $\tau$ 是 $C^{1}$ 级函数.
+\end{exercise}
+
+\begin{exercise}\label{exer:4.4}
+$g \in L^{1}(\mathbb{R})$ 时, 考虑有界线性算子 $L_{g}: L^{2}(\mathbb{R}) \ni f \mapsto f * g \in L^{2}(\mathbb{R})$.
+
+(1) 用 Young 不等式证明 $L_{g}$ 是 $L^{2}(\mathbb{R})$ 有界的.
+
+(2) 令 $\check{g}(x) = \overline{g(-\cdot)}$. 证明 $L_{g}$ 在 Hilbert 空间 $L^{2}(\mathbb{R})$ 中的伴随是 $L_{\check{g}}$.
+\end{exercise}
+
+\begin{exercise}\label{exer:4.5}
+设 $f, g \in C_{\mathrm{c}}^{1}(\mathbb{R})$. 即, $f, g$ 是 1 次可微的, $f, g$ 的 1 次导函数与 $f, g$ 本身全都连续, 且 $|x| \gg 1$ 时 $f(x) = g(x) = 0$. 此时, 证明 $(f * g)' = f' * g = f * g'$ 成立.
+\end{exercise}

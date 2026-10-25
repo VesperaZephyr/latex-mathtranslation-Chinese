@@ -1,0 +1,1445 @@
+% chapters/ch10.tex
+% 第~
+% \ref{chap:10}~章 发展方程: 热方程与波动方程
+% 源: 原书 PDF 第 329--351 页 (印刷页 325--347)
+
+\chapter{发展方程: 热方程与波动方程}
+\label{chap:10}
+
+\section{热方程: 存在性, 唯一性与正则性}
+\label{sec:10.1}
+
+\begin{notation}
+设 $\Omega\subset\R^N$ 为边界为 $\Gamma$ 的开集.令
+\begin{equation*}
+Q=\Omega\times(0,+\infty),\qquad
+\Sigma=\Gamma\times(0,+\infty);
+\end{equation*}
+$\Sigma$ 称为柱体 $Q$ 的\emph{侧边界}.见图  \ref{fig:7}.
+\end{notation}
+
+考虑下述问题: 求函数 $u(x,t):\Omega\times[0,+\infty)\to\R$ 使得
+\begin{equation}
+\frac{\partial u}{\partial t}-\Delta u=0\quad\text{在}\ Q\ \text{中},
+\label{eq:10.1}
+\end{equation}
+\begin{equation}
+u=0\quad\text{在}\ \Sigma\ \text{上},
+\label{eq:10.2}
+\end{equation}
+\begin{equation}
+u(x,0)=u_0(x)\quad\text{在}\ \Omega\ \text{上},
+\label{eq:10.3}
+\end{equation}
+
+\begin{figure}[tbp]
+	\centering
+	\begin{tikzpicture}[scale=0.95]
+		\draw[-{Stealth}] (-0.5,0) -- (5.2,0) node[below left] {$x$};
+		\draw[-{Stealth}] (0,-0.5) -- (0,4.4) node[above right] {$t$};
+		\draw (1.4,0) -- (1.4,3.6);
+		\draw (3.6,0) -- (3.6,3.6);
+		\draw (1.4,3.6) .. controls (2.1,4.3) and (2.9,4.3) .. (3.6,3.6);
+		\draw[dashed] (1.4,3.6) .. controls (2.1,2.9) and (2.9,2.9) .. (3.6,3.6);
+		\draw (1.4,0.35) .. controls (2.1,1.05) and (2.9,1.05) .. (3.6,0.35);
+		\draw[dashed] (1.4,0.35) .. controls (2.1,-0.35) and (2.9,-0.35) .. (3.6,0.35);
+		\draw (1.4,0) -- (1.4,-0.12);
+		\draw (3.6,0) -- (3.6,-0.12);
+		\node at (2.5,2.4) {$Q$};
+		\node at (2.5,-0.35) {$\Omega$};
+		\node[right] at (3.62,2.4) {$\Sigma$};
+	\end{tikzpicture}
+	\caption{}
+	\label{fig:7}
+\end{figure}
+
+其中 $\Delta=\sum_{i=1}^N\dfrac{\partial^2}{\partial x_i^2}$ 表示关于空间变量
+$x$ 的 Laplace 算子, $t$ 是时间变量, $u_0(x)$ 是给定的函数, 称为
+\emph{初值} (或 \emph{Cauchy 数据}).
+
+\index{refangcheng@热方程 (heat equation)}
+方程 \eqref{eq:10.1} 称为\emph{热方程}, 因为它刻画区域 $\Omega$ 中时刻 $t$
+的温度分布 $u$.热方程及其各种变形出现在许多扩散现象中\footnote{热的扩散
+只是众多例子之一.} (见本章末评注).热方程是\emph{抛物型}方程的最简单
+例子.\footnote{关于偏微分方程分为``椭圆型'', ``抛物型'', ``双曲型''三类
+的传统分类, 参见例如 R.~Courant--D.~Hilbert \bref{CourantHilbert}{1}.}
+
+方程 \eqref{eq:10.2} 是 (齐次) \emph{Dirichlet 边界条件}; 可以把它换成
+Neumann 条件
+\begin{equation*}
+\frac{\partial u}{\partial n}=0\quad\text{在}\ \Sigma\ \text{上}
+\tag*{(2$'$)}
+\end{equation*}
+($n$ 是 $\Gamma$ 的外单位法向量), 或第~
+\ref{chap:8}~章与第~
+\ref{chap:9}~章中遇到的任何边界条件.
+条件 \eqref{eq:10.2} 对应于假设边界 $\Gamma$ 保持零温度; 条件 $(2')$
+对应于假设通过 $\Gamma$ 的热流为零.我们通过把 $u(x,t)$ 看作定义在
+$[0,+\infty)$ 上, 取值于空间 $H$ 的函数来求解问题 \eqref{eq:10.1}--
+\eqref{eq:10.3}, 其中 $H$ 是只依赖于 $x$ 的函数空间: 例如 $H=L^2(\Omega)$,
+或 $H=H_0^1(\Omega)$.当我们只写 $u(t)$ 时, 意思是 $u(t)$ 是 $H$ 的元素,
+即函数 $x\mapsto u(x,t)$.这种观点使我们能够把 Hille--Yosida 定理与第 8, 9
+章的结果结合起来, 非常容易地求解问题 \eqref{eq:10.1}--\eqref{eq:10.3}.
+
+为简化起见, 我们在整个第~
+\ref{chap:10}~章中假设 $\Omega$ 属于 $C^\infty$ 类且
+$\Gamma$ 有界 (但若只关心弱解, 这个假设可以大大减弱).
+
+\begin{keytheorem}
+\label{thm:10.1}
+假设 $u_0\in L^2(\Omega)$.则存在唯一的函数 $u(x,t)$ 满足
+\eqref{eq:10.1}, \eqref{eq:10.2}, \eqref{eq:10.3} 以及
+\begin{equation}
+u\in C([0,\infty);L^2(\Omega))\cap C((0,\infty);H^2(\Omega)\cap
+H_0^1(\Omega)),
+\label{eq:10.4}
+\end{equation}
+\begin{equation}
+u\in C^1((0,\infty);L^2(\Omega)).
+\label{eq:10.5}
+\end{equation}
+此外,
+\begin{equation*}
+u\in C^\infty(\overline\Omega\times[\varepsilon,\infty))
+\quad\forall\varepsilon>0.
+\end{equation*}
+最后, $u\in L^2(0,\infty;H_0^1(\Omega))$ 且\footnote{依照上面的讨论, 我们
+采用下述记号:
+$\abs{u(T)}_{L^2(\Omega)}=\int_\Omega\abs{u(x,T)}^2dx$ 以及
+$\abs{\nabla u(t)}^2_{L^2(\Omega)}
+=\sum_{i=1}^N\int_\Omega\abs{\dfrac{\partial u}{\partial x_i}(x,t)}^2dx$.}
+\begin{equation}
+\frac12\abs{u(T)}_{L^2(\Omega)}^2
++\int_0^T\abs{\nabla u(t)}^2_{L^2(\Omega)}dt
+=\frac12\abs{u_0}_{L^2(\Omega)}^2\quad\forall T>0.
+\label{eq:10.6}
+\end{equation}
+\end{keytheorem}
+
+\begin{proof}
+我们在 $H=L^2(\Omega)$ 中应用 Hille--Yosida 理论 (但也可以作其他选择; 见
+定理  \ref{thm:10.2} 的证明).考虑由
+\begin{equation*}
+D(A)=H^2(\Omega)\cap H_0^1(\Omega),\qquad Au=-\Delta u
+\end{equation*}
+定义的无界算子 $A:D(A)\subset H\to H$.
+
+注意, 边界条件 \eqref{eq:10.2} 已被纳入 $A$ 的定义域中, 这一点很重要.
+我们断言 $A$ 是自伴极大单调算子.于是可以应用定理  \ref{thm:7.7}, 推出
+\eqref{eq:10.1}--\eqref{eq:10.3} 存在唯一的满足 \eqref{eq:10.4} 与
+\eqref{eq:10.5} 的解.
+
+(i) \emph{$A$ 单调.} 对每个 $u\in D(A)$, 有
+\begin{equation*}
+(Au,u)_{L^2}=\int_\Omega(-\Delta u)u=\int_\Omega\abs{\nabla u}^2\ge0.
+\end{equation*}
+
+(ii) \emph{$A$ 极大单调.} 须验证 $R(I+A)=H=L^2$.但我们已知 (见定理
+ \ref{thm:9.25}): 对每个 $f\in L^2$, 方程 $u-\Delta u=f$ 存在唯一的解
+$u\in H^2\cap H_0^1$.
+
+(iii) \emph{$A$ 自伴.} 由命题  \ref{prop:7.6}, 只须验证 $A$ 对称.对每个
+$u,v\in D(A)$, 有
+\begin{equation*}
+(Au,v)_{L^2}=\int_\Omega(-\Delta u)v=\int_\Omega\nabla u\cdot\nabla v
+\end{equation*}
+以及
+\begin{equation*}
+(u,Av)_{L^2}=\int_\Omega u(-\Delta v)=\int_\Omega\nabla u\cdot\nabla v,
+\end{equation*}
+从而 $(Au,v)=(u,Av)$.
+
+其次, 由定理  \ref{thm:9.25} 推出: 对每个整数 $\ell$, 有
+$D(A^\ell)\subset H^{2\ell}(\Omega)$, 且嵌入连续.更精确地说,
+\begin{equation*}
+D(A^\ell)=\{u\in H^{2\ell}(\Omega);\ u=\Delta u=\dots=\Delta^{\ell-1}u=0
+\ \text{在}\ \Gamma\ \text{上}\}.
+\end{equation*}
+由定理  \ref{thm:7.7} 我们知道, \eqref{eq:10.1}--\eqref{eq:10.3} 的解 $u$
+满足
+\begin{equation*}
+u\in C^k((0,\infty);D(A^\ell))\quad\forall k,\ \forall\ell,
+\end{equation*}
+从而
+\begin{equation*}
+u\in C^k((0,\infty);H^{2\ell}(\Omega))\quad\forall k,\ \forall\ell.
+\end{equation*}
+由此推出 (借助推论  \ref{cor:9.15})
+\begin{equation*}
+u\in C^k((0,\infty);C^k(\overline\Omega))\quad\forall k.
+\end{equation*}
+现在我们转向 \eqref{eq:10.6} 的证明.形式上, 我们把 \eqref{eq:10.1} 乘以
+$u$ 并在 $\Omega\times(0,T)$ 上积分.但必须小心, 因为 $u(t)$ 在 $(0,\infty)$
+上可微, 而在 $[0,\infty)$ 上不可微.考虑函数
+$\varphi(t)=\dfrac12\abs{u(t)}^2_{L^2(\Omega)}$.它在 $(0,\infty)$ 上属于
+$C^1$ 类 (由 \eqref{eq:10.5}), 且对 $t>0$,
+\begin{equation*}
+\varphi'(t)=\left(u(t),\frac{du}{dt}(t)\right)_{L^2}
+=(u(t),\Delta u(t))_{L^2}=-\int_\Omega\abs{\nabla u(t)}^2.
+\end{equation*}
+因此, 对 $0<\varepsilon<T<\infty$, 我们得到
+\begin{equation*}
+\varphi(T)-\varphi(\varepsilon)
+=\int_\varepsilon^T\varphi'(t)dt
+=-\int_\varepsilon^T\abs{\nabla u(t)}^2_{L^2}dt.
+\end{equation*}
+最后令 $\varepsilon\to0$.由于 $\varphi(\varepsilon)\to\frac12\abs{u_0}^2$
+(因为 $u\in C([0,\infty];L^2(\Omega))$), 我们得到
+$u\in L^2(0,\infty;H_0^1(\Omega))$, 且 \eqref{eq:10.6} 成立.
+
+若对 $u_0$ 作附加假设, 则解 $u$ 直到 $t=0$ 都会变得更正则 (回忆: 在
+$t=0$ 之外, 定理  \ref{thm:10.1} 总保证 $u$ 光滑, 即
+$u\in C^\infty(\overline\Omega\times[\varepsilon,\infty))\ \forall\varepsilon>0$).
+\end{proof}
+
+\begin{theorem}
+\label{thm:10.2}
+(a) 若 $u_0\in H_0^1(\Omega)$, 则 \eqref{eq:10.1}--\eqref{eq:10.3} 的解
+$u$ 满足
+\begin{equation*}
+u\in C([0,\infty);H_0^1(\Omega))\cap L^2(0,\infty;H^2(\Omega))
+\end{equation*}
+且
+\begin{equation*}
+\frac{\partial u}{\partial t}\in L^2(0,\infty;L^2(\Omega)).
+\end{equation*}
+此外, 我们有
+\begin{equation}
+\int_0^T\left\|\frac{\partial u}{\partial t}(t)\right\|^2_{L^2(\Omega)}dt
++\frac12\abs{\nabla u(T)}^2_{L^2(\Omega)}
+=\frac12\abs{\nabla u_0}^2_{L^2(\Omega)}.
+\label{eq:10.7}
+\end{equation}
+
+(b) 若 $u_0\in H^2(\Omega)\cap H_0^1(\Omega)$, 则
+\begin{equation*}
+u\in C([0,\infty);H^2(\Omega))\cap L^2(0,\infty;H^3(\Omega))
+\end{equation*}
+且
+\begin{equation*}
+\frac{\partial u}{\partial t}\in L^2(0,\infty;H_0^1(\Omega)).
+\end{equation*}
+
+(c) 若 $u_0\in H^k(\Omega)\ \forall k$ 且满足所谓的\emph{相容性条件}
+\begin{equation}
+u_0=\Delta u_0=\dots=\Delta^ju_0=\dots=0\quad\text{在}\ \Gamma\ \text{上}
+\label{eq:10.8}
+\end{equation}
+(对每个整数 $j$), 则 $u\in C^\infty(\overline\Omega\times[0,\infty))$.
+\end{theorem}
+
+\begin{proof}[(a)]
+这里我们在空间 $H_1=H_0^1(\Omega)$ 中工作, 它配以标量积
+\begin{equation*}
+(u,v)_{H_1}=\int_\Omega\nabla u\cdot\nabla v+\int_\Omega uv.
+\end{equation*}
+在 $H_1$ 中考虑由
+\begin{equation*}
+D(A_1)=\{u\in H^3(\Omega)\cap H_0^1(\Omega);\ \Delta u\in H_0^1(\Omega)\},
+\qquad A_1u=-\Delta u
+\end{equation*}
+定义的无界算子 $A_1:D(A_1)\subset H_1\to H_1$.
+
+我们断言 $A_1$ 极大单调且自伴.
+
+(i) \emph{$A_1$ 单调.} 对每个 $u\in D(A_1)$, 有
+\begin{equation*}
+(A_1u,u)_{H_1}=\int_\Omega\nabla(-\Delta u)\cdot\nabla u
++\int_\Omega(-\Delta u)u
+=\int_\Omega\abs{\Delta u}^2+\int_\Omega\abs{\nabla u}^2\ge0.
+\end{equation*}
+
+(ii) \emph{$A_1$ 极大单调.} 由定理  \ref{thm:9.25} 我们知道: 对每个
+$f\in H^1(\Omega)$, 问题
+\begin{equation*}
+\begin{cases}
+u-\Delta u=f & \text{在}\ \Omega\ \text{中},\\
+u=0 & \text{在}\ \Gamma\ \text{上}
+\end{cases}
+\end{equation*}
+的解 $u\in H_0^1(\Omega)$ 属于 $H^3(\Omega)$.若此外 $f\in H_0^1(\Omega)$,
+则 $\Delta u\in H_0^1(\Omega)$, 从而 $u\in D(A_1)$.
+
+(iii) \emph{$A_1$ 对称.} 对每个 $u,v\in D(A_1)$, 有
+\begin{align*}
+(A_1u,v)_{H_1}
+&=\int_\Omega\nabla(-\Delta u)\cdot\nabla v+\int_\Omega(-\Delta u)v\\
+&=\int_\Omega\Delta u\,\Delta v+\int_\Omega\nabla u\cdot\nabla v
+=(u,A_1v)_{H_1}.
+\end{align*}
+
+应用定理  \ref{thm:7.7} 可见: 若 $u_0\in H_0^1(\Omega)$, 则存在
+\eqref{eq:10.1}--\eqref{eq:10.3} 的解 $u$ (由唯一性, 它与定理
+ \ref{thm:10.1} 中得到的解相同), 使得
+\begin{equation*}
+u\in C([0,\infty);H_0^1(\Omega)).
+\end{equation*}
+最后, 令 $\varphi(t)=\dfrac12\abs{\nabla u(t)}^2_{L^2(\Omega)}$.这个函数在
+$(0,\infty)$ 上属于 $C^\infty$ 类, 且
+\begin{equation*}
+\varphi'(t)=\left(\nabla u(t),\nabla\frac{du}{dt}(t)\right)_{L^2}
+=\left(-\Delta u(t),\frac{du}{dt}(t)\right)_{L^2}
+=-\left\|\frac{du}{dt}(t)\right\|^2_{L^2}.
+\end{equation*}
+由此推出, 对 $0<\varepsilon<T<\infty$, 有
+\begin{equation*}
+\varphi(T)-\varphi(\varepsilon)
++\int_\varepsilon^T\left\|\frac{du}{dt}(t)\right\|^2_{L^2}dt=0.
+\end{equation*}
+当 $\varepsilon\to0$ 时,
+$\varphi(\varepsilon)\to\frac12\abs{\nabla u_0}^2_{L^2}$, 于是容易得到结论.
+\end{proof}
+
+\begin{proof}[(b)]
+这里我们在空间 $H_2=H^2(\Omega)\cap H_0^1(\Omega)$ 中工作, 它配以标量积
+\begin{equation*}
+(u,v)_{H_2}=(\Delta u,\Delta v)_{L^2}+(u,v)_{L^2}
+\end{equation*}
+(相应的范数与通常的 $H^2$ 范数等价; 为什么?).在 $H_2$ 中考虑由
+\begin{equation*}
+D(A_2)=\{u\in H^4(\Omega);\ u\in H_0^1(\Omega)\ \text{且}\
+\Delta u\in H_0^1(\Omega)\},\qquad A_2u=-\Delta u
+\end{equation*}
+定义的无界算子 $A_2:D(A_2)\subset H_2\to H_2$.
+
+容易证明 $A_2$ 是 $H_2$ 中的自伴极大单调算子.\footnote{更一般地, 若
+$A:D(A)\subset H\to H$ 是自伴极大单调算子, 则可以考虑 Hilbert 空间
+$\tilde H=D(A)$, 它配以标量积
+$(u,v)_{\tilde H}=(Au,Av)+(u,v)$.此时由 $D(\tilde A)=D(A^2)$ 与
+$\tilde Au=Au$ 定义的算子 $\tilde A:D(\tilde A)\subset\tilde H\to\tilde H$
+是 $\tilde H$ 中的自伴极大单调算子.} 因此我们可以对 $H_2$ 中的 $A_2$
+应用定理  \ref{thm:7.7}.最后, 令
+$\varphi(t)=\dfrac12\abs{\Delta u(t)}^2_{L^2}$.这个函数在 $(0,\infty)$ 上
+属于 $C^\infty$ 类, 且
+\begin{equation*}
+\varphi'(t)=\left(\Delta u(t),\Delta\frac{du}{dt}(t)\right)_{L^2}
+=(\Delta u(t),\Delta^2u(t))_{L^2}=-\abs{\nabla\Delta u(t)}^2_{L^2}.
+\end{equation*}
+于是, 对 $0<\varepsilon<T<\infty$, 有
+\begin{equation*}
+\frac12\abs{\Delta u(T)}^2_{L^2}-\frac12\abs{\Delta u(\varepsilon)}^2_{L^2}
++\int_\varepsilon^T\abs{\nabla\Delta u(t)}^2_{L^2}dt=0.
+\end{equation*}
+取极限 $\varepsilon\to0$, 可见 $u\in L^2(0,\infty;H^3(\Omega))$ (为什么?),
+且 (由方程 \eqref{eq:10.1}) $\dfrac{du}{dt}\in L^2(0,\infty;H^1(\Omega))$.
+\end{proof}
+
+\begin{proof}[(c)]
+在空间 $H=L^2(\Omega)$ 中, 考虑由
+\begin{equation*}
+D(A)=H^2(\Omega)\cap H_0^1(\Omega),\qquad Au=-\Delta u
+\end{equation*}
+定义的算子 $A:D(A)\subset H\to H$.
+
+应用定理  \ref{thm:7.5}, 我们知道: 若 $u_0\in D(A^k)$, $k\ge1$, 则
+\begin{equation*}
+u\in C^{k-j}([0,\infty);D(A^j))\quad\forall j=0,1,\dots,k.
+\end{equation*}
+假设 \eqref{eq:10.8} 恰好说明 $u_0\in D(A^k)$ 对每个整数 $k\ge1$ 成立.
+因此我们有
+\begin{equation*}
+u\in C^{k-j}([0,\infty);D(A^j))\quad\forall k\ge1,\
+\forall j=0,1,\dots,k.
+\end{equation*}
+由此推出 (如同定理  \ref{thm:10.1} 的证明)
+$u\in C^\infty(\overline\Omega\times[0,\infty))$.
+\end{proof}
+
+\begin{keyremark}
+\label{rem:10.1}
+定理  \ref{thm:10.1} 表明热方程对初值 $u_0$ 有很强的\emph{光滑化效应}.
+注意, 即使初值不连续, 解 $u(x,t)$ 对每个 $t>0$ 关于 $x$ 也是 $C^\infty$ 的.
+特别地, 这个效应意味着热方程是\emph{时间不可逆}的.一般说来, 人们不能
+求解带有``终值''数据
+\begin{equation}
+u(x,T)=u_T(x)\quad\text{在}\ \Omega\ \text{上}
+\label{eq:10.11}
+\end{equation}
+的反向问题
+\begin{equation}
+\frac{\partial u}{\partial t}-\Delta u=0\quad\text{在}\ \Omega\times(0,T)\ \text{中},
+\label{eq:10.9}
+\end{equation}
+\begin{equation}
+u=0\quad\text{在}\ \Gamma\times(0,T)\ \text{上},
+\label{eq:10.10}
+\end{equation}
+我们必然要假设
+\begin{equation*}
+u_T\in C^\infty(\overline\Omega)
+\quad\text{且}\quad
+\Delta^ju_T=0\ \text{在}\ \Gamma\ \text{上}\ \forall j\ge0.
+\end{equation*}
+但即使作了这个假设, 反向问题 \eqref{eq:10.9}, \eqref{eq:10.10}, \eqref{eq:10.11} 也未必有解.不应把这个与问题 $(9')$, \eqref{eq:10.10}, \eqref{eq:10.11} 混淆, 其中
+\begin{equation*}
+-\frac{\partial u}{\partial t}-\Delta u=0
+\quad\text{在}\ \Omega\times(0,T)\ \text{中},
+\tag*{(9$'$)}
+\end{equation*}
+它对任何数据 $u_T\in L^2(\Omega)$ 总有唯一解 (把 $t$ 换成 $T-t$ 并应用
+定理  \ref{thm:10.1}).
+\end{keyremark}
+
+\begin{remark}
+\label{rem:10.2}
+若把 Dirichlet 条件换成 Neumann 条件, 前面的结果 (作一些小的修改后) 仍然
+成立.
+\end{remark}
+
+\begin{remark}
+\label{rem:10.3}
+当 $\Omega$ 有界时, 问题 \eqref{eq:10.1}--\eqref{eq:10.3} 也可以通过
+在 $L^2(\Omega)$ 的一个 Hilbert 基中分解来求解.为此, 非常方便的是选取
+$L^2(\Omega)$ 的一个由 $-\Delta$ 的特征函数 (带零 Dirichlet 条件) 组成的基
+$(e_i(x))_{i\ge1}$, 即
+\begin{equation*}
+\begin{cases}
+-\Delta e_i=\lambda_ie_i & \text{在}\ \Omega\ \text{中},\\
+e_i=0 & \text{在}\ \Gamma\ \text{上}
+\end{cases}
+\end{equation*}
+(见 \S \ref{sec:9.8}).我们以级数\footnote{由于显而易见的原因, 这个方法也
+称为``分离变量法''或 Fourier 方法.事实上, Fourier 正是在研究一个空间变量
+的热方程时发现了 Fourier 级数.}
+\begin{equation}
+u(x,t)=\sum_{i=1}^\infty a_i(t)e_i(x)
+\label{eq:10.12}
+\end{equation}
+的形式寻求 \eqref{eq:10.1}--\eqref{eq:10.3} 的解.我们立即看出, 函数
+$a_i(t)$ 必须满足
+\begin{equation*}
+a_i'(t)+\lambda_ia_i(t)=0,
+\end{equation*}
+从而 $a_i(t)=a_i(0)e^{-\lambda_it}$.常数 $a_i(0)$ 由关系式
+\begin{equation}
+u_0(x)=\sum_{i=1}^\infty a_i(0)e_i(x)
+\label{eq:10.13}
+\end{equation}
+确定.换言之, \eqref{eq:10.1}--\eqref{eq:10.3} 的解 $u$ 由
+\begin{equation}
+u(x,t)=\sum_{i=1}^\infty a_i(0)e^{-\lambda_it}e_i(x)
+\label{eq:10.14}
+\end{equation}
+给出, 其中常数 $a_i(0)$ 是 $u_0(x)$ 在基 $(e_i)$ 中的分量, 即
+$a_i(0)=\int_\Omega u_0e_i$.
+
+关于这个级数的收敛性 (以及由此得到的 $u$ 的正则性), 我们参见
+H.~Weinberger \bref{Weinberger}{1}.注意这个方法与求解线性微分方程组
+\begin{equation*}
+\frac{du}{dt}+Mu=0
+\end{equation*}
+时所用的标准技巧之间的类似之处, 其中 $u(t)$ 取值于一个有限维向量空间,
+$M$ 是对称矩阵.当然, 主要差别来自问题 \eqref{eq:10.1}--\eqref{eq:10.3}
+对应的是一个无穷维方程组这一事实.
+\end{remark}
+
+\begin{remark}
+\label{rem:10.4}
+\index{xiangrongxingtiaojian@相容性条件 (compatibility conditions)}
+相容性条件 \eqref{eq:10.8} 看上去也许有些神秘, 但事实上它们是自然的.
+它们是使 \eqref{eq:10.1}--\eqref{eq:10.3} 有直到 $t=0$ 都光滑的解, 即
+$u\in C^\infty(\overline\Omega\times[0,\infty))$ 的\emph{必要}条件 (假设
+$u_0\in C^\infty(\overline\Omega)$ 且 $u_0=0$ 在 $\partial\Omega$ 上, 并不能
+保证直到 $t=0$ 的光滑性).事实上, 设 $u\in C^\infty(\overline\Omega\times
+[0,\infty))$ 满足 \eqref{eq:10.1}--\eqref{eq:10.3}.则显然
+\begin{equation}
+\frac{\partial^ju}{\partial t^j}=0
+\quad\text{在}\ \Gamma\times(0,\infty)\ \text{上}\quad\forall j,
+\label{eq:10.15}
+\end{equation}
+由连续性, 我们还有
+\begin{equation*}
+\frac{\partial^ju}{\partial t^j}=0
+\quad\text{在}\ \Gamma\times[0,\infty)\ \text{上}\quad\forall j.
+\end{equation*}
+另一方面,
+\begin{equation*}
+\frac{\partial^2u}{\partial t^2}
+=\Delta\left(\frac{\partial u}{\partial t}\right)=\Delta^2u
+\quad\text{在}\ Q\ \text{中},
+\end{equation*}
+从而由归纳法,
+\begin{equation*}
+\frac{\partial^ju}{\partial t^j}=\Delta^ju\quad\text{在}\ Q\ \text{中}
+\quad\forall j.
+\end{equation*}
+再次由连续性, 我们有
+\begin{equation}
+\frac{\partial^ju}{\partial t^j}=\Delta^ju
+\quad\text{在}\ \Omega\times[0,\infty)\ \text{中}.
+\label{eq:10.16}
+\end{equation}
+在 $\Gamma\times\{0\}$ 上比较 \eqref{eq:10.15} 与 \eqref{eq:10.16}, 我们
+得到 \eqref{eq:10.8}.
+\end{remark}
+
+\begin{remark}
+\label{rem:10.5}
+当然, 若我们在定理  \ref{thm:10.2} 的 (b) 与 (c) 两种情形之间作中间假设,
+则 $u$ 在 $t=0$ 附近的正则性结果有许多变体.
+\end{remark}
+\section{极大值原理}
+\label{sec:10.2}
+
+主要结果如下.
+
+\begin{keytheorem}
+\label{thm:10.3}
+假设 $u_0\in L^2(\Omega)$, 设 $u$ 为 \eqref{eq:10.1}--\eqref{eq:10.3} 的解.
+则对所有 $(x,t)\in Q$, 有
+\begin{equation*}
+\min\left\{0,\inf_\Omega u_0\right\}\le u(x,t)\le\max\left\{0,
+\sup_\Omega u_0\right\}.
+\end{equation*}
+\end{keytheorem}
+
+\begin{proof}
+与椭圆情形一样, 我们使用 Stampacchia 的截断方法.令
+\begin{equation*}
+K=\max\left\{0,\sup_\Omega u_0\right\}
+\end{equation*}
+并假设 $K<+\infty$.固定一个如定理  \ref{thm:9.27} 的证明中的函数 $G$,
+并令
+\begin{equation*}
+H(s)=\int_0^sG(\sigma)d\sigma,\quad s\in\R.
+\end{equation*}
+容易验证, 由
+\begin{equation*}
+\varphi(t)=\int_\Omega H(u(x,t)-K)dx
+\end{equation*}
+定义的函数 $\varphi$ 具有下述性质:
+\begin{equation}
+\varphi\in C([0,\infty);\R),\quad\varphi(0)=0,\quad
+\varphi\ge0\ \text{在}\ [0,\infty)\ \text{上},
+\label{eq:10.17}
+\end{equation}
+\begin{equation}
+\varphi\in C^1((0,\infty);\R),
+\label{eq:10.18}
+\end{equation}
+且
+\begin{align*}
+\varphi'(t)&=\int_\Omega G(u(x,t)-K)\frac{\partial u}{\partial t}(x,t)dx
+=\int_\Omega G(u(x,t)-K)\Delta u(x,t)dx\\
+&=-\int_\Omega G'(u-K)\abs{\nabla u}^2dx\le0,
+\end{align*}
+因为 $G(u(x,t)-K)\in H_0^1(\Omega)$ 对每个 $t>0$ 成立.由此推出
+$\varphi\equiv0$, 从而对每个 $t>0$, $u(x,t)\le K$ 在 $\Omega$ 上几乎
+处处成立.
+\end{proof}
+
+\begin{corollary}
+\label{cor:10.4}
+设 $u_0\in L^2(\Omega)$.\eqref{eq:10.1}--\eqref{eq:10.3} 的解 $u$ 具有
+下述性质:
+
+(i) 若 $u_0\ge0$ 在 $\Omega$ 上几乎处处成立, 则 $u\ge0$ 在 $Q$ 中.
+
+(ii) 若 $u_0\in L^\infty(\Omega)$, 则 $u\in L^\infty(Q)$ 且
+\begin{equation}
+\norm{u}_{L^\infty(Q)}\le\norm{u_0}_{L^\infty(\Omega)}.
+\label{eq:10.19}
+\end{equation}
+\end{corollary}
+
+\begin{corollary}
+\label{cor:10.5}
+设 $u_0\in C(\overline\Omega)\cap L^2(\Omega)$ 且 $u_0=0$ 在 $\Gamma$ 上.
+\footnote{若 $\Omega$ 无界, 我们还假设当 $\abs{x}\to\infty$ 时
+$u_0(x)\to0$.} 则 \eqref{eq:10.1}--\eqref{eq:10.3} 的解 $u$ 属于
+$C(\overline Q)$.
+\end{corollary}
+
+\begin{proof}[推论 \ref{cor:10.5}]
+设 $(u_{0n})$ 为 $C_c^\infty(\Omega)$ 中的函数序列, 使得
+$u_{0n}\to u_0$ 在 $L^\infty(\Omega)$ 中且在 $L^2(\Omega)$ 中 (这样的序列
+容易构造).由定理  \ref{thm:10.2}, 对应于初值 $u_{0n}$ 的
+\eqref{eq:10.1}--\eqref{eq:10.3} 的解 $u_n$ 属于 $C^\infty(\overline Q)$.
+另一方面 (定理  \ref{thm:7.7}), 我们知道
+\begin{equation*}
+\abs{u_n(t)-u(t)}_{L^2(\Omega)}\le\abs{u_{0n}-u_0}_{L^2(\Omega)}
+\quad\forall t\ge0.
+\end{equation*}
+由 \eqref{eq:10.19} 我们有
+\begin{equation*}
+\norm{u_n-u_m}_{L^\infty(Q)}\le\norm{u_{0n}-u_{0m}}_{L^\infty(\Omega)}.
+\end{equation*}
+因此, 序列 $(u_n)$ 在 $Q$ 上一致收敛于 $u$, 从而 $u\in C(\overline Q)$.
+\end{proof}
+
+与椭圆情形一样, 极大值原理还有另一种途径.为简单起见, 这里假设
+$\Omega$ 有界.设 $u(x,t)$ 是满足\footnote{注意, 我们没有给定任何边界条件或
+任何初值.}
+\begin{equation}
+u\in C(\overline\Omega\times[0,T]),
+\label{eq:10.20}
+\end{equation}
+\begin{equation}
+u\ \text{在}\ \Omega\times(0,T)\ \text{中关于}\ t\ \text{属于}\ C^1\
+\text{类, 关于}\ x\ \text{属于}\ C^2\ \text{类},
+\label{eq:10.21}
+\end{equation}
+\begin{equation}
+\frac{\partial u}{\partial t}-\Delta u\le0\quad\text{在}\
+\Omega\times(0,T)\ \text{中}
+\label{eq:10.22}
+\end{equation}
+的函数.
+
+\begin{theorem}
+\label{thm:10.6}
+假设 \eqref{eq:10.20}, \eqref{eq:10.21} 与 \eqref{eq:10.22} 成立.则
+\begin{equation}
+\max_{\overline\Omega\times[0,T]}u=\max_Pu,
+\label{eq:10.23}
+\end{equation}
+其中 $P=(\overline\Omega\times\{0\})\cup(\Gamma\times[0,T])$ 称为柱体
+$\Omega\times(0,T)$ 的\emph{\index{paowubianjie@抛物边界 (parabolic boundary)}
+抛物边界}.
+\end{theorem}
+
+\begin{proof}
+令 $v(x,t)=u(x,t)+\varepsilon\abs{x}^2$, 其中 $\varepsilon>0$, 于是
+\begin{equation}
+\frac{\partial v}{\partial t}-\Delta v\le-2\varepsilon N<0
+\quad\text{在}\ \Omega\times(0,T)\ \text{中}.
+\label{eq:10.24}
+\end{equation}
+我们断言
+\begin{equation*}
+\max_{\overline\Omega\times[0,T]}v=\max_Pv.
+\end{equation*}
+若不然, 则存在点 $(x_0,t_0)\in\overline\Omega\times[0,T]$ 使得
+$(x_0,t_0)\notin P$ 且
+\begin{equation*}
+\max_{\overline\Omega\times[0,T]}v=v(x_0,t_0).
+\end{equation*}
+由于 $x_0\in\Omega$ 且 $0<t_0\le T$, 我们有
+\begin{equation}
+\Delta v(x_0,t_0)\le0
+\label{eq:10.25}
+\end{equation}
+以及
+\begin{equation}
+\frac{\partial v}{\partial t}(x_0,t_0)\ge0
+\label{eq:10.26}
+\end{equation}
+(若 $t_0<T$, 则 $\dfrac{\partial v}{\partial t}(x_0,t_0)=0$; 若
+$t_0=T$, 则 $\dfrac{\partial v}{\partial t}(x_0,t_0)\ge0$).\footnote{为
+稳妥起见, 应当在 $\Omega\times(0,T')$ 中工作, 其中 $T'<T$, 然后令
+$T'\to T$, 因为 $v$ 只在 $\Omega\times(0,T)$ 中关于 $t$ 属于 $C^1$ 类.}
+结合 \eqref{eq:10.25} 与 \eqref{eq:10.26}, 我们得到
+$\left(\dfrac{\partial v}{\partial t}-\Delta v\right)(x_0,t_0)\ge0$, 这与
+\eqref{eq:10.24} 矛盾.因此我们有
+\begin{equation*}
+\max_{\overline\Omega\times[0,T]}v=\max_Pv\le\max_Pu+\varepsilon C,
+\end{equation*}
+其中 $C=\sup_{x\in\Omega}\abs{x}^2$.由于 $u\le v$, 我们推出
+\begin{equation*}
+\max_{\overline\Omega\times[0,T]}u\le\max_Pu+\varepsilon C
+\quad\forall\varepsilon>0.
+\end{equation*}
+这就完成了 \eqref{eq:10.23} 的证明.
+\end{proof}
+
+\section{波动方程}
+\label{sec:10.3}
+
+设 $\Omega\subset\R^N$ 为开集.如上, 我们令
+\begin{equation*}
+Q=\Omega\times(0,\infty),\qquad\Sigma=\Gamma\times(0,\infty).
+\end{equation*}
+考虑下述问题: 求函数 $u(x,t):\Omega\times[0,\infty)\to\R$ 满足
+\begin{equation}
+\frac{\partial^2u}{\partial t^2}-\Delta u=0\quad\text{在}\ Q\ \text{中},
+\label{eq:10.27}
+\end{equation}
+\begin{equation}
+u=0\quad\text{在}\ \Sigma\ \text{上},
+\label{eq:10.28}
+\end{equation}
+\begin{equation}
+u(x,0)=u_0(x)\quad\text{在}\ \Omega\ \text{上},
+\label{eq:10.29}
+\end{equation}
+\begin{equation}
+\frac{\partial u}{\partial t}(x,0)=v_0(x)\quad\text{在}\ \Omega\ \text{上},
+\label{eq:10.30}
+\end{equation}
+其中 $\Delta=\sum_{i=1}^N\dfrac{\partial^2}{\partial x_i^2}$ 表示关于空间
+变量 $x$ 的 Laplace 算子, $t$ 是时间变量, $u_0,v_0$ 是给定的函数.
+
+\index{bodongfangcheng@波动方程 (wave equation)}
+方程 \eqref{eq:10.27} 称为\emph{波动方程}.算子
+$\left(\dfrac{\partial^2}{\partial t^2}-\Delta\right)$ 常记作 $\square$,
+\index{dAlembertsuanzi@d'Alembert 算子 (d'Alembertian)}
+称为 \emph{d'Alembert 算子}.波动方程是\emph{双曲型}方程的典型例子.
+
+当 $N=1$ 且 $\Omega=(0,1)$ 时, 方程 \eqref{eq:10.27} 刻画在没有外力作用时
+弦的微小\footnote{完整的方程是一个非常困难的非线性方程; 方程
+\eqref{eq:10.27} 是它在平衡位置附近的线性化版本.}振动.对每个 $t$, 函数
+$x\in\Omega\mapsto u(x,t)$ 的图形表示弦在时刻 $t$ 的构形.当 $N=2$ 时,
+方程 \eqref{eq:10.27} 刻画弹性膜的微小振动.对每个 $t$, 函数
+$x\in\Omega\mapsto u(x,t)$ 的图形表示膜在时刻 $t$ 的构形.更一般地, 方程
+\eqref{eq:10.27} 刻画波 (声波, 电磁波等) 在某个均匀弹性介质
+$\Omega\subset\R^N$ 中的传播.
+
+方程 \eqref{eq:10.28} 是 (齐次) Dirichlet 边界条件; 可以把它换成 Neumann
+条件或第~
+\ref{chap:8}~章或第~
+\ref{chap:9}~章中遇到的任何边界条件.条件 $u=0$ 在 $\Sigma$ 上意味着
+弦 (或膜) 在 $\Gamma$ 上固定, 而 Neumann 条件则说弦在其端点处自由.方程
+\eqref{eq:10.29} 与 \eqref{eq:10.30} 表示系统的初始状态: 初始构形 (也说
+初始位移) 由 $u_0$ 描述, 初速度由 $v_0$ 描述.数据 $(u_0,v_0)$ 通常称为
+\emph{Cauchy 数据}.
+
+为简化起见, 我们在本节中始终假设 $\Omega$ 属于 $C^\infty$ 类, 且 $\Gamma$
+有界.
+
+\begin{keytheorem}[存在性与唯一性]
+\label{thm:10.7}
+假设 $u_0\in H^2(\Omega)\cap H_0^1(\Omega)$ 且 $v_0\in H_0^1(\Omega)$.则
+\eqref{eq:10.27}--\eqref{eq:10.30} 存在唯一的解 $u$, 满足
+\begin{equation}
+u\in C([0,\infty);H^2(\Omega)\cap H_0^1(\Omega))\cap
+C^1([0,\infty);H_0^1(\Omega))\cap C^2([0,\infty);L^2(\Omega)).
+\label{eq:10.31}
+\end{equation}
+此外,\footnote{我们采用与前面各节相同的记号, 即
+$\left\|\dfrac{\partial u}{\partial t}(t)\right\|^2_{L^2(\Omega)}
+=\int_\Omega\abs{\dfrac{\partial u}{\partial t}(x,t)}^2dx$,
+$\norm{\nabla u(t)}^2_{L^2(\Omega)}
+=\sum_{i=1}^N\int_\Omega\abs{\dfrac{\partial u}{\partial x_i}(x,t)}^2dx$.}
+\begin{equation}
+\left\|\frac{\partial u}{\partial t}(t)\right\|^2_{L^2(\Omega)}
++\abs{\nabla u(t)}^2_{L^2(\Omega)}
+=\abs{v_0}^2_{L^2(\Omega)}+\abs{\nabla u_0}^2_{L^2(\Omega)}
+\quad\forall t\ge0.
+\label{eq:10.32}
+\end{equation}
+\end{keytheorem}
+
+\begin{remark}
+\label{rem:10.6}
+方程 \eqref{eq:10.32} 是一条\emph{守恒律}, 它断言系统的能量不随时间改变.
+\end{remark}
+
+在证明定理  \ref{thm:10.7} 之前, 我们先提一个正则性结果.
+
+\begin{theorem}[正则性]
+\label{thm:10.8}
+假设初值满足
+\begin{equation*}
+u_0\in H^k(\Omega),\quad v_0\in H^k(\Omega)\quad\forall k,
+\end{equation*}
+以及相容性条件
+\begin{align*}
+\Delta^ju_0&=0\quad\text{在}\ \Gamma\ \text{上}\quad
+\forall j\ge0,\ j\ \text{为整数},\\
+\Delta^jv_0&=0\quad\text{在}\ \Gamma\ \text{上}\quad
+\forall j\ge0,\ j\ \text{为整数}.
+\end{align*}
+则 \eqref{eq:10.27}--\eqref{eq:10.30} 的解 $u$ 属于
+$C^\infty(\overline\Omega\times[0,\infty))$.
+\end{theorem}
+
+\begin{proof}[定理 \ref{thm:10.7}]
+与 \S \ref{sec:10.1} 一样, 我们把 $u(x,t)$ 看作定义在 $[0,\infty)$ 上的
+向量值函数; 更精确地说, 对每个 $t\ge0$, $u(t)$ 表示映射
+$x\mapsto u(x,t)$.我们把 \eqref{eq:10.27} 写成一阶方程组的形式:\footnote{
+这是标准的手法, 即把一个 $k$ 阶微分方程写成一个由 $k$ 个一阶方程组成的
+方程组.}
+\begin{equation}
+\begin{cases}
+\dfrac{\partial u}{\partial t}-v=0 & \text{在}\ Q\ \text{中},\\[2mm]
+\dfrac{\partial v}{\partial t}-\Delta u=0 & \text{在}\ Q\ \text{中},
+\end{cases}
+\label{eq:10.33}
+\end{equation}
+并令 $U=\binom{u}{v}$, 于是 \eqref{eq:10.33} 变成
+\begin{equation}
+\frac{dU}{dt}+AU=0,
+\label{eq:10.34}
+\end{equation}
+其中
+\begin{equation}
+AU=\begin{pmatrix}0&-I\\-\Delta&0\end{pmatrix}U
+=\begin{pmatrix}0&-I\\-\Delta&0\end{pmatrix}
+\begin{pmatrix}u\\v\end{pmatrix}
+=\begin{pmatrix}-v\\-\Delta u\end{pmatrix}.
+\label{eq:10.35}
+\end{equation}
+现在我们在空间 $H=H_0^1(\Omega)\times L^2(\Omega)$ 中应用 Hille--Yosida
+理论, 它配以标量积
+\begin{equation*}
+(U_1,U_2)=\int_\Omega\nabla u_1\cdot\nabla u_2dx+\int_\Omega u_1u_2dx
++\int_\Omega v_1v_2dx,
+\end{equation*}
+其中 $U_1=\binom{u_1}{v_1}$, $U_2=\binom{u_2}{v_2}$.
+
+考虑由 \eqref{eq:10.35} 与
+\begin{equation*}
+D(A)=(H^2(\Omega)\cap H_0^1(\Omega))\times H_0^1(\Omega)
+\end{equation*}
+定义的无界算子 $A:D(A)\subset H\to H$.
+
+注意, 边界条件 \eqref{eq:10.28} 已被纳入空间 $H$ 中.条件
+$v=\dfrac{\partial u}{\partial t}=0$ 在 $\Sigma$ 上是 \eqref{eq:10.28} 的
+直接推论.
+
+我们断言 $A+I$ 在 $H$ 中极大单调:
+
+(i) \emph{$A+I$ 单调}; 事实上, 若 $U=\binom{u}{v}\in D(A)$, 则
+\begin{align*}
+(AU,U)_H+\abs{U}^2_H
+&=-\int_\Omega\nabla v\cdot\nabla u-\int_\Omega uv
++\int_\Omega(-\Delta u)v+\int_\Omega u^2+\int_\Omega\abs{\nabla u}^2
++\int_\Omega v^2\\
+&=-\int_\Omega uv+\int_\Omega u^2+\int_\Omega v^2+\int_\Omega\abs{\nabla u}^2
+\ge0.
+\end{align*}
+
+(ii) \emph{$A+I$ 极大单调.} 这归结为证明 $A+2I$ 是满射.给定
+$F=\binom{f}{g}\in H$, 我们必须求解方程 $AU+2U=F$, 即方程组
+\begin{equation}
+\begin{cases}
+-v+2u=f & \text{在}\ \Omega\ \text{中},\\
+-\Delta u+2v=g & \text{在}\ \Omega\ \text{中},
+\end{cases}
+\label{eq:10.36}
+\end{equation}
+其中
+\begin{equation*}
+u\in H^2(\Omega)\cap H_0^1(\Omega)\quad\text{且}\quad
+v\in H_0^1(\Omega).
+\end{equation*}
+由 \eqref{eq:10.36} 推出
+\begin{equation}
+-\Delta u+4u=2f+g.
+\label{eq:10.37}
+\end{equation}
+方程 \eqref{eq:10.37} 有唯一的解 $u\in H^2(\Omega)\cap H_0^1(\Omega)$
+(由定理  \ref{thm:9.25}).然后取 $v=2u-f$ 即得到 $v\in H_0^1(\Omega)$.
+这样就解出了 \eqref{eq:10.36}.
+
+应用 Hille--Yosida 定理 (定理  \ref{thm:7.4}) 与注记 \ref{rem:7.7}, 我们
+看到问题
+\begin{equation}
+\begin{cases}
+\dfrac{dU}{dt}+AU=0 & \text{在}\ [0,\infty)\ \text{上},\\
+U(0)=U_0
+\end{cases}
+\label{eq:10.38}
+\end{equation}
+存在唯一的解, 满足
+\begin{equation}
+U\in C^1([0,\infty);H)\cap C([0,\infty);D(A)),
+\label{eq:10.39}
+\end{equation}
+因为 $U_0=\binom{u_0}{v_0}\in D(A)$.由 \eqref{eq:10.39} 我们推出
+\eqref{eq:10.31}.
+
+为证明 \eqref{eq:10.32}, 只须把 \eqref{eq:10.27} 乘以
+$\dfrac{\partial u}{\partial t}$ 并在 $\Omega$ 上积分.注意
+\begin{equation*}
+\int_\Omega\frac{\partial^2u}{\partial t^2}
+\frac{\partial u}{\partial t}dx
+=\frac12\frac{\partial}{\partial t}\int_\Omega
+\abs{\frac{\partial u}{\partial t}(x,t)}^2dx
+\end{equation*}
+以及
+\begin{equation*}
+\int_\Omega(-\Delta u)\frac{\partial u}{\partial t}dx
+=\int_\Omega\nabla u\cdot\frac{\partial}{\partial t}(\nabla u)dx
+=\frac12\frac{\partial}{\partial t}\int_\Omega\abs{\nabla u}^2dx.
+\end{equation*}
+\end{proof}
+
+\begin{remark}
+\label{rem:10.7}
+当 $\Omega$ 有界时, 我们可以在 $H_0^1(\Omega)$ 上使用标量积
+$\int\nabla u_1\cdot\nabla u_2$ (见推论  \ref{cor:9.19}), 并在
+$H=H_0^1(\Omega)\times L^2(\Omega)$ 上使用标量积
+\begin{equation*}
+(U_1,U_2)=\int_\Omega\nabla u_1\cdot\nabla u_2+\int_\Omega v_1v_2,
+\end{equation*}
+其中 $U_1=\begin{pmatrix}u_1\\v_1\end{pmatrix}$,
+$U_2=\begin{pmatrix}u_2\\v_2\end{pmatrix}$.
+
+用这个标量积, 我们有
+\begin{equation*}
+(AU,U)=-\int_\Omega\nabla v\cdot\nabla u+\int_\Omega(-\Delta u)v=0
+\quad\forall U=\begin{pmatrix}u\\v\end{pmatrix}\in D(A).
+\end{equation*}
+容易验证:
+
+(i) $A$ 与 $-A$ 极大单调,
+
+(ii) $A^\star=-A$.
+\end{remark}
+
+因此我们也可以求解问题
+\begin{equation*}
+\frac{dU}{dt}-AU=0\quad\text{在}\ [0,+\infty)\ \text{上},\quad U(0)=U_0,
+\end{equation*}
+或等价地
+\begin{equation*}
+\frac{dU}{dt}+AU=0\quad\text{在}\ (-\infty,0]\ \text{上},\quad U(0)=U_0
+\end{equation*}
+(只须把 $t$ 换成 $-t$).\footnote{换言之, 时间是可逆的; 从这个观点看,
+波动方程与热方程 (对热方程时间不可逆) 之间有本质的差别.} 关系式
+\eqref{eq:10.32} 可以写成
+\begin{equation*}
+\abs{U(t)}_H=\abs{U_0}_H\quad\forall t\in\R.
+\end{equation*}
+我们说单参数族 $\{U(t)\}_{t\in\R}$ 是 $H$ 上的\emph{等距群}.
+
+\begin{keyremark}
+\label{rem:10.8}
+与热方程相反, 波动方程对初值\emph{没有}光滑化效应.为说明这一点, 只须考虑
+$\Omega=\R$ 的情形.此时 \eqref{eq:10.27}--\eqref{eq:10.30} 有一个非常
+简单的显式解, 即
+\begin{equation}
+u(x,t)=\frac12(u_0(x+t)+u_0(x-t))
++\frac12\int_{x-t}^{x+t}v_0(s)ds.
+\label{eq:10.40}
+\end{equation}
+特别地, 若 $v_0=0$, 我们有
+\begin{equation*}
+u(x,t)=\frac12(u_0(x+t)+u_0(x-t)).
+\end{equation*}
+显然 $u$ 并不比 $u_0$ 更正则.我们甚至可以更精确些.假设
+$u_0\in C^\infty(\R\setminus\{x_0\})$.则 $u(x,t)$ 在 $\R\times\R$ 上
+属于 $C^\infty$ 类, 但在直线 $x+t=x_0$ 与 $x-t=x_0$ 上除外.这些直线
+称为过点 $(x_0,0)$ 的\emph{特征线}.我们说奇性沿特征线传播.
+\end{keyremark}
+
+\begin{remark}
+\label{rem:10.9}
+当 $\Omega$ 有界时, 问题 \eqref{eq:10.27}--\eqref{eq:10.30} 可以像热方程
+那样通过在一个 Hilbert 基中分解来求解.非常方便的是在 $L^2(\Omega)$ 的
+由 $-\Delta$ 的特征函数 (带 Dirichlet 条件) 组成的基 $(e_i)$ 中工作, 即
+$-\Delta e_i=\lambda_ie_i$ 在 $\Omega$ 中, $e_i=0$ 在 $\Gamma$ 上; 回忆
+$\lambda_i>0$.我们以级数
+\begin{equation}
+u(x,t)=\sum_ia_i(t)e_i(x)
+\label{eq:10.41}
+\end{equation}
+的形式寻求 \eqref{eq:10.27}--\eqref{eq:10.30} 的解.我们立即看出, 函数
+$a_i(t)$ 必须满足
+\begin{equation*}
+a_i''(t)+\lambda_ia_i(t)=0,
+\end{equation*}
+从而
+\begin{equation*}
+a_i(t)=a_i(0)\cos(\sqrt{\lambda_i}t)
++\frac{a_i'(0)}{\sqrt{\lambda_i}}\sin(\sqrt{\lambda_i}t).
+\end{equation*}
+常数 $a_i(0)$ 与 $a_i'(0)$ 由关系式
+\begin{equation*}
+u_0(x)=\sum_ia_i(0)e_i(x)
+\quad\text{与}\quad
+v_0(x)=\sum_ia_i'(0)e_i(x)
+\end{equation*}
+确定.换言之, $a_i(0)$ 与 $a_i'(0)$ 是 $u_0$ 与 $v_0$ 在基 $(e_i)$ 中的
+分量.关于这个级数的收敛性, 参见例如 H.~Weinberger \bref{Weinberger}{1}.
+\end{remark}
+
+\begin{proof}[定理 \ref{thm:10.8}]
+我们使用与定理  \ref{thm:10.7} 的证明相同的记号.容易通过对 $k$ 作归纳
+证明
+\begin{equation*}
+D(A^k)=\left\{\begin{pmatrix}u\\v\end{pmatrix}\ \middle|\
+\begin{array}{l}
+u\in H^{k+1}(\Omega)\ \text{且}\ \Delta^ju=0\ \text{在}\ \Gamma\ \text{上}
+\ \forall j,\ 0\le j\le[k/2]\\[1mm]
+v\in H^k(\Omega)\ \text{且}\ \Delta^jv=0\ \text{在}\ \Gamma\ \text{上}
+\ \forall j,\ 0\le j\le[(k+1)/2]-1
+\end{array}
+\right\}.
+\end{equation*}
+特别地, $D(A^k)\subset H^{k+1}(\Omega)\times H^k(\Omega)$, 且嵌入连续.
+应用定理  \ref{thm:7.5}, 我们看到: 若
+$U_0=\binom{u_0}{v_0}\in D(A^k)$, 则 \eqref{eq:10.38} 的解 $U$ 满足
+\begin{equation*}
+U\in C^{k-j}([0,\infty);D(A^j))\quad\forall j=0,1,\dots,k.
+\end{equation*}
+于是 $u\in C^{k-j}([0,\infty);H^{j+1}(\Omega))\ \forall j=0,1,\dots,k$.
+借助推论  \ref{cor:9.15}, 我们在定理  \ref{thm:10.8} 的假设下 (即
+$U_0\in D(A^k)\ \forall k$) 得出
+\begin{equation*}
+u\in C^k(\overline\Omega\times[0,\infty))\quad\forall k.
+\end{equation*}
+\end{proof}
+
+\begin{remark}
+\label{rem:10.10}
+定理  \ref{thm:10.8} 中引入的相容性条件, 是问题
+\eqref{eq:10.27}--\eqref{eq:10.30} 有解
+$u\in C^\infty(\overline\Omega\times[0,\infty))$ 的\emph{充要}条件.证明
+与注记 \ref{rem:10.4} 相同.
+\end{remark}
+
+\begin{remark}
+\label{rem:10.11}
+\S \ref{sec:10.3} 中介绍的方法也可以用来求解 \emph{Klein--Gordon} 方程
+\begin{equation*}
+\frac{\partial^2u}{\partial t^2}-\Delta u+m^2u=0\quad\text{在}\ Q\ \text{中},
+\quad m>0.
+\tag*{(27$'$)}
+\end{equation*}
+注意, $(27')$ 不能通过形如
+$v(x,t)=e^{\lambda t}u(x,t)$ 的未知函数变换化为 \eqref{eq:10.27}.
+\end{remark}
+\section*{第 10 章评注}
+\addcontentsline{toc}{section}{第 10 章评注}
+
+\cmtitem{\emph{关于热方程的评注}}
+
+\cmtnum{1.} \emph{J.-L.~Lions 的途径.}
+
+下述结果使我们能够在一个非常一般的框架中证明抛物型问题弱解的存在性与唯一性.
+这个定理可以看作 Lax--Milgram 定理的抛物型对应物.设 $H$ 是带有标量积
+$(\ ,\ )$ 与范数 $\abs{\cdot}$ 的 Hilbert 空间.对偶空间 $H^\star$ 与 $H$
+等同.
+
+设 $V$ 是另一个 Hilbert 空间, 范数为 $\norm{\cdot}$.我们假设
+$V\subset H$, 且嵌入稠密, 连续, 于是
+\begin{equation*}
+V\subset H\subset V^\star
+\end{equation*}
+(见注记 \ref{rem:5.3}).
+
+固定 $T>0$; 对几乎所有的 $t\in[0,T]$, 给定双线性形式
+$a(t;u,v):V\times V\to\R$, 它满足下述性质:
+
+(i) 对每个 $u,v\in V$, 函数 $t\mapsto a(t;u,v)$ 可测,
+
+(ii) 对几乎所有的 $t\in[0,T]$, $\abs{a(t;u,v)}\le M\norm{u}\norm{v}\
+\forall u,v\in V$,
+
+(iii) 对几乎所有的 $t\in[0,T]$, $a(t;v,v)\ge\alpha\norm{v}^2-C\abs{v}^2\
+\forall v\in V$,
+
+其中 $\alpha>0$, $M$ 与 $C$ 为常数.
+
+\begin{theorem}[J.-L.~Lions]
+\label{thm:10.9}
+给定 $f\in L^2(0,T;V^\star)$ 与 $u_0\in H$, 存在唯一的函数 $u$ 满足
+\begin{equation*}
+u\in L^2(0,T;V)\cap C([0,T];H),\qquad
+\frac{du}{dt}\in L^2(0,T;V^\star),
+\end{equation*}
+\begin{equation*}
+\dual{\frac{du}{dt}(t)}{v}+a(t;u(t),v)=\dual{f(t)}{v}
+\quad\text{对几乎所有的}\ t\in(0,T),\ \forall v\in V,
+\end{equation*}
+以及
+\begin{equation*}
+u(0)=u_0.
+\end{equation*}
+\end{theorem}
+
+证明参见例如 J.-L.~Lions--E.~Magenes \bref{LionsMagenes}{1}.
+
+\emph{应用.} $H=L^2(\Omega)$, $V=H_0^1(\Omega)$,
+\begin{equation*}
+a(t;u,v)=\sum_{i,j}\int_\Omega a_{ij}(x,t)\frac{\partial u}{\partial x_i}
+\frac{\partial v}{\partial x_j}dx
++\sum_i\int_\Omega a_i(x,t)\frac{\partial u}{\partial x_i}v
++\int_\Omega a_0(x,t)uv\,dx,
+\end{equation*}
+其中 $a_{ij},a_i,a_0\in L^\infty(\Omega\times(0,T))$ 且
+\begin{equation}
+\sum_{i,j}a_{ij}(x,t)\xi_i\xi_j\ge\alpha\abs{\xi}^2
+\quad\text{对几乎所有的}\ (x,t)\in\Omega\times(0,T),\ \forall\xi\in\R^N,
+\label{eq:10.42}
+\end{equation}
+$\alpha>0$.这样我们就得到问题
+\begin{equation}
+\begin{cases}
+\displaystyle\frac{\partial u}{\partial t}
+-\sum_{i,j}\frac{\partial}{\partial x_j}
+\left(a_{ij}\frac{\partial u}{\partial x_i}\right)
++\sum_ia_i\frac{\partial u}{\partial x_i}+a_0u=f
+& \text{在}\ \Omega\times(0,T)\ \text{中},\\[2mm]
+u=0 & \text{在}\ \Gamma\times(0,T)\ \text{上},\\
+u(x,0)=u_0(x) & \text{在}\ \Omega\ \text{上}
+\end{cases}
+\label{eq:10.43}
+\end{equation}
+的弱解.在对数据作附加假设时, \eqref{eq:10.43} 的解有更好的正则性; 见
+下面的评注.
+
+\cmtnum{2.} \emph{$C^\infty$ 正则性.}
+
+这里我们假设 $\Omega$ 有界且属于 $C^\infty$ 类.设
+$a_{ij},a_i,a_0\in C^\infty(\overline\Omega\times[0,T])$ 满足
+\eqref{eq:10.42}.
+
+\begin{theorem}
+\label{thm:10.10}
+假设 $u_0\in L^2(\Omega)$ 且 $f\in C^\infty(\overline\Omega\times[0,T])$.
+则 \eqref{eq:10.43} 的解 $u$ 对每个 $\varepsilon>0$ 属于
+$C^\infty(\overline\Omega\times[\varepsilon,T])$.若此外
+$u_0\in C^\infty(\overline\Omega)$ 且 $\{f,u_0\}$ 在
+$\Gamma\times\{0\}$ 上满足适当的相容性条件,\footnote{我们不显式写出这些
+关系式; 它们是 \eqref{eq:10.8} 的自然推广 (另见注记 \ref{rem:10.4}).}
+则 $u\in C^\infty(\overline\Omega\times[0,T])$.
+\end{theorem}
+
+证明参见例如 J.-L.~Lions--E.~Magenes \bref{LionsMagenes}{1},
+A.~Friedman \bref{Friedman}{1}, \bref{Friedman}{2}, 以及
+O.~Ladyzhenskaya--V.~Solonnikov--N.~Uraltseva
+\bref{LadyzhenskayaSolonnikovUraltseva}{1}; 它基于与第~
+\ref{chap:7}~章和
+\S \ref{sec:10.1} 中给出的估计非常相似的估计.
+
+我们要提到, 还有一种抽象理论把 Hille--Yosida 理论推广到形如
+$\dfrac{du}{dt}(t)+A(t)u(t)=f(t)$ 的问题, 其中对每个 $t$, $A(t)$ 是极大
+单调算子.这个理论由 T.~Kato, H.~Tanabe, P.~E.~Sobolevskii 等人发展起来.
+处理它比 Hille--Yosida 理论在技术上更复杂; 参见
+A.~Friedman \bref{Friedman}{2}, H.~Tanabe \bref{Tanabe}{1}, 以及
+K.~Yosida \bref{Yosida}{1}.
+
+\cmtnum{3.} \emph{$L^p$ 与 $C^{0,\alpha}$ 正则性.}
+
+考虑问题\footnote{当然, 我们也可以给定非齐次 Dirichlet 条件
+$u(x,t)=g(x,t)$ 在 $\Gamma\times(0,T)$ 上, 但为简单起见我们只处理
+$g=0$ 的情形.}
+\begin{equation}
+\begin{cases}
+\dfrac{\partial u}{\partial t}-\Delta u=f & \text{在}\
+\Omega\times(0,T)\ \text{中},\\[2mm]
+u=0 & \text{在}\ \Gamma\times(0,T)\ \text{上},\\
+u(x,0)=u_0(x) & \text{在}\ \Omega\ \text{上}.
+\end{cases}
+\label{eq:10.44}
+\end{equation}
+为方便起见, 假设 $\Omega$ 有界且属于 $C^\infty$ 类.我们先从一个简单的
+结果开始.
+
+\begin{theorem}[$L^2$ 正则性]
+\label{thm:10.11}
+给定 $f\in L^2(\Omega\times(0,T))$ 与 $u_0\in H_0^1(\Omega)$, \eqref{eq:10.44}
+存在唯一的解, 满足
+\begin{equation*}
+u\in C([0,T];H_0^1(\Omega))\cap L^2(0,T;H^2(\Omega)\cap H_0^1(\Omega))
+\end{equation*}
+且
+\begin{equation*}
+\frac{\partial u}{\partial t}\in L^2(0,T;L^2(\Omega)).
+\end{equation*}
+\end{theorem}
+
+证明是容易的; 参见例如 J.-L.~Lions--E.~Magenes \bref{LionsMagenes}{1}.
+更一般地, 在 $L^p$ 空间中我们有下述结果.
+
+\begin{theorem}[$L^p$ 正则性]
+\label{thm:10.12}
+给定 $f\in L^p(\Omega\times(0,T))$, 其中 $1<p<\infty$, 且
+$u_0=0$,\footnote{为简化起见.} 则 \eqref{eq:10.44} 存在唯一的解, 满足
+\begin{equation*}
+u,\ \frac{\partial u}{\partial t},\
+\frac{\partial u}{\partial x_i},\
+\frac{\partial^2u}{\partial x_i\partial x_j}
+\in L^p(\Omega\times(0,T))\quad\forall i,j.
+\end{equation*}
+\end{theorem}
+
+\begin{theorem}[Hölder 正则性]
+\label{thm:10.13}
+设 $0<\alpha<1$.假设\footnote{即
+$\abs{f(x_1,t_1)-f(x_2,t_2)}\le C(\abs{x_1-x_2}^2+\abs{t_1-t_2})^{\alpha/2}
+\ \forall x_1,x_2,t_1,t_2$.}
+$f\in C^{\alpha,\alpha/2}(\overline\Omega\times[0,T])$ 且
+$u_0\in C^{2+\alpha}(\overline\Omega)$ 满足自然的相容性条件
+\begin{equation*}
+u_0=0\ \text{在}\ \Gamma\ \text{上}
+\quad\text{且}\quad
+-\Delta u_0=f(x,0)\ \text{在}\ \Gamma\ \text{上}.
+\end{equation*}
+则 \eqref{eq:10.44} 存在唯一的解 $u$, 使得
+\begin{equation*}
+u,\ \frac{\partial u}{\partial t},\
+\frac{\partial u}{\partial x_i},\
+\frac{\partial^2u}{\partial x_i\partial x_j}
+\in C^{\alpha,\alpha/2}(\overline\Omega\times[0,T])\quad\forall i,j.
+\end{equation*}
+\end{theorem}
+
+定理  \ref{thm:10.12} 与  \ref{thm:10.13} 的证明是精细的, 但定理
+ \ref{thm:10.12} 中 $p=2$ 的情形除外.与椭圆情形一样 (见第~
+\ref{chap:9}~章末的评注),
+它们依赖于下述两点:
+
+(i) 一个显式的表示公式, 它涉及 $\dfrac{\partial}{\partial t}-\Delta$ 的
+基本解.例如, 若 $\Omega=\R^N$ 且 $f=0$, 则
+\begin{equation}
+u(x,t)=\int_{\R^N}E(x-y,t)u_0(y)dy=E\star u_0,
+\label{eq:10.45}
+\end{equation}
+其中 $\star$ 只表示关于空间变量 $x$ 的卷积, $E$ 是\emph{热核},
+$E(x,t)=(4\pi t)^{-N/2}e^{-\abs{x}^2/4t}$; 参见例如
+G.~Folland \bref{Folland}{1}.
+
+(ii) 奇异积分的技术.
+
+关于这个课题, 参见例如 O.~Ladyzhenskaya--V.~Solonnikov--N.~Uraltseva
+\bref{LadyzhenskayaSolonnikovUraltseva}{1}, A.~Friedman
+\bref{Friedman}{1}, N.~Krylov \bref{Krylov}{1}, \bref{Krylov}{2},
+P.~Grisvard \bref{Grisvard}{1} (第 9 节),
+D.~Stroock--S.~Varadhan \bref{StroockVaradhan}{1},
+A.~Brandt \bref{Brandt}{2}, B.~Knerr \bref{Knerr}{1}, 以及
+L.~Simon \bref{Simon}{2} 为 Hölder 正则性设计了更初等的论证.
+
+应当记住的一般``哲学''如下: 若 $u$ 是 \eqref{eq:10.44} 在 $u_0=0$ 时的解,
+则 $\dfrac{\partial u}{\partial t}$ 与 $\Delta u$ 都与 $f$ 有相同的正则性.
+
+最后, 我们要提到: 若把 $\Delta$ 换成
+\begin{equation*}
+\sum_{i,j}\frac{\partial}{\partial x_j}
+\left(a_{ij}(x,t)\frac{\partial u}{\partial x_i}\right)
++\sum_ia_i(x,t)\frac{\partial u}{\partial x_i}+a_0(x,t)u,
+\end{equation*}
+其中系数光滑且满足
+\begin{equation}
+\sum_{i,j}a_{ij}(x,t)\xi_i\xi_j\ge\nu\abs{\xi}^2
+\quad\forall x,t,\ \forall\xi\in\R^N,\ \nu>0,
+\label{eq:10.46}
+\end{equation}
+则定理  \ref{thm:10.11},  \ref{thm:10.12} 与  \ref{thm:10.13} 的结论仍然
+成立.在系数不规则 (即 $a_{ij}\in L^\infty(\Omega\times(0,T))$ 且满足
+\eqref{eq:10.46}) 的情形, Nash--Moser 的一个困难结果表明: 存在某个
+$\alpha>0$ 使得 $u\in C^{\alpha,\alpha/2}(\overline\Omega\times[0,T])$;
+参见例如 O.~Ladyzhenskaya--V.~Solonnikov--N.~Uraltseva
+\bref{LadyzhenskayaSolonnikovUraltseva}{1}.
+
+\cmtnum{4.} \emph{抛物型方程的一些例子.}
+
+线性与非线性抛物型方程 (以及方程组) 出现在许多领域: 力学, 物理学, 化学, 生物学, 最优控制, 概率论, 金融, 图像处理等.我们举出一些例子:
+
+(i) \emph{Navier--Stokes 方程组}:
+\begin{equation}
+\frac{\partial u_i}{\partial t}-\Delta u_i+\sum_ju_j\frac{\partial u_i}
+{\partial x_j}=f_i+\frac{\partial p}{\partial x_i}
+\quad\text{在}\ \Omega\times(0,T)\ \text{中},\ 1\le i\le N,
+\label{eq:10.47}
+\end{equation}
+\begin{equation}
+\operatorname{div}u=\sum_{i=1}^N\frac{\partial u_i}{\partial x_i}=0
+\quad\text{在}\ \Omega\times(0,T)\ \text{中},
+\label{eq:10.48}
+\end{equation}
+\begin{equation}
+u=0\quad\text{在}\ \Gamma\times(0,T)\ \text{上},
+\label{eq:10.49}
+\end{equation}
+\begin{equation}
+u(x,0)=u_0(x)\quad\text{在}\ \Omega\ \text{上},
+\label{eq:10.50}
+\end{equation}
+它在流体力学中起中心作用; 参见例如 R.~Temam \bref{Temam}{1} 及其中的
+参考文献.
+
+(ii) \emph{反应--扩散方程组.} 这些是形如
+\begin{equation*}
+\begin{cases}
+\dfrac{\partial u}{\partial t}-M\Delta u=f(u)
+& \text{在}\ \Omega\times(0,T)\ \text{中}\\
+\text{加上边界条件与初值}
+\end{cases}
+\end{equation*}
+的非线性抛物型方程或方程组, 其中 $u(x,t)$ 取值于 $\R^m$, $M$ 是一个
+$m\times m$ (对角) 矩阵, $f$ 是由 $\R^m$ 到 $\R^m$ 的非线性映射.这些
+方程组被用来模拟各种领域中出现的现象: 化学, 生物学, 神经生理学, 流行病学, 燃烧, 群体遗传学, 生态学, 地质学等; 参见例如 P.~Fife \bref{Fife}{1}
+及其大量的参考文献.反应--扩散方程的解表现出范围广泛的行为, 包括行波的
+形成与自组织斑图的形成.
+
+(iii) \emph{自由边界问题.} 例如, Stefan 问题描述冰水混合物的演化; 参见
+例如 E.~Magenes \bref{Magenes}{1} 的综述文章与 A.~Friedman
+\bref{Friedman}{4} 的书.
+
+(iv) 扩散方程在概率论 (Brown 运动, Markov 过程, 扩散过程, 随机微分方程等)
+中起中心作用; 参见例如 D.~Stroock--S.~Varadhan \bref{StroockVaradhan}{1}.
+
+(v) 许多其他半线性抛物型问题的例子见 D.~D.~Henry \bref{Henry}{1} 与
+Th.~Cazenave--A.~Haraux \bref{CazenaveHaraux}{1}.
+
+(vi) 热方程的一个有趣的应用与 Atiyah--Singer 指标有关; 参见例如
+P.~Gilkey \bref{Gilkey}{1}.
+
+(vii) 更精致的非线性扩散方程用于图像处理 (Perona--Malik 模型的变体).
+G.~Perelman 最近对著名的 Poincaré 猜想的解决, 依赖于 R.~Hamilton 对
+Ricci 流的细致研究, 而 Ricci 流是一种非线性热方程.
+
+\cmtnum{5.} 关于抛物型方程极大值原理的进一步结果, 参见例如
+A.~Friedman \bref{Friedman}{1}, M.~Protter--H.~Weinberger
+\bref{ProtterWeinberger}{1}, R.~Sperb \bref{Sperb}{1}.例如, 若 $u$ 是
+\eqref{eq:10.1}--\eqref{eq:10.3} 在 $u_0\ge0$ 且 $u_0\not\equiv0$ 时的解,
+则 $u(x,t)>0\ \forall x\in\Omega,\ \forall t>0$.当 $\Omega=\R^N$ 时, 这
+容易由显式表示公式 \eqref{eq:10.45} 推出.
+
+\cmtitem{\emph{关于波动方程的评注}}
+
+\cmtnum{6.} \emph{波动方程的弱解.}
+
+波动方程弱解的存在性与唯一性有一个一般的抽象框架.设 $V$ 与 $H$ 是两个
+Hilbert 空间, 使得 $V\subset H\subset V^\star$ (如评注 1 中那样).对每个
+$t\in[0,T]$, 给定对称连续双线性形式 $a(t;u,v):V\times V\to\R$, 使得
+
+(i) 函数 $t\mapsto a(t;u,v)$ 属于 $C^1$ 类 $\forall u,v\in V$,
+
+(ii) $a(t;v,v)\ge\alpha\norm{v}^2-C\abs{v}^2\ \forall t\in[0,T],\
+\forall v\in V$, $\alpha>0$.
+
+\begin{theorem}[J.-L.~Lions]
+\label{thm:10.14}
+给定 $f\in L^2(0,T;H)$, $u_0\in V$ 与 $v_0\in H$, 存在唯一的函数 $u$ 满足
+\begin{equation*}
+u\in C([0,T];V),\qquad
+\frac{du}{dt}\in C([0,T];H),\qquad
+\frac{d^2u}{dt^2}\in L^2(0,T;V^\star),
+\end{equation*}
+\begin{equation*}
+\dual{\frac{d^2u}{dt^2}(t)}{v}+a(t;u(t),v)=\dual{f(t)}{v}
+\quad\text{对几乎所有的}\ t\in(0,T),\ \forall v\in V,
+\end{equation*}
+\begin{equation*}
+u(0)=u_0\quad\text{且}\quad\frac{du}{dt}(0)=v_0.
+\end{equation*}
+\end{theorem}
+
+证明参见例如 J.-L.~Lions--E.~Magenes \bref{LionsMagenes}{1}.
+
+\emph{应用.} 令 $H=L^2(\Omega)$, $V=H_0^1(\Omega)$,
+\begin{equation*}
+a(t;u,v)=\int_\Omega\sum_{i,j}a_{ij}(x,t)\frac{\partial u}{\partial x_i}
+\frac{\partial v}{\partial x_j}dx+\int_\Omega a_0(x,t)uv\,dx,
+\end{equation*}
+其中 \eqref{eq:10.42} 成立且
+\begin{equation*}
+a_{ij},\ \frac{\partial a_{ij}}{\partial t},\ a_0,\
+\frac{\partial a_0}{\partial t}\in L^\infty(\Omega\times(0,T)),\qquad
+a_{ij}=a_{ji}\ \forall i,j.
+\end{equation*}
+则问题
+\begin{equation*}
+\begin{cases}
+\displaystyle\frac{\partial^2u}{\partial t^2}
+-\sum_{i,j}\frac{\partial}{\partial x_j}
+\left(a_{ij}\frac{\partial u}{\partial x_i}\right)+a_0u=f
+& \text{在}\ \Omega\times(0,T)\ \text{中},\\
+\eqref{eq:10.28},~\eqref{eq:10.29},~\eqref{eq:10.30}
+\end{cases}
+\end{equation*}
+存在唯一的弱解.注意, 对初值的假设 ($u_0\in H_0^1(\Omega)$ 且
+$v_0\in L^2(\Omega)$) 比定理  \ref{thm:10.7} 中的假设更弱.在对 $f$, $u_0$, $v_0$ (正则性与相容性条件) 以及 $a_{ij}$, $a_0$ 作附加假设时, 可以得到
+$u$ 的更好正则性.
+
+\cmtnum{7.} 波动方程的 $L^p$ 理论是精细的, 在过去 30 年里得到了广泛的
+研究.Strichartz 估计是一个重要的工具; 参见例如
+S.~Klainerman \bref{Klainerman}{1}.
+
+\cmtnum{8.} \emph{极大值原理.}
+
+极大值原理的一些非常特殊的形式对波动方程成立; 参见例如
+M.~Protter--H.~Weinberger \bref{ProtterWeinberger}{1}.例如, 设 $u$ 是
+\eqref{eq:10.27}--\eqref{eq:10.30} 的解.
+
+(i) 若 $\Omega=\R$, $u_0\ge0$ 且 $v_0\ge0$, 则 $u\ge0$.
+
+(ii) 若 $\Omega=\R^2$, $u_0=0$ 且 $v_0\ge0$, 则 $u\ge0$.
+
+断言 (i) 由表示公式 \eqref{eq:10.40} 推出.在 $\R^N$ 中有类似但更复杂的
+公式; 参见例如 S.~Mizohata \bref{Mizohata}{1}, G.~Folland
+\bref{Folland}{1}, H.~Weinberger \bref{Weinberger}{1},
+R.~Courant--D.~Hilbert \bref{CourantHilbert}{1}, 以及
+S.~Mikhlin \bref{Mikhlin}{1}.它蕴含 (ii).
+
+然而, 我们要提醒读者注意下述几点:
+
+(iii) 若 $\Omega=(0,1)$, $u_0\ge0$ 且 $v_0=0$, 则一般不能推出 $u\ge0$.
+
+(iv) 若 $\Omega=\R^2$, $u_0\ge0$ 且 $v_0=0$, 则一般不能推出 $u\ge0$.
+
+J.~Mawhin--R.~Ortega--A.~M.~Robles--P\'erez \bref{MawhinOrtegaRoblesPerez}{1}
+最近为电报方程 (它与波动方程相似) 设计了一种不寻常的极大值原理形式.
+
+\cmtnum{9.} \emph{\index{yilaiquyu@依赖区域 (domain of dependence)}
+依赖区域. 波的传播. \index{Huygensyuanli@Huygens 原理 (Huygens' principle)}
+Huygens 原理.}
+
+热方程与波动方程之间有本质的差别:
+
+(i) 对热方程, 初值的一个小扰动\footnote{即在小的区域内局部化的扰动.}
+会立即在所有地方被感觉到, 即 $\forall x\in\Omega,\ \forall t>0$.例如,
+我们已经看到, 若 $u_0\ge0$ 且 $u_0\not\equiv0$, 则
+$u(x,t)>0\ \forall x\in\Omega,\ \forall t>0$.我们说热以\emph{无穷大速度}
+传播.\footnote{从物理上说, 这并不现实! 然而, 表示公式 \eqref{eq:10.45}
+表明: 当初值的扰动局部化在 $x=x_0$ 附近时, 若 $t$ 小且 $\abs{x-x_0}$ 大,
+则它在点 $(x,t)$ 处的效应可以忽略.}
+
+(ii) 对波动方程, 情形完全不同.例如假设 $\Omega=\R$.显式公式
+\eqref{eq:10.40} 表明 $u(\bar x,\bar t)$ 只依赖于 $u_0$ 与 $v_0$ 在区间
+$[\bar x-\bar t,\bar x+\bar t]$ 上的值; 见图  \ref{fig:8}.
+
+\begin{figure}[tbp]
+	\centering
+	\begin{tikzpicture}[scale=1.05]
+		\draw[-{Stealth}] (-0.4,0) -- (6.2,0) node[below] {$x$};
+		\draw[-{Stealth}] (0,-0.4) -- (0,3.8) node[right] {$t$};
+		\draw (0,1.6) -- (-0.08,1.6) node[left] {$\bar t$};
+		\draw (1.1,-0.3) -- (3.0,1.6);
+		\draw (4.9,-0.3) -- (3.0,1.6);
+		\fill (3.0,1.6) circle (1.8pt);
+		\node[right] at (3.15,1.5) {$(\bar x,\bar t)$};
+		\foreach \xpos in {1.4,1.55,...,4.6}{
+			\draw (\xpos-0.08,-0.12) -- (\xpos+0.08,0.18);
+		}
+		\draw (3.0,0.15) -- (3.0,-0.15);
+		\node[below] at (0.9,-0.25) {$\bar x-\bar t$};
+		\node[below] at (3.0,-0.15) {$\bar x$};
+		\node[below] at (5.1,-0.25) {$\bar x+\bar t$};
+	\end{tikzpicture}
+	\caption{}
+	\label{fig:8}
+\end{figure}
+
+我们说 $x$ 轴上的区间 $[\bar x-\bar t,\bar x+\bar t]$ 是点
+$(\bar x,\bar t)$ 的\emph{依赖区域}.对 $\Omega=\R^N$ ($N\ge2$) 也成立
+同样的事实: $u(\bar x,\bar t)$ 只依赖于 $u_0$ 与 $v_0$ 在球
+$\{x\in\R^N;\ \abs{x-\bar x}\le\bar t\}$ 上的值.这个位于超平面
+$\R^N\times\{0\}$ 中的球称为点 $(\bar x,\bar t)$ 的依赖区域.从几何上看,
+它是锥
+\begin{equation*}
+\{(x,t)\in\R^N\times\R;\ \abs{x-\bar x}\le\bar t-t\ \text{且}\
+t\le\bar t\}
+\end{equation*}
+与超平面 $\R^N\times\{0\}$ 的交.物理解释是: 波以小于 1 的速度传播.
+\footnote{出现速度 1 是因为我们对波动方程作了标准化.有些读者可能更愿意
+使用方程 $\dfrac{\partial^2u}{\partial t^2}-c^2\Delta u=0$.} 在时刻
+$t=0$ 局部化于区域\footnote{即 $u_0$ 与 $v_0$ 的支集在 $D$ 中.} $D$ 中的
+信号, 只有在时刻 $t\ge\dist(x,D)$ 之后才能在点 $x\in\R^N$ 处被感觉到
+(当 $t<\dist(x,D)$ 时 $u(x,t)=0$).
+
+当 $N>1$ 为奇数时, 例如 $N=3$, 还有一个更引人注目的效应:
+$u(\bar x,\bar t)$ 只依赖于 $u_0$ 与 $v_0$\footnote{以及它们的某些导数.}
+在球面 $\{x\in\R^N;\ \abs{x-\bar x}=t\}$ 上的值.这就是 \emph{Huygens
+原理}.从物理上说, 它表明在时刻 $t=0$ 局部化于区域 $D$ 中的信号, 只在
+时间区间 $[t_1,t_2]$ 内于点 $x\in\R^N$ 处被观察到, 其中
+$t_1=\inf_{y\in D}\dist(x,y)$ 且 $t_2=\sup_{y\in D}\dist(x,y)$.在时刻
+$t_2$ 之后, 信号在点 $x$ 处就不再被感觉到.
+
+另一方面, 若维数 $N$ 为偶数 (例如 $N=2$), 则信号在 $x$ 处对所有时刻
+$t>t_1$ 都会持续存在.\footnote{这个效应随时间衰减, 但不会完全消失.}
+
+\emph{对音乐的一个应用.} 位于 $\R^3$ 中, 与乐器\footnote{尺寸很小的
+乐器.}相距 $d$ 的听者, 在时刻 $t$ 听到的是在时刻 $t-d$ 演奏的音符,
+此外什么也听不到!\footnote{而在 $\R^2$ 中, 他会听到在时间区间 $[0,t-d]$
+内演奏的所有音符的一个加权平均.}
+
+关于 Huygens 原理的更多细节, 读者可以查阅 R.~Courant--D.~Hilbert
+\bref{CourantHilbert}{1}, G.~Folland \bref{Folland}{1},
+P.~Garabedian \bref{Garabedian}{1}, 以及 S.~Mikhlin
+\bref{Mikhlin}{1}.

@@ -1,0 +1,125 @@
+% ============ \emph{类域论}中文翻译 LaTeX 重排版 ============
+% 原书: J.S. Milne, Class Field Theory (v4.03, August 6, 2020)
+% 模板: AJbook.cls (李文威\emph{代数学方法}书系模板)
+% 编号体系 (按原书):
+%   - 引言语为第 0 章, 定理编号 0.1, 0.4, 0.5 ...
+%   - 正文 I--VIII 章(Roman 数字), 定理/推论/引理/命题/定义/例/注记
+%     共享一个计数器, 按节编号(如 命题 1.1, 定理 3.10)
+% 结构: 封面 + 目录 + 记号/预备/参考文献/致谢/DRAMATIS PERSONAE
+%       + 引言(第 0 章) + I--VIII 章 + 索引
+%
+\documentclass[geometry=a4, fontsetup=font-setup-open.tex, titlesetup=titles-setup, coverpage=cover, CJKthechapter=false]{AJbook}
+
+% ============ 宏包 ============
+\usepackage{mycommand}      % 常用数学命令(\R \Z \Q \CC \e \ii \Spec \Gm \Gal \Nm \Cl ...)
+\usepackage{myarrows}       % 可伸缩箭头
+\usepackage{amssymb}
+\usepackage{enumerate}      % 支持 \begin{enumerate}[(a)] 形式的编号列表
+\usepackage{chngcntr}       % \counterwithin
+\usepackage{quiver}         % 交换图: 包装 tikz-cd, 并载入 amssymb/calc/decorations.pathmorphing/spath3,
+                            % 额外提供 curve / between / 2tail 等样式, 使 q.uiver.app 导出的代码可直接编译
+\usepackage{imakeidx}       % 索引(xindy)
+\usepackage[bookmarksnumbered=true]{hyperref}
+\usepackage{xurl}          % 允许 URL 在任意字符处断行, 消除书目条目的 overfull hbox
+\usetikzlibrary{calc}       % 封面坐标计算
+
+% ============ 参考文献库 ============
+\addbibresource{references.bib}
+
+% ============ 跨章共用的算子与范畴简写 ============
+% 用 \providecommand, 与各章内部的重复定义不冲突
+\providecommand{\Res}{\operatorname{Res}}    % 限制映射
+\providecommand{\Cor}{\operatorname{Cor}}    % 余限制 (转移) 映射
+\providecommand{\Inf}{\operatorname{Inf}}    % 膨胀映射
+\providecommand{\Ver}{\operatorname{Ver}}    % Verlagerung
+\providecommand{\inv}{\operatorname{inv}}    % 不变映射
+\providecommand{\Coker}{\operatorname{Coker}}
+\providecommand{\Ab}{\mathsf{Ab}}            % 交换群范畴
+\providecommand{\Mod}{\mathsf{Mod}}          % 模范畴
+
+% ============ 编号体系 ============
+% 章用 Roman 数字显示: I, II, ..., VIII
+\renewcommand{\thechapter}{\Roman{chapter}}
+% 节只显示节号(随章重置), 如 1, 2, 3
+\renewcommand{\thesection}{\arabic{section}}
+% 定理类环境按节编号: 命题 1.1, 定理 3.10 ...
+% 注意: theorem 计数器由 AJbook.cls 在 \AtBeginDocument 中定义,
+% 故 \counterwithin 必须也放在 \AtBeginDocument 里, 待计数器存在后再执行.
+\AtBeginDocument{\counterwithin{theorem}{section}}
+
+% 章标题框与目录中只显示 Roman 数字(不要"附录 I"或"第 I 章")
+\renewcommand{\AJchapterttl}[1]{#1}
+
+% 天眉: "I 局部类域论: Lubin-Tate 理论". AJbook.cls 在 \AtBeginDocument 里定义 \chaptermark, 故此处覆盖须放在其之后
+\AtBeginDocument{%
+  \renewcommand{\chaptermark}[1]{\markboth{\thechapter\quad #1}{}}%
+}
+
+% ============ 超链接 ============
+\hypersetup{
+    pdfauthor={J.S. Milne},
+    pdftitle={类域论 (Class Field Theory)},
+    pdfsubject={代数数论},
+    colorlinks=true,
+    linkcolor=MidnightBlue,
+    citecolor=BrickRed,
+    urlcolor=MidnightBlue
+}
+
+% ============ 本重排版专用命令 ============
+% 注: \N, \Z, \Q, \CC, \Gal, \Nm, \Cl, \Frob 等已在 mycommand.sty 中定义, 此处不再重复.
+% 但原书的记号与模板默认不同, 需覆盖(不动 mycommand.sty):
+%   范数在原书排作 Nm(mycommand 默认 \Nm= N), Frobenius 元排作 Frob(默认 \Frob= Fr).
+\renewcommand{\Nm}{\operatorname{Nm}}        % 范数 (原书 Nm)
+\renewcommand{\Frob}{\operatorname{Frob}}    % Frobenius 元 (原书 Frob)
+\newcommand{\Spl}{\operatorname{Spl}}                 % 分裂素理想集
+\newcommand{\ray}{\mathfrak{m}}                       % 模(modulus)
+\newcommand{\rayC}{\mathrm{C}_{\mathfrak{m}}}          % ray class group
+\newcommand{\ordp}[1]{\operatorname{ord}_{#1}}         % 赋值
+% 原书用 sx<编号> / mo<编号> 标注 StackExchange / MathOverflow 网上讨论, 此处还原为可点击链接
+\newcommand{\sx}[1]{\href{https://math.stackexchange.com/questions/#1/}{Math\,StackExchange\,#1}}
+\newcommand{\mo}[1]{\href{https://mathoverflow.net/questions/#1/}{MathOverflow\,#1}}
+
+% ============ 索引 (xindy) ============
+\makeindex[%
+    columns=2,
+    program=texindy,
+    intoc=true,
+    options=-M texindy -I xelatex -C utf8,
+    title={名词索引暨英译}]
+
+% 全局断行弹性: 消除边界性 Overfull
+\emergencystretch=3em
+
+% ============ 文档开始 ============
+\begin{document}
+\frontmatter        % 封面(cover.tex) + 目录(模板自动处理, 罗马页码)
+
+% 前置部分: 记号/预备/参考文献/致谢/DRAMATIS PERSONAE(原书罗马页码)
+\input{frontmatter}
+
+\mainmatter         % 正文(阿拉伯页码从 1 开始)
+
+% 引言(第 0 章)
+\input{intro}
+
+% ===== 以下各章将在后续翻译阶段依次加入 =====
+\input{chI}    % I   局部类域论: Lubin-Tate 理论
+\input{chII}   % II  群的上同调
+\input{chIII}  % III 局部类域论: 上同调
+\input{chIV}   % IV  Brauer 群
+\input{chV}    % V   整体类域论: 陈述
+\input{chVI}   % VI  L-级数与素数密度
+\input{chVII}  % VII 整体类域论: 证明
+\input{chVIII} % VIII 补遗
+
+% 索引
+\backmatter
+% 正文引用已全部改为 \cite 交叉引用 (authoryear 样式, 印出 "作者 年份" 与原书正文
+% 体例一致, 并带超链接; backref 会在书目条目末尾显示 "引用于 p. X").
+% \nocite{*} 使书目中未被正文引用的条目也打印, 以与原书完整书目一致.
+\nocite{*}
+\printbibliography[heading=bibintoc]
+\printindex
+
+\end{document}

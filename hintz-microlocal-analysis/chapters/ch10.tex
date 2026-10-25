@@ -1,0 +1,843 @@
+% chapters/ch10.tex - 第 10 章: 径向集上的奇性传播
+\input{chapters/tikz_ch10.tex}
+
+\chapter{径向集上的奇性传播}\label{ch:10}
+
+\index{jingxiang ji@径向集 (radial set)}%
+\index{jingxiangdian guji@径向点估计 (radial point estimates)}%
+\index{linjiezhengze@临界正则性 (threshold regularity)}%
+第~\ref{ch:08}~章中所证明的传播定理是分析一般线性偏微分方程 $P u = f$ 的解之正则性的通用工具, 其中 $P \in \Psi^m(M)$ 具有实齐次主符号, 前提是人们事先掌握关于 $u$ 在相空间某处的信息. 特别地, 一般而言不能仅由 $f$ 就整体地控制 $u$ (对比估计~\eqref{eq:8.21} 中由项 $E u$ 所编码的关于 $u$ 的微局部正则性的先验控制假设). 为整体地控制 $u$, 需要相空间中存在一个能够无条件地控制 $u$ 的子集. 出现这种情况的主要场景有两种.
+
+\begin{enumerate}
+    \item 演化方程的初值问题或前向问题. 所需的关于 $u$ 的初始控制来自初始数据的正则性 (对初值问题而言) 或来自 $u$ 在强迫项开启之前的消失性 (对前向问题而言). 这一场景已在上一章中详细讨论.
+    \item 径向集 (见~\eqref{eq:8.17}) 或 $P$ 的其他退化. 广义径向集是本章的主题.
+\end{enumerate}
+
+\section{径向点估计: 一个简单例子}\label{sec:10.1}
+\index{ling shuangtezhengxian@零双特征线 (null-bicaracteristic)}%
+
+考虑乘法算子 $P \defeq x \in \Psi^0(M)$, 其中 $M \defeq \R^n = \R_x \times \R_y^{n-1}$. 记 $\xi, \eta$ 为动量变量. $P$ 的主符号为 $p(x, y, \xi, \eta) = x$, 其特征集为
+\begin{equation}\label{eq:10.1}
+    \Sigma \defeq \Char(P) = \left\{ (x, y, \xi, \eta) : x = 0, \; (\xi, \eta) \neq (0, 0) \right\} \subset T^* \R^n \setminus o,
+\end{equation}
+而 Hamilton 向量场为 $H_p = -\partial_\xi$. (这是例~\ref{eg:8.1}(3) 的一个特例.) 设 $u \in \mathcal{D}'(\R^n)$ 解 "偏微分方程"
+\begin{equation}\label{eq:10.2}
+    P u = x u = f \in \Smooth(\R^n).
+\end{equation}
+椭圆正则性 (命题~\ref{prop:6.32}) 蕴涵 $\WF(u) \subset \Sigma$. 由奇性传播 (定理~\ref{thm:8.4}), $\WF(u)$ 是 $P$ 的极大延拓零双特征线之并. 注意在点 $(x, 0, \xi, 0) \in \Sigma$ 处,
+\begin{equation}\label{eq:10.3}
+    H_p = -\partial_\xi
+\end{equation}
+是\textbf{径向的}; 过 $(x, 0, \xi, 0)$ 的零双特征线保持在半直线 $\{(x, 0, c\xi, 0) : c > 0\}$ 之内, 因此传播定理在该处是空的. 于是我们定义下述两个\textbf{径向点}集合:
+\begin{equation}\label{eq:10.4}
+    \mathcal{R}_\pm = \left\{ (0, y, \xi, 0) : \pm \xi > 0 \right\} \subset \Sigma.
+\end{equation}
+见图~\ref{fig:10.1}.
+
+\begin{figure}[htbp]
+\centering
+\drawFigTenOne
+\caption{左图: $T^* \R^n$ 的单个纤维中的径向集 $\mathcal{R}_\pm$ (此处取 $n = 2$), 以及 $p(x, y, \xi, \eta) = x$ 的 Hamilton 向量场 $H_p = -\partial_\xi$. 右图: $S^* \R^n$ 的纤维中的零双特征线. $\mathcal{R}_\pm$ 在纤维无穷远处的边界 $\partial\mathcal{R}_\pm$ 画作粗点.}
+\label{fig:10.1}
+\end{figure}
+
+现在, 偏微分方程~\eqref{eq:10.2} 的一般解具有形式
+\begin{equation}\label{eq:10.5}
+    u(x, y) = u_+(y) (x + \ii 0)^{-1} + u_-(y) (x - \ii 0)^{-1} + \tilde{u}(x, y),
+\end{equation}
+其中 $u_\pm \in \mathcal{D}'(\R^{n-1})$ 且 $\tilde{u} \in \Smooth(\R^n)$, 并满足 $u_+(y) + u_-(y) = f(0, y)$. 为证明这一点, 写 $f(x, y) = f(0, y) + x g(x, y)$; 则 $(x + \ii 0)^{-1} f(0, y) + g(x, y)$ 是~\eqref{eq:10.2} 的一个解. \eqref{eq:10.2} 的两个解之差 $v \in \mathcal{D}'(\R^n)$ 满足 $x v = 0$, 故 $v(x, y) = \delta(x) w(y)$, 其中 $w \in \mathcal{D}'(\R^{n-1})$. 剩下只需回忆习题~\ref{ex:2.6}(6).
+
+\begin{proposition}[乘以 $x$]\label{prop:10.1}
+设 $u \in \mathcal{D}'(\R^n)$, $x u = f \in \Smooth(\R^n)$, 且对某个 $s_0 > -\frac{1}{2}$ 有 $\WF^{s_0}(u) \cap \mathcal{R}_+ = \emptyset$. 则 $\WF(u) \subset \mathcal{R}_-$. 此外, 对所有 $s < -\frac{1}{2}$ 均有 $\WF^s(u) = \emptyset$.
+\end{proposition}
+
+\begin{proof}
+我们有 $(x \pm \ii 0)^{-1} \in H_{\mathrm{loc}}^s(\R^n)$ 当且仅当 $s < -\frac{1}{2}$. (这可由~\eqref{eq:2.72} 推出; 另见习题~\ref{ex:6.4}.) 此外, 对任意 $u_- \in \mathcal{D}'(\R^{n-1})$ 与 $\tilde{u} \in \Smooth(\R^n)$, $\WF^{s_0}\bigl(u_-(y)(x - \ii 0)^{-1}\bigr)$ 与 $\WF^{s_0}(\tilde{u})$ 均与 $\mathcal{R}_+$ 不交 (参见例~\ref{eg:6.30}), 而 $\WF^{s_0}\bigl(u_+(y)(x + \ii 0)^{-1}\bigr) \cap \mathcal{R}_+ = \emptyset$ 当且仅当 $u_+ = 0$. (这些论断事实上对所有 $s_0 \ge -\frac{1}{2}$ 成立.) 因此关于 $u$ 的假设蕴涵 $u_+ \equiv 0$; 从而 $u_-(y) = f(0, y)$ 是光滑的. 第一个结论现在由 $\WF\bigl(u_-(y)(x - \ii 0)^{-1}\bigr) \subset \mathcal{R}_-$ 得到. 第二个结论则来自: 对任意 $\epsilon > 0$ 有 $(x - \ii 0)^{-1} \in H_{\mathrm{loc}}^{-\frac{1}{2}-\epsilon}(\R^n)$.
+\end{proof}
+
+除使用显式解公式~\eqref{eq:10.5} 之外, 命题~\ref{prop:10.1} 的微局部证明可通过串接三个微局部正则性结果来完成:
+
+\begin{enumerate}
+    \item 在先验正则性假设 $\WF^{s_0}(u) \cap \mathcal{R}_+ = \emptyset$ 之下, 可以断定事实上 $\WF(u) \cap \mathcal{R}_+ = \emptyset$, 从而 $u$ 在 $\mathcal{R}_+$ 附近是微局部光滑的.
+    \item 由正则性传播, 我们推出 $\WF(u) \subset \mathcal{R}_-$.
+    \item 若 $\WF(u)$ 与 $\mathcal{R}_-$ 的某个去心邻域不交, 则 $u$ 在 $\mathcal{R}_-$ 附近对所有 $s < -\frac{1}{2}$ 微局部地属于 $H^s$.
+\end{enumerate}
+
+第 (1) 与第 (3) 部分是下述关于径向点处奇性/正则性传播的一般结果 (定理~\ref{thm:10.5}) 的特例. 该结果的一个关键特征是存在\textbf{临界正则性} (threshold regularity): 若 $u$ 在 $\mathcal{R}_+$ 处的微局部正则性超过某个临界值 (此处为 $-\frac{1}{2}$), 则 $u$ 在 $\mathcal{R}_+$ 附近微局部地达到 $f$ 所允许的那样光滑. 于是, 对 $s > -\frac{1}{2}$, 我们可以把 $H^s$ 正则性 "从 $\mathcal{R}_+$ 传播出去". 另一方面, 当向 $\mathcal{R}_-$ 传播时, 可以在临界值之下 (此处仍为 $-\frac{1}{2}$) 断定 $u$ 的微局部正则性.
+
+在非常粗略的意义下, 所要的径向点估计可视为实主型传播在无穷长时间下的一致版本: 毕竟在上例中, 从点 $(x, 0, \xi, \eta)$ ($\eta \neq 0$) 出发的 $H_p$ 流, 当投影到 $S^* \R^n$ 上时, 沿前向或后向分别趋向 $\mathcal{R}_+$. 因此, 在正对易子论证的框架下, 径向点估计证明的关键在于构造一个沿 $H_p$ 流具有适当的一致单调性的符号. 在情形~\eqref{eq:10.3} 以及区域 $\xi > \epsilon|\eta|$ ($\epsilon > 0$) 中, 这样的符号的一个显然候选者是权重 $\xi^{2s+1}$: 它沿 $H_p$ 的导数为 $-(2s+1)\xi^{2s}$, 从而当 $s \neq -\frac{1}{2}$ 时是 $\xi^{2s}$ 的一个定号倍数. (关于 "长时间" 能量估计的一个非微局部玩具模型见习题~\ref{ex:10.1}.) 注意正是 $H_p$ 在 $\mathcal{R}_+$ 处沿纤维径向的非平凡行为造成了这种单调性. 与第~\ref{ch:08}~章中证明实主型传播估计时不同, 因此我们绝不能完全过渡到余球面丛, 因为那会丢失关于纤维径向的信息. 取而代之, 我们在第~\ref{sec:6.5}~节引入的径向紧化余切丛上工作:
+
+\begin{lemma}[齐次向量场与紧化]\label{lem:10.2}
+设 $V \in \mathcal{V}(T^* M \setminus o)$ 是 0 次齐次的. 则 $V$ 连续延拓为光滑向量场
+\begin{equation}\label{eq:10.6}
+    V \in \mathcal{V}(\overline{T^* M} \setminus o),
+\end{equation}
+且该向量场与 $S^* M$ 相切.
+\end{lemma}
+
+\begin{proof}
+在 $M$ 的局部坐标 $x_1, \ldots, x_n$ 下, 记 $\xi_1, \ldots, \xi_n$ 为相应的动量变量, 我们有
+\begin{equation}\label{eq:10.7}
+    V = \sum_{j=1}^{n} a_j(x, \xi) \partial_{x_j} + \sum_{j, k=1}^{n} b_{jk}(x, \xi) \xi_k \partial_{\xi_j},
+\end{equation}
+其中对所有 $\lambda > 0$ 有 $a_j(x, \lambda \xi) = a_j(x, \xi)$ 与 $b_{jk}(x, \lambda \xi) = b_{jk}(x, \xi)$. 在 $\xi_1 > 0$ 的区域内, 我们使用射影坐标
+\begin{equation}\label{eq:10.8}
+    \rho \defeq \frac{1}{\xi_1}, \qquad \hat{\xi}_j \defeq \frac{\xi_j}{\xi_1}, \quad j = 2, \ldots, n.
+\end{equation}
+于是 $a_j(x, \xi) = a_j\bigl(x, (1, \hat{\xi}_2, \ldots, \hat{\xi}_n)\bigr)$ 光滑延拓至 $\rho = 0$, $b_{jk}$ 亦然. 此外 $\partial_{x_j} \in \mathcal{V}(\overline{T^* M})$. 对 $2 \le j, k \le n$ 直接计算可得
+\begin{equation}\label{eq:10.9}
+    \begin{gathered}
+        \xi_1 \partial_{\xi_1} = -\rho \partial_\rho - \sum_{\ell=2}^{n} \hat{\xi}_\ell \partial_{\hat{\xi}_\ell}, \qquad
+        \xi_1 \partial_{\xi_j} = \partial_{\hat{\xi}_j}, \\
+        \xi_k \partial_{\xi_1} = -\hat{\xi}_k \rho \partial_\rho - \sum_{\ell=2}^{n} \hat{\xi}_k \hat{\xi}_\ell \partial_{\hat{\xi}_\ell}, \qquad
+        \xi_k \partial_{\xi_j} = \hat{\xi}_k \partial_{\hat{\xi}_j}.
+    \end{gathered}
+\end{equation}
+检查这些表达式即得引理.
+\end{proof}
+
+在~\eqref{eq:10.1} 所使用的坐标中, 再次考虑方程 $P u \defeq x u = f$ 与 Hamilton 向量场 $H_p = -\partial_\xi$. 在射影坐标
+\begin{equation}\label{eq:10.10}
+    \rho \defeq \xi^{-1}, \qquad \hat{\eta} \defeq \frac{\eta}{\xi}, \qquad \xi > \epsilon |\eta|
+\end{equation}
+下, 我们把 $H_p$ 重标度为向量场
+\begin{equation}\label{eq:10.11}
+    V \defeq \xi H_p = -\xi \partial_\xi = \rho \partial_\rho + \hat{\eta} \partial_{\hat{\eta}}, \qquad \rho > 0, \quad |\hat{\eta}| < \epsilon^{-1},
+\end{equation}
+它是 0 次齐次的. 把 $V$ 限制到 $S^* \R^n$ 上时, 项 $\rho \partial_\rho$ 消失, 于是我们看到: $H_p$ 的径向性意味着 $V|_{S^* \R^n}$ 在
+\begin{equation}\label{eq:10.12}
+    \partial \mathcal{R}_+ \defeq \left\{ (x, y, \rho, \hat{\eta}) : x = 0, \; \rho = 0, \; \hat{\eta} = 0 \right\} \subset S^* \R^n
+\end{equation}
+(即 $\mathcal{R}_+$ 由~\eqref{eq:10.4} 给出的纤维无穷远处的边界) 上为零. 因此, 在通过正对易子证明 $\partial\mathcal{R}_+$ 处的微局部估计时, 我们必须利用~\eqref{eq:10.11} 中的第一个加项: 必须利用 $V$ 沿纤维径向的非平凡行为, 即它作用在权重 $\rho^{-s} = \xi^s$ 上的非平凡性. 为把我们此前的启发式论证精确化, 考虑对易子
+\begin{equation}\label{eq:10.13}
+    a = \rho^{-2s-1} \psi(|\hat{\eta}|^2),
+\end{equation}
+其中 $\psi \in \mathcal{C}_c^\infty([0, \infty))$ 在 $0$ 附近恒等于 $1$, 且对所有 $r \ge 0$ 满足 $r \psi'(r) \le 0$. 则在射影坐标系~\eqref{eq:10.10} 中有
+\begin{equation}\label{eq:10.14}
+    H_p a = \rho V a = \rho^{-2s} \left( -(2s + 1) \psi(|\hat{\eta}|^2) + 2|\hat{\eta}|^2 \psi'(|\hat{\eta}|^2) \right).
+\end{equation}
+当 $s > -\frac{1}{2}$ 时, 两个加项具有相同的 (不定) 符号 (即均 $\le 0$). 此外至关重要的是, 第一个加项在 $\partial\mathcal{R}_+$ 处是椭圆的. 于是, 如同第~\ref{ch:08}~章那样对计算~\eqref{eq:10.14} 作量子化, 我们可以写出
+\begin{equation}\label{eq:10.15}
+    \ii [P, A] = -B^* B - B_1^* B_1 + R, \qquad R \in \Psi^{2s-1}, \quad s > -\tfrac{1}{2},
+\end{equation}
+其中 $B \in \Psi^s$ 在 $\partial\mathcal{R}_+$ 处椭圆, 而 $B_1 \in \Psi^s$ 捕获涉及 $\psi'$ 的项. 最终这给出关于 $\|B u\|_{L^2}$ 的估计, 从而给出 $u$ 在 $\partial\mathcal{R}_+$ 附近的微局部 $H^s$ 估计, 且不含任何先验控制项. 另一方面注意, \eqref{eq:10.14} 中第一项的 "正性" (意为 "好" 的符号, 此处即负性) 是精细而有界的; 因此, 来自正则化论证的误差项 (对比~\eqref{eq:8.61} 与~\eqref{eq:8.65} 中的项 $f_r, \hat{f}_r$) 只能在正则化程度受限时被吸收. 这正是 $\partial\mathcal{R}_+$ 处先验正则性假设的由来.
+
+另一方面, 当 $s < -\frac{1}{2}$ 时, \eqref{eq:10.14} 中的两项异号, 但第一个加项在 $\partial\mathcal{R}_+$ 处仍是椭圆的. 于是, 假定 $u$ 在第二个加项的支撑集上 (它含于 $\partial\mathcal{R}_+$ 的某个去心邻域中) 具有 $H^s$ 控制, 便可断定 $u$ 在 $\partial\mathcal{R}_+$ 附近的 $H^s$ 正则性. ($\partial\mathcal{R}_-$ 处的情形当然完全类似.)
+
+
+\section{径向点估计: 一般设定}\label{sec:10.2}
+\index{faxiang yuan@法向源 (normal source)}%
+\index{faxiang hui@法向汇 (normal sink)}%
+\index{erci dingyi hanshu@二次定义函数 (quadratic defining function)}%
+\index{xianxinghua@线性化 (linearization)}%
+
+我们现在建立关于 (广义) 径向点处奇性/正则性传播的一般定理. 需要下述概念.
+
+\begin{definition}[二次定义函数]\label{def:10.3}
+设 $M$ 为闭光滑流形, $X \subset M$ 为光滑子流形. 若 $X = \rho^{-1}(0)$ 且 $\dd\rho = 0$ 在 $X$ 上成立, 并且对所有 $p \in X$ 与在 $p$ 处不与 $X$ 相切的 $V \in \mathcal{V}(M)$, 在 $X$ 上 $p$ 的附近有 $V^2 \rho = V(V\rho) > 0$, 则称 $\rho \in \Smooth(M)$ 为 $X$ 的\textbf{二次定义函数}.
+\end{definition}
+
+关于稍为简洁的定义见习题~\ref{ex:10.2}. 每个闭子流形 $X$ 都容许一个二次定义函数 (习题~\ref{ex:10.3}). 此外, 给定任一二次定义函数 $\rho \in \Smooth(M)$, 在 $X$ 的每一点附近都存在 $M$ 上的局部坐标 $x_1, \ldots, x_n$, 使得 $X$ 局部由 $x_1 = \cdots = x_k = 0$ 给出 (其中 $k$ 为 $X$ 的余维数) 且 $\rho = \frac{1}{2}\sum_{j=1}^{k} x_j^2$ (习题~\ref{ex:10.4}). 特别地, 当 $X$ 紧, $\rho \in \Smooth(M)$ 固定, 而 $U, V \subset M$ 为 $X$ 的开邻域且 $\bar{U}$ 紧时, 存在 $\delta > 0$ 使 $\{p \in U : \rho(p) < \delta\} \subset V$. 因此可以用 $X$ 的二次定义函数来定义 $X$ 的任意小邻域.
+
+\begin{definition}[法向源与法向汇]\label{def:10.4}
+给定切于闭子流形 $X \subset M$ 的向量场 $V \in \mathcal{V}(M)$. 若存在 $X$ 的开邻域 $U \subset M$ 与二次定义函数 $\rho \in \Smooth(M)$ 使得
+\begin{equation}\label{eq:10.16}
+    V\rho \ge \beta\rho \quad \text{在 } U \text{ 上成立}, \qquad 0 < \beta \in \Smooth(U),
+\end{equation}
+则称 $X$ 是 $V$ 的\textbf{法向源}. 法向汇通过对偶条件 $V\rho \le -\beta\rho$ 类似地定义.
+\end{definition}
+
+我们作下述假设.
+
+\begin{enumerate}
+    \item[(R.1)] $P \in \Psi_{\mathrm{cl}}^m(M)$ 是经典算子, 具有实齐次主符号 $p$. 我们把其特征集视为闭子集 $\Char(P) \subset \overline{T^* M} \setminus o$ (即通常特征集在 $T^* M \setminus o$ 中的闭包).
+    \item[(R.2)] 固定椭圆符号 $0 < \rho \in S_{\mathrm{cl}}^{-1}(T^* M)$, 并置
+    \begin{equation}\label{eq:10.17}
+        \tilde{p} \defeq \rho^m p \in \Smooth(\overline{T^* M} \setminus o), \qquad \tilde{H}_p \defeq \rho^{m-1} H_p \in \mathcal{V}(\overline{T^* M} \setminus o).
+    \end{equation}
+    我们假定
+    \begin{equation}\label{eq:10.18}
+        \mathcal{R} \subset \Char(P) \cap S^* M \subset S^* M \text{ 是光滑紧子流形}, \quad \text{且 } \tilde{H}_p \text{ 切于 } \mathcal{R}.
+    \end{equation}
+    我们还假定在 $S^* M$ 中 $\mathcal{R}$ 的某个邻域内 $\dd\tilde{p} \neq 0$. (这意味着 $\Char(P)$ 在 $\mathcal{R}$ 附近是 $\overline{T^* M} \setminus o$ 的光滑余维 $1$ 锥子流形.)
+\end{enumerate}
+
+为确定起见, 我们假定 $\mathcal{R}$ 是 $\tilde{H}_p$-流的法向源. (若把 $P$ 换为 $-P$, 从而把 $p$ 换为 $-p$, 则法向源变为法向汇, 反之亦然.) 这意为:
+
+\begin{enumerate}
+    \item[(R.3)] $\mathcal{R}$ 是 $\tilde{H}_p$ 在 $\Char(P) \cap S^* M$ 内部的法向源. 即存在 $\mathcal{R}$ 在 $\Char(P)$ 内部的二次定义函数 $\rho_1 \in \Smooth(S^* M)$ (即 $\rho_1|_{\Char(P)}$ 是 $\mathcal{R}$ 在 $\mathcal{R}$ 的某邻域内的二次定义函数), $\delta_1 > 0$ 以及正函数 $0 < \beta_1 \in \Smooth(S^* M)$, 使得
+    \begin{equation}\label{eq:10.19}
+        \tilde{H}_p \rho_1 \ge \beta_1 \rho_1 \quad \text{在 } \Char(P) \cap \{\rho_1 < \delta_1\} \text{ 上}.
+    \end{equation}
+    \item[(R.4)] 成立
+    \begin{equation}\label{eq:10.20}
+        \tilde{H}_p \rho = \beta_0 \rho, \qquad \beta_0|_{\mathcal{R}} > 0.
+    \end{equation}
+    (由于 $\tilde{H}_p$ 切于 $S^* M$, $\tilde{H}_p \rho$ 在 $S^* M$ 上为零, 从而在 $\mathcal{R}$ 附近具有所述形式, 其中 $\beta_0 \in \Smooth(\overline{T^* M})$; 新的信息是 $\beta_0$ 在 $\mathcal{R}$ 处的正性.)
+\end{enumerate}
+
+假设 (R.3) 说明 $\mathcal{R}$ 是 $\tilde{H}_p$-流在 $\Char(P) \cap S^* M$ 内的源. 假设 (R.4) 说明 $\mathcal{R}$ 也是 $\tilde{H}_p$-流沿纤维径向的源. 见图~\ref{fig:10.2}. 一些作者称 $\mathcal{R}$ 为 $P$ 的\textbf{广义径向源}; 使用 "广义" 一词是因为并不要求 $H_p$ 在由 $\mathcal{R}$ 确定的 $T^* M$ 的锥子集与 $o$ 上是径向的 (另见例~\ref{eg:10.14}).
+
+$P$ 在 $\mathcal{R}$ 处的次主部起着重要作用: 它造成临界正则性的平移 ($(10.15)$ 中的 $-\frac{1}{2}$); 另见下面的例~\ref{eg:10.12}. 因此我们引入下述记号:
+
+\begin{enumerate}
+    \item[(R.5)] 固定 $M$ 上的一个体积密度. 置 $p_1 \defeq \sigma^{m-1}\bigl(\frac{1}{2\ii}(P - P^*)\bigr)$ 与 $\tilde{p}_1 \defeq \rho^{m-1} p_1$. 由
+    \begin{equation}\label{eq:10.21}
+        \tilde{p}_1 = \beta_0 \tilde{\beta}
+    \end{equation}
+    定义 $\mathcal{R}$ 附近的 $\tilde{\beta} \in \Smooth(S^* M)$.
+\end{enumerate}
+
+\begin{figure}[htbp]
+\centering
+\drawFigTenTwo
+\caption{一个径向集 $\mathcal{R} \subset S^* M$ (此处为单点), 它既是重标度 Hamilton 向量场 $\tilde{H}_p$ 在 $S^* M$ 中特征集内部的法向源, 又是沿纤维径向的法向源.}
+\label{fig:10.2}
+\end{figure}
+
+我们以两种形式陈述本章的主要结果: 一种是定性的 (类似于定理~\ref{thm:8.8}), 另一种是定量的 (类似于定理~\ref{thm:8.10}).
+
+\begin{theorem}[法向源处的微局部正则性: 定性陈述]\label{thm:10.5}
+设 $P$ 与 $\mathcal{R} \subset \Char(P) \subset S^* M$ 满足假设 (R.1)--(R.5). 设 $u \in \mathcal{D}'(M)$, $P u \defeq f$.
+\begin{enumerate}
+    \item (\textbf{前向传播: 流出} $\mathcal{R}$.) 设 $s, s_0 \in \R$, 且在 $\mathcal{R}$ 上 $s > s_0 > \frac{m-1}{2} + \tilde{\beta}$. 若 $\WF^{s_0}(u) \cap \mathcal{R} = \emptyset$ 且 $\WF^{s-m+1}(f) \cap \mathcal{R} = \emptyset$, 则 $\WF^s(u) \cap \mathcal{R} = \emptyset$.
+    \item (\textbf{后向传播: 流入} $\mathcal{R}$.) 设 $s \in \R$, 且在 $\mathcal{R}$ 上 $s < \frac{m-1}{2} + \tilde{\beta}$. 若 $\WF^s(u)$ 与 $\mathcal{R}$ 的某个去心邻域不交, 且 $\WF^{s-m+1}(f) \cap \mathcal{R} = \emptyset$, 则 $\WF^s(u) \cap \mathcal{R} = \emptyset$.
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}[选取; 丛]\label{rem:10.6}
+当 $\tilde{H}_p|_{\mathcal{R}} \neq 0$ 时, 量 $\tilde{\beta}|_{\mathcal{R}}$ 依赖于用来定义 $P^*$ 的体积密度的选取. 为得到尽可能锐利的结果, 对第 (1) 部分取 $\tilde{\beta}$ 为所有选取下的下确界, 对第 (2) 部分取为上确界. 定理~\ref{thm:10.5} 对 $P \in \Psi^m(M; E)$ 亦成立, 只要其主符号是实、齐次且标量的; 此时临界量依赖于 $E$ 上纤维内积的选取.
+\end{remark}
+
+带有估计的版本可以陈述为类似于推论~\ref{cor:8.19} 的半整体形式, 如下.
+
+\begin{theorem}[法向源处的微局部正则性: 定量陈述]\label{thm:10.7}
+设 $P$ 与 $\mathcal{R} \subset \Char(P) \subset S^* M$ 满足假设 (R.1)--(R.5). 设 $K \subset M$ 为紧集, 使 $\mathcal{R}$ 的底投影含于 $K^\circ$ 中. 设 $\tilde{K} \subset M$ 为紧集, 使得对 $P$ 的 Schwartz 核 $K_P$ 有 $\supp K_P \cap (K \times M) \subset K \times \tilde{K}$. 固定 $\chi \in \SmoothComp(M)$ 使 $\chi = 1$ 在 $\tilde{K}$ 附近成立. 设 $u \in \mathcal{D}'(M)$.
+\begin{enumerate}
+    \item (\textbf{前向传播: 流出} $\mathcal{R}$.) 设 $B, G \in \Psi^0(M)$ 满足:
+    \begin{enumerate}
+        \item[(i)] $B, G$ 的 Schwartz 核的支撑集含于 $K \times K$ 中;
+        \item[(ii)] $\WF'(B) \subset \Ell(G)$;
+        \item[(iii)] $\mathcal{R} \subset \Ell(G)$;
+        \item[(iv)] 从 $\WF'(B) \cap \Char(P)$ 中任一点出发的所有后向零双特征线都趋向 $\mathcal{R}$, 且始终留在 $\Ell(G)$ 中.
+    \end{enumerate}
+    则对所有满足在 $\mathcal{R}$ 上 $s > s_0 > \frac{m-1}{2} + \tilde{\beta}$ 的 $s, s_0, N \in \R$, 存在 $C > 0$ 使得
+    \begin{equation}\label{eq:10.22}
+        \|B u\|_{H^s} \le C \left( \|G P u\|_{H^{s-m+1}} + \|G u\|_{H^{s_0}} + \|\chi u\|_{H^{-N}} \right).
+    \end{equation}
+    该估计在强意义下成立: 若 $u$ 使右端有限, 则左端亦有限, 且估计成立.
+    \item (\textbf{后向传播: 流入} $\mathcal{R}$.) 设 $B, G, E \in \Psi^0(M)$ 满足:
+    \begin{enumerate}
+        \item[(i)] $B, G, E$ 的 Schwartz 核的支撑集含于 $K \times K$ 中;
+        \item[(ii)] $\WF'(B) \subset \Ell(G)$;
+        \item[(iii)] $\mathcal{R} \subset \Ell(B)$;
+        \item[(iv)] 从 $\WF'(B) \cap \Char(P)$ 中任一点出发的所有前向零双特征线或者含于 $\mathcal{R}$ 中, 或者在有限时间内进入 $\Ell(E)$, 且始终留在 $\Ell(G)$ 中.
+    \end{enumerate}
+    则对所有满足在 $\mathcal{R}$ 上 $s < \frac{m-1}{2} + \tilde{\beta}$ 的 $s, N \in \R$, 存在 $C > 0$ 使得
+    \begin{equation}\label{eq:10.23}
+        \|B u\|_{H^s} \le C \left( \|G P u\|_{H^{s-m+1}} + \|E u\|_{H^s} + \|\chi u\|_{H^{-N}} \right).
+    \end{equation}
+    该估计在通常的强意义下成立.
+\end{enumerate}
+\end{theorem}
+
+见图~\ref{fig:10.3}. 估计~\eqref{eq:10.22}--\eqref{eq:10.23} 常被称为 (\textbf{广义}) \textbf{径向点估计}.
+
+\begin{figure}[htbp]
+\centering
+\drawFigTenThree
+\caption{定理~\ref{thm:10.7} 的图示: 在特征集内部, 我们画出法向源 $\mathcal{R}$ 附近的 Hamilton 流 (即零双特征线). 左图: 流出 $\mathcal{R}$ 的传播. 右图: 流入 $\mathcal{R}$ 的传播.}
+\label{fig:10.3}
+\end{figure}
+
+在描述上述设定的例子之前, 我们给出一个方便的结果, 它把法向源条件 (R.3) 的验证化归为对 $\tilde{H}_p$ 的线性化的计算.
+
+\begin{definition}[向量场的线性化]\label{def:10.8}
+设 $M$ 为光滑流形, $X \subset M$ 为闭光滑子流形, 并设 $V \in \mathcal{V}(M)$ 沿 $X$ 为零. 则 $V$ 的\textbf{线性化}是向量丛映射
+\begin{equation}\label{eq:10.24}
+    [V] \colon N^* X \to N^* X, \qquad \dd f \mapsto \dd(V f),
+\end{equation}
+其中 $f \in \Smooth(M)$ 在 $X$ 上为零.
+\end{definition}
+
+在 $M$ 的局部坐标 $x_1, \ldots, x_n$ 下 (其中 $X$ 由 $x_1 = \cdots = x_k = 0$ 给出), 可写 $V = \sum_{i=1}^{k} x_i V_i$, 其中 $V_i \in \mathcal{V}(M)$; 此外, 任一在 $X$ 上为零的 $f \in \Smooth(M)$ 可写为 $f = \sum_{j=1}^{k} x_j f_j$, 其中 $f_j \in \Smooth(M)$. 在 $x_1 = \cdots = x_k = 0$ 处计算可得
+\begin{equation}\label{eq:10.25}
+    \dd(V f) = \dd\left( \sum_{i,j=1}^{k} x_i x_j V_i(f_j) + \sum_{i,j=1}^{k} x_i V_i(x_j) f_j \right) = \sum_{i,j=1}^{k} V_i(x_j) f_j \, \dd x_i,
+\end{equation}
+它因此线性依赖于 $\dd f = \sum_{j=1}^{k} f_j \dd x_j$. 具体地说, 若写 $V_i = \sum_{\ell=1}^{n} V_{i\ell} \partial_\ell$, 则在 $N^* X$ 的基 $\dd x_1, \ldots, \dd x_k$ 下, 映射 $[V]$ 由矩阵 $(V_i(x_\ell))_{i,\ell=1}^{k} = (V_{i\ell})_{i,\ell=1}^{k}$ 给出.
+
+\begin{lemma}[线性化与法向源]\label{lem:10.9}
+设 $V \in \mathcal{V}(M)$ 在闭子流形 $X \subset M$ 上为零. 则下述条件等价.
+\begin{enumerate}
+    \item $X$ 是 $V$ 的法向源.
+    \item 对所有 $p \in X$, $[V] \in \End(N_p^* X)$ 的所有特征值都具有正实部.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+先证 (1) $\Rightarrow$ (2). 给定满足~\eqref{eq:10.16} 的二次定义函数 $\rho$, 在 $X$ 中某点的附近取局部坐标 $x_1, \ldots, x_n$ 使 $\rho = \frac{1}{2}\sum_{j=1}^{k} x_j^2$ (习题~\ref{ex:10.4}), 且 $X$ 由 $x' = 0$ 给出, 其中 $x' = (x_1, \ldots, x_k)$, $x'' = (x_{k+1}, \ldots, x_n)$. 写 $V = \sum_{i=1}^{k}\sum_{\ell=1}^{n} x_i V_{i\ell} \partial_\ell$; 则 $V\rho = \sum_{i,\ell=1}^{k} V_{i\ell}(x', x'') x_i x_\ell$ 与 $\sum_{i,\ell=1}^{k} V_{i\ell}(0, x'') x_i x_\ell$ 相差一个在 $x' = 0$ 处三阶消失的项. 因此~\eqref{eq:10.16} 的成立蕴涵: 对矩阵 $A \defeq [V] = (V_{i\ell}(0, x''))_{i,\ell=1}^{k} \in \R^{k \times k}$ 有
+\begin{equation}\label{eq:10.26}
+    \sum_{i,j=1}^{k} A_{ij} x_i x_j = (x')^T A x' > 0, \qquad 0 \neq x' = (x_1, \ldots, x_k) \in \R^k.
+\end{equation}
+注意 $A$ 不必是对称矩阵. 设 $\lambda + \ii\mu$ 是 $A$ 的特征值, 相应的特征向量为 $v + \ii w \neq 0$, 其中 $\lambda, \mu \in \R$, $v, w \in \R^k$. 由于 $A$ 是实矩阵, 特征值方程 $A(v + \ii w) = (\lambda + \ii\mu)(v + \ii w)$ 给出两个方程: $A v = \lambda v - \mu w$ 与 $A w = \mu v + \lambda w$. 因此~\eqref{eq:10.26} 蕴涵
+\begin{equation}\label{eq:10.27}
+    0 < v^T A v + w^T A w = \lambda(|v|^2 + |w|^2),
+\end{equation}
+从而 $\lambda > 0$.
+
+再证 (2) $\Rightarrow$ (1). 首先注意只需局部地构造满足~\eqref{eq:10.16} 的二次定义函数 $\rho$. 事实上, 若 $\rho_1, \rho_2$ 是两个这样的函数, 分别定义在开集 $U_1, U_2$ 上, 而 $\chi_1, \chi_2$ 是从属于 $U_1, U_2$ 的单位分解, 则对 $\rho \defeq \chi_1 \rho_1 + \chi_2 \rho_2$ 有
+\begin{equation}\label{eq:10.28}
+    V\rho = \chi_1 V\rho_1 + \chi_2 V\rho_2 + (V\chi_1)(\rho_1 - \rho_2).
+\end{equation}
+第一、二项分别 $\ge \chi_1 \beta \rho_1$ 与 $\ge \chi_2 \beta \rho_2$, 而第三项在 $X$ 处三阶消失. 于是在 $X \cap (U_1 \cup U_2)$ 的某邻域内 $V\rho \ge \frac{1}{2}\beta\rho$.
+
+至于局部构造, 我们借助下面的引理~\ref{lem:10.10} 推出: 若 $A = (A_{ij}) \in \R^{k \times k}$ 的所有特征值都有正实部, 则存在正定矩阵 $B = (B_{ij}) \in \R^{k \times k}$ 使得对所有 $0 \neq v \in \R^k$ 有 $v^T A B v = \frac{1}{2} v^T (AB + (AB)^T) v > 0$. 此时函数 $\rho \defeq \frac{1}{2}\sum_{j,\ell=1}^{k} B_{j\ell} x_j x_\ell$ 满足
+\begin{equation}\label{eq:10.29}
+    \sum_{i,j=1}^{k} x_i A_{ij} \partial_j \rho = \sum_{i,j,\ell=1}^{k} A_{ij} B_{j\ell} x_i x_\ell \ge \frac{1}{2}\beta \rho,
+\end{equation}
+其中 $\beta > 0$ 取得使 $\frac{1}{2}(AB + (AB)^T) - \beta B$ 仍为正定.
+\end{proof}
+
+\begin{lemma}\label{lem:10.10}
+设 $A \in \R^{k \times k}$. 则下述条件等价.
+\begin{enumerate}
+    \item $A$ 的每个特征值都具有正实部.
+    \item 存在正定矩阵 $B \in \R^{k \times k}$ 使得对所有 $0 \neq v \in \R^k$ 有 $v^T A B v > 0$. (等价地, $AB + (AB)^T$ 正定.)
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+记 $\langle \cdot, \cdot \rangle$ 与 $\|\cdot\|$ 分别为 Euclidean 内积与范数. 先证 (1) 蕴涵 (2). 对 $L > 0$ (其值待定), 置
+\begin{equation}\label{eq:10.30}
+    \langle v, w \rangle_L \defeq \int_0^L \langle e^{tA^T} v, e^{tA^T} w \rangle \, \dd t, \qquad v, w \in \R^k.
+\end{equation}
+对 $v \in \R^k$ 有 $\frac{\dd}{\dd t} e^{tA^T} v = A^T e^{tA^T} v$. 于是, 写 $v = e^{-LA^T} w$, 便有
+\begin{equation}\label{eq:10.31}
+    \begin{aligned}
+        \langle v, A^T v \rangle_L &= \frac{1}{2}\int_0^L \frac{\dd}{\dd t} \langle e^{tA^T} v, e^{tA^T} v \rangle \, \dd t \\
+        &= \frac{\|e^{LA^T} v\|^2 - \|v\|^2}{2} = \frac{\|w\|^2 - \|e^{-LA^T} w\|^2}{2}.
+    \end{aligned}
+\end{equation}
+由于 $A^T$ 与 $A$ 的特征值相同, $e^{-A^T}$ 的每个特征值的绝对值都小于 $1$. 因此由谱半径公式, 对充分大的 $L \in \N$ 有 $\|e^{-LA^T}\| = \|(e^{-A^T})^L\| < 1$. 对这样的 $L$ 便得到: 对所有 $v \neq 0$ 有 $\langle v, A^T v \rangle_L > 0$. 置 $B \defeq \int_0^L e^{tA} e^{tA^T} \dd t$, 这等价于 $v^T A B v = v^T B A^T v = \langle v, A^T v \rangle_L > 0$.
+
+反之, 若条件 (2) 对 $A, B$ 成立, 则它对 $S^T A (S^T)^{-1}$ 与 $S^T B S$ 也成立, 其中 $S$ 为任意可逆矩阵. 选取 $S$ 使 $S^T B S = I$. 把 $A$ 换为 $S^T A (S^T)^{-1}$, 我们于是有~\eqref{eq:10.26}; 而 $A$ 的所有特征值 $\lambda$ 满足 $\operatorname{Re}\lambda > 0$ 已由~\eqref{eq:10.26} 之后的段落证明.
+\end{proof}
+
+现在我们给出径向点估计设定的四个例子.
+
+\begin{example}[乘以 $x$]\label{eg:10.11}
+我们来验证算子
+\begin{equation}\label{eq:10.32}
+    P = x \in \Diff^0(M), \qquad M = \R \times Y
+\end{equation}
+的假设 (R.1)--(R.5); 此处 $Y$ 是无边紧流形. 在 $Y$ 的局部坐标 $y \in \R^{n-1}$ 下, 把 $T^*(\R \times Y)$ 中的点写作 $(x, y, \xi, \eta)$, 其中 $x, \xi \in \R$, $y, \eta \in \R^{n-1}$. 则 $p(x, y, \xi, \eta) = x$ 且 $H_p = -\partial_\xi$. 我们固定椭圆符号 $\rho \in S_{\mathrm{cl}}^{-1}(T^* \R^n)$, 使其在 $|\xi| > \max(|\eta|, 1)$ 时等于 $|\xi|^{-1}$. 在 $\xi > \max(|\eta|, 1)$ 中工作, 使用~\eqref{eq:10.10} 的坐标 $\rho = \xi^{-1}$, $\hat{\eta} = \eta/\xi$, 于是由~\eqref{eq:10.11} 有 $\tilde{H}_p = \rho\partial_\rho + \hat{\eta}\partial_{\hat{\eta}}$. 在坐标 $x, y, \rho, \hat{\eta}$ 下, 纤维无穷远处的特征集由 $\{x = 0, \rho = 0\}$ 给出. 此时 $\tilde{H}_p$ 切于 $\mathcal{R} = \{x = 0, \rho = 0, \hat{\eta} = 0\}$. (该集合是紧的, 因为 $Y$ 紧 --- 这正是我们使用 $\R \times Y$ 而非命题~\ref{prop:10.1} 中所用的 $\R \times \R^{n-1}$ 的原因.) $\mathcal{R}$ 在 $\Char(P)$ 中的余法丛由 $\hat{\eta}$ 张成. 由于
+\begin{equation}\label{eq:10.33}
+    [\tilde{H}_p] \colon \dd\hat{\eta} \mapsto \dd(\tilde{H}_p \hat{\eta}) = \dd\hat{\eta}
+\end{equation}
+是恒等映射, 由引理~\ref{lem:10.9} 知条件 (R.3) 成立. 条件 (R.4) 以 $\beta_0 = 1$ 成立. 最后, \eqref{eq:10.21} 以 $\tilde{\beta} = 0$ 成立. 于是可以对临界正则性 $-\frac{1}{2}$ 应用定理~\ref{thm:10.5}, 从而在命题~\ref{prop:10.1} 的证明之后所勾勒的逐步微局部程序中重新得到该命题. (事实上, 由此得到命题~\ref{prop:10.1} 的一个 Sobolev 精细化.)
+\end{example}
+
+\begin{example}[非对称算子]\label{eg:10.12}
+为说明 (R.5) 中次主部 $\tilde{\beta}$ 的意义, 考虑 $P = x D_x - \lambda \in \Diff^1(M)$, $M = \R$. 此时对 $u = \chi_+^{\ii\lambda}$ 有 $P u = 0$ (习题~\ref{ex:2.6}), 这提示径向集 $T^* \R \setminus o$ (它有两个连通分支) 处的临界正则为 $\frac{1}{2} - \operatorname{Im}\lambda$ (即相应的 Sobolev 正则性; 由习题~\ref{ex:6.4}, $\chi_+^{\ii\lambda}$ 恰好勉强不具备它). 此时 $p(x, \xi) \defeq \sigma^1(P)(x, \xi) = x\xi$, 且 $H_p = x\partial_x - \xi\partial_\xi$. 为具体起见在 $\xi > 1$ 中工作, 取 $\rho = \xi^{-1}$, 于是 $\tilde{H}_p = H_p = x\partial_x + \rho\partial_\rho$. 在纤维无穷远处有 $\Char(P) = \{x = \rho = 0\} = \mathcal{R}$, 故条件 (R.3) 是空的, 而~\eqref{eq:10.20} 以 $\beta_0 = 1$ 成立; 又 $p_1 = \sigma^0\bigl(\frac{1}{2\ii}(P - P^*)\bigr) = \frac{1}{2} - \operatorname{Im}\lambda$, 故~\eqref{eq:10.21} 中 $\tilde{\beta} = \frac{1}{2} - \operatorname{Im}\lambda$. 定理~\ref{thm:10.5} 蕴涵: 若 $u \in H_{\mathrm{loc}}^{s_0}(\R)$, $P u = f \in H_{\mathrm{loc}}^{s}(\R)$ 且 $s \ge s_0 > \frac{1}{2} - \operatorname{Im}\lambda$, 则 $u \in H_{\mathrm{loc}}^{s}(\R)$.
+\end{example}
+
+\begin{example}[Keldysh 算子]\label{eg:10.13}
+考虑算子 $P \defeq x D_x^2 + \Delta_Y \in \Diff^2(\R \times Y)$, 其中 $Y$ 是紧 Riemann 流形. 把 $\R \times Y$ 上的余向量写作 $\xi\,\dd x + \eta$, $\eta \in T^* Y$. 则集合 $\{\xi > 0\} \cap N^*\{x = 0\} \setminus o$ 在纤维无穷远处的边界是一个径向集, 并且是 (R.3)--(R.4) 意义下的法向源. 注意在 $x > 0$ 中 $P$ 是椭圆的, 而在 $x < 0$ 中它是双曲的; $x = 0$ 上方的径向集位于这两个区域的交界上方. 读者被要求对习题~\ref{ex:10.6} 中该算子的一个推广给出详细计算.
+\end{example}
+
+\begin{example}[$\mathcal{R}$ 内部的非平凡流]\label{eg:10.14}
+在此前讨论的例子中 $\tilde{H}_p$ 在 $\mathcal{R}$ 上为零. 下述算子 (例~\ref{eg:10.13} 的一个变体) 在 $\mathcal{R}$ 内部具有非平凡动力学: 在 $M = (-\frac{1}{4}, \frac{1}{4})_x \times \mathbb{S}^1_y$ 上置
+\begin{equation}\label{eq:10.34}
+    P \defeq x D_x^2 + D_x D_y + D_y^2.
+\end{equation}
+则 $p(x, y, \xi, \eta) = x\xi^2 + \xi\eta + \eta^2$, 且 $H_p = (2x\xi + \eta)\partial_x + (\xi + 2\eta)\partial_y - \xi^2 \partial_\xi$. 在 $\xi > 0$ 中置 $\rho \defeq \xi^{-1}$, $\hat{\eta} \defeq \eta/\xi$; 于是在坐标 $x, y, \rho, \hat{\eta}$ 下有
+\begin{equation}\label{eq:10.35}
+    \tilde{H}_p \defeq \rho H_p = (2x + \hat{\eta})\partial_x + (1 + 2\hat{\eta})\partial_y + \rho\partial_\rho + \hat{\eta}\partial_{\hat{\eta}}.
+\end{equation}
+集合 $\mathcal{R} \defeq \{x = 0, \rho = 0, \hat{\eta} = 0\}$ 是 $\tilde{H}_p$ 的法向源: 在 $\Char(P) \cap S^* M = \{x = -\hat{\eta} - \hat{\eta}^2, \rho = 0\}$ 内部, $\mathcal{R}$ 由 $\hat{\eta} = 0$ 给出, 而 $\tilde{H}_p \hat{\eta} = \hat{\eta}$. 最后, $\tilde{H}_p|_{\mathcal{R}} = \partial_y$ 是非平凡的.
+\end{example}
+
+现在给出定理~\ref{thm:10.5} 的证明.
+
+\begin{proof}[定理~\ref{thm:10.5} 的证明]
+我们使用与第~\ref{sec:8.3}--\ref{sec:8.5}~节相同的正对易子论证, 对适当的 $B, G, \chi$ 证明形如~\eqref{eq:10.22} 的定量估计. 利用涉及~\eqref{eq:8.22}--\eqref{eq:8.23} 的论证, 我们同样可以化归为 $\chi u = u$ 的情形.
+
+\medskip\noindent\textbf{第 (1) 部分: 对易子的构造.} 取~\eqref{eq:10.17} 中的 $\tilde{p}$, ~\eqref{eq:10.19} 中 $\mathcal{R}$ 的二次定义函数 $\rho_1$, 以及~\eqref{eq:10.20} 中所用的纤维无穷远定义函数 $\rho$, 置
+\begin{equation}\label{eq:10.36}
+    a \defeq \rho^{-2s+m-1} \phi(\tilde{p})^2 \psi(\rho_1)^2.
+\end{equation}
+此处
+\begin{equation}\label{eq:10.37}
+    \phi \in \mathcal{C}_c^\infty(\R; [0,1]), \quad \phi = 1 \text{ 在 } 0 \text{ 附近}, \qquad
+    \psi \in \mathcal{C}_c^\infty([0, \infty); [0,1]), \quad \psi = 1 \text{ 在 } 0 \text{ 附近},
+\end{equation}
+并要求 $\sqrt{-\psi'}\,\psi \in \Smooth([0, \infty))$. 于是 $\phi(\tilde{p})$ 在 $\Char(P)$ 附近局部化, 而 $\psi(\rho_1)$ 进一步在 $\mathcal{R}$ 附近局部化. 我们有
+\begin{equation}\label{eq:10.38}
+    \tilde{H}_p \tilde{p} = \tilde{q}\tilde{p}, \qquad \tilde{q} \defeq \rho^{-m} \tilde{H}_p \rho^m;
+\end{equation}
+$\tilde{q}$ 在 $\mathcal{R}$ 附近光滑. 取 $A = A^* \in \Psi^{2s-m+1}$ 使 $\sigma^{2s-m+1}(A) = a$. 于是 $i[P, A] + 2\frac{P-P^*}{2i}A$ 的主符号为
+\begin{equation}\label{eq:10.39}
+    \begin{aligned}
+        H_p a + 2p_1 a &= \rho^{-m+1}(\tilde{H}_p a + 2\tilde{p}_1 a) \\
+        &= \rho^{-2s}\Big( \beta_0(-2s + m - 1 + 2\tilde{\beta})\phi(\tilde{p})^2 \psi(\rho_1)^2 \\
+        &\qquad + 2(\tilde{H}_p \rho_1)\phi(\tilde{p})^2 \psi'(\rho_1)\psi(\rho_1)
+        + 2\tilde{q}\tilde{p}\phi'(\tilde{p})\phi(\tilde{p})\psi(\rho_1)^2 \Big).
+    \end{aligned}
+\end{equation}
+当 $\psi$ 与 $\phi$ 的支撑集足够小时, 括号中的各项具有下述性质.
+
+\begin{enumerate}
+    \item 在关于 $s$ 的所述假设下, 第一项在 $\mathcal{R}$ 处是椭圆 (且为负) 的.
+    \item 第二项在特征集上非正, 其本质支撑含于 $\mathcal{R}$ 的某个去心邻域中. 更确切地说, 在第二项的支撑集上 $\rho_1$ 严格为正, 从而当 $\tilde{p} = 0$ 且 $\supp\psi$ 足够小时, 由~\eqref{eq:10.19} 知 $\tilde{H}_p \rho_1$ 亦为正. 当 $\supp\phi$ 足够小时, $\tilde{H}_p\rho_1$ 的正性在 $\supp(\phi(\tilde{p})^2 \psi'(\rho_1)\psi(\rho_1))$ 上得以保持.
+    \item 第三项的支撑集含于 $P$ 的椭圆集中.
+\end{enumerate}
+
+我们强调, 本质支撑与 $\Char(P)$ 相交的各项的符号, 可以通过观察图~\ref{fig:10.2} 中的 $H_p$-流来确定.
+
+此时, 对光滑 $u$ 已可通过重复第~\ref{ch:08}~章第~\ref{sec:8.4}~节中的论证来证明形如~\eqref{eq:10.22} 的定量估计; 我们把这一部分留给读者.
+
+\medskip\noindent\textbf{第 (1) 部分: 对易子的正则化.} 我们如第~\ref{sec:8.5}~节那样正则化对易子 $a$, 见式~\eqref{eq:8.60}--\eqref{eq:8.61}, 不过此处记号略有不同. 于是, 对 $\Theta > 0$ (其值在下面确定) 与 $r \ge 0$, 置
+\begin{equation}\label{eq:10.40}
+    \phi_r(\rho) \defeq (1 + r\rho^{-1})^{-\Theta}; \qquad
+    \rho\phi_r'(\rho) = f_r(\rho)\phi_r(\rho), \quad f_r(\rho) = \Theta\frac{r\rho^{-1}}{1 + r\rho^{-1}},
+\end{equation}
+于是 $\phi_r \in L^\infty((0,1]_\tau; S^0)$ (回忆~\eqref{eq:8.59}), 且对 $r > 0$ 有 $\phi_r \in S^{-\Theta}$. 我们再置
+\begin{equation}\label{eq:10.41}
+    a_r \defeq \phi_r(\rho)^2 a \in L^\infty((0,1]_\tau; S^{2s-m+1}),
+\end{equation}
+并计算得
+\begin{equation}\label{eq:10.42}
+    \begin{aligned}
+        H_p a_r + 2p_1 a_r &= \rho^{-2s}\phi_r(\rho)^2 \Big( \beta_0(-2s + m - 1 + 2\tilde{\beta} + 2f_r)\phi(\tilde{p})^2 \psi(\rho_1)^2 \\
+        &\qquad + 2(\tilde{H}_p \rho_1)\phi(\tilde{p})^2 \psi'(\rho_1)\psi(\rho_1)
+        + 2\tilde{q}\tilde{p}\phi'(\tilde{p})\phi(\tilde{p})\psi(\rho_1)^2 \Big).
+    \end{aligned}
+\end{equation}
+由于 $0 \le f_r \le \Theta$, 当从径向集 $\mathcal{R}$ 向外传播时, 正则化量 $\Theta$ 是受限的: 为确保~\eqref{eq:10.42} 中第一项在 $\mathcal{R}$ 处为负, 我们需要在 $\mathcal{R}$ 上 $s - \Theta > \frac{m-1}{2} + \tilde{\beta}$. 固定这样的 $\Theta > 0$. 取 $\delta > 0$ 足够小, 使得仍有 $s - \Theta - \delta\beta_0^{-1} > \frac{m-1}{2} + \tilde{\beta}$ 在 $\mathcal{R}$ 上成立, 然后写
+\begin{equation}\label{eq:10.43}
+    H_p a_r + 2p_1 a_r = -2\delta\rho^{2s-2m+2} a_r^2 - b_r^2 - b_{1,r}^2 + h_r p,
+\end{equation}
+其中
+\begin{equation}\label{eq:10.44}
+    \begin{aligned}
+        b_r &\defeq \rho^{-s}\phi_r(\rho)\phi(\tilde{p})\psi(\rho_1)
+        \sqrt{\beta_0\bigl(2s - (m - 1 + 2\tilde{\beta} + 2f_r + 2\delta\beta_0^{-1}\phi_r(\rho)^2\phi(\tilde{p})^2\psi(\rho_1)^2)\bigr)}, \\
+        b_{1,r} &\defeq \rho^{-s}\phi_r(\rho)\phi(\tilde{p})\sqrt{-2(\tilde{H}_p\rho_1)\psi'(\rho_1)\psi(\rho_1)}, \\
+        h_r &\defeq 2\rho^{-2s+m}\phi_r(\rho)^2 \tilde{q}\phi'(\tilde{p})\phi(\tilde{p})\psi(\rho_1)^2.
+    \end{aligned}
+\end{equation}
+于是 $b_r, b_{1,r} \in L^\infty((0,1]_r; S^s)$ 且 $h_r \in L^\infty((0,1]_r; S^{2s-m})$, 对 $r > 0$ 其阶分别降低 $\Theta, \Theta$ 与 $2\Theta$.
+
+\medskip\noindent\textbf{量子化; 第 (1) 部分证明的完成.} 使用~\eqref{eq:8.67} 中的完全量子化映射, 置 $A_r \defeq \frac{1}{2}(\operatorname{Op}(a_r) + \operatorname{Op}(a_r)^*)$, $B_r \defeq \operatorname{Op}(b_r)$, $B_{1,r} \defeq \operatorname{Op}(b_{1,r})$, $H_r \defeq \operatorname{Op}(h_r)$. 并置 $\Lambda \defeq \operatorname{Op}(\rho^{s-m+1})$. 则~\eqref{eq:10.43} 与~\eqref{eq:10.44} 蕴涵
+\begin{equation}\label{eq:10.45}
+    \ii[P, A_r] + 2\frac{P - P^*}{2\ii}A_r = -2\delta(\Lambda A_r)^*(\Lambda A_r) - B_r^* B_r - B_{1,r}^* B_{1,r} + H_r P + R_r,
+\end{equation}
+其中 $R_r \in L^\infty((0,1]_r; \Psi^{2s-1})$ 且 $\WF_{L^\infty}'(\{R_r\}) \subset \operatorname{ess\,supp} a$.
+
+现在回忆我们假定 $\WF^{s_0}(u) \cap \mathcal{R} = \emptyset$; 设 $\tilde{B} \in \Psi^0$ 在 $\mathcal{R}$ 处椭圆, 且使 $\tilde{B}u \in H^{s_0}$ 与 $B P u \in H^{s-m+1}$. 取 $\Theta > 0$ 使
+\begin{equation}\label{eq:10.46}
+    \frac{m-1}{2} + \tilde{\beta} < s - \Theta < s_0,
+\end{equation}
+并取~\eqref{eq:10.37} 中 $\phi, \psi$ 的支撑集足够小, 使 $\operatorname{ess\,supp} a \subset \Ell(\tilde{B})$. 由于对 $r > 0$ 有 $A_r \in \Psi^{2s-m+1-2\Theta} \subset \Psi^{2s_0-m+1}$, 故 $A_r u \in H^{-s_0+m-1}$. 我们断言
+\begin{equation}\label{eq:10.47}
+    \begin{aligned}
+        2\operatorname{Im}\langle P u, A_r u \rangle &= \ii\bigl(\langle P u, A_r u \rangle - \langle A_r u, P u \rangle\bigr) \\
+        &= \Bigl\langle \Bigl(\ii[P, A_r] + 2\frac{P - P^*}{2\ii}A_r\Bigr)u, u \Bigr\rangle.
+    \end{aligned}
+\end{equation}
+由引理~\ref{lem:6.42}, 所有项各自有意义: 第一行用到 $\WF_{s_0-m+1}^{s}(P u) \cap \WF'(A_r) = \emptyset$, 第二行用到 $\ii[P, A_r] + 2\frac{P-P^*}{2\ii}A_r \in \Psi^{2s_0}$, 且其算子波前集含于 $\Ell(\tilde{B})$ 中. 然而分部积分仍需论证: 对一般的 $u \in H^{s_0}$ 只有 $P u \in H^{s_0-m}$, 这通常不足以支撑分部积分. 这可以很容易地通过插入另一个正则化子 $J_\epsilon \in L^\infty((0,1]_\epsilon; \Psi^0)$ 来完成, 其中对 $\epsilon > 0$ 有 $J_\epsilon = J_\epsilon^* \in \Psi^{-\infty}$, 且 $J_\epsilon \to I$ 在 $\Psi^\eta$ ($\eta > 0$) 的拓扑中. 具体地说,
+\begin{equation}\label{eq:10.48}
+    \begin{aligned}
+        \langle P u, A_r u \rangle - \langle A_r u, P u \rangle
+        &= \bigl(\langle P u, J_\epsilon A_r u \rangle - \langle A_r u, J_\epsilon P u \rangle\bigr) \\
+        &= \langle (A_r J_\epsilon P - P^* J_\epsilon A_r)u, u \rangle \\
+        &= \langle J_\epsilon(A_r P - P^* A_r)u, u \rangle + \langle ([A_r, J_\epsilon]P - [P^*, J_\epsilon]A_r)u, u \rangle \\
+        &\to \langle (A_r P - P^* A_r)u, u \rangle.
+    \end{aligned}
+\end{equation}
+注意此处对固定的 $r > 0$, 族 $[A_r, J_\epsilon]$ ($\epsilon \in (0,1]$) 在 $\Psi^{2s_0-m}$ 中一致有界, 且当 $\epsilon \to 0$ 时在 $\Psi^{2s_0-m+\eta}$ ($\eta > 0$) 中收敛到 $[A_r, I] = 0$; 由引理~\ref{lem:4.39} 这蕴涵 $[A_r, J_\epsilon]P u \to 0$ 于 $H^{-s_0}$, 从而 $\langle [A_r, J_\epsilon]P u, u \rangle \to 0$. 类似地, 对固定的 $r > 0$, 当 $\epsilon \to 0$ 时 $\langle [P^*, J_\epsilon]A_r u, u \rangle \to 0$.
+
+接下来把~\eqref{eq:10.45} 代入配对~\eqref{eq:10.47} 的右端, 重写之. 取 $G \in \Psi^0$ 使 $\WF'(I - G) \cap \WF_{L^\infty}'(\{A_r\}) = \emptyset$. 则由 Peter--Paul 不等式与引理~\ref{lem:8.18} 得到估计
+\begin{equation}\label{eq:10.49}
+    \begin{aligned}
+        &\|B_r u\|_{L^2}^2 + \|B_{1,r} u\|_{L^2}^2 + 2\delta\|\Lambda A_r u\|_{L^2}^2 \\
+        &\quad \le 2\delta\|\Lambda A_r u\|_{L^2}^2 + C\delta^{-1}\|G P u\|_{H^{s-m+1}}^2
+        + |\langle P u, H_r^* u \rangle| + C\bigl(\|G u\|_{H^{s-\frac{1}{2}}}^2 + \|u\|_{H^{-N}}^2\bigr),
+    \end{aligned}
+\end{equation}
+其中 $C$ 与 $r$ 无关. 利用 $\WF_{L^\infty}'(\{H_r\}) \cap \WF'(I - G) = \emptyset$, 最后一行的第一项可估计为
+\begin{equation}\label{eq:10.50}
+    \begin{aligned}
+        |\langle P u, H_r^* u \rangle| &\le C\bigl(\|G P u\|_{H^{s-m+1}}^2 + \|H_r^* u\|_{H^{-s+m-1}}^2 + \|u\|_{H^{-N}}^2\bigr) \\
+        &\le C\bigl(\|G P u\|_{H^{s-m+1}}^2 + \|G u\|_{H^{s-1}}^2 + \|u\|_{H^{-N}}^2\bigr);
+    \end{aligned}
+\end{equation}
+这里回忆 $H_r \in L^\infty((0,1]; \Psi^{2s-m})$. 与~\eqref{eq:10.49} 合并即得一致估计
+\begin{equation}\label{eq:10.51}
+    \|B_r u\|_{L^2} \le C\bigl(\|G P u\|_{H^{s-m+1}} + \|G u\|_{H^{s-\frac{1}{2}}} + \|u\|_{H^{-N}}\bigr).
+\end{equation}
+如同第~\ref{sec:8.5}~节, 我们由此断定 $B_0 u \in L^2$ (从而 $\WF^s(u) \cap \mathcal{R} = \emptyset$), 并且 $\|B_0 u\|_{L^2}$ 被~\eqref{eq:10.51} 的右端界住. 若 $s - \frac{1}{2} \le s_0$, 还可进一步估计 $\|G u\|_{H^{s-\frac{1}{2}}} \le C(\|\tilde{B}u\|_{H^{s_0}} + \|u\|_{H^{-N}})$, 从而 (重新命名算子后) 得到~\eqref{eq:10.22}. 否则, 用迭代论证 (每步把正则性提高 $\frac{1}{2}$) 经有限步后即得~\eqref{eq:10.22}.
+
+\medskip\noindent\textbf{第 (2) 部分的修正.} 正则性流入法向源的传播使用同一个对易子~\eqref{eq:10.41}. 此时正则化量 $\Theta$ 可以任意大. 事实上, 在~\eqref{eq:10.42} 中, 无论正则化量 $\Theta > 0$ 为何, 右端第一项现在在 $\mathcal{R}$ 处为正, 从而与第二项异号. 于是现在写
+\begin{equation}\label{eq:10.52}
+    H_p a_r + 2p_1 a_r = 2\delta\rho^{2s-2m+2}a_r^2 + b_r^2 - b_{1,r}^2 + h_r p,
+\end{equation}
+其中 $b_{1,r}, h_r$ 如~\eqref{eq:10.44}, 而
+\begin{equation}\label{eq:10.53}
+    \begin{aligned}
+        b_r &\defeq \rho^{-s}\phi_r(\rho)\phi(\tilde{p})\psi(\rho_1) \\
+        &\qquad \times \sqrt{\beta_0(-2s + m - 1 + 2\tilde{\beta} + 2f_r - 2\delta\beta_0^{-1}\phi_r(\rho)^2\phi(\tilde{p})^2\psi(\rho_1)^2)}.
+    \end{aligned}
+\end{equation}
+如前面那样量子化, 我们得到一致估计
+\begin{equation}\label{eq:10.54}
+    \|B_r u\|_{L^2} \le C\bigl(\|G P u\|_{H^{s-m+1}} + \|B_{1,r}u\|_{L^2} + \|G u\|_{H^{s-\frac{1}{2}}} + \|u\|_{H^{-N}}\bigr).
+\end{equation}
+于是我们有了一个先验控制项 $\|B_{1,r}u\|_{L^2}$: 若 $\WF^s(u)$ 与 $\mathcal{R}$ 的某个包含 $\WF_L'(B_{1,r})$ 的去心邻域不交, 则该项一致有界. 在极限 $r \to 0$ 下得到 $B_0 u \in L^2$, 从而 $\WF^s(u) \cap \mathcal{R} = \emptyset$. 迭代论证 (每步提高正则性 $\frac{1}{2}$) 蕴涵下述一致估计: 对满足 $\Ell(E) \supset \WF_L'(B_{1,r})$ 的 $E \in \Psi^0$ 有
+\begin{equation}\label{eq:10.55}
+    \|B_0 u\|_{L^2} \le C\bigl(\|G P u\|_{H^{s-m+1}} + \|E u\|_{H^s} + \|u\|_{H^{-N}}\bigr);
+\end{equation}
+特别地, $E$ 可以取得使 $\WF'(E) \cap \mathcal{R} = \emptyset$.
+\end{proof}
+
+定理~\ref{thm:10.7} 的证明与推论~\ref{cor:8.19} 的证明类似, 留给读者. 我们强调, 估计~\eqref{eq:10.22} 具有下述微局部构件.
+
+\begin{enumerate}
+    \item 在 $\mathcal{R}$ 附近的微局部区域, 使用径向点估计 (即上述证明中建立的定量估计), 得到 $u$ 在 $\mathcal{R}$ 附近 $H^s$ 中的微局部估计.
+    \item 然后用实主型传播 (定理~\ref{thm:8.8}, 定量版本则用定理~\ref{thm:8.10}) 在 $\mathcal{R}$ 的流出集附近微局部地控制 $u$ 的 $H^s$ 正则性.
+    \item 最后, 在 $P$ 的椭圆集上, 用微局部椭圆估计以 $P u$ 来估计 $u$.
+\end{enumerate}
+
+\begin{remark}[无 $Gu$ 项]\label{rem:10.15}
+在假定 $\WF^{s_0}(u) \cap \mathcal{R} = \emptyset$ 之下, 可以证明比~\eqref{eq:10.22} 更强的估计, 即
+\begin{equation}\label{eq:10.56}
+    \|B u\|_{H^s} \le C\bigl(\|G P u\|_{H^{s-m+1}} + \|\chi u\|_{H^{-N}}\bigr).
+\end{equation}
+这可如下看出. 首先, 只需考虑在 $\mathcal{R}$ 处椭圆的 $B$. 此时若 $\WF'(G)$ 接近定理~\ref{thm:10.7} 陈述中要求 (1ii)--(1iv) 之下所能取到的最小值, 则从 $\WF'(G) \cap \Char(P)$ 出发的 $P$ 的所有后向零双特征线都趋向 $\mathcal{R}$, 特别地在有限时间内进入 $\Ell(B)$, 同时始终留在 $\Ell(\tilde{G})$ 中, 其中 $\tilde{G} \in \Psi^0$ 的算子波前集比 $G$ 略大. 利用奇性传播, 我们因此可以估计
+\begin{equation}\label{eq:10.57}
+    \|G u\|_{H^{s_0}} \le C\bigl(\|\tilde{G} P u\|_{H^{s_0-m+1}} + \|B u\|_{H^{s_0}} + \|\chi u\|_{H^{-N}}\bigr).
+\end{equation}
+把该估计代入~\eqref{eq:10.22}, 剩下的只是使用插值不等式
+\begin{equation}\label{eq:10.58}
+    \|B u\|_{H^{s_0}} \le \epsilon\|B u\|_{H^s} + C_\epsilon \|B u\|_{H^{-N}}
+\end{equation}
+(习题~\ref{ex:2.13}). 事实上, 对充分小的 $\epsilon$, 第一项可被吸收到~\eqref{eq:10.22} 的左端, 从而得到~\eqref{eq:10.56}. 我们在定理~\ref{thm:10.7} 中未把径向点估计陈述为~\eqref{eq:10.56} 的形式, 因为~\eqref{eq:10.56} 在强意义下不成立: 例如取 $P = x \in \Psi^0(M)$, $M = \R \times Y$ ($Y$ 紧), 把 $\R \times Y$ 中的点记为 $(x, y)$ ($x \in \R$, $y \in Y$), 并取 $u(x, y) = \delta(x)\phi(y)$, 其中 $0 \neq \phi \in \Smooth(Y)$; 则 $P u = 0$ 且对 $N > \frac{1}{2}$ 有 $u \in H^{-N}$, 但当 $B \in \Psi^0$ 在径向集 $N^*\{x = 0\} \setminus o$ 处椭圆时, 对 $s > -\frac{1}{2}$ 有 $B u \notin H^s$.
+\end{remark}
+
+
+\section{半经典径向点估计}\label{sec:10.3}
+\index{banjingdian jingxiangdian guji@半经典径向点估计 (semiclassical radial point estimate)}%
+
+一般设定与第~\ref{sec:10.2}~节极为相似. 我们作下述假设与定义.
+
+\begin{enumerate}
+    \item[(Rh.1)] $P = (P_h)_{h \in (0, h_0)} \in \Psi_{h,\mathrm{cl}}^m(M)$ 是经典半经典算子 (具适当支撑), 其主符号 $p \in S_{\mathrm{cl}}^m(T^* M)$ 与 $h$ 无关.
+    \item[(Rh.2)] 固定椭圆符号 $0 < \rho \in S_{\mathrm{cl}}^{-1}(T^* M)$, 并置
+    \begin{equation}\label{eq:10.59}
+        \tilde{p} \defeq \rho^m p \in \Smooth(\overline{T^* M}), \qquad \tilde{H}_p \defeq \rho^{m-1} H_p \in \mathcal{V}(\overline{T^* M}).
+    \end{equation}
+    (关于 $\tilde{H}_p$ 的归属见习题~\ref{ex:10.10}.) 假定
+    \begin{equation}\label{eq:10.60}
+        \mathcal{R} \subset \Char(P) \cap S^* M \subset S^* M \text{ 是光滑紧子流形}, \quad \text{且 } \tilde{H}_p \text{ 切于 } \mathcal{R}.
+    \end{equation}
+    再假定在 $\mathcal{R}$ 附近 $\dd\tilde{p} \neq 0$, 于是 $\Char(P)$ 在 $\mathcal{R}$ 附近是 $\overline{T^* M}$ 的光滑余维 $1$ 子流形.
+    \item[(Rh.3)] $\mathcal{R}$ 是 $\tilde{H}_p$ 在 $\Char(P) \cap S^* M$ 内部的法向源. 我们记 $\rho_1 \in \Smooth(S^* M)$ 为二次定义函数, 使对某个 $0 < \beta_1 \in \Smooth(S^* M)$ 在 $\mathcal{R}$ 附近有 $\tilde{H}_p \rho_1 \ge \beta_1 \rho_1$.
+    \item[(Rh.4)] $\mathcal{R}$ 沿纤维径向也是源, 即
+    \begin{equation}\label{eq:10.61}
+        \tilde{H}_p \rho = \beta_0 \rho, \qquad \beta_0|_{\mathcal{R}} > 0.
+    \end{equation}
+    \item[(Rh.5)] 我们由
+    \begin{equation}\label{eq:10.62}
+        \tilde{p}_1 \defeq \rho^{m-1} p_1 = \beta_0 \tilde{\beta}, \qquad p_1 \defeq \sigma_h^{m-1}\Bigl(\frac{1}{2\ii h}(P - P^*)\Bigr)
+    \end{equation}
+    定义 $\mathcal{R}$ 附近的 $\tilde{\beta} \in \Smooth(S^* M)$.
+\end{enumerate}
+
+图~\ref{fig:10.2} 仍是该设定的有用图示. 半经典设定的主要新特征在于: 特征集在 $T^* M$ 的纤维中不再是锥的, 因此在 $\mathcal{R}$ 附近作微局部化现在还需要在纤维无穷远处局部化.
+
+我们在此设定下以两种版本陈述半经典径向点估计: 一个定性版本与一个半整体定量版本.
+
+\begin{theorem}[法向源处的半经典微局部正则性: 定性陈述]\label{thm:10.16}
+设 $u = (u_h)_{h \in (0, h_0)}$ 是 $M$ 上 $h$-缓增的分布族, 并设 $f = (f_h)_{h \in (0, h_0)}$, $f_h \defeq P_h u_h$.
+\begin{enumerate}
+    \item (\textbf{前向传播: 流出} $\mathcal{R}$.) 设 $s, s_0 \in \R$, 且在 $\mathcal{R}$ 上 $s > s_0 > \frac{m-1}{2} + \tilde{\beta}$. 若 $\WF_h^{s_0,0}(u) \cap \mathcal{R} = \emptyset$ 且 $\WF^{s-m+1,1}(f) \cap \mathcal{R} = \emptyset$, 则 $\WF_h^{s,0}(u) \cap \mathcal{R} = \emptyset$.
+    \item (\textbf{后向传播: 流入} $\mathcal{R}$.) 设 $s \in \R$, 且在 $\mathcal{R}$ 上 $s < \frac{m-1}{2} + \tilde{\beta}$. 若 $\WF_h^{s,0}(u)$ 与 $\mathcal{R}$ 的某个去心邻域不交, 且 $\WF_h^{s-m+1,1}(f) \cap \mathcal{R} = \emptyset$, 则 $\WF_h^{s,0}(u) \cap \mathcal{R} = \emptyset$.
+\end{enumerate}
+\end{theorem}
+
+\begin{theorem}[法向源处的半经典微局部正则性: 定量陈述]\label{thm:10.17}
+设 $K \subset M$ 为紧集, 使 $\mathcal{R}$ 的底投影含于 $K^\circ$ 中. 设 $\tilde{K} \subset M$ 为紧集, 使得对 $P_h$ 的 Schwartz 核 $K_{P_h}$ 有 $\supp K_{P_h} \cap (K \times M) \subset K \times \tilde{K}$. 固定 $\chi \in \SmoothComp(M)$ 使 $\chi = 1$ 在 $\tilde{K}$ 附近成立. 设 $u \in \mathcal{D}'(M)$.
+\begin{enumerate}
+    \item (\textbf{前向传播: 流出} $\mathcal{R}$.) 设 $B, G \in \Psi_h^0(M)$ 满足:
+    \begin{enumerate}
+        \item[(i)] $B, G$ 的 Schwartz 核的支撑集含于 $K \times K$ 中;
+        \item[(ii)] $\WF_h'(B) \subset \Ell_h(G)$;
+        \item[(iii)] $\mathcal{R} \subset \Ell_h(G)$;
+        \item[(iv)] 从 $\WF_h'(B) \cap \Char_h(P)$ 中任一点出发的 $-\rho^{m-1}H_p$ 的所有积分曲线都趋向 $\mathcal{R}$, 且始终留在 $\Ell_h(G)$ 中.
+    \end{enumerate}
+    则对所有满足在 $\mathcal{R}$ 上 $s > s_0 > \frac{m-1}{2} + \tilde{\beta}$ 的 $s, s_0, N \in \R$, 存在 $h_1, C > 0$, 使估计
+    \begin{equation}\label{eq:10.63}
+        \|B u\|_{H_h^s} \le C\left( h^{-1}\|G P u\|_{H_h^{s-m+1}} + h^N \|G u\|_{H_h^{s_0}} + h^N \|\chi u\|_{H_h^{-N}} \right)
+    \end{equation}
+    对所有 $h \in (0, h_1)$ 在强意义下成立.
+    \item (\textbf{后向传播: 流入} $\mathcal{R}$.) 设 $B, G, E \in \Psi_h^0(M)$ 满足:
+    \begin{enumerate}
+        \item[(i)] $B, G, E$ 的 Schwartz 核的支撑集含于 $K \times K$ 中;
+        \item[(ii)] $\WF_h'(B) \subset \Ell_h(G)$;
+        \item[(iii)] $\mathcal{R} \subset \Ell_h(B)$;
+        \item[(iv)] 从 $\WF_h'(B) \cap \Char_h(P)$ 中任一点出发的 $\rho^{m-1}H_p$ 的所有积分曲线或者含于 $\mathcal{R}$ 中, 或者在有限时间内进入 $\Ell_h(E)$, 且始终留在 $\Ell_h(G)$ 中.
+    \end{enumerate}
+    则对所有满足在 $\mathcal{R}$ 上 $s < \frac{m-1}{2} + \tilde{\beta}$ 的 $s, N \in \R$, 存在 $h_1, C > 0$, 使估计
+    \begin{equation}\label{eq:10.64}
+        \|B u\|_{H_h^s} \le C\left( h^{-1}\|G P u\|_{H_h^{s-m+1}} + \|E u\|_{H_h^s} + h^N \|\chi u\|_{H_h^{-N}} \right)
+    \end{equation}
+    对所有 $h \in (0, h_1)$ 在强意义下成立.
+\end{enumerate}
+\end{theorem}
+
+我们按上一节的论证来解释对应于定理~\ref{thm:10.16} 的定量估计 (它是在 $\mathcal{R}$ 附近的微局部估计) 的证明; 定理~\ref{thm:10.17} 则可由与推论~\ref{cor:8.19} 的证明类似的论证得到. 论证中的主要变化在于: 其一, 我们现在需要局部化到纤维无穷远的某个邻域; 其二, 我们需要把 $h$ 的幂放在适当的位置上. 我们同样可以化归为 $u$ 的支撑集含于 $\chi^{-1}(1)$ 的情形.
+
+我们先讨论定理~\ref{thm:10.16} 的第 (1) 部分. 取 $\rho_1 \in \Smooth(\overline{T^* M})$ 使 $\rho_1|_{\Char_h(P) \cap S^* M}$ 是 $\mathcal{R}$ 在 $\Char_h(P) \cap S^* M$ 内部的二次定义函数, 且使单调性性质~\eqref{eq:10.19} 成立. 取 $\phi, \psi$ 为~\eqref{eq:10.37} 中的截断函数, 并取截断函数 $\chi \in \mathcal{C}_c^\infty([0, \infty); [0,1])$ 使 $\chi = 1$ 在 $0$ 附近成立且 $\sqrt{-\chi'}\,\chi \in \Smooth$. 先考虑未正则化的对易子
+\begin{equation}\label{eq:10.65}
+    a \defeq \rho^{-2s+m-1} \chi(\rho)^2 \phi(\tilde{p})^2 \psi(\rho_1)^2.
+\end{equation}
+由~\eqref{eq:10.38} 定义 $\tilde{q}$. 取 $A = A^* \in \Psi_h^{2s-m+1}$ 使 $\sigma_h^{2s-m+1}(A) = a$. 于是 $\frac{\ii}{h}[P, A] + 2\frac{P - P^*}{2\ii h}A$ 的半经典主符号为
+\begin{equation}\label{eq:10.66}
+    \begin{aligned}
+        H_p a + 2p_1 a &= \rho^{-m+1}(\tilde{H}_p a + 2\tilde{p}_1 a) \\
+        &= \rho^{-2s}\Big( \beta_0(-2s + m - 1 + 2\tilde{\beta})\chi(\rho)^2 \phi(\tilde{p})^2 \psi(\rho_1)^2 \\
+        &\qquad + 2\beta_0\rho\chi'(\rho)\chi(\rho)\phi(\tilde{p})^2\psi(\rho_1)^2
+        + 2(\tilde{H}_p\rho_1)\chi(\rho)^2\phi(\tilde{p})^2\psi'(\rho_1)\psi(\rho_1) \\
+        &\qquad + 2\tilde{q}\tilde{p}\chi(\rho)^2\phi'(\tilde{p})\phi(\tilde{p})\psi(\rho_1)^2 \Big).
+    \end{aligned}
+\end{equation}
+右端的四项具有下述性质.
+
+\begin{enumerate}
+    \item 第一项 (主项) 在 $\mathcal{R}$ 处为负, 从而当 $\chi, \phi, \psi$ 的支撑集足够小时, 它在 $\supp a$ 上保持为负.
+    \item 第二项支撑于有限频率处, 并且由~\eqref{eq:10.61} 与 $\chi' \le 0$, 当 $\supp\chi$ 足够小时它也是非正的. 事实上它是一个符号的平方的相反数. 前两项的符号源于 $\mathcal{R}$ 沿纤维径向的源性质.
+    \item 注意 $\rho_1$ 在第三项的支撑集上为正. 此外, 在纤维无穷远处的特征集 $\{\tilde{p} = \rho = 0\}$ 内以及在 $\supp\psi'(\rho_1)$ 上, 只要 $\supp\psi$ 足够小, 由假设 (Rh.3) 便有 $\tilde{H}_p\rho_1 > 0$. 这一性质在 $\{\tilde{p} = \rho = 0\}$ 的某邻域内保持. 因此, 取 $\phi, \chi$ 的支撑集足够小 (依赖于 $\psi$ 的选取) 可以确保第三项非正, 且确实是某个符号的平方的相反数. 该项与第二项同号, 这源于 $\mathcal{R}$ 在 $\Char_h(P)$ 内 (无论在纤维无穷远处还是沿纤维径向) 的源性质.
+    \item 第四项支撑于 $\Ell_h(P)$ 中.
+\end{enumerate}
+
+至于正则化, 我们使用~\eqref{eq:10.40} 中的 $\phi_r(\rho) = (1 + r\rho^{-1})^{-\Theta}$. 正则化量 $\Theta$ 取得使在 $\mathcal{R}$ 上 $s_0 > s - \Theta > \frac{m-1}{2} + \tilde{\beta}$. 定义正则化符号
+\begin{equation}\label{eq:10.67}
+    a_r \defeq \phi_r(\rho)^2 a.
+\end{equation}
+与~\eqref{eq:10.43} 类似, 固定 $\delta > 0$ 使得在 $\mathcal{R}$ 上仍有 $s - \Theta - \delta\beta_0^{-1} > \frac{m-1}{2} + \tilde{\beta}$, 并写
+\begin{equation}\label{eq:10.68}
+    H_p a_r + 2p_1 a_r = -2\delta\rho^{2s-2m+2}a_r^2 - b_r^2 - b_{1,r}^2 - b_{2,r}^2 + h_r p,
+\end{equation}
+其中沿用~\eqref{eq:10.40} 的记号,
+\begin{equation}\label{eq:10.69}
+    \begin{aligned}
+        b_r &\defeq \rho^{-s}\phi_r(\rho)\chi(\rho)\phi(\tilde{p})\psi(\rho_1) \\
+        &\qquad \times \sqrt{\beta_0\bigl(2s - (m - 1 + 2\tilde{\beta} + 2f_r + 2\delta\beta_0^{-1}\phi_r(\rho)^2\chi(\rho)^2\phi(\tilde{p})^2\psi(\rho_1)^2)\bigr)}, \\
+        b_{1,r} &\defeq \rho^{-s}\phi_r(\rho)\chi(\rho)\phi(\tilde{p})\sqrt{-2(\tilde{H}_p\rho_1)\psi'(\rho_1)\psi(\rho_1)}, \\
+        b_{2,r} &\defeq \rho^{-s}\phi_r(\rho)\phi(\tilde{p})\psi(\rho_1)\sqrt{-2\beta_0\rho\chi'(\rho)\chi(\rho)}, \\
+        h_r &\defeq 2\rho^{-2s+m}\phi_r(\rho)^2\chi(\rho)^2\tilde{q}\phi'(\tilde{p})\phi(\tilde{p})\psi(\rho_1)^2.
+    \end{aligned}
+\end{equation}
+当 $\psi$ 与 $\phi, \chi$ 的支撑集足够小时, 有 $b_r, b_{1,r}, b_{2,r} \in L^\infty((0,1]_r; S^s)$ 与 $h_r \in L^\infty((0,1]_r; S^{2s-m})$, 对 $r > 0$ 其阶分别降低 $\Theta, \Theta, \Theta$ 与 $2\Theta$.
+
+使用~\eqref{eq:5.200} 中的完全量子化映射, 现在置 $A_r \defeq \frac{1}{2}(\operatorname{Op}_h(a_r) + \operatorname{Op}_h(a_r^*)^*)$ 以及 $B_r \defeq \operatorname{Op}_h(b_r)$, $B_{j,r} \defeq \operatorname{Op}_h(b_{j,r})$ ($j = 1, 2$), $H_r \defeq \operatorname{Op}_h(h_r)$; 并置 $\Lambda \defeq \operatorname{Op}_h(\rho^{-m+s-1})$. 则
+\begin{equation}\label{eq:10.70}
+    \begin{aligned}
+        &\frac{\ii}{h}[P, A_r] + 2\frac{P - P^*}{2\ii h}A_r \\
+        &\qquad = -2\delta(\Lambda A_r)^*(\Lambda A_r) - B_r^* B_r - B_{1,r}^* B_{1,r} - B_{2,r}^* B_{2,r} + H_r P + h R_r,
+    \end{aligned}
+\end{equation}
+其中 $R_r \in L^\infty((0,1]_r; \Psi_h^{2s-1})$, $\WF_{h,L^\infty}'(\{R_r\}) \subset \operatorname{ess\,supp}_h a$. 于是我们可以通过重复~\eqref{eq:10.48} 中的二次正则化论证, 来论证 $L^2$-配对中的分部积分:
+\begin{equation}\label{eq:10.71}
+    \begin{aligned}
+        2h^{-1}\operatorname{Im}\langle P u, A_r u \rangle
+        &= \Bigl\langle \Bigl(\frac{\ii}{h}[P, A_r] + 2\frac{P - P^*}{2\ii h}A_r\Bigr)u, u \Bigr\rangle \\
+        &= -2\delta\|\Lambda A_r u\|^2 - \|B_r u\|^2 - \|B_{1,r}u\|^2 - \|B_{2,r}u\|^2 + \langle H_r P u, u \rangle + \langle h R_r u, u \rangle.
+    \end{aligned}
+\end{equation}
+现在如~\eqref{eq:10.49} 那样进行. 固定 $G \in \Psi_h^0$ 使 $\WF_h'(I - G) \cap \WF_{h,L^\infty}'(\{A_r\}) = \emptyset$, 由 Peter--Paul 不等式可估计
+\begin{equation}\label{eq:10.72}
+    \begin{aligned}
+        \|B_r u\|^2 &\le C\delta^{-1}h^{-2}\|G P u\|_{H_h^{s-m+1}}^2 \\
+        &\qquad + |\langle P u, H_r u \rangle| + C\bigl(h^{\frac{1}{2}}\|G u\|_{H_h^{s-\frac{1}{2}}}^2 + h^N\|u\|_{H_h^{-N}}^2\bigr).
+    \end{aligned}
+\end{equation}
+(我们已丢掉了与 $\|B_r u\|^2$ 同号的项 $\|B_{1,r}u\|^2$ 与 $\|B_{2,r}u\|^2$.) 右端第二项可进一步估计为
+\begin{equation}\label{eq:10.73}
+    \begin{aligned}
+        |\langle P u, H_r u \rangle| &\le C\bigl(h^{-2}\|G P u\|_{H_h^{s-m+1}}^2 + h^2\|H_r u\|_{H_h^{-s+m-1}}^2 + h^N\|u\|_{H_h^{-N}}^2\bigr) \\
+        &\le C\bigl(h^{-2}\|G P u\|_{H_h^{s-m+1}}^2 + h^2\|G u\|_{H_h^{s-1}}^2 + h^N\|u\|_{H_h^{-N}}^2\bigr).
+    \end{aligned}
+\end{equation}
+总之我们得到
+\begin{equation}\label{eq:10.74}
+    \|B_r u\| \le C\bigl(h^{-1}\|G P u\|_{H_h^{s-m+1}} + h^{\frac{1}{2}}\|G u\|_{H_h^{s-\frac{1}{2}}} + h^N\|u\|_{H_h^{-N}}\bigr).
+\end{equation}
+于是断定 $B_0 u \in L^2$, 且其范数被同一右端界住. 每步把正则性与半经典阶同时提高 $\frac{1}{2}$ 的迭代论证给出估计~\eqref{eq:10.63}, 只是右端出现 $h^{\frac{1}{2}}\|G u\|_{H_h^{s_0}}$ 而非 $h^N\|G u\|_{H_h^{s_0}}$. 但利用如注~\ref{rem:10.15} 中的奇性传播论证, 当 $h$ 足够小时可以去掉该项. 这就建立了不含 $Gu$ 项的估计~\eqref{eq:10.63}. 为使~\eqref{eq:10.63} 在所需的强意义下成立, 只需把该项以任意对 $h > 0$ 为正的因子加回; 在~\eqref{eq:10.63} 中我们为此选取因子 $h^N$.
+
+定理~\ref{thm:10.16} 第 (2) 部分的证明循类似思路. 差别如下. 首先, \eqref{eq:10.66} 右端第二、三行中涉及 $\chi$ 与 $\psi$ 的导数的项, 现在与第一行中的主项异号. 其次, 正则化量 $\Theta$ 现在不受限制. 于是现在写
+\begin{equation}\label{eq:10.75}
+    H_p a_r + 2p_1 a_r = 2\delta\rho^{2s-2m+2}a_r^2 + b_r^2 - b_{1,r}^2 - b_{2,r}^2 + h_r p,
+\end{equation}
+其中 $b_{1,r}, b_{2,r}, h_r$ 如~\eqref{eq:10.69}, 而此刻
+\begin{equation}\label{eq:10.76}
+    \begin{aligned}
+        b_r &= \rho^{-s}\phi_r(\rho)\chi(\rho)\phi(\tilde{p})\psi(\rho_1) \\
+        &\qquad \times \sqrt{\beta_0\bigl(-2s + m - 1 + 2\tilde{\beta} + 2f_r - 2\delta\beta_0^{-1}\phi_r(\rho)^2\chi(\rho)^2\phi(\tilde{p})^2\psi(\rho_1)^2\bigr)}.
+    \end{aligned}
+\end{equation}
+我们于是得到
+\begin{equation}\label{eq:10.77}
+    \begin{aligned}
+        \|B_r u\| &\le C\bigl(h^{-1}\|G P u\|_{H_h^{s-m+1}} + \|B_{1,r}u\| + \|B_{2,r}u\|\bigr) \\
+        &\qquad + h^{\frac{1}{2}}\|G u\|_{H_h^{s-\frac{1}{2}}} + h^N\|u\|_{H_h^{-N}}.
+    \end{aligned}
+\end{equation}
+按假设, $\WF_h^{s,0}(u)$ 与 $\mathcal{R}$ 的某个去心邻域不交. 因此当 $\psi, \phi, \chi$ 的支撑集足够小时, 项 $B_{1,r}u$ 与 $B_{2,r}u$ 一致有界. 对满足 $\Ell_h(E) \supset \WF_{h,L^\infty}'(B_{1,r}) \cup \WF_{h,L^\infty}'(B_{2,r})$ 的 $E \in \Psi_h^0$, 可以估计
+\begin{equation}\label{eq:10.78}
+    \|B_{1,r}u\| + \|B_{2,r}u\| \le C\bigl(\|E u\|_{H_h^s} + h^N\|u\|_{H_h^{-N}}\bigr),
+\end{equation}
+从而得到~\eqref{eq:10.64}, 只是右端还多出一项 $h^{\frac{1}{2}}\|G u\|_{H_h^{s-\frac{1}{2}}}$. 后者可按常规迭代地估计, 经有限次迭代后即得所述的~\eqref{eq:10.64}. 至此定理~\ref{thm:10.16} 证毕.
+
+\section*{注记}
+\addcontentsline{toc}{section}{注记}
+
+此处给出的径向点估计属于 Vasy~\cite{Vas13}. 它们源于 Melrose~\cite{Mel94} 关于渐近锥空间上散射理论的工作. 微局部文献中径向点的最早实例似乎出现在 Guillemin--Schaeffer~\cite{GS77} 的一篇论文中; 在那里它们构成一个离散集. 离散径向点也在 Hassell--Melrose--Vasy~\cite{HMV08} 分析非衰减位势引起的散射时出现. 在半经典设定下, Dyatlov--Zworski~\cite{DZ19} 附录 E.4 利用其 "最终正性" (eventual positivity) 概念证明了比~\eqref{eq:10.63}--\eqref{eq:10.64} 略为一般的估计. 对于作用在向量丛截面上的算子, Hintz~\cite{Hin17} 基于 Dencker 的部分联络~\cite{Den82} 引入的次主算子概念, 使得最优临界量 (注~\ref{rem:10.6}) 的确定变得清晰.
+
+Haber~\cite{Hab14} 给出了径点处 Lagrange 子流形的一个辛 (从而通过 FIO 也是微局部) 标准形. 该微局部标准形在 $(x, y, \xi, \eta) = (0, 0, 1, 0)$ 附近为 $\R_x \times \R_y^{n-1}$ 上的 $x D_x - q(y)$, 其中 $q \in \Smooth$. 在此设定下, 人们可以在径向集内部对径向传播估计作微局部化, 见 Haber--Vasy~\cite{HV13}.
+
+
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+
+\begin{exer}[长时间能量估计]\label{ex:10.1}
+考虑算子 $P \defeq D_x - \lambda x^{-1} \in \Diff^1((1, \infty)_x)$. 置 $s_0 \defeq -\frac{1}{2} + \operatorname{Im}\lambda$. 对 $\alpha \in \R$ 与 $I \subseteq [1, \infty)$, 定义加权 $L^2$ 范数
+\[
+    \|u\|_{x^{-\alpha}L^2(I)}^2 \defeq \int_I x^{2\alpha}|u(x)|^2 \, \dd x.
+\]
+\begin{enumerate}
+    \item 设 $s < -\frac{1}{2} + \operatorname{Im}\lambda$. 证明
+    \begin{equation}\label{eq:10.79}
+        \|u\|_{x^{-s}L^2([1,\infty))} \le C\bigl(\|u\|_{L^2([1,2])} + \|P u\|_{x^{-s-1}L^2([1,\infty))}\bigr).
+    \end{equation}
+    \item 设 $s > s_0 > -\frac{1}{2} + \operatorname{Im}\lambda$. 证明
+    \begin{equation}\label{eq:10.80}
+        \|u\|_{x^{-s}L^2([1,\infty))} \le C\bigl(\|u\|_{x^{-s_0}L^2([1,\infty))} + \|P u\|_{x^{-s-1}L^2([1,\infty))}\bigr).
+    \end{equation}
+\end{enumerate}
+\textbf{注.} 这些估计是散射余切丛中径向集 $\mathcal{R} \defeq \{(x, \xi) = (\infty, 0)\} \subset {}^{\mathrm{sc}}T^* \R$ 处径向点估计的实例: 在~\eqref{eq:10.79} 中我们把加权 $L^2$ 控制传播\emph{到} $\mathcal{R}$ (类似于定理~\ref{thm:10.5}(2)), 而在~\eqref{eq:10.80} 中我们把加权 $L^2$ 控制传播\emph{出} $\mathcal{R}$ (类似于定理~\ref{thm:10.5}(1)). 散射设定下的一般径向点估计在 Vasy~\cite{Vas13} 中证明.
+\end{exer}
+
+下述三道习题阐明二次定义函数的概念.
+
+\begin{exer}[Hessian]\label{ex:10.2}
+设 $M$ 为光滑流形, $X \subset M$ 为闭光滑子流形. 设 $\rho \in \Smooth(M)$ 满足 $X = \rho^{-1}(0)$ 且 $\dd\rho = 0$ 在 $X$ 上成立. 证明: 对 $V, W \in \mathcal{V}(M)$, 值 $V(W(\rho))(p)$ ($p \in X$) 只依赖于 $V(p), W(p) \in T_p M$, 关于 $V, W$ 对称, 并且当 $V(p) \in T_p X$ 或 $W(p) \in T_p X$ 时为零. 由此断定: $\rho$ 在 $X$ 处的 Hessian (定义为 $\operatorname{Hess}(\rho)(V, W) \defeq V(W(\rho))$) 是 $T_X M / TX = NX$ 上良定义的对称双线性型 (习题~\ref{ex:5.8}), 从而定义了一个元素
+\begin{equation}\label{eq:10.81}
+    \operatorname{Hess}(\rho) \in \Smooth(X; S^2 N^* X).
+\end{equation}
+并证明: $\rho$ 是 $X$ 的二次定义函数, 当且仅当~\eqref{eq:10.81} 中的 $\operatorname{Hess}(\rho)$ 正定.
+\end{exer}
+
+\begin{exer}[二次定义函数: 存在性]\label{ex:10.3}
+设 $M$ 为光滑流形.
+\begin{enumerate}
+    \item (\textbf{简单情形}.) 设 $\rho_1, \ldots, \rho_k \in \Smooth(M)$ 使得
+    \begin{equation}\label{eq:10.82}
+        X = \{\rho_1 = \cdots = \rho_k = 0\} \subset M
+    \end{equation}
+    是 $M$ 的光滑子流形, 且 $\dd\rho_1, \ldots, \dd\rho_k$ 在 $X$ 的每一点处线性无关. 证明 $\rho \defeq \frac{1}{2}\sum_{j=1}^{k}\rho_j^2$ 是 $X$ 的二次定义函数.
+    \item (\textbf{一般情形}.) 证明每个闭光滑子流形 $X \subset M$ 都容许一个二次定义函数.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[二次定义函数: 结构]\label{ex:10.4}
+设 $M$ 为光滑流形, $X \subset M$ 是余维数为 $k$ 的闭光滑子流形. 证明 $\rho \in \Smooth(M)$ 的下述两个条件等价.
+\begin{enumerate}
+    \item $\rho$ 是 $X$ 的二次定义函数.
+    \item 对每个 $p \in X$, 存在 $p$ 在 $M$ 中的开邻域 $U$ 内的局部坐标 $x_1, \ldots, x_n$, 使得 $X \cap U = \{x_1 = \cdots = x_k = 0\}$ 且 $\rho = \frac{1}{2}\sum_{j=1}^{k} x_j^2$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[线性化]\label{ex:10.5}
+设 $M$ 为光滑流形, $X \subset M$ 为光滑子流形.
+\begin{enumerate}
+    \item 记 $\mathcal{I} = \{u \in \Smooth(M) : u|_X = 0\}$ 为在 $X$ 上消失的函数构成的理想. 证明映射 $\mathcal{I} \ni u \mapsto (\dd u)|_X \in \Smooth(X; N^* X)$ 诱导出环同构 $\phi \colon \mathcal{I}/\mathcal{I}^2 \to \Smooth(X; N^* X)$.
+    \item 证明 $\phi$ 是张量性的, 即对所有 $u \in \mathcal{I}$ 与 $f \in \Smooth(M)$ 有 $\phi(fu) = f\phi(u)$.
+    \item 设 $V \in \mathcal{V}(M)$ 为在 $X$ 上消失的光滑向量场. 证明 $V \colon \mathcal{I} \ni f \mapsto V f \in \mathcal{I}$ 诱导出张量性映射 $[V] \colon \mathcal{I}/\mathcal{I}^2 \to \mathcal{I}/\mathcal{I}^2$, 它在同构 $\phi$ 之下等于由~\eqref{eq:10.24} 定义的 $V$ 的线性化.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[Keldysh 算子]\label{ex:10.6}
+固定闭 Riemann 流形 $(Y, g)$. 固定 $\lambda \in \CC$, 并考虑算子
+\begin{equation}\label{eq:10.83}
+    P \defeq D_x x D_x - \lambda D_x + \Delta_g \in \Diff^2(M), \qquad M = \R \times Y.
+\end{equation}
+置 $p(x, y, \xi, \eta) \defeq \sigma^2(P)(x, y, \xi, \eta) = x\xi^2 + |\eta|_{g_y^{-1}}^2$.
+\begin{enumerate}
+    \item 证明: $T^* M \setminus o$ 中使 $H_p$ 为径向的点的集合等于 $N^*\{x = 0\} \setminus o$. 记
+    \begin{equation}\label{eq:10.84}
+        \mathcal{R}_\pm \defeq \partial\{(x, y, \xi, \eta) : x = 0, \; \eta = 0, \; \pm\xi > 0\} \subset S^* M
+    \end{equation}
+    为 $N^*\{x = 0\} \setminus o$ 的两个连通分支在纤维无穷远处的边界. 证明 $\Char(P) \cap S^* M$ 光滑, 且 $\mathcal{R}_+$ 是重标度 $H_p$-流的法向源 (条件 (R.3)). 同时在 $\mathcal{R}_+$ 处验证条件 (R.4), 并计算量 $\tilde{\beta}$.
+    \item 设 $u \in H_{\mathrm{loc}}^{s_0}(M)$, $s_0 > \frac{1}{2} - \operatorname{Im}\lambda$, 解 $P u = f \in H_{\mathrm{loc}}^{s-1}(M)$. 证明 $u \in H_{\mathrm{loc}}^{s}(M)$. 当 $s = \infty$ 时, 把这一结论与习题~\ref{ex:8.2} 联系起来.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[一个径向向量场]\label{ex:10.7}
+设 $P = \sum_{j=1}^{n} x_j D_{x_j} \in \Diff^1(M)$, $M = \R^n$. 设 $u \in \mathcal{D}'(\R^n)$ 解 $P u = f \in \Smooth(\R^n)$.
+\begin{enumerate}
+    \item 置 $\mathcal{A} \defeq \{x \in \R^n : |x| > 1\}$. 设对某个 $s \in \R$ 有 $u|_{\mathcal{A}} \in H_{\mathrm{loc}}^s(\mathcal{A})$. 证明: 对所有满足 $s' \le s$ 且 $s' < \frac{n}{2}$ 的 $s' \in \R$ 有 $u \in H_{\mathrm{loc}}^{s'}(\R^n)$.
+    \item 若对某个 $s > \frac{n}{2}$ 有 $u \in H_{\mathrm{loc}}^s(\R^n)$, 证明 $u \in \Smooth(\R^n)$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[径向点估计的稳定性]\label{ex:10.8}
+对 $P$ 为微分算子的情形, 证明与习题~\ref{ex:8.5} 类似的关于定理~\ref{thm:10.7} 中估计之稳定性的结论: 估计~\eqref{eq:10.22} 与~\eqref{eq:10.23} 对具实主符号的微分算子空间 $\Diff^m(M)$ 中 $P$ 的某邻域 $\mathcal{U}$ 内的所有 $P'$ 都成立.
+
+\textbf{注.} 除 $P$ 本身之外, 并不要求 $\mathcal{U}$ 中的算子满足加在 $P$ 上的法向源/汇条件.
+\end{exer}
+
+\begin{exer}[非经典算子]\label{ex:10.9}
+证明: 若只假定 $P \in \Psi^m(M)$ 具有齐次主符号 (如定理~\ref{thm:8.4} 的陈述中那样!) 且满足第~\ref{sec:10.2}~节所述的条件, 定理~\ref{thm:10.5} 仍然成立, 但有下述差别: \eqref{eq:10.21} 中的函数 $\tilde{\beta}$ 现在是符号 $\tilde{\beta} \in S^0(T^* M)$; 而且在定理~\ref{thm:10.5} 的临界条件中, 必须把 $\tilde{\beta}$ 分别替换为
+\[
+    \overline{\tilde{\beta}}(x, [\xi]) \defeq \limsup_{\lambda \to \infty} \tilde{\beta}(x, \lambda\xi), \qquad
+    \underline{\tilde{\beta}}(x, [\xi]) \defeq \liminf_{\lambda \to \infty} \tilde{\beta}(x, \lambda\xi).
+\]
+\end{exer}
+
+\begin{exer}[重标度 Hamilton 向量场]\label{ex:10.10}
+固定椭圆符号 $0 < \rho \in S_{\mathrm{cl}}^{-1}(T^* M)$. 设 $p \in S_{\mathrm{cl}}^m(T^* M)$. 证明 $\tilde{H}_p \defeq \rho^{m-1}H_p \in \mathcal{V}(\overline{T^* M})$, 且 $\tilde{H}_p$ 切于 $S^* M$.
+\end{exer}
+
+\begin{exer}[鞍点估计]\label{ex:10.11}
+在 $\R_{x,y}^2$ 上置 $P \defeq x D_x - y D_y$, 并记其主符号为 $p(x, y, \xi, \eta) = x\xi - y\eta$.
+\begin{enumerate}
+    \item 证明在 $\Char(P) \subset T^* \R^2 \setminus o$ 上 $\dd p \neq 0$. 进而证明径向点的集合是下述两集合之并:
+    \begin{equation}\label{eq:10.85}
+        \mathcal{R}_x^\pm \defeq \{(0, 0, \xi, 0) : \pm\xi > 0\}, \qquad
+        \mathcal{R}_y^\pm \defeq \{(0, 0, 0, \eta) : \pm\eta > 0\}.
+    \end{equation}
+    \item 集中于集合 $\mathcal{R}_x^+$, 引入射影纤维坐标 $\rho \defeq \xi^{-1}$, $\hat{\eta} \defeq \eta/\xi$. 计算 $H_p$ 在 $\partial\mathcal{R}_x^+ = \{x = y = \rho = \hat{\eta} = 0\} \subset S^* \R^2$ 处的线性化, 并证明 $\partial\mathcal{R}_x^+$ 是 $H_p$-流在 $\Char(P) \cap S^* \R^2$ 中的鞍点.
+    \item 画出 $P$ 的零双特征线流在 $\Char(P) \cap S^* \R^2$ 内部的图形.
+    \item 置
+    \begin{equation}\label{eq:10.86}
+        a(x, y, \xi, \eta) \defeq \rho^{-2s}\chi(x)^2\chi(y)^2\chi(|\eta|)^2,
+    \end{equation}
+    其中 $\chi \in \mathcal{C}_c^\infty([0, 1))$ 在 $0$ 的某小邻域内等于 $1$, 且满足 $\sqrt{-\chi'}\,\chi \in \Smooth$. 把 $H_p a$ 表为符号的平方和之差. (须区分 $s > 0$ 与 $s < 0$ 两种情形.)
+    \item 设 $s > 0$. 证明: 若
+    \begin{equation}\label{eq:10.87}
+        \WF^s(P u) \cap \mathcal{R}_x^+ = \emptyset, \qquad
+        \WF^s(u) \cap \{\rho = 0, \; x = \eta = 0, \; 0 < |y| < \delta\} = \emptyset
+    \end{equation}
+    对某个 $\delta > 0$ 成立, 则 $\WF^s(u) \cap \mathcal{R}_x^+ = \emptyset$.
+    \item 设 $s < 0$. 证明: 若
+    \begin{equation}\label{eq:10.88}
+        \WF^s(P u) \cap \mathcal{R}_x^+ = \emptyset, \qquad
+        \WF^s(u) \cap \{\rho = 0, \; 0 < |x| + |\hat{\eta}| < \delta, \; y = 0\} = \emptyset
+    \end{equation}
+    对某个 $\delta > 0$ 成立, 则 $\WF^s(u) \cap \mathcal{R}_x^+ = \emptyset$.
+    \item 陈述并证明关于 "穿过 (广义) 径向鞍点集" 的传播的一个一般性结果.
+\end{enumerate}
+\textbf{注.} 在~\eqref{eq:10.87} 与~\eqref{eq:10.88} 中假定 $H^s$ 波前集缺失的集合, 分别是 $\partial\mathcal{R}_x^+$ 在 $\Char(P) \cap S^* \R^2$ 中的稳定流形与不稳定流形内部 (即去掉 $\partial\mathcal{R}_x^+$ 之后) 的去心邻域. 因此第 (5)(6) 部分说明: 高于或低于某个临界值 (此处为 $0$) 的微局部正则性, 可以从稳定流形传播到径向集, 再经不稳定流形传播出去, 或者反之.
+\end{exer}
+

@@ -1,0 +1,684 @@
+% ==== part05 第 5 章 傅里叶变换 (Fourier transform) ====
+% 源: MinerU_latex_lecture nots.tex 第 6716--7788 行;pdf_text.txt 第 5552--6455 行(PDF 第 105--120 页)
+%
+% 术语(新增,键=中文=英文):
+%   fourier-transform=傅里叶变换、physical-space=物理空间、frequency-space=频率空间、
+%   plane-wave=平面波、inversion-formula=反演公式、rapidly-decreasing=快速递减、
+%   schwartz-space=Schwartz 空间、tempered-distribution=缓增分布、
+%   plancherel-identity=Plancherel 恒等式、parseval-identity=Parseval 恒等式、
+%   modulation=调制、uncertainty-principle=不确定性原理、
+%   fourier-multiplier-operator=Fourier 乘子算子、bernstein-inequality=Bernstein 不等式、
+%   dimensional-analysis=量纲分析、annihilator-subgroup=零化子群、
+%   domain-of-influence=影响域、fourier-integral-operator=Fourier 积分算子
+% 注: 分布、检验函数、卷积、支集、主值、张量积、解析延拓、截断函数、特征函数等已由 part03 引入,
+%   此处直接使用中文;参数层(partgf1)、等距(part01)等亦同.
+%
+% REFS(需跨章/待解析项):
+%   - 公式 (129)(1/(x+i0)): 第 3 章公式,part03 已有 \label{eq:c3-129},正文用 \eqref{eq:c3-129}.
+%   - 公式 (153)、(154)(物理空间公式)与 Kirchhoff 公式 (146): 均在第 4 章(part04 未写),
+%     正文用纯文本 "公式 (153) 与 (154)"、"Kirchhoff 公式 (146)",待 part04 完成后统一改 \eqref.
+%   - "前一章"(第 4 章)基于基本解显式计算导出的公式: 文本引用,无需标签.
+%   - 脚注 7 中 "[?] 第一卷": 原书文献编号破损,保留 [?].
+%   - OCR-BROKEN: 第 7144 行公式 e^{i\xi} 缺 x,按数学正确性补为 e^{i\xi x};
+%     第 7149--7150 行 "\mathrm{\bar{\ s t}{b a s i s}}^{\bar{\ y}}" 实为 "basis"(正交归一基);
+%     第 6757 行孤立上标 "2"(pdf 页 106)无对应脚注文本,视为 OCR 噪音删除;第 6793、6812、
+%     6934、7029 行孤立 "2" 同理删除;第 7421 行孤立 "厂" 删除.
+%   - 脚注 3 中 "i d/dx_i f" 按上下文理解为 i\partial/\partial x_i.
+%
+% 编号说明:
+%   - 原书第 5 章显式编号公式为 (155)--(178) 共 24 个,按指南全部行间公式自动编号,
+%     显示编号与原书可能不对应(与 part03 相同问题,由协调员统一核对).
+%   - 公式 (157)、(158) 原书(及 OCR)缺 d\xi/dy 因子,按原文保留.
+%   - 第 4 节编号: Proposition 4.1 → \mtsubsec(4.2 物理空间的局部化) → \mtsubsec(4.3 频率空间的局部化)
+%     → Lemma 4.4 → Lemma 4.5 → Proposition 4.6,共享计数器自然推进,无跳号.
+%   - 缓增分布之 Definition 与 Example 原书无编号,用 definition* / example*;
+%     Proposition 4.6 后的 Remark 无编号,用 remark*.
+%   - 习题: 第 2 节 Exercise 2.5/2.6 带节号,按原文写 "习题 2.5."/"习题 2.6.";
+%     第 3、5 节习题按节重起 "习题 1."/"习题 2."/"习题 3.";第 4 节一个未编号 "习题.".
+%   - 原文 "Schwarz space" 与 "Schwartz space" 混用,统一为 Schwartz 空间(术语表);
+%     原文 "Kirchof/Kirchoff" 拼写不一,统一为 Kirchhoff;原文 "Berenstein estimate" 拼写有误,
+%     统一为 Bernstein 估计;原文 "Plancharel" 拼写有误,统一为 Plancherel;原文 "Fourer" 统一为 Fourier.
+
+\chapter{傅里叶变换}
+
+\section{基本性质}
+
+回忆:若 $f \in L^1(\mathbb{R}^n)$, 则 \newterm{fourier-transform}{傅里叶变换}{Fourier transform} $\mathcal{F}(f) = \hat{f}$ 定义为连续函数
+
+\begin{equation}
+\hat{f}(\xi) = \int f(x)e^{-ix\xi}\, dx\label{eq:c5-155}
+\end{equation}
+
+若 $\hat{f} \in L^1(\widehat{\mathbb{R}}^n)$, 我们有 \newterm{inversion-formula}{反演公式}{inversion formula}
+
+\begin{equation}
+f(x) = (2\pi)^{-n}\int\hat{f}(\xi)e^{ix\xi}\, d\xi, \label{eq:c5-156}
+\end{equation}
+
+其证明我们将在后面给出.为了在概念上区分两者, 我们把 $f$ 所在的 $\mathbb{R}^n$ 称为 \newterm{physical-space}{物理空间}{physical space}, 把 $\hat{f}$ 所在的点集 $\xi$ 称为 \newterm{frequency-space}{频率空间}{frequency space}.我们用 $\widehat{\mathbb{R}}^n$ 表示频率空间, 并用归一化测度 $\frac{d\xi}{(2\pi)^n}$ 赋予它.
+
+反演公式为我们提供了关于 傅里叶变换作用的宝贵启发式理解.我们看到, $f(x)$ 可以写成某种 \newterm{plane-wave}{平面波}{plane wave} $(x\mapsto e^{ix\cdot\xi})$ 的线性组合, 而测度 $\hat{f}(\xi)\frac{d\xi}{(2\pi)^n}$ 描述了 $f$ 在频率空间上的分布.若我们把平面波 $e^{ix\cdot\xi}$ 看作 $\mathbb{R}^n$ 上平移算子的特征向量, 则可以把 傅里叶变换视为同时对角化平移的一种尝试.类似地, 若把平面波 $e^{ix\cdot\xi}$ 看作算子族 $\{i\frac{\partial}{\partial x_j}: j = 1, \ldots, n\}$ 的特征向量——这些算子关于 $L^2$ 内积是自伴的(限制在适当的定义域上)——那么我们就会看到, 微分也被 傅里叶变换对角化了.
+
+带着这些启发, 我们开始看到 傅里叶变换如何可能对分析有用.例如, 若 $\hat{f}$ 集中在某个频率 $\xi_0 \in \widehat{\mathbb{R}}^n$ 附近, 我们预期 $f$ 在某种程度上表现得像 $e^{ix\cdot\xi_0}$ 附近的平面波.例如, $f$ 可能允许有界、复解析地延拓到 $\mathbb{C}^n$ 的某一部分.我们还预期 $\partial_{x_j}f(x)\sim i\xi_j^0 f(x)$, 从而微分成为更容易研究的运算.事实上, 当我们稍后遇到 Littlewood-Paley 理论时, 主要思想将是把一般函数分解为频率局部化的分量, 分别分析这些分量, 然后再重新组装.
+
+关于 傅里叶变换的另一个重要原理是光滑性与衰减在物理空间和频率空间之间的对偶性.直觉上, 一个在物理空间中其图形具有突然跳跃或尖峰的函数, 必然"由"任意大的频率"构成", 而当 $\hat{f}$ 具有紧支集时, $f$ 必是全局"驯良"的.类似地, 当 $\hat{f}$ 非常光滑时, 由于反演公式中邻近平面波之间的干涉(抵消), $f$ 可以在无穷远处衰减.这些基本原理在 Fourier 分析中处处有不止一种而是许多种正式的表现形式, 因此让我们在继续发展理论的过程中牢记它们.
+
+反演公式在 Gauss 函数 $G(x) = e^{-|x|^2/2}$ 的情形采取了特别具体的形式.
+
+\begin{lemma}\label{lem:c5-1.1}
+如下计算对一元函数以及 $a, b \in \mathbb{R}$, $b > 0$ 成立:
+
+\begin{equation}
+\int_{-\infty}^{\infty} e^{iax}e^{-bx^2} = \left(\frac{\pi}{b}\right)^{1/2}e^{-a^2/4b}\label{eq:c5-157}
+\end{equation}
+
+于是, 在 $\mathbb{R}^n$ 中, 对 $t > 0$,
+
+\begin{equation}
+\int_{\mathbb{R}^n} e^{ix\cdot y}e^{-ty^2} = \left(\frac{\pi}{t}\right)^{n/2}e^{-|x|^2/4t}\label{eq:c5-158}
+\end{equation}
+
+特别地,
+
+\begin{equation}
+\mathcal{F}(G)(\xi) = (2\pi)^{n/2}G(\xi)\label{eq:c5-159}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+在复域中作变量替换 $z = b^{1/2}x - \frac{a}{2b^{1/2}}i$, 并记 $\Gamma$ 为围道 $\mathrm{Im}(z) = -\frac{a}{2b^{1/2}}$:
+
+\[
+\int_{-\infty}^{\infty} e^{iax}e^{-bx^2}\, dx = \frac{e^{-a^2/4b}}{b^{1/2}}\int_\Gamma e^{-z^2}\, dz = \frac{e^{-a^2/4b}}{b^{1/2}}\int_{-\infty}^{\infty} e^{-x^2}\, dx
+\]
+
+(利用标准围道变形论证).现在计算积分 $J = \int_{-\infty}^{\infty} e^{-x^2}\, dx = \pi^{1/2}$:我们观察到, 通过极坐标, $J^2 = \int_{\mathbb{R}^2} e^{-|x|^2}\, dx = \pi$, 由此即得 \eqref{eq:c5-157}.公式 \eqref{eq:c5-158} 随之立即成立.
+\end{proof}
+
+在回顾了 傅里叶变换的一些基本性质之后, 我们可以给出上述恒等式的另一个证明.
+
+\begin{proposition}\label{prop:c5-1.2}
+傅里叶变换是线性的, 并验证如下简单性质.
+
+\begin{itemize}
+\item 傅里叶变换把物理空间中的平移 $T_{x_0}f(x) = f(x-x_0)$ 变为频率空间中的调制 \newterm{modulation}{调制}{modulation}:$\mathcal{F}(T_{x_0}f)(\xi) = e^{-i\xi\cdot x_0}\hat{f}(\xi)$.
+\item 傅里叶变换把物理空间中的调制 $M_{\xi_0}f(x) = e^{ix\cdot\xi_0}f(x)$ 变为频率空间中的平移:$\mathcal{F}(M_{\xi_0}f)(\xi) = \hat{f}(\xi-\xi_0)$.
+\item 傅里叶变换把物理空间中的共轭变为频率空间中的共轭与反射, 即 $\mathcal{F}(\bar{f})(\xi) = \hat{f}(-\xi)$.
+\item 傅里叶变换把物理空间中的卷积变为频率空间中的乘法:$\widehat{f*g} = \hat{f}\, \hat{g}$.
+\item 傅里叶变换把物理空间中的偏导数变为频率空间中的乘法:$\mathcal{F}(\partial_{x_j}f)(\xi) = i\xi_j\hat{f}(\xi)$.
+\item 傅里叶变换把物理空间中乘以 $x_j$ 变为频率空间中的偏导数 $\partial_{\xi_j}$:$\mathcal{F}(x_jf)(\xi) = i\partial_{\xi_j}\hat{f}(\xi)$.
+\item 我们还有如下简单的自对偶关系:
+
+\[
+\int f(x)\hat{g}(x)\, dx = \int\hat{f}(\xi)g(\xi)\, d\xi
+\]
+
+\item 傅里叶变换把物理空间中的伸缩 $S_\lambda f(x) = f(\lambda x)$ 变为 Fourier 空间中的对偶伸缩:$\mathcal{F}(S_\lambda f)(\xi) = \lambda^{-n}\hat{f}(\xi/\lambda)$.注意, $S_\lambda(f)$ 保持大小, 即 $\|S_\lambda f\|_{L^\infty} = \|f\|_{L^\infty}$, 而对偶伸缩 $S_\lambda^* f = \lambda^{-n}f(x/\lambda)$ 保持质量, 即 $\|S_\lambda^* f\|_{L^1} = \|f\|_{L^1}$.
+\end{itemize}
+\end{proposition}
+
+\begin{proof}
+上述性质几乎全部归结为关于指数的简单恒等式:只要把 $f$ 与 $g$ 特殊化为物理空间或频率空间中的点质量\footnote{有限 Borel 测度的 傅里叶变换是连续函数 $\hat{\mu}(\xi) = \int_{\mathbb{R}^n} e^{-ix\cdot\xi}\, d\mu(x)$.}(从而在偶空间中就是平面波)即可——这些恒等式本身甚至可以被看作这些特殊情形的连续(双)线性延拓.
+\end{proof}
+
+利用这些性质, 我们可以给出 \eqref{eq:c5-157} 的另一个证明.由伸缩恒等式, 只需考虑 $b = \frac{1}{2}$ 并计算 $G(x) = e^{-x^2/2}$ 的 傅里叶变换.对恒等式 $\frac{dG}{dx} = -xG(x)$ 取 傅里叶变换并应用上述性质, 我们看到 $\hat{G}$ 在 $\xi$ 中满足同样的微分方程, 因此具有形式 $\hat{G}(0)e^{-\xi^2/2}$.由于我们已经证明了 $\hat{G}(0) = \int e^{-x^2/2} = \pi^{1/2}$, 这就完成了 \eqref{eq:c5-157} 的第二个证明.
+
+设 $G_{\lambda, x_0, \xi_0}(x) = e^{ix\cdot\xi_0}G((x-x_0)/\sqrt{\lambda})$ 是平移、调制、伸缩后的 Gauss 函数.于是,
+
+\[
+\begin{aligned}
+\mathcal{F}(G_{\lambda, x_0, \xi_0})(\xi) &= \lambda^{n/2}e^{-i(\xi-\xi_0)\cdot x_0}\int e^{-i\sqrt{\lambda}\, y\cdot(\xi-\xi_0)}G(y)\, dy \\
+&= (\pi\lambda)^{n/2}G\big(\sqrt{\lambda}(\xi-\xi_0)\big)
+\end{aligned}
+\]
+
+我们可以把这个结果解释为:$G_{\lambda, x_0, \xi_0}$ 局部化在空间位置 $x_0$ 附近, 空间展布 $\Delta x\approx\sqrt{\lambda}$;并局部化在频率位置 $\xi_0$ 附近, 频率展布 $\Delta\xi = 1/\sqrt{\lambda}$.注意 $\Delta x\cdot\Delta\xi\approx 1$, 因此我们这样同时在物理空间和频率空间中局部化的能力似乎是有限的.令人惊讶的是, 这种构造在某种意义上是我们能做到的最好情形, 它也是我们与 Fourier 分析的\newterm{uncertainty-principle}{不确定性原理}{uncertainty principle}的第一次相遇;该原理以各种形式断言, 同时在这两个频率空间和物理空间中局部化的精度存在一个界限.
+
+我们现在来证明光滑性与衰减之间对偶性的第一个重要表现形式.\footnote{我们指出, 该命题对没有 $L^1$ 密度函数的测度不成立——例如, 点质量的 傅里叶变换是平面波, 它完全没有衰减.因此, 一定量的光滑性是必要的.}
+
+\begin{proposition}[Riemann--Lebesgue]\label{prop:c5-1.3}
+对任意的 $f \in L^1(\mathbb{R}^n)$, 我们有 $\|\hat{f}\|_{L^\infty}\lesssim\|f\|_{L^1}$.此外, 当 $|\xi|\to\infty$ 时, $\hat{f}(\xi)\to 0$.
+\end{proposition}
+
+\begin{proof}
+只有最后一个陈述需要论证.注意, 若 $f\in\mathcal{C}_0^\infty(\mathbb{R}^n)$, 则我们可以用分部积分得出结论:$\hat{f}$ 快速衰减.事实上, 对任何多重指标 $\alpha$, $|\alpha| = k\in\mathbb{N}$,
+
+\[
+\begin{aligned}
+\xi^\alpha\hat{f}(\xi) &= i^k\int\partial_x^\alpha e^{-ix\xi}f(x)\, dx = (-i)^k\int e^{-ix\xi}\partial_x^\alpha f(x)\, dx \\
+|\xi^\alpha\hat{f}(\xi)| &\lesssim \int|\partial_x^\alpha f(x)\, dx| \leq C_\alpha
+\end{aligned}
+\]
+
+对某个常数 $C_\alpha$ 成立.因此, $|\hat{f}(\xi)|\lesssim(1+|\xi|)^{-k}$, 这证明了该情形下的陈述.对一般的 $f\in L^1(\mathbb{R}^n)$, 给定 $\epsilon>0$, 我们可以选取 $g\in\mathcal{C}_0^\infty$, 使得 $\|f-g\|_{L^1}\leq\frac{\epsilon}{2}$.由前述结果, 当 $|\xi|>M = M_\epsilon$ 充分大时, $|\hat{g}(\xi)|\leq\frac{\epsilon}{2}$, 因此
+
+\[
+\sup_{|\xi|>M}|\hat{f}(\xi)| \leq \|f-g\|_{L^1(\mathbb{R}^n)} + \sup_{|\xi|>M}|\hat{g}(\xi)| \leq \epsilon
+\]
+\end{proof}
+
+
+\section{Schwartz 空间与反演公式}
+
+光滑函数上的许多运算自然地延拓到分布上(通过与 $\mathcal{C}_0^\infty$ 的对偶), 我们希望看到 傅里叶变换如何延拓到分布上.唯一可能的延拓必须与公式
+
+\[
+\langle\hat{u}, \phi\rangle = \langle u, \hat{\phi}\rangle
+\]
+
+相容, 但对分布 $u\in\mathcal{D}'(\mathbb{R}^n)$ 与检验函数 $\phi\in\mathcal{C}_0^\infty(\widehat{\mathbb{R}}^n)$, 这个公式没有意义, 因为不能保证 $\hat{\phi}$ 也具有紧支集.事实上, 作为不确定性原理的一个表现, $\phi$ 与 $\hat{\phi}$ 不可能同时具有紧支集, 除非 $\phi = 0$.因此, 如果我们想要一个推广 傅里叶变换的对称理论, 我们就要考虑一族关于 Fourier 对偶性表现良好的新的检验函数(以及相应的分布).
+
+\begin{definition}\label{def:c5-2.1}
+函数 $\phi\in\mathcal{C}^\infty(\mathbb{R}^n)$ 称为\newterm{rapidly-decreasing}{快速递减}{rapidly decreasing}的, 如果对一切多重指标 $\alpha, \beta$ 有
+
+\[
+\sup_{x\in\mathbb{R}^n}|x^\alpha\partial^\beta\phi(x)| < \infty.
+\]
+\end{definition}
+
+这个所谓的 \newterm{schwartz-space}{Schwartz 空间}{Schwartz space} $\mathcal{S}(\mathbb{R}^n)$, 即快速递减函数的空间, 以通常的方式配备一个自然的 Frechet 拓扑.在此拓扑中, 函数序列 $\phi_j$ 收敛于零当且仅当对一切多重指标 $\alpha, \beta$, $x^\alpha\partial^\beta\phi_j$ 一致收敛于零.注意, $\mathcal{S}(\mathbb{R}^n)$ 包含紧支撑函数 $\mathcal{C}_0^\infty(\mathbb{R}^n)$.由于对 $1\leq p<\infty$, $\mathcal{C}_0^\infty(\mathbb{R}^n)$ 在 $L^p(\mathbb{R}^n)$ 空间中稠密, $\mathcal{S}(\mathbb{R}^n)$ 在 $L^p$ 空间中也稠密.还容易验证 $\mathcal{C}_0^\infty(\mathbb{R}^n)$ 在 $\mathcal{S}(\mathbb{R}^n)$ 中稠密.
+
+我们有以下重要事实, 这就是我们在当前情形下考虑 Schwartz 空间的原因:
+
+\begin{proposition}\label{prop:c5-2.2}
+傅里叶变换是从 $\mathcal{S}(\mathbb{R}^n)$ 到 $\mathcal{S}(\widehat{\mathbb{R}}^n)$ 的同构, 其逆由反演公式 \eqref{eq:c5-156} 给出.此外, 对一切 $f, g\in\mathcal{S}(\mathbb{R}^n)$, 我们有 \newterm{plancherel-identity}{Plancherel 恒等式}{Plancherel identity}
+
+\begin{equation}
+(f, g)_{L^2} = \int_{\mathbb{R}^n} f(x)\bar{g}(x)\, dx = (2\pi)^{-n}\int\hat{f}\, \overline{\hat{g}}\, d\xi = (\hat{f}, \hat{g})_{L^2(\widehat{\mathbb{R}}^n)}\label{eq:c5-160}
+\end{equation}
+
+特别地, 我们有 \newterm{parseval-identity}{Parseval 恒等式}{Parseval identity} $\|f\|_{L^2(\mathbb{R}^n)} = \|\mathcal{F}(f)\|_{L^2(\widehat{\mathbb{R}}^n)}$.
+\end{proposition}
+
+\begin{proof}
+注意 $|\xi^\alpha\partial^\beta\hat{\phi}(\xi)| = |\widehat{x^\beta\partial^\alpha\phi}|$, 且 $\partial^\alpha\phi(x)$ 的衰减比 $|x|^{-|\beta|-n-1}$ 更快.于是我们容易推出 $\mathcal{F}$ 把 $\mathcal{S}(\mathbb{R}^n)$ 映入 $\mathcal{S}(\widehat{\mathbb{R}}^n)$.设 $Rf(x) = f(-x)$, 并定义 $T = R\mathcal{F}^2$.注意, $T$ 与偏导数 $\partial_j$ 及乘以 $x_j$ 都交换.事实上, 对一切 $j = 1, \ldots, n$,
+
+\begin{equation}
+T(\partial_j f) = \partial_j(Tf), \quad T(x_jf) = x_j(Tf)\label{eq:c5-161}
+\end{equation}
+
+反演公式由如下引理得出.
+\end{proof}
+
+\begin{lemma}\label{lem:c5-2.3}
+满足 \eqref{eq:c5-161} 的线性算子 $T: \mathcal{S}(\mathbb{R}^n)\longrightarrow\mathcal{S}(\mathbb{R}^n)$ 必具有形式 $T\phi = c\phi$, 其中 $c$ 是某个常数.
+\end{lemma}
+
+\begin{proof}
+由交换性质 \eqref{eq:c5-161}, 我们看到 $T$ 在多项式函数的代数上是线性的.作为这一线性的推论, 我们可以证明值 $T\phi(x_0)$ 只依赖于 $\phi(x_0)$ 在点 $x_0$ 处的值.例如在一维情形, 若 $\phi$ 在点 $x_0$ 处为零, 则我们可以写成
+
+\[
+\phi(x) = (x-x_0)\int_0^1\phi'(x_0+t(x-x_0))\, dt = (x-x_0)\tilde{\phi}
+\]
+
+其中 $\tilde{\phi}\in\mathcal{S}(\mathbb{R})$.把 $T$ 作用于这个恒等式, 我们看到 $T\phi(x_0) = 0$ 也成立, 因此我们可以写成 $T\phi = f_\phi\phi$, 其中函数 $f_\phi$ 可能依赖于 $\phi$.
+
+但 $f_\phi = f$ 不依赖于 $\phi$.若 $\psi$ 是任何另一个 Schwartz 函数, 线性组合 $\psi(x_0)\phi - \phi(x_0)\psi$ 在点 $x_0$ 处为零, 对 $T$ 应用同样的性质, 我们得出结论:在 $\psi$ 与 $\phi$ 同时非零的任何点 $x_0$ 处, $f_\phi(x_0) = f_\psi(x_0)$.显然, 为了使 $T$ 把 $\mathcal{S}(\mathbb{R}^n)$ 映入自身, 函数 $f$ 必须是光滑的;而为了使 $T$ 与微分交换, $f$ 必须是常数.
+
+为确定常数, 我们只需指出:根据\lemref{lem:c5-1.1}, 我们有 $T(G) = \bigl((2\pi)^{n/2}\bigr)^2G = (2\pi)^nG$.因此常数 $c = (2\pi)^n$, 这就完成了对 Schwartz 函数的反演公式与命题的证明.
+
+Plancherel 与 Parseval 恒等式是反演公式的直接推论.
+\end{proof}
+
+\begin{corollary}\label{cor:c5-2.4}
+如下性质对 $\mathcal{S}(\mathbb{R}^n)$ 中的一切函数成立:
+
+\[
+\begin{aligned}
+\int\hat{\phi}\psi\, dx &= \int\phi\hat{\psi}\, d\xi \\
+\int\phi\bar{\psi}\, dx &= (2\pi)^{-n}\int\hat{\phi}\, \overline{\hat{\psi}}\, dx \\
+\widehat{\phi*\psi} &= \hat{\phi}\, \hat{\psi} \\
+\widehat{\phi\psi} &= (2\pi)^{-n}\int\hat{\phi}(\xi-\eta)\hat{\psi}(\eta)\, d\eta = \hat{\phi}*\hat{\psi}
+\end{aligned}
+\]
+
+最后一个卷积是关于 $\widehat{\mathbb{R}}^n$ 上的测度取的.
+\end{corollary}
+
+我们只在维数 1 的情形完整写出了反演公式的证明, 尽管同样的证明只需对 Taylor 展开作微小的推广即可对一般 $n$ 成立.一般情形也可以从 $n = 1$ 的情形如下推出:反演公式对张量积 $f_1(x_1)\cdots f_n(x_n)$ 及其线性组合成立, delta 函数是张量积 $\delta_0(x) = \delta(x_1)\cdots\delta(x_n)$, 而任意函数都可以写成 delta 函数的线性组合 $f(x) = \int f(t)\delta(x-t)\, dt$.
+
+\textbf{习题 2.5.} 利用近似 delta 函数, 把上述论证变成 $\mathbb{R}^n$ 上反演公式的一个严格的、自足的证明.
+
+探讨上述经由\lemref{lem:c5-2.3} 的反演公式证明与该公式的其他证明之间的关系是值得的.正如有限维向量空间之间的线性算子可以通过矩阵表示来研究一样, 我们可以借助其核 $K$——即 $\mathbb{R}^n\times\mathbb{R}^n$ 上的分布, 使得
+
+\[
+T\phi(x) = \int\phi(x')K(x, x')\, dx'
+\]
+
+——来研究算子 $T$.在断言 $T\phi(x_0)$ 只依赖于 $\phi(x_0)$ 时, 我们已经证明了作用 $T$ 与乘以某个函数相同;用核的语言来说, 我们已经确立了
+
+\[
+T\phi(x) = \int\phi(x')f(x)\delta(x-x')\, dx'
+\]
+
+为了使 $T$ 与微分交换——这与和平移交换并无太大区别——我们得出结论:$f(x)$ 是常数.
+
+但我们还可以直接看到, 反演公式的一个等价表述是如下分布论恒等式
+
+\begin{equation}
+\int_{\widehat{\mathbb{R}}^n} e^{i(x-x')\cdot\xi}\frac{d\xi}{(2\pi)^n} = \delta(x-x')\label{eq:c5-162}
+\end{equation}
+
+它实际上就是反演公式对 $\delta$ 函数的特例.把左边的积分看作内积, 上述恒等式可以理解为:平面波 $\xi\mapsto e^{i\xi x}$ 在 $x$ 变化的意义下是某种"正交归一"的.因此, 在写出
+
+\[
+\int f(t)\delta(x-t)\, dt = f(x) = \int\hat{f}(\xi)e^{i\xi x}\frac{d\xi}{2\pi}
+\]
+
+时, 我们可以把 傅里叶变换看作类似于从物理空间中的 delta 函数到平面波的正交归一基的更换, 从而 Plancherel 与 Parseval 恒等式应当立即成立.例如, 在一维情形, 不同的平面波是自伴算子 $i\frac{d}{d\xi}$ 的具有不同特征值的特征函数, 因此按一般原理应当正交——这一论证可以严格化, 以证明上述分布在 $x-x'\neq 0$ 处消失, 正如前一个证明中通过 Taylor 展开与在多项式环上的线性所做的那样.让我们提一下确立这个恒等式从而证明反演公式的其他几种途径.\footnote{如前所述, 平面波可视为交换的自伴算子族 $f\mapsto i\frac{\partial}{\partial x_i}f$ 的特征函数.对偶地, delta 函数——它们按 $\int\delta_0(y-x)\bar{\delta}_0(y'-x)\, dx = \delta(y-y')$ 的意义同样"正交归一"——可视为交换的算子族 $f\mapsto x_if$ 的特征函数.}
+
+只需证明
+
+\[
+\frac{1}{(2\pi)^n}\int e^{i\xi\cdot x}\, d\xi = \delta_0(x)
+\]
+
+作为变量 $x$ 上的分布、在 $\mathbb{R}^n$ 上成立即可——这种平移不变性对应于前一个证明中 $T$ 与 $\frac{d}{dx}$ 交换.把上述分布看作张量积, 只需考虑 $n = 1$ 的情形, 但我们不妨不这样做.回忆:每个支集在原点的分布都是 $\delta(x)$ 的导数的有限线性组合, 因此 $\delta$ 函数本身(不计常数)是唯一支集在 $0$ 处、$-n$ 次齐次的分布——这些事实由 Taylor 展开容易建立.由于左边的积分显然关于 $x$ 是 $-n$ 次齐次的, 只要我们能够证明
+
+\begin{equation}
+\int e^{i\xi\cdot x}\, d\xi\label{eq:c5-163}
+\end{equation}
+
+的支集在原点, 就在不计常数的意义下证明了该恒等式——在这个精确的意义上, 平面波 $\xi\mapsto e^{i\xi\cdot x}$ "平均地"为零.
+
+启发式地, 让我们概述完成这一计算的几种途径.假装积分 \eqref{eq:c5-163} 是经典积分, 且 $x\neq 0$ 固定.若把平面波看作微分算子的特征函数, 我们可以利用恒等式
+
+\[
+\int e^{i\xi\cdot x}\, d\xi = \int\frac{1}{|x|^2}\Delta_\xi e^{i\xi\cdot x}\, d\xi,
+\]
+
+在 $\xi$ 中分部积分;或者我们也可以旋转到 $x = |x|(1, 0, \ldots, 0)$ 的情形, 利用恒等式 $\frac{1}{i|x|}\frac{\partial e^{i\xi\cdot x}}{\partial\xi_1}$ 分部积分.如果我们更愿意把平面波看作平移算子的特征函数, 则可以通过在 $\xi$ 变量中平移来证明该积分在 $x\neq 0$ 时为零:
+
+\[
+\int e^{i\xi\cdot x}\, d\xi = \int e^{i(\xi-\xi')\cdot x}\, d\xi = e^{-i\xi'\cdot x}\int e^{i\xi\cdot x}\, d\xi
+\]
+
+其中 $\xi'$ 是依赖于 $x$ 的某个适当的频率.当然, 这些都是把积分当作经典积分来处理的启发式思路, 我们不能把 $x$ 当作固定点, 但我们可以通过固定一个局部化在 $x$ 附近的检验函数, 给出一个与下面类似的完整论证, 从而使这些论证严格化.
+
+\begin{proof}
+设 $\psi\in\mathcal{C}_0^\infty(\mathbb{R}^n)$ 的支集远离原点.设 $\phi$ 是光滑、快速递减的函数, 满足 $\phi(0) = 1$.
+
+\[
+\begin{aligned}
+\int\int\psi(x)e^{i\xi\cdot x}\, dx\, d\xi &= \lim_{\delta\to 0^+}\int\Big(\int\psi(x)e^{i\xi\cdot x}\, dx\Big)\phi(\delta\xi)\, d\xi \\
+&= \lim_{\delta\to 0^+}\int\psi(\delta x)\Big(\int e^{i\xi\cdot x}\phi(\xi)\, d\xi\Big)\, dx
+\end{aligned}
+\]
+
+由控制收敛定理, 该极限为零($d\xi$ 积分是 $x$ 的快速递减函数, 且 $\psi(\delta x)\to 0$).
+\end{proof}
+
+若不对 $\psi$ 的支集作任何假设, 则只要选取一个其 傅里叶变换已知的 $\phi$(例如 Gauss 函数), 上述证明就直接建立了带常数的反演公式.事实上, 如果我们知道 Gauss 函数的反演公式, 则反演公式对 Gauss 函数的伸缩与平移也成立.作为极限情形, 反演公式对任何 $\delta$ 函数成立, 从而由分解 $f(x) = \int f(t)\delta(x-t)\, dt$, 反演公式对任意函数成立.
+
+\textbf{习题 2.6.} 从 Gauss 函数的情形出发, 给出反演公式的一个自足的、直接的证明.
+
+在 $n = 1$ 的情形, 还有一种更偏向复分析的方法来求分布论积分 $\int_{-\infty}^{\infty} e^{i\xi x}\, d\xi$, 它不仅确定了常数\footnote{顺便指出, 这一论证也间接地确定了 Gauss 积分的值.}, 而且直接把反演公式中的 $2\pi$ 与 Cauchy 积分公式中的 $2\pi$(圆的周长)联系起来.基本做法是:利用平面波的复解析延拓以及 $\frac{1}{x+i0}$ 的公式 \eqref{eq:c3-129}, 把
+
+\[
+\begin{aligned}
+\int_{-\infty}^{\infty} e^{i\xi x}\, d\xi &= \int_{-\infty}^{0} e^{i\xi x}\, d\xi + \int_{0}^{\infty} e^{i\xi x}\, d\xi \\
+&= \lim_{y\to 0^+}\int_{-\infty}^{0} e^{i\xi(x-iy)}\, d\xi + \int_{0}^{\infty} e^{i\xi(x+iy)}\, d\xi \\
+&= i\left(\frac{-1}{x-i0} + \frac{1}{x+i0}\right) \\
+&= 2\pi\delta(x)
+\end{aligned}
+\]
+
+分解.
+
+
+\section{傅里叶变换的推广}
+
+作为 Parseval 与 Plancherel 公式的推论, 我们可以通过一个简单的稠密性论证把 傅里叶变换的定义延拓到 $L^2(\mathbb{R}^n)$ 函数.事实上, 对任何 $u\in L^2$, 我们可以选取 $\mathcal{S}(\mathbb{R}^n)\subset L^1$ 中的函数序列 $u_j$ 在 $L^2$ 范数下收敛于 $u$.由 Plancherel, $\|\mathcal{F}(u_j)-\mathcal{F}(u_k)\|_{L^2}\lesssim\|u_j-u_k\|_{L^2}$.因此序列 $\mathcal{F}(u_j)$ 在 $L^2$ 中构成 Cauchy 列, 从而收敛于一个极限, 我们可以称之为 $\hat{u}$.显然, 这个定义不依赖于特定的序列.此外, 容易验证 Parseval 恒等式可以延拓到一切 $L^2$ 函数.由于 $\mathcal{F}$ 因此是到其像上的等距, 其像必是闭的;但该像也包含 Schwartz 函数, 所以它必然是整个 $L^2$.于是我们证明了:
+
+\begin{theorem}\label{thm:c5-3.1}
+傅里叶变换是 Hilbert 空间 $L^2(\mathbb{R}^n)$ 与 $L^2(\widehat{\mathbb{R}}^n)$ 之间的等距.
+\end{theorem}
+
+我们还可以把 傅里叶变换进一步延拓到定义在 $\mathbb{R}^n$ 上的一类特殊分布.
+
+\begin{definition*}
+我们称 Schwartz 空间的对偶空间中的元素为 \newterm{tempered-distribution}{缓增分布}{tempered distribution}.
+\end{definition*}
+
+\begin{example*}
+虽然 $e^x$ 不是 $\mathbb{R}$ 上的缓增分布, 因为它增长得太快, 但函数 $e^x\cos(e^x) = \frac{d}{dx}\sin(e^x)$ 是.这里我们作函数与分布的通常等同.
+\end{example*}
+
+注意, 缓增分布连续嵌入到前面定义的普通分布空间中.与普通分布的性质类比, 对每个缓增分布 $u$, 存在一个自然数 $N$ 与常数 $C = C_{\alpha, \beta}$, 使得
+
+\[
+|\langle u, \phi\rangle| \leq C\sum_{|\alpha|, |\beta|\leq N}\sup|x^\alpha\partial^\beta\phi|, \quad \phi\in\mathcal{S}(\mathbb{R}^n)
+\]
+
+我们现在可以定义缓增分布的 傅里叶变换, 即
+
+\[
+\langle\hat{u}, \phi\rangle = \langle u, \hat{\phi}\rangle.
+\]
+
+容易验证, 对每个缓增分布 $u$, 这定义了一个缓增分布 $\hat{u}$.此外, 所有已在 $\mathcal{S}(\mathbb{R}^n)$ 中对 Schwartz 函数验证过的 傅里叶变换性质都可以容易地延拓到一切缓增分布.特别地, 由于一切 $L^p$ 空间都包含在 $\mathcal{S}'(\mathbb{R}^n)$ 中, 我们对所有这些空间都有了 傅里叶变换的定义.注意, 在 $L^1$ 的情形, 这个定义与 \eqref{eq:c5-155} 中给出的定义一致.
+
+Dirac 测度 $\delta_0$ 的 傅里叶变换的如下简单而非常有用的公式现在有了意义:
+
+\begin{equation}
+\mathcal{F}(\delta_0) = 1, \qquad \mathcal{F}(1) = (2\pi)^n\delta_0\label{eq:c5-164}
+\end{equation}
+
+另外注意, 若我们用 $\mathrm{sign}(x)$ 表示由局部可积函数 $\frac{x}{|x|}$ 给出的一维缓增分布, 则我们有
+
+\begin{equation}
+\widehat{\mathrm{sign}}(\xi) = -2i\, \mathrm{pv}\Big(\frac{1}{\xi}\Big)\label{eq:c5-165}
+\end{equation}
+
+事实上, $\mathrm{sign}'(x) = 2\delta_0$.因此, $i\xi\, \widehat{\mathrm{sign}}(\xi) = 2$.于是, 对任何快速递减的 $\phi$, 我们有
+
+\[
+i\int\mathrm{sign}(x)\, \widehat{x\phi}(x)\, dx = 2\hat{\phi}(0) = 2\int\phi(x)\, dx
+\]
+
+又注意, $\widehat{\mathrm{sign}}(x)$ 是奇分布, 因此每当 $\phi(x) = \phi(-x)$ 是偶检验函数时, $\langle\widehat{\mathrm{sign}}, \phi\rangle = 0$.现在给定一般检验函数 $\phi$, 写成 $\phi = \frac{1}{2}(\phi(x)+\phi(-x)) + \frac{1}{2}(\phi(x)-\phi(-x)) = \phi_{\mathrm{ev}} + \phi_{\mathrm{odd}}$.于是, 由前述, 我们推出
+
+\[
+\langle\widehat{\mathrm{sign}}, \phi\rangle = \Big\langle\widehat{\mathrm{sign}}, \xi\Big(\frac{1}{\xi}\phi_{\mathrm{odd}}\Big)\Big\rangle = -2i\Big\langle\mathrm{pv}\Big(\frac{1}{\xi}\Big), \phi\Big\rangle
+\]
+
+如所期望.
+
+这一事实也可以通过求如下分布论积分
+
+\[
+\int\mathrm{sign}(x)e^{-i\xi x}\, dx
+\]
+
+更直接地观察到, 所用的思路与上一节概述的 Fourier 反演公式的复解析证明相同.
+
+\textbf{习题 1.} 证明:是缓增分布的调和函数只有多项式.
+
+\textbf{习题 2.} 设 $f(x) = e^{-|x|}\in L^1(\mathbb{R})$.利用 $f$ 满足一个简单的二阶微分方程这一事实, 计算 $\hat{f}(\xi)$(从而 $\hat{f}(0) = \int f(x)\, dx = 2$).讨论 $f$ 与 $\hat{f}$ 的精确的正则性与衰减量, 以及如何从物理空间表示中预见它们.注意, $\hat{f}$ 可亚纯延拓到复平面——通过考虑与复平面波 $x\to e^{izx}$, $z\in\mathbb{C}$ 的相关性, 你可以从 $f$ 在物理空间中的形式预见极点的位置.
+
+\textbf{习题 3.} 假设 $u$ 是一个缓增分布, 在 $\mathbb{R}^n$ 的子群 $S$ 的平移下不变——例如 $u$ 可以是周期的, 或是少于 $n$ 个变量的函数.为什么我们可以假设 $S$ 是闭的?证明 傅里叶变换 $\hat{u}$ 的支集包含在 $S$ 下不变的平面波的 \newterm{annihilator-subgroup}{零化子群}{annihilator subgroup} $S^\perp$ 中:
+
+\[
+S^\perp = \{\xi \mid e^{i\xi\cdot x} = 1 \text{ 对一切 } x\in S\}
+\]
+
+
+\section{不确定性原理与局部化}
+
+在实直线上设算子 $X, D$ 定义为
+
+\[
+Xf(t) = tf(t), \qquad Df(t) = -if'(t)
+\]
+
+注意,
+
+\[
+[D, X]f = DXf - XDf = -if
+\]
+
+这种不可交换性是如下结论的原因:
+
+\begin{proposition}[Heisenberg 不确定性原理]\label{prop:c5-4.1}
+如下不等式成立:
+
+\[
+\|Xf\|_{L^2}\cdot\|Df\|_{L^2}\geq\frac{1}{2}\|f\|_{L^2}^2
+\]
+\end{proposition}
+
+\begin{proof}
+注意, 利用上述对易关系,
+
+\[
+0\leq\|(aX+ibD)f\|_{L^2}^2 = a^2\|Xf\|_{L^2}^2 + b^2\|Df\|_{L^2}^2 - ab\|f\|_{L^2}^2
+\]
+
+现在, 选取 $a = \|Df\|_{L^2}$, $b = \|Xf\|_{L^2}$, 使右边最小化.
+\end{proof}
+
+不确定性原理非正式地描述为 $\Delta x\cdot\Delta\xi\geq 1/2$\footnote{这一记号来自量子力学:在那里归一化 $\|f\|_{L^2} = 1$, 并把 $|f(x)|^2$ 与 $\frac{|\hat{f}(\xi)|^2}{2\pi}$ 分别解释为位置空间与动量空间中的概率密度.在这种设定下, Heisenberg 不确定性原理给出位置与动量的标准差之积的一个下界.}, 它对我们在空间和频率中同时局部化一个函数(或任何其他相关对象)的精度设置了一个界限.让我们更详细地研究这些局部化.
+
+\mtsubsec{物理空间的局部化}
+
+如果我们想把函数 $f$ 局部化到区域 $D\subset\mathbb{R}^n$, 可以简单地用特征函数 $\chi_D$ 乘 $f$.这种局部化的问题是, 所得函数 $\chi_Df$ 即使 $f$ 光滑也不是光滑的.为纠正这一点, 我们选取 $\phi_D\in\mathcal{C}_0^\infty(D)$, 使得 $\phi_D$ 与 $\chi_D$ 相差不大.在 $D$ 是以 $x_0$ 为中心的球 $B(x_0, R)$ 的特殊情形, 我们可以选取 $\phi_D$ 在球 $B(x_0, R)$ 上等于 1, 在球 $B(x_0, 2R)$ 外等于 0.这导致如下对 $\phi_D$ 的导数的界
+
+\[
+|\partial^\alpha\phi_D|\lesssim R^{-|\alpha|}.
+\]
+
+一般地, 给定一个可以关联一个长度尺度 $R$(例如其直径, 或到其内部一个固定点的距离)的区域 $D$, 我们可以找到函数 $\phi_D\in\mathcal{C}_0^\infty(D)$, 使得对一切多重指标 $\alpha\in\mathbb{N}^n$,
+
+\begin{equation}
+|\partial^\alpha\phi_D|\lesssim R^{-|\alpha|}, \label{eq:c5-166}
+\end{equation}
+
+一个一般性的注记:形如 \eqref{eq:c5-166} 的导数估计在分析中非常常见, 而且几乎总是出现于满足该估计的函数来自另一个导数有界的函数的伸缩版本时.这就是为什么出现的特定指数与\newterm{dimensional-analysis}{量纲分析}{dimensional analysis}一致.
+
+\mtsubsec{频率空间的局部化}
+
+和前面一样, 我们可以通过 $\mathcal{F}^{-1}(\chi_D\hat{f})$ 把函数 $f$ 在频率空间中局部化到区域 $D\subset\mathbb{R}^n$.同样, 使用更光滑的截断版本常常是有益的, 因此我们设
+
+\[
+\widehat{P_Df}(\xi) = \phi_D\hat{f}(\xi).
+\]
+
+$P_D$ 是 \newterm{fourier-multiplier-operator}{Fourier 乘子算子}{Fourier multiplier operator}的一个例子, 即如下类型的算子:
+
+\begin{equation}
+\widehat{T_mf}(\xi) = m(\xi)\hat{f}(\xi).\label{eq:c5-167}
+\end{equation}
+
+其中 $m = m(\xi)$ 是给定的函数, 称为该算子的符号.显然,
+
+\begin{equation}
+T_mf(x) = f*K(x) = \int f(x-y)K(y)\, dy\label{eq:c5-168}
+\end{equation}
+
+其中 $K$, 即 $T$ 的核, 是 $m$ 的逆 傅里叶变换:
+
+\[
+K(x) = (2\pi)^{-n}\int e^{ix\cdot\xi}m(\xi)\, d\xi
+\]
+
+显然, 任何线性微分算子 $P(\partial)$ 都是以 $P(i\xi)$ 为符号的乘子.
+
+为了比较粗糙与光滑截断算子在物理空间中的作用, 只需考察相应的核 $K$.设 $I = [-1, 1]\subset\mathbb{R}$, $\chi_I$ 为粗糙截断(忽略 $2\pi$ 常数).相应的核
+
+\[
+K(x) = \int_{-1}^{1} e^{ix\cdot\xi}\, d\xi = 2\frac{\sin x}{x}
+\]
+
+当 $|x|\to\infty$ 时衰减得非常慢.正因如此, 算子
+
+\[
+\mathcal{F}^{-1}(\chi_I\hat{f})(x) = 2\int\frac{\sin(x-y)}{(x-y)}f(y)\, dy
+\]
+
+具有非常差的局部化性质.事实上, 该算子把任何支集在某个集合 $J\subset\mathbb{R}$ 中的函数扩散到整个 $\mathbb{R}$.这种情况对应于频率空间中的完美局部化与物理空间中的极差局部化.当我们对物理空间中的粗糙截断局部化 $\chi_If$ 时, 恰好出现相反的情形.另一方面, 当我们在频率空间中使用光滑截断 $\phi_I$ 时, 频率截断算子 $P_If = \mathcal{F}^{-1}(\phi_I\hat{f})$ 具有形式 $f\to K*f$, 其中核
+
+\[
+K(x) = \int_{\mathbb{R}} e^{ix\cdot\xi}\phi_I(\xi)\, d\xi
+\]
+
+是快速递减的.在这种情况下, 我们可以证明:
+
+\begin{lemma}\label{lem:c5-4.4}
+设 $I = [-1, 1]$, $\phi_I$ 是 $I$ 上的光滑截断, $P_If = \mathcal{F}^{-1}(\phi_I\hat{f})$.则, 若 $f$ 是任何支集在集合 $D\subset\mathbb{R}$ 上的 $L^2$ 函数,
+
+\[
+|P_I(f)(x)|\lesssim C_j\|f\|_{L^2}\bigl(1+\mathrm{dist}(x, D)\bigr)^{-j}
+\]
+
+对一切 $j\in\mathbb{N}$ 成立.
+\end{lemma}
+
+因此, $P_I$ 把任何函数 $f$ 的支集扩散一个 $O(1)$ 的距离, 再加上一个快速递减的尾部.
+
+\textbf{习题.} 证明:不存在非平凡函数 $\phi$, 使得 $\phi$ 与 $\mathcal{F}(\phi)$ 都具有紧支集.
+
+上述讨论可以容易地推广到高维情形.特别地, 我们可以得到 $\mathbb{R}^n$ 中 Fourier 支集限制在中心在原点的球 $B_R = B(0, R)$ 内的函数的定性描述.设 $\phi_R$ 是 $B_R$ 的光滑截断.更精确地说, 我们取它形如
+
+\[
+\phi_R(\xi) = \phi(\xi/R)
+\]
+
+其中 $\phi$ 是 $B_1$ 的光滑截断, 即 $\phi$ 光滑, 在 $B_1$ 上恒等于 1, 支集在(比如说)$B_2$ 中.容易验证, 对任何多重指标 $\alpha$,
+
+\[
+\sup_\xi|\partial_\xi^\alpha\phi_R(\xi)|\leq c_\phi R^{-|\alpha|},
+\]
+
+其中常数 $c_\phi$ 只依赖于固定的 $\phi$ 及其导数.
+
+若 $f$ 的 Fourier 支集限制在 $B_R$ 内, 则 $\hat{f} = \phi_R\hat{f}$.因此,
+
+\begin{equation}
+f(x) = \int_{\mathbb{R}^n} f(y)K_R(x-y)\, dy\label{eq:c5-169}
+\end{equation}
+
+其中 $K_R(x) = \mathcal{F}^{-1}(\phi_R)$.
+
+\begin{lemma}\label{lem:c5-4.5}
+核 $K_R(x)$ 满足如下估计:
+
+\begin{equation}
+|\partial_x^\alpha K_R(x)| \leq C_{N, \alpha}R^{|\alpha|}R^n(1+|x|R)^{-N}, \label{eq:c5-170}
+\end{equation}
+
+对一切 $R>0$、任何 $N\in\mathbb{N}$ 与多重指标 $\alpha\in\mathbb{N}^n$ 成立, 其中常数 $C_{N, \alpha}$ 只依赖于 $N$、$\alpha$、维数 $n$ 以及固定检验函数 $\phi$ 的选取.
+\end{lemma}
+
+\begin{proof}
+事实上, 分部积分,
+
+\[
+\begin{aligned}
+K_R(x) &= \int_{\mathbb{R}^n} e^{ix\cdot\xi}\phi_R(\xi)\, d\xi = \int_{\mathbb{R}^n}\Big(\frac{-1}{ix}\Big)^\alpha\partial_\xi^\alpha(e^{ix\cdot\xi})\phi_R(\xi)\, d\xi \\
+&= \int_{\mathbb{R}^n}\Big(\frac{1}{ix}\Big)^\alpha e^{ix\cdot\xi}\partial_\xi^\alpha\phi_R(\xi)\, d\xi
+\end{aligned}
+\]
+
+因此, 对任何 $\alpha$, $|\alpha| = N$, 记 $|B_R| = c_nR^n$ 为 $B_R$ 的体积,
+
+\[
+|x^\alpha K_R(x)| \leq \int_{\mathbb{R}^n}|\partial_\xi^\alpha\phi_R(\xi)| \leq c_\phi R^{-N}|B_R| \leq c_nc_\phi R^{-N+n}
+\]
+
+于是, 对某个依赖于 $N$、$n$ 与固定 $\phi$ 的常数 $C_N$, $|K_R(x)|\leq C_NR^n(|x|R)^{-N}$.另一方面, 当 $|x|\leq R^{-1}$ 时, $|K_R(x)|\lesssim R^n$.因此, 对每个 $N\in\mathbb{N}$,
+
+\[
+|K_R(x)|\lesssim C_NR^n(1+|x|R)^{-N}.
+\]
+
+还容易验证, $K_R$ 的每个导数都花费一个 $R$ 的因子, 从而证明了 \eqref{eq:c5-170}.
+\end{proof}
+
+现在回到 \eqref{eq:c5-169}, 我们有
+
+\[
+\begin{aligned}
+|\partial^\alpha f(x)| = \Big|\int_{\mathbb{R}^n} f(y)\partial^\alpha K_R(x-y)\, dy\Big| &\lesssim R^{|\alpha|+n}\int_{\mathbb{R}^n}|f(y)|(1+R|x-y|)^{-N}\, dy \\
+&\lesssim R^{|\alpha|+n}\|f\|_{L^1}
+\end{aligned}
+\]
+
+又, 由 Hölder 不等式, 其中 $\frac{1}{p}+\frac{1}{p'} = 1$,
+
+\[
+\begin{aligned}
+|\partial^\alpha f(x)| &\lesssim \|f\|_{L^p}\|\partial^\alpha K_R\|_{L^{p'}}\lesssim R^{|\alpha|}R^nR^{-n/p'}\|f\|_{L^p} \\
+&\lesssim R^{|\alpha|+n/p}\|f\|_{L^p}
+\end{aligned}
+\]
+
+我们刚刚证明了非常重要的 \newterm{bernstein-inequality}{Bernstein 不等式}{Bernstein inequality}的如下版本($L^p-L^\infty$ 版本):
+
+\begin{proposition}\label{prop:c5-4.6}
+假设 $f$ 是 $L^p$ 函数, 其 傅里叶变换的支集在球 $B_R = B(0, R)$ 内.则 $f$ 具有无穷多个在 $L^\infty$ 中有界的导数, 并且有
+
+\[
+\|\partial^\alpha f\|_{L^\infty(\mathbb{R}^n)}\lesssim R^{n/p+|\alpha|}\|f\|_{L^p}.
+\]
+\end{proposition}
+
+\begin{remark*}
+注意, 该命题可以通过化归到 $R = 1$ 的特殊情形来证明.更精确地说, 假设结论对 $R = 1$ 成立, 并考虑 傅里叶变换支集在 $B_R$ 内的函数 $f$.设 $g(x) = R^{-n}f(R^{-1}x)$, 注意, $\operatorname{supp}\hat{g}(\xi) = \operatorname{supp}\hat{f}(R\xi)\subset B_1$, 因此我们有 $\|\partial^\alpha g\|_{L^\infty(\mathbb{R}^n)}\lesssim\|g\|_{L^1} = R^{-n}R^{n/p}\|f\|_{L^p}$.于是, $\|\partial^\alpha f\|_{L^\infty(\mathbb{R}^n)}\lesssim R^{n/p+|\alpha|}\|f\|_{L^p}$.
+\end{remark*}
+
+正如我们在这些讲义中将非常频繁地看到的那样, 量纲分析可以用来迅速弄清上面出现的指数.例如, 如果我们把空间变量看作具有尺度 $L$, 从而体积元 $dx$ 具有尺度 $L^n$, 那么频率变量具有单位 $R\sim L^{-1}$.我们看到 $\|\partial^\alpha f\|_{L^\infty}$ 具有尺度 $L^{-|\alpha|}$, 而 $\|f\|_{L^p} = \big(\int|f(x)|^p\, dx\big)^{1/p}$ 具有尺度 $L^{n/p}$——因此出现的 $R$ 的幂使得该估计与量纲分析一致.
+
+定性地说, Bernstein 估计体现了关于 $L^p$ 范数与 傅里叶变换的一些基本直觉.在某种意义上, 函数的较高 $L^p$ 范数(如 $L^\infty$ 范数)控制函数在空间的局部区域中爆破的能力, 而较低的 $L^p$ 范数控制其在无穷远处的增长.Bernstein 估计说的是:如果一个频率局部化的函数在无穷远处不增长(即具有有界的 $L^p$ 范数, $1\leq p<\infty$), 那么由于没有高频分量, 该函数也被禁止具有局部奇性(即 $L^\infty$ 范数有界).
+
+我们对这类估计感兴趣的一个主要原因, 并不是我们经常遇到 傅里叶变换紧支撑的函数, 而是我们经常把更一般的函数分解为频率局部化的各部分之和.我们将在 Littlewood-Paley 理论的研究中回到这个想法.
+
+
+\section{在 PDE 中的应用}
+
+考虑我们的基本 PDE 在 $\mathbb{R}\times\mathbb{R}^n$ 中的初值问题, 写成如下形式:
+
+\begin{equation}
+\partial_t\phi = \Delta\phi, \qquad \phi(0, x) = f(x)\label{eq:c5-171}
+\end{equation}
+
+\begin{equation}
+\partial_t\phi = i\Delta\phi, \quad \phi(0, x) = f(x)\label{eq:c5-172}
+\end{equation}
+
+\begin{equation}
+\partial_t^2\phi = \Delta\phi, \qquad \phi(0, x) = f(x), \quad \partial_t\phi(0, x) = g(x)\label{eq:c5-173}
+\end{equation}
+
+\begin{equation}
+\partial_t^2\phi = -\Delta\phi, \quad \phi(0, x) = f(x), \quad \partial_t\phi(0, x) = g(x)\label{eq:c5-174}
+\end{equation}
+
+在每一种情形下, 我们都可以用 傅里叶变换方法写出解.更精确地说, 我们可以对每个方程取 傅里叶变换, 设
+
+\[
+\hat{\phi}(t, \xi) = \int e^{-ix\cdot\xi}\phi(t, x)\, dx
+\]
+
+并求解关于 $t$ 的所得微分方程.完成这一步之后, 我们只需用逆 傅里叶变换即可得到我们的解, 即
+
+\[
+\phi(t, x) = \int e^{ix\cdot\xi}\hat{\phi}(t, \xi)\frac{d\xi}{(2\pi)^n}
+\]
+
+在热方程 \eqref{eq:c5-171} 的情形, 我们导出
+
+\begin{equation}
+\phi(t, x) = (2\pi)^{-1}\int_{-\infty}^{+\infty} e^{ix\xi}e^{-t|\xi|^2}\hat{u}_0(\xi)\frac{d\xi}{(2\pi)^n}\label{eq:c5-175}
+\end{equation}
+
+而在 Schrödinger 方程的情形,
+
+\begin{equation}
+\phi(t, x) = (2\pi)^{-1}\int_{-\infty}^{+\infty} e^{ix\xi}e^{-it|\xi|^2}\hat{u}_0(\xi)\frac{d\xi}{(2\pi)^n}\label{eq:c5-176}
+\end{equation}
+
+\textbf{习题 1.} 说明如何把公式 \eqref{eq:c5-175} 与 \eqref{eq:c5-176} 与物理空间\eqref{eq:c4-153} 和 (154) 联系起来.
+
+在波动方程 \eqref{eq:c5-173} 的特殊情形, 我们导出
+
+\begin{equation}
+\phi(t, x) = \int_{\mathbb{R}^n} e^{ix\cdot\xi}\Big(\cos t|\xi|\hat{f}(\xi) + \frac{\sin t|\xi|}{|\xi|}\hat{g}(\xi)\Big)\frac{d\xi}{(2\pi)^n}\label{eq:c5-177}
+\end{equation}
+
+\textbf{习题 2.} 对 Laplace 方程 \eqref{eq:c5-174} 导出与 \eqref{eq:c5-177} 类似的公式.利用这些公式证明:\eqref{eq:c5-173} 对一切 $f, g\in\mathcal{S}(\mathbb{R}^n)$ 都有解, 而 \eqref{eq:c5-174} 没有.不过要证明:若我们只指定 $\phi(0, x) = f$(这就是 $\mathbb{R}^{n+1}$ 中 Laplace 算子 $\partial_t^2+\Delta$ 的 Dirichlet 问题), 则该问题对一切函数 $f\in\mathcal{S}(\mathbb{R}^n)$ 都有唯一解 $\phi$, 且当 $|t|+|x|\to\infty$ 时它衰减为零.
+
+\textbf{习题 3.} 证明:在维数 $1+3$ 的特殊情形, 如何从公式 \eqref{eq:c5-177} 过渡到 Kirchhoff \eqref{eq:c4-146}:
+
+\begin{equation}
+\phi(t, x) = \partial_t\Big((4\pi t)^{-1}\int_{|x-y|=t} f(y)\, da(y)\Big) + (4\pi t)^{-1}\int_{|x-y|=t} g(y)\, da(y)\label{eq:c5-178}
+\end{equation}
+
+它与前一章基于基本解的显式计算导出的公式一致.
+
+比较基于 Fourier 的公式 \eqref{eq:c5-177} 与 Kirchhoff 公式 \eqref{eq:c5-178} 是很有趣的.注意, 利用 Parseval, 从 \eqref{eq:c5-177} 导出全局能量恒等式是相当容易的:
+
+\[
+\int_{\mathbb{R}^n}\big(|\partial_t\phi|^2 + |\nabla\phi|^2\big) = \int_{\mathbb{R}^n}\big(|\nabla f|^2 + |g|^2\big)\, dx
+\]
+
+而从 \eqref{eq:c5-178} 得到这样的恒等式似乎一点也不显然, 事实上相当不可信.另一方面, \eqref{eq:c5-178} 非常适合给出影响域信息.事实上, 我们立即从公式中读出:若资料 $f, g$ 支集在球 $B_a = \{|x-x_0|\leq a\}$ 内, 则对任何时刻 $t$, $\phi(t, x)$ 的支集在球 $B_{a+|t|}$ 内.另一方面, 这一事实在基于 Fourier 的公式\footnote{支集信息可由 Paley-Wiener 型结果导出.}\eqref{eq:c5-177}\footnote{然而, 支集信息可以借助 Paley-Wiener 方法从 \eqref{eq:c5-177} 中提取出来, 参见 [?] 第一卷.}中一点也不透明.解的不同表示具有不同甚至相反的优点与缺点, 这一事实对构造更复杂的、线性变系数或非线性波动方程的参数层(即近似解)具有重要意义.有两种可能的构造类型:物理空间中的构造, 模仿物理空间公式 \eqref{eq:c5-178};或 Fourier 空间中的构造, 模仿公式 \eqref{eq:c5-177}.前者称为 Kirchhoff-Sobolev 参数层或 Hadamard 参数层, 后者称为 Lax 参数层, 或更一般地, \newterm{fourier-integral-operator}{Fourier 积分算子}{Fourier integral operator}.

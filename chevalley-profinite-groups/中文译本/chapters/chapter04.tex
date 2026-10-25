@@ -1,0 +1,494 @@
+% !TeX root = ../main.tex
+% 第 4 章 群的上同调 （原书 CHAPTER 4, Group Cohomology, 印刷页 35-41）
+
+\chapter{群的上同调}
+\label{ch:4}
+
+下一章（按原书行文如此\footnote{原文为 ``In the following chapter''，按上下文即指本章.}）我们定义\newterm{c4-cohomology}{上同调群}{cohomology group}.这一概念源于拓扑学，后来被用于群论中以提供不变量.\\
+本章许多证明留给读者.
+
+\section{概说}
+
+\subsection{（余）同调模}
+
+\begin{definition}\label{c4-def-1-1}
+一个\emph{左 $R$-模}（其中 $R$ 是环）是指配有标量乘法 $R\times M\to M:(r,m)\mapsto r\cdot m$ 的阿贝尔群 $(M,+)$，使得对一切 $m,m'\in M$ 与一切 $r,r'\in R$，都有
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item $r\cdot(m+m')=r\cdot m+r\cdot m'$，
+    \item $(r+r')\cdot m=r\cdot m+r'\cdot m$，
+    \item $(rr')\cdot m=r\cdot(r'\cdot m)$，
+    \item $1\cdot m=m$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition}\label{c4-def-1-2}
+设 $M$ 与 $N$ 是两个 $R$-模，一个 $R$-\emph{映射}（或 $R$-\emph{同态}）是指群同态 $f:M\to N$，使得对一切 $m\in M$ 与 $r\in R$，
+\[
+r\cdot f(m)=f(r\cdot m).
+\]
+\end{definition}
+
+可以类似地定义右 $R$-模，但当 $R$ 交换时两者一致.因此，为简化起见，从此刻起我们假定 $R$ 是一个交换环.
+
+\begin{notation}\label{c4-not-1-3}
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item 表示 $R$ 在 $R$-模 $M$ 上的作用时，我们常写 $rm$ 而不写 $r\circ m$.
+    \item $R$-模与 $R$-映射构成的类是一个阿贝尔范畴，记作 $\mathscr{M}_R$.
+\end{enumerate}
+\end{notation}
+
+这里我们介绍（余）同调的最一般概念.
+
+\begin{definition}\label{c4-def-1-4}
+$R$ 上的一个\newterm{c4-chain-complex}{链复形}{chain complex} $C$ 是一列 $R$-模 $(C_n)_{n\in\mathbb Z}$ 与 $R$-映射 $(d_n:C_n\to C_{n-1})_{n\in\mathbb Z}$，称为\newterm{c4-coboundary}{（余）边缘算子}{(co)boundary}\footnote{原文此处用词为 differentiations（微分）.}，
+\[
+C:\ldots\to C_{n+1}\xrightarrow{d_{n+1}}C_n\xrightarrow{d_n}C_{n-1}\to\ldots
+\]
+使得对一切 $n\in\mathbb Z$ 有 $d_n\circ d_{n+1}=0$.
+\end{definition}
+
+\begin{definition}\label{c4-def-1-5}
+链复形的一个\emph{态射} $f:C\to C'$ 是一族 $R$-模的态射 $(f_n:C_n\to C_n')_{n\in\mathbb Z}$，使得对一切 $n$，下图交换
+\[
+\begin{tikzcd}
+C_n \arrow[d,"f_n"'] \arrow[r,"d_n"] & C_{n-1} \arrow[d,"f_{n-1}"] \\
+C_n' \arrow[r,"d_n'"'] & C_{n-1}'.
+\end{tikzcd}
+\]
+\end{definition}
+
+\begin{definition}\label{c4-def-1-6}
+设 $C$ 是一个链复形，我们定义其第 $n$ 个\newterm{c4-homology}{同调群}{homology}\footnote{原文作 homology module（同调模）.}为
+\[
+H_n(C):=\ker d_n/\operatorname{im} d_{n+1}.
+\]
+\end{definition}
+
+若 $f:C\to C'$ 是链复形的态射，我们定义
+\[
+H_n(f):H_n(C)\to H_n(C'):[z]\mapsto[f_n(z)].
+\]
+下面是上同调的定义.
+
+\begin{definition}\label{c4-def-1-7}
+$R$ 上的一个\emph{上链复形} $C$ 是一列 $R$-模 $(D_n)_{n\in\mathbb Z}$ 与 $R$-映射 $(\delta_n:C_n\to C_{n-1})_{n\in\mathbb Z}$\footnote{原文此处记号即如此不自洽：模的序列写作 $(D_n)$，映射写作 $\delta_n:C_n\to C_{n-1}$，而下面的图中模却写作 $D^{n-1}$、$D^n$、$D^{n+1}$，箭头标签亦上、下标混用（$\delta^{n-1}$ 与 $\delta_n$），此处一律照录.}，
+\[
+D:\ldots\to D^{n-1}\xrightarrow{\delta^{n-1}}D^n\xrightarrow{\delta_n}D^{n+1}\to\ldots
+\]
+使得对一切 $n\in\mathbb Z$ 有 $\delta^{n+1}\circ\delta^n=0$.
+\end{definition}
+
+\begin{definition}\label{c4-def-1-8}
+设 $D$ 是一个上链复形，我们定义其第 $n$ 个上同调模为
+\[
+H^n(D):=\ker\delta^n/\operatorname{im}\delta^{n-1}.
+\]
+\end{definition}
+
+\subsection{Hom 函子}
+
+\begin{definition}\label{c4-def-1-9}
+设 $\mathscr C$ 与 $\mathscr D$ 是范畴.从 $\mathscr C$ 到 $\mathscr D$ 的一个\emph{协变函子} $F$ 是指如下对应：它给每个对象 $C\in\mathscr C$ 配备一个对象 $F(C)\in\mathscr D$，并给 $\mathscr C$ 中每个态射 $f:C_1\to C_2$ 配备一个 $\mathscr D$ 中的态射 $F(f):F(C_1)\to F(C_2)$，使得
+\begin{itemize}
+    \item $F(\mathrm{id}_C)=\mathrm{id}_{F(C)}$，对每个对象 $C\in\mathscr C$；
+    \item $F(g\circ f)=F(g)\circ F(f)$，对 $\mathscr C$ 中一切态射 $f:C_1\to C_2$ 与 $g:C_2\to C_3$.
+\end{itemize}
+从 $\mathscr C$ 到 $\mathscr D$ 的一个\emph{逆变函子} $F$ 是指如下对应：它给每个对象 $C\in\mathscr C$ 配备一个对象 $F(C)\in\mathscr D$，并给 $\mathscr C$ 中每个态射 $f:C_1\to C_2$ 配备一个 $\mathscr D$ 中的态射 $F(f):F(C_2)\to F(C_1)$，使得
+\begin{itemize}
+    \item $F(\mathrm{id}_C)=\mathrm{id}_{F(C)}$，对每个对象 $C\in\mathscr C$；
+    \item $F(g\circ f)=F(f)\circ F(g)$，对 $\mathscr C$ 中一切态射 $f:C_1\to C_2$ 与 $g:C_2\to C_3$.
+\end{itemize}
+\end{definition}
+
+\begin{definition}\label{c4-def-1-10}
+设 $M$ 是一个固定的 $R$-模.\\
+我们定义函子 $\operatorname{Hom}(\square, M)$：它从范畴 $\mathscr{M}_R$ 到范畴 $\mathscr A$，把每个 $R$-模 $N$ 送到从 $N$ 到 $M$ 的一切 $R$-映射的集合 $\operatorname{Hom}_R(N, M)$，并把每个 $R$-映射 $\varphi:N_1\to N_2$ 送到映射\footnote{原文即如此；按上下文应写作 $\operatorname{Hom}(\varphi, M)$ 与 $g\mapsto g\circ\varphi$.}
+\[
+\operatorname{Hom}(f, M):\operatorname{Hom}(N_2, M)\to\operatorname{Hom}(N_1, M):f\mapsto f\circ\varphi.
+\]
+其次，我们定义函子 $\operatorname{Hom}(M, \square)$：它从范畴 $\mathscr{M}_R$ 到范畴 $\mathscr A$，把每个 $R$-模 $N$ 送到从 $M$ 到 $N$ 的一切 $R$-映射的集合 $\operatorname{Hom}_R(M, N)$，并把每个 $R$-映射 $\varphi:N_1\to N_2$ 送到映射
+\[
+\operatorname{Hom}(f, M):\operatorname{Hom}(M, N_1)\to\operatorname{Hom}(M, N_2):f\mapsto\varphi\circ f.
+\]
+\end{definition}
+
+\begin{proposition}\label{c4-prop-1-1}
+\mbox{}
+\begin{itemize}
+    \item $\operatorname{Hom}_R(\square, M)$ 是从 $\mathscr{M}_R$ 到 $\mathscr A$ 的一个定义良好的逆变函子.此外，该函子是左正合的.
+    \item $\operatorname{Hom}_R(M, \square)$ 是从 $\mathscr{M}_R$ 到 $\mathscr A$ 的一个定义良好的协变函子.此外，该函子是左正合的.
+\end{itemize}
+\end{proposition}
+
+\begin{proof}
+证明可参见 \cite[\S2.1]{rot09}.
+\end{proof}
+
+\begin{remark}\label{c4-rem-1-11}
+从链复形 $C$ 出发得到上链复形有许多方式.最自然的是定义 $C^n:=C_{-n}$ 且 $\delta_m:=d_{-n}$\footnote{原文即如此；$\delta_m$ 的下标与右端 $d_{-n}$ 不相符，按上下文应为 $\delta_n$.}.\\
+但另一种方式更有意思：我们只需施加函子 $\operatorname{Hom}(\square, G)$. 确切地说，$C^n:=\operatorname{Hom}_R(C_n, R)$ 且 $\delta^n:=d^*_{n+1}=\operatorname{Hom}_R(d_{n+1}, R)$. 我们把这一上链复形记作
+\[
+\operatorname{Hom}_R(C, R):\ldots\to\operatorname{Hom}_R(C_{n-1}, R)\xrightarrow{\delta^{n-1}}\operatorname{Hom}_R(C_n, R)\xrightarrow{\delta_n}\operatorname{Hom}_R(C_{n+1}, R)\to\ldots
+\]
+\end{remark}
+
+下面的两个定理都是经典结果.
+
+\begin{theorem}\label{c4-thm-1-2}
+设 $0\to C'\xrightarrow{i}C\xrightarrow{p}C''\to 0$ 是链复形的一个\newterm{c4-exact-sequence}{正合列}{exact sequence}，则存在模的长正合列
+\[
+\ldots\to H_n(C')\xrightarrow{H_n(i)}H_n(C)\xrightarrow{H_n(p)}H_n(C'')\xrightarrow{\delta_n}H_{n-1}(C')\to\ldots.
+\]
+\end{theorem}
+
+\begin{proof}
+该定理的证明可参见 \cite[\S6.1]{rot09}.
+\end{proof}
+
+\begin{theorem}\label{c4-thm-1-3}
+设 $0\to C'\xrightarrow{i}C\xrightarrow{p}C''\to 0$ 是上链复形的一个正合列，则存在模的长正合列
+\[
+\ldots\to H^n(C')\xrightarrow{H^n(i)}H^n(C)\xrightarrow{H^n(p)}H^n(C'')\xrightarrow{\delta^n}H^{n+1}(C')\to\ldots.
+\]
+\end{theorem}
+
+\section{投射模与内射模}
+
+本节我们定义投射模与内射模的概念.
+
+\begin{definition}\label{c4-def-2-1}
+称 $R$-模 $P$ 是\newterm{c4-projective-module}{投射模}{projective module}，若对 $R$-模的任一满同态 $\beta:M\to N$ 与任一态射 $\alpha:P\to N$，存在态射 $\gamma:P\to M$ 使得 $\beta\circ\gamma=\alpha$，即下图交换
+\[
+\begin{tikzcd}
+& P \arrow[d,"\alpha"] \arrow[ld,dotted,"\gamma"'] \\
+M \arrow[r,"\beta"'] & N \arrow[r] & 0.
+\end{tikzcd}
+\]
+\end{definition}
+
+下面给出的定理将为我们提供投射模的另一个刻画.
+
+\begin{theorem}\label{c4-thm-2-1}
+设 $P$ 是一个 $R$-模，则下面各条等价：
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item $P$ 是投射的；
+    \item $\operatorname{Hom}(P, \square)$ 是正合的；
+    \item 每个 $R$-模的正合列 $0\to M'\to M\to P\to 0$ 都分裂；
+    \item $P$ 是某个自由模的直和项，即存在 $R$-模 $M$ 使得 $P\oplus M$ 是自由的.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+证明可参见 \cite[Proposition~3.2, Proposition~3.3 \& Theorem~3.5, Chapter~3]{rot09}.
+\end{proof}
+
+我们现在精确定义什么是 $R$-模\footnote{原文即如此；按上下文此处所指应为自由 $R$-模.}.
+
+\begin{definition}\label{c4-def-2-2}
+称 $R$-模 $M$ 是\emph{自由的}，若存在集合 $X=\{m_i\mid i\in I\}$（$I$ 可为任意指标集），称为 $M$ 的一组基，使得每个 $m\in M$ 都有唯一表达式
+\[
+m=\sum_{i\in I}r_im_i
+\]
+其中 $r_i\in R$，且 $r_i\neq 0$ 的情形只有有限多个.
+\end{definition}
+
+\begin{proposition}\label{c4-prop-2-2}
+设 $F$ 是一个自由 $R$-模，$M$、$N$ 为任意 $R$-模. 若 $\beta:M\to N$ 是满同态，则对每个 $\alpha:F\to N$，存在 $R$-同态 $\gamma:F\to M$ 使下图交换
+\[
+\begin{tikzcd}
+& F \arrow[d,"\alpha"] \arrow[ld,dotted,"\gamma"'] \\
+M \arrow[r,"\beta"'] & N \arrow[r] & 0.
+\end{tikzcd}
+\]
+\end{proposition}
+
+\begin{proof}
+该命题的证明可参见 \cite[Theorem~3.1, Chapter~3]{rot09}.
+\end{proof}
+
+\begin{corollary}\label{c4-cor-2-3}
+每个自由模都是投射模.
+\end{corollary}
+
+我们现在定义投射模的对偶概念，即内射模.
+
+\begin{definition}\label{c4-def-2-3}
+称 $R$-模 $I$ 是\newterm{c4-injective-module}{内射模}{injective module}，若对任一单同态 $\beta:M\to N$ 与任一 $R$-模的态射 $\alpha:M\to I$，存在态射 $\gamma:N\to I$ 使得 $\gamma\circ\beta=\alpha$，即下图交换
+\[
+\begin{tikzcd}
+& I \\
+0 \arrow[r] & M \arrow[u,"\alpha"'] \arrow[r,"\beta"'] & N. \arrow[ul,dotted,"\gamma"']
+\end{tikzcd}
+\]
+\end{definition}
+
+\begin{theorem}\label{c4-thm-2-4}
+设 $I$ 是一个 $R$-模，则下面各条等价：
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item $I$ 是内射的；
+    \item $\operatorname{Hom}_R(\square, I)$ 是正合函子；
+    \item 每个 $R$-模的正合列 $0\to I\to M\to M'\to 0$ 都分裂.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+证明可参见 \cite[Proposition~3.25 \& 3.26, \S3.2]{rot09}.
+\end{proof}
+
+\section{\texorpdfstring{分解与 $R$-模的上同调}{分解与 R-模的上同调}}
+
+\subsection{分解}
+
+下面定义模的分解，它将提供用来定义上同调的链复形.
+
+\begin{definition}\label{c4-def-3-1}
+设 $M$ 是一个 $R$-模. $M$ 在 $R$ 上的一个\newterm{c4-projective-resolution}{投射分解}{projective resolution}（相应地：\emph{自由分解}）是指 $R$-模的一个正合列
+\[
+\ldots\to P_n\xrightarrow{d_n}P_{n-1}\to\ldots\to P_1\xrightarrow{d_1}P_0\xrightarrow{\varepsilon}M\to 0,
+\]
+其中每个 $P_n$ 都是投射模（相应地：自由模）.
+\end{definition}
+
+\begin{notation}\label{c4-not-3-2}
+这样的投射分解有时记作 $P_\bullet\to M$.
+\end{notation}
+
+这些分解不仅有用，我们还知道：对任何 $R$-模，这样的分解总可以找到.
+
+\begin{theorem}\label{c4-thm-3-1}
+每个 $R$-模都有自由分解.
+\end{theorem}
+
+\begin{proof}
+参见 \cite[Proposition~6.2, \S6.1]{rot09}.
+\end{proof}
+
+\begin{corollary}\label{c4-cor-3-2}
+每个 $R$-模都有投射分解.
+\end{corollary}
+
+\begin{definition}\label{c4-def-3-3}
+设 $M$ 是一个 $R$-模. $M$ 在 $R$ 上的一个\emph{内射分解}是指 $R$-模的一个正合列
+\[
+0\to M\xrightarrow{\varepsilon}I^0\xrightarrow{\delta^0}I^1\to\ldots\to I^n\xrightarrow{\delta^n}I^{n+1}\to\ldots,
+\]
+其中每个 $I^n$ 都是内射模.
+\end{definition}
+
+\begin{notation}\label{c4-not-3-4}
+这样的内射分解有时记作 $M\to I^\bullet$.
+\end{notation}
+
+\begin{theorem}\label{c4-thm-3-3}
+每个 $R$-模都有内射分解.
+\end{theorem}
+
+\begin{proof}
+参见 \cite[Proposition~6.4, \S6.1]{rot09}.
+\end{proof}
+
+现在定义删失（余）复形，因为它们处理起来更方便.
+
+\begin{definition}\label{c4-def-3-5}
+设 $M$ 是一个 $R$-模. 若
+\[
+X:\ldots\to X_n\xrightarrow{d_n}X_{n-1}\to\ldots\to X_1\to X_0\to M\to 0
+\]
+是一个链复形，我们定义 $X$ 的\emph{删失复形}为链复形
+\[
+X_M:\ldots\to X_n\xrightarrow{d_n}X_{n-1}\to\ldots\to X_1\to X_0\to 0.
+\]
+类似地，若
+\[
+Y:0\to M\to Y^0\xrightarrow{\delta^0}Y^1\to\ldots\to Y^n\xrightarrow{\delta^n}Y^{n+1}\to\ldots
+\]
+是一个上链复形，我们定义 $Y$ 的\emph{删失余复形}为上链复形
+\[
+Y_M:0\to Y^0\xrightarrow{\delta^0}Y^1\to\ldots\to Y^n\xrightarrow{\delta^n}Y^{n+1}\to\ldots
+\]
+\end{definition}
+
+\subsection{\texorpdfstring{$R$}{R}-模的上同调}
+
+本节我们定义函子 Ext，它是上同调概念的推广\footnote{换言之，$\operatorname{Ext}$ 是函子 $\operatorname{Hom}$ 的\newterm{c4-derived-functor}{导出函子}{derived functor}（原文未使用这一术语）.}.
+
+\begin{definition}\label{c4-def-3-6}
+设 $M$、$N$ 是 $R$-模. 令 $P_M$ 为 $M$ 的某个投射分解的删失复形. 构成复形 $\operatorname{Hom}_R(P_M, N)$，即
+\[
+\operatorname{Hom}_R(P_M, N):0\to\operatorname{Hom}_R(P_0, N)\xrightarrow{d^*_1}\ldots\to\operatorname{Hom}_R(P_n, N)\xrightarrow{d^*_{n+1}}\operatorname{Hom}_R(P_{n+1}, N)\to\ldots
+\]
+我们把 $M$ 以 $N$ 为系数的第 $n$ 个上同调 $\operatorname{Ext}^n_R(M, N)$ 定义为上述上链复形的第 $n$ 个上同调，即
+\[
+\operatorname{Ext}^n_R(M, N):=H^n(\operatorname{Hom}(P_M, N)).
+\]
+\end{definition}
+
+\begin{theorem}\label{c4-thm-3-4}
+设 $M$、$N$ 是 $R$-模，$P_M$ 与 $P_M'$ 是 $M$ 的两个投射分解. 设 $\operatorname{Ext}^n_R(M, N)$ 与 $\operatorname{Ext}^{'n}_R(M, N)$ 分别是与 $P_M$、$P_M'$ 相联的上同调模，则
+\[
+\operatorname{Ext}^n_R(M, N)\cong\operatorname{Ext}^{'n}_R(M, N).
+\]
+\end{theorem}
+
+\begin{proof}
+证明可参见 \cite[Proposition~6.40, \S6.2]{rot09}.
+\end{proof}
+
+\begin{remark}\label{c4-rem-3-7}
+有些作者利用内射分解来定义 $M$ 以 $N$ 为系数的上同调.\\
+令 $I_N$ 为 $N$ 的某个内射分解的删失复形. 构成复形 $\operatorname{Hom}_R(M, I_N)$，即
+\[
+\operatorname{Hom}_R(M, I_N):0\to\operatorname{Hom}_R(M, I^0)\to\ldots\to\operatorname{Hom}_R(M, I^n)\xrightarrow{\delta^n_*}\operatorname{Hom}_R(M, E^{n+1})\to\ldots
+\]
+则 $M$ 以 $N$ 为系数的第 $n$ 个上同调为
+\[
+H^n(M, N)=H^n(\operatorname{Hom}_R(M, I_N)).
+\]
+这与上面的定义并无歧义，因为 \cite[Theorem~6.67, \S6.2]{rot09} 证明了\footnote{原文上一行写作 $E^{n+1}$，按上下文应为 $I^{n+1}$.}
+\[
+H^n(\operatorname{Hom}(M, I_N))=H^n(\operatorname{Hom}(P_M, N)).
+\]
+\end{remark}
+
+\section{群的上同调}
+
+现在我们来精确定义\newterm{c4-group-cohomology}{群的上同调}{group cohomology}. 下文 $R$ 恒为带单位元 $1$ 的交换环.
+
+\begin{definition}\label{c4-def-4-1}
+设 $G$ 是一个群，群环 $R[G]$ 是以 $G$ 为基的自由阿贝尔群，即 $G$ 中元素的一切以 $R$ 中元素为系数的形式线性组合构成的群（并赋予由 $G$ 的乘法诱导的乘法）：
+\[
+R[G]=\Bigl\{\sum_{\substack{g\in G\\ \text{finite}}}r_gg\ \Big|\ r_g\in R\Bigr\}.
+\]
+整数群\footnote{原文作 integral group，按上下文应为 integral group ring（整数群环）.}是指对整数环 $\mathbb Z$ 取群环所得的 $\mathbb Z[G]$，该环也写作 $\mathbb ZG$.
+\end{definition}
+
+\begin{definition}\label{c4-def-4-2}
+设 $(G,\cdot)$ 是一个群. 一个 $G$-\emph{模}是指配有映射 $G\times M\to M:(g,m)\mapsto g\cdot m$ 的阿贝尔群 $(M,+)$，且对 $m,n\in M$ 与 $g_1,g_2,g\in G$ 满足：
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item $(g_1g_2)\cdot(m)=g_1\cdot(g_2\cdot m)$；
+    \item $g\cdot(m+n)=g\cdot m+g\cdot n$；
+    \item $1_G\cdot m=m$.
+\end{enumerate}
+\end{definition}
+
+\begin{remark}\label{c4-rem-4-3}
+若 $M$ 是一个 $G$-模，则按
+\[
+\Bigl(\sum_{\substack{g\in G\\ \text{finite}}}n_gg\Bigr)\cdot m=\sum_{\substack{g\in G\\ \text{finite}}}n_g(g\cdot m)
+\]
+定义作用后，$M$ 成为一个 $\mathbb ZG$-模. 反之，若 $M$ 是一个 $\mathbb ZG$-模，则按 $g\cdot m=(1g)\cdot m$ 定义作用后，$M$ 成为一个 $G$-模.
+\end{remark}
+
+\begin{definition}\label{c4-def-4-4}
+设 $G$ 是一个群. 称 $G$-模 $M$ 是\emph{平凡的}，若 $G$ 的每个元素在 $M$ 上的作用都是恒等映射，即 $g\cdot m=m$.
+\end{definition}
+
+\begin{definition}\label{c4-def-4-5}
+设 $G$ 是一个群，$M$ 是一个 $G$-模. 把整数 $\mathbb Z$ 视为平凡 $G$-模，并定义 $G$ 以 $M$ 为系数的第 $n$ 个上同调群为\footnote{原文公式中写作 $H^n(G, N):=\operatorname{Ext}^n_{\mathbb ZG}(\mathbb Z, N)$，按上下文 $N$ 应为 $M$.}
+\[
+H^n(G, N):=\operatorname{Ext}^n_{\mathbb ZG}(\mathbb Z, N).
+\]
+\end{definition}
+
+\section{Shapiro 引理与诱导模}
+
+本节我们介绍 Shapiro 引理与\newterm{c4-induced-module}{诱导模}{induced module}. 它们在后面研究 Galois 群的上同调时将派上用场.\\
+设 $G$ 是一个群.
+
+\begin{definition}\label{c4-def-5-1}
+称 $\mathbb ZG$-模 $A$ 是 $G$-\emph{无循环的}（$G$-acyclic），若对一切 $n\geq 1$ 有 $H^n(G, A)=\{0\}$.
+\end{definition}
+
+\begin{definition}\label{c4-def-5-2}
+群同态 $f:G'\to G$ 诱导出环同态 $\mathbb ZG'\to\mathbb ZG$，仍记作 $f$，确切地说，$f:\sum n_{g'}g'\mapsto\sum n_{g'}f(g')$. 设 $A$ 是一个 $\mathbb ZG$-模，它可以被视为 $\mathbb ZG'$-模：若 $g'\in G'$ 且 $a\in A$，则 $g'a=f(g')a$. 把视为 $G'$-模的 $G$-模 $A$ 记作 $UA$，并称
+\[
+U_f:\mathscr{M}_{\mathbb ZG}\to\mathscr{M}_{\mathbb ZG'}
+\]
+为一个\emph{换群函子}.
+\end{definition}
+
+\begin{lemma}\label{c4-lem-5-1}
+设 $f:G'\to G$ 是群同态，$U_f:\mathscr{M}_{\mathbb ZG}\to\mathscr{M}_{\mathbb ZG'}$ 是相应的换群函子.
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item 若 $\mathbf P$ 是一个 $G$-循环复形，则 $\mathbf{UP}$ 是一个 $G'$-循环复形.
+    \item 设 $H\subseteq G$，$f:H\to G$ 为包含同态. 若 $\mathbf P$ 是投射 $G$-模，则 $UP$ 是投射 $H$-模. 此外，若 $\mathbf P$ 是 $\mathbb ZG$-模 $A$ 在 $\mathbb ZG$ 上的一个投射分解，则 $U\mathbf P$ 是 $UA$ 在 $\mathbb ZS$-上的一个投射分解\footnote{原文此处即止于 ``$\mathbb ZS$-''，按上下文应为 $\mathbb ZH$.}.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item 由 \cite[Proposition~8.3, \S8.2]{rot09}，我们知道 $U:\mathscr{M}_{\mathbb ZG}\to\mathscr{M}_{\mathbb ZG'}$ 是一个正合可加函子. 于是 $\mathbf{UP}$ 是一个复形，此外 $H^n(G', A)=\{0\}$.
+    \item 取 $R$ 为这样一个集合：它含有 $G/H$ 的每个陪集中的（且仅一个）元素. 于是 $G$ 是不交并 $\bigcup_{r\in R}rH$. 这意味着对每个 $g\in G$，存在唯一的 $r\in R$ 与 $h\in H$ 使得 $g=rh$. 从而我们可以写成 $\mathbb ZG=\bigoplus_{r\in R}r(\mathbb ZH)$（作为 $\mathbb ZS$-模的直和），故 $\mathbb ZG$ 是一个自由 $\mathbb ZH$-模.
+
+设 $P$ 是一个投射 $\mathbb ZG$-模. 这等价于存在 $\mathbb ZG$-模 $M$ 使得 $P\oplus M$ 是自由的. 于是 $UP$ 是一个投射 $\mathbb ZH$-模.
+
+第二条断言由 (1) 推出.
+\end{enumerate}
+\end{proof}
+
+\begin{remark}\label{c4-rem-5-3}
+设 $H$ 是 $G$ 的子群，$A$ 是一个 $\mathbb ZH$-模. 则 $\operatorname{Hom}_{\mathbb ZH}(\mathbb ZG, A)$ 赋予如下作用后是一个 $\mathbb ZG$-模：
+\[
+gf:\mathbb ZG\to A:x\mapsto gf(g^{-1}x),
+\]
+对一切 $g\in G$ 与一切 $f:\mathbb ZG\to A$ 成立. 我们特别考虑 $H=\{1\}$ 的情形（此时 $\mathbb ZH=\mathbb Z$）.
+\end{remark}
+
+其次，我们介绍 Eckman-Shapiro 引理（即通常所称的 Shapiro 引理）.
+
+\begin{theorem}\label{c4-thm-5-2}
+设 $G$ 是一个群，$H$ 是子群，$A$ 是一个 $\mathbb ZH$-模. 则
+\[
+H^n(H, A)\cong H^n\bigl(G, \operatorname{Hom}_{\mathbb ZH}(\mathbb ZG, A)\bigr)
+\]
+对一切 $n\geq 0$ 成立.
+\end{theorem}
+
+在本证明中，我们要用到张量积的概念，记作 $\otimes$. 关于它的更多信息，参见 \cite[\S2.2]{rot09}.
+
+\begin{proof}
+记 $U:\mathscr{M}_{\mathbb ZG}\to\mathscr{M}_{\mathbb ZH}$ 为换群函子. 设 $\mathbf P=\ldots\to P_1\to P_0\to\mathbb Z\to 0$ 是 $\mathbb Z$ 在 $\mathbb ZG$ 上的一个自由分解，则
+\[
+H^n\bigl(G, \operatorname{Hom}_{\mathbb ZH}(\mathbb ZG, A)\bigr)=H^n\bigl(\operatorname{Hom}_{\mathbb ZG}(\mathbf P, \operatorname{Hom}_{\mathbb ZG}(\mathbb ZG, A))\bigr),
+\]
+因为这正是上同调群的定义. 利用张量积与函子 Hom 之间的伴随关系（确切地说，参见 \cite[Theorem~2.75, \S2.2]{rot09}），我们有
+\[
+\operatorname{Hom}_{\mathbb ZG}\bigl(P_i, \operatorname{Hom}_{\mathbb ZH}(\mathbb ZG, A)\bigr)\cong\operatorname{Hom}_{\mathbb ZH}\bigl(P_i\bigotimes_{\mathbb ZG}\mathbb ZG, A\bigr).
+\]
+其次，利用张量积的一条性质（见 \cite[Proposition~2.58, \S2.2]{rot09}），有 $P_i\otimes_{\mathbb ZG}\cong P_i$\footnote{原文即如此；按上下文应为 $P_i\otimes_{\mathbb ZG}\mathbb ZG\cong P_i$.}，并用事实 $UP_i\cong P_i$. 于是对一切 $i$，我们得到
+\[
+\operatorname{Hom}_{\mathbb ZG}\bigl(P_i, \operatorname{Hom}_{\mathbb ZH}(\mathbb ZG, A)\bigr)\cong\operatorname{Hom}_{\mathbb ZH}(UP_i, A).
+\]
+由 \autoref{c4-lem-5-1}(2)，$U\mathbf P$ 是 $\mathbb Z$ 在 $\mathbb ZH$ 上的一个投射分解，从而
+\[
+H^n(H, A)\cong H^n(\operatorname{Hom}_{\mathbb ZH}(U\mathbf P, A),
+\]
+参见 \autoref{c4-thm-3-4}. 此外，存在复形的同构
+\begin{equation}\label{c4-eq-1}
+\operatorname{Hom}_{\mathbb ZH}(U\mathbf P, A)\cong\operatorname{Hom}_{\mathbb ZG}\bigl(\mathbf P, \operatorname{Hom}_{\mathbb ZH}(\mathbb ZG, A)\bigr).
+\end{equation}
+总之，由 \eqref{c4-eq-1} 我们得到同构
+\[
+H^n(H, A)\cong H^n\bigl(G, \operatorname{Hom}_{\mathbb ZH}(\mathbb ZG, A)\bigr).
+\]
+\end{proof}
+
+\begin{definition}\label{c4-def-5-4}
+设 $G$ 是一个群，$A$ 是一个阿贝尔群. 我们定义\emph{余诱导模}为 $\mathbb ZG$-模 $\operatorname{Hom}_{\mathbb Z}(\mathbb ZG, A)$.
+\end{definition}
+
+\begin{remark}\label{c4-rem-5-5}
+上述构造与 \autoref{c4-rem-5-3} 中取 $H=\{1\}$ 的构造相同，这里注意到每个阿贝尔群都可以视为带平凡作用的 $\mathbb Z$-模.
+\end{remark}
+
+\begin{proposition}\label{c4-prop-5-3}
+每个余诱导 $\mathbb ZG$-模 $A$ 都是 $G$-循环的：$H^n(G, A)=\{0\}$ 对一切 $n\geq 1$ 成立.
+\end{proposition}
+
+\begin{proof}
+考虑子群 $H=\{1\}$ 并应用 \autoref{c4-thm-5-2}，则
+\[
+H^n\bigl(G, \operatorname{Hom}_{\mathbb Z}(\mathbb ZG, A)\bigr)\cong H^n(H, A).
+\]
+但该上同调群是平凡的（见 \cite[Corollary~9.28, \S9.2]{rot09}）.
+\end{proof}

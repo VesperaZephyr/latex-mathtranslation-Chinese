@@ -1,0 +1,828 @@
+\chapter{复数域上的椭圆曲线}\label{ch:3}
+
+\begin{quote}\small\itshape
+基域为 $\mathbb{C}$ 的情形正是经典的椭圆函数理论，这一理论可见于任何一本足够传统的分析学教科书.
+\end{quote}
+\vspace{-0.5em}
+\hfill \small \cite{cassels1966}.
+
+当基域为复数域时, 椭圆曲线的理论大为简化.
+
+\section{格与基}\label{sec:3.1}
+
+$\mathbb{C}$ 中的格 (lattice)\index{ge@格(lattice)} 是由两个在 $\mathbb{R}$ 上线性无关的复数生成的子群. 故
+\[
+\Lambda = \mathbb{Z}\omega_1 + \mathbb{Z}\omega_2, \qquad \text{某些 } \omega_1, \omega_2\in\mathbb{C},
+\]
+且因 $\omega_1$ 与 $\omega_2$ 互不为实倍数, 可把它们排序使 $\Im(\omega_1/\omega_2) > 0$. 若 $\{\omega_1', \omega_2'\}$ 是 $\Lambda$ 的第二对元素, 则
+\[
+\omega_1' = a\omega_1 + b\omega_2, \qquad \omega_2' = c\omega_1 + d\omega_2, \qquad \text{某些 } a, b, c, d\in\mathbb{Z},
+\]
+即
+\[
+\begin{pmatrix}\omega_1'\\ \omega_2'\end{pmatrix} = A\begin{pmatrix}\omega_1\\ \omega_2\end{pmatrix},
+\]
+其中 $A$ 是整系数 $2\times 2$ 矩阵. 序对 $(\omega_1', \omega_2')$ 是 $\Lambda$ 的 $\mathbb{Z}$-基当且仅当 $A$ 可逆, 从而行列式为 $\pm 1$. 令 $z = \omega_1/\omega_2$, $z' = \omega_1'/\omega_2'$, 则
+\[
+\Im(z') = \Im\Bigl(\frac{az+b}{cz+d}\Bigr) = \frac{\Im(adz + bc\bar{z})}{|cz+d|^2} = \frac{(ad-bc)\Im(z)}{|cz+d|^2},
+\]
+故 $\Im(\omega_1'/\omega_2') > 0$ 当且仅当 $\det A > 0$. 因此, 整系数行列式为 $1$ 的矩阵群 $\mathrm{SL}_2(\mathbb{Z})$ 传递地作用在 $\Lambda$ 的满足 $\Im(\omega_1/\omega_2) > 0$ 的基集上. 我们证明了以下陈述.
+
+\begin{proposition} \label{thm:3.1.1} 
+设 $M$ 为满足 $\Im(\omega_1/\omega_2) > 0$ 的复数对 $(\omega_1, \omega_2)$ 的集合, $L$ 为 $\mathbb{C}$ 中格的集合. 则映射 $(\omega_1, \omega_2)\mapsto\mathbb{Z}\omega_1 + \mathbb{Z}\omega_2$ 诱导双射
+\begin{equation} \label{eq:19}
+\mathrm{SL}_2(\mathbb{Z})\setminus M \to L.
+\tag{19}
+\end{equation}
+\end{proposition}
+
+这里 $\mathrm{SL}_2(\mathbb{Z})\setminus M$ 表示 $M$ 在如下作用下的轨道集:
+\[
+\begin{pmatrix}a & b\\ c & d\end{pmatrix}\begin{pmatrix}\omega_1\\ \omega_2\end{pmatrix} = \begin{pmatrix}a\omega_1 + b\omega_2\\ c\omega_1 + d\omega_2\end{pmatrix}.
+\]
+
+设 $\mathbb{H}$ 为复上半平面:
+\[
+\mathbb{H} = \{z\in\mathbb{C} \mid \Im(z) > 0\}.
+\]
+令 $z\in\mathbb{C}^{\times}$ 按规则 $z(\omega_1, \omega_2) = (z\omega_1, z\omega_2)$ 作用在 $M$ 上, 按规则 $z\Lambda = \{z\lambda \mid \lambda\in\Lambda\}$ 作用在 $L$ 上. 映射 $(\omega_1, \omega_2)\mapsto\omega_1/\omega_2$ 诱导双射
+\begin{equation} \label{eq:20}
+M/\mathbb{C}^{\times}\to\mathbb{H}.
+\tag{20}
+\end{equation}
+$\mathrm{SL}_2(\mathbb{Z})$ 在 $M$ 上的作用对应于它在 $\mathbb{H}$ 上的作用
+\[
+\begin{pmatrix}a & b\\ c & d\end{pmatrix}\tau = \frac{a\tau + b}{c\tau + d}.
+\]
+合并 \eqref{eq:19} 与 \eqref{eq:20}, 得双射
+\[
+\begin{array}{ccccc}
+L/\mathbb{C}^{\times} & & \mathrm{SL}_2(\mathbb{Z})\setminus M/\mathbb{C}^{\times} & & \mathrm{SL}_2(\mathbb{Z})\setminus\mathbb{H}\\
+(\mathbb{Z}\omega_1 + \mathbb{Z}\omega_2)\mathbb{C}^{\times} & \longleftrightarrow & \mathrm{SL}_2(\mathbb{Z})\cdot(\omega_1, \omega_2)\mathbb{C}^{\times} & \longleftrightarrow & \mathrm{SL}_2(\mathbb{Z})\cdot\frac{\omega_1}{\omega_2}.
+\end{array}
+\]
+
+对具有基 $\{\omega_1, \omega_2\}$ 的格 $\Lambda$, 以 $z_0$, $z_0+\omega_1$, $z_0+\omega_2$, $z_0+\omega_1+\omega_2$ 为顶点的任何平行四边形的内部称为 $\Lambda$ 的基本区域 (fundamental domain)\index{jibenyu@基本域(fundamental domain)} 或周期平行四边形 (period parallelogram).\index{zhouqipingxingsibianxing@周期平行四边形(period parallelogram)} 通常选取 $z_0$ 使该区域包含 $0$.
+
+\section{双周期函数}\label{sec:3.2}
+
+设 $\Lambda$ 为 $\mathbb{C}$ 中的格. 给出 $\mathbb{C}/\Lambda$ 上的函数等价于给出 $\mathbb{C}$ 上满足
+\begin{equation} \label{eq:21}
+f(z+\lambda) = f(z) \qquad (\text{作为 } \mathbb{C} \text{ 上的函数})
+\tag{21}
+\end{equation}
+(对所有 $\lambda\in\Lambda$) 的函数 $f$. 若 $\{\omega_1, \omega_2\}$ 是 $\Lambda$ 的基, 则此条件等价于
+\[
+\begin{cases}
+f(z+\omega_1) = f(z)\\
+f(z+\omega_2) = f(z).
+\end{cases}
+\]
+为此, 满足 \eqref{eq:21} 的函数称为双周期的 (doubly periodic).\index{hanshu@函数(function)!shuangzhouqi@双周期(doubly periodic)} 本节研究 $\mathbb{C}$ 上对格 $\Lambda$ 双周期亚纯的函数, 下节把这些函数解释为商 Riemann 曲面 $\mathbb{C}/\Lambda$ 上的亚纯函数\index{hanshu@函数(function)!yachun@亚纯(meromorphic)}.
+
+\begin{proposition} \label{thm:3.2.1} 
+设 $f(z)$ 为对 $\Lambda$ 双周期、不恒为零的亚纯函数, $D$ 为 $\Lambda$ 的基本域, 且 $f$ 在 $D$ 的边界上无零点或极点. 则
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $\sum\limits_{P\in D}\operatorname{Res}_P(f) = 0$;
+\item $\sum\limits_{P\in D}\operatorname{ord}_P(f) = 0$;
+\item $\sum\limits_{P\in D}\operatorname{ord}_P(f)\cdot P\equiv 0 \pmod{\Lambda}$.
+\end{enumerate}
+第一个和遍历 $D$ 中 $f$ 有极点的点, 其他和遍历 $f$ 有零点或极点的点 ($\operatorname{ord}_P(f)$ 是零点的阶或极点的负阶). 每个和都有限.
+\end{proposition}
+
+\begin{proof}
+由留数定理 (\cite[III, 5.2]{cartan1963}),
+\[
+\int_{\partial D} f(z)\,dz = 2\pi i\sum\limits_{P\in D}\operatorname{Res}_P(f),
+\]
+其中 $\partial D$ 是 $D$ 的边界. 因 $f$ 周期, $D$ 对边的积分抵消, 故积分为零. 这给出 (a). 对 (b), 把留数定理应用于 $f'/f$, 注意它仍双周期且 $\operatorname{Res}_P(f'/f) = \operatorname{ord}_P(f)$. 对 (c), 把留数定理应用于 $z\cdot f'(z)/f(z)$. 它不再双周期, 但它绕 $\partial D$ 的积分属于 $\Lambda$.
+\end{proof}
+
+\begin{corollary} \label{thm:3.2.2} 
+非常数的双周期亚纯函数至少有两个极点 (或一个二重极点).
+\end{corollary}
+
+\begin{proof}
+全纯的双周期函数在任何基本域的闭包上有界 (由紧致性), 从而在整个平面上有界 (由周期性). 由 Liouville 定理 (\cite[III, 1.2]{cartan1963}), 它是常数. 双周期亚纯函数不可能在周期平行四边形中只有一个单极点, 因为由命题的 (a), 该极点处的留数必须为零, 从而该极点不是单极点.
+\end{proof}
+
+\subsection*{Weierstrass $\wp$ 函数}
+
+设 $\Lambda$ 为 $\mathbb{C}$ 中的格. 把 Riemann--Roch 定理应用于商 $\mathbb{C}/\Lambda$ 可证明 $\Lambda$ 的非常数双周期亚纯函数的存在性, 但这里我们显式地构造它们. 当 $G$ 是作用在集合 $S$ 上的有限群时, 构造在 $G$ 作用下不变的函数很容易: 取任意函数 $f\colon S\to\mathbb{C}$, 定义
+\[
+F(s) = \sum\limits_{g\in G} f(gs);
+\]
+则 $F(g_0s) = \sum\limits_{g\in G} f(g_0gs) = F(s)$, 因为当 $g$ 遍历 $G$ 时 $g_0g$ 也遍历 $G$; 故 $F$ 不变, 且 (显然) 所有不变函数都有此形式. 当 $G$ 不有限时, 必须验证级数收敛——事实上, 为使结果与求和次序无关, 需要 (至少) 绝对收敛.
+
+设 $D$ 为 $\mathbb{C}$ 的开子集, $f_0, f_1, \dots$ 为 $D$ 上的全纯函数序列. 回忆 (\cite[I, 2]{cartan1963}) 级数 $\sum\limits_n f_n$ 称为在 $D$ 的子集 $A$ 上正规收敛\index{zhengguishoulian@正规收敛(converge normally)} (normally convergent), 若正项级数 $\sum\limits_n\|f_n\|$ 收敛, 其中 $\|f_n\| = \sup_{z\in A}|f_n(z)|$. 级数 $\sum\limits_n f_n$ 于是 在 $A$ 上一致且绝对收敛. 当 $f_0, f_1, \dots$ 是亚纯函数序列时, 称级数在 $A$ 上正规收敛, 若去掉有限多个项 $f_n$ 后变成全纯函数的正规收敛级数 (\cite[V, 2]{cartan1963}). 若亚纯函数级数 $\sum\limits_n f_n$ 在 $D$ 的紧子集上正规收敛, 则其和 $f$ 是 $D$ 上的亚纯函数; 且导数级数在 $D$ 的紧子集上正规收敛, 其和是 $f$ 的导数 (\cite[V, 2]{cartan1963}).
+
+现在设 $\varphi(z)$ 为 $\mathbb{C}$ 上的亚纯函数, 令
+\[
+\Phi(z) = \sum\limits_{\omega\in\Lambda}\varphi(z+\omega).
+\]
+假设当 $|z|\to\infty$ 时 $\varphi(z)\to 0$ 足够快, 使 $\Phi(z)$ 的级数在紧子集上正规收敛. 则 $\Phi(z)$ 关于 $\Lambda$ 双周期, 因为把 $z$ 换成 $z+\omega_0$ ($\omega_0\in\Lambda$) 只是重排求和中的项.
+
+为证明我们感兴趣函数的正规收敛, 需要下面的结果.
+
+\begin{lemma} \label{thm:3.2.3} 
+对 $\mathbb{C}$ 中每个格 $\Lambda$, 级数 $\sum\limits_{\omega\in\Lambda, \omega\neq 0}1/|\omega|^3$ 收敛.
+\end{lemma}
+
+\begin{proof}
+设 $\omega_1, \omega_2$ 为 $\Lambda$ 的基, 对每个整数 $n\ge 1$, 考虑平行四边形
+\[
+P(n) = \{a_1\omega_1 + a_2\omega_2 \mid a_1, a_2\in\mathbb{R}, \max(|a_1|, |a_2|) = n\}.
+\]
+$P(n)$ 上有 $8n$ 个 $\Lambda$ 的点, 且 $0$ 与其中任一点的距离至少为 $kn$, 其中 $k$ 是 $0$ 到 $P(1)\cap\Lambda$ 中点的最短距离. 因此, $P(n)$ 上的点对求和的贡献以 $8n/k^3n^3$ 为界, 故
+\[
+\sum\limits_{\omega\in\Lambda, \omega\neq 0}\frac{1}{|\omega|^3}\le\frac{8}{k^3}\sum\limits_n\frac{1}{n^2} < \infty.
+\]
+\end{proof}
+
+由~\ref{thm:3.2.2} 我们知道, 最简单的非常数双周期亚纯函数是在 $\Lambda$ 的每一点有二重极点且无其他极点的函数. 设 $f(z)$ 是这样的函数. 则 $f(z) - f(-z)$ 双周期, 除在 $\Lambda$ 的点处可能有单极点外无其他极点. 故它必为常数, 且因它是奇函数必为零. 于是 $f(z)$ 偶, 且可通过归一化条件使唯一:
+\[
+f(z) = z^{-2} + 0 + z^2g(z),
+\]
+其中 $g(z)$ 在 $z = 0$ 附近全纯. 存在这样的函数, 即 Weierstrass 函数 $\wp(z)$, 但不能直接用本小节开头的方法从 $1/z^2$ 定义它, 因为 $\sum\limits_{\omega\in\Lambda}1/(z+\omega)^2$ 不正规收敛. 取而代之, 我们定义
+\begin{align*}
+\wp(z) &= \frac{1}{z^2} + \sum\limits_{\omega\in\Lambda, \omega\neq 0}\Bigl(\frac{1}{(z-\omega)^2} - \frac{1}{\omega^2}\Bigr),\\
+\wp'(z) &= \sum\limits_{\omega\in\Lambda}\frac{-2}{(z-\omega)^3}.
+\end{align*}
+
+\begin{proposition} \label{thm:3.2.4} 
+上述两级数在 $\mathbb{C}$ 的紧子集上正规收敛, 且其和 $\wp$ 与 $\wp'$ 是 $\mathbb{C}$ 上的双周期亚纯函数, 且 $\wp' = \frac{d\wp}{dz}$.
+\end{proposition}
+
+\begin{proof}
+注意 $\wp'(z) = \sum\limits_{\omega\in\Lambda}\varphi(z+\omega)$, 其中 $\varphi(z) = \frac{-2}{z^3} = \frac{d}{dz}\bigl(\frac{1}{z^2}\bigr)$, 而级数 $\sum\limits_{\omega\in\Lambda}\varphi(z+\omega)$ 通过与 $\sum 1/|\omega|^3$ 比较在任何紧圆盘 $|z|\le r$ 上正规收敛. 因此由上面的说明, $\wp'(z)$ 是 $\mathbb{C}$ 上的双周期亚纯函数.
+
+对 $|z|\le r$, 除有限多个满足 $|\omega|\le 2r$ 的 $\omega$ 外, 有
+\[
+\Bigl|\frac{1}{(z-\omega)^2} - \frac{1}{\omega^2}\Bigr|
+= \Bigl|\frac{-z^2 + 2\omega z}{\omega^2(z-\omega)^2}\Bigr|
+= \frac{|z|\,|2 - \frac{z}{\omega}|}{|\omega|^3\,|1 - \frac{z}{\omega}|^2}
+\le \frac{r\cdot\frac{5}{2}}{|\omega|^3\cdot\frac{1}{4}} = \frac{10r}{|\omega|^3},
+\]
+故 $\wp(z)$ 也在紧圆盘 $|z|\le r$ 上正规收敛. 因其导数双周期, $\wp(z)$ 也双周期.
+\end{proof}
+
+\subsection*{Eisenstein 级数}
+
+设 $\Lambda$ 为 $\mathbb{C}$ 中的格, 考虑和
+\[
+\sum\limits_{\omega\in\Lambda, \omega\neq 0}\frac{1}{\omega^n}.
+\]
+映射 $\omega\mapsto-\omega\colon\Lambda\to\Lambda$ 的阶为 $2$, 其唯一不动点是 $0$. 故 $\Lambda\setminus\{0\}$ 是其轨道的无交并, 由此推出 $n$ 为奇数时该和为零. 我们写
+\[
+G_{2k}(\Lambda) = \sum\limits_{\omega\in\Lambda, \omega\neq 0}\frac{1}{\omega^{2k}},
+\]
+并令 $G_{2k}(z) = G_{2k}(\mathbb{Z}z + \mathbb{Z})$, $z\in\mathbb{H}$. 注意对 $c\in\mathbb{C}^{\times}$ 有
+\[
+G_{2k}(c\Lambda) = c^{-2k}G_{2k}(\Lambda),
+\]
+故 $G_{2k}(\mathbb{Z}\omega_1 + \mathbb{Z}\omega_2) = \omega_2^{-2k}G_{2k}(\mathbb{Z}\frac{\omega_1}{\omega_2} + \mathbb{Z})$.
+
+\begin{proposition} \label{thm:3.2.5} 
+对所有整数 $k\ge 2$, $G_{2k}(z)$ 收敛到 $\mathbb{H}$ 上的全纯函数.
+\end{proposition}
+
+\begin{proof}
+设
+\[
+D = \{z\in\mathbb{C} \mid |z|\ge 1, \ |\Re(z)|\le 1/2\}.
+\]
+对 $z\in D$,
+\[
+|mz + n|^2 = m^2z\bar{z} + 2mn\Re(z) + n^2\ge m^2 - mn + n^2 = |m\rho - n|^2,
+\]
+其中 $\rho = e^{2\pi i/3}$. 因此, 引理 \ref{thm:3.2.3} 表明对 $k\ge 2$, $G_{2k}(z)$ 在 $D$ 上正规收敛. 对所有 $A\in\mathrm{SL}_2(\mathbb{Z})$, $G_{2k}(A^{-1}z)$ 也在 $D$ 上正规收敛, 这表明 $G_{2k}(z)$ 在 $AD$ 上正规收敛. 在 V\ref{thm:5.1.3} 中我们将看到集合 $AD$ 覆盖 $\mathbb{H}$, 故这表明 $G_{2k}(z)$ 在整个 $\mathbb{H}$ 上全纯.
+\end{proof}
+
+函数 $G_{2k}(\Lambda)$ 与 $G_{2k}(z)$ 称为 Eisenstein 级数.\index{Eisenstein@Eisenstein 级数(Eisenstein series)}
+
+\subsection*{双周期亚纯函数的域}
+
+固定 $\mathbb{C}$ 中的格 $\Lambda$, 令 $\wp(z)$ 为 $\Lambda$ 的 Weierstrass $\wp$ 函数. 对 $\Lambda$ 双周期的函数构成 $\mathbb{C}$ 上亚纯函数域 $M(\mathbb{C})$ 的子域, 我们现在确定它.
+
+\begin{proposition} \label{thm:3.2.6} 
+$\wp$ 与 $\wp'$ 之间有关系
+\[
+\wp'(z)^2 = 4\wp(z)^3 - g_4\wp(z) - g_6,
+\]
+其中 $g_4 = 60G_4(\Lambda)$, $g_6 = 140G_6(\Lambda)$.
+\end{proposition}
+
+\begin{proof}
+计算 $\wp(z)$ 在 $0$ 附近的 Laurent 展开. 回忆对 $|t| < 1$,
+\[
+\frac{1}{1-t} = 1 + t + t^2 + \cdots.
+\]
+求导, 得
+\[
+\frac{1}{(1-t)^2} = \sum\limits_{n\ge 1}nt^{n-1} = \sum\limits_{n\ge 0}(n+1)t^n.
+\]
+故对 $|z| < |\omega|$,
+\[
+\frac{1}{(z-\omega)^2} - \frac{1}{\omega^2} = \frac{1}{\omega^2}\Bigl(\frac{1}{(1-\frac{z}{\omega})^2} - 1\Bigr) = \sum\limits_{n\ge 1}(n+1)\frac{z^n}{\omega^{n+2}}.
+\]
+代入 $\wp(z)$ 的定义并交换求和次序, 对 $|z| < |\omega|$ 有
+\begin{align*}
+\wp(z) &= \frac{1}{z^2} + \sum\limits_{n\ge 1}\sum\limits_{\omega\neq 0}(n+1)\frac{z^n}{\omega^{n+2}}
+= \frac{1}{z^2} + \sum\limits_{k\ge 1}(2k+1)G_{2k+2}(\Lambda)z^{2k}\\
+&= \frac{1}{z^2} + 3G_4z^2 + 5G_6z^4 + \cdots.
+\end{align*}
+因此
+\[
+\wp'(z) = -\frac{2}{z^3} + 6G_4z + 20G_6z^3 + \cdots.
+\]
+这些表达式包含足够的项, 足以说明
+\[
+\wp'(z)^2 - 4\wp(z)^3 + 60G_4(\Lambda)\wp(z) + 140G_6(\Lambda)
+\]
+的 Laurent 展开中没有 $n\le 0$ 的非零 $z^n$ 项. 故该函数在 $0$ 处全纯且取值为 $0$. 由于它双周期且在含 $0$ 的适当基本域中无极点, 我们看到它是常数, 事实上为零.
+\end{proof}
+
+\begin{proposition} \label{thm:3.2.7} 
+双周期亚纯函数的域是 $M(\mathbb{C})$ 中由 $\wp$ 与 $\wp'$ 生成的子域 $\mathbb{C}(\wp, \wp')$, 即每个双周期亚纯函数都可表示为 $\wp$ 与 $\wp'$ 的有理函数.
+\end{proposition}
+
+\begin{proof}
+先证每个偶双周期亚纯函数 $f$ 属于 $\mathbb{C}(\wp)$.
+
+观察, 因 $f(z) = f(-z)$, $f$ 的 $k$ 阶导数满足 $f^{(k)}(z) = (-1)^k f^{(k)}(-z)$. 因此, 若 $f$ 在 $z_0$ 处有 $m$ 阶零点, 则它在 $-z_0$ 处有 $m$ 阶零点. 把此说明应用于 $1/f$, 得到``零点''换成``极点''的相同陈述.
+
+类似地, 因 $f^{(2k+1)}(z_0) = -f^{(2k+1)}(-z_0)$, 若 $z_0\equiv-z_0\pmod{\Lambda}$, 则 $f$ 在 $z_0$ 处零点 (或极点) 的阶是偶数.
+
+{\emergencystretch=3em 选 $f$ 在 $\Lambda$ 之外 (且不在 $\Lambda$ 中) 的零点与极点的模 $\Lambda$ 代表元集, 编号为 $z_1, \dots, z_m$, $-z_1, \dots, -z_m$, $z_{m+1}, \dots, z_n$, 使 (模 $\Lambda$)\par}
+\[
+z_i\not\equiv -z_i \ (1\le i\le m), \qquad z_i\equiv -z_i\not\equiv 0 \ (m < i\le n).
+\]
+令 $m_i$ 为 $f$ 在 $z_i$ 处的阶; 由第二个观察, 对 $i > m$, $m_i$ 偶. 现在 $\wp(z) - \wp(z_i)$ 也是偶双周期函数. 由于它在基本域中恰有两个极点, 它必在其中恰有两个零点. 当 $i\le m$ 时, 它在 $\pm z_i$ 处有单零点; 当 $i > m$ 时, 它在 $z_i$ 处有二重零点 (由第二个观察). 定义
+\[
+g(z) = \prod_{i=1}^{m}\bigl(\wp(z) - \wp(z_i)\bigr)^{m_i}\cdot\prod_{i=m+1}^{n}\bigl(\wp(z) - \wp(z_i)\bigr)^{m_i/2}.
+\]
+则 $f(z)$ 与 $g(z)$ 在不在 $\Lambda$ 上的点处有完全相同的零点与极点. 由~\ref{thm:3.2.1}b, 它们在 $z = 0$ 处也有相同的阶, 故 $f/g$ 全纯且双周期, 从而是常数: $f = cg\in\mathbb{C}(\wp)$.
+
+现在考虑任意双周期亚纯函数 $f$. 可把 $f$ 写成偶与奇双周期函数之和:
+\[
+f(z) = \frac{f(z) + f(-z)}{2} + \frac{f(z) - f(-z)}{2}.
+\]
+我们知道偶双周期亚纯函数属于 $\mathbb{C}(\wp)$, 而显然奇双周期亚纯函数属于 $\wp'\cdot\mathbb{C}(\wp)$.
+\end{proof}
+
+令
+\[
+\mathbb{C}[x, y] = \frac{\mathbb{C}[X, Y]}{(Y^2 - 4X^3 + g_4X + g_6)},
+\]
+{\emergencystretch=3em 并令 $\mathbb{C}[\wp, \wp']$ 为由 $\wp$ 与 $\wp'$ 生成的 $\mathbb{C}$ 上亚纯函数 $\mathbb{C}$-代数. 命题 \ref{thm:3.2.6} 表明映射 $(X, Y)\mapsto(\wp(z), \wp'(z))$ 定义同态\par}
+\[
+\mathbb{C}[x, y]\to\mathbb{C}[\wp, \wp'],
+\]
+我们将证明它是同构. 为此, 需证使 $g(\wp, \wp') = 0$ 的 $g(X, Y)\in\mathbb{C}[X, Y]$ 只有那些被 $f(X, Y) \overset{\text{def}}{=} Y^2 - 4X^3 + g_4X + g_6$ 整除的. 由结式理论 (I\ref{thm:1.1.24}), 对任何多项式 $g(X, Y)$, 存在多项式 $a(X, Y)$ 与 $b(X, Y)$ 使
+\[
+a(X, Y)f(X, Y) + b(X, Y)g(X, Y) = r(X)\in\mathbb{C}[X]
+\]
+且 $\deg_Y(b) < \deg_Y(f)$. 若 $g(\wp, \wp') = 0$, 则 $r(\wp) = 0$, 但容易看出 $\wp$ 在 $\mathbb{C}$ 上超越 (例如它有无穷多个极点). 故 $r = 0$, 从而 $f(X, Y)$ 整除 $b(X, Y)g(X, Y)$. 因 $f(X, Y)$ 不可约, 它必整除 $b(X, Y)$ 或 $g(X, Y)$. 由次数原因它不能整除 $b$, 故必整除 $g$.
+
+同构 $\mathbb{C}[x, y]\to\mathbb{C}[\wp, \wp']$ 在分式域上诱导同构
+\[
+\mathbb{C}(x, y)\to\mathbb{C}(\wp, \wp').
+\]
+故 $\mathbb{C}(x, y)$ 典范同构于 $\Lambda$ 的全部双周期亚纯函数的域.
+
+\section{作为 Riemann 曲面的椭圆曲线}\label{sec:3.3}
+
+\subsection*{Riemann 曲面的概念}
+
+设 $X$ 为连通 Hausdorff 拓扑空间, 具有可数开集基. $X$ 的坐标邻域 (coordinate neighbourhood)\index{zuobiaolinyu@坐标邻域(coordinate neighbourhood)} 是序对 $(U, z)$, 其中 $U\subset X$ 为开集, $z$ 把 $U$ 同胚地映到复平面 $\mathbb{C}$ 的开子集上. 两个坐标邻域 $(U_1, z_1)$ 与 $(U_2, z_2)$ 相容 (compatible), 若函数
+\[
+z_1\circ z_2^{-1}\colon z_2(U_1\cap U_2)\to z_1(U_1\cap U_2)
+\]
+及其逆全纯. 坐标邻域族 $(U_i, z_i)_{i\in I}$ 若满足 $X = \bigcup_i U_i$, 且对一切 $(i, j)\in I\times I$, $(U_i, z_i)$ 与 $(U_j, z_j)$ 相容, 则称为坐标覆盖\index{zuobiaofugai@坐标覆盖(coordinate covering)} (coordinate covering). 两个坐标覆盖称为等价的, 若它们的并也是坐标覆盖. 这在坐标覆盖集上定义了等价关系, 等价类称为 $X$ 上的复结构 (complex structure).\index{fujiegou@复结构(complex structure)} 配上复结构的空间 $X$ 称为 Riemann 曲面.\index{Riemann@Riemann 曲面(Riemann surface)}
+
+设 $X$ 为 Riemann 曲面. 开集 $U\subset X$ 上的函数 $f\colon U\to\mathbb{C}$ 称为全纯的 (holomorphic)\index{quanchunyingshe@全纯映射(holomorphic map)}, 若它满足: 对定义复结构的等价类中的一个 (从而每个) 坐标覆盖 $(U_i, z_i)_{i\in I}$, 对一切 $i\in I$, $f\circ z_i^{-1}\colon z_i(U\cap U_i)\to\mathbb{C}$ 全纯.
+
+从 Riemann 曲面 $X$ 到第二个 Riemann 曲面 $X'$ 的映射 $f\colon X\to X'$ 称为全纯的 (holomorphic), 若 $g\circ f$ 在 $X'$ 的开子集上的全纯函数 $g$ 是 (情形下) 全纯的. 为此, 只需对 $X$ 与 $X'$ 的某些坐标覆盖检验: 对 $X$ 中每一点 $P$, 存在 $P$ 的坐标邻域 $(U, z)$ 与 $f(P)$ 的坐标邻域 $(U', z')$ 使 $z'\circ f\circ z^{-1}\colon z(U)\to z'(U')$ 全纯. Riemann 曲面的同构 (isomorphism) 是双射全纯映射.
+
+回忆 $\mathbb{C}$ 的开子集 $U$ 上的亚纯函数 (meromorphic function) 是 $U\setminus\Sigma$ 上的全纯函数 $f$ (其中 $\Sigma\subset U$ 为某离散子集), 它在 $\Sigma$ 的每一点 $a$ 处至多有极点, 即存在 $m$ 使 $(z-a)^mf(z)$ 在 $a$ 的邻域内全纯. Riemann 曲面的开子集上的亚纯函数类似定义. 等价地, 它是从 Riemann 曲面到 Riemann 球面的全纯映射 (\cite[VI, 4.5]{cartan1963}).
+
+\begin{example} \label{thm:3.3.1} 
+$\mathbb{C}$ 的每个开子集 $U$ 都是 Riemann 曲面, 只需取单个坐标邻域, 即 $U$ 本身 (映射为恒等 $z$).
+\end{example}
+
+\begin{example} \label{thm:3.3.2} 
+考虑 $\mathbb{R}^3$ 中的单位球面
+\[
+S^2\colon X^2 + Y^2 + Z^2 = 1,
+\]
+设 $P$ 为北极 $(0, 0, 1)$. 从 $P$ 出发的球极投影 (stereographic projection) 是映射
+\[
+(x, y, z)\mapsto\frac{x + iy}{1 - z}\colon S^2\setminus\{P\}\to\mathbb{C}.
+\]
+取它为 $S^2$ 的坐标邻域. 从南极出发的球极投影给出第二个坐标邻域. 这两个坐标邻域在 $S^2$ 上定义了复结构, 配上此复结构的 $S^2$ 称为 Riemann 球面 (Riemann sphere).\index{Riemann@Riemann 球面(Riemann sphere)} 另一方面, $\mathbb{P}^1(\mathbb{C})$ 从坐标覆盖
+\begin{align*}
+\mathbb{P}^1(\mathbb{C}) &= U_0(\mathbb{C})\cup U_1(\mathbb{C}),\\
+U_0(\mathbb{C}) &\overset{\text{def}}{=} \{(x:y) \mid x\neq 0\}\cong\mathbb{C}, \qquad
+U_1(\mathbb{C}) \overset{\text{def}}{=} \{(x:y) \mid y\neq 0\}\cong\mathbb{C},
+\end{align*}
+\[
+(x:y)\mapsto y/x, \qquad (x:y)\mapsto x/y
+\]
+获得复结构. 映射 $(x, y, z)\mapsto(x:y:z)\colon S^2\to\mathbb{P}^1(\mathbb{C})$ 是 Riemann 曲面的同构.
+\end{example}
+
+\subsection*{Riemann 曲面上的微分形式}
+
+$\mathbb{C}$ 的开子集上的微分形式 (differential one-form) 只是表达式 $\omega = fdz$, 其中 $f$ 为亚纯函数. 给定光滑曲线
+\[
+t\mapsto z(t)\colon[a, b]\to\mathbb{C}, \qquad [a, b] = \{t\in\mathbb{R} \mid a\le t\le b\},
+\]
+可作积分
+\[
+\int_\gamma\omega = \int_a^b f(z(t))\cdot z'(t)\cdot dt\in\mathbb{C}.
+\]
+现在考虑紧 Riemann 曲面 $X$. 若 $\omega$ 是 $X$ 上的微分形式, $(U_i, z_i)$ 是 $X$ 的坐标邻域, 则 $\omega|_{U_i} = f_i(z_i)dz_i$. 若 $(U_j, z_j)$ 是第二个坐标邻域, 使在 $U_i\cap U_j$ 上 $z_j = w(z_i)$, 则在 $U_i\cap U_j$ 上
+\[
+f_i(z_i)dz_i = f_j(w(z_i))w'(z_i)dz_i.
+\]
+因此, 给出 $X$ 上的微分形式等价于给出每个 $U_i$ 上满足重叠处方程的微分形式 $f_idz_i$. 对任何 (实) 曲线 $\gamma\colon I\to X$ 与 $X$ 上的微分形式 $\omega$, 积分 $\int_\gamma\omega$ 有意义.
+
+若微分形式在坐标邻域上由全纯函数 $f$ 的形式 $fdz$ 表示, 则称为全纯的 (holomorphic).
+
+{\emergencystretch=3em 一个重要事实: 亏格 $g$ 的 Riemann 曲面上的全纯微分形式\index{quanchunweifengxingshi@全纯微分形式(holomorphic one-form)}构成维数为 $g$ 的复向量空间 $\Omega^1(X)$.\par}
+
+例如, Riemann 球面 $S$ 亏格为 $0$, 故它应无非零全纯微分形式. 注意 $dz$ 在 $\mathbb{C} = S\setminus\{\text{北极}\}$ 上全纯, 但 $z = 1/z'$ 在 $S\setminus\{\text{极点}\}$ 上, 故 $dz = -\frac{1}{z'^2}dz'$, 在北极处有极点. 因而 $dz$ 不能延拓为整个 $S$ 上的全纯微分形式.
+
+\subsection*{格对 $\mathbb{C}$ 的商}
+
+设 $\Lambda$ 为 $\mathbb{C}$ 中的格. 拓扑上商 $\mathbb{C}/\Lambda$ 同构于 $\mathbb{R}^2/\mathbb{Z}^2$, 它是单孔环面 (甜甜圈的表面). 记 $\pi\colon\mathbb{C}\to\mathbb{C}/\Lambda$ 为商映射. 则 $\mathbb{C}/\Lambda$ 有唯一的复结构使 $\pi$ 是 Riemann 曲面的局部同构. 可描述如下: 对所有 $P\in\mathbb{C}/\Lambda$ 与 $Q\in\pi^{-1}(P)$, 存在 $P$ 的开邻域 $U$ 与 $Q$ 的开邻域 $V$ 使 $\pi|_V\colon V\to U$ 是同胚; 坐标邻域 $(U, (\pi|_V)^{-1}\colon U\to V)$ 构成 $\mathbb{C}/\Lambda$ 的坐标覆盖, 从而定义 $\mathbb{C}/\Lambda$ 上的复结构. 相对于此结构, $\mathbb{C}/\Lambda$ 的开子集 $U$ 上的函数 $\varphi\colon U\to\mathbb{C}$ 全纯 (分别地亚纯), 当且仅当复合 $\varphi\circ\pi\colon\pi^{-1}(U)\to\mathbb{C}$ 按通常意义全纯 (分别地亚纯).
+
+我们将看到, 虽然任意两个商 $\mathbb{C}/\Lambda$, $\mathbb{C}/\Lambda'$ 同胚, 但它们作为 Riemann 曲面同构仅当 $\Lambda' = \alpha\Lambda$ 对某个 $\alpha\in\mathbb{C}^{\times}$.
+
+\subsection*{全纯映射 $\mathbb{C}/\Lambda\to\mathbb{C}/\Lambda'$}
+
+设 $\Lambda$ 与 $\Lambda'$ 为 $\mathbb{C}$ 中的格. 映射 $\pi\colon\mathbb{C}\to\mathbb{C}/\Lambda$ 把 $\mathbb{C}$ 实现为 $\mathbb{C}/\Lambda$ 的万有覆盖空间. 因 $\pi'\colon\mathbb{C}\to\mathbb{C}/\Lambda'$ 同理, 每个使 $\varphi(0) = 0$ 的连续映射 $\varphi\colon\mathbb{C}/\Lambda\to\mathbb{C}/\Lambda'$ 唯一提升为连续映射 $\tilde{\varphi}\colon\mathbb{C}\to\mathbb{C}$ 且 $\tilde{\varphi}(0) = 0$,
+\[\begin{tikzcd}
+	\CC & \CC \\
+	{\CC/\Lambda} & {\CC/\Lambda'}
+	\arrow["{\tilde\varphi}", dashed, from=1-1, to=1-2]
+	\arrow["\pi"', from=1-1, to=2-1]
+	\arrow["{\pi'}", from=1-2, to=2-2]
+	\arrow["\varphi", from=2-1, to=2-2]
+\end{tikzcd}\]
+因 $\pi$ 与 $\pi'$ 是 Riemann 曲面的局部同构, 映射 $\varphi$ 全纯当且仅当 $\tilde{\varphi}$ 全纯.
+
+\begin{proposition} \label{thm:3.3.3} 
+设 $\Lambda$ 与 $\Lambda'$ 为 $\mathbb{C}$ 中的格. 满足 $\alpha\Lambda\subset\Lambda'$ 的复数 $\alpha$ 定义了全纯映射
+\[
+[z]\mapsto[\alpha z]\colon\mathbb{C}/\Lambda\to\mathbb{C}/\Lambda'
+\]
+(把 $0$ 送到 $0$), 且每个把 $0$ 送到 $0$ 的全纯映射 $\mathbb{C}/\Lambda\to\mathbb{C}/\Lambda'$ 都有此形式 (对唯一的 $\alpha$).
+\end{proposition}
+
+\begin{proof}
+由上面的说明显然 $\alpha$ 定义全纯映射 $\mathbb{C}/\Lambda\to\mathbb{C}/\Lambda'$. 反之, 设 $\varphi\colon\mathbb{C}/\Lambda\to\mathbb{C}/\Lambda'$ 为全纯映射且 $\varphi(0) = 0$, $\tilde{\varphi}$ 为它到把 $0$ 送到 $0$ 的全纯映射 $\mathbb{C}\to\mathbb{C}$ 的唯一提升. 对每个 $\omega\in\Lambda$, 映射 $z\mapsto\tilde{\varphi}(z+\omega) - \tilde{\varphi}(z)$ 连续且取值于 $\Lambda'\subset\mathbb{C}$; 因 $\mathbb{C}$ 连通而 $\Lambda'$ 离散, 该映射必为常数, 故其导数为零:
+\[
+\tilde{\varphi}'(z+\omega) = \tilde{\varphi}'(z).
+\]
+因此 $\tilde{\varphi}'(z)$ 双周期. 因它全纯, 必为常数, 设 $\tilde{\varphi}'(z) = \alpha$ 对所有 $z$. 积分, 得 $\tilde{\varphi}(z) = \alpha z + \beta$, 且 $\beta = \tilde{\varphi}(0) = 0$.
+\end{proof}
+
+\begin{corollary} \label{thm:3.3.4} 
+Riemann 曲面 $\mathbb{C}/\Lambda$ 与 $\mathbb{C}/\Lambda'$ 同构当且仅当 $\Lambda' = \alpha\Lambda$ 对某个 $\alpha\in\mathbb{C}^{\times}$.
+\end{corollary}
+
+\begin{proof}
+若 $\mathbb{C}/\Lambda$ 与 $\mathbb{C}/\Lambda'$ 同构, 则每个同构 $\mathbb{C}/\Lambda\to\mathbb{C}/\Lambda'$ 对某个 $\alpha\in\mathbb{C}$ 有 $[z]\mapsto[\alpha z]$ 的形式, 故 $\Lambda' = \alpha\Lambda$. 反之, 若 $\Lambda' = \alpha\Lambda$, 则 $[z]\mapsto[\alpha z]$ 是同构 $\mathbb{C}/\Lambda\to\mathbb{C}/\Lambda'$.
+\end{proof}
+
+\begin{corollary} \label{thm:3.3.5} 
+每个把 $0$ 送到 $0$ 的全纯映射 $\mathbb{C}/\Lambda\to\mathbb{C}/\Lambda'$ 是群同态.
+\end{corollary}
+
+\begin{proof}
+显然 $[z]\mapsto[\alpha z]$ 是群同态.
+\end{proof}
+
+命题表明
+\[
+\operatorname{Hom}(\mathbb{C}/\Lambda, \mathbb{C}/\Lambda') \cong \{\alpha\in\mathbb{C} \mid \alpha\Lambda\subset\Lambda'\},
+\]
+而第一个推论表明有一一对应
+\[
+\{\mathbb{C}/\Lambda \text{ 模同构}\}\to L/\mathbb{C}^{\times}.
+\]
+
+\subsection*{椭圆曲线 $E(\Lambda)$}
+
+设 $\Lambda$ 为 $\mathbb{C}$ 中的格.
+
+\begin{lemma} \label{thm:3.3.6} 
+多项式 $f(X) = 4X^3 - g_4(\Lambda)X - g_6(\Lambda)$ 有互不相同的根.
+\end{lemma}
+
+\begin{proof}
+函数 $\wp'(z)$ 奇, 故 $\wp'(\omega_1/2) = -\wp'(-\omega_1/2)$; 又双周期, 故 $\wp'(\omega_1/2) = \wp'(-\omega_1/2)$. 于是 $\wp'(\omega_1/2) = 0$, 而命题 \ref{thm:3.2.6} 表明 $\wp(\omega_1/2)$ 是 $f(X)$ 的根. 同样的论证表明 $\wp(\omega_2/2)$ 与 $\wp((\omega_1+\omega_2)/2)$ 也是 $f(X)$ 的根. 剩下证这三个数互不相同.
+
+函数 $\wp(z) - \wp(\omega_1/2)$ 在 $\omega_1/2$ 处有零点, 因其导数也在那里为零, 该零点必为二重零点. 由于 $\wp(z) - \wp(\omega_1/2)$ 在含 $0$ 的基本域 $D$ 中只有一个 (二重) 极点, 命题 \ref{thm:3.2.1} 表明 $\omega_1/2$ 是 $\wp(z) - \wp(\omega_1/2)$ 在 $D$ 中的唯一零点, 即 $\wp(z)$ 在 $D$ 中只在 $z = \omega_1/2$ 处取值 $\wp(\omega_1/2)$. 特别地, $\wp(\omega_1/2)$ 不等于 $\wp(\omega_2/2)$ 或 $\wp((\omega_1+\omega_2)/2)$. 类似地, $\wp(\omega_2/2)$ 不等于 $\wp((\omega_1+\omega_2)/2)$.
+\end{proof}
+
+引理表明
+\[
+E(\Lambda)\colon Y^2Z = 4X^3 - g_4(\Lambda)XZ^2 - g_6(\Lambda)Z^3
+\]
+是椭圆曲线. 回忆对 $c\in\mathbb{C}^{\times}$ 有 $c^4g_4(c\Lambda) = g_4(\Lambda)$, $c^6g_6(c\Lambda) = g_6(\Lambda)$, 故 $c\Lambda$ 定义本质上与 $\Lambda$ 相同的椭圆曲线.
+
+对椭圆曲线
+\[
+E\colon Y^2Z = X^3 + a_4XZ^2 + a_6Z^3,
+\]
+$\mathbb{P}^2(\mathbb{C})$ 的闭子集 $E(\mathbb{C})$ 有自然复结构——例如在满足 $y(P)\neq 0\neq z(P)$ 的点 $P\in E(\mathbb{C})$ 的邻域内, 函数 $x/z$ 提供局部坐标.
+
+\begin{proposition} \label{thm:3.3.7} 
+映射
+\[
+\begin{cases}
+z\mapsto(\wp(z):\wp'(z):1), & z\neq 0,\\
+0\mapsto(0:1:0)
+\end{cases}
+\]
+是 Riemann 曲面的同构 $\mathbb{C}/\Lambda\to E(\Lambda)(\mathbb{C})$.
+\end{proposition}
+
+\begin{proof}
+它当然是良定义的映射. 函数 $\wp(z)\colon\mathbb{C}/\Lambda\to\mathbb{P}^1(\mathbb{C})$ 在含 $0$ 的基本域中是 $2:1$ 的, 除在点 $\frac{\omega_1}{2}, \frac{\omega_2}{2}, \frac{\omega_1+\omega_2}{2}$ 处一对一. 因此, $\wp$ 把 $\mathbb{C}/\Lambda$ 实现为 Riemann 球面的 $2$ 重覆盖, 且在列出的四个点之外是局部同构. 类似地, $x/z$ 把 $E(\Lambda)(\mathbb{C})$ 实现为 Riemann 球面的 $2$ 重覆盖, 且在 $(0:1:0)$ 与 $y = 0$ 的三个点之外是局部同构. 由此推出 $\mathbb{C}/\Lambda\to E(\Lambda)(\mathbb{C})$ 在两组四个点之外是同构, 从而是同构.
+\end{proof}
+
+\subsection*{加法公式}
+
+对固定的 $z_0$, $\wp(z+z_0)$ 是 $z$ 的双周期函数, 因而是 $\wp$ 与 $\wp'$ 的有理函数. 下一个结果给出该有理函数.
+
+\begin{proposition} \label{thm:3.3.8} 
+下面的公式成立:
+\[
+\wp(z+z_0) = \frac{1}{4}\Bigl(\frac{\wp'(z) - \wp'(z_0)}{\wp(z) - \wp(z_0)}\Bigr)^2 - \wp(z) - \wp(z_0).
+\]
+\end{proposition}
+
+\begin{proof}
+令 $f(z)$ 表示左右两边的差. 它唯一的可能极点 (在 $\Lambda$ 的基本域中) 在 $0$ 或 $\pm z_0$, 而检验 $f(z)$ 在这些点附近的 Laurent 展开可见它在 $0$ 或 $-z_0$ 处无极点, 在 $z_0$ 处至多有单极点. 由于它双周期, 必为常数, 而因 $f(0) = 0$, 它恒为零.
+\end{proof}
+
+\begin{corollary} \label{thm:3.3.9} 
+映射 $z\mapsto(\wp(z):\wp'(z):1)\colon\mathbb{C}/\Lambda\to E(\Lambda)$ 是群同态.
+\end{corollary}
+
+\begin{proof}
+设 $Y = mX + c$ 为曲线 $Y^2 = 4X^3 - g_4X - g_6$ 上过点 $P = (x, y)$ 与 $P' = (x', y')$ 的直线. 则 $x$, $x'$ 与 $x(P+P')$ 是多项式
+\[
+(mX + c)^2 - 4X^3 + g_4X + g_6
+\]
+的根, 故
+\[
+x(P+P') + x + x' = \frac{m^2}{4} = \frac{1}{4}\Bigl(\frac{y - y'}{x - x'}\Bigr)^2.
+\]
+这与命题中的公式一致.
+\end{proof}
+
+\subsection*{$\mathbb{C}$ 上椭圆曲线的分类}
+
+\begin{theorem} \label{thm:3.3.10} 
+$\mathbb{C}$ 上每条椭圆曲线 $E$ 都同构于某个格 $\Lambda$ 的 $E(\Lambda)$.
+\end{theorem}
+
+\begin{proof}
+回忆 (II\ref{thm:2.2.1}c) 在代数闭域上椭圆曲线由 $j$-不变量分类到同构. 对 $\mathbb{C}$ 中的格 $\Lambda$, 曲线
+\[
+E(\Lambda)\colon Y^2Z = 4X^3 - g_4(\Lambda)XZ^2 - g_6(\Lambda)Z^3
+\]
+有判别式 $\Delta(\Lambda) = g_4(\Lambda)^3 - 27g_6(\Lambda)^2$ 与 $j$-不变量
+\[
+j(\Lambda) = \frac{1728g_4(\Lambda)^3}{g_4(\Lambda)^3 - 27g_6(\Lambda)^2}.
+\]
+对 $c\in\mathbb{C}^{\times}$, $g_4(c\Lambda) = c^{-4}g_4(\Lambda)$, $g_6(c\Lambda) = c^{-6}g_6(\Lambda)$, 故 $E(\Lambda)$ 的同构类只依赖 $\Lambda$ 模缩放. 定义
+\[
+j(\tau) = j(\mathbb{Z}\tau + \mathbb{Z}).
+\]
+则对所有 $\begin{pmatrix}a & b\\ c & d\end{pmatrix}\in\mathrm{SL}_2(\mathbb{Z})$,
+\[
+j\Bigl(\frac{a\tau + b}{c\tau + d}\Bigr) = j(\tau).
+\]
+在 V\ref{thm:5.2.2} 中我们将证明 $j\colon\mathbb{H}\to\mathbb{C}$ 是满射, 这就完成了证明.
+\end{proof}
+
+设 $k$ 为 $\mathbb{C}$ 的子域. 下图总结了这些情形:
+\[\begin{tikzcd}
+	{\dfrac{\{\CC\text{上的椭圆曲线}\}}{\approx}} & {\mathcal{L}/\CC^\times} & {\SL_2(\Z)\setminus\mathbb{H}} & \CC \\
+	{\dfrac{\{k\text{上的椭圆曲线}\}}{\approx}} &&& {k.}
+	\arrow["{1:1}", tail reversed, from=1-1, to=1-2]
+	\arrow["{1:1}", tail reversed, from=1-2, to=1-3]
+	\arrow["j", from=1-3, to=1-4]
+	\arrow[from=2-1, to=1-1]
+	\arrow["j", from=2-1, to=2-4]
+	\arrow[hook, from=2-4, to=1-4]
+\end{tikzcd}\]
+上面的 $j$ 是双射 (V\ref{thm:5.2.2}), 下面的 $j$ 是满射 (II\ref{thm:2.2.3}). 若 $k$ 代数闭, 则两个映射 $j$ 都是双射.
+
+\begin{remark} \label{thm:3.3.11} 
+上面的图像可更精确化. 考虑同构 $z\mapsto(\wp(z):\wp'(z):1)\colon\mathbb{C}/\Lambda\to E(\mathbb{C})$. 因 $x = \wp(z)$, $y = \wp'(z)$,
+\[
+\frac{dx}{y} = \frac{\wp'(z)dz}{\wp'(z)} = dz.
+\]
+故 $\mathbb{C}$ 上的微分形式 $dz$ 对应于 $E(\mathbb{C})$ 上的微分形式 $dx/y$. 反之, 从 $E(\mathbb{C})$ 上的全纯微分形式 $\omega$, 可得到 $E$ 作为商 $\mathbb{C}/\Lambda$ 的实现, 过程如下. 对 $P\in E(\mathbb{C})$, 考虑 $\varphi(P) = \int_O^P\omega\in\mathbb{C}$. 它不良定义, 因为它依赖从 $O$ 到 $P$ 的路径. 但若选取 $H_1(E(\mathbb{C}), \mathbb{Z})$ 的 $\mathbb{Z}$-基 $(\gamma_1, \gamma_2)$, 令 $\omega_1 = \int_{\gamma_1}\omega$, $\omega_2 = \int_{\gamma_2}\omega$, 则 $\Lambda = \mathbb{Z}\omega_1 + \mathbb{Z}\omega_2$ 是 $\mathbb{C}$ 中的格, 且 $P\mapsto\varphi(P)$ 是同构 $E(\mathbb{C})\to\mathbb{C}/\Lambda$. 这样, 我们得到 $L$ 与由 $\mathbb{C}$ 上椭圆曲线 $E$ 与 $E$ 上全纯微分形式 $\omega$ 组成的序对 $(E, \omega)$ 的同构类集之间的自然一一对应:
+\[\begin{tikzcd}
+	{\{(E,\omega)\text{的同构类}\}} & {\mathcal{L}} \\
+	{\{E\text{的同构类}\}} & {\mathcal{L}/\CC^\times.}
+	\arrow["{1:1}", tail reversed, from=1-1, to=1-2]
+	\arrow[from=1-1, to=2-1]
+	\arrow[from=1-2, to=2-2]
+	\arrow["{1:1}", tail reversed, from=2-1, to=2-2]
+\end{tikzcd}\]
+\end{remark}
+
+\subsection*{挠点}
+
+设 $E$ 为 $\mathbb{C}$ 上的椭圆曲线. 由同构 $E(\mathbb{C})\cong\mathbb{C}/\Lambda$ 得到同构
+\[
+E(\mathbb{C})_n \cong \operatorname{Ker}(n\colon\mathbb{C}/\Lambda\to\mathbb{C}/\Lambda) = \frac{1}{n}\Lambda/\Lambda.
+\]
+由于此描述, 椭圆曲线上的挠点常称为分点 (division points).\index{fendian@分点(division point)} 若 $\Lambda = \mathbb{Z}\omega_1 + \mathbb{Z}\omega_2$, 则
+\[
+\begin{aligned}
+\frac{1}{n}\Lambda/\Lambda
+&= \frac{\{\frac{a}{n}\omega_1 + \frac{b}{n}\omega_2 \mid a,b\in\mathbb{Z}\}}{\mathbb{Z}\omega_1 + \mathbb{Z}\omega_2}\\
+&\cong \frac{1}{n}\mathbb{Z}/\mathbb{Z}\oplus\frac{1}{n}\mathbb{Z}/\mathbb{Z}\\
+&\cong \mathbb{Z}/n\mathbb{Z}\oplus\mathbb{Z}/n\mathbb{Z},
+\end{aligned}
+\]
+故 $E(\mathbb{C})_n$ 是秩为 $2$ 的自由 $\mathbb{Z}/n\mathbb{Z}$-模.
+
+\begin{theorem} \label{thm:3.3.12} 
+设 $E$ 为特征零的代数闭域 $k$ 上的椭圆曲线. 对所有 $n\ge 1$, $E(k)_n$ 是秩为 $2$ 的自由 $\mathbb{Z}/n\mathbb{Z}$-模.
+\end{theorem}
+
+\begin{proof}
+若存在 $k$ 到 $\mathbb{C}$ 的嵌入, 这由下一个命题推出. 一般地, 存在 $\mathbb{Q}$ 上有限超越次数 $k_0$ 的代数闭子域使 $E$ 来自 $k_0$ 上的曲线 $E_0$ (例如, 取 $k_0$ 为 $k$ 中由定义 $E$ 的方程系数在 $\mathbb{Q}$ 上生成的子域的代数闭包). 现在 $k_0$ 可嵌入 $\mathbb{C}$, 且可应用下一个命题 (两次).
+\end{proof}
+
+\begin{proposition} \label{thm:3.3.13} 
+设 $k\subset\Omega$ 为代数闭域, $E$ 为 $k$ 上的椭圆曲线. 映射 $E(k)\to E(\Omega)$ 在挠子群上诱导同构.
+\end{proposition}
+
+\begin{proof}
+下面的第一个引理表明 $E(k)_n$ 的元素是方程组
+\[
+\begin{cases}
+Y^2 = X^3 + aX + b\\
+\varphi_n(X, Y) = 0
+\end{cases}
+\]
+的公共解, 其中 $\varphi_n$ 是不被 $Y^2 - X^3 - aX - b$ 整除的多项式, 故可应用下面第二个引理.
+\end{proof}
+
+\begin{lemma} \label{thm:3.3.14} 
+设 $E$ 为特征零域上椭圆曲线 $Y^2Z = X^3 + aXZ^2 + bZ^3$. 令
+\begin{align*}
+  \psi_1 &= 1, \qquad \psi_2 = 2Y,\\
+  \psi_3 &= 3X^4 + 6aX^2 + 12bX - a^2,\\
+  \psi_4 &= 4Y(X^6 + 5aX^4 + 20bX^3 - 5a^2X^2 - 4abX - 8b^2 - a^3),
+\end{align*}
+并归纳地,
+\[
+\begin{aligned}
+2Y\psi_{2n} &= \psi_n(\psi_{n-1}^2\psi_{n+2} - \psi_{n-2}\psi_{n+1}^2),\\
+\psi_{2n+1} &= \psi_{n+2}\psi_n^3 - \psi_{n+1}^3\psi_{n-1}.
+\end{aligned}
+\]
+\footnote{校对注：原书偶数递推左侧写为 $Y\psi_{2n}$，译稿此前又漏掉了 $Y$. 按本引理 $\psi_2=2Y$ 的归一化及随后倍点坐标式，左侧应为 $2Y\psi_{2n}$；此处更正并保持多项式恒等式的形式. 后面的坐标式按有理映射理解；当 $\psi_n(P)=0$ 时应取 $nP=O$，不能把全零坐标当作射影点.} 则对 $E$ 的点 $P = (x:y:1)$，当 $\psi_n(P)\neq 0$ 时，
+\[
+nP = \bigl(2x\psi_n^4-2\psi_{n-1}\psi_n^2\psi_{n+1}:\psi_{2n}:2\psi_n^4\bigr).
+\]
+\end{lemma}
+
+\begin{proof}
+当 $k = \mathbb{C}$ 时, 这些是 Weierstrass $\wp$ 函数理论的标准公式 (\cite[III, \S 58]{weber1908}). 优雅的代数证明见 \cite[Formulary]{cassels1991}.
+\end{proof}
+
+\begin{lemma} \label{thm:3.3.15} 
+设 $k\subset\Omega$ 为代数闭域. 若 $F, G\in k[X, Y]$ 无公共因子, 则方程 $F(X, Y) = 0$, $G(X, Y) = 0$ 的坐标在 $\Omega$ 中的每个公共解坐标都在 $k$ 中.
+\end{lemma}
+
+\begin{proof}
+由结式理论 (I~\ref{thm:1.1.22}, \ref{thm:1.1.24}), 存在系数在 $k$ 中的多项式 $a(X, Y)$, $b(X, Y)$, $r(X)$ 使
+\[
+a(X, Y)F(X, Y) + b(X, Y)G(X, Y) = r(X),
+\]
+且 $r(x_0) = 0$ 当且仅当 $F(x_0, Y)$ 与 $G(x_0, Y)$ 有公共零点. 换言之, $r$ 的根正是 $F(X, Y)$ 与 $G(X, Y)$ 的公共零点的 $x$-坐标. 因 $r(X)$ 是一元多项式, 其根都在 $k$ 中. 类似地, 对给定 $x_0\in k$, $F(x_0, Y)$ 与 $G(x_0, Y)$ 的公共根都在 $k$ 中.
+\end{proof}
+
+\begin{remark} \label{thm:3.3.16} 
+定理 \ref{thm:3.3.12} 在特征 $p\neq 0$ 且 $p\nmid n$ 时也成立 (II\ref{thm:2.6.3}). 对 $p$ 的幂 $p^m$, 要么 $E(k)_{p^m}$ 是秩为 $1$ 的自由 $\mathbb{Z}/p^m\mathbb{Z}$-模 (``普通''情形), 要么为零 (``超奇异''情形).
+\end{remark}
+
+\subsection*{自同态}
+
+设 $K$ 为数域. $K$ 中每个 $\alpha$ 满足首一方程:
+\begin{equation} \label{eq:22}
+\alpha^m + a_1\alpha^{m-1} + \cdots + a_m = 0, \qquad a_i\in\mathbb{Q}, \ m = [K:\mathbb{Q}].
+\tag{22}
+\end{equation}
+若它满足系数 $a_i\in\mathbb{Z}$ 的此类方程, 则称 $\alpha$ 为 $K$ 的代数整数 (algebraic integer).\index{daishuzhengshu@代数整数(algebraic integer)} 代数整数构成 $K$ 的子环 $\mathcal{O}_K$. 例如, 对无平方因子的 $d\in\mathbb{Z}$, 若 $K = \mathbb{Q}[\sqrt{d}]$, 则
+\[
+\mathcal{O}_K = \begin{cases} \mathbb{Z} + \mathbb{Z}\sqrt{d}, & d\not\equiv 1\pmod{4},\\ \mathbb{Z} + \mathbb{Z}\frac{1+\sqrt{d}}{2}, & d\equiv 1\pmod{4}. \end{cases}
+\]
+$K$ 的子环 $R$ 若作为 $\mathbb{Z}$-模由 $K$ 的 $\mathbb{Q}$-基生成, 则称 $R$ 为 $K$ 中的阶 (order). 例如 $\mathcal{O}_K$ 是阶, 且包含所有其他阶. $K = \mathbb{Q}[\sqrt{d}]$ 中的阶是子环 $\mathbb{Z}1 + c\mathcal{O}_K$ ($c$ 为正整数).
+
+\begin{proposition} \label{thm:3.3.17} 
+设 $\Lambda = \mathbb{Z}\omega_1 + \mathbb{Z}\omega_2$ 为 $\mathbb{C}$ 中的格, $\tau = \omega_1/\omega_2\in\mathbb{H}$. Riemann 曲面 $\mathbb{C}/\Lambda$ 的自同态环为 $\mathbb{Z}$, 除非 $[\mathbb{Q}[\tau]:\mathbb{Q}] = 2$, 此时它是 $\mathbb{Q}[\tau]$ 中的阶.
+\end{proposition}
+
+\begin{proof}
+设存在 $\alpha\in\mathbb{C}$, $\alpha\notin\mathbb{Z}$, 使 $\alpha\Lambda\subset\Lambda$. 则
+\[
+\alpha\omega_1 = a\omega_1 + b\omega_2, \qquad
+\alpha\omega_2 = c\omega_1 + d\omega_2,
+\]
+其中 $a, b, c, d\in\mathbb{Z}$. 除以 $\omega_2$, 得方程
+\[
+\alpha\tau = a\tau + b, \qquad \alpha = c\tau + d.
+\]
+注意 $c\neq 0$. 消去 $\alpha$, 得
+\[
+c\tau^2 + (d-a)\tau + b = 0.
+\]
+故 $\mathbb{Q}[\tau]$ 在 $\mathbb{Q}$ 上的次数为 $2$. 消去 $\tau$, 得
+\[
+\alpha^2 - (a+d)\alpha - bc = 0.
+\]
+故 $\alpha$ 在 $\mathbb{Z}$ 上整, 从而包含在 $\mathbb{Q}[\tau]$ 的整数环中. 故 $\mathbb{Z}\neq\operatorname{End}(\mathbb{C}/\Lambda)\subset\mathcal{O}_{\mathbb{Q}[\tau]}$, 这蕴含 $\operatorname{End}(\mathbb{C}/\Lambda)$ 是 $\mathcal{O}_{\mathbb{Q}[\tau]}$ 中的阶.
+\end{proof}
+
+注意: 若 $\mathbb{Q}[\tau]$ 是 $\mathbb{Q}$ 的二次扩张, 则它必为虚二次, 故对某个整数 $d > 0$ 有 $\mathbb{Q}[\tau] = \mathbb{Q}[\sqrt{-d}]$. $E(\Lambda) = \mathbb{C}/\Lambda$ 的自同态无论视为椭圆曲线还是 Riemann 曲面都相同. 因此, $\mathbb{C}$ 上椭圆曲线 $E$ 的自同态环为 $\mathbb{Z}$ 或虚二次域 $\mathbb{Q}[\sqrt{-d}]$ 中的阶. 在第二种情形, 称曲线 $E$ 有复乘法 (complex multiplication).\index{fucheng@复乘(complex multiplication)}
+
+\begin{example} \label{thm:3.3.18} 
+我们展示一些不属于 $\mathbb{Z}$ 的自同态.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item 考虑
+\[
+E\colon Y^2Z = X^3 + aXZ^2,
+\]
+令 $i = \sqrt{-1}$ 为 $4$ 次本原单位根. 则 $(x:y:z)\mapsto(-x:iy:z)$ 是 $E$ 的 $4$ 阶自同态, 且 $\operatorname{End}(E) = \mathbb{Z}[i]$. 注意 $E$ 的 $j$-不变量为 $1728$.
+\item 考虑
+\[
+E\colon Y^2Z = X^3 + bZ^3,
+\]
+令 $\rho = \frac{-1+\sqrt{-3}}{2}$ 为 $3$ 次本原单位根. 则 $(x:y:z)\mapsto(\rho x:y:z)$ 是 $E$ 的 $3$ 阶自同态, 且 $\operatorname{End}(E) = \mathbb{Z}[\rho]$. 注意 $E$ 的 $j$-不变量为 $0$.
+\end{enumerate}
+\end{example}
+
+\begin{aside} \label{thm:3.3.19} 
+复数 $\alpha$ 若在 $\mathbb{Q}$ 上代数, 则称为代数的 (algebraic), 否则称为超越的\index{chaoyueshu@超越数(transcendental number)} (transcendental). 有一个普遍哲学: 超越亚纯函数 $f$ 应在 $\mathbb{C}$ 的代数点取超越值, 除某些``特殊''点之外, 在这些点它有有趣的``特殊值''. 我们为两个函数说明之.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item 定义 $e(z) = e^{2\pi iz}$. 若 $z$ 代数而非有理, 则 $e(z)$ 超越. 另一方面, 若 $z\in\mathbb{Q}$, 则 $e(z)$ 代数——事实上它是单位根, 且 $\mathbb{Q}[e(z)]$ 是 $\mathbb{Q}$ 的有限 Abel 扩张. 著名的 Kronecker--Weber 定理说: $\mathbb{Q}$ 的每个 Abel 扩张都包含在某个 $\mathbb{Q}[e(\frac{1}{m})]$ 中.
+\item 设 $\tau\in\mathbb{H}$ 代数. 若 $\tau$ 生成 $\mathbb{Q}$ 的二次扩张, 则 $j(\tau)$ 代数, 否则 $j(\tau)$ 超越 (后一陈述由 Siegel\index{Siegel} 于 1949 年证明). 事实上, 当 $[\mathbb{Q}[\tau]:\mathbb{Q}] = 2$ 时可说得更多. 假设 $\mathbb{Z}[\tau]$ 是 $K \overset{\text{def}}{=} \mathbb{Q}[\tau]$ 的整数环. 则 $j(\tau)$ 是代数整数, 且
+\[
+[\mathbb{Q}[j(\tau)]:\mathbb{Q}] = [K[j(\tau)]:K] = h_K,
+\]
+其中 $h_K$ 是 $K$ 的类数. 且 $K[j(\tau)]$ 是 $K$ 的 Hilbert 类域 (含所有有限素点与无限素点都不分歧的 $K$ 的最大 Abel 扩张).
+\end{enumerate}
+\end{aside}
+
+\subsection*{自同态的特征多项式}
+
+对环 $R$ 上有限秩自由模 $\Lambda$ 的 $R$-线性自同态 $\alpha$, 记 $\det(\alpha)$ 为 $\alpha$ 相对 $\Lambda$ 某组基的矩阵的行列式. 它与基的选取无关.
+
+\begin{lemma} \label{thm:3.3.20} 
+设 $\Lambda$ 为有限秩自由 $\mathbb{Z}$-模, $\alpha\colon\Lambda\to\Lambda$ 为行列式非零的 $\mathbb{Z}$-线性映射.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $\alpha$ 的余核有限, 其阶等于 $|\det(\alpha)|$.
+\item 由 $\alpha$ 定义的映射 $\bar{\alpha}\colon(\Lambda\otimes\mathbb{Q})/\Lambda\to(\Lambda\otimes\mathbb{Q})/\Lambda$ 的核有限, 其阶等于 $|\det(\alpha)|$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}\begin{enumerate}[label=\textup{(\alph*)}]
+
+\item 因 $\alpha$ 行列式非零, 它把 $\Lambda$ 同构地映到 $\Lambda$ 的子群 $\alpha(\Lambda)$ 上. 由基本结构定理, 存在 $\Lambda$ 的基 $e_1, \dots, e_m$ 与 $e_1', \dots, e_m'$ 使
+\[
+\alpha(e_i) = n_ie_i', \qquad n_i\in\mathbb{Z}, \ n_i > 0, \ i = 1, \dots, n.
+\]
+{\emergencystretch=3em 故 $\alpha$ 的余核有限, 阶等于 $n_1\cdots n_m$. $\alpha$ 相对基 $e_1, \dots, e_m$ 与 $e_1', \dots, e_m'$ 的矩阵是 $\operatorname{diag}(n_1, \dots, n_m)$. 因从一组基到另一组的过渡矩阵行列式为 $\pm 1$, 可见 $\det(\alpha) = \pm\det(\operatorname{diag}(n_1, \dots, n_m)) = \pm n_1\cdots n_m$.\par}
+
+\item 考虑交换图
+\[
+\begin{tikzcd}
+0 \ar[r] &
+\Lambda \ar[r] \ar[d, "\alpha"] &
+\Lambda \otimes \mathbb{Q} \ar[r] \ar[d, "\alpha \otimes 1"] &
+(\Lambda \otimes \mathbb{Q})/\Lambda \ar[r] \ar[d, "\bar{\alpha}"] &
+0 \\
+0 \ar[r] &
+\Lambda \ar[r] &
+\Lambda \otimes \mathbb{Q} \ar[r] &
+(\Lambda \otimes \mathbb{Q})/\Lambda \ar[r] &
+0.
+\end{tikzcd}
+\]
+因 $\det(\alpha)\neq 0$, 映射 $\alpha\otimes 1$ 是同构. 故蛇引理给出同构 $\operatorname{Ker}(\bar{\alpha})\to\operatorname{Coker}(\alpha)$, 从而 (b) 由 (a) 推出.
+
+
+\end{enumerate}\end{proof}
+
+\begin{proposition} \label{thm:3.3.21} 
+椭圆曲线 $E$ ($E(\mathbb{C}) = \mathbb{C}/\Lambda$) 的非零自同态 $\alpha$ 的次数是 $\alpha$ 作用在 $\Lambda$ 上的行列式.
+\end{proposition}
+
+\begin{proof}
+我们有 $E(\mathbb{C})_{\mathrm{tors}} = \mathbb{Q}\Lambda/\Lambda$, 其中
+\[
+\mathbb{Q}\Lambda = \{r\lambda \mid r\in\mathbb{Q}, \lambda\in\Lambda\} = \{z\in\mathbb{C} \mid mz\in\Lambda \text{ 对某个 } m\in\mathbb{Z}\setminus\{0\}\} \cong \mathbb{Q}\otimes_{\mathbb{Z}}\Lambda.
+\]
+\footnote{校对注：原书在这里未排除 $m=0$；若允许零，集合会包含任意复数，不能表示 $\mathbb{Q}\Lambda$. 此处补明 $m\neq 0$.} 设 $\alpha$ 为 $E$ 的非零自同态, $n$ 为其在 $E(\mathbb{C})$ 上的核的阶 (等于其在 $E(\mathbb{C})_{\mathrm{tors}}$ 上的核的阶). 因 $\alpha(\mathbb{C})$ 是群同态, 它是 $n:1$ 的, 故 $\alpha$ 的次数为 $n$ (见I~\ref{thm:1.4.24}a). 故陈述由引理推出.
+\end{proof}
+
+\begin{theorem} \label{thm:3.3.22} 
+设 $E$ 为 $\mathbb{C}$ 上的椭圆曲线, $\alpha$ 与 $\beta$ 为 $E$ 的自同态. 存在只依赖于 $\alpha, \beta$ 的整数 $r, s, t$ 使
+\[
+\deg(m\alpha + n\beta) = rm^2 + smn + tn^2
+\]
+对所有 $m, n\in\mathbb{Z}$ 成立.
+\end{theorem}
+
+\begin{proof}
+取同构 $E(\mathbb{C})\cong\mathbb{C}/\Lambda$, 设 $A = (a_{ij})$ 与 $B = (b_{ij})$ 为 $\alpha$ 与 $\beta$ 相对 $\Lambda$ 某组基作用的矩阵. 则
+\[
+\deg(m\alpha + n\beta) = \det(mA + nB) = m^2\det(A) + smn + n^2\det(B) = m^2\deg(\alpha) + smn + n^2\deg(\beta),
+\]
+其中 $s = a_{11}b_{22} + a_{22}b_{11} - a_{12}b_{21} - a_{21}b_{12}$.
+\end{proof}
+
+设 $\alpha$ 为 $\mathbb{C}$ 上椭圆曲线 $E$ 的自同态. 定义 $\alpha$ 的特征多项式为它作为 $\Lambda\otimes\mathbb{Q}$ 的自同态的特征多项式. 它是满足 $f(n) = \deg(n-\alpha)$ (对所有 $n\in\mathbb{Z}$) 的唯一多项式 $f(T) = T^2 - sT + t\in\mathbb{Z}[T]$. 注意 $f(\alpha) = 0$.
+
+回忆 (p.~\pageref{pg:tate-module}) 域 $k$ 上椭圆曲线 $E$ 的 Tate 模 $T_\ell E$ 定义为 $T_\ell E = \varprojlim_n E(k^{\mathrm{al}})_{\ell^n}$. 它是秩为 $2$ 的自由 $\mathbb{Z}_\ell$-模, 且对所有 $n$ 有 $T_\ell E/\ell^nT_\ell E\cong E(k)_{\ell^n}$. 若 $k = \mathbb{C}$ 且 $E(\mathbb{C}) = \mathbb{C}/\Lambda$, 则
+\[
+E(\mathbb{C})_{\ell^n} = \frac{1}{\ell^n}\Lambda/\Lambda\cong\Lambda/\ell^n\Lambda\cong\Lambda\otimes(\mathbb{Z}/\ell^n\mathbb{Z}),
+\]
+故
+\[
+T_\ell E\cong\Lambda\otimes_{\mathbb{Z}}\mathbb{Z}_\ell.
+\]
+因此 $\alpha$ 的特征多项式等于它作为 $T_\ell E\otimes_{\mathbb{Z}_\ell}\mathbb{Q}_\ell$ 的自同态的特征多项式. 特别地,
+\[
+\deg(\alpha) = \det(T_\ell\alpha).
+\]
+
+\begin{exercise} \label{thm:3.3.23} 
+(a) 证明对所有 $z_1, z_2$,
+\[
+\begin{vmatrix}
+\wp(z_1) & \wp'(z_1) & 1\\
+\wp(z_2) & \wp'(z_2) & 1\\
+\wp(z_1+z_2) & -\wp'(z_1+z_2) & 1
+\end{vmatrix} = 0.
+\]
+(b) 计算 $\wp'(z)$, $\wp'(z)^2$ 等的 Laurent 展开中足够多的初始项, 以验证命题 \ref{thm:3.2.6} 中的方程.
+\end{exercise}
+
+\subsection*{$p$-进类比: Tate 曲线}\label{subsec:tate-curves}
+
+对 $\mathbb{C}$ 上的椭圆曲线, 我们看到选取微分形式 $\omega$ 把 $E(\mathbb{C})$ 实现为 $\mathbb{C}$ 对周期格 $\Lambda$ 的商 $\mathbb{C}/\Lambda\cong E(\mathbb{C})$. 更准确地说, 它把 Riemann 曲面 $E$ 实现为 Riemann 曲面 $\mathbb{C}$ 对离散群 $\Lambda$ 的作用的商.
+
+对 $\mathbb{Q}_p$ 上的椭圆曲线 $E$, $\mathbb{Q}_p$ 中没有非零离散子群 (若 $\lambda\in\mathbb{Q}_p$, 则当 $n\to\infty$ 时 $p^n\lambda\to 0$), 故 $E(\mathbb{Q}_p)$ 没有类似的描述. 但 $\mathbb{C}$ 上的椭圆曲线有另一均匀化. 设 $\Lambda = \mathbb{Z} + \mathbb{Z}\tau$ 为 $\mathbb{C}$ 中的格. 指数映射 $e\colon\mathbb{C}\to\mathbb{C}^{\times}$ 把 $\mathbb{C}/\Lambda$ 同构地映到 $\mathbb{C}^{\times}/q^{\mathbb{Z}}$, 其中 $q = e(\tau)$, 故 $\mathbb{C}^{\times}/q^{\mathbb{Z}}\cong E$ (作为 Riemann 曲面). 若 $\Im(\tau) > 0$, 则 $|q| < 1$, 椭圆曲线 $E_q$ 由方程
+\begin{equation} \label{eq:23}
+Y^2Z + XYZ = X^3 - b_2XZ^2 - b_3Z^3
+\tag{23}
+\end{equation}
+给出, 其中
+\begin{equation} \label{eq:24}
+\begin{cases}
+b_2 = 5\sum\limits_{n=1}^{\infty}\dfrac{n^3q^n}{1-q^n} = 5q + 45q^2 + 140q^3 + \cdots,\\
+b_3 = \sum\limits_{n=1}^{\infty}\dfrac{7n^5 + 5n^3}{12}\dfrac{q^n}{1-q^n} = q + 23q^2 + 154q^3 + \cdots
+\end{cases}
+\tag{24}
+\end{equation}
+是整数系数的幂级数. $E_q$ 的判别式与 $j$-不变量由通常公式给出:
+\begin{equation} \label{eq:25}
+\Delta = q\prod_{n\ge 1}(1-q^n)^{24},
+\tag{25}
+\end{equation}
+\begin{equation} \label{eq:26}
+j(E_q) = \frac{(1+48b_2)^3}{q\prod_{n\ge 1}(1-q^n)^{24}} = \frac{1}{q} + 744 + 196884q + \cdots.
+\tag{26}
+\end{equation}
+现在设 $q\in\mathbb{Q}_p^{\times}$ 满足 $|q| < 1$. 级数 \eqref{eq:24} 在 $\mathbb{Q}_p$ 中收敛, Tate 于 1959 年证明 \eqref{eq:24} 是椭圆曲线 $E_q$, 且对 $\mathbb{Q}_p$ 的每个有限扩张 $K$,
+\[
+K^{\times}/q^{\mathbb{Z}}\cong E_q(K).
+\]
+由对 $\mathbb{Z}$ 成立的幂级数恒等式, $E_q$ 的判别式与 $j$-不变量由~\eqref{eq:25} 与 \eqref{eq:26} 给出. 每个满足 $|j| > 1$ 的 $j\in\mathbb{Q}_p^{\times}$ 都来自某个 $q$ (\eqref{eq:26} 可把 $q$ 表为 $1/j$ 的整系数幂级数). $E_q$ 的函数域由 Laurent 级数
+\[
+F = \sum\limits_{-\infty}^{\infty}a_nz^n, \qquad G = \sum\limits_{-\infty}^{\infty}b_nz^n, \qquad a_n, b_n\in\mathbb{Q}_p,
+\]
+(对所有非零 $z$ 收敛) 的商 $F/G$ 组成, 满足
+\[
+F(qz)/G(qz) = F(z)/G(z).
+\]
+$|j(E)| > 1$ 的 $\mathbb{Q}_p$ 上椭圆曲线 $E$ 以这种方式产生的, 恰是那些在 $\mathbb{F}_p$ 上约化具有有理切线结点的曲线. 它们称为 Tate 曲线 (Tate curves)\index{Tate@Tate 曲线(Tate curve)}. 见 \cite[Chap.~V]{silverman1994}.
+
+\begin{remarkstar}
+Hensel 在 1890 年代引入 $p$-进数域 $\mathbb{Q}_p$ 之后, 有人尝试发展 $\mathbb{Q}_p$ 上的解析函数理论, 最著名的是 Krasner. 问题在于 $\mathbb{Q}_p$ 中每个圆盘都可写成任意多个互不相交的开闭小子盘之并, 故 $D$ 上能由幂级数局部表示的函数太多. Tate 发现均匀化 $\mathbb{Q}_p^{\times}/q^{\mathbb{Z}} = E_q(\mathbb{Q}_p)$ 后, 他确信应存在一个范畴, 其中 $E$ 本身 (而不只是它的点) 是商; 换言之, 存在一个范畴, 其中 $E$ 作为``解析空间''是 $\mathbb{Q}_p^{\times}$ 作为``解析空间''对离散群 $q^{\mathbb{Z}}$ 的商. 两年后, Tate 构造了``刚性解析空间'' (rigid analytic spaces) 的正确范畴, 从而在数学中创立了一个新学科``刚性解析几何''.
+\end{remarkstar}

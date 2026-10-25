@@ -1,0 +1,1430 @@
+% chapters/ch04.tex - 第 4 章: 伪微分算子
+
+\chapter{伪微分算子}\label{ch:04}
+
+回忆式~\eqref{eq:2.54} 中对关于 $\xi$ 为多项式的符号 $a = a(x, \xi)$ 的量化公式: 它定义了微分算子 $a(x, D)$. 当 $a \in S^m(\R^n; \R^n)$ 是一般符号时, 它定义了一个伪微分算子 (pseudodifferential operator, 简记为 ps.d.o.). 对伪微分算子理论的发展而言, 允许符号 $a = a(x, y, \xi) \in S^m(\R^n \times \R^n; \R^n)$ 是重要的, 因为这类符号在研究伴随算子与复合时会自然产生. 事实上, 考虑略微更一般的符号类也是有用的, 即如下类中的那些:
+\begin{equation}\label{eq:4.1}
+    \langle x - y \rangle^w S^m(\R_x^n \times \R_y^n; \R_\xi^n) \defeq \left\{ \langle x - y \rangle^w \tilde{a} : \tilde{a} \in S^m(\R_x^n \times \R_y^n; \R_\xi^n) \right\},
+\end{equation}
+其中 $w \in \R$. 我们在第~\ref{sec:4.1}~节的目标就是赋予如下定义以意义.
+
+\begin{definition}[量化映射]\label{def:4.1}
+设 $m, w \in \R$, 并设 $a \in \langle x - y \rangle^w S^m(\R_x^n \times \R_y^n; \R_\xi^n)$. 我们定义其\textbf{量化} (quantization) $\Op(a)$ 为
+\begin{equation}\label{eq:4.2}
+    (\Op(a) u)(x) \defeq (2\pi)^{-n} \iint_{\R^n \times \R^n} \ee^{\ii (x-y) \cdot \xi} a(x, y, \xi) u(y) \,\dd y \,\dd\xi, \qquad u \in \Schwartz(\R^n).
+\end{equation}
+\end{definition}
+
+此前在式~\eqref{eq:2.54} 中, 我们仅考察了不依赖于 $y$ 的左符号 (left symbol) $a \in S^m(\R_x^n; \R_\xi^n)$ 的\textbf{左量化} (left quantization):
+\begin{equation}\label{eq:4.3}
+    (\Op_L(a) u)(x) \defeq (2\pi)^{-n} \iint_{\R^n \times \R^n} \ee^{\ii (x-y) \cdot \xi} a(x, \xi) u(y) \,\dd y \,\dd\xi;
+\end{equation}
+对于 $u \in \Schwartz(\R^n)$, 这立即可理解为累次积分, 并应理解为``先求导, 再乘上系数''. 对偶地, 我们可以考虑不依赖于 $x$ 的右符号 (right symbol) $a \in S^m(\R_y^n; \R_\xi^n)$ 的\textbf{右量化} (right quantization):
+\begin{equation}\label{eq:4.4}
+    (\Op_R(a) u)(x) \defeq (2\pi)^{-n} \iint_{\R^n \times \R^n} \ee^{\ii (x-y) \cdot \xi} a(y, \xi) u(y) \,\dd y \,\dd\xi;
+\end{equation}
+对 $u \in \Schwartz(\R^n)$ 而言, 这需要稍加思考才能说清其含义; 而这应当理解为``先乘上系数, 再求导''. 事实上, 对于 $a(z, \xi) = \xi^\alpha a_\alpha(z)$ ($a_\alpha \in \mathcal{C}_b^\infty(\R^n)$), 我们有
+\begin{equation}\label{eq:4.5}
+    (\Op_L(a) u)(x) = a_\alpha(x) D_x^\alpha u(x), \qquad (\Op_R(a) u)(x) = D_x^\alpha(a_\alpha(x) u(x)).
+\end{equation}
+一般的量化映射式~\eqref{eq:4.2} 则应当理解为``先乘上关于 $y$ 的系数, 接着在频域对 $\xi$ 求导, 最后乘上关于 $x$ 的系数'' (取 $a(x, y, \xi) = a_1(x) \xi^\alpha a_2(y)$ 试算一遍即可验证).
+
+我们将在第~\ref{sec:4.2}~节看到: 每一个算子 $\Op(a)$ 都可以唯一表示为某个同阶左符号 $a_L$ 的左量化 $\Op_L(a_L)$, 亦可表示为同阶右符号 $a_R$ 的右量化 $\Op_R(a_R)$; 这一论证利用了定义~\ref{def:4.1} 中权重 $w$ 所赋予的灵活性 (见式~\eqref{eq:4.59}).
+
+我们将证明全体 $m$ 阶伪微分算子空间恰好等于 $\Psi^m(\R^n) = \Op_L(S^m(\R^n; \R^n))$. 全体伪微分算子在求伴随 (推论~\ref{cor:4.18}) 与算子复合 (第~\ref{sec:4.4}~节) 下构成一个 $*$-代数. 作为伪微分算子及其主符号演算 (第~\ref{sec:4.5}~节) 的首批重要应用, 我们将在分布空间上 (第~\ref{sec:4.7}~节) 以及在基于 $L^2$ 的 Sobolev 空间上 (在第~\ref{sec:4.8}~节证明了伪微分算子的有界性之后) 建立椭圆正则性理论. (伪微分算子在加权 Sobolev 空间上的有界性, 是权重 $w$ 第二个显出其重要性的场合.) 最后, 我们讨论这些结果在半经典设定下的对应版本 (第~\ref{sec:4.9}~节).
+
+\section{量化}\label{sec:4.1}
+\index{lianghua@量化 (quantization)}%
+\index{zuolianghua@左量化 (left quantization)}%
+\index{youlianghua@右量化 (right quantization)}%
+
+面对定义~\ref{def:4.1}, 立即出现的障碍是对一般的 $w, m$, 积分式~\eqref{eq:4.2} 并不绝对收敛. 赋予定义~\ref{def:4.1} 严谨意义的策略如下:
+\begin{enumerate}
+    \item 证明当阶数 $m$ 充分负时绝对收敛性成立 (引理~\ref{lem:4.2}).
+    \item 证明当 $u$ 为 Schwartz 函数时 $\Op(a) u$ 亦为 Schwartz 函数, 且对于残余符号 $a$, $\Op(a) u$ 的 Schwartz 半范数可由 $u$ 的半范数与 $a$ 在任意固定 $m$ 下的 $S^m$-半范数所控制 (命题~\ref{prop:4.4}).
+    \item 借助命题~\ref{prop:3.10} 的稠密性论证, 将定义~\ref{def:4.1} 唯一延拓至任意一般的阶数 $m \in \R$ (见式~\eqref{eq:4.24}).
+\end{enumerate}
+
+\begin{lemma}[极低阶符号的量化]\label{lem:4.2}
+设 $w \in \R$, $m < -n$, 且设 $a = \langle x - y \rangle^w \tilde{a}$, 其中 $\tilde{a} \in S^m(\R_x^n \times \R_y^n; \R_\xi^n)$. 则积分式~\eqref{eq:4.2} 绝对收敛, 并且定义了一个连续线性算子
+\begin{equation}\label{eq:4.6}
+    \Op(a) \colon \Schwartz(\R^n) \to \langle x \rangle^w \mathcal{C}_b^0(\R^n) \defeq \left\{ \langle x \rangle^w f : f \in \mathcal{C}_b^0(\R^n) \right\}.
+\end{equation}
+更确切地, 对任意 $M > n + |w|$, 存在常数 $C < \infty$ 使得
+\begin{equation}\label{eq:4.7}
+    \|\Op(a) u\|_{\langle x \rangle^w \mathcal{C}_b^0(\R^n)} \defeq \|\langle x \rangle^{-w} \Op(a) u\|_{\mathcal{C}_b^0(\R^n)} \le C \|\tilde{a}\|_{m, 0} \|u\|_M, \qquad u \in \Schwartz(\R^n).
+\end{equation}
+\end{lemma}
+
+证明需要如下常用的初等不等式:
+
+\begin{lemma}[Peetre 不等式]\label{lem:4.3}
+对任意 $w \in \R$ 及 $x, y \in \R^n$, 均有
+\[
+    \langle x + y \rangle^w \le 2^{|w|/2} \langle x \rangle^w \langle y \rangle^{|w|}.
+\]
+\end{lemma}
+
+\begin{proof}
+由三角不等式与 Cauchy--Schwarz 不等式,
+\begin{equation}\label{eq:4.8}
+    1 + |x + y|^2 \le 1 + 2|x|^2 + 2|y|^2 \le 2(1 + |x|^2)(1 + |y|^2).
+\end{equation}
+若 $w \ge 0$, 两边取 $w/2$ 次幂即得证. 若 $w < 0$, 则 $-w > 0$, 类似地有
+\begin{equation}\label{eq:4.9}
+    \langle x \rangle^{-w} \le 2^{-w/2} \langle x + y \rangle^{-w} \langle y \rangle^{-w},
+\end{equation}
+两边同乘以 $\langle x \rangle^w \langle x + y \rangle^w$ 即得所需结论.
+\end{proof}
+
+\begin{proof}[引理~\ref{lem:4.2} 的证明]
+由于 $u \in \Schwartz(\R^n)$, $|u(y)| \le C \|u\|_M \langle y \rangle^{-M}$. 因此式~\eqref{eq:4.2} 中的被积函数满足
+\begin{equation}\label{eq:4.10}
+    \begin{aligned}
+        |\ee^{\ii (x-y) \cdot \xi} a(x, y, \xi) u(y)| &\le C \langle x - y \rangle^w \|\tilde{a}\|_{m, 0} \langle \xi \rangle^m \|u\|_M \langle y \rangle^{-M} \\
+        &\le C \langle x \rangle^w \langle \xi \rangle^m \langle y \rangle^{|w| - M} \|\tilde{a}\|_{m, 0} \|u\|_M.
+    \end{aligned}
+\end{equation}
+只要 $m < -n$ 且 $|w| - M < -n$, 该表达式关于 $(y, \xi)$ 便绝对可积.
+\end{proof}
+
+\begin{proposition}[残余符号量化的界]\label{prop:4.4}
+设 $w \in \R$, $a = \langle x - y \rangle^w \tilde{a}$, 其中 $\tilde{a} \in S^{-\infty}(\R^n \times \R^n; \R^n)$. 则 $\Op(a)$ 连续地将 $\Schwartz(\R^n)$ 映入 $\Schwartz(\R^n)$. 事实上, 对任意 $k \in \N_0$ 与 $m \in \R$, 均存在 $N \in \N$ 与常数 $C$, 使得
+\begin{equation}\label{eq:4.11}
+    \|\Op(a) u\|_k \le C \|\tilde{a}\|_{m, N} \|u\|_N.
+\end{equation}
+\end{proposition}
+
+\begin{lemma}[加权符号的微分]\label{lem:4.5}
+算子 $D_x^\alpha$ 与 $D_y^\alpha$ 是
+\[
+    \langle x - y \rangle^w S^m(\R^n \times \R^n; \R^n) \to \langle x - y \rangle^w S^m(\R^n \times \R^n; \R^n)
+\]
+上的连续线性映射. 更确切地,
+\begin{equation}\label{eq:4.12}
+    \|\langle x - y \rangle^{-w} D_x^\alpha a\|_{m, k} \le C \|\langle x - y \rangle^{-w} a\|_{m, k + |\alpha|},
+\end{equation}
+对 $D_y^\alpha a$ 亦然.
+\end{lemma}
+
+\begin{proof}
+只需对 $D_{x_1}$ 证明结论. 设 $a(x, y, \xi) = \langle x - y \rangle^w \tilde{a}(x, y, \xi)$, 则
+\begin{equation}\label{eq:4.13}
+    D_{x_1} a(x, y, \xi) = \langle x - y \rangle^w \left( D_{x_1} \tilde{a}(x, y, \xi) + \frac{1}{\ii} w (x_1 - y_1) \langle x - y \rangle^{-2} \tilde{a}(x, y, \xi) \right).
+\end{equation}
+注意到 $(x_1 - y_1) \langle x - y \rangle^{-2} \in S^0(\R_{x, y}^{2n})$ 关于各阶导数一致有界, 结论立得.
+\end{proof}
+
+\begin{proof}[命题~\ref{prop:4.4} 的证明]
+关键在于对 $\xi \neq 0$, 相位 $(x - y) \cdot \xi$ 关于 $y$ 没有临界点. 我们通过写出如下恒等式来利用这一点:
+\begin{equation}\label{eq:4.14}
+    (1 - \xi \cdot D_y) \ee^{\ii(x-y)\cdot\xi} = \langle \xi \rangle^2 \ee^{\ii(x-y)\cdot\xi}.
+\end{equation}
+于是对任意 $N \in \N$, 我们有
+\begin{equation}\label{eq:4.15}
+    \begin{aligned}
+        (\Op(a) u)(x) &= (2\pi)^{-n} \iint_{\R^n \times \R^n} \left( (1 - \xi \cdot D_y)^N \ee^{\ii (x-y) \cdot \xi} \right) \langle \xi \rangle^{-2N} a(x, y, \xi) u(y) \,\dd y \,\dd\xi \\
+        &= (2\pi)^{-n} \iint_{\R^n \times \R^n} \ee^{\ii (x-y) \cdot \xi} (1 + \xi \cdot D_y)^N \left( \langle \xi \rangle^{-2N} a(x, y, \xi) u(y) \right) \,\dd y \,\dd\xi.
+    \end{aligned}
+\end{equation}
+根据 Leibniz 法则展开, 有
+\begin{equation}\label{eq:4.16}
+    (1 + \xi \cdot D_y)^N \left( \langle \xi \rangle^{-2N} a(x, y, \xi) u(y) \right) = \sum_{|\gamma| \le N} a_\gamma(x, y, \xi) D_y^\gamma u,
+\end{equation}
+其中每个系数满足
+\begin{equation}\label{eq:4.17}
+    a_\gamma(x, y, \xi) = \sum_{|\delta|, |\epsilon| \le N} c_{\gamma\delta\epsilon} \langle \xi \rangle^{-2N} \xi^\delta D_y^\epsilon a(x, y, \xi),
+\end{equation}
+由引理~\ref{lem:4.5}, $\tilde{a}_\gamma \defeq \langle x - y \rangle^{-w} a_\gamma \in S^{-\infty}$, 且对任意 $m \in \R$,
+\begin{equation}\label{eq:4.18}
+    \|\tilde{a}_\gamma\|_{m-N, 0} \le C \|\tilde{a}\|_{m, N}.
+\end{equation}
+当选取 $N > m + n$ 时, 引理~\ref{lem:4.2} 适用, 给出
+\begin{equation}\label{eq:4.19}
+    \|\Op(a_\gamma) D^\gamma u\|_{\langle x \rangle^w \mathcal{C}_b^0} \le C \|\tilde{a}_\gamma\|_{m-N, 0} \|D^\gamma u\|_M, \qquad M > n + |w|.
+\end{equation}
+从而
+\begin{equation}\label{eq:4.20}
+    \|\Op(a) u\|_{\langle x \rangle^w \mathcal{C}_b^0} \le C \|\tilde{a}\|_{m, N} \|u\|_M, \qquad M > n + N + |w|.
+\end{equation}
+关于更高阶导数与空间衰减: 对任意 $\alpha, \beta \in \N_0^n$, 注意到
+\begin{equation}\label{eq:4.21}
+    \begin{aligned}
+        x^\alpha D_x^\beta (\Op(a) u)(x)
+        &= (2\pi)^{-n} \iint_{\R^n \times \R^n} \left( (D_\xi + y)^\alpha \ee^{\ii (x-y) \cdot \xi} \right) (\xi + D_x)^\beta a(x, y, \xi) u(y) \,\dd y \,\dd\xi \\
+        &= (2\pi)^{-n} \iint_{\R^n \times \R^n} \ee^{\ii (x-y) \cdot \xi} (y - D_\xi)^\alpha (\xi + D_x)^\beta (a(x, y, \xi) u(y)) \,\dd y \,\dd\xi.
+    \end{aligned}
+\end{equation}
+展开后多项式因子 $y^\gamma$ 可被 $u \in \Schwartz(\R^n)$ 吸收. 由此断定对充分大的 $N$,
+\begin{equation}\label{eq:4.22}
+    \|x^\alpha D_x^\beta \Op(a) u\|_{\langle x \rangle^w \mathcal{C}_b^0} \le C \|\tilde{a}\|_{m, N} \|u\|_N.
+\end{equation}
+因此 $\Op(a) u \in \Schwartz(\R^n)$.
+\end{proof}
+
+上述论证表明映射
+\begin{equation}\label{eq:4.23}
+    \langle x - y \rangle^w S^{-\infty}(\R^n \times \R^n; \R^n) \times \Schwartz(\R^n) \to \Schwartz(\R^n), \qquad (a, u) \mapsto \Op(a) u
+\end{equation}
+在第一个因子配备 $\langle x - y \rangle^w S^{m'}(\R^n \times \R^n; \R^n)$ 的拓扑时是连续双线性的. 由命题~\ref{prop:3.10}, 它以唯一方式延拓为连续双线性映射
+\begin{equation}\label{eq:4.24}
+    \langle x - y \rangle^w S^m(\R^n \times \R^n; \R^n) \times \Schwartz(\R^n) \to \Schwartz(\R^n), \qquad (a, u) \mapsto \Op(a) u.
+\end{equation}
+将 $\Op(a)$ 等同于其分布积分核, 我们得到连续线性映射
+\begin{equation}\label{eq:4.25}
+    \Op \colon \langle x - y \rangle^w S^m(\R^n \times \R^n; \R^n) \to \TempDistr(\R^n \times \R^n),
+\end{equation}
+形式上由下式给出:
+\begin{equation}\label{eq:4.26}
+    \Op(a)(x, y) = (2\pi)^{-n} \int_{\R^n} \ee^{\ii (x-y) \cdot \xi} a(x, y, \xi) \,\dd\xi,
+\end{equation}
+它严格理解为沿残余符号序列在 $\TempDistr(\R^n \times \R^n)$ 中的弱极限.
+
+\begin{remark}[显式切断极限定义]\label{rem:4.6}
+设 $\chi \in \SmoothComp(\R^n)$ 在原点附近恒为 $1$. 则对任意 $u \in \Schwartz(\R^n)$,
+\begin{equation}\label{eq:4.27}
+    (\Op(a) u)(x) = \lim_{j\to\infty} (2\pi)^{-n} \iint_{\R^n \times \R^n} \ee^{\ii(x-y)\cdot\xi} \chi(\xi / j) a(x, y, \xi) u(y) \,\dd y \,\dd\xi,
+\end{equation}
+该极限在 $\Schwartz(\R^n)$ 的拓扑下强收敛.
+\end{remark}
+
+\begin{definition}[伪微分算子空间]\label{def:4.7}
+设 $m \in \R$. $\R^n$ 上 $m$ 阶 (一致) \textbf{伪微分算子空间}记为
+\begin{equation}\label{eq:4.28}
+    \Psi^m(\R^n),
+\end{equation}
+由所有形如 $\Op(a) \colon \Schwartz(\R^n) \to \Schwartz(\R^n)$ 的算子组成, 其中 $a \in \langle x - y \rangle^w S^m(\R_x^n \times \R_y^n; \R_\xi^n)$, $w \in \R$. (我们在下一节将证明可以始终取 $w = 0$. 微分算子的情形见习题~\ref{ex:4.1}.) \textbf{残余伪微分算子空间}定义为
+\begin{equation}\label{eq:4.29}
+    \Psi^{-\infty}(\R^n) \defeq \bigcap_{m \in \R} \Psi^m(\R^n).
+\end{equation}
+\end{definition}
+
+通过对偶性, 我们可以将 $A = \Op(a) \in \Psi^m(\R^n)$ 的作用延拓至缓增分布: 对 $u, v \in \Schwartz(\R^n)$ 及 $a \in \langle x - y \rangle^w S^{-\infty}$,
+\begin{equation}\label{eq:4.30}
+    \langle \Op(a) u, v \rangle = (2\pi)^{-n} \iiint_{\R^{3n}} \ee^{\ii(x-y)\cdot\xi} a(y, x, -\xi) v(y) u(x) \,\dd y \,\dd\xi \,\dd x = \langle u, \Op(a^\dag) v \rangle,
+\end{equation}
+其中我们置
+\begin{equation}\label{eq:4.31}
+    a^\dag(x, y, \xi) \defeq a(y, x, -\xi).
+\end{equation}
+由于映射 $a \mapsto a^\dag$ 是 $\langle x - y \rangle^w S^m(\R^n \times \R^n; \R^n)$ 上的同构, 等式
+\begin{equation}\label{eq:4.32}
+    \Op(a)^\dag = \Op(a^\dag), \qquad \text{即 } \langle \Op(a) u, v \rangle = \langle u, \Op(a^\dag) v \rangle
+\end{equation}
+对所有 $a \in \langle x - y \rangle^w S^m(\R^n \times \R^n; \R^n)$ 均成立. 由 $\Schwartz(\R^n) \subset \TempDistr(\R^n)$ 的稠密性, 我们由此可以通过式~\eqref{eq:4.32} 将 $\Op(a)$ 唯一延拓为 $\TempDistr(\R^n)$ 上的算子.
+
+下面给出伪微分算子 Schwartz 核的精细点态刻画:
+
+\begin{proposition}[符号与 Fourier 变换]\label{prop:4.8}
+\begin{enumerate}
+    \item 设 $a \in S^m(\R_\xi^n)$, 置 $b \defeq \mathcal{F}^{-1} a \in \TempDistr(\R_x^n)$. 则 $\singsupp b \subset \{0\}$. 此外, 对所有 $\alpha, \beta \in \N_0^n$ ($|\beta| \le |\alpha|$) 以及 $x \neq 0$, 均有
+    \begin{equation}\label{eq:4.33}
+        |x^\alpha \partial^\beta b(x)| \le C_{\alpha\beta} \cdot \begin{cases}
+            |x|^{-m-n}, & m > -n, \\
+            1 + |\log |x||, & m = -n, \\
+            1, & m < -n.
+        \end{cases}
+    \end{equation}
+    特别地, 当 $|x| \to \infty$ 时, $b$ 及其各阶导数均快速衰减.
+    \item 设 $m < 0$. 假定 $b \in L^1_{\mathrm{loc}}(\R_x^n)$ 在 $x \neq 0$ 处光滑, 且满足对任意 $|\beta| \le |\alpha|$ 及 $x \neq 0$,
+    \begin{equation}\label{eq:4.34}
+        |x^\alpha \partial^\beta b(x)| \le C_{\alpha\beta} |x|^{-m-n}, \qquad \forall\,\alpha, \beta \in \N_0^n, \ |\beta| \le |\alpha|, \quad x \neq 0.
+    \end{equation}
+    则 $a \defeq \mathcal{F} b \in S^m(\R_\xi^n)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+对于 (1), 首先设 $m < -n$. 利用 $(-\frac{x}{|x|^2} \cdot D_\xi) \ee^{\ii x \cdot \xi} = \ee^{\ii x \cdot \xi}$ 及多次分部积分, 有
+\begin{equation}\label{eq:4.35}
+    b(x) = (2\pi)^{-n} \int_{\R^n} \ee^{\ii x \cdot \xi} \left( -\frac{x}{|x|^2} \cdot D_\xi \right)^N a(\xi) \,\dd\xi.
+\end{equation}
+对一般的 $m$, 只要 $m - N < -n$, 积分绝对收敛且定义了 $x \in \R^n \setminus \{0\}$ 上的连续函数. 将 $a \in S^m(\R^n)$ 视为在 $S^{m'}$ 拓扑下阶数 $< -n$ 的符号极限 (取 $m' > m$ 使得 $m' - N < -n$), 可知 $\mathcal{F}^{-1} a$ 在 $\R^n \setminus \{0\}$ 上连续且当 $x \neq 0$ 时由式~\eqref{eq:4.35} 给出. 鉴于 $N$ 可以取任意大, 结合式~\eqref{eq:4.35} 即断定对所有 $N$ 以及 $|x| \ge 1$ 均有 $|b(x)| \le C_N |x|^{-N}$. 当 $|x| \le 1$ 时, 将积分以 $|\xi| = |x|^{-1}$ 为界分为高频与低频两部分:
+\begin{equation}\label{eq:4.36}
+    \begin{aligned}
+        \left| \int_{|\xi| \ge |x|^{-1}} \ee^{\ii x \cdot \xi} \left( -\frac{x}{|x|^2} \cdot D_\xi \right)^N a(\xi) \,\dd\xi \right|
+        &\le C |x|^{-N} \int_{|\xi| \ge |x|^{-1}} \|a\|_{m, N} \langle \xi \rangle^{m-N} \,\dd\xi \\
+        &\le C' |x|^{-N} \int_{|x|^{-1}}^\infty r^{m-N} r^{n-1} \,\dd r \\
+        &\le C'' |x|^{-n-m},
+    \end{aligned}
+\end{equation}
+对低频部分 $|\xi| \le |x|^{-1}$ 撤销分部积分可得:
+\begin{equation}\label{eq:4.37}
+    \begin{aligned}
+        &\left| \int_{|\xi| \le |x|^{-1}} \ee^{\ii x \cdot \xi} \left( -\frac{x}{|x|^2} \cdot D_\xi \right)^N a(\xi) \,\dd\xi \right|
+        \le \int_{|\xi| \le |x|^{-1}} |a(\xi)| \,\dd\xi \\
+        &\quad + \sum_{j=0}^{N-1} \left| \int_{|\xi| = |x|^{-1}} \ee^{\ii x \cdot \xi} \left( -\frac{x}{|x|^2} \cdot D_\xi \right)^j a(\xi) \left( \frac{x}{|x|^2} \cdot \frac{\xi}{|\xi|} \right) \,\dd\xi \right| \\
+        &\le C \int_0^{|x|^{-1}} \langle r \rangle^m r^{n-1} \,\dd r
+        + C \sum_{j=0}^{N-1} |x|^{-j} (|x|^{-1})^{m-j} |x|^{-1} (|x|^{-1})^{n-1}.
+    \end{aligned}
+\end{equation}
+求和项之值为 $C_N |x|^{-m-n}$, 而积分项当 $m + n > 0$ 时受控于常数倍的 $|x|^{-m-n}$, 当 $m + n = 0$ 时受控于常数倍的 $1 + \log |x|^{-1}$, 当 $m + n < 0$ 时受控于常数. 这便证明了 $\alpha = \beta = 0$ 时的式~\eqref{eq:4.33}. 一般的 $\alpha, \beta$ 情形直接由 $x^\alpha D_x^\beta \mathcal{F}^{-1} a = \mathcal{F}^{-1}((-D_\xi)^\alpha \xi^\beta a)$ 得出, 因为当 $|\beta| \le |\alpha|$ 时 $(-D_\xi)^\alpha \xi^\beta a \in S^m(\R^n)$.
+
+对于 (2), 写出 $a(\xi) = \int_{\R^n} \ee^{-\ii x \cdot \xi} b(x) \,\dd x$. 利用 $(-\frac{\xi}{|\xi|^2} \cdot D_x) \ee^{-\ii x \cdot \xi} = \ee^{-\ii x \cdot \xi}$, 可将 $a(\xi)$ 分解为
+\begin{equation}\label{eq:4.38}
+    a(\xi) = \int_{|x| \le |\xi|^{-1}} \ee^{-\ii x \cdot \xi} b(x) \,\dd x + \int_{|x| \ge |\xi|^{-1}} \left[ \left(-\frac{\xi}{|\xi|^2} \cdot D_x\right)^N \ee^{-\ii x \cdot \xi} \right] b(x) \,\dd x.
+\end{equation}
+第一个积分的绝对值受控于 $C \int_0^{|\xi|^{-1}} r^{-m-n} r^{n-1} \,\dd r = C' |\xi|^m$. 在第二个积分中, 我们进行 $N$ 次分部积分; 其中的边界项受控于常数倍的
+\begin{equation}\label{eq:4.39}
+    |\xi|^{-j} \left( \sup_{|\gamma| = j, |x| = |\xi|^{-1}} |\partial^\gamma b(x)| \right) |\xi|^{-1} (|\xi|^{-1})^{n-1} \le C |\xi|^m, \qquad j = 0, \ldots, N - 1.
+\end{equation}
+剩余的区域积分项可以估计为
+\begin{equation}\label{eq:4.40}
+    \left| \int_{|x| \ge |\xi|^{-1}} \ee^{-\ii x \cdot \xi} \left( \frac{\xi}{|\xi|^2} \cdot D_x \right)^N b(x) \,\dd x \right| \le C \int_{|\xi|^{-1}}^\infty |\xi|^{-N} r^{-m-n-N} r^{n-1} \,\dd r = C' |\xi|^m,
+\end{equation}
+只要我们选取 $N$ 满足 $-m - N < 0$. 我们至此证得 $|a(\xi)| \le C \langle \xi \rangle^m$. 对 $a$ 的导数的符号估计由式~\eqref{eq:2.16} 直接导出.
+\end{proof}
+
+\begin{corollary}[伪微分算子 Schwartz 核的点态估计]\label{cor:4.9}
+\begin{enumerate}
+    \item 设 $A \in \Psi^m(\R^n)$, 其 Schwartz 核记为 $K \in \TempDistr(\R^n \times \R^n)$. 则 $\singsupp K \subset \operatorname{diag}_{\R^n} \defeq \{(x, x) : x \in \R^n\}$. 此外, 对所有 $\alpha, \beta, \gamma \in \N_0^n$, $N \in \R$ 以及 $x \neq y$, 均有
+    \begin{equation}\label{eq:4.41}
+        \left| (\partial_x + \partial_y)^\gamma \partial_x^\alpha \partial_y^\beta K(x, y) \right| \le C_{\gamma\alpha\beta N} \langle x - y \rangle^{-N} \cdot \begin{cases}
+            |x - y|^{-m - |\alpha| - |\beta| - n}, & m + |\alpha| + |\beta| > -n, \\
+            1 + |\log |x - y||, & m + |\alpha| + |\beta| = -n, \\
+            1, & m + |\alpha| + |\beta| < -n.
+        \end{cases}
+    \end{equation}
+    \item 设 $m < 0$. 若 $K \in L^1_{\mathrm{loc}}(\R_x^n \times \R_y^n)$ 在 $x \neq y$ 处光滑且满足
+    \begin{equation}\label{eq:4.42}
+        \left| (\partial_x + \partial_y)^\gamma \partial_x^\alpha \partial_y^\beta K(x, y) \right| \le C_{\gamma\alpha\beta N} \langle x - y \rangle^{-N} |x - y|^{-m - |\alpha| - |\beta| - n}, \qquad x \neq y,
+    \end{equation}
+    则 $K$ 是某个伪微分算子 $A \in \Psi^m(\R^n)$ 的 Schwartz 核.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+对于 (1), 将 $A$ 写为 $A = \Op(a)$, 其中 $a \in \langle x - y \rangle^w S^m(\R^n_x \times \R^n_y; \R^n_\xi)$. 对任意 $x \neq y$ 及所有满足 $m + |\alpha| + |\beta| - N < -n$ 的 $N \in \N_0$, 我们有
+\begin{equation}\label{eq:4.43}
+    \begin{aligned}
+        &(D_x + D_y)^\gamma D_x^\alpha D_y^\beta K(x, y) \\
+        &\qquad = (2\pi)^{-n} \int_{\R^n} \ee^{\ii(x-y)\cdot\xi} \left( -\frac{x-y}{|x-y|^2} \cdot D_\xi \right)^N a_{\gamma\alpha\beta}(x, y, \xi) \,\dd\xi, \\
+        &a_{\gamma\alpha\beta}(x, y, \xi) \defeq (D_x + D_y)^\gamma (D_x + \xi)^\alpha (D_y - \xi)^\beta a(x, y, \xi) \\
+        &\qquad \in \langle x - y \rangle^w S^{m+|\alpha|+|\beta|}(\R^n \times \R^n; \R^n).
+    \end{aligned}
+\end{equation}
+重复命题~\ref{prop:4.8}(1) 证明中的估计论证, 立即得出式~\eqref{eq:4.41}.
+
+对于 (2), 我们定义
+\begin{equation}\label{eq:4.44}
+    a(x, \xi) \defeq \int_{\R^n} \ee^{-\ii z \cdot \xi} K(x, x - z) \,\dd z.
+\end{equation}
+重复命题~\ref{prop:4.8}(2) 证明中的估计论证, 可知 $a \in S^m(\R^n_x; \R^n_\xi)$. 根据 Fourier 反演公式, 算子 $A = \Op(a)$ 的 Schwartz 核恰好等于 $K$.
+\end{proof}
+
+\begin{example}[伪微分算子的 Schwartz 核]\label{eg:4.10}
+如式~\eqref{eq:4.26} 那样, 我们把算子与其 Schwartz 核等同起来.
+\begin{enumerate}
+    \item 当 $n = 3$ 且 $m = -2$ 时, 推论~\ref{cor:4.9} 的一个具体例证由下式给出:
+    \begin{equation}\label{eq:4.45}
+        \Op\left( (|\xi|^2 + \mu^2)^{-1} \right)(x, y) = \frac{\ee^{-\mu |x-y|}}{4\pi |x - y|}, \qquad \mu > 0.
+    \end{equation}
+    它是 $\Delta + \mu^2$ 在 $\Schwartz(\R^3)$ 上的逆.
+    \item 当 $n = 1$ 且 $m = -1$ 时的一个例子是
+    \begin{equation}\label{eq:4.46}
+        \Op\left( (\ii \xi + 1)^{-1} \right)(x, y) = \ee^{-(x-y)} H(x - y),
+    \end{equation}
+    其中 $H$ 为 Heaviside 函数. 它是 $\partial_x + 1$ 在 $\Schwartz(\R)$ 上的逆.
+    \item 为得到一个 $m = -n$, $n = 2$ 且在 $x = y$ 处具有对数奇性的具体例子, 回顾
+    $u(x) \defeq -\frac{1}{2\pi} \log |x|$ ($x \in \R^2$) 是 $\Delta$ 在 $\R^2$ 中的基本解,
+    即 $\Delta u = \delta$, 因此 $|\xi|^2 \hat{u}(\xi) = 1$ 在 $\TempDistr(\R^2)$ 中成立.
+    若 $\chi \in \SmoothComp(\R^2)$ 在 $0$ 附近等于 $1$, 则可直接验证
+    $a \defeq \mathcal{F}(\chi u) = (2\pi)^2 \hat{\chi} * \hat{u} \in S^{-2}(\R^2)$
+    (并且当 $|\xi| \ge 1$ 时它确实等于 $|\xi|^{-2} + r(\xi)$, 其中 $r \in S^{-\infty}(\R^2)$).
+    因此 $\Op(a) \in \Psi^{-2}(\R^2)$ 的 Schwartz 核为
+    \begin{equation}\label{eq:4.47}
+        -\frac{1}{2\pi} \chi(x - y) \log |x - y|.
+    \end{equation}
+    习题~\ref{ex:4.6} 给出了此构造的一个推广.
+    \item 对 $n \in \N$, 在热方程求解中出现的算子
+    $A_t \defeq \ee^{-t \Delta} \defeq \Op(\ee^{-t |\xi|^2})$ ($t > 0$) 定义了残余伪微分算子,
+    即 $\Psi^{-\infty}(\R^n)$ 中的一个元素. 其 Schwartz 核为
+    $(4\pi t)^{-n/2} \exp\left( -\frac{|x-y|^2}{4t} \right)$.
+\end{enumerate}
+\end{example}
+
+\section{左/右约化与伴随}\label{sec:4.2}
+\index{zuoyuehua@左约化 (left reduction)}%
+\index{youyuehua@右约化 (right reduction)}%
+\index{bansuisuanzi@伴随算子 (adjoint operator)}%
+
+本节将证明如下结论:
+
+\begin{theorem}[左/右约化定理]\label{thm:4.11}
+设 $a \in \langle x - y \rangle^w S^m(\R^n \times \R^n; \R^n)$. 则存在唯一的左符号 $a_L \in S^m(\R^n; \R^n)$ 使得
+\begin{equation}\label{eq:4.48}
+    \Op(a) = \Op_L(a_L),
+\end{equation}
+并且存在唯一的右符号 $a_R \in S^m(\R^n; \R^n)$ 使得
+\begin{equation}\label{eq:4.49}
+    \Op(a) = \Op_R(a_R).
+\end{equation}
+映射 $a \mapsto a_L$ 与 $a \mapsto a_R$ 是连续的. 在模去残余符号的意义下, 它们由如下渐近和给出:
+\begin{align}
+    a_L(x, \xi) &\sim \sum_{\alpha \in \N_0^n} \frac{1}{\alpha!} \left. \left( \partial_\xi^\alpha D_y^\alpha a(x, y, \xi) \right) \right|_{y = x}, \label{eq:4.50} \\
+    a_R(y, \xi) &\sim \sum_{\alpha \in \N_0^n} \frac{(-1)^{|\alpha|}}{\alpha!} \left. \left( \partial_\xi^\alpha D_x^\alpha a(x, y, \xi) \right) \right|_{x = y}. \label{eq:4.51}
+\end{align}
+\end{theorem}
+
+\begin{definition}[左/右约化符号]\label{def:4.12}
+在定理~\ref{thm:4.11} 的记号下, 我们称 $a_L$ (相应地 $a_R$) 为全符号 $a$ 的\textbf{左约化} (相应地\textbf{右约化}), 记作
+\begin{equation}\label{eq:4.52}
+    \sigma_L(A) \defeq a_L, \qquad \sigma_R(A) \defeq a_R.
+\end{equation}
+\end{definition}
+
+我们首先给出残余算子的精确核刻画:
+
+\begin{proposition}[残余算子的 Schwartz 核刻画]\label{prop:4.13}
+算子 $A \colon \Schwartz(\R^n) \to \TempDistr(\R^n)$ 属于残余算子空间 $\Psi^{-\infty}(\R^n)$ 当且仅当其 Schwartz 核 $K(x, y)$ 是光滑函数且满足如下一致衰减估计:
+\begin{equation}\label{eq:4.53}
+    |\partial_x^\alpha \partial_y^\beta K(x, y)| \le C_{\alpha\beta N} \langle x - y \rangle^{-N}, \qquad \forall\,\alpha, \beta \in \N_0^n, \ N \in \R.
+\end{equation}
+此外, 任意此类算子均可唯一表示为 $A = \Op_L(a_L) = \Op_R(a_R)$, 其中 $a_L, a_R \in S^{-\infty}(\R^n; \R^n)$.
+\end{proposition}
+
+\begin{proof}
+若 $A \in \Psi^{-N}(\R^n)$ 对所有 $N \in \R$ 成立. 我们可以将 $A$ 写为 $A = \Op(a_N)$, 其中 $a_N \in \langle x - y \rangle^{w_N} S^{-N}(\R^n \times \R^n; \R^n)$. 当取 $N > n$ 时, 算子 $A$ 的 Schwartz 核 $K$ 由如下绝对收敛积分给出:
+\begin{equation}\label{eq:4.54}
+    K(x, y) = (2\pi)^{-n} \int_{\R^n} \ee^{\ii (x-y) \cdot \xi} a_N(x, y, \xi) \,\dd\xi.
+\end{equation}
+设 $M \in \N_0$. 对于 $|x - y| < 1$ 以及满足 $|\alpha| + |\beta| \le M$ 的 $\alpha, \beta \in \N_0^n$, 选取 $N > n + M$, 利用三角不等式可直接得出一致控制:
+\begin{equation}\label{eq:4.55}
+    |\partial_x^\alpha \partial_y^\beta K(x, y)| \le C_{\alpha\beta} \|\tilde{a}_N\|_{-N, M}.
+\end{equation}
+这给出了该紧邻域内的估计式~\eqref{eq:4.53}.
+
+为了在区域 $|x - y| > 1$ 上获得估计式~\eqref{eq:4.53}, 我们采用命题~\ref{prop:4.8} 证明中论证的简明版本. 固定 $N = n + 1$, 并利用恒等式 $(\frac{x-y}{|x-y|^2} \cdot D_\xi) \ee^{\ii(x-y)\cdot\xi} = \ee^{\ii(x-y)\cdot\xi}$ 进行 $M$ 次分部积分:
+\begin{equation}\label{eq:4.56}
+    \begin{aligned}
+        |K(x, y)| &= (2\pi)^{-n} \left| \int_{\R^n} \ee^{\ii(x-y)\cdot\xi} \left( -\frac{x-y}{|x-y|^2} \cdot D_\xi \right)^M a_{n+1}(x, y, \xi) \,\dd\xi \right| \\
+        &\le C_M |x - y|^{-M} \langle x - y \rangle^{w_{n+1}} \int_{\R^n} \langle \xi \rangle^{-n-1-M} \,\dd\xi \le C'_M \langle x - y \rangle^{-M + w_{n+1}}.
+    \end{aligned}
+\end{equation}
+由于 $M$ 可以任意选取, 这证明了 $\alpha = \beta = 0$ 时的估计式~\eqref{eq:4.53}. 关于 $x, y$ 的直至 $k$ 阶导数的估计完全同理, 仅需以 $a_{n+1+k}$ 替换 $a_{n+1}$.
+
+反之, 设光滑核 $K$ 满足式~\eqref{eq:4.53}. 我们定义
+\begin{equation}\label{eq:4.57}
+    a_L(x, \xi) \defeq \int_{\R^n} \ee^{-\ii z \cdot \xi} K(x, x - z) \,\dd z.
+\end{equation}
+由 Fourier 反演公式可知算子 $\Op_L(a_L)$ 的 Schwartz 核恰好等于 $K$. 对式~\eqref{eq:4.57} 重复命题~\ref{prop:4.8}(1) 中的分部积分估计, 可知 $a_L \in S^{-\infty}(\R^n; \R^n)$. 类似地, 算子 $\Op_R(a_R)$ 具有 Schwartz 核 $K$, 其中
+\begin{equation}\label{eq:4.58}
+    a_R(y, \xi) \defeq \int_{\R^n} \ee^{-\ii z \cdot \xi} K(y + z, y) \,\dd z.
+\end{equation}
+证明完成.
+\end{proof}
+
+\begin{remark}[残余算子约化的拓扑连续性]\label{rem:4.14}
+在满足式~\eqref{eq:4.53} 的核空间上定义半范数 $\|K\|_{\alpha\beta N} \defeq \sup_{x, y} \langle x - y \rangle^N |\partial_x^\alpha \partial_y^\beta K(x, y)|$. 则映射 $K \mapsto a_{L/R} \in S^{-\infty}$ 与 $a \mapsto K = \Op_{L/R}(a)$ 均为连续映射.
+\end{remark}
+
+为了处理任意阶数 $m \in \R$, 注意到关键的对偶微分恒等式:
+\begin{equation}\label{eq:4.59}
+    \Op\left( (y - x)^\alpha a \right)(x, y) = (2\pi)^{-n} \int_{\R^n} ((-D_\xi)^\alpha \ee^{\ii(x-y)\cdot\xi}) a(x, y, \xi) \,\dd\xi = \Op(D_\xi^\alpha a)(x, y).
+\end{equation}
+
+\begin{proof}[定理~\ref{thm:4.11} 的证明]
+设 $N \in \N$. 我们在 $y = x$ 附近把 $a(x, y, \xi)$ 展开为 Taylor 级数:
+\[
+    a(x, y, \xi) = \sum_{|\alpha| < N} \frac{1}{\alpha!} (y - x)^\alpha \left. (\partial_y^\alpha a)(x, y, \xi) \right|_{y = x} + r_N(x, y, \xi),
+\]
+\begin{equation}\label{eq:4.60}
+    r_N(x, y, \xi) = \sum_{|\alpha| = N} \frac{N}{\alpha!} (y - x)^\alpha \int_0^1 (1 - t)^{N-1} (\partial_y^\alpha a)(x, x + t(y - x), \xi) \,\dd t.
+\end{equation}
+利用恒等式~\eqref{eq:4.59}, 我们有
+\begin{equation}\label{eq:4.61}
+    \Op\left( a - \sum_{|\alpha| < N} \frac{1}{\alpha!} (D_\xi^\alpha \partial_y^\alpha a)|_{y=x} \right) = \Op(\tilde{r}_N) \in \Psi^{m-N}(\R^n),
+\end{equation}
+其中
+\begin{equation}\label{eq:4.62}
+    \tilde{r}_N(x, y, \xi) \defeq \sum_{|\alpha| = N} \frac{N}{\alpha!} \int_0^1 (1 - t)^{N-1} (D_\xi^\alpha \partial_y^\alpha a)(x, x + t(y - x), \xi) \,\dd t.
+\end{equation}
+我们验证 $\tilde{r}_N$ 是一个符号: 鉴于 $a$ 的符号估计, 函数 $\tilde{r}_N$ 满足估计
+\begin{equation}\label{eq:4.63}
+    |\partial_x^\beta \partial_y^\gamma \partial_\xi^\delta \tilde{r}_N(x, y, \xi)| \le C_{\beta\gamma\delta N} \langle x - y \rangle^{w_+} \langle \xi \rangle^{m-N-|\delta|},
+\end{equation}
+其中 $w_+ \defeq \max(w, 0)$. 从而
+\begin{equation}\label{eq:4.64}
+    \tilde{r}_N \in \langle x - y \rangle^{w_+} S^{m-N}(\R^n \times \R^n; \R^n).
+\end{equation}
+注意到对 $|\alpha| = k$, 均有 $(D_\xi^\alpha \partial_y^\alpha a)|_{y=x} \in S^{m-k}(\R_x^n; \R_\xi^n)$. 于是由命题~\ref{prop:3.16}, 我们可以令 $b \in S^m(\R^n; \R^n)$ 为如下渐近和:
+\begin{equation}\label{eq:4.65}
+    b \sim \sum_{\alpha \in \N_0^n} \frac{1}{\alpha!} \left. (D_\xi^\alpha \partial_y^\alpha a) \right|_{y = x}.
+\end{equation}
+此时算子差满足
+\begin{equation}\label{eq:4.66}
+    \begin{aligned}
+        R \defeq \Op(a - b) &= \Op(\tilde{r}_N) - \Op\left( b - \sum_{|\alpha| < N} \frac{1}{\alpha!} (D_\xi^\alpha \partial_y^\alpha a)|_{y=x} \right) \\
+        &\in \bigcap_{N \in \N} \Psi^{m-N}(\R^n) = \Psi^{-\infty}(\R^n).
+    \end{aligned}
+\end{equation}
+由命题~\ref{prop:4.13}, 残余算子 $R$ 可以表示为某个 $r \in S^{-\infty}(\R^n; \R^n)$ 的左量化: $R = \Op_L(r)$. 因此
+\begin{equation}\label{eq:4.67}
+    A = \Op_L(a_L), \qquad a_L \defeq b + r \in S^m(\R^n; \R^n).
+\end{equation}
+符号 $a_L$ 对 $a$ 的连续依赖性如下: 用命题~\ref{prop:3.17} 的显式渐近求和程序来定义 $a_L$ (从而它连续依赖于 $a$), 再注意到残余算子 $R$ 的 Schwartz 核 $K$ 在式~\eqref{eq:4.53} 中的最优常数、进而 $r$ 的 $S^{-\infty}$-半范数 (见注记~\ref{rem:4.14}) 都连续依赖于 $a$ 与 $a_L$.
+
+约化为右符号的证明完全同理; 亦可通过式~\eqref{eq:4.30} 的对偶性导出: 利用式~\eqref{eq:4.31}, 我们将 $\Op(a)$ 的实伴随记为 $\Op(a)^\dag = \Op(a^\dag) = \Op_L(a'_L)$ ($a'_L \in S^m(\R^n; \R^n)$), 从而
+\begin{equation}\label{eq:4.68}
+    \Op(a) = \Op(a^\dag)^\dag = (\Op_L(a'_L))^\dag = \Op_R((a'_L)^\dag) = \Op_R(a_R),
+\end{equation}
+其中 $a_R(y, \xi) \defeq a'_L(y, -\xi)$. 将左约化公式应用于 $a^\dag$, 给出
+\begin{equation}\label{eq:4.69}
+    a'_L(x, \xi) \sim \sum_\alpha \frac{1}{\alpha!} \left. ((-\partial_\xi)^\alpha D_x^\alpha a)(y, x, -\xi) \right|_{y=x},
+\end{equation}
+这便导出了式~\eqref{eq:4.51} 给出的 $a_R$ 的渐近展开.
+
+最后证明 $a_L, a_R$ 的唯一性. 假定 $\Op_L(a_L) = 0$. 则对任意 $\chi \in \Schwartz(\R^n)$, $\epsilon > 0$ 以及 $\xi_0 \in \R^n$, 均有
+\begin{equation}\label{eq:4.70}
+    0 = \Op_L(a_L)(\chi(\epsilon \cdot) \ee^{\ii \xi_0 \cdot}).
+\end{equation}
+由于 $x \mapsto \chi(\epsilon x) \ee^{\ii \xi_0 \cdot x}$ 的 Fourier 变换为 $\xi \mapsto \epsilon^{-n} \hat{\chi}(\epsilon^{-1}(\xi - \xi_0))$, 这意味着对所有 $x \in \R^n$,
+\begin{equation}\label{eq:4.71}
+    (2\pi)^{-n} \int_{\R^n} \ee^{\ii x \cdot \xi} a_L(x, \xi) \epsilon^{-n} \hat{\chi}\left( \frac{\xi - \xi_0}{\epsilon} \right) \,\dd\xi = 0.
+\end{equation}
+要求 $\chi(0) = 1$ (从而 $\int_{\R^n} \hat{\chi}(\xi) \,\dd\xi = (2\pi)^n$), 取极限 $\epsilon \searrow 0$, 即得出 $a_L(x, \xi_0) = 0$. 鉴于 $x, \xi_0 \in \R^n$ 的任意性, $a_L = 0$. 亦可注意到 $\Op_L$ 对任意 $a_L \in \mathcal{C}^\infty(\R_x^n; \TempDistr(\R_\xi^n))$ 良定义, 且 $\Op(a_L)$ 的 Schwartz 核为
+\begin{equation}\label{eq:4.72}
+    \Op(a_L)(x, x - z) = (\mathcal{F}_2^{-1} a_L)(x, z),
+\end{equation}
+其中 $\mathcal{F}_2^{-1}$ 表示关于第二个自变量的逆 Fourier 变换; 由于 $\mathcal{F}_2^{-1}$ 是 $\mathcal{C}^\infty(\R^n; \TempDistr(\R^n))$ 上的同构, $\Op(a_L) = 0$ 推出 $a_L = 0$.
+\end{proof}
+
+\begin{corollary}[伪微分算子空间的等价刻画]\label{cor:4.15}
+对任意 $m \in \R \cup \{-\infty\}$, 均有
+\[
+    \Psi^m(\R^n) = \Op_L(S^m(\R^n; \R^n)) = \Op_R(S^m(\R^n; \R^n)).
+\]
+\end{corollary}
+
+\begin{proposition}[伪微分算子的拟局部性]\label{prop:4.16}
+设 $A \in \Psi^m(\R^n)$. 则 $A$ 具有拟局部性:
+\begin{equation}\label{eq:4.73}
+    \singsupp A u \subset \singsupp u, \qquad \forall\,u \in \TempDistr(\R^n).
+\end{equation}
+\end{proposition}
+
+\begin{lemma}[残余算子在缓增分布上的作用]\label{lem:4.17}
+每一个残余算子 $A \in \Psi^{-\infty}(\R^n)$ 均连续映射:
+\begin{equation}\label{eq:4.74}
+    A \colon \TempDistr(\R^n) \to \TempDistr(\R^n) \cap \Smooth(\R^n).
+\end{equation}
+更确切地, 对任意 $u \in \TempDistr(\R^n)$, 存在依赖于 $u$ 的整数 $N$ 使得 $A u \in \langle x \rangle^N \mathcal{C}_b^\infty(\R^n)$.
+\end{lemma}
+
+\begin{proof}
+算子 $A$ 的 Schwartz 核 $K(x, y)$ 满足估计~\eqref{eq:4.53}. 特别地, 对任意固定的 $x$, $K(x, \cdot) \in \Schwartz(\R^n)$. 由泛函 $u$ 的连续性与定义~\ref{def:2.1},
+\begin{equation}\label{eq:4.75}
+\begin{aligned}
+    |(A u)(x)| = |\langle u, K(x, \cdot) \rangle|
+    &\le C \|K(x, \cdot)\|_N = C \sup_{y \in \R^n} \max_{|\alpha|+|\beta| \le N} |y^\alpha D_y^\beta K(x, y)| \\
+    &\le C \sup_{y \in \R^n} \max_{|\beta| \le N} \langle y \rangle^N |D_y^\beta K(x, y)|.
+\end{aligned}
+\end{equation}
+引理~\ref{lem:4.3} 给出 $\langle y \rangle^N \langle x - y \rangle^{-N} \le C_N \langle x \rangle^N$, 由此得到
+\begin{equation}\label{eq:4.76}
+    |(A u)(x)| \le C \langle x \rangle^N.
+\end{equation}
+关于 $x$ 的导数可完全类似估计, 故 $A u \in \Smooth(\R^n)$ 且
+\begin{equation}\label{eq:4.77}
+    |\partial_x^\alpha (A u)(x)| \le C_\alpha \langle x \rangle^N.
+\end{equation}
+这便完成了引理的证明.
+\end{proof}
+
+\begin{proof}[命题~\ref{prop:4.16} 的证明]
+设 $x_0 \notin \singsupp u$. 选取切断函数 $\chi, \tilde{\chi} \in \SmoothComp(\R^n)$ 使得
+\begin{equation}\label{eq:4.78}
+    \chi(x_0) \neq 0, \qquad \tilde{\chi} \equiv 1 \text{ 于 } \supp \chi \text{ 上}, \qquad \tilde{\chi} u \in \SmoothComp(\R^n).
+\end{equation}
+则
+\begin{equation}\label{eq:4.79}
+    \chi A u = \chi A(\tilde{\chi} u) + \chi A(1 - \tilde{\chi}) u.
+\end{equation}
+由于 $A$ 作用在 $\Schwartz(\R^n)$ 上, 我们有 $\chi A(\tilde{\chi} u) \in \Schwartz(\R^n)$. 对于第二项, 注意到 $\chi$ 与 $1 - \tilde{\chi}$ 具有不相交的支集; 借助分部积分可得
+\begin{equation}\label{eq:4.80}
+    \sigma_L(\chi A(1 - \tilde{\chi}))(x, \xi) \sim \sum_{\alpha \in \N_0^n} \frac{1}{\alpha!} \chi(x) \partial_\xi^\alpha \sigma_L(A)(x, \xi) \left. D_y^\alpha(1 - \tilde{\chi}(y)) \right|_{y=x} = 0,
+\end{equation}
+这意味着
+\begin{equation}\label{eq:4.81}
+    \chi A(1 - \tilde{\chi}) \in \Psi^{-\infty}(\R^n).
+\end{equation}
+由引理~\ref{lem:4.17}, 我们断定 $\chi A(1 - \tilde{\chi}) u \in \Smooth(\R^n)$, 从而完成了证明.
+\end{proof}
+
+\begin{corollary}[伪微分算子的伴随算子]\label{cor:4.18}
+设 $A \in \Psi^m(\R^n)$. 则由
+\begin{equation}\label{eq:4.82}
+    \int_{\R^n} (A^* u)(x) \overline{v(x)} \,\dd x \defeq \int_{\R^n} u(x) \overline{(A v)(x)} \,\dd x, \qquad u, v \in \Schwartz(\R^n)
+\end{equation}
+定义的形式伴随算子满足 $A^* \in \Psi^m(\R^n)$. 若 $A = \Op(a)$, 则 $A^* = \Op(a^*)$ ($a^*(x, y, \xi) = \overline{a(y, x, \xi)}$). 若 $A = \Op_L(a_L)$, 则 $A^* = \Op_L(a_L^*)$, 且满足渐近展开:
+\begin{equation}\label{eq:4.83}
+    a_L^*(x, \xi) \sim \sum_{\alpha \in \N_0^n} \frac{1}{\alpha!} \partial_\xi^\alpha D_x^\alpha \overline{a_L(x, \xi)}.
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+式~\eqref{eq:4.30} 的变体给出了第一部分; 第二部分则是定理~\ref{thm:4.11} 的直接应用, 因为 $A^* = \Op(a^*)$ 具有幅度函数 $a^*(x, y, \xi) = \overline{a(y, x, \xi)}$.
+\end{proof}
+
+\begin{corollary}[伪微分算子的渐近求和]\label{cor:4.19}
+设 $A_j \in \Psi^{m_j}(\R^n)$ ($j \ge 0$), 且 $\limsup_{j\to\infty} m_j = -\infty$. 记 $\bar{m}_j \defeq \sup_{j' \ge j} m_{j'}$, $m \defeq \bar{m}_0$. 则存在唯一的算子 $A \in \Psi^m(\R^n)$ (在模去 $\Psi^{-\infty}(\R^n)$ 意义下唯一), 使得对所有 $J \in \N$,
+\begin{equation}\label{eq:4.84}
+    A - \sum_{j=0}^{J-1} A_j \in \Psi^{\bar{m}_J}(\R^n).
+\end{equation}
+记作 $A \sim \sum_{j=0}^\infty A_j$.
+\end{corollary}
+
+\begin{proof}
+这直接由推论~\ref{cor:4.15} 与命题~\ref{prop:3.16} 推出.
+\end{proof}
+
+\section{伪微分算子空间上的拓扑}\label{sec:4.3}
+\index{weifen suanzi kongjian tuopu@伪微分算子空间拓扑 (topology on ps.d.o. spaces)}%
+
+对 $m \in \R \cup \{-\infty\}$, 由于左量化映射 $\Op_L \colon S^m(\R^n; \R^n) \to \Psi^m(\R^n)$ 是向量空间的同构, 我们直接通过 $\Op_L$ 将符号空间 $S^m(\R^n; \R^n)$ 的 Fréchet 拓扑诱导至算子空间 $\Psi^m(\R^n)$ 上.
+
+\begin{lemma}[磨光子]\label{lem:4.20}
+设 $\chi \in \SmoothComp(\R_\xi^n)$ 在原点附近恒为 $1$, 对 $\epsilon > 0$ 置 $J_\epsilon \defeq \Op(\chi(\epsilon \cdot))$. 则 $J_\epsilon \in \Psi^{-\infty}(\R^n)$ 在 $\Psi^0(\R^n)$ 中一致有界, 并且对任意 $\eta > 0$, 当 $\epsilon \searrow 0$ 时 $J_\epsilon \to I = \Op(1)$ 在 $\Psi^\eta(\R^n)$ 的拓扑下收敛.
+\end{lemma}
+
+\begin{proof}
+这等价于命题~\ref{prop:3.10} (证明) 的主体部分.
+\end{proof}
+
+令人安心的是, 人们完全可以等价地利用右量化来定义 $\Psi^m(\R^n)$ 上的拓扑:
+
+\begin{proposition}[$\Psi^m(\R^n)$ 上的拓扑]\label{prop:4.21}
+对任意 $m \in \R \cup \{-\infty\}$, 线性同构 $\Op_R \colon S^m(\R^n; \R^n) \to \Psi^m(\R^n)$ 亦为 Fréchet 空间的拓扑同构.
+\end{proposition}
+
+\begin{proof}
+取右符号映射 $\sigma_R$ 是 $\Op_R$ 的逆映射. 根据 $\Psi^m(\R^n)$ 的 Fréchet 空间结构定义, 该断言等价于复合映射 $\sigma_R \circ \Op_L$ 的连续性——而这正是定理~\ref{thm:4.11} 的一部分.
+\end{proof}
+
+\section{复合}\label{sec:4.4}
+\index{weifen suanzi fuhe@伪微分算子复合 (composition of ps.d.o.s)}%
+
+我们现在证明两个伪微分算子的复合依然是伪微分算子:
+
+\begin{theorem}[伪微分算子的复合定理]\label{thm:4.22}
+设 $A \in \Psi^m(\R^n)$, $B \in \Psi^{m'}(\R^n)$. 则复合算子 $A \circ B \colon \Schwartz(\R^n) \to \Schwartz(\R^n)$ 属于伪微分算子空间:
+\begin{equation}\label{eq:4.85}
+    A \circ B \in \Psi^{m+m'}(\R^n),
+\end{equation}
+其左符号由如下渐近和给出:
+\begin{equation}\label{eq:4.86}
+    \sigma_L(A \circ B) \sim \sum_{\alpha \in \N_0^n} \frac{1}{\alpha!} \partial_\xi^\alpha \sigma_L(A) \cdot D_x^\alpha \sigma_L(B).
+\end{equation}
+双线性映射 $(A, B) \mapsto A \circ B$ 是连续的.
+\end{theorem}
+
+\begin{proof}
+将 $A$ 写为左量化 $A = \Op_L(a)$, 将 $B$ 写为右量化 $B = \Op_R(b_R)$. 首先假设 $A, B \in \Psi^{-\infty}$. 则对 $u, v \in \Schwartz(\R^n)$, 有
+\[
+    (A v)(x) = (2\pi)^{-n} \int_{\R^n} \ee^{\ii x \cdot \xi} a(x, \xi) \hat{v}(\xi) \,\dd\xi,
+\]
+以及
+\begin{equation}\label{eq:4.87}
+    \widehat{B u}(\xi) = \int_{\R^n} \ee^{-\ii y \cdot \xi} b_R(y, \xi) u(y) \,\dd y.
+\end{equation}
+直接代入即得
+\begin{equation}\label{eq:4.88}
+    (A B u)(x) = (2\pi)^{-n} \iint_{\R^n \times \R^n} \ee^{\ii (x-y) \cdot \xi} a(x, \xi) b_R(y, \xi) u(y) \,\dd y \,\dd\xi.
+\end{equation}
+这说明 $A \circ B = \Op(c)$, 其幅度函数为 $c(x, y, \xi) \defeq a(x, \xi) b_R(y, \xi) \in S^{m+m'}(\R^n \times \R^n; \R^n)$. (这是考虑如此一般的符号类的又一个理由.) 由稠密性与连续性延拓定理, 该式对一般的 $A \in \Psi^m, B \in \Psi^{m'}$ 均成立.
+
+利用左约化定理式~\eqref{eq:4.50} 计算 $c$ 的左约化, 记 $b \defeq \sigma_L(B)$, 则利用 $b_R$ 的展开式~\eqref{eq:4.51} 代入并做指标组合求和:
+\begin{equation}\label{eq:4.89}
+    \begin{aligned}
+        \sigma_L(A \circ B)(x, \xi) &\sim \sum_\alpha \frac{1}{\alpha!} \partial_\xi^\alpha a(x, \xi) D_y^\alpha b_R(y, \xi)|_{y=x} \\
+        &\sim \sum_\beta \frac{1}{\beta!} \partial_\xi^\beta a(x, \xi) D_x^\beta \left( \sum_{\epsilon} \frac{1}{\epsilon!} \partial_\xi^\epsilon D_x^\epsilon b(x, \xi) \sum_{\gamma + \delta = \epsilon} \frac{\epsilon!}{\gamma! \delta!} (-1)^{|\delta|} \right).
+    \end{aligned}
+\end{equation}
+注意到当 $\epsilon \in \N_0^n \setminus \{0\}$ 时,
+\begin{equation}\label{eq:4.90}
+    \sum_{\gamma + \delta = \epsilon} \frac{\epsilon!}{\gamma! \delta!} (-1)^{|\delta|} = \prod_{\epsilon_j \neq 0} (1 - 1)^{\epsilon_j} = 0,
+\end{equation}
+而当 $\epsilon = 0$ 时该求和等于 $1$. 于是内层括号完全化简为 $b(x, \xi)$, 最终精确得到式~\eqref{eq:4.86}.
+\end{proof}
+
+\section{主符号}\label{sec:4.5}
+\index{zhufuhao@主符号 (principal symbol)}%
+\index{huanweizi@换位子 (commutator)}%
+\index{Poisson kuohao@Poisson 括号 (Poisson bracket)}%
+
+如同微分算子的情形 (命题~\ref{prop:3.3}), 伪微分算子左符号或右符号的``最高阶部分''具有特别简单的性质.
+
+\begin{definition}[伪微分算子的主符号]\label{def:4.23}
+设 $m \in \R$. 伪微分算子 $A \in \Psi^m(\R^n)$ 的\textbf{主符号} $\sigma_m(A)$ 定义为等价类:
+\begin{equation}\label{eq:4.91}
+    \sigma_m(A) \defeq [\sigma_L(A)] \in S^m(\R^n; \R^n) / S^{m-1}(\R^n; \R^n).
+\end{equation}
+在上下文明确时, 我们常在记号中省略商空间等价类括号.
+\end{definition}
+
+直接由定义可得如下短正合列:
+\begin{equation}\label{eq:4.92}
+    0 \to \Psi^{m-1}(\R^n) \hookrightarrow \Psi^m(\R^n) \xrightarrow{\sigma_m} S^m(\R^n; \R^n) / S^{m-1}(\R^n; \R^n) \to 0.
+\end{equation}
+主符号映射 $\sigma_m$ 的满射性是清楚的: 给定符号等价类的一个代表元 $a \in S^m(\R^n; \R^n)$, 则 $\sigma_m(\Op_L(a)) = [a]$.
+
+\begin{proposition}[主符号的代数性质]\label{prop:4.24}
+\begin{enumerate}
+    \item 对任意 $a \in S^m(\R^n; \R^n)$, 均有 $\sigma_m(\Op_R(a)) = [a]$, 即在定义~\ref{def:4.23} 中采用右符号得到完全相同的主符号映射.
+    \item 对任意 $A \in \Psi^m(\R^n)$, 均有 $\sigma_m(A^*) = \overline{\sigma_m(A)}$.
+    \item 设 $A \in \Psi^m(\R^n)$, $B \in \Psi^{m'}(\R^n)$. 则 $\sigma_{m+m'}(A \circ B) = \sigma_m(A) \sigma_{m'}(B)$.
+\end{enumerate}
+(主符号在变量替换下的行为将在第~\ref{ch:05}~章第~\ref{sec:5.1}~节讨论.)
+\end{proposition}
+
+注意: 主符号映射把算子的复合运算 (非交换运算) 转化为 (等价类的) 函数的乘法 (可交换运算),
+不过与完整的展开式~\eqref{eq:4.86} 相比, 这似乎损失了极大的信息 (而式~\eqref{eq:4.86} 本身又丢掉了
+$A \circ B$ 的``残余部分''的全部信息). 然而在大多数情形下, 起主导作用的是主符号, 有时还包括完整符号的
+``次主''部分, 而更低阶的部分则无关紧要. 第一个例子 (椭圆算子) 将在第~\ref{sec:4.7}~节讨论.
+
+一个关键的计算如下: 对 $A \in \Psi^m(\R^n)$, $B \in \Psi^{m'}(\R^n)$, 注意到
+$\sigma_{m+m'}(A \circ B) = \sigma_m(A) \sigma_{m'}(B) = \sigma_{m+m'}(B \circ A)$, 因此
+\begin{equation}\label{eq:4.93}
+    \sigma_{m+m'}([A, B]) = 0, \qquad [A, B] \defeq A \circ B - B \circ A.
+\end{equation}
+由式~\eqref{eq:4.92} 可知 $[A, B] \in \Psi^{m+m'-1}(\R^n)$, 于是自然会追问它作为 $m+m'-1$ 阶算子的主符号.
+结果表明, 该主符号可以完全由 $A$ 与 $B$ 的主符号算出:
+
+\begin{proposition}[换位子的主符号定理]\label{prop:4.25}
+设 $A \in \Psi^m(\R^n)$, $B \in \Psi^{m'}(\R^n)$. 则
+\begin{equation}\label{eq:4.94}
+    \sigma_{m+m'-1}(\ii [A, B]) = \{\sigma_m(A), \sigma_{m'}(B)\},
+\end{equation}
+其中光滑函数 $a, b \in \mathcal{C}^\infty(\R_x^n \times \R_\xi^n)$ 的 \textbf{Poisson 括号}定义为
+\begin{equation}\label{eq:4.95}
+    \{a, b\} \defeq \sum_{j=1}^n \left( (\partial_{\xi_j} a)(\partial_{x_j} b) - (\partial_{x_j} a)(\partial_{\xi_j} b) \right).
+\end{equation}
+\end{proposition}
+
+这将构成``量子力学''(符号的量化、算子的非交换代数、换位子) 与``经典力学''(符号本身、函数的可交换代数、Poisson 括号) 之间的关键联系, 自第~\ref{ch:08}~章起将起核心作用.
+
+\begin{proof}
+式~\eqref{eq:4.94} 的良定义性 (即右端在商空间 $S^{m+m'-1} / S^{m+m'-2}$ 中的像不依赖于 $A, B$ 主符号代表元的选取) 留给读者验证.
+证明本身是式~\eqref{eq:4.86} 的直接应用. 设 $a \defeq \sigma_L(A), b \defeq \sigma_L(B)$. 在模去 $S^{m+m'-2}(\R^n; \R^n)$ 的意义下, 复合展开式~\eqref{eq:4.86} 给出:
+\begin{equation}\label{eq:4.96}
+    \begin{aligned}
+        \sigma_L(A \circ B) &\equiv a b + \frac{1}{\ii} \sum_{j=1}^n (\partial_{\xi_j} a)(\partial_{x_j} b), \\
+        \sigma_L(B \circ A) &\equiv a b + \frac{1}{\ii} \sum_{j=1}^n (\partial_{\xi_j} b)(\partial_{x_j} a).
+    \end{aligned}
+\end{equation}
+两式相减并乘以 $\ii$ 即直接证得式~\eqref{eq:4.94}.
+\end{proof}
+
+\section{经典算子}\label{sec:4.6}
+\index{jingdian weifen suanzi@经典伪微分算子 (classical ps.d.o.s)}%
+
+对应于经典符号 (定义~\ref{def:3.14}), 我们引入经典伪微分算子子类:
+
+\begin{definition}[经典伪微分算子]\label{def:4.26}
+对 $m \in \R$, 我们定义 $m$ 阶\textbf{经典伪微分算子空间}为
+\begin{equation}\label{eq:4.97}
+    \Psi_{\mathrm{cl}}^m(\R^n) \defeq \Op_L(S_{\mathrm{cl}}^m(\R^n; \R^n)) \subset \Psi^m(\R^n),
+\end{equation}
+配备使 $\Op_L$ 成为同构的 Fréchet 空间结构. 我们令 $\Psi_{\mathrm{cl}}^{-\infty}(\R^n) \defeq \Psi^{-\infty}(\R^n)$.
+\end{definition}
+
+定理~\ref{thm:4.22} 与推论~\ref{cor:4.18} 中的符号展开保证了经典算子的复合与伴随依然是经典算子:
+
+\begin{proposition}[经典伪微分算子的复合与伴随]\label{prop:4.27}
+算子复合限制在经典算子空间上定义了连续双线性映射:
+\begin{equation}\label{eq:4.98}
+    \Psi_{\mathrm{cl}}^m(\R^n) \times \Psi_{\mathrm{cl}}^{m'}(\R^n) \ni (A, B) \mapsto A \circ B \in \Psi_{\mathrm{cl}}^{m+m'}(\R^n).
+\end{equation}
+此外, 伴随映射
+\begin{equation}\label{eq:4.99}
+    \Psi_{\mathrm{cl}}^m(\R^n) \ni A \mapsto A^* \in \Psi_{\mathrm{cl}}^m(\R^n)
+\end{equation}
+是连续的反线性映射.
+\end{proposition}
+
+对于经典算子 $A = \Op_L(a)$ ($a \in S_{\mathrm{cl}}^m(\R^n; \R^n)$), 正如引理~\ref{lem:3.15} 之后所讨论的, 我们可以自然地将主符号 $\sigma_m(A)$ 等同于 $a$ 的最高阶齐次主导部分 $a_m \in S_{\mathrm{hom}}^m(\R^n; \R^n \setminus \{0\})$. 对应的短正合列为:
+\begin{equation}\label{eq:4.100}
+    0 \to \Psi_{\mathrm{cl}}^{m-1}(\R^n) \hookrightarrow \Psi_{\mathrm{cl}}^m(\R^n) \xrightarrow{\sigma_m} S_{\mathrm{hom}}^m(\R^n; \R^n \setminus \{0\}) \to 0.
+\end{equation}
+
+实际中出现的几乎所有伪微分算子 (包括本书中作为例子给出的那些) 都是经典的. 然而对大多数实际用途而言, 并无必要追踪经典性; 本书 (特别是第~\ref{ch:08}~章与第~\ref{ch:10}~章) 对任一伪微分算子所需的最精细信息, 是其主符号为齐次的, 即承认一个在 $|\xi| \ge 1$ 上齐次的代表元.
+
+\section{椭圆拟逆}\label{sec:4.7}
+\index{tuoyuan nini@椭圆拟逆 (elliptic parametrix)}%
+\index{tuoyuan zhengxing@椭圆正则性 (elliptic regularity)}%
+
+回忆定义~\ref{def:3.11} 及关于式~\eqref{eq:3.28} 的讨论:
+
+\begin{definition}[椭圆伪微分算子]\label{def:4.28}
+若算子 $A \in \Psi^m(\R^n)$ 的主符号 $\sigma_m(A)$ 是 (一致) 椭圆的, 则称算子 $A$ 是 (一致) \textbf{椭圆型的}.
+\end{definition}
+
+作为前文发展的符号微积分的第一项重大应用, 我们构造一致椭圆算子的拟逆 (parametrix, 近似逆算子):
+
+\begin{theorem}[椭圆拟逆定理]\label{thm:4.29}
+设 $A \in \Psi^m(\R^n)$ 是一致椭圆伪微分算子. 则存在在模去 $\Psi^{-\infty}(\R^n)$ 意义下唯一的算子 $B \in \Psi^{-m}(\R^n)$, 使得
+\begin{equation}\label{eq:4.101}
+    A B - I \in \Psi^{-\infty}(\R^n), \qquad B A - I \in \Psi^{-\infty}(\R^n).
+\end{equation}
+我们称满足式~\eqref{eq:4.101} 的算子 $B$ 为 $A$ 的\textbf{拟逆}.
+\end{theorem}
+
+\begin{lemma}[渐近 Neumann 级数]\label{lem:4.30}
+设 $R \in \Psi^{-\delta}(\R^n)$, $\delta > 0$. 设 $R' \in \Psi^{-\delta}(\R^n)$ 满足 $R' \sim \sum_{j=1}^\infty R^j$. 则 $(I - R)(I + R') = I + E$, 其中 $E \in \Psi^{-\infty}(\R^n)$.
+\end{lemma}
+
+\begin{proof}
+对任意 $N \in \N$, 我们有
+\begin{equation}\label{eq:4.102}
+    \begin{aligned}
+        (I - R)(I + R') - I
+        &= (I - R)\left( I + \sum_{j=1}^N R^j \right) - I + (I - R)\left( R' - \sum_{j=1}^N R^j \right) \\
+        &= -R^{N+1} + (I - R)\left( R' - \sum_{j=1}^N R^j \right).
+    \end{aligned}
+\end{equation}
+右端第一项属于 $\Psi^{-(N+1)\delta}(\R^n)$, 第二项亦然, 因为 $R' - \sum_{j=1}^N R^j \in \Psi^{-(N+1)\delta}(\R^n)$.
+令 $N \to \infty$ 即知差属于 $\bigcap_N \Psi^{-N\delta} = \Psi^{-\infty}$.
+\end{proof}
+
+\begin{proof}[定理~\ref{thm:4.29} 的证明]
+设 $b \in S^{-m}(\R^n; \R^n)$ 使得 $\sigma_m(A) b - 1 = 0 \in S^0 / S^{-1}$. 置 $B_0 \defeq \Op(b) \in \Psi^{-m}(\R^n)$, 则
+\begin{equation}\label{eq:4.103}
+    A \circ B_0 = I - R, \qquad R \in \Psi^{-1}(\R^n).
+\end{equation}
+选取渐近和 $R' \sim \sum_{j=1}^\infty R^j \in \Psi^{-1}(\R^n)$, 并令
+\begin{equation}\label{eq:4.104}
+    B \defeq B_0 (I + R') \in \Psi^{-m}(\R^n).
+\end{equation}
+由引理~\ref{lem:4.30}, $A B = I + E$, 其中 $E \in \Psi^{-\infty}(\R^n)$.
+
+完全类似地可构造左拟逆 $B' \in \Psi^{-m}(\R^n)$ 满足 $B' A = I + E'$ ($E' \in \Psi^{-\infty}(\R^n)$). 于是由抽象的``群论''论证可得
+\begin{equation}\label{eq:4.105}
+    B = I B = (B' A - E') B = B' A B - E' B = B'(I + E) - E' B = B' + (B' E - E' B).
+\end{equation}
+因此 $B - B' \in \Psi^{-\infty}(\R^n)$. 特别地, 任何两个拟逆相差一个残余算子.
+\end{proof}
+
+\begin{example}[Laplace 算子]\label{eg:4.31}
+Laplace 算子 $\Delta = \sum_{j=1}^n D_{x_j}^2 \in \Diff^2(\R^n)$ 的逆由与基本解
+\begin{equation}\label{eq:4.106}
+    E_n(x) \defeq c_n |x|^{-n+2} \quad (n \neq 2), \qquad E_2(x) \defeq c_2 \log |x| \quad (n = 2)
+\end{equation}
+的卷积给出 (在此 $c_2^{-1} = -2\pi$, $c_n^{-1} = n(n-2) \operatorname{vol}(B(0, 1))$). 该卷积核并不直接属于 $\Psi^{-2}(\R^n)$, 因为在无穷远处不衰减. 但取切断函数 $\chi \in \SmoothComp(\R^n)$ 在原点附近恒为 $1$, 则截断核 $K(x, y) = E_n(x - y) \chi(x - y)$ 确立为一个属于 $\Psi^{-2}(\R^n)$ 的拟逆 $B$, 满足 $I - \Delta B, I - B \Delta \in \Psi^{-\infty}(\R^n)$ (由推论~\ref{cor:4.9}(2) 保证). 更多例子见习题~\ref{ex:4.6}.
+\end{example}
+
+椭圆正则性是拟逆存在的直接推论:
+
+\begin{proposition}[椭圆正则性: 光滑情形]\label{prop:4.32}
+设 $A \in \Psi^m(\R^n)$ 是一致椭圆算子, 并设
+\begin{equation}\label{eq:4.107}
+    u \in \TempDistr(\R^n), \qquad A u = f \in \Smooth(\R^n).
+\end{equation}
+则 $u \in \Smooth(\R^n)$. 更一般地, 均有
+\begin{equation}\label{eq:4.108}
+    \singsupp u = \singsupp A u, \qquad \forall\,u \in \TempDistr(\R^n).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+设 $B \in \Psi^{-m}$ 为 $A$ 的拟逆, 满足 $B A = I - R$ ($R \in \Psi^{-\infty}$). 结合命题~\ref{prop:4.16} 的拟局部性与引理~\ref{lem:4.17},
+\begin{equation}\label{eq:4.109}
+    \singsupp u = \singsupp(B A u + R u) = \singsupp B A u \subseteq \singsupp A u \subseteq \singsupp u.
+\end{equation}
+每一步包含关系必须取等号, 证毕.
+\end{proof}
+
+\begin{example}[椭圆算子]\label{eg:4.33}
+命题~\ref{prop:4.32} 适用于 Laplace 算子 $\Delta \in \Psi^2(\R^n)$ 以及 Cauchy--Riemann 算子 $\bar{\partial} = \frac{1}{2}(\partial_{x_1} + \ii \partial_{x_2}) \in \Psi^1(\R^2)$. 对后者, 我们推出: 若缓增分布 $u \in \TempDistr(\R^2)$ 满足 $\bar{\partial} u = 0$, 则 $u \in \Smooth(\R^2)$. (在复分析中我们会学到, $u$ 事实上是解析的; 然而这里我们只在光滑范畴内发展微局部分析, 因而得不到这个更强的结论.)
+\end{example}
+
+\section{在 Sobolev 空间上的有界性}\label{sec:4.8}
+\index{Sobolev kongjian youjiexing@Sobolev 空间有界性 (boundedness on Sobolev spaces)}%
+\index{Calderon-Vaillancourt dingli@Calderón--Vaillancourt 定理 (Calderón--Vaillancourt theorem)}%
+
+在实际应用中, 人们通常使用 $\Schwartz(\R^n)$ 与 $\TempDistr(\R^n)$ 之外的函数空间, 例如 Hölder 空间或 $L^p$ 空间. 这里我们聚焦与 $L^2$ 相关的函数空间, 部分原因是它们对第~\ref{ch:08}~章中非椭圆算子的研究最为自然. 照例, 我们首先考察残余算子:
+
+\begin{proposition}[残余算子的 $L^2$-有界性]\label{prop:4.34}
+设 $A \in \Psi^{-\infty}(\R^n)$. 则 $A$ 从 $\Schwartz(\R^n)$ 连续延拓为有界线性算子 $A \colon L^2(\R^n) \to L^2(\R^n)$.
+\end{proposition}
+
+这将由 Schwartz 核估计~\eqref{eq:4.53} 与 Schur 引理得出:
+
+\begin{lemma}[Schur 引理]\label{lem:4.35}
+设 $(X, \mu)$ 与 $(Y, \nu)$ 为测度空间. 设核函数 $K(x, y)$ 在 $X \times Y$ 上可测, 且满足:
+\begin{equation}\label{eq:4.110}
+    \int_X |K(x, y)| \,\dd\mu(x) \le C_1 \quad (\text{对几乎所有 } y), \qquad \int_Y |K(x, y)| \,\dd\nu(y) \le C_2 \quad (\text{对几乎所有 } x).
+\end{equation}
+设
+\begin{equation}\label{eq:4.111}
+    T u(x) \defeq \int_Y K(x, y) u(y) \,\dd\nu(y).
+\end{equation}
+则积分算子 $T$ 定义了有界线性算子 $T \colon L^2(Y) \to L^2(X)$, 且有定量界
+\begin{equation}\label{eq:4.112}
+    \|T u\|_{L^2(X)} \le (C_1 C_2)^{1/2} \|u\|_{L^2(Y)}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+对 $u \in L^2(Y), v \in L^2(X)$, 利用 Cauchy--Schwarz 不等式即得:
+\[
+    \iint_{X \times Y} |K(x, y)| |u(y)| |v(x)| \,\dd\nu(y) \,\dd\mu(x) \le (C_1 C_2)^{1/2} \|u\|_{L^2(Y)} \|v\|_{L^2(X)}.
+\]
+\end{proof}
+
+\begin{proof}[命题~\ref{prop:4.34} 的证明]
+残余算子 $A$ 的 Schwartz 核满足 $|K(x, y)| \le C \langle x - y \rangle^{-n-1}$, 从而
+\begin{equation}\label{eq:4.113}
+    \int_{\R^n} |K(x, y)| \,\dd x \le C \int_{\R^n} \langle x \rangle^{-n-1} \,\dd x =: C_1 < \infty, \qquad \int_{\R^n} |K(x, y)| \,\dd y \le C_2 < \infty.
+\end{equation}
+该断言直接由引理~\ref{lem:4.35} 得出.
+\end{proof}
+
+利用``Hörmander 平方根技巧'', 我们现在可以证明:
+
+\begin{theorem}[零阶伪微分算子的 $L^2$-有界性]\label{thm:4.36}
+设 $A \in \Psi^0(\R^n)$. 则
+\begin{equation}\label{eq:4.114}
+    A \colon L^2(\R^n) \to L^2(\R^n)
+\end{equation}
+是有界线性算子. 由此定义的线性映射 $\Psi^0(\R^n) \to \mathcal{L}(L^2(\R^n), L^2(\R^n))$ 是连续的.
+\end{theorem}
+
+\begin{proof}
+根据推论~\ref{cor:4.18} 与定理~\ref{thm:4.22}, $A^* A \in \Psi^0(\R^n)$. 取其主符号代表元 $a \in S^0(\R^n; \R^n)$, 则 $\sigma_0(A^* A) = |a|^2 \ge 0$ 实且有界. 取常数 $C > \sup_{x, \xi} |a(x, \xi)|^2$, 则符号 $C - |a|^2 \in S^0$ 一致椭圆且为正. 由习题~\ref{ex:3.10}, 它具有近似平方根 $b_0 \in S^0$, 满足 $C - |a|^2 - b_0^2 \in S^{-1}$. 令 $B_0 \defeq \Op(b_0)$, 则
+\begin{equation}\label{eq:4.115}
+    C - A^* A = B_0^* B_0 + R_1, \qquad R_1 \in \Psi^{-1}(\R^n).
+\end{equation}
+归纳假设已找到 $B_j \in \Psi^{-j}(\R^n)$ ($j = 0, \ldots, k-1$), 使得
+\begin{equation}\label{eq:4.116}
+    R_k \defeq C - A^* A - \left( \sum_{j=0}^{k-1} B_j \right)^* \left( \sum_{j=0}^{k-1} B_j \right) \in \Psi^{-k}(\R^n).
+\end{equation}
+为构造下一步修正 $B_k = \Op(b_k) \in \Psi^{-k}(\R^n)$, 我们计算
+\begin{equation}\label{eq:4.117}
+    \begin{aligned}
+        R_{k+1} &= C - A^* A - (B_0 + \cdots + B_k)^* (B_0 + \cdots + B_k) \\
+        &= R_k - \left( B_k^* (B_0 + \cdots + B_{k-1}) + (B_0 + \cdots + B_{k-1})^* B_k + B_k^* B_k \right) \in \Psi^{-k}(\R^n).
+    \end{aligned}
+\end{equation}
+从而要求 $R_{k+1} \in \Psi^{-k-1}(\R^n)$ 等价于如下主符号条件:
+\begin{equation}\label{eq:4.118}
+    \bar{b}_k b_0 + b_0 b_k = \sigma^{-k}(R_k) \quad \text{在 } S^{-k}(\R^n; \R^n) / S^{-k-1}(\R^n; \R^n) \text{ 中}.
+\end{equation}
+由于 $R_k = R_k^*$ 自伴, 其主符号 $\sigma^{-k}(R_k)$ 为实, 故可直接取 $b_k \defeq \frac{1}{2} \sigma^{-k}(R_k) / b_0 \in S^{-k}$. 最后, 我们令 $B \in \Psi^0(\R^n)$ 为渐近和
+\begin{equation}\label{eq:4.119}
+    B \sim \sum_{k=0}^\infty B_k.
+\end{equation}
+从而安排了
+\begin{equation}\label{eq:4.120}
+    R \defeq C - A^* A - B^* B \in \Psi^{-\infty}(\R^n).
+\end{equation}
+(因此我们在模去残余算子的意义下成功构造出了 $C - A^* A$ 的平方根.)
+
+给定 $u \in \Schwartz(\R^n)$, 我们有
+\begin{equation}\label{eq:4.121}
+    \|A u\|_{L^2}^2 = \langle A^* A u, u \rangle_{L^2} = C \|u\|_{L^2}^2 - \|B u\|_{L^2}^2 - \langle R u, u \rangle_{L^2} \le C \|u\|_{L^2}^2 + \|R u\|_{L^2} \|u\|_{L^2} \le C' \|u\|_{L^2}^2,
+\end{equation}
+最后一步利用了残余算子的 $L^2$-有界性 (命题~\ref{prop:4.34}). 从而 $A$ 经连续延拓成为 $L^2(\R^n)$ 上的有界算子. 连续性由参数依赖性与闭图像定理得出 (利用闭图像定理的另一种论证见习题~\ref{ex:4.3}).
+\end{proof}
+
+\begin{proposition}[负阶具紧支核算子的紧性]\label{prop:4.37}
+设 $m < 0$, 并设 $A \in \Psi^m(\R^n)$. 若 $A$ 的 Schwartz 核在 $\R^n \times \R^n$ 中具有紧支集, 则算子 $A \colon L^2(\R^n) \to L^2(\R^n)$ 是紧算子.
+\end{proposition}
+
+\begin{proof}
+将 $A$ 写为 $A = \Op_L(a)$, 其中 $a \in S^m(\R^n; \R^n)$, 并设 $B \subset \R^n$ 为有界开球使得当 $x \notin B$ 时 $a(x, \xi) = 0$. (若 Schwartz 核 $K(x, y)$ 的支集包含在 $K \times K$ 内, 则对任意包含 $K$ 的开球 $B$ 此式均成立.) 由命题~\ref{prop:3.10}, $S^{-\infty}(\R^n; \R^n) \subset S^m(\R^n; \R^n)$ 稠密, 从而存在序列 $a_j \in S^{-\infty}(\R^n; \R^n)$ 使得在 $S^m(\R^n; \R^n)$ 中 $a_j \to a$. 乘以一个在 $\supp_x a$ 上恒为 $1$ 的切断函数 $\chi \in \SmoothComp(B)$, 我们不妨假设对所有 $x \notin B$ 亦有 $a_j(x, \xi) = 0$. 此时 $\Op(a_j)$ 在 $L^2(\R^n)$ 上是紧算子, 因为它可以分解为
+\begin{equation}\label{eq:4.122}
+    L^2(\R^n) \xrightarrow{\Op(a_j)} \SmoothComp(B) \subset \mathcal{C}^1(\bar{B}) \hookrightarrow \mathcal{C}^0(\bar{B}) \to L^2(\R^n),
+\end{equation}
+其中倒数第二个包含映射由 Arzelà--Ascoli 定理保证是紧的, 而最后一个映射是零延拓. 由定理~\ref{thm:4.36}, $\Op(a)$ 是 $\Op(a_j)$ 在 $\mathcal{L}(L^2(\R^n), L^2(\R^n))$ 中的极限, 因而是紧算子.
+\end{proof}
+
+结合定理~\ref{thm:4.36} 与伪微分算子的复合性质, 我们可以直接推导出一般的 Sobolev 有界性定理:
+
+\begin{corollary}[Sobolev 空间上的有界性定理]\label{cor:4.38}
+设 $s, m \in \R$, $A \in \Psi^m(\R^n)$. 则
+\[
+    A \colon H^s(\R^n) \to H^{s-m}(\R^n)
+\]
+是有界线性算子. 由此定义的线性映射 $\Psi^m(\R^n) \to \mathcal{L}(H^s(\R^n), H^{s-m}(\R^n))$ 是连续的.
+\end{corollary}
+
+\begin{proof}
+回忆分数阶导数算子 $\langle D \rangle^\sigma \in \Psi^\sigma(\R^n)$ (定义~\ref{def:2.13}). 映射 $\langle D \rangle^{-s} \colon L^2 \to H^s$ 与 $\langle D \rangle^{s-m} \colon H^{s-m} \to L^2$ 是等距同构. 算子
+\begin{equation}\label{eq:4.123}
+    \langle D \rangle^{s-m} A \langle D \rangle^{-s} \in \Psi^0(\R^n)
+\end{equation}
+在 $L^2(\R^n)$ 上有界 (由定理~\ref{thm:4.36}), 从而直接等价于本推论的断言.
+\end{proof}
+
+\begin{lemma}[伪微分算子的强收敛性]\label{lem:4.39}
+设 $m \in \R$. 设 $A_\epsilon \in \Psi^m(\R^n)$ ($\epsilon \in (0, 1]$) 是一致有界算子族, 且 $A \in \Psi^m(\R^n)$. 若对某个 $m' \ge m$, 当 $\epsilon \to 0$ 时 $A_\epsilon \to A$ 在 $\Psi^{m'}(\R^n)$ 的拓扑下收敛, 则 $A_\epsilon$ 在 $\mathcal{L}(H^s(\R^n), H^{s-m}(\R^n))$ 中强收敛于 $A$: 对所有 $u \in H^s(\R^n)$, 均有 $A_\epsilon u \to A u$ 在 $H^{s-m}(\R^n)$ 中成立. (当 $m' = m$ 时在算子范数下一致收敛.)
+\end{lemma}
+
+例如经典的 Friedrichs 磨光子族
+\begin{equation}\label{eq:4.124}
+    J_\epsilon \defeq \phi(\epsilon D), \qquad \phi \in \Schwartz(\R^n), \quad \phi(0) = 1,
+\end{equation}
+在 $\Psi^0(\R^n)$ 中一致有界, 且对任意 $m' > 0$ 在 $\Psi^{m'}(\R^n)$ 中收敛于 $I$. 一个具体例子是取 $\phi(\xi) = \ee^{-|\xi|^2}$, 此时 $J_\epsilon = \ee^{-\epsilon^2 |D|^2}$. (在这种情形下, $J_\epsilon \to I$ 在 $\mathcal{L}(H^s(\R^n))$ 中的强收敛当然也容易直接手工验证.)
+
+最后, 我们将上述部分结果推广到加权 Sobolev 空间:
+
+\begin{theorem}[加权 Sobolev 空间之间的有界性]\label{thm:4.40}
+设 $s, m, r \in \R$, $A \in \Psi^m(\R^n)$. 则
+\[
+    A \colon \langle x \rangle^r H^s(\R^n) \to \langle x \rangle^r H^{s-m}(\R^n)
+\]
+是有界线性算子. 线性映射 $\Psi^m(\R^n) \to \mathcal{L}(\langle x \rangle^r H^s(\R^n), \langle x \rangle^r H^{s-m}(\R^n))$ 是连续的.
+\end{theorem}
+
+\begin{proof}
+只需验证算子
+\begin{equation}\label{eq:4.125}
+    A' \defeq \langle D \rangle^{s-m} \langle x \rangle^{-r} \circ A \circ \langle x \rangle^r \langle D \rangle^{-s} \in \Psi^0(\R^n).
+\end{equation}
+设 $a = \sigma_L(A)$, 则算子 $A^\sharp \defeq \langle x \rangle^{-r} \circ A \circ \langle x \rangle^r$ 的全符号由 $a^\sharp(x, y, \xi) = \langle x \rangle^{-r} \langle y \rangle^r a(x, \xi)$ 给出. 由 Peetre 不等式 (引理~\ref{lem:4.3}),
+\begin{equation}\label{eq:4.126}
+    |a^\sharp(x, y, \xi)| \le 2^{|r|/2} \langle x - y \rangle^{|r|} |a(x, \xi)| \le C \langle x - y \rangle^{|r|} \langle \xi \rangle^m.
+\end{equation}
+对导数同理, 注意到
+\begin{equation}\label{eq:4.127}
+    |\partial_{y_j} a^\sharp(x, y, \xi)| = |r \langle x \rangle^{-r} \langle y \rangle^{r-2} y_j a(x, \xi)| \le C \langle x - y \rangle^{|r|} \frac{|y_j|}{\langle y \rangle^2} \langle \xi \rangle^m \le C \langle x - y \rangle^{|r|} \langle \xi \rangle^m.
+\end{equation}
+由此断定 $a^\sharp \in \langle x - y \rangle^{|r|} S^m(\R^n \times \R^n; \R^n)$. 从而 $A^\sharp \in \Psi^m(\R^n)$, 故 $A' \in \Psi^0(\R^n)$, 证毕.
+\end{proof}
+
+\begin{corollary}[加权 Sobolev 空间上的椭圆正则性]\label{cor:4.41}
+设 $A \in \Psi^m(\R^n)$ 是一致椭圆算子, 并设 $u \in \langle x \rangle^r H^{-N}(\R^n)$ ($r, N \in \R$). 若 $A u = f \in \langle x \rangle^r H^{s-m}(\R^n)$, 则 $u \in \langle x \rangle^r H^s(\R^n)$. 特别地, 若 $u \in H^{-N}(\R^n)$ 且 $f \in H^{s-m}(\R^n)$, 则 $u \in H^s(\R^n)$.
+\end{corollary}
+
+\begin{proof}
+设 $B \in \Psi^{-m}(\R^n)$ 为 $A$ 的拟逆, 满足 $I = B A + R$ ($R \in \Psi^{-\infty}$). 则
+\begin{equation}\label{eq:4.128}
+    u = B A u + R u = B f + R u,
+\end{equation}
+由定理~\ref{thm:4.40}, $B f \in \langle x \rangle^r H^s(\R^n)$, 而 $R u \in \langle x \rangle^r H^\infty(\R^n)$, 即得 $u \in \langle x \rangle^r H^s(\R^n)$.
+\end{proof}
+
+\begin{remark}[加权空间中的先验归属]\label{rem:4.42}
+在推论~\ref{cor:4.41} 中, 假定 $u$ 带有相同的空间权指标 $r$ 是重要的. 若仅假设 $u \in \langle x \rangle^{r'} H^{-N}$ ($r' < r$), 结论通常不再成立 (请读者自行确认这一点. 例如, 在 $\R^n$ 上取 Laplace 算子 $A = \Delta$、常数函数 $u = 1$, 并取适当的 $r, r'$.)
+\end{remark}
+
+\section{半经典伪微分算子}\label{sec:4.9}
+\index{banjingdian weifen suanzi@半经典伪微分算子 (semiclassical ps.d.o.s)}%
+\index{banjingdian nini@半经典拟逆 (semiclassical parametrix)}%
+
+在半经典设定下, 我们希望将符号 $a = a(h, x, \xi)$ 量化为 $\Op_h(a) \defeq a(h, x, h D)$. 这等价于对重整标度符号 $\tilde{a}_h(x, \xi) \defeq a(h, x, h \xi)$ 施加标准量化:
+\begin{equation}\label{eq:4.129}
+    (\Op_h(a) u)(x) = (2\pi)^{-n} \iint_{\R^n \times \R^n} \ee^{\ii (x-y) \cdot \xi} a(h, x, h \xi) u(y) \,\dd y \,\dd\xi.
+\end{equation}
+通过变量代换将 $\xi$ 替换为 $\xi / h$, 通常将其写为带有半经典微小相位的显式形式:
+
+\begin{definition}[半经典量化]\label{def:4.43}
+设 $k, m, w \in \R$, 并设 $a \in h^{-k} \left\langle \frac{x-y}{h} \right\rangle^w S_\hbar^m(\R_x^n \times \R_y^n; \R_\xi^n)$ 对 $h < h_0$ 有定义. (该记号表示 $a(h, x, y, \xi) = h^{-k} \left\langle \frac{x-y}{h} \right\rangle^w \tilde{a}(h, x, y, \xi)$, 其中 $\tilde{a} \in S_\hbar^m(\R_x^n \times \R_y^n; \R_\xi^n)$.) 我们定义其半经典量化 $\Op_\hbar(a) = (\Op_h(a))_{h \in (0, h_0)}$ 为
+\begin{equation}\label{eq:4.130}
+    (\Op_h(a) u)(x) \defeq (2\pi h)^{-n} \iint_{\R^n \times \R^n} \ee^{\ii (x-y) \cdot \xi / h} a(h, x, y, \xi) u(y) \,\dd y \,\dd\xi, \qquad u \in \Schwartz(\R^n).
+\end{equation}
+对仅依赖于 $(x, \xi)$ (或 $(y, \xi)$) 的符号, 类似地定义半经典左量化 $\Op_{h, L}(a)$ 与右量化 $\Op_{h, R}(a)$.
+\end{definition}
+
+\begin{definition}[半经典伪微分算子空间]\label{def:4.44}
+设 $k, m \in \R$. 我们定义微分阶数为 $m$, 半经典阶数为 $k$ 的半经典伪微分算子空间为
+\begin{equation}\label{eq:4.131}
+    h^{-k} \Psi_\hbar^m(\R^n) \defeq \left\{ (\Op_h(a))_{h \in (0, h_0)} : a \in h^{-k} \left\langle \frac{x-y}{h} \right\rangle^w S_\hbar^m(\R^n \times \R^n; \R^n), \ w \in \R \right\}.
+\end{equation}
+等价地,
+\begin{equation}\label{eq:4.132}
+    h^{-k} \Psi_\hbar^m(\R^n) = \left\{ (\Op_{h, L/R}(a))_{h \in (0, h_0)} : a \in h^{-k} S_\hbar^m(\R^n; \R^n) \right\}.
+\end{equation}
+当 $k = 0$ 时简记为 $\Psi_\hbar^m(\R^n)$. 残余半经典算子空间定义为 $h^\infty \Psi_\hbar^{-\infty}(\R^n) \defeq \bigcap_{m, k \in \R} h^{-k} \Psi_\hbar^m(\R^n)$.
+\end{definition}
+
+\begin{example}[移阶算子]\label{eg:4.45}
+设 $a(h, x, y, \xi) = h^{-k} \langle \xi \rangle^m$, 则 $\Op_h(a) = h^{-k} \langle h D \rangle^m \in h^{-k} \Psi_\hbar^m(\R^n)$, 它是等距同构 $h^l H_h^s(\R^n) \to h^{l-k} H_h^{s-m}(\R^n)$ (对所有 $l, s \in \R$).
+\end{example}
+
+\begin{example}[微局部化算子]\label{eg:4.46}
+设 $\chi, \psi \in \SmoothComp(\R^n)$. 则算子 $A \defeq \Op_h(\chi(x) \psi(\xi)) \in \Psi_\hbar^{-\infty}(\R^n)$, 其作用为 $u \mapsto \chi \mathcal{F}^{-1}(\psi(h \xi) \hat{u}(\xi))$. 注意 $A$ 并非残余算子 (除非 $\chi = 0$ 或 $\psi = 0$).
+\end{example}
+
+下面通过左/右约化论证来证明式~\eqref{eq:4.131} 与式~\eqref{eq:4.132} 的等价性. 为简洁起见, 我们只考虑 $k = 0$ 的情形. 因此设
+\begin{equation}\label{eq:4.133}
+    a \in \left\langle \frac{x-y}{h} \right\rangle^w S_\hbar^m(\R_x^n \times \R_y^n; \R_\xi^n), \qquad a = a(h, x, y, \xi), \quad h < h_0.
+\end{equation}
+虽然定理~\ref{thm:4.11} 说明存在唯一的 $a_{h, L} \in S^m(\R^n; \R^n)$ 使得 $\Op(\tilde{a}_h) = \Op_L(\tilde{a}_{h, L})$, 其中 $\tilde{a}_h(x, y, \xi) \defeq a(h, x, y, h \xi)$ 而 $\tilde{a}_{h, L}(x, \xi) \defeq a_{h, L}(x, h \xi)$ (从而 $\Op_h(a) = \Op_{h, L}(a_{h, L})$), 但我们无法立即读出所需结论 $(a_{h, L})_{h \in (0, h_0)} \in S_\hbar^m(\R_x^n; \R_\xi^n)$: 症结在于渐近和公式~\eqref{eq:4.50} 至~\eqref{eq:4.51} 中隐含的余项在 $h \to 0$ 时的行为. 我们将遵循定理~\ref{thm:4.11} 的证明, 并指出由于半经典参数 $h$ 的出现而需要的改动. 首先给出命题~\ref{prop:4.13} 的对应版本.
+
+\begin{lemma}[残余半经典算子]\label{lem:4.47}
+算子族 $A = (A_h)_{h \in (0, h_0)}$ 属于 $h^\infty \Psi_\hbar^{-\infty}(\R^n)$ 当且仅当其 Schwartz 核 $K_h(x, y)$ 光滑且满足:
+\begin{equation}\label{eq:4.134}
+    |(h \partial_x)^\alpha (h \partial_y)^\beta K_h(x, y)| \le C_{\alpha\beta M N} h^N \left\langle \frac{x-y}{h} \right\rangle^{-M}, \qquad \forall\,\alpha, \beta, M, N.
+\end{equation}
+此外, 任意此类算子均可唯一表为 $A_h = \Op_{h, L}(a_L) = \Op_{h, R}(a_R)$, 其中 $a_L, a_R \in h^\infty S_\hbar^{-\infty}(\R^n; \R^n)$. 特别地,
+\begin{equation}\label{eq:4.135}
+    h^\infty \Psi_\hbar^{-\infty}(\R^n) = \left\{ \Op_{h, L}(a) : a \in h^\infty S_\hbar^{-\infty}(\R^n; \R^n) \right\}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+由于 $K_h = \Op_h(a_N)$, 其中 $a_N = h^N \langle \frac{x-y}{h} \rangle^{w_N} \tilde{a}_N$, $\tilde{a}_N \in S_\hbar^{-N}(\R^n \times \R^n; \R^n)$, 我们可将 Schwartz 核表为
+\begin{equation}\label{eq:4.136}
+    K_h(x, y) = (2\pi h)^{-n} \int_{\R^n} \ee^{\ii (x-y) \cdot \xi / h} a_N(h, x, y, \xi) \,\dd\xi.
+\end{equation}
+当 $|x - y| \le h$ 时, 由绝对值估计得 $|K_h(x, y)| \le C_N h^{-n} h^N \|\tilde{a}_N(h, \cdot)\|_{-n-1, 0}$. 更一般地, 当 $M \ge |\alpha| + |\beta|$ 且 $N > n + M$ 时, $|(h \partial_x)^\alpha (h \partial_y)^\beta K_h(x, y)| \le C_{N\alpha\beta} h^{-n} h^N \|\tilde{a}_N(h, \cdot)\|_{-N, M}$.
+
+当 $|x - y| \ge h$ 时, 如同式~\eqref{eq:4.56} 进行分部积分并估计:
+\begin{equation}\label{eq:4.137}
+    \begin{aligned}
+        |K_h(x, y)| &= (2\pi h)^{-n} \left| \int_{\R^n} \left[ \left( \frac{x-y}{|x-y|^2} \cdot h D_\xi \right)^M \ee^{\ii (x-y) \cdot \xi / h} \right] a_N(h, x, y, \xi) \,\dd\xi \right| \\
+        &\le C_N \left| \frac{x-y}{h} \right|^{-M} h^{-n+N} \left\langle \frac{x-y}{h} \right\rangle^{w_N} \|\tilde{a}_N\|_{-n-1, M}.
+    \end{aligned}
+\end{equation}
+$K_h$ 的导数同理估计, 即证得式~\eqref{eq:4.134}.
+
+反之, 我们仅构造左符号 $a_L$. 在式~\eqref{eq:4.57} 中对 $\xi$ 作重标度 $h$, 置
+\begin{equation}\label{eq:4.138}
+    a_L(h, x, \xi) \defeq \int_{\R^n} \ee^{-\ii z \cdot \xi / h} K_h(x, x - z) \,\dd z.
+\end{equation}
+它确实满足 $\Op_{h, L}(a_L) = A_h$, 且其属于 $h^\infty S_\hbar^{-\infty}(\R^n; \R^n)$ 由估计式~\eqref{eq:4.134} 直接得出.
+\end{proof}
+
+\begin{theorem}[半经典左/右约化定理]\label{thm:4.48}
+设 $a \in \langle \frac{x-y}{h} \rangle^w S_\hbar^m(\R^n \times \R^n; \R^n)$ ($h < h_0$). 则存在唯一的左符号 $a_L \in S_\hbar^m(\R^n; \R^n)$ 与右符号 $a_R \in S_\hbar^m(\R^n; \R^n)$, 使得 $\Op_h(a) = \Op_{h, L}(a_L) = \Op_{h, R}(a_R)$. 模去残余符号 $h^\infty S_\hbar^{-\infty}$, 它们由如下半经典渐近和给出:
+\begin{align}
+    a_L(h, x, \xi) &\sim \sum_{\alpha \in \N_0^n} \frac{h^{|\alpha|}}{\alpha!} \left. \left( \partial_\xi^\alpha D_y^\alpha a(h, x, y, \xi) \right) \right|_{y = x}, \label{eq:4.139} \\
+    a_R(h, y, \xi) &\sim \sum_{\alpha \in \N_0^n} \frac{(-h)^{|\alpha|}}{\alpha!} \left. \left( \partial_\xi^\alpha D_x^\alpha a(h, x, y, \xi) \right) \right|_{x = y}. \label{eq:4.140}
+\end{align}
+\end{theorem}
+
+\begin{proof}
+仅考虑左约化. 式~\eqref{eq:4.59} 的半经典对应版本为
+\begin{equation}\label{eq:4.141}
+    \begin{aligned}
+        \Op_h((y - x)^\alpha a)(x, y)
+        &= (2\pi h)^{-n} \int_{\R^n} \left( (-h D_\xi)^\alpha \ee^{\ii (x-y) \cdot \xi / h} \right) a(h, x, y, \xi) \,\dd\xi \\
+        &= \Op_h((h D_\xi)^\alpha a)(x, y).
+    \end{aligned}
+\end{equation}
+利用此式与关于 $y$ 在对角线 $y = x$ 处的 Taylor 展开式~\eqref{eq:4.60},
+\begin{equation}\label{eq:4.142}
+    \Op_h\left( a - \sum_{|\alpha| < N} \frac{h^{|\alpha|}}{\alpha!} (D_\xi^\alpha \partial_y^\alpha a)|_{y=x} \right) = \Op_h(\tilde{r}_N),
+\end{equation}
+其中
+\begin{equation}\label{eq:4.143}
+    \begin{aligned}
+        \tilde{r}_N(h, x, y, \xi) &= \sum_{|\alpha| = N} \frac{N h^{|\alpha|}}{\alpha!} \int_0^1 (1 - t)^{N-1} (D_\xi^\alpha \partial_y^\alpha a)(h, x, x + t(y - x), \xi) \,\dd t \\
+        &\qquad \in h^N \left\langle \frac{x-y}{h} \right\rangle^{w_+} S_\hbar^{m-N}(\R^n \times \R^n; \R^n).
+    \end{aligned}
+\end{equation}
+取 $b \in S_\hbar^m(\R^n; \R^n)$ 为渐近和 $b \sim \sum_{\alpha \in \N_0^n} \frac{h^{|\alpha|}}{\alpha!} \left. (D_\xi^\alpha \partial_y^\alpha a) \right|_{y=x}$, 于是有
+\begin{equation}\label{eq:4.144}
+    \Op_h(a - b) =: R_h, \qquad (R_h)_{h \in (0, h_0)} \in \bigcap_{N \in \N} h^N \Psi_\hbar^{m-N}(\R^n) = h^\infty \Psi_\hbar^{-\infty}(\R^n).
+\end{equation}
+由引理~\ref{lem:4.47}, 残余算子 $R$ 可写为 $R = \Op_{h, L}(r)$ ($r \in h^\infty S_\hbar^{-\infty}$). 取 $a_L \defeq b + r$ 即完成证明.
+\end{proof}
+
+\begin{definition}[半经典主符号]\label{def:4.49}
+半经典伪微分算子 $A = (\Op_h(a)) \in h^{-k} \Psi_\hbar^m(\R^n)$ 的\textbf{半经典主符号} $\sigma_{\hbar}^{m, k}(A)$ 定义为等价类:
+\begin{equation}\label{eq:4.145}
+    \sigma_{\hbar}^{m, k}(A) \defeq [\sigma_{\hbar, L}(A)] \in h^{-k} S_\hbar^m(\R^n; \R^n) / h^{-k+1} S_\hbar^{m-1}(\R^n; \R^n).
+\end{equation}
+当 $k = 0$ 时简记为 $\sigma_\hbar^m(A) \in S_\hbar^m / h S_\hbar^{m-1}$.
+\end{definition}
+
+半经典主符号对应如下短正合列:
+\begin{equation}\label{eq:4.146}
+    0 \to h \Psi_\hbar^{m-1}(\R^n) \hookrightarrow \Psi_\hbar^m(\R^n) \xrightarrow{\sigma_\hbar^m} S_\hbar^m(\R^n; \R^n) / h S_\hbar^{m-1}(\R^n; \R^n) \to 0.
+\end{equation}
+
+\begin{theorem}[半经典算子的伴随, 复合与对易子]\label{thm:4.50}
+设 $A \in \Psi_\hbar^m(\R^n)$, $B \in \Psi_\hbar^{m'}(\R^n)$.
+\begin{enumerate}
+    \item $A^* \in \Psi_\hbar^m(\R^n)$, 其左符号满足
+    \begin{equation}\label{eq:4.147}
+        \sigma_{\hbar, L}(A^*)(h, x, \xi) \sim \sum_{\alpha \in \N_0^n} \frac{h^{|\alpha|}}{\alpha!} \partial_\xi^\alpha D_x^\alpha \overline{\sigma_{\hbar, L}(A)}(h, x, \xi).
+    \end{equation}
+    特别地, $\sigma_\hbar^m(A^*) = \overline{\sigma_\hbar^m(A)}$.
+    \item $A \circ B \in \Psi_\hbar^{m+m'}(\R^n)$, 且其左符号满足
+    \begin{equation}\label{eq:4.148}
+        \sigma_{\hbar, L}(A \circ B) \sim \sum_{\alpha \in \N_0^n} \frac{h^{|\alpha|}}{\alpha!} \partial_\xi^\alpha \sigma_{\hbar, L}(A) \cdot D_x^\alpha \sigma_{\hbar, L}(B).
+    \end{equation}
+    特别地, $\sigma_\hbar^{m+m'}(A \circ B) = \sigma_\hbar^m(A) \sigma_\hbar^{m'}(B)$.
+    \item $[A, B] \in h \Psi_\hbar^{m+m'-1}(\R^n)$, 且
+    \begin{equation}\label{eq:4.149}
+        \sigma_\hbar^{m+m'-1}\left( \frac{\ii}{h} [A, B] \right) = \{\sigma_\hbar^m(A), \sigma_\hbar^{m'}(B)\}.
+    \end{equation}
+\end{enumerate}
+\end{theorem}
+
+\begin{theorem}[半经典 Sobolev 空间上的有界性]\label{thm:4.51}
+设 $s, m \in \R$ 且 $A = (A_h)_{h \in (0, h_0)} \in \Psi_\hbar^m(\R^n)$. 则存在与 $h$ 无关的常数 $C$, 使得
+\begin{equation}\label{eq:4.150}
+    \|A_h u\|_{H_h^{s-m}(\R^n)} \le C \|u\|_{H_h^s(\R^n)}, \qquad \forall\,h \in (0, h_0).
+\end{equation}
+\end{theorem}
+
+\begin{theorem}[椭圆半经典伪微分算子的可逆性]\label{thm:4.52}
+设 $A \in \Psi_\hbar^m(\R^n)$ 是半经典椭圆的 (按定义~\ref{def:3.21}). 则存在充分小的 $h_0 > 0$, 使得对所有 $h \in (0, h_0)$ 与 $s \in \R$, 算子 $A_h \colon H_h^s(\R^n) \to H_h^{s-m}(\R^n)$ 均是严格可逆的. 此外, 其逆算子可表为
+\begin{equation}\label{eq:4.151}
+    A_h^{-1} = B_h + R_h,
+\end{equation}
+其中 $B = (B_h)_{h \in (0, h_0)} \in \Psi_\hbar^{-m}(\R^n)$, 且余项算子 $R_h \colon H_h^{-N}(\R^n) \to H_h^N(\R^n)$ 的算子范数对任意 $N$ 均被 $C_N h^N$ 所控制.
+\end{theorem}
+
+主要成分是半经典代数中的一个椭圆拟逆构造.
+
+\begin{theorem}[半经典椭圆拟逆]\label{thm:4.53}
+设 $A = (A_h)_{h \in (0, h_0)} \in \Psi_\hbar^m(\R^n)$ 是半经典椭圆的. 则存在 $h_1 \in (0, h_0]$ 与在模去 $h^\infty \Psi_\hbar^{-\infty}(\R^n)$ 意义下唯一的算子 $B = (B_h)_{h \in (0, h_1)} \in \Psi_\hbar^{-m}(\R^n)$, 使得
+\begin{equation}\label{eq:4.152}
+    A B - I \in h^\infty \Psi_\hbar^{-\infty}(\R^n), \qquad B A - I \in h^\infty \Psi_\hbar^{-\infty}(\R^n).
+\end{equation}
+\end{theorem}
+
+\begin{proof}[定理~\ref{thm:4.52} 的证明]
+设 $h_1 > 0$, $B \in \Psi_\hbar^{-m}(\R^n)$ 为定理~\ref{thm:4.53} 给出的拟逆, 置
+\begin{equation}\label{eq:4.153}
+    R = (R_h)_{h \in (0, h_1)} \defeq I - B A \in h^\infty \Psi_\hbar^{-\infty}(\R^n).
+\end{equation}
+由于 $\|R_h\|_{\mathcal{L}(H_h^m(\R^n), H_h^m(\R^n))} \le C h$, 选取 $h_0 \in (0, h_1]$ 使得对所有 $h \in (0, h_0)$ 均有 $\|R_h\|_{\mathcal{L}(H_h^m, H_h^m)} \le 1/2$. 因此 $I - R_h$ 在 $H_h^m(\R^n)$ 上通过 Neumann 级数可逆. 这推出 $(I - R_h)^{-1} B A = I$ 在 $H_h^m(\R^n)$ 上成立, 故 $A \colon H_h^m(\R^n) \to L^2(\R^n)$ 是左可逆的. 类似地, 从
+\begin{equation}\label{eq:4.154}
+    R' \defeq I - A B \in h^\infty \Psi_\hbar^{-\infty}(\R^n),
+\end{equation}
+我们推知 $A B (I - R')^{-1} = I$ 在 $L^2(\R^n)$ 上成立, 故 $A \colon H_h^m(\R^n) \to L^2(\R^n)$ 是右可逆的; 因此它是一般的双边可逆算子. 为行文清晰, 将其逆算子记作
+\begin{equation}\label{eq:4.155}
+    A_{h, L^2}^{-1} \colon L^2(\R^n) \to H_h^m(\R^n), \qquad h \in (0, h_0),
+\end{equation}
+满足 $A_h A_{h, L^2}^{-1} = I$ 于 $L^2$ 上, 以及 $A_{h, L^2}^{-1} A_h = I$ 于 $H_h^m$ 上.
+
+接下来证明 $A$ 在同一范围 $h \in (0, h_0)$ 内作为任意其他相容的 Sobolev 空间对之间的算子依然可逆. 首先写出
+\begin{equation}\label{eq:4.156}
+    A_{h, L^2}^{-1} = A_{h, L^2}^{-1}(A B + R') = B + (B A + R) A_{h, L^2}^{-1} R' = B + B R' + R A_{h, L^2}^{-1} R'.
+\end{equation}
+由于 $B \in \Psi_\hbar^{-m}$ 且 $B R' \in h^\infty \Psi_\hbar^{-\infty}$, 右端前两项均属于 $\Psi_\hbar^{-m}$. 由定理~\ref{thm:4.51}, 最后一项作为映射 $H_h^{-N}(\R^n) \to H_h^N(\R^n)$ 的算子范数被 $C_N h^N$ 所控制. 因此 $A_{h, L^2}^{-1}$ 是有界算子 $Q \colon H_h^{s-m}(\R^n) \to H_h^s(\R^n)$ 对所有 $s \in \R$ 的限制. 由恒等式
+\begin{equation}\label{eq:4.157}
+    A Q = I \text{ 于 } L^2(\R^n) \text{ 上}, \qquad Q A = I \text{ 于 } H_h^m(\R^n) \text{ 上},
+\end{equation}
+结合密度性即确立了对所有 $s \in \R$ 在 $H_h^{s-m}(\R^n)$ 与 $H_h^s(\R^n)$ 上的恒等式. 证毕.
+\end{proof}
+
+\section*{注记}
+\addcontentsline{toc}{section}{注记}
+
+伪微分算子由 Kohn--Nirenberg~\cite{KN65} 引入. 本章前半部分的处理沿袭 Melrose~\cite{Mel07}. 关于半经典理论的系统论述, 读者可参阅 Zworski~\cite{Zwo12}, Dimassi--Sjöstrand~\cite{DS99} (侧重高能谱理论) 以及 Martinez~\cite{Mar01} (系统使用 FBI 变换技术). 定理~\ref{thm:4.36} 的 $L^2$-有界性证明中的``平方根技巧''取自 Hörmander~\cite[定理 2.2.1]{Hor71a}.
+
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+
+\begin{exer}[关于 $\xi$ 为多项式的符号量化]\label{ex:4.1}
+设 $m \in \N_0$, 且设 $a \in S^m(\R_x^n \times \R_y^n; \R_\xi^n)$ 是关于符号变量 $\xi$ 的多项式.
+\begin{enumerate}
+    \item 从量化作为残余符号弱极限的原始定义出发, 证明 $\Op(a) \in \Diff^m(\R^n)$.
+    \item 设 $w \in \R$. 证明 $\Op(\langle x - y \rangle^w a) \in \Diff^m(\R^n)$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[极低阶伪微分算子的界]\label{ex:4.2}
+设 $n \in \N$, 取定 $m < -n$.
+\begin{enumerate}
+    \item 证明算子 $A = \Op_L(a) \in \Psi^m(\R^n)$ 的 Schwartz 核 $K(x, y)$ 是 $\R^n \times \R^n$ 上的连续函数. 此外证明对所有 $N \in \N$, 均存在常数 $C \in \R$ 使得
+    \begin{equation}\label{eq:4.158}
+        |K(x, y)| \le C \|a\|_{m, N} \langle x - y \rangle^{-N}.
+    \end{equation}
+    \item 由此推导存在常数 $C$ 使得 $\|A\|_{\mathcal{L}(L^2(\R^n), L^2(\R^n))} \le C \|a\|_{m, n+1}$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[零阶伪微分算子作为 $L^2$ 有界算子]\label{ex:4.3}
+记
+\begin{equation}\label{eq:4.159}
+    \Phi \colon \Psi^0(\R^n) \to \mathcal{L}(L^2(\R^n), L^2(\R^n))
+\end{equation}
+为将 $A \in \Psi^0(\R^n)$ 映射为对应有界线性算子 $\Phi(A) \colon u \mapsto A u$ ($u \in L^2(\R^n)$) 的线性映射. 利用闭图像定理证明 $\Phi$ 是连续的.
+\end{exer}
+
+\begin{exer}[一个经典伪微分算子]\label{ex:4.4}
+设 $k \in \mathcal{C}_b^\infty(\R)$. 设 $\chi \in \SmoothComp(\R^n)$ 在原点附近恒为 $1$. 证明主值型积分算子
+\begin{equation}\label{eq:4.160}
+    (A u)(x) \defeq \lim_{\epsilon \searrow 0} \int_{|x-y| \ge \epsilon} \chi(x - y) k(x) (x - y)^{-1} u(y) \,\dd y, \qquad u \in \SmoothComp(\R^n)
+\end{equation}
+良定义, 且确立为一个经典伪微分算子 $A \in \Psi_{\mathrm{cl}}^0(\R)$. 计算其主符号.
+\end{exer}
+
+\begin{exer}[Gårding 不等式]\label{ex:4.5}
+设 $A \in \Psi^{2m}(\R^n)$, 其主符号为 $a = \sigma_{2m}(A) \in S^{2m}(\R^n; \R^n)$. 设 $c \in \R$, 并假定存在 $C_0 > 0$ 使得对所有满足 $|\xi| \ge C_0$ 的 $x, \xi \in \R^n$, 均有 $\operatorname{Re} \sigma_{2m}(A) \ge c \langle \xi \rangle^{2m}$. 证明对任意 $\epsilon > 0$ 与 $N \in \R$, 均存在常数 $C$ 使得
+\begin{equation}\label{eq:4.161}
+    \operatorname{Re} \langle A u, u \rangle_{L^2(\R^n)} \ge (c - \epsilon) \|u\|_{H^m(\R^n)}^2 - C \|u\|_{H^{-N}(\R^n)}^2, \qquad \forall\,u \in \Schwartz(\R^n).
+\end{equation}
+\begin{remark}
+尖锐 Gårding 不等式表明: 式~\eqref{eq:4.161} 在 $\epsilon = 0$ 时仍然成立, 但此时需取 $-N = m - 1/2$; 教科书式的处理见 Hörmander~\cite[定理 18.1.14]{Hor03}. 这可进一步精细化为 Fefferman--Phong 不等式~\cite{FP78}, 它允许取 $-N = m - 1$.
+\end{remark}
+\end{exer}
+
+\begin{exer}[逆算子与拟逆]\label{ex:4.6}
+\begin{enumerate}
+    \item 设 $A \in \Diff^m(\R^n)$ 为常系数算子 $A = \sum_{|\alpha| \le m} a_\alpha D^\alpha$ ($a_\alpha \in \mathbb{C}$). 设 $u \in \TempDistr(\R^n)$ 为基本解 (即 $A u = \delta$). 设 $\chi \in \SmoothComp(\R^n)$ 在原点附近恒为 $1$. 证明具有 Schwartz 核
+    \begin{equation}\label{eq:4.162}
+        K_B(x, y) = u(x - y) \chi(x - y)
+    \end{equation}
+    的算子 $B$ 是 $A$ 的经典拟逆 (即 $B \in \Psi_{\mathrm{cl}}^{-m}(\R^n)$ 且 $A B - I, B A - I \in \Psi^{-\infty}(\R^n)$) 当且仅当 $A$ 是椭圆算子.
+    \item 显式求出 Cauchy--Riemann 算子 $\bar{\partial} = \frac{1}{2}(\partial_{x_1} + \ii \partial_{x_2})$ 的一个显式拟逆 $B \in \Psi^{-1}(\R^2)$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[Weyl 量化]\label{ex:4.7}
+对符号 $a \in S^m(\R^n; \R^n)$, 定义其 \textbf{Weyl 量化}为
+\begin{equation}\label{eq:4.163}
+    \Op^{\mathrm{w}}(a) \defeq \Op\left( a\left( \frac{x+y}{2}, \xi \right) \right) \in \Psi^m(\R^n).
+\end{equation}
+\begin{enumerate}
+    \item 证明对任意 $A \in \Psi^m(\R^n)$, 存在唯一的 $a \in S^m(\R^n; \R^n)$ 使得 $A = \Op^{\mathrm{w}}(a)$. 称 $a$ 为 $A$ 的 (全) Weyl 符号, 记作 $\sigma^{\mathrm{w}}(A)$. 此外证明:
+    \begin{equation}\label{eq:4.164}
+        \sigma^{\mathrm{w}}(\Op(a))(x, \xi) \sim \sum_{\alpha \in \N_0^n} \frac{(-1)^{|\alpha|}}{\alpha! 2^{|\alpha|}} \left. \partial_\xi^\alpha (D_x - D_y)^\alpha a(x, y, \xi) \right|_{y = x},
+    \end{equation}
+    以及
+    \begin{equation}\label{eq:4.165}
+        \sigma_L(\Op^{\mathrm{w}}(a)) \sim \sum_\alpha \frac{1}{\alpha! 2^{|\alpha|}} \partial_\xi^\alpha D_x^\alpha a, \qquad \sigma^{\mathrm{w}}(\Op_L(a)) \sim \sum_\alpha \frac{(-1)^{|\alpha|}}{\alpha! 2^{|\alpha|}} \partial_\xi^\alpha D_x^\alpha a.
+    \end{equation}
+    \item 证明对实符号 $a$, 其 Weyl 量化算子是严格形式自伴的: $\Op^{\mathrm{w}}(a)^* = \Op^{\mathrm{w}}(\bar{a})$.
+    \item 证明
+    \begin{equation}\label{eq:4.166}
+        \sigma^{\mathrm{w}}(\Op^{\mathrm{w}}(a) \circ \Op^{\mathrm{w}}(b)) \equiv a b + \frac{1}{2\ii} \{a, b\} \pmod{S^{m+m'-2}(\R^n; \R^n)}.
+    \end{equation}
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[算子族中的强收敛性]\label{ex:4.8}
+设 $k \in \N_0 \cup \{\infty\}$, $s, m \in \R$.
+\begin{enumerate}
+    \item 设 $H$ 为 Hilbert 空间, 设算子族 $A_j \in \mathcal{L}(H)$ ($j \in \N$) 一致有界且强收敛于 $A \in \mathcal{L}(H)$. 设 $\phi \in \mathcal{C}^k([0, 1]; H)$. 证明曲线族 $A_j \phi \colon t \mapsto A_j(\phi(t))$ 在 $\mathcal{C}^k([0, 1]; H)$ 中收敛于 $A \phi$.
+    \item 设 $A_\epsilon \in \Psi^m(\R^n)$ 一致有界, 并在 $\Psi^{m'}(\R^n)$ ($m' \ge m$) 拓扑下收敛于 $A \in \Psi^m(\R^n)$. 设 $\phi \in \mathcal{C}^k([0, 1]; H^s(\R^n))$. 证明 $A_\epsilon \phi$ 在 $\mathcal{C}^k([0, 1]; H^{s-m}(\R^n))$ 中收敛于 $A \phi$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[半经典伪微分算子 Schwartz 核的衰减]\label{ex:4.9}
+设 $A = (A_h)_{h \in (0, h_0)} \in \Psi_\hbar^m(\R^n)$, 其 Schwartz 核记为 $K_h$. 证明对所有 $\epsilon > 0, N \in \R, \alpha, \beta \in \N_0^n$, 均存在常数 $C$ 使得当 $\left|\frac{x-y}{h}\right| \ge \epsilon$ 时,
+\begin{equation}\label{eq:4.167}
+    \left| (h \partial_x)^\alpha (h \partial_y)^\beta K_h(x, y) \right| \le C \left\langle \frac{x-y}{h} \right\rangle^{-N}.
+\end{equation}
+\end{exer}
+
+\begin{exer}[半经典 Sobolev 空间上有界性证明]\label{ex:4.10}
+\begin{enumerate}
+    \item 设 $A = (A_h) \in \Psi_\hbar^{-\infty}(\R^n)$. 证明存在常数 $C < \infty$ 使得对所有 $h \in (0, h_0)$ 与 $u \in \Schwartz(\R^n)$, 均有 $\|A_h u\|_{L^2} \le C \|u\|_{L^2}$.
+    \item 利用平方根技巧证明每个 $A \in \Psi_\hbar^0(\R^n)$ 均定义了 $L^2$ 上的关于 $h$ 一致有界的算子族.
+    \item 完成定理~\ref{thm:4.51} 的详细证明, 并陈述推广至一般半经典阶数的对应结论.
+    \item 令 $C_A \defeq \liminf_{h \to 0} \sup_{x, \xi} |\sigma_\hbar^0(A)(x, \xi)|$. 证明对任意 $\epsilon > 0$ 存在 $C_\epsilon < \infty$ 使得
+    \begin{equation}\label{eq:4.168}
+        \|A\|_{\mathcal{L}(L^2(\R^n), L^2(\R^n))} \le C_A + \epsilon + C_\epsilon h, \qquad h \in (0, h_0).
+    \end{equation}
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[高频极限下谱族的求逆, I]\label{ex:4.11}
+设 $Q \in \Diff^1(\R^n)$, 并设光滑对称矩阵 $(g^{ij}) \in \mathcal{C}_b^\infty(\R^n)$ 严格正定 (即 $\sum_{i, j=1}^n g^{ij} v_i v_j \ge c |v|^2$). 定义算子族
+\begin{equation}\label{eq:4.169}
+    P(\sigma) \defeq \sum_{i, j=1}^n g^{ij} D_i D_j + Q - \sigma^2, \qquad \sigma \in \mathbb{C}.
+\end{equation}
+证明对任意 $c > 0$ 均存在 $C > 0$, 使得当 $|\!\operatorname{Im} \sigma| > c |\!\operatorname{Re} \sigma|$ 且 $|\!\operatorname{Re} \sigma| > C$ 时, 算子 $P(\sigma) \colon H^2(\R^n) \to L^2(\R^n)$ 是可逆的.
+\end{exer}
+
+\begin{exer}[高频极限下谱族的求逆, II]\label{ex:4.12}
+设 $A \in \Diff^m(\R^n)$ 是椭圆微分算子, 其主符号记为 $a(x, \xi)$. 设 $z_0 \in \mathbb{C}$ ($|z_0| = 1$) 满足 $\inf_{x, \xi} |a(x, \xi) - z_0| > 0$. 证明存在 $\lambda_0, \epsilon > 0$ 使得当 $|\lambda| > \lambda_0$ 且 $\left| \frac{\lambda}{|\lambda|} - z_0 \right| < \epsilon$ 时, 算子 $A - \lambda \colon H^m(\R^n) \to L^2(\R^n)$ 是可逆的.
+\end{exer}
+
+\begin{exer}[半经典算子的共轭变换]\label{ex:4.13}
+设 $a \in S_\hbar^m(\R^n; \R^n)$, $A_h = \Op_h(a)$.
+\begin{enumerate}
+    \item 设 $\xi_0 \in \R^n$, 置 $B_h \defeq \ee^{\ii \xi_0 \cdot / h} A_h \ee^{-\ii \xi_0 \cdot / h}$. 证明 $\sigma_{\hbar, L}(B)(x, \xi) = \sigma_{\hbar, L}(A)(x, \xi - \xi_0)$.
+    \item 设 $\phi \in \mathcal{C}_b^\infty(\R^n)$. 证明 $\sigma_\hbar^m(\ee^{\ii \phi / h} A \ee^{-\ii \phi / h})(x, \xi) = \sigma_\hbar^m(A)(x, \xi - \nabla\phi(x))$.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[散射符号类]\label{ex:4.14}
+对 $m, r_1, r_2 \in \R$, 定义散射符号空间
+\begin{equation}\label{eq:4.170}
+    S^{m, r_1, r_2}(\R_x^n \times \R_y^n; \R_\xi^n)
+\end{equation}
+为所有满足半范数
+\begin{equation}\label{eq:4.171}
+    \|a\|_{m, r_1, r_2, k} \defeq \sup_{x, y, \xi \in \R^n} \max_{|\alpha_1| + |\alpha_2| + |\beta| \le k} \langle x \rangle^{-r_1 + |\alpha_1|} \langle y \rangle^{-r_2 + |\alpha_2|} \langle \xi \rangle^{-m + |\beta|} |\partial_x^{\alpha_1} \partial_y^{\alpha_2} \partial_\xi^\beta a(x, y, \xi)| < \infty
+\end{equation}
+的光滑函数 $a \in \mathcal{C}^\infty(\R^{3n})$ 构成的空间. 记
+\begin{equation}\label{eq:4.172}
+    S^{-\infty, -\infty, -\infty}(\R^n \times \R^n; \R^n) \defeq \bigcap_{m, r_1, r_2 \in \R} S^{m, r_1, r_2}(\R^n \times \R^n; \R^n).
+\end{equation}
+\begin{enumerate}
+    \item 证明当 $m < m', r_1 < r_1', r_2 < r_2'$ 时, $S^{-\infty, -\infty, -\infty}$ 在 $S^{m', r_1', r_2'}$ 拓扑下稠密.
+    \item 建立散射符号类的渐近求和命题.
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[散射伪微分算子, I: 有界性]\label{ex:4.15}
+证明对任意 $a \in S^{m, r_1, r_2}(\R^n \times \R^n; \R^n)$, 算子满足
+\begin{equation}\label{eq:4.173}
+    \Op(a) \colon \Schwartz(\R^n) \to \Schwartz(\R^n), \qquad a \in S^{m, r_1, r_2}(\R^n \times \R^n; \R^n).
+\end{equation}
+更一般地对包含权重 $\langle x - y \rangle^w$ 的散射符号证明相同结论.
+\end{exer}
+
+\begin{exer}[散射伪微分算子, II: 残余算子]\label{ex:4.16}
+设 $r_1 \in \R$. 证明算子 $A$ 可对所有 $N$ 表为 $\Op(a_N)$ ($a_N \in S^{-N, r_1, -N}$) 当且仅当其 Schwartz 核满足 $K \in \Schwartz(\R_x^n \times \R_y^n)$. 证明此时存在唯一的 $a_L, a_R \in S^{-\infty, -\infty}$ 使得 $A = \Op_L(a_L) = \Op_R(a_R)$.
+\end{exer}
+
+\begin{exer}[散射伪微分算子, III: 约化]\label{ex:4.17}
+记
+\begin{equation}\label{eq:4.174}
+    S^{m, r}(\R^n; \R^n)
+\end{equation}
+为满足 $|\partial_x^\alpha \partial_\xi^\beta a(x, \xi)| \le C_{\alpha\beta} \langle x \rangle^{r - |\alpha|} \langle \xi \rangle^{m - |\beta|}$ 的符号空间. 设 $A = \Op(a)$ ($a \in S^{m, r_1, r_2}$). 证明存在唯一的左符号 $a_L \in S^{m, r_1+r_2}(\R^n; \R^n)$ 使得 $A = \Op_L(a_L)$. (注意: Taylor 展开余项的控制需要一些小心.)
+\end{exer}
+
+\begin{exer}[散射伪微分算子, IV: 算子代数]\label{ex:4.18}
+定义散射伪微分算子空间为
+\begin{equation}\label{eq:4.175}
+    \Psi_{\mathrm{sc}}^{m, r}(\R^n) \defeq \Op(S^{m, r}(\R^n; \R^n)).
+\end{equation}
+\begin{enumerate}
+    \item 证明 $A \in \Psi_{\mathrm{sc}}^{m, r}(\R^n) \implies A^* \in \Psi_{\mathrm{sc}}^{m, r}(\R^n)$.
+    \item 设 $A \in \Psi_{\mathrm{sc}}^{m, r}, B \in \Psi_{\mathrm{sc}}^{m', r'}$. 证明
+    \begin{equation}\label{eq:4.176}
+        A \circ B \in \Psi_{\mathrm{sc}}^{m+m', r+r'}(\R^n).
+    \end{equation}
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[散射伪微分算子, V: 主符号]\label{ex:4.19}
+定义散射伪微分算子 $A = \Op_L(a_L) \in \Psi_{\mathrm{sc}}^{m, r}$ 的散射主符号为
+\begin{equation}\label{eq:4.177}
+    {}^{\mathrm{sc}}\sigma_{m, r}(A) \defeq [a_L] \in S^{m, r}(\R^n; \R^n) / S^{m-1, r-1}(\R^n; \R^n).
+\end{equation}
+陈述并证明命题~\ref{prop:4.24} 在散射伪微分算子情形下的对应结论. (因此, 主符号在散射世界中更为有力: 它不仅捕捉算子在高频 (即 $|\xi|$ 很大) 处的行为, 也捕捉 $|x|$ 很大处的行为.)
+\end{exer}
+
+\begin{exer}[散射伪微分算子, VI: 椭圆性]\label{ex:4.20}
+设 $A = \Op_L(a_L) \in \Psi_{\mathrm{sc}}^{m, r}$ 是散射椭圆的, 即存在 $b \in S^{-m, -r}$ 使得 $a_L b - 1 \in S^{-1, -1}$.
+\begin{enumerate}
+    \item 证明存在散射拟逆 $B \in \Psi_{\mathrm{sc}}^{-m, -r}(\R^n)$ 使得 $B A - I \in \Psi_{\mathrm{sc}}^{-\infty, -\infty}(\R^n)$.
+    \item 若 $u \in \TempDistr(\R^n)$ 且 $A u = f \in \Schwartz(\R^n)$, 证明必有 $u \in \Schwartz(\R^n)$.
+\end{enumerate}
+\noindent\textbf{注记.} 注意这与命题~\ref{prop:4.32} 或推论~\ref{cor:4.41} 的陈述之间的差别. 例如, Laplace 算子 $\Delta \in \Psi^2(\R^n)$ 是一致椭圆的, 但对 $u = 1$、$u = x_1 x_2$ 等却有 $\Delta u = 0$. 然而 $\Delta$ 作为 $\Psi_{\mathrm{sc}}^{2, 0}(\R^n)$ 的元素并不是椭圆的. (请验证这一点.) 那么 $\Delta + 1$ 又如何呢?
+\end{exer}
+
+\begin{exer}[散射伪微分算子, VII: Sobolev 空间有界性]\label{ex:4.21}
+\begin{enumerate}
+    \item 证明 $\Psi_{\mathrm{sc}}^{0, 0}(\R^n)$ 中的元素在 $L^2(\R^n)$ 上有界.
+    \item 证明 $\Lambda_{m, r} \defeq \langle x \rangle^r \langle D \rangle^m \in \Psi_{\mathrm{sc}}^{m, r}(\R^n)$ 且 $\Lambda'_{m, r} \defeq \langle D \rangle^m \langle x \rangle^r \in \Psi_{\mathrm{sc}}^{m, r}(\R^n)$.
+    \item 证明对任意 $\rho, \sigma \in \R$, $A \in \Psi_{\mathrm{sc}}^{m, r}$ 定义了有界算子:
+    \begin{equation}\label{eq:4.178}
+        A \colon \langle x \rangle^\rho H^\sigma(\R^n) \to \langle x \rangle^{\rho+r} H^{\sigma-m}(\R^n).
+    \end{equation}
+\end{enumerate}
+\end{exer}
+
+\begin{exer}[散射伪微分算子, VIII: 椭圆散射算子是 Fredholm 算子]\label{ex:4.22}
+\begin{enumerate}
+    \item 设 $A \in \Psi_{\mathrm{sc}}^{m, r}(\R^n)$ 是散射椭圆的. 证明对所有 $\rho, \sigma \in \R$, 算子
+    \begin{equation}\label{eq:4.179}
+        A \colon \langle x \rangle^\rho H^\sigma(\R^n) \to \langle x \rangle^{\rho+r} H^{\sigma-m}(\R^n)
+    \end{equation}
+    是 Fredholm 算子.
+    \item 证明其 Fredholm 指标 $\operatorname{ind} A \defeq \dim\ker A - \dim\operatorname{coker} A$ 与权重参数 $\rho, \sigma$ 无关.
+\end{enumerate}
+\end{exer}

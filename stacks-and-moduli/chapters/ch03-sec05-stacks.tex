@@ -1,0 +1,229 @@
+% Source printed pp. 98-104, PDF pp. 106-112.
+\section{叠}\label{src:3.5}
+\begin{epigraph}
+缺少证明是一项挑战; 缺少定义则是致命的.
+\epigraphauthor{Pierre Deligne}
+\end{epigraph}
+景 $\mathcal S$ 上的叠是一个预叠 $\mathcal X$, 其对象和态射在 $\mathcal S$ 的 Grothendieck 拓扑中可以唯一地粘合.
+
+\subsection{定义}\label{src:3.5.1-subsection}
+给定景中的覆盖 $\{S_i\to S\}$, 我们约定 $S_{ij}$ 表示 $S_i\times_S S_j$, $S_{ijk}$ 表示 $S_i\times_S S_j\times_S S_k$.
+\begin{definition}[叠]\label{src:3.5.1}
+景 $\mathcal S$ 上的预叠 $\mathcal X$ 称为\newterm{叠}{stack}, 如果对每个对象 $S\in\mathcal S$ 的所有覆盖 $\{S_i\to S\}$, 以下条件都成立:
+\begin{enumerate}[(1)]
+\item \hypertarget{stack-axiom-1}{}(态射可以粘合) 对 $\mathcal X$ 中位于 $S$ 上的对象 $a,b$, 以及满足 $\varphi_i|_{S_{ij}}=\varphi_j|_{S_{ij}}$ 的态射 $\varphi_i:a|_{S_i}\to b$, 如下图所示,
+\[
+\begin{tikzcd}[column sep=small,row sep=small]
+&a|_{S_i}\arrow[dr]\arrow[drr,bend left=20,"\varphi_i"]&&{}\\
+a|_{S_{ij}}\arrow[ur]\arrow[dr]&&a\arrow[r,dashed]&b\\
+&a|_{S_j}\arrow[ur]\arrow[urr,bend right=20,"\varphi_j"']&&{}
+\end{tikzcd}
+\quad\text{位于}\quad
+\begin{tikzcd}[column sep=small,row sep=small]
+&S_i\arrow[dr]&{}\\
+S_{ij}\arrow[ur]\arrow[dr]&&S,\\
+&S_j\arrow[ur]&{}
+\end{tikzcd}
+\]
+存在唯一的位于 $\id_S$ 上的态射 $\varphi:a\to b$, 满足 $\varphi|_{S_i}=\varphi_i$.
+\item \hypertarget{stack-axiom-2}{}(对象可以粘合) 对位于 $S_i$ 上的对象 $a_i$ 及同构 $\alpha_{ij}:a_i|_{S_{ij}}\to a_j|_{S_{ij}}$, 如下图所示,
+\[
+\begin{tikzcd}[column sep=small,row sep=small]
+&a_i\arrow[dr]&{}\\
+a_i|_{S_{ij}}\arrow[ur]\arrow[d,"\alpha_{ij}"']&&a\\
+a_j|_{S_{ij}}\arrow[dr]&&{}\\
+&a_j\arrow[uur]&{}
+\end{tikzcd}
+\quad\text{位于}\quad
+\begin{tikzcd}[column sep=small,row sep=small]
+&S_i\arrow[dr]&{}\\
+S_{ij}\arrow[ur]\arrow[dr]&&S\\
+&S_j\arrow[ur]&{}
+\end{tikzcd}
+\]
+若它们在 $S_{ijk}$ 上满足上循环条件
+$\alpha_{jk}|_{S_{ijk}}\circ\alpha_{ij}|_{S_{ijk}}=\alpha_{ik}|_{S_{ijk}}$,
+则存在位于 $S$ 上的对象 $a$ 及位于 $\id_{S_i}$ 上的同构 $\varphi_i:a|_{S_i}\to a_i$, 使得在 $S_{ij}$ 上有 $\varphi_j|_{S_{ij}}=\alpha_{ij}\circ\varphi_i|_{S_{ij}}$.
+\end{enumerate}
+叠的态射就是预叠的态射.
+\end{definition}
+\begin{remark}\label{src:3.5.2}
+若覆盖只包含一个映射 $S'\to S$, 而 $a'\in\mathcal X$ 是位于 $S'$ 上的对象, 则 $S'\times_S S'$ 上的同构 $\alpha:p_1^*a'\xrightarrow{\sim}p_2^*a'$ 的上循环条件, 转化为 $S'\times_S S'\times_S S'$ 上下图的交换性:
+\[
+\begin{tikzcd}[column sep=small,row sep=small]
+&p_{12}^*p_1^*a\arrow[r,"p_{12}^*\alpha"]&p_{12}^*p_2^*a\arrow[dr,equal]&{}\\
+p_{13}^*p_1^*a\arrow[ur,equal]\arrow[dr,"p_{13}^*\alpha"']&&&p_{23}^*p_1^*a\arrow[dl,"p_{23}^*\alpha"]\\
+&p_{13}^*p_2^*a\arrow[r,equal]&p_{23}^*p_2^*a&{}
+\end{tikzcd}
+\]
+公理~\hyperlink{stack-axiom-2}{(2)}~要求存在对象 $a\in\mathcal X(S)$ 及同构 $\varphi:a'\xrightarrow{\sim}a|_{S'}$, 满足 $p_1^*\varphi=p_2^*\varphi\circ\alpha$.
+\end{remark}
+\begin{remark}\label{src:3.5.3}
+预层 $F:\mathcal S\to\Sets$ 的层公理要求, 对覆盖 $\{S_i\to S\}$, 序列 $F(S)\to\prod_iF(S_i)\rightrightarrows\prod_{i,j}F(S_i\times_S S_j)$ 正合. 类似地, 叠的公理可解释为下列序列的``正合性'':
+\[
+\begin{tikzcd}[column sep=small]
+\mathcal X(S)\arrow[r]&\prod_i\mathcal X(S_i)\arrow[r,shift left=2pt]\arrow[r,shift right=2pt]&
+\prod_{i,j}\mathcal X(S_i\times_S S_j)\arrow[r,shift left=3pt]\arrow[r]\arrow[r,shift right=3pt]&
+\prod_{i,j,k}\mathcal X(S_i\times_S S_j\times_S S_k).
+\end{tikzcd}
+\]
+\end{remark}
+\begin{exercise}\label{src:3.5.4}
+证明公理~\hyperlink{stack-axiom-1}{(1)}~等价于如下条件: 对 $\mathcal X$ 中位于 $S\in\mathcal S$ 上的任意对象 $a,b$, Isom 预层 $\underline{\Isom}_{\mathcal X(S)}(a,b)$ (见习题~\bookref{3.4.39}) 是 $\mathcal S/S$ 上的层.
+\end{exercise}
+\begin{exercise}\label{src:3.5.5}
+将习题~\bookref{3.3.7}~从层推广到叠, 证明 $\Sch$ 上的预叠 $\mathcal X$ 是 $\Sch_{\text{ét}}$ (分别为 $\Sch_{\mathrm{fppf}}$, $\Sch_{\mathrm{fpqc}}$) 上的叠当且仅当 $\mathcal X$ 是 $\Sch_{\mathrm{Zar}}$ 上的叠, 且对仿射概形之间的满射平展 (分别为 fppf, fpqc) 态射 $\Spec A'\to\Spec A$, 公理~\hyperlink{stack-axiom-1}{(1)}~和~\hyperlink{stack-axiom-2}{(2)}~成立.
+\end{exercise}
+\begin{exercise}[叠的纤维积]\label{src:3.5.6}
+证明若 $\mathcal X\to\mathcal Y$ 与 $\mathcal Y'\to\mathcal Y$ 是景 $\mathcal S$ 上的叠态射, 则 $\mathcal X\times_{\mathcal Y}\mathcal Y'$ 也是 $\mathcal S$ 上的叠.
+\end{exercise}
+
+\subsection{叠的初步例子}\label{src:3.5.2-subsection}
+\begin{example}[作为叠的层与概形]\label{src:3.5.7}
+景 $\mathcal S$ 上的预层 $F$ 定义了 $\mathcal S$ 上的预叠 $\mathcal X_F$, 其对象为二元组 $(a,S)$, 其中 $S\in\mathcal S$, $a\in F(S)$ (见例~\bookref{3.4.7}). $F$ 是层当且仅当 $\mathcal X_F$ 是叠. 我们常滥用记号, 也用 $F$ 表示叠 $\mathcal X_F$.
+
+概形 $X$ 是 $\Sch_{\text{ét}}$ 上的层 (命题~\bookref{3.3.8}), 因而预叠 $\Sch/X$ 是 $\Sch_{\text{ét}}$ 上的叠. 这一预叠常简记为 $X$, 其在概形 $S$ 上的对象是态射 $S\to X$.
+\end{example}
+\begin{example}[层的叠]\label{src:3.5.8}
+设 $\mathsf{Sheaves}$ 是 $\Sch$ 上的预叠, 其对象为二元组 $(T,F)$, 其中 $T$ 是概形, $F$ 是 $T$ 的 Zariski 拓扑上的层. 态射 $(T',F')\to(T,F)$ 是二元组 $(f,\alpha)$, 其中 $f:T'\to T$ 是概形映射, $\alpha:f^{-1}F\to F'$ 是层的同构. 投影 $\mathsf{Sheaves}\to\Sch$ 由 $(T,F)\mapsto T$ 定义. 由于层及其态射在 Zariski 拓扑中可以粘合~\cite[习题 II.1.15 和 22]{Har77}, $\mathcal X$ 是大 Zariski 景 $\Sch_{\mathrm{Zar}}$ 上的叠.
+\end{example}
+\begin{example}[拟凝聚层的叠]\label{src:3.5.9}
+定义 $\QCoh$, $\mathsf{Coh}$ 和 $\mathsf{Bun}$ 为 $\Sch$ 上的范畴, 其对象为二元组 $(T,F)$, 其中 $F$ 是概形 $T$ 上的拟凝聚层 (分别为有限表现的拟凝聚层, 向量丛); 态射 $(T,F)\to(T',F')$ 是映射 $f:T\to T'$ 及同构 $\alpha:f^*F'\to F$.
+为证明 $\QCoh$ 是 $\Sch_{\mathrm{fpqc}}$ 上的叠, 根据习题~\bookref{3.5.5}, 只需对 fpqc 映射 $T'\to T$ 验证公理~\hyperlink{stack-axiom-1}{(1)}~和~\hyperlink{stack-axiom-2}{(2)}. 这两个公理恰好转化为拟凝聚层的 fpqc 下降 (\bookref{3.1.4}(2)) 中的两个部分. 特别地, $\QCoh$ 是 $\Sch_{\text{ét}}$ 上的叠. 由拟凝聚层性质的 fpqc 下降 (\bookref{3.1.18}), $\mathsf{Coh}$ 和 $\mathsf{Bun}$ 也是 $\Sch_{\mathrm{fpqc}}$ 及 $\Sch_{\text{ét}}$ 上的叠.
+\end{example}
+\begin{exercise}[不重要]\label{src:3.5.10}
+证明参数化二元组 $(T,F)$ 的预叠 $\Mod$ 不是 $\Sch_{\text{ét}}$ 上的叠, 其中 $T$ 是概形, $F$ 是 $\mathcal O_T$-模层.
+\end{exercise}
+\begin{exercise}[不容易, 但也不太重要]\label{src:3.5.11}
+定义任意景上的层的预叠, 并应用习题~\bookref{3.3.9}~和~\bookref{3.3.10}~证明它是叠.
+\end{exercise}
+\begin{example}[概形的叠]\label{src:3.5.12}
+定义 $\mathsf{Schemes}$ 为 $\Sch$ 上的预叠, 其对象是概形态射 $X\to S$, 而态射 $(X'\to S')\to(X\to S)$ 由组成 Cartesian 图的态射 $X'\to X$ 与 $S'\to S$ 给出. 投影 $\mathsf{Schemes}\to\Sch$ 将 $X\to S$ 映到 $S$. 由于概形在 Zariski 拓扑中可以粘合~\cite[习题 II.2.12]{Har77}, $\mathsf{Schemes}$ 是 $\Sch_{\mathrm{Zar}}$ 上的叠. 然而, $\mathsf{Schemes}$ 不是 $\Sch_{\text{ét}}$ 上的叠; 见例~\bookref{3.1.16}. 概形在平展拓扑中可以粘合成代数空间, 并且存在 $\Sch_{\text{ét}}$ 上的代数空间的叠; 见习题~\bookref{5.5.15}.
+
+另一方面, 参数化闭浸入 (分别为开浸入, 仿射, 拟仿射, 局部拟有限且分离) 态射 $X\to S$ 的子范畴 $\mathsf{ClSubSch}$ (分别为 $\mathsf{OpenSubSch}$, $\mathsf{Aff}$, $\mathsf{QAff}$, $\mathsf{SepLQFin}$), 由概形的 fppf 下降 (\bookref{3.1.11}, \bookref{3.1.12}~和~\bookref{3.1.14}), 都是 $\Sch_{\text{ét}}$ 上的叠.
+\end{example}
+
+\subsection{分类叠与商叠}\label{src:3.5.3-subsection}
+设 $G\to S$ 是作用于 $S$-概形 $U$ 的光滑仿射群概形, $[U/G]$ 是定义~\bookref{3.4.15}~中的 $\Sch/S$ 上的范畴: 它在 $S$-概形 $T$ 上的对象是图
+\[
+\begin{tikzcd}
+P\arrow[r,"f"]\arrow[d]&U\\
+T&
+\end{tikzcd}
+\]
+其中 $P\to T$ 是主 $G$-丛, $f:P\to U$ 是概形的 $G$-等变态射.
+\begin{proposition}\label{src:3.5.13}
+若 $G\to S$ 是作用于 $S$-概形 $U$ 的光滑仿射群概形, 则 $[U/G]$ 是 $\Sch_{\text{ét}}$ 上的叠. 特别地, 分类叠 $BG=[S/G]$ 是 $\Sch_{\text{ét}}$ 上的叠.
+\end{proposition}
+\begin{proof}
+事实上, 我们将证明 $[U/G]$ 是 $\Sch_{\mathrm{fpqc}}$ 上的叠. 由于概形及其态射在 Zariski 拓扑中可以粘合, 根据习题~\bookref{3.5.5}, 只需对 fpqc 映射 $T'\to T$ 验证公理~\hyperlink{stack-axiom-1}{(1)}~和~\hyperlink{stack-axiom-2}{(2)}.
+对公理~\hyperlink{stack-axiom-1}{(1)}, 设 $(P'\to T,f':P\to U)$ 和 $(P\to T,f:P\to U)$ 是位于 $S$-概形 $T$ 上的对象, $T'\to T$ 是 fpqc 映射, $\varphi':P'_{T'}\to P$ 是诱导同构 $P'_{T'}\xrightarrow{\sim}P_{T'}$ 且与 $f,f'$ 相容的 $G$-等变态射. 由态射的 fpqc 下降 (\bookref{3.1.7}), 存在唯一的与 $f',f$ 相容的态射 $P'\to P$. 由靶上的 fpqc 局部性质 (\bookref{3.1.26}), $P'\to P$ 是同构.
+对公理~\hyperlink{stack-axiom-2}{(2)}, 设 $(P'\to T',f':P'\to U)$ 是位于 $T'$ 上的对象, $\alpha:p_1^*P'\to p_2^*P'$ 是与 $f'$ 交换且在 $T'\times_T T'\times_T T'$ 上满足上循环条件 $p_{23}^*\alpha\circ p_{12}^*\alpha=p_{13}^*\alpha$ 的同构. 由主 $G$-丛的 fpqc 下降 (\bookref{3.1.17}), 存在拉回为 $P'\to T'$ 的主 $G$-丛 $P\to T$. 由态射的 fpqc 下降 (\bookref{3.1.7}), 存在 $G$-等变态射 $P\to U$.
+\end{proof}
+
+\subsection{曲线的模叠}\label{src:3.5.4-subsection}
+记 $\mathcal M_g$ 为例~\bookref{3.4.10}~中定义的亏格 $g$ 的光滑曲线族 $C\to S$ 的预叠.
+\begin{proposition}[光滑曲线的模叠]\label{src:3.5.14}
+若 $g\geq2$, 则 $\mathcal M_g$ 是 $\Sch_{\text{ét}}$ 上的叠.
+\end{proposition}
+\begin{proof}
+我们验证 $\mathcal M_g$ 是 $\Sch_{\mathrm{fpqc}}$ 上的叠. 由于光滑曲线及其态射在 Zariski 拓扑中可以粘合, 根据习题~\bookref{3.5.5}, 只需对 fpqc 映射 $S'\to S$ 验证公理~\hyperlink{stack-axiom-1}{(1)}~和~\hyperlink{stack-axiom-2}{(2)}.
+公理~\hyperlink{stack-axiom-1}{(1)}~转化为: 对亏格 $g$ 的光滑曲线族 $C\to S$ 与 $D\to S$, 以下由实线箭头组成的任意交换图都能唯一地补全:
+\[
+\begin{tikzcd}[column sep=small]
+C_{S'\times_S S'}\arrow[r,shift left=2pt]\arrow[r,shift right=2pt]\arrow[d]\arrow[dr,phantom,"\square"]&
+C_{S'}\arrow[r]\arrow[rr,bend left=30,"f'"]\arrow[d]\arrow[dr,phantom,"\square"]&
+C\arrow[r,dashed,"f"]\arrow[d]&D\arrow[dl]\\
+S'\times_S S'\arrow[r,shift left=2pt]\arrow[r,shift right=2pt]&S'\arrow[r]&S&
+\end{tikzcd}
+\]
+$f$ 的存在性与唯一性来自态射的 fpqc 下降 (\bookref{3.1.7}). 基变换 $C_{S'}\to D_{S'}$ 是同构 (这是由 $\mathcal M_g$ 中态射的定义决定的), 因而由平展下降 (命题~\bookref{3.1.26}), 态射 $f:C\to D$ 也是同构.
+
+公理~\hyperlink{stack-axiom-2}{(2)}~的验证需要一些几何: 我们必须证明, 给定图
+\[
+\begin{tikzcd}[column sep=small]
+p_1^*C'\arrow[r,"\alpha", "\sim"']\arrow[d]\arrow[rr,bend left=30]&
+p_2^*C'\arrow[dl]\arrow[r]\arrow[dr,phantom,"\square"]&C'\arrow[rr,dashed]\arrow[d]\arrow[dr,phantom,"\square"]&{}&C\arrow[d,dashed]\\
+S'\times_S S'\arrow[rr,shift left=2pt,"p_1"]\arrow[rr,shift right=2pt,"p_2"']&{}&S'\arrow[rr]&{}&S,
+\end{tikzcd}
+\]
+其中 $C'\to S'$ 是光滑曲线族, $\alpha:p_1^*C'\to p_2^*C'$ 是在 $S'\times_S S'\times_S S'$ 上满足上循环条件 $p_{23}^*\alpha\circ p_{12}^*\alpha=p_{13}^*\alpha$ 的同构, 则存在光滑曲线族 $C\to S$ 及同构 $\varphi:C|_{S'}\to C'$, 使得 $p_1^*\varphi=p_2^*\varphi\circ\alpha$.
+我们应用光滑曲线族的性质 (\bookref{6.1.16}): $\Omega_{C'/S'}^{\otimes3}$ 在 $S$ 上相对甚丰沛 (因为 $g\geq2$), 而 $E':=\pi_*(\Omega_{C'/S'}^{\otimes3})$ 是 $S'$ 上秩为 $5(g-1)$ 的向量丛, 其构造与基变换可交换. 因而 $\Omega_{C'/S'}^{\otimes3}$ 定义了 $S'$ 上的闭浸入 $C'\hookrightarrow\mathbb P(E')$.
+同构 $\alpha$ 诱导同构 $\beta:p_1^*E'\to p_2^*E'$, 在 $S'\times_S S'\times_S S'$ 上满足上循环条件 $p_{23}^*\beta\circ p_{12}^*\beta=p_{13}^*\beta$.
+拟凝聚层的 fpqc 下降 (\bookref{3.1.4}) 给出 $S$ 上的拟凝聚层 $E$ 及同构 $\psi:E'\to E|_{S'}$, 满足 $p_1^*\psi=p_2^*\psi\circ\beta$.
+由拟凝聚层性质的 fpqc 下降 (\bookref{3.1.18}), $E$ 是向量丛. 图示如下:
+\[
+\begin{tikzcd}[column sep=small,row sep=large]
+{}&{}&{}&\mathbb P(E')\arrow[rr]\arrow[ddl]&{}&\mathbb P(E)\arrow[ddl]\\
+p_1^*C'\arrow[r,"\alpha"]\arrow[d]\arrow[rr,bend left=30]&
+p_2^*C'\arrow[dl]\arrow[r]&
+C'\arrow[rr]\arrow[d]\arrow[ur,hook]&{}&C\arrow[d,dashed]\arrow[ur,dashed,hook]&{}\\
+S'\times_S S'\arrow[rr,shift left=2pt,"p_1"]\arrow[rr,shift right=2pt,"p_2"']&{}&S'\arrow[rr]&{}&S,&{}
+\end{tikzcd}
+\]
+将 $\mathbb P(p_1^*E')$ 与 $\mathbb P(p_2^*E')$ 等同于 $\mathbb P(E)\times_S(S'\times_S S')$ 后, 原像 $p_1^*C'$ 与 $p_2^*C'$ 相等. 由闭子概形的 fpqc 下降 (\bookref{3.1.11}), 存在拉回为 $C'$ 的闭子概形 $C\subseteq\mathbb P(E)$. 光滑性与固有性是靶上的 fpqc 局部性质 (\bookref{3.1.26}), 因而 $C\to S$ 光滑且固有. $C\to S$ 的每个几何纤维均与 $C'\to S'$ 的某个几何纤维等同, 因而是连通的亏格 $g$ 曲线.
+\end{proof}
+\begin{exercise}[亏格 $0$ 的曲线与椭圆曲线的模, 有益的练习]\label{src:3.5.15}
+\begin{enumerate}[(a)]
+\item 利用亏格 $0$ 的曲线族与主 $\mathrm{PGL}_2$-挠子之间的对应 (习题~\bookref{B.1.69}), 证明预叠 $\mathcal M_0$ 是 $\Sch_{\text{ét}}$ 上的叠, 且在 $\Spec\mathbb Z$ 上同构于 $B\mathrm{PGL}_2$.
+\item 概形 $S$ 上的椭圆曲线族是二元组 $(E\to S,\sigma)$, 其中 $E\to S$ 是带有截面 $\sigma:S\to E$ 的光滑固有态射, 且对每个 $s\in S$, 纤维 $(E_s,\sigma(s))$ 是剩余域 $\kappa(s)$ 上的椭圆曲线. 证明以椭圆曲线族为对象的模叠 $\mathcal M_{1,1}$ 是 $\Sch_{\text{ét}}$ 上的叠.
+\end{enumerate}
+\end{exercise}
+\begin{remark}[亏格 $1$ 的曲线的模]\label{src:3.5.16}
+预叠 $\mathcal M_1$ 的对象是概形的光滑固有态射 $C\to S$, 其几何纤维为连通的亏格 $1$ 曲线. 它不是 $\Sch_{\text{ét}}$ 上的叠. 与 $g\geq2$ 时的 $\mathcal M_g$ 以及 $\mathcal M_{1,1}$ 不同, 这里没有自然的线丛定义到射影空间的嵌入, 因而无法像上面那样用它来验证公理~\hyperlink{stack-axiom-2}{(2)}.
+Raynaud 构造了平展覆盖 $S'\to S$ 及光滑亏格 $1$ 曲线族 $C'\to S'$, 它不能下降为曲线族 $C\to S$~\cite[XIII 3.2]{Ray70}.
+然而, 类似于例~\bookref{3.5.12}, 若将 $\mathcal M_1$ 重新定义为由从代数空间出发的光滑固有态射 $C\to S$ 组成的范畴, 且要求每个几何纤维为连通的亏格 $1$ 曲线, 则 $\mathcal M_1$ 是叠.
+\end{remark}
+
+\subsection{凝聚层与向量丛的模叠}\label{src:3.5.5-subsection}
+若 $X$ 是域 $k$ 上的概形, 则例~\bookref{3.4.12}~中引入的预叠 $\QCoh(X)$, $\mathsf{Coh}(X)$ 与 $\mathsf{Bun}(X)$ 参数化二元组 $(T,F)$, 其中 $T$ 是概形, $F$ 是 $X_T=X\times_k T$ 上的拟凝聚层, 凝聚层 (更准确地说, 有限表现的拟凝聚层) 或向量丛.
+注意例~\bookref{3.5.9}~中的预叠 $\QCoh$, $\mathsf{Coh}$ 与 $\mathsf{Bun}$ 参数化二元组 $(T,F)$, 其中 $T$ 是概形, $F$ 是 $T$ 上的拟凝聚层.
+\begin{proposition}\label{src:3.5.17}
+预叠 $\QCoh(X)$, $\mathsf{Coh}(X)$ 与 $\mathsf{Bun}(X)$ 是 $(\Sch/k)_{\text{ét}}$ 上的叠.
+\end{proposition}
+\begin{proof}
+与例~\bookref{3.5.9}~的证明完全一样, 结论直接来自拟凝聚层的 fpqc 下降 (\bookref{3.1.4}) 及拟凝聚层性质的 fpqc 下降 (\bookref{3.1.18}).
+\end{proof}
+
+\subsection{叠化}\label{src:3.5.6-subsection}
+回顾层化 (\bookref{3.3.15}): 对景 $\mathcal S$ 上的任意预层 $F$, 存在映射 $F\to F^{\mathrm{sh}}$, 给出包含函子的左伴随, 即对 $\mathcal S$ 上的每个层 $G$, $\Mor(F^{\mathrm{sh}},G)\to\Mor(F,G)$ 是双射. 类似地, $\mathcal S$ 上的预叠 $\mathcal X$ 也有叠化 $\mathcal X\to\mathcal X^{\mathrm{st}}$.
+\begin{theorem}[叠化]\label{src:3.5.18}
+若 $\mathcal X$ 是景 $\mathcal S$ 上的预叠, 则存在叠 $\mathcal X^{\mathrm{st}}$, 称为\newterm{叠化}{stackification}, 以及预叠态射 $\mathcal X\to\mathcal X^{\mathrm{st}}$, 使得对 $\mathcal S$ 上的每个叠 $\mathcal Y$, 诱导函子
+\begin{equation}\label{src:3.5.19}
+\Mor(\mathcal X^{\mathrm{st}},\mathcal Y)\longrightarrow\Mor(\mathcal X,\mathcal Y)
+\end{equation}
+是范畴等价.
+\end{theorem}
+\begin{proof}
+与定理~\bookref{3.3.15}~中层化的构造一样, 我们分阶段构造叠化. 大部分细节留给读者.
+
+首先, 给定预叠 $\mathcal X$, 我们可以构造满足公理~\hyperlink{stack-axiom-1}{(1)}~的预叠 $\mathcal X^{\mathrm{st}_1}$ 及预叠态射 $\mathcal X\to\mathcal X^{\mathrm{st}_1}$, 使得
+\[
+\Mor(\mathcal X^{\mathrm{st}_1},\mathcal Y)\longrightarrow\Mor(\mathcal X,\mathcal Y)
+\]
+对所有满足公理~\hyperlink{stack-axiom-1}{(1)}~的预叠 $\mathcal Y$ 都是等价. $\mathcal X^{\mathrm{st}_1}$ 的对象与 $\mathcal X$ 相同. 对分别位于 $S,T\in\mathcal S$ 上的对象 $a,b\in\mathcal X$, $\mathcal X^{\mathrm{st}_1}$ 中位于给定态射 $f:S\to T$ 上的态射 $a\to b$ 的集合, 是习题~\bookref{3.4.39}~中引入的 Isom 预层之层化的整体截面
+$\Gamma(S,\underline{\Isom}_{\mathcal X(S)}(a,f^*b)^{\mathrm{sh}})$.
+
+其次, 给定满足公理~\hyperlink{stack-axiom-1}{(1)}~的预叠 $\mathcal X$, 我们构造叠 $\mathcal X$ 及预叠态射 $\mathcal X\to\mathcal X^{\mathrm{st}_2}$, 使得~\bookeqref{3.5.19}~对所有叠 $\mathcal Y$ 都是等价.
+$\mathcal X^{\mathrm{st}_2}$ 在 $S\in\mathcal S$ 上的对象由三元组给出, 包含覆盖 $\{S_i\to S\}$, $\mathcal X$ 中位于 $S_i$ 上的对象 $a_i$, 以及在 $S_{ijk}$ 上满足上循环条件 $\alpha_{jk}|_{S_{ijk}}\circ\alpha_{ij}|_{S_{ijk}}=\alpha_{ik}|_{S_{ijk}}$ 的同构 $\alpha_{ij}:a_i|_{S_{ij}}\to a_j|_{S_{ij}}$.
+$\mathcal X^{\mathrm{st}_2}$ 中位于 $S\to T$ 上的态射
+\[
+\bigl(\{S_i\to S\},\{a_i\},\{\alpha_{ij}\}\bigr)
+\longrightarrow
+\bigl(\{T_\mu\to T\},\{b_\mu\},\{\beta_{\mu\nu}\}\bigr)
+\]
+定义如下: 对于诱导覆盖 $\{S_i\times_S T_\mu\to S\}_{i,\mu}$, 选择拉回 $a_i|_{S_i\times_S T_\mu}$ 与 $b_\mu|_{S_i\times_S T_\mu}$, 则一个态射就是对所有 $i,\mu$ 给出映射 $\Psi_{i\mu}:a_i|_{S_i\times_S T_\mu}\to b_\mu|_{S_i\times_S T_\mu}$ 的数据, 且这些映射与 $\alpha_{ij},\beta_{\mu\nu}$ 相容 (即在 $S_{ij}\times_S T_{\mu\nu}$ 上有 $\Psi_{j\nu}\circ\alpha_{ij}=\beta_{\mu\nu}\circ\Psi_{i\mu}$).
+\end{proof}
+\begin{exercise}[细节]\label{src:3.5.20}
+证明叠化与纤维积可交换: 若 $\mathcal X\to\mathcal Y$ 与 $\mathcal Z\to\mathcal Y$ 是预叠态射, 则 $(\mathcal X\times_{\mathcal Y}\mathcal Z)^{\mathrm{st}}\cong\mathcal X^{\mathrm{st}}\times_{\mathcal Y^{\mathrm{st}}}\mathcal Z^{\mathrm{st}}$.
+\end{exercise}
+\begin{exercise}[有益的练习]\label{src:3.5.21}
+设 $G\to S$ 是作用于 $S$ 上概形 $U$ 的光滑仿射群概形. 回顾定义~\bookref{3.4.15}, 商预叠 $[U/G]^{\mathrm{pre}}$ 与商叠 $[U/G]$ 表示 $\Sch/S$ 上的预叠, 分别分类平凡主 $G$-丛和一般的主 $G$-丛 $P\to T$, 连同 $G$-等变映射 $P\to U$.
+\begin{enumerate}[(a)]
+\item 证明 $[U/G]^{\mathrm{pre}}$ 满足 $(\Sch/S)_{\text{ét}}$ 上叠的公理~\hyperlink{stack-axiom-1}{(1)}.
+\item 证明 $[U/G]$ 同构于 $[U/G]^{\mathrm{pre}}$ 在 $(\Sch/S)_{\text{ét}}$ 上的叠化, 且 $[U/G]^{\mathrm{pre}}\to[U/G]$ 完全忠实.
+\end{enumerate}
+\end{exercise}
+\begin{exercise}\label{src:3.5.22}
+推广习题~\bookref{3.4.27}, 证明 $U\to[U/G]$ 是叠范畴中的范畴商.
+\end{exercise}

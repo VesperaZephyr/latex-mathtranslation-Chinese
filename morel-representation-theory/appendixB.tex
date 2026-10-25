@@ -1,0 +1,303 @@
+% ============ 附录 B: 赋范向量空间的有用事实 ============
+% (Useful Things about Normed Vector Spaces)
+% 原书 B.1 - B.6 (原书 pp.341-349)
+
+\section{商范数}
+见 {[}19{]} 18.15 或 {[}20{]} 1.40, 1.41.
+
+\begin{definition}[商范数 (quotient norm)]
+\label{def:B.1.1}
+设 $V$ 是赋范向量空间, $W \subset V$ 是子空间. 则 $V/W$ 上的商半范数 (quotient seminorm) 由
+\[
+\|x + W\| = \inf_{w \in W}\|v + w\|
+\]
+定义.
+若 $W$ 闭, 则称它为商范数 (quotient norm).
+\end{definition}
+
+\begin{proposition}[商空间的性质]
+\label{prop:B.1.2}
+\begin{enumerate}
+\item[(i)] 前一命题的公式给出 $V/W$ 上的半范数, 当且仅当 $W$ 在 $V$ 中闭时它是范数.
+\item[(ii)] 若 $V$ 是巴拿赫空间且 $W$ 在 $V$ 中闭, 则 $V/W$ 对商范数是巴拿赫空间.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) 设 $v, v' \in V$, $\lambda \in \CC$. 则
+\[
+\|v + v' + W\| = \inf_{w \in W}\|v + v' + w\| \leq \inf_{w \in W}\|v + w\| + \inf_{w \in W}\|v' + w\| = \|v + W\| + \|v' + W\|.
+\]
+若 $\lambda = 0$, 则 $\lambda v \in W$, 所以 $\|\lambda v + W\| = 0$; 否则,
+\[
+\|\lambda v + W\| = \inf_{w \in W}\|\lambda v + w\| = \inf_{w \in W}\|\lambda(v + w)\| = |\lambda|\inf_{w \in W}\|v + w\| = |\lambda|\|v + W\|.
+\]
+这证明商半范数确实是 $V/W$ 上的半范数. 现在证明 $\|v + W\| = 0$ 当且仅当 $v \in W$, 这将蕴含最后的结论. 由 $\|v + W\|$ 的定义 (以及 $W$ 是子空间这一事实), $\|v + W\| = 0$ 当且仅当对每个 $\varepsilon > 0$, 存在 $w \in W$ 使得 $\|v - w\| < \varepsilon$. 这等价于 $v \in \overline{W}$.
+
+(ii) 设 $(v_n)_{n \geq 0}$ 是 $V$ 中的序列使得 $(v_n + W)_{n \geq 0}$ 是 $V/W$ 中的 Cauchy 序列. 取 $(v_n)_{n \geq 0}$ 的子序列后, 可以假设对每个 $n \geq 0$ 有 $\|v_{n+1} - v_n + W\| < 2^{-n}$. 如下定义另一个序列 $(v'_n)_{n \geq 0}$ 使得 $n \geq 0$ 时 $v'_n \in v_n + W$, 且 $n \geq 1$ 时 $\|v'_n - v'_{n-1}\| < 2^{-n+1}$:
+\begin{itemize}
+\item 取 $v'_0 = v_0$.
+\item 假设已有满足两个条件的 $v'_0, \ldots, v'_n$ ($n \geq 0$). 则 $\|v_{n+1} - v'_n + W\| = \|v_{n+1} - v_n + W\| < 2^{-n}$, 所以由商范数的定义, 可以找到 $w \in W$ 使得 $\|v_{n+1} - v'_n + w\| < 2^{-n}$. 取 $v'_{n+1} = v_{n+1} + w$.
+\end{itemize}
+由第二个条件, $(v'_n)_{n \geq 0}$ 是 Cauchy 序列, 所以它有极限 $v \in V$. 由第一个条件, 对每个 $n \geq 0$ 有 $v'_n + W = v_n + W$, 所以 $v + W$ 是序列 $(v_n + W)_{n \geq 0}$ 在 $V/W$ 中的极限.
+\end{proof}
+
+\section{开映射定理}
+这也称为 Banach-Schauder 定理. 见例如 {[}19{]} 的定理 5.10.
+
+\begin{theorem}[开映射定理 (open mapping theorem)]
+\label{thm:B.2.1}
+设 $V$ 和 $W$ 是巴拿赫空间, $T \colon V \to W$ 是双射有界线性变换. 则 $T^{-1} \colon W \to V$ 也有界.
+\end{theorem}
+
+\section{Hahn-Banach 定理}
+见 {[}19{]} 定理 5.16 或 {[}20{]} 定理 3.2-3.7.
+
+\begin{theorem}[Hahn-Banach 定理, 解析版本, 实情形]
+\label{thm:B.3.1}
+设 $V$ 是 $\R$ 上的向量空间, 设 $p \colon V \to \R$ 满足:
+\begin{enumerate}
+\item[(a)] 对所有 $v, v' \in V$ 有 $p(v + v') \leq p(v) + p(v')$ (即 $p$ 次可加);
+\item[(b)] 对每个 $v \in V$ 和每个 $\lambda \in \R_{>0}$ 有 $p(\lambda v) = \lambda p(v)$.
+\end{enumerate}
+设 $E \subset V$ 是子空间, $f \colon E \to \R$ 是满足对每个 $x \in E$ 有 $f(x) \leq p(x)$ 的线性泛函.
+则存在线性函数 $F \colon V \to \R$ 使得 $F|_E = f$ 且对每个 $x \in V$ 有 $F(x) \leq p(x)$.
+\end{theorem}
+
+注意在此版本中, $V$ 上没有任何范数或拓扑, 对线性泛函也没有连续性条件.
+
+\begin{proof}
+考虑偶对 $(W, g)$ 的集合 $\mathcal{X}$, 其中 $W \supset E$ 是 $V$ 的子空间, $g \colon W \to \R$ 是满足 $g|_E = f$ 且对每个 $x \in W$ 有 $g(x) \leq p(x)$ 的线性泛函. 通过说 $(W, g) \leq (W', g')$ 若 $W \subset W'$ 且 $g'|_W = g$ 来排序此集合. 假设 $(W_i, g_i)_{i \in I}$ 是 $\mathcal{X}$ 中的非空全序族, 证明它有上界. 设 $W = \bigcup_{i \in I}W_i$; 这是 $V$ 的子空间, 因为 $(W_i)_{i \in I}$ 全序 (所以对所有 $i, j \in I$, $W_i \subset W_j$ 或 $W_j \subset W_i$). 如下定义 $g \colon W \to \R$: 若 $v \in W$, 则存在 $i \in I$ 使得 $v \in W_i$, 设 $g(v) = g_i(v)$. 显然有 $g(v) \leq p(v)$. 又, 若 $j \in I$ 是满足 $v \in W_j$ 的另一个元素, 则有 $(W_i, g_i) \leq (W_j, g_j)$ 或 $(W_j, g_j) \leq (W_i, g_i)$, 两种情形都迫使 $g_i(v) = g_j(v)$, 所以定义有意义. 也容易看到 $g$ 是 $\R$-线性的, 所以 $(W, g) \in \mathcal{X}$. 这是族的上界.
+所以可以对集合 $\mathcal{X}$ 应用 Zorn 引理. 设 $(W, g)$ 是 $\mathcal{X}$ 的极大元素, 证明 $W = V$. 假设 $W \neq V$, 选择 $v \in V - W$. 要把 $g$ 延拓成 $W \oplus \R v$ 上满足 $h \leq p$ 的线性泛函 $h$, 这将与 $(W, g)$ 的极大性矛盾. 这只是意味着必须选择 $h(v)$ 的值, 设为 $h(v) = \alpha \in \R$. 条件 $h \leq p$ 意味着想要对每个 $w \in W$ 和每个 $t \in \R$:
+\[
+h(w + tv) = g(w) + t\alpha \leq p(w + tv).
+\]
+若上面的不等式对某个 $t \in \R$ 和所有 $w \in W$ 成立, 则它对所有 $ct$ ($c \in \R_{>0}$) 和所有 $w \in W$ 也成立 (因为 $W$ 是子空间, 且当参数乘以 $c$ 时 $g$ 和 $p$ 的值都乘以 $c$). 所以只需对 $t = \pm 1$ 验证, 这意味着想要对每个 $w \in W$:
+\[
+g(w) + \alpha \leq p(w + v) \quad \text{且} \quad g(w) - \alpha \leq p(w - v).
+\]
+换句话说, 想要:
+\[
+\sup_{w \in W}(g(w) - p(w - v)) \leq \alpha \leq \inf_{w \in W}(p(w + v) - g(w)).
+\]
+能找到这样的 $\alpha$, 因为对所有 $w, w' \in W$,
+\[
+g(w) + g(w') = g(w + w') \leq p(w + w') \leq p(w + v) + p(w' - v),
+\]
+即
+\[
+g(w') - p(w' - v) \leq p(w + v) - g(w).
+\]
+所以得到矛盾, 可以得出结论 $W$ 本来就等于 $V$, 完成了.
+\end{proof}
+
+\begin{theorem}[Hahn-Banach 定理, 解析版本, 复情形]
+\label{thm:B.3.2}
+设 $V$ 是 $\CC$ 上的向量空间, 设 $p \colon V \to \R_{\geq 0}$ 是半范数,\footnote{这意味着对所有 $x, y \in V$ 和所有 $\lambda \in \CC$, $p(x + y) \leq p(x) + p(y)$ 且 $p(\lambda x) = |\lambda|p(x)$.} 设 $E \subset V$ 是 $\CC$-子空间, $f \colon E \to \CC$ 是满足对每个 $x \in E$ 有 $|f(x)| \leq p(x)$ 的线性泛函.
+则存在线性函数 $F \colon V \to \CC$ 使得 $F|_E = f$ 且对每个 $x \in V$ 有 $|F(x)| \leq p(x)$.
+\end{theorem}
+
+\begin{proof}
+把 $V$ 和 $E$ 看作 $\R$-向量空间, 定义 $\R$-线性泛函 $h \colon E \to \R$:
+\[
+h(v) = \frac{1}{2}(f(v) + \overline{f(v)}).
+\]
+则对每个 $v \in E$,
+\[
+h(v) \leq \frac{1}{2}(|f(v)| + |f(v)|) \leq p(v).
+\]
+注意 $p$ 满足定理 \ref{thm:B.3.1} 的条件 (a) 和 (b). 由该定理, 可以找到 $\R$-线性泛函 $H \colon V \to \R$ 使得 $H|_E = h$ 且对每个 $v \in V$ 有 $H(v) \leq p(v)$. 定义 $F \colon V \to \CC$:
+\[
+F(v) = H(v) + \frac{1}{i}H(iv),
+\]
+证明它具有所有要求的性质.
+\begin{enumerate}
+\item[(i)] $F$ 由构造是 $\R$-线性的, 且对每个 $v \in V$,
+\[
+F(iv) = H(iv) + \frac{1}{i}H(i(iv)) = iF(v).
+\]
+所以 $F$ 是 $\CC$-线性的.
+\item[(ii)] 若 $v \in E$, 则
+\[
+F(v) = h(v) + \frac{1}{i}h(iv) = \frac{1}{2}(f(v) + \overline{f(v)} - if(iv) - i\overline{f(iv)}) = f(v)
+\]
+(因为 $f$ 是 $\CC$-线性的), 所以 $F|_E = f$.
+\item[(iii)] 设 $v \in V$, 选择 $\theta \in \R$ 使得 $e^{i\theta}F(v) \in \R_{\geq 0}$. 则
+\[
+|F(v)| = e^{i\theta}F(v) = F(e^{i\theta}v) = H(e^{i\theta}v) - iH(ie^{i\theta}v) \in \R.
+\]
+由于 $H(e^{i\theta}v) \in \R$ 且 $iH(ie^{i\theta}v) \in i\R$, 必有 $iH(ie^{i\theta}v) = 0$. 所以
+\[
+|F(v)| = H(e^{i\theta}v) \leq p(e^{i\theta}v) = p(v).
+\]
+\end{enumerate}
+\end{proof}
+
+\begin{corollary}[保范延拓]
+\label{cor:B.3.3}
+设 $V$ 是 (实或复) 赋范向量空间, $W$ 是 $V$ 的子空间, $T_W$ 是 $W$ 上的有界线性泛函. 则存在 $V$ 上的有界线性泛函 $T$ 使得 $T|_W = T_W$ 且 $\|T\|_{\mathrm{op}} = \|T_W\|_{\mathrm{op}}$.
+\end{corollary}
+
+\begin{proof}
+设 $C = \|T_W\|_{\mathrm{op}}$. 对 $p(v) = C\|v\|$ 应用 Hahn-Banach 定理. 得到延拓 $T_W$ 且对每个 $v \in V$ 满足 $|T(v)| \leq C\|v\|$ 的线性泛函 $T \colon V \to \CC$, 这意味着 $T$ 有界且 $\|T\|_{\mathrm{op}} \leq \|T_W\|_{\mathrm{op}}$. 由于不等式 $\|T_W\|_{\mathrm{op}} \leq \|T\|_{\mathrm{op}}$ 显然, 完成了.
+\end{proof}
+
+\begin{corollary}[双重对偶嵌入]
+\label{cor:B.3.4}
+(见 {[}19{]} 定理 5.20 和注记 5.21.) 设 $V$ 是 $K = \R$ 或 $\CC$ 上的赋范向量空间. 记 $V^* = \Hom(V, K)$. 则映射 $V \to V^{**}$, 把 $v \in V$ 送到线性泛函 $\hat{v} \colon V^* \to \CC$, $T \longmapsto T(v)$, 是等距.
+特别地, 此映射单射, 这意味着有界线性泛函分离点.
+\end{corollary}
+
+现在可以推出 Hahn-Banach 定理的几何版本. (在有限维中, 它们有时称为``超平面分离定理''.)
+
+\begin{definition}[\index{拓扑向量空间}拓扑向量空间与\index{局部凸}局部凸]
+\label{def:B.3.5}
+设 $V$ 是域 $K$ ($K = \R$ 或 $\CC$) 上的向量空间. 若它有拓扑使得:
+\begin{itemize}
+\item $(V, +)$ 是拓扑群;
+\item 映射 $K \times V \to V$, $(a, v) \longmapsto av$ 连续,
+\end{itemize}
+则说 $V$ 是 $K$ 上的拓扑向量空间 (topological vector space).
+说拓扑向量空间局部凸 (locally convex), 若每个点有凸邻域基.
+\end{definition}
+
+\begin{example}[局部凸的例子]
+\label{exa:B.3.6}
+(a) 任何赋范向量空间都是局部凸拓扑向量空间, 其对偶对弱*拓扑也是.
+(b) 设 $(X, \mu)$ 是测度空间, $p \in (0, 1)$, 考虑空间 $L^p(X, \mu)$, 带度量
+\[
+d(f, g) = \int_X|f(x) - g(x)|^p\,\dd\mu(x).
+\]
+这使得 $L^p(X, \mu)$ 成为拓扑向量空间, 若 $\mu$ 无原子且有限 (例如 $\mu$ 是 $\R^n$ 的有界子集上的 Lebesgue 测度, 或紧群上的 Haar 测度), 则它不局部凸.
+\end{example}
+
+\begin{theorem}[Hahn-Banach 定理, 第一几何版本]
+\label{thm:B.3.7}
+设 $V$ 是拓扑 $\R$-向量空间, $A$ 和 $B$ 是 $V$ 的两个非空凸子集. 假设 $A$ 开且 $A \cap B = \emptyset$.
+则存在连续线性泛函 $f \colon V \to \R$ 和 $c \in \R$ 使得对每个 $x \in A$ 和每个 $y \in B$,
+\[
+f(x) \leq c \leq f(y).
+\]
+\end{theorem}
+
+我们将用作函数 $p$ 的是所谓开凸集 $C \ni 0$ 的\index{规范函数}规范函数 (gauge).
+
+\begin{lemma}[规范函数]
+\label{lem:B.3.8}
+设 $C$ 是 $V$ 的非空开凸子集, 假设 $0 \in C$. 定义 $C$ 的规范函数 (gauge) $p \colon V \to \R_{\geq 0}$:
+\[
+p(v) = \inf\{\alpha > 0 \mid v \in \alpha C\}.
+\]
+则 $p$ 满足定理 \ref{thm:B.3.1} 的条件 (a) 和 (b), 且还有:
+\begin{enumerate}
+\item[(c)] 若 $V$ 是赋范向量空间, 则存在 $M \in \R_{\geq 0}$ 使得对每个 $v \in V$,
+\[
+0 \leq p(v) \leq M\|v\|.
+\]
+\item[(d)] $C = \{v \in V \mid p(v) < 1\}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+$p(\lambda v) = \lambda p(v)$ (对每个 $\lambda \in \R_{>0}$ 和每个 $v \in V$) 这一事实立即由定义得出 (不用 $C$ 的凸性或开性).
+证明 (c). 由于 $C$ 开且 $0 \in C$, 存在 $r > 0$ 使得 $C \supset \{v \in V \mid \|v\| < r\}$. 则对每个 $v \in V - \{0\}$, $\frac{r}{\|v\|}v \in C$, 所以 $p(v) \leq \frac{1}{r}\|v\|$.
+证明 (d). 设 $v \in C$. 由于 $C$ 开, 存在 $\varepsilon > 0$ 使得 $(1 + \varepsilon)v \in C$. 所以 $p(v) \leq \frac{1}{1+\varepsilon} < 1$. 反之, 设 $v \in V$ 满足 $p(v) < 1$. 则存在 $\alpha \in (0, 1)$ 使得 $v \in \alpha C$, 即 $\frac{1}{\alpha}v \in C$, 然后 $v = \alpha(\frac{1}{\alpha}v) + (1 - \alpha)0 \in C$, 因为 $C$ 凸.
+最后证明 $p$ 次可加, 即条件 (b). 设 $v, w \in V$. 设 $\varepsilon > 0$. 由 (b) (和证明的第一个性质), $\frac{1}{p(v)+\varepsilon}v \in C$, $\frac{1}{p(w)+\varepsilon}w \in C$. 由于 $C$ 凸, 这蕴含对每个 $t \in [0, 1]$,
+\[
+t\frac{1}{p(v)+\varepsilon}v + (1 - t)\frac{1}{p(w)+\varepsilon}w \in C.
+\]
+取 $t = \frac{p(v)+\varepsilon}{p(v)+p(w)+2\varepsilon}$, 得到
+\[
+\frac{1}{p(v) + p(w) + 2\varepsilon}(v + w) \in C,
+\]
+即 $p(v + w) \leq p(v) + p(w) + 2\varepsilon$. 由于 $\varepsilon > 0$ 任意, 这蕴含 $p(v + w) \leq p(v) + p(w)$.
+\end{proof}
+
+\begin{lemma}[凸集与线性泛函]
+\label{lem:B.3.9}
+设 $C \subset V$ 是非空开凸子集, $v_0 \in V - C$.
+则存在 $V$ 上的连续线性泛函 $F$ 使得对每个 $v \in C$, $F(v) < F(v_0)$.
+\end{lemma}
+
+\begin{proof}
+可以假设 $0 \in C$ (通过平移). 设 $p \colon V \to \R_{\geq 0}$ 是 $C$ 的规范函数, 即前一引理定义的函数.
+设 $E = \R v_0$, 定义线性泛函 $f \colon E \to \R$: $f(\lambda v_0) = \lambda$, 对每个 $\lambda \in \R$. 证明 $f \leq p$. 若 $\lambda \leq 0$, 则 $f(\lambda v_0) \leq 0 \leq p(\lambda v_0)$. 若 $\lambda > 0$, 则 $f(\lambda v_0) = \lambda \leq p(\lambda v_0)$, 因为 $\frac{1}{\lambda}(\lambda v_0) = v_0 \notin C$.
+所以可以应用 Hahn-Banach 定理的解析形式得到线性函数 $F \colon V \to \R$ 使得对每个 $v \in V$ 有 $F(v) \leq p(v)$. 特别地, $F(v_0) = 1$, 且若 $v \in C$, 则 $F(v) \leq p(v) < 1$ (由第一个引理中的 (d)).
+最后证明 $F$ 连续. 注意若 $v \in -C$, 则 $-F(v) = F(-v) < 1$. 所以对 $0$ 的开邻域 $U := C \cap (-C)$ 中的每个 $v$, 有 $|F(v)| < 1$. 若 $\varepsilon > 0$, 则 $\varepsilon U$ 是 $V$ 中 $0$ 的开邻域, 且对每个 $v \in \varepsilon U$ 有 $|F(v)| < \varepsilon$. 所以 $F$ 在 $0$ 处连续. 由于 $F$ 线性且平移在 $V$ 上连续, 这蕴含 $F$ 在 $V$ 的每个点连续.
+\end{proof}
+
+\begin{proof}[定理的证明]
+设 $C = A - B = \{x - y \mid x \in A, y \in B\}$. 则 $C$ 显然凸, $C$ 开因为它等于 $\bigcup_{y \in B}(A - y)$, 且 $0 \notin C$ 因为 $A \cap B = \emptyset$. 所以可以应用上面的第二个引理得到连续线性泛函 $f \colon V \to \R$ 使得对每个 $x \in C$ 有 $f(x) < 0$. 则对每个 $x \in A$ 和每个 $y \in B$, $f(x) < f(y)$. 所以对 $f$ 和 $c = \sup_{x \in A}f(x)$ 结论成立.
+\end{proof}
+
+\begin{theorem}[Hahn-Banach 定理, 第二几何版本]
+\label{thm:B.3.10}
+设 $V$ 是局部凸拓扑 $\R$-向量空间, $A$ 和 $B$ 是 $V$ 的两个非空凸子集. 假设 $A$ 闭, $B$ 紧, 且 $A \cap B = \emptyset$.
+则存在连续线性泛函 $f \colon V \to \R$ 和 $c \in \R$ 使得对每个 $x \in A$ 和每个 $y \in B$,
+\[
+f(x) < c < f(y).
+\]
+\end{theorem}
+
+\begin{proof}
+先找 $V$ 中 $0$ 的凸开邻域 $U$ 使得 $(A + U) \cap (B + U) = \emptyset$. (注意: 这只用 $V$ 局部凸以及 $A$ 闭、$B$ 紧这一事实, 不用 $A$ 和 $B$ 凸.)
+对每个 $x \in B$, 选择对称凸开邻域 $U_x$ 使得 $(x + U_x + U_x + U_x) \cap A = \emptyset$; 由于 $U_x$ 对称, 这等价于说 $(x + U_x + U_x) \cap (A + U_x) = \emptyset$. 由于 $B$ 紧, 可以找到 $x_1, \ldots, x_n \in B$ 使得 $B \subset \bigcup_{i=1}^n(x_i + U_{x_i})$. 设 $U = \bigcap_{i=1}^n U_{x_i}$. 则 $U$ 是 $0$ 的凸开邻域, 且 $B + U \subset \bigcup_{i=1}^n(x_i + U_{x_i} + U)$, $A + U \subset \bigcap_{i=1}^n(A + U_{x_i})$, 所以 $(B + U) \cap (A + U) = \emptyset$.
+集合 $A + U$ 和 $B + U$ 凸且开, 所以由定理 \ref{thm:B.3.7}, 存在连续线性泛函 $f \colon V \to \R$ 和 $c_0 \in \R$ 使得对每个 $x \in A + U$ 和每个 $y \in B + U$ 有 $f(x) \leq c_0 \leq f(y)$. 由于 $B$ 紧且 $f$ 连续, 存在 $y_0 \in B$ 使得 $f(y_0) = \min_{y \in B}f(y)$. 特别地, $c_0 < \min_{y \in B}f(y)$. 选择 $c \in \R$ 使得 $c_0 < c < \min_{y \in B}f(y)$. 则对每个 $x \in A$ 和每个 $y \in B$ 有 $f(x) < c < f(y)$.
+\end{proof}
+
+\section{Banach-Alaoglu 定理}
+见 {[}18{]} 第 15.1 节或 {[}20{]} 定理 3.15. 此定理也称为``Alaoglu 定理''.
+
+\begin{theorem}[Banach-Alaoglu 定理]
+\label{thm:B.4.1}
+设 $V$ 是赋范向量空间. 则 $\Hom(V, \CC)$ 中的闭单位球对弱*拓扑紧 Hausdorff.
+\end{theorem}
+
+与下列通常称为``Riesz 引理''或``Riesz 定理''的结果比较 (见 {[}18{]} 第 13.3 节或 {[}20{]} 定理 1.22):
+
+\begin{theorem}[Riesz 定理]
+\label{thm:B.4.2}
+设 $V$ 是赋范向量空间. 则 $V$ 的闭单位球紧当且仅当 $V$ 有限维.
+\end{theorem}
+
+\section{\index{Krein-Milman 定理}Krein-Milman 定理}
+见 {[}18{]} 第 14.6 节 (或 {[}20{]} 定理 3.23).
+
+\begin{definition}[端点 (extremal point)]
+\label{def:B.5.1}
+设 $V$ 是 $\R$-向量空间, $C$ 是 $V$ 的凸子集. 若每当 $x = ty + (1 - t)z$ ($t \in (0, 1)$, $y, z \in C$), 必有 $y = z = x$, 则说 $x \in C$ 端点 (extremal).
+\end{definition}
+
+\begin{theorem}[Krein-Milman 定理]
+\label{thm:B.5.2}
+设 $V$ 是局部凸拓扑 $\R$-向量空间, $K$ 是 $V$ 的非空紧凸子集. 则 $K$ 是其端点集合的凸包的闭包.
+\end{theorem}
+
+\begin{lemma}[紧凸集的端点]
+\label{lem:B.5.3}
+设 $V$ 是局部凸拓扑 $\R$-向量空间, $K$ 是 $V$ 的非空紧凸子集. 则 $K$ 有端点.
+\end{lemma}
+
+\begin{proof}
+说 $K$ 的子集 $S$ 端 (extremal), 若对每个 $x \in S$, 若 $x = ty + (1 - t)z$, $y, z \in K$, $t \in (0, 1)$, 则必有 $y, z \in S$. (注意点 $x \in K$ 端点当且仅当 $\{x\}$ 端.)
+设 $\mathcal{X}$ 是 $K$ 的非空闭端子集的集合, 按反向包含排序. 设 $Y$ 是 $\mathcal{X}$ 的非空全序子集, 证明它有极大元素. 由于 $Y$ 全序, 对所有 $T_1, \ldots, T_n \in Y$, 存在 $i \in \{1, \ldots, n\}$ 使得对所有 $j \in \{1, \ldots, n\}$ 有 $T_i \subset T_j$, 然后 $T_1 \cap \cdots \cap T_n \supset T_i \neq \emptyset$. 由于 $K$ 紧, 这蕴含每个 $S := \bigcap_{T \in Y}T$ 非空. 集合 $S$ 显然闭, 所以若能证明它端, 就完成了. 设 $x \in S$, 写 $x = ty + (1 - t)z$, $y, z \in K$, $t \in (0, 1)$. 对每个 $T \in Y$, 由于 $T$ 端, 必有 $y, z \in T$. 所以 $y, z \in S$, $S$ 确实端.
+由 Zorn 引理, 集合 $\mathcal{X}$ 有极大元素, 称之为 $S$. 为完成证明, 只需证明 $S$ 是单点集. 若 $|S| \geq 2$, 设 $x, y \in S$ 满足 $x \neq y$. 由 Hahn-Banach 定理的几何版本 (定理 \ref{thm:B.3.10}), 存在连续线性泛函 $f \colon V \to \R$ 使得 $f(x) < f(y)$. 由于 $S$ 紧, 连续函数 $f$ 在 $S$ 上达到最小值. 设 $m = \min_{z \in S}f(z)$, $S' = \{z \in S \mid f(z) \leq m\}$. 则 $S'$ 闭, 由刚才的观察非空, 且 $S' \neq S$, 因为 $y \notin S'$. 证明 $S'$ 端, 这将给出矛盾 (且蕴含 $S$ 本来是单点集). 设 $z \in S'$, 写 $z = tz' + (1 - t)z''$, $z', z'' \in K$, $t \in (0, 1)$. 由于 $S$ 端, 有 $z', z'' \in S$. 由 $m$ 的定义, $m = f(z) = tf(z') + (1 - t)f(z'') \leq tm + (1 - t)m$, 这迫使 $m = f(z') = f(z'')$, 即 $z', z'' \in S'$.
+\end{proof}
+
+\begin{proof}[定理的证明]
+设 $L$ 是 $K$ 的端点集合的凸包的闭包. 则 $L$ 凸、闭且包含于 $K$; 特别地, $L$ 也紧. 假设 $L \neq K$, 设 $x \in K \setminus L$. 由 Hahn-Banach 定理的几何版本 (定理 \ref{thm:B.3.10}), 存在连续线性泛函 $f \colon V \to \R$ 使得 $\max_{y \in L}f(y) < f(x)$. 设 $M = \max_{z \in K}f(z)$, $K' = \{z \in K \mid f(z) = M\}$. 则 $K'$ 是 $K$ 的闭凸子集 (所以紧), 且 $K' \cap L = \emptyset$. 由引理, $K'$ 必有端点 $z$, 且容易看到 (如在引理的证明中) $z$ 也是 $K$ 的端点. 但此时 $z$ 应在 $L$ 中, 矛盾.
+\end{proof}
+
+\section{Stone-Weierstrass 定理}
+见 {[}18{]} 第 12.3 节或 {[}20{]} 定理 5.7 (紧空间的情形).
+
+\begin{theorem}[Stone-Weierstrass 定理]
+\label{thm:B.6.1}
+设 $X$ 是局部紧 Hausdorff 拓扑空间, $A$ 是 $\mathcal{C}_0(X)$ 的 $\CC$-子代数, 使得:
+\begin{enumerate}
+\item[(a)] 对每个 $f \in A$, 函数 $x \longmapsto \overline{f(x)}$ 也在 $A$ 中;
+\item[(b)] 对所有满足 $x \neq y$ 的 $x, y \in X$, 存在 $f \in A$ 使得 $f(x) \neq f(y)$ (``$A$ 分离 $X$ 的点'');
+\item[(c)] 对每个 $x \in X$, 存在 $f \in A$ 使得 $f(x) \neq 0$ (``$A$ 在 $X$ 上任何地方不消失'').
+\end{enumerate}
+则 $A$ 在 $\mathcal{C}_0(X)$ 中稠密.
+\end{theorem}

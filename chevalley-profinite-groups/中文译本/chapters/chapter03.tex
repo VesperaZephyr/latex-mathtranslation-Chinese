@@ -1,0 +1,607 @@
+% !TeX root = ../main.tex
+% 第 3 章 投射有限群 （原书 CHAPTER 3, Profinite Groups, 印刷页 23-33）
+
+\chapter{投射有限群}
+\label{ch:3}
+
+本章定义投射有限群的概念. 投射有限群定义为一类特殊系统的极限. 它们在刻画 Galois 群时十分有用：事实上，每一个 Galois 群都是投射有限群，而每一个投射有限群都可以实现为一个 Galois 群.
+
+\section{定义与例子}
+
+\subsection{逆极限的概念}
+
+\subsubsection{定义}
+
+\begin{definition}\label{c3-def-1-1}
+设 $I$ 是一个非空集合，其上配有自反且传递的二元关系 $\leq$，并满足附加性质：任意两个元素都有上界. 则称 $I$ 为 \newterm{c3-directed-set}{有向集}{directed set}.
+\end{definition}
+
+\begin{definition}\label{c3-def-1-2}
+设 $I$ 是有向集. 以 $I$ 为指标的拓扑空间的 \newterm{c3-inverse-system}{逆系统}{inverse system} $(X_i,f_{ij})_I$ 由一簇拓扑空间 $\{X_i\mid i\in I\}$ 与一簇连续映射 $\{f_{ij}:X_j\to X_i\mid i,j\in I,\,i\leq j\}$ 构成，且满足
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item 对一切 $i\in I$，$f_{ii}$ 是 $X_i$ 上的恒等映射；
+    \item 对一切 $i\leq j\leq k\in I$，$f_{ij}\circ f_{jk}=f_{ik}$.
+\end{enumerate}
+\end{definition}
+
+\begin{remark}\label{c3-rem-1-3}
+前面的定义不仅适用于拓扑空间范畴，还可以推广到任意范畴.
+\end{remark}
+
+\begin{examples}\label{c3-ex-1-4}
+\
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item 考虑有向集 $(\mathbb{Z},>)$，其中对一切 $m,n\in\mathbb{Z}$，$m>n$ 当且仅当 $n$ 整除 $m$. 定义 $G_m=\mathbb{Z}/m\mathbb{Z}$，并考虑典范投影
+    \[
+    f_{nm}:\mathbb{Z}/m\mathbb{Z}\to\mathbb{Z}/n\mathbb{Z}:k+m\mathbb{Z}\mapsto k+n\mathbb{Z},
+    \]
+    当 $n\mid m$ 时它是良定义的. 于是 $(G_m,f_{nm})_{\mathbb{Z}}$ 是一个逆系统.
+    \item 设 $p$ 为素数. 现在考虑 $I=\mathbb{N}$ 赋予通常序. 定义 $G_n=\mathbb{Z}/p^n\mathbb{Z}$，并考虑典范投影
+    \[
+    f_{mn}:\mathbb{Z}/p^n\mathbb{Z}\to\mathbb{Z}/p^m\mathbb{Z}
+    \]
+    当 $m\leq n$ 时它是良定义的. 于是 $(G_n,f_{mn})_{\mathbb{N}}$ 是一个逆系统.
+    \item 设 $G$ 为任意群. 以 $\mathcal{S}$ 记其全体有限指数正规子群之集. 在 $\mathcal{S}$ 上规定序：$U<V$ 当且仅当 $V\subseteq U$，其中 $U,V\in\mathcal{S}$. 定义
+    \[
+    f_{UV}:G/V\to G/U:gV\mapsto gU,
+    \]
+    当 $U\leq V$ 时. 于是 $(G/U,f_{UV})_{\mathcal{S}}$ 是一个逆系统.
+\end{enumerate}
+\end{examples}
+
+\begin{definition}\label{c3-def-1-5}
+若 $Y$ 是拓扑空间，称连续映射族 $\{\psi_i:Y\to X_i\}_{i\in I}$ 是\emph{相容的}，若对一切 $i\leq j\in I$ 有 $f_{ij}\psi_j=\psi_i$，即下图交换：
+\[
+\begin{tikzcd}
+& Y \arrow[dl, "\psi_j"'] \arrow[dr, "\psi_i"] & \\
+X_j \arrow[rr, "f_{ij}"'] & & X_i.
+\end{tikzcd}
+\]
+\end{definition}
+
+\begin{definition}\label{c3-def-1-6}
+拓扑空间逆系统 $(X_i,f_{ij})_I$ 的 \newterm{c3-inverse-limit}{逆极限}{inverse limit} $(X,\varphi_i)$ 是指配有相容族 $\{\varphi_i:X\to X_i\}_{i\in I}$ 的拓扑空间 $X$，它满足如下泛性质：
+
+对每个拓扑空间 $Y$ 与每个相容族 $\{\psi_i:Y\to X_i\}_{i\in I}$，存在唯一的连续映射 $\theta:Y\to X$，使得对一切 $i\leq j\in I$ 下图交换.
+\[
+\begin{tikzcd}
+& Y \arrow[d, dashed, "\exists!\,\theta"'] \arrow[ddl, shift right=3pt, "\psi_j"'] \arrow[ddr, shift left=3pt, "\psi_i"] & \\
+& X \arrow[dl, "\varphi_j"'] \arrow[dr, "\varphi_i"'] & \\
+X_j \arrow[rr, "f_{ij}"'] & & X_i.
+\end{tikzcd}
+\]
+\end{definition}
+
+\begin{remark}\label{c3-rem-1-7}
+内射极限也称为射影极限.\footnote{原文即如此（"An injective limit is also called a projective limit."）；按上下文应为"逆极限亦称射影极限"，injective 疑为 inverse 之误.}
+\end{remark}
+
+\subsubsection{逆极限的存在性与唯一性}
+
+\begin{proposition}\label{c3-prop-1-1}
+设 $(X_i,f_{ij})_I$ 是拓扑空间的逆系统. 若 $(X,\varphi_i)_I$ 与 $(Y,\psi_i)_I$ 都是 $(X_i,f_{ij})_I$ 的逆极限，则存在同胚 $\Phi:X\to Y$ 使得对一切 $i\in I$ 有 $\psi_i\circ\Phi=\varphi_i$.
+\end{proposition}
+
+\begin{proof}
+由于 $(X,\varphi_i)_I$ 是逆极限而 $(Y,\psi_i)_I$ 是相容族，存在唯一的 $\Phi:X\to Y$ 使得对一切 $i\in I$ 有 $\psi_i\circ\Phi=\varphi_i$.
+
+由于 $(Y,\psi_i)_I$ 是逆极限而 $(X,\varphi_i)_I$ 是相容族，存在唯一的 $\Psi:Y\to X$ 使得对一切 $i\in I$ 有 $\varphi_i\circ\Psi=\psi_i$.
+
+于是 $\Psi\circ\Phi:X\to X$ 且对一切 $i\in I$ 有 $\varphi_i\Psi\Phi=\psi_i\Phi=\varphi_i$；此外对一切 $i\in I$ 有 $\varphi_i\mathrm{id}_X=\varphi_i$. 由\autoref{c3-def-1-6} 中态射的唯一性，$\Psi\circ\Phi=\mathrm{id}_X$.
+
+同法可证 $\Phi\circ\Psi=\mathrm{id}_Y$.
+\end{proof}
+
+\begin{proposition}\label{c3-prop-1-2}
+设 $(X_i,f_{ij})_I$ 是拓扑空间的逆系统. 以 $X$ 表示使下图交换的元素 $x\in\prod_{k\in I}X_k$ 之集
+\[
+\begin{tikzcd}
+& \prod_{k\in I}X_k \arrow[dl, "\pi_j"'] \arrow[dr, "\pi_i"] & \\
+X_j \arrow[rr, "f_{ij}"'] & & X_i
+\end{tikzcd}
+\]
+这就是说，$X$ 是满足 $f_{ij}\pi_j(x)=\pi_i(x)$（对一切 $i\leq j\in I$）的一切元素 $x\in\prod_{k\in I}X_k$ 之集，其中 $\pi_i$ 是典范投影. 对一切 $i\in I$ 定义 $\varphi_i:=\pi_i|_X$. 则 $(X,\varphi_i)_I$ 是 $(X_i,f_{ij})_I$ 的逆极限.
+\end{proposition}
+
+\begin{remark}\label{c3-rem-1-8}
+我们给 $\prod_{k\in I}X_k$ 赋予乘积拓扑，给 $X$ 赋予子空间拓扑.
+\end{remark}
+
+\begin{proof}
+由乘积拓扑的定义，映射 $\varphi_i$ 连续；又由 $X$ 的定义有 $f_{ij}\varphi_j=\varphi_i$. 这就是说 $\{\varphi_i:X\to X_i\mid i\in I\}$ 是相容族.
+
+现在考虑另一个相容族 $\{\psi_i:Y\to X_i\mid i\in I\}$. 我们须证存在唯一的连续映射 $\theta:Y\to X$ 使得对一切 $i\in I$ 有 $\varphi_i\theta=\psi_i$. 为此，定义
+\[
+\begin{aligned}
+\overline{\theta}:Y&\longrightarrow\prod_{k\in I}X_k\\
+y&\longmapsto\{\psi_k(y)\}_{k\in I}.
+\end{aligned}
+\]
+我们有 $\pi_i\overline{\theta}=\psi_i$ 对一切 $i\in I$ 连续，这就推出 $\overline{\theta}$ 的连续性. 此外 $\overline{\theta}$ 的像含于 $X$，事实上
+\[
+f_{ij}\circ\pi_j(\overline{\theta}(y))=f_{ij}\psi_j(y)=\psi_i(y)=\pi_i(\overline{\theta}(y))\quad\forall\, i\leq j\in I,\ \forall\, y\in Y.
+\]
+这说明我们可以定义映射
+\[
+\begin{aligned}
+\theta:Y&\longrightarrow X\\
+y&\longmapsto\overline{\theta}(y)
+\end{aligned}
+\]
+它是连续的. 此映射还满足对一切 $i\in I$ 有 $\varphi_i\theta=\psi_i$. 注意 $\theta$ 的唯一性由其构造即得.
+\end{proof}
+
+\begin{notation}\label{c3-not-1-9}
+现在可以把逆系统 $(X_i,f_{ij})_I$ 的逆极限记作 $\varprojlim_I X_i$. 并以 $s\varprojlim_I X_i$ 表示上面给出的那个特定构造.
+\end{notation}
+
+\subsubsection{性质}
+
+下面给出逆极限的若干性质，后文将会用到.
+
+\begin{proposition}\label{c3-prop-1-3}
+设 $(X_i,f_{ij})_I$ 是以 $I$ 为指标的逆系统，记 $X=\varprojlim X_i$.
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item 若每个 $X_i$ 都是 Hausdorff 空间，则 $X$ 也是.
+    \item 若每个 $X_i$ 都是全不连通空间，则 $X$ 也是.
+    \item 若每个 $X_i$ 都是 Hausdorff 空间，则 $s\varprojlim X_i$ 在 $P=\prod_{i\in I}X_i$ 中是闭集.
+    \item 若每个 $X_i$ 都是紧致 Hausdorff 空间，则 $X$ 也是.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+由逆极限的唯一性，只需对 $X=s\varprojlim X_i$ 证明结论.
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item Hausdorff 空间的乘积与子空间总是 Hausdorff 空间，故结论成立.
+    \item 同理.
+    \item 由一个拓扑学结果：若 $f,g:Y\to Z$ 是连续映射而 $Z$ 是 Hausdorff 空间，则集合 $\{y\mid f(y)=g(y)\}$ 在 $Y$ 中闭. 由于
+    \[
+    s\varprojlim X_i=\bigcap_{j\geq i}\{p\in P\mid f_{ij}\pi_j(p)=\pi_i(p)\}
+    \]
+    （其中 $\pi_i$ 是从 $P$ 到 $X_i$ 的典范投影），若每个 $X_i$ 是 Hausdorff 空间，则 $s\varprojlim X_i$ 是闭集之交，从而 $s\varprojlim X_i$ 是闭集.
+    \item 此结论来自两个事实：紧致空间的每个闭子空间是紧致的；紧致空间的乘积是紧致的.
+\end{enumerate}
+\end{proof}
+
+\subsection{投射有限群}
+
+现在考虑拓扑群的逆极限.
+
+\begin{proposition}\label{c3-prop-1-4}
+拓扑群的逆系统 $(G_i,f_{ij})_I$ 的逆极限 $\varprojlim G_i$ 是拓扑群.
+\end{proposition}
+
+\begin{proof}
+笛卡儿积 $\prod_{k\in I}G_k$ 是拓扑群，这就是说只须证明 $G:=\varprojlim G_i$ 是子群.
+
+显然 $G$ 非空（$1_{\prod_{k\in I}G_k}\in G$）且对乘法与取逆封闭. 事实上 $G=\{g\in\prod_{k\in I}G_k\mid f_{ij}\pi_j(g)=\pi_i(g)\ \forall\, i\leq j\}$，而一切 $f_{ij}$ 与 $\pi_k$（$i,j,k\in I$）都是群同态. 于是 $G$ 是 $\prod_{k\in I}G_k$ 的子群，从而赋予诱导拓扑后是拓扑子群.
+\end{proof}
+
+\begin{definition}\label{c3-def-1-10}
+\newterm{c3-profinite-group}{投射有限群}{profinite group} $G$ 是指同构于某个有限群逆系统 $(G_i,f_{ij})_I$ 之逆极限的拓扑群，其中各 $G_i$ 均赋予离散拓扑.
+\end{definition}
+
+\begin{examples}\label{c3-ex-1-11}
+\
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item 记 $\widehat{\mathbb{Z}}:=\varprojlim_{m\in\mathbb{Z}}\mathbb{Z}/m\mathbb{Z}$ 为逆系统 $(\mathbb{Z}/m\mathbb{Z},f_{nm})_{\mathbb{Z}}$ 的逆极限（见例~\ref{c3-ex-1-4} (2)\footnote{原文即如此；按上下文应为 例 1.4 (1).}）. 称 $\widehat{\mathbb{Z}}$ 为 \emph{Prüfer 群}. 注意 $\widehat{\mathbb{Z}}$ 是满足
+    \[
+    a_m\equiv a_n\bmod n,\quad\forall\, n\mid m.
+    \]
+    的序列 $(a_m)$ 的全体等价类之集.
+    \item 定义 $\mathbb{Z}_p:=\varprojlim_{n\in\mathbb{N}}\mathbb{Z}/p^n\mathbb{Z}$ 为逆系统 $(\mathbb{Z}/p^n\mathbb{Z},f_{mn})_{\mathbb{N}}$ 的逆极限（见例~\ref{c3-ex-1-4} (2)）. $\mathbb{Z}_p$ 是 $p$-进整数的加法群.
+    \item 每个有限群 $G$ 特别地都是投射有限群. 事实上它是平凡逆系统 $(G,\mathrm{Id}_G)_{\{1\}}$ 的极限.
+    \item 整数群 $\mathbb{Z}$ 不是投射有限群.
+\end{enumerate}
+\end{examples}
+
+\begin{definition}\label{c3-def-1-12}
+设 $G$ 为任意群，以 $\mathcal{S}$ 记其全体有限指数正规子群之集. 如例~\ref{c3-ex-1-4} 所述，$(G/U,f_{UV})_{\mathcal{S}}$ 是逆系统，我们定义
+\[
+\widehat{G}:={\varprojlim_{U\in\mathcal{S}}}G/U
+\]
+为 $G$ 的射完备.
+\end{definition}
+
+\section{投射有限群的一般性质}
+
+本节的目标是给出投射有限群的一个特殊刻画. 事实上，我们将证明：投射有限群恰是紧致、全不连通、Hausdorff 群.
+
+\subsection{若干引理与命题}
+
+\begin{proposition}\label{c3-prop-2-1}
+设 $(G_i,f_{ij})_I$ 是有限群（赋予离散拓扑）的逆系统. 我们构造 $G:=s\varprojlim_{i\in I}G_i$，并以 $\varphi_i:G\to G_i$ 记投影同态. 则 $\{\ker(\varphi_i)\mid i\in I\}$ 是 $G$ 的单位元 $1$ 的开邻域基本系.
+\end{proposition}
+
+\begin{proof}
+考虑 $\prod_{i\in I}G_i$ 中形如
+\[
+\bigl(\prod_{i\neq i_1,\ldots,i_t}G_i\bigr)\times\{1\}_{i_1}\times\ldots\times\{1\}_{i_t}
+\]
+的 $1$ 的邻域族，其中 $i_1,\ldots,i_t\in I$ 为任意有限多个指标，而 $\{1\}_i$ 表示 $G_i$ 中只含其单位元的子集. 由于诸 $G_i$ 是离散的，上述邻域族构成 $\prod_{i\in I}G_i$ 的单位元的邻域基本系（见乘积拓扑的定义——\cite[\S19]{mun75}）. 由于 $I$ 是有向集且所涉指标集有限，存在 $i_0\in I$ 使得 $i_0\geq i_r$ 对一切 $1\leq r\leq t$ 成立. 于是有
+\[
+G\cap\bigl[(\prod_{i\neq i_0}G_i)\times\{1\}_{i_0}\bigr]=G\cap\bigl[(\prod_{i\neq i_1,\ldots,i_t}G_i)\times\{1\}_{i_1}\times\ldots\times\{1\}_{i_t}\bigr]
+\]
+因为 $f_{i_ri_0}(1)=1$ 对一切 $1\leq r\leq t$ 成立.
+
+这样，$G$ 中 $1$ 的开邻域基本系由全体形如 $G\cap[(\prod_{i\neq i_0}G_i)\times\{1\}_{i_0}]$ 的集合给出. 而我们看到 $\ker(\varphi_{i_0})=G\cap[(\prod_{i\neq i_0}G_i)\times\{1\}_{i_0}]$.
+\end{proof}
+
+\begin{lemma}\label{c3-lem-2-2}
+设 $X$ 是紧致 Hausdorff 拓扑空间. 设 $x\in X$，而 $\{U_i\mid i\in I\}$ 是包含 $x$ 的全体紧开集之族. 则 $A=\cap_{i\in I}U_i$ 是连通的.
+\end{lemma}
+
+\begin{proof}
+注意 $X$ 是 Hausdorff 空间且 $U_i$ 紧致，蕴含 $U_i$ 对一切 $i\in I$ 是闭集（见 \cite[Theorem~26.3]{mun75}）.
+
+假设 $A$ 存在分离，即假设存在闭集 $U,V$ 使得 $A=U\cup V$ 且 $U\cap V=\emptyset$. 由于 $X$ 是正规空间（$X$ 紧致 Hausdorff——见 \cite[Theorem~32.3]{mun75}），存在开集 $U',V'$ 使得 $U\subseteq U'$，$V\subseteq V'$ 且 $U'\cap V'=\emptyset$. 于是有：
+\[
+U\cup V\subseteq U'\cup V'\Rightarrow X\setminus(U'\cap V')\subseteq X\setminus(U\cap V),
+\]
+即 $[X\setminus(U'\cap V')]\cap A=\emptyset$. 但 $X\setminus(U'\cap V')$ 是闭集，故也紧致. 由 $X\setminus(U'\cap V')\subseteq X\setminus A=\cup_{i\in I}X\setminus U_i$（诸 $X\setminus U_i$ 是开集），存在有限集 $J\subseteq I$ 使得
+\[
+[X\setminus(U'\cap V')]\cap(\bigcap_{i\in J}U_i)=\emptyset.
+\]
+考虑 $B:=\cap_{i\in J}U_i$. $B$ 是开集，因为 $|J|<\infty$ 且 $U_i$ 对一切 $i\in I$ 是开集；$B$ 是紧致的，因为它是 $X$ 的闭子集（$B$ 也是闭集之交）. 我们有 $x\in B$ 且 $B=(B\cap U')\cup(B\cap V')$. 假设 $x\in B\cap U'$. 由于 $B\cap U'$ 既开又紧，对某个 $i_0\in I$ 有 $B\cap U'=U_{i_0}$. 这意味着 $A\subseteq B\cap U'\subseteq U'$，于是
+\[
+A\cap V\subseteq A\cap V'\subseteq U'\cap V'=\emptyset\Rightarrow V=\emptyset,
+\]
+故结论得证.
+\end{proof}
+
+\begin{lemma}\label{c3-lem-2-3}
+设 $G$ 是紧致、Hausdorff、全不连通的拓扑群. 则 $1$ 的每个邻域都含有一个开正规子群. 并且该子群在 $G$ 中指数有限.
+\end{lemma}
+
+\begin{proof}
+考虑 $\{U_i\mid i\in I\}$：包含 $1$ 的全体紧开集之族. 如同前面的引理，一个拓扑学结果蕴含 $U_i$ 对每个 $i\in I$ 是闭集.
+
+由\autoref{c3-lem-2-2} 以及 $X$ 全不连通\footnote{原文即如此作 $X$；按上下文此处应为 $G$.}，我们有 $\{1\}=\cap_{i\in I}U_i$.
+
+设 $U$ 是 $\{1\}$ 的一个开邻域. 则 $G\setminus U$ 是闭集，故紧致. 我们有
+\[
+(G\setminus U)\cap(\bigcap_{i\in I}U_i)=\emptyset,
+\]
+这说明存在有限集 $J\subseteq I$ 使得
+\[
+(G\setminus U)\cap(\bigcap_{i\in J}U_i)=\emptyset.
+\]
+令 $A:=\cap_{i\in J}U_i$，则 $A$ 作为有限个开集之交是开集，且 $A$ 紧致，因为它是 $G$ 的闭子空间（注意 $A$ 是闭集之交）. 这意味着 $A$ 是 $1$ 的邻域. 此外 $A\subseteq U$.
+
+定义 $F:=(G\setminus A)\cap A^2$. 注意 $A^2$ 紧致，因为它是 $A\times A$（紧致——见 \cite[Theorem~26.7]{mun75}）在连续映射 $(x,y)\mapsto xy$ 下的像. 于是 $A^2$ 是闭集，从而 $F$ 也是闭集.
+
+设 $V$ 是 $1$ 的对称开邻域，使得 $AV\cap F=\emptyset$ 且 $V\subseteq A$（这样的邻域存在，由第 1 章的\autoref{c1-prop-2-4}）. 于是有 $AV\subseteq A^2\Rightarrow AV\cap(G\setminus A)\subseteq A^2\cap(G\setminus A)=F$. 由 $AV\cap F=\emptyset$ 可知 $AV\cap(G\setminus A)=\emptyset$. 从而 $AV\subseteq A\Rightarrow AV^n\subseteq A$ 对一切 $n\geq 1$ 成立，这就推出 $V^n\subseteq A$（因为 $1\in A$）.
+
+定义 $K:=\cup_{n\geq 1}V^n\subseteq A$，它是 $G$ 的开子集. 由于 $G$ 紧致，由\autoref{c1-prop-4-4}，$K$ 指数有限. 于是可写 $G:=\cup_{m=1}^r x_mK$. $K$ 指数有限蕴含 $K$ 的共轭类只有有限多个（$xK=yK\Rightarrow$ 存在 $k\in K$ 使 $x=yk\Rightarrow xKx^{-1}=ykKk^{-1}y^{-1}=yKy^{-1}$）. 故
+\[
+H:=\bigcap_{x\in G}xKx^{-1}=\bigcap_{m=1}^r x_mKx_m^{-1}.
+\]
+由于 $x_mKx_m^{-1}$ 对一切 $1\leq m\leq r$ 是开集（见\autoref{c1-prop-4-4}），$H$ 是 $G$ 的开正规子群. 这也意味着 $H$ 指数有限（\autoref{c1-prop-4-4}）.
+\end{proof}
+
+\begin{lemma}\label{c3-lem-2-4}
+设 $(X_i,f_{ij})_I$ 是拓扑空间的逆系统. 设 $(X,\varphi_i)_{i\in I}$ 是相容族，且一切 $h_i$ 都是满射.\footnote{原文即如此作 $h_i$；按上下文应为 $\varphi_i$.} 则或者 $\varprojlim X_i$ 为空，或者诱导映射 $\theta:X\to\varprojlim X_i$ 把 $X$ 映满 $\varprojlim X_i$ 的一个稠密子集.
+\end{lemma}
+
+\begin{proof}
+我们将证明：对 $\varprojlim X_i$ 的每个基本开集 $V$，都可找到 $y\in X$ 使得 $\theta(y)\in V$.
+
+考虑
+\[
+V=(\varprojlim X_i)\cap(\prod_{i\in I\setminus\{i_1,\ldots,i_n\}}X_i\times U_1\times\ldots U_n),
+\]
+其中对每个 $1\leq j\leq n$，$U_j$ 是 $X_{i_j}$ 的非空开子集.
+
+由于 $I$ 是有向集，可找到 $i_0\in I$ 使得 $i_0>i_j$ 对一切 $1\leq j\leq n$ 成立. 若取 $x=\prod_{i\in I}X_i\in V$，则 $f_{i_ji_0}(x_{i_0})=x_{i_j}$ 对一切 $1\leq j\leq n$ 成立.
+
+由于 $\varphi_{i_0}$ 是满射，存在 $y\in X$ 使得 $\varphi_{i_0}(y)=x_{i_0}$. 这意味着 $\pi_{i_0}(\theta(y))=x_{i_0}$，于是 $\pi_{x_j}(\theta(y))=f_{i_ji_0}(\pi_{x_0}(\theta(y)))=x_{i_j}$\footnote{原文即如此作 $\pi_{x_j}$ 与 $\pi_{x_0}$；按上下文应为 $\pi_{i_j}$ 与 $\pi_{i_0}$.}，从而 $\theta(y)\in V$.
+\end{proof}
+
+\subsection{投射有限群的其他刻画}
+
+\begin{theorem}\label{c3-thm-2-5}
+投射有限群恰是紧致、全不连通的 Hausdorff 群.
+\end{theorem}
+
+\begin{proof}
+假设 $G$ 是投射有限群.
+
+由投射有限群的定义，存在有限群 $(G_i)_{i\in I}$ 与映射 $f_{ij}:X_j\to X_i$\footnote{原文即如此；按上下文应为 $f_{ij}:G_j\to G_i$.}（对一切 $i,j\in I$，$i\leq j$）使得 $G=\varprojlim_{i\in I}G_i$. 由于一切 $G_i$ 都是有限离散拓扑群，它们都是 Hausdorff、紧致且全不连通的. 于是由\autoref{c3-prop-1-3}，$G$ 是 Hausdorff 紧致全不连通群.
+
+反之，假设 $G$ 是 Hausdorff、紧致且全不连通的拓扑群.
+
+当 $U$ 是 $G$ 的开正规子群时，记 $U<_O G$.
+
+考虑族 $\mathcal{S}=\{U\mid U<_O G\}$. 由于 $G$ 紧致，$U$ 为开集蕴含 $G/U$ 有限（第 1 章的\autoref{c1-prop-4-4}）. 由\autoref{c3-lem-2-3}，$\mathcal{S}$ 是 $1\in G$ 的开邻域基.
+
+对每一对满足 $U\subseteq V$ 的 $U,V\in\mathcal{S}$，考虑自然映射：
+\[
+f_{U,V}:G/U\to G/V:gU\mapsto gV.
+\]
+于是显然 $(G/U,f_{U,V})_{\mathcal{S}}$ 是群的逆系统.
+
+考虑典范同态构成的相容族 $\varphi_U:G\to G/U$，$U\in\mathcal{S}$，我们得到一个映射
+\[
+\varphi:G\to s\varprojlim_{\mathcal{S}}G/U\subseteq\prod_{U\in\mathcal{S}}G/U.
+\]
+我们将证明 $\varphi$ 是单射、连续且满射. 然后由 $G$ 紧致即得 $\varphi$ 是拓扑同构（见 \cite[Theorem~26.6]{mun75}）.
+\begin{itemize}
+    \item \textbf{$\varphi$ 是单射：}设 $\sigma\in G$ 满足 $\varphi(\sigma)=1$. 则 $\sigma\in U$ 对一切 $U\in\mathcal{S}$ 成立，从而 $\sigma\in\cap_{U\in\mathcal{S}}U=\{1\}$.
+    \item \textbf{$\varphi$ 是连续的：}我们证明复合
+    \[
+    G\xrightarrow{\varphi}s\varprojlim_{\mathcal{S}}G/U\xrightarrow{\pi_U}G/U
+    \]
+    对每个 $U\in\mathcal{S}$ 连续. 事实上这就够了，因为 $s\varprojlim_{\mathcal{S}}G/U\subseteq\prod_{U\in\mathcal{S}}G/U$（见 \cite[Theorem~19.6]{mun75}）. 而
+    \[
+    (\pi_U\varphi)^{-1}\{1\}=\varphi^{-1}(\pi_U^{-1}(\{1\}))=U
+    \]
+    在 $G$ 中是开集.
+
+    （注意对一切 $U\in\mathcal{S}$，$\{1\}$ 是 $G/U$ 中 $1$ 的开邻域基——因为 $\{1\}$ 在 $G$ 中本来就是开邻域基.）
+    \item \textbf{$\varphi$ 是满射：}由\autoref{c3-lem-2-4}，$\varphi(G)$ 在 $s\varprojlim_{\mathcal{S}}G/U$ 中稠密. 我们证明 $\varphi(G)$ 是闭集，从而 $\varphi(G)=s\varprojlim_{\mathcal{S}}G/U$. $\varphi(G)$ 是闭集，因为 $\varphi(G)=\pi_U^{-1}(\varphi_U(G))=\pi_U^{-1}(G/U)$（这里用到 $\varphi_U$ 是满射）而 $\pi_U$ 连续.
+\end{itemize}
+\end{proof}
+
+\begin{remark}\label{c3-rem-2-1}
+一些作者依据\autoref{c3-thm-2-5}，把投射有限群定义为 Hausdorff、紧致、全不连通的拓扑群.
+\end{remark}
+
+\begin{corollary}\label{c3-cor-2-6}
+设 $G$ 是投射有限群. 令 $\mathcal{S}:=\{G\ \text{的开正规子群}\}$，则有
+\[
+G\cong{\varprojlim_{U\in\mathcal{S}}}G/U.
+\]
+\end{corollary}
+
+\subsection{定理的推论}
+
+\begin{proposition}\label{c3-prop-2-7}
+设 $G$ 是投射有限群.
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item 设 $\{H_i\mid i\in I\}$ 是 $G$ 的一族闭子群，且 $\cap_{i\in I}H_i\leq U\leq G$，其中 $U$ 是 $G$ 的开子群. 则存在 $I$ 的有限子集 $J$ 使得 $\cap_{j\in J}H_j\leq U$.
+    \item 设 $\{U_i\mid i\in I\}$ 是 $G$ 的一族开子群，且 $\cap_{i\in I}U_i=1$. 令 $\mathcal{V}=\{\cap_{j\in J}U_j\mid J\subseteq I\ \text{有限}\}$. 则 $\mathcal{V}$ 是 $G$ 中 $1$ 的邻域基本系.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}\
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+    \item 考虑紧空间 $G\setminus U$ 的开覆盖 $\{G\setminus H_i\mid i\in I\}$（注意 $G\setminus U$ 是紧空间 $G$ 的闭子集）. 于是存在有限子覆盖 $\{G\setminus H_j\mid j\in J\}$，其中 $J$ 是 $I$ 的有限子集. 这意味着
+    \[
+    G\setminus U\subseteq\bigcup_{j\in J}G\setminus H_j,
+    \]
+    从而
+    \[
+    \bigcap_{j\in J}G\setminus H_j\subseteq U.
+    \]
+    \item 由 (1) 即得.
+\end{enumerate}
+\end{proof}
+
+\begin{proposition}\label{c3-prop-2-8}
+投射有限群 $G$ 的闭子群 $H$ 是投射有限的. 确切地说，若 $G=\varprojlim_{\mathcal{S}}G/U$，其中 $\mathcal{S}=\{G\ \text{的开正规子群}\}$，则
+\[
+H\cong{\varprojlim_{\mathcal{S}}}HU/U\cong{\varprojlim_{\mathcal{S}}}H/H\cap U.
+\]
+\end{proposition}
+
+\begin{proof}
+我们使用\autoref{c3-thm-2-5} 的刻画. 显然 $H$ 是 Hausdorff 且全不连通的，因为 $G$ 如此. 定理 \cite[Theorem~26.2, Chapter~3]{mun75} 蕴含 $H$ 紧致（因为 $H$ 是闭集）.
+
+第二个断言由\autoref{c3-lem-2-4} 得出. 事实上，典范映射
+\[
+\begin{aligned}
+\varphi_U&:H\to HU/U\\
+\pi_U&:H\to H/H\cap U
+\end{aligned}
+\]
+对 $\mathcal{S}$ 中一切 $U$ 都是满射.
+\end{proof}
+
+\begin{proposition}\label{c3-prop-2-9}
+投射有限群 $G$ 模闭子群 $H$ 的商群 $G/H$ 是投射有限群. 事实上，若以 $\mathcal{S}$ 记 $G$ 的一切开正规子群之集，则
+\[
+G/H\cong{\varprojlim_{\mathcal{S}}}G/HU.
+\]
+\end{proposition}
+
+\begin{proof}
+考虑典范投影
+\[
+\pi:G\to G/HU,
+\]
+它是满射. 由于 $\pi(H)=0$\footnote{原文即如此；按上下文应为 $\pi(H)=1$.}，我们可以定义
+\[
+\widetilde{\pi}:G/H\to G/HU
+\]
+并再次使用\autoref{c3-lem-2-4}.
+\end{proof}
+
+\begin{proposition}\label{c3-prop-2-10}
+设 $I$ 是指标集，$(G_i)_{i\in I}$ 是一族投射有限群. 则 $G:=\prod_{i\in I}G_i$ 是投射有限群.
+\end{proposition}
+
+\begin{proof}
+显然：Hausdorff、紧致、全不连通群的乘积仍是 Hausdorff、紧致、全不连通群.
+\end{proof}
+
+\begin{corollary}\label{c3-cor-2-11}
+设 $(G_i,f_{ij})_I$ 是投射有限群的逆系统. 则 $G=\varprojlim_I G_i$ 是投射有限的.
+\end{corollary}
+
+\begin{proof}
+用\autoref{c3-prop-1-3} 可见 $G$ 是 $\prod_{i\in I}G_i$ 的闭子群，再用\autoref{c3-cor-2-11}\footnote{原文即如此（此处自指推论 2.11）；按上下文应为 命题 2.8.}.
+\end{proof}
+
+\begin{example}\label{c3-ex-2-2}
+设 $\mathbb{P}$ 为全体素数之集. 我们将证明
+\[
+\widehat{\mathbb{Z}}\cong\prod_{p\in\mathbb{P}}\mathbb{Z}_p.
+\]
+我们构造自然投影
+\[
+\alpha^m_p:\mathbb{Z}_p\to\mathbb{Z}/p^{m_p}\mathbb{Z}
+\]
+其中 $m=\prod_{q\in\mathbb{P}}q^{m_q}$. 于是有映射
+\[
+\alpha^m:\prod_{p\in\mathbb{P}}\alpha^m_p:\prod_{p\in\mathbb{P}}\mathbb{Z}_p\to\prod_{p\in\mathbb{P}}\mathbb{Z}/p^{m_p}\mathbb{Z},
+\]
+它是满射（可以容易地构造出一个原像）.
+
+注意，利用中国剩余定理（见 \cite[Corollary~2.2, \S2, Chapter~2]{lang02a}），我们有
+\[
+\prod_{p\in\mathbb{P}}\mathbb{Z}/p^{m_p}\mathbb{Z}\cong\mathbb{Z}/m\mathbb{Z}.
+\]
+利用\autoref{c3-lem-2-4}，映射 $\alpha^m$（$m\in\mathbb{Z}$）诱导出一个连续满射
+\[
+\alpha:\prod_{p\in\mathbb{P}}\mathbb{Z}_p\to\widehat{\mathbb{Z}}={\varprojlim_{m}}\mathbb{Z}/m\mathbb{Z}.
+\]
+另一方面，设 $(x_p)_{p\in\mathbb{P}}$ 是 $\prod_{p\in\mathbb{P}}\mathbb{Z}_p$ 中满足 $\alpha((x_p)_\mathbb{P})=0$ 的元素. 这意味着 $\alpha^m((x_p)_\mathbb{P})=0$ 对每个 $m\in\mathbb{Z}$ 成立（由 $\widehat{\mathbb{Z}}$ 的定义）. 从而 $\alpha^m_q((x_p)_\mathbb{P})=0$ 对每个 $m\in\mathbb{Z}$ 与每个 $q\in\mathbb{P}$ 成立. 于是对一切 $p\in\mathbb{P}$ 有 $x_p=0$，即 $(x_p)_\mathbb{P}=0$. 这说明 $\alpha$ 是单射.
+
+由于 $\prod_{p\in\mathbb{P}}\mathbb{Z}_p$ 紧致，我们得到 $\alpha$ 是拓扑同构（见 \cite[Theorem~26.6, Chapter~3]{mun75}）.
+\end{example}
+
+\begin{proposition}\label{c3-prop-2-12}
+$\varprojlim$ 是从投射有限群的逆系统范畴（指标集 $I$ 为有向集）到投射有限群范畴的正合函子.
+\end{proposition}
+
+\begin{proof}
+设
+\[
+1\longrightarrow(H_i,\varphi_{ij})\xrightarrow{(f_i)_I}(G_i,\psi_{ij})\xrightarrow{(g_i)_I}(K_i,\eta_{ij})\longrightarrow 1
+\]
+是投射有限群逆系统（在 $I$ 上）的一个正合列. 我们须证
+\[
+1\longrightarrow{\varprojlim_I}\,H_i\xrightarrow{f}{\varprojlim_I}\,G_i\xrightarrow{g}{\varprojlim_I}\,K_i\longrightarrow 1
+\]
+正合.
+\begin{itemize}
+    \item 先证 $f$ 是单射：设 $(x_i)_I\in{\varprojlim_I}\,H_i$ 满足 $f((x_i)_I)=0$. 则对一切 $i\in I$ 有 $f_i(x_i)=0$. 而 $f_i$ 是单射，故对一切 $i\in I$ 有 $x_i=0$. 于是 $(x_i)_I=0$.
+    \item 其次，证明 $\ker(g)=\mathrm{im}(f)$：设 $(x_i)_I\in{\varprojlim_I}\,H_i$，
+    \[
+    (g\circ f)((x_i)_I)=g((f_i(x_i))_I)=((g_i\circ f_i)(x_i))_I=0
+    \]
+    因为逆系统序列是正合的. 这说明 $\mathrm{im}(f)\subseteq\ker(g)$.
+
+    设 $(y_i)_I\in\ker(g)$. 这等价于 $g((y_i)_I)=0$，于是 $(g_i(y_i))_I=0$. 从而对一切 $i\in I$ 有 $y_i\in\ker(g_i)$. 而逆系统序列是正合的，故对每个 $i\in I$，存在 $x_i\in H_i$ 使得 $f_i(x_i)=y_i$. 于是 $\ker(g)\subseteq\mathrm{im}(f)$.
+    \item 最后须证 $g$ 是满射：设 $(z_i)_I\in{\varprojlim_I}\,K_i$. 考虑集合 $Y_i=g_i^{-1}(x_i)$\footnote{原文即如此作 $x_i$；前文所设为 $(z_i)_I$，按上下文应为 $g_i^{-1}(z_i)$，下文诸 $x_i$ 同此.}，它是 $G_i$ 中的紧集，因为它是闭集的原像. 注意 $(g_i)_I$ 是逆系统范畴中的态射，这意味着当 $i\leq j$ 时下图交换\footnote{交换图上方箭头原文即如此标 $\varphi_{ij}$；按上下文应为 $\psi_{ij}$.}：
+    \[
+    \begin{tikzcd}
+    G_j \arrow[r, "\varphi_{ij}"] \arrow[d, "g_j"'] & G_i \arrow[d, "g_i"] \\
+    K_j \arrow[r, "\eta_{ij}"'] & K_i
+    \end{tikzcd}
+    \]
+    于是当 $i\leq j$ 时，$\psi_{ij}(Y_j)\subseteq Y_i$，事实上对每个 $y_j\in Y_j$ 有
+    \[
+    \begin{aligned}
+    g_i(\psi_{ij}(y_j))\,&=(g_i\circ\psi_{ij})(y_j)\\
+    &=(\eta_{ij}\circ g_j)(y_j)\\
+    &=\eta_{ij}(x_j)=x_i,
+    \end{aligned}
+    \]
+    从而 $(Y_i,\psi_{ij})$ 是一族非空紧集的逆系统. 故 ${\varprojlim_I}\,Y_i\neq\emptyset$（见 \cite[Proposition~8, \S9, Chapter~1]{bou71}）. 而对每个 $(y_i)_I\in{\varprojlim_I}\,Y_i$，有 $g((y_i)_I)=(x_i)_I$，故结论得证.
+\end{itemize}
+\end{proof}
+
+\section{Galois 群与投射有限群}
+
+我们已在第 2 章（\autoref{c2-thm-2-6}）看到，Galois 群是 Hausdorff、紧致且全不连通的. 而由\autoref{c3-thm-2-5}，投射有限群亦然. 本节将把这一点说得更清楚.
+
+\begin{theorem}\label{c3-thm-3-1}
+假设 $\mathbb{L}$ 是域 $\mathbb{K}$ 的 Galois 扩张. 固定 $\mathcal{F}=\mathcal{F}=\{\mathbb{E}\mid \mathbb{K}\subseteq\mathbb{E}\subseteq\mathbb{L}$，$\mathbb{E}$ 为 $\mathbb{K}$ 的有限 Galois 扩张$\}$\footnote{原文即如此（$\mathcal{F}=\mathcal{F}$ 重复，疑为衍文）.}. 则 $\mathrm{Gal}(\mathbb{L},\mathbb{K})$ 是有限群 $\mathrm{Gal}(\mathbb{E},\mathbb{K})$（$\mathbb{E}\in\mathcal{F}$）的逆极限；特别地，$\mathrm{Gal}(\mathbb{L},\mathbb{K})$ 是投射有限群.
+\end{theorem}
+
+\begin{proof}
+由 Galois 理论，$\mathrm{Gal}(\mathbb{E},\mathbb{K})$ 是有限群. 若 $\mathbb{E}_1,\mathbb{E}_2\in\mathcal{F}$ 且 $\mathbb{E}_1\subseteq\mathbb{E}_2$，我们定义
+\[
+\begin{aligned}
+\varphi_{\mathbb{E}_1\mathbb{E}_2}:\mathrm{Gal}(\mathbb{E}_2,\mathbb{K})&\longrightarrow\mathrm{Gal}(\mathbb{E}_1,\mathbb{K})\\
+\sigma&\longmapsto\sigma|_{\mathbb{E}_1}.
+\end{aligned}
+\]
+于是 $(\mathrm{Gal}(\mathbb{E},\mathbb{K}),\varphi_{\mathbb{E}_1\mathbb{E}_2})_{\mathcal{F}}$ 是以 $\mathcal{F}$ 为指标的逆系统.
+
+考虑限制映射 $\mathrm{Gal}(\mathbb{L},\mathbb{K})\to\mathrm{Gal}(\mathbb{E},\mathbb{K})$，我们得到群同态 $\theta:\mathrm{Gal}(\mathbb{L},\mathbb{K})\to\prod_{\mathbb{E}\in\mathcal{F}}\mathrm{Gal}(\mathbb{E},\mathbb{K})$. $\theta$ 的像含于 $\varprojlim_{\mathbb{E}\in\mathcal{F}}\mathrm{Gal}(\mathbb{E},\mathbb{K})$，因为
+\[
+\varphi_{\mathbb{E}_1,\mathbb{E}_2}(\pi_{\mathbb{E}_2}(\theta(\sigma)))=\varphi_{\mathbb{E}_1,\mathbb{E}_2}(\sigma|_{\mathbb{E}_2})=\sigma|_{\mathbb{E}_1}=\pi_{\mathbb{E}_1}(\theta(\sigma)).
+\]
+现在给定 $(\sigma_\mathbb{E})_{\mathbb{E}\in\mathcal{F}}\in s\varprojlim_{\mathbb{E}\in\mathcal{F}}\mathrm{Gal}(\mathbb{E},\mathbb{K})$ 与 $x\in\mathbb{K}$，我们构造
+\[
+\psi((\sigma_\mathbb{E}))(x)=\sigma_\mathbb{M}(x)
+\]
+其中 $\mathbb{M}\in\mathcal{F}$ 是满足 $x\in\mathbb{M}$ 的一个中间扩张（这样的 $\mathbb{M}$ 总是存在）. $\psi$ 的这一构造与 $\mathbb{M}$ 的选取无关，因为 $\sigma$ 属于 $\varprojlim_{\mathbb{E}\in\mathcal{F}}\mathrm{Gal}(\mathbb{E},\mathbb{K})$. 容易看出 $\psi((\sigma_\mathbb{E}))\in\mathrm{Gal}(\mathbb{L},\mathbb{K})$ 且 $\psi$ 是 $\theta$ 的逆映射. 于是 $\theta$ 是同构. 从而作为抽象群，$\mathrm{Gal}(\mathbb{L},\mathbb{K})$ 同构于 $\varprojlim_{\mathbb{E}\in\mathcal{F}}\mathrm{Gal}(\mathbb{E},\mathbb{K})$.
+
+下面我们将证明 $1$ 处的拓扑基之间存在同构. 回忆 $\varprojlim_{\mathbb{E}\in\mathcal{F}}\mathrm{Gal}(\mathbb{E},\mathbb{K})$ 中 $1$ 的开邻域基由
+\[
+\{\ker(\pi_\mathbb{E})\mid \mathbb{E}\in\mathcal{F}\}
+\]
+给出（见\autoref{c2-thm-3-3}）\footnote{原文作 "proposition 3.3"；本章并无命题 3.3，按上下文疑指第 2 章定理 3.3（Galois 群的 Krull 拓扑）.}. 但对每个 $\mathbb{F}\in\mathcal{F}$，我们有
+\[
+\ker(\pi_\mathbb{F})=\{(\sigma_\mathbb{E})\in s\varprojlim_{\mathbb{E}\in\mathcal{F}}\mathrm{Gal}(\mathbb{E},\mathbb{K})\mid \pi_\mathbb{F}((\sigma_\mathbb{E}))=\mathrm{Id}_\mathbb{F}\}
+\]
+注意
+\[
+\theta(\mathrm{Gal}(\mathbb{L},\mathbb{F}))=\prod_{\mathbb{E}\in\mathcal{F}\setminus\{\mathbb{F}\}}\mathrm{Gal}(\mathbb{E},\mathbb{K})\times\{\mathrm{Id}_\mathbb{F}\}
+\]
+且由 $\mathrm{im}(\theta)\subseteq s\varprojlim_{\mathbb{E}\in\mathcal{F}}\mathrm{Gal}(\mathbb{E},\mathbb{K})$，我们得到
+\[
+\ker(\pi_\mathbb{F})=\theta(\mathrm{Gal}(\mathbb{L},\mathbb{F}))
+\]
+对一切 $\mathbb{F}\in\mathcal{F}$ 成立. 这就证明了同胚，于是
+\[
+\mathrm{Gal}(\mathbb{L},\mathbb{K})\cong s\varprojlim_{\mathbb{E}\in\mathcal{F}}\mathrm{Gal}(\mathbb{E},\mathbb{K}).
+\]
+\end{proof}
+
+\begin{proof}
+你可以在 \cite[Chapter~3.3]{wil98} 中找到该引理的证明.\footnote{原文即如此：此处并无对应的引理陈述，此证明块疑为排版残留.}
+\end{proof}
+
+\begin{theorem}\label{c3-thm-3-2}
+每个投射有限群 $G$ 都同构（作为拓扑群）于一个 Galois 群.
+\end{theorem}
+
+\begin{proof}
+回忆 $G$ 是 Hausdorff、紧致、全不连通的拓扑群（见\autoref{c3-thm-2-5}）.
+
+设 $\mathbb{F}$ 是任意域. 我们考虑 $S$：集合族 $G/N$ 的不交并，其中 $N$ 遍历 $G$ 的全体开正规子群（我们记 $N<_O G$）. 把 $S$ 的元素看作未定元，并构造域 $\mathbb{L}=\mathbb{F}(S)$（以 $\mathbb{F}$ 中元素为系数、以 $S$ 中元素为未定元的有理函数域）.
+
+群 $G$ 以自然方式作用于 $S$：若 $g\in G$ 且 $g'N\in G/N$，则 $g(g'N)=gg'N$（对任何 $N\in S$）. 于是这诱导出 $G$ 在 $\mathbb{L}$ 上的一个作用.
+
+定义 $\mathbb{K}=\mathbb{L}^G$ 为由 $G$ 固定的 $\mathbb{K}$ 的元素构成的 $\mathbb{L}$ 的子域.\footnote{原文即如此（"the elements of $\mathbb{K}$ fixed by $G$"）；按上下文应为 $\mathbb{L}$ 中由 $G$ 固定的元素.}
+
+我们现在的目标是证明 $\mathbb{L}$ 是 $\mathbb{K}$ 的 Galois 扩张且 Galois 群为 $G$.
+
+若 $\alpha\in\mathbb{L}$，考虑 $G$ 的子群
+\[
+G_\alpha=\{\sigma\in G\mid \sigma(\alpha)=\alpha\}.
+\]
+若出现在 $\alpha$ 的有理表达式中的未定元为 $\{t_i\in G/N_i\mid i=1,\ldots,n\}$，则
+\[
+\{1\}\subseteq\bigcap_{i=1}^n N_i\subseteq G_\alpha.
+\]
+事实上，若 $n\in N_i$ 且 $gN_i\in G/N_i$，我们有
+\[
+n(gN_i)=ngN_i=gg^{-1}ngN_i=gN_i,
+\]
+因为 $g^{-1}ng\in N_i$（$N_i$ 是 $G$ 的正规子群）. 这意味着 $N_i$ 在 $G/N_i$ 上的作用是平凡的. 由于一切 $N_i$ 都是 $G$ 的开子群，$\cap_{i=1}^n N_i$ 是开集. 于是利用第 1 章的\autoref{c1-prop-4-4} 第 (4) 部分可知 $G_\alpha$ 是开集. 从而，利用同一命题（第 (2) 部分），$G_\alpha$ 指数有限.
+
+由于元素的稳定子群的指数等于其轨道的基数，$\alpha$ 在 $G$ 作用下的轨道是有限集. 设该轨道为 $O_\alpha=\{\alpha_1,\ldots,\alpha_r\}$（诸 $\alpha_i$ 两两不同），并考虑多项式\footnote{原文即如此；按上下文应为 $\prod_{i=1}^r(X-\alpha_i)$.}
+\[
+f(X)=\prod_{i=1}^r(X\alpha_i).
+\]
+由于 $G$ 把 $O_\alpha$ 变为自身（由轨道的定义），对一切 $1\leq i\leq r$，$\alpha_i$ 属于 $\mathbb{K}$，这意味着 $f(X)\in\mathbb{K}[X]$. 而 $\alpha$ 作为 $f(X)$ 的根，在 $\mathbb{K}$ 上是代数元. 此外，注意 $f(X)$ 的一切根两两不同，这意味着 $\alpha$ 在 $\mathbb{K}$ 上是可分的. 于是 $\mathbb{L}$ 是 $\mathbb{K}$ 的可分扩张.
+
+注意 $\mathbb{K}[\alpha_1,\ldots,\alpha_r]$ 是 $\mathbb{K}$ 的正规扩张（作为非常数多项式 $f(X)\in\mathbb{K}[X]$ 的分裂域）. 于是 $\mathbb{L}$ 是 $\mathbb{K}$ 的一族正规扩张之并，故 $\mathbb{L}$ 在 $\mathbb{K}$ 上正规.
+
+这样我们就证明了 $\mathbb{L}$ 是 $\mathbb{K}$ 的 Galois 扩张.
+
+我们记 $H:=\mathrm{Gal}(\mathbb{L},\mathbb{K})$. 显然，由于 $G$ 作用于 $\mathbb{L}$ 且固定 $\mathbb{K}=\mathbb{L}^G$，有 $G\subseteq H$. 下面证明等号成立. 考虑包含映射 $i:G\hookrightarrow H$. 下一步将证明此映射连续.
+
+设 $U$ 是 $H$ 的正规开子群，并考虑 $\mathbb{L}^U$. 由于 $U$ 指数有限（见第 1 章的\autoref{c1-prop-4-4}），$\mathbb{L}^U$ 是 $\mathbb{K}$ 的有限 Galois 扩张（用第 2 章的\autoref{c2-thm-3-3}）. 设 $\mathbb{L}^U=\mathbb{K}(\alpha'_1,\ldots,\alpha'_s)$，其中 $\alpha'_i\in\mathbb{L}$. 于是
+\[
+G\cap U\supseteq\bigcap_{i=1}^s G_{\alpha'_i}.
+\]
+这说明 $G\cap U$ 是开集（因为它含有一个开子群——见第 1 章的\autoref{c1-prop-4-4}）. 于是 $G$ 是开集，从而 $G$ 是 $H$ 的闭子群.
+
+最后，利用关于无限 Galois 扩张的定理（第 2 章的\autoref{c2-thm-3-3}）：由 $\mathbb{L}^G=\mathbb{L}^H$ 且 $G$ 是闭集，得 $H=G$.
+\end{proof}

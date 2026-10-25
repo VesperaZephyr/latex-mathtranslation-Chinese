@@ -1,0 +1,1728 @@
+% ================================================================
+%  第 4 章  存在性结果
+% ================================================================
+\chapter{存在性结果}
+\label{chap:4}
+
+本章讨论从曲面出发的映射的经典 Plateau 问题的解. 在二维情形下, 能量与
+面积之间有密切的联系, 而主要问题在于理解有界能量的映射所缺少的紧性,
+这种紧性缺失称为\newterm{bubbling}{冒泡}{bubbling}. 前三节给出从圆盘出发的映射的 Dirichlet 问题与
+Plateau 问题的基本存在性结果, 第四节讨论分支点. 此后我们转向从二维球面
+出发的调和映射的存在性, 采用 Sacks 与 Uhlenbeck \cite{SaUh} 的方法:
+先极小化一个扰动能量泛函, 再令扰动趋于零而取极限.
+
+% ================================================================
+\section{Plateau 问题}
+\label{sec:4.1}
+
+下述关于极小曲面的基本存在性问题称为\newterm{plateau}{Plateau 问题}{Plateau problem}:
+
+\begin{quote}
+给定一条闭曲线 $\Gamma$, 求一张以 $\Gamma$ 为边界的极小曲面.
+\end{quote}
+
+这个问题最早由 Lagrange 于 1760 年提出, 并在 19 世纪由比利时物理学家
+Plateau 作了广泛研究. 这一问题促成了几何与偏微分方程方面的许多重大进展,
+其中包括:
+
+\begin{itemize}[leftmargin=1.6em,itemsep=2pt,topsep=2pt]
+\item Lebesgue 1902 年的学位论文, 他在其中为求解 Plateau 问题而构造了
+      Lebesgue 积分;
+\item Courant、Morrey 等人在偏微分方程的存在性与正则性理论方面的早期工作;
+\item De Giorgi、Reifenberg 等人的正则性理论;
+\item Federer、Fleming、Almgren 等人发展的几何测度论.
+\end{itemize}
+
+视曲面的确切定义(参数化圆盘、整流、$Z_2$ 流或可求长变分流形)
+之不同, 此问题有各种不同的解. 我们将考虑参数化圆盘情形的 Plateau 问题;
+它由 J. Douglas \cite{Do} 与 T. Rad\'o \cite{Ra1} 各自独立解决.
+
+\begin{theorem}
+\label{thm:4.1}
+设 $\Gamma\subset\R^3$ 是分段 $C^1$ 闭 Jordan 曲线, 则存在映射
+$u:D\subset\R^2\to\R^3$, 使得
+\begin{enumerate}
+\item $u:\partial D\to\Gamma$ 是单调的\footnote{单调性的定义见下文.} 且满射;
+\item $u\in C^0(\overline{D})\cap W^{1,2}(D)$, 且在 $D$ 上为 $C^\infty$;
+\item $u$ 的像在所有以 $\Gamma$ 为边界的圆盘映射之中面积极小.
+\end{enumerate}
+\end{theorem}
+
+到 Riemann 流形的推广归功于 C. B. Morrey \cite{Mo1}.
+
+求解此问题最自然的途径是取一列面积趋于下确界的映射, 并试图抽出收敛子列.
+这样做有两个严重困难.
+
+第一, 由于面积只依赖于像而与参数化无关, 圆盘微分同胚群的非紧性便成了
+大问题. 具体地说, 设 $\phi_k:D\to D$ 是圆盘的一列非紧微分同胚, 并固定
+$u:D\to\R^3$. 映射序列 $u(\phi_k)$ 有相同的像, 却不收敛.
+
+第二, 对映射面积的界并不能对映射给出多少控制. 由于细长的管子可以有
+任意小的面积, 因此可以构造一列 $\R^3$ 中的曲面, 使其边界
+$\partial D\subset\R^2\subset\R^3$, 面积接近 $\pi$, 而其闭包是整个 $\R^3$.
+具体做法如下:
+
+\begin{example}
+\label{ex:4.2}
+记 $T(x,y,h,k)$ 为以 $(x,y)$ 为中心、高为 $h$、宽为 $k$ 的柱状「触手」
+(顶部用一个圆盘封住). 它多出的面积为 $\pi hk$. 对每个正整数 $\ell$, 令
+$\Sigma_\ell$ 为附着了触手 $T(\alpha/2^\ell,\beta/2^\ell,1,2^{-4\ell})$,
+$|\alpha|^2+|\beta|^2<2^{2\ell}$, 的拓扑圆盘. $\Sigma_\ell$ 的面积小于
+$\pi+2^{2\ell}(\pi 2^{-3\ell})=\pi(1+2^{-\ell})$, 因此 $\Sigma_\ell$ 是
+极小化序列. 然而, 这一列曲面显然不收敛.
+\end{example}
+
+我们将不极小化面积, 而极小化能量(映射微分的 $L^2$ 范数). 然后我们将
+证明: 能量极小元既极小化面积, 又给出好的参数化.
+
+在给出这一存在性结果的证明之前, 我们需要一些准备.
+
+$W^{1,2}=W^{1,2}(D)$ 表示圆盘 $D$ 上使 $f$ 与 $|\nabla f|$ 均平方可积的
+函数 $f$ 构成的 Sobolev 空间, $f$ 的 $W^{1,2}$ 范数为
+\begin{equation}
+|f|_{W^{1,2}}^2=\int_D|f|^2+\int_D|\nabla f|^2.
+\label{eq:4.1}
+\end{equation}
+
+令 $C_0^\infty(D)$ 表示 $D$ 上具有紧支集的光滑函数空间, 再令
+$W_0^{1,2}(D)\subset W^{1,2}(D)$ 表示 $C_0^\infty(D)$ 关于 $W^{1,2}$ 范数的
+闭包.
+
+设 $(x,y)$ 是 $\R^2$ 上的坐标, 并设 $u=(u^1,u^2,u^3)$ 是从
+$D\subset\R^2$ 到 $\R^3$ 的映射.
+
+若 $u\in W^{1,2}(D)$, 则能量定义为
+\begin{equation}
+\mathrm{E}(u)=\frac12\int_D|\nabla u|^2\,dxdy
+ =\frac12\int_D\bigl(|u_x|^2+|u_y|^2\bigr)\,dxdy,
+\label{eq:4.2}
+\end{equation}
+其中 $\nabla$ 是欧氏梯度. $u$ 的像的面积(即二维 Hausdorff 测度)为
+\begin{equation}
+\Area(u)=\int_D\bigl(|u_x|^2|u_y|^2-\langle u_x,u_y\rangle^2\bigr)
+ ^{\frac12}\,dxdy.
+\label{eq:4.3}
+\end{equation}
+
+于是有
+\begin{equation}
+\Area(u)\leq\mathrm{E}(u),
+\label{eq:4.4}
+\end{equation}
+且等号成立当且仅当 $\langle u_x,u_y\rangle$ 与 $|u_x|^2-|u_y|^2$ 都为零
+(作为 $L^1$ 函数). 等号成立时, 称 $u$ 是\newterm{almost-conformal}{几乎共形}{almost conformal}的. 若 $u$ 是
+几乎共形的浸入, 则 $u$ 是共形的.
+
+在二维情形下工作的一个关键好处是\newterm{isothermal}{等温坐标}{isothermal coordinates}的存在性. 即: 给定如上之 $u$,
+存在微分同胚 $\phi:D\to D$, 使 $u(\phi):D\to\R^3$ 是几乎共形的(证明见
+Morrey \cite{Mo2} 或 Chern \cite{Ch2}). 由于面积只依赖于像(而与参数化
+无关), 我们有 $\Area(u(\phi))=\Area(u)$.
+
+\begin{remark}
+\label{rem:4.3}
+事实上, Morrey 在 \cite{Mo2} 的定理 3 中证明: 若 $ds^2$ 是 $D$ 上有界的
+分段光滑度量, 则存在同胚 $\phi:D\to D$, 使 $\phi$、$|\nabla\phi|$ 与
+$|\nabla^2\phi|$ 均属于 $L^2$, 且 $\phi$ 是几乎共形的. 这一更强的结果
+将在后面的\thmref{thm:6.20} 中用到.
+\end{remark}
+
+设 $\Gamma\subset\R^3$ 是分段 $C^1$ 闭 Jordan 曲线. 若映射
+$f:\partial D\to\Gamma$ 下每个连通集的逆像都是连通的, 则称 $f$ 是
+\textbf{单调的}. 定义类
+\begin{equation*}
+X_\Gamma=\bigl\{\psi:D\to\R^3\mid\psi\in C^0(\overline{D})\cap W^{1,2}(D),
+\ \text{且}\ \psi|_{\partial D}:\partial D\to\Gamma\
+\text{单调且满射}\bigr\}.
+\end{equation*}
+
+定义
+\begin{equation}
+A_\Gamma=\inf_{\psi\in X_\Gamma}\Area(\psi)
+ \qquad\text{与}\qquad
+E_\Gamma=\inf_{\psi\in X_\Gamma}\mathrm{E}(\psi).
+\label{eq:4.5}
+\end{equation}
+
+等温坐标的存在性给出下述引理:
+
+\begin{lemma}
+\label{lem:4.4}
+$A_\Gamma=E_\Gamma$.
+\end{lemma}
+
+\begin{proof}
+由 \eqref{eq:4.4} 立得 $A_\Gamma\leq E_\Gamma$.
+
+另一方向由等温坐标的存在性得到(见注 \ref{rem:4.3}), 不过在映射不是
+浸入的点上需要小心. 给定 $\epsilon>0$, 取某个 $u\in X_\Gamma$ 使
+\begin{equation*}
+\Area(u)=\int_D\sqrt{\det g_{ij}}<A_\Gamma+\epsilon/2,
+\end{equation*}
+其中 $g_{ij}=\langle u_i,u_j\rangle$ 是 $D$ 上(可能退化的)拉回度量, 且
+\begin{equation*}
+\operatorname{Tr}g=|\nabla u|^2.
+\end{equation*}
+
+等温坐标的存在性要求度量非退化. 为处理这一点, 定义扰动映射
+$u^s:D\to\R^5=\R^3\times\R\times\R$ 为
+\begin{equation*}
+u^s(x,y)=(u(x,y),sx,sy).
+\end{equation*}
+
+$u^s$ 的拉回度量为
+\begin{equation*}
+\tilde{g}_{ij}=g_{ij}+s^2\delta_{ij}.
+\end{equation*}
+
+为备后用, 我们记下
+\begin{equation}
+\begin{aligned}
+\det\tilde{g}&=\det\bigl(g_{ij}+s^2\delta_{ij}\bigr)
+ =\det g+s^2(\operatorname{Tr}g)+s^4=\det g+s^2|\nabla u|^2+s^4\\
+&\leq\bigl(\sqrt{\det g}+s|\nabla u|+s^2\bigr)^2.
+\end{aligned}
+\label{eq:4.6}
+\end{equation}
+
+等温坐标的存在性(见 \cite{Mo2} 或 \cite{Ch2})给出共形微分同胚
+$\phi:(D,\delta_{ij})\to(D,\tilde{g})$, 于是 $u^s\circ\phi$ 是共形的.
+由构造,
+\begin{equation*}
+\mathrm{E}(u\circ\phi)\leq\mathrm{E}(u^s\circ\phi)
+ =\Area(u^s\circ\phi)=\Area(u^s),
+\end{equation*}
+其中第一个等号用了共形性, 最后一个用了 $\phi$ 是微分同胚因而不改变像的
+面积.
+
+下面我们说明: 取 $s$ 充分小可使 $u^s$ 的面积任意接近 $u$ 的面积. 即由
+\eqref{eq:4.6},
+\begin{equation*}
+\begin{aligned}
+\Area(u^s)&=\int_D\sqrt{\det\tilde{g}}
+ \leq\int_D\bigl(\sqrt{\det g}+s|\nabla u|+s^2\bigr)\\
+&\leq\Area(u)+\pi s^2+s\int|\nabla u|.
+\end{aligned}
+\end{equation*}
+
+由于 $u\in W^{1,2}$, 可取 $s$ 使上式小于 $\Area(u)+\epsilon$. 综合起来
+得到
+\begin{equation*}
+E_\Gamma\leq\mathrm{E}(u\circ\phi)\leq\Area(u)+\epsilon<A_\Gamma+2\epsilon,
+\end{equation*}
+由 $\epsilon>0$ 的任意性即得引理.
+\end{proof}
+
+我们将分两步证明定理 \ref{thm:4.1}. 第一步, 我们证明: 对边界曲线
+$\Gamma$ 的每一种参数化, 都存在以之为边界值的圆盘上的能量极小映射.
+每个这样的映射都是调和的. 由于目标空间是欧氏的, 这意味着各分量 $u^i$
+都是调和函数. 这当然就是经典的 Dirichlet 问题. 第二步, 我们将在边界的
+各种可能的参数化上极小化能量, 以得到同时也解出 Plateau 问题的能量
+极小元. 当然, 要在这里取极限, 我们需要对序列中的解有一致估计. 做到
+这一点的关键估计是下面的 Courant--Lebesgue 引理.
+
+% ================================================================
+\section{Dirichlet 问题}
+\label{sec:4.2}
+
+我们将使用下述关于\newterm{harmonic-map}{调和映射}{harmonic map}的著名 Dirichlet 问题的解的形式:
+
+\begin{proposition}
+\label{prop:4.5}
+若 $w\in C^0(\overline{D})\cap W^{1,2}(D)$, 则存在唯一的(能量极小的)
+调和映射 $u\in C^0(\overline{D})\cap W^{1,2}(D)\cap C^\infty(D)$, 使
+$u=w$ 在 $\partial D$ 上.
+\end{proposition}
+
+本节余下部分将给出命题 \ref{prop:4.5} 的证明. 有许多不同的可能途径
+(用 Fourier 级数、Poisson 核、Perron 方法等). 我们将采用变分途径:
+取一列能量趋于下确界的函数, 得到作为极限的能量极小元.
+
+\mtpara{弱调和函数的内正则性}
+在证明命题之前, 我们需要一些准备. 我们将使用下述 $W^{1,2}$ 函数的
+弱紧性结果(证明见 \cite{GiTr} 的定理 7.22):
+
+\begin{lemma}[Rellich 紧性]
+\label{lem:4.6}
+若 $u_k$ 是 $W^{1,2}(D)$ 中的序列且
+\begin{equation*}
+\sup_k\|u_k\|_{W^{1,2}}<\infty,
+\end{equation*}
+则存在子列 $u_{k'}$ 与 $u\in W^{1,2}(D)$, 使 $u_{k'}\to u$ 强收敛于
+$L^2$, $\nabla u_{k'}\to\nabla u$ 弱收敛于 $L^2$, 且
+\begin{equation}
+\int_D|\nabla u|^2\leq\liminf\int_D|\nabla u_k|^2.
+\label{eq:4.7}
+\end{equation}
+此外, 若每个 $u_k$ 属于 $W_0^{1,2}$, 则 $u$ 也属于 $W_0^{1,2}$.
+\end{lemma}
+
+引理 \ref{lem:4.6} 的最后一部分是 Sobolev 空间迹理论的一个特殊情形;
+更多内容见 \cite{Ev} 的 5.5 节.
+
+我们还需要下述圆盘上的 Dirichlet Poincar\'e 不等式:
+
+\begin{lemma}[Dirichlet Poincar\'e 不等式]
+\label{lem:4.7}
+存在 $C<\infty$, 使得若 $u\in W_0^{1,2}(D)$, 则
+\begin{equation}
+\int_Du^2\leq C\int_D|\nabla u|^2.
+\label{eq:4.8}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+由稠密性, 可设 $u$ 光滑且在 $D$ 中具有紧支集. Sobolev 不等式(见第 3 章)
+给出常数 $c$, 使
+\begin{equation*}
+\int_Du^2\leq c\Bigl(\int_D|\nabla u|\Bigr)^2
+ \leq c\pi\int_D|\nabla u|^2,
+\end{equation*}
+其中第二个不等式是 Cauchy--Schwarz 不等式.
+\end{proof}
+
+若对 $D$ 中每个具有紧支集的光滑 $\psi$ 都有
+\begin{equation}
+\int_D\langle\nabla v,\nabla\psi\rangle\,dxdy=0,
+\label{eq:4.9}
+\end{equation}
+则称函数 $v\in W^{1,2}(D)$ 是\newterm{weakly-harmonic}{弱调和}{weakly harmonic}的.
+
+由分部积分立即可知, 光滑的调和函数是弱调和的.
+
+我们还需要下述关于圆盘上调和函数的初等正则性结果:
+
+\begin{lemma}[Weyl 引理]
+\label{lem:4.8}
+若 $v:D\to\R$ 属于 $W^{1,2}$ 且弱调和, 则 $v$ 在 $D$ 的内部为 $C^\infty$.
+\end{lemma}
+
+当然, 这一结果可由标准正则性理论得到(例如见 \cite{GiTr} 的定理 2.10),
+但因其证明简单, 我们仍给出证明. 证明依赖于与近似单位的卷积, 故我们
+简要回顾这一技巧.
+
+设 $\psi:[0,1]\to\R$ 是光滑、非负、单调不增的函数, 在 $[0,\frac13]$ 上为
+常数, 支集在 $[0,\frac23]$ 中, 且
+\begin{equation}
+2\pi\int_0^1\psi(t)t\,dt=1.
+\label{eq:4.10}
+\end{equation}
+
+定义 $\phi_t:\R^2\to\R$ 为
+\begin{equation}
+\phi_t(x)=t^{-2}\psi(|x|/t).
+\label{eq:4.11}
+\end{equation}
+于是 $\phi_t$ 是非负、光滑、径向对称的, 其支集在 $D_t$ 中, 且全积分为 $1$.
+
+暂时固定某个 $t<1$, 令 $v_t:D_{1-t}\to\R$ 为 $v$ 与 $\phi_t$ 的卷积.
+即: 对满足 $|y|<(1-t)$ 的 $y$, 有
+\begin{equation}
+v_t(y)=\int_{\R^2}v(y+x)\phi_t(x)\,dx.
+\label{eq:4.12}
+\end{equation}
+
+由于 $\phi_t$ 的支集在半径为 $t$ 的球中, 这个积分是良定义的. 这一构造的
+重要性在于 $v_t$ 是光滑的. 为此作变量替换 $z=y+x$, 把 \eqref{eq:4.12}
+写成
+\begin{equation}
+v_t(y)=\int_{\R^2}v(z)\phi_t(z-y)\,dz.
+\label{eq:4.13}
+\end{equation}
+
+现在可以在积分号下对 \eqref{eq:4.13} 求导, 于是 $v_t$ 的光滑性由
+$\phi_t$ 的光滑性得到(进一步的讨论见 \cite{GiTr} 的 7.2 节).
+
+\begin{proof}[引理~\ref{lem:4.8} 的证明]
+由于 $v_t$ 光滑, 只需证明 $v_t=v$, 引理便得证.
+
+为此, 我们利用 $\phi_t$ 的径向对称性以及弱调和函数的平均值性质 ——
+后者可由\propref{prop:1.15} 容易地推出. 即: \propref{prop:1.15} 给出, 对弱调和函数 $v$ 与
+任意 $r$,
+\begin{equation}
+\int_{\theta=0}^{2\pi}v\bigl(y+(r\cos\theta,r\sin\theta)\bigr)\,d\theta
+ =2\pi v(y).
+\label{eq:4.14}
+\end{equation}
+
+把 \eqref{eq:4.12} 写成极坐标形式, 得到
+\begin{equation}
+\begin{aligned}
+v_t(y)&=\int_{r=0}^{t}\int_{\theta=0}^{2\pi}
+ v\bigl(y+(r\cos\theta,r\sin\theta)\bigr)
+ \phi_t(r\cos\theta,r\sin\theta)\,r\,d\theta\,dr\\
+&=\int_{r=0}^{t}t^{-2}\psi\Bigl(\frac rt\Bigr)
+ \int_{\theta=0}^{2\pi}v\bigl(y+(r\cos\theta,r\sin\theta)\bigr)
+ r\,d\theta\,dr\\
+&=2\pi v(y)\,t^{-2}\int_{r=0}^{t}\psi\Bigl(\frac rt\Bigr)r\,dr=v(y).
+\end{aligned}
+\label{eq:4.15}
+\end{equation}
+\end{proof}
+
+注意, 上述论证实际上给出了 $v$ 及其所有导数的内估计. 容易看出,
+调和函数是实解析的.
+
+\begin{corollary}
+\label{cor:4.9}
+若 $v:D\to\R$ 是光滑的调和函数, 则 $v$ 在 $D$ 中是实解析的.
+\end{corollary}
+
+\begin{proof}
+复值函数 $v=u_x-\ii u_y$ 是光滑的, 且我们算得
+\begin{align}
+v_x&=u_{xx}-\ii u_{yx},\label{eq:4.16}\\
+v_y&=u_{xy}-\ii u_{yy}.\label{eq:4.17}
+\end{align}
+
+\eqref{eq:4.16} 与 \eqref{eq:4.17} 表明 $v$ 满足 Cauchy--Riemann 方程,
+从而是全纯的. 因此 $v$ 的实部与虚部, 即 $u_x$ 与 $u_y$, 都是实解析的.
+积分之即知 $u$ 本身也是实解析的.
+\end{proof}
+
+\mtpara{边界正则性}
+上一小节建立了弱调和函数的内正则性. 下面我们证明: 当边界值连续时,
+调和函数在闭圆盘上连续. 这一点最早由 H. A. Schwarz 证明, 并在 Schwarz
+反射原理的证明中起了重要作用. 为简单起见, 我们只限于 $\R^2$ 中圆盘这一
+简单情形.
+
+\begin{lemma}
+\label{lem:4.10}
+设 $w\in C^0(\overline{D})\cap W^{1,2}(D)$. 若 $u$ 在 $D$ 上弱调和且
+$(u-w)\in W_0^{1,2}(D)$, 则 $u\in C^0(\overline{D})$.
+\end{lemma}
+
+\begin{proof}
+我们已经证明内正则性, 故只需证明 $v$ 在 $\partial D$ 的每一点连续.
+由 $\partial D$ 的对称性, 只需证明在 $x=1$、$y=0$ 处的连续性. 我们将
+借助闸函数的概念来做这件事. 函数 $(1-x)$ 称为
+$(1,0)\in\partial D$ 处的\textbf{闸函数}, 因为它满足:
+
+\begin{itemize}[leftmargin=1.6em,itemsep=2pt,topsep=2pt]
+\item $(1-x)$ 在 $(1,0)$ 处为零, 且在
+      $\overline{D}\setminus\{(1,0)\}$ 上为正;
+\item $(1-x)$ 在 $\overline{D}$ 上连续, 且在 $D$ 中超调和\footnote{当然,
+      $(1-x)$ 实际上是调和的, 但这里只需要超调和性.}.
+\end{itemize}
+
+固定任意 $\epsilon>0$. 由 $w$ 的连续性, 存在 $\delta>0$ 使
+\begin{equation*}
+|w(z)-w(1,0)|<\epsilon
+ \quad\text{对一切}\ z\in\overline{D}\cap B_\delta(1,0).
+\end{equation*}
+
+由于 $(1-x)>0$ 在 $\overline{D}\setminus\{(1,0)\}$ 上成立, 且 $\delta>0$,
+故存在 $k$ 使
+\begin{equation*}
+k(1-x)(z)>2\sup_{\overline{D}}|w|
+ \quad\text{对一切}\ z\notin\overline{D}\cap B_\delta(1,0).
+\end{equation*}
+
+现在定义连续调和函数 $w^+$ 与 $w^-$ 为
+\begin{equation*}
+w^\pm=w(1,0)\pm\bigl(\epsilon+k(1-x)\bigr),
+\end{equation*}
+于是在 $\overline{D}$ 上(从而在 $\partial D$ 上)
+\begin{equation*}
+w^-\leq w\leq w^+.
+\end{equation*}
+
+最大值原理(允许调和函数属于 $W^{1,2}$ 的版本见 \cite{GiTr} 的定理 8.1)
+给出, 在 $\overline{D}$ 上有
+\begin{equation}
+w^-\leq u\leq w^+.
+\label{eq:4.18}
+\end{equation}
+
+由于 $(1-x)$ 连续且在 $(1,0)$ 处为零, 可以选取 $\delta_0>0$(且小于
+$\delta$), 使
+\begin{equation*}
+k(1-x)<\epsilon\quad\text{在}\ \overline{D}\cap B_{\delta_0}(1,0)\ \text{上}.
+\end{equation*}
+
+最后, 由 \eqref{eq:4.18} 得到
+\begin{equation*}
+|u-u(1,0)|<2\epsilon
+ \quad\text{在}\ \overline{D}\cap B_{\delta_0}(1,0)\ \text{上}.
+\end{equation*}
+
+由于 $\epsilon>0$ 是任意的, 这就给出了所要的连续性, 从而完成证明.
+\end{proof}
+
+% ================================================================
+\mtpara{Dirichlet 问题的解}
+现在我们可以用变分法中的直接方法求解 Dirichlet 问题: 我们证明极小化
+序列收敛到一个弱调和函数, 而后者是正则的.
+
+\begin{proof}[命题~\ref{prop:4.5} 的证明]
+令 $W_w^{1,2}$ 表示使 $(f-w)$ 属于 $W_0^{1,2}$ 的 $f\in W^{1,2}$ 构成的
+空间, 即
+\begin{equation*}
+W_w^{1,2}=\bigl\{f\in W^{1,2}\mid(f-w)\in W_0^{1,2}\bigr\},
+\end{equation*}
+并令 $E_w$ 为能量的下确界
+\begin{equation*}
+E_w=\inf\Bigl\{\int_D|\nabla u|^2\mid u\in W_w^{1,2}\Bigr\}.
+\end{equation*}
+
+我们用直接方法得到能量极小元. 即: 选取极小化序列
+$u_\ell\in W_w^{1,2}$, 使
+\begin{equation}
+\int_D|\nabla u_\ell|^2<E_w+\frac1\ell.
+\label{eq:4.19}
+\end{equation}
+
+把平行四边形法则
+\begin{equation*}
+\Bigl|\nabla\frac{(u_i-u_j)}{2}\Bigr|^2
+ +\Bigl|\nabla\frac{(u_i+u_j)}{2}\Bigr|^2
+ =\frac12|\nabla u_i|^2+\frac12|\nabla u_i|^2
+\end{equation*}
+在圆盘 $D$ 上积分得
+\begin{equation}
+\begin{aligned}
+\frac14\int_D|\nabla(u_i-u_j)|^2
+ +\int_D\Bigl|\nabla\frac{(u_i+u_j)}{2}\Bigr|^2
+&=\frac12\int_D|\nabla u_i|^2+\frac12\int_D|\nabla u_i|^2\\
+&<E_w+\frac12(1/i+1/j).
+\end{aligned}
+\label{eq:4.20}
+\end{equation}
+
+函数 $\frac12(u_i+u_j)$ 在边界上与 $w$ 一致, 故其能量至少为 $E_w$;
+从两边减去 $E_w$ 得
+\begin{equation*}
+\frac14\int_D|\nabla(u_i-u_j)|^2<\frac12(1/i+1/j).
+\end{equation*}
+
+由于 $(u_i-u_j)\in W_0^{1,2}$, 引理 \ref{lem:4.7} 给出
+\begin{equation}
+\int_D(u_i-u_j)^2\leq C\int_D|\nabla(u_i-u_j)|^2
+ \leq 2C(1/i+1/j).
+\label{eq:4.21}
+\end{equation}
+
+于是序列 $u_\ell$ 在 $W^{1,2}$ 中是 Cauchy 列, 因而强收敛于某个函数
+$v\in W^{1,2}$, 且
+\begin{equation*}
+\int_D|\nabla v|^2\leq E_w.
+\end{equation*}
+
+$W_0^{1,2}(D)$ 中的函数序列 $(u_\ell-w)$ 收敛于 $(v-w)$, 故由 Rellich
+紧性(引理 \ref{lem:4.6} 的最后一部分)知 $(v-w)\in W_0^{1,2}(D)$. 于是
+$v\in W_w^{1,2}$, 而 $E_w$ 的定义给出
+\begin{equation*}
+\int_D|\nabla v|^2\geq E_w.
+\end{equation*}
+
+因此 $\int_D|\nabla v|^2=E_w$, 且 $v$ 是能量极小的. 唯一性可由任意
+极小化序列的强收敛直接得到, 无须取子列. (一旦证明 $v$ 是调和的, 它也
+可由最大值原理立即得到.)
+
+下面我们证明 $v$ 是弱调和的. 由于 $v$ 是能量极小的, 对 $D$ 中任意具有
+紧支集的光滑 $\psi$ 有
+\begin{equation*}
+\mathrm{E}(v)=\frac12\int_D|\nabla v|^2
+ \leq\frac12\mathrm{E}(v+t\psi)
+ =\frac12\int_D\langle\nabla v+t\nabla\psi,\nabla v+t\nabla\psi\rangle.
+\end{equation*}
+
+在 $t=0$ 处对此式求导得
+\begin{equation}
+0=\frac{d}{dt}\mathrm{E}(v+t\psi)\Big|_{t=0}
+ =\int_D\langle\nabla v,\nabla\psi\rangle.
+\label{eq:4.22}
+\end{equation}
+
+由于这对 $D$ 中任意具有紧支集的光滑 $\psi$ 成立, 故 $v$ 是弱调和的.
+于是由引理 \ref{lem:4.8}, $v$ 在圆盘内部光滑. 最后, 引理 \ref{lem:4.10}
+给出 $v$ 在闭圆盘 $\overline{D}$ 上连续, 从而完成证明.
+\end{proof}
+
+% ================================================================
+\section{Plateau 问题的解}
+\label{sec:4.3}
+
+现在我们将把上一节中 Dirichlet 问题的解, 用于在全边界的各种可能参数化
+上极小化, 从而解出 Plateau 问题.
+
+给定任意点 $p\in D$, 对每个 $\rho>0$ 定义集合
+\begin{equation*}
+C_\rho=\bigl\{q\in D\mid|p-q|=\rho\bigr\}.
+\end{equation*}
+
+给定映射 $u:D\to\R^3$, 记 $d(C_\rho)$ 为曲线 $C_\rho$ 的像的直径,
+$L(C_\rho)$ 为曲线 $C_\rho$ 的像的长度.
+
+\begin{lemma}[Courant--Lebesgue 引理]
+\label{lem:4.11}
+若 $u:D\to\R^3$, $u\in C^0(\overline{D})\cap W^{1,2}(D)$ 且
+$\mathrm{E}(u)\leq K/2$, 则对每个 $\delta<1$, 存在
+$\rho\in[\delta,\sqrt{\delta}]$ 使
+\begin{equation}
+\bigl(d(C_\rho)\bigr)^2\leq 2\pi\epsilon_\delta,
+\label{eq:4.23}
+\end{equation}
+其中 $\epsilon_\delta=\frac{4\pi K}{-\log\delta}$; 特别地,
+$\epsilon_\delta\to0$($\delta\to0$).
+\end{lemma}
+
+\begin{proof}
+由通常的稠密性与正则化论证(例如见 \cite{Ev} 的第 5 章), 只需在 $u$ 为
+$C^1$ 的假设下证明本引理. 此时我们将估计 $L(C_\rho)$, 而这立即给出
+$d(C_\rho)$ 的估计.
+
+定义量 $p(r)$ 为
+\begin{equation}
+p(r)=r\int_{C_r}|\nabla u|^2\,ds,
+\label{eq:4.24}
+\end{equation}
+其中 $ds$ 是 $C_r$ 上的弧长测度. 我们有
+\begin{equation}
+\int_\delta^{\sqrt{\delta}}p(r)\,d(\log r)
+ =\int_\delta^{\sqrt{\delta}}p(r)\frac{dr}{r}
+ \leq\int_D|\nabla u|^2\,dxdy\leq K.
+\label{eq:4.25}
+\end{equation}
+
+于是由一元微积分中的中值定理, 存在 $\delta$ 与 $\sqrt{\delta}$ 之间的
+某个 $\rho$, 使
+\begin{equation}
+p(\rho)\leq
+ \frac{\int_\delta^{\sqrt{\delta}}p(r)\,d(\log r)}
+      {\int_\delta^{\sqrt{\delta}}d(\log r)}
+ \leq\frac{2K}{-\log\delta}.
+\label{eq:4.26}
+\end{equation}
+
+对任意 $r\in[\delta,\sqrt{\delta}]$, Cauchy--Schwarz 不等式给出
+\begin{equation}
+\bigl(L(C_r)\bigr)^2\leq\Bigl(\int_{C_r}|\nabla u|\,ds\Bigr)^2
+ \leq 2\pi p(r).
+\label{eq:4.27}
+\end{equation}
+
+合并 \eqref{eq:4.26} 与 \eqref{eq:4.27} 即得
+$\bigl(L(C_\rho)\bigr)^2\leq\frac{4\pi K}{-\log\delta}$, 如所断言.
+\end{proof}
+
+还有一个最后需要克服的困难: $D$ 的共形群的非紧性. 回忆: 把边界映到
+边界的微分同胚 $\phi:D\to D$ 若保持角度, 则称为共形的. 这等价于
+$\langle\phi_x,\phi_y\rangle=0$ 且 $|\phi_x|^2=|\phi_y|^2$. 共形群的
+非紧性之所以成为问题, 是因为能量在二维情形下是共形不变的.
+
+\begin{lemma}
+\label{lem:4.12}
+若 $u\in W^{1,2}(D)$ 且 $\phi:D\to D$ 是共形微分同胚, 则
+$\mathrm{E}(u)=\mathrm{E}(u(\phi))$.
+\end{lemma}
+
+\begin{proof}
+设 $g_{ij}$ 表示 $\phi$ 下拉回的欧氏度量 $\delta_{ij}$. 由 $\phi$ 的
+共形性,
+\begin{equation}
+g_{ij}=\langle\phi_i,\phi_j\rangle=\frac12|\nabla\phi|^2\delta_{ij}.
+\label{eq:4.28}
+\end{equation}
+
+以这种方式相差一个标量因子的度量称为\textbf{共形的}. 其次我们注意到,
+能量在度量的共形变换下不变. 设 $g_{ij}=\lambda^2\delta_{ij}$. 我们有
+\begin{equation}
+\begin{aligned}
+\mathrm{E}_g(u)&=\frac12\int_Dg^{ij}u_iu_j(\det g_{ij})^{\frac12}\,dxdy\\
+&=\frac12\int_D\lambda^{-2}|\nabla u|^2\lambda^2\,dxdy=\mathrm{E}(u).\qedhere
+\end{aligned}
+\label{eq:4.29}
+\end{equation}
+\end{proof}
+
+我们将用到: $D$ 的共形群就是线性分式变换群. 这个群在边界上是三重点
+传递的, 即: 给定边界上两个各含三个互异点的三元组, 存在把一个三元组
+映到另一个的线性分式变换. 然而, 能量与面积在区域的共形重参数化下都
+不变; 因此我们需要对此作用取商.
+
+在本节余下部分, 我们固定 $\Gamma$ 中三个互异的点 $q_\ell$ 以及
+$\partial D$ 中三个互异的点 $p_\ell$. 我们已经证明了下述结论:
+
+\begin{lemma}
+\label{lem:4.13}
+若 $u:D\to\R^3$ 属于 $C^0(\overline{D})\cap W^{1,2}(D)$, 且
+$u:\partial D\to\Gamma$ 是单调满射, 则存在线性分式变换 $\phi:D\to D$,
+使 $u\circ\phi$ 满足:
+\begin{enumerate}
+\item $\mathrm{E}(u)=\mathrm{E}(u\circ\phi)$;
+\item $u\circ\phi\in C^0(\overline{D})\cap W^{1,2}(D)$;
+\item $u:\partial D\to\Gamma$ 是单调满射;
+\item 对每个 $i=1,2,3$, 有 $u\circ\phi(p_i)=q_i$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+前三条性质由能量的共形不变性以及线性分式变换是圆盘的共形微分同胚
+得到. 最后一条用到 $u$ 是满射以及线性分式变换在 $\partial D$ 上的
+三重传递性.
+\end{proof}
+
+现在我们可以用 Courant--Lebesgue 引理说明: 固定这三个点的像并给定能量
+的界, 蕴含边界上的等度连续性:
+
+\begin{lemma}
+\label{lem:4.14}
+对任意常数 $K$, 定义映射族 $\mathcal{F}=\mathcal{F}_K$ 为所有满足
+下述条件的 $\psi:D\to\R^3$:
+\begin{enumerate}
+\item $\psi\in C^0(\overline{D})\cap W^{1,2}(D)$ 且
+      $\mathrm{E}(\psi)\leq K/2$;
+\item $\psi:\partial D\to\Gamma$ 是单调满射;
+\item 对每个 $i=1,2,3$, 有 $\psi(p_i)=q_i$.
+\end{enumerate}
+则 $\mathcal{F}$ 在 $\partial D$ 上等度连续. 因此由 Arzel\`a--Ascoli
+定理, $\mathcal{F}$ 在 $\partial D$ 上一致收敛的拓扑中是紧的.
+\end{lemma}
+
+\begin{proof}
+设给定 $\epsilon>0$; 不妨设 $\epsilon$ 小于 $\min|q_i-q_j|$.
+
+由于 $\Gamma$ 是长度有限的简单闭曲线, 故存在某个 $d>0$, 使得若
+$p,q\in\Gamma$ 且 $0<|p-q|<d$, 则 $\Gamma\setminus\{p,q\}$ 恰有一个
+直径不超过 $\epsilon$ 的连通分支.
+
+选取 $\delta<1$, 使 $\sqrt{2\pi\epsilon_\delta}<d$, 且对任意
+$p\in\partial D$, 至少有两个 $p_i$ 不在以 $p$ 为中心、半径为
+$\sqrt{\delta}$ 的球中.
+
+现在, 对任意 $p\in\partial D$, Courant--Lebesgue 引理(即引理
+\ref{lem:4.11})给出: 存在 $\delta$ 与 $\sqrt{\delta}$ 之间的某个 $\rho$,
+使 $d(C_\rho)<d$. 曲线 $C_\rho$ 把 $\partial D$ 分成两个连通分支
+$A^1$ 与 $A^2$, 其中较大者(设为 $A^2$)含有至少两个基点 $p_i$. 把
+$\Gamma$ 上对应的弧记为 $\mathcal{A}^1$ 与 $\mathcal{A}^2$. 由于 $C_\rho$ 两端点的像
+由一条长度小于 $d$ 的曲线相连, 故 $\mathcal{A}^1$ 与 $\mathcal{A}^2$ 中有一个直径小于
+$\epsilon$. 注意这个连通分支不可能含有两个基点 $q_i$, 于是可以断定
+$\mathcal{A}^1$ 的直径小于 $\epsilon$. 由于 $\mathcal{A}^1$ 是 $A^1$ 的像, 这就完成了等度
+连续性的证明.
+\end{proof}
+
+现在我们准备解 Plateau 问题.
+
+\begin{proof}[定理~\ref{thm:4.1} 的证明]
+首先注意 $E_\Gamma<\infty$. 即: 由于 $\Gamma$ 是分段 $C^1$ 的, 我们有
+分段 $C^1$ 的单调满射 $w:\partial D\to\Gamma$. 在极坐标
+$(\rho,\theta)$ 下, 令
+\begin{equation*}
+\tilde{w}(\rho,\theta)=\eta(\rho)w(\theta),
+\end{equation*}
+其中 $\eta$ 是光滑函数, $\eta(1)=1$, 且对一切 $\rho<1/2$ 有
+$\eta(\rho)=0$. 这给出一个 Lipschitz 映射, 因而能量有限; 所以
+$E_\Gamma<\infty$.
+
+由命题 \ref{prop:4.5}, 存在极小化序列 $\{u_j\}$, 其中每个 $u_j$ 是
+属于 $C^0(\overline{D})\cap W^{1,2}(D)$ 的调和映射, $u_j:\partial D\to\Gamma$
+单调满射, 且
+\begin{equation*}
+\mathrm{E}(u_j)\to E_\Gamma.
+\end{equation*}
+
+此外, 由引理 \ref{lem:4.13} 可以要求每个 $u_j\in\mathcal{F}$.
+
+由 Rellich 紧性(引理 \ref{lem:4.6}), 存在弱收敛子列 $u_k\to u\in W^{1,2}$,
+且
+\begin{equation*}
+\mathrm{E}(u)\leq\liminf\{\mathrm{E}(u_k)\}=E_\Gamma.
+\end{equation*}
+
+Courant--Lebesgue 引理及其推论(引理 \ref{lem:4.14})表明, $u_j$ 的边界值
+构成 $\partial D$ 上等度连续的函数族. 于是 Arzel\`a--Ascoli 定理给出
+一个在 $\partial D$ 上一致收敛到连续函数的子列. 此外, 由于每个 $u_j$
+是调和的, $(u_j-u_k)$ 也是调和的, 故由最大值原理
+\begin{equation*}
+\sup_D|u_j-u_k|=\max_{\partial D}|u_j-u_k|.
+\end{equation*}
+
+因此, $\partial D$ 上的一致收敛蕴含 $\overline{D}$ 上的一致收敛. 我们
+于是得到
+\begin{equation*}
+\mathrm{E}(u)=E_\Gamma,
+\end{equation*}
+且 $u$ 是调和的. 此外, 一致收敛还蕴含 $u:\partial D\to\Gamma$ 是单调
+满射. 最后, 引理 \ref{lem:4.4} 蕴含 $\Area(u)=A_\Gamma$, 且 $u$ 是
+几乎共形的.
+\end{proof}
+
+回忆: 若连通集的逆像是连通的, 则称映射 $u$ 在 $\partial D$ 上是单调的.
+为备后用, 作下述定义是方便的:
+
+\begin{definition}
+\label{def:4.15}
+设 $\Gamma$ 是分段 $C^1$ 闭 Jordan 曲线, 设 $u:\overline{D}\to\R^3$ 是
+$C^0(\overline{D})\cap W^{1,2}(D)$ 的几乎共形调和映射, 且其在
+$\partial D$ 上的限制是到 $\Gamma$ 的单调满射. 若 $u$ 在所有这类映射中
+极小化能量, 则称 $u$ 是 \textbf{Plateau 问题的解}.
+\end{definition}
+
+还剩下 $u$ 直到边界 $\partial D$ 的正则性需要讨论. 关于边界正则性的一般
+论证(适用于各种不同的情形)由 S. Hildebrandt 在 \cite{Hi} 中给出. 由于
+我们主要关心 $\R^3$ 中极小曲面的情形, 这里回顾 J. C. C. Nitsche
+\cite{Ni1} 的下述结果:
+
+\begin{theorem}[Nitsche, \cite{Ni1}]
+\label{thm:4.16}
+若 $\Gamma$ 是 $C^{k,\alpha}$ 类的正则 Jordan 曲线, 其中 $k\geq1$ 且
+$0<\alpha<1$, 则 Plateau 问题的解 $u$ 在整个 $\overline{D}$ 上是
+$C^{k,\alpha}$ 的.
+\end{theorem}
+
+\cite{Ni2} 一书包含定理 \ref{thm:4.16} 的证明以及对边界正则性的详尽
+讨论.
+
+\mtpara{平面区域上的映射}
+Plateau 问题可以推广到边界分支多于一个的其它平面区域上的映射. 最简单
+的情形是从圆环出发的映射, 对此 Meeks 与 Yau 证明了:
+
+\begin{theorem}[Meeks--Yau, \cite{MeY1}]
+\label{thm:4.17}
+设 $\Gamma_1$ 与 $\Gamma_2$ 是简单闭曲线. 设 $\mathcal{A}_1$ 与
+$\mathcal{A}_2$ 分别是以 $\Gamma_1$ 与 $\Gamma_2$ 为边界的极小面积
+圆盘的面积. 若存在圆环 $\Sigma$ 使
+$\partial\Sigma=\Gamma_1\cup\Gamma_2$ 且
+\begin{equation*}
+\Area(\Sigma)<\mathcal{A}_1+\mathcal{A}_2,
+\end{equation*}
+则以 $\Gamma_1\cup\Gamma_2$ 为边界的极小面积圆环存在.
+\end{theorem}
+
+这一结果的证明及其到其它平面区域的推广, 请读者参阅 \cite{MeY1} 的
+定理 1.
+
+% ================================================================
+\section{分支点}
+\label{sec:4.4}
+
+下面我们证明: 上一节给出的 Plateau 问题的解实际上是浸入. 在本书中,
+极小曲面
+\begin{equation*}
+u:D\to\R^3
+\end{equation*}
+的\newterm{branch-point}{分支点}{branch point}是指 $u$ 的微分消失的点; 这些正是 $u$ 不能成为浸入的
+点. 因此我们希望证明: Plateau 问题的解没有分支点; 相反地, 带有分支点
+的极小曲面是存在的, 但它们不可能是圆盘上的能量极小映射.
+
+由于 $u$ 自动是几乎共形的, 在复分析的意义下, 极小曲面的分支点具有
+分歧共形映射 $z\to z^k$($k>1$)的结构(例如见 \cite{A}); 但它们还从
+浸入的第三个坐标函数获得额外的结构.
+
+\mtfigurepair{fig-4-1}{分支点附近的一张极小曲面. 图由 Michael Beeson 提供.}{fig:4.1}%
+{fig-4-2}{分支点附近极小曲面的一半. 图由 Michael Beeson 提供.}{fig:4.2}
+
+为说明 Plateau 问题的解是浸入, 我们先证明分支点是孤立的(这对任意
+极小曲面都成立). 然后, 利用极小性证明内部不存在分支点. 由此即知解
+是浸入曲面.
+
+若令 $z=(x+\ii y)$ 为 $D$ 上的复坐标, 则我们在推论 \ref{cor:4.9} 的
+证明中看到: $u$ 的调和性蕴含 $v\equiv u_x-\ii u_y$ 是(向量值)全纯
+函数. 此外有
+\begin{equation}
+|v|^2=|u_x|^2+|u_y|^2,
+\label{eq:4.30}
+\end{equation}
+因此 $v$ 恰在 $u$ 的分支点处为零. 由于 $D$ 上非常数全纯函数的零点
+必然孤立, 这给出:
+
+\begin{corollary}
+\label{cor:4.18}
+几乎共形的调和映射 $u:D\to\R^3$ 的分支点是孤立的.
+\end{corollary}
+
+正如上面提到的, 还可证明多得多的结论. R. Osserman 证明像曲面是浸入的
+(即不存在内部几何分支点). R. Gulliver 证明了下述决定性结果: 解没有
+内部分支点(因此不仅像是浸入曲面, 而且参数化本身也不引入任何分支点);
+参看 H. W. Alt. 我们将在第 6 章证明这些结果.
+
+% ================================================================
+\section{调和映射}
+\label{sec:4.5}
+
+在接下来的两节中, $M$ 将表示等距嵌入到某个欧氏空间 $\R^N$ 中的闭
+Riemann 流形. 给定曲面 $\Sigma$ 与映射
+\begin{equation}
+u:\Sigma\to M,
+\label{eq:4.31}
+\end{equation}
+映射 $u$ 的能量 $\mathrm{E}(u)$ 定义为
+\begin{equation}
+\mathrm{E}(u)=\frac12\int_\Sigma|\nabla u|^2,
+\label{eq:4.32}
+\end{equation}
+其中 $\nabla$ 是 $\Sigma$ 上的梯度. 若 $u$ 关于映入 $M$ 的紧支集变分
+是 $\mathrm{E}$ 的临界点, 则称 $u$ 是\textbf{调和}的.
+
+如同引理 \ref{lem:4.12} 的证明中那样论证, 容易看出映射的能量在二维
+情形下是共形不变的:
+
+\begin{corollary}
+\label{cor:4.19}
+若 $\Phi:\Gamma\to\Sigma$ 是共形微分同胚, $u:\Sigma\to M$ 是调和的,
+则 $u\circ\Phi:\Gamma\to M$ 也是调和的, 且
+$\mathrm{E}(u)=\mathrm{E}(u\circ\Phi)$.
+\end{corollary}
+
+\mtpara{调和映射方程}
+下面我们推导能量泛函的 Euler--Lagrange 方程; 它称为\textbf{调和映射
+方程}.
+
+\begin{lemma}
+\label{lem:4.20}
+调和映射 $u:\Sigma\to M$ 满足
+\begin{equation}
+(\Delta u)^T=0,
+\label{eq:4.33}
+\end{equation}
+其中 $(\Delta u)^T$ 是到 $M$ 的切向投影. 特别地,
+\begin{equation}
+\Delta_Mu^i=g^{jk}A^i_{u(x)}\bigl(\partial_ju,\partial_ku\bigr),
+\label{eq:4.34}
+\end{equation}
+其中 $u^i$ 是 $u$ 的分量, $g_{jk}$ 是 $\Sigma$ 上的度量,
+$A^i_{u(x)}$ 是 $M$ 在点 $u(x)$ 处第二基本形式的第 $i$ 个分量.
+\end{lemma}
+
+\begin{proof}
+设 $w:\Sigma\times\R\to M$ 是单参数映射族, $w(x,0)=u(x)$. 对能量求导
+给出
+\begin{equation}
+\begin{aligned}
+\frac{d}{dt}\Big|_{t=0}\mathrm{E}(w(\cdot,t))
+&=\int_\Sigma\langle\nabla w(\cdot,0),\nabla\partial_tw(\cdot,0)\rangle\\
+&=-\int_\Sigma\langle\Delta u,\partial_tw(\cdot,0)\rangle,
+\end{aligned}
+\label{eq:4.35}
+\end{equation}
+其中第二个等号用了散度定理. 对 $\partial_tw(\cdot,0)$ 的唯一约束是它
+必须与 $M$ 相切, 因为 $w$ 总是映入 $M$ 的, 于是得到 \eqref{eq:4.33}.
+
+\eqref{eq:4.34} 的推导如下: Riemann 几何告诉我们, $\Delta u$ 的法向
+部分总可以这样表示(这一步没有用到第一个方程). 即: 若 $N$ 是沿 $M$ 的
+法向量场, 则
+\begin{equation}
+\begin{aligned}
+\langle\Delta u,N\circ u\rangle
+&=\frac1{\sqrt{\det g}}\bigl\langle\partial_j
+ \bigl(g^{jk}\sqrt{\det g}\,u_k\bigr),N\circ u\bigr\rangle\\
+&=-g^{jk}\langle u_k,\partial_j(N\circ u)\rangle,
+\end{aligned}
+\label{eq:4.36}
+\end{equation}
+其中第二个等号用了度量的相容性以及 $u_k$ 与 $M$ 相切而 $N$ 与 $M$
+正交. 链式法则给出
+\begin{equation}
+\partial_j(N\circ u)=\nabla_{u_j}N,
+\label{eq:4.37}
+\end{equation}
+于是可把它改写为
+\begin{equation}
+\langle\Delta u,N\circ u\rangle
+ =-g^{jk}\langle u_k,\nabla_{u_j}N\rangle
+ =g^{jk}\langle\nabla_{u_j}u_k,N\rangle,
+\label{eq:4.38}
+\end{equation}
+而这给出 \eqref{eq:4.34}.
+\end{proof}
+
+利用这一点, 我们可以导出 $|\nabla u|^2$ 的一个微分不等式, 它对于
+调和映射所起的作用, 正如 Simons 不等式对极小曲面所起的作用.
+
+\begin{lemma}
+\label{lem:4.21}
+若 $u:\Sigma\to M$ 是调和的, 则存在仅依赖于 $M$ 与 $\operatorname{Ric}_{\Sigma}$ 的
+下界的常数 $C$, 使
+\begin{equation}
+\Delta|\nabla u|^2\geq-C\bigl(|\nabla u|^2+|\nabla u|^4\bigr).
+\label{eq:4.39}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+在整个证明中, $C$ 表示仅依赖于 $M$ 与 $\operatorname{Ric}_{\Sigma}$ 之下界的常数,
+并且允许逐行改变.
+
+我们从 Bochner 公式(\propref{prop:1.47})出发, 它对 $u$ 的每个分量给出
+\begin{equation}
+\begin{aligned}
+\frac12\Delta|\nabla u|^2
+&=|\Hess_u|^2+\operatorname{Ric}_{\Sigma}(\nabla u,\nabla u)
+ +\langle\nabla u,\nabla\Delta u\rangle\\
+&\geq|\Hess_u|^2-C|\nabla u|^2-|\nabla u||\nabla\Delta u|,
+\end{aligned}
+\label{eq:4.40}
+\end{equation}
+其中不等式用了 $\Sigma$ 紧致因而 Ricci 曲率有界. 对调和映射方程
+\eqref{eq:4.34} 求导给出
+\begin{equation}
+\begin{aligned}
+|\nabla\Delta u|
+&\leq|\nabla(A\circ u)|\,|\nabla u|^2
+ +2|A|\,|\nabla u|\,|\Hess_u|\\
+&\leq C|\nabla u|^3+C|\nabla u|\,|\Hess_u|,
+\end{aligned}
+\label{eq:4.41}
+\end{equation}
+其中第二个不等式用了闭流形 $M\subset\R^N$ 的 $|A|$ 与 $|\nabla A|$
+有界. 因此, 由吸收不等式得到
+\begin{equation}
+\begin{aligned}
+|\nabla u|\,|\nabla\Delta u|
+&\leq C|\nabla u|^4+C|\nabla u|^2|\Hess_u|\\
+&\leq C'|\nabla u|^4+|\Hess_u|^2.
+\end{aligned}
+\label{eq:4.42}
+\end{equation}
+
+最后, 把它代回 \eqref{eq:4.40} 并注意 Hessian 项相消, 即得引理.
+\end{proof}
+
+% ================================================================
+\mtpara{调和映射的先验估计}
+利用引理 \ref{lem:4.21} 的微分不等式, 并仿照\thmref{thm:2.2} 的证明, 我们得到
+Sacks 与 Uhlenbeck \cite{SaUh} 的小能量估计:
+
+\begin{theorem}[Sacks--Uhlenbeck, \cite{SaUh}]
+\label{thm:4.22}
+给定 $\Sigma$ 与 $M$, 存在 $\epsilon,\rho>0$, 使得若 $r_0<\rho$,
+$u:\Sigma\to M$ 是调和的, 且
+\begin{equation}
+\int_{B^\Sigma_{r_0}(y)}|\nabla u|^2<\delta\epsilon,
+\label{eq:4.43}
+\end{equation}
+则
+\begin{equation}
+|\nabla u|^2(y)\leq\frac{\delta}{r_0^2}.
+\label{eq:4.44}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+在 $B^\Sigma_{r_0}(y)$ 上令 $F=(r_0-r)^2|\nabla u|^2$, 其中 $r$ 是到
+$y$ 的距离; 注意 $F$ 在 $\partial B^\Sigma_{r_0}(y)$ 上为零. 设
+$x_0\in\Sigma$ 是 $F$ 取到最大值的点, 注意只需证明 $F(x_0)<\delta$.
+我们将证明: 对充分小的 $\epsilon>0$, $F(x_0)\geq\delta$ 会导致矛盾.
+
+定义 $\sigma>0$ 为
+\begin{equation}
+\sigma^2|\nabla u|^2(x_0)=\frac{\delta}{4}.
+\label{eq:4.45}
+\end{equation}
+特别地, 由于 $F(x_0)\geq\delta$, 可见
+\begin{equation}
+2\sigma\leq r_0-r(x_0).
+\label{eq:4.46}
+\end{equation}
+
+于是由三角不等式, 在 $B^\Sigma_\sigma(x_0)$ 上有
+\begin{equation*}
+\frac12\leq\frac{r_0-r}{r_0-r(x_0)}\leq2.
+\end{equation*}
+
+由于 $F$ 在 $x_0$ 处取到最大值, 我们得到
+\begin{equation}
+\begin{aligned}
+\bigl(r_0-r(x_0)\bigr)^2\sup_{B^\Sigma_\sigma(x_0)}|\nabla u|^2
+&\leq4\sup_{B^\Sigma_\sigma(x_0)}F(x)=4F(x_0)\\
+&=4\bigl(r_0-r(x_0)\bigr)^2|\nabla u|^2(x_0).
+\end{aligned}
+\label{eq:4.47}
+\end{equation}
+
+两边除以 $(r_0-r(x_0))^2$ 并利用 $\sigma$ 的定义得
+\begin{equation}
+\sup_{B^\Sigma_\sigma(x_0)}|\nabla u|^2\leq4|\nabla u|^2(x_0)
+ =\delta\sigma^{-2}.
+\label{eq:4.48}
+\end{equation}
+
+把 $B^\Sigma_\sigma(x_0)$ 缩放为单位大小(仍记作 $\Sigma$!)后, 有
+\begin{equation*}
+\sup_{B^\Sigma_1(x_0)}|\nabla u|^2\leq4|\nabla u|^2(x_0)=\delta\leq1.
+\end{equation*}
+
+由引理 \ref{lem:4.21}, 在 $B^\Sigma_1(x_0)$ 上
+\begin{equation*}
+\Delta|\nabla u|^2\geq-2C|\nabla u|^2,
+\end{equation*}
+其中 $C$ 仅依赖于 $M$ 与 $\operatorname{Ric}_\Sigma$ 的下界. 所要的
+矛盾现在由平均值不等式得到. 即: \corref{cor:1.16} 的一个变体(精确的平均值
+不等式见 \cite{LiSc})给出
+\begin{equation}
+\frac{\delta}{4}=|\nabla u|^2(x_0)
+ \leq C_1\int_{B^\Sigma_1(x_0)}|\nabla u|^2<C_1\delta\epsilon,
+\label{eq:4.49}
+\end{equation}
+其中 $C_1$ 仅依赖于 $M$ 与 $\operatorname{Ric}_\Sigma$ 的下界. 只要
+$\epsilon$ 取得充分小, 这就是矛盾.
+\end{proof}
+
+\begin{remark}
+\label{rem:4.23}
+上述估计是对光滑调和映射证明的. F. H\'elein 在 \cite{Hf2} 中证明:
+弱调和映射自动是光滑的; 参看 \cite{Rt}、\cite{RtSt}.
+\end{remark}
+
+注意, 更高阶导数的估计可由 $|\nabla u|$ 的 $L^\infty$ 估计与线性椭圆
+理论立即得到. 即: 方程此时蕴含 $\Delta u$ 属于 $L^\infty$, 于是线性椭圆
+理论(\cite{GiTr} 的定理 9.11)蕴含对任意 $p<\infty$ 有 $u\in W^{2,p}$.
+非线性项
+\begin{equation}
+A\circ u(\nabla u,\nabla u)
+\label{eq:4.50}
+\end{equation}
+的导数被(一个常数乘以)
+\begin{equation}
+|\nabla u|^3+|\nabla u|^2|\Hess_u|
+\label{eq:4.51}
+\end{equation}
+所界, 而后者属于 $L^p$. 由此 $\Delta u$ 属于 $W^{1,p}$, 从而 $u$ 属于
+$W^{3,p}$(这称为「自举」); 见 \cite{GiTr} 的定理 9.19. 重复此论证即知
+对每个 $k$ 都有 $u\in W^{k,p}$. Morrey--Sobolev 嵌入定理(\cite{GiTr}
+的定理 7.26)蕴含 $u$ 是光滑的.
+
+% ================================================================
+\mtpara{Hopf 微分}
+本节中我们将证明: 每个从 $\R^2$ 出发的有限能量调和映射必定也是共形的,
+因而给出目标空间 $M$ 中的一张极小曲面. 由能量的共形不变性, 从 $\bS^2$
+出发的调和映射也有同样的结论.
+
+关键在于: 映射不是共形这一缺陷, 由称为\newterm{hopf}{Hopf 微分}{Hopf differential}的
+一个全纯微分来度量; 而在 $\bS^2$ 或 $\R^2$ 上(在增长界之下), 这些微分必须
+为零.
+
+我们需要下述简单的引理:
+
+\begin{lemma}
+\label{lem:4.24}
+若 $\phi$ 是 $\R^2$ 上的 $L^1$ 全纯函数, 则 $\phi\equiv0$.
+\end{lemma}
+
+\begin{proof}
+设 $f$ 与 $g$ 是 $\phi$ 的实部与虚部, 则
+\begin{equation}
+\begin{aligned}
+\Delta|\phi|&=\Delta\bigl(f^2+g^2\bigr)^{\frac12}
+ =\dive\Bigl(\frac{f\nabla f+g\nabla g}{(f^2+g^2)^{\frac12}}\Bigr)\\
+&=\frac{|\nabla f|^2+|\nabla g|^2}{(f^2+g^2)^{\frac12}}
+ -\frac{|f\nabla f+g\nabla g|^2}{(f^2+g^2)^{\frac32}},
+\end{aligned}
+\label{eq:4.52}
+\end{equation}
+其中第二个等号用了 $f$ 与 $g$ 都是调和的. Cauchy--Riemann 方程给出
+$\nabla f$ 与 $\nabla g$ 正交, 且 $|\nabla f|=|\nabla g|$. 把它代入
+$\Delta|\phi|$ 的表达式得
+\begin{equation}
+\Delta|\phi|
+ =\frac{2|\nabla f|^2}{(f^2+g^2)^{\frac12}}
+ -\frac{|\nabla f|^2(f^2+g^2)}{(f^2+g^2)^{\frac32}}
+ =\frac{|\nabla f|^2}{(f^2+g^2)^{\frac12}}.
+\label{eq:4.53}
+\end{equation}
+
+由此可见 $\Delta|\phi|\geq0$, 故\corref{cor:1.17} 的平均值不等式蕴含: 或者
+$\phi\equiv0$, 或者 $L^1(B_R)$ 范数关于 $R$ 至少按二次增长. 引理得证.
+\end{proof}
+
+下一个引理说明: 从 $\R^2$ 出发的有限能量调和映射是共形的; 由二维情形下
+能量的共形不变性, 从 $\bS^2$ 出发的调和映射也是共形的. 这一结果属于
+Sacks 与 Uhlenbeck(\cite{SaUh} 的推论 1.7).
+
+\begin{lemma}[Sacks--Uhlenbeck, \cite{SaUh}]
+\label{lem:4.25}
+若 $u:\R^2\to M$ 是调和的且 $\mathrm{E}(u)<\infty$, 则 $u$ 是几乎
+共形的, 因而给出极小曲面.
+\end{lemma}
+
+\begin{proof}
+考虑复值函数
+\begin{equation}
+\phi(x,y)=\bigl(|u_x|^2-|u_y|^2\bigr)-2\ii\langle u_x,u_y\rangle.
+\label{eq:4.54}
+\end{equation}
+
+我们将说明 $\phi$ 是全纯的. 我们算得
+\begin{align}
+\bigl(|u_x|^2-|u_y|^2\bigr)_x
+ &=2\langle u_x,u_{xx}\rangle-2\langle u_y,u_{xy}\rangle,\label{eq:4.55}\\
+\bigl(|u_x|^2-|u_y|^2\bigr)_y
+ &=2\langle u_x,u_{xy}\rangle-2\langle u_y,u_{yy}\rangle,\label{eq:4.56}\\
+\bigl(\langle u_x,u_y\rangle\bigr)_x
+ &=\langle u_{xx},u_y\rangle+\langle u_x,u_{yx}\rangle,\label{eq:4.57}\\
+\bigl(\langle u_x,u_y\rangle\bigr)_y
+ &=\langle u_{xy},u_y\rangle+\langle u_x,u_{yy}\rangle.\label{eq:4.58}
+\end{align}
+
+把这些代入 Cauchy--Riemann 方程给出
+\begin{equation}
+\begin{aligned}
+\bigl(|u_x|^2-|u_y|^2\bigr)_x
+ -\bigl(-2\langle u_x,u_y\rangle\bigr)_y
+&=2\bigl(\langle u_x,u_{xx}\rangle-\langle u_y,u_{xy}\rangle\\
+&\qquad+\langle u_{xy},u_y\rangle+\langle u_x,u_{yy}\rangle\bigr)\\
+&=2\langle\Delta u,u_x\rangle=0,
+\end{aligned}
+\label{eq:4.59}
+\end{equation}
+其中最后一个等号用了 $u_x$ 与 $M$ 相切, 而由调和映射方程 $\Delta u$
+与 $M$ 正交. 类似地, 我们得到
+\begin{equation}
+\bigl(|u_x|^2-|u_y|^2\bigr)_y
+ +\bigl(-2\langle u_x,u_y\rangle\bigr)_x
+ =-2\langle\Delta u,u_y\rangle=0,
+\label{eq:4.60}
+\end{equation}
+于是 $\phi$ 是全纯的. 由于 $\mathrm{E}(u)<\infty$, 函数 $\phi$ 属于
+$L^1(\R^2)$. 最后, 由引理 \ref{lem:4.24}, $\phi\equiv0$, 从而 $u$ 是
+几乎共形的.
+\end{proof}
+
+% ================================================================
+\mtpara{可去奇点}
+我们将使用下述关于从曲面出发的调和映射的\newterm{removable}{可去奇点}{removable singularity}结果:
+
+\begin{theorem}[Sacks--Uhlenbeck, \cite{SaUh}]
+\label{thm:4.26}
+若 $u:B_1\setminus\{0\}\to M$(其中 $B_1\subset\R^2$)是有限能量的
+光滑调和映射, 则 $u$ 可光滑延拓为从 $B_1$ 到 $M$ 的调和映射.
+\end{theorem}
+
+证明请参阅 \cite{ScYa2} 的定理 3.6.
+
+% ================================================================
+\section{同伦类中极小球面的存在性}
+\label{sec:4.6}
+
+本节中我们将证明: 每个 $\pi_2(M)$ 非平凡的闭流形 $M$ 必定含有极小球面.
+这是 Sacks 与 Uhlenbeck 在 \cite{SaUh} 中证明的, 我们将沿用他们的途径:
+为扰动泛函寻找极小元, 并令扰动趋于零而取极限. Sacks 与 Uhlenbeck 的
+论证对某个 $k\geq2$ 满足 $\pi_k(M)\neq0$ 的情形同样给出存在性:
+
+\begin{theorem}[Sacks--Uhlenbeck, \cite{SaUh}]
+\label{thm:4.27}
+若 $M$ 是闭流形, 且对某个 $k\geq2$ 有 $\pi_k(M)\neq0$, 则存在非平凡的
+调和映射 $u:\bS^2\to M$. 该映射 $u$ 是几乎共形的, 且其像是极小曲面.
+\end{theorem}
+
+本节余下部分将致力于在 $\pi_2(M)\neq0$ 的情形证明定理 \ref{thm:4.27}.
+我们在此不处理 $k>2$ 时 $\pi_k(M)\neq0$ 的情形, 因为这一结果(事实上
+远不止此)可由下一章的 min-max 存在性结果推出.
+
+当 $\pi_2(M)\neq0$ 时, 自然的途径是在同伦类中极小化能量. 然而, 有界
+能量的 $W^{1,2}$ 映射构成的空间不是紧的, 极小化序列未必收敛(即使取
+子列). 我们在圆盘的 Plateau 问题中已经看到这种紧性缺失, 它来自圆盘
+共形自同构群的非紧性. 对于从 $\bS^2$ 出发的映射也是如此, 此时 M\"obius
+变换群是非紧的.
+
+Sacks 与 Uhlenbeck 是这样克服这一困难的: 先极小化一个扰动泛函
+$E_\alpha$, 它在共形群下不具有不变性, 且其极小化序列必须在同一同伦类中收敛到
+极小元. 要点在于对扰动泛函的极小元获得一致控制, 以便取极限.
+
+\mtpara{扰动泛函}
+下面我们定义 Sacks 与 Uhlenbeck 的\newterm{perturbed}{扰动泛函}{perturbed functional}, 并导出这些泛函的
+Euler--Lagrange 方程. 即: 给定 $\alpha\geq1$ 与映射 $u:\bS^2\to M$,
+定义扰动能量函数
+\begin{equation}
+E_\alpha(u)=\int_{\bS^2}\bigl(1+|\nabla u|^2\bigr)^\alpha.
+\label{eq:4.61}
+\end{equation}
+
+显然, 当 $\alpha=1$ 时 $E_1(u)=4\pi+2\mathrm{E}(u)$, 故 $E_1$ 的临界点
+恰是调和映射.
+
+仿照引理 \ref{lem:4.20}, 我们计算 $E_\alpha$ 的 Euler--Lagrange 方程.
+
+\begin{lemma}
+\label{lem:4.28}
+若映射 $u:\Sigma\to M$ 是 $E_\alpha$ 的临界点, 则
+\begin{equation}
+\Bigl(\dive\bigl((1+|\nabla u|^2)^{\alpha-1}\nabla u\bigr)\Bigr)^T=0,
+\label{eq:4.62}
+\end{equation}
+其中 $(\cdot)^T$ 是到 $M$ 的切向投影. 特别地,
+\begin{equation}
+\Delta u^i+(\alpha-1)
+ \frac{\bigl\langle\nabla|\nabla u|^2,\nabla u^i\bigr\rangle}
+      {1+|\nabla u|^2}
+ =g^{jk}A^i_{u(x)}\bigl(\partial_ju,\partial_ku\bigr),
+\label{eq:4.63}
+\end{equation}
+其中 $u^i$ 是 $u$ 的分量, $g_{jk}$ 是 $\Sigma$ 上的度量,
+$A^i_{u(x)}$ 是 $M$ 在点 $u(x)$ 处第二基本形式的第 $i$ 个分量.
+\end{lemma}
+
+\begin{proof}
+设 $w:\Sigma\times\R\to M$ 是单参数映射族, $w(x,0)=u(x)$. 对
+$E_\alpha$ 求导给出
+\begin{equation}
+\begin{aligned}
+\frac{d}{dt}\Big|_{t=0}E_\alpha(w(\cdot,t))
+&=\alpha\int_\Sigma\bigl(1+|\nabla w|^2(\cdot,0)\bigr)^{\alpha-1}
+ \langle\nabla w(\cdot,0),\nabla\partial_tw(\cdot,0)\rangle\\
+&=-\alpha\int_\Sigma\bigl\langle
+ \dive\bigl((1+|\nabla u|^2)^{\alpha-1}\nabla u\bigr),
+ \partial_tw(\cdot,0)\bigr\rangle,
+\end{aligned}
+\label{eq:4.64}
+\end{equation}
+其中第二个等号用了散度定理. 对变分 $\partial_tw(\cdot,0)$ 的唯一约束
+是它必须与 $M$ 相切, 因为 $w$ 总是映入 $M$ 的, 于是得到 \eqref{eq:4.62}.
+
+为得到 \eqref{eq:4.63}, 设 $N$ 是沿 $M$ 的法向量场, 于是
+\begin{equation}
+\begin{aligned}
+&\bigl\langle\dive\bigl((1+|\nabla u|^2)^{\alpha-1}\nabla u\bigr),
+ N\circ u\bigr\rangle\\
+&\quad=\frac1{\sqrt{\det g}}\Bigl\langle\partial_j\Bigl(
+ (1+|\nabla u|^2)^{\alpha-1}g^{jk}\sqrt{\det g}\,u_k\Bigr),
+ N\circ u\Bigr\rangle\\
+&\quad=-g^{jk}(1+|\nabla u|^2)^{\alpha-1}
+ \langle u_k,\partial_j(N\circ u)\rangle,
+\end{aligned}
+\label{eq:4.65}
+\end{equation}
+其中第二个等号用了度量的相容性以及 $u_k$ 与 $M$ 相切而 $N$ 与 $M$
+正交. 链式法则给出
+\begin{equation}
+\partial_j(N\circ u)=\nabla_{u_j}N,
+\label{eq:4.66}
+\end{equation}
+于是可把它改写为
+\begin{equation}
+\begin{aligned}
+&\bigl\langle\dive\bigl((1+|\nabla u|^2)^{\alpha-1}\nabla u\bigr),
+ N\circ u\bigr\rangle
+ =-g^{jk}(1+|\nabla u|^2)^{\alpha-1}\langle u_k,\nabla_{u_j}N\rangle\\
+&\quad=g^{jk}(1+|\nabla u|^2)^{\alpha-1}
+ \langle\nabla_{u_j}u_k,N\rangle.
+\end{aligned}
+\label{eq:4.67}
+\end{equation}
+
+由于
+$\dive\bigl((1+|\nabla u|^2)^{\alpha-1}\nabla u\bigr)$ 等于
+\begin{equation}
+(1+|\nabla u|^2)^{\alpha-1}\Delta u
+ +(\alpha-1)(1+|\nabla u|^2)^{\alpha-2}
+ \bigl\langle\nabla|\nabla u|^2,\nabla u\bigr\rangle,
+\label{eq:4.68}
+\end{equation}
+这便给出 \eqref{eq:4.63}.
+\end{proof}
+
+从扰动泛函的一列临界点得到极限调和映射的关键, 是获得与 $\alpha$ 无关的
+估计. 下一个引理给出这样的估计:
+
+\begin{lemma}
+\label{lem:4.29}
+给定 $M$ 与 $p\in(0,\infty)$, 存在 $\alpha_0>1$ 与 $C$, 使得若
+$u:\bS^2\to M$ 是 $E_\alpha$ 的临界点且 $\alpha\leq\alpha_0$, 则
+\begin{equation}
+\|u\|_{W^{2,p}}\leq C\Bigl[1+\bigl(\sup|\nabla u|^2\bigr)
+ ^{\frac{p-1}{p}}\Bigl(\int_{\bS^2}|\nabla u|^2\Bigr)^{\frac1p}\Bigr].
+\label{eq:4.69}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Euler--Lagrange 方程给出
+\begin{equation*}
+|\Delta u^i|\leq2(\alpha-1)|\nabla|\nabla u||+C_M|\nabla u|^2
+ \leq2(\alpha-1)|\nabla^2u|+C_M|\nabla u|^2,
+\end{equation*}
+其中第二个不等式用了(向量形式的)Cauchy--Schwarz 不等式\footnote{不等式
+$|\nabla|\nabla u||\leq|\nabla^2u|$ 有时称为 Kato 不等式.}, 而 $C_M$
+来自 $M$ 的第二基本形式, 不依赖于 $u$.
+
+给定 $p\in(1,\infty)$, 线性椭圆理论(\cite{GiTr} 的定理 9.11)给出
+一致的常数 $\bar{C}$, 使得对任意单位球 $B_1\subset\bS^2$ 有
+\begin{equation}
+\begin{aligned}
+\|u^i\|_{W^{2,p}(B_{1/2})}
+&\leq\bar{C}\bigl(\|u\|_{L^p(B_1)}+\|\Delta u\|_{L^p(B_1)}\bigr)\\
+&\leq\bar{C}\Bigl(4\pi\diam(M)+C_M\bigl(\sup|\nabla u|^2\bigr)
+ ^{\frac{p-1}{p}}\Bigl(\int_{B_1}|\nabla u|^2\Bigr)^{\frac1p}\\
+&\qquad\qquad+2(\alpha-1)\|\nabla^2u\|_{L^p(B_1)}\Bigr).
+\end{aligned}
+\label{eq:4.70}
+\end{equation}
+
+对 $i$ 求和得
+\begin{equation}
+\begin{aligned}
+\|u\|_{W^{2,p}(B_{1/2})}
+&\leq C_1N+C_1N\bigl(\sup|\nabla u|^2\bigr)^{\frac{p-1}{p}}
+ \Bigl(\int_{\bS^2}|\nabla u|^2\Bigr)^{\frac1p}\\
+&\qquad+C_1N(\alpha-1)\|\nabla^2u\|_{L^p(B_1)},
+\end{aligned}
+\label{eq:4.71}
+\end{equation}
+其中 $N$ 是 $M$ 所在欧氏空间的维数, $C_1$ 仅依赖于 $p$ 与 $M$.
+
+利用 $\bS^2$ 具有 $\R^2$ 的体积加倍性质, 可以用一族半径为 $1/2$ 的球
+$B_{1/2}(y_i)$ 覆盖 $\bS^2$, 使得
+\begin{equation*}
+\sum_i\chi_{B_1(y_i)}\leq9,
+\end{equation*}
+其中 $\chi_E$ 是集合 $E$ 的特征函数(即当 $x\in E$ 时 $\chi_E(x)=1$,
+否则为 $0$). 对这些球求和 \eqref{eq:4.71} 得
+\begin{equation}
+\begin{aligned}
+\|u\|_{W^{2,p}(\bS^2)}
+&\leq9C_1N+9C_1N\bigl(\sup|\nabla u|^2\bigr)^{\frac{p-1}{p}}
+ \Bigl(\int_{\bS^2}|\nabla u|^2\Bigr)^{\frac1p}\\
+&\qquad+9C_1N(\alpha-1)\|\nabla^2u\|_{L^p(\bS^2)}.
+\end{aligned}
+\label{eq:4.72}
+\end{equation}
+
+选取 $\alpha_0>1$ 使 $9C_1N(\alpha_0-1)=1/2$. 于是可以把 \eqref{eq:4.72}
+右端的 $\|\nabla^2u\|_{L^p}$ 项吸收掉, 得到
+\begin{equation}
+\|u\|_{W^{2,p}}\leq18C_1N\Bigl[1+\bigl(\sup|\nabla u|^2\bigr)
+ ^{\frac{p-1}{p}}\Bigl(\int_{\bS^2}|\nabla u|^2\Bigr)^{\frac1p}\Bigr].
+\label{eq:4.73}
+\end{equation}
+
+这就给出了 $u$ 的一致 $W^{2,p}$ 估计.
+\end{proof}
+
+% ================================================================
+\mtpara{扰动泛函的极小元}
+下面我们证明扰动泛函在同伦类中极小元的存在性.
+
+先作一个简单的观察:
+
+\begin{lemma}
+\label{lem:4.30}
+给定 $M$, 存在 $r_M>0$, 使得若 $u$ 与 $v$ 是从 $\bS^2$ 到 $M$ 的连续
+映射, 且
+\begin{equation*}
+\sup_{x\in\bS^2}\dist_M(u(x),v(x))\leq r_M,
+\end{equation*}
+则 $u$ 与 $v$ 同伦.
+\end{lemma}
+
+\begin{proof}
+由于 $M$ 紧致且光滑, 存在 $r_M>0$, 使指数映射在每个半径为 $r_M$ 的
+闭内蕴球上都是微分同胚. 定义 $\Gamma\subset M\times M$ 为
+\begin{equation*}
+\Gamma=\{(x,y)\in M\times M\mid\dist_M(x,y)\leq r_M\},
+\end{equation*}
+并定义映射
+\begin{equation*}
+H:\Gamma\to C^1([0,1],M),
+\end{equation*}
+其中 $H(x,y):[0,1]\to M$ 取为从 $x$ 到 $y$ 的线性映射.
+
+令 $w(x,t)=H(u(x),v(x))(t)$, 即得所要的同伦.
+\end{proof}
+
+\begin{proposition}
+\label{prop:4.31}
+若 $w:\bS^2\to M$ 是 Lipschitz 的且 $\alpha>1$, 则存在光滑映射
+$u:\bS^2\to M$, 它在 $w$ 的同伦类中极小化 $E_\alpha$, 且满足
+\eqref{eq:4.63}.
+\end{proposition}
+
+\begin{proof}
+Morrey--Sobolev 嵌入定理(\cite{GiTr} 的定理 7.26)表明, 任何
+$W^{1,2\alpha}$ 映射都连续, 事实上以指数
+\begin{equation*}
+\frac{\alpha-1}{\alpha}
+\end{equation*}
+H\"older 连续. 因此同伦类是完全确定的. 令 $I=I(\alpha,w)$ 表示
+$E_\alpha$ 在一切与 $w$ 同伦的 $\bS^2\to M$ 的 $W^{1,2\alpha}$ 映射上
+的下确界.
+
+取一列与 $w$ 同伦的 $W^{1,2\alpha}$ 映射 $u_j:\bS^2\to M$, 使
+\begin{equation}
+E_\alpha(u_j)\leq I+\frac1j.
+\label{eq:4.74}
+\end{equation}
+
+由于这些映射一致地属于 $C^{\frac{\alpha-1}{\alpha}}$, 它们是等度连续的,
+故 Arzel\`a--Ascoli 定理给出一个一致收敛到极限映射 $u$ 的子列. 于是由
+引理 \ref{lem:4.30}, $u$ 与 $w$ 同伦. 利用 $W^{1,2\alpha}$ 的弱紧性与
+$E_\alpha$ 的下半连续性, 可见 $u$ 也属于 $W^{1,2\alpha}$, 且
+\begin{equation}
+E_\alpha(u)\leq\lim E_\alpha(u_j)=I.
+\label{eq:4.75}
+\end{equation}
+
+于是 $E_\alpha(u)=I$, 如所断言.
+
+由于 $u$ 相对于任何变分都极小化 $E_\alpha$(变分是同伦, 因而不改变
+同伦类), 引理 \ref{lem:4.28} 蕴含 $u$ 是 \eqref{eq:4.63} 的
+$W^{1,2\alpha}$ 弱解. 有了这一点, 线性椭圆理论便可起作用, 给出 $u$ 光滑
+(参看 \cite{Mo2}). 若 $u$ 是标量值函数(此时方程可写成 Laplacian 的
+扰动), 这将完全是标准的; 但这里需要一些小心, 因为当 $u$ 是向量值时
+方程组并不解耦, 从而标准的标量线性理论不适用. 我们处理这一步的方式与
+Sacks 与 Uhlenbeck 不同. 即: 可以修改引理 \ref{lem:4.29} 的论证以得到
+$u\in W^{2,\alpha}$, 然后再自举以得到更高的正则性. 与引理
+\ref{lem:4.29} 的主要差别在于: 我们在 \eqref{eq:4.70} 的第二个不等式
+中不引入 $\sup|\nabla u|$, 而改用 $|\nabla u|^2\in L^\alpha$.
+\end{proof}
+
+% ================================================================
+\mtpara{极限调和映射}
+下一个推论给出: 当存在一列具有一致梯度界的近似调和映射时, 调和映射的
+存在性.
+
+\begin{corollary}[Sacks--Uhlenbeck, \cite{SaUh}]
+\label{cor:4.32}
+若 $u_i$ 是 $E_{\alpha_i}$ 的临界点, 其中 $\alpha_i\to1$, 且
+\begin{equation}
+\liminf_{i\to\infty}\Bigl(\sup_{\bS^2}|\nabla u_i|\Bigr)<\infty,
+\label{eq:4.76}
+\end{equation}
+则存在一个子列, 它在 $C^{1,1/2}$ 中收敛到光滑调和映射
+$u:\bS^2\to M$. 若 $u_i$ 在 $\pi_2(M)$ 中非平凡, 则 $u$ 也非平凡.
+\end{corollary}
+
+\begin{proof}
+取子列后可设 $|\nabla u_i|<C_1<\infty$. 取 $p>3$, 引理 \ref{lem:4.29}
+给出 $C_2$ 使
+\begin{equation*}
+\|u_i\|_{W^{2,p}}<C_2,
+\end{equation*}
+而 Morrey--Sobolev 嵌入定理给出一个子列(仍记作 $u_i$), 它在
+$C^{1,1/2}$ 中收敛到极限函数 $u$.
+
+由引理 \ref{lem:4.28}, 每个 $u_i$ 都解散度型方程
+\begin{equation}
+\dive\bigl((1+|\nabla u_i|^2)^{\alpha_i-1}\nabla u_i\bigr)
+ =(1+|\nabla u_i|^2)^{\alpha_i-1}A\circ u_i(\nabla u_i,\nabla u_i).
+\label{eq:4.77}
+\end{equation}
+
+由于 $u_i\to u$ 于 $C^{1,1/2}$ 且 $\alpha_i\to1$, \eqref{eq:4.77} 的
+右端一致收敛到 $A\circ u(\nabla u,\nabla u)$, 而向量场
+$(1+|\nabla u_i|^2)^{\alpha_i-1}\nabla u_i$ 一致收敛到 $\nabla u$.
+由此可见 $u$ 是调和映射方程
+\begin{equation*}
+\dive(\nabla u)=A\circ u(\nabla u,\nabla u)
+\end{equation*}
+的 $C^{1,1/2}$ 弱解.
+
+正如我们先前看到的, 线性椭圆理论(\cite{GiTr} 的定理 9.11 与 9.19)
+此时蕴含 $u$ 是光滑解.
+
+最后, 由于 $u_i$ 一致收敛到 $u$, 引理 \ref{lem:4.30} 蕴含: 当 $i$
+充分大时, 所有 $u_i$ 都与 $u$ 同伦.
+\end{proof}
+
+% ================================================================
+\mtpara{重整化}
+下一个引理将给出具有一致有界能量的近似调和映射序列的紧性定理. 按照
+Sacks 与 Uhlenbeck 的做法, 只有在与一列伸缩复合之后紧性才成立, 而且
+在极限中可能损失能量.
+
+\begin{lemma}[Sacks--Uhlenbeck, \cite{SaUh}]
+\label{lem:4.33}
+设 $u_i$ 是 $E_{\alpha_i}$ 的临界点, $i\to\infty$, 其中 $\alpha_i\to1$,
+且 $u_i$ 具有有界能量 $\int|\nabla u_i|^2\leq C_E$.
+
+若 $\sup_{\bS^2}|\nabla u_i|\to\infty$, 则存在一个子列(仍记作 $u_i$)、
+$\bS^2$ 的一列旋转以及一列伸缩因子
+\begin{equation}
+\lambda_i=\sup_{\bS^2}|\nabla u_i|^2\to\infty,
+\label{eq:4.78}
+\end{equation}
+使 $(\bS^2,\lambda_ig)\to(\R^2,\delta_{ij})$, 且 $u_i$ 在 $C^{1,1/2}$ 中
+收敛到光滑调和映射 $u:\R^2\to M$, 满足 $|\nabla u|(0)=1$ 且
+$\int_{\R^2}|\nabla u|^2\leq C_E$.
+\end{lemma}
+
+在证明本引理之前, 我们先收集关于共形度量
+\begin{equation*}
+\bar{g}=\lambda g
+\end{equation*}
+的几个简单事实, 其中 $g$ 是 $\bS^2$ 上的标准(常曲率 $1$)度量,
+$\lambda>0$ 是常数. 由于维数是二, 体积元的变化为
+\begin{equation}
+dv_{\bar{g}}=\lambda\,dv_g.
+\label{eq:4.79}
+\end{equation}
+若 $v:\bS^2\to\R$ 是函数, 则
+\begin{align}
+\nabla_{\bar{g}}v&=\frac1\lambda\nabla_gv,\label{eq:4.80}\\
+\dive_{\bar{g}}&=\dive_g,\label{eq:4.81}\\
+\Delta_{\bar{g}}v&=\frac1\lambda\Delta_gv.\label{eq:4.82}
+\end{align}
+
+利用这些变换规则以及度量的变化, 得到
+\begin{align}
+|\nabla_{\bar{g}}v|_{\bar{g}}^2&=\frac1\lambda|\nabla_gv|_g^2,\label{eq:4.83}\\
+|\Hess_{\bar{g}}v|_{\bar{g}}^2&=\frac1{\lambda^2}|\Hess_gv|_g^2.\label{eq:4.84}
+\end{align}
+
+给定 $q\geq1$, 合并 \eqref{eq:4.79} 与 \eqref{eq:4.84} 表明
+\begin{equation}
+\int|\Hess_{\bar{g}}v|_{\bar{g}}^q\,dv_{\bar{g}}
+ =\lambda^{1-q}\int|\Hess_gv|_g^q\,dv_g.
+\label{eq:4.85}
+\end{equation}
+
+现在我们准备证明引理 \ref{lem:4.33}.
+
+\begin{proof}[引理~\ref{lem:4.33} 的证明]
+定义共形度量
+\begin{equation*}
+g_i=\lambda_ig,
+\end{equation*}
+其中 $g$ 是 $\bS^2$ 上的标准度量, $\lambda_i$ 由 \eqref{eq:4.78} 定义.
+旋转 $\bS^2$ 后可设 \eqref{eq:4.78} 中的上确界对所有 $i$ 都在同一点
+$z\in\bS^2$ 处取到. 由于 $\lambda_i\to\infty$, 这一列流形光滑收敛到平坦
+的欧氏空间; 可以设 $z\to0$.
+
+利用变换规则 \eqref{eq:4.83}, 映射 $u_i$ 满足
+\begin{equation}
+\sup_{\bS^2}|\nabla_{g_i}u|_{g_i}=|\nabla_{g_i}u|_{g_i}(z)=1.
+\label{eq:4.86}
+\end{equation}
+
+给定 $p>3$ 且 $i$ 充分大, 引理 \ref{lem:4.29} 给出 $C_p$ 使
+\begin{equation*}
+\begin{aligned}
+\int|\Hess_gu_i|_g^p\,dv_g
+&\leq C_p\Bigl(1+\sup|\nabla_gu_i|_g^{2p-2}
+ \int|\nabla_gu_i|_g^2\,dv_g\Bigr)\\
+&\leq C_p\bigl(1+\lambda_i^{p-1}C_E\bigr),
+\end{aligned}
+\end{equation*}
+其中最后一个不等式用了 $\lambda_i$ 的定义以及 $u_i$ 的一致能量界. 把它
+与关于 Hessian 范数的变换规则 \eqref{eq:4.85} 合并, 得到
+\begin{equation}
+\begin{aligned}
+\int|\Hess_{g_i}u_i|_{g_i}^p\,dv_{g_i}
+&=\lambda_i^{1-p}\int|\Hess_gu_i|_g^p\,dv_g
+ \leq C_p\lambda_i^{1-p}\bigl(1+\lambda_i^{p-1}C_E\bigr)\\
+&\leq 2C_pC_E,
+\end{aligned}
+\label{eq:4.87}
+\end{equation}
+其中最后一个不等式设 $\lambda_i\geq1$ 且 $C_E\geq1$(这可以假设).
+
+现在我们已经有了 Hessian 的 $L^p$ 范数在 $p>3$ 时的一致界, 于是可以
+如同引理~\ref{cor:4.32} 的证明中那样进行. 即: Morrey--Sobolev 嵌入
+定理给出一个子列(仍记作 $u_i$), 它在(紧子集上)$C^{1,1/2}$ 中收敛到
+极限映射 $u:\R^2\to M$. 此外, \eqref{eq:4.86} 与梯度的一致收敛蕴含
+$|\nabla u|(0)=1$, 而能量的下半连续性蕴含
+$\int_{\R^2}|\nabla u|^2\leq C_E$.
+
+在本证明余下部分, 我们用 $\mathcal{L}_g$ 表示调和映射算子
+\begin{equation*}
+\mathcal{L}_gv^\ell
+ =\Delta_gv^\ell-g^{jk}A^\ell\circ v(\partial_jv,\partial_kv),
+\end{equation*}
+于是 $v$ 调和当且仅当 $\mathcal{L}_gv=0$. 同样, $\mathcal{L}_{g_i}$
+表示关于度量 $g_i$ 的调和映射算子. 利用变换规则 \eqref{eq:4.80} 与
+\eqref{eq:4.82}, 可见
+\begin{equation*}
+\mathcal{L}_g=\lambda_i\mathcal{L}_{g_i}.
+\end{equation*}
+(这与二维情形下调和映射的共形不变性是一致的.)
+
+由引理 \ref{lem:4.28}, 每个 $u_i$ 满足
+\begin{equation*}
+\mathcal{L}_gu_i=(1-\alpha_i)
+ \frac{\bigl\langle\nabla_g|\nabla_gu_i|_g^2,\nabla_gu_i\bigr\rangle_g}
+      {1+|\nabla_gu_i|_g^2}.
+\end{equation*}
+
+利用变换规则 \eqref{eq:4.80} 与 \eqref{eq:4.83} 给出
+\begin{equation*}
+\lambda_i\mathcal{L}_{g_i}u_i=(1-\alpha_i)
+ \frac{\lambda_i^2\bigl\langle\nabla_{g_i}|\nabla_{g_i}u_i|_{g_i}^2,
+ \nabla_{g_i}u_i\bigr\rangle_{g_i}}
+ {1+\lambda_i|\nabla_{g_i}u_i|_{g_i}^2},
+\end{equation*}
+于是得到
+\begin{equation}
+\begin{aligned}
+|\mathcal{L}_{g_i}u_i|
+&\leq(1-\alpha_i)
+ \frac{2\lambda_i|\nabla_{g_i}u_i|_{g_i}^2
+  |\Hess_{g_i}u_i|_{g_i}}
+ {1+\lambda_i|\nabla_{g_i}u_i|_{g_i}^2}\\
+&\leq2(1-\alpha_i)|\Hess_{g_i}u_i|_{g_i}.
+\end{aligned}
+\label{eq:4.88}
+\end{equation}
+
+由于 $\alpha_i\to1$, 由 \eqref{eq:4.87} 知 \eqref{eq:4.88} 的右端在
+$L^p$ 中趋于零. 于是
+\begin{equation*}
+\mathcal{L}_{g_i}u_i\to0\quad\text{于}\ L^p.
+\end{equation*}
+
+另一方面, 容易看出 $\mathcal{L}_{g_i}u_i\to\mathcal{L}_{\R^2}u$ 在每个
+紧集 $\Omega\subset\R^2$ 上弱收敛. 即: $u_i$ 到 $u$ 的 $C^{1,1/2}$ 收敛
+蕴含非线性项一致收敛, 且(散度型算子)$\Delta_{g_i}u_i$ 弱收敛到
+$\Delta_{\R^2}u$. 因此我们断定 $u$ 是 $\mathcal{L}_{\R^2}u=0$ 的
+$C^{1,1/2}$ 弱解. 正如我们先前看到的, 线性椭圆理论(\cite{GiTr} 的定理
+9.11 与 9.19)此时蕴含 $u$ 是光滑解.
+\end{proof}
+
+现在我们可以证明 Sacks--Uhlenbeck 存在性定理:
+
+\begin{proof}[当 $\pi_2(M)\neq0$ 时定理~\ref{thm:4.27} 的证明]
+由于 $\pi_2(M)\neq0$, 可以选取同伦非平凡的 Lipschitz 映射
+$w:\bS^2\to M$. 特别地, 对每个 $\alpha\in[1,2]$ 有
+\begin{equation}
+E_\alpha(w)=\int_{\bS^2}\bigl(1+|\nabla w|^2\bigr)^\alpha
+ \leq4\pi\bigl(1+\sup|\nabla w|^2\bigr)^2.
+\label{eq:4.89}
+\end{equation}
+
+对每个 $j>0$, 命题 \ref{prop:4.31} 给出光滑映射 $u_j:\bS^2\to M$,
+它在 $w$ 的同伦类中极小化 $E_{\frac{1+j}{j}}$, 且满足 \eqref{eq:4.63}.
+特别地, 极小性以及 \eqref{eq:4.89} 给出
+\begin{equation}
+\int_{\bS^2}|\nabla u_j|^2
+ \leq\int_{\bS^2}\bigl(1+|\nabla u_j|^2\bigr)^{\frac{1+j}{j}}
+ \leq E_{\frac{1+j}{j}}(w)
+ \leq4\pi\bigl(1+\sup|\nabla w|^2\bigr)^2.
+\label{eq:4.90}
+\end{equation}
+
+我们将按 $u_j$ 是否爆破分成两种情形.
+
+\textbf{情形 1}: 先设
+\begin{equation*}
+\liminf_{j\to\infty}\Bigl(\sup_{\bS^2}|\nabla u_j|\Bigr)<\infty.
+\end{equation*}
+
+此时推论 \ref{cor:4.32} 给出一个子列, 它在 $C^{1,1/2}$ 中收敛到光滑
+调和映射 $u:\bS^2\to M$, 且 $u$ 与 $w$ 同伦. 特别地, $u$ 非平凡, 因为
+同伦类是非平凡的.
+
+\textbf{情形 2}: 现在设
+\begin{equation*}
+\liminf_{j\to\infty}\Bigl(\sup_{\bS^2}|\nabla u_j|\Bigr)=\infty.
+\end{equation*}
+
+此时引理 \ref{lem:4.33} 给出一个子列(仍记作 $u_j$)、$\bS^2$ 的一列
+旋转以及一列伸缩因子
+\begin{equation*}
+\lambda_j=\sup_{\bS^2}|\nabla u_j|^2\to\infty,
+\end{equation*}
+使 $(\bS^2,\lambda_jg)\to(\R^2,\delta_{ij})$, 且 $u_j$ 在 $C^{1,1/2}$ 中
+收敛到光滑调和映射 $u:\R^2\to M$, 满足 $|\nabla u|(0)=1$ 且
+\begin{equation}
+\int_{\R^2}|\nabla u|^2\leq4\pi\bigl(1+\sup|\nabla w|^2\bigr)^2.
+\label{eq:4.91}
+\end{equation}
+
+能量界来自 \eqref{eq:4.90} 以及能量的共形不变性. 利用球极投影与共形
+不变性, $u$ 给出一个从 $\bS^2\setminus\{p\}$ 到 $M$ 的有限能量非平凡
+调和映射, 其中 $p$ 是无穷远点. 由可去奇点定理(定理 \ref{thm:4.26}),
+$u$ 延拓为整个 $\bS^2$ 上的调和映射.
+\end{proof}
+
+正如前面提到的, 他们的论证实际上对某个 $k\geq2$ 满足
+$\pi_k(M)\neq0$ 的情形也有效. 此时需要用变分论证来得到扰动泛函的
+高阶指标临界点(它们满足 Palais--Smale 条件 (C)), 然后原封不动地应用
+论证的其余部分. 我们将在下一章证明一个更强的存在性结果.
