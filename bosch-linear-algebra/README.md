@@ -2,7 +2,7 @@
 
 *中文翻译稿* — Chinese translation / LaTeX typeset
 
-本目录是 **latex-mathtranslation-Chinese（数学著作中文翻译合集）** 合集的一个子项目。
+本目录是 **latex-mathtranslation-Chinese（数学著作中文翻译合集）** 的一个子项目。
 
 ---
 
@@ -22,7 +22,7 @@ This directory is part of the **latex-mathtranslation-Chinese (Chinese translati
 - **完整的超链接支持**：目录、引用、定理编号、索引页码均为可点击链接
 - **开源**：所有 LaTeX 源以 CC BY-NC-SA 4.0 国际许可证托管，可自由获取与改进
 
-- **Faithful to the source**: layout, formulas, theorem numbering and exercise arrangement strictly follow the original (retypeset) / rendered into Chinese while staying close to the meaning (translation)
+- **Faithful to the source**: the content follows the original and is rendered into Chinese while staying close to its meaning
 - **Professional LaTeX typesetting**: crisp and sharp mathematical formulas with modern fonts
 - **Optimized reading experience**: carefully adjusted line spacing and margins for screen and print
 - **Full hyperlink support**: table of contents, citations, theorem numbers and index page numbers are clickable

@@ -1,16 +1,16 @@
-# 极小曲面教程 (Minimal Surfaces)
+# A Course in Minimal Surfaces（极小曲面教程）
 
 *中文翻译稿* — Chinese translation / LaTeX typeset
 
-本目录是 **latex-mathtranslation-Chinese（数学著作中文翻译合集）** 合集的一个子项目。
+本目录是 **latex-mathtranslation-Chinese（数学著作中文翻译合集）** 的一个子项目。
 
 ---
 
 ## 项目简介 / Project Introduction
 
-本目录是 **latex-mathtranslation-Chinese（数学著作中文翻译合集）** 中的一本：数学著作《极小曲面教程 (Minimal Surfaces)》的中文翻译（LaTeX 排版）。译文在尽力贴合原意的前提下以中文呈现，便于中文读者研读。
+本目录是 **latex-mathtranslation-Chinese（数学著作中文翻译合集）** 中的一本：数学著作《A Course in Minimal Surfaces》的中文翻译（LaTeX 排版）。译文在尽力贴合原意的前提下以中文呈现，便于中文读者研读。
 
-This directory is part of the **latex-mathtranslation-Chinese (Chinese translations collection)**: a Chinese translation (typeset in LaTeX) of *极小曲面教程 (Minimal Surfaces)*. The translation renders the original into Chinese while striving to stay faithful to its meaning, for the benefit of Chinese readers.
+This directory is part of the **latex-mathtranslation-Chinese (Chinese translations collection)**: a Chinese translation (typeset in LaTeX) of *A Course in Minimal Surfaces*. The translation renders the original into Chinese while striving to stay faithful to its meaning, for the benefit of Chinese readers.
 
 ---
 
@@ -22,7 +22,7 @@ This directory is part of the **latex-mathtranslation-Chinese (Chinese translati
 - **完整的超链接支持**：目录、引用、定理编号、索引页码均为可点击链接
 - **开源**：所有 LaTeX 源以 CC BY-NC-SA 4.0 国际许可证托管，可自由获取与改进
 
-- **Faithful to the source**: layout, formulas, theorem numbering and exercise arrangement strictly follow the original (retypeset) / rendered into Chinese while staying close to the meaning (translation)
+- **Faithful to the source**: the content follows the original and is rendered into Chinese while staying close to its meaning
 - **Professional LaTeX typesetting**: crisp and sharp mathematical formulas with modern fonts
 - **Optimized reading experience**: carefully adjusted line spacing and margins for screen and print
 - **Full hyperlink support**: table of contents, citations, theorem numbers and index page numbers are clickable
@@ -111,9 +111,9 @@ Full license text: see the `LICENSE` file in this directory.
 
 ## 致谢 / Acknowledgments
 
-- 由衷感谢本著作的原作者写下这部作品。
+- 由衷感谢《A Course in Minimal Surfaces》的原作者 **Tobias Holck Colding & William P. Minicozzi II** 写下这部著作。
 - 感谢所有为本子项目贡献力量与建议的数学爱好者。
 
-- Sincere thanks to the original author(s) of this work.
+- Sincere thanks to **Tobias Holck Colding & William P. Minicozzi II** for writing *A Course in Minimal Surfaces*.
 - Thanks to all mathematics enthusiasts who contributed to this sub-project.
 

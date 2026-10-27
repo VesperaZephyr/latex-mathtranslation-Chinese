@@ -1,16 +1,16 @@
-# Stein 讲座 (Stein's Lectures)
+# Oscillatory Integrals in Fourier Analysis（傅里叶分析中的振动积分）
 
 *中文翻译稿* — Chinese translation / LaTeX typeset
 
-本目录是 **latex-mathtranslation-Chinese（数学著作中文翻译合集）** 合集的一个子项目。
+本目录是 **latex-mathtranslation-Chinese（数学著作中文翻译合集）** 的一个子项目。
 
 ---
 
 ## 项目简介 / Project Introduction
 
-本目录是 **latex-mathtranslation-Chinese（数学著作中文翻译合集）** 中的一本：数学著作《Stein 讲座 (Stein's Lectures)》的中文翻译（LaTeX 排版）。译文在尽力贴合原意的前提下以中文呈现，便于中文读者研读。
+本目录是 **latex-mathtranslation-Chinese（数学著作中文翻译合集）** 中的一本：数学著作《Oscillatory Integrals in Fourier Analysis》的中文翻译（LaTeX 排版）。译文在尽力贴合原意的前提下以中文呈现，便于中文读者研读。
 
-This directory is part of the **latex-mathtranslation-Chinese (Chinese translations collection)**: a Chinese translation (typeset in LaTeX) of *Stein 讲座 (Stein's Lectures)*. The translation renders the original into Chinese while striving to stay faithful to its meaning, for the benefit of Chinese readers.
+This directory is part of the **latex-mathtranslation-Chinese (Chinese translations collection)**: a Chinese translation (typeset in LaTeX) of *Oscillatory Integrals in Fourier Analysis*. The translation renders the original into Chinese while striving to stay faithful to its meaning, for the benefit of Chinese readers.
 
 ---
 
@@ -22,7 +22,7 @@ This directory is part of the **latex-mathtranslation-Chinese (Chinese translati
 - **完整的超链接支持**：目录、引用、定理编号、索引页码均为可点击链接
 - **开源**：所有 LaTeX 源以 CC BY-NC-SA 4.0 国际许可证托管，可自由获取与改进
 
-- **Faithful to the source**: layout, formulas, theorem numbering and exercise arrangement strictly follow the original (retypeset) / rendered into Chinese while staying close to the meaning (translation)
+- **Faithful to the source**: the content follows the original and is rendered into Chinese while staying close to its meaning
 - **Professional LaTeX typesetting**: crisp and sharp mathematical formulas with modern fonts
 - **Optimized reading experience**: carefully adjusted line spacing and margins for screen and print
 - **Full hyperlink support**: table of contents, citations, theorem numbers and index page numbers are clickable
@@ -108,9 +108,9 @@ Full license text: see the `LICENSE` file in this directory.
 
 ## 致谢 / Acknowledgments
 
-- 由衷感谢《Stein 讲座 (Stein's Lectures)》的原作者 **Elias M. Stein** 写下这部著作。
+- 由衷感谢《Oscillatory Integrals in Fourier Analysis》的原作者 **E. M. Stein** 写下这部著作。
 - 感谢所有为本子项目贡献力量与建议的数学爱好者。
 
-- Sincere thanks to **Elias M. Stein** for writing *Stein 讲座 (Stein's Lectures)*.
+- Sincere thanks to **E. M. Stein** for writing *Oscillatory Integrals in Fourier Analysis*.
 - Thanks to all mathematics enthusiasts who contributed to this sub-project.
 
