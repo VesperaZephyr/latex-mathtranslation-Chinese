@@ -1,0 +1,444 @@
+\chapter{导论与概览}\label{chap:nt-1}
+
+% Source: physical/printed pages 2--9; source images in evidence/.
+
+这里主要研究的对象是\newterm{nt-number-field}{数域}{number field}，即有理数域 $\mathbb{Q}$ 的有限扩张. 这些域可以是``嵌入的''（嵌入 $\mathbb{C}$ 或预先固定的\newterm{nt-algebraic-closure}{代数闭包}{algebraic closure} $\overline{\mathbb{Q}}$），也可以是``抽象的''.
+
+\begin{example*}
+
+\begin{itemize}
+
+\item 嵌入的域：$\mathbb{Q}(i)$，即``由 $i$ 生成的 $\mathbb{C}$ 的子域''；更一般地，有 $\mathbb{Q}(e^{2i\pi/n})$.
+
+\item 抽象的域：$\mathbb{Q}[X]/(X^2+1)$ 或 $\mathbb{Q}[X]/(X^3+X+1)$.
+
+\end{itemize}
+
+\end{example*}
+
+事实上，由一般的域论可知：
+
+\begin{enumerate}[label=\roman*)]
+
+\item 每个抽象数域都可以嵌入 $\mathbb{C}$（d'Alembert 定理：$\mathbb{C}$ 是代数闭域）.
+
+\item 每个嵌入 $\mathbb{C}$ 的数域都形如 $\mathbb{Q}(\alpha)$（\newterm{nt-primitive-element-theorem}{本原元定理}{primitive element theorem}）.
+
+\end{enumerate}
+
+\paragraph{记号.} 对于代数数 $\alpha\in\mathbb{C}$，以 $f_\alpha$ 记其极小多项式，即理想 $\{f\in\mathbb{Q}[X]:f(\alpha)=0\}$ 的首一生成元. 于是有域同构 $\mathbb{Q}[X]/(f_\alpha)\xrightarrow{\sim}\mathbb{Q}(\alpha)$，它把 $X$ 映为 $\alpha$.
+
+我们的研究将主要使用下列工具：
+
+\begin{itemize}
+
+\item Galois 理论（一般域论）；
+
+\item 整数理论（交换代数）；
+
+\item 赋值理论（域上的分析）.
+
+\end{itemize}
+
+\section{Galois 理论：回顾与补充}\label{sec:nt-1-1}
+
+选定 $\mathbb{Q}$ 的一个代数闭包 $\overline{\mathbb{Q}}$，例如 $\mathbb{Q}$ 在 $\mathbb{C}$ 中的代数闭包. 与有限扩张的情形一样，以 $\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$ 记域 $\overline{\mathbb{Q}}$ 的自同构群.
+
+\subsection[$\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$ 的拓扑]{$\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$ 的拓扑\protect\footnotemark}\label{sec:nt-1-1-1}
+
+\footnotetext{更多细节可参看 J. Milne 的讲义 \emph{Fields and Galois theory}，网址为 \url{https://www.jmilne.org/math/}.}
+
+若 $K\subset\overline{\mathbb{Q}}$ 是 $\mathbb{Q}$ 的正规扩张（即对每个 $\alpha\in K$，$P_\alpha$ 在 $K[X]$ 中分裂），则 $\overline{\mathbb{Q}}$ 的每个自同构都保持 $K$，因而得到限制映射
+\begin{align*}
+(*)\colon\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})\longrightarrow\operatorname{Gal}(K/\mathbb{Q}),
+\end{align*}
+已知这个映射是满射.
+
+正规扩张（因特征为 $0$，也就是 Galois 扩张）组成的集合按包含关系排序，并且对这个序是滤过的，因为两个正规扩张的合成仍是正规扩张.
+
+这些映射 $(*)$ 与限制映射相容，故定义了同态
+\begin{align*}
+\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})&\longrightarrow\varprojlim_{K\subset\overline{\mathbb{Q}}}\operatorname{Gal}(K/\mathbb{Q}),\\
+\varprojlim_{K\subset\overline{\mathbb{Q}}}\operatorname{Gal}(K/\mathbb{Q})&:=\Bigl\{(\alpha_K)_K\in\prod_{K\subset\overline{\mathbb{Q}}}\operatorname{Gal}(K/\mathbb{Q}):\ \forall K'\subset K,\ (\alpha_K)|_{K'}=\alpha_{K'}\Bigr\}.
+\end{align*}
+这个同态是双射. 事实上，这是因为 $\overline{\mathbb{Q}}$ 是有限 Galois 扩张的并：$\overline{\mathbb{Q}}$ 中每个元素都属于这样的扩张，例如由其极小多项式的全部根生成的域.
+
+上述投射极限是乘积 $\prod_{K\subset\overline{\mathbb{Q}}}\operatorname{Gal}(K/\mathbb{Q})$ 的闭子空间，因而是投射有限空间（紧且全不连通）. 此外，乘法和取逆对这个拓扑显然连续. 这样，我们便赋予 $\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$ 一个\newterm{nt-profinite-group}{投射有限拓扑群}{profinite topological group}的结构.
+
+\begin{remark*}
+
+更一般地，若 $L$ 是域 $F$ 的代数、可分、正规扩张，则 $\operatorname{Gal}(L/F)=\varprojlim_{L'}\operatorname{Gal}(L'/F)$，其中 $L'$ 遍历有限 Galois 子扩张；这赋予 $\operatorname{Gal}(L/F)$ 一个投射有限拓扑. 若 $(L_n)_{n\in\mathbb{N}}$ 是一列递增子域，其并为 $L$，则还有 $\operatorname{Gal}(L/F)=\varprojlim_{L'}\operatorname{Gal}(L_n/F)$.\footnote{译注：本式原文的极限下标为 $L'$，而右端使用 $L_n$；按上下文应沿这列子域取极限，且需这些子扩张为 Galois 扩张. 此处保留原式.}
+
+\end{remark*}
+
+\begin{example*}
+
+取 $F=\mathbb{F}_p$，$L=\overline{\mathbb{F}}_p$. 此时
+\begin{align*}
+\operatorname{Gal}(\overline{\mathbb{F}}_p/\mathbb{F}_p)=\varprojlim_n\operatorname{Gal}(\mathbb{F}_{p^n}/\mathbb{F}_p)=\varprojlim_n\mathbb{Z}/n\mathbb{Z}=\widehat{\mathbb{Z}}
+\end{align*}
+（$\mathbb{Z}$ 的投射有限完备化）. 这里 $\mathbb{N}$ 按整除关系排序，当 $m\mid n$ 时，过渡同态为投影 $\mathbb{Z}/n\mathbb{Z}\longrightarrow\mathbb{Z}/m\mathbb{Z}$.
+
+\end{example*}
+
+通常的 Galois 理论基本定理可以推广如下（参看 Milne 的讲义 \emph{Fields and Galois Theory} 第 7 章）.
+
+\subsection{Galois 对应定理}\label{sec:nt-1-1-2}
+
+\begin{theorem*}
+
+\begin{enumerate}[label=\roman*)]
+
+\item 若 $K\subset\overline{\mathbb{Q}}$ 是子域，则 $\operatorname{Gal}(\overline{\mathbb{Q}}/K)$ 是 $\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$ 的闭子群，且 $\overline{\mathbb{Q}}^{\operatorname{Gal}(\overline{\mathbb{Q}}/K)}=K$.
+
+\item 若 $U$ 是 $\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$ 的闭子群，则 $\overline{\mathbb{Q}}^U$ 是一个域，且 $U=\operatorname{Gal}(\overline{\mathbb{Q}}/\overline{\mathbb{Q}}^U)$.
+
+\item 上述两种过程给出 $\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$ 的闭子群与 $\overline{\mathbb{Q}}$ 的子域之间的反序双射，它把正规子群对应于 $\mathbb{Q}$ 的正规扩张，把开子群对应于 $\mathbb{Q}$ 的有限扩张.
+
+\end{enumerate}
+
+\end{theorem*}
+
+由此可见，数域的研究与拓扑群 $\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$ 的研究密切相关. 下面列出几个直接涉及这个群的问题.
+
+\begin{enumerate}[label=\roman*)]
+
+\item 逆问题：给定一个有限单群，它是否是某个数域的 Galois 群？等价地，它是否是 $\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$ 的连续商群？这个问题仍未解决.
+
+\item 描述 $\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$ 的（拓扑）Abel 化：Kronecker--Weber 定理回答了这个问题，见下文. 更一般地，描述开子群 $\operatorname{Gal}(\overline{\mathbb{Q}}/K)$ 的 Abel 化，这是类域论的研究对象.
+
+\item 通过连续线性表示研究 $\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$. 例如，已知可以给每个有理系数的（齐次）代数方程组赋予 $\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$ 在有限域或 $\ell$ 进域上的向量空间中的表示（代数几何中的平展上同调）. Langlands 纲领是一个宏大的研究纲领，粗略地说，它预期借助其他更具分析性质的对象（``自守表示''）对 $\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$ 的表示进行分类.
+
+\end{enumerate}
+
+\paragraph{注意.} $\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$ 的拓扑是投射有限的，所以每个开子群的指数有限；逆命题却不成立. 例如，选取两两不同的素数组成的无穷序列 $p_1,p_2,\ldots$，令 $K_n=\mathbb{Q}(\sqrt{p_1},\ldots,\sqrt{p_n})$，$K=\bigcup_nK_n$. 则 $\operatorname{Gal}(K_n/\mathbb{Q})\simeq\{\pm1\}^n$，且 $\operatorname{Gal}(K/\mathbb{Q})=\varprojlim_n\operatorname{Gal}(K_n/\mathbb{Q})\simeq\{\pm1\}^{\mathbb{N}}$. 后一个群是 $\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$ 的连续商群. 由选择公理可知，存在不连续的 $\mathbb{F}_2$ 线性映射 $\mathbb{F}_2^{\mathbb{N}}\longrightarrow\mathbb{F}_2$，因而得到 $\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$ 的一个非拓扑的有限商群 $\{\pm1\}$.
+
+\subsection{分圆扩张}\label{sec:nt-1-1-3}
+
+设 $K$ 是特征为零的域，$\overline K$ 是一个代数闭包. 以 $\mu_n\subset\overline K$ 记 $n$ 次单位根群. 它生成的域 $K(\mu_n)$ 是 Galois 扩张. 若 $\zeta_n$ 是一个本原 $n$ 次单位根，则有群同态
+\begin{align*}
+\chi_{n,K}\colon\operatorname{Gal}(K(\mu_n)/K)\longrightarrow(\mathbb{Z}/n\mathbb{Z})^\times,
+\end{align*}
+它把 $\sigma$ 映为满足 $\sigma(\zeta_n)=\zeta_n^a$ 的唯一元素 $a\in(\mathbb{Z}/n\mathbb{Z})^\times$（这个元素不依赖于 $\zeta_n$ 的选择）. 当 $m\mid n$ 时，限制映射 $\operatorname{Gal}(K(\mu_n)/K)\longrightarrow\operatorname{Gal}(K(\mu_m)/K)$ 对应于自然映射 $(\mathbb{Z}/n\mathbb{Z})^\times\longrightarrow(\mathbb{Z}/m\mathbb{Z})^\times$.
+
+令 $K(\mu_\infty):=\bigcup_nK(\mu_n)$，即所有单位根在 $K$ 上生成的扩张. 上述同态诱导出拓扑群的连续同态
+\begin{align*}
+\chi_K\colon\operatorname{Gal}(K(\mu_\infty)/K)\longrightarrow\widehat{\mathbb{Z}}^\times.
+\end{align*}
+\subsection{分圆特征与 Kronecker--Weber 定理}\label{sec:nt-1-1-4}
+
+\begin{theorem*}
+
+对 $K=\mathbb{Q}$，有：
+
+\begin{enumerate}[label=\roman*)]
+
+\item $\chi_\mathbb{Q}$ 是同构 $\operatorname{Gal}(\mathbb{Q}(\mu_\infty)/\mathbb{Q})\xrightarrow{\sim}\widehat{\mathbb{Z}}^\times$.
+
+\item （Kronecker--Weber）限制映射 $\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})\longrightarrow\operatorname{Gal}(\mathbb{Q}(\mu_\infty)/\mathbb{Q})$ 诱导同构 $\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})_{\mathrm{ab}}\xrightarrow{\sim}\operatorname{Gal}(\mathbb{Q}(\mu_\infty)/\mathbb{Q})$.
+
+\end{enumerate}
+
+\end{theorem*}
+
+第一点归结为证明分圆多项式在 $\mathbb{Q}$ 上不可约，我们将在后文证明.
+
+第二点中的 Abel 化取拓扑意义，即对换位子生成的子群的闭包取商. 第二点等价于说，$\mathbb{Q}$ 的每个 Abel Galois 扩张都可以嵌入 $\mathbb{Q}$ 的一个分圆扩张. 对其他数域，一般没有这样的结论.
+
+\section{代数整数}\label{sec:nt-1-2}
+
+设 $K$ 是一个数域. 若存在 $f\in\mathbb{Z}[X]$ 使 $f(\alpha)=0$，便称 $\alpha\in K$ 是\newterm{nt-algebraic-integer}{代数整数}{algebraic integer}.\footnote{译注：原文此处未要求 $f$ 首一；通常的定义必须要求 $f$ 为首一多项式，否则每个代数数均满足这个条件. 下面习题也原样保留；其所述结论需要补充首一等适当条件.} 根据下面的习题，这实际上等价于 $f_\alpha\in\mathbb{Z}[X]$.
+
+\begin{exercise*}
+
+设 $f\in\mathbb{Z}[X]$ 在 $\mathbb{Q}[X]$ 中有分解 $f=gh$. 则 $g,h\in\mathbb{Z}[X]$.
+
+\end{exercise*}
+
+整扩张的一般理论将给出下面的命题.
+
+\subsection{整数环的基本性质}\label{sec:nt-1-2-1}
+
+\begin{proposition*}
+
+以 $\mathcal O_K$ 记 $K$ 中代数整数的集合，则
+
+\begin{enumerate}[label=\roman*)]
+
+\item $\mathcal O_K$ 是 $K$ 的子环；
+
+\item $\operatorname{Frac}(\mathcal O_K)=K$；
+
+\item $\mathcal O_K$ 作为 $\mathbb{Z}$ 模有限生成.
+
+\end{enumerate}
+
+\end{proposition*}
+
+\begin{remark*}
+
+第一点的通常证明不是构造性的. 一个自然的问题是：已知 $f_\alpha$ 和 $f_\beta$，能否找到以 $\alpha+\beta$ 或 $\alpha\beta$ 为根的多项式？借助下面这个有趣的结果，答案是肯定的：
+\begin{align*}
+(*)\colon\mathbb{Z}[X_1,\ldots,X_n]^{\mathfrak S_n}\simeq\mathbb{Z}[\Sigma_1,\ldots,\Sigma_n],
+\end{align*}
+这里 $\Sigma_1,\ldots,\Sigma_n$ 是变量 $X_1,\ldots,X_n$ 的初等对称多项式，由等式 $\prod_{i=1}^n(T-X_i)=T^n-\Sigma_1T^{n-1}+\cdots+(-1)^n\Sigma_n$ 给出.
+
+事实上，$(*)$ 蕴含：若 $f\in\mathbb{Z}[X]$ 的根为 $\alpha_1,\ldots,\alpha_n\in\overline{\mathbb{Q}}$，则对每个 $g\in\mathbb{Z}[X_1,\ldots,X_n]$，多项式
+\begin{align*}
+\widetilde g(X):=\prod_{\sigma\in\mathfrak S_n}\bigl(X-g(\alpha_1,\ldots,\alpha_n)\bigr)
+\end{align*}
+属于 $\mathbb{Z}[X]$.\footnote{译注：原式乘积因子没有出现置换 $\sigma$，通常应写为 $g(\alpha_{\sigma(1)},\ldots,\alpha_{\sigma(n)})$；此外，上述推论通常要求 $f$ 首一. 此处保留原式.} 取 $f=f_\alpha f_\beta$，并分别取 $g=X_1+X_2$、$g=X_1X_2$，便分别得到 $\widetilde g(\alpha+\beta)=0$、$\widetilde g(\alpha\beta)=0$（当然，一般来说，这与极小多项式还相差很远）.
+
+\end{remark*}
+
+由于 $\mathbb{Z}$ 是主理想整环，上述命题的第二、三点表明，$\mathcal O_K$ 是秩为 $[K:\mathbb{Q}]$ 的自由 $\mathbb{Z}$ 模. 这引出了第一个自然问题.
+
+\subsection{问题：求 $\mathcal O_K$ 的一组基}\label{sec:nt-1-2-2}
+
+主要工具将是判别式理论. 先看一个说明问题复杂性的例子.
+
+\begin{example*}[二次域情形]
+
+设 $[K:\mathbb{Q}]=2$. 容易看出，存在唯一的无平方因子整数 $d$，使 $K=\mathbb{Q}(\sqrt d)$. 显然 $\mathbb{Z}[\sqrt d]\subset\mathcal O_{\mathbb{Q}(\sqrt d)}$，但一般 $\mathbb{Z}[\sqrt d]\ne\mathcal O_{\mathbb{Q}(\sqrt d)}$. 例如：
+
+\begin{itemize}
+
+\item $d=-1$. 此时 $\mathcal O_{\mathbb{Q}(i)}=\mathbb{Z}[i]$. 事实上，$\alpha=a+ib$ 是代数整数，当且仅当 $\alpha+\bar\alpha=2a$ 与 $\alpha\bar\alpha=a^2+b^2$ 都属于 $\mathbb{Z}$；由此可以用初等方法推出 $a,b$ 也属于 $\mathbb{Z}$（习题）.
+
+\item $d=-3$. 此时 $j=\frac{-1+i\sqrt3}{2}$ 是代数整数（$j^3=1$），却不属于 $\mathbb{Z}[\sqrt{-3}]$.
+
+\end{itemize}
+
+我们将更一般地证明，当 $d\equiv2,3\pmod4$ 时，$\mathcal O_{\mathbb{Q}(\sqrt d)}=\mathbb{Z}[\sqrt d]=\mathbb{Z}\oplus\sqrt d\mathbb{Z}$；当 $d\equiv1\pmod4$ 时，$\mathcal O_{\mathbb{Q}(\sqrt d)}=\mathbb{Z}\oplus\frac{1+\sqrt d}{2}\mathbb{Z}$.
+
+\end{example*}
+
+\begin{example*}[分圆情形]
+
+我们将看到，$\mathcal O_{\mathbb{Q}(\mu_n)}=\mathbb{Z}[\mu_n]=\mathbb{Z}\oplus\zeta_n\mathbb{Z}\oplus\cdots\oplus\zeta_n^{\varphi(n)-1}\mathbb{Z}$，其中 $\varphi(n)=|(\mathbb{Z}/n\mathbb{Z})^\times|$.
+
+\end{example*}
+
+\begin{remark*}
+
+上述例子中的 $\mathcal O_K$ 都是单生成的（形如 $\mathbb{Z}[\alpha]$），但也存在 $\mathcal O_K$ 不是单生成的数域 $K$.
+
+\end{remark*}
+
+\subsection{问题：整数环未必是主理想整环}\label{sec:nt-1-2-3}
+
+与 $\mathbb{Z}$ 不同，$\mathcal O_K$ 并非总是主理想整环，甚至未必是唯一分解整环. 我们用二次域来说明可能发生的情况.
+
+\begin{example*}
+
+设 $K=\mathbb{Q}(\sqrt d)$.
+
+\begin{enumerate}[label=\roman*)]
+
+\item 若 $d=-1$，用类似带余除法的论证可证明 $\mathcal O_K=\mathbb{Z}[i]$ 是主理想整环（因而也是唯一分解整环）. 事实上，若 $I\subset\mathbb{Z}[i]$ 是理想，选取复绝对值最小的 $\beta\in I\setminus\{0\}$，则对每个 $\alpha\in\mathbb{Z}[i]$，可以选取 $\gamma\in\mathbb{Z}[i]$ 使 $|\gamma-\alpha/\beta|^2\leqslant1/2$（画图！）. 若 $\alpha\in I$，则 $\alpha-\beta\gamma$ 属于 $I$，且绝对值小于 $|\beta|$，所以它为零. 因而 $I=(\beta)$.
+
+\item 若 $d=-5$，则有 $6=2\times3=(1+\sqrt{-5})(1-\sqrt{-5})$. 然而，$2$、$3$、$1+\sqrt{-5}$ 和 $1-\sqrt{-5}$ 都是不可约元.\footnote{环 $A$ 的元素 $a$ 称为``不可约的''，若对于任意 $b,c$，$a=bc$ 都蕴含 $b\in A^\times$ 或 $c\in A^\times$. 两个不可约元 $a,a'$ 称为``相伴的''，若存在 $b\in A^\times$ 使 $a'=ab$.}
+
+事实上，以 $N(\alpha)\in\mathbb{Z}$ 记 $\alpha$ 的范数，即 $N(a+\sqrt{-5}b)=a^2+5b^2$. 可见 $N(\alpha)=\pm1\Longleftrightarrow\alpha\in\mathcal O_K^\times$（此时 $\alpha^{-1}=N(\alpha)/\bar\alpha$）.\footnote{译注：原文的逆元公式如此；通常应为 $\alpha^{-1}=\bar\alpha/N(\alpha)$.}
+
+由于 $N(1+\sqrt{-5})=6$，若 $1+\sqrt{-5}=\alpha\beta$，且 $\alpha,\beta$ 都不可逆，则必有 $N(\alpha)=2$ 或 $N(\beta)=2$，这是不可能的. 这证明了 $1+\sqrt{-5}$ 的不可约性，同样可以验证另外三个元素的不可约性. 于是，开头给出的 $6$ 的两种分解确实表明，这时 $\mathcal O_K$ 不是唯一分解整环.
+
+它也不是主理想整环. 考虑理想 $\mathcal I=(2,1+\sqrt{-5})$. 它不是单位理想，因为
+\begin{align*}
+\mathcal O_K/\mathcal I&=\mathbb{Z}[X]/(X^2+5,1+X,2)\\
+&=\mathbb{F}_2[X]/(X+1,(X+1)^2)=\mathbb{F}_2\ne0.
+\end{align*}
+它也不是主理想，因为 $2$ 和 $1+\sqrt{-5}$ 不可约且不相伴，因而没有公因子.
+
+\end{enumerate}
+
+\end{example*}
+
+研究整数环的一个基本思想可以追溯到 Dedekind：着眼于理想而非数本身，着眼于素理想而非不可约元. 事实上，我们将证明：
+
+\begin{theorem*}
+
+$\mathcal O_K$ 的每个非零理想 $\mathcal I$ 都可以``唯一地''分解为乘积 $\mathcal I=\mathcal P_1^{e_1}\mathcal P_2^{e_2}\cdots\mathcal P_r^{e_r}$，其中 $\mathcal P_i$ 是两两不同的素理想.
+
+\end{theorem*}
+
+\begin{example*}
+
+在上例第二种情形中，虽然 $2$ 是不可约元，理想 $(2)$ 却不是素理想. 它有分解 $(2)=(2,1+\sqrt{-5})(2,1-\sqrt{-5})$（事实上，$2=(1+\sqrt{-5})(1-\sqrt{-5})-2\times2$）.
+
+\end{example*}
+
+$\mathcal O_K$ 偏离主理想整环的程度由它的\newterm{nt-ideal-class-group}{理想类群}{ideal class group} $\mathcal C\ell(\mathcal O_K)$ 衡量. 这个群是由非零理想组成的乘法群对主理想生成的子群的商.\footnote{译注：原文这里写的是``非零理想组成的乘法群''；通常应使用非零分式理想的乘法群，非零整理想仅组成幺半群.} 例如，可以证明 $\mathcal C\ell(\mathbb{Z}[\sqrt{-5}])=\mathbb{Z}/2\mathbb{Z}$. 计算这个群通常很困难. 本课程最深刻的结果之一是：
+
+\begin{theorem*}[Dirichlet、Dedekind、Minlowski]
+
+$\mathcal C\ell(\mathcal O_K)$ 是有限群.\footnote{译注：原文人名拼作 Minlowski，通常应为 Minkowski.}
+
+\end{theorem*}
+
+\subsection{问题：将 $(p)$ 分解为素理想的乘积}\label{sec:nt-1-2-4}
+
+这里 $p$ 是素数. 这是本学科的基本问题之一，目前没有一般的解法. 将所求分解写作 $(p)=\mathcal P_1^{e_1}\mathcal P_2^{e_2}\cdots\mathcal P_r^{e_r}$. 我们将证明以下一般事实：
+
+\begin{itemize}
+
+\item 若 $f_i:=[\mathcal O_K/\mathcal P_i:\mathbb{F}_p]$，则 $[K:\mathbb{Q}]=\sum_{i=1}^re_if_i$.
+
+\item 若 $K$ 是 Galois 扩张，则 $e_1=\cdots=e_r$ 且 $f_1=\cdots=f_r$.
+
+\end{itemize}
+
+我们还将引入以下术语：
+
+\begin{itemize}
+
+\item 若存在 $i$ 使 $e_i\ne1$，则称 $p$ 是``分歧的''. 判别式可以``检测''出这些 $p$，而且它们只有有限多个.
+
+\item 若 $r=[K:\mathbb{Q}]$，则称 $p$ 是``完全分解的''.
+
+\item 若 $p$ 非分歧且 $r=1$，即 $(p)$ 是 $\mathcal O_K$ 的素理想，则称 $p$ 是``惰性的''.
+
+\end{itemize}
+
+一个更为宏大的问题是刻画在 $\mathcal O_K$ 中完全分解的素数. 对分圆扩张和二次扩张（更一般地，对 Abel 扩张），将给出精确的判别规律；一般情形下，却只能给出估计（Chebotarev 密度定理）.
+
+\begin{example*}
+
+考虑 $K$ 为二次域的情形. 此时有三种可能：$(p)$ 是素理想，$(p)=\mathcal P_1\mathcal P_2$，或 $(p)=\mathcal P^2$. 为简单起见，设 $\mathcal O_K=\mathbb{Z}[\sqrt d]$. 则 $\mathcal O_K/(p)=\mathbb{F}_p[X]/(X^2+d)$.\footnote{译注：原文为 $X^2+d$；依 $\sqrt d$ 满足的关系，通常应为 $X^2-d$. 下列三种情形也保留原文次序；非平方的判别应排除已列出的分歧情形.} 于是有三种情形：
+
+\begin{itemize}
+
+\item 若 $p\mid d$ 或 $p=2$，则 $\mathcal O_K/(p)$ 非既约，故 $p$ 分歧.
+
+\item 若 $d\in(\mathbb{F}_p^\times)^2$，则 $p$ 分解. 具体地，若 $a$ 满足 $p\mid a^2-d$，则 $(p)=(p,\sqrt d-a)(p,\sqrt d+a)$.
+
+\item 若 $d$ 模 $p$ 不是平方，则 $p$ 惰性.
+
+\end{itemize}
+
+\end{example*}
+
+可见，惰性与分解的二分涉及二次互反律：
+\begin{align*}
+p\text{ 分解}\quad\Longleftrightarrow\quad\left(\frac dp\right)=1\quad\Longleftrightarrow\quad p\text{ 满足某些同余条件}.
+\end{align*}
+例如，在 $\mathbb{Z}[i]$ 中，当 $p\equiv1\pmod4$ 时 $p$ 分解，当 $p\equiv3\pmod4$ 时 $p$ 惰性. 对 $d=-5$，当 $p\equiv1,3,7,9\pmod{20}$ 时 $p$ 分解，当 $p\equiv11,13,17\pmod{20}$ 时 $p$ 惰性.\footnote{译注：原文的惰性同余类列表漏列 $19\pmod{20}$；这里保留原列举.}
+
+上述等价式中间的符号是 Legendre 符号，取值于 $\{\pm1\}$. 几十年来，数学家一直试图推广这种用同余条件刻画分解素数的方法. 一般情形下这实际上不可能，但对数域 $L$ 的每个 Abel 扩张 $K$，类域论可以做到这一点. 非常粗略地说，对 $\mathcal O_L$ 的素理想 $\mathcal P$，可以赋予它的 Artin 符号 $\left(\frac{K/L}{\mathcal P}\right)\in\operatorname{Gal}(L/K)$，并有等价关系\footnote{译注：原文将 Artin 符号所属群写为 $\operatorname{Gal}(L/K)$，通常应为 $\operatorname{Gal}(K/L)$；Artin 符号还要求相应的非分歧条件.}
+\begin{align*}
+\mathcal P\text{ 完全分解}\quad\Longleftrightarrow\quad\left(\frac{K/L}{\mathcal P}\right)=1\quad\Longleftrightarrow\quad\mathcal P\text{ 满足某些``同余条件''}.
+\end{align*}
+第二个等价关系是``Artin 互反律''的一部分，它是二次互反律的广泛推广.
+
+本课程只讨论 $L=\mathbb{Q}$ 的情形，特别地，我们将证明二次互反律.
+
+\subsection{问题：确定 $\mathcal O_K^\times$}\label{sec:nt-1-2-5}
+
+这也是一个困难的问题，至今仍在研究. 挠子群 $(\mathcal O_K^\times)_{\mathrm{tors}}$ 是单位根群，因而是循环群. 若 $K$ 有一个实嵌入，则有 $(\mathcal O_K^\times)_{\mathrm{tors}}=\mathbb{Z}/2\mathbb{Z}$.
+
+我们将证明著名的 Dirichlet 单位定理：
+
+\begin{theorem*}
+
+$\mathcal O_K^\times$ 是秩为 $r-1$ 的有限生成 Abel 群，其中 $r$ 是嵌入 $K\longrightarrow\mathbb{C}$ 模复共轭的个数.
+
+\end{theorem*}
+
+例如，可见 $\mathcal O_K^\times$ 有限，当且仅当 $K$ 是虚二次域.\footnote{译注：原文这个``当且仅当''漏掉 $K=\mathbb{Q}$ 的情形，其单位群 $\{\pm1\}$ 也有限.}
+
+仍然困难的是求一组基本单位，即求出 $r-1$ 个单位，生成商群 $\mathcal O_K^\times/(\mathcal O_K^\times)_{\mathrm{tors}}$.
+
+\begin{example*}
+
+$\mathbb{Z}[\sqrt3]^\times=\{\pm1\}\times(2+\sqrt3)^{\mathbb{Z}}$.
+
+\end{example*}
+
+\section{赋值理论（范数）}\label{sec:nt-1-3}
+
+域 $K$ 上的范数（或乘法\newterm{nt-valuation}{赋值}{valuation}）是映射 $|\cdot|\colon K\longrightarrow\mathbb{R}_+$，满足对任意 $x,y$ 都有：
+
+\begin{itemize}
+
+\item $|xy|=|x||y|$；
+
+\item $|x+y|\leqslant|x|+|y|$；
+
+\item $|x|=0\Longleftrightarrow x=0$.
+
+\end{itemize}
+
+这样的范数确定一个由开球生成的拓扑. 若两个范数定义相同的拓扑，便称它们等价；等价类称为 $K$ 的\newterm{nt-place}{位}{place}.
+
+\begin{example*}
+
+在 $\mathbb{Q}$ 上有通常的绝对值，记为 $|\cdot|_\infty$；对每个素数 $p$，还有 $p$ 进范数：若 $x=p^r\frac ab$，其中 $(a,p)=(b,p)=1$，则定义 $|x|_p=p^{-r}$.
+
+\end{example*}
+
+$p$ 进范数满足比第二条公理更强的条件：对任意 $x,y$，有 $|x+y|_p\leqslant\max(|x|_p,|y|_p)$. 这样的范数称为``非 Archimedes 的''. 我们将证明以下经典定理.
+
+\subsection{Ostrowski 定理}\label{sec:nt-1-3-1}
+
+\begin{theorem*}[Ostrowski]
+
+在 $\mathbb{Q}$ 上，每个范数都等价于 $|\cdot|_\infty$ 或某个范数 $|\cdot|_p$.\footnote{译注：原文没有排除平凡范数；这个结论及后面的位的描述均应排除平凡范数. 对函数域的位的描述通常还须限定范数在常数域上平凡，素理想也应取非零素理想. 原文的 Riemann 曲面断言未列出紧性等条件，照录其概览性表述.}
+
+\end{theorem*}
+
+换言之，$\{\mathbb{Q}\text{ 的位}\}=\{\text{素数}\}\cup\{\infty\}$. 更一般地，对数域 $K$，我们将看到
+\begin{align*}
+\{K\text{ 的位}\}=\{\mathcal O_K\text{ 的素理想}\}\cup\{\text{嵌入 }K\hookrightarrow\mathbb{C}\}_{/\text{复共轭}}.
+\end{align*}
+这里与函数域有一个有趣的类比：事实上，也可以证明
+\begin{align*}
+\{\mathbb{C}(X)\text{ 的位}\}&=\{\mathbb{C}[X]\text{ 的素理想}\}\cup\{f\mapsto\deg(f)\}\\
+&=\{\text{复仿射直线上的点}\}\cup\{\text{无穷远点}\}\\
+&=\mathbb{P}^1(\mathbb{C}),
+\end{align*}
+更一般地，对 Riemann 曲面 $S$ 的亚纯函数域 $\mathcal M(S)$，有
+\begin{align*}
+\{\mathcal M(S)\text{ 的位}\}=S.
+\end{align*}
+因此，可以把数域的位的集合看成其整数环的素理想集合的某种``完备化''或``紧化''.
+
+\subsection{完备化}\label{sec:nt-1-3-2}
+
+众所周知，$\mathbb{Q}$ 对 $|\cdot|_\infty$ 不完备，其完备化（按定义）是 $\mathbb{R}$. 同样，$\mathbb{Q}$ 对 $|\cdot|_p$ 也不完备，其完备化记为 $\mathbb{Q}_p$，称为``$p$ 进数域''. 它是局部紧域，可以像在 $\mathbb{R}$ 上一样，在其上进行分析.
+
+应用如下：
+
+\begin{itemize}
+
+\item $(p)$ 在 $\mathcal O_K$ 中的分解可以从 $K\otimes_\mathbb{Q}\mathbb{Q}_p$ 中``读出''. 例如，$p$ 完全分解，当且仅当 $K\otimes_\mathbb{Q}\mathbb{Q}_p\simeq\mathbb{Q}_p^{[K:\mathbb{Q}]}$.
+
+\item 要证明 $\mathbb{Q}$ 上的一个代数方程无解，只须找到 $p$，使这个方程在 $\mathbb{Q}_p$ 中无解. 好处在于可以在 $\mathbb{Q}_p$ 中使用分析工具.
+
+\end{itemize}
+
+\subsection{加元}\label{sec:nt-1-3-3}
+
+现在可以将所有完备化放在一起，定义
+\begin{align*}
+\mathbb A:=\mathbb{R}\times\prod_p'\mathbb{Q}_p,
+\end{align*}
+其中 $\prod'$（限制直积）表示乘积中几乎所有分量都是整数（属于 $\mathbb{Z}_p$）的元素. 这样得到一个局部紧的\newterm{nt-adele-ring}{加元环}{adele ring}. 若 $S$ 是位的有限集合，还定义 $\mathbb A_S$ 为上述限制直积去掉由 $S$ 索引的因子所得的环. 如果时间允许，我们将证明：
+
+\begin{proposition*}
+
+\begin{enumerate}[label=\roman*)]
+
+\item 嵌入 $\mathbb{Q}\hookrightarrow\mathbb A$ 的像是离散且余紧的.
+
+\item （强逼近）对任意 $S\ne\varnothing$，嵌入 $\mathbb{Q}\hookrightarrow\mathbb A^S$ 的像稠密.\footnote{译注：原文先用下标 $\mathbb A_S$，这里改用上标 $\mathbb A^S$；两者均按原文保留.}
+
+\end{enumerate}
+
+\end{proposition*}
+
+对数域，定义 $\mathbb A_K:=\mathbb A\otimes_\mathbb{Q}K$；它也是 $K$ 在所有位处的完备化的限制直积. Artin 符号给出同态
+\begin{align*}
+K^\times\backslash\mathbb A_K^\times\longrightarrow\operatorname{Gal}(\overline{\mathbb{Q}}/K)_{\mathrm{ab}},
+\end{align*}
+在 $K=\mathbb{Q}$ 时，它重新给出上面提到的同构 $\widehat{\mathbb{Z}}^\times\simeq\operatorname{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})_{\mathrm{ab}}$（Kronecker--Weber 定理）.
+

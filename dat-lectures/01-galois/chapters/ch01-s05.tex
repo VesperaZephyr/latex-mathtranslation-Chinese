@@ -1,0 +1,198 @@
+\section{唯一分解环、主理想环与 Euclid 环}\label{sec:galois-1-5}
+本节中，除非另有说明，所考虑的环都假定为整环（且为交换环）.
+
+\subsection{唯一分解整环的一般性质}\label{sec:galois-1-5-1}
+设 $A$ 为整环. 先回顾已经遇到的若干定义和性质：
+\begin{itemize}
+\item 非零且不可逆的元素 $p\in A$ 称为不可约元，如果对任意 $a,b\in A$，都有 $(p=ab)\Rightarrow(a\in A^\times\text{ 或 }b\in A^\times)$.
+\item 两个不可约元 $p,p'\in A$ 称为等价（或``相伴''），如果存在单位 $u\in A^\times$ 使得 $p'=up$. 这等价于理想相等 $(p)=(p')$（这里用到了 $A$ 是整环）.
+\item 非零且不可逆的元素 $x\in A$ 是不可约元，当且仅当理想 $(x)$ 在所有真主理想中是极大的.
+\item 若理想 $(x)$ 是素理想，则 $x$ 是不可约元.\footnote{译注：原文未排除 $x=0$. 在整环中 $(0)$ 是素理想，而 $0$ 不是不可约元；此处应另要求 $x\ne0$.}
+\end{itemize}
+在此基础上，回顾如下定义.
+\begin{definition*}
+整环 $A$ 称为\newterm{galois-unique-factorization-domain}{唯一分解整环}{unique factorization domain}（英语为 Unique Factorisation Domain，缩写为 UFD），如果它满足以下两条性质：
+\begin{description}
+\item[\hypertarget{galois-factorization-ex}{(Ex)}] 每个非零且不可逆的元素 $x\in A$ 都能写成不可约元的乘积 $x=p_1\cdots p_r$.
+\item[\hypertarget{galois-factorization-un}{(Un)}] 如 \hyperlink{galois-factorization-ex}{(Ex)} 中的两个分解 $x=p_1\cdots p_r=p'_1\cdots p'_{r'}$ 是等价的，即 $r=r'$，且存在 $\{1,\ldots,r\}$ 的一个置换 $\sigma$，使得 $p_i$ 与 $p'_{\sigma(i)}$ 等价（即 $(p_i)=(p'_{\sigma(i)})$）.
+\end{description}
+\end{definition*}
+我们已经看到，Noether 环满足 \hyperlink{galois-factorization-ex}{(Ex)}，但也有非 Noether 环满足 \hyperlink{galois-factorization-ex}{(Ex)}，例如 $\mathbb C[\mathbb N^{\mathbb N}]=\mathbb C[X_1,\ldots,X_n,\ldots]$. 我们也遇到过不满足 \hyperlink{galois-factorization-un}{(Un)} 的 Noether 环，例如 $\mathbb Z[\sqrt{-5}]$.
+
+\begin{lemma*}\hypertarget{galois-ufd-equivalences}{}
+设 $A$ 为满足 \hyperlink{galois-factorization-ex}{(Ex)} 的整环. 则下列断言等价：
+\begin{enumerate}[label=\roman*)]
+\item $A$ 满足 \hyperlink{galois-factorization-un}{(Un)}.
+\item $A$ 满足 Euclid 引理：$(p\text{ 不可约且 }p\mid ab)\Rightarrow(p\mid a\text{ 或 }p\mid b)$.
+\item $A$ 满足 Gauss 引理：$(a\mid bc\text{ 且 }a,b\text{ 无公因子})\Rightarrow a\mid c$.
+\item 对每个不可约元 $p$，理想 $(p)$ 都是素理想.
+\end{enumerate}
+\end{lemma*}
+\begin{proof}
+$\mathrm{iii)}\Rightarrow\mathrm{ii)}$ 是直接的，因为 Euclid 引理是 Gauss 引理的特例.
+
+证明 $\mathrm{ii)}\Rightarrow\mathrm{i)}$. 更确切地说，对 $r$ 归纳，证明不可约元乘积之间的等式 $p_1\cdots p_r=p'_1\cdots p'_{r'}$ 蕴含 $r=r'$，且存在 $\{1,\ldots,r\}$ 的一个置换 $\sigma$，使得 $(p_i)=(p'_{\sigma(i)})$. 先处理 $r=1$ 的情形. 此时 Euclid 引理说明 $p_1$ 整除某个 $p'_i$；适当置换后，不妨记为 $p'_1$. 但若 $r'>1$，就有 $p'_2\cdots p'_{r'}\in A^\times$，矛盾. 因此 $r'=1$. 现设 $r>1$. 与前面一样，$p_r$ 整除某个 $p'_i$，适当置换后可设它整除 $p'_{r'}$. 因而有 $p'_r=up_r$，其中 $u\in A^\times$，\footnote{译注：原文此处下标为 $p'_r$，而上下文所用的是 $p'_{r'}$；此处保留原式.}于是得到等式
+\begin{align*}
+p_1\cdots p_{r-1}=p'_1\cdots p'_{r'-2}(p'_{r'-1}u),
+\end{align*}
+可以对它应用归纳假设. 由此得到 $r=r'$ 以及一个置换 $\sigma'$；再考虑最初为使 $p_r\mid p'_{r'}$ 而作的置换，即得所求的置换 $\sigma$.
+
+证明 $\mathrm{i)}\Rightarrow\mathrm{iii)}$. 选取分解 $b=p_1\cdots p_s$，再选取分解 $c=p_{s+1}\cdots p_r$. 由性质 \hyperlink{galois-factorization-un}{(Un)}，存在子集 $I\subset\{1,\ldots,r\}$ 及单位 $u\in A^\times$，使得 $a=u\prod_{i\in I}p_i$. 由于 $a,b$ 无公因子，$I\cap\{1,\ldots,s\}=\varnothing$，所以 $I\subset\{s+1,\ldots,r\}$，最终得到 $a\mid c$.
+
+最后，ii) 与 iv) 的等价性是直接的. 事实上，$(p)$ 是素理想就是说 $ab\in(p)\Rightarrow(a\in(p)\text{ 或 }b\in(p))$. 而对任意 $x\in A$，都有 $x\in(p)\Leftrightarrow p\mid x$.
+\end{proof}
+
+\begin{lemma*}\hypertarget{galois-adic-valuation-lemma}{}
+设 $A$ 为 Noether 整环，$p$ 为不可约元.
+\begin{enumerate}[label=\roman*)]
+\item 对每个非零元素 $a\in A$，集合 $E=\{n\in\mathbb N:p^n\mid a\}$ 是有限集.
+\item $E$ 的最大元素 $\nu_p(a)$ 是使 $a$ 能写成 $a=p^na'$ 且 $p\nmid a'$ 的唯一整数 $n$.
+\item 有如下等价关系：$(p)$ 是素理想，当且仅当对任意 $a,b\in A\setminus\{0\}$，都有 $\nu_p(ab)=\nu_p(a)+\nu_p(b)$.
+\end{enumerate}
+\end{lemma*}
+\begin{proof}
+i) 假设所考察的集合 $E$ 无界，即对任意 $n\in\mathbb N$ 都有 $p^n\mid a$. 写成 $a=p^na_n$. 注意，由于 $A$ 是整环，当 $m>n$ 时，$p^ma_m=p^na_n$，所以 $p^{m-n}a_m=a_n$，从而 $a_m$ 整除 $a_n$. 由于 $a_n$ 不整除 $a_m$，理想序列 $(a_n)$（$n\in\mathbb N$）严格递增，与 $A$ 的 Noether 性矛盾.
+
+ii) 因为 $p^{\nu_p(a)}\mid a$，可以分解为 $a=p^{\nu_p(a)}a'$；由 $\nu_p(a)$ 的最大性，$p$ 不整除 $a'$. 假设还有另一个分解 $a=p^na''$，其中 $p$ 不整除 $a''$. 按定义 $n\leqslant\nu_p(a)$. 因为 $A$ 是整环，可得 $p^{\nu_p(a)-n}a'=a''$，故 $\nu_p(a)-n=0$，并且 $a'=a''$.
+
+iii) 假设 $(p)$ 是素理想，并固定 $a,b\ne0$. 写成 $a=p^{\nu_p(a)}a'$ 及 $b=p^{\nu_p(b)}b'$，于是 $ab=p^{\nu_p(a)+\nu_p(b)}a'b'$. 由于 $p$ 既不整除 $a'$ 也不整除 $b'$，即 $a',b'\notin(p)$，而 $(p)$ 是素理想，所以 $a'b'\notin(p)$，即 $p$ 不整除 $a'b'$. 由 ii) 即得所需等式 $\nu_p(a)+\nu_p(b)=\nu_p(ab)$.
+
+反之，假设这一等式对所有非零的 $a,b$ 成立. 则
+\begin{align*}
+ab\in(p)&\Leftrightarrow p\mid ab\Rightarrow\nu_p(ab)>0\\
+&\Rightarrow(\nu_p(a)>0\text{ 或 }\nu_p(b)>0)\\
+&\Rightarrow(p\mid a\text{ 或 }p\mid b)\Leftrightarrow(a\in(p)\text{ 或 }b\in(p)).
+\end{align*}
+故 $(p)$ 是素理想.
+\end{proof}
+
+\begin{definition*}
+在上述引理的假设下，使 $p^n\mid a$ 的最大自然数 $n$ 称为 $a$ 的 \newterm{galois-p-adic-valuation}{$p$-进赋值}{$p$-adic valuation}，记作 $\nu_p(a)$.
+\end{definition*}
+若 $a$ 可逆，则对任意 $p$ 都有 $\nu_p(a)=0$. 通常令 $\nu_p(0)=\infty$，以扩充这一定义.
+
+\begin{remark*}
+也可见到记号 $\operatorname{ord}_p(a)$，意为``$a$ 在 $p$ 处的阶数''. 这一记号来自如下几何解释：将 $\mathbb C[X]$ 看作 $\mathbb C$ 上多项式函数组成的空间，对任意 $z\in\mathbb C$，多项式 $X-z$ 显然不可约，而整数 $\nu_{X-z}(f)=\operatorname{ord}_{X-z}(f)$ 就是函数 $f$ 在 $z$ 处的零点阶数.
+\end{remark*}
+
+
+\begin{proposition*}\hypertarget{galois-valuation-properties}{}
+设 $A$ 为唯一分解整环.
+\begin{enumerate}[label=\roman*)]
+\item 设 $p$ 为不可约元. 对任意 $a,b\in A$，都有 $\nu_p(ab)=\nu_p(a)+\nu_p(b)$.
+\item 设 $a,b\in A$. 则 $(a\mid b)\Leftrightarrow(\text{对任意不可约元 }p\in A,\ \nu_p(a)\leqslant\nu_p(b))$.
+\item 设 $p$ 为不可约元，且 $a\in A$ 有分解 $a=p_1\cdots p_r$. 则 $\nu_p(a)$ 等于与 $p$ 等价的因子 $p_i$ 的个数.
+\item 设 $P$ 是 $A$ 中不可约元等价类的一个代表系. 对每个非零的 $a\in A$，集合 $\{p\in P:\nu_p(a)\ne0\}$ 是有限集，且存在 $u\in A^\times$ 使得 $a=u\prod_{p\in P}p^{\nu_p(a)}$.
+\end{enumerate}
+\end{proposition*}
+\begin{proof}
+i) 当 $ab\ne0$ 时，这由前一引理的 iii) 得出. 当 $ab=0$ 时，约定 $\infty+\infty=\infty$，等式仍成立.
+
+ii) $\Rightarrow$ 由 i) 得出. 对于 $\Leftarrow$，对 $a$ 的不可约因子个数 $r(a)$ 作归纳. 若 $r(a)=0$，则 $a$ 可逆，从而 $a\mid b$. 若 $r(a)>0$，选取 $a$ 的一个不可约因子 $q$. 有 $\nu_q(b)\geqslant\nu_q(a)>0$，所以 $q$ 也整除 $b$. 令 $a=qa'$、$b=qb'$. 则
+\begin{align*}
+\nu_q(b')=\nu_q(b)-1\geqslant\nu_q(a)-1=\nu_q(a'),
+\end{align*}
+并且对所有 $p\ne q$ 都有 $\nu_p(b')=\nu_p(b)\geqslant\nu_p(a)=\nu_p(a')$.\footnote{译注：原文写作 $p\ne q$；为使这里的赋值等式成立，所需条件应为 $p$ 与 $q$ 不等价（或在固定代表系中取 $p\ne q$）. 原文此处也未单独处理 $a=0$ 的情形.} 因为 $r(a')<r(a)$，可对 $a',b'$ 应用归纳假设，得到 $a'\mid b'$，进而 $a\mid b$.
+
+iii) 由 i)，有 $\nu_p(a)=\sum_{i=1}^r\nu_p(p_i)$. 而
+\begin{align*}
+\nu_p(p_i)=\begin{cases}1,&\text{若 }p\text{ 与 }p_i\text{ 等价},\\0,&\text{否则}.\end{cases}
+\end{align*}
+iv) 作分解 $a=p_1\cdots p_r$.\footnote{译注：命题允许 $a$ 为单位，而此处原文直接采用不可约元分解；单位情形可用空乘积单独处理. 此外，前述赋值引理假设 Noether 性，本命题却只假设唯一分解性；在一般唯一分解整环中，也可由唯一分解直接定义这些赋值.} 根据 iii)，$\nu_p(a)\ne0$ 当且仅当 $p$ 与某个 $p_i$ 等价，故 $\{p\in P:\nu_p(a)\ne0\}$ 有限，从而乘积 $\prod_{p\in P}p^{\nu_p(a)}$ 也是有限乘积. 此外，仍由 iii)，$\nu_p(a)$ 是集合 $I_p:=\{i\in\{1,\ldots,r\}:p_i\in A^\times p\}$ 的元素个数. 因此 $\prod_{i\in I_p}p_i\in A^\times p^{\nu_p(a)}$. 由于所有非空的 $I_p$ 构成 $\{1,\ldots,r\}$ 的一个划分，可得 $a\in A^\times\prod_{p\in P}p^{\nu_p(a)}$，正如所求.
+\end{proof}
+
+\begin{remark*}
+在不是唯一分解整环的 Noether 整环中，以上性质都可能不成立. 以 $\mathbb Z[\sqrt{-5}]$ 以及分解 $2\times3=(1+\sqrt{-5})(1-\sqrt{-5})$ 为例. 可以证明（作为练习，或参见习题课），$2,3,1+\sqrt{-5},1-\sqrt{-5}$ 是两两不等价的不可约元. 因而：
+\begin{itemize}
+\item 取 $p=2$、$a=1+\sqrt{-5}$、$b=1-\sqrt{-5}$，就得到性质 i) 的一个反例.
+\item 取 $a=2(1+\sqrt{-5})$、$b=6$，就得到 ii) 中 $\Leftarrow$ 方向的一个反例.
+\item 取 $p=2$、$a=6$ 及分解 $6=(1+\sqrt{-5})(1-\sqrt{-5})$，就得到 iii) 的一个反例.
+\item 取 $a=6$，则乘积 $\prod_{p\in P}p^{\nu_p(a)}$ 可被 $2\times3\times(1+\sqrt{-5})(1-\sqrt{-5})=36$ 整除，因此不具有 iv) 中所述的形式.
+\end{itemize}
+\end{remark*}
+在唯一分解整环中，可以谈论最大公因子和最小公倍数：
+
+\begin{proposition*}\hypertarget{galois-gcd-lcm-proposition}{}
+设 $A$ 为唯一分解整环，$a_1,\ldots,a_n\in A$.
+\begin{enumerate}[label=\roman*)]
+\item 理想 $I:=(a_1)\cap\cdots\cap(a_n)$ 是主理想. 对元素 $m\in A$，下列断言等价：
+\begin{enumerate}[label=(\alph*)]
+\item $m$ 是 $I$ 的一个生成元.
+\item 对任意 $i$，$a_i\mid m$；且对任意 $x\in A$，$(\forall i,\ a_i\mid x)\Rightarrow m\mid x$.
+\item 对每个不可约元 $p$，$\nu_p(m)=\max\{\nu_p(a_i):i=1,\ldots,n\}$.
+\end{enumerate}
+\item 包含所有 $a_i$ 的主理想构成的集合有唯一的极小元. 对元素 $d\in A$，下列断言等价：
+\begin{enumerate}[label=(\alph*)]
+\item $d$ 是 $J$ 的一个生成元.\footnote{译注：原文未在此之前引入 $J$；依上下文，$J$ 指上句所说的唯一极小主理想.}
+\item 对任意 $i$，$d\mid a_i$；且对任意 $x\in A$，$(\forall i,\ x\mid a_i)\Rightarrow x\mid d$.
+\item 对每个不可约元 $p$，$\nu_p(d)=\min\{\nu_p(a_i):i=1,\ldots,n\}$.
+\end{enumerate}
+\end{enumerate}
+\end{proposition*}
+这引出以下定义.
+\begin{definition*}
+沿用上述命题的记号，$I$ 的任一生成元称为 $a_i$ 的一个\newterm{galois-least-common-multiple}{最小公倍数}{least common multiple}，$J$ 的任一生成元称为 $a_i$ 的一个\newterm{galois-greatest-common-divisor}{最大公因子}{greatest common divisor}. 若 $J=A$，则称 $a_i$ \newterm{galois-coprime}{互素}{coprime}.
+\end{definition*}
+因此应当注意，最小公倍数或最大公因子都只确定到相差一个单位因子.
+
+\begin{proof}
+选取 $A$ 中不可约元等价类的一个代表系 $P$.
+
+i) 对任意 $p\in P$，令 $v_p:=\max\{\nu_p(a_i):i=1,\ldots,n\}$，再令 $m:=\prod_{p\in P}p^{v_p}$；由前一命题的 iv)，这是良定义的.\footnote{译注：原命题允许 $a_i=0$，而这一乘积构造未处理指数为 $\infty$ 的情形. 若有某个 $a_i=0$，应单独取最小公倍数为 $0$；若所有 $a_i=0$，最大公因子也应单独取 $0$. 此处保留原文的构造与论述.} 因为 $\nu_p(m)=v_p\geqslant\nu_p(a_i)$，由前一命题的 ii) 可知每个 $a_i$ 都整除 $m$，故 $m\in I$. 另一方面，若 $x\in I$，仍由同一条 ii)，对任意 $p$ 和每个 $a_i$，都有 $\nu_p(x)\geqslant\nu_p(a_i)$，从而 $\nu_p(x)\geqslant v_p$，最终得到 $m\mid x$. 所以 $I=(m)$ 是主理想. 由此也可推出 (a) 与 (c) 等价. 至于 (a) 与 (b) 的等价性则是直接的，因为对任意 $x\in A$，$(x\in I)$ 与 $(\forall i,\ a_i\mid x)$ 本来就是等价的.
+
+ii) 对任意 $p\in P$，令 $u_p:=\min\{\nu_p(a_i):i=1,\ldots,n\}$，再令 $d:=\prod_{p\in P}p^{u_p}$. 则对任意 $i$，都有 $d\mid a_i$（由前一命题），所以 $(d)$ 包含每个 $(a_i)$. 反之，若 $(x)$ 包含每个 $(a_i)$，则 $x$ 整除每个 $a_i$，从而对任意 $i$ 都有 $\nu_p(x)\leqslant\nu_p(a_i)$，故 $\nu_p(x)\leqslant u_p=\nu_p(d)$，所以 $x$ 整除 $d$. 由此，理想 $(d)$ 是包含每个 $(a_i)$ 的最小主理想. 同样的论证给出 (a)、(b)、(c) 的等价性.
+\end{proof}
+
+\begin{remark*}[{注意}]
+按定义，$a,b$ 互素就是说 $A$ 是包含 $(a,b)$ 的唯一主理想. 应注意，这一般并不蕴含 $(a,b)=A$. 例如，在 $\mathbb C[X,Y]$ 中（后面将证明它是唯一分解整环），有 $(X,Y)\subsetneq\mathbb C[X,Y]$.
+\end{remark*}
+
+
+\subsection{主理想环与 Euclid 环}\label{sec:galois-1-5-2}
+如果环 $A$ 是整环，且它的每个理想都是主理想，就称 $A$ 为\newterm{galois-principal-ideal-domain}{主理想整环}{principal ideal domain}. 因此，这样的环特别是 Noether 环. 最著名的例子是 $\mathbb Z$ 和 $K[X]$，更一般地，还有 Euclid 整环（见下文）.
+
+\begin{theorem*}
+设 $A$ 是主理想整环.
+\begin{enumerate}[label=\roman*)]
+\item $A$ 是唯一分解整环.
+\item 每个非零素理想都是极大理想.
+\item 若 $a,b\in A$ 互素，则 $(a,b)=A$.
+\end{enumerate}
+\end{theorem*}
+\begin{proof}
+iii) 由于 $A$ 是主理想整环，理想 $(a,b)$ 是主理想. ``互素''这一假设意味着，包含 $(a,b)$ 的主理想只有 $A$. 因而 $(a,b)=A$.
+
+ ii) 设 $I$ 是非零素理想. 由于 $A$ 是主理想整环，$I$ 由某个非零元素生成，记为 $I=(x)$. 因为 $I$ 是素理想，$x$ 不可约，所以 $(x)$ 在所有真主理想中是极大的. 但所有理想都是主理想，因此 $(x)$ 就是通常意义下的极大理想.
+
+ i) $A$ 是主理想整环，因而是 Noether 环，所以满足分解的存在性条件 \hyperlink{galois-factorization-ex}{(Ex)}. 此外，若 $x$ 不可约，由刚才的论证可知，$(x)$ 是极大理想，因而更是素理想. 根据前面的引理，$A$ 因此满足 \hyperlink{galois-factorization-un}{(Un)}.
+\end{proof}
+
+\begin{definition*}
+整环 $A$ 称为\newterm{galois-euclidean-domain}{Euclid 整环}{Euclidean domain}，如果存在函数 $N\colon A\setminus\{0\}\longrightarrow\mathbb N$ 满足下述性质：对任意非零元素 $a,b$，存在 $q,r\in A$，使得 $b=qa+r$，且 $N(r)<N(a)$ 或 $r=0$.
+\end{definition*}
+
+\begin{theorem*}
+设 $A$ 是 Euclid 整环. 对任意非零理想 $I$，只要 $a\in I\setminus\{0\}$ 使 $N(a)$ 取最小值，$a$ 就生成 $I$. 特别地，$A$ 是主理想整环.
+\end{theorem*}
+\begin{proof}
+设 $I$ 和 $a$ 如定理所述，并取 $b\in I$. 写成 $b=qa+r$，其中 $N(r)<N(a)$ 或 $r=0$. 若 $r\ne0$，则 $r=b-qa\in I$，与 $N(a)$ 的最小性矛盾. 所以 $r=0$ 且 $b\in(a)$，最终得到 $I=(a)$.
+\end{proof}
+
+当然，$\mathbb Z$ 是 Euclid 整环的典型例子，其中 $N$ 取为``绝对值''函数.
+
+\begin{example*}
+设 $K$ 是域. 则函数 $f\mapsto N(f)=\deg(f)$ 使 $K[X]$ 成为 Euclid 整环，因而是主理想整环，进而是唯一分解整环. $K[X]$ 的理想 $I$ 由其中任意一个次数最小的多项式 $f\in I$ 生成.\footnote{译注：原文此处未限制 $I$ 和 $f$ 非零；前文约定零多项式的次数为 $-\infty$，因此这里关于最小次数生成元的表述应限于非零理想中的非零多项式.}
+\end{example*}
+
+注意，如果 $A$ 不是域，则 $A[X]$ 不是 Euclid 整环（也不是主理想整环）. 事实上，我们已经定义了以 $A[X]$ 中首一多项式为除式的 Euclid 除法；它可以推广到首项系数在 $A$ 中可逆的多项式，但如果首项系数不可逆，就无法进行``Euclid 除法''. 具体而言，设 $a\in A$ 是非零且不可逆的元素，则理想 $(a,X)$ 不是主理想.
+
+\begin{example*}
+设 $A=\mathbb Z[i]$. 则函数 $z\mapsto N(z):=z\bar z$ 使它成为 Euclid 整环，因而是主理想整环（参见习题课）. 对 $A=\mathbb Z[\sqrt{-2}]$ 和 $\mathbb Z[j]$ 也同样成立.
+\end{example*}
+
+\begin{remark*}
+可以证明，整数环 $\mathbb Z[\frac{1+\sqrt{-19}}2]$ 是主理想整环，但不是 Euclid 整环\ldots
+\end{remark*}
+
+我们的下一个目标是证明 Gauss 传递定理：如果 $A$ 是唯一分解整环，则 $A[X]$ 也是唯一分解整环. 为此，我们需要整环的分式域这一概念.
+

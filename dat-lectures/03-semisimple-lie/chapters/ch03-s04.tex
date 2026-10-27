@@ -1,0 +1,437 @@
+% 原书物理页=印刷页54--60上；3.4 全节（含 p57/p58 的 Dynkin 图：经典型、例外型与 9 个禁用图）.
+\section{根系的分类}\label{sec:ssl-3-4}
+% ---- Dynkin 图绘制辅助（顶点白圈 2pt；双线间距 0.8pt；三线间距 1.1pt）----
+\newcommand{\dknode}[2]{\node[draw,circle,fill=white,inner sep=0pt,outer sep=0pt,minimum size=4pt] at (#1,#2) {};}
+\newcommand{\dkdbl}[2]{\begin{pgfonlayer}{background}\draw ({#1+0.07},0.028) -- ({#2-0.07},0.028);\end{pgfonlayer}\begin{pgfonlayer}{background}\draw ({#1+0.07},-0.028) -- ({#2-0.07},-0.028);\end{pgfonlayer}}
+\newcommand{\dkdbla}[3]{\dkdbl{#1}{#2}\node[inner sep=0pt] at ({(#1+#2)/2},0) {$\scriptstyle #3$};}
+\newcommand{\dktri}[2]{\begin{pgfonlayer}{background}\draw ({#1+0.07},0.039) -- ({#2-0.07},0.039);\end{pgfonlayer}\begin{pgfonlayer}{background}\draw ({#1+0.07},0) -- ({#2-0.07},0);\end{pgfonlayer}\begin{pgfonlayer}{background}\draw ({#1+0.07},-0.039) -- ({#2-0.07},-0.039);\end{pgfonlayer}}
+无论使用上面的 Serre 定理，还是只满足于推论~\ref{cor:ssl-3-3-2}，我们现在都必须对不可约根系进行分类. 这要借助与根系 $\Phi$ 相联系的两个不变量：它的\newterm{ssl-cartan-matrix}{Cartan 矩阵}{Cartan matrix}和它的\newterm{ssl-dynkin-diagram}{Dynkin 图}{Dynkin diagram}.
+\begin{definition}[Cartan 矩阵]\label{def:ssl-3-4-1}
+设 $\Delta$ 是一个有限集. $\Delta$ 上的一个 Cartan 矩阵是指一族整数 $c_{\alpha,\beta}$（$\alpha,\beta\in\Delta$），使得
+\begin{itemize}
+\item[(C1)] $c_{\alpha,\alpha}=2$，且当 $\alpha\neq\beta$ 时 $c_{\alpha,\beta}\in\{0,-1,-2,-3\}$；
+\item[(C2)] $c_{\alpha,\beta}=0\Rightarrow c_{\beta,\alpha}=0$；
+\item[(C3)] 向量空间 $\mathbb{R}^{\Delta}$ 上的二次型
+\[Q(x)=\sum_{\alpha}x_{\alpha}^{2}-\sum_{\alpha\neq\beta}\sqrt{c_{\alpha,\beta}c_{\beta,\alpha}}\;x_{\alpha}x_{\beta}\]
+是一个\newterm{ssl-positive-definite-quadratic-form}{正定二次型}{positive definite quadratic form}\footnote{译注：原文对第二个和式标作 $\sum_{\alpha\neq\beta}$（每个无序对 $\{\alpha,\beta\}$ 被计两次）. 但由下文引理证明中的等式 $Q(x)=\lVert y\rVert^{2}$（以及后面诸禁用图迷向向量的验证）可知，求和应对每个无序对只计一次（即作 $\sum_{\alpha<\beta}$ 理解），原文记法照录.}.
+\end{itemize}
+称 $\Delta$ 上的一个 Cartan 矩阵与 $\Delta'$ 上的一个 Cartan 矩阵是\emph{等价的}，如果存在 $\Delta$ 到 $\Delta'$ 上的双射 $\alpha\mapsto\alpha'$，使得对一切 $\alpha,\beta\in\Delta$ 都有 $c_{\alpha',\beta'}=c_{\alpha,\beta}$.
+
+通过给集合 $\Delta$ 排序，可以得到一个 $r\times r$（$r=|\Delta|$）的``真''矩阵. 这个``真''矩阵在基的置换意义下（即相差一个置换矩阵共轭）是确定的.
+\end{definition}
+\begin{lemma*}
+设 $\Phi$ 是一个根系.
+\begin{enumerate}[label=\roman*)]
+\item 若 $\Delta$ 是 $\Phi$ 的一组基，则诸 $c_{\alpha,\beta}:=\alpha^{\vee}(\beta)$ 构成一个 Cartan 矩阵 $C(\Phi,\Delta)$.
+\item 若 $\Delta'$ 是另一组基，则 $C(\Phi,\Delta)$ 与 $C(\Phi,\Delta')$ 等价.
+\item $\Phi$ 在同构意义下由 $C(\Phi)$ 确定.
+\item $\Phi$ 可约当且仅当 $C(\Phi)$ 等价于一个至少含 $2$ 个块的分块对角矩阵.
+\item $C(\Phi^{\vee})$ 是 $C(\Phi)$ 的转置.
+\end{enumerate}
+\end{lemma*}
+\begin{proof}
+i) 我们已经看到矩阵 $C(\Phi,\Delta)$ 满足 Cartan 矩阵的性质 (C1). 为验证性质 (C2)，只须回忆：对一个 $W$-不变内积有 $\alpha^{\vee}(\beta)=\dfrac{2\langle\alpha,\beta\rangle}{\lVert\alpha\rVert^{2}}$，再利用该内积的对称性即可. 对性质 (C3)，我们再次使用这个内积和这个等式. 把该等式同样应用于 $\beta^{\vee}$，得知 $\alpha^{\vee}(\beta)\beta^{\vee}(\alpha)=\dfrac{4\langle\alpha,\beta\rangle^{2}}{\lVert\alpha\rVert^{2}\lVert\beta\rVert^{2}}$；而由于已知 $\langle\alpha,\beta\rangle\leqslant 0$，由此推出
+\[\sqrt{\alpha^{\vee}(\beta)\beta^{\vee}(\alpha)}=\frac{-2\langle\alpha,\beta\rangle}{\lVert\alpha\rVert\,\lVert\beta\rVert}.\]
+于是对每个 $x=\sum_{\alpha}x_{\alpha}\alpha$，若置 $y=\sum_{\alpha}\dfrac{x_{\alpha}}{\lVert\alpha\rVert}\alpha$，就有 $Q(x)=\lVert y\rVert^{2}$. 这表明 $Q$ 是正定的.
+
+ii) 满足 $w(\Delta)=\Delta'$ 的唯一的 $w\in W$ 使我们可以把 $C(\Phi,\Delta)$ 与 $C(\Phi,\Delta')$ 等同起来，因为
+\[c_{w(\alpha),w(\beta)}=\frac{2\langle w(\alpha),w(\beta)\rangle}{\lVert w(\alpha)\rVert^{2}}=\frac{2\langle\alpha,\beta\rangle}{\lVert\alpha\rVert^{2}}=c_{\alpha,\beta}.\]
+iii) 问题在于说明如何从 $\Delta$ 和诸 $c_{\alpha,\beta}$ 找回 $\Phi$. 而诸 $c_{\alpha,\beta}$ 确定诸反射 $s_{\alpha}$（$\alpha\in\Delta$），我们知道这些反射生成 Weyl 群 $W$，又知道 $W.\Delta=\Phi$.
+
+iv) 正向是清楚的. 故设 $C(\Phi,\Delta)$ 等价于一个分块对角矩阵. 这意味着可以把 $\Delta$ 分拆为 $\Delta=\Delta_1\sqcup\Delta_2$，使得当 $\alpha\in\Delta_1$、$\beta\in\Delta_2$ 时 $c_{\alpha,\beta}=0$. 于是对任何 $W$-不变内积都有 $\Delta_1\perp\Delta_2$，而我们在上文的一个习题中已经看到，此时 $\Phi$ 是可约的.
+
+v) 是显然的.
+\end{proof}
+\begin{example*}
+$\Phi(\mathfrak{sl}_n)$ 在基 $\alpha_i=e_i-e_{i+1}$（$i=1,\cdots,n-1$）下的 Cartan 矩阵是（按约定，未填之处为零）：
+\[
+\begin{pmatrix}
+2 & -1 & & & \\
+-1 & \ddots & \ddots & & \\
+ & \ddots & \ddots & \ddots & \\
+ & & \ddots & \ddots & -1 \\
+ & & & -1 & 2
+\end{pmatrix}
+\]
+$\Phi(\mathfrak{so}_{2n+1})$ 与 $\Phi(\mathfrak{sp}_{2n})$ 在基 $\alpha_i=e_i-e_{i+1}$（$i\leqslant n-1$）与 $\alpha_n=e_n$（相应地 $2e_n$）下的 Cartan 矩阵分别为\footnote{译注：按正文顺序（先 $\mathfrak{so}_{2n+1}$ 后 $\mathfrak{sp}_{2n}$）及所给基，左图应为 $B_n$ 型（最后一行为 $\cdots,-2,2$），右图应为 $C_n$ 型（倒数第二行末项为 $-2$）；原书两图恰互换，此处照录.}
+\[
+\begin{pmatrix}
+2 & -1 & & & \\
+-1 & \ddots & \ddots & & \\
+ & \ddots & \ddots & -1 & \\
+ & & \ddots & \ddots & -2 \\
+ & & & -1 & 2
+\end{pmatrix}
+\qquad
+\begin{pmatrix}
+2 & -1 & & & \\
+-1 & \ddots & \ddots & & \\
+ & \ddots & \ddots & \ddots & \\
+ & & -1 & \ddots & -1 \\
+ & & & -2 & 2
+\end{pmatrix}
+\]
+\end{example*}
+\begin{exercise*}
+找 $\Phi(\mathfrak{so}_{2n})$ 的一组基，使 Cartan 矩阵具有形状
+\[
+\begin{pmatrix}
+2 & -1 & & & \\
+-1 & \ddots & \ddots & & \\
+ & \ddots & \ddots & -1 & -1 \\
+ & & -1 & 2 & \\
+ & & -1 & & 2
+\end{pmatrix}
+\]
+\end{exercise*}
+\begin{exercise*}
+找出段~\ref{np:ssl-3-2-5} 中那个非经典秩 $2$ 根系的一组基，并写出它的 Cartan 矩阵.
+\end{exercise*}
+上面引理的性质 iii) 提示我们去对 Cartan 矩阵分类. 为此我们将需要下面的引理，以及矩阵的一个称为 Dynkin 图的不变量.
+\begin{lemma}\label{lemma:ssl-3-4-2}
+设 $C=(c_{\alpha,\beta})_{\alpha,\beta\in\Delta}$ 是集合 $\Delta$ 上的一个 Cartan 矩阵.
+\begin{enumerate}[label=\roman*)]
+\item 若 $\Delta'\subset\Delta$，则从 $C$ 中取出的\newterm{ssl-extracted-cartan-matrix}{子 Cartan 矩阵}{extracted Cartan matrix} $C'=(c_{\alpha,\beta})_{\alpha,\beta\in\Delta'}$ 是 $\Delta'$ 上的一个 Cartan 矩阵.
+\item 若 $c_{\alpha,\beta}<0$，则 $c_{\alpha,\beta}=-1$ 或 $c_{\beta,\alpha}=-1$.
+\item 设 $C'=(c'_{\alpha,\beta})_{\alpha,\beta\in\Delta}$ 是一个矩阵，使得对一切 $\alpha,\beta$ 都有 $c'_{\alpha,\beta}\geqslant c_{\alpha,\beta}$. 若 $C'$ 满足性质 (C1) 与 (C2)，则它是一个 Cartan 矩阵.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+i) 是清楚的. 把它应用于 $\Delta'=\{\alpha,\beta\}$，其中 $\alpha,\beta$ 满足 $c_{\alpha,\beta}<0$. 双线性型 $Q'$ 在 $\mathbb{R}\alpha\oplus\mathbb{R}\beta$ 上的判别式是 $c_{\alpha,\beta}c_{\beta,\alpha}-4$. 要使 $Q'$ 是定的，必须这个判别式 $<0$. 由此推出 $0<c_{\alpha,\beta}c_{\beta,\alpha}<4$，鉴于诸 $c_{\alpha,\beta}$ 所受的约束，这迫使 $c_{\alpha,\beta}=-1$ 或 $c_{\beta,\alpha}=-1$.
+
+对 iii)，记 $Q'$ 为与 $C'$ 相联系的 $\mathbb{R}^{\Delta}$ 上的二次型. 对 $x=\sum_{\alpha}x_{\alpha}\alpha\in\mathbb{R}^{\Delta}$，记 $|x|:=\sum_{\alpha}|x_{\alpha}|\alpha$. 那么
+\[Q'(x)\geqslant Q'(|x|)\geqslant Q(|x|).\]
+由此断定 $Q'$ 是正定的.
+\end{proof}
+\begin{definition}\label{def:ssl-3-4-3}
+集合 $\Delta$ 上的一个\newterm{ssl-diagram}{图}{diagram} $\Gamma$ 是指一个部分定向的图，类型如下：
+\begin{itemize}
+\item \newterm{ssl-vertex}{顶点}{vertex}的集合是 $\Delta$；
+\item 对 $\alpha\neq\beta\in\Delta$，连接 $\alpha$ 与 $\beta$ 的\newterm{ssl-edge}{边}{edge}的条数记作 $n_{\alpha\beta}$；
+\item 若 $n_{\alpha\beta}>1$，则给这 $n_{\alpha\beta}$ 条边一个共同的\newterm{ssl-orientation}{定向}{orientation} $\alpha\to\beta$ 或 $\beta\to\alpha$.
+\end{itemize}
+称图 $\Gamma$ 为 Dynkin 图，如果 $\mathbb{R}^{\Delta}$ 上的二次型
+\[Q(x)=\sum_{\alpha}x_{\alpha}^{2}-\sum_{\alpha\neq\beta}\sqrt{n_{\alpha\beta}}\;x_{\alpha}x_{\beta}\]
+是正定的.
+\end{definition}
+注意 $\Gamma$ 是否为 Dynkin 图，与可能存在的定向无关. 下面是矩阵与图之间的联系.
+
+设 $C=(c_{\alpha,\beta})_{\alpha,\beta}$ 是 $\Delta$ 上的一个 Cartan 矩阵. 令 $n_{\alpha,\beta}=c_{\alpha,\beta}c_{\beta,\alpha}$，就得到 $\Delta$ 上的一个图 $\Gamma(C)$. 若 $n_{\alpha\beta}>1$ 且 $|c_{\alpha,\beta}|=1$，就把这些边定向为由 $\alpha$ 指向 $\beta$. （注意，据前一引理，我们知道 $|c_{\alpha,\beta}|=1$ 或 $|c_{\beta,\alpha}|=1$.）
+
+反过来，对图 $\Gamma$ 联系矩阵 $C(\Gamma)$，它由 $c_{\alpha,\alpha}=2$ 以及
+\begin{itemize}
+\item 当 $n_{\alpha,\beta}<2$ 或 $\beta\to\alpha$ 时，$c_{\alpha,\beta}=-n_{\alpha\beta}$；
+\item 当 $n_{\alpha,\beta}\geqslant 2$ 且 $\alpha\to\beta$ 时，$c_{\alpha,\beta}=-1$
+\end{itemize}
+定义. 若 $\Gamma$ 是一个 Dynkin 图，那么 $C(\Gamma)$ 是一个 Cartan 矩阵（注意，$Q$ 的定性蕴涵 $n_{\alpha\beta}<4$，与上面的引理一样）.
+\begin{lemma*}
+上述构造给出 Cartan 矩阵与 Dynkin 图之间的一对互逆双射. 此外，还有下列性质：
+\begin{itemize}
+\item $\Gamma(C)$ 的连通分支与 $C$ 的``对角块''成双射. 特别地，若 $C=C(\Phi)$，则 $\Phi$ 不可约当且仅当 $\Gamma(C)$ 连通；
+\item 转置 ${}^{t}C$ 的图由反转诸定向得到；
+\item 若 $C'$ 是 $C$ 的子矩阵，则 $\Gamma(C')$ 是 $\Gamma(C)$ 的\newterm{ssl-subdiagram}{子图}{subdiagram}（意义自明）；
+\item 前一引理 iii) 中那样的矩阵 $C'$，对应于从 $\Gamma(C)$ 中擦去若干条边所得到的图.
+\end{itemize}
+\end{lemma*}
+\begin{proof}
+留给读者.
+\end{proof}
+\begin{example*}
+下面是经典 Lie 代数的 Dynkin 图.
+\begin{center}
+\begin{tabular}{@{}c@{\quad}c@{\hspace{1.2em}}p{6.8cm}@{}}
+$A_n$ &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+\foreach \i in {0,...,5} {\dknode{\i}{0}}
+\begin{pgfonlayer}{background}\draw[densely dotted] (0.07,0) -- (0.93,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1.07,0) -- (4.93,0);\end{pgfonlayer}
+\end{tikzpicture}
+& 这是 $\Phi(\mathfrak{sl}_{n+1})$ 的 Dynkin 图，共 $n$ 个顶点.\\[0.9em]
+$B_n$ &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+\foreach \i in {0,...,5} {\dknode{\i}{0}}
+\begin{pgfonlayer}{background}\draw[densely dotted] (0.07,0) -- (0.93,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1.07,0) -- (3.93,0);\end{pgfonlayer}
+\dkdbla{4}{5}{>}
+\end{tikzpicture}
+& 这是 $\Phi(\mathfrak{so}_{2n+1})$ 的 Dynkin 图，共 $n$ 个顶点.\\[0.9em]
+$C_n$ &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+\foreach \i in {0,...,5} {\dknode{\i}{0}}
+\begin{pgfonlayer}{background}\draw[densely dotted] (0.07,0) -- (0.93,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1.07,0) -- (3.93,0);\end{pgfonlayer}
+\dkdbla{4}{5}{<}
+\end{tikzpicture}
+& 这是 $\Phi(\mathfrak{sp}_{2n})$ 的 Dynkin 图，共 $n$ 个顶点.\\[0.9em]
+$D_n$ &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+\foreach \i in {0,...,4} {\dknode{\i}{0}}
+\dknode{5}{0.5}\dknode{5}{-0.5}
+\begin{pgfonlayer}{background}\draw[densely dotted] (0.07,0) -- (0.93,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1.07,0) -- (3.93,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (4.06,0.03) -- (4.94,0.47);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (4.06,-0.03) -- (4.94,-0.47);\end{pgfonlayer}
+\end{tikzpicture}
+& 这是 $\Phi(\mathfrak{so}_{2n})$ 的 Dynkin 图，共 $n>1$ 个顶点（$\mathfrak{so}_2$ 并不单）. 注意 $D_2=A_1\sqcup A_1$ 不连通.\\
+\end{tabular}
+\end{center}
+\end{example*}
+于是问题归结为对 Dynkin 图分类. 分类定理如下.
+\begin{theorem}\label{thm:ssl-3-4-4}
+每个连通的 Dynkin 图都属于``经典''类型 $A_n$、$B_n$、$C_n$、$D_n$（$n>2$），或属于下列``例外''类型之一：
+\begin{center}
+$G_2$\;
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+\dknode{0}{0}\dknode{0.6}{0}
+\dktri{0}{0.6}
+\node[inner sep=0pt] at (0.3,0) {$\scriptstyle>$};
+\end{tikzpicture}
+\qquad
+$F_4$\;
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+\foreach \x in {0,0.6,1.2,1.8} {\dknode{\x}{0}}
+\begin{pgfonlayer}{background}\draw (0.07,0) -- (0.53,0);\end{pgfonlayer}
+\dkdbla{0.6}{1.2}{>}
+\begin{pgfonlayer}{background}\draw (1.27,0) -- (1.73,0);\end{pgfonlayer}
+\end{tikzpicture}
+\qquad
+$E_6$\;
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+\foreach \i in {0,...,4} {\dknode{\i*0.6}{0}}
+\dknode{1.2}{0.5}
+\begin{pgfonlayer}{background}\draw (0.07,0) -- (2.33,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1.2,0.07) -- (1.2,0.43);\end{pgfonlayer}
+\end{tikzpicture}\\[0.7em]
+$E_7$\;
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+\foreach \i in {0,...,5} {\dknode{\i*0.6}{0}}
+\dknode{1.2}{0.5}
+\begin{pgfonlayer}{background}\draw (0.07,0) -- (2.93,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1.2,0.07) -- (1.2,0.43);\end{pgfonlayer}
+\end{tikzpicture}
+\qquad
+$E_8$\;
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+\foreach \i in {0,...,6} {\dknode{\i*0.6}{0}}
+\dknode{1.2}{0.5}
+\begin{pgfonlayer}{background}\draw (0.07,0) -- (3.53,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1.2,0.07) -- (1.2,0.43);\end{pgfonlayer}
+\end{tikzpicture}
+\end{center}
+\end{theorem}
+\begin{proof}
+证明基于这样的事实：Dynkin 图的任何子图都必须仍是 Dynkin 图（见最后两个引理）. 因此策略分两步：
+\begin{itemize}
+\item[(a)] 列出一批``\newterm{ssl-forbidden-diagram}{禁用图}{forbidden diagram}''，其相伴双线性型是退化的.
+\item[(b)] 证明若一个图不含任何``禁用图''，则它具有定理 i) 所描述的类型\footnote{译注：原文作``le i) du théorème''，但定理~\ref{thm:ssl-3-4-4} 的陈述并未分条编号，此处照录；所指即定理所述的诸类型.}.
+\end{itemize}
+
+(a) 下面是所用的``禁用图''列表（记号中的下标是顶点数减一）.
+\begin{center}
+\begin{tabular}{@{}c@{\;\;}c@{\hspace{1.6em}}c@{\;\;}c@{\hspace{1.6em}}c@{\;\;}c@{}}
+$\widetilde{\mathrm A}_{n}$ &
+\begin{tikzpicture}
+\foreach \i in {0,...,4} {\dknode{\i*0.5}{0}}
+\dknode{1}{0.5}
+\begin{pgfonlayer}{background}\draw (0.07,0) -- (0.43,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw[densely dotted] (0.57,0) -- (0.93,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1.07,0) -- (1.43,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1.57,0) -- (1.93,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (0.937,0.468) -- (0.063,0.032);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1.063,0.468) -- (1.937,0.032);\end{pgfonlayer}
+\end{tikzpicture}
+&
+$\widetilde{\mathrm C}_{n}$ &
+\begin{tikzpicture}
+\foreach \i in {0,...,5} {\dknode{\i*0.5}{0}}
+\dkdbl{0}{0.5}
+\begin{pgfonlayer}{background}\draw (0.57,0) -- (0.93,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw[densely dotted] (1.07,0) -- (1.43,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1.57,0) -- (1.93,0);\end{pgfonlayer}
+\dkdbl{2}{2.5}
+\end{tikzpicture}
+&
+$\widetilde{\mathrm F}_{5}$\footnotemark &
+\begin{tikzpicture}
+\foreach \i in {0,...,4} {\dknode{\i*0.5}{0}}
+\begin{pgfonlayer}{background}\draw (0.07,0) -- (0.43,0);\end{pgfonlayer}
+\dkdbl{0.5}{1}
+\begin{pgfonlayer}{background}\draw (1.07,0) -- (1.93,0);\end{pgfonlayer}
+\end{tikzpicture}
+\\[0.7em]
+$\widetilde{\mathrm B}_{n}$ &
+\begin{tikzpicture}
+\dknode{0}{0.5}\dknode{0}{-0.5}
+\foreach \i in {1,...,5} {\dknode{\i*0.5}{0}}
+\begin{pgfonlayer}{background}\draw (0.05,0.45) -- (0.45,0.05);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (0.05,-0.45) -- (0.45,-0.05);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (0.57,0) -- (0.93,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw[densely dotted] (1.07,0) -- (1.43,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1.57,0) -- (1.93,0);\end{pgfonlayer}
+\dkdbl{2}{2.5}
+\end{tikzpicture}
+&
+$\widetilde{\mathrm D}_{n}$ &
+\begin{tikzpicture}
+\dknode{0}{0.5}\dknode{0}{-0.5}
+\foreach \i in {1,...,4} {\dknode{\i*0.5}{0}}
+\dknode{2.5}{0.5}\dknode{2.5}{-0.5}
+\begin{pgfonlayer}{background}\draw (0.05,0.45) -- (0.45,0.05);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (0.05,-0.45) -- (0.45,-0.05);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (0.57,0) -- (0.93,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw[densely dotted] (1.07,0) -- (1.43,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1.57,0) -- (1.93,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (2.05,0.05) -- (2.45,0.45);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (2.05,-0.05) -- (2.45,-0.45);\end{pgfonlayer}
+\end{tikzpicture}
+&
+$\widetilde{\mathrm G}_{3}$ &
+\begin{tikzpicture}
+\foreach \i in {0,...,2} {\dknode{\i*0.5}{0}}
+\dktri{0}{0.5}
+\begin{pgfonlayer}{background}\draw (0.57,0) -- (0.93,0);\end{pgfonlayer}
+\end{tikzpicture}
+\\[0.7em]
+$\widetilde{\mathrm E}_{6}$ &
+\begin{tikzpicture}
+\foreach \i in {0,...,4} {\dknode{\i*0.5}{0}}
+\dknode{1}{0.5}\dknode{1}{1}
+\begin{pgfonlayer}{background}\draw (0.07,0) -- (1.93,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1,0.07) -- (1,0.43);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1,0.57) -- (1,0.93);\end{pgfonlayer}
+\end{tikzpicture}
+&
+$\widetilde{\mathrm E}_{7}$ &
+\begin{tikzpicture}
+\foreach \i in {0,...,6} {\dknode{\i*0.5}{0}}
+\dknode{1.5}{0.5}
+\begin{pgfonlayer}{background}\draw (0.07,0) -- (2.93,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1.5,0.07) -- (1.5,0.43);\end{pgfonlayer}
+\end{tikzpicture}
+&
+$\widetilde{\mathrm E}_{8}$ &
+\begin{tikzpicture}
+\foreach \i in {0,...,7} {\dknode{\i*0.5}{0}}
+\dknode{1}{0.5}
+\begin{pgfonlayer}{background}\draw (0.07,0) -- (3.43,0);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (1,0.07) -- (1,0.43);\end{pgfonlayer}
+\end{tikzpicture}
+\end{tabular}
+\end{center}
+\footnotetext{译注：按原书``下标为顶点数减一''之约定，此两图应记 $\widetilde{\mathrm F}_4$（$5$ 个顶点）与 $\widetilde{\mathrm G}_2$（$3$ 个顶点）；原文记法照录.}
+要看出它们确实被禁用，只须对相伴二次型给出一个\newterm{ssl-isotropic-vector}{迷向向量}{isotropic vector}. 我们把验证下列向量合宜的工作留给读者：
+\begin{center}
+\begin{tabular}{@{}l@{\,}l@{\hspace{1.4em}}l@{\,}l@{\hspace{1.4em}}l@{\,}l@{}}
+$\widetilde{\mathrm A}_{n}$ : & $(1,1,\cdots,1)$ &
+$\widetilde{\mathrm C}_{n}$ : & $(1,\sqrt{2},\cdots,\sqrt{2},1)$ &
+$\widetilde{\mathrm F}_{5}$ : & $(1,2,3,2\sqrt{2},\sqrt{2})$\footnotemark \\[0.5em]
+$\widetilde{\mathrm B}_{n}$ : & $\bigl(\tfrac{1}{\sqrt{2}},\tfrac{1}{\sqrt{2}},\sqrt{2},\cdots,\sqrt{2},1\bigr)$ &
+$\widetilde{\mathrm D}_{n}$ : & $(1,1,2,\cdots,2,1,1)$ &
+$\widetilde{\mathrm G}_{3}$ : & $(\sqrt{3},2,1)$ \\[0.5em]
+$\widetilde{\mathrm E}_{6}$ : &
+\begin{tikzpicture}[every node/.style={inner sep=1pt}]
+\node (a) at (0,0) {$\tfrac{1}{3}$};
+\node (b) at (0.55,0) {$\tfrac{2}{3}$};
+\node (c) at (1.1,0) {$1$};
+\node (d) at (1.65,0) {$\tfrac{2}{3}$};
+\node (e) at (2.2,0) {$\tfrac{1}{3}$};
+\node (u) at (1.1,0.55) {$\tfrac{2}{3}$};
+\node (t) at (1.1,1.1) {$\tfrac{1}{3}$};
+\begin{pgfonlayer}{background}\draw (a.east) -- (b.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (b.east) -- (c.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (c.east) -- (d.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (d.east) -- (e.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (t.south) -- (u.north);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (u.south) -- (c.north);\end{pgfonlayer}
+\end{tikzpicture}
+&
+$\widetilde{\mathrm E}_{7}$ : &
+\begin{tikzpicture}[every node/.style={inner sep=1pt}]
+\node (a) at (0,0) {$\tfrac{1}{4}$};
+\node (b) at (0.5,0) {$\tfrac{2}{4}$};
+\node (c) at (1.0,0) {$\tfrac{3}{4}$};
+\node (d) at (1.5,0) {$1$};
+\node (e) at (2.0,0) {$\tfrac{3}{4}$};
+\node (f) at (2.5,0) {$\tfrac{2}{4}$};
+\node (g) at (3.0,0) {$\tfrac{1}{4}$};
+\node (t) at (1.5,0.55) {$\tfrac{1}{2}$};
+\begin{pgfonlayer}{background}\draw (a.east) -- (b.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (b.east) -- (c.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (c.east) -- (d.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (d.east) -- (e.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (e.east) -- (f.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (f.east) -- (g.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (t.south) -- (d.north);\end{pgfonlayer}
+\end{tikzpicture}
+&
+$\widetilde{\mathrm E}_{8}$ : &
+\begin{tikzpicture}[every node/.style={inner sep=1pt}]
+\node (a) at (0,0) {$\tfrac{1}{3}$};
+\node (b) at (0.5,0) {$\tfrac{2}{3}$};
+\node (c) at (1.0,0) {$1$};
+\node (d) at (1.5,0) {$\tfrac{5}{6}$};
+\node (e) at (2.0,0) {$\tfrac{4}{6}$};
+\node (f) at (2.5,0) {$\tfrac{3}{6}$};
+\node (g) at (3.0,0) {$\tfrac{2}{6}$};
+\node (h) at (3.5,0) {$\tfrac{1}{6}$};
+\node (t) at (1.0,0.55) {$\tfrac{1}{2}$};
+\begin{pgfonlayer}{background}\draw (a.east) -- (b.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (b.east) -- (c.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (c.east) -- (d.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (d.east) -- (e.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (e.east) -- (f.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (f.east) -- (g.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (g.east) -- (h.west);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw (t.south) -- (c.north);\end{pgfonlayer}
+\end{tikzpicture}
+\end{tabular}
+\end{center}
+\footnotetext{译注：如上面所画，$\widetilde{\mathrm F}_{5}$ 的双重边在第 $2$、$3$ 个顶点之间，其迷向向量应为 $(\sqrt{2},2\sqrt{2},3,2,1)$；原文此处所列的向量对应于将该图左右翻转（双重边在第 $3$、$4$ 个顶点之间）的情形，照录.}
+
+(b) 剩下要证明：若图 $\Gamma$ 不含任何禁用图，则它属于定理所述的类型之一. 这是一个初等的验证. 我们来处理例如 $\Gamma$ 只有单边的情形.
+\begin{itemize}
+\item 若 $\Gamma$ 没有分叉点（即没有至少有 $3$ 个邻点的顶点），那么禁用图 $\widetilde{\mathrm A}_{n}$ 告诉我们 $\Gamma$ 是 $A_n$ 型的.
+\item 设 $\alpha$ 是一个至少有 $3$ 个邻点的顶点. 禁用图 $\widetilde{\mathrm D}_{4}$ 告诉我们 $\alpha$ 恰有 $3$ 个邻点，而禁用图 $\widetilde{\mathrm D}_{n}$ 告诉我们 $\alpha$ 是唯一的分叉点. 于是有从 $\alpha$ 出发的 $3$ 条分支 $b_1,b_2,b_3$，且禁用图 $\widetilde{\mathrm A}_{n}$ 告诉我们这些分支确实互不相同.
+\item 禁用图 $\widetilde{\mathrm E}_{6}$ 告诉我们，这些分支之一（设为 $b_1$）除 $\alpha$ 外只有一个顶点.
+\item 禁用图 $\widetilde{\mathrm E}_{7}$ 告诉我们，另外两条分支之一（设为 $b_2$）除 $\alpha$ 外至多有两个顶点. 我们不妨设 $b_3$ 至少与 $b_2$ 一样长.
+\item 若 $b_2$ 有 $2$ 个顶点，则禁用图 $\widetilde{\mathrm E}_{8}$ 告诉我们 $\Gamma$ 是 $E_6$、$E_7$ 或 $E_8$.
+\item 若 $b_2$ 只有 $1$ 个顶点，则 $\Gamma$ 是 $D_n$ 型的.
+\end{itemize}
+$\Gamma$ 具有双重边或三重边的情形留给读者.
+\end{proof}
+\begin{remark*}
+上面用到的那些``禁用图''本身也很值得注意. 除 Dynkin 图之外，它们是仅有的使二次型 $Q$ 为正（尽管未必正定）的图. 这些图对应于``仿射根系''，后者分类某些被称为``仿射 Lie 代数''的无穷维 Lie 代数. 给定这样一个图，相应的仿射 Lie 代数恰好像 Serre 定理中那样由生成元与关系来定义.
+\end{remark*}
+反过来，是否所有 Dynkin 图（或者说，所有 Cartan 矩阵）都来自根系，眼下还不清楚. 这正是下面这段补充的目的.
+\begin{theorem}\label{thm:ssl-3-4-5}
+前一定理中的每个图都是某个既约且不可约的根系的 Dynkin 图. 此外，这些根系两两不同构，仅有例外 $A_1=B_1=C_1$、$B_2=C_2$ 与 $A_3=D_3$.
+\end{theorem}
+\begin{proof}
+与经典类型 $A_n$、$B_n$、$C_n$、$D_n$ 相应的根系的存在性已经见过. 此外，立即可看出图 $G_2$ 对应段~\ref{np:ssl-3-2-5} 中那个秩 $2$、基数 $12$ 的根系. 在 Euclid 空间 $\mathbb{R}^4$ 中，可以验证集合
+\[\Phi:=\{(\pm e_i\pm e_j),\ i\neq j\}\cup\{\pm e_i\}\cup\Bigl\{\tfrac{1}{2}(\pm e_1\pm e_2\pm e_3\pm e_4)\Bigr\}\]
+是一个 $F_4$ 型的根系，且以 $\{e_2-e_3,\ e_3-e_4,\ e_4,\ (e_1-e_2-e_3-e_4)\}$（例如）为一组基.\footnote{译注：原文这组基的最后一个向量未带因子 $\tfrac12$，此处照录；按本段所列根集，该向量不属于 $\Phi$.}
+% 原书物理页=印刷页60；续定理3.4.5证明，接在既有proof内部.
+在 Euclid 空间 $\mathbb{R}^8$ 中，可以验证集合
+\begin{align*}
+\Phi:=\{(\pm e_i\pm e_j),\ i\neq j\}\cup\Bigl\{\tfrac12(\pm e_1\pm e_2\pm e_3\pm e_4\pm e_5\pm e_6\pm e_7\pm e_8)\Bigr\}^{+}
+\end{align*}
+是一个 $E_8$ 型的根系；这里右边集合中只允许偶数个负号. 它的一组基为 $\alpha_1=(e_1-e_2-e_3-e_4-e_5-e_6-e_7+e_8)$、$\alpha_2=e_1+e_2$、$\alpha_i=e_{i-1}-e_{i-2}$（$i=3,\ldots,8$）.\footnote{译注：原文的 $\alpha_1$ 前没有因子 $\tfrac12$，此处照录；按上面给出的根集，该向量不属于 $\Phi$.}
+由于 $E_7$ 与 $E_6$ 的图包含在 $E_8$ 的图中，相应根系的存在性也就得到保证：只需取相应单根生成的子根系. 具体来说，用上述记号，对于 $E_i$（$i=6$ 或 $7$），取单根 $\alpha_1,\ldots,\alpha_i$.
+最后，我们已经见过，过程 $\Phi\mapsto C\mapsto\Gamma$ 在根系的同构类上是单射，因而陈述的最后一点显然成立.
+\end{proof}
+\begin{remark*}
+由 Serre 的表述定理，定理第 ii) 项中 Dynkin 图的``例外等同''转化为``例外同构''\footnote{译注：原文此处引用定理的第 ii) 项，但前一定理的陈述未分项，此处照录原文回指.}
+\begin{align*}
+\mathfrak{sl}_2(K)&\simeq\mathfrak{sp}_2(K)\simeq\mathfrak{so}_3(K),&
+\mathfrak{so}_5(K)&\simeq\mathfrak{sp}_4(K),&
+\mathfrak{sl}_4(K)&\simeq\mathfrak{so}_6(K).
+\end{align*}
+等同 $D_2=A_1\sqcup A_1$ 则反映同构 $\mathfrak{so}_4(K)\simeq\mathfrak{sl}_2(K)\oplus\mathfrak{sl}_2(K)$. 应注意，其中有些同构在非代数闭域上并不成立. 例如 $\mathfrak{sl}_2(\mathbb{R})\not\simeq\mathfrak{so}_3(\mathbb{R})$！
+\end{remark*}
+\begin{exercise*}
+记 $\mathfrak g(\Gamma)$ 为与根系 $\Phi(\Gamma)$ 对应的 Lie 代数. 证明：如果 Dynkin 图 $\Gamma'$ 由 $\Gamma$ 删去一些顶点及从它们出发的边得到，那么可以把 $\mathfrak g(\Gamma')$ 嵌入 $\mathfrak g(\Gamma)$. 由此推出，每个秩为 $n$ 的经典 Lie 代数都含有一个与 $\mathfrak{sl}_n$ 同构的子代数.
+\end{exercise*}
+\begin{exercise*}
+照常取 $\mathfrak g,\mathfrak h,\Phi,\Delta$，并记 $\mathfrak n_+:=\bigoplus_{\alpha\in\Phi_+}\mathfrak g_\alpha$. 构造一个从 $\mathfrak g$ 的 Dynkin 图的自同构群到保持 $\mathfrak h$ 与 $\mathfrak n_+$ 的 $\mathfrak g$ 的自同构所成子群的同态.
+在 $\mathfrak{sl}_n$ 的情形，明确写出 $\operatorname{Aut}(\Gamma(\mathfrak g))$ 及所得同态的像.
+\end{exercise*}

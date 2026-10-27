@@ -1,0 +1,330 @@
+% 原书物理页=印刷页20--27；1.7 全节.（原书第 28 页顶部、1.8 节标题之前还有一道属于本节的习题，一并译出附于末尾.）
+\section{Lie 群的指数映射}\label{sec:lie-1-7}
+
+人们想把性质~\ref{np:lie-1-6-6} 推广到任意一个不必是线性的 Lie 群 $G$. 为了说明这项工作确实必要，这里给出一个非线性 Lie 群的例子.
+
+\begin{numpara}[一个非线性 Lie 群]\label{np:lie-1-7-1}
+记 $U_{3}$ 为尺寸 $3\times 3$ 的实上三角幺幂矩阵全体所成的群. 它是 $\mathrm{GL}_{3}(\mathbb R)$ 的一个维数为 $3$ 的闭子群. 令
+\[
+\Gamma:=\Bigl\{\begin{pmatrix}1&0&z\\0&1&0\\0&0&1\end{pmatrix},\ z\in\mathbb Z\Bigr\}
+\]
+这是 $U_{3}$ 的一个中心且离散的子群. 记 $H:=U_{3}/\Gamma$，赋予其商拓扑. 于是投影 $\pi:U_{3}\longrightarrow H$ 是 $H$ 的一个覆盖. 因而在 $H$ 上存在唯一的光滑流形结构使得 $\pi$ 是光滑的. 这使得 $H$ 成为一个 Lie 群.
+\end{numpara}
+
+\begin{proposition*}
+不存在从 $H$ 到某个 $\mathrm{GL}_{n}(\mathbb R)$ 中的嵌入.
+\end{proposition*}
+
+\begin{proof}
+用映射 $d\pi$ 把 $\operatorname{Lie}(H)$ 等同于 $\operatorname{Lie}(U_{3})$. $\operatorname{Lie}(U_{3})$ 以三个初等矩阵 $(E_{12},E_{13},E_{23})$ 为基. 我们将证明：对任何 Lie 群态射 $\varphi:H\longrightarrow\mathrm{GL}_{n}(\mathbb C)$，都有 $d\varphi(E_{13})=0$. 这显然蕴含 $H$ 不能嵌入任何 $\mathrm{GL}_{m}(\mathbb R)$ 之中.
+先证 $d\varphi(E_{13})$ 是 $\mathfrak{gl}_{n}(\mathbb C)=\mathrm{M}_{n}(\mathbb C)$ 中的幂零矩阵. 设 $\lambda$ 为 $d\varphi(E_{13})$ 的一个特征值，$V_{\lambda}\subset\mathbb C^{n}$ 为其特征空间. 由于 $[d\varphi(E_{13}),d\varphi(E_{12})]=[d\varphi(E_{13}),d\varphi(E_{23})]=0$，空间 $V_{\lambda}$ 在 $d\varphi(E_{12})$ 与 $d\varphi(E_{23})$ 下稳定. 而 $[d\varphi(E_{12}),d\varphi(E_{23})]=d\varphi([E_{12},E_{23}])=d\varphi(E_{13})$，故
+\[
+[d\varphi(E_{12})|_{V_{\lambda}},\,d\varphi(E_{23})|_{V_{\lambda}}]=d\varphi(E_{13})|_{V_{\lambda}}
+\]
+（即乘以 $\lambda$）.
+由此得
+\[
+\lambda\dim_{\mathbb C}(V_{\lambda})=\operatorname{tr}\bigl([d\varphi(E_{12})|_{V_{\lambda}},\,d\varphi(E_{23})|_{V_{\lambda}}]\bigr)=0
+\]
+（交换子的迹），从而最终 $\lambda=0$. 这样 $d\varphi(E_{13})$ 确实是幂零的.
+现在证明 $\exp(d\varphi(E_{13}))=I_{n}$. 我们有 $\exp(d\varphi(E_{13}))=\varphi(\exp_{H}(E_{13}))$. 而另一方面
+\[
+\exp_{H}(E_{13})=\pi\bigl(\exp_{U_{3}}(E_{13})\bigr)=\pi\begin{pmatrix}1&0&1\\0&1&0\\0&0&1\end{pmatrix}=e_{H},
+\]
+故最终 $\exp(d\varphi(E_{13}))=\varphi(e_{H})=I_{n}$.
+为了得出 $d\varphi(E_{13})=0$，还只需注意到（矩阵的）指数映射给出了从 $\mathrm{M}_{n}(\mathbb C)$ 的``幂零锥''（定义为 $\{X\in\mathrm{M}_{n}(\mathbb C),\ X^{n}=0\}$）到 $\mathrm{GL}_{n}(\mathbb C)$ 的幺幂轨迹（定义为 $\{g\in\mathrm{GL}_{n}(\mathbb C),\ (g-I_{n})^{n}=0\}$）上的一个微分同胚. 事实上，其逆微分同胚就由对数给出：$g\mapsto\sum_{n>0}\frac{1}{n}(g-I_{n})^{n}$.
+\end{proof}
+
+\begin{numpara}[微分方程]\label{np:lie-1-7-2}
+在线性情形，得到这些性质的主要工具曾是指数映射，而它（在把群嵌入某个 $\mathrm{GL}_{n}(\mathbb R)$ 之后）是由矩阵指数诱导的. 因此我们需要找到指数映射的一个内蕴定义. 更确切地说，考虑映射 $\mathscr X(G)\longrightarrow\operatorname{Lie}(G),\ \lambda\mapsto\lambda'(0)$. 我们要证明：
+\begin{enumerate}[label=\roman*)]
+\item 它是双射. 此时记其逆为 $X\mapsto\lambda_{X}$，并令 $\exp_{G}(X):=\lambda_{X}(1)$.
+\item 映射 $X\mapsto\exp_{G}(X)$ 诱导出从 $\operatorname{Lie}(G)$ 中 $0$ 的一个邻域到 $G$ 中 $e$ 的一个邻域上的微分同胚.
+\end{enumerate}
+由于 $\lambda$ 是群态射，每个 $\lambda\in\mathscr X(G)$ 都满足微分方程
+\[
+(*)\quad
+\begin{cases}
+\lambda'(t)=d_{e}L_{\lambda(t)}(X),\ \lambda'(0)=X,\\
+\lambda(0)=e\ \text{（初始条件）}
+\end{cases}
+\]
+于是我们看到：
+\begin{itemize}[label=--]
+\item $\lambda\mapsto\lambda'(0)$ 的单射性等价于方程 $(*)$ 之解的唯一性.
+\item $\lambda\mapsto\lambda'(0)$ 的满射性等价于方程 $(*)$ 之解的存在性.
+\item $\exp_{G}$ 的光滑性是解关于参数 $X$ 的正则性条件.
+\end{itemize}
+我们因此要说明所有这些性质如何从流形上的流理论推出.
+\end{numpara}
+
+\begin{numpara}[关于向量场的流的回顾]\label{np:lie-1-7-3}
+设 $M$ 是一个光滑流形，$\xi:M\longrightarrow TM$ 是 $M$ 上的一个\newterm{lie-vector-field}{向量场}{vector field}，即\newterm{lie-tangent-bundle}{切丛}{tangent bundle} $TM\xrightarrow{\ \pi\ }M$ 的一个光滑截面. 由 Cauchy--Lipschitz 定理``立即''导出的\newterm{lie-flow}{流}{flow}理论告诉我们：
+\begin{enumerate}[label=\roman*)]
+\item 存在 $\{0\}\times M$ 在 $\mathbb R\times M$ 中的一个开邻域 $\mathcal U$ 以及一个映射 $\mathcal U\longrightarrow M,\ (t,m)\mapsto\varphi^{\xi}_{t}(m)$，它满足微分方程
+\[
+ED_{\xi}:\quad
+\begin{cases}
+\frac{d}{dt}\varphi^{\xi}_{t}(m)=\xi\bigl(\varphi^{\xi}_{t}(m)\bigr) & \forall(t,m)\in\mathcal U,\\
+\varphi^{\xi}_{0}(m)=m & \forall m\in M.
+\end{cases}
+\]
+\item 若 $(\mathcal U',\varphi')$ 是微分方程 $ED_{\xi}$ 的另一组解，则 $\varphi|_{\mathcal U\cap\mathcal U'}=\varphi'|_{\mathcal U\cap\mathcal U'}$.
+\end{enumerate}
+因此存在一个最大的开集 $\mathcal U$，方程 $ED_{\xi}$ 在其上有解. 若 $\mathcal U=\mathbb R\times M$，则称 $\xi$ 是\newterm{lie-complete-vector-field}{完备的}{complete}.
+点 ii) 还蕴含：若 $(t_{1},m)\in\mathcal U$ 且 $(t_{2},\varphi^{\xi}_{t_{1}}(m))\in\mathcal U$，则 $(t_{1}+t_{2},m)\in\mathcal U$，且 $\varphi^{\xi}_{t_{1}+t_{2}}(m)=\varphi^{\xi}_{t_{2}}\bigl(\varphi^{\xi}_{t_{1}}(m)\bigr)$.
+当场 $\xi$ 完备时，这意味着 $t\mapsto\varphi^{\xi}_{t}$ 是 $G$ 的一个单参数微分同胚群\footnote{译注：原文作 ``de $G$''，按上下文应为 ``de $M$''，即 $M$ 的单参数微分同胚群.}.
+\end{numpara}
+
+\begin{numpara}[群不变的向量场]\label{np:lie-1-7-4}
+设群 $G$ 通过微分同胚作用在 $M$ 上. 把这个作用记作 $(g,m)\mapsto\alpha_{g}(m)=gm$. 它还在向量场空间上诱导出一个作用，定义为
+\[
+g_{*}\xi(m)=d_{g^{-1}m}\alpha_{g}\bigl(\xi(g^{-1}m)\bigr),
+\]
+其中 $d_{g^{-1}m}\alpha_{g}:T_{g^{-1}m}\xrightarrow{\ \sim\ }T_{m}$ 是在 $g^{-1}m$ 处求导得到的 $\mathbb R$-同构. 若 $g_{*}\xi=\xi$ 对一切 $g\in G$ 成立，则称 $\xi$ 是 \emph{$G$-不变的}.
+\end{numpara}
+
+\begin{lemma*}
+设存在一个紧子集 $C\subset M$ 使得 $G.C=M$（此时称 $G$ 的作用是\newterm{lie-cocompact}{余紧的}{cocompact}）. 则任何被 $G$ 保持不变的向量场 $\xi$ 都是完备的，且其流由 $M$ 的 \newterm{lie-equivariant}{$G$-等变}{equivariant}微分同胚组成.
+\end{lemma*}
+
+\begin{proof}
+设 $\mathcal U$ 是 $ED_{\xi}$ 的解存在的最大区域. 由于 $\xi$ 不变，这个区域在 $G$ 的作用下稳定. 于是对每个 $m\in M$，存在 $m$ 在 $M$ 中的一个 $G$-稳定开邻域 $U_{m}$ 以及一个 $t_{m}>0$，使得 $]-t_{m},t_{m}[\times U_{m}\subset\mathcal U$. 由 $M$ 模 $G$ 的紧性，可以用有限多个 $U_{m}$ 覆盖 $M$. 取与之对应的诸 $t_{m}$ 中的最小者并记为 $t_{0}$，则可见每个点 $m$ 都具有形如 $]-t_{0},t_{0}[\times U_{m}$ 且含于 $\mathcal U$ 中的邻域. 现在设 $t\in\mathbb R$. 选取 $n\in\mathbb N$ 使得 $\frac{t}{n}\in\,]-t_{0},t_{0}[$. 于是 $(\frac{t}{n},m)\in\mathcal U$，$(\frac{t}{n},\varphi^{\xi}_{\frac{t}{n}}(m))\in\mathcal U$，等等…… 由此得 $(t,m)\in\mathcal U$，且
+\[
+\varphi^{\xi}_{t}(m)=\varphi^{\xi}_{\frac{t}{n}}\Bigl(\varphi^{\xi}_{\frac{t}{n}}\bigl(\cdots\varphi^{\xi}_{\frac{t}{n}}(m)\bigr)\Bigr).
+\]
+这样向量场就是完备的. 现在设 $g\in G$. 由于 $\xi$ 是 $G$-不变的，映射 $(t,m)\mapsto g\varphi^{\xi}_{t}(g^{-1}m)$ 也是 $ED_{\xi}$ 的一组解，因而等于 $\xi$ 的流. 于是后者满足 $\varphi^{\xi}_{t}(gm)=g\varphi^{\xi}_{t}(m)$ 对一切 $g$ 成立，也就是说它是 $G$-等变的.
+\end{proof}
+
+\begin{numpara}[$G$ 上左不变的向量场]\label{np:lie-1-7-5}
+现在回到一个 Lie 群 $G$. 让它通过\emph{左平移}作用在其自身上，左平移像前面一样记作 $L_{g}(x)=gx$. 这在切丛 $TG$ 上诱导出一个与投影 $\pi$ 相容的作用，我们把它记作 $(g,\theta)\mapsto L^{t}_{g}(\theta)$. 映射
+\[
+\begin{array}{rcl}
+TG & \longrightarrow & G\times T_{e}G\\
+\theta & \longmapsto & \bigl(\pi(\theta),\,L^{t}_{\pi^{-1}(\theta)}(\theta)\bigr)
+\end{array}
+\]
+是一个与到 $G$ 上的各投影相容的微分同胚，其逆由
+\[
+\begin{array}{rcl}
+G\times T_{e}G & \longrightarrow & TG\\
+(g,X) & \longmapsto & \bigl(g,\,d_{e}L_{g}(X)\bigr)
+\end{array}
+\]
+给出. 于是 $G$ 的切丛是``\newterm{lie-parallelizable}{可平行化}{parallelizable}的''. 设 $X\in\operatorname{Lie}(G)=T_{e}G$. 于是可以按下列公式给它配上一个\newterm{lie-left-invariant-vector-field}{左不变向量场}{left-invariant vector field} $\xi_{X}$：
+\[
+\forall g\in G,\ \xi_{X}(g):=d_{e}L_{g}(X).
+\]
+记 $\mathcal V(G)$ 为 $G$ 上向量场全体构成的 $\mathbb R$-向量空间，$\mathcal V(G)^{L}$ 为左不变向量场构成的子空间.
+\end{numpara}
+
+\begin{lemma*}
+映射 $X\mapsto\xi_{X}$ 是一个 $\mathbb R$-线性同构 $T_{e}G\xrightarrow{\ \sim\ }\mathcal V(G)^{L}$，其逆为 $\xi\mapsto\xi(e)$.
+\end{lemma*}
+
+\begin{proof}
+显然.
+\end{proof}
+
+$G$ 通过左平移在自身上的作用是传递的，因而更是余紧的. 所以场 $\xi_{X}$ 是完备的. 它的流 $t\mapsto\varphi^{X}_{t}$ 由 $G$-等变微分同胚组成. 于是有
+\[
+\varphi^{X}_{t}(g)=g\varphi^{X}_{t}(e),\ \forall g\in G.
+\]
+此时令
+\[
+\lambda_{X}:\ t\in\mathbb R\mapsto\lambda_{X}(t):=\varphi^{X}_{t}(e)\in G.
+\]
+它是 $G$ 的一个单参数子群，因为 $\varphi^{X}_{t+t'}(e)=\varphi^{X}_{t}\bigl(\varphi^{X}_{t'}(e)\bigr)=\varphi^{X}_{t'}(e)\varphi^{X}_{t}(e)$. 它也是向量场 $\xi_{X}$ 以 $e$ 为中心的唯一\newterm{lie-integral-curve}{积分曲线}{integral curve}.
+
+\begin{proposition}\label{prop:lie-1-7-6}
+映射
+\[
+\begin{array}{rcl}
+T_{e}G & \longrightarrow & \mathscr X(G)\\
+X & \longmapsto & \lambda_{X}
+\end{array}
+\qquad\text{与}\qquad
+\begin{array}{rcl}
+\mathscr X(G) & \longrightarrow & T_{e}G\\
+\lambda & \longmapsto & \lambda'(0)
+\end{array}
+\]
+互为逆映射. 此外，若 $\varphi:G\longrightarrow G'$ 是一个光滑态射，则 $\lambda_{d\varphi(X)}=\varphi\circ\lambda_{X}$.
+\end{proposition}
+
+\begin{proof}
+由定义 $\lambda'_{X}(0)=\xi_{X}\bigl(\varphi^{X}_{0}(e)\bigr)=\xi_{X}(e)=X$. 反之，设 $\lambda\in\mathscr X(G)$. 前面已经指出，它满足微分方程
+\[
+\lambda'(t)=d_{e}L_{\lambda(t)}\bigl(\lambda'(0)\bigr)\ \text{且}\ \lambda(0)=e,
+\]
+因此 $t\mapsto\lambda(t)$ 是向量场 $\xi_{\lambda'(0)}$ 以 $e$ 为中心的一条积分曲线. 由积分曲线的唯一性，得 $\lambda=\lambda_{\lambda'(0)}$.
+现在设 $\varphi$ 如陈述中所述. 我们有
+\[
+(\varphi\circ\lambda_{X})'(0)=d_{e}\varphi\bigl(\lambda'_{X}(0)\bigr)=d\varphi(X),
+\]
+故 $\varphi\circ\lambda_{X}=\lambda_{d\varphi(X)}$.
+\end{proof}
+
+\begin{definition}\label{def:lie-1-7-7}
+用公式
+\[
+\exp_{G}:\quad
+\begin{array}{rcl}
+\operatorname{Lie}(G) & \longrightarrow & G\\
+X & \longmapsto & \exp_{G}(X):=\lambda_{X}(1)
+\end{array}
+\]
+定义 $G$ 的\newterm{lie-exponential-map}{指数映射}{exponential map}.
+\end{definition}
+
+\begin{remark*}
+由前面的命题，若 $\varphi:G\longrightarrow G'$ 是一个光滑态射，则
+\[
+\exp_{G'}\circ d\varphi=\varphi\circ\exp_{G}.
+\]
+与线性情形一样，有一个有意思的特殊情形 $\varphi=\operatorname{Ad}$，它给出
+\[
+\exp_{\mathrm{GL}(T_{e}G)}(\operatorname{ad}_{X})=\operatorname{Ad}_{\exp_{G}(X)}.
+\]
+\end{remark*}
+
+\begin{proposition}\label{prop:lie-1-7-8}
+映射 $\exp_{G}$ 是光滑的，且它的微分 $d_{0}\exp_{G}:T_{e}G\longrightarrow T_{e}G$ 是恒等映射 $\operatorname{id}_{T_{e}G}$. 因此，$\exp_{G}$ 诱导出从 $\operatorname{Lie}(G)$ 中 $0$ 的一个邻域到 $G$ 中 $e$ 的一个邻域上的微分同胚.
+\end{proposition}
+
+\begin{proof}
+考虑流形 $M=G\times T_{e}G$. 由于映射 $(g,X)\mapsto d_{e}L_{g}(X)$ 是光滑的，可以在该流形上定义向量场
+\[
+\xi:\ (g,X)\mapsto\bigl(\xi_{X}(g),\,X\bigr)=\bigl(d_{e}L_{g}(X),\,0\bigr)
+\]
+证明 $\xi$ 是完备的. 设 $\mathcal U\subset\mathbb R\times G\times T_{e}G$ 为 $\xi$ 的流的最大区域. 由于 $G$ 传递地作用在其自身上，与引理~\ref{np:lie-1-7-4} 中相同的论证表明：存在 $0$ 在 $T_{e}G$ 中的一个邻域 $\mathcal V$，使得 $\mathbb R\times G\times\mathcal V\subset\mathcal U$. 现在设 $W$ 是 $T_{e}G$ 中的一个有界区域，并设 $r\in\mathbb R$ 使得 $rW\subset\mathcal V$. 那么由于 $\xi(g,rX)=r\xi(g,X)$，可见 $\mathbb R\times G\times W\subset\mathcal U$，其中对 $(t,g,X)\in\mathbb R\times G\times W$ 令 $\varphi^{\xi}_{t}(g,X):=\varphi^{\xi}_{t/r}(g,rX)$\footnote{译注：原文如此. 按原文所定义的向量场 $\xi(g,X)=(d_{e}L_{g}(X),0)$，沿流线第二分量恒等于初始值，故 $\varphi^{\xi}_{t/r}(g,rX)$ 的第二分量应为 $rX$；原文此处关于伸缩的论证欠严谨，其要点在于第一分量满足 $\varphi^{rX}_{t/r}=\varphi^{X}_{t}$.}. 所以最终 $\mathcal U=\mathbb R\times G\times T_{e}G$，即 $\xi$ 是完备的.
+现在要对一切 $(t,g,X)$ 证明
+\[
+\varphi^{\xi}_{t}(g,X)=\bigl(\varphi^{X}_{t}(g),\,X\bigr).
+\]
+记 $pr_{2}:M\longrightarrow T_{e}G$ 为第二投影. 于是
+\[
+\frac{d}{dt}\bigl(pr_{2}\circ\varphi^{\xi}_{t}\bigr)=pr_{2}\circ\frac{d}{dt}\varphi^{\xi}_{t}=pr_{2}\circ\bigl(\xi\circ\varphi^{\xi}_{t}\bigr)=0.
+\]
+由此得，对一切 $(t,g,X)$ 有
+\[
+pr_{2}\bigl(\varphi^{\xi}_{t}(g,X)\bigr)=pr_{2}\bigl(\varphi^{\xi}_{0}(g,X)\bigr)=pr_{2}(g,X)=X.
+\]
+现在令 $pr_{1}:M\longrightarrow G$ 为第一投影. 同样地，
+\[
+\frac{d}{dt}\bigl(pr_{1}\circ\varphi^{\xi}_{t}\bigr)(g,X)=pr_{1}\bigl(\xi(\varphi^{\xi}_{t}(g,X))\bigr)=d_{e}L_{pr_{1}(\varphi^{\xi}_{t}(g,X))}\bigl(pr_{2}(\varphi^{\xi}_{t}(g,X))\bigr)=\xi_{X}\bigl(pr_{1}(\varphi^{\xi}_{t}(g,X))\bigr),
+\]
+这表明对每个 $X$，映射 $(t,g)\mapsto pr_{1}(\varphi^{\xi}_{t}(g,X))$ 就是 $\xi_{X}$ 的流. 于是我们证明了
+\[
+\varphi^{\xi}_{t}(g,X)=\bigl(\varphi^{X}_{t}(g),\,X\bigr),
+\]
+从而推出
+\[
+X\mapsto\exp_{G}(X)=\lambda_{X}(1)=pr_{1}\bigl(\varphi^{\xi}_{1}(e,X)\bigr)
+\]
+是光滑的.
+为计算其在 $0$ 处的微分，做法如下：
+\begin{align*}
+d_{0}\exp_{G}(Y)=\frac{d}{dt}\bigl(t\mapsto\exp_{G}(tY)\bigr)|_{t=0} &= \frac{d}{dt}\bigl(t\mapsto\lambda_{tY}(1)\bigr)|_{t=0}\\
+&= \frac{d}{dt}\bigl(t\mapsto\lambda_{Y}(t)\bigr)|_{t=0}=\lambda'_{Y}(0)=Y
+\end{align*}
+\end{proof}
+
+\begin{remark*}
+\begin{enumerate}[label=\roman*)]
+\item 对一切 $X\in T_{e}G$ 与一切 $n\in\mathbb N$，有 $\exp_{G}(nX)=\lambda_{nX}(1)=\lambda_{X}(n)=\exp_{G}(X)^{n}$，与线性情形一样.
+\item 若在 $\operatorname{Lie}(G)$ 中 $[X,Y]=0$，则 $\exp_{G}(X)$ 与 $\exp_{G}(Y)$ 交换. 事实上：
+\[
+\operatorname{Int}_{\exp_{G}(X)}\bigl(\exp_{G}(Y)\bigr)=\exp_{G}\bigl(\operatorname{Ad}_{\exp_{G}(X)}(Y)\bigr)=\exp_{G}\bigl(\exp_{\mathrm{GL}(T_{e}G)}(\operatorname{ad}_{X})(Y)\bigr)=\exp_{G}(Y).
+\]
+由此得，映射 $t\mapsto\exp_{G}(tX)\exp_{G}(tY)$ 是 $G$ 的一个单参数子群. 由于它在 $0$ 处的导数是 $X+Y$，它等于 $\lambda_{X+Y}$. 于是我们证明了
+\[
+[X,Y]=0\ \Rightarrow\ \exp_{G}(X+Y)=\exp_{G}(X)\exp_{G}(Y),
+\]
+与线性情形一样.
+\end{enumerate}
+\end{remark*}
+
+\begin{proposition}\label{prop:lie-1-7-9}
+对一切 $X,Y\in\operatorname{Lie}(G)$，有
+\[
+\exp_{G}(X+Y)=\lim_{k\to\infty}\Bigl(\exp_{G}\Bigl(\frac{X}{k}\Bigr)\exp_{G}\Bigl(\frac{Y}{k}\Bigr)\Bigr)^{k}.
+\]
+特别地，$\operatorname{Lie}(G)$ 的加法在 $\mathscr X(G)$ 中由与命题~\ref{prop:lie-1-6-3} 中相同的公式表达.
+\end{proposition}
+
+\begin{proof}
+由前面的命题，存在 $0$ 在 $T_{e}G$ 中的一个邻域 $\mathcal V$ 以及唯一的光滑映射 $f:\mathcal V\times\mathcal V\longrightarrow T_{e}G$，使得 $f(0,0)=0$ 且
+\[
+\exp(X)\exp(Y)=\exp\bigl(f(X,Y)\bigr).
+\]
+此外有 $d_{(0,0)}f(X,Y)=X+Y$. 由此得，对 $k\gg 0$，
+\[
+\exp_{G}\Bigl(\frac{X}{k}\Bigr)\exp_{G}\Bigl(\frac{Y}{k}\Bigr)=\exp_{G}\Bigl(\frac{X+Y}{k}+o\Bigl(\frac{1}{k}\Bigr)\Bigr),
+\]
+从而
+\[
+\Bigl(\exp_{G}\Bigl(\frac{X}{k}\Bigr)\exp_{G}\Bigl(\frac{Y}{k}\Bigr)\Bigr)^{k}=\exp_{G}\bigl(X+Y+o(1)\bigr),
+\]
+命题得证.
+\end{proof}
+
+\begin{remark*}
+通过类似的论证，可以证明 $\operatorname{Lie}(G)$ 的括号在 $\mathscr X(G)$ 中由与命题~\ref{prop:lie-1-6-3} 中相同的公式表达. 不过，后面我们并不需要它.
+\end{remark*}
+
+最后，可以把 Cartan--von Neumann 定理精确陈述并予以证明：
+
+\begin{theorem}\label{thm:lie-1-7-10}
+设 $H$ 是 Lie 群 $G$ 的一个闭子群. 则 $H$ 是 $G$ 的一个 Lie 子群，且 $\operatorname{Lie}(H)=\{X\in\operatorname{Lie}(G),\ \forall t\in\mathbb R,\ \exp_{G}(tX)\in H\}$.
+\end{theorem}
+
+\begin{proof}
+由前面的命题，集合 $L:=\{X\in\operatorname{Lie}(G),\ \forall t\in\mathbb R,\ \exp_{G}(tX)\in H\}$ 是一个 $\mathbb R$-向量子空间. 于是可以选取一个补空间 $E$，并像线性情形的证明（定理~\ref{thm:lie-1-6-4}）中那样进行论证.
+\end{proof}
+
+\begin{corollary}\label{cor:lie-1-7-11}
+设 $\varphi:G\longrightarrow G'$ 是一个 Lie 群态射. 则 $\operatorname{Ker}(\varphi)$ 是一个 Lie 子群，且 $\operatorname{Lie}(\operatorname{Ker}(\varphi))=\operatorname{Ker}(d\varphi)$.
+\end{corollary}
+
+\begin{example*}
+与线性情形（命题~\ref{prop:lie-1-6-7}）一样，伴随表示 $\operatorname{Ad}:G\longrightarrow\mathrm{GL}(\operatorname{Lie}(G))$ 的核是中心 $Z(G)$. 因此它是 $G$ 的一个 Lie 子群，且它的 Lie 代数是``中心''$\mathfrak{z}(\operatorname{Lie}(G))=\{X\in\operatorname{Lie}(G),\ \forall Y\in\operatorname{Lie}(G),\ [X,Y]=0\}$.
+\end{example*}
+
+\begin{corollary}\label{cor:lie-1-7-12}
+设 $G$ 是一个 Lie 代数为 $\mathfrak g=\operatorname{Lie}(G)$ 的连通 Lie 群，$H$ 是一个 Lie 代数为 $\mathfrak h$ 的连通 Lie 子群. 则 $H$ 在 $G$ 中正规当且仅当 $[\mathfrak g,\mathfrak h]\subset\mathfrak h$（此时称 $\mathfrak h$ 是 $\mathfrak g$ 的一个\newterm{lie-ideal}{理想}{ideal}）.
+\end{corollary}
+
+\begin{proof}
+设 $H$ 在 $G$ 中正规. 则对一切 $x\in G$ 有 $\operatorname{Int}_{x}(H)\subset H$，从而对一切 $x\in G$ 有 $\operatorname{Ad}_{x}(\mathfrak h)\subset\mathfrak h$，再求导便得：对一切 $X\in\mathfrak g$ 有 $\operatorname{ad}_{X}(\mathfrak h)\subset\mathfrak h$.
+反之，设 $[\mathfrak g,\mathfrak h]\subset\mathfrak h$，即对一切 $X\in\mathfrak g$ 有 $\operatorname{ad}_{X}(\mathfrak h)\subset\mathfrak h$. 由于 $\operatorname{Ad}_{\exp_{G}(X)}=\exp_{\mathrm{GL}(\mathfrak g)}(\operatorname{ad}_{X})$，可见对一切 $g\in\exp_{G}(\mathfrak g)$ 有 $\operatorname{Ad}_{g}(\mathfrak h)\subset\mathfrak h$. 而 $\exp_{G}$ 的像生成 $G$，因为它含有 $0$ 的一个邻域且 $G$ 连通. 所以最终对一切 $g\in G$ 有 $\operatorname{Ad}_{g}(\mathfrak h)\subset\mathfrak h$. 另一方面，对一切 $X\in\mathfrak g$ 有 $\exp_{G}(\operatorname{Ad}_{g}(X))=\operatorname{Int}_{g}(\exp_{G}(X))$. 由于 $(\exp_{G})|_{\mathfrak h}=\exp_{H}$，这表明像 $\exp_{H}(\mathfrak h)$ 在 $\operatorname{Int}_{g}$ 下稳定. 于是由这个像生成的群——即 $H$，因为它连通——在 $\operatorname{Int}_{g}$ 下稳定，最终 $H$ 在 $G$ 中正规.
+\end{proof}
+
+\begin{exercise*}
+在同样的假设下，证明 $H$ 在 $G$ 中是中心的当且仅当 $[\mathfrak g,\mathfrak h]=0$.
+\end{exercise*}
+
+\begin{numpara}[商]\label{np:lie-1-7-13}
+设 $\mathfrak g$ 是一个 $K$-Lie 代数，$\mathfrak h$ 是 $\mathfrak g$ 的一个理想，即 $\mathfrak g$ 的一个满足 $[\mathfrak h,\mathfrak g]\subset\mathfrak h$ 的子 $K$-向量空间. 于是在商向量空间 $\mathfrak g/\mathfrak h$ 上存在唯一的 $K$-Lie 代数结构，使得投影 $\pi:\mathfrak g\longrightarrow\mathfrak g/\mathfrak h$ 是一个 Lie 代数态射. 具体地，括号由 $[X+\mathfrak h,\,Y+\mathfrak h]:=[X,Y]+\mathfrak h$ 给出，多亏理想性质它是良好定义的.
+\end{numpara}
+
+\begin{proposition*}
+设 $G$ 是一个 Lie 群，$H$ 是 $G$ 的一个 Lie 子群. 则在商空间 $G/H$ 上存在唯一的光滑流形结构，使得商映射 $\pi:G\longrightarrow G/H$ 是一个以 $H$ 为纤维的\newterm{lie-fibration}{纤维化}{fibration}. 此外，若 $H$ 还是正规的，则 $G/H$ 是一个 Lie 群，并且存在唯一的同构 $\operatorname{Lie}(G/H)\xrightarrow{\ \sim\ }\operatorname{Lie}(G)/\operatorname{Lie}(H)$，使得 $d\pi$ 等同于投影 $\operatorname{Lie}(G)\longrightarrow\operatorname{Lie}(G)/\operatorname{Lie}(H)$.
+\end{proposition*}
+
+\begin{proof}
+给 $G/H$ 赋予商拓扑. 我们要对每个 $g\in G$ 构造 $G$ 的一个包含 $g$ 的子流形 $\mathcal V_{g}$，使得
+\begin{enumerate}[label=\roman*)]
+\item 对一切 $g'\in\mathcal V_{g}$，$\mathcal V_{g}$ 在点 $g'$ 处与 $g'H$ \newterm{lie-transverse}{横截}{transverse}；
+\item $\pi(\mathcal V_{g})$ 在 $G/H$ 中是开集；
+\item 乘积映射 $\mathcal V_{g}\times H\longrightarrow\pi^{-1}(\pi(\mathcal V_{g}))$ 是一个微分同胚.
+\end{enumerate}
+用如上的诸 $\pi(\mathcal V_{g})$ 覆盖 $G/H$，便得到一个满足所有要求性质的光滑图册.
+我们从一个在点 $g$ 处与 $gH$ 横截的 $G$ 的子流形 $\mathcal U_{g}$ 出发. 由于映射 $\mathcal U_{g}\times H\longrightarrow G,\ (g',h)\mapsto g'h$ 在 $(g,e)$ 处的微分可逆，必要时把 $\mathcal U_{g}$ 换成一个开的子流形，便存在 $e$ 在 $H$ 中的一个开邻域 $U_{H}$ 以及 $g$ 在 $G$ 中的一个开邻域 $U_{G}$，使得乘法诱导出一个微分同胚 $\mathcal U_{g}\times U_{H}\xrightarrow{\ \sim\ }U_{G}$. 特别地，$\mathcal U_{g}$ 满足上面的性质 i) 与 ii).
+为了得到 iii)，只需找到 $\mathcal U_{g}$ 中的一个开集 $\mathcal V_{g}$，使得 iii) 的乘积映射是单射（此时它自动是一个微分同胚）. 可以设 $U_{G}$ 相对紧. 于是考虑 $K:=H\cap\overline{U_{G}^{-1}}\,\overline{U_{G}}$. 这是一个紧集. 由于 $G$ 是 Hausdorff 的，对每个 $h\in K\setminus U_{H}$，存在包含 $g$ 的开集 $U_{g,h}\subset\mathcal U_{g}$ 与包含 $e$ 的开集 $U_{H,h}\subset U_{H}$，使得 $U_{g,h}hU_{H,h}\cap U_{g,h}=\varnothing$. 由于 $K\setminus U_{H}$ 是紧的，可以用有限多个 $(h_{i}U_{H,h_{i}}\cap K)$ 覆盖它. 此时令 $\mathcal V_{g}:=\bigcap_{i}U_{g,h_{i}}$. 设 $h\in H\cap\mathcal V_{g}^{-1}\mathcal V_{g}$. 那么 $h\in K$. 对每个 $i$，有 $h_{i}U_{H,h_{i}}\cap\mathcal V_{g}^{-1}\mathcal V_{g}=\varnothing$，故 $h\in U_{H}$，最终 $h=e$，因为乘积映射 $\mathcal V_{g}\times U_{H}\longrightarrow G$ 是单射.
+当 $H$ 正规时，容易看出商群结构与流形结构是相容的. 秩定理表明 $\operatorname{Lie}(G/H)$ 是 $\operatorname{Lie}(G)$ 的一个商，而推论~\ref{cor:lie-1-7-11} 告诉我们这个核就是 $\operatorname{Lie}(H)$.
+\end{proof}
+
+\begin{exercise*}
+设 $G=\mathrm{GL}_{n}(\mathbb R)$，$H$ 为上三角矩阵全体构成的子群. 证明 $G/H\simeq\mathbb P^{1}$（实射影直线）.
+\end{exercise*}

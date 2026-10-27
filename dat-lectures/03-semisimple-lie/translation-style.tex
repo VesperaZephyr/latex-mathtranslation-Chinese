@@ -1,0 +1,75 @@
+\RequirePackage{enumitem}
+% 原书（Dat, Algèbres de Lie semi-simples et leurs représentations, 2013-2014）
+% 在每节内用同一计数器给定义/命题/编号段落统一编号（X.Y.Z，含正文段落），
+% 故此处把 cls 预定义的定理环境全部改为共享 definition 计数器（按节重置）。
+% 编号由 LaTeX 自动生成，正文中不得手打定理编号。
+\theoremstyle{mtfang}
+% definition 环境与计数器沿用 cls 的 \newtheorem{definition}{定义}[section]。
+% 其余环境一律改为共享 definition 计数器（旧计数器仍被分配但不再使用）。
+\let\lemma\relax
+\newtheorem{lemma}[definition]{引理}
+\let\theorem\relax
+\newtheorem{theorem}[definition]{定理}
+\let\corollary\relax
+\newtheorem{corollary}[definition]{推论}
+\let\proposition\relax
+\newtheorem{proposition}[definition]{命题}
+\let\remark\relax
+\newtheorem{remark}[definition]{注}
+\theoremstyle{mtsong}
+\let\example\relax
+\newtheorem{example}[definition]{例}
+\newtheorem{exercise}[definition]{习题}
+
+% 原书中不带编号的陈述（如未编号的 Lemme、Exemples 列表等）使用星号环境，
+% 与系列其他各册一致：定义*/引理*/定理*/命题*/推论*/注*/例*/习题*。
+\theoremstyle{mtfang}
+\newtheorem*{definition*}{定义}
+\newtheorem*{lemma*}{引理}
+\newtheorem*{theorem*}{定理}
+\newtheorem*{proposition*}{命题}
+\newtheorem*{corollary*}{推论}
+\newtheorem*{remark*}{注}
+\theoremstyle{mtsong}
+\newtheorem*{example*}{例}
+\newtheorem*{exercise*}{习题}
+
+% 原书的编号正文段落（如 “1.2.11 Groupes symplectiques.”）：
+% 与定理共享同一计数器。
+% 用法：\begin{numpara}正文...\end{numpara} 或
+%      \begin{numpara}[标题]正文...\end{numpara}
+% 标签用 \label{np:ssl-X-Y-Z}。
+\newenvironment{numpara}[1][]{%
+  \refstepcounter{definition}\par\noindent
+  \textbf{\thedefinition.}\enspace
+  \ifx\\#1\\\else\textbf{#1.}\enspace\fi
+  \ignorespaces
+}{\par}
+
+% 交叉引用写法：定理~\ref{thm:ssl-4-2-1}、命题~\ref{prop:ssl-3-1-2} 等；
+% 章节引用 \ref{sec:...}、\ref{chap:...}。
+\emergencystretch=3em
+\setcounter{secnumdepth}{1}
+\setcounter{tocdepth}{1}
+
+% Compact display spacing: avoid visually empty lines around formulas.
+\newcommand{\TranslationDisplaySpacing}{%
+  \setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}%
+  \setlength{\belowdisplayskip}{4pt plus 1pt minus 1pt}%
+  \setlength{\abovedisplayshortskip}{0pt plus 1pt}%
+  \setlength{\belowdisplayshortskip}{3pt plus 1pt minus 1pt}%
+}
+\AddToHook{cmd/normalsize/after}{\TranslationDisplaySpacing}
+\AtBeginDocument{\TranslationDisplaySpacing}
+
+% The first-introduction terms may occur in bold numbered headings.
+\setCJKfamilyfont{termfont}[AutoFakeBold=2]{FandolKai-Regular.otf}
+
+\usetikzlibrary{backgrounds}
+
+% Keep theorem anchors on the page that actually contains the heading.
+\RequirePackage{needspace}
+\newcommand{\sslNeedspaceBefore}[1]{%
+  \BeforeBeginEnvironment{#1}{\Needspace{3\baselineskip}}%
+}
+\forcsvlist{\sslNeedspaceBefore}{definition,lemma,theorem,proposition,corollary,remark,example,exercise,numpara,definition*,lemma*,theorem*,proposition*,corollary*,remark*,example*,exercise*,proof}

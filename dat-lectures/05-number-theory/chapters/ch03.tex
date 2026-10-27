@@ -1,0 +1,852 @@
+\chapter{Dedekind 环}\label{chap:nt-3}
+\section{离散赋值环}\label{sec:nt-3-1}
+\subsection{定义}\label{sec:nt-3-1-1}
+\begin{definition*}
+若一个环是整环、主理想环，且恰有一个非零素理想，则称它为\newterm{nt-discrete-valuation-ring}{离散赋值环}{discrete valuation ring}.
+\end{definition*}
+\emph{性质.}设 $A$ 是离散赋值环，$\mathfrak m$ 是它的非零素理想.
+\begin{enumerate}[label=\roman*)]
+\item $A$ 是局部环，且 $\operatorname{Max}(A)=\{\mathfrak m\}$、$\operatorname{Spec}(A)=\{(0),\mathfrak m\}$.
+\item 设 $\varpi$ 是理想 $\mathfrak m$ 的一个生成元.则 $\mathfrak m^i\setminus\mathfrak m^{i+1}=A^\times\varpi^i$，并有不交分解
+\begin{align*}
+A\setminus\{0\}=\bigsqcup_{i\in\mathbb N}A^\times\varpi^i.
+\end{align*}
+事实上，$A$ 是唯一分解整环（因为它是主理想环），而 $\varpi$ 是相差单位因子意义下唯一的不可约元（因为唯一分解整环中每个不可约元都生成一个素理想）.这样的元素 $\varpi$ 称为 $A$ 的\newterm{nt-uniformizer}{素元}{uniformizer}.
+\emph{例.}
+\begin{itemize}
+\item $A=\mathbb Z_{(p)}$，$\pi=p$.
+\item $A=\mathbb C[X]_{(X-c)}$，$\pi=X-c$.
+\item $A=\mathbb C[[X]]$，$\pi=X$.
+\end{itemize}
+\item $A$ 的理想是 $\mathfrak m^i=\varpi^iA$ 及零理想.
+\item $\operatorname{Frac}(A)=A[\varpi^{-1}]$，且 $\operatorname{Frac}(A)\setminus\{0\}=\bigsqcup_{i\in\mathbb Z}A^\times\varpi^i$.
+\item 定义函数 $v\colon\operatorname{Frac}(A)\longrightarrow\mathbb Z\cup\{\infty\}$，将 $0$ 映到 $\infty$，将 $x\ne0$ 映到满足 $x\in A^\times\varpi^{v(x)}$ 的唯一整数 $v(x)$.它具有以下性质：
+\begin{align*}
+v(x)=\infty&\quad\Longleftrightarrow\quad x=0,\\
+v(xy)&=v(x)+v(y),\\
+v(x+y)&\ge\min(v(x),v(y)).
+\end{align*}
+此外，由等式 $A=\{x\in\operatorname{Frac}(A),\ v(x)\ge0\}$ 可以恢复 $A$.这提供了另一种观点，也解释了上述术语.
+\end{enumerate}
+\subsection{定义}\label{sec:nt-3-1-2}
+\begin{definition*}
+设 $K$ 为域.一个（加法）赋值是满足上述三个性质的函数 $v\colon K\longrightarrow\mathbb R\cup\{\infty\}$.若 $v(K^\times)$ 是 $\mathbb R$ 的离散子群，则称它为\newterm{nt-discrete-valuation}{离散赋值}{discrete valuation}；若 $v(K^\times)=\mathbb Z$，则称它为\newterm{nt-normalized-discrete-valuation}{规范化离散赋值}{normalized discrete valuation}.
+\end{definition*}
+\emph{性质.}设 $(K,v)$ 是带有规范化离散赋值的域.
+\begin{enumerate}[label=\roman*)]
+\item $A:=\{x\in K,\ v(x)\ge0\}$ 是离散赋值环（称为赋值 $v$ 的环），其极大理想为 $\mathfrak m:=\{x\in K,\ v(x)>0\}$.
+\item $A^\times=\{x\in K,\ v(x)=0\}$，且 $\varpi\in K$ 是 $A$ 的素元当且仅当 $v(\varpi)=1$.
+\item $K$ 是 $A$ 的分式域.
+\end{enumerate}
+\begin{example*}
+设 $p$ 为素数.在 $\mathbb Q$ 上定义相应的规范化离散赋值 $v_p$（也记为 $\operatorname{ord}_p$）：对写成 $p^m\frac ab$、其中 $(p,a)=(p,b)=1$ 的 $x\in\mathbb Q\setminus\{0\}$，令 $v_p(x)=m$.这个赋值的环正是 $\mathbb Z_{(p)}$.
+\end{example*}
+\begin{example*}
+设 $M$ 是 Riemann 曲面 $X$ 上的亚纯函数域（或一条代数曲线的函数域）.对每一点 $x\in X$，相应的赋值 $\operatorname{ord}_x$ 将 $f\in M$ 映到它在 $x$ 处的阶数（极点阶数或零点阶数）.
+\end{example*}
+\begin{exercise*}
+设 $v$ 是域 $K$ 上的赋值.证明：
+\begin{enumerate}[label=\roman*)]
+\item 若 $v(x)\ne v(y)$，则 $v(x+y)=\min(v(x),v(y))$.
+\item 若 $x_1+\cdots+x_n=0$，则存在 $i\ne j$，使 $v(x_i)=v(x_j)=\min\{v(x_1),\ldots,v(x_n)\}$.
+\end{enumerate}
+\end{exercise*}
+
+\section{可逆分式理想}\label{sec:nt-3-2}
+本节 $A$ 始终表示整环（不过，所有内容都可以推广到非整环）.
+\subsection{定义}\label{sec:nt-3-2-1}
+\begin{definition*}
+$A$ 的一个\newterm{nt-fractional-ideal}{分式理想}{fractional ideal}是 $K=\operatorname{Frac}(A)$ 的一个 $A$ 子模 $I\subset K$，使存在 $a\in A$ 满足 $aI\subset A$.\footnote{译注：原文未要求 $a\ne0$；通常的分式理想定义必须作此要求，否则条件可取 $a=0$ 而失去限制.}
+若它由一个元素生成，即形如 $A\alpha$、$\alpha\in K$，则称它为主分式理想.
+\end{definition*}
+\begin{exercise*}
+证明：若 $I,J$ 为分式理想，则 $I+J$、$IJ$ 及 $I^{-1}:=\{x\in K,\ xI\subset A\}$ 都是分式理想.\footnote{译注：逆分式理想的断言通常须要求 $I\ne0$；原文这里未写此条件.}
+\end{exercise*}
+\subsection{定义}\label{sec:nt-3-2-2}
+\begin{definition*}
+若 $II^{-1}=A$，则称分式理想 $I$ \newterm{nt-invertible-fractional-ideal}{可逆}{invertible fractional ideal}.
+\end{definition*}
+\begin{example*}
+$\mathbb C[X,Y]$ 的理想 $I=(X,Y)$ 不可逆.事实上，$I^{-1}=\mathbb C[X,Y]$.
+\end{example*}
+\emph{性质.}
+\begin{itemize}
+\item $I$ 为主分式理想 $\Rightarrow I$ 可逆.这是显然的.\footnote{译注：此处及下面主分式理想构成子群的表述均须排除零分式理想.}
+\item $I$ 可逆 $\Rightarrow I$ 有限生成.事实上，写成 $1=x_1y_1+\cdots+x_my_m$，其中 $x_i\in I$、$y_i\in I^{-1}$.则任意 $a\in I$ 都可写成 $a=\sum_i x_i(ay_i)$，且 $ay_i\in A$.因此 $x_1,\ldots,x_m$ 生成 $I$.
+\item 若 $A$ 是局部环，则 $I$ 可逆 $\Rightarrow I$ 为主分式理想.如上写成 $1=x_1y_1+\cdots+x_my_m$，其中 $x_i\in I$、$y_i\in I^{-1}$.存在 $i$ 使 $x_iy_i\notin\mathfrak m$，因而 $x_iy_i\in A^\times$.于是可写成 $1=x_iy'_i$，其中 $y'_i\in I^{-1}$，再如上推出 $x_i$ 生成 $I$.
+\item 即使 $A$ 不是局部环，对每个 $\mathfrak p\in\operatorname{Spec}(A)$，$A_{\mathfrak p}$ 的理想 $IA_{\mathfrak p}$ 仍然可逆，因而为主理想.我们称 $I$ \newterm{nt-locally-principal}{局部为主}{locally principal}.
+\end{itemize}
+\begin{remark*}
+对 $\mathfrak p\in\operatorname{Spec}(A)$，局部化函子 $M\mapsto A_{\mathfrak p}\otimes_A M=M_{\mathfrak p}$ 是正合的，即 $A_{\mathfrak p}$ 在 $A$ 上平坦.因此乘法映射
+\begin{align*}
+A_{\mathfrak p}\otimes_A I\longrightarrow A_{\mathfrak p}I=IA_{\mathfrak p}
+\end{align*}
+是同构，从而 $A_{\mathfrak p}$ 模 $A_{\mathfrak p}\otimes_A I$ 是秩 $1$ 自由模.我们称 $A$ 模 $I$ 为\newterm{nt-locally-free-module}{局部自由模}{locally free module}，其秩为 $1$.局部自由 $A$ 模的一个优点是它们在 $A$ 上平坦.由此可知，对两个可逆理想 $I,J$，乘法映射
+\begin{align*}
+I\otimes_A J\longrightarrow IJ
+\end{align*}
+是同构.
+\end{remark*}
+若 $I,J$ 为可逆分式理想，则 $IJ$ 显然也是可逆分式理想.因此，$A$ 的全部可逆分式理想关于乘法构成 Abel 群.
+\subsection{定义}\label{sec:nt-3-2-3}
+\begin{definition*}
+对上述 $A$，记
+\begin{itemize}
+\item $\operatorname{Div}(A)$ 为可逆分式理想群；
+\item $\operatorname{Div.Pr}(A)$ 为主分式理想组成的子群；
+\item $\operatorname{Pic}(A):=\operatorname{Div}(A)/\operatorname{Div.Pr}(A)$.
+\end{itemize}
+\end{definition*}
+\subsection{定义}\label{sec:nt-3-2-4}
+\begin{definition*}
+环 $A$（未必为整环）的\newterm{nt-krull-dimension}{Krull 维数}{Krull dimension}是素理想链 $\mathcal P_0\subsetneq\mathcal P_1\subsetneq\cdots\subsetneq\mathcal P_l$ 的最大长度.
+\end{definition*}
+\emph{例.}对整环 $A$，有
+\begin{itemize}
+\item $\dim(A)=0\Longleftrightarrow A$ 为域.
+\item $\dim(A)\le1\Longleftrightarrow$ 每个非零素理想都是极大理想.
+\item 若 $A$ 是离散赋值环，则 $\dim(A)=1$.
+\end{itemize}
+此外，可以证明 $\dim(A[X])=\dim(A)+1$.\footnote{译注：原文未加 Noether 等假设；对任意环，这个等式一般不成立.}
+\subsection{命题}\label{sec:nt-3-2-5}
+\begin{proposition*}
+设 $A$ 为局部整环，$\mathfrak m$ 为其极大理想，并假设 $\mathfrak m\ne0$.则以下条件等价：
+\begin{enumerate}[label=\roman*)]
+\item $A$ 是离散赋值环；
+\item $A$ 是主理想环；
+\item $A$ 是 Noether 环，且 $\mathfrak m$ 是主理想；
+\item $A$ 是 Noether 环，且 $\mathfrak m$ 可逆；
+\item 每个非零分式理想都可逆；
+\item $A$ 是 Noether 环、正规环，且 $\dim(A)=1$.
+\end{enumerate}
+\end{proposition*}
+\begin{proof}
+由定义，i)$\Rightarrow$ii)$\Rightarrow$iii).下面证明 iii)$\Rightarrow$i).设 $\mathfrak m$ 为主理想，并选取其生成元 $\varpi$.令 $N:=\bigcap_{n\in\mathbb N}\varpi^nA$.由于 $A$ 是 Noether 环，$N$ 有限生成.但 $\mathfrak mN=\varpi N=N$，由 Nakayama 引理得到 $N=0$.因此，对每个非零 $a\in A$，存在唯一整数 $n$，使 $a\in\varpi^nA\setminus\varpi^{n+1}A$.由此推出 $A\setminus\{0\}=\bigsqcup_{n\in\mathbb N}\varpi^nA^\times$，进而所有非零理想都形如 $\varpi^nA$，最后得到 $\varpi A$ 是唯一的非零素理想.
+
+由于局部环中``可逆''等价于``为主''（见\ref{sec:nt-3-2-2}的性质），iii)$\Longleftrightarrow$iv).同理，ii)$\Longleftrightarrow$v).
+
+i)$\Rightarrow$vi)：我们已经看到离散赋值环的维数为 $1$，而每个唯一分解整环都是正规环.
+
+最后证明 vi)$\Rightarrow$iv).在 vi) 的假设下，须证明 $\mathfrak m\mathfrak m^{-1}=A$，分四步进行.
+\begin{enumerate}[label=\alph*)]
+\item 令 $E(\mathfrak m):=\{x\in\operatorname{Frac}(A),\ x\mathfrak m\subset\mathfrak m\}$.因为 $A$ 是 Noether 环，$\mathfrak m$ 是有限生成 $A$ 模，$E(\mathfrak m)\subset\operatorname{End}_A(\mathfrak m)$ 也是如此.所以 $E(\mathfrak m)$ 是 $A$ 的整扩环，而 $A$ 正规，故 $E(\mathfrak m)=A$.
+\item $A\subset\mathfrak m^{-1}$，故 $\mathfrak m\subset\mathfrak m\mathfrak m^{-1}\subset A$.于是只有两种可能：$\mathfrak m\mathfrak m^{-1}=A$ 或 $\mathfrak m\mathfrak m^{-1}=\mathfrak m$.后一种情形将给出 $\mathfrak m^{-1}\subset E(\mathfrak m)$，由 a) 得 $\mathfrak m^{-1}\subset A$，最终 $\mathfrak m^{-1}=A$.下面通过证明 $A\subsetneq\mathfrak m^{-1}$ 来排除这种可能.
+\item 满足 $A\subsetneq I^{-1}$ 的理想 $I$ 构成非空集合（因为它包含主理想），因此，由于 $A$ 是 Noether 环，该集合有一个极大元，记为 $\mathfrak a$.若证明 $\mathfrak a$ 为素理想，则假设 $\dim(A)=1$ 将给出 $\mathfrak a=\mathfrak m$，这正是所需的.
+\item 证明 $\mathfrak a$ 为素理想.设 $x,y\in A$ 满足 $xy\in\mathfrak a$ 且 $x\notin\mathfrak a$，须证明 $y\in\mathfrak a$.因为 $(x)+\mathfrak a\supsetneq\mathfrak a$，由 $\mathfrak a$ 的定义得 $((x)+\mathfrak a)^{-1}=A$.取 $z\in\mathfrak a^{-1}\setminus A$.有 $zy((x)+\mathfrak a)\subset\mathfrak a\mathfrak a^{-1}+y\mathfrak a\mathfrak a^{-1}\subset A$，因此 $zy\in((x)+\mathfrak a)^{-1}=A$.于是 $z\in((y)+\mathfrak a)^{-1}$，从而 $((y)+\mathfrak a^{-1})\supsetneq A$.\footnote{译注：最后一式按原书保留；结合前后文，疑应为 $((y)+\mathfrak a)^{-1}\supsetneq A$.此外 c) 中``包含主理想''须限于非零真主理想.}由 $\mathfrak a$ 的定义，$(y)+\mathfrak a=\mathfrak a$，故 $y\in\mathfrak a$.
+\end{enumerate}
+\end{proof}
+
+\section{Dedekind 环}\label{sec:nt-3-3}
+\subsection{定理}\label{sec:nt-3-3-1}
+\begin{theorem*}
+设 $A$ 为整环.以下性质等价：
+\begin{enumerate}[label=\roman*)]
+\item $A$ 是 Noether 环、正规环，且 $\dim(A)\le1$.
+\item $A$ 是 Noether 环，且对每个非零素理想 $\mathfrak p$，$A_{\mathfrak p}$ 都是离散赋值环.
+\item $A$ 的所有非零分式理想都可逆.
+\end{enumerate}
+满足这些条件时，称 $A$ 为\newterm{nt-dedekind-ring}{Dedekind 环}{Dedekind domain}.
+\end{theorem*}
+\begin{proof}
+假设 i)，证明 ii).设 $S$ 为 $A$ 的乘法集.$S^{-1}A$ 的理想的形式表明，由于 $A$ 是 Noether 环，$S^{-1}A$ 也是 Noether 环，且 $\dim(S^{-1}A)\le\dim(A)\le1$.下面证明 $S^{-1}A$ 正规.设 $x\in\operatorname{Frac}(S^{-1}A)=\operatorname{Frac}(A)$ 满足方程 $x^n+a_1x^{n-1}+\cdots+a_n=0$，其中 $a_i\in S^{-1}A$.取 $s\in S$，使对所有 $i$ 都有 $sa_i\in A$.则 $(sx)^n+sa_1(sx)^{n-1}+\cdots+s^na_n=0$，由 $A$ 正规得 $sx\in A$，最终 $x\in S^{-1}A$.
+
+现在假设 ii)，证明 iii).设 $I$ 为 $A$ 的分式理想.对每个素理想 $\mathfrak p$，$\operatorname{Frac}(A)$ 的 $A_{\mathfrak p}$ 子模 $IA_{\mathfrak p}$ 是 $A_{\mathfrak p}$ 的分式理想，且显然有 $(IA_{\mathfrak p})^{-1}=I^{-1}A_{\mathfrak p}$.因此 $(II^{-1})A_{\mathfrak p}=(IA_{\mathfrak p})(IA_{\mathfrak p})^{-1}$，由假设得 $(II^{-1})A_{\mathfrak p}=A_{\mathfrak p}$.这意味着 $A$ 的理想 $II^{-1}$ 不包含在任何素理想 $\mathfrak p$ 中.所以 $II^{-1}=A$.
+
+最后假设 iii)，证明 i).在 iii) 的假设下，所有理想都可逆，故由上面的性质知它们都有限生成，因而 $A$ 为 Noether 环.\footnote{译注：本证明涉及可逆性的``分式理想''和``所有理想''均须理解为非零者；原文行文未处处重申.}下面证明 $A$ 正规.设 $x\in\operatorname{Frac}(A)$ 在 $A$ 上整.则环 $B:=A[x]$ 是有限生成 $A$ 模，因而是分式理想，由假设可逆.于是 $B=BA=BBB^{-1}=BB^{-1}=A$，特别地 $x\in A$.还须证明 $\dim(A)\le1$，等价地，每个非零素理想 $\mathfrak p$ 都极大.选取极大理想 $\mathfrak m\supset\mathfrak p$，则 $\mathfrak p\mathfrak m^{-1}\subset A$ 是 $A$ 的（普通）理想.因为 $\mathfrak p$ 为素理想，等式 $\mathfrak p=(\mathfrak p\mathfrak m^{-1})\mathfrak m$ 意味着 $\mathfrak p\supset\mathfrak m$ 或 $\mathfrak p\supset\mathfrak p\mathfrak m^{-1}$.第二种情形不可能，因为它推出 $\mathfrak m^{-1}\subset A$，从而 $A\subset\mathfrak m$.第一种情形给出 $\mathfrak p=\mathfrak m$ 为极大理想，证毕.
+\end{proof}
+因此，每个主理想整环都是 Dedekind 环.Dedekind 环这一概念的第一个优点在于：与主理想环不同，它在可分扩张中取整闭包的运算下保持稳定.
+\subsection{命题}\label{sec:nt-3-3-2}
+\begin{proposition*}
+设 $A$ 是 Dedekind 环，$L$ 是 $K=\operatorname{Frac}(A)$ 的有限可分扩张.则 $A$ 在 $L$ 中的整闭包 $B$ 是 Dedekind 环.
+\end{proposition*}
+\begin{proof}
+由构造，$B$ 是整环且正规.根据定理~\ref{sec:nt-2-4-6}，$B$ 是有限生成 $A$ 模.因此，$B$ 的每个理想都是有限生成 $A$ 模，当然也是有限生成 $B$ 模，所以 $B$ 是 Noether 环.设 $\mathfrak p$ 为 $B$ 的素理想.则 $A\cap\mathfrak p$ 为 $A$ 的素理想.证明它非零：取 $b\in\mathfrak p\setminus\{0\}$，设 $b$ 在 $A$ 上的最小方程为 $b^n+a_1b^{n-1}+\cdots+a_n=0$.则 $a_n\in A\cap\mathfrak p$ 非零，因而 $A\cap\mathfrak p\ne(0)$.\footnote{译注：这里须取非零素理想 $\mathfrak p$；原文在引入 $\mathfrak p$ 时未写这一限制.}因此 $A/(A\cap\mathfrak p)$ 为域，而 $B/\mathfrak p$ 是它上面的有限维代数，且为整环，所以也是域.故 $\mathfrak p$ 极大，$\dim(B)\le1$.
+\end{proof}
+\begin{example*}
+若 $K$ 为数域，则 $\mathcal O_K$ 是 Dedekind 环.
+\end{example*}
+下面讨论引言中预告的 Dedekind 环的核心优点，即理想的唯一分解性质.
+\subsection{极大理想对应的赋值}\label{sec:nt-3-3-3}
+设 $A$ 为 Dedekind 环，$K=\operatorname{Frac}(A)$.有 $\operatorname{Spec}(A)=\operatorname{Max}(A)\cup\{0\}$，所以我们可以用``极大理想''指称``非零素理想''.\footnote{译注：本段默认 $A$ 不是域；若 $A$ 是域，则 $(0)$ 也是极大理想，须另作处理.}设 $\mathfrak p\in\operatorname{Max}(A)$.由于 $A_{\mathfrak p}$ 是离散赋值环，且 $\operatorname{Frac}(A_{\mathfrak p})=K$，我们有一个规范化离散赋值
+\begin{align*}
+v_{\mathfrak p}\colon K\longrightarrow\mathbb Z\cup\{\infty\},
+\end{align*}
+它将 $\alpha\in K^\times$ 映到满足 $\alpha A_{\mathfrak p}=(\mathfrak pA_{\mathfrak p})^{v_{\mathfrak p}(\alpha)}=\mathfrak p^{v_{\mathfrak p}(\alpha)}A_{\mathfrak p}$ 的唯一整数 $v_{\mathfrak p}(\alpha)$.反之，若 $v$ 是 $K$ 上的规范化离散赋值，且在 $A$ 上非负，则 $\mathfrak p:=\{\alpha\in K,\ v(\alpha)>0\}$ 是 $A$ 的极大理想，且 $v=v_{\mathfrak p}$.\footnote{译注：此集合按原书保留，其中 $\alpha\in K$ 疑应为 $\alpha\in A$，否则它一般不是 $A$ 的子集.}
+更一般地，若 $I$ 为 $A$ 的非零分式理想，令
+\begin{align*}
+v_{\mathfrak p}(I):=\text{满足 }IA_{\mathfrak p}=\mathfrak p^iA_{\mathfrak p}\text{ 的唯一整数 }i.
+\end{align*}
+于是有以下容易验证的性质.
+\emph{性质（习题）.}设 $I,J$ 为 $A$ 的两个分式理想.
+\begin{enumerate}[label=\roman*)]
+\item $v_{\mathfrak p}(IJ)=v_{\mathfrak p}(I)+v_{\mathfrak p}(J)$；
+\item $v_{\mathfrak p}(I+J)=\min(v_{\mathfrak p}(I),v_{\mathfrak p}(J))$；
+\item $v_{\mathfrak p}(I\cap J)=\max(v_{\mathfrak p}(I),v_{\mathfrak p}(J))$；
+\item $I\subset J\Rightarrow(\forall\mathfrak p\in\operatorname{Max}(A),\ v_{\mathfrak p}(I)\ge v_{\mathfrak p}(J))$.
+\end{enumerate}
+\subsection{定理}\label{sec:nt-3-3-4}
+\begin{theorem*}
+设 $A$ 为 Dedekind 环.对 $A$ 的每个非零分式理想 $I$，集合 $\{\mathfrak p\in\operatorname{Max}(A),\ v_{\mathfrak p}(I)\ne0\}$ 有限，且
+\begin{align*}
+I=\prod_{\mathfrak p\in\operatorname{Max}(A)}\mathfrak p^{v_{\mathfrak p}(I)}.
+\end{align*}
+此外，此分解唯一，即对任意分解 $I=\mathfrak p_1^{e_1}\cdots\mathfrak p_r^{e_r}$，其中 $\mathfrak p_i$ 为极大理想，有 $e_i=v_{\mathfrak p_i}(I)$，且当 $\mathfrak p\notin\{\mathfrak p_1,\ldots,\mathfrak p_r\}$ 时 $v_{\mathfrak p}(I)=0$.\footnote{译注：唯一性的表述应要求 $\mathfrak p_i$ 两两不同；原文的定理陈述未写这一条件，证明中则明确作了此要求.}
+\end{theorem*}
+\begin{proof}
+\begin{enumerate}[label=\arabic*)]
+\item 先证明分解 $I=\mathfrak p_1^{e_1}\cdots\mathfrak p_r^{e_r}$ 的存在性.为此可设 $I$ 为 $A$ 的普通理想，并记为 $I_0$.递归构造如下理想升链：若 $I_{n-1}=A$，令 $I_n=A$；否则，选取包含 $I_{n-1}$ 的极大理想 $\mathfrak p_n$，并令 $I_n:=\mathfrak p_n^{-1}I_{n-1}$.这仍是理想，因为 $\mathfrak p_n^{-1}\subset I^{-1}$；它严格包含 $I_{n-1}$，因为 $A\subsetneq\mathfrak p_n^{-1}$.\footnote{译注：这里 $\mathfrak p_n^{-1}\subset I^{-1}$ 按原书保留；用于证明乘积包含于 $A$ 时，应使用 $\mathfrak p_n^{-1}\subset I_{n-1}^{-1}$.}由于 $A$ 是 Noether 环，序列 $(I_n)_{n\in\mathbb N}$ 从某个 $n_0$ 起稳定.按构造，这意味着 $I_0\subsetneq I_1\subsetneq\cdots\subsetneq I_{n_0-1}\subsetneq I_{n_0}=A$，且对每个 $k\le n_0$ 有 $I_0=\mathfrak p_1\mathfrak p_2\cdots\mathfrak p_kI_k$.特别地，取 $k=n_0$ 得分解 $I_0=\mathfrak p_1\mathfrak p_2\cdots\mathfrak p_{n_0}$.改变记号后，可将它重写成 $I=\mathfrak p_1^{e_1}\cdots\mathfrak p_r^{e_r}$，其中 $\mathfrak p_i$ 两两不同.
+\item 证明任意上述分解均满足 $e_i=v_{\mathfrak p_i}(I)$，且对 $\mathfrak p\ne\mathfrak p_1,\ldots,\mathfrak p_r$，有 $v_{\mathfrak p}(I)=0$.注意：若极大理想 $\mathfrak q$ 不同于极大理想 $\mathfrak q_1,\ldots,\mathfrak q_s$，则每个 $i$ 都有 $\mathfrak q+\mathfrak q_i=A$，相乘后得：对任意一族整数 $f_1,\ldots,f_s$，有 $\mathfrak q+\mathfrak q_1^{f_1}\cdots\mathfrak q_s^{f_s}=A$.\footnote{译注：此处关于理想之和的等式通常须限于非负整数 $f_i$；原文仅称``整数''.}所以 $\mathfrak q_1^{f_1}\cdots\mathfrak q_s^{f_s}A_{\mathfrak q}$ 不包含于 $A_{\mathfrak q}$ 的极大理想 $\mathfrak qA_{\mathfrak q}$，因而等于 $A_{\mathfrak q}$ 的单位理想，最终得到
+\begin{align*}
+v_{\mathfrak q}(\mathfrak q^{f_0}\mathfrak q_1^{f_1}\cdots\mathfrak q_s^{f_s})=v_{\mathfrak q}(\mathfrak q^{f_0})=f_0.
+\end{align*}
+\item 由前两步，集合 $\{\mathfrak p\in\operatorname{Max}(A),\ v_{\mathfrak p}(I)\ne0\}$ 有限，且 $I=\prod_{\mathfrak p\in\operatorname{Max}(A)}\mathfrak p^{v_{\mathfrak p}(I)}$.
+\end{enumerate}
+\end{proof}
+下面是这个定理的几个直接推论.
+\emph{推论.}设 $I,J$ 是 Dedekind 环 $A$ 的两个非零分式理想.
+\begin{enumerate}[label=\roman*)]
+\item $I\subset J\Longleftrightarrow(\forall\mathfrak p\in\operatorname{Max}(A),\ v_{\mathfrak p}(I)\ge v_{\mathfrak p}(J))$.这加强了定理之前的性质 iv).
+\item $I=\bigcap_{\mathfrak p\in\operatorname{Max}(A)}IA_{\mathfrak p}$.（事实上，$IA_{\mathfrak p}=\{x\in A,\ v_{\mathfrak p}(x)\ge v_{\mathfrak p}(I)\}$，所以本条由上一条推出.）\footnote{译注：括号内集合按原书保留；其中 $x\in A$ 疑应为 $x\in K$，因为 $IA_{\mathfrak p}$ 一般不是 $A$ 的子集.}
+\item 中国剩余定理给出
+\begin{align*}
+A/I\xrightarrow{\sim}\prod_{\mathfrak p\in\operatorname{Max}(A)}A/\mathfrak p^{v_{\mathfrak p}(I)}.
+\end{align*}
+事实上，如上述证明，对每个 $\mathfrak p\in\operatorname{Max}(A)$，有 $\mathfrak p^{v_{\mathfrak p}(I)}+\prod_{\mathfrak q\ne\mathfrak p}\mathfrak q^{v_{\mathfrak q}(I)}=A$.这个分解也可表述为一个同时逼近结果：设 $\mathfrak p_1,\ldots,\mathfrak p_r\in\operatorname{Max}(A)$ 两两不同，$e_1,\ldots,e_r\in\mathbb N$，$x_1,\ldots,x_n\in A$.则存在 $x\in A$，使对所有 $i=1,\ldots,r$ 都有 $v_{\mathfrak p_i}(x-x_i)\ge e_i$.\footnote{译注：商环公式要求 $I$ 为普通理想；原文段首称其为分式理想.同时逼近中的 $x_1,\ldots,x_n$ 按原文保留，末下标疑应为 $r$.}
+\item 两个非零理想 $I,J$ 互素（即 $I+J=A$）当且仅当它们没有公共素因子.
+\end{enumerate}
+\begin{exercise*}
+\begin{enumerate}[label=\roman*)]
+\item 设 $\mathfrak p_1,\ldots,\mathfrak p_r\in\operatorname{Max}(A)$ 两两不同，$e_1,\ldots,e_r\in\mathbb N$.证明存在 $x\in A$，使 $v_{\mathfrak p_i}(x)=e_i$，$i=1,\ldots,r$.
+\item 设 $I$ 为 $A$ 的非零理想.求 $x\in A$，使 $(x)=IJ$，其中 $J$ 与 $I$ 互素.
+\item 利用同构 $I/IJ=I/(I\cap J)\xrightarrow{\sim}(I+J)/J$，推出 $I$ 可由两个元素生成.
+\end{enumerate}
+\end{exercise*}
+正如我们已经看到的，Dedekind 环未必是主理想环.它偏离主理想环的程度由类群衡量.
+\subsection{类群}\label{sec:nt-3-3-5}
+设 $A$ 为 Dedekind 环.以 $\mathfrak Z^1(A)$ 表示以 $A$ 的极大理想为基的自由 Abel 群，\footnote{更一般的定义须将此处的``极大理想''换成``高度为 $1$ 的素理想''，几何上它们对应余维为 $1$ 的循环.}以 $\mathfrak Z^1_{\mathrm{prin}}(A)$ 表示由满足理想 $\prod_i\mathfrak p_i^{a_i}$ 为主理想的和 $\sum_i a_i\mathfrak p_i$ 生成的子群.定义
+\begin{align*}
+\mathcal C\ell(A):=\mathfrak Z^1(A)/\mathfrak Z^1_{\mathrm{prin}}(A).
+\end{align*}
+注意，理想唯一分解定理表明 $\mathcal C\ell(A)=\operatorname{Pic}(A)$.\footnote{更一般地，若 $A$ 是 Noether 环且局部为唯一分解整环，则 $\mathcal C\ell(A)$ 与 $\operatorname{Pic}(A)$ 一致.}此外，由定义可知，$A$ 为主理想环当且仅当 $\mathcal C\ell(A)=0$.\footnote{更一般地，Noether 正规环 $A$ 是唯一分解整环当且仅当 $\mathcal C\ell(A)=0$.}以后我们将给出数域整数环 $\mathcal O_K$ 的类群阶数的一种上界，有时这能用于计算类群.
+\subsection{有限生成模的结构}\label{sec:nt-3-3-6}
+即使 $A$ 不是主理想环，有限生成 $A$ 模的结构仍相当简单.我们在此加以说明，但只证明后文所需的部分，其余留作``习题''.
+
+记 $K:=\operatorname{Frac}(A)$.设 $M$ 为有限生成 $A$ 模.有正合列
+\begin{align*}
+0\longrightarrow M_{\mathrm{tors}}\longrightarrow M\longrightarrow M/M_{\mathrm{tors}}\longrightarrow0,
+\end{align*}
+其中 $M_{\mathrm{tors}}=\{m\in M,\ \exists a\in A\setminus\{0\},\ am=0\}=\operatorname{Ker}(M\longrightarrow K\otimes_A M)$ 为\newterm{nt-torsion-module}{挠模}{torsion module}，而 $M/M_{\mathrm{tors}}=\operatorname{Im}(M\longrightarrow K\otimes_A M)$ 为\newterm{nt-torsion-free-module}{无挠模}{torsion-free module}.
+
+\noindent\textbf{事实.}若 $A$ 为 Dedekind 环，这个正合列（非典范地）分裂.因此可写成 $M=M_{\mathrm{tors}}\oplus M'$，其中 $M'$ 无挠.
+
+\noindent\emph{说明.}有限生成无挠 $A$ 模是局部自由的（对每个 $\mathfrak p$，无挠 $A_{\mathfrak p}$ 模 $A_{\mathfrak p}\otimes_A M$ 是自由模，因为 $A_{\mathfrak p}$ 为主理想环），所以是\newterm{nt-projective-module}{投射模}{projective module}.\hfill$\square$
+
+这样就归结为分别研究挠模与无挠模.对无挠模 $M$，令 $\operatorname{rg}(M):=\dim_K(K\otimes_A M)$.若 $\operatorname{rg}(M)=1$，则 $M$ 同构于 $A$ 的一个非零分式理想，因而同构于一个可逆分式理想.更一般地：
+\begin{proposition*}
+设 $M$ 是秩为 $n$ 的无挠 $A$ 模.
+\begin{enumerate}[label=\roman*)]
+\item 存在可逆分式理想 $I_1,\ldots,I_n$，使 $M\simeq I_1\oplus\cdots\oplus I_n$.
+\item 对任意另一族 $I'_1,\ldots,I'_n$，有 $M\simeq I'_1\oplus\cdots\oplus I'_n$ 当且仅当在 $\mathcal C\ell(A)$ 中 $\prod_iI_i=\prod_iI'_i$.
+\end{enumerate}
+\end{proposition*}
+\begin{proof}
+i) $n=1$ 的情形已经讨论过.当 $n>1$ 时，取非零 $K$ 线性形式 $\pi\colon K\otimes_A M\longrightarrow K$.得到正合列
+\begin{align*}
+(M\cap\operatorname{Ker}(\pi))\hookrightarrow M\twoheadrightarrow\operatorname{Im}(\pi).
+\end{align*}
+由于 $\operatorname{Im}(\pi)$ 是秩 $1$ 无挠模，故同构于可逆理想.后者是投射模，所以正合列分裂，对 $n$ 归纳即得结论.
+
+ii) 先看 $n=1$ 的情形.若在 $\mathcal C\ell(A)$ 中 $I=I'$，则 $I^{-1}I'$ 是主理想，设由 $x\in K$ 生成，乘以 $x$ 就给出同构 $I\xrightarrow{\sim}I'$.反之，若 $\varphi\colon I\xrightarrow{\sim}I'$ 为同构，则它延拓为同构 $I\otimes_A K=K\xrightarrow{\sim}J\otimes_A K=K$，后者是乘以某个 $x\in K$ 的映射.因此这个 $x$ 生成 $I^{-1}I'$.\footnote{译注：原文此处写 $J\otimes_A K$；由上下文疑应为 $I'\otimes_A K$，这里保留原式.}
+
+当 $n>1$ 时，注意 $\prod_iI_i$ 是 $M$ 的行列式（即 $M\otimes\cdots\otimes M$ 在 $\bigwedge^n(K\otimes_A M)$ 中的像）.因此，条件``在 $\mathcal C\ell(A)$ 中 $\prod_iI_i=\prod_iI'_i$''等价于条件``$\prod_iI_i\simeq\prod_iI'_i$''，是必要的.为证明它充分，只须证明 $I_1\oplus\cdots\oplus I_n\simeq A^{n-1}\oplus\prod_iI_i$.由归纳法，只须处理 $n=2$，即 $I\oplus J\simeq A\oplus IJ$.取 $a,b\in K$，使 $aI+bJ=A$（见下面的引理），再取 $i,j$，使 $ai+bj=1$.则矩阵
+\begin{align*}
+\begin{pmatrix}a&b\\-abj&abi\end{pmatrix}
+\end{align*}
+属于 $\operatorname{GL}_2(K)$，并将 $K\oplus K$ 的子模 $I\oplus J$ 映入子模 $A\oplus abIJ$，后者同构于 $A\oplus IJ$.
+\end{proof}
+\begin{lemma*}
+设 $I,J$ 为两个可逆分式理想.则存在 $a,b\in K$，使 $aI+bJ=A$.
+\end{lemma*}
+\begin{proof}
+可设 $I,J$ 均包含于 $A$.若它们互素，则 $I+J=A$，无需再作处理.否则，取 $x\in A$，使对每个满足 $v_{\mathfrak p}(J)>0$ 的 $\mathfrak p$，都有 $v_{\mathfrak p}(x)=v_{\mathfrak p}(I)$.于是 $x^{-1}I$ 与 $J$ 不再有公共素因子（对每个 $\mathfrak p$ 都有 $v_{\mathfrak p}(I)v_{\mathfrak p}(J)=0$），但 $x^{-1}I$ 不再是普通理想.\footnote{译注：括号内按原书保留，其中第一个 $I$ 疑应为 $x^{-1}I$.}因此选取 $y$，使对每个满足 $v_{\mathfrak q}(x^{-1}I)<0$ 的 $\mathfrak q$，有 $v_{\mathfrak q}(y)=-v_{\mathfrak q}(x^{-1}I)$，并且对每个 $\mathfrak p\supset J$，有 $v_{\mathfrak p}(y)=0$.于是 $yxI$ 是与 $J$ 互素的理想，故 $xyI+J=A$.\footnote{译注：末句两处 $x$ 按原书保留；结合前面的赋值条件，疑应分别为 $yx^{-1}I$ 与 $x^{-1}yI+J=A$.}
+\end{proof}
+\begin{remark*}
+取 $I=J$，便重新得到 $I^{-1}$ 可由两个元素生成的事实.
+\end{remark*}
+现在考虑挠模.$A$ 仍是 Dedekind 环.
+\begin{proposition*}
+设 $M$ 为有限生成挠 $A$ 模.对 $\mathfrak p\in\operatorname{Max}(A)$，令 $M_{\mathfrak p\text{-}\mathrm{tors}}:=\{m\in M,\ \exists k\in\mathbb N,\ \mathfrak p^km=0\}$.
+\begin{enumerate}[label=\roman*)]
+\item $M=\bigoplus_{\mathfrak p\in\operatorname{Max}(A)}M_{\mathfrak p\text{-}\mathrm{tors}}$（特别地，$\{\mathfrak p\in\operatorname{Max}(A),\ M_{\mathfrak p\text{-}\mathrm{tors}}\ne0\}$ 有限）.
+\item 对每个满足 $M_{\mathfrak p\text{-}\mathrm{tors}}\ne0$ 的 $\mathfrak p$，存在唯一整数序列 $n_1\le n_2\le\cdots\le n_r$，使 $M_{\mathfrak p\text{-}\mathrm{tors}}\simeq A/\mathfrak p^{n_1}\oplus\cdots\oplus A/\mathfrak p^{n_r}$.
+\end{enumerate}
+\end{proposition*}
+\begin{exercise*}
+由此推出，每个挠模 $M$ 都有唯一的分解 $M=A/I_1\oplus A/I_2\oplus\cdots\oplus A/I_r$，其中 $I_1\mid I_2\mid\cdots\mid I_r$.\footnote{译注：本段承接有限生成挠模的语境；上述唯一性通常须排除零直和项，即要求 $n_i>0$、$I_i\ne A$.原文未写这些限制.}
+\end{exercise*}
+\begin{proof}
+i) 对 $m\in M$，其零化理想 $\operatorname{Ann}(m)=\{a\in A,\ am=0\}$ 非零.由于 $M$ 有限生成，所以存在理想 $I$ 零化 $M$（即 $IM=0$）；例如，可取一组生成元的零化理想之交.
+
+若 $M_{\mathfrak p\text{-}\mathrm{tors}}\ne0$，则 $\mathfrak p\supset I$.否则，由等式 $\mathfrak p^k+I=A$ 可知 $\mathfrak p^km=0\Rightarrow m=0$.此外，对 $\mathfrak p\supset I$，有 $\mathfrak p^{v_{\mathfrak p}(I)}M_{\mathfrak p\text{-}\mathrm{tors}}=0$.
+
+考虑理想 $\sum_{\mathfrak p\supset I}I\mathfrak p^{-v_{\mathfrak p}(I)}$.它不包含于任何极大理想，因为各 $I\mathfrak p^{-v_{\mathfrak p}(I)}$ 没有公共素因子.所以它是单位理想，可写成 $1=\sum_{\mathfrak p\supset I}x_{\mathfrak p}$，其中 $x_{\mathfrak p}\in I\mathfrak p^{-v_{\mathfrak p}(I)}$.对任意 $m\in M$，有 $\mathfrak p^{v_{\mathfrak p}(I)}(x_{\mathfrak p}m)=0$，故 $x_{\mathfrak p}m\in M_{\mathfrak p\text{-}\mathrm{tors}}$.等式 $m=\sum_{\mathfrak p\supset I}x_{\mathfrak p}m$ 表明 $M=\sum_{\mathfrak p}M_{\mathfrak p\text{-}\mathrm{tors}}$.此外，若 $\mathfrak q\ne\mathfrak p$ 是另一个包含 $I$ 的理想，则 $x_{\mathfrak p}M_{\mathfrak q\text{-}\mathrm{tors}}=0$.所以这个和是直和：若给定 $(m_{\mathfrak p})_{\mathfrak p\supset I}$ 满足 $\sum_{\mathfrak p}m_{\mathfrak p}=0$，则 $m_{\mathfrak p}=x_{\mathfrak p}(\sum_{\mathfrak p}m_{\mathfrak p})=0$.
+
+ii) 可以用初等方法证明.不过，我们将证明 $M_{\mathfrak p\text{-}\mathrm{tors}}$ 可与 $M$ 在 $\mathfrak p$ 处的局部化等同，从而由已知的主理想环上有限生成模的结构推出它.
+\end{proof}
+\begin{lemma*}
+（这里 $A$ 可以是任意交换环.）设 $\mathfrak m$ 为 $A$ 的极大理想，$M$ 为 $\mathfrak m$-挠 $A$ 模，即被 $\mathfrak m$ 的某个幂零化.则
+\begin{enumerate}[label=\roman*)]
+\item 映射 $M\longrightarrow M_{\mathfrak m}=A_{\mathfrak m}\otimes_A M$ 为双射.
+\item 对每个不同于 $\mathfrak m$ 的极大理想 $\mathfrak n$，有 $M_{\mathfrak n}=0$.
+\end{enumerate}
+\end{lemma*}
+\begin{proof}
+i) 单射性.根据局部化的定义，$\operatorname{Ker}(M\longrightarrow M_{\mathfrak m})=\{m\in M,\ \exists s\in A\setminus\mathfrak m,\ sm=0\}$.设 $m\in M$ 被 $s\in A\setminus\mathfrak m$ 零化.有 $(s)+\mathfrak m=A$，从而对每个 $k\in\mathbb N$，$(s)+\mathfrak m^k=A$.选取使 $\mathfrak m^k$ 零化 $m$ 的 $k$，可见 $A$ 零化 $m$，因此 $m=0$.
+
+满射性.设 $x=\frac ms\in M_{\mathfrak m}$，其中 $m\in M$、$s\in A\setminus\mathfrak m$.仍选取使 $\mathfrak m^k$ 零化 $m$ 的 $k$，并取 $t$ 使 $st\in1+\mathfrak m^k$.则 $tm\in M$ 在 $M_{\mathfrak m}$ 中的像就是 $x=\frac ms$.
+
+ii) 每个 $s\in\mathfrak m\setminus\mathfrak n$ 在 $M$ 上的作用都幂零，所以只要 $s\in S$，就有 $S^{-1}M=0$；特别地，$M_{\mathfrak n}=0$.
+\end{proof}
+i) 意味着可以将 $M$ 看作 $A_{\mathfrak m}$ 模.这在某些方面很方便，因为 $A_{\mathfrak m}$ 是局部环.
+\begin{corollary*}
+（这里 $A$ 又是 Dedekind 环.）设 $M$ 为有限生成挠 $A$ 模.则对每个 $\mathfrak p\in\operatorname{Max}(A)$，映射 $M\longrightarrow M_{\mathfrak p}$ 诱导同构 $M_{\mathfrak p\text{-}\mathrm{tors}}\xrightarrow{\sim}M_{\mathfrak p}$，且乘积映射 $M\xrightarrow{\sim}\bigoplus_{\mathfrak p\in\operatorname{Max}(A)}M_{\mathfrak p}$ 是同构.
+\end{corollary*}
+\begin{proof}[前一命题 ii) 的证明]
+由于 $A_{\mathfrak p}$ 为主理想环，已知存在唯一整数序列 $n_1\le n_2\le\cdots\le n_r$，使 $M_{\mathfrak p}\simeq A_{\mathfrak p}/(\mathfrak pA_{\mathfrak p})^{n_1}\oplus\cdots\oplus A_{\mathfrak p}/(\mathfrak pA_{\mathfrak p})^{n_r}$.再应用上述引理，便有 $A/\mathfrak p^e\xrightarrow{\sim}A_{\mathfrak p}\otimes_A(A/\mathfrak p^e)=A_{\mathfrak p}/(\mathfrak pA_{\mathfrak p})^e$.
+\end{proof}
+\begin{remark*}[有限长度模的``回顾'']
+设 $A$ 为交换环.若 $A$ 模同时为 Noether 模（每个子模升链都稳定）和 Artin 模（每个子模降链都稳定），则称它为\newterm{nt-finite-length-module}{有限长度模}{module of finite length}.此时，存在长度 $l$ 最大的 $A$ 子模链 $0=M_0\subsetneq M_1\subsetneq\cdots\subsetneq M_l=M$.注意，一个链具有最大长度当且仅当其相继商 $M_i/M_{i-1}$ 都是单 $A$ 模.可以证明，这些链的长度都相同，称为 $M$ 的长度.容易推出：在正合列 $M_1\hookrightarrow M_2\twoheadrightarrow M_3$ 中，有 $\operatorname{long}(M_2)=\operatorname{long}(M_1)+\operatorname{long}(M_3)$.
+\end{remark*}
+设 $M:=A/\mathfrak p^n$.有有限滤过 $M\supset\mathfrak pM\supset\cdots\supset\mathfrak p^{n-1}M\supset\{0\}$，其相继子商形如 $\mathfrak p^i/\mathfrak p^{i+1}$.每个 $\mathfrak p^i/\mathfrak p^{i+1}$ 都是有限维 $A/\mathfrak p$ 向量空间.所以 $A/\mathfrak p^n$ 是有限长度 $A$ 模.事实上，若 $x\in A$ 满足 $v_{\mathfrak p}(x)=i$，则乘以 $x$ 诱导同态 $A/\mathfrak p\longrightarrow\mathfrak p^i/\mathfrak p^{i+1}$.
+\begin{lemma*}
+这个同态是同构.因此 $\operatorname{long}_A(A/\mathfrak p^n)=n$.
+\end{lemma*}
+\begin{proof}
+如前一个引理中一样，映射 $\mathfrak p^i/\mathfrak p^{i+1}\longrightarrow(\mathfrak p^i/\mathfrak p^{i+1})_{\mathfrak p}=(\mathfrak pA_{\mathfrak p})^i/(\mathfrak pA_{\mathfrak p})^{i+1}$ 为同构.所以归结到 $A$ 为离散赋值环的情形.此时 $\mathfrak p^i=(\varpi^i)$，且 $x\in\varpi^iA^\times$，结论显然.
+\end{proof}
+\begin{exercise*}
+证明更一般的结论：若 $I,J$ 为非零理想，则 $A/I\simeq J/IJ$.
+\end{exercise*}
+\subsection{定义}\label{sec:nt-3-3-7}
+\begin{definition*}
+设 $M$ 为有限生成挠 $A$ 模.以 $[M]$ 表示理想
+\begin{align*}
+[M]=[M]_A=\prod_{\mathfrak p}\mathfrak p^{\operatorname{long}_A(M_{\mathfrak p})},
+\end{align*}
+其中 $\operatorname{long}_A(M_{\mathfrak p})$ 是 Artin $A$ 模 $M_{\mathfrak p}$ 的长度.
+\end{definition*}
+\emph{性质.}
+\begin{enumerate}[label=\roman*)]
+\item 对 $A$ 的非零理想 $I$，有 $[A/I]_A=I$.
+\item 若 $M_1\hookrightarrow M_2\twoheadrightarrow M_3$ 是挠模的正合列，则 $[M_2]=[M_1][M_3]$.
+\item 若 $A=\mathbb Z$，则 $[M]$ 是 $M$ 的基数（所生成的理想）.
+\item 对每个 $\mathfrak p$，有 $[M]_AA_{\mathfrak p}=[M_{\mathfrak p}]_{A_{\mathfrak p}}$.
+\end{enumerate}
+\subsection{定义}\label{sec:nt-3-3-8}
+\begin{definition*}
+若 $N\subset M$ 是两个同秩无挠模，定义\newterm{nt-module-index}{指数}{index of modules} $(M:N)=(M:N)_A:=[M/N]_A$.
+\end{definition*}
+\emph{性质.}
+\begin{enumerate}[label=\roman*)]
+\item 对每个 $\mathfrak p$，有 $(M:N)A_{\mathfrak p}=(M_{\mathfrak p}:N_{\mathfrak p})_{A_{\mathfrak p}}$.
+\item 若 $A=\mathbb Z$，则 $(M:N)$ 是通常意义下的指数所生成的理想.
+\item 若 $L\subset N\subset M$，则 $(M:L)=(M:N)(N:L)$.由此可将定义推广到 $K^n$ 中两个秩 $n$ 子模 $M,N$，令
+\begin{align*}
+(M:N):=(M:M\cap N)(N:M\cap N)^{-1}.
+\end{align*}
+这是 $A$ 的分式理想.
+\item 采用这个推广后的定义，若 $M$ 是 $K^n$ 中的秩 $n$ 子模，且 $\alpha\in\operatorname{GL}_n(K)$，则 $(M:\alpha(M))=\det(\alpha)A$.（利用 i) 归结为主理想环的情形.）
+\end{enumerate}
+
+\section{扩张中的素理想分解}\label{sec:nt-3-4}
+本节采用如下设定：$A$ 为 Dedekind 环，$L$ 为 $K=\operatorname{Frac}(A)$ 的有限可分扩张，$B$ 为 $A$ 在 $L$ 中的整闭包.对 $\mathfrak p\in\operatorname{Max}(A)$，我们研究 $\mathfrak pB$ 分解为 $B$ 的素理想乘积 $\mathfrak pB=\prod_i\mathfrak P_i^{e_i}$ 的性质.
+
+\paragraph{记号}
+若 $\mathfrak p\in\operatorname{Max}(A)$、$\mathfrak P\in\operatorname{Max}(B)$ 且 $\mathfrak P\supset\mathfrak p$，则 $B/\mathfrak P$ 是域 $A/\mathfrak p$ 的有限扩张.记
+\begin{itemize}
+\item $f(\mathfrak P/\mathfrak p):=\dim_{A/\mathfrak p}(B/\mathfrak P)$，称为 $\mathfrak P$ 在 $\mathfrak p$ 上的\newterm{nt-residue-degree}{剩余次数}{residue degree}.
+\item $e(\mathfrak P/\mathfrak p):=\operatorname{long}_B(B/\mathfrak pB)_{\mathfrak P}$，称为 $\mathfrak P$ 在 $\mathfrak p$ 上的\newterm{nt-ramification-index}{分歧指数}{ramification index}.
+\end{itemize}
+
+\subsection{命题}\label{sec:nt-3-4-1}
+\begin{proposition*}
+沿用上述记号，有
+\begin{align*}
+B/\mathfrak pB\simeq\prod_{\substack{\mathfrak P\in\operatorname{Max}(B)\\\mathfrak P\cap A=\mathfrak p}}B/\mathfrak P^{e(\mathfrak P/\mathfrak p)}.
+\end{align*}
+因此，
+\begin{enumerate}[label=\roman*)]
+\item $\mathfrak pB=[B/\mathfrak pB]_B=\prod_{\mathfrak P\cap A=\mathfrak p}\mathfrak P^{e(\mathfrak P/\mathfrak p)}$，且
+\item $[L:K]=\dim_{A/\mathfrak p}(B/\mathfrak pB)=\sum_{\mathfrak P\cap A=\mathfrak p}e(\mathfrak P/\mathfrak p)f(\mathfrak P/\mathfrak p)$.
+\end{enumerate}
+\end{proposition*}
+\begin{proof}
+\begin{enumerate}[label=\roman*)]
+\item 对 $\mathfrak Q\in\operatorname{Max}(B)$，有 $(B/\mathfrak pB)_{\mathfrak Q}\ne0\Rightarrow\mathfrak p\subset\mathfrak Q\Rightarrow\mathfrak p\subset\mathfrak Q\cap A$.由于 $\mathfrak p$ 在 $A$ 中极大且 $1\notin\mathfrak Q$，故 $\mathfrak p=\mathfrak Q\cap A$.因而可写成
+\begin{align*}
+B/\mathfrak pB
+&=\prod_{\mathfrak P\cap A=\mathfrak p}(B/\mathfrak p)_{\mathfrak P}
+=\prod_{\mathfrak P\cap A=\mathfrak p}B_{\mathfrak P}/\mathfrak pB_{\mathfrak P}\\
+&=\prod_{\mathfrak P\cap A=\mathfrak p}B_{\mathfrak P}/\mathfrak P^{v_{\mathfrak P}(\mathfrak pB)}B_{\mathfrak P}.
+\end{align*}
+上一引理表明，$v_{\mathfrak P}(\mathfrak pB)$ 也等于单生成 $B_{\mathfrak P}$-模 $B_{\mathfrak P}/\mathfrak pB_{\mathfrak P}$ 的长度，即定义中的 $e(\mathfrak P/\mathfrak p)$.
+\item 有
+\begin{align*}
+B/\mathfrak pB
+&=(A/\mathfrak p)\otimes_AB
+=(A_{\mathfrak p}/\mathfrak pA_{\mathfrak p})\otimes_AB\\
+&=(A_{\mathfrak p}/\mathfrak pA_{\mathfrak p})\otimes_{A_{\mathfrak p}}(A_{\mathfrak p}\otimes_AB).
+\end{align*}
+而 $B$ 是秩 $[L:K]$ 的无挠 $A$-模，故 $A_{\mathfrak p}\otimes_AB$ 是秩 $[L:K]$ 的自由 $A_{\mathfrak p}$-模.因此，$B/\mathfrak pB$ 在 $A_{\mathfrak p}/\mathfrak pA_{\mathfrak p}=A/\mathfrak p$ 上的维数为 $[L:K]$.断言 ii) 的第二个等式由 i) 得到.
+\end{enumerate}
+\end{proof}
+以下将``$\mathfrak P\cap A=\mathfrak p$''简记为``$\mathfrak P\mid\mathfrak p$''（这也等价于 $\mathfrak P\supset\mathfrak p$）.
+\begin{remark*}
+环 $B_{\mathfrak p}=B\otimes_AA_{\mathfrak p}$ 可等同于 $A_{\mathfrak p}$ 在 $L$ 中的整闭包.因此，它是 Dedekind 环，且是秩 $[L:K]$ 的自由 $A_{\mathfrak p}$-模.它是\newterm{nt-semilocal-ring}{半局部环}{semilocal ring}（只有有限个极大理想），其极大理想为满足 $\mathfrak P\mid\mathfrak p$ 的 $\mathfrak PB_{\mathfrak p}$.因而还有 $B_{\mathfrak p}=\bigcap_{\mathfrak P\mid\mathfrak p}B_{\mathfrak P}$.命题告诉我们 $B_{\mathfrak p}/\mathfrak pB_{\mathfrak p}\simeq\prod B_{\mathfrak P}/\mathfrak pB_{\mathfrak P}$；但由于 $B_{\mathfrak p}$ 是整环，不能将这一分解提升为各个 $B_{\mathfrak P}$（$\mathfrak P\mid\mathfrak p$）的乘积.此外，$B_{\mathfrak P}$ 在 $B_{\mathfrak p}$ 上并非有限的，后者是正规环.以后将看到，在作 $\mathfrak p$-进完备化之后可以得到这样的分解.
+\end{remark*}
+\paragraph{术语}
+称 $\mathfrak p$
+\begin{itemize}
+\item \newterm{nt-ramified-prime}{分歧}{ramified}，若存在 $\mathfrak P\mid\mathfrak p$ 使 $e(\mathfrak P/\mathfrak p)>1$［或 $B/\mathfrak P$ 在 $A/\mathfrak p$ 上不可分］.\footnote{对于数域的整数环，剩余域是有限域，因而所有剩余扩张都是可分的.}
+\item \newterm{nt-inert-prime}{惰性}{inert}，若它不分歧且 $\mathfrak pB$ 为素理想.
+\item \newterm{nt-totally-split}{完全分解}{totally split}，若 $|\{\mathfrak P\mid\mathfrak p\}|=[L:K]$，即对每个 $\mathfrak P\mid\mathfrak p$ 都有 $e(\mathfrak P/\mathfrak p)=f(\mathfrak P/\mathfrak p)=1$.
+\end{itemize}
+分歧与否最容易判定.为此，需要将判别式的概念推广到 $B$ 在 $A$ 上的情形，因为 $B$ 未必是自由 $A$-模.
+
+\subsection{Dedekind 扩张的判别式}\label{sec:nt-3-4-2}
+设 $M$ 是 $L$ 中秩为 $n=[L:K]$ 的 $A$-子模.记
+\begin{align*}
+M^*:=\{x\in L,\ \forall y\in M,\ \operatorname{Tr}_{L/K}(xy)\in A\}.
+\end{align*}
+\emph{性质.}
+\begin{enumerate}[label=\roman*)]
+\item 若 $M$ 是自由 $A$-模，基为 $\omega_1,\ldots,\omega_n$，则 $M^*$ 为以对偶基 $\omega_1^*,\ldots,\omega_n^*$ 为基的自由模.
+\item 一般地，$M^*$ 仍是秩为 $n$ 的 $A$-子模.（由 i) 得到.）
+\item 若 $\mathfrak p\in\operatorname{Max}(A)$，则 $(M^*)_{\mathfrak p}=(M_{\mathfrak p})^*$（右端相对于 $A_{\mathfrak p}$ 而非 $A$ 定义）.留作练习.
+\end{enumerate}
+现在定义 $A$ 的分式理想
+\begin{align*}
+D(M)=D_{L/A}(M):=(M^*:M)_A.
+\end{align*}
+\emph{性质.}
+\begin{enumerate}[label=\roman*)]
+\item 若 $M$ 如上为自由模，则 $D(M)$ 是由从 $\omega_i^*$ 到 $\omega_i$ 的换基矩阵的行列式生成的主分式理想.该矩阵正是 $(\operatorname{Tr}_{L/K}(\omega_i\omega_j))_{i,j}$.因此 $D_{L/A}(M)=D_{L/K}(\omega_1,\ldots,\omega_n)A$.
+\item 对任意 $\mathfrak p\in\operatorname{Max}(A)$，有 $D_{L/A}(M)A_{\mathfrak p}=D_{L/A_{\mathfrak p}}(M_{\mathfrak p})$.
+\item 若 $N$ 是 $L$ 中另一个秩为 $n$ 的子模，则 $D(N)=D(M)(M:N)_A^2$.（利用 ii) 化归到主理想情形.）
+\end{enumerate}
+\begin{definition*}
+$B$ 在 $A$ 上的\newterm{nt-discriminant-ideal}{判别式理想}{discriminant ideal}为 $\operatorname{disc}(B/A):=D(B)=(B^*,B)_A$.
+\end{definition*}
+注意，由于 $\operatorname{Tr}_{L/K}(B)\subset A$，这确实是理想，而不只是分式理想.当 $A$ 为主理想环时，这一定义与先前的定义相容.一般地，
+\begin{align*}
+\operatorname{disc}(B/A)A_{\mathfrak p}=\operatorname{disc}(B_{\mathfrak p}/A_{\mathfrak p})\qquad\forall\mathfrak p\in\operatorname{Max}(A).
+\end{align*}
+
+\subsection{定理}\label{sec:nt-3-4-3}
+\begin{theorem*}
+$\mathfrak p\in\operatorname{Max}(A)$ 在 $B$ 中分歧，当且仅当 $\mathfrak p\mid\operatorname{disc}(B/A)$.
+\end{theorem*}
+\begin{proof}
+刚才已看到 $\mathfrak p\mid\operatorname{disc}(B/A)\Leftrightarrow\operatorname{disc}(B_{\mathfrak p}/A_{\mathfrak p})\subsetneq A_{\mathfrak p}$.由于 $A_{\mathfrak p}$ 是局部环，可以利用 $B_{\mathfrak p}$ 的一组 $A_{\mathfrak p}$-基计算 $\operatorname{disc}(B_{\mathfrak p}/A_{\mathfrak p})$；由此可见，它在 $A_{\mathfrak p}/\mathfrak pA_{\mathfrak p}=A/\mathfrak p$ 中的像是判别式
+\begin{align*}
+\operatorname{disc}\bigl((B_{\mathfrak p}/\mathfrak pB_{\mathfrak p})/(A_{\mathfrak p}/\mathfrak pA_{\mathfrak p})\bigr)
+=\operatorname{disc}\bigl((B/\mathfrak pB)/(A/\mathfrak p)\bigr).
+\end{align*}
+因而 $\mathfrak p\mid\operatorname{disc}(B/A)\Leftrightarrow\operatorname{disc}((B/\mathfrak pB)/(A/\mathfrak pA))=0$.由公式
+\begin{align*}
+\operatorname{disc}\bigl((B/\mathfrak pB)/(A/\mathfrak pA)\bigr)
+=\prod_{\mathfrak P\mid\mathfrak p}\operatorname{disc}\bigl((B/\mathfrak P^{e(\mathfrak P/\mathfrak p)})/(A/\mathfrak pA)\bigr)
+\end{align*}
+（请思考），最终得到
+\begin{align*}
+\mathfrak p\mid\operatorname{disc}(B/A)\quad\Longleftrightarrow\quad
+\exists\mathfrak P\mid\mathfrak p,\ \operatorname{disc}\bigl((B/\mathfrak P^{e(\mathfrak P/\mathfrak p)})/(A/\mathfrak p)\bigr)=0.
+\end{align*}
+最后只须使用如下的一般事实：若 $k$ 是域，$R$ 是有限维局部 $k$-代数，则 $\operatorname{disc}(R/k)\ne0$ 当且仅当 $R$ 是 $k$ 的可分扩张.我们已经证明了``若''的方向.对于``仅若''，先注意到，若 $R$ 不是域，则其 Jacobson 根 $J=\sqrt{(0)}$ 非零.取 $0\ne x\in J$，则对每个 $y\in R$ 都有 $\operatorname{Tr}_{R/K}(xy)=0$（因为 $xy$ 幂零），所以双线性型 $\theta_{R/K}$ 退化，$\operatorname{disc}(R/k)=0$.若 $R$ 不可分，则 $R\otimes_kR$ 的 Jacobson 根非零，故 $\operatorname{disc}(R\otimes_kR/R)=\operatorname{disc}(R/k)R=0$.
+\end{proof}
+\begin{corollary*}
+在 $B$ 中分歧的 $\mathfrak p\in\operatorname{Max}(A)$ 只有有限个.
+\end{corollary*}
+\paragraph{例}
+\begin{enumerate}[label=\roman*)]
+\item （二次情形）若 $K=\mathbb Q(\sqrt d)$，其中 $d$ 无平方因子，则
+\begin{itemize}
+\item 若 $d\equiv2,3\pmod4$，则（$p$ 分歧）$\Leftrightarrow(p\mid4d)$.
+\item 若 $d\equiv1\pmod4$，则（$p$ 分歧）$\Leftrightarrow(p\mid d)$.
+\end{itemize}
+两种情形中，若 $p$ 分歧，其分解都形如 $p\mathcal O_K=\mathfrak P^2$.
+\item （$p$-分圆情形）对于 $K=\mathbb Q(e^{2i\pi/p^r})$，唯一分歧的素数是 $p$.
+\item （几何例子）设 $A=\mathbb C[X]$、$B=\mathbb C[\sqrt X]$.此时 $\operatorname{Max}(A)$ 和 $\operatorname{Max}(B)$ 分别通过 $z\mapsto(X-z)$ 和 $z\mapsto(\sqrt X-z)$ 与 $\mathbb C$ 上仿射直线的点一一对应，而映射 $\mathfrak P\mapsto\mathfrak P\cap A$ 对应于 $z\mapsto z^2$.若 $z\ne0$，理想 $\mathfrak p=(X-z)$ 有两个原像，且分解为 $\mathfrak pB=\mathfrak P_1\mathfrak P_2=(\sqrt X-z_1)(\sqrt X+z_1)$.当 $z=0$ 时，$\mathfrak p=(X)$ 只有一个原像 $\mathfrak P=(\sqrt X)$，且分歧为 $\mathfrak pB=\mathfrak P^2$.另外，判别式 $\operatorname{disc}(B/A)$ 为 $(X)$.
+\end{enumerate}
+还可以逐个刻画满足 $e(\mathfrak P/\mathfrak p)>1$ 或 $B/\mathfrak P$ 在 $A/\mathfrak p$ 上不可分的 $\mathfrak P\mid\mathfrak p$（此时称 $\mathfrak P$ 在 $\mathfrak p$ 上分歧）.为此使用\newterm{nt-different}{差积}{different} $\mathfrak D_{B/A}:=(B^*)^{-1}$，它是 $B$ 的理想.
+\begin{theorem*}
+$\mathfrak P$ 在 $\mathfrak p$ 上分歧，当且仅当 $\mathfrak P\mid\mathfrak D_{B/A}$.
+\end{theorem*}
+\begin{exercise*}
+若 $B=A[\alpha]$，则 $\mathfrak D_{B/A}=f'_\alpha(\alpha)B$.
+\end{exercise*}
+
+\subsection{计算 $\mathfrak pB$ 的分解的一种方法}\label{sec:nt-3-4-4}
+写成 $L=K(\alpha)$，其中 $\alpha\in B$，并仍以 $f_\alpha\in A[X]$ 表示 $\alpha$ 在 $A$ 上的最小多项式.作如下较强的假设：
+\begin{align*}
+\text{假设}\quad\mathfrak p\nmid(B:A[\alpha])_A.
+\end{align*}
+设 $\overline f_\alpha\in(A/\mathfrak p)[X]$ 为 $f_\alpha$ 的像，其在 $(A/\mathfrak p)[X]$ 中的不可约分解为 $\overline f_\alpha=\overline g_1^{e_1}\cdots\overline g_r^{e_r}$（各 $\overline g_i$ 两两互素）.再选择 $\overline g_i$ 的首一提升 $g_i\in A[X]$.
+\begin{theorem*}
+在上述记号和假设下，
+\begin{enumerate}[label=\roman*)]
+\item 对 $i=1,\ldots,r$，理想 $\mathfrak P_i:=\mathfrak pB+g_i(\alpha)B$ 极大，且 $[B/\mathfrak P_i:A/\mathfrak p]=\deg(g_i)$.
+\item 对任意 $i,j$，$i\ne j\Rightarrow\mathfrak P_i\ne\mathfrak P_j$.
+\item $\mathfrak pB=\prod_i\mathfrak P_i^{e_i}$.
+\end{enumerate}
+\end{theorem*}
+\begin{proof}
+有如下等价关系：
+\begin{align*}
+(\mathfrak p\nmid(B:A[\alpha])_A)&\quad\Longleftrightarrow\quad(B/A[\alpha])_{\mathfrak p}=0
+\\&\quad\Longleftrightarrow\quad B_{\mathfrak p}=A_{\mathfrak p}[\alpha].
+\end{align*}
+这蕴含 $B_{\mathfrak p}/\mathfrak pB_{\mathfrak p}\simeq(A_{\mathfrak p}/\mathfrak pA_{\mathfrak p})[X]/(\overline f_\alpha)$.因此，沿用上述记号，
+\begin{align*}
+B/\mathfrak pB\simeq(A/\mathfrak p)[X]/(\overline f_\alpha)
+=\prod_{i=1}^r(A/\mathfrak p)[X]/(\overline g_i^{e_i}).
+\end{align*}
+乘积中的每个因子都是局部 $A/\mathfrak p$-代数.与命题~\ref{sec:nt-3-4-1} 的分解比较，得到 $\{1,\ldots,r\}$ 与 $\{\mathfrak P\mid\mathfrak p\}$ 之间的双射 $i\mapsto\mathfrak P_i$，满足
+\begin{align*}
+B/\mathfrak P_i^{e(\mathfrak P_i/\mathfrak p)}\simeq(A/\mathfrak p)[X]/(\overline g_i^{e_i}).
+\end{align*}
+比较这两个局部代数作为自身上的模的长度，得到 $e(\mathfrak P_i/\mathfrak p_i)=e_i$.再将两端各自除以 Jacobson 根，得到剩余域的同构
+\begin{align*}
+B/\mathfrak P_i\simeq(A/\mathfrak p)[X]/(\overline g_i),
+\end{align*}
+特别地，次数相等：$f(\mathfrak P_i/\mathfrak p)=\deg(g_i)$.最后，右端可改写为
+\begin{align*}
+(A/\mathfrak p)[X]/(\overline g_i)
+&=A[X]/\bigl(\mathfrak pA[X]+(f_\alpha(X))+(g_i(X))\bigr)\\
+&=A[\alpha]/\bigl(\mathfrak pA[\alpha]+(g_i(\alpha))\bigr).
+\end{align*}
+因而 $\mathfrak P_i=\mathfrak pB+g_i(\alpha)B$.
+\end{proof}
+\begin{remark*}
+公式 $\operatorname{disc}(f_\alpha)A=\operatorname{disc}(B/A)(B:A[\alpha])^2$ 告诉我们：若 $\mathfrak p\nmid\operatorname{disc}(f_\alpha)$，则 $\mathfrak p\nmid(B:A[\alpha])$，且 $\mathfrak p$ 不分歧.
+\end{remark*}
+\begin{example*}[二次数域]
+考察 $K=\mathbb Q(\sqrt d)$，其中 $d\in\mathbb Z\setminus\{0,1\}$ 无平方因子，取 $\alpha=\sqrt d$，于是 $f_\alpha(X)=X^2-d$.前面已看到 $(\mathcal O_K:\mathbb Z[\sqrt d])=1$ 或 $2$.设 $p$ 为素数.
+\begin{enumerate}[label=\roman*)]
+\item 设 $p\ne2$.有以下几种可能：
+\begin{itemize}
+\item （$X^2-d$ 在 $\mathbb F_p[X]$ 中不可约）$\Leftrightarrow$（$p$ 在 $\mathcal O_K$ 中惰性）.
+\item （在 $\mathbb F_p[X]$ 中 $X^2-d=(X-\overline a)(X+\overline a)$）$\Leftrightarrow$（$p$ 完全分解，$(p)=\mathfrak P_1\mathfrak P_2$，其中 $\mathfrak P_1=(p,\sqrt d-a)$、$\mathfrak P_2=(p,\sqrt d+a)$，$a\in\mathbb Z$ 提升 $\overline a$）.
+\item （在 $\mathbb F_p[X]$ 中 $X^2-d=X^2$）$\Leftrightarrow$（$p$ 分歧，$(p)=\mathfrak P^2$，其中 $\mathfrak P=(p,\sqrt d)$）.
+\end{itemize}
+\item 设 $p=2$.
+\begin{itemize}
+\item 若 $d\equiv2,3\pmod4$，则已知 $2\nmid(\mathcal O_K:\mathbb Z[\sqrt d])$，且 $2$ 分歧.此时 $(2)=\mathfrak P^2$；若 $d\equiv2\pmod4$，则 $\mathfrak P=(2,\sqrt d)$；若 $d\equiv3\pmod4$，则 $\mathfrak P=(2,\sqrt d-1)$.
+\item 设 $d\equiv1\pmod4$.已知 $2$ 不分歧，且 $2\mid(\mathcal O_K:\mathbb Z[\sqrt d])$，但可以写成 $\mathcal O_K=\mathbb Z[\alpha]$，其中 $\alpha=(1-\sqrt d)/2$.此时 $f_\alpha(X)=X^2-X+(1-d)/4$，分两种情形：若 $d\equiv1\pmod8$，则 $\overline f_\alpha=X(X-1)$，故 $2$ 分解，$(2)=\mathfrak P_1\mathfrak P_2$，其中 $\mathfrak P_1=(2,\alpha)$、$\mathfrak P_2=(2,\alpha-1)$；若 $d\equiv5\pmod8$，则 $\overline f_\alpha=X^2-X-1$ 不可约，故 $2$ 惰性.
+\end{itemize}
+\end{enumerate}
+\end{example*}
+\begin{example*}[Eisenstein 情形]
+若多项式 $f(X)=X^n+a_0X^{n-1}+\cdots+a_n\in A[X]$ 满足对每个 $i$ 都有 $v_{\mathfrak p}(a_i)>0$，且 $v_{\mathfrak p}(a_n)=1$，则称它``在 $\mathfrak p\in\operatorname{Max}(A)$ 处为 Eisenstein 多项式''.与 $A=\mathbb Z$ 的情形相同，这样的多项式在 $K[X]$ 中不可约.此外，沿用定理中的记号，若 $f_\alpha$ 在 $\mathfrak p$ 处为 Eisenstein 多项式，则与 $A=\mathbb Z$ 的情形一样，可证明 $\mathfrak p\nmid(B:A[\alpha])$.于是可以应用定理；由于 $\overline f_\alpha=X^n$，可见 $\mathfrak pB=\mathfrak P^n$，其中 $\mathfrak P=\mathfrak pB+(\alpha)$.此时称 $\mathfrak p$ \newterm{nt-totally-ramified}{完全分歧}{totally ramified}.
+\end{example*}
+\begin{example*}[$p$-分圆情形]
+考察 $p$ 在扩张 $K=\mathbb Q(\zeta_r)$ 中的分解，其中 $\zeta_r=e^{2i\pi/p^r}$.有 $f_{\zeta_r}=\Phi_{p^r}$.由于 $f_{\zeta_r}(1+X)$ 在 $p$ 处为 Eisenstein 多项式，这是上一情形的特例.因此 $(p)=\mathfrak P^{\varphi(p^r)}$，其中 $\mathfrak P=(p,\zeta_r-1)$.还可以改进这个表达式，因为
+\begin{align*}
+p=\Phi_{p^r}(1)=\prod_{a\in(\mathbb Z/p^r\mathbb Z)^\times}(1-\zeta_r^a)
+\in(1-\zeta_r)^{\varphi(p^r)}\mathbb Z[\zeta_r]^\times,
+\end{align*}
+（练习：验证 $(1-\zeta_r^a)/(1-\zeta_r)$ 和 $(1-\zeta_r)/(1-\zeta_r^a)$ 都属于 $\mathbb Z[\zeta_r]$），从而 $\mathfrak P=(1-\zeta_r)$.
+\end{example*}
+
+\subsection{定理：分圆数域}\label{sec:nt-3-4-5}
+\begin{theorem*}
+对整数 $n>1$，令 $\zeta_n:=e^{2i\pi/n}$，记第 $n$ 个分圆多项式为 $\Phi_n(X)$.若 $n\not\equiv2\pmod4$，则
+\begin{enumerate}[label=\roman*)]
+\item $[\mathbb Q(\zeta_n):\mathbb Q]=\varphi(n)$（故 $\Phi_n$ 不可约，且 $\chi_{n,\mathbb Q}:\operatorname{Gal}(\mathbb Q(\zeta_n)/\mathbb Q)\longrightarrow(\mathbb Z/n\mathbb Z)^\times$ 是同构）.
+\item $\mathcal O_{\mathbb Q(\zeta_n)}=\mathbb Z[\zeta_n]$.
+\item 对素数 $p$，（$p$ 在 $\mathbb Q(\zeta_n)$ 中分歧）$\Leftrightarrow p\mid n$.
+\item 对素数 $p$，写成 $n=n'p^r$，其中 $(n',p)=1$.则在 $\mathbb Z[\zeta_n]$ 中有 $(p)=(\mathfrak P_1\cdots\mathfrak P_g)^{\varphi(p^r)}$，其中所有 $f(\mathfrak P_i/\mathfrak p)$ 都等于 $p$ 在 $(\mathbb Z/n'\mathbb Z)^\times$ 中的阶.
+\end{enumerate}
+\end{theorem*}
+\begin{proof}
+先对 $n$ 的素因子个数 $k$ 归纳证明 i)、ii)、iii).$k=1$ 的情形已处理，故可设 $k>1$，选择 $n$ 的一个素因子 $p$，写成 $n=n'p^r$，其中 $(n',p)=1$.注意
+\begin{align*}
+\mathbb Q(\zeta_n)=\mathbb Q(\zeta_{n'},\zeta_{p^r})
+=\mathbb Q(\zeta_{n'})(\zeta_{p^r})=\mathbb Q(\zeta_{n'})\mathbb Q(\zeta_{p^r})
+\end{align*}
+（合成域）.
+\begin{enumerate}[label=\roman*)]
+\item 归纳假设给出 $\mathcal O_{\mathbb Q(\zeta_{n'})}=\mathbb Z[\zeta_{n'}]$，且若 $\mathfrak P\in\operatorname{Max}(\mathbb Z[\zeta_{n'}])$ 整除 $(p)$，则 $e(\mathfrak P/p)=v_{\mathfrak P}(p)=1$.因此，在 $\mathbb Z[\zeta_r][X]$ 中，多项式 $\Phi_{p^r}(1+X)$ 在 $\mathfrak P$ 处为 Eisenstein 多项式，故不可约.于是
+\begin{align*}
+[\mathbb Q(\zeta_n):\mathbb Q]
+&=[\mathbb Q(\zeta_{n'})(\zeta_{p^r}):\mathbb Q(\zeta_{n'})][\mathbb Q(\zeta_{n'}):\mathbb Q]\\
+&=\varphi(p^r)\varphi(n')=\varphi(n).
+\end{align*}
+\item 考察 $\mathbb Z[\zeta_{n'}]$ 中的理想等式
+\begin{align*}
+\operatorname{disc}(\mathbb Z[\zeta_n]/\mathbb Z[\zeta_{n'}])
+&=\operatorname{disc}(\mathcal O_{\mathbb Q(\zeta_n)}/\mathbb Z[\zeta_{n'}])\\
+&\qquad\cdot(\mathcal O_{\mathbb Q(\zeta_n)}:\mathbb Z[\zeta_n])_{\mathbb Z[\zeta_{n'}]}^2.
+\end{align*}
+由 $\mathbb Z[\zeta_n]=\mathbb Z[\zeta_{n'}][\zeta_{p^r}]$ 可见，左端为理想 $(\operatorname{disc}(\Phi_{p^r}))=(p)^{m(r)}$，其中 $m(r)$ 是某个整数.因此，对 $\mathfrak P\in\operatorname{Max}(\mathbb Z[\zeta_{n'}])$，
+\begin{align*}
+\mathfrak P\mid(\mathcal O_{\mathbb Q(\zeta_n)}:\mathbb Z[\zeta_n])_{\mathbb Z[\zeta_{n'}]}
+\quad\Longrightarrow\quad\mathfrak P\mid(p).
+\end{align*}
+而已知 $\Phi_{p^r}(1+X)$ 在每个整除 $(p)$ 的 $\mathfrak P$ 处都是 Eisenstein 多项式.故与 $A=\mathbb Z$ 的情形相同，由定理~\ref{sec:nt-2-5-5} 和引理~\ref{sec:nt-2-5-6} 可知 $\mathfrak P$ 不整除 $(\mathcal O_{\mathbb Q(\zeta_n)}:\mathbb Z[\zeta_n])_{\mathbb Z[\zeta_{n'}]}$，最终得到 $\mathcal O_{\mathbb Q(\zeta_n)}=\mathbb Z[\zeta_n]$.
+\item 现在有等式 $(\operatorname{disc}(\Phi_{p^r}))=(p)^{m(r)}=\operatorname{disc}(\mathcal O_{\mathbb Q(\zeta_n)}/\mathbb Z[\zeta_{n'}])$.它表明：若 $\mathfrak P\in\operatorname{Max}(\mathbb Z[\zeta_{n'}])$ 在 $\mathbb Z[\zeta_n]$ 中分歧，则 $\mathfrak P\mid(p)$，正如所需.
+\end{enumerate}
+至此归纳完成.还须证明 iv).
+\begin{enumerate}[label=\roman*),start=4]
+\item 刚才已看到 $p$ 在 $\mathbb Z[\zeta_{n'}]$ 中不分歧，故 $p\mathbb Z[\zeta_{n'}]=\mathfrak p_1\cdots\mathfrak p_g$，其中 $\mathfrak p_i\in\operatorname{Max}(\mathbb Z[\zeta_{n'}])$ 两两不同，并且环
+\begin{align*}
+\mathbb Z[\zeta_{n'}]/(p)=\mathbb F_p[X]/(\Phi_{n'})
+\end{align*}
+是若干域的乘积（即多项式 $\Phi_{n'}$ 在 $\mathbb F_p[X]$ 中可分）.乘积的每个因子都由一个本原 $n'$ 次单位根生成，因而同构于 $\overline{\mathbb F}_p$ 的子域 $\mathbb F_p(\mu_{n'})$.所以
+\begin{align*}
+\mathbb Z[\zeta_{n'}]/(p)=\mathbb F_p[X]/(\Phi_{n'})\simeq\mathbb F_p(\mu_{n'})^g.
+\end{align*}
+只须确定 $\mathbb F_p(\mu_{n'})$ 在 $\mathbb F_p$ 上的次数 $f$.而对任意 $k\ge1$，有
+\begin{align*}
+\mu_{n'}\subset\mathbb F_{p^k}^\times\quad\Longleftrightarrow\quad n'\mid(p^k-1).
+\end{align*}
+故 $f$ 是使 $n'\mid(p^k-1)$ 的最小 $k$，即 $p$ 在 $(\mathbb Z/n'\mathbb Z)^\times$ 中的阶.
+现在，由于多项式 $\Phi_{p^r}$ 在每个 $\mathfrak p_i$ 处都是 Eisenstein 多项式，各 $\mathfrak p_i$ 在 $\mathbb Z[\zeta_n]$ 中完全分歧，即存在 $\mathfrak P_i\in\operatorname{Max}(\mathbb Z[\zeta_n])$ 使 $\mathfrak p_i\mathbb Z[\zeta_n]=\mathfrak P_i^{\varphi(p^r)}$.\qedhere
+\end{enumerate}
+\end{proof}
+\begin{remark*}
+可见 $p$ 在 $\mathbb Z[\zeta_n]$ 中的分解类型由 $p$ 模 $n$ 的类决定.例如：
+\begin{itemize}
+\item $p$ 完全分解，当且仅当 $p\equiv1\pmod n$.
+\item $p$ 惰性，当且仅当 $p$ 生成 $(\mathbb Z/n\mathbb Z)^\times$.
+\end{itemize}
+这是因为方程 $\Phi_n(x)=0$ 在有限域中容易求解.对于以后将讨论的二次数域，方程 $X^2-d$ 不易求解，而二次互反律使我们得以转化为同余条件.
+\end{remark*}
+\begin{exercise*}
+求 $n$，使得没有素数 $p$ 在 $\mathbb Z[\zeta_n]$ 中惰性.
+\end{exercise*}
+
+\section{Galois 作用、分解群与惯性群}\label{sec:nt-3-5}
+继续沿用前面的设定：$A$ 为 Dedekind 环，$L$ 为 $K=\operatorname{Frac}(A)$ 的有限可分扩张，$B$ 为 $A$ 在 $L$ 中的整闭包；再假设 $L/K$ 为 Galois 扩张.记其 Galois 群为
+\begin{align*}
+G=G_{L/K}:=\operatorname{Gal}(L/K).
+\end{align*}
+
+\subsection{命题}\label{sec:nt-3-5-1}
+\begin{proposition*}
+沿用上述记号，有
+\begin{enumerate}[label=\roman*)]
+\item 对任意 $\sigma\in G$，$\sigma(B)\subset B$，且 $B^G=A$.
+\item 对任意 $\mathfrak p\in\operatorname{Max}(A)$，$G$ 在 $\{\mathfrak P\in\operatorname{Max}(B),\ \mathfrak P\mid\mathfrak p\}$ 上传递作用.
+\end{enumerate}
+\end{proposition*}
+\begin{proof}
+\begin{enumerate}[label=\roman*)]
+\item 对任意 $x\in L$，$f_{\sigma(x)}=f_x$，故 $x\in B\Rightarrow\sigma(x)\in B$.此外，$B^G=B\cap L^G=B\cap K=A$.
+\item 首先，对 $\mathfrak P\in\operatorname{Max}(B)$，显然 $\sigma(\mathfrak P)\in\operatorname{Max}(B)$；且若 $\mathfrak P\mid\mathfrak p$，则 $\sigma(\mathfrak P)\mid\sigma(\mathfrak p)=\mathfrak p$.所以 $G$ 确实作用在断言中的集合上.若此作用不传递，取分属两个不相交轨道的 $\mathfrak P,\mathfrak P'$.由逼近引理或中国剩余定理，可以找到 $b\in B$，使
+\begin{align*}
+\forall\sigma\in\mathfrak P,\quad b\in\sigma(\mathfrak P)\quad\text{且}\quad b-1\in\sigma(\mathfrak P').
+\end{align*}
+但此时 $N_{L/K}(b)=\prod_{\sigma\in G}\sigma(b)$ 模 $\mathfrak p$ 同时等于 $0$ 和 $1$，矛盾.
+\end{enumerate}
+\end{proof}
+
+\subsection{推论}\label{sec:nt-3-5-2}
+\begin{corollary*}
+设 $\mathfrak p\in\operatorname{Max}(A)$，$\mathfrak pB=\mathfrak P_1^{e_1}\cdots\mathfrak P_g^{e_g}$，其中各 $\mathfrak P_i$ 两两不同.则 $e_1=e_2=\cdots=e_g=:e$，$f_1=f_2=\cdots=f_g=:f$，且 $efg=n$（$=[L:K]$）.
+\end{corollary*}
+
+\subsection{分解群}\label{sec:nt-3-5-3}
+\begin{definition*}
+$\mathfrak P\in\operatorname{Max}(B)$ 的稳定子 $D_{\mathfrak P}=\{\sigma\in G,\ \sigma(\mathfrak P)=\mathfrak P\}$ 称为在 $\mathfrak P$ 处的\newterm{nt-decomposition-group}{分解群}{decomposition group}.
+\end{definition*}
+\emph{性质.}
+\begin{enumerate}[label=\roman*)]
+\item 对任意 $\sigma\in G$，$D_{\sigma(\mathfrak P)}=\sigma D_{\mathfrak P}\sigma^{-1}$.
+\item $|D_{\mathfrak P}|=ef$（记号同上述推论）.事实上，命题的 ii) 告诉我们 $|G|/|D_{\mathfrak P}|=g$.
+\item $p$ 完全分解 $\Leftrightarrow D_{\mathfrak P}=\{1\}$（对某个 $\mathfrak P\mid\mathfrak p$ 成立等价于对所有这样的 $\mathfrak P$ 成立）.
+\item 若 $K\subset L'$ 是包含于 $L$ 的 Galois 扩张，$B'$ 为 $A$ 在 $L'$ 中的正规化，且 $\mathfrak P':=\mathfrak P\cap B'$，则 $D_{\mathfrak P'}$ 是 $D_{\mathfrak P}$ 在满射 $\pi:G_{L/K}\twoheadrightarrow G_{L'/K}$ 下的像.更确切地，$\pi$ 诱导正合列
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&,column sep=large]
+D_{\mathfrak P/\mathfrak P'}\arrow[r,hook]\&D_{\mathfrak P}\arrow[r,two heads]\&D_{\mathfrak P'}.
+\end{tikzcd}
+\end{align*}
+事实上，显然 $\pi(D_{\mathfrak P})\subset D_{\mathfrak P'}$.反之，若 $\sigma'\in D_{\mathfrak P'}$，$\sigma\in\pi^{-1}(\sigma')$，则 $\sigma(\mathfrak P)\cap B'=\mathfrak P'$，因而由命题的 ii)，存在 $\tau\in G_{L/L'}$ 使 $\tau\sigma(\mathfrak P)=\mathfrak P$.又 $\pi(\tau\sigma)=\sigma'$，故 $\sigma'\in\pi(D_{\mathfrak P'})$.最后，确有 $\operatorname{Ker}(\pi|_{D_{\mathfrak P}})=D_{\mathfrak P}\cap G_{L/L'}=D_{\mathfrak P/\mathfrak P'}$，即扩张 $L\supset L'$ 在 $\mathfrak P$ 处的分解群.
+\end{enumerate}
+由于 $D_{\mathfrak P}$ 稳定 $B$ 和 $\mathfrak P$，它在商 $B/\mathfrak P$ 上通过环自同构作用；若 $\mathfrak p=\mathfrak P\cap A$，此作用还是 $A/\mathfrak p$-线性的.因此得到同态 $D_{\mathfrak P}\longrightarrow\operatorname{Aut}_{A/\mathfrak p\text{-alg}}(B/\mathfrak P)$.以下将\newterm{nt-residue-field}{剩余域}{residue field}记为
+\begin{align*}
+k_{\mathfrak P}:=B/\mathfrak P\qquad\text{和}\qquad k_{\mathfrak p}:=A/\mathfrak p.
+\end{align*}
+
+\subsection{命题}\label{sec:nt-3-5-4}
+\begin{proposition*}
+扩张 $k_{\mathfrak P}\supset k_{\mathfrak p}$ 是正规扩张，且上述同态 $D_{\mathfrak P}\longrightarrow\operatorname{Aut}_{k_{\mathfrak p}\text{-alg}}(k_{\mathfrak P})$ 是满射.
+\end{proposition*}
+\begin{proof}
+当 $A$ 是数域的整数环时，第一个断言显然成立，因为此时剩余域为有限域，而有限域的任意扩张都是正规扩张.在一般情形下，取 $\overline b\in k_{\mathfrak P}$.须证 $f_{\overline b}\in k_{\mathfrak p}[X]$ 的所有根都属于 $k_{\mathfrak P}$.选取 $\overline b$ 的提升 $b\in B$.由于 $L$ 正规，$f_b\in A[X]$ 的所有根都在 $B$ 中，故 $\overline f_b$ 的所有根都在 $k_{\mathfrak P}$ 中.而 $\overline f_b(\overline b)=0$，故 $f_{\overline b}\mid\overline f_b$.
+
+再证第二个断言，记 $k_{\mathfrak P}^s$ 为 $k_{\mathfrak p}$ 在 $k_{\mathfrak P}$ 中的可分闭包.选取 $k_{\mathfrak P}^s/k_{\mathfrak p}$ 的一个生成元（本原元）$\overline b$.任意自同构 $\tau\in\operatorname{Aut}_{k_{\mathfrak p}\text{-alg}}(k_{\mathfrak P})=\operatorname{Gal}(k_{\mathfrak P}^s/k_{\mathfrak p})$ 都由 $\tau(\overline b)$ 决定，后者是 $f_{\overline b}$ 的根.因此，只须证明 $f_{\overline b}$ 的每个根都形如 $\overline{\sigma(b)}$，其中 $b\in B$ 为 $\overline b$ 的提升，$\sigma\in D_{\mathfrak P}$.
+
+为此，选择 $b$，使对任意 $\sigma\in G\setminus D_{\mathfrak P}$ 都有 $b\in\sigma(\mathfrak P)$，并令 $f(X)=\prod_\sigma(X-\sigma(b))\in A[X]$.则
+\begin{align*}
+\overline f(X)=X^{|G\setminus D_{\mathfrak P}|}\prod_{\sigma\in D_{\mathfrak P}}(X-\overline{\sigma(b)}).
+\end{align*}
+由于 $\overline f(\overline b)=0$，可见 $f_{\overline b}$ 的每个根都形如某个 $\sigma\in D_{\mathfrak P}$ 所对应的 $\overline{\sigma(b)}$.
+\end{proof}
+\begin{remark*}
+我们关心的是 $A$ 为数域整数环的情形.此时剩余域有限，故扩张 $k_{\mathfrak P}\supset k_{\mathfrak p}$ 是 Galois 扩张，从而有满射 $D_{\mathfrak P}\twoheadrightarrow\operatorname{Gal}(k_{\mathfrak P}/k_{\mathfrak p})$.记
+\begin{align*}
+N\mathfrak p:=|A/\mathfrak p|,\qquad\text{于是}\quad k_{\mathfrak p}\simeq\mathbb F_{N\mathfrak p},\quad N\mathfrak P=(N\mathfrak p)^f.
+\end{align*}
+Galois 群 $\operatorname{Gal}(k_{\mathfrak P}/k_{\mathfrak p})$ 是 $f$ 阶循环群，由相对于 $k_{\mathfrak p}$ 的 Frobenius 自同构 $x\mapsto x^{N\mathfrak p}$ 生成.
+\end{remark*}
+
+\subsection{惯性群}\label{sec:nt-3-5-5}
+\begin{definition*}
+满射 $D_{\mathfrak P}\longrightarrow\operatorname{Gal}(k_{\mathfrak P}/k_{\mathfrak p})$ 的核 $I_{\mathfrak P}$ 称为在 $\mathfrak P$ 处的\newterm{nt-inertia-group}{惯性子群}{inertia subgroup}.
+\end{definition*}
+\emph{性质.}
+\begin{enumerate}[label=\roman*)]
+\item $I_{\sigma(\mathfrak P)}=\sigma I_{\mathfrak P}\sigma^{-1}$.
+\item $|I_{\mathfrak P}|=e$.
+\item $p$ 不分歧 $\Leftrightarrow I_{\mathfrak P}=\{1\}$（对某个 $\mathfrak P\mid\mathfrak p$ 成立等价于对所有这样的 $\mathfrak P$ 成立）.
+\item $p$ 完全分歧 $\Leftrightarrow I_{\mathfrak P}=G_{L/K}$（此时只有一个 $\mathfrak P\mid\mathfrak p$）.
+\item $p$ 惰性 $\Leftrightarrow(I_{\mathfrak p}=\{1\}\text{ 且 }D_{\mathfrak P}=G_{L/K})$.
+\item 若 $K\subset L'$ 是包含于 $L$ 的 Galois 扩张，$B'$ 为 $A$ 在 $L'$ 中的正规化，且 $\mathfrak P':=\mathfrak P\cap B'$，则 $I_{\mathfrak P'}$ 是 $I_{\mathfrak P}$ 在满射 $\pi:G_{L/K}\twoheadrightarrow G_{L'/K}$ 下的像.更确切地，$\pi$ 诱导正合列
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&,column sep=large]
+I_{\mathfrak P/\mathfrak P'}\arrow[r,hook]\&I_{\mathfrak P}\arrow[r,two heads]\&I_{\mathfrak P'}.
+\end{tikzcd}
+\end{align*}
+事实上，显然 $\pi(I_{\mathfrak P})\subset I_{\mathfrak P'}$.反之，若 $\sigma'\in I_{\mathfrak P'}$、$\sigma\in\pi^{-1}(\sigma')\cap D_{\mathfrak P}$，则 $\sigma$ 诱导 $k_{\mathfrak P}$ 的一个 $k_{\mathfrak P'}$-线性自同构 $\overline\sigma$.此自同构可提升为某个 $\tau\in D_{\mathfrak P/\mathfrak P'}$，于是 $\tau^{-1}\sigma\in I_{\mathfrak P}$.又 $\pi(\tau^{-1}\sigma)=\sigma'$，故 $\sigma'\in\pi(I_{\mathfrak P'})$.最后，确有 $\operatorname{Ker}(\pi|_{I_{\mathfrak P}})=I_{\mathfrak P}\cap G_{L/L'}=I_{\mathfrak P/\mathfrak P'}$，即扩张 $L\supset L'$ 在 $\mathfrak P$ 处的惯性群.
+\end{enumerate}
+下图概括了所引入各群的性质.
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&,column sep=large]
+K=L^G\arrow[r,hook,"\text{次数 }g"]\&L^{D_{\mathfrak P}}\arrow[r,hook,"\text{次数 }f"]\&L^{I_{\mathfrak P}}\arrow[r,hook,"\text{次数 }e"]\&L
+\end{tikzcd}
+\end{align*}
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&,column sep=large,row sep=large]
+\mathfrak p=\mathfrak P^G\arrow[r,hook]\arrow[d,hook]\&\mathfrak P^{D_{\mathfrak P}}\arrow[r,hook,"\text{惰性}"]\arrow[d,hook]\&\mathfrak P^{I_{\mathfrak P}}\arrow[r,hook,"\text{完全分歧}"]\arrow[d,hook]\&\mathfrak P\arrow[d,hook]\\
+A=B^G\arrow[r,hook]\arrow[d,two heads]\&B^{D_{\mathfrak P}}\arrow[r,hook]\arrow[d,two heads]\&B^{I_{\mathfrak P}}\arrow[r,hook]\arrow[d,two heads]\&B\arrow[d,two heads]\\
+k_{\mathfrak p}\arrow[r,hook,"\sim"]\&k_{\mathfrak P^{D_{\mathfrak P}}}\arrow[r,hook,"\text{次数 }f"]\&k_{\mathfrak P^{I_{\mathfrak P}}}\arrow[r,hook,"\sim"]\&k_{\mathfrak P}
+\end{tikzcd}
+\end{align*}
+注意，$L\supset L^{I_{\mathfrak P}}$ 是 Galois 扩张，群为 $I_{\mathfrak P}$；$L^{I_{\mathfrak P}}\supset L^{D_{\mathfrak P}}$ 也是 Galois 扩张，其群同构于 $D_{\mathfrak P}/I_{\mathfrak P}\simeq\operatorname{Gal}(k_{\mathfrak P}/k_{\mathfrak p})$.然而，一般而言 $L^{D_{\mathfrak P}}\supset L$ 不是 Galois 扩张.它是 Galois 扩张，当且仅当 $D_{\mathfrak P}$ 在 $G$ 中正规.此时 $\mathfrak p$ 在 $L^{D_{\mathfrak P}}$ 中完全分解，因为 $f_{L^{D_{\mathfrak P}}/K}=f(\mathfrak P^{D_{\mathfrak P}}\mid\mathfrak p)=1=e(\mathfrak P^{D_{\mathfrak P}}\mid\mathfrak p)=e_{L^{D_{\mathfrak P}}/K}$.
+
+\paragraph{$G_{L/K}$ 为 Abel 群的特殊情形}
+此时 $D_{\mathfrak P}$ 和 $I_{\mathfrak P}$ 都与 $\mathfrak P$ 的选择无关，可以分别记为 $D_{\mathfrak p}$、$I_{\mathfrak p}$.于是 $\mathfrak p$ 的分解可用下图表示.
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&,column sep=large,row sep=large]
+\&\mathfrak P_1^{D_{\mathfrak p}}\arrow[r,hook,"\text{惰性}"]\arrow[d,dotted,dash]\&\mathfrak P_1^{I_{\mathfrak p}}\arrow[r,hook,"\text{完全分歧}"]\arrow[d,dotted,dash]\&\mathfrak P_1\arrow[d,dotted,dash]\\
+\mathfrak p\arrow[ur,hook,"\text{完全分解}"]\arrow[r,hook]\arrow[dr,hook]\&\mathfrak P_i^{D_{\mathfrak p}}\arrow[r,hook,"\text{惰性}"]\arrow[d,dotted,dash]\&\mathfrak P_i^{I_{\mathfrak p}}\arrow[r,hook,"\text{完全分歧}"]\arrow[d,dotted,dash]\&\mathfrak P_i\arrow[d,dotted,dash]\\
+\&\mathfrak P_g^{D_{\mathfrak p}}\arrow[r,hook,"\text{惰性}"]\&\mathfrak P_g^{I_{\mathfrak p}}\arrow[r,hook,"\text{完全分歧}"]\&\mathfrak P_g
+\end{tikzcd}
+\end{align*}
+\begin{example*}[分圆数域]
+取 $K=\mathbb Q$、$L=\mathbb Q(\zeta_n)$，并固定 $\mathbb Z$ 的理想 $\mathfrak p=(p)$，其中 $p$ 为素数.由于 Galois 群为 Abel 群，我们处于上述情形.写成 $n=n'p^r$，其中 $(n',p)=1$.定理~\ref{sec:nt-3-4-5} 告诉我们
+\begin{align*}
+I_p=G_{\mathbb Q(\zeta_n)/\mathbb Q(\zeta_{n'})}\qquad\text{且}\qquad L^{I_p}=\mathbb Q(\zeta_{n'}).
+\end{align*}
+通过同构 $\chi_{n,\mathbb Q}:G_{\mathbb Q(\zeta_n)/\mathbb Q}\xrightarrow{\sim}(\mathbb Z/n\mathbb Z)^\times$ 以及典范分解（中国剩余定理）$(\mathbb Z/n\mathbb Z)^\times=(\mathbb Z/n'\mathbb Z)^\times\times(\mathbb Z/p^r\mathbb Z)^\times$，得到 $\chi_{n,\mathbb Q}(I_p)=(\mathbb Z/p^r\mathbb Z)^\times$.此外，$\chi_n(D_p)=\chi_{n'}(D'_p)\times(\mathbb Z/p^r\mathbb Z)^\times$，其中 $D'_p=D_p/I_p$ 为 $p$ 在 $\mathbb Q(\zeta_{n'})$ 中的分解群.$\chi_{n',\mathbb Q}(D'_p)$ 的计算见下文.
+\end{example*}
+
+\subsection{Frobenius 代换与 Artin 符号}\label{sec:nt-3-5-6}
+今后假设 $L$ 和 $K$ 都是数域（从而 $A=\mathcal O_K$、$B=\mathcal O_L$）.设 $\mathfrak p\in\operatorname{Max}(A)$ 是在 $B$ 中不分歧的素理想，$\mathfrak P\in\operatorname{Max}(B)$ 包含 $\mathfrak p$.于是 $I_{\mathfrak P}=\{1\}$，且 $D_{\mathfrak P}\xrightarrow{\sim}G_{k_{\mathfrak P}/k_{\mathfrak p}}$.与 Frobenius 自同构 $x\mapsto x^{N\mathfrak p}$ 对应的元素 $\sigma_{\mathfrak P}\in D_{\mathfrak P}$ 称为在 $\mathfrak P$ 处的\newterm{nt-frobenius-substitution}{Frobenius 代换}{Frobenius substitution}.它的阶为 $f(\mathfrak P\mid\mathfrak p)$，并由以下性质刻画：
+\begin{align*}
+\forall b\in B,\quad\sigma_{\mathfrak P}(b)-b^{N\mathfrak p}\in\mathfrak P.
+\end{align*}
+改变 $\mathfrak P$ 时，所得元素互为共轭.更确切地，
+\begin{align*}
+\forall\tau\in G_{L/K},\quad\sigma_{\tau(\mathfrak P)}=\tau\sigma_{\mathfrak P}\tau^{-1}.
+\end{align*}
+因此，若 $G_{L/K}$ 为 Abel 群，则 $\sigma_{\mathfrak P}$ 只依赖于 $\mathfrak p$，与 $\mathfrak P\mid\mathfrak p$ 的选择无关.此时将其简记为 $\sigma_{\mathfrak p}$，或用其\newterm{nt-artin-symbol}{Artin 符号}{Artin symbol} $\left(\frac{L/K}{\mathfrak p}\right)$ 表示.
+
+更一般地，若 $I=\prod_i\mathfrak p_i^{e_i}$，其中每个 $\mathfrak p_i$ 都不分歧，则令 $\left(\frac{L/K}{I}\right)=\prod_i\left(\frac{L/K}{\mathfrak p_i}\right)^{e_i}$.
+\begin{example*}[分圆数域]
+取 $K=\mathbb Q$、$L=\mathbb Q(\zeta_n)$，固定一个满足 $(p,n)=1$ 的素数 $p$.已知 $(p)$ 在 $\mathbb Q(\zeta_n)$ 中不分歧.使用如今已熟悉的记号 $\chi_{n,\mathbb Q}:G_{\mathbb Q(\zeta_n)/\mathbb Q}\xrightarrow{\sim}(\mathbb Z/n\mathbb Z)^\times$，有
+\begin{align*}
+\chi_{n,\mathbb Q}\left(\frac{\mathbb Q(\zeta_n)/\mathbb Q}{p}\right)=p,\qquad\text{故}\quad\chi_{n,\mathbb Q}(D_p)=\langle p\rangle\subset(\mathbb Z/n\mathbb Z)^\times.
+\end{align*}
+事实上，令 $\sigma':=\chi_{n,\mathbb Q}^{-1}(p)$.由定义 $\sigma'(\zeta_n)=\zeta_n^p$，故若 $\mathfrak P\mid p$，当然有 $\sigma'(\zeta_n)-\zeta_n^p\in\mathfrak P$.由于 $\mathcal O_{\mathbb Q(\zeta_n)}$ 由 $\zeta_n$ 生成，对每个 $b\in\mathcal O_{\mathbb Q(\zeta_n)}$ 都有 $\sigma'(b)-b^p\in\mathfrak P$.这正是 $\sigma=\left(\frac{\mathbb Q(\zeta_n)/\mathbb Q}{p}\right)$ 的刻画性质.
+\end{example*}
+\begin{example*}[二次数域]
+此时 $K=\mathbb Q$、$L=\mathbb Q(\sqrt d)$，其中 $d\in\mathbb Z\setminus\{1,0\}$ 无平方因子.有同构
+\begin{align*}
+\psi_d:G_{\mathbb Q(\sqrt d)/\mathbb Q}\xrightarrow{\sim}\{\pm1\},\qquad\sigma\longmapsto\sigma(\sqrt d)/\sqrt d.
+\end{align*}
+设 $p\nmid4d$（故不分歧），且 $\mathfrak P\mid p$.可见
+\begin{align*}
+\left(\frac{\mathbb Q(\sqrt d)/\mathbb Q}{p}\right)=1
+&\quad\Longleftrightarrow\quad k_{\mathfrak P}=\mathbb F_p\\
+&\quad\Longleftrightarrow\quad d\in(\mathbb F_p^\times)^2
+\quad\Longleftrightarrow\quad\left(\frac dp\right)=1,
+\end{align*}
+其中最后一项为 Legendre 符号.于是总有
+\begin{align*}
+\psi_d\left(\frac{\mathbb Q(\sqrt d)/\mathbb Q}{p}\right)=\left(\frac dp\right),
+\end{align*}
+可见 Artin 符号是 Legendre 符号的广泛推广.
+\end{example*}
+\begin{exercise*}
+设 $L\supset L'\supset K$ 为 Abel 扩张，$\mathfrak p\in\operatorname{Max}(\mathcal O_K)$ 在 $\mathcal O_L$ 中不分歧.
+\begin{enumerate}[label=\roman*)]
+\item 验证 $\mathfrak p$ 在 $\mathcal O_{L'}$ 中不分歧，且 $\operatorname{Max}(\mathcal O_{L'})$ 中每个 $\mathfrak P'\mid\mathfrak p$ 都在 $\mathcal O_L$ 中不分歧.
+\item 证明 $\left(\frac{L'/K}{\mathfrak p}\right)=\pi\left(\frac{L/K}{\mathfrak p}\right)$，其中 $\pi:G_{L/K}\twoheadrightarrow G_{L'/K}$.
+\item 证明：若 $\mathfrak P'\mid\mathfrak p$，$\mathfrak P'\in\operatorname{Max}(\mathcal O_{L'})$，则 $\left(\frac{L/L'}{\mathfrak p}\right)=\left(\frac{L/K}{\mathfrak p}\right)^{f(\mathfrak P'/\mathfrak p)}$.
+\end{enumerate}
+\end{exercise*}
+
+\subsection{应用：二次互反律}\label{sec:nt-3-5-7}
+设 $p,q$ 为两个不同的奇素数.我们要证明
+\begin{align*}
+\left(\frac pq\right)\left(\frac qp\right)=(-1)^{\frac{p-1}{2}\frac{q-1}{2}}.
+\end{align*}
+这条``定律''告诉我们：$p$ 在 $\mathbb Q(\sqrt q)$ 中的分解类型（即 $q$ 是否为 $\mathbb F_p^\times$ 中的平方）只依赖于 $p$ 模 $q$（以及模 $4$）的类.它还给出了计算 Legendre 符号的有效算法.
+
+回忆 $\operatorname{disc}(\Phi_q)=(-1)^{(q-1)/2}q^{q-2}$.由公式 $\operatorname{disc}(\Phi_q)=\prod_{i<j}(\zeta_q^i-\zeta_q^j)^2$，可见 $\operatorname{disc}(\Phi)\in\mathbb Q(\zeta_q)^2$，故 $\mathbb Q(\zeta_q)\supset\mathbb Q(\sqrt{q^*})$，其中 $q^*:=(-1)^{(q-1)/2}q$.由于 $p\ne q$，已知 $p$ 在 $\mathbb Q(\zeta_q)$ 中不分歧（因而在 $\mathbb Q(\sqrt{q^*})$ 中也不分歧）.于是有图：
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&,column sep=large,row sep=large]
+G_{\mathbb Q(\zeta_q)/\mathbb Q(\sqrt{q^*})}\arrow[r,hook]\arrow[d,"\sim"]\&G_{\mathbb Q(\zeta_q)/\mathbb Q}\arrow[r,two heads,"\pi"]\arrow[d,"\chi_{q,\mathbb Q}"]\&G_{\mathbb Q(\sqrt{q^*})/\mathbb Q}\arrow[d,"\psi_{q^*}"]\\
+(\mathbb F_q^\times)^2\arrow[r,hook]\&\mathbb F_q^\times\arrow[r,two heads,"a\mapsto\left(\frac aq\right)"']\&\{\pm1\}
+\end{tikzcd}
+\end{align*}
+事实上，由于 $\mathbb F_q^\times$ 为循环群，它只有一个指数为 $2$ 的子群，即 $(\mathbb F_q^\times)^2$；所以右下方的箭头由 Legendre 符号给出.由此推出（第二个等式参见上述练习）：
+\begin{align*}
+\left(\frac{q^*}p\right)
+&=\psi_{q^*}\left(\frac{\mathbb Q(\sqrt{q^*})/\mathbb Q}{p}\right)\\
+&=\psi_{q^*}\circ\pi\left(\frac{\mathbb Q(\zeta_q)/\mathbb Q}{p}\right)=\left(\frac aq\right),
+\end{align*}
+其中
+\begin{align*}
+a=\chi_{q,\mathbb Q}\left(\frac{\mathbb Q(\zeta_q)/\mathbb Q}{p}\right)=p.
+\end{align*}
+因此得到
+\begin{align*}
+\left(\frac pq\right)=\left(\frac{q^*}p\right)=\left(\frac{-1}p\right)^{\frac{q-1}{2}}\left(\frac qp\right).
+\end{align*}
+为计算 $\left(\frac{-1}p\right)$，可以注意到 $\mathbb Q(\sqrt{-1})=\mathbb Q(\zeta_4)$，并使用上文的事实：$p$ 在 $\mathbb Q(\zeta_4)$ 中完全分解，当且仅当 $p\equiv1\pmod4$.此时 $\left(\frac{-1}p\right)=1$，最终得到一般公式 $\left(\frac{-1}p\right)=(-1)^{(p-1)/2}$.
+
+\subsection{走向其他互反律}\label{sec:nt-3-5-8}
+设 $K$ 为某个 $\mathbb Q(\zeta_n)$ 的子域.它是 $\mathbb Q$ 的 Abel 扩张（反过来，Kronecker--Weber 定理告诉我们，$\mathbb Q$ 的每个 Abel 扩张都可嵌入某个分圆数域）.设 $p\nmid n$ 为素数.则 $p$ 在 $K$ 中不分歧.我们关心它的分解类型，即 $\operatorname{Max}(\mathcal O_K)$ 中所有包含 $p$ 的 $\mathfrak P$ 所共有的剩余次数 $f_p$.希望证明这一分解类型只依赖于 $p$ 的同余性质.
+
+为此，注意 $f_p$ 是 $\left(\frac{K/\mathbb Q}{p}\right)$ 在 $G_{K/\mathbb Q}$ 中的阶.有图
+\begin{align*}
+\begin{tikzcd}[ampersand replacement=\&,column sep=large,row sep=large]
+G_{\mathbb Q(\zeta_n)/K}\arrow[r,hook]\arrow[dr,"\chi_{n,K}"']\&G_{\mathbb Q(\zeta_n)/\mathbb Q}\arrow[r,two heads,"\pi"]\arrow[d,"\chi_{n,\mathbb Q}"]\&G_{K/\mathbb Q}\arrow[d,"\sim"']\\
+\&(\mathbb Z/n\mathbb Z)^\times\arrow[r,two heads]\&(\mathbb Z/n\mathbb Z)^\times/\operatorname{Im}(\chi_{n,K})
+\end{tikzcd}
+\end{align*}
+这表明问题归结为确定 $\chi_{n,K}$ 的像.例如，$p$ 完全分解（$f_p=1$），当且仅当 $\left(\frac{K/\mathbb Q}{p}\right)\in\operatorname{Im}(\chi_{n,K})$.为此，有下述定理，将在基础课程中证明.
+\begin{theorem*}
+设 $L/K$ 为数域的 Galois 扩张.则 $G_{L/K}$ 由 Frobenius 代换生成.
+\end{theorem*}
+在我们的情形中，$G_{\mathbb Q(\zeta_n)/K}$ 由
+\begin{align*}
+\left(\frac{\mathbb Q(\zeta_n)/K}{\mathfrak P}\right)
+=\left(\frac{\mathbb Q(\zeta_n)/\mathbb Q}{p}\right)^{f_p}\qquad(\mathfrak P\mid p)
+\end{align*}
+生成，其中 $p$ 与 $n$ 互素.因此，$\operatorname{Im}(\chi_{n,K})$ 由素数 $p$ 对应的 $p^{f_p}$ 生成.
+
+表面上看似循环，实际并非如此.由于 $\operatorname{Im}(\chi_{n,K})$ 有限，只须有限多个 $p$ 即可将它生成.因此，先对有限多个 $p$ ``手工''确定 $f_p$，随后所有其他 $f_p$ 都由 $p$ 模 $n$ 的类给出.

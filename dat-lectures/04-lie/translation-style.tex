@@ -1,0 +1,53 @@
+\RequirePackage{enumitem}
+% 原书（Dat, Groupes et Algèbres de Lie, 2012-2013）在每节内用
+% 同一计数器给定义/命题/编号段落统一编号（X.Y.Z，含正文段落），故此处把
+% cls 预定义的定理环境全部改为共享 definition 计数器（按节重置）。
+% 编号由 LaTeX 自动生成，正文中不得手打定理编号。
+\theoremstyle{mtfang}
+% definition 环境与计数器沿用 cls 的 \newtheorem{definition}{定义}[section]。
+% 其余环境一律改为共享 definition 计数器（旧计数器仍被分配但不再使用）。
+\let\lemma\relax
+\newtheorem{lemma}[definition]{引理}
+\let\theorem\relax
+\newtheorem{theorem}[definition]{定理}
+\let\corollary\relax
+\newtheorem{corollary}[definition]{推论}
+\let\proposition\relax
+\newtheorem{proposition}[definition]{命题}
+\let\remark\relax
+\newtheorem{remark}[definition]{注}
+\theoremstyle{mtsong}
+\let\example\relax
+\newtheorem{example}[definition]{例}
+\newtheorem{exercise}[definition]{习题}
+
+% 原书中不带编号的陈述（如未编号的 Lemme、Exemples 列表等）使用星号环境，
+% 由 codex 两本成品沿用：定义*/引理*/定理*/命题*/推论*/注*/例*/习题*。
+\theoremstyle{mtfang}
+\newtheorem*{definition*}{定义}
+\newtheorem*{lemma*}{引理}
+\newtheorem*{theorem*}{定理}
+\newtheorem*{proposition*}{命题}
+\newtheorem*{corollary*}{推论}
+\newtheorem*{remark*}{注}
+\theoremstyle{mtsong}
+\newtheorem*{example*}{例}
+\newtheorem*{exercise*}{习题}
+
+% 原书的编号正文段落（如 “1.1.4 Soient A et B ...” 或
+% “1.2.1 Groupes monogènes et cycliques.”）：与定理共享同一计数器。
+% 用法：\begin{numpara}正文...\end{numpara} 或
+%      \begin{numpara}[标题]正文...\end{numpara}
+% 标签用 \label{np:<book>-X-Y-Z}。
+\newenvironment{numpara}[1][]{%
+  \refstepcounter{definition}\par\noindent
+  \textbf{\thedefinition.}\enspace
+  \ifx\\#1\\\else\textbf{#1.}\enspace\fi
+  \ignorespaces
+}{\par}
+
+% 交叉引用写法：定理~\ref{thm:lie-1-1-8}、命题~\ref{prop:fg-1-1-6} 等；
+% 章节引用 \ref{sec:...}、\ref{chap:...}。
+\emergencystretch=3em
+\setcounter{secnumdepth}{1}
+\setcounter{tocdepth}{1}

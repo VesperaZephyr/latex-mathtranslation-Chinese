@@ -45,8 +45,11 @@ Chinese translation manuscripts.
 | `harmonic-analysis-intro-zeno/` | 调和分析入门——为深入理解函数的性质 | 澤野嘉宏 | 翻译完成 |
 | `hintz-microlocal-analysis/` | An Introduction to Microlocal Analysis (GTM 304) | Peter Hintz | 翻译完成 |
 | `visual-differential-forms/` | A Visual Introduction to Differential Forms and Calculus on Manifolds（微分形式与流形上的微积分——可视化导引） | Jon Pierre Fortney | 翻译完成 |
+| `dat-lectures/` | Jean-François Dat 数学讲义（七册：有限群及其表示、代数与 Galois 理论、数论、Lie 群与 Lie 代数、半单 Lie 代数及其表示、代数几何（二）、模形式及其算术性质） | Jean-François Dat | 翻译完成 |
 
-> 更多译本将逐步加入（如张慧星 ODE、收获与播种、代数/数论/几何导引等按计划后续补充）。/ More translations will be added over time.
+> 更多译本将逐步加入。/ More translations will be added over time.
+
+Dat 讲义各册的原始介绍见 [Jean-François Dat 教学页面](https://webusers.imj-prg.fr/~jean-francois.dat/enseignement/enseignement.php)。其中《代数与 Galois 理论》所据为**较早（最早）的版本**；该页面上的**最新版本为 2017 年版**，并非本译本依据的版本。
 
 ## 本地编译 / Building locally
 

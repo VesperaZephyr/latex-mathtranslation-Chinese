@@ -1,0 +1,242 @@
+\chapter{交换代数}\label{chap:galois-commutative-algebra}
+\section{为什么研究交换代数}\label{sec:galois-1-1}
+交换代数研究交换环及其模.回顾一下，一个（含幺）环 $A$ 是带有加法 $+\colon A\times A\longrightarrow A$ 和乘法 $\cdot\colon A\times A\longrightarrow A$ 的集合：加法有记作 $0$ 的单位元，使 $(A,+)$ 成为 Abel 群；乘法有单位元 $1$，使 $(A,\cdot)$ 成为结合幺半群；而且乘法对加法满足``分配律''（也称``双线性''）.如果乘法交换，就称这个环为交换环.用 $A^\times$ 表示 $A$ 中乘法可逆元组成的子集，于是 $(A^\times,\cdot)$ 是群.当 $A^\times=A\setminus\{0\}$ 时，称 $A$ 为域.
+
+本课程的某些定义和命题脱离背景后，可能显得十分晦涩.因此，牢记数学家为什么以及怎样走到这些概念是很重要的.引导他们的并非抽象本身的乐趣，而是通过适当重述来解决具体问题的愿望.
+
+\subsection{整数环}\label{sec:galois-1-1-1}
+交换环的第一个例子是整数环 $A=\mathbb Z$.它的加法结构很清楚（我们将遇到的大多数环也是如此）：它由 $1$ 生成，$1$ 是其唯一的``基本砖块''.有趣的是乘法结构，以及乘法与加法的相互作用.乘法的``基本砖块''是素数，关于素数仍有许多未解决的猜想.回顾 Euclid 的著名结果：
+\begin{theorem*}[{唯一分解}]
+每个整数都能写成 $n=\pm p_1^{v_1}p_2^{v_2}\cdots p_r^{v_r}$，其中 $p_i$ 是两两不同的素数，$v_i\in\mathbb N^*$；除因子的次序外，这种写法唯一.\footnote{译注：原文未排除 $n=0$；此分解陈述应限于非零整数.}
+\end{theorem*}
+上述分解的存在性容易用归纳法证明，但唯一性更为微妙.回顾一下，它通过以下步骤由带余除法推出：
+\begin{enumerate}
+\item （Bézout 引理）若 $a,b\in\mathbb Z\setminus\mathbb Z^\times$ 没有公因子，则存在 $u,v\in\mathbb Z$ 使 $ua+vb=1$.事实上，令 $r_0:=|a|$、$r_1:=|b|$，并以 $r_2$ 表示 $a$ 除以 $b$ 的带余除法余数.于是 $r_2\in r_0+\mathbb Zr_1$，且 $0\leq r_2<r_1$.由于 $r_1$ 不整除 $r_0$，有 $r_2\ne0$.如果 $r_2=1$，证明完毕.否则，再考虑 $r_1$ 除以 $r_2$ 的余数 $0<r_3<r_2$；只要 $r_k\ne1$，就把 $r_{k+1}$ 定义为 $r_{k-1}$ 除以 $r_k$ 的余数.于是 $r_{k+1}\in r_{k-1}+\mathbb Zr_k$，再作直接归纳即得 $r_{k+1}\in\mathbb Zr_0+\mathbb Zr_1$.由于 $r_{k+1}<r_k$，算法在某个 $k<|b|$ 处停止，此时 $r_{k+1}=1$.
+\item （Euclid 引理）若素数 $p$ 整除 $ab$，则 $p\mid a$ 或 $p\mid b$.事实上，如果 $p$ 不整除 $a$，就能找到 $u,v$ 使 $up+va=1$，因而 $upb+vab=b$，这说明 $p$ 整除 $b$.
+\item 特别地，如果 $p$ 整除定理中的乘积 $p_1^{v_1}\cdots p_r^{v_r}$，则 $p$ 等于某个 $p_i$.唯一性随即容易推出：若
+\begin{align*}
+p_1^{v_1}\cdots p_r^{v_r}=(p'_1)^{v'_1}\cdots(p'_{r'})^{v'_{r'}},
+\end{align*}
+则 $p_1$ 等于某个（且仅一个）$p'_i$；适当编号后，可设其为 $p'_1$.对 $p_2$ 及其后的素数同样处理，就得到 $r=r'$，并可设所有 $i$ 都有 $p_i=p'_i$.剩下只须证明每个 $i=1,\ldots,r$ 都满足 $v_i=v'_i$；例如，可以对整数 $v_1+\cdots+v_r$ 作归纳.
+\end{enumerate}
+Euclid 的结论也可以表述如下：设 $p$ 是素数，$\nu_p(n)$ 是 $n$ 的 $p$ 进赋值，即满足 $p^v$ 整除 $n$ 的最大整数 $v$.有等式
+\begin{align*}
+n=\varepsilon(n)\prod_p p^{\nu_p(n)},
+\end{align*}
+其中 $\varepsilon(n)$ 表示 $n$ 的符号，而乘积遍历全部素数\footnote{这个表达式要有意义，就隐含着只有有限多个素数满足 $\nu_p(n)\ne0$，因而也只有有限多个素数满足 $p^{\nu_p(n)}\ne1$.}.
+
+Euclid 的结果有一些我们早已熟悉的推论，例如最大公因子和最小公倍数的存在性.上述表述还给出下列简洁的公式：
+\begin{align*}
+\operatorname{gcd}(n,m)&=\prod_p p^{\min(\nu_p(n),\nu_p(m))},&
+\operatorname{lcm}(n,m)&=\prod_p p^{\max(\nu_p(n),\nu_p(m))}.
+\end{align*}
+尤其是，Euclid 的结果能用来解某些``丢番图''方程，即要求在 $\mathbb Z$ 或 $\mathbb Q$ 中求解的多项式方程.例如：
+\begin{enumerate}
+\item 方程 $x^2=2$ 在 $\mathbb Q$ 中无解（习题）.
+\item 方程 $x^2-1=y^3$ 的解为 $\{(0,-1),(1,0),(-1,0),(3,2),(-3,2)\}$.事实上，可以分解 $x^2-1=(x-1)(x+1)$.先寻找 $x$ 为偶数的解 $(x,y)$.这时 $x-1$ 与 $x+1$ 的最大公因子为 $1$，由唯一分解性，它们都必须是整数的立方，设 $x-1=a^3$、$x+1=b^3$，其中 $ab=y$.于是 $b^3-a^3=2$，从而 $b=1$、$a=-1$，所以 $x=0$、$y=-1$.再寻找 $x$ 为奇数的解，设 $x=2x'+1$.这时 $y$ 必须为偶数，设 $y=2y'$，则 $x'(x'+1)=2(y')^3$.如果 $x'=2x''$ 为偶数，那么 $x''$ 与 $x'+1$ 都必须是立方，设为 $a^3$ 与 $b^3$，且满足 $b^3-2a^3=1$.作一些粗略估计，就能确信仅有的解是 $(b,a)=(1,0)$ 或 $(-1,-1)$，相应地 $(x,y)=(1,0)$ 或 $(-3,2)$.当 $x'$ 为奇数时，得到另外两种可能 $(-1,0)$ 与 $(3,2)$.\footnote{译注：原文把方程 $b^3-2a^3=1$ 的求解归结于粗略估计，论证并未展开；此处保留原文.}
+\end{enumerate}
+遗憾的是，很快就会遇到形式十分相近、分解方法却完全不再适用的方程，例如
+\begin{align*}
+x^2+N=y^3,\qquad N\in\mathbb Z\text{ 为给定整数}.
+\end{align*}
+数学家自然想到扩大``可用''的数的范围，使 $x^2+N$ 能够分解.
+
+\subsection{代数整数环}\label{sec:galois-1-1-2}
+为简单起见，假设我们已经有复数域 $\mathbb C$，且知道它是代数闭的.对 $z\in\mathbb C$，用 $\mathbb Z[z]$ 表示 $\mathbb C$ 中由 $z$ 生成的子环，即包含 $z$ 的最小子环.具体地说，它是 $\mathbb C$ 中由 $z$ 的幂 $\{z^n:n\in\mathbb N\}$ 生成的加法子群（请自行验证！）.
+\begin{definition*}
+若 $z$ 是某个首一多项式 $f(X)=X^d+a_1X^{d-1}+\cdots+a_d\in\mathbb Z[X]$ 的零点，则称 $z$ 为\newterm{galois-algebraic-integer}{代数整数}{algebraic integer}.
+\end{definition*}
+此时 $z^d\in\mathbb Z+\mathbb Zz+\cdots+\mathbb Zz^{d-1}$；直接归纳可知，每个 $n\geq d$ 对应的 $z^n$ 也属于这个群.换句话说，$\mathbb Z[z]$ 作为 Abel 群由有限族 $\{1,z,\ldots,z^{d-1}\}$ 生成.
+\begin{example*}[{环 $\mathbb Z[\sqrt{-2}]$ 与方程 $x^2+2=y^3$}]
+数 $\sqrt{-2}:=i\sqrt2$ 是多项式 $X^2+2$ 的零点，因而是代数整数.它生成的环是 $\mathbb Z[\sqrt{-2}]=\mathbb Z\oplus i\sqrt2\mathbb Z$（验证它确实是子环！）.在这个环中，对每个 $x\in\mathbb Z[\sqrt{-2}]$，都能分解 $x^2+2=(x+\sqrt{-2})(x-\sqrt{-2})$.我们将看到，这个环是 Euclid 环，即其中存在某种形式的带余除法.这将推出某种形式的最大公因子的存在性，以及这个环中两个元素``互素''的概念；还将推出一个类似于整数环中 Euclid 定理的结果，即不可约元幂的唯一分解.我们将称这种环为唯一分解环.下面具体说明其含义.
+\end{example*}
+\begin{definition*}
+在一般的交换环 $A$ 中，若元素 $a\in A$ 不可逆，且 $a=bc$ 蕴含 $b\in A^\times$ 或 $c\in A^\times$，则称 $a$ 为\newterm{galois-irreducible}{不可约元}{irreducible element}.若两个不可约元 $a,a'$ 满足 $a'=ua$，其中 $u\in A^\times$，则称它们相伴.
+\end{definition*}
+例如，在 $\mathbb Z$ 中，不可约元是 $a=\pm p$，其中 $p$ 为素数；不可约元的等价类为 $\{-p,p\}$.假设已经选定不可约元各等价类的代表组成的集合 $P\subset A$.如果每个元素 $x$ 都能除次序外唯一地写成 $x=up_1^{\nu_1}\cdots p_r^{\nu_r}$，其中 $p_i\in P$、$u\in A^\times$，就称 $A$ 为``唯一分解环''.\footnote{译注：原文未在不可约元的定义中排除零，也未在唯一分解的表述中排除零；这里保留原文的表述.}
+
+下面解释 $\mathbb Z[\sqrt{-2}]$ 的唯一分解性如何让我们在 $\mathbb Z^2$ 中解方程 $x^2+2=y^3$.首先，模 $4$ 考虑可知 $x$ 不能为偶数.因此设 $x$ 为奇数；这时 $\mathbb Z[\sqrt{-2}]$ 中的 $x+\sqrt{-2}$ 与 $x-\sqrt{-2}$ 必须互素.事实上，同时整除它们的不可约元还应整除 $2\sqrt{-2}=-(\sqrt{-2})^3$，因而必须等于 $\pm\sqrt{-2}$（它确实不可约）；但 $\pm\sqrt{-2}$ 不整除奇数 $x$.由唯一分解性，$x+\sqrt{-2}$ 与 $x-\sqrt{-2}$ 必分别形如 $u\alpha^3$ 与 $u^{-1}\bar\alpha^3$（横线表示复共轭），其中 $u\in\mathbb Z[\sqrt{-2}]^\times$、$\alpha\in\mathbb Z[\sqrt{-2}]$.事实上，容易验证（习题）$\mathbb Z[\sqrt{-2}]^\times=\{\pm1\}$，所以 $x+\sqrt{-2}$ 和 $x-\sqrt{-2}$ 必须是 $\mathbb Z[\sqrt{-5}]$ 中的完全立方.\footnote{译注：原文此处写作 $\mathbb Z[\sqrt{-5}]$，与上下文中的 $\mathbb Z[\sqrt{-2}]$ 不符；保留原文.}而一个立方可写为
+\begin{align*}
+(a+b\sqrt{-2})^3=(a^3-6ab^2)+(3a^2b-2b^3)\sqrt{-2}.
+\end{align*}
+初等验证可得 $3a^2b-2b^3=1\Longleftrightarrow(a,b)=(\pm1,1)$，而 $3a^2b-2b^3=-1\Longleftrightarrow(a,b)=(\pm1,-1)$.所以仅有的 $x$ 值为 $x=\pm5$，原方程的解就是 $(x,y)=(\pm5,3)$.
+\begin{example*}[{环 $\mathbb Z[\sqrt{-3}]$ 与方程 $x^2+3=y^3$}]
+尝试把 $3$ 换成 $2$，使用同样的策略.\footnote{译注：原文写的是``把 $3$ 换成 $2$''，但此处实际从上一例的 $2$ 转向 $3$.}考虑环 $\mathbb Z[\sqrt{-3}]=\mathbb Z\oplus i\sqrt3\mathbb Z$，其中对每个 $x\in\mathbb Z[\sqrt{-3}]$ 都有 $x^2+3=(x+\sqrt{-3})(x-\sqrt{-3})$.遗憾的是，这个环不是唯一分解环.事实上，考虑等式
+\begin{align*}
+2\cdot2=4=(1+\sqrt{-3})(1-\sqrt{-3}).
+\end{align*}
+元素 $2$ 不可约，因为若写成 $2=xy$，其中 $x,y\in\mathbb Z[\sqrt{-3}]$，则 $4=x\bar x y\bar y$，所以正整数 $x\bar x$ 只能是 $1$、$2$ 或 $4$.但它不能为 $2$，因为方程 $u^2+3v^2=2$ 在 $\mathbb Z^2$ 中无解.因此，或者 $x\bar x=1$，此时 $x=\pm1$；或者 $y\bar y=1$，此时 $y=\pm1$.同理，$1+\sqrt{-3}$ 与 $1-\sqrt{-3}$ 也不可约.由于 $\mathbb Z[\sqrt{-3}]^\times=\{\pm1\}$，这三个元素两两不相伴，上述等式说明 $\mathbb Z[\sqrt{-3}]$ 不具有唯一分解性.
+
+事实上，这个环的情况比不具唯一分解性还``糟''：它也不是整闭的.这意味着（以后还会讨论）它的分式域，即 $\mathbb C$ 中由 $\sqrt{-3}$ 生成的子域 $\mathbb Q[\sqrt{-3}]$，含有不属于这个环的代数整数.例如 $j:=(-1+\sqrt{-3})/2$ 就是代数整数，因为它是多项式 $X^3-1$ 的根，更确切地说，是不可约多项式 $X^2+X+1$ 的根.
+
+包含 $\mathbb Z[\sqrt{-3}]$ 的环 $\mathbb Z[j]$ 比前者好得多：我们将看到，它是 Euclid 环，因而是唯一分解环（也整闭）.注意，等式 $2\cdot2=(1+\sqrt{-3})(1-\sqrt{-3})$ 并不违背 $\mathbb Z[j]$ 中分解的唯一性，因为根据等式 $2=-j(1+\sqrt{-3})=-j^{-1}(1-\sqrt{-3})$ 以及 $j\in\mathbb Z[j]^\times$，$2$、$1+\sqrt{-3}$ 与 $1-\sqrt{-3}$ 是相伴的不可约元.此外，以下事实也有用：$\mathbb Z[j]^\times=\mu_6=\{\pm1,\pm j,\pm\bar j\}$.
+
+分解 $x^2+3=(x+\sqrt{-3})(x-\sqrt{-3})$ 在 $\mathbb Z[j]$ 中成立，因此能用它研究方程 $x^2+3=y^3$.注意，任何可能的解 $(x,y)$ 都有 $x\ne0$.于是 $x+\sqrt{-3}$ 与 $x-\sqrt{-3}$ 互素.事实上，公因子也整除 $2\sqrt{-3}$，而 $2$ 与 $\sqrt{-3}$ 都不可约，且在 $x\ne0$ 时显然均不整除 $x\pm\sqrt{-3}$.\footnote{译注：原文这里的互素性论证不成立；例如 $x=1$ 时，$2$ 在 $\mathbb Z[j]$ 中整除 $1\pm\sqrt{-3}$.}由唯一分解性，可以写成
+\begin{align*}
+x+\sqrt{-3}&=u(a+b\sqrt{-3})^3\\
+&=u\bigl((a^3-9ab^2)+(3a^2b-3b^3)\sqrt{-3}\bigr),
+\end{align*}
+其中 $u\in\{\pm1,(\pm1\pm\sqrt{-3})/2\}$.比较 $\sqrt{-3}$ 的系数，立刻可知 $u=\pm1$ 时不可能成立.若 $u=(1+\sqrt{-3})/2$，则得到条件
+\begin{align*}
+a^3-9ab^2+3a^2b-3b^3=2.
+\end{align*}
+稍用``一点''技巧，可以注意到模 $4$ 的同余式
+\begin{align*}
+a^3-9ab^2+3a^2b-3b^3&\equiv a^3+3ab^2+3a^2b+b^3\\
+&\equiv(a+b)^3\pmod4.
+\end{align*}
+但 $2$ 不是 $\mathbb Z/4\mathbb Z$ 中的立方，因此上述条件不可能成立.对其他 $u$ 作类似论证，便得到方程 $x^2+3=y^3$ 无解的结论（请验证）.\footnote{译注：原文从互素性到立方表示的论证存在缺口，特别是未处理 $\mathbb Z[j]$ 中元素的半整数坐标.这里保留原文推导与结论，不将这段论证视为已补全的证明.}
+\end{example*}
+\begin{example*}[{环 $\mathbb Z[\sqrt{-5}]$ 与方程 $x^2+5=y^3$}]
+现在把 $3$ 换成 $5$，考虑环 $\mathbb Z[\sqrt{-5}]=\mathbb Z\oplus i\sqrt5\mathbb Z$，其中对每个 $x\in\mathbb Z[\sqrt{-5}]$ 都有 $x^2+5=(x+\sqrt{-5})(x-\sqrt{-5})$.这个环仍然不是唯一分解环，例如下面的等式便说明了这一点：
+\begin{align*}
+2\cdot3=(1+\sqrt{-5})(1-\sqrt{-5}).
+\end{align*}
+（习题：验证 $2$、$3$、$1+\sqrt{-5}$ 与 $1-\sqrt{-5}$ 是 $\mathbb Z[\sqrt{-5}]$ 中两两不相伴的不可约元.）但这一次问题更严重：$\mathbb Z[\sqrt{-5}]$ 已经整闭，因而不能像处理 $\mathbb Z[\sqrt{-3}]$ 那样，通过稍微扩大它来获得唯一分解环.
+\end{example*}
+为克服分解不唯一带来的困难，Dedekind 提出了环的理想这一概念.
+
+\subsection{理想}\label{sec:galois-1-1-3}
+回顾，$A$ 的\newterm{galois-ideal}{理想}{ideal} $I$ 是在与 $A$ 中元素相乘下稳定的加法子群.若 $a_1,\ldots,a_n$ 是 $A$ 的元素，用 $(a_1,\ldots,a_n)$ 表示它们生成的理想，即包含这些元素的最小理想.因此
+\begin{align*}
+(a_1,\ldots,a_n)=(a_1)+\cdots+(a_n)=Aa_1+\cdots+Aa_n,
+\end{align*}
+其中对 $A$ 的两个子集 $S_1,S_2$，使用下列``和''的记号：
+\begin{align*}
+S_1+S_2=\{x\in A:\exists(s_1,s_2)\in S_1\times S_2,\ x=s_1+s_2\}.
+\end{align*}
+像这样由有限族生成的理想称为有限生成理想.如果只由一个元素生成，就称为主理想.
+
+$A$ 的理想可以``相加''和``相乘''.加法就是上面的集合和：
+\begin{align*}
+I+J=\{x\in A:\exists(i,j)\in I\times J,\ x=i+j\}.
+\end{align*}
+理想的乘法更微妙：如果直接把集合 $I$ 与 $J$ 相乘，所得集合虽然在与 $A$ 中元素相乘下稳定，却不对加法封闭.因此应取这个直接乘积生成的理想.明确地说，
+\begin{align*}
+I\cdot J:=\{x\in A:\ &\exists n\in\mathbb N,\ \exists(i_1,\ldots,i_n,j_1,\ldots,j_n)\in I^n\times J^n,\\
+&x=i_1j_1+\cdots+i_nj_n\}.
+\end{align*}
+Dedekind 的发现是，对于像 $\mathbb Z[\sqrt{-5}]$ 这样的整闭数环，即使环本身不具有唯一分解性，非零真理想仍具有``唯一''分解.当然，这需要对理想建立一个与不可约元类似的概念，即素理想.
+\begin{definition*}
+若理想 $I\ne A$ 满足：对所有 $x,y\in A$，$xy\in I$ 蕴含 $x\in I$ 或 $y\in I$，则称 $I$ 为\newterm{galois-prime-ideal}{素理想}{prime ideal}.
+\end{definition*}
+由定义可知，对非零 $a\in A$，若理想 $(a)$ 是素理想，则 $a$ 不可约.反之未必成立.事实上，逆命题等价于 Euclid 引理，而我们已看到，该引理在 $\mathbb Z[\sqrt{-5}]$ 中不成立.具体地，若 $x=1+\sqrt{-5}$、$y=1-\sqrt{-5}$，则 $xy\in(2)$，但 $x,y$ 都不属于 $(2)$，所以尽管 $2$ 不可约，理想 $(2)$ 却不是素理想.
+\begin{theorem*}[{Dedekind}]
+在环 $\mathbb Z[\sqrt{-5}]$（或其他任何整闭的代数整数环）中，每个非零真理想 $I$ 都能``除次序外唯一''地写成 $I=\mathfrak p_1^{\nu_1}\cdot\mathfrak p_2^{\nu_2}\cdots\mathfrak p_r^{\nu_r}$，其中 $\mathfrak p_i$ 是两两不同的素理想.
+\end{theorem*}
+例如，有下列理想等式：
+\begin{align*}
+(2)&=(2,1+\sqrt{-5})(2,1-\sqrt{-5})=(2,1+\sqrt{-5})^2,\\
+(3)&=(3,1+\sqrt{-5})(3,1-\sqrt{-5}),\\
+(1+\sqrt{-5})&=(2,1+\sqrt{-5})(3,1+\sqrt{-5}),\\
+(1-\sqrt{-5})&=(2,1-\sqrt{-5})(3,1-\sqrt{-5}).
+\end{align*}
+以第一行为例.首先，显然 $(2,1+\sqrt{-5})=(2,1-\sqrt{-5})$，因为 $1-\sqrt{-5}=2-(1+\sqrt{-5})$.注意到 $(\alpha,\beta)(\alpha',\beta')=(\alpha\alpha',\alpha\beta',\beta\alpha',\beta\beta')$，可得 $(2,1+\sqrt{-5})^2=(4,2+2\sqrt{-5},-4-2\sqrt{-5})$.\footnote{译注：原文此处最后一个生成元写作 $-4-2\sqrt{-5}$；直接平方 $(1+\sqrt{-5})^2$ 则为 $-4+2\sqrt{-5}$.该生成元表仍与直接展开所得生成同一理想，且与下文表示 $2$ 的等式相合；此处保留原文.}特别地，此理想由 $2$ 的倍数生成，所以包含于 $(2)$.它还包含元素 $2=4+(2+2\sqrt{-5})-4-2\sqrt{-5}$，因而包含理想 $(2)$，最终与其相等.其他等式同理.可以证明理想 $\mathfrak p_1:=(2,1+\sqrt{-5})$、$\mathfrak p_2:=(3,1+\sqrt{-5})$ 和 $\mathfrak p_3:=(3,1-\sqrt{-5})$ 都是素理想.我们看到，之前造成困难的等式 $2\cdot3=(1+\sqrt{-5})(1-\sqrt{-5})$，在理想的世界里变成 $\mathfrak p_1^2\mathfrak p_2\mathfrak p_3=\mathfrak p_1\mathfrak p_2\mathfrak p_1\mathfrak p_3$，符合理想的唯一分解性.
+\begin{exercise*}
+验证上述理想 $\mathfrak p_i$ 确实是素理想（进一步学习理论后会更容易），且都不是主理想.
+\end{exercise*}
+回到方程 $x^2+5=y^3$，在环 $\mathbb Z[\sqrt{-5}]$ 中将其分解为 $y^3=(x+\sqrt{-5})(x-\sqrt{-5})$.由于分解不唯一，不能像前面那样断言 $x+\sqrt{-5}$ 形如 $u\alpha^3$.但 Dedekind 定理仍保证由 $x+\sqrt{-5}$ 生成的理想形如 $(x+\sqrt{-5})=I^3$，其中 $I$ 为 $\mathbb Z[\sqrt{-5}]$ 的某个非零理想；条件是要证明 $(x+\sqrt{-5})$ 和 $(x-\sqrt{-5})$ 没有共同的素因子 $\mathfrak p$，即不存在同时包含它们的素理想 $\mathfrak p$.事实上，这样的 $\mathfrak p$ 必包含 $2\sqrt{-5}$，从而或者包含 $2$，此时 $\mathfrak p=(2,1+\sqrt{-5})$；或者包含 $\sqrt{-5}$，此时 $\mathfrak p=(\sqrt{-5})$（请验证！）.而因为 $x\ne0$，$\sqrt{-5}$ 不整除 $x+\sqrt{-5}$，所以 $(\sqrt{-5})$ 不包含 $(x+\sqrt{-5})$.\footnote{译注：仅由 $x\ne0$ 不能推出这里的非整除断言；例如 $x=5$ 时就可整除.此处保留原文论证.}此外，如果 $(2,1+\sqrt{-5})$ 包含 $(x+\sqrt{-5})$，则 $2$ 整除 $y$，因而 $x$ 为奇数；但这不可能，因为模 $4$ 将得到 $1+5=0$.
+
+这里要用到数环理论中一个非常重要的不变量，称为\newterm{galois-class-number}{类数}{class number}，它衡量数环偏离主理想性的程度（因而也衡量偏离唯一分解性的程度）.若时间允许，我们会在以后定义这个不变量；否则将在``数论''课程中定义.关键是 $3$ 不整除 $\mathbb Z[\sqrt{-5}]$ 的类数，这意味着（若已知道该不变量的含义）任何立方为主理想的理想本身都是主理想.因此对某个 $\alpha\in\mathbb Z[\sqrt{-5}]$ 有 $I=(\alpha)$，从而 $(x+\sqrt{-5})=(\alpha^3)$，最终得到所希望的形式 $x+\sqrt{-5}=u\alpha^3$.从这里出发，使用与方程 $x^2+3=y^3$ 的情形相同的一类初等论证，就能证明方程 $x^2+5=y^3$ 无解.
+\subsection{数论的另一个经典问题}\label{sec:galois-1-1-4}
+除了丢番图方程，另一个经典问题是确定哪些整数能由给定二次型``表示''.例如，哪些整数是两个、三个或四个平方之和？哪些整数能写成 $x^2+xy+y^2$，其中 $x,y\in\mathbb Z$？
+\begin{example*}[{Gauss 整数与两平方和问题}]
+Gauss 整数环 $\mathbb Z[i]$ 是研究两平方和问题的自然场所：哪些素数 $p$ 能写成 $p=a^2+b^2$，其中 $a,b\in\mathbb Z$？事实上，$\mathbb Z[i]$ 中的分解 $a^2+b^2=(a+ib)(a-ib)$ 蕴含这样的 $p$ 在 $\mathbb Z[i]$ 中不可约性不成立.反之，如果 $p$ 在 $\mathbb Z[i]$ 中不可约性不成立，就能分解为 $p=\alpha\beta$，其中 $\alpha,\beta$ 都不可逆，因而 $\alpha\bar\alpha>1$ 且 $\beta\bar\beta>1$（请验证，并注意 $\alpha\bar\alpha$ 与 $\beta\bar\beta$ 是整数！）.于是等式 $(\alpha\bar\alpha)(\beta\bar\beta)=p\bar p=p^2$ 表明 $\alpha\bar\alpha=\beta\bar\beta=p$.写成 $\alpha=a+ib$，就得到 $p=a^2+b^2$.所以两平方和问题等价于确定哪些素数 $p$ 在 $\mathbb Z[i]$ 中不可约性不成立.
+
+将等式 $p=a^2+b^2$ 模 $p$ 化简，可见一个必要条件是 $-1$ 为 $\mathbb F_p^\times$ 中的平方.为证明条件充分，假设存在 $m\in\mathbb N$ 使 $p\mid(m^2+1)$.在 $\mathbb Z[i]$ 中写成 $m^2+1=(m+i)(m-i)$.注意 $p$ 在 $\mathbb Z[i]$ 中既不整除 $m+i$，也不整除 $m-i$，因为 $m/p\pm i/p$ 不属于 $\mathbb Z[i]$.由 Euclid 引理，$p$ 不是 $\mathbb Z[i]$ 中的不可约元，正如所要证明的.
+\end{example*}
+\begin{remark*}
+要满意地回答两平方和问题，还需注意（经典习题）：``$-1$ 是模 $p$ 的平方''等价于 $p=2$ 或 $p\equiv1\pmod4$.
+\end{remark*}
+\begin{example*}
+仿照上述论证，我们可能想用环 $\mathbb Z[\sqrt{-3}]=\mathbb Z[i\sqrt3]$ 来证明：能写成 $p=a^2+3b^2$（$a,b\in\mathbb Z$）的素数 $p$，恰好是使 $-3$ 成为 $\mathbb F_p^\times$ 中平方的素数（后者显然是必要条件）.然而，第一个例子就是反例：$-3$ 确实是模 $2$ 的平方，但 $2$ 却不能写成 $a^2+3b^2$……前面的推理在哪里出了问题？就在使用 Euclid 引理的那一步：它对不具唯一分解性的 $\mathbb Z[\sqrt{-3}]$ 不成立.
+
+不过，在之前遇到的稍大的环 $\mathbb Z[j]$ 中，Euclid 引理是成立的.因此改在这个环中工作.我们寻找能写成 $a^2+3b^2$ 的素数 $p$，而 $-3$ 为 $\mathbb F_p$ 中的平方是一个必要条件.反之，若满足该条件，就存在 $m$ 使 $p$ 整除 $m^2+3=(m+\sqrt{-3})(m-\sqrt{-3})$.但在 $\mathbb Z[j]$ 中，除非 $p=2$，否则 $p$ 不整除 $m\pm\sqrt{-3}$.所以当 $p$ 为奇数时，$p$ 不是不可约元，可分解为 $p=\alpha\beta$，其中 $\alpha,\beta\in\mathbb Z[j]$ 都不可逆.于是必有 $\alpha\bar\alpha=p$.问题在于 $\alpha$ 形如 $(a+b\sqrt{-3})/2$，所以 $\alpha\bar\alpha=(a^2+3b^2)/4=p$.因此一般不能据此断言 $p$ 形如 $a^2+3b^2$.
+
+问题在于环 $\mathbb Z[j]$ 并不是由多项式 $X^2+3$ 的一个根生成的；它由 $j$ 生成，而 $j$ 是 $X^2+X+1$ 的根.因此，这个环更适合二次型 $x^2+xy+y^2$.事实上，利用分解 $X^2+X+1=(X-j)(X-\bar j)$，并运用与前一例相同的论证，可以证明素数 $p$ 形如 $p=a^2+ab+b^2$，当且仅当方程 $X^2+X+1=0$ 在 $\mathbb F_p$ 中有解.若 $p\ne3$，这等价于 $\mathbb F_p^\times$ 包含一个本原三次单位根，又等价于 $3$ 整除循环群 $\mathbb F_p^\times$ 的阶 $p-1$.最终得到：$p$ 可写成 $a^2+ab+b^2$，当且仅当 $p=3$ 或 $p\equiv1\pmod3$.
+\end{example*}
+上述所有例子的目的，都是说明环论中的某些概念（不可约性、唯一分解性、整闭性、理想）是如何产生的：它们在解决表面上更初等的数论问题时显示出用处.因此，我们有必要像本课程将要做的那样，系统发展交换环理论.然而，除了数环的优美性质，我们也会遇到许多病态现象.例如，下面这个十分自然的环竟没有任何不可约元！
+\begin{example*}
+设 $\overline{\mathbb Z}\subset\mathbb C$ 为全体代数整数的集合.我们以后会看到，它是 $\mathbb C$ 的子环.注意它不是域：例如，对整数 $n>1$，$1/n$ 从来不是代数整数（请验证）.设 $z\in\overline{\mathbb Z}$ 非零且不可逆，取 $z$ 在 $\mathbb C$ 中的一个平方根 $\sqrt z$（$\mathbb C$ 是代数闭的！）.它仍是 $\overline{\mathbb Z}$ 中的元素，并且在 $\overline{\mathbb Z}$ 中非零且不可逆（请说明理由）.于是等式 $z=\sqrt z\cdot\sqrt z$ 表明 $z$ 不可约性不成立.因此 $\overline{\mathbb Z}$ 没有任何不可约元.
+\end{example*}
+我们以后会证明，对 Noether 环不会出现这种病态现象：其中每个非零不可逆元都是不可约元的乘积.
+
+环论的另一个动机来自代数几何.
+
+
+
+% Source: physical/printed pages 9--11, sections 1.1.5--1.1.6.
+\subsection{经典代数几何中的环}
+\label{sec:galois-1-1-5}
+
+``经典''代数几何主要由 Hilbert 以及随后二十世纪初的意大利学派发展起来，研究由多项式方程定义的 $\mathbb{C}^{n}$ 的子集（以及它们的射影变体，这里不作讨论）. 因而，这样的集合由一族 $n$ 元多项式 $f_1,\dots,f_r\in\mathbb{C}[X_1,\dots,X_n]$ 定义如下：
+\begin{align*}
+V(f_1,\dots,f_r)
+ :=\bigl\{(z_1,\dots,z_n)\in\mathbb{C}^{n},\;
+ f_1(z,\dots,z_n)=\dots=f_r(z_1,\dots,z_n)=0\bigr\}.
+\end{align*}
+\footnote{译注：原文第一个 $f_1$ 的首个自变量印作 $z$，此处照录；按上下文应为 $z_1$.}
+这样的子集称为 $\mathbb{C}^{n}$ 的\newterm{galois-algebraic-subset}{代数子集}{algebraic subset}或\newterm{galois-zariski-closed-subset}{Zariski 闭集}{Zariski closed subset}. 我们希望从内蕴的角度研究这类集合，也就是说，不依赖于定义它所用的``辅助''数据，即 $n$ 和多项式 $f_i$. 例如，直觉告诉我们，应当能够将 $\mathbb{C}^{2}$ 中方程为 $X^3-Y^2=0$ 的平面曲线，与 $\mathbb{C}^{3}$ 中由方程 $f_1=X^3-Z$ 和 $f_2=Y^2-Z$ 定义的代数集等同起来. 为此，需要有同构的概念，而首先需要有代数集之间态射的概念. 自然的概念就是多项式映射.
+
+\begin{definition*}
+设 $V\subset\mathbb{C}^{n}$ 和 $V'\subset\mathbb{C}^{n'}$ 是两个代数子集. 映射 $\varphi\colon V\longrightarrow V'$ 称为\newterm{galois-polynomial-map}{多项式映射}{polynomial map}，如果它是某个多项式映射 $\widetilde{\varphi}\colon\mathbb{C}^{n}\longrightarrow\mathbb{C}^{n'}$ 的限制，其中后一个映射具有形式
+\begin{align*}
+(z_1,\dots,z_n)\in\mathbb{C}^{n}
+\longmapsto
+\bigl(f_1(z_1,\dots,z_n),\dots,f_{n'}(z_1,\dots,z_n)\bigr)
+\in\mathbb{C}^{n'},
+\end{align*}
+这里 $f_1,\dots,f_{n'}\in\mathbb{C}[X_1,\dots,X_n]$.
+\end{definition*}
+
+特别地，$V$ 上的\newterm{galois-polynomial-function}{多项式函数}{polynomial function}是上述意义下的多项式映射 $V\longrightarrow\mathbb{C}$. $V$ 上所有多项式函数组成的集合 $\mathcal{O}(V)$ 显然是一个 $\mathbb{C}$-代数（函数的加法和乘法逐点定义）. 如果 $\varphi\colon V\longrightarrow V'$ 是多项式映射，那么由这些定义可知，函数的复合 $f'\longmapsto\varphi\circ f$ 诱导一个 $\mathbb{C}$-代数态射
+\begin{align*}
+\varphi^*\colon\mathcal{O}(V')\longrightarrow\mathcal{O}(V),
+\qquad f'\longmapsto\widetilde{\varphi}\circ f.
+\end{align*}
+\footnote{译注：此处正文和公式中的复合次序及 $f$、$f'$ 均照原文保留. 按所列映射的定义域和值域，通常的拉回定义应为 $\varphi^*(f')=f'\circ\varphi$.}
+以后我们将解释下面这个引人注目的结果：
+
+\begin{theorem*}
+映射 $\varphi\longmapsto\varphi^*$ 在多项式映射 $V\longrightarrow V'$ 的集合与 $\mathbb{C}$-代数态射 $\mathcal{O}(V')\longrightarrow\mathcal{O}(V)$ 的集合之间诱导一个双射.
+\end{theorem*}
+
+这意味着，研究代数集及其间的多项式映射，等价于研究某些 $\mathbb{C}$-代数及其间的代数同态. 这就是交换代数在代数几何中占据重要地位的原因.
+
+可以问，哪些代数是某个代数集上的多项式函数代数. 由定义，$\mathcal{O}(\mathbb{C}^{n})=\mathbb{C}[X_1,\dots,X_n]$. 同样由定义，对 $V\subset\mathbb{C}^{n}$，函数的限制映射
+\begin{align*}
+\mathcal{O}(\mathbb{C}^{n})=\mathbb{C}[X_1,\dots,X_n]
+\longrightarrow\mathcal{O}(V),\qquad f\longmapsto f|_V
+\end{align*}
+是满射. 这说明 $\mathcal{O}(V)$ 是一个\newterm{galois-finite-type-algebra}{有限型代数}{algebra of finite type}，即由有限多个元素生成的 $\mathbb{C}$-代数. 此外，它还是\newterm{galois-reduced-ring}{既约环}{reduced ring}，其含义是：对 $f\in\mathcal{O}(V)$ 和 $k\in\mathbb{N}^*$，有 $f^k=0\Rightarrow f=0$.
+
+反过来，设 $A$ 是一个既约有限型 $\mathbb{C}$-代数. 选取 $A$ 的生成元 $x_1,\dots,x_n$，便得到一个满的 $\mathbb{C}$-代数态射
+\begin{align*}
+\mathbb{C}[X_1,\dots,X_n]\longrightarrow A,
+\qquad X_i\longmapsto x_i.
+\end{align*}
+设 $I$ 是这个态射的核. 它是 $\mathbb{C}[X_1,\dots,X_n]$ 的一个理想. 我们将证明下面这个由 Hilbert 得到的定理.
+
+\begin{theorem*}
+\emergencystretch=3em
+理想 $I$ 由有限多个函数生成，记为 $f_1,\dots,f_r$. 这些函数定义一个代数子集 $V=V(f_1,\dots,f_r)$. 限制映射
+\begin{align*}
+\mathcal{O}(\mathbb{C}^{n})\longrightarrow\mathcal{O}(V)
+\end{align*}
+的核恰好是 $I$，从而 $\mathcal{O}(V)=A$.
+\end{theorem*}
+
+因此，代数集 $V$ 背后的内蕴对象就是它的多项式函数代数 $\mathcal{O}(V)$. 而将 $V$ 给定为某个 $\mathbb{C}^{n}$ 的代数子集，等价于给定一个满射 $\mathbb{C}[X_1,\dots,X_n]\longrightarrow\mathcal{O}(V)$.
+
+为说明 $V$ 与 $\mathcal{O}(V)$ 之间的联系，下面解释如何从 $\mathcal{O}(V)$ 恢复 $V$ 的点. 首先注意，对任意子集 $E\subset V$，在每一点 $x\in E$ 处都为零的多项式函数 $f\in\mathcal{O}(V)$ 组成的集合 $I_E$ 是 $\mathcal{O}(V)$ 的一个理想（请验证）. 反过来，对 $\mathcal{O}(V)$ 的任意理想 $I$，可以令 $E_I$ 为所有满足 $I$ 中每个函数都在其上取零值的点 $x\in V$ 组成的集合. 注意，这个集合是否非空并不显然. 不过，我们将证明著名的 Hilbert \newterm{galois-nullstellensatz}{零点定理}{Nullstellensatz}：
+
+\begin{theorem*}
+映射 $E\longmapsto I_E$ 和 $I\longmapsto E_I$ 在 $V$ 的单点子集的集合（自然将其与 $V$ 等同）和 $\mathcal{O}(V)$ 的极大理想的集合之间诱导互为逆映射的双射.
+\end{theorem*}
+
+最后指出，$V$ 的几何性质都可以从它的函数代数中读出：切空间、维数、连通分支，以及它是否为光滑流形（在微分几何的意义下），等等. 例如，方程为 $Y^2=X^3$ 的平面曲线不是光滑流形，因为它在 $0$ 处有一个奇点（画出它的实点）. 与此对应，环 $\mathcal{O}(V)$ 不是整闭的. 相反，多项式函数环整闭的任何曲线都是光滑流形.
+
+\subsection{现代代数几何}
+\label{sec:galois-1-1-6}
+
+$\mathbb{C}^{n}$ 的代数子集与既约有限型 $\mathbb{C}$-代数之间的对偶性，预示着 Grothendieck 及其学生从二十世纪六十年代起对代数几何进行的大规模重建. 在他们的语言中，任何环都是某个称为\newterm{galois-scheme}{概形}{scheme}的几何对象的函数环. 与环 $A$ 相关联的概形是一个称为 $A$ 的\newterm{galois-spectrum}{谱}{spectrum}的拓扑空间. 它是 $A$ 的素理想的集合，赋予 \newterm{galois-zariski-topology}{Zariski 拓扑}{Zariski topology}. 特别地，数论中的每个环，例如 $\mathbb{Z}[\sqrt{-5}]$，都定义一个概形；Grothendieck 的语言为代数数论和代数几何提供了共同的框架. 概形理论超出了本课程的范围，不过，本课程将提供这一理论所需的交换代数基础.

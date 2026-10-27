@@ -1,0 +1,750 @@
+\chapter{交换代数}\label{chap:nt-2}
+关于交换代数的更多细节，可参阅 D.~Eisenbud 的著作《Commutative Algebra, with a view towards Algebraic Geometry》.
+
+\section{回顾与补充}\label{sec:nt-2-1}
+除非另有说明，这里考虑的环都带单位且交换.回忆：这样的环称为\newterm{nt-integral-domain}{整环}{integral domain}，如果 $\forall x,y\in A$，$(xy=0)\Rightarrow(x=0\text{ 或 }y=0)$.
+
+\subsection{理想}\label{sec:nt-2-1-1}
+设 $A$ 为环，$I,J$ 为 $A$ 的两个理想.
+
+\emph{理想的运算.}定义 $I,J$ 的和与积为
+\begin{align*}
+I+J&=\{i+j,\ i\in I,\ j\in J\},\\
+IJ&=\left\{\sum_{k=1}^{n}i_kj_k,\ i_1,\ldots,i_n\in I,\ j_1,\ldots,j_n\in J\right\}.
+\end{align*}
+它们仍是理想.注意，$IJ$ 是由集合 $\{ij,\ i\in I,j\in J\}$ 生成的理想，且 $IJ\subset I\cap J$.中国剩余定理告诉我们：如果 $I+J=A$（此时称 $I,J$ \newterm{nt-comaximal}{互素}{comaximal}），那么 $IJ=I\cap J$，且典范映射
+\begin{align*}
+A/IJ\longrightarrow A/I\times A/J
+\end{align*}
+为双射.此外，定义 $I$ 的\newterm{nt-radical}{根}{radical}为
+\begin{align*}
+\sqrt I:=\{x\in A,\ \exists n,\ x^n\in I\},
+\end{align*}
+它仍是 $A$ 的理想，且包含 $I$.回忆：若 $\sqrt{(0)}=(0)$，则称 $A$ 为\newterm{nt-reduced-ring}{既约环}{reduced ring}.
+
+\emph{有限性.}若存在元素 $a$ 使 $I=(a):=Aa$，则称 $I$ 为\newterm{nt-principal-ideal}{主理想}{principal ideal}（也称单生成理想）.如果 $A$ 的所有理想都是主理想，则称 $A$ 为主理想环.此外，若 $I$ 可由有限个元素生成，即为有限个主理想之和 $I=(a_1)+\cdots+(a_n)$，则称 $I$ 有限生成.如果 $A$ 的每个理想都有限生成，则称 $A$ 为\newterm{nt-noetherian-ring}{Noether 环}{Noetherian ring}.这等价于每个理想升链都最终稳定.
+
+\emph{素性与极大性.}理想 $I=A$ 称为单位理想；其他理想称为真理想.如果 $I$ 在真理想中关于包含关系极大，则称 $I$ 为\newterm{nt-maximal-ideal}{极大理想}{maximal ideal}.这等价于 $A/I$ 为域.以 $\operatorname{Max}(A)$ 表示 $A$ 的极大理想集合.如果 $\forall x,y\in A$，$xy\in I\Rightarrow x\in I\text{ 或 }y\in I$，则称 $I$ 为\newterm{nt-prime-ideal}{素理想}{prime ideal}；这等价于 $A/I$ 为整环.以 $\operatorname{Spec}(A)$ 表示 $A$ 的素理想集合.\footnote{译注：原文对素理想的判别条件未另写 $I\ne A$；通常应要求素理想为真理想，且整环不为零环.}
+
+\subsection{整除与分解}\label{sec:nt-2-1-2}
+设 $A$ 为整环，$a,b\in A$.
+
+\emph{整除.}若 $(b)\subseteq(a)$，则称 $a$ 整除 $b$（记为 $a\mid b$）；若 $(b)\subsetneq(a)$，则称 $a$ 严格整除 $b$.若 $a$ 非零、不可逆，且没有不可逆的严格因子，则称 $a$ \newterm{nt-irreducible-element}{不可约}{irreducible}.显然，
+\begin{align*}
+((a)\text{ 为素理想})\Rightarrow(a\text{ 不可约}),
+\end{align*}
+但逆命题不成立（参见 $A=\mathbb Z[\sqrt{-5}]$ 中的 $a=2$）.\footnote{译注：此处蕴含式按原文保留；通常须另设 $a\ne0$，因为整环中的零理想为素理想而 $0$ 不是不可约元.}
+
+\begin{proposition*}
+若 $A$ 是 Noether 环，则每个非零、不可逆元素都是不可约元之积（即``可分解''）.
+\end{proposition*}
+\begin{proof}
+由于 $A$ 是 Noether 环，由所有形如 $(a)$、其中 $a$ 不可分解的理想构成的集合 $E$，若非空，就有极大元，记为 $I=(a)$.由假设，$a$ 不可约不成立，所以它有不可逆的严格因子 $b$.若 $a=bc$，则 $c$ 也是 $a$ 的不可逆因子.由 $a$ 的选取，$b,c$ 都可分解，因此 $a$ 也可分解，矛盾.
+\end{proof}
+\begin{remark*}
+Noether 假设是必要的.例如，在 $\overline{\mathbb Z}=\{\alpha\in\overline{\mathbb Q},\ \alpha\text{ 为代数整数}\}$ 中没有不可约元，因为每个不可逆的 $\alpha$ 都可被 $\sqrt\alpha$ 严格整除.
+\end{remark*}
+若 Noether 环 $A$ 的每个元素 $a$ 的分解在不计顺序时唯一，则称 $A$ 为\newterm{nt-ufd}{唯一分解整环}{unique factorization domain}（英语简称 UFD）.\footnote{译注：原文仅写``在不计顺序时唯一''，未写``相差单位因子''，也未在本句重申整环及非零、非单位元素的限制；通常的唯一分解定义包含这些限定.}
+
+\subsection{局部化}\label{sec:nt-2-1-3}
+设 $A$ 为环.
+\begin{definition*}
+若子集 $S\subset A$ 满足 $1\in S$ 且 $\forall s,t\in S$，$st\in S$，则称 $S$ 为 $A$ 的\newterm{nt-multiplicative-set}{乘法集}{multiplicative set}.$A$ 在 $S$ 处的\newterm{nt-localization}{局部化}{localization}是环
+\begin{align*}
+S^{-1}A&:=\left\{\frac as,\ a\in A,s\in S\right\}_{/\sim},\\
+\frac as\sim\frac{a'}{s'}&\quad\Longleftrightarrow\quad\exists t\in S,\ t(sa'-s'a)=0.
+\end{align*}
+其中乘法与加法分别为 $\frac as\frac{a'}{s'}=\frac{aa'}{ss'}$ 与 $\frac as+\frac{a'}{s'}=\frac{as'+a's}{ss'}$.有典范同态 $A\xrightarrow{\mathrm{can}}S^{-1}A$，$a\mapsto\frac a1$.
+\end{definition*}
+\emph{例.}
+\begin{itemize}
+\item 若 $A$ 为整环，则 $S:=A\setminus\{0\}$ 为乘法集，$S^{-1}A$ 是域，记作 $\operatorname{Frac}(A)$（$A$ 的\newterm{nt-fraction-field}{分式域}{field of fractions}）.此时，每个局部化 $S'^{-1}A$ 都自然是 $\operatorname{Frac}(A)$ 的子环.（若 $A$ 不是整环，则非零因子组成的集合 $S$ 为乘法集，其局部化 $S^{-1}A$ 为包含 $A$ 的 Artin 环，但不包含 $A$ 的所有局部化.）\footnote{译注：括号中的 Artin 性断言对任意环并不成立；例如取 $A=\prod_{n\ge1}\mathbb F_2$，所有非零因子均为单位，总分式环仍为 $A$，而它不是 Artin 环.此外，将局部化视为分式域子环时须排除 $0\in S'$ 的情形.原文未写这些限制.}
+\item 若 $\mathcal P$ 为素理想，则 $S:=A\setminus\mathcal P$ 为乘法集，将 $S^{-1}A$ 记为 $A_{\mathcal P}$.例如
+\begin{align*}
+\mathbb Z_{(p)}=\left\{\frac ab\in\mathbb Q,\ (b,p)=1\right\}.
+\end{align*}
+\item 若 $f\in A$，则 $S:=\{f^n,n\in\mathbb N\}$ 为乘法集，将 $S^{-1}A$ 记为 $A[f^{-1}]$.例如
+\begin{align*}
+\mathbb Z[p^{-1}]=\left\{\frac ab\in\mathbb Q,\ b\in p^{\mathbb N}\right\}.
+\end{align*}
+一般而言，若 $f$ 幂零，则 $A[f^{-1}]=0$.
+\end{itemize}
+\emph{性质.}
+\begin{itemize}
+\item $S^{-1}A$ 的理想都形如 $S^{-1}I$，其中 $I$ 为 $A$ 的理想.
+\item 映射 $\mathcal P\mapsto\mathrm{can}^{-1}(\mathcal P)$ 给出 $\operatorname{Spec}(S^{-1}A)$ 到 $\{\mathcal Q\in\operatorname{Spec}(A),\ S\cap\mathcal Q=\varnothing\}$ 的双射.其逆双射为 $\mathcal Q\mapsto S^{-1}\mathcal Q$.
+\item 特别地，$A_{\mathcal P}$ 的素理想与 $A$ 中包含于 $\mathcal P$ 的素理想对应.因此，$A_{\mathcal P}$ 为\newterm{nt-local-ring}{局部环}{local ring}（只有一个极大理想），其极大理想为 $\mathcal PA_{\mathcal P}$（这是 $\mathrm{can}(\mathcal P)A_{\mathcal P}$ 的简略记法）.
+\end{itemize}
+
+\subsection{局部环}\label{sec:nt-2-1-4}
+设 $A$ 为局部环，$\mathfrak m$ 为其极大理想.显然，$\mathfrak m=A\setminus A^\times$.
+\begin{lemma*}[Nakayama]
+设 $M$ 为\newterm{nt-finitely-generated-module}{有限生成模}{finitely generated module}，其标量环为 $A$.若 $\mathfrak mM=M$，则 $M=0$.
+\end{lemma*}
+这里 $\mathfrak mM$ 是由 $\{am,\ a\in\mathfrak m,m\in M\}$ 生成的 $A$ 子模，具体地，
+\begin{align*}
+\mathfrak mM=\left\{\sum_{k=1}^n a_km_k,\ a_1,\ldots,a_n\in\mathfrak m,\ m_1,\ldots,m_n\in M\right\}.
+\end{align*}
+\begin{proof}
+设 $M\ne0$.取 $M$ 的一个极小生成族 $e_1,\ldots,e_r$.由于 $e_1\in\mathfrak mM$，可写成 $e_1=a_1e_1+\cdots+a_re_r$，其中 $a_1,\ldots,a_r\in\mathfrak m$.于是 $(1-a_1)e_1\in Ae_2+\cdots+Ae_r$.但 $1-a_1$ 可逆，所以 $e_1\in Ae_2+\cdots+Ae_r$，这与生成族的极小性矛盾.
+\end{proof}
+
+\subsection{张量积}\label{sec:nt-2-1-5}
+设 $A$ 为环，$M,N$ 为两个 $A$ 模.
+\begin{definition*}
+$M,N$ 在 $A$ 上的\newterm{nt-tensor-product}{张量积}{tensor product}是一个 $A$ 模，记为 $M\otimes_A N$，并带有 $A$ 双线性映射
+\begin{align*}
+M\times N&\longrightarrow M\otimes_A N,\\
+(m,n)&\longmapsto m\otimes n,
+\end{align*}
+它具有如下泛性质：对任意 $A$ 模 $E$，映射
+\begin{align*}
+\operatorname{Hom}_A(M\otimes_A N,E)\longrightarrow\operatorname{Bil}_A(M\times N,E)
+\end{align*}
+由 $\varphi\mapsto((m,n)\mapsto\varphi(m\otimes n))$ 给出，是双射.换言之，二元组 $(M\otimes_A N,(m,n)\mapsto m\otimes n)$（假定它存在）表示 $A$ 模范畴上的一个函子，因此在唯一同构意义下唯一.剩下的问题是构造它.
+\end{definition*}
+\emph{构造.}取以所有符号 $m\otimes n$（$m\in M,n\in N$）为基的自由 $A$ 模，再对由以下各类元素生成的子模取商：
+\begin{align*}
+am\otimes n-a(m\otimes n),&\qquad m\otimes an-a(m\otimes n),\\
+(m_1+m_2)\otimes n-m_1\otimes n-m_2\otimes n,&\\
+m\otimes(n_1+n_2)-m\otimes n_1-m\otimes n_2.&
+\end{align*}
+\emph{性质.}
+\begin{enumerate}[label=\roman*)]
+\item 若 $M,N$ 是有限秩自由 $A$ 模，分别有基 $m_1,\ldots,m_r$ 与 $n_1,\ldots,n_s$，则 $M\otimes_A N$ 是自由模，其基为 $(m_i\otimes m_j)_{i=1,\ldots,r;\ j=1,\ldots,s}$.\footnote{译注：基中的 $m_j$ 是原文写法，应为 $n_j$.}特别地，$\dim_A(M\otimes_A N)=\dim_A(M)\dim_A(N)$.
+\item 若 $B$ 为 $A$ 代数，则 $B\otimes_A M$ 自然是 $B$ 模，称为 $M$ 到 $B$ 的\newterm{nt-extension-of-scalars}{标量扩张}{extension of scalars}.其作用为 $b'(b\otimes m)=(b'b)\otimes m$.函子 $M\mapsto B\otimes_A M$ 是标量限制函子的左伴随；特别地，这意味着对任意 $B$ 模 $N$ 及 $A$ 模 $M$，有
+\begin{align*}
+\operatorname{Hom}_B(B\otimes_A M,N)\simeq\operatorname{Hom}_A(M,N).
+\end{align*}
+特殊情形如下：
+\begin{itemize}
+\item 若 $B=A/I$ 为 $A$ 的商环，则 $B\otimes_A M\simeq M/IM$.
+\item 若 $B=S^{-1}A$ 为 $A$ 的局部化，则 $B\otimes_A M\simeq S^{-1}M$，其中 $S^{-1}M$ 的定义类似于 $S^{-1}A$.
+\item 若 $B=A_{\mathcal P}$，其中 $\mathcal P\in\operatorname{Spec}(A)$，则也记 $M_{\mathcal P}:=A_{\mathcal P}\otimes_A M$.
+\end{itemize}
+\item 若 $B,C$ 为两个 $A$ 代数，则 $B\otimes_A C$ 自然是 $A$ 代数，其乘法为 $(b\otimes c)(b'\otimes c')=(bb')\otimes(cc')$.特别地，$B\otimes_A A[X]\simeq B[X]$.
+\end{enumerate}
+
+\subsection{域的张量积}\label{sec:nt-2-1-6}
+设 $K$ 为数域，$L$ 为特征零的域.张量积 $K\otimes_{\mathbb Q}L$ 为有限维可分 $L$ 代数，因此可分解成域的乘积.这同时也是 $K\otimes L$ 代数的乘积分解.下面进一步明确这一分解.
+
+将 $K$ 写成 $K=\mathbb Q[X]/(f)$，其中 $f\in\mathbb Q[X]$ 不可约.设 $f=f_1f_2\cdots f_r$ 是 $f$ 在 $L$ 上的不可约多项式乘积分解.由上文和中国剩余定理，
+\begin{align*}
+K\otimes_{\mathbb Q}L\simeq L[X]/(f)\simeq\prod_{i=1}^rL[X]/(f_i).
+\end{align*}
+还有一种更内在的观点，无须选取本原元 $\alpha$.设 $\overline L$ 为 $L$ 的代数闭包.对每个嵌入 $\sigma:K\hookrightarrow\overline L$，关联 $\overline L$ 中的合成域 $L_\sigma=\sigma(K)L$.它是同态 $K\otimes_{\mathbb Q}L\longrightarrow\overline L$，$\alpha\otimes l\mapsto\sigma(\alpha)l$ 的像，因而也是 $K\otimes L$ 代数.绝对 Galois 群 $G_L:=\operatorname{Gal}(\overline L/L)$ 通过复合作用于嵌入集合 $\{\sigma:K\hookrightarrow\overline L\}$.注意，若 $G_{L,\sigma}$ 表示这一作用下 $\sigma$ 的稳定子，则 $L_\sigma=\overline L^{G_{L,\sigma}}$.
+\begin{proposition*}
+设 $\sigma_1,\ldots,\sigma_r$ 为嵌入集合中各个 $G_L$ 轨道的代表元.则乘积同态是 $K\otimes L$ 代数的同构：
+\begin{align*}
+K\otimes_{\mathbb Q}L\xrightarrow{\sim}\prod_{i=1}^rL_{\sigma_i}.
+\end{align*}
+\end{proposition*}
+\begin{proof}
+设 $\alpha_1,\ldots,\alpha_n$ 为 $f$ 在 $\overline L$ 中的根.嵌入 $K\hookrightarrow\overline L$ 形如 $\sigma_t:X\mapsto\alpha_t$.两个嵌入 $\sigma_t,\sigma_s$ 在 $G_L$ 下共轭，当且仅当相应的根 $\alpha_t,\alpha_s$ 属于上文同一个多项式 $f_i$ 的根.此时 $L_{\sigma_t}\simeq L_{\sigma_s}\simeq L[X]/(f_i)$.因此，命题由前述分解得到.
+\end{proof}
+\emph{特殊情形.}
+\begin{enumerate}[label=\roman*)]
+\item $L=\mathbb C$.有 $K\otimes\mathbb C$ 代数的分解
+\begin{align*}
+K\otimes_{\mathbb Q}\mathbb C\xrightarrow{\sim}\prod_{\sigma:K\hookrightarrow\mathbb C}\mathbb C_\sigma,
+\end{align*}
+其中 $\mathbb C_\sigma$ 表示环 $\mathbb C$，赋予它由 $\alpha\otimes z\mapsto\sigma(\alpha)z$ 确定的 $K\otimes\mathbb C$ 代数结构.
+\item\label{item:nt-2-1-6-real} $L=\mathbb R$.有 $K\otimes\mathbb R$ 代数的分解
+\begin{align*}
+K\otimes_{\mathbb Q}\mathbb R\xrightarrow{\sim}
+\prod_{\sigma:K\hookrightarrow\mathbb R}\mathbb R_\sigma\times
+\prod_{\sigma\in\operatorname{Hom}(K,\mathbb C)/\mathrm{conj}}\mathbb C_\sigma
+=\mathbb R^{r_1}\times\mathbb C^{r_2},
+\end{align*}
+其中 $r_1$ 为 $K$ 的实嵌入数，$r_2$ 为虚嵌入数的一半（因而 $r_1+2r_2=[K:\mathbb Q]$）.\footnote{译注：第二个乘积的下标按原文保留；这里应只取非实嵌入的共轭对，否则实嵌入会被重复计入.}
+\end{enumerate}
+
+\section{整扩张}\label{sec:nt-2-2}
+设 $A$ 为带单位交换环.先回顾如下经典定理.
+\subsection{Cayley--Hamilton 定理}\label{sec:nt-2-2-1}
+\begin{theorem*}[Cayley--Hamilton]
+设 $M$ 为有限秩自由 $A$ 模，$u\in\operatorname{End}_A(M)$ 为 $M$ 的自同态.记 $u$ 的特征多项式为 $\chi_u(T)=\det(T\operatorname{id}_M-u)\in A[T]$.则在环 $\operatorname{End}_A(M)$ 中有 $\chi_u(u)=0$.
+\end{theorem*}
+回忆：与域上的向量空间一样，有限生成自由 $A$ 模的自同态 $u$ 的行列式，是在 $M$ 的任意一组 $A$ 基下表示 $u$ 的矩阵的行列式.
+\begin{proof}
+先考虑特殊情形 $A=A_n:=\mathbb Z[X_{ij}]_{1\le i,j\le n}$、$M=A^n$，且 $u_n$ 在标准基下由矩阵 $(X_{ij})_{1\le i,j\le n}$ 给出.由于 $A_n$ 为整环，考虑其分式域 $K_n$ 及其代数闭包 $\overline K_n$.多项式 $\chi_{u_n}$ 也是将矩阵 $u_n$ 看作 $M_n(K_n)$ 或 $M_n(\overline K_n)$ 中矩阵时的特征多项式.在 $M_n(\overline K_n)$ 中将 $u_n$ 化为 Jordan 形，就得到 $\chi_{u_n}(u_n)=0$.由于 $M_n(A_n)\longrightarrow M_n(\overline K_n)$ 为单射，同一等式在 $M_n(A_n)$ 中也成立.
+
+回到一般情形.选取 $M$ 的一组基，将 $M$ 认同为 $A^n$.记 $u$ 在该基下的矩阵为 $(a_{ij})_{i,j}$，并考虑``特殊化''环同态
+\begin{align*}
+\varepsilon:A_n=\mathbb Z[X_{ij}]_{1\le i,j\le n}\longrightarrow A,\qquad X_{ij}\longmapsto a_{ij}.
+\end{align*}
+它还诱导环同态 $A_n[T]\longrightarrow A[T]$ 与 $M_n(A_n)\longrightarrow M_n(A)$，仍记为 $\varepsilon$.显然 $\varepsilon(\chi_{u_n}(T))=\chi_u(T)$，从而 $\varepsilon(\chi_{u_n}(u_n))=\chi_u(u)$，故 $\chi_u(u)=0$.
+\end{proof}
+
+\subsection{有限生成模自同态的整性}\label{sec:nt-2-2-2}
+\begin{corollary*}
+设 $M$ 为有限生成 $A$ 模，$u\in\operatorname{End}_A(M)$ 为自同态.则存在首一多项式 $f\in A[T]$，使 $f(u)=0$ 在 $\operatorname{End}_A(M)$ 中成立.
+\end{corollary*}
+\begin{proof}
+对适当的 $n$，选取满同态 $\pi:A^n\twoheadrightarrow M$.设 $(e_1,\ldots,e_n)$ 为 $A^n$ 的标准基.对每个 $i=1,\ldots,n$，选取 $f_i\in A^n$ 使 $\pi(f_i)=u(\pi(e_i))$.这定义了 $A^n$ 的自同态 $\widetilde u$，满足 $\widetilde u(e_i)=f_i$.由构造，$\pi\circ\widetilde u=u\circ\pi$，迭代得到 $\pi\circ\widetilde u^k=u^k\circ\pi$，最后得到
+\begin{align*}
+\pi\circ\chi_{\widetilde u}(\widetilde u)=\chi_{\widetilde u}(u)\circ\pi.
+\end{align*}
+由前一定理，$\chi_{\widetilde u}(u)\circ\pi=0$.而 $\pi$ 满射，故 $\chi_{\widetilde u}(u)=0$.
+\end{proof}
+
+\subsection{整性的等价条件}\label{sec:nt-2-2-3}
+\begin{proposition*}
+设 $B$ 为 $A$ 代数.对 $b\in B$，下列条件等价：
+\begin{enumerate}[label=\roman*)]
+\item $b$ 在 $A$ 上\newterm{nt-integral-element}{整}{integral}（即存在首一多项式 $f\in A[X]$，使 $f(b)=0$）.
+\item 由 $b$ 生成的环 $A[b]$ 是有限生成 $A$ 模.
+\item 存在一个忠实 $A[b]$ 模，它作为 $A$ 模有限生成.
+\end{enumerate}
+\end{proposition*}
+回忆：若映射 $A\longrightarrow\operatorname{End}_{\mathbb Z}(M)$ 为单射，则称 $A$ 模 $M$ \newterm{nt-faithful-module}{忠实}{faithful}.
+\begin{proof}
+$\mathrm{i)}\Rightarrow\mathrm{ii)}$：取 i) 中的 $f=X^n+a_1X^{n-1}+\cdots+a_n$.于是 $b^n\in A+Ab+\cdots+Ab^{n-1}$，归纳可得对所有 $m\ge n$ 都有 $b^m\in A+Ab+\cdots+Ab^{n-1}$.所以 $A[b]$ 作为 $A$ 模由 $1,b,\ldots,b^{n-1}$ 生成.
+
+$\mathrm{ii)}\Rightarrow\mathrm{iii)}$：取 $A[b]$ 模 $A[b]$ 即可！
+
+$\mathrm{iii)}\Rightarrow\mathrm{i)}$ 由前一推论得到.
+\end{proof}
+
+\subsection{整闭包}\label{sec:nt-2-2-4}
+\begin{corollary*}
+设 $B$ 为 $A$ 代数.集合 $\{b\in B,\ b\text{ 在 }A\text{ 上整}\}$ 是 $B$ 的一个 $A$ 子代数，称为 $A$ 在 $B$ 中的\newterm{nt-integral-closure}{整闭包}{integral closure}.
+\end{corollary*}
+\begin{proof}
+设 $b,b'$ 在 $A$ 上整.则 $b'$ 更在 $A[b]$ 上整，所以 $A[b][b']$ 是有限生成 $A[b]$ 模，因而也是有限生成 $A$ 模.它还是忠实 $A[b+b']$ 模（因为它包含 $A[b+b']$），所以由前一命题的条件 iii)，$b+b'$ 整.同样，$bb'$ 也整.
+\end{proof}
+\begin{example*}
+若 $K$ 为数域，则 $\mathcal O_K$ 是 $\mathbb Z$ 在 $K$ 中的整闭包.
+\end{example*}
+
+\subsection{正规化与整闭性}\label{sec:nt-2-2-5}
+\begin{definition*}
+若 $A$ 为整环，则 $A$ 在 $\operatorname{Frac}(A)$ 中的整闭包称为 $A$ 的\newterm{nt-normalization}{正规化}{normalization}.若 $A$ 等于自身的正规化，则称 $A$ \newterm{nt-normal-ring}{正规}{normal}（或\newterm{nt-integrally-closed}{整闭}{integrally closed}）.
+\end{definition*}
+\emph{例.}
+\begin{enumerate}[label=\roman*)]
+\item $\mathcal O_K$ 正规，因为 $K=\operatorname{Frac}(\mathcal O_K)$.事实上，若 $x\in K$，则存在 $a_i\in\mathbb Q$ 使 $x^n+a_1x^{n-1}+\cdots+a_n=0$.选取 $b\in\mathbb Z$ 使对每个 $i$ 都有 $ba_i\in\mathbb Z$.于是
+\begin{align*}
+(xb)^n+(a_1b)(xb)^{n-1}+\cdots+(a_nb^n)=0,
+\end{align*}
+这表明 $xb\in\mathcal O_K$，故 $x\in\operatorname{Frac}(\mathcal O_K)$.
+\item $\mathbb Z[\sqrt{-3}]$ 不是整闭的.其正规化为 $\mathbb Z[\frac{1+\sqrt{-3}}2]$.
+\end{enumerate}
+\begin{example*}
+$A$ 唯一分解 $\Rightarrow A$ 正规.事实上，设 $x\in\operatorname{Frac}A$ 满足整方程 $x^n+a_1x^{n-1}+\cdots+a_n=0$.由于 $A$ 唯一分解，可写 $x=a/b$，其中 $a,b$ 无公因子，因而 $(a,b)=A$.\footnote{译注：原文由``无公因子''推出 $(a,b)=A$，这在一般唯一分解整环中不成立，例如 $k[X,Y]$ 中的 $X,Y$.该结论的正确证明只需利用 $b\mid a^n$ 及唯一分解性，便得 $b$ 为单位.}于是 $a^n+a_1a^{n-1}b+\cdots+a_nb^n=0$，所以 $a^n\in(b)$，这推出 $(b)=A$.
+\end{example*}
+\begin{remark*}
+若 $B$ 的每个元素都在 $A$ 上整，则称环扩张 $A\subset B$ 为\newterm{nt-integral-extension}{整扩张}{integral extension}.上述命题还表明：如果 $C$ 在 $B$ 上整，而 $B$ 在 $A$ 上整，则 $C$ 在 $A$ 上整.
+\end{remark*}
+\begin{exercise*}
+证明 $\mathbb Q[X_1,\ldots,X_n]$ 是 $\mathbb Q[\Sigma_1,\ldots,\Sigma_n]$ 在 $\mathbb Q(X_1,\ldots,X_n)$ 中的整闭包.
+\end{exercise*}
+
+\subsection{最小多项式判别}\label{sec:nt-2-2-6}
+\begin{proposition*}
+若 $A$ 正规，且 $L$ 是 $K:=\operatorname{Frac}(A)$ 的有限扩张，则 $x\in L$ 整，当且仅当其最小多项式 $f_x\in K[X]$ 属于 $A[X]$.
+\end{proposition*}
+\begin{proof}
+只有 $\Rightarrow$ 需要证明.设 $x$ 整，并取 $f\in A[X]$ 使 $f(x)=0$.则在 $K[X]$ 中有 $f_x\mid f$，所以 $f_x$ 在 $K$ 的代数闭包 $\overline K$ 中的每个根 $\alpha$ 都是 $f$ 的根，因而在 $A$ 上整.因此，$f_x$ 的系数也都在 $A$ 上整；它们属于 $K$，而 $A$ 正规，所以它们属于 $A$.\footnote{译注：证明中原文仅写 $f\in A[X]$，此处为推出其根整，所选 $f$ 应为首一多项式.}
+\end{proof}
+\begin{exercise*}
+证明
+\begin{align*}
+\mathcal O_{\mathbb Q(\sqrt d)}=\{a+b\sqrt d\in\mathbb Q(\sqrt d),\ 2a\in\mathbb Z,\ \text{且 }a^2-db^2\in\mathbb Z\}.
+\end{align*}
+\end{exercise*}
+\begin{exercise*}
+计算环 $\mathbb C[X,Y]/(X^2-Y^3)$ 的正规化.
+\end{exercise*}
+
+\section{迹与范数}\label{sec:nt-2-3}
+设 $A$ 为环，$B$ 为 $A$ 代数，且作为 $A$ 模有限生成且自由.对 $b\in B$，以 $m(b)$ 表示由乘以 $b$ 给出的 $B$ 的 $A$ 自同态.由此得到单的环同态
+\begin{align*}
+m:B&\longrightarrow\operatorname{End}_A(B),\\
+b&\longmapsto m(b):b'\longmapsto bb'.
+\end{align*}
+由于 $B$ 在 $A$ 上自由，可考虑特征多项式
+\begin{align*}
+\chi_b(T)=\chi_{B/A,b}(T):=\det(T\operatorname{id}_B-m(b))\in A[T].
+\end{align*}
+\subsection{迹与范数的定义}\label{sec:nt-2-3-1}
+\begin{definition*}
+在上述情形下，
+\begin{itemize}
+\item 定义 $b$ 的\newterm{nt-trace}{迹}{trace}为 $\operatorname{Tr}_{B/A}(b):=\operatorname{trace}(m(b))$.
+\item 定义 $b$ 的\newterm{nt-norm}{范数}{norm}为 $N_{B/A}(b):=\det(m(b))$.
+\end{itemize}
+\end{definition*}
+\begin{example*}
+设 $B=A[X]/(f)$，其中 $f(X)=x^n+a_1x^{n-1}+\cdots+a_n$，并设 $b$ 为 $X$ 的像.\footnote{译注：原文在 $f(X)$ 的表达式右端使用小写 $x$，这里保留其写法；它表示同一多项式变量.}则 $m(b)$ 在基 $\{1,b,\ldots,b^{n-1}\}$ 下的矩阵是 $f$ 的``相伴矩阵''，且 $\chi_b(T)=f(T)$.特别地，$\operatorname{Tr}_{B/A}(b)=-a_1$，$N_{B/A}(b)=(-1)^na_n$.
+\end{example*}
+\begin{exercise*}
+若 $M$ 为有限生成自由 $B$ 模，$u\in\operatorname{End}_B(M)$，则
+\begin{itemize}
+\item $\operatorname{tr}_A(u\mid M)=\operatorname{Tr}_{B/A}(\operatorname{tr}_B(u\mid M))$；
+\item $\det_A(u\mid M)=N_{B/A}(\det_B(u\mid M))$（较难，参见 Bourbaki《Algèbre》第 III 章，引理 4.1，第 112 页；另见\hyperref[chap:nt-exercises]{本讲义末尾的习题单}）.
+\end{itemize}
+特别地，若 $C$ 是 $B$ 代数，且作为 $B$ 模有限生成而自由，则
+\begin{align*}
+\operatorname{Tr}_{C/A}=\operatorname{Tr}_{B/A}\circ\operatorname{Tr}_{C/B},\qquad N_{C/A}=N_{B/A}\circ N_{C/B}.
+\end{align*}
+\end{exercise*}
+
+\subsection{域的有限扩张中的公式}\label{sec:nt-2-3-2}
+\begin{proposition*}
+设 $K\subset L$ 为域的有限扩张，$n:=[L:K]$.对 $\alpha\in L$，若其最小多项式为 $f_\alpha(X)=X^m+a_1X^{m-1}+\cdots+a_m\in K[X]$，则 $m\mid n$，且
+\begin{itemize}
+\item $\operatorname{Tr}_{L/K}(\alpha)=-\frac nm a_1$；
+\item $N_{L/K}(\alpha)=((-1)^ma_m)^{n/m}$.
+\end{itemize}
+\end{proposition*}
+\begin{proof}
+$K[\alpha]$ 在 $\mathbb Q$ 上的次数整除 $L$ 的次数，\footnote{译注：原文此处写 $\mathbb Q$，一般情形应为 $K$.}所以 $m\mid n$，且 $\frac nm=[L:K[\alpha]]$.于是 $\operatorname{Tr}_{L/K[\alpha]}(\alpha)=\frac nm\alpha$，$N_{L/K[\alpha]}(\alpha)=\alpha^{n/m}$.上面的例子表明 $\operatorname{Tr}_{K[\alpha]/K}(\alpha)=-a_1$，$N_{K[\alpha]/K}(\alpha)=(-1)^ma_m$.再用上面的习题即可得到结论.
+\end{proof}
+
+\subsection{以嵌入表示迹与范数}\label{sec:nt-2-3-3}
+\begin{corollary*}
+若 $L$ 是 $K$ 的有限可分扩张，$\overline K$ 为 $K$ 的代数闭包，则对任意 $\alpha\in L$，有
+\begin{align*}
+\operatorname{Tr}_{L/K}(\alpha)=\sum_{\sigma:L\hookrightarrow\overline K}\sigma(\alpha),\qquad
+N_{L/K}(\alpha)=\prod_{\sigma:L\hookrightarrow\overline K}\sigma(\alpha).
+\end{align*}
+\end{corollary*}
+\begin{proof}
+限制映射 $\{\sigma:L\hookrightarrow\overline K\}\longrightarrow\{\sigma:K[\alpha]\hookrightarrow\overline K\}$ 为满射，其每条纤维的基数为 $n/m$（沿用命题中的记号）.因此
+\begin{align*}
+\sum_{\sigma:L\hookrightarrow\overline K}\sigma(\alpha)
+&=\frac nm\sum_{\sigma:K[\alpha]\hookrightarrow\overline K}\sigma(\alpha)\\
+&=\frac nm\left(\sum\{f_\alpha\text{ 在 }\overline L\text{ 中的根}\}\right)=-\frac nm a_1.
+\end{align*}
+\footnote{译注：原文上式写 $\overline L$，前文引入的代数闭包则为 $\overline K$；按原式保留.}范数的情形类似.
+\end{proof}
+
+\subsection{整元素的迹与范数}\label{sec:nt-2-3-4}
+\begin{corollary*}
+设 $A$ 为正规环（整环），$L$ 为 $K:=\operatorname{Frac}(A)$ 的有限可分扩张，$\alpha\in L$ 在 $A$ 上整.则 $\operatorname{Tr}_{L/K}(\alpha)\in A$ 且 $N_{L/K}(\alpha)\in A$.
+\end{corollary*}
+
+
+
+
+% 原书物理页=印刷页17--24，止于第三章标题前.
+\section{判别式}\label{sec:nt-2-4}
+设 $A$ 是环，$B$ 是作为 $A$-模自由且有限生成的 $A$-代数. 考虑 $B$ 上的 $A$-双线性型
+\begin{align*}
+\theta_{B/A}\colon(b,b')\longmapsto\operatorname{Tr}_{B/A}(bb').
+\end{align*}
+若 $b_1,\ldots,b_n$ 是 $A$ 的元素，记\footnote{译注：原文写作 $A$ 的元素；按此处定义及后文，应为 $B$ 的元素.}
+\begin{align*}
+D_{B/A}(b_1,\ldots,b_n):=\det\bigl(\operatorname{Tr}_{B/A}(b_ib_j)\bigr)_{i,j}.
+\end{align*}
+若 $b_1,\ldots,b_n$ 是 $B$ 的一组 $A$-基，这就是双线性型 $\theta_{B/A}$ 在此基下的\newterm{nt-discriminant}{判别式}{discriminant}. 若 $b'_1,\ldots,b'_n$ 是 $B$ 的另一组 $A$-基，$P$ 是满足 $(b'_i)_i=P\cdot(b_i)_i$ 的换基矩阵，则
+\begin{align*}
+D_{B/A}(b'_1,\ldots,b'_n)=\det(P)^2D(b_1,\ldots,b_n).
+\end{align*}
+\subsection{定义}\label{sec:nt-2-4-1}
+\begin{definition*}
+用 $\operatorname{disc}(B/A)\in A/(A^\times)^2$ 表示 $\theta_{B/A}$ 在任意一组基下的判别式的像，用 $(\operatorname{disc}(B/A))$ 表示它生成的 $A$ 的理想.
+\end{definition*}
+\begin{remark*}
+当 $A=\mathbb Z$ 时，元素 $\operatorname{disc}(B/A)$ 属于 $\mathbb Z$.
+\end{remark*}
+
+\subsection{命题}\label{sec:nt-2-4-2}
+\begin{proposition*}
+设 $A$ 是整环且 $\operatorname{disc}(B/A)\ne0$. 则 $B$ 中的元素组 $b_1,\ldots,b_n$ 是 $B$ 的一组 $A$-基，当且仅当
+\begin{align*}
+\bigl(D_{B/A}(b_1,\ldots,b_n)\bigr)=\bigl(\operatorname{disc}(B/A)\bigr).
+\end{align*}
+\end{proposition*}
+\begin{proof}
+留作习题.
+\end{proof}
+
+\subsection{命题}\label{sec:nt-2-4-3}
+\begin{proposition*}
+设 $L\supset K$ 是有限可分扩张，$\omega_1,\ldots,\omega_n$ 是 $L$ 的一组 $K$-基，$\sigma_1,\ldots,\sigma_n$ 是嵌入 $L\hookrightarrow\overline K$. 则
+\begin{align*}
+D_{L/K}(\omega_1,\ldots,\omega_n)=\bigl(\det(\sigma_i(\omega_j))_{i,j}\bigr)^2.
+\end{align*}
+\end{proposition*}
+\begin{proof}
+有 $\operatorname{Tr}_{L/K}(\omega_i\omega_j)=\sum_{k=1}^n\sigma_k(\omega_i)\sigma_k(\omega_j)$. 因而有如下 $n\times n$ 矩阵等式：
+\begin{align*}
+\bigl(\operatorname{Tr}_{L/K}(\omega_i\omega_j)\bigr)_{i,j}
+={}^{t}\!UU,\qquad U=\bigl(\sigma_i(\omega_j)\bigr)_{i,j}.
+\end{align*}
+\end{proof}
+
+\subsection{与多项式判别式的联系}\label{sec:nt-2-4-4}
+回忆：多项式 $f=X^n+a_1X^{n-1}+\cdots+a_n\in A[X]$ 的判别式定义为
+\begin{align*}
+\operatorname{disc}(f)=\Delta_n(-a_1,\ldots,(-1)^na_n),
+\end{align*}
+其中 $\Delta_n\in\mathbb Z[\Sigma_1,\ldots,\Sigma_n]$ 满足
+$\Delta_n(\Sigma_1,\ldots,\Sigma_n)=\prod_{i<j}(X_i-X_j)^2$.
+现在令 $B:=A[X]/(f)$，并记 $b$ 为 $X$ 在 $B$ 中的像.
+\begin{proposition*}
+在上述情形下，有
+\begin{align*}
+\operatorname{disc}(f)=D_{B/A}(1,b,\ldots,b^{n-1})
+=(-1)^{n(n-1)/2}N_{B/A}(f'(b)).
+\end{align*}
+\end{proposition*}
+\begin{proof}
+先处理如下特殊但 ``泛'' 的情形：
+$A=A_{\mathrm{univ}}:=\mathbb Z[A_1,\ldots,A_n]$，
+$f=f_{\mathrm{univ}}=X^n+A_1X^{n-1}+\cdots+A_n\in A_{\mathrm{univ}}[X]$.
+显然，不存在 $f=f_1f_2$ 这样的分解，其中 $f_1,f_2\in A_{\mathrm{univ}}[X]$ 的次数均非零. 否则，将 $A_1=\cdots=A_{n-1}=0$、$A_n=-2$ 代入，便会得到 $X^n-2$ 在 $\mathbb Z[X]$ 中的分解，与此多项式的不可约性矛盾（见后文的 Eisenstein 判别法）.
+由于 $A$ 正规，$f_{\mathrm{univ}}$ 在 $K[X]$ 中不可约，其中 $K=A_{\mathrm{univ}}[X]$\footnote{译注：原文此处写作 $K=A_{\mathrm{univ}}[X]$；按下文称 $K$ 为域的用法，应为 $K=\operatorname{Frac}(A_{\mathrm{univ}})$.}（同命题~\ref{sec:nt-2-2-6} 的证明）.
+于是令 $L:=K[X]/(f_{\mathrm{univ}})$，这是 $K$ 的有限可分扩张，并固定 $K$ 的一个代数闭包 $\overline K$.
+通过 $\sigma\mapsto\sigma(b_{\mathrm{univ}})$（其中 $b_{\mathrm{univ}}$ 是 $X$ 的像），嵌入 $L\hookrightarrow\overline K$ 与 $f_{\mathrm{univ}}$ 在 $\overline K$ 中的根 $\alpha_1,\ldots,\alpha_n$ 一一对应.
+于是，上一命题中的矩阵 $U$（取 $\omega_j=b_{\mathrm{univ}}^{j-1}$）就是 Vandermonde 矩阵 $(\alpha_i^{j-1})_{i,j}$，故
+\begin{align*}
+D_{B_{\mathrm{univ}}/A_{\mathrm{univ}}}(1,b_{\mathrm{univ}},\ldots,b_{\mathrm{univ}}^{n-1})
+=\prod_{i<j}(\alpha_i-\alpha_j)^2
+=\operatorname{disc}(f_{\mathrm{univ}}).
+\end{align*}
+另一方面，由 $f'_{\mathrm{univ}}(\alpha_i)=\prod_{j\ne i}(\alpha_i-\alpha_j)$ 可见
+\begin{align*}
+N_{B_{\mathrm{univ}}/A_{\mathrm{univ}}}(f'_{\mathrm{univ}}(b_{\mathrm{univ}}))
+&=\prod_{j=1}^nf'_{\mathrm{univ}}(\alpha_j)
+=\prod_{k\ne j}(\alpha_j-\alpha_k)\\
+&=(-1)^{n(n-1)/2}\operatorname{disc}(f_{\mathrm{univ}}).
+\end{align*}
+现在通过将上述 ``泛'' 情形特化来处理一般情形. 考虑环同态
+$\varepsilon\colon A_{\mathrm{univ}}\longrightarrow A$，$A_i\mapsto a_i$.
+于是 $f=\varepsilon(f_{\mathrm{univ}})$ 且
+$\operatorname{disc}(f)=\varepsilon\operatorname{disc}(f_{\mathrm{univ}})$.
+此外，将 $b_{\mathrm{univ}}$ 映到 $b$，便将 $\varepsilon$ 延拓为 $B_{\mathrm{univ}}\longrightarrow B$.
+于是有
+\begin{align*}
+\varepsilon(f'_{\mathrm{univ}}(b_{\mathrm{univ}}))&=f'(b),\\
+\varepsilon\circ N_{B_{\mathrm{univ}}/A_{\mathrm{univ}}}&=N_{B/A}\circ\varepsilon,\\
+\varepsilon\bigl(D_{B_{\mathrm{univ}}/A_{\mathrm{univ}}}
+(1,b_{\mathrm{univ}},\ldots,b_{\mathrm{univ}}^{n-1})\bigr)
+&=D_{B/A}(1,b,\ldots,b^{n-1}).
+\end{align*}
+命题随之得证.
+\end{proof}
+这个命题给出了计算 $\operatorname{disc}(f)$ 的一种方法.
+\begin{example*}
+设 $f(X)=X^2+aX+b$，$\alpha$ 是 $X$ 在 $B$ 中的像. 在基 $1,\alpha$ 下，$P'(\alpha)=2\alpha+a$ 的矩阵为
+$\left(\begin{smallmatrix}a&2\\-2b&-a\end{smallmatrix}\right)$，因而\footnote{译注：原文此处记作 $P'$，而前文多项式记作 $f$；原矩阵亦照录. 若按列记录乘以 $2\alpha+a$ 的线性映射，其矩阵应为 $\left(\begin{smallmatrix}a&-2b\\2&-a\end{smallmatrix}\right)$，二者行列式相同.}
+\begin{align*}
+\operatorname{disc}(f)=-\begin{vmatrix}a&2\\-2b&-a\end{vmatrix}=a^2-4b.
+\end{align*}
+\end{example*}
+\begin{exercise*}
+对 $f(X)=X^n+aX+b$ 计算 $\operatorname{disc}(f)$.
+\end{exercise*}
+
+\subsection{推论}\label{sec:nt-2-4-5}
+\begin{corollary*}
+设 $L/K$ 是有限域扩张，则下列条件等价：
+\begin{enumerate}[label=\roman*)]
+\item $\operatorname{disc}(L/K)\ne0$.
+\item 双线性型 $\theta_{L/K}$ 非退化.
+\item $L$ 在 $K$ 上可分.
+\end{enumerate}
+\end{corollary*}
+\begin{proof}
+条件 i) 与 ii) 的等价性显然. 蕴含 iii) $\Rightarrow$ i) 来自本原元定理：它告诉我们，$L=K[X]/(f)$，其中 $f$ 可分，因此若 $b$ 是 $X$ 的像，则 $f'(b)\ne0$；再由上一命题，
+$\operatorname{disc}(f)=\pm N_{L/K}(f'(b))\ne0$.
+最后，若 $L$ 在 $K$ 上不可分，则存在元素 $\alpha\in L$，其极小多项式在 $K$ 上不可分，从而 $\operatorname{disc}(K[\alpha]/K)=0\ldots$\footnote{译注：原文证明至此以省略号结束，并未写出从此式推得 $\operatorname{disc}(L/K)=0$ 的步骤.}
+\end{proof}
+
+\subsection{定理}\label{sec:nt-2-4-6}
+\begin{theorem*}
+设 $A$ 正规，$B$ 是 $A$ 在 $K=\operatorname{Frac}(A)$ 的有限可分扩张 $L$ 中的整闭包. 则存在 $L$ 的两个 $A$-子模 $M,M'$，它们均为秩 $[L:K]$ 的自由模，且 $M\subset B\subset M'$. 特别地：
+\begin{itemize}
+\item 若 $A$ 是 Noether 环，则 $B$ 是有限生成 $A$-模.
+\item 若 $A$ 是主理想整环，则 $B$ 是秩 $[L:K]$ 的自由模.
+\end{itemize}
+\end{theorem*}
+\begin{proof}
+记 $n=[L:K]$. 取 $L$ 的一组包含于 $B$ 的 $K$-基 $b_1,\ldots,b_n$（因为 $L=\operatorname{Frac}(B)$，这样的基存在）.
+于是 $M:=\bigoplus_iAb_i\subset B$.
+设 $b_1^*,\ldots,b_n^*$ 是关于非退化型 $\theta_{L/K}$ 的对偶基（用到了可分性）.
+对任意 $b\in B$，有
+\begin{align*}
+b=\sum_{i=1}^n\operatorname{Tr}_{L/K}(bb_i)b_i^*,
+\end{align*}
+且由推论~\ref{sec:nt-2-3-4}，$\operatorname{Tr}_{L/K}(bb_i)\in A$.
+故 $B\subset M':=\bigoplus_iAb_i^*$.
+\end{proof}
+
+\section{整数环的计算}\label{sec:nt-2-5}
+这里将前面的工具应用于计算数域 $K$ 的整数环 $\mathcal O_K$ 的问题.
+
+\subsection{整数环的有限性}\label{sec:nt-2-5-1}
+上面的定理表明，$\mathcal O_K$ 是秩 $[K:\mathbb Q]$ 的自由 $\mathbb Z$-模，这也表明 $\mathcal O_K$ 是 Noether 环.
+但是，若 $L\subset K$ 是另一个数域，则 $\mathcal O_K$ 虽然是有限生成 $\mathcal O_L$-模，却不一定是自由 $\mathcal O_L$-模.
+我们将看到，它仍然是投射模，即某个自由模的直和因子.
+
+\subsection{命题}\label{sec:nt-2-5-2}
+\begin{proposition*}
+设 $K=\mathbb Q[\alpha]$ 是次数为 $n$ 的数域，且 $f_\alpha\in\mathbb Z[X]$（因而 $\alpha$ 是整数）.
+若 $\operatorname{disc}(f_\alpha)\in\mathbb Z$ 无平方因子，则 $\{1,\alpha,\ldots,\alpha^{n-1}\}$ 是 $\mathcal O_K$ 的一组 $\mathbb Z$-基（从而 $\mathcal O_K=\mathbb Z[\alpha]$）.
+\end{proposition*}
+\begin{proof}
+设 $P$ 是从 $\mathcal O_K$ 的任意一组 $\mathbb Z$-基到元素组 $(1,\alpha,\ldots,\alpha^{n-1})$ 的换基矩阵.
+于是 $P\in\mathrm M_n(\mathbb Z)\cap\mathrm{GL}_n(\mathbb Q)$，$\det(P)\in\mathbb Z$，并且
+\begin{align*}
+\operatorname{disc}(f_\alpha)
+&=D_{\mathcal O_K/\mathbb Z}(1,\alpha,\ldots,\alpha^{n-1})\\
+&=\operatorname{disc}(\mathcal O_K/\mathbb Z)\det(P)^2.
+\end{align*}
+根据下面的回顾，$|\det(P)|$ 就是 $\mathbb Z[\alpha]$ 在 $\mathcal O_K$ 中的指数 $(\mathcal O_K:\mathbb Z[\alpha])$. 命题由此得证.
+\end{proof}
+\paragraph{回顾}
+设 $M$ 是秩为 $m$ 的自由 $\mathbb Z$-模，$N$ 是秩为 $m$ 的子模.
+则存在 $M$ 的一组基 $e_1,e_2,\ldots,e_m$ 及整数 $a_1\mid a_2\mid\cdots\mid a_m$，使得 $a_1e_1,a_2e_1,\ldots,a_me_m$ 是 $N$ 的一组 $\mathbb Z$-基.\footnote{译注：原文第二项为 $a_2e_1$，应为 $a_2e_2$；下式末项原文为 $a_n$，而这里的秩记作 $m$.}
+这可以从给出有限 Abel 群结构的 ``初等因子'' 定理推出，也可以对从 $M$ 的一组基到 $N$ 的一组基的任意换基矩阵作行、列阶梯化得到.
+因此，对任意这样的换基矩阵 $P$，都有
+\begin{align*}
+|\det(P)|=a_1a_2\cdots a_n=(M:N).
+\end{align*}
+\begin{example*}
+沿用命题中的记号.
+\begin{enumerate}[label=\roman*)]
+\item 若 $f_\alpha(X)=X^3-X-1$，计算得 $\operatorname{disc}(f_\alpha)=-23$，故 $\mathcal O_K=\mathbb Z[\alpha]$.
+\item 若 $f_\alpha(X)=X^3+X^2-2X+8$，则 $\operatorname{disc}(f_\alpha)=-2012=-4\times503$.
+在这种情形下，可以证明 $\mathbb Z[\alpha]\ne\mathcal O_K$.
+\end{enumerate}
+\end{example*}
+\begin{exercise*}
+证明上述命题的如下变体：若 $f\in\mathbb Z[X]$ 是首一不可约多项式，且其判别式 $\operatorname{disc}(f)$ 无平方因子，则 $\mathbb Z[X]/(f)$ 是正规环.
+\end{exercise*}
+\begin{example*}
+设 $f(X)=X^5-X-1$. 证明 $f$ 在 $\mathbb F_3[X]$ 中不可约，从而在 $\mathbb Q[X]$ 中不可约；再证明 $\mathbb Z[X]/(f)$ 正规.
+\end{example*}
+
+\subsection{命题}\label{sec:nt-2-5-3}
+\begin{proposition*}
+设 $K$ 是数域. 有
+\begin{enumerate}[label=\roman*)]
+\item $\operatorname{sgn}(\operatorname{disc}(K/\mathbb Q))=(-1)^{r_2}$，其中 $r_2$ 是虚嵌入 $K\hookrightarrow\mathbb C$ 的数目的一半.
+\item $\operatorname{disc}(\mathcal O_K/\mathbb Z)$ 模 $4$ 同余于 $0$ 或 $1$（Stickelberger）.
+\end{enumerate}
+\end{proposition*}
+\begin{proof}
+i) 设 $\omega_1,\ldots,\omega_n$ 是 $K/\mathbb Q$ 的一组基，$\sigma_1,\ldots,\sigma_n$ 是嵌入 $K\hookrightarrow\mathbb C$.
+令 $M=(\sigma_i(\omega_j))_{i,j}\in\mathrm M_n(\mathbb C)$.
+我们知道 $D_{K/\mathbb Q}(\omega_1,\ldots,\omega_n)=(\det(M))^2$，所以所求符号就是 $(\det(M))^2$ 的符号.
+而共轭矩阵 $\overline M=(\overline\sigma_i(\omega_j))_{i,j}$ 可由 $M$ 经 $r_2$ 次行交换得到，故
+$\det(\overline M)=(-1)^{r_2}\det(M)$.
+由此推出 $(\det(M))=(-1)^{r_2}|\det(M)|^2$，从而得到所述符号.\footnote{译注：此等式左端原文未写平方；应为 $(\det(M))^2$. 此处保留原式.}
+
+ii) 设 $\alpha_1,\ldots,\alpha_n$ 是 $\mathcal O_K$ 的一组 $\mathbb Z$-基，$\sigma_1,\ldots,\sigma_n$ 是嵌入 $K\hookrightarrow\mathbb C$. 则
+\begin{align*}
+\operatorname{disc}(\mathcal O_K/\mathbb Z)
+&=\bigl(\det(\sigma_i(\alpha_j))_{i,j}\bigr)^2\\
+&=\left(
+\sum_{\substack{\tau\in\mathfrak S_n\\\varepsilon(\tau)=1}}
+\prod_{i=1}^n\sigma_i(\alpha_{\tau(i)})
+-
+\sum_{\substack{\tau\in\mathfrak S_n\\\varepsilon(\tau)=-1}}
+\prod_{i=1}^n\sigma_i(\alpha_{\tau(i)})
+\right)^2\\
+&=(P-I)^2\\
+&=(P+I)^2-4PI.
+\end{align*}
+我们将证明 $P+I$ 与 $PI$ 是整数（属于 $\mathbb Z$），这将推出
+$\operatorname{disc}(\mathcal O_K/\mathbb Z)\equiv(P+I)^2\pmod4$，从而模 $4$ 同余于 $0$ 或 $1$，因为整数的平方模 $4$ 总同余于 $0$ 或 $1$.
+
+由于 $\sigma_i(\alpha_j)$ 是代数整数，$P+I$ 与 $PI$ 也是代数整数，所以只须证明它们是有理数（属于 $\mathbb Q$），即在 $\operatorname{Gal}(\overline{\mathbb Q}/\mathbb Q)$ 的作用下不变.
+取 $\gamma\in\operatorname{Gal}(\overline{\mathbb Q}/\mathbb Q)$.
+它在嵌入 $\sigma_1,\ldots,\sigma_n$ 上诱导置换 $\tau_\gamma\colon\sigma\mapsto\gamma\circ\sigma$.
+若 $\tau_\gamma$ 是偶置换，则 $\gamma(P)=P$ 且 $\gamma(I)=I$.
+若 $\tau_\gamma$ 是奇置换，则 $\gamma(P)=I$ 且 $\gamma(I)=P$.
+于是 $\gamma(P+I)=P+I$ 且 $\gamma(PI)=PI$，正如所需.
+\end{proof}
+
+\subsection{二次数域}\label{sec:nt-2-5-4}
+设 $K=\mathbb Q(\sqrt d)$，其中 $d\in\mathbb Z$ 无平方因子. 于是
+\begin{align*}
+\operatorname{disc}(X^2-d)=4d
+=\operatorname{disc}(\mathcal O_K/\mathbb Z)
+(\mathcal O_K:\mathbb Z[\sqrt d])^2.
+\end{align*}
+因此，$\operatorname{disc}(\mathcal O_K/\mathbb Z)$ 事先只有两种可能：等于 $4d$ 或等于 $d$.
+在后一情形，由 Stickelberger 定理必须有 $d\equiv1\pmod4$.
+由此得到以下两种情形：
+\begin{enumerate}[label=\roman*)]
+\item 若 $d$ 模 $4$ 同余于 $2$ 或 $3$，则
+$\operatorname{disc}(\mathcal O_K/\mathbb Z)=4d$ 且 $\mathcal O_K=\mathbb Z[\sqrt d]$.
+\item 若 $d\equiv1\pmod4$，则 $\frac{1+\sqrt d}{2}$ 是整数，故 $\mathbb Z[\sqrt d]\ne\mathcal O_K$，且
+$\operatorname{disc}(\mathcal O_K/\mathbb Z)=d$.
+此时 $\mathcal O_K=\mathbb Z[\frac{1+\sqrt d}{2}]$.
+\end{enumerate}
+
+\subsection{一个更精细的判别法}\label{sec:nt-2-5-5}
+我们已经看到，对有限指数子环 $B\subset\mathcal O_K$，有
+\begin{align*}
+\operatorname{disc}(B/\mathbb Z)=
+\operatorname{disc}(\mathcal O_K/\mathbb Z)(\mathcal O_K:B)^2.
+\end{align*}
+这表明，当 $\operatorname{disc}(B/\mathbb Z)$ 无平方因子时，有 $B=\mathcal O_K$.
+
+\paragraph{问题}
+若对某个素数 $p$，有 $p^2\mid\operatorname{disc}(B/\mathbb Z)$，该怎么办？
+如何判定 $p\mid(\mathcal O_K:B)$ 是否成立？若成立，如何找到 $b\in B$，使得 $\frac bp\in\mathcal O_K$？
+\begin{theorem*}
+设 $N=\sqrt{pB}$ 是 $(p)=pB$ 在 $B$ 中的根理想，并令
+\begin{align*}
+m\colon B/pB&\longrightarrow\operatorname{End}_B(N/pN),\\
+b&\longmapsto(\overline n\longmapsto\overline b\,\overline n)
+\end{align*}
+为 $B/pB$ 在 $N/pN$ 上的作用.
+\begin{enumerate}[label=\roman*)]
+\item 若 $\operatorname{Ker}(m)=0$，则 $\mathcal O_K\cap p^{-1}B=B$，从而 $p$ 不整除 $(\mathcal O_K:B)$.
+\item 若 $b\in B$ 满足 $0\ne\overline b\in\operatorname{Ker}(m)$，则 $\frac bp\in\mathcal O_K$ 且 $\frac bp\notin B$.
+\end{enumerate}
+\end{theorem*}
+\begin{proof}
+i) 设 $\operatorname{Ker}(m)=0$. 我们有包含关系 $B\subset\mathcal O_K\cap p^{-1}B$，要证明两者相等.
+引入环 $B'=\{x\in\mathcal O_K,\ xN\subset N\}$.
+有 $B\subset B'\subset\mathcal O_K\cap p^{-1}B$.
+
+\emph{第一步：$B=B'$.}
+事实上，若 $x\in B'$，则 $xpN\subset pN$，又因为 $xp\in B$（注意 $p\in N$），可见 $\overline{xp}\in\operatorname{Ker}(m)$.
+因此，由假设 $xp\in pB$，最终得到 $x\in B$.
+
+\emph{第二步：设 $x\in\mathcal O_K\cap p^{-1}B$ 的次数为 $n$，并取 $m$ 使得 $N^m\subset pB$.
+则对任意 $y\in N$，都有 $(xy)^{nm}\in pB$.}
+事实上，$xy^m\in pxB$，又因 $px\in B$，有 $xy^m\in B$.
+所以，对任意 $k\in\mathbb N$，都有 $y^m(xy^m)^k\in pB$；特别地，对 $1\leq k\leq n-1$，有 $x^ky^{mn}\in pB$.
+利用 $x$ 满足的一个 $n$ 次首一整性方程，得到对任意 $k\in\mathbb N$ 都有 $x^ky^{mn}\in pB$，特别可取 $k=mn$.
+因而 $(xy)^{mn}\in pB$.
+
+\emph{第三步：$B'=\mathcal O_K\cap p^{-1}B$.}
+取 $x\in\mathcal O_K\cap p^{-1}B$.
+我们对 $k\geq1$ 作下降归纳，证明 $xN^k\subset N$.
+从 $k=2m$ 开始，因为 $xN^{2m}\subset xp^2B\subset pB\subset N$.
+现在假定 $xN^{k+1}\subset N$，来证明 $xN^k\subset N$.
+取 $y\in N^k$. 有 $xyN\subset N$，所以由第一步，$xy\in B$.
+由第二步，$(xy)^{nm}\in pB$，故 $xy\in N$.
+于是 $xN^k\subset N$. 取 $k=1$，便得到 $x\in B'$.
+
+ii) 取陈述中的 $b$. 则 $\frac bp\notin B$ 且 $\frac bpN\subset N$.
+第二个性质表明 $\mathbb Z[\frac bp]$ 嵌入 $\operatorname{End}_{\mathbb Z}(N)$，因而是有限生成 $\mathbb Z$-模.\footnote{译注：原文写作 ``un $\mathbb Z$-module de type''，缺少 ``fini''；此处按其惯用短语译出.}
+因此 $\frac bp$ 在 $\mathbb Z$ 上整，即 $\frac bp\in\mathcal O_K$.
+\end{proof}
+现在给出这个定理的一个应用例子.
+
+\subsection{Eisenstein 情形}\label{sec:nt-2-5-6}
+设 $p$ 是素数. 回忆：多项式
+$f(X)=X^n+a_{n-1}X^{n-1}+\cdots+a_0\in\mathbb Z[X]$
+称为在 $p$ 处的 Eisenstein 多项式，如果对每个 $i$ 都有 $p\mid a_i$，且 $p^2$ 不整除 $a_0$.
+这个概念的意义在于下面的不可约性判别法.
+\begin{lemma*}[Eisenstein 判别法]
+若 $f$ 是 Eisenstein 多项式，则 $f$ 不可约.
+\end{lemma*}
+\begin{proof}
+设存在分解 $f=gh$，其中
+$g(X)=X^m+b_{m-1}X^{m-1}+\cdots+b_0$，
+$h(X)=X^l+c_{l-1}X^{l-1}+\cdots+c_0$.
+由假设，$p$ 恰好整除 $b_0,c_0$ 中的一个；设 $p\mid c_0$.
+令 $i$ 是使得 $p$ 不整除 $c_i$ 的最小下标.
+有 $a_i=c_ib_0+c_{i-1}b_1+\cdots+c_0b_i\equiv c_ib_0\pmod p$，
+所以 $p$ 不整除 $a_i$，矛盾.
+\end{proof}
+我们希望将上面的定理应用于如下情形：
+$K=\mathbb Q(\alpha)$，$f_\alpha$ 是在 $p$ 处的 Eisenstein 多项式，
+$B=\mathbb Z[\alpha]\simeq\mathbb Z[X]/(f_\alpha)$.
+此时，$B/pB\simeq\mathbb F_p[X]/(X^n)$ 且 $N=pB+\alpha B$
+（因为按定义，$N$ 是 $B/pB$ 的幂零根在 $B$ 中的逆像，而该幂零根显然是 $(X)$）.
+\begin{lemma*}
+沿用定理中的记号，有 $\operatorname{Ker}(m)=0$.
+\end{lemma*}
+\begin{proof}
+因为 $\operatorname{Ker}(m)$ 是 $B/pB$ 的理想，它具有 $(X^i)$ 的形式.
+若它非零，便包含 $X^{n-1}$，这等价于 $\alpha^{n-1}N\subset pN$.
+但这是不可能的，因为 $\alpha\in N$ 且 $\alpha^n=\alpha^{n-1}\alpha\notin pN$.
+事实上，
+$\alpha^n=-a_0-a_1\alpha-\cdots-a_{n-1}\alpha^{n-1}\in-a_0+pN$，
+而由 $p^2$ 不整除 $a_0$，有 $a_0\notin pN$.
+\end{proof}
+根据此引理及前面的定理，若 $p$ 是 $\operatorname{disc}(\mathbb Z[\alpha]/\mathbb Z)$ 中唯一以重数出现的素数，则可断言 $\mathcal O_K=\mathbb Z[\alpha]$.
+下面给出这一方法适用的一个重要情形.
+
+\subsection{\texorpdfstring{$p$}{p}-分圆数域}\label{sec:nt-2-5-7}
+固定整数 $r\geq1$，令 $\zeta_r:=\exp(\frac{2i\pi}{p^r})\in\mathbb C$，这是一个 $p^r$ 次本原单位根.
+我们关心数域 $K=\mathbb Q(\zeta_r)$；它是 $\mathbb Q$ 的 Galois 扩张，因为 $\zeta_r$ 的所有共轭都是它的幂.
+``$p^r$ 次分圆多项式''是次数为 $\varphi(p^r)=p^r-p^{r-1}$ 的多项式，定义为
+\begin{align*}
+\Phi_{p^r}(X)=\frac{X^{p^r}-1}{X^{p^{r-1}}-1}.
+\end{align*}
+它显然以 $\zeta_r$ 为根.
+注意到模 $p$ 有
+$\Phi_{p^r}(1+T)\equiv\frac{T^{p^r}}{T^{p^{r-1}}}=T^{p^r-p^{r-1}}$，
+又因为 $\Phi_{p^r}(1)=p$，由此推出 $\Phi_{p^r}$ 是在 $p$ 处的 Eisenstein 多项式，特别地，它不可约.\footnote{译注：原文此处写 $\Phi_{p^r}$；满足 Eisenstein 条件的是平移后的 $\Phi_{p^r}(1+T)$，后者的不可约性也给出前者的不可约性.}
+所以它是 $\zeta_r$ 在 $\mathbb Q$ 上的极小多项式，且
+\begin{align*}
+\mathbb Q(\zeta_r)\simeq\mathbb Q[X]/(\Phi_{p^r}).
+\end{align*}
+比较基数可知，\ref{sec:nt-1-1-3} 中定义的单同态
+\begin{align*}
+\chi_{p^r,\mathbb Q}\colon
+\operatorname{Gal}(\mathbb Q(\zeta_r)/\mathbb Q)
+\longrightarrow(\mathbb Z/p^r\mathbb Z)^\times
+\end{align*}
+是同构.
+
+现在，我们希望用下面的公式计算 $\Phi_{p^r}$ 的判别式：
+\begin{align*}
+\operatorname{disc}(\Phi_{p^r})
+=(-1)^{\frac{\varphi(p^r)(\varphi(p^r)-1)}2}
+N_{\mathbb Q(\zeta_r)/\mathbb Q}(\Phi'_{p^r}(\zeta_r)).
+\end{align*}
+有
+$\Phi'_{p^r}(\zeta_r)=p^r\frac{\zeta_r^{p^r-1}}{\zeta_r^{p^{r-1}}-1}
+=p^r\frac{\zeta_r^{-1}}{\zeta_1-1}$.
+注意 $N_{\mathbb Q(\zeta_r)/\mathbb Q}(\zeta_r)$ 是 $\mathbb Q$ 中的 $p^r$ 次单位根，所以当 $p\ne2$ 时，它等于 $1$.
+若 $p=2$，则公式
+$N_{\mathbb Q(\zeta_r)/\mathbb Q}(\zeta_r)
+=\prod_{a\in(\mathbb Z/p^r\mathbb Z)^\times}\zeta_r^a$
+表明该范数等于 $1$，唯一例外是 $r=1$，此时范数等于 $-1$.
+此外，有
+\begin{align*}
+N_{\mathbb Q(\zeta_r)/\mathbb Q}(\zeta_1-1)
+&=N_{\mathbb Q(\zeta_1)/\mathbb Q}(\zeta_1-1)^{
+[\mathbb Q(\zeta_r):\mathbb Q(\zeta_1)]}\\
+&=\left(\prod_{i=1}^{p-1}(\zeta_1^i-1)\right)^{p^{r-1}}.
+\end{align*}
+乘积 $\prod_{i=1}^{p-1}(\zeta_1^i-1)$ 是多项式
+$\Phi_p(1+T)=(1+T)^{p-1}+\cdots+(1+T)+1$
+的根的乘积，所以等于 $(-1)^{p-1}p$.
+最终得到
+\begin{align*}
+\operatorname{disc}(\Phi_{p^r})
+=\pm p^{r\varphi(p^r)}\frac1{p^{p^{r-1}}}
+=\pm p^{rp^r-(r+1)p^{r-1}}.
+\end{align*}
+\begin{corollary*}
+元素组 $(1,\zeta_r,\ldots,\zeta_r^{\varphi(p^r)-1})$ 是 $\mathcal O_{\mathbb Q(\zeta_r)}$ 的一组基.
+换言之，有 $\mathcal O_{\mathbb Q(\zeta_r)}=\mathbb Z[\zeta_r]$.
+\end{corollary*}
+\begin{proof}
+从公式
+\begin{align*}
+\operatorname{disc}(\mathbb Z[\zeta_r]/\mathbb Z)
+=\operatorname{disc}(\mathcal O_{\mathbb Q(\zeta_r)}/\mathbb Z)
+(\mathcal O_{\mathbb Q(\zeta_r)}:\mathbb Z[\zeta_r])^2
+\end{align*}
+出发. 它表明，唯一可能整除指数
+$(\mathcal O_{\mathbb Q(\zeta_r)}:\mathbb Z[\zeta_r])$ 的素数是 $p$.
+而 $\Phi_{p^r}(1+X)$ 是在 $p$ 处的 Eisenstein 多项式，所以
+\ref{sec:nt-2-5-6} 中的第二个引理及定理~\ref{sec:nt-2-5-5}
+告诉我们，$p$ 不整除 $(\mathcal O_{\mathbb Q(\zeta_r)}:\mathbb Z[\zeta_r])$.
+\end{proof}
+\begin{exercise*}
+考虑 $K=\mathbb Q(\sqrt[3]{17})$，并令 $B=\mathbb Z[\sqrt[3]{17}]$.
+\begin{enumerate}[label=\roman*),nosep]
+\item 证明 $\operatorname{disc}(B/\mathbb Z)=-3^3\,17^2$.
+\item 证明 $17$ 不整除 $(\mathcal O_K:B)$，从而 $(\mathcal O_K:B)=1$ 或 $3$.
+\item 令 $\alpha:=1+\sqrt[3]{17}$. 证明 $\frac{\alpha^2}{3}$ 是整数.
+\item 推出 $\mathcal O_K=\mathbb Z\oplus\mathbb Z\alpha\oplus\mathbb Z\frac{\alpha^2}{3}$.
+\end{enumerate}
+\end{exercise*}

@@ -1,0 +1,221 @@
+\section{局部化与分式域}\label{sec:galois-1-6}
+\subsection{局部化的构造}\label{sec:galois-1-6-1}
+在交换环 $A$ 中，若子集 $S$ 对乘法封闭、包含 $1$ 而不包含 $0$，就称它为\newterm{galois-multiplicative-subset}{乘法子集}{multiplicative subset}. 换言之，$S$ 是 $(A\setminus\{0\},\cdot,1)$ 的含单位元子幺半群.
+\begin{example*}
+下面是乘法子集的一些例子.
+\begin{enumerate}
+\item 当 $A$ 是整环时，取 $S=A\setminus\{0\}$.
+\item 对非整环 $A$，取 $A$ 的正则元组成的集合 $S=A_{\mathrm{reg}}$.
+\item 若 $f\in A$ 不是幂零元，取 $f$ 的幂组成的集合 $S=\{f^n,n\in\mathbb N\}$.
+\item 若 $\mathfrak p$ 为素理想，取其补集 $A\setminus\mathfrak p$（请验证）.
+\end{enumerate}
+\end{example*}
+设 $S$ 为 $A$ 的乘法子集. 在集合 $A\times S$ 上定义如下等价关系（练习：验证传递性）：
+\begin{align*}
+(a,s)\sim(a',s')\ \Longleftrightarrow\ \exists t\in S,\ t(as'-a's)=0.
+\end{align*}
+注意，若 $A$ 为整环，右端可简化为 $as'-a's=0$. 记商集为 $S^{-1}A:=(A\times S)/\sim$，并用 $a/s$ 表示 $(a,s)$ 的等价类. 由下面的公式在 $S^{-1}A$ 上定义加法.
+\begin{lemma*}
+\begin{enumerate}[label=\roman*)]
+\item 将 $((a,s),(b,r))$ 映到 $(ar+bs,sr)$ 的映射 $(A\times S)\times(A\times S)\longrightarrow A\times S$ 诱导一个结合且交换的运算
+\begin{align*}
++:S^{-1}A\times S^{-1}A&\longrightarrow S^{-1}A,\\
+\left(\frac as,\frac br\right)&\longmapsto\frac as+\frac br=\frac{ar+bs}{sr},
+\end{align*}
+其单位元为 $0:=0/s$，其中 $s$ 可任取.
+\item 将 $((a,s),(b,r))$ 映到 $(ab,sr)$ 的映射 $(A\times S)\times(A\times S)\longrightarrow A\times S$ 诱导一个结合、交换且对 $+$ 满足分配律的运算
+\begin{align*}
+\cdot:S^{-1}A\times S^{-1}A&\longrightarrow S^{-1}A,\\
+\left(\frac as,\frac br\right)&\longmapsto\frac as\cdot\frac br=\frac{ab}{sr},
+\end{align*}
+其单位元为 $1:=1/1$. 因此 $(S^{-1}A,+,\cdot)$ 是环.
+\item 映射 $\iota:A\longrightarrow S^{-1}A,\ a\mapsto a/1$ 是环同态.
+\end{enumerate}
+\end{lemma*}
+\begin{proof}
+i) 先验证运算有定义. 设 $(a',s')\sim(a,s)$ 且 $(b',r')\sim(b,r)$. 则存在 $t,u\in S$ 使 $t(as'-a's)=0=u(br'-b'r)$. 于是
+\begin{align*}
+ut\bigl((ar+bs)s'r'-(a'r'+b's')sr\bigr)=0,
+\end{align*}
+从而 $(ar+bs,sr)\sim(a'r'+b's',s'r')$，这表明 $+$ 在 $S^{-1}A$ 上有定义. 交换性显然成立，$0/s$ 是单位元（且不依赖于 $s$）也显然成立. 结合性同样由一个不难的计算得到.
+
+ii) 论证与上面相同，而且更简单，留给读者.
+
+iii) 直接写出等式即可.
+\end{proof}
+\subsection{局部化的泛性质}\label{sec:galois-1-6-2}
+$S^{-1}A$ 的显著性质是，$S$ 的元素``在其中变得可逆''. 事实上，若 $s\in S$，在 $S^{-1}A$ 中有
+\begin{align*}
+\frac s1\cdot\frac1s=\frac1s\cdot\frac s1=\frac ss=\frac11=1.
+\end{align*}
+实际上，作为 $A$-代数，$S^{-1}A$ 由下述泛性质刻画.
+\begin{proposition*}
+对任意满足 $\varphi(S)\subset B^\times$ 的 $A$-代数 $\varphi:A\longrightarrow B$，存在唯一的 $A$-代数同态 $\widetilde\varphi:S^{-1}A\longrightarrow B$（即唯一满足 $\widetilde\varphi\circ\iota=\varphi$ 的环同态）.
+\end{proposition*}
+\begin{proof}
+唯一性：若 $\widetilde\varphi$ 如命题所述，对每个 $(a,s)\in A\times S$，必有
+\begin{align*}
+\widetilde\varphi\left(\frac as\right)\widetilde\varphi\left(\frac s1\right)
+=\widetilde\varphi\left(\frac a1\right)=\varphi(a),
+\end{align*}
+故 $\widetilde\varphi(a/s)=\varphi(a)\varphi(s)^{-1}$. 这就给出唯一性.
+
+存在性：须验证表达式 $\widetilde\varphi(a/s):=\varphi(a)\varphi(s)^{-1}$ 有定义. 若 $(a',s')\sim(a,s)$，存在 $t\in S$ 使 $tas'=ta's$，故 $\varphi(t)\varphi(a)\varphi(s')=\varphi(t)\varphi(a')\varphi(s)$，从而 $\varphi(a)\varphi(s)^{-1}=\varphi(a')\varphi(s')^{-1}$（注意，此处乘法的交换性至关重要）. 因而所需表达式有定义. 剩下只须验证它定义一个环同态，这是直接的计算.
+\end{proof}
+\begin{remark*}
+命题中可以允许 $B$ 非交换. 非交换情形有如下有趣的推论：若在 $A$-模 $M$ 上，每个 $s\in S$ 的作用都是双射，则 $M$ 自然成为 $S^{-1}A$-模，反之亦然. 此外，若 $M,N$ 是 $S^{-1}A$-模，则每个 $A$-模同态自动是 $S^{-1}A$-模同态，即
+\begin{align*}
+\operatorname{Hom}_{S^{-1}A}(M,N)=\operatorname{Hom}_A(M,N).
+\end{align*}
+\end{remark*}
+\subsection{整环的分式域}\label{sec:galois-1-6-3}
+设 $A$ 是整环，且 $S=A\setminus\{0\}$. 此时 $S^{-1}A$ 的每个非零元素都形如 $a/b$，其中 $a,b\ne0$，故可逆，逆元为 $b/a$. 因此 $S^{-1}A$ 是包含 $A$ 的域（通过 $\iota$），称为 $A$ 的\newterm{galois-field-of-fractions}{分式域}{field of fractions}，也记为 $\operatorname{Frac}(A)$. 例如，这就重现了 $\mathbb Q=\operatorname{Frac}(\mathbb Z)$ 的构造，以及域上单变元有理分式域 $K(X)=\operatorname{Frac}(K[X])$ 的构造.
+\begin{lemma*}
+设 $A$ 是分式域为 $K$ 的整环. 则 $\operatorname{Frac}(A[X])=K(X)$.
+\end{lemma*}
+\begin{proof}
+因为 $A[X]\subset K[X]$ 的每个非零元素在域 $K(X)$ 中可逆，局部化的泛性质给出自然同态 $\operatorname{Frac}(A[X])\longrightarrow K(X)$；它是域同态，故单射. 来证明它满射. 为此，须验证每个有理分式 $Q=f/g\in K(X)$，其中 $f,g\in K[X]$，都可写成 $\widetilde f/\widetilde g$，其中 $\widetilde f,\widetilde g\in A[X]$. 写 $f=\sum_n(a_n/b_n)X^n$ 和 $g=\sum_n(c_n/d_n)X^n$. 令 $a:=\prod_n b_n\prod_n d_n$. 取 $\widetilde f:=af$ 和 $\widetilde g:=ag$ 即可.
+\end{proof}
+更一般地，记 $K(X_1,\ldots,X_n):=\operatorname{Frac}(K[X_1,\ldots,X_n])$. 上述引理结合 $K[X_1,\ldots,X_n]=K[X_1,\ldots,X_{n-1}][X_n]$ 这个同构，表明 $K(X_1,\ldots,X_n)=K(X_1,\ldots,X_{n-1})(X_n)$.
+
+现在考察唯一分解整环的特殊情形.
+\begin{proposition*}
+设 $A$ 为唯一分解整环，$K:=\operatorname{Frac}(A)$. 对每个不可约元 $p\in A$，$p$-进赋值唯一延拓为函数
+\begin{align*}
+\nu_p:K^\times\longrightarrow\mathbb Z,\qquad
+\nu_p(xy)=\nu_p(x)+\nu_p(y)\quad(\forall x,y\in K^\times).
+\end{align*}
+此外，若 $P$ 表示 $A$ 中不可约元等价类的一个集合，则每个 $x\in K^\times$ 都形如 $x=u\cdot\prod_{p\in P}p^{\nu_p(x)}$，其中 $u\in A^\times$. 特别地，
+\begin{align*}
+\forall x\in K^\times,\quad x\in A\ \Longleftrightarrow\ (\forall p\text{ 不可约},\ \nu_p(x)\geqslant0).
+\end{align*}
+\end{proposition*}
+\begin{proof}
+若 $x=a/b$，$\nu_p$ 的可加性要求
+\begin{align*}
+\nu_p(a)=\nu_p\left(\frac ab\cdot\frac b1\right)=\nu_p\left(\frac ab\right)+\nu_p(b),
+\end{align*}
+故 $\nu_p(a/b)=\nu_p(a)-\nu_p(b)$. 这就证明可能存在的延拓的唯一性. 对存在性，须验证这个表达式只依赖于 $x$. 若 $x=a'/b'$，则 $a'b=ab'$，故 $\nu_p(a')+\nu_p(b)=\nu_p(a)+\nu_p(b')$，最终有 $\nu_p(a)-\nu_p(b)=\nu_p(a')-\nu_p(b')$，所证即此. 关于 $x=a/b$ 的第二项断言，将 $A$ 中成立的相同断言分别用于 $a,b$ 即得. 第二项断言证明最后等价关系的 $\Leftarrow$ 方向，$\Rightarrow$ 方向则是显然的.
+\end{proof}
+\begin{exercise*}
+证明对任意 $x,y\in K$，都有 $\nu_p(x+y)\geqslant\min(\nu_p(x),\nu_p(y))$（约定 $\nu_p(0)=\infty$，且对每个整数 $n$，都有 $\infty\geqslant n$）.
+\end{exercise*}
+\begin{remark*}
+对一般整环 $A$，总可以将分式写成 $x=a/b$，其中 $a,b$ 无公因子. 当 $A$ 是唯一分解整环时，这种写法在相差单位因子的意义下唯一，即若 $x=a'/b'$ 且 $a',b'$ 无公因子，则存在 $u\in A^\times$ 使 $a'=ua$ 且 $b'=ub$. 这由上面的命题得到. 当 $A$ 不是唯一分解整环时，没有这样的唯一性. 例如在 $\mathbb Z[\sqrt{-5}]$ 中，$2/(1+\sqrt{-5})=(1-\sqrt{-5})/3$.
+\end{remark*}
+若对任意乘法子集局部化一个整环，会发生什么？
+\begin{lemma*}
+设 $A$ 为整环，$S\subset A$ 为乘法子集. 有自然同构
+\begin{align*}
+S^{-1}A\xrightarrow{\sim}\{x\in\operatorname{Frac}(A),\ \exists s\in S,\ sx\in A\},
+\end{align*}
+它将 $S^{-1}A$ 实现为 $\operatorname{Frac}(A)$ 的 $A$-子代数.
+\end{lemma*}
+\begin{proof}
+因为每个 $s\in S$ 在 $\operatorname{Frac}(A)$ 中都可逆，局部化的泛性质给出自然同态 $S^{-1}A\longrightarrow\operatorname{Frac}(A)$. 它是单射：若 $a/s$ 属于核，则 $a/1$ 也属于核，由 $A$ 单射到 $\operatorname{Frac}(A)$ 可得 $a=0$. 它的像显然就是命题所述的集合.
+\end{proof}
+注意，特别地，$S^{-1}A$ 是整环，其分式域为 $\operatorname{Frac}(A)$.
+\subsection{全分式环}\label{sec:galois-1-6-4}
+当 $A$ 不是整环时，$A\setminus\{0\}$ 不是乘法子集，改用 $A$ 的正则元（即非零且不是零因子的元素）组成的集合 $S=A_{\mathrm{reg}}$. 局部化 $S^{-1}A$ 有时记为 $Q(A)$，称为\newterm{galois-total-ring-of-fractions}{全分式环}{total ring of fractions}.
+\begin{exercise*}
+证明自然同态 $A\longrightarrow Q(A)$ 是单射.
+\end{exercise*}
+实际上，$Q(A)$ 是 $A$ 能单射到其中的``最大局部化''. 事实上，若乘法子集 $S$ 包含零因子 $t$，则每个满足 $at=0$ 的元素 $a\in A$，在 $S^{-1}A$ 中的像 $a/1=at/t=0$ 都是零. 可以证明，当 $A$ 既约时，$Q(A)$ 是域的直积.\footnote{译注：原文此处未加有限性假设；一般既约环的全分式环未必是域的直积，此断言按原文保留.}
+\begin{exercise*}
+对 $A=\mathbb C[X,Y]/(XY)$，证明 $Q(A)=\mathbb C(X)\times\mathbb C(Y)$（先做下面第三道练习）.
+\end{exercise*}
+\subsection{使一个元素可逆}\label{sec:galois-1-6-5}
+若 $f\in A$ 非幂零且 $S=\{f^n,n\in\mathbb N\}$，也将环 $S^{-1}A$ 记作 $A_{(f)}$ 或 $A[f^{-1}]$. 这一记号可作如下解释.
+\begin{lemma*}
+将 $X$ 映到 $1/f$ 的唯一 $A$-代数同态 $A[X]\longrightarrow A[f^{-1}]$ 诱导一个同构 $A[X]/(Xf-1)\xrightarrow{\sim}A[f^{-1}]$.
+\end{lemma*}
+\begin{proof}
+将命题中的同态记为 $\psi$（其存在性由多项式环的泛性质得到）. 有 $\psi(Xf-1)=\psi(X)f-1=0$，所以 $\psi$ 通过同态 $\overline\psi:A[X]/(Xf-1)\longrightarrow A[f^{-1}]$ 分解（商的泛性质）. 另一方面，因为 $f$ 在 $A[X]/(Xf-1)$ 中可逆（其逆为 $X$ 在商中的像 $\overline X$），局部化的泛性质给出 $A$-代数同态 $\widetilde\varphi:A[f^{-1}]\longrightarrow A[X]/(Xf-1)$，将 $1/f$ 映到 $f$ 在此商中的逆 $\overline X$. 复合 $\overline\psi\circ\widetilde\varphi$ 是 $A$-代数 $S^{-1}A=A[f^{-1}]$ 的自同态，所以由 $S^{-1}A$ 泛性质中的唯一性，它必等于恒等映射 $\operatorname{id}_{A[f^{-1}]}$. 这表明 $\widetilde\varphi$ 是单射. 另一方面，$\widetilde\varphi$ 的像包含 $X$ 的像 $\overline X$ 及 $A$ 在 $A[X]/(Xf-1)$ 中的像. 此环是 $A[X]$ 的商，所以 $\widetilde\varphi$ 也是满射. 因而 $\widetilde\varphi$ 是同构，$\overline\psi$ 为其逆.
+\end{proof}
+\begin{example*}
+在环 $A[X]$ 中取 $f=X$，便重新得到 Laurent 多项式环 $A[X,X^{-1}]$.
+\end{example*}
+\begin{exercise*}
+证明自然同态 $A\longrightarrow A[f^{-1}]$ 的核是理想 $I_f:=\{g\in A,\ \exists n\in\mathbb N,\ gf^n=0\}$. 例如，取 $A=\mathbb C[X,Y]/(X^2Y)$ 和 $f=X$，证明 $A[f^{-1}]=\mathbb C[X,X^{-1}]$.
+\end{exercise*}
+\begin{exercise*}
+设 $A=\mathbb C[X,Y]/(XY)$ 且 $f=X+Y$. 证明 $e=X/(X+Y)$ 是 $A[f^{-1}]$ 中的幂等元，然后证明 $A[f^{-1}]=\mathbb C[X,X^{-1}]\times\mathbb C[Y,Y^{-1}]$.
+\end{exercise*}
+\paragraph{应用（$\mathbb C^n$ 的主开集上的正则函数）}
+若 $f$ 是 $\mathbb C^n$ 上的多项式函数，记
+\footnote{译注：原 PDF 此处集合中印作 $z\in\mathbb C$，按原式保留；按上下文应为 $z\in\mathbb C^n$.}
+\begin{align*}
+U_f:=\{z\in\mathbb C,\ f(z)\ne0\}=\mathbb C^n\setminus V(f).
+\end{align*}
+这是 $\mathbb C^n$ 的一个稠密开集，且 $U_f\cap U_{f'}=U_{ff'}$. 我们希望在 $U_f$ 上有一个恰当的``正则函数''概念. 可以考虑将 $\mathbb C^n$ 上的多项式函数限制而得到的函数，但这有悖于如下直觉：$U_f$ 上应有``更多的正则函数''，其中一些可延拓到 $\mathbb C^n$，另一些则不能. 函数 $f$ 在 $U_f$ 上不为零，其逆 $f^{-1}$ 似乎正是不能延拓到 $\mathbb C^n$ 的正则函数的典型，这引导出如下定义：$U_f$ 上的正则函数是形如 $z\mapsto g(z)f(z)^{-k}$ 的函数，其中 $g$ 是 $\mathbb C^n$ 上的多项式函数，$k\in\mathbb N$. $U_f$ 上正则函数的集合 $\mathcal O(U_f)$ 是 $\mathbb C$-代数，且由定义有同构
+\begin{align*}
+\mathcal O(U_f)=\mathcal O(\mathbb C^n)[f^{-1}].
+\end{align*}
+可将它与同构 $\mathcal O(V(f))=\mathcal O(\mathbb C^n)/(f)$ 对照.
+
+\subsection{在素理想处局部化}\label{sec:galois-1-6-6}
+若 $\mathfrak p$ 是环 $A$ 的素理想，且 $S:=A\setminus\mathfrak p$，通常将局部化记为 $A_{\mathfrak p}:=S^{-1}A$. 注意，若 $A$ 是整环（事实上也只有此时），零理想 $\mathfrak p=0$ 是素理想，而且已经知道相应的局部化是 $A$ 的分式域. 这是下述结果的特殊情形.
+\begin{proposition*}
+设 $\mathfrak pA_{\mathfrak p}$ 为 $\mathfrak p$ 的像在 $A_{\mathfrak p}$ 中生成的理想. 则 $A_{\mathfrak p}^\times=A_{\mathfrak p}\setminus\mathfrak pA_{\mathfrak p}$，$\mathfrak pA_{\mathfrak p}$ 是 $A_{\mathfrak p}$ 唯一的极大理想，而且自然同态 $A\longrightarrow A_{\mathfrak p}$ 诱导单射同态 $A/\mathfrak p\hookrightarrow A_{\mathfrak p}/\mathfrak pA_{\mathfrak p}$，后者将 $A_{\mathfrak p}/\mathfrak pA_{\mathfrak p}$ 识别为 $A/\mathfrak p$ 的分式域.
+\end{proposition*}
+\begin{proof}
+考虑复合 $\varphi:=A\xrightarrow{\iota}A_{\mathfrak p}\longrightarrow A_{\mathfrak p}/\mathfrak pA_{\mathfrak p}$. 它的核显然包含 $\mathfrak p$，所以它通过同态 $\overline\varphi:A/\mathfrak p\longrightarrow A_{\mathfrak p}/\mathfrak pA_{\mathfrak p}$ 分解. 整环 $A/\mathfrak p$ 的每个非零元素都来自 $A\setminus\mathfrak p$ 中的元素，所以按局部化 $A_{\mathfrak p}$ 的定义，它被映到 $A_{\mathfrak p}/\mathfrak pA_{\mathfrak p}$ 的可逆元. 由整环分式域的泛性质，得到 $\overline\varphi$ 的分解：
+\begin{align*}
+\overline\varphi:A/\mathfrak p\hookrightarrow\operatorname{Frac}(A/\mathfrak p)
+\xrightarrow{\widetilde\varphi}A_{\mathfrak p}/\mathfrak pA_{\mathfrak p}.
+\end{align*}
+反过来，考虑复合 $\psi:A\longrightarrow A/\mathfrak p\hookrightarrow\operatorname{Frac}(A/\mathfrak p)$. 它将 $A\setminus\mathfrak p$ 的每个元素映到 $\operatorname{Frac}(A/\mathfrak p)$ 的非零元，因而映到可逆元. 由泛性质，$\psi$ 通过局部化 $A_{\mathfrak p}$ 分解为 $\widetilde\psi:A_{\mathfrak p}\longrightarrow\operatorname{Frac}(A/\mathfrak p)$. 显然，核包含 $\mathfrak p$，所以 $\widetilde\psi$ 又通过商分解为
+\begin{align*}
+\widetilde\psi:A_{\mathfrak p}\twoheadrightarrow A_{\mathfrak p}/\mathfrak pA_{\mathfrak p}
+\xrightarrow{\overline\psi}\operatorname{Frac}(A/\mathfrak p).
+\end{align*}
+复合 $\overline\psi\circ\widetilde\varphi$ 是 $A$-代数 $\operatorname{Frac}(A/\mathfrak p)$ 的自同态，因而也是这个 $A/\mathfrak p$-代数的自同态，所以由局部化 $\operatorname{Frac}(A/\mathfrak p)$ 泛性质中的唯一性，它等于恒等映射. 同样，复合 $\widetilde\varphi\circ\overline\psi$ 是 $A$-代数 $A_{\mathfrak p}/\mathfrak pA_{\mathfrak p}$ 的自同态. 这样的自同态也自动是 $A_{\mathfrak p}$-线性的（参看前面的注），即是 $A_{\mathfrak p}$-代数同态，故等于 $A_{\mathfrak p}/\mathfrak pA_{\mathfrak p}$ 的恒等映射. 因此 $\widetilde\varphi$ 与 $\overline\psi$ 是互逆的 $A$-代数同构.
+
+现在可推出 $A_{\mathfrak p}/\mathfrak pA_{\mathfrak p}$ 是域，故 $\mathfrak pA_{\mathfrak p}$ 是 $A_{\mathfrak p}$ 的极大理想，且 $A_{\mathfrak p}^\times\subset A_{\mathfrak p}\setminus\mathfrak pA_{\mathfrak p}$. 为证明反向包含，设 $x=a/b\in A_{\mathfrak p}$，其中 $a\in A$，$b\in A\setminus\mathfrak p$. 若 $x$ 属于补集 $A_{\mathfrak p}\setminus\mathfrak pA_{\mathfrak p}$，则 $a\in A\setminus\mathfrak p$. 因此 $a$ 在 $A_{\mathfrak p}$ 中可逆，$x$ 也可逆. 这就得到所需的包含 $A_{\mathfrak p}\setminus\mathfrak pA_{\mathfrak p}\subset A_{\mathfrak p}^\times$. 这个包含关系还说明 $A_{\mathfrak p}$ 的每个真理想 $I$ 都包含于 $\mathfrak pA_{\mathfrak p}$，从而后者确为唯一的极大理想.
+\end{proof}
+\begin{example*}
+设 $A$ 为唯一分解整环，且 $\mathfrak p$ 为主理想. 将 $\mathfrak p$ 的任一生成元 $p$ 对应的赋值记为 $\nu_{\mathfrak p}:=\nu_p$（它只依赖于 $\mathfrak p$）. 则
+\begin{align*}
+A_{\mathfrak p}=\{x\in\operatorname{Frac}(A),\ \nu_{\mathfrak p}(x)\geqslant0\}.
+\end{align*}
+事实上，前面的一个引理将 $A_{\mathfrak p}$ 识别为 $\{x\in\operatorname{Frac}(A),\ \exists s\in A\setminus\mathfrak p,\ sx\in A\}$. 而 $A\setminus\mathfrak p=\{s\in A,\nu_{\mathfrak p}(s)=0\}$，所以 $sx\in A\Rightarrow\nu_{\mathfrak p}(x)=\nu_{\mathfrak p}(sx)\geqslant0$. 反之，若 $\nu_{\mathfrak p}(x)\geqslant0$，由第\ref{sec:galois-1-6-3}分目的命题，可将 $x$ 写成 $x=a/s$，其中 $\nu_p(s)=0$. 同样有
+\begin{align*}
+\mathfrak pA_{\mathfrak p}=\{x\in\operatorname{Frac}(A),\ \nu_{\mathfrak p}(x)>0\}.
+\end{align*}
+考虑例子 $A=\mathbb C[X]$，$\mathfrak p=\mathfrak p_z=(X-z)$，其中 $z\in\mathbb C$（因为 $\mathbb C$ 代数闭，$\mathbb C[X]$ 的每个非零素理想都具有此形式）. 已知赋值 $\nu_{X-z}$ 是多项式函数在 $z$ 处的零点阶数. 上述讨论因此将局部化 $A_{\mathfrak p_z}$ 识别为 $\mathbb C(X)$ 中在 $z$ 处没有极点的有理分式组成的子代数.
+\end{example*}
+\paragraph{应用（代数几何中的有理函数）}
+考虑由 $\mathbb C^n$ 的一个主开集 $U$ 及一个正则函数 $\varphi\in\mathcal O(U)$ 组成的对 $(U,\varphi)$ 的集合（按定义，存在 $f,g\in\mathbb C[X_1,\ldots,X_n]$ 使 $U=U_f$ 且 $\varphi(z)=g(z)/f(z)$）. 若 $\varphi|_{U\cap U'}=\varphi'|_{U\cap U'}$，便将 $(U,\varphi)$ 与 $(U',\varphi')$ 等同. 称这样一对 $(U,\varphi)$ 的任意等价类为 $\mathbb C^n$ 上的有理函数. 因而这里的``函数''一词略有滥用，因为这样一个``函数''的定义域并不是整个 $\mathbb C^n$. $\mathbb C$ 上有理函数的集合 $\mathcal M(\mathbb C^n)$ 是一个 $\mathbb C$-代数：\footnote{译注：原 PDF 此句印作``$\mathbb C$ 上''，前后讨论的空间为 $\mathbb C^n$，此处保留原文.} 其运算为 $(U,\varphi)+(U',\varphi'):=(U\cap U',\varphi+\varphi')$ 及 $(U,\varphi)(U',\varphi')=(U\cap U',\varphi\varphi')$. 它甚至是域：若 $\varphi(z)=g(z)/f(z)$ 且 $\varphi\ne0$（从而 $g\ne0$），则逆元为 $(U_f,\varphi)^{-1}=(U_g,\varphi^{-1})$. 这个域并不神秘.
+\begin{lemma*}
+有 $\mathcal M(\mathbb C^n)\simeq\mathbb C(X_1,\ldots,X_n)$.
+\end{lemma*}
+\begin{proof}
+给有理分式 $Q=g/f\in\mathbb C(X_1,\ldots,X_n)$ 对应一对 $(U_f,\varphi)$，其中 $\varphi(z)=g(z)/f(z)$. 显然得到一个非零的 $\mathbb C$-代数同态，因为 $\mathbb C(X_1,\ldots,X_n)$ 是域，该同态为单射. 另一方面，由有理函数的定义，它为满射.
+\end{proof}
+现在希望在代数子集 $V\subset\mathbb C^n$ 上定义有理函数的概念. 为此，将讨论限制在 $\mathcal O(V)$ 是整环的情形；于是 $\mathcal O(V)=\mathcal O(\mathbb C^n)/\mathfrak p$，其中 $\mathfrak p$ 是 $\mathcal O(\mathbb C^n)$ 的素理想. 此时有
+\begin{align*}
+V=V(\mathfrak p)&=\{z\in\mathbb C^n,\ \forall f\in\mathfrak p,\ f(z)=0\},\\
+\mathfrak p&=\{f\in\mathcal O(\mathbb C^n),\ f|_V=0\}.
+\end{align*}
+前面的引理提示我们采用如下方便的定义：
+\begin{align*}
+\mathcal M(V)&:=\operatorname{Frac}(\mathcal O(V))=\operatorname{Frac}(A/\mathfrak p),\tag{1}\label{eq:galois-s06-rational-definition-1}\\
+\text{其中}\quad A&:=\mathcal O(\mathbb C^n)=\mathbb C[X_1,\ldots,X_n].
+\end{align*}
+然而，几何直觉更希望我们尝试将 $V$ 上的有理函数定义为 $\mathbb C^n$ 上有理函数 $(U,\varphi)$ 的限制. 显然，只有定义域 $U$ 与 $V$ 相交时，这才有可能. 此时称这个有理函数``在 $V$ 的一个开集上有定义''，并令 $(U,\varphi)|_V:=(U\cap V,\varphi|_{U\cap V})$；这是由 $V$ 的一个稠密``主''开集及该开集上的一个``正则''函数组成的对. 于是自然可以作如下定义：
+\begin{align*}
+\mathcal M(V)\text{ 是所有形如 }(U\cap V,\varphi|_{U\cap V})\text{ 的对的等价类组成的集合}.\tag{2}\label{eq:galois-s06-rational-definition-2}
+\end{align*}
+这里，由稠密开集及函数组成的对之间的等价关系，与前面相同.
+
+记 $\mathcal M(\mathbb C^n)_V$ 为 $\mathbb C^n$ 上在 $V$ 的某个开集上有定义的有理函数组成的集合. 通过前面引理中的同构，可看出
+\begin{align*}
+\mathcal M(\mathbb C^n)_V\simeq
+\left\{Q=\frac fg\in\mathbb C(X_1,\ldots,X_n),\ g|_V\ne0\right\}=A_{\mathfrak p}.
+\end{align*}
+于是定义 \eqref{eq:galois-s06-rational-definition-2} 将 $\mathcal M(V)$ 表示为 $\mathcal M(\mathbb C^n)_V$ 对由在 $V$ 上为零的函数组成的理想 $I_V$ 的商. 而通过前面的引理，可以识别
+\begin{align*}
+I_V\simeq\left\{Q=\frac fg\in\mathbb C(X_1,\ldots,X_n),\ g|_V\ne0\text{ 且 }f|_V=0\right\}=\mathfrak pA_{\mathfrak p}.
+\end{align*}
+所以定义 \eqref{eq:galois-s06-rational-definition-2} 就是令 $\mathcal M(V):=A_{\mathfrak p}/\mathfrak pA_{\mathfrak p}$，而上面的命题保证它与定义 \eqref{eq:galois-s06-rational-definition-1} 等价.
+
