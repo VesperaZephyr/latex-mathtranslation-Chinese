@@ -13,43 +13,47 @@ Chinese translation manuscripts.
 ## 收录说明 / What is included
 
 - 仅纳入**可独立编译的必要源码**：`*.tex`、`*.bib`、`*.cls`、`*.sty`、`*.fd`、
-  `*.def`、`*.bst`、`*.ist`、`README*`、`LICENSE*`。
+  `*.def`、`*.bst`、`*.ist`、`README*`。
 - **排除工程 / OCR 文件**（见 `.gitignore`）：`*.png`/`*.jpg`（扫描页）、`*.py`、
   `*.json`（OCR 转储）、`*.txt`、`tools/`、`_ocr_compare/`、`.workbuddy/`、
   以及所有构建产物（`*.aux`/`*.log`/`*.pdf` 等）。
 - 若某译本确需非 TeX Live 自带的矢量图（`*.pdf`/`*.svg`）或字体文件，单独白名单放行。
+- **许可证统一在顶层声明**：各书目录内不再单独附带 `LICENSE` 文件（见文末「许可 / License」）。
 
 ## 书籍目录 / Books
 
 | 目录 / Directory | 书名 / Title | 原作者 / Authors | 翻译状态 / Status |
 |---|---|---|---|
-| `aluffi-algebra-chapter-0/` | Algebra: Chapter 0 | Paolo Aluffi | 全本翻译完成 |
-| `breuil-emerton/` | Représentations p-adiques ordinaires de GL2(Qp) et compatibilité local-global（Breuil–Emerton 讲义） | Christophe Breuil & Matthew Emerton | 翻译完成 |
-| `brezis-functional-analysis/` | 泛函分析 | H. Brézis | 翻译完成 |
-| `klainerman-lecture-notes-analysis/` | Lecture Notes in Analysis (2011) | Sergiu Klainerman | 翻译完成 |
-| `bochner-riesz-means/` | Lectures on Bochner-Riesz Means | K. M. Davis, Y.-C. Chang | 翻译完成 |
-| `milne-etale-cohomology/` | Lectures on Étale Cohomology | J. S. Milne | 翻译完成 |
-| `bosch-linear-algebra/` | Lineare Algebra | Siegfried Bosch | 翻译完成 |
-| `morel-representation-theory/` | MAT 449 Representation Theory | Sophie Morel | 翻译完成 |
-| `milne-elliptic-curves/` | Elliptic Curves | J. S. Milne | 翻译完成 |
-| `milne-class-field-theory/` | Class Field Theory | J. S. Milne | 翻译完成 |
-| `chevalley-profinite-groups/` | Profinite Groups and Galois Cohomology (thesis) | Rosalie Chevalley | 翻译完成 |
-| `sga/` | Séminaire de Géométrie Algébrique (SGA) | Grothendieck et al. | 翻译完成 |
-| `stacks-and-moduli/` | Stacks and Moduli | Jarod Alper | 翻译完成 |
-| `stein-lectures/` | 傅里叶分析中的振动积分（Oscillatory Integrals in Fourier Analysis） | Elias M. Stein | 翻译完成 |
-| `cordoba-suprematism-harmonic/` | Suprematism in Harmonic Analysis | Antonio Córdoba | 翻译完成 |
-| `tensor-product/` | Tensor Products (Part I) | Keith Conrad | 翻译完成 |
-| `fractal-sets-falconer/` | The Geometry of Fractal Sets | K. J. Falconer | 翻译完成 |
-| `classical-harmonic-analysis/` | 古典调和分析（Classical Harmonic Analysis） | 藪田公三、佐藤圓治、田中仁、宮地晶彦、中路貴彦 | 翻译完成 |
-| `minimal-surfaces/` | 极小曲面教程（A Course in Minimal Surfaces） | Tobias Holck Colding & William P. Minicozzi II | 翻译完成 |
-| `harmonic-analysis-intro-zeno/` | 调和分析入门——为深入理解函数的性质 | 澤野嘉宏 | 翻译完成 |
-| `hintz-microlocal-analysis/` | An Introduction to Microlocal Analysis (GTM 304) | Peter Hintz | 翻译完成 |
-| `visual-differential-forms/` | A Visual Introduction to Differential Forms and Calculus on Manifolds（微分形式与流形上的微积分——可视化导引） | Jon Pierre Fortney | 翻译完成 |
-| `dat-lectures/` | Jean-François Dat 数学讲义（七册：有限群及其表示、代数与 Galois 理论、数论、Lie 群与 Lie 代数、半单 Lie 代数及其表示、代数几何（二）、模形式及其算术性质） | Jean-François Dat | 翻译完成 |
+| `Algebra Chapter 0/` | Algebra: Chapter 0 | Paolo Aluffi | 全本翻译完成 |
+| `(GTM 304) An Introduction to Microlocal Analysis (Peter Hintz)/` | An Introduction to Microlocal Analysis (GTM 304) | Peter Hintz | 翻译完成 |
+| `A Visual Introduction to Differential Forms and Calculation/` | A Visual Introduction to Differential Forms and Calculus | — | 翻译完成 |
+| `Breuil-Emerton-CN/` | Breuil–Emerton (CN) | Breuil, Emerton | 翻译完成 |
+| `Brezis泛函分析/` | 泛函分析 (Analyse fonctionnelle) | H. Brézis | 翻译完成 |
+| `Hodge Theory and Complex Algebraic Geometry I (Claire Voisin)/` | Hodge Theory and Complex Algebraic Geometry I | Claire Voisin | 翻译完成 |
+| `LECTURE NOTES IN ANALYSIS (2011) Sergiu Klainerman/` | Lecture Notes in Analysis (2011) | Sergiu Klainerman | 翻译完成 |
+| `Lectures on Bochner-Riesz Means (Katherine Michelle Davis, Yang-Chun Chang)/` | Lectures on Bochner-Riesz Means | K. M. Davis, Y.-C. Chang | 翻译完成 |
+| `Lectures on etale cohomology(J.S. Milne)/` | Lectures on Étale Cohomology | J. S. Milne | 翻译完成 |
+| `Lieare_Algebra(Siegfried_Bosch)/` | Lineare Algebra | Siegfried Bosch | 翻译完成 |
+| `MAT 449-Representation Theory(Sophie Morel)/` | MAT 449 Representation Theory | Sophie Morel | 翻译完成 |
+| `Milne椭圆曲线/` | Elliptic Curves | J. S. Milne | 翻译完成 |
+| `Milne类域论/` | Class Field Theory | J. S. Milne | 翻译完成 |
+| `Numerical Linear Algebra and Its Applications (Second Edition)/` | Numerical Linear Algebra and Its Applications (2nd ed.) | Xiao-Qing Jin, Yi-Min Wei, Zhi Zhao | 翻译完成 |
+| `Profinite Groups and Galois Cohomology [thesis] (Rosalie Chevalley)/` | Profinite Groups and Galois Cohomology (thesis) | Rosalie Chevalley | 翻译完成 |
+| `SGA/` | Séminaire de Géométrie Algébrique (SGA) | Grothendieck et al. | 翻译完成 |
+| `Stacks and Moduli/` | Stacks and Moduli | — | 翻译完成 |
+| `Stein讲座/` | Stein 讲座 | Elias M. Stein | 翻译完成 |
+| `Suprematism in Harmonic Analysis (Antonio Córdoba)/` | Suprematism in Harmonic Analysis | Antonio Córdoba | 翻译完成 |
+| `Teonsor Product/` | Tensor Product | — | 翻译完成 |
+| `The Geometry of Fractal Sets (K. J. Falconer)/` | The Geometry of Fractal Sets | K. J. Falconer | 翻译完成 |
+| `dat-lectures/` | Dat 七册讲义中文译本 | Jean-François Dat | 翻译完成 |
+| `代数, 数论与几何导引(法语)/` | 代数、数论与几何导引 (法语) | — | 翻译完成 |
+| `古典调和分析/` | 古典调和分析 | — | 翻译完成 |
+| `张慧星Ordinary Differential Equations/` | Ordinary Differential Equations | 张慧星 | 翻译完成 |
+| `收获与播种/` | 收获与播种 | — | 翻译完成 |
+| `极小曲面教程/` | 极小曲面教程 | — | 翻译完成 |
+| `调和分析入门——为深入理解函数的性质(泽野嘉宏)/` | 调和分析入门——为深入理解函数的性质 | 澤野嘉宏 | 翻译完成 |
 
-> 更多译本将逐步加入。/ More translations will be added over time.
-
-Dat 讲义各册的原始介绍见 [Jean-François Dat 教学页面](https://webusers.imj-prg.fr/~jean-francois.dat/enseignement/enseignement.php)。其中《代数与 Galois 理论》所据为**较早（最早）的版本**；该页面上的**最新版本为 2017 年版**，并非本译本依据的版本。
+> 全部译本均可独立编译；各书目录内附有各自的 `README`（含作者、目录、编译方法与项目结构）。
 
 ## 本地编译 / Building locally
 
@@ -62,6 +66,8 @@ biber  main     # 若使用 biblatex/biber
 xelatex main.tex
 xelatex main.tex
 ```
+
+多数译本也提供一键构建脚本（如 `bash tools/build.sh full`）；具体以各书 `README` 为准。
 
 ## 支持作者 / Support the Authors
 
@@ -89,5 +95,18 @@ If this collection helps your study or research, you may consider a small donati
 
 ## 许可 / License
 
-具体许可以各书目录内的 `LICENSE*` 文件为准；未声明者默认保留原作者版权，
-翻译稿仅供学习交流使用。
+本合集（含全部中文翻译子项目）统一采用 **Creative Commons Attribution 4.0 International (CC BY 4.0)** 许可证。
+
+This collection (including all Chinese-translation sub-projects) is uniformly licensed under the **Creative Commons Attribution 4.0 International (CC BY 4.0)** License.
+
+[![CC BY 4.0](https://licensebuttons.net/l/by/4.0/88x31.png)](https://creativecommons.org/licenses/by/4.0/)
+
+- 您可以自由地：**分享**（复制、发行、通过信息网络传播本作品）与 **改编**（二次创作、翻译、重排），包括商业用途。
+- 唯需遵守：**署名 (Attribution)**——以合理方式标明原作者与译者，提供许可证链接，并说明是否对作品进行了修改。
+- 不要求相同方式共享（无需 ShareAlike），亦无商业使用限制。
+- 各书目录内不再单独附带 `LICENSE` 文件；翻译稿版权归原作者与译者所有，转载与二次创作请遵守上述署名要求。
+
+- You are free to **Share** and **Adapt**, including commercially.
+- Only requirement: **Attribution** — give appropriate credit to the original authors and translators, provide a link to the license, and indicate if changes were made.
+- No ShareAlike or NonCommercial restriction applies.
+- Individual book directories no longer carry a separate `LICENSE` file; copyright of the translations remains with the original authors and translators.

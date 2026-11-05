@@ -1,0 +1,228 @@
+% ================================================================
+%  《收获与播种》中文译本 —— 各卷共用导言区
+%  由 vol-prelude / vol-part1 / vol-part2 / vol-part3 / vol-part4
+%  以及全书合订 main-all 共同 \input。基类 mathtranslation.cls v3.2 不改。
+%  --------------------------------------------------------------
+%  样式均在此改写, 以贴近原书:
+%    · 章标题仿原书 "5. Travail et découverte"(块状左对齐黑体)
+%    · 节/小节: 黑体左对齐, 编号后带句点
+%    · 脚注: 人工编号照录原书——前奏与第一部分页内重新编号,
+%      第二至四部各自连续编号并带(*)角标; 第一部分另有 \fnoteP
+%      处理 "(n)" 式连续注号
+%    · 边码: 原打字稿页码 \origpage{N}(前奏作 A1、P1、L1、罗马数字等)
+%    · ⋄ 记号: 段首补写标记 \pmark 与上标形式 \dmark
+% ================================================================
+
+% 题名含空格, 不能走类选项(会被 kvoptions 吃掉), 在此赋值
+\renewcommand{\BookTitleEN}{Récoltes et Semailles}
+\renewcommand{\OriginalAuthor}{Alexandre Grothendieck}
+\renewcommand{\TranslationDate}{\today}
+
+% --------------------------------------------------------------
+%  罕用字后备(如"祐"): Fandol 不载时退到 SimSun
+% --------------------------------------------------------------
+\setCJKfallbackfamilyfont{\CJKrmdefault}{{SimSun}}
+
+% --------------------------------------------------------------
+%  hyperref 元信息(各卷在 \input{common} 之后可用 \hypersetup 覆写)
+% --------------------------------------------------------------
+\hypersetup{
+  pdftitle={收获与播种},
+  pdfauthor={Alexandre Grothendieck / 数译 译},
+  pdfsubject={Récoltes et Semailles — Réflexions et témoignage sur un passé de mathématicien}
+}
+
+% --------------------------------------------------------------
+%  标题样式: 仿原书 —— 黑体左对齐, 编号后带句点
+% --------------------------------------------------------------
+\titleformat{\section}[block]
+  {\normalfont\Large\headfont}{\thesection.}{0.5em}{}
+\titlespacing*{\section}{0pt}{3.2ex plus 1.2ex minus .2ex}{1.6ex plus .2ex}
+\titleformat{\subsection}[block]
+  {\normalfont\large\headfont}{\thesubsection.}{0.5em}{}
+\titlespacing*{\subsection}{0pt}{2.6ex plus 1ex minus .2ex}{1.2ex plus .2ex}
+\titleformat{\subsubsection}[block]
+  {\normalfont\normalsize\headfont}{\thesubsubsection.}{0.5em}{}
+\titlespacing*{\subsubsection}{0pt}{2.2ex plus .8ex minus .2ex}{1ex plus .2ex}
+\titleformat{name=\subsubsection,numberless}[block]
+  {\normalfont\normalsize\headfont}{}{0em}{}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+% 为含长外文书名与行内公式的段落提供必要的断行余量
+\setlength{\emergencystretch}{3em}
+
+% 章标题样式: 原书章标题与节同级排印("13. A) HERITAGE..."),
+% 故章标题取块状左对齐黑体, 字号介于节与部之间
+\titleformat{\chapter}[block]
+  {\normalfont\LARGE\headfont}{\thechapter.}{0.5em}{}
+\titlespacing*{\chapter}{0pt}{3.6ex plus 1.4ex minus .2ex}{2ex plus .2ex}
+% 目录中章号照原书用阿拉伯数字("13. A) ..." 而非 "第十三章")
+\renewcommand{\CTEXthechapter}{\thechapter\hspace{.3em}}
+
+% --------------------------------------------------------------
+%  目录观感: 条目与引导点之间、引导点与页码之间各留 0.5em
+%  内核 \@dottedtocline 让 \leaders 从标题末字起排, 第一个点几乎
+%  贴着末字, 读起来像多标了一个句点; 页码前也没有余量。两处各补
+%  0.5em。
+% --------------------------------------------------------------
+\makeatletter
+\patchcmd{\@dottedtocline}{\nobreak\leaders}{\nobreak\hspace{0.5em}\leaders}%
+  {\typeout{MT: TOC 引导点前已留 0.5em}}%
+  {\typeout{MT-WARN: TOC 引导点前间距补丁未生效}}
+\patchcmd{\@dottedtocline}{\hfill\nobreak\hb@xt@\@pnumwidth}%
+  {\hfill\nobreak\hspace{0.5em}\hb@xt@\@pnumwidth}%
+  {\typeout{MT: TOC 页码前已留 0.5em}}%
+  {\typeout{MT-WARN: TOC 页码前间距补丁未生效}}
+\makeatother
+
+% --------------------------------------------------------------
+%  正文半角标点后的间距
+%  本书体例用半角 , ; : ? ! 与 ASCII 括号, 由 xeCJK 按 HalfRight
+%  (右半留白) 处理。放宽到 0.45em, 与全角标点右半留白大致齐平。
+% --------------------------------------------------------------
+\xeCJKsetup{CJKecglue={\hskip 0.45em plus 0.06em minus 0.09em}}
+
+% --------------------------------------------------------------
+%  页眉页脚: 偶数页眉右对齐斜体节题; 页码页脚外侧
+% --------------------------------------------------------------
+\fancyhf{}
+\fancyhead[RE]{\small\itshape\rightmark}
+\fancyfoot[LE,RO]{\small\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[LE,RO]{\small \thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+}
+
+% --------------------------------------------------------------
+%  原书版式记号宏
+% --------------------------------------------------------------
+% 边码: 原打字稿页码(G. 手稿系统里的自引页码), 排在页边
+\usepackage{marginnote}
+\newcommand{\origpage}[1]{\marginnote{\normalfont\scriptsize p.~#1}}
+
+% ⋄ 记号: 段首/行内正常大小; 上标形式为作者后补文字的位置标记
+\DeclareRobustCommand{\pmark}{\ensuremath{\diamond}\hspace{0.15em}}
+\DeclareRobustCommand{\dmark}{\textsuperscript{\ensuremath{\diamond}}}
+
+% 脚注人工编号: \fnote{795}{(*)}{文本} —— 编号与(*)角标均照录原书
+\newcommand{\fnote}[3]{%
+  \begingroup
+  \renewcommand{\thefootnote}{#1#2}%
+  \footnote{#3}%
+  \endgroup
+}
+
+% 第一部分的脚注: 页内序号作上标(#1), 注文行首印 "序号(连续注号)",
+% 正文在序号之后另行括注同一连续注号 —— \fnoteP{1}{(3)}{注文}
+% 原书有三条注无连续注号而改标日期(ch07 注3 = 30 Septembre,
+% ch09 注11/12 = 8 août), 第二参数留空, 日期写进注文之首。
+\newcommand{\fnoteP}[3]{%
+  \begingroup
+  \renewcommand{\thefootnote}{#1}\footnotemark
+  \renewcommand{\thefootnote}{#1#2}\footnotetext{#3}%
+  \endgroup
+}
+
+% 正文呼号与注文行首标号不同(原书照录)
+\newcommand{\fnotevariant}[4]{%
+  \begingroup
+  \renewcommand{\thefootnote}{#1#2}\footnotemark
+  \renewcommand{\thefootnote}{#1#3}\footnotetext{#4}%
+  \endgroup
+}
+
+% 大注块标题: \notehead{171³}{斜体评论} —— 正文随后另起
+\newcommand{\notehead}[2]{%
+  \par\bigskip
+  \noindent{\headfont 注~#1}\ifblank{#2}{}{\hspace{0.5em}{\itshape #2}}%
+  \par\nobreak\smallskip\nobreak
+}
+
+% ∗ ∗ ∗ 分隔
+\newcommand{\asterisms}{%
+  \par\vspace{1.2ex}%
+  \noindent\hspace*{2em}$\ast$\hspace{1.2em}$\ast$\hspace{1.2em}$\ast$%
+  \par\vspace{1.2ex}%
+}
+
+% 无编号子目的目录条目
+\newcommand{\tocsubsub}[1]{%
+  \phantomsection
+  \addcontentsline{toc}{subsubsection}{#1}%
+}
+
+% 部扉: 仿原书部题页
+\newcommand{\partdivider}[3]{%
+  \clearpage
+  \thispagestyle{empty}%
+  \phantomsection
+  \addcontentsline{toc}{part}{#1\quad #3}%
+  \vspace*{6.5cm}
+  \begin{center}
+    {\fontsize{16pt}{26pt}\selectfont\headfont #1\par}
+    \vspace{0.9cm}
+    {\fontsize{22pt}{34pt}\selectfont\headfont #2\par}
+  \end{center}
+  \clearpage
+}
+
+% 献辞页: 仿原书部题后的题献, 独占一页且不入目录
+\newcommand{\dedication}[1]{%
+  \thispagestyle{empty}%
+  \vspace*{4cm}%
+  \begin{center}#1\end{center}%
+  \clearpage
+}
+
+% --------------------------------------------------------------
+%  各卷"译者说明"的共用体例段(各卷的范围段自写, 后接本段)
+% --------------------------------------------------------------
+\newcommand{\CommonNoteBody}{%
+为便于与原书及学界通行的打字稿页码对勘, 本册保留:
+
+\begin{itemize}
+  \item 原书全部章节编号(章~1--18, 节如~5.2、18.2, 子目如~18.1.1)与原书小节标题;
+  \item 原书脚注的编号与角标——
+        \begin{itemize}
+          \item 前奏(第~1--4 章)与第一部的注在各页内重新编号, 正文中的上标即该
+                页序号; 第一部紧随其后的括注(如“(3)”)是该部分的连续注号, 与第~12
+                章“第一部分的注”里的“注~3”一一对应, 注文行首照原书印作“1(3)”式。
+                其中三条注原书未标连续注号而改标日期(ch7 注~3 = 30 Septembre、
+                ch9 注~11/12 = 8 août), 本册照录其日期;
+          \item 第二部第~13--16~章各自重新编号, 分别为~1--41、1--86、1--132、1--29;
+                第三部第~17~章自~1~起至~12, 第~18~章自~1~重新起算并延续至~794;
+                末段自~\textbf{795(*)}~续至~1053(*)。各段与原书一一对应;
+        \end{itemize}
+  \item 页边码“p.~1”“p.~A3”“p.~1066”式小注——这是作者引用自己打字稿原稿时
+        所用的页码, 与本排印本页码不同。前奏四章的边码各有前缀: 第~1 章作
+        \texttt{A1…A6}, 第~2 章作 \texttt{P1…P65}, 第~3 章作 \texttt{L1…L56},
+        第~4 章作罗马数字 \texttt{I…XXII}, 自第一部起作纯数字 \texttt{1…171};
+  \item 作者用以标记段落的~$\diamond$~记号, 以及标示后来补写文字的上标
+        ~\textsuperscript{$\diamond$}~记号;
+  \item 原书大小注(“注~44'”“注~46$^1$”“注~171³”等)的编号与层级。
+\end{itemize}
+
+第~12 章“第一部分的注”把第~5 至第~11 章各页脚注汇为一编, 并给每条注配上节题
+(如“12.19. 耶稣与十二使徒”), 因此部分注文与正文脚注重复——这是原书的体例, 非
+重出之误。这一部分属随笔式的自省文字, 同一句法语在正文脚注与章末汇编注中
+各有措辞, 本册有意保留各自的译笔, 不强求统一。
+
+除上述标记外, 译文力求贴近作者驳杂、跳跃而辛辣的文风; 数学名词的译法见各卷
+术语表(如~\emph{topos}~不译, \emph{faisceaux pervers}~作“反常层”)。文中的日期
+括注(如“(5~月~30~日)”“(1984年3月补写)”)为作者历次补写时的纪日, 一律照录。文中
+另有一些对注号、页码的引用(如“n°~1695”“打字稿第~227~页”)沿袭作者打字稿的编号
+系统, 与本排印本不尽一致, 亦无法在本书中落实, 悉照原文录出。
+
+全套五卷(另有全书合订一册)的分工是:
+
+\begin{itemize}
+  \item \textbf{卷一·前奏}——主题的呈现: 或四个乐章的前奏(原书 p.23--122);
+  \item \textbf{卷二·第一部}——愚妄与更新(原书 p.123--254);
+  \item \textbf{卷三·第二部}——葬礼(I): 或中国皇帝的新衣(原书 p.255--412);
+  \item \textbf{卷四·第三部}——葬礼(II): 或阴阳之钥(原书 p.413--632);
+  \item \textbf{卷五·第四部}——葬礼(III): 或四种运算(原书 p.633--929)。
+\end{itemize}
+}

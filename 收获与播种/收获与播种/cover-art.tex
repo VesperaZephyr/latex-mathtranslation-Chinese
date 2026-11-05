@@ -1,0 +1,246 @@
+% ================================================================
+%  《收获与播种》统一封面 —— TikZ 原生矢量绘制(不依赖任何外部图片)
+%  母题: 暮色中的麦田 —— 犁沟向地平线的灭点收束, 前景麦穗剪影,
+%        一位播种者把一把种子撒向天空, 种子沿弧线落入田里。
+%  用法(在 \begin{document} 之前, 依次):
+%      \input{common}                       % 共用导言区
+%      \input{cover-art}                    % 本文件
+%      \CoverSetup{prelude}{卷一}{前奏}%
+%                 {主题的呈现——或四个乐章的前奏}{p.23–122}
+%  正文中再 \makecover 即可。配色关键字:
+%      prelude / part1 / part2 / part3 / part4 / all
+%  五卷共用同一幅画, 只换配色与卷次文字, 以保证"一套书"的观感。
+% ================================================================
+
+\RequirePackage{tikz}
+
+% --------------------------------------------------------------
+%  配色: 六套(前奏 / 四部 / 全书), 各为同一暮色母题的变调
+% --------------------------------------------------------------
+\newcommand{\CoverPalette}[1]{%
+  \ifstrequal{#1}{prelude}{%
+    \definecolor{cvSkyTop}{RGB}{10,26,48}%
+    \definecolor{cvSkyMid}{RGB}{46,84,116}%
+    \definecolor{cvSkyBot}{RGB}{232,164,92}%
+    \definecolor{cvSun}{RGB}{255,224,168}%
+    \definecolor{cvFieldTop}{RGB}{150,110,52}%
+    \definecolor{cvFieldBot}{RGB}{58,36,18}%
+    \definecolor{cvFurrow}{RGB}{40,22,10}%
+    \definecolor{cvSil}{RGB}{30,18,10}%
+    \definecolor{cvCream}{RGB}{247,240,228}%
+  }{%
+  \ifstrequal{#1}{part1}{%
+    \definecolor{cvSkyTop}{RGB}{22,70,100}%
+    \definecolor{cvSkyMid}{RGB}{92,150,168}%
+    \definecolor{cvSkyBot}{RGB}{240,200,104}%
+    \definecolor{cvSun}{RGB}{255,244,200}%
+    \definecolor{cvFieldTop}{RGB}{176,140,58}%
+    \definecolor{cvFieldBot}{RGB}{84,54,22}%
+    \definecolor{cvFurrow}{RGB}{45,28,12}%
+    \definecolor{cvSil}{RGB}{34,22,10}%
+    \definecolor{cvCream}{RGB}{250,245,232}%
+  }{%
+  \ifstrequal{#1}{part2}{%
+    \definecolor{cvSkyTop}{RGB}{46,20,30}%
+    \definecolor{cvSkyMid}{RGB}{128,52,54}%
+    \definecolor{cvSkyBot}{RGB}{226,120,64}%
+    \definecolor{cvSun}{RGB}{255,206,150}%
+    \definecolor{cvFieldTop}{RGB}{132,84,44}%
+    \definecolor{cvFieldBot}{RGB}{48,26,18}%
+    \definecolor{cvFurrow}{RGB}{36,16,14}%
+    \definecolor{cvSil}{RGB}{26,12,12}%
+    \definecolor{cvCream}{RGB}{248,236,224}%
+  }{%
+  \ifstrequal{#1}{part3}{%
+    \definecolor{cvSkyTop}{RGB}{30,20,54}%
+    \definecolor{cvSkyMid}{RGB}{92,62,124}%
+    \definecolor{cvSkyBot}{RGB}{216,132,140}%
+    \definecolor{cvSun}{RGB}{255,214,196}%
+    \definecolor{cvFieldTop}{RGB}{128,90,74}%
+    \definecolor{cvFieldBot}{RGB}{44,26,30}%
+    \definecolor{cvFurrow}{RGB}{34,20,30}%
+    \definecolor{cvSil}{RGB}{22,14,22}%
+    \definecolor{cvCream}{RGB}{246,238,238}%
+  }{%
+  \ifstrequal{#1}{part4}{%
+    \definecolor{cvSkyTop}{RGB}{12,28,28}%
+    \definecolor{cvSkyMid}{RGB}{44,86,72}%
+    \definecolor{cvSkyBot}{RGB}{186,168,86}%
+    \definecolor{cvSun}{RGB}{240,232,168}%
+    \definecolor{cvFieldTop}{RGB}{110,104,50}%
+    \definecolor{cvFieldBot}{RGB}{30,34,20}%
+    \definecolor{cvFurrow}{RGB}{26,32,20}%
+    \definecolor{cvSil}{RGB}{14,20,14}%
+    \definecolor{cvCream}{RGB}{240,238,226}%
+  }{%
+    % 默认: 全书(麦浪金褐)
+    \definecolor{cvSkyTop}{RGB}{28,40,32}%
+    \definecolor{cvSkyMid}{RGB}{128,110,64}%
+    \definecolor{cvSkyBot}{RGB}{232,178,88}%
+    \definecolor{cvSun}{RGB}{255,236,180}%
+    \definecolor{cvFieldTop}{RGB}{168,124,52}%
+    \definecolor{cvFieldBot}{RGB}{62,40,20}%
+    \definecolor{cvFurrow}{RGB}{42,26,12}%
+    \definecolor{cvSil}{RGB}{28,18,10}%
+    \definecolor{cvCream}{RGB}{250,242,226}%
+  }}}}}%
+}
+
+% --------------------------------------------------------------
+%  一键设定:  \CoverSetup{配色}{卷次}{卷名}{副题}{原书页码范围}
+% --------------------------------------------------------------
+\newcommand{\CoverSetup}[5]{%
+  \CoverPalette{#1}%
+  \newcommand{\VolNum}{#2}%
+  \newcommand{\VolName}{#3}%
+  \newcommand{\VolSub}{#4}%
+  \newcommand{\VolPages}{#5}%
+}
+
+% --------------------------------------------------------------
+%  一支麦穗:  \cvWheatEar{x}{底 y}{高}{倾角}
+%  茎略弯, 麦粒成对左右斜出, 顶端一芒三针
+% --------------------------------------------------------------
+\newcommand{\cvWheatEar}[4]{%
+  \begin{scope}[shift={(#1,#2)}, rotate=#4]
+    \draw[cvSil, line width=0.85mm, line cap=round]
+      (0,0) .. controls (0.5,{0.35*#3}) and (0.8,{0.72*#3}) .. ({0.55*#3},#3);
+    \foreach \cvK in {0,...,6}{%
+      \pgfmathsetmacro{\cvT}{0.50+0.50*\cvK/6}
+      \pgfmathsetmacro{\cvGY}{\cvT*#3}
+      \pgfmathsetmacro{\cvGX}{0.55*\cvT*\cvT*#3}
+      \pgfmathsetmacro{\cvGS}{1.0-0.34*\cvT}
+      \begin{scope}[shift={(\cvGX,\cvGY)}, rotate=28]
+        \fill[cvSil] (0,{1.9*\cvGS}) ellipse [x radius={0.92*\cvGS}, y radius={2.3*\cvGS}];
+      \end{scope}
+      \begin{scope}[shift={(\cvGX,\cvGY)}, rotate=-28]
+        \fill[cvSil] (0,{-1.9*\cvGS}) ellipse [x radius={0.92*\cvGS}, y radius={2.3*\cvGS}];
+      \end{scope}
+    }
+    \begin{scope}[shift={({0.55*#3},#3)}]
+      \fill[cvSil] (0,1.5) ellipse [x radius=0.78, y radius=1.95];
+    \end{scope}
+    \draw[cvSil, line width=0.26mm, line cap=round]
+      ({0.55*#3},{#3+2.3}) -- ({0.55*#3-1.7},{#3+9.5});
+    \draw[cvSil, line width=0.26mm, line cap=round]
+      ({0.55*#3},{#3+2.3}) -- ({0.55*#3+2.1},{#3+10.5});
+    \draw[cvSil, line width=0.26mm, line cap=round]
+      ({0.55*#3},{#3+2.3}) -- ({0.55*#3},{#3+11.5});
+  \end{scope}
+}
+
+% --------------------------------------------------------------
+%  封面
+% --------------------------------------------------------------
+\makeatletter
+\renewcommand{\makecover}{%
+  \begin{titlepage}
+    \thispagestyle{empty}
+    \begin{tikzpicture}[remember picture, overlay, x=1mm, y=1mm,
+                        shift={(current page.south west)}]
+      % ===== 天空 =====
+      \shade[top color=cvSkyTop, middle color=cvSkyMid, bottom color=cvSkyBot]
+        (0,105) rectangle (210,297);
+      % ===== 田野 =====
+      \shade[top color=cvFieldTop, bottom color=cvFieldBot]
+        (0,0) rectangle (210,105);
+      % ===== 落日与光晕 =====
+      \begin{scope}
+        \clip (0,105) rectangle (210,297);
+        \fill[cvSun, opacity=0.14] (152,132) circle (46);
+        \fill[cvSun, opacity=0.24] (152,132) circle (30);
+      \end{scope}
+      \fill[cvSun, opacity=0.95] (152,132) circle (16.5);
+      % ===== 犁沟: 向地平线灭点收束 =====
+      \begin{scope}
+        \clip (0,0) rectangle (210,105);
+        \foreach \cvI in {1,...,20}{%
+          \pgfmathsetmacro{\cvDX}{3.1*pow(\cvI,1.55)}
+          \draw[cvFurrow, opacity=0.30, line width=0.32mm] ({105+\cvDX},0) -- (105,105);
+          \draw[cvFurrow, opacity=0.30, line width=0.32mm] ({105-\cvDX},0) -- (105,105);
+        }
+        \foreach \cvY in {8,18,31,47,68,92}{%
+          \draw[cvFurrow, opacity=0.15, line width=0.3mm]
+            (0,\cvY) .. controls (60,{\cvY+3.5}) and (150,{\cvY-3}) .. (210,{\cvY+1.5});
+        }
+      \end{scope}
+      % 地平线
+      \draw[cvSil, opacity=0.45, line width=0.45mm] (0,105) -- (210,105);
+      % ===== 播种者剪影(立于地平线) =====
+      \begin{scope}[cvSil]
+        \draw[line width=1.9mm, line cap=round, line join=round]
+          (55.5,116) -- (50,105)  (55.5,116) -- (60.5,105.5);
+        \draw[line width=2.3mm, line cap=round, line join=round]
+          (55.5,116) -- (55,123.5);
+        \draw[line width=1.6mm, line cap=round, line join=round]
+          (55.2,123.2) -- (61.5,126.6) -- (68,129.4);
+        \draw[line width=1.5mm, line cap=round, line join=round]
+          (55.2,123.2) -- (51.4,119.8) -- (48.6,116.2);
+        \fill (55.6,127.3) circle (2.35);
+      \end{scope}
+      % ===== 种子: 沿贝塞尔弧撒出 =====
+      \draw[cvCream, opacity=0.13, line width=0.5mm]
+        (68,129.4) .. controls (100,168) and (160,162) .. (196,104);
+      % 掌心那一把(尚未撒出)
+      \foreach \cvI in {1,...,5}{%
+        \pgfmathsetmacro{\cvJX}{1.1*sin(\cvI*53)}
+        \pgfmathsetmacro{\cvJY}{1.1*cos(\cvI*83)}
+        \fill[cvCream, opacity=0.9] ({68+\cvJX},{129.4+\cvJY}) circle (1.0);
+      }
+      \foreach \cvI in {1,...,26}{%
+        \pgfmathsetmacro{\cvT}{0.035+0.92*\cvI/26}
+        \pgfmathsetmacro{\cvU}{1-\cvT}
+        \pgfmathsetmacro{\cvSX}{\cvU*\cvU*\cvU*68 + 3*\cvU*\cvU*\cvT*100
+                                + 3*\cvU*\cvT*\cvT*160 + \cvT*\cvT*\cvT*196}
+        \pgfmathsetmacro{\cvSY}{\cvU*\cvU*\cvU*129.4 + 3*\cvU*\cvU*\cvT*168
+                                + 3*\cvU*\cvT*\cvT*162 + \cvT*\cvT*\cvT*104}
+        \pgfmathsetmacro{\cvR}{1.55-0.85*\cvT}
+        \pgfmathsetmacro{\cvJX}{1.7*sin(\cvI*97)}
+        \pgfmathsetmacro{\cvJY}{1.7*cos(\cvI*71)}
+        \fill[cvCream, opacity={0.88-0.28*\cvT}] ({\cvSX+\cvJX},{\cvSY+\cvJY}) circle (\cvR);
+      }
+      % ===== 前景麦穗(两排) =====
+      \foreach \cvI in {1,...,11}{%
+        \pgfmathsetmacro{\cvWX}{4+19*(\cvI-1)+1.6*sin(\cvI*2.1)}
+        \pgfmathsetmacro{\cvWH}{23+7*sin(\cvI*1.7)}
+        \pgfmathsetmacro{\cvWL}{3.2*sin(\cvI*2.9)}
+        \begin{scope}[opacity=0.45]
+          \cvWheatEar{\cvWX}{30}{\cvWH}{\cvWL}
+        \end{scope}
+      }
+      \foreach \cvI in {1,...,10}{%
+        \pgfmathsetmacro{\cvWX}{9+20.4*(\cvI-1)+1.5*sin(\cvI*1.3)}
+        \pgfmathsetmacro{\cvWH}{41+10*sin(\cvI*2.3)}
+        \pgfmathsetmacro{\cvWL}{4.5*sin(\cvI*3.7)}
+        \cvWheatEar{\cvWX}{30}{\cvWH}{\cvWL}
+      }
+      % ===== 压暗一层, 统一色调并保证文字可读 =====
+      \fill[black, opacity=0.10] (0,105) rectangle (210,297);
+      % ===== 底部信息带 =====
+      \fill[cvSil, opacity=0.72] (0,0) rectangle (210,30);
+      \draw[cvCream, opacity=0.40, line width=0.4mm] (0,30) -- (210,30);
+      % ===== 文字 =====
+      \node[anchor=north west, inner sep=0, text=cvCream] at (22,268)
+        {\fontsize{38pt}{45pt}\selectfont\headfont \ziju{0.08}\BookTitleCN};
+      \node[anchor=north west, inner sep=0, text=cvCream] at (22.6,242)
+        {\fontsize{15pt}{20pt}\selectfont\itshape \BookTitleEN};
+      \draw[cvCream, opacity=0.55, line width=0.5mm] (22,233) -- (120,233);
+      \node[anchor=north west, inner sep=0, text=cvCream] at (22,224)
+        {\fontsize{11pt}{15pt}\selectfont 一位数学家对往昔的反思与见证};
+      \node[anchor=north west, inner sep=0, text=cvCream, opacity=0.78] at (22.4,208)
+        {\fontsize{10pt}{14pt}\selectfont \ziju{0.14}\VolNum};
+      \node[anchor=north west, inner sep=0, text=cvCream] at (22,199)
+        {\fontsize{30pt}{37pt}\selectfont\headfont \ziju{0.1}\VolName};
+      \node[anchor=north west, inner sep=0, text=cvCream, opacity=0.92] at (22,180)
+        {\fontsize{13pt}{18pt}\selectfont \VolSub};
+      \node[anchor=north west, inner sep=0, text=cvCream] at (22,19)
+        {\fontsize{11.5pt}{15pt}\selectfont \OriginalAuthor\quad 著};
+      \node[anchor=north west, inner sep=0, text=cvCream, opacity=0.85] at (22,7)
+        {\fontsize{9.5pt}{13pt}\selectfont \Translator\ 译\quad ·\quad
+         \ifdefempty{\TranslationDate}{\today}{\TranslationDate}};
+      \node[anchor=north east, inner sep=0, text=cvCream, opacity=0.85] at (188,13)
+        {\fontsize{10pt}{14pt}\selectfont 原书 \VolPages};
+    \end{tikzpicture}
+  \end{titlepage}%
+}
+\makeatother
