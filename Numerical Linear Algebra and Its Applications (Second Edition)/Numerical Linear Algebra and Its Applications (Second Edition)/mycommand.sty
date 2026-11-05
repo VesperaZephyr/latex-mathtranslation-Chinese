@@ -1,0 +1,146 @@
+% mycommand.sty —— 本项目专用宏
+% 规则：不改动 mathtranslation.cls；新宏只加在本文件。
+% 所有定义须避免与 cls / amsmath / amssymb / mathtools 已有命令冲突。
+\ProvidesPackage{mycommand}
+
+% ---------- 数集 ----------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\ii}{\mathrm{i}}   % 虚数单位（源书 \mathbf{i} = \sqrt{-1}）
+
+% ---------- 常用算子 / 函数 ----------
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\sign}{\operatorname{sign}}
+
+% ---------- 范数 / 绝对值 ----------
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\abs}[1]{\left|#1\right|}
+% 源书习题中用以表示“疑似矩阵范数”的三竖线记号 |||·|||
+% 三根竖线之间留正向微间距，否则在 Fandol 下会粘连成一根粗线。
+\newcommand{\triplenorm}[1]{\vert\mkern2.5mu\vert\mkern2.5mu\vert #1\vert\mkern2.5mu\vert\mkern2.5mu\vert}
+
+% ---------- 条件定义号（mathtools 提供 \coloneqq） ----------
+% 用法：A \coloneqq B
+
+% ================================================================
+% 编号体系
+% 源书的定理、习题都按“章内连续”编号（Theorem 1.1、习题 1、2、3…），
+% cls 默认按小节编号（1.4.1）。此处改为章内编号，不改动 cls 本体。
+% ================================================================
+\makeatletter
+% 定理类环境：去掉“按小节重置”，改为“按章重置”，显示为 章.序号
+\@removefromreset{theorem}{section}
+\@addtoreset{theorem}{chapter}
+\renewcommand{\thetheorem}{\thechapter.\arabic{theorem}}
+\@removefromreset{definition}{section}
+\@addtoreset{definition}{chapter}
+\renewcommand{\thedefinition}{\thechapter.\arabic{definition}}
+\@removefromreset{lemma}{section}
+\@addtoreset{lemma}{chapter}
+\renewcommand{\thelemma}{\thechapter.\arabic{lemma}}
+\@removefromreset{corollary}{section}
+\@addtoreset{corollary}{chapter}
+\renewcommand{\thecorollary}{\thechapter.\arabic{corollary}}
+\@removefromreset{proposition}{section}
+\@addtoreset{proposition}{chapter}
+\renewcommand{\theproposition}{\thechapter.\arabic{proposition}}
+\@removefromreset{remark}{section}
+\@addtoreset{remark}{chapter}
+\renewcommand{\theremark}{\thechapter.\arabic{remark}}
+\@removefromreset{example}{section}
+\@addtoreset{example}{chapter}
+\renewcommand{\theexample}{\thechapter.\arabic{example}}
+\@removefromreset{problem}{section}
+\@addtoreset{problem}{chapter}
+\renewcommand{\theproblem}{\thechapter.\arabic{problem}}
+% 习题：章内重置，显示为 章.序号（保证标签跨章唯一，可双向跳转）
+\@removefromreset{exercise}{section}
+\@addtoreset{exercise}{chapter}
+\renewcommand{\theexercise}{\thechapter.\arabic{exercise}}
+\makeatother
+
+% ---------- 无编号的“注” ----------
+% 源书的 Remark 不编号（“Remark:”），故另立一个不编号环境；
+% 标题后的标点用全角冒号（cls 的 mtfang/mtsong 样式一律用英文句点）。
+\newtheoremstyle{mtcolon}%
+  {6pt}{6pt}%
+  {\theoremfont}%
+  {0pt}%
+  {\headfont}%
+  {：}%
+  {0.5em}%
+  {}%
+\theoremstyle{mtcolon}
+\newtheorem*{mremark}{注}
+
+% ================================================================
+% 算法环境
+% 源书版式：粗体标题“Algorithm 2.1 (Gaussian elimination)”顶格，
+% 随后是居中的伪代码（左侧带大括号）。cls 未提供该环境，故在此定义。
+% ================================================================
+\newcounter{algorithm}[chapter]
+\renewcommand{\thealgorithm}{\thechapter.\arabic{algorithm}}
+\newenvironment{algorithm}[1]{%
+  \par\medskip
+  \refstepcounter{algorithm}%
+  \noindent{\headfont 算法\ \textbf{\thealgorithm}（#1）}\par
+  \smallskip
+}{%
+  \par\medskip
+}
+
+% ================================================================
+% 列表：与源书的编号样式一致
+% ================================================================
+% 圆括号数字列表：(1) (2) (3)
+\newenvironment{parenlist}{%
+  \begin{enumerate}%
+  \renewcommand{\labelenumi}{(\arabic{enumi})}%
+}{%
+  \end{enumerate}%
+}
+% 圆括号罗马数字列表：(i) (ii) (iii)
+\newenvironment{romanlist}{%
+  \begin{enumerate}%
+  \renewcommand{\labelenumi}{(\roman{enumi})}%
+}{%
+  \end{enumerate}%
+}
+
+% ---------- 习题内的小问 ----------
+% 注意：cls 的 exercises 环境用 \renewcommand{\item} 实现，
+% 在其内部嵌套任何 LaTeX list 环境（enumerate/itemize）都会触发
+% “Something's wrong--perhaps a missing \item”。故习题子问改用本命令，
+% 不依赖 list 机制。
+\newcounter{subquest}
+\newcommand{\subquest}{%
+  \par\smallskip
+  \stepcounter{subquest}%
+  \hangindent=2em\relax
+  \hangafter=1\relax
+  \noindent\hspace*{2em}(\arabic{subquest})\enspace
+  \ignorespaces
+}
+% 每道新习题开始时把子问计数归零
+% 习题编号：忠实源书，显示为裸序号“1.”“2.”……（不带章号）；
+% 但 \theexercise 仍保留“章.序号”（如 1.8），因为 cls 第 633 行用它
+% 生成唯一 label 名 exe:1.8 —— 若一并改成裸数字，各章 label 会互相覆盖。
+% 故只把“显示文本”换掉，不动计数器本身。
+\makeatletter
+\pretocmd{\exercise@item}{\setcounter{subquest}{0}}{}{%
+  \PackageWarning{mycommand}{无法为 exercise@item 打补丁，子问编号需手工重置}}
+\patchcmd{\exercise@item}{\textbf{\theexercise.}}{\textbf{\arabic{exercise}.}}{}{}
+\patchcmd{\exercise@item}{\textbf{\theexercise.}}{\textbf{\arabic{exercise}.}}{}{}
+\makeatother
+
+% ---------- 文献引用分隔符 ----------
+% 源书的引用写作 [3,6,13,...]（逗号后无空格），与 biblatex 默认的“逗号+空格”不同。
+\ifundef{\multicitedelim}{}{\renewcommand*{\multicitedelim}{\addcomma}}
+
+\endinput

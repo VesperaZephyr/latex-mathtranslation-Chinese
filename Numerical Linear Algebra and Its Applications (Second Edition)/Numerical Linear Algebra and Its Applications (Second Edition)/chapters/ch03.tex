@@ -1,0 +1,1323 @@
+% chapters/ch03.tex —— 第 3 章：扰动与误差分析
+% 源书：Chapter 3 Perturbation and Error Analysis，书页 23–45（物理页 37–59）
+% 公式编号 (3.1)–(3.22)；定理 3.1–3.12；定义 3.1–3.5；引理 3.1–3.2；推论 3.1–3.3；例 3.1；习题 1–15
+\chapter{扰动与误差分析}
+\label{ch:perturbation}
+
+本章讨论扰动与误差对数值解的影响, 并给出浮点运算与部分主元选取技术的误差分析. 众所周知, 线性向量空间中距离与大小的本质刻画由范数承担. 因此在展开扰动与误差分析之前, 我们需要先引入向量范数与矩阵范数并研究其性质.
+
+\section{向量范数与矩阵范数}
+\label{sec:3-1}
+
+先介绍向量范数.
+
+\subsection{向量范数}
+
+设
+\[
+  \mathbf{x}=[x_1,x_2,\ldots,x_n]^T\in\R^n.
+\]
+
+\begin{definition}
+\label{def:3-1}
+$\R^n$ 上的\newterm{vectornorm}{向量范数}{vector norm}是一个函数, 它对每个 $\mathbf{x}\in\R^n$ 赋予一个实数 $\norm{\mathbf{x}}$, 称为 $\mathbf{x}$ 的范数, 且对一切 $\mathbf{x},\mathbf{y}\in\R^n$ 与一切 $\alpha\in\R$ 满足以下三条性质:
+\begin{romanlist}
+  \item 若 $\mathbf{x}\neq\mathbf{0}$ 则 $\norm{\mathbf{x}}>0$; 且 $\norm{\mathbf{x}}=0$ 当且仅当 $\mathbf{x}=\mathbf{0}$;
+  \item $\norm{\alpha\mathbf{x}}=|\alpha|\cdot\norm{\mathbf{x}}$;
+  \item $\norm{\mathbf{x}+\mathbf{y}}\leqslant\norm{\mathbf{x}}+\norm{\mathbf{y}}$.
+\end{romanlist}
+\end{definition}
+
+一类有用的向量范数是由下式定义的\newterm{pnorm}{$p$ 范数}{$p$-norm}:
+\[
+  \norm{\mathbf{x}}_p\equiv\left(\sum_{i=1}^{n}|x_i|^p\right)^{\frac{1}{p}},
+\]
+其中 $1\leqslant p$. 实践中最为常用的 $p$ 范数是
+\[
+  \norm{\mathbf{x}}_1=\sum_{i=1}^{n}|x_i|,\qquad
+  \norm{\mathbf{x}}_2=\left(\sum_{i=1}^{n}|x_i|^2\right)^{\frac{1}{2}},\qquad
+  \norm{\mathbf{x}}_\infty=\max_{1\leqslant i\leqslant n}|x_i|.
+\]
+
+关于 $\norm{\cdot}_2$ 的 Cauchy-Schwarz 不等式如下:
+\[
+  \left|\mathbf{x}^T\mathbf{y}\right|\leqslant\norm{\mathbf{x}}_2\norm{\mathbf{y}}_2
+\]
+对 $\mathbf{x},\mathbf{y}\in\R^n$ 成立; 它是如下 Hölder 不等式 \cite{src:39} 的特例:
+\[
+  \left|\mathbf{x}^T\mathbf{y}\right|\leqslant\norm{\mathbf{x}}_p\norm{\mathbf{y}}_q,
+\]
+其中 $1/p+1/q=1$.
+
+$\R^n$ 上向量范数的一个非常重要的性质是: $\R^n$ 上所有向量范数都是等价的, 如下述定理所示 \cite{src:75}.
+
+\begin{theorem}
+\label{thm:3-1}
+若 $\norm{\cdot}_\alpha$ 与 $\norm{\cdot}_\beta$ 是 $\R^n$ 上的两个范数, 则存在两个正常数 $c_1$ 与 $c_2$, 使得
+\[
+  c_1\norm{\mathbf{x}}_\alpha\leqslant\norm{\mathbf{x}}_\beta\leqslant c_2\norm{\mathbf{x}}_\alpha
+\]
+对一切 $\mathbf{x}\in\R^n$ 成立.
+\end{theorem}
+
+例如, 若 $\mathbf{x}\in\R^n$, 则有
+\[
+  \norm{\mathbf{x}}_2\leqslant\norm{\mathbf{x}}_1\leqslant\sqrt{n}\,\norm{\mathbf{x}}_2,
+\]
+\[
+  \norm{\mathbf{x}}_\infty\leqslant\norm{\mathbf{x}}_2\leqslant\sqrt{n}\,\norm{\mathbf{x}}_\infty
+\]
+以及
+\[
+  \norm{\mathbf{x}}_\infty\leqslant\norm{\mathbf{x}}_1\leqslant n\norm{\mathbf{x}}_\infty.
+\]
+
+我们指出, 对任一向量序列 $\{\mathbf{x}^k\}$, 其中 $\mathbf{x}^k=[x_1^{(k)},\ldots,x_n^{(k)}]^T\in\R^n$, 以及 $\mathbf{x}=[x_1,\ldots,x_n]^T\in\R^n$, 由定理 \ref{thm:3-1} 可证
+\[
+  \lim_{k\to\infty}\norm{\mathbf{x}^k-\mathbf{x}}=0
+  \iff
+  \lim_{k\to\infty}\left|x_i^{(k)}-x_i\right|=0
+\]
+对 $i=1,\ldots,n$ 成立.
+
+\subsection{矩阵范数}
+
+设
+\[
+  A=[a_{ij}]_{i,j=1}^{n}\in\R^{n\times n}.
+\]
+
+下面转向矩阵范数.
+
+\begin{definition}
+\label{def:3-2}
+\newterm{matrixnorm}{矩阵范数}{matrix norm}是一个函数, 它对每个 $A\in\R^{n\times n}$ 赋予一个实数 $\norm{A}$, 称为 $A$ 的范数, 且对一切 $A,B\in\R^{n\times n}$ 与一切 $\alpha\in\R$ 满足以下四条性质:
+\begin{romanlist}
+  \item 若 $A\neq0$ 则 $\norm{A}>0$; 且 $\norm{A}=0$ 当且仅当 $A=0$;
+  \item $\norm{\alpha A}=|\alpha|\cdot\norm{A}$;
+  \item $\norm{A+B}\leqslant\norm{A}+\norm{B}$;
+  \item $\norm{AB}\leqslant\norm{A}\cdot\norm{B}$.
+\end{romanlist}
+\end{definition}
+
+$\R^{n\times n}$ 上矩阵范数的一个重要性质是: $\R^{n\times n}$ 上所有矩阵范数都是等价的. 关于向量范数与矩阵范数之间的关系, 有
+
+\begin{definition}
+\label{def:3-3}
+若矩阵范数 $\norm{\cdot}_M$ 与向量范数 $\norm{\cdot}_v$ 满足
+\[
+  \norm{A\mathbf{x}}_v\leqslant\norm{A}_M\norm{\mathbf{x}}_v
+\]
+对 $A\in\R^{n\times n}$ 与 $\mathbf{x}\in\R^n$ 成立, 则称这两个范数是\newterm{consistentnorm}{相容的}{mutually consistent}.
+\end{definition}
+
+对任意向量范数 $\norm{\cdot}_v$, 可按如下自然方式定义一个矩阵范数:
+\[
+  \norm{A}_M\equiv\max_{\mathbf{x}\neq\mathbf{0}}\frac{\norm{A\mathbf{x}}_v}{\norm{\mathbf{x}}_v}
+  =\max_{\norm{\mathbf{x}}_v=1}\norm{A\mathbf{x}}_v.
+\]
+这样得到的矩阵范数称为由该向量范数\newterm{inducednorm}{诱导}{induced}的范数.
+
+最重要的矩阵范数是由向量 $p$ 范数诱导的矩阵 $p$ 范数, $p=1,2,\infty$. 我们有下述定理.
+
+\begin{theorem}
+\label{thm:3-2}
+设
+\[
+  A=[a_{ij}]_{i,j=1}^{n}\in\R^{n\times n}.
+\]
+则
+\begin{romanlist}
+  \item $\displaystyle\norm{A}_1=\max_{\norm{\mathbf{x}}_1=1}\norm{A\mathbf{x}}_1
+    =\max_{1\leqslant j\leqslant n}\sum_{i=1}^{n}\abs{a_{ij}}$;
+  \item $\displaystyle\norm{A}_\infty=\max_{\norm{\mathbf{x}}_\infty=1}\norm{A\mathbf{x}}_\infty
+    =\max_{1\leqslant i\leqslant n}\sum_{j=1}^{n}\abs{a_{ij}}$;
+  \item $\displaystyle\norm{A}_2=\max_{\norm{\mathbf{x}}_2=1}\norm{A\mathbf{x}}_2
+    =\sqrt{\lambda_{\max}(A^TA)}$, 其中 $\lambda_{\max}(A^TA)$ 是 $A^TA$ 的最大特征值.
+\end{romanlist}
+\end{theorem}
+
+\begin{proof}
+我们只给出 (i) 与 (iii) 的证明. 以下总假定 $A\neq0$.
+
+对 (i), 把矩阵 $A$ 按列分块:
+\[
+  A=[\mathbf{a}_1\mid\mathbf{a}_2\mid\cdots\mid\mathbf{a}_n].
+\]
+令
+\[
+  \delta=\norm{\mathbf{a}_{j_0}}_1=\max_{1\leqslant j\leqslant n}\norm{\mathbf{a}_j}_1.
+\]
+则对任一满足 $\norm{\mathbf{x}}_1=\sum_{i=1}^{n}|x_i|=1$ 的向量 $\mathbf{x}=[x_1,x_2,\ldots,x_n]^T\in\R^n$, 有
+\[
+  \begin{aligned}
+    \norm{A\mathbf{x}}_1
+    &=\norm{\sum_{j=1}^{n}x_j\mathbf{a}_j}_1
+      \leqslant\sum_{j=1}^{n}|x_j|\cdot\norm{\mathbf{a}_j}_1\\
+    &\leqslant\Bigl(\sum_{j=1}^{n}|x_j|\Bigr)\cdot\max_{1\leqslant j\leqslant n}\norm{\mathbf{a}_j}_1
+      =\norm{\mathbf{a}_{j_0}}_1=\delta.
+  \end{aligned}
+\]
+令 $\mathbf{e}_{j_0}$ 表示第 $j_0$ 个单位向量, 则
+\[
+  \norm{A\mathbf{e}_{j_0}}_1=\norm{\mathbf{a}_{j_0}}_1=\delta.
+\]
+因此
+\[
+  \norm{A}_1=\max_{\norm{\mathbf{x}}_1=1}\norm{A\mathbf{x}}_1
+  =\delta=\max_{1\leqslant j\leqslant n}\norm{\mathbf{a}_j}_1
+  =\max_{1\leqslant j\leqslant n}\sum_{i=1}^{n}\abs{a_{ij}}.
+\]
+
+对 (iii), 有
+\[
+  \begin{aligned}
+    \norm{A}_2
+    &=\max_{\norm{\mathbf{x}}_2=1}\norm{A\mathbf{x}}_2
+      =\max_{\norm{\mathbf{x}}_2=1}\bigl[(A\mathbf{x})^T(A\mathbf{x})\bigr]^{1/2}\\
+    &=\max_{\norm{\mathbf{x}}_2=1}\bigl[\mathbf{x}^T(A^TA)\mathbf{x}\bigr]^{1/2}.
+  \end{aligned}
+\]
+由于 $A^TA$ 是半正定的, 其特征值可按如下次序排列:
+\[
+  \lambda_1\geqslant\lambda_2\geqslant\cdots\geqslant\lambda_n\geqslant0.
+\]
+令
+\[
+  \mathbf{v}_1,\mathbf{v}_2,\ldots,\mathbf{v}_n\in\R^n
+\]
+分别表示对应于 $\lambda_1,\lambda_2,\ldots,\lambda_n$ 的标准正交特征向量. 则对任一满足 $\norm{\mathbf{x}}_2=1$ 的向量 $\mathbf{x}\in\R^n$, 有
+\[
+  \mathbf{x}=\sum_{i=1}^{n}\alpha_i\mathbf{v}_i,\qquad\sum_{i=1}^{n}\alpha_i^2=1.
+\]
+因此
+\[
+  \mathbf{x}^TA^TA\mathbf{x}=\sum_{i=1}^{n}\lambda_i\alpha_i^2\leqslant\lambda_1.
+\]
+另一方面, 令 $\mathbf{x}=\mathbf{v}_1$, 得
+\[
+  \mathbf{x}^TA^TA\mathbf{x}=\mathbf{v}_1^TA^TA\mathbf{v}_1
+  =\mathbf{v}_1^T\lambda_1\mathbf{v}_1=\lambda_1.
+\]
+于是
+\[
+  \norm{A}_2=\max_{\norm{\mathbf{x}}_2=1}\norm{A\mathbf{x}}_2
+  =\sqrt{\lambda_1}=\sqrt{\lambda_{\max}(A^TA)}.
+\]
+\end{proof}
+
+关于范数 $\norm{\cdot}_2$, 我们有下述定理.
+
+\begin{theorem}
+\label{thm:3-3}
+设 $A\in\R^{n\times n}$. 则
+\begin{romanlist}
+  \item $\displaystyle\norm{A}_2=\max_{\norm{\mathbf{x}}_2=1}\max_{\norm{\mathbf{y}}_2=1}\abs{\mathbf{y}^*A\mathbf{x}}$, 其中 $\mathbf{x},\mathbf{y}\in\C^n$;
+  \item $\norm{A^T}_2=\norm{A}_2=\sqrt{\norm{A^TA}_2}$;
+  \item $\norm{A}_2=\norm{QAZ}_2$, 对任意正交矩阵 $Q$ 与 $Z$ 成立.
+\end{romanlist}
+我们回忆, 矩阵 $M\in\R^{n\times n}$ 称为\newterm{orthogonalmatrix}{正交的}{orthogonal}, 若 $M^{-1}=M^T$.
+\end{theorem}
+
+\begin{proof}
+我们只证 (i). 先引入向量范数 $\norm{\cdot}$ 的\newterm{dualnorm}{对偶范数}{dual norm} $\norm{\cdot}^D$, 其定义为
+\[
+  \norm{\mathbf{y}}^D=\max_{\norm{\mathbf{x}}=1}\abs{\mathbf{y}^*\mathbf{x}}.
+\]
+对 $\norm{\cdot}_2$, 由 Cauchy-Schwarz 不等式有
+\[
+  \abs{\mathbf{y}^*\mathbf{x}}\leqslant\norm{\mathbf{y}}_2\norm{\mathbf{x}}_2,
+\]
+当 $\mathbf{x}=\mathbf{y}/\norm{\mathbf{y}}_2$ 时取等号. 因此 $\norm{\cdot}_2$ 的对偶范数为
+\[
+  \norm{\mathbf{y}}_2^D=\max_{\norm{\mathbf{x}}_2=1}\abs{\mathbf{y}^*\mathbf{x}}
+  =\max_{\norm{\mathbf{x}}_2=1}\norm{\mathbf{y}}_2\norm{\mathbf{x}}_2=\norm{\mathbf{y}}_2.
+\]
+所以 $\norm{\cdot}_2$ 是自对偶的. 现在考虑
+\[
+  \begin{aligned}
+    \norm{A}_2
+    &=\max_{\norm{\mathbf{x}}_2=1}\norm{A\mathbf{x}}_2
+      =\max_{\norm{\mathbf{x}}_2=1}\norm{A\mathbf{x}}_2^D\\
+    &=\max_{\norm{\mathbf{x}}_2=1}\max_{\norm{\mathbf{y}}_2=1}\abs{(A\mathbf{x})^*\mathbf{y}}
+      =\max_{\norm{\mathbf{x}}_2=1}\max_{\norm{\mathbf{y}}_2=1}\abs{\mathbf{y}^*A\mathbf{x}}.
+  \end{aligned}
+\]
+\end{proof}
+
+另一有用的范数是\newterm{frobeniusnorm}{Frobenius 范数}{Frobenius norm}, 其定义为
+\[
+  \norm{A}_F\equiv\left(\sum_{j=1}^{n}\sum_{i=1}^{n}\abs{a_{ij}}^2\right)^{\frac{1}{2}}.
+\]
+$\norm{\cdot}_F$ 最重要的性质之一是: 对任意正交矩阵 $Q$ 与 $Z$,
+\[
+  \norm{A}_F=\norm{QAZ}_F.
+\]
+
+下面把关于范数的讨论推广到 $\C$ 域. 我们指出, 从范数的观点看, $\R$ 域中的矩阵或向量与 $\C$ 域中的矩阵或向量并无本质区别.
+
+\begin{definition}
+\label{def:3-4}
+设 $A\in\C^{n\times n}$. 则 $A$ 的所有特征值构成的集合称为 $A$ 的\newterm{spectrum}{谱}{spectrum}, 而
+\[
+  \rho(A)=\max\{|\lambda|:\lambda\text{ 属于 }A\text{ 的谱}\}
+\]
+称为 $A$ 的\newterm{spectralradius}{谱半径}{spectral radius}.
+\end{definition}
+
+关于谱半径与矩阵范数之间的关系, 有
+
+\begin{theorem}
+\label{thm:3-4}
+设 $A\in\C^{n\times n}$. 则
+\begin{romanlist}
+  \item 对任意矩阵范数, 有
+  \[
+    \rho(A)\leqslant\norm{A};
+  \]
+  \item 对任意 $\epsilon>0$, 存在定义在 $\C^{n\times n}$ 上的范数 $\norm{\cdot}_\epsilon$, 使得
+  \[
+    \norm{A}_\epsilon\leqslant\rho(A)+\epsilon.
+  \]
+\end{romanlist}
+\end{theorem}
+
+\begin{proof}
+对 (i), 设 $\mathbf{x}\in\C^n$ 满足
+\[
+  \mathbf{x}\neq\mathbf{0},\qquad A\mathbf{x}=\lambda\mathbf{x},\qquad|\lambda|=\rho(A).
+\]
+则
+\[
+  \rho(A)\norm{\mathbf{x}\mathbf{e}_1^T}=\norm{\lambda\mathbf{x}\mathbf{e}_1^T}
+  =\norm{A\mathbf{x}\mathbf{e}_1^T}\leqslant\norm{A}\cdot\norm{\mathbf{x}\mathbf{e}_1^T}.
+\]
+故
+\[
+  \rho(A)\leqslant\norm{A}.
+\]
+
+对 (ii), 利用定理 \ref{thm:ch1-jordan}(Jordan 分解定理), 知存在非奇异矩阵 $X\in\C^{n\times n}$, 使得
+\[
+  X^{-1}AX=
+  \begin{bmatrix}
+    \lambda_1 & \delta_1 &           &        &                \\
+              & \lambda_2 & \delta_2 &        &                \\
+              &           & \ddots    & \ddots &                \\
+              &           &           & \lambda_{n-1} & \delta_{n-1}\\
+              &           &           &        & \lambda_n
+  \end{bmatrix},
+\]
+其中 $\delta_i=1$ 或 $0$. 对任意给定的 $\epsilon>0$, 令
+\[
+  D_\epsilon=\diag(1,\epsilon,\epsilon^2,\ldots,\epsilon^{n-1}),
+\]
+则
+\[
+  D_\epsilon^{-1}X^{-1}AXD_\epsilon=
+  \begin{bmatrix}
+    \lambda_1 & \epsilon\delta_1 &           &        &                \\
+              & \lambda_2 & \epsilon\delta_2 &        &                \\
+              &           & \ddots    & \ddots &                \\
+              &           &           & \lambda_{n-1} & \epsilon\delta_{n-1}\\
+              &           &           &        & \lambda_n
+  \end{bmatrix}.
+\]
+现在定义
+\[
+  \norm{G}_\epsilon=\norm{D_\epsilon^{-1}X^{-1}GXD_\epsilon}_\infty,
+  \qquad G\in\C^{n\times n}.
+\]
+容易看出, 这个矩阵范数 $\norm{\cdot}_\epsilon$ 实际上是由如下定义的向量范数诱导的:
+\[
+  \norm{\mathbf{x}}_{XD_\epsilon}=\norm{(XD_\epsilon)^{-1}\mathbf{x}}_\infty,
+  \qquad\mathbf{x}\in\C^n.
+\]
+因此
+\[
+  \norm{A}_\epsilon=\norm{D_\epsilon^{-1}X^{-1}AXD_\epsilon}_\infty
+  =\max_{1\leqslant i\leqslant n}\bigl(|\lambda_i|+|\epsilon\delta_i|\bigr)
+  \leqslant\rho(A)+\epsilon,
+\]
+其中 $\delta_n=0$.
+\end{proof}
+
+我们指出, 对任一矩阵序列 $\{A_{(k)}\}$, 其中 $A_{(k)}=[a_{ij}^{(k)}]\in\R^{n\times n}$, 以及 $A=[a_{ij}]\in\R^{n\times n}$,
+\[
+  \lim_{k\to\infty}\norm{A_{(k)}-A}=0
+  \iff
+  \lim_{k\to\infty}a_{ij}^{(k)}=a_{ij}
+\]
+对 $i,j=1,\ldots,n$ 成立.
+
+\begin{theorem}
+\label{thm:3-5}
+设 $A\in\C^{n\times n}$. 则
+\[
+  \lim_{k\to\infty}A^k=0\iff\rho(A)<1,
+\]
+其中 $0$ 是 $n\times n$ 零矩阵.
+\end{theorem}
+
+\begin{proof}
+先假定
+\[
+  \lim_{k\to\infty}A^k=0.
+\]
+设 $\lambda$ 是 $A$ 的特征值且 $\rho(A)=|\lambda|$. 则对任意 $k$, $\lambda^k$ 是 $A^k$ 的特征值. 由定理 \ref{thm:3-4} (i) 知, 对任意 $k$,
+\[
+  \rho(A)^k=|\lambda|^k=\abs{\lambda^k}\leqslant\rho(A^k)\leqslant\norm{A^k}.
+\]
+因此
+\[
+  \lim_{k\to\infty}\rho(A)^k=0,
+\]
+这说明 $\rho(A)<1$.
+
+反之, 假定 $\rho(A)<1$. 由定理 \ref{thm:3-4} (ii), 存在矩阵范数 $\norm{\cdot}_\epsilon$ 使得 $\norm{A}_\epsilon<1$. 因此
+\[
+  0\leqslant\norm{A^k}_\epsilon\leqslant\norm{A}_\epsilon^k\to0,
+  \qquad k\to\infty,
+\]
+即
+\[
+  \lim_{k\to\infty}A^k=0.
+\]
+\end{proof}
+
+利用定理 \ref{thm:3-5}, 容易证明下述重要定理.
+
+\begin{theorem}
+\label{thm:3-6}
+设 $A\in\C^{n\times n}$. 则
+\begin{romanlist}
+  \item $\sum_{k=0}^{\infty}A^k$ 收敛当且仅当 $\rho(A)<1$;
+  \item 当 $\sum_{k=0}^{\infty}A^k$ 收敛时, 有
+  \[
+    \sum_{k=0}^{\infty}A^k=(I-A)^{-1}.
+  \]
+\end{romanlist}
+此外, 存在定义在 $\C^{n\times n}$ 上的范数, 使得对任意 $m$,
+\[
+  \norm{(I-A)^{-1}-\sum_{k=0}^{m}A^k}\leqslant\frac{\norm{A}^{m+1}}{1-\norm{A}}.
+\]
+\end{theorem}
+
+\begin{corollary}
+\label{cor:3-1}
+设 $\norm{\cdot}$ 是定义在 $\C^{n\times n}$ 上的范数, $\norm{I}=1$, 且 $A\in\C^{n\times n}$ 满足 $\norm{A}<1$. 则 $I-A$ 非奇异, 且
+\[
+  \norm{(I-A)^{-1}}\leqslant\frac{1}{1-\norm{A}}.
+\]
+\end{corollary}
+
+\begin{proof}
+只需注意
+\[
+  \norm{(I-A)^{-1}}=\norm{\sum_{k=0}^{\infty}A^k}
+  \leqslant1+\sum_{k=1}^{\infty}\norm{A}^k=\frac{1}{1-\norm{A}}.
+\]
+\end{proof}
+
+\section{线性方程组的扰动分析}
+
+先考虑如下简单的线性方程组 $A\mathbf{x}=\mathbf{b}$:
+\[
+  \begin{bmatrix}
+    2.0001 & 1.9999\\
+    1.9999 & 2.0001
+  \end{bmatrix}
+  \begin{bmatrix}
+    x_1\\ x_2
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    4\\ 4
+  \end{bmatrix}.
+\]
+该方程组的解为 $\mathbf{x}=[1,1]^T$. 若 $\mathbf{b}$ 有一个小扰动, 比如
+\[
+  \delta\mathbf{b}=[1\times10^{-4},\,-1\times10^{-4}]^T,
+\]
+则方程组变为
+\[
+  \begin{bmatrix}
+    2.0001 & 1.9999\\
+    1.9999 & 2.0001
+  \end{bmatrix}
+  \begin{bmatrix}
+    \hat{x}_1\\ \hat{x}_2
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    4.0001\\ 3.9999
+  \end{bmatrix}.
+\]
+该扰动方程组的解为 $\hat{\mathbf{x}}=[1.5,0.5]^T$. 因此
+\[
+  \frac{\norm{\mathbf{x}-\hat{\mathbf{x}}}_\infty}{\norm{\mathbf{x}}_\infty}=\frac{1}{2},
+  \qquad
+  \frac{\norm{\delta\mathbf{b}}_\infty}{\norm{\mathbf{b}}_\infty}=\frac{1}{40000},
+\]
+即解的相对误差是 $\mathbf{b}$ 上扰动相对误差的 $20000$ 倍.
+
+由此可见, 在求解线性方程组 $A\mathbf{x}=\mathbf{b}$ 时, 需要一个良好的度量来刻画计算解对输入小扰动的敏感程度. 于是引入矩阵的条件数, 它把 $\mathbf{x}$ 的扰动与 $A$, $\mathbf{b}$ 的扰动联系起来.
+
+\begin{definition}
+\label{def:3-5}
+设 $\norm{\cdot}$ 为任一矩阵范数, $A$ 为非奇异矩阵. $A$ 的条件数定义为
+\begin{equation}
+  \kappa(A)\equiv\norm{A}\cdot\norm{A^{-1}}.
+  \label{eq:3-1}
+\end{equation}
+\end{definition}
+
+显然, 条件数依赖于所用的矩阵范数. 当 $\kappa(A)$ 小时, 称 $A$ 是\newterm{wellconditioned}{良态的}{well-conditioned}; 当 $\kappa(A)$ 大时, 称 $A$ 是\newterm{illconditioned}{病态的}{ill-conditioned}. 注意对任意 $p$ 范数, 有
+\[
+  1=\norm{I}=\norm{A\cdot A^{-1}}\leqslant\norm{A}\cdot\norm{A^{-1}}=\kappa(A).
+\]
+
+设 $\hat{\mathbf{x}}$ 是 $A\mathbf{x}=\mathbf{b}$ 的精确解 $\mathbf{x}$ 的一个近似. \newterm{errorvector}{误差向量}{error vector}定义为
+\[
+  \mathbf{e}=\mathbf{x}-\hat{\mathbf{x}},
+\]
+即
+\begin{equation}
+  \mathbf{x}=\hat{\mathbf{x}}+\mathbf{e}.
+  \label{eq:3-2}
+\end{equation}
+\newterm{absoluteerror}{绝对误差}{absolute error}由 $\norm{\mathbf{e}}=\norm{\mathbf{x}-\hat{\mathbf{x}}}$ 给出 (对任意向量范数). 若 $\mathbf{x}\neq\mathbf{0}$, 则\newterm{relativeerror}{相对误差}{relative error}定义为
+$\norm{\mathbf{e}}/\norm{\mathbf{x}}=\norm{\mathbf{x}-\hat{\mathbf{x}}}/\norm{\mathbf{x}}$.
+
+把 \eqref{eq:3-2} 代入 $A\mathbf{x}=\mathbf{b}$, 得
+\[
+  A(\hat{\mathbf{x}}+\mathbf{e})=A\hat{\mathbf{x}}+A\mathbf{e}=\mathbf{b}.
+\]
+因此
+\[
+  A\hat{\mathbf{x}}=\mathbf{b}-A\mathbf{e}=\hat{\mathbf{b}}.
+\]
+$\hat{\mathbf{x}}$ 是 $A\hat{\mathbf{x}}=\hat{\mathbf{b}}$ 的精确解, 其中 $\hat{\mathbf{b}}$ 是 $\mathbf{b}$ 的扰动向量. 由 $\mathbf{x}=A^{-1}\mathbf{b}$ 与 $\hat{\mathbf{x}}=A^{-1}\hat{\mathbf{b}}$, 有
+\begin{equation}
+  \norm{\mathbf{x}-\hat{\mathbf{x}}}=\norm{A^{-1}(\mathbf{b}-\hat{\mathbf{b}})}
+  \leqslant\norm{A^{-1}}\cdot\norm{\mathbf{b}-\hat{\mathbf{b}}}.
+  \label{eq:3-3}
+\end{equation}
+类似地,
+\[
+  \norm{\mathbf{b}}=\norm{A\mathbf{x}}\leqslant\norm{A}\cdot\norm{\mathbf{x}},
+\]
+即
+\begin{equation}
+  \frac{1}{\norm{\mathbf{x}}}\leqslant\frac{\norm{A}}{\norm{\mathbf{b}}}.
+  \label{eq:3-4}
+\end{equation}
+结合 \eqref{eq:3-3}, \eqref{eq:3-4} 与 \eqref{eq:3-1}, 得到下述定理, 它以 $A$ 的条件数刻画了向量 $\mathbf{b}$ 的扰动对 $A\mathbf{x}=\mathbf{b}$ 的解的影响.
+
+\begin{theorem}
+\label{thm:3-7}
+设 $\hat{\mathbf{x}}$ 是 $A\mathbf{x}=\mathbf{b}$ 的精确解 $\mathbf{x}$ 的近似解. 则
+\[
+  \frac{\norm{\mathbf{x}-\hat{\mathbf{x}}}}{\norm{\mathbf{x}}}
+  \leqslant\kappa(A)\frac{\norm{\mathbf{b}-\hat{\mathbf{b}}}}{\norm{\mathbf{b}}}.
+\]
+\end{theorem}
+
+下一个定理则以 $A$ 的条件数刻画了系数矩阵 $A$ 的扰动对 $A\mathbf{x}=\mathbf{b}$ 的解的影响.
+
+\begin{theorem}
+\label{thm:3-8}
+设 $A$ 为非奇异矩阵, $\widehat{A}$ 是 $A$ 的扰动矩阵, 且
+\[
+  \norm{A-\widehat{A}}\cdot\norm{A^{-1}}<1.
+\]
+若 $A\mathbf{x}=\mathbf{b}$ 且 $\widehat{A}\hat{\mathbf{x}}=\hat{\mathbf{b}}$, 其中 $\hat{\mathbf{b}}$ 是 $\mathbf{b}$ 的扰动向量, 则
+\[
+  \frac{\norm{\mathbf{x}-\hat{\mathbf{x}}}}{\norm{\mathbf{x}}}
+  \leqslant\frac{\kappa(A)}{1-\kappa(A)\norm{A-\widehat{A}}/\norm{A}}
+  \left(\frac{\norm{A-\widehat{A}}}{\norm{A}}+\frac{\norm{\mathbf{b}-\hat{\mathbf{b}}}}{\norm{\mathbf{b}}}\right).
+\]
+\end{theorem}
+
+\begin{proof}
+令
+\[
+  E=A-\widehat{A}\qquad\text{且}\qquad\delta\mathbf{b}=\mathbf{b}-\widehat{\mathbf{b}}.
+\]
+用 $\widehat{A}\hat{\mathbf{x}}=\hat{\mathbf{b}}$ 减去 $A\mathbf{x}=\mathbf{b}$, 得
+\[
+  A(\mathbf{x}-\hat{\mathbf{x}})=-E\hat{\mathbf{x}}+\delta\mathbf{b}.
+\]
+进一步有
+\[
+  \frac{\norm{\mathbf{x}-\hat{\mathbf{x}}}}{\norm{\mathbf{x}}}
+  \leqslant\norm{A^{-1}E}\frac{\norm{\hat{\mathbf{x}}}}{\norm{\mathbf{x}}}
+  +\norm{A^{-1}}\frac{\norm{A\mathbf{x}}}{\norm{\mathbf{x}}}\frac{\norm{\delta\mathbf{b}}}{\norm{\mathbf{b}}}.
+\]
+利用
+\[
+  \norm{\hat{\mathbf{x}}}\leqslant\norm{\hat{\mathbf{x}}-\mathbf{x}}+\norm{\mathbf{x}}
+  \qquad\text{且}\qquad
+  \norm{A\mathbf{x}}\leqslant\norm{A}\cdot\norm{\mathbf{x}},
+\]
+便得
+\[
+  \frac{\norm{\mathbf{x}-\hat{\mathbf{x}}}}{\norm{\mathbf{x}}}
+  \leqslant\norm{A^{-1}E}\frac{\norm{\mathbf{x}-\hat{\mathbf{x}}}}{\norm{\mathbf{x}}}
+  +\norm{A^{-1}E}+\norm{A^{-1}}\norm{A}\frac{\norm{\delta\mathbf{b}}}{\norm{\mathbf{b}}},
+\]
+即
+\[
+  \bigl(1-\norm{A^{-1}E}\bigr)\frac{\norm{\mathbf{x}-\hat{\mathbf{x}}}}{\norm{\mathbf{x}}}
+  \leqslant\norm{A^{-1}E}+\kappa(A)\frac{\norm{\delta\mathbf{b}}}{\norm{\mathbf{b}}}.
+\]
+由于
+\[
+  \norm{A^{-1}E}\leqslant\norm{A^{-1}}\cdot\norm{E}
+  =\norm{A^{-1}}\cdot\norm{A-\widehat{A}}<1,
+\]
+得到
+\[
+  \frac{\norm{\mathbf{x}-\hat{\mathbf{x}}}}{\norm{\mathbf{x}}}
+  \leqslant\bigl(1-\norm{A^{-1}E}\bigr)^{-1}
+  \left(\norm{A^{-1}E}+\kappa(A)\frac{\norm{\delta\mathbf{b}}}{\norm{\mathbf{b}}}\right).
+\]
+再利用
+\[
+  \norm{A^{-1}E}\leqslant\norm{A^{-1}}\cdot\norm{E}
+  =\kappa(A)\frac{\norm{E}}{\norm{A}},
+\]
+最终得到
+\[
+  \frac{\norm{\mathbf{x}-\hat{\mathbf{x}}}}{\norm{\mathbf{x}}}
+  \leqslant\frac{\kappa(A)}{1-\kappa(A)\norm{E}/\norm{A}}
+  \left(\frac{\norm{E}}{\norm{A}}+\frac{\norm{\delta\mathbf{b}}}{\norm{\mathbf{b}}}\right).
+\]
+\end{proof}
+
+定理 \ref{thm:3-7} 与定理 \ref{thm:3-8} 以 $A$ 的条件数给出了 $\mathbf{x}$ 的相对误差的上界. 由这两个定理可知, 若 $A$ 是良态的, 即 $\kappa(A)$ 小, 则当 $A$ 与 $\mathbf{b}$ 两者的相对误差都小时, $\mathbf{x}$ 的相对误差也小.
+
+\begin{corollary}
+\label{cor:3-2}
+设 $\norm{\cdot}$ 为任一满足 $\norm{I}=1$ 的矩阵范数, $A$ 为非奇异矩阵, 且 $A+\widetilde{A}$ 是 $A$ 的扰动矩阵, 满足
+\[
+  \norm{A^{-1}\widetilde{A}}<1.
+\]
+则 $A+\widetilde{A}$ 非奇异, 且
+\[
+  \frac{\norm{(A+\widetilde{A})^{-1}-A^{-1}}}{\norm{A^{-1}}}
+  \leqslant\frac{\kappa(A)}{1-\kappa(A)\norm{\widetilde{A}}/\norm{A}}
+  \cdot\frac{\norm{\widetilde{A}}}{\norm{A}}.
+\]
+\end{corollary}
+
+\begin{proof}
+先证明
+\[
+  \norm{(A+\widetilde{A})^{-1}-A^{-1}}
+  \leqslant\frac{\norm{\widetilde{A}}\cdot\norm{A^{-1}}^2}{1-\norm{A^{-1}\widetilde{A}}}.
+\]
+注意
+\[
+  A+\widetilde{A}=A(I+A^{-1}\widetilde{A})=A\bigl[I-(-A^{-1}\widetilde{A})\bigr].
+\]
+令 $F=-A^{-1}\widetilde{A}$ 且 $r=\norm{A^{-1}\widetilde{A}}$. 现在
+\[
+  (A+\widetilde{A})^{-1}=(I-F)^{-1}A^{-1}.
+\]
+因此, 注意到 $\norm{F}=r<1$ 并利用推论 \ref{cor:3-1}, 有
+\[
+  \norm{(A+\widetilde{A})^{-1}}=\norm{(I-F)^{-1}A^{-1}}
+  \leqslant\norm{(I-F)^{-1}}\cdot\norm{A^{-1}}
+  <\frac{\norm{A^{-1}}}{1-\norm{F}}=\frac{\norm{A^{-1}}}{1-r}.
+\]
+利用恒等式
+\[
+  B^{-1}=A^{-1}-B^{-1}(B-A)A^{-1},
+\]
+有
+\[
+  (A+\widetilde{A})^{-1}-A^{-1}=-(A+\widetilde{A})^{-1}\widetilde{A}A^{-1}.
+\]
+于是
+\[
+  \norm{(A+\widetilde{A})^{-1}-A^{-1}}
+  \leqslant\norm{A^{-1}}\cdot\norm{\widetilde{A}}\cdot\norm{(A+\widetilde{A})^{-1}}
+  \leqslant\frac{\norm{A^{-1}}^2\norm{\widetilde{A}}}{1-r}.
+\]
+最后得到
+\[
+  \begin{aligned}
+    \frac{\norm{(A+\widetilde{A})^{-1}-A^{-1}}}{\norm{A^{-1}}}
+    &\leqslant\frac{\norm{A^{-1}}\cdot\norm{\widetilde{A}}}{1-r}
+     \leqslant\frac{\norm{A^{-1}}\cdot\norm{\widetilde{A}}}{1-\norm{A^{-1}}\cdot\norm{\widetilde{A}}}\\
+    &\leqslant\frac{\kappa(A)}{1-\kappa(A)\norm{\widetilde{A}}/\norm{A}}
+     \cdot\frac{\norm{\widetilde{A}}}{\norm{A}}.
+  \end{aligned}
+\]
+\end{proof}
+
+\begin{mremark}
+除 \eqref{eq:3-1} 所定义的条件数之外, 文献 \cite{src:22} 为数值求解偏微分方程提出了\newterm{effectivecondnum}{有效条件数}{effective condition number}. 详细研究见 \cite{src:57}.
+\end{mremark}
+
+\section{浮点算术的误差分析}
+
+在计算机中, \newterm{floatingpoint}{浮点数}{floating point number} $f$ 表示为
+\[
+  f=\pm\omega\times\beta^J,\qquad L\leqslant J\leqslant U,
+\]
+其中 $\beta$ 是基数, $J$ 是阶, $\omega$ 是尾数. 通常 $\omega$ 具有如下形式:
+\[
+  \omega=0.d_1d_2\ldots d_t,
+\]
+其中 $t$ 是 $\omega$ 的长度 (精度), $d_1\neq0$, 且 $0\leqslant d_i<\beta$ 对 $i=2,\ldots,t$ 成立.
+
+令
+\[
+  \mathcal{F}=\{0\}\cup\{f:f=\pm\omega\times\beta^J,\ 0\leqslant d_i<\beta,\ d_1\neq0,\ L\leqslant J\leqslant U\}.
+\]
+则 $\mathcal{F}$ 含
+\[
+  2(\beta-1)\beta^{t-1}(U-L+1)+1
+\]
+个浮点数. 这些数对称地分布在区间 $[m,M]$ 与 $[-M,-m]$ 中, 其中
+\begin{equation}
+  m=\beta^{L-1},\qquad M=\beta^U(1-\beta^{-t}).
+  \label{eq:3-5}
+\end{equation}
+我们指出, $\mathcal{F}$ 只是一个有限集, 它不可能包含这两个区间中的所有实数.
+
+令 $fl(x)$ 表示任一实数 $x$ 的浮点数. 则
+\[
+  fl(x)=0,\qquad\text{当 }x=0.
+\]
+若 $m\leqslant|x|\leqslant M$, 则按\newterm{rounding}{舍入}{rounding}, $fl(x)$ 是使
+\[
+  \abs{fl(x)-x}=\min_{f\in\mathcal{F}}|f-x|
+\]
+成立的 $f$; 而按\newterm{chopping}{截断}{chopping}, $fl(x)$ 是使
+\[
+  \abs{fl(x)-x}=\min_{|f|\leqslant|x|}|f-x|
+\]
+成立的 $f$.
+
+例如, 令 $\beta=10$, $t=3$, $L=0$, $U=2$. 考虑 $x=5.45627$ 的浮点表示. 按舍入, 得 $fl(x)=0.546\times10$; 按截断, 得 $fl(x)=0.545\times10$. 下述定理给出浮点表示相对误差的估计.
+
+\begin{theorem}
+\label{thm:3-9}
+设 $m\leqslant|x|\leqslant M$, 其中 $m$ 与 $M$ 由 \eqref{eq:3-5} 定义. 则
+\[
+  fl(x)=x(1+\delta),\qquad|\delta|\leqslant\mu_\varepsilon,
+\]
+其中 $\mu_\varepsilon$ 是\newterm{machineprecision}{机器精度}{machine precision}, 即
+\[
+  \mu_\varepsilon=
+  \begin{cases}
+    \dfrac{1}{2}\beta^{1-t}, & \text{按舍入},\\[8pt]
+    \beta^{1-t}, & \text{按截断}.
+  \end{cases}
+\]
+\end{theorem}
+
+\begin{proof}
+以下假定 $x>0$. 设 $\alpha$ 为整数且满足
+\begin{equation}
+  \beta^{\alpha-1}\leqslant x<\beta^{\alpha}.
+  \label{eq:3-6}
+\end{equation}
+由于 $[\beta^{\alpha-1},\beta^{\alpha})$ 中浮点数的阶为 $\alpha$, 所有数
+\[
+  0.d_1d_2\ldots d_t\times\beta^{\alpha}
+\]
+都以间距 $\beta^{\alpha-t}$ 分布在该区间内. 对舍入误差, 由 \eqref{eq:3-6} 有
+\[
+  \abs{fl(x)-x}\leqslant\frac{1}{2}\beta^{\alpha-t}
+  =\frac{1}{2}\beta^{\alpha-1}\beta^{1-t}\leqslant\frac{1}{2}x\beta^{1-t},
+\]
+即
+\[
+  \frac{\abs{fl(x)-x}}{x}\leqslant\frac{1}{2}\beta^{1-t}.
+\]
+对截断误差, 有
+\[
+  \abs{fl(x)-x}\leqslant\beta^{\alpha-t}=\beta^{\alpha-1}\beta^{1-t}\leqslant x\beta^{1-t},
+\]
+即
+\[
+  \frac{\abs{fl(x)-x}}{x}\leqslant\beta^{1-t}.
+\]
+证毕.
+\end{proof}
+
+下面考虑基本运算的舍入误差. 设 $a,b\in\mathcal{F}$, 而``$\circ$''表示任一基本运算: ``$+,-,\times,\div$''. 由定理 \ref{thm:3-9} 立即得到
+
+\begin{theorem}
+\label{thm:3-10}
+有
+\[
+  fl(a\circ b)=(a\circ b)(1+\delta),\qquad|\delta|\leqslant\mu_\varepsilon.
+\]
+\end{theorem}
+
+\begin{theorem}
+\label{thm:3-11}
+若 $|\delta_i|\leqslant\mu_\varepsilon$ 且 $n\mu_\varepsilon\leqslant0.01$, 则
+\[
+  1-1.01n\mu_\varepsilon\leqslant\prod_{i=1}^{n}(1+\delta_i)
+  \leqslant1+1.01n\mu_\varepsilon.
+\]
+\end{theorem}
+
+\begin{proof}
+由于 $|\delta_i|\leqslant\mu_\varepsilon$, 有
+\begin{equation}
+  (1-\mu_\varepsilon)^n\leqslant\prod_{i=1}^{n}(1+\delta_i)\leqslant(1+\mu_\varepsilon)^n.
+  \label{eq:3-7}
+\end{equation}
+对 $(1-\mu_\varepsilon)^n$ 的下界, 利用 $(1-x)^n$ 的 Taylor 展开, 即
+\[
+  (1-x)^n=1-nx+\frac{n(n-1)}{2}(1-\theta x)^{n-2}x^2,
+\]
+有
+\[
+  1-nx\leqslant(1-x)^n.
+\]
+因此
+\begin{equation}
+  1-1.01n\mu_\varepsilon\leqslant1-n\mu_\varepsilon\leqslant(1-\mu_\varepsilon)^n.
+  \label{eq:3-8}
+\end{equation}
+现在估计 $(1+\mu_\varepsilon)^n$ 的上界. 利用 $e^x$ 的 Taylor 展开, 有
+\[
+  e^x=1+x+\frac{x^2}{2!}+\frac{x^3}{3!}+\cdots
+  =1+x+\frac{x}{2}\cdot x\cdot\left(1+\frac{x}{3}+\cdots\right).
+\]
+因此, 当 $0\leqslant x\leqslant0.01$ 时, 利用 $e^{0.01}<2$ 可知
+\begin{equation}
+  1+x\leqslant e^x\leqslant1+x+\frac{0.01}{2}xe^x\leqslant1+1.01x.
+  \label{eq:3-9}
+\end{equation}
+令 $x=\mu_\varepsilon$, 由 \eqref{eq:3-9} 的左不等式得
+\begin{equation}
+  (1+\mu_\varepsilon)^n\leqslant e^{n\mu_\varepsilon}.
+  \label{eq:3-10}
+\end{equation}
+令 $x=n\mu_\varepsilon$, 由 \eqref{eq:3-9} 的右不等式得
+\begin{equation}
+  e^{n\mu_\varepsilon}\leqslant1+1.01n\mu_\varepsilon.
+  \label{eq:3-11}
+\end{equation}
+结合 \eqref{eq:3-10} 与 \eqref{eq:3-11}, 有
+\begin{equation}
+  (1+\mu_\varepsilon)^n\leqslant1+1.01n\mu_\varepsilon.
+  \label{eq:3-12}
+\end{equation}
+由 \eqref{eq:3-7}, \eqref{eq:3-8} 与 \eqref{eq:3-12}, 证毕.
+\end{proof}
+
+考虑下述例子.
+
+\begin{example}
+\label{ex:3-1}
+给定 $\mathbf{x},\mathbf{y}\in\R^n$ 与 $n\mu_\varepsilon\leqslant0.01$, 估计
+\[
+  \abs{fl(\mathbf{x}^T\mathbf{y})-\mathbf{x}^T\mathbf{y}}
+\]
+的上界.
+
+令
+\[
+  S_k=fl\left(\sum_{i=1}^{k}x_iy_i\right).
+\]
+由定理 \ref{thm:3-10}, 有
+\[
+  S_1=x_1y_1(1+\gamma_1),\qquad|\gamma_1|\leqslant\mu_\varepsilon,
+\]
+以及
+\[
+  \begin{aligned}
+    S_k&=fl\bigl(S_{k-1}+fl(x_ky_k)\bigr)\\
+       &=\bigl[S_{k-1}+x_ky_k(1+\gamma_k)\bigr](1+\delta_k),
+       \qquad|\delta_k|,|\gamma_k|\leqslant\mu_\varepsilon.
+  \end{aligned}
+\]
+因此
+\[
+  \begin{aligned}
+    fl(\mathbf{x}^T\mathbf{y})
+    &=S_n=\sum_{i=1}^{n}x_iy_i(1+\gamma_i)\prod_{j=i}^{n}(1+\delta_j)\\
+    &=\sum_{i=1}^{n}(1+\epsilon_i)x_iy_i,
+  \end{aligned}
+\]
+其中
+\[
+  1+\epsilon_i=(1+\gamma_i)\prod_{j=i}^{n}(1+\delta_j),
+\]
+且 $\delta_1=0$. 于是, 若 $n\mu_\varepsilon\leqslant0.01$, 由定理 \ref{thm:3-11} 得
+\[
+  \abs{fl(\mathbf{x}^T\mathbf{y})-\mathbf{x}^T\mathbf{y}}
+  \leqslant\sum_{i=1}^{n}|\epsilon_i|\cdot|x_iy_i|
+  \leqslant1.01n\mu_\varepsilon\sum_{i=1}^{n}|x_iy_i|.
+\]
+\end{example}
+
+在结束本节之前, 简要讨论基本矩阵运算的浮点分析. 回忆以下记号:
+\[
+  |E|=[|e_{ij}|],
+\]
+其中 $E=[e_{ij}]\in\R^{n\times n}$, 以及
+\[
+  |E|\leqslant|F|\iff|e_{ij}|\leqslant|f_{ij}|
+\]
+对 $i,j=1,2,\ldots,n$ 成立. 设 $A,B\in\R^{n\times n}$ 的元素均属于 $\mathcal{F}$, $\alpha\in\mathcal{F}$. 由定理 \ref{thm:3-10}, 有
+\[
+  fl(\alpha A)=\alpha A+E,\qquad|E|\leqslant\mu_\varepsilon|\alpha A|,
+\]
+以及
+\[
+  fl(A+B)=(A+B)+E,\qquad|E|\leqslant\mu_\varepsilon|A+B|.
+\]
+由例 \ref{ex:3-1} 还有
+\[
+  fl(AB)=AB+E,\qquad|E|\leqslant1.01n\mu_\varepsilon|A|\cdot|B|.
+\]
+注意 $|A|\cdot|B|$ 可能远大于 $|AB|$. 因此 $AB$ 的相对误差未必小. 关于浮点算术数值计算的详细研究, 参见 \cite{src:65}.
+
+\section{部分主元法的误差分析}
+
+我们证明: 若用带部分主元选取的高斯消去法求解 $A\mathbf{x}=\mathbf{b}$, 则计算解 $\tilde{\mathbf{x}}$ 满足
+\[
+  (A+E)\tilde{\mathbf{x}}=\mathbf{b},
+\]
+其中 $E$ 是一个误差矩阵. 同时也给出 $E$ 的上界. 先研究 $A$ 的 $LU$ 分解的舍入误差.
+
+\begin{lemma}
+\label{lem:3-1}
+设 $A\in\R^{n\times n}$ 的元素为浮点数. 假定 $A$ 具有 $LU$ 分解, 且 $6n\mu_\varepsilon\leqslant1$, 其中 $\mu_\varepsilon$ 是机器精度. 则用高斯消去法得到
+\[
+  \widetilde{L}\widetilde{U}=A+E,
+\]
+其中
+\[
+  |E|\leqslant3n\mu_\varepsilon\bigl(|A|+|\widetilde{L}|\cdot|\widetilde{U}|\bigr).
+\]
+\end{lemma}
+
+\begin{proof}
+对 $n$ 作归纳. 显然, $n=1$ 时引理成立. 设引理对 $n-1$ 成立. 现在考虑矩阵 $A\in\R^{n\times n}$:
+\[
+  A=
+  \begin{bmatrix}
+    \alpha & \mathbf{w}^T\\
+    \mathbf{u} & A_1
+  \end{bmatrix},
+\]
+其中 $A_1\in\R^{(n-1)\times(n-1)}$. 在高斯消去的第一步, 应计算向量 $\tilde{\mathbf{v}}_1=fl(\mathbf{u}/\alpha)$, 并把矩阵 $A_1$ 修改为
+\[
+  \widetilde{A}_1=fl\bigl(A_1-fl(\tilde{\mathbf{v}}_1\mathbf{w}^T)\bigr).
+\]
+由定理 \ref{thm:3-10}, 有
+\begin{equation}
+  \tilde{\mathbf{v}}_1=\mathbf{u}/\alpha+\mathbf{f},
+  \qquad|\mathbf{f}|\leqslant\frac{\mu_\varepsilon}{|\alpha|}|\mathbf{u}|
+  \label{eq:3-13}
+\end{equation}
+以及
+\begin{equation}
+  \widetilde{A}_1=A_1-\tilde{\mathbf{v}}_1\mathbf{w}^T+F,
+  \qquad|F|\leqslant(2+\mu_\varepsilon)\mu_\varepsilon
+  \bigl(|A_1|+|\tilde{\mathbf{v}}_1|\cdot|\mathbf{w}|^T\bigr).
+  \label{eq:3-14}
+\end{equation}
+对 $\widetilde{A}_1$, 利用归纳假设, 得到 $LU$ 分解: 单位下三角矩阵 $\widetilde{L}_1$ 与上三角矩阵 $\widetilde{U}_1$ 使得
+\[
+  \widetilde{L}_1\widetilde{U}_1=\widetilde{A}_1+E_1,
+\]
+其中
+\[
+  |E_1|\leqslant3(n-1)\mu_\varepsilon
+  \bigl(|\widetilde{A}_1|+|\widetilde{L}_1|\cdot|\widetilde{U}_1|\bigr).
+\]
+于是有
+\[
+  \widetilde{L}\widetilde{U}
+  =
+  \begin{bmatrix}
+    1 & \mathbf{0}\\
+    \tilde{\mathbf{v}}_1 & \widetilde{L}_1
+  \end{bmatrix}
+  \begin{bmatrix}
+    \alpha & \mathbf{w}^T\\
+    \mathbf{0} & \widetilde{U}_1
+  \end{bmatrix}
+  =A+E,
+\]
+其中
+\[
+  E=
+  \begin{bmatrix}
+    \mathbf{0} & \mathbf{0}\\
+    \alpha\mathbf{f} & E_1+F
+  \end{bmatrix}.
+\]
+利用 \eqref{eq:3-14}, 得到
+\[
+  |\widetilde{A}_1|\leqslant(1+2\mu_\varepsilon+\mu_\varepsilon^2)
+  \bigl(|A_1|+|\tilde{\mathbf{v}}_1|\cdot|\mathbf{w}|^T\bigr).
+\]
+因此, 利用条件 $6n\mu_\varepsilon\leqslant1$, 有
+\[
+  \begin{aligned}
+    |E_1+F|
+    &\leqslant|E_1|+|F|\\
+    &\leqslant3(n-1)\mu_\varepsilon\bigl(|\widetilde{A}_1|+|\widetilde{L}_1|\cdot|\widetilde{U}_1|\bigr)
+      +(2+\mu_\varepsilon)\mu_\varepsilon\bigl(|A_1|+|\tilde{\mathbf{v}}_1|\cdot|\mathbf{w}|^T\bigr)\\
+    &\leqslant3(n-1)\mu_\varepsilon\Bigl(\bigl(1+2\mu_\varepsilon+\mu_\varepsilon^2\bigr)
+      \bigl(|A_1|+|\tilde{\mathbf{v}}_1|\cdot|\mathbf{w}|^T\bigr)
+      +|\widetilde{L}_1|\cdot|\widetilde{U}_1|\Bigr)\\
+    &\qquad+(2+\mu_\varepsilon)\mu_\varepsilon\bigl(|A_1|+|\tilde{\mathbf{v}}_1|\cdot|\mathbf{w}|^T\bigr)\\
+    &\leqslant\mu_\varepsilon\Bigl(3n-1+\bigl[6n+3(n-1)\mu_\varepsilon-5\bigr]\mu_\varepsilon\Bigr)
+      \bigl(|A_1|+|\tilde{\mathbf{v}}_1|\cdot|\mathbf{w}|^T\bigr)\\
+    &\qquad+3(n-1)\mu_\varepsilon\bigl(|\widetilde{L}_1|\cdot|\widetilde{U}_1|\bigr)\\
+    &\leqslant3n\mu_\varepsilon\bigl(|A_1|+|\tilde{\mathbf{v}}_1|\cdot|\mathbf{w}|^T
+      +|\widetilde{L}_1|\cdot|\widetilde{U}_1|\bigr).
+  \end{aligned}
+\]
+结合 \eqref{eq:3-13}, 得到
+\[
+  \begin{aligned}
+    |E|
+    &=
+    \begin{bmatrix}
+      \mathbf{0} & \mathbf{0}\\
+      |\alpha|\,|\mathbf{f}| & |E_1+F|
+    \end{bmatrix}\\
+    &\leqslant3n\mu_\varepsilon
+    \begin{bmatrix}
+      \mathbf{0} & \mathbf{0}\\
+      |\mathbf{u}| & |A_1|+|\tilde{\mathbf{v}}_1|\cdot|\mathbf{w}|^T
+        +|\widetilde{L}_1|\cdot|\widetilde{U}_1|
+    \end{bmatrix}\\
+    &\leqslant3n\mu_\varepsilon\left(
+    \begin{bmatrix}
+      |\alpha| & |\mathbf{w}|^T\\
+      |\mathbf{u}| & |A_1|
+    \end{bmatrix}
+    +
+    \begin{bmatrix}
+      1 & \mathbf{0}\\
+      |\tilde{\mathbf{v}}_1| & |\widetilde{L}_1|
+    \end{bmatrix}
+    \begin{bmatrix}
+      |\alpha| & |\mathbf{w}|^T\\
+      \mathbf{0} & |\widetilde{U}_1|
+    \end{bmatrix}\right)\\
+    &=3n\mu_\varepsilon\bigl(|A|+|\widetilde{L}|\cdot|\widetilde{U}|\bigr).
+  \end{aligned}
+\]
+证毕.
+\end{proof}
+
+\begin{corollary}
+\label{cor:3-3}
+设 $A\in\R^{n\times n}$ 非奇异且元素为浮点数, $6n\mu_\varepsilon\leqslant1$. 假定用带部分主元选取的高斯消去法得到
+\[
+  \widetilde{L}\widetilde{U}=PA+E,
+\]
+其中 $\widetilde{L}=[l_{ij}]$ 是满足 $|l_{ij}|\leqslant1$ 的单位下三角矩阵, $\widetilde{U}$ 是上三角矩阵, $P$ 是置换矩阵. 则 $E$ 满足下述不等式:
+\[
+  |E|\leqslant3n\mu_\varepsilon\bigl(|PA|+|\widetilde{L}|\cdot|\widetilde{U}|\bigr).
+\]
+\end{corollary}
+
+在得到 $A$ 的 $LU$ 分解之后, 求解 $A\mathbf{x}=\mathbf{b}$ 的问题就化为求解如下两个三角方程组:
+\[
+  \widetilde{L}\mathbf{y}=P\mathbf{b},\qquad\widetilde{U}\mathbf{x}=\mathbf{y}.
+\]
+因此, 还需估计求解三角方程组的舍入误差.
+
+\begin{lemma}
+\label{lem:3-2}
+设 $S\in\R^{n\times n}$ 为非奇异三角矩阵, 元素为浮点数, 且 $1.01n\mu_\varepsilon\leqslant0.01$. 用 \ref{subsec:2-1-1} 小节提出的方法求解 $S\mathbf{x}=\mathbf{b}$, 则所得计算解 $\tilde{\mathbf{x}}$ 满足
+\[
+  (S+H)\tilde{\mathbf{x}}=\mathbf{b},
+\]
+其中
+\[
+  |H|\leqslant1.01n\mu_\varepsilon|S|.
+\]
+\end{lemma}
+
+\begin{proof}
+对 $n$ 作归纳. 不失一般性, 设 $S=L$ 为下三角矩阵. 显然, $n=1$ 时引理成立. 设引理对 $n-1$ 成立. 现在考虑下三角矩阵 $L\in\R^{n\times n}$. 设 $\tilde{\mathbf{x}}$ 是 $L\mathbf{x}=\mathbf{b}$ 的计算解, 并把 $L$, $\mathbf{b}$ 与 $\tilde{\mathbf{x}}$ 分块如下:
+\[
+  L=
+  \begin{bmatrix}
+    l_{11} & \mathbf{0}\\
+    \mathbf{v}_1 & L_1
+  \end{bmatrix},
+  \qquad
+  \mathbf{b}=
+  \begin{bmatrix}
+    b_1\\ \mathbf{c}
+  \end{bmatrix},
+  \qquad
+  \tilde{\mathbf{x}}=
+  \begin{bmatrix}
+    \tilde{x}_1\\ \tilde{\mathbf{y}}
+  \end{bmatrix},
+\]
+其中 $\mathbf{c},\tilde{\mathbf{y}}\in\R^{n-1}$, $L_1\in\R^{(n-1)\times(n-1)}$. 由定理 \ref{thm:3-10}, 有
+\begin{equation}
+  \tilde{x}_1=fl(b_1/l_{11})=\frac{b_1}{l_{11}(1+\delta_1)},
+  \qquad|\delta_1|\leqslant\mu_\varepsilon.
+  \label{eq:3-15}
+\end{equation}
+注意 $\tilde{\mathbf{y}}$ 是 $(n-1)$ 阶方程组
+\[
+  L_1\mathbf{y}=fl(\mathbf{c}-\tilde{x}_1\mathbf{v}_1)
+\]
+的计算解. 由归纳假设, 有
+\[
+  (L_1+H_1)\tilde{\mathbf{y}}=fl(\mathbf{c}-\tilde{x}_1\mathbf{v}_1),
+\]
+其中
+\begin{equation}
+  |H_1|\leqslant1.01(n-1)\mu_\varepsilon|L_1|.
+  \label{eq:3-16}
+\end{equation}
+再次由定理 \ref{thm:3-10}, 得到
+\[
+  fl(\mathbf{c}-\tilde{x}_1\mathbf{v}_1)
+  =fl\bigl(\mathbf{c}-fl(\tilde{x}_1\mathbf{v}_1)\bigr)
+  =(I+D_\gamma)^{-1}(\mathbf{c}-\tilde{x}_1\mathbf{v}_1-\tilde{x}_1D_\delta\mathbf{v}_1),
+\]
+其中
+\[
+  D_\gamma=\diag(\gamma_2,\ldots,\gamma_n),\qquad
+  D_\delta=\diag(\delta_2,\ldots,\delta_n),
+\]
+且
+\[
+  |\gamma_i|,\,|\delta_i|\leqslant\mu_\varepsilon,\qquad i=2,\ldots,n.
+\]
+因此
+\[
+  \tilde{x}_1\mathbf{v}_1+\tilde{x}_1D_\delta\mathbf{v}_1
+  +(I+D_\gamma)(L_1+H_1)\tilde{\mathbf{y}}=\mathbf{c},
+\]
+从而
+\[
+  (L+H)\tilde{\mathbf{x}}=\mathbf{b},
+\]
+其中
+\[
+  H=
+  \begin{bmatrix}
+    \delta_1l_{11} & \mathbf{0}\\
+    D_\delta\mathbf{v}_1 & H_1+D_\gamma(L_1+H_1)
+  \end{bmatrix}.
+\]
+利用 \eqref{eq:3-15}, \eqref{eq:3-16} 与条件 $1.01n\mu_\varepsilon\leqslant0.01$, 有
+\[
+  \begin{aligned}
+    |H|
+    &\leqslant
+    \begin{bmatrix}
+      |\delta_1|\cdot|l_{11}| & \mathbf{0}\\
+      |D_\delta|\cdot|\mathbf{v}_1| & |H_1|+|D_\gamma|\bigl(|L_1|+|H_1|\bigr)
+    \end{bmatrix}\\
+    &\leqslant
+    \begin{bmatrix}
+      \mu_\varepsilon|l_{11}| & \mathbf{0}\\
+      \mu_\varepsilon|\mathbf{v}_1| & |H_1|+\mu_\varepsilon\bigl(|L_1|+|H_1|\bigr)
+    \end{bmatrix}\\
+    &\leqslant\mu_\varepsilon
+    \begin{bmatrix}
+      |l_{11}| & \mathbf{0}\\
+      |\mathbf{v}_1| & \bigl[1.01(n-1)+1+1.01(n-1)\mu_\varepsilon\bigr]|L_1|
+    \end{bmatrix}\\
+    &\leqslant1.01n\mu_\varepsilon|L|.
+  \end{aligned}
+\]
+证毕.
+\end{proof}
+
+于是得到本节的主要定理.
+
+\begin{theorem}
+\label{thm:3-12}
+设 $A\in\R^{n\times n}$ 为非奇异矩阵, 元素为浮点数, 且 $1.01n\mu_\varepsilon\leqslant0.01$. 若用带部分主元选取的高斯消去法求解 $A\mathbf{x}=\mathbf{b}$, 则所得计算解 $\tilde{\mathbf{x}}$ 满足
+\[
+  (A+\delta A)\tilde{\mathbf{x}}=\mathbf{b},
+\]
+其中
+\begin{equation}
+  \norm{\delta A}_\infty\leqslant\mu_\varepsilon\bigl(3n+5.04n^3\rho\bigr)\norm{A}_\infty,
+  \label{eq:3-17}
+\end{equation}
+而\newterm{growthfactor}{增长因子}{growth factor}为
+\[
+  \rho\equiv\frac{1}{\norm{A}_\infty}\max_{i,j,k}\abs{a_{ij}^{(k)}}.
+\]
+\end{theorem}
+
+\begin{proof}
+利用带部分主元选取的高斯消去法, 得到如下两个三角方程组:
+\[
+  \widetilde{L}\mathbf{y}=P\mathbf{b},\qquad\widetilde{U}\mathbf{x}=\mathbf{y}.
+\]
+由引理 \ref{lem:3-2}, 计算解 $\tilde{\mathbf{x}}$ 应满足
+\[
+  (\widetilde{L}+F)(\widetilde{U}+G)\tilde{\mathbf{x}}=P\mathbf{b},
+\]
+即
+\begin{equation}
+  \bigl(\widetilde{L}\widetilde{U}+F\widetilde{U}+\widetilde{L}G+FG\bigr)\tilde{\mathbf{x}}=P\mathbf{b},
+  \label{eq:3-18}
+\end{equation}
+其中
+\begin{equation}
+  |F|\leqslant1.01n\mu_\varepsilon|\widetilde{L}|,\qquad
+  |G|\leqslant1.01n\mu_\varepsilon|\widetilde{U}|.
+  \label{eq:3-19}
+\end{equation}
+把 $\widetilde{L}\widetilde{U}=PA+E$ 代入 \eqref{eq:3-18}, 得
+\[
+  (A+\delta A)\tilde{\mathbf{x}}=\mathbf{b},
+\]
+其中
+\[
+  \delta A=P^T\bigl(E+F\widetilde{U}+\widetilde{L}G+FG\bigr).
+\]
+利用 \eqref{eq:3-19}, 推论 \ref{cor:3-3} 与条件 $1.01n\mu_\varepsilon\leqslant0.01$, 有
+\begin{equation}
+  \begin{aligned}
+    |\delta A|
+    &\leqslant P^T\bigl(3n\mu_\varepsilon|PA|+(3n+2.04n)\mu_\varepsilon
+      |\widetilde{L}|\cdot|\widetilde{U}|\bigr)\\
+    &=n\mu_\varepsilon P^T\bigl(3|PA|+5.04|\widetilde{L}|\cdot|\widetilde{U}|\bigr).
+  \end{aligned}
+  \label{eq:3-20}
+\end{equation}
+再次由推论 \ref{cor:3-3}, $\widetilde{L}$ 中各元素的绝对值均不超过 $1$. 因此
+\begin{equation}
+  \norm{\widetilde{L}}_\infty\leqslant n.
+  \label{eq:3-21}
+\end{equation}
+现在定义
+\[
+  \rho\equiv\frac{1}{\norm{A}_\infty}\max_{i,j,k}\abs{a_{ij}^{(k)}},
+\]
+于是有
+\begin{equation}
+  \norm{\widetilde{U}}_\infty\leqslant n\rho\norm{A}_\infty.
+  \label{eq:3-22}
+\end{equation}
+把 \eqref{eq:3-21} 与 \eqref{eq:3-22} 代入 \eqref{eq:3-20}, 即得 \eqref{eq:3-17}. 证毕.
+\end{proof}
+
+\begin{mremark}
+与由给定数据引起的初始误差相比, $\norm{\delta A}_\infty$ 通常非常小. 因此, 带部分主元选取的高斯消去法是数值稳定的. 带完全主元选取的高斯消去法中的增长因子可在 \cite{src:33,src:38} 中找到.
+\end{mremark}
+
+\begin{exercises}
+  \item 设
+  \[
+    A=
+    \begin{bmatrix}
+      1 & 0.999999\\
+      0.999999 & 1
+    \end{bmatrix}.
+  \]
+  计算 $A^{-1}$, $\det(A)$ 以及 $A$ 的条件数.
+
+  \item 证明 $\norm{AB}_F\leqslant\norm{A}_2\norm{B}_F$ 与 $\norm{AB}_F\leqslant\norm{A}_F\norm{B}_2$.
+
+  \item 证明: 对任意方阵 $A$, 有 $\norm{A}_2^2\leqslant\norm{A}_1\norm{A}_\infty$.
+
+  \item 证明
+  \[
+    \norm{
+    \begin{bmatrix}
+      A_{11} & 0\\
+      0 & A_{22}
+    \end{bmatrix}}_2
+    \leqslant
+    \norm{
+    \begin{bmatrix}
+      A_{11} & A_{12}\\
+      A_{21} & A_{22}
+    \end{bmatrix}}_2.
+  \]
+
+  \item 设 $A$ 非奇异. 证明
+  \[
+    \norm{A^{-1}}_2^{-1}=\min_{\norm{\mathbf{x}}_2=1}\norm{A\mathbf{x}}_2.
+  \]
+
+  \item 证明: 若 $S$ 为实矩阵且 $S=-S^T$, 则 $I-S$ 非奇异, 且矩阵
+  \[
+    (I-S)^{-1}(I+S)
+  \]
+  是正交矩阵. 这个矩阵称为 $S$ 的 Cayley 变换.
+
+  \item 证明: 若 $A$ 与 $A+E$ 均非奇异, 则
+  \[
+    \frac{\norm{(A+E)^{-1}-A^{-1}}}{\norm{A^{-1}}}
+    \leqslant\norm{(A+E)^{-1}}\cdot\norm{E}.
+  \]
+
+  \item 设 $A\in\R^{n\times n}$ 非奇异, 且 $\mathbf{x},\mathbf{y},\mathbf{z}\in\R^n$ 满足 $A\mathbf{x}=\mathbf{b}$ 与 $A\mathbf{y}=\mathbf{b}+\mathbf{z}$. 证明
+  \[
+    \frac{\norm{\mathbf{z}}_2}{\norm{A}_2}
+    \leqslant\norm{\mathbf{x}-\mathbf{y}}_2
+    \leqslant\norm{A^{-1}}_2\norm{\mathbf{z}}_2.
+  \]
+
+  \item 设 $A=[a_{ij}]$ 为 $m\times n$ 矩阵. 定义
+  \[
+    \triplenorm{A}_l=\max_{i,j}\abs{a_{ij}}.
+  \]
+  $\triplenorm{\cdot}_l$ 是矩阵范数吗? 说明理由.
+
+  \item 证明: 若 $X\in\C^{n\times n}$ 非奇异, 则 $\norm{A}_X=\norm{X^{-1}AX}_2$ 定义了一个矩阵范数.
+
+  \item 设 $A=LDL^T\in\R^{n\times n}$ 为对称正定矩阵, 且
+  \[
+    D=\diag(d_{11},\ldots,d_{nn}).
+  \]
+  证明
+  \[
+    \kappa_2(A)\geqslant\frac{\max_i\{d_{ii}\}}{\min_i\{d_{ii}\}}.
+  \]
+
+  \item 验证
+  \[
+    \norm{\mathbf{x}\mathbf{y}^*}_F=\norm{\mathbf{x}\mathbf{y}^*}_2
+    =\norm{\mathbf{x}}_2\norm{\mathbf{y}}_2
+  \]
+  对任意 $\mathbf{x},\mathbf{y}\in\C^n$ 成立.
+
+  \item 证明: 若 $\mathbf{0}\neq\mathbf{v}\in\R^n$ 且 $E\in\R^{n\times n}$, 则
+  \[
+    \norm{E\left(I-\frac{\mathbf{v}\mathbf{v}^T}{\mathbf{v}^T\mathbf{v}}\right)}_F^2
+    =\norm{E}_F^2-\frac{\norm{E\mathbf{v}}_2^2}{\mathbf{v}^T\mathbf{v}}.
+  \]
+
+  \item 设 $A=[a_{ij}]\in\R^{n\times n}$, $\mathbf{x}=[x_1,\ldots,x_n]^T\in\R^n$. 证明
+  \[
+    |A|\cdot|\mathbf{x}|\leqslant\tau\norm{A}_\infty|\mathbf{x}|,
+  \]
+  其中 $\tau=\max_i|x_i|/\min_i|x_i|$.
+
+  \item 证明 Sherman-Morrison-Woodbury 公式. 设 $U,V$ 为 $n\times k$ 矩阵, $k\leqslant n$, $A$ 为 $n\times n$ 矩阵. 则
+  \[
+    T=I+V^TA^{-1}U
+  \]
+  非奇异当且仅当 $A+UV^T$ 非奇异. 此时有
+  \[
+    (A+UV^T)^{-1}=A^{-1}-A^{-1}UT^{-1}V^TA^{-1}.
+  \]
+\end{exercises}

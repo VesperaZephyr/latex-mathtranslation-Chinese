@@ -1,0 +1,820 @@
+% chapters/ch02.tex —— 第 2 章：高斯消去法
+% 源书：Chapter 2 Gaussian Elimination，书页 9–22（物理页 23–36）
+% 公式编号 (2.1)–(2.6)；定理 2.1–2.4；定义 2.1；引理 2.1；算法 2.1–2.4；习题 1–11
+\chapter{高斯消去法}
+\label{ch:gaussian}
+
+线性方程组的求解问题在 NLA 中处于核心地位. 求解线性方程组一般有两类方法: 一类称为\newterm{directmethod}{直接法}{direct method}, 另一类称为\newterm{iterativemethod}{迭代法}{iterative method}. 使用直接法, 可在有限步内得到计算问题在精确算术下的精确解; 使用迭代法, 在有限步内只能得到计算问题的近似解.
+
+本章介绍求解一般线性方程组的一种基本直接法——\newterm{gaussianelimination}{高斯消去法}{Gaussian elimination}. 通常, 高斯消去法用于求解规模中等, 无特殊结构的稠密线性方程组.
+
+\section{三角线性方程组与 $LU$ 分解}
+
+我们先研究三角线性方程组.
+
+\subsection{三角线性方程组}
+\label{subsec:2-1-1}
+
+考虑如下非奇异下三角线性方程组
+\begin{equation}
+  L\mathbf{y}=\mathbf{b},
+  \label{eq:2-1}
+\end{equation}
+其中 $\mathbf{b}=[b_1,b_2,\cdots,b_n]^T\in\R^n$ 为已知向量, $\mathbf{y}=[y_1,y_2,\cdots,y_n]^T$ 为未知向量, 而 $L=[l_{ij}]\in\R^{n\times n}$ 由下式给出
+\[
+  L=
+  \begin{bmatrix}
+    l_{11} & 0      & \cdots & \cdots & 0 \\
+    l_{21} & l_{22} & 0      & \cdots & \vdots \\
+    l_{31} & l_{32} & l_{33} & \ddots & \vdots \\
+    \vdots & \vdots & \vdots & \ddots & 0 \\
+    l_{n1} & l_{n2} & l_{n3} & \cdots & l_{nn}
+  \end{bmatrix}
+\]
+且 $l_{ii}\neq0\ (i=1,2,\cdots,n)$. 由 \eqref{eq:2-1} 的第一个方程, 有
+\[
+  l_{11}y_1=b_1,
+\]
+从而
+\[
+  y_1=\frac{b_1}{l_{11}}.
+\]
+类似地, 由 \eqref{eq:2-1} 的第二个方程, 有
+\[
+  y_2=\frac{1}{l_{22}}\bigl(b_2-l_{21}y_1\bigr).
+\]
+一般地, 若已求得 $y_1,y_2,\cdots,y_{i-1}$, 则由 \eqref{eq:2-1} 的第 $i$ 个方程, 有
+\[
+  y_i=\frac{1}{l_{ii}}\left(b_i-\sum_{j=1}^{i-1}l_{ij}y_j\right).
+\]
+该算法称为\newterm{forwardsubstitution}{前代法}{forward substitution}, 需要 $\mathcal{O}(n^2)$ 次运算.
+
+现在考虑如下非奇异上三角线性方程组
+\begin{equation}
+  U\mathbf{x}=\mathbf{y},
+  \label{eq:2-2}
+\end{equation}
+其中 $\mathbf{x}=[x_1,x_2,\ldots,x_n]^T$ 为未知向量, 而 $U\in\R^{n\times n}$ 由下式给出
+\[
+  U=
+  \begin{bmatrix}
+    u_{11} & u_{12} & u_{13} & \cdots & u_{1n} \\
+    0      & u_{22} & u_{23} & \cdots & \vdots \\
+    0      & 0      & u_{33} & \ddots & \vdots \\
+    \vdots & \vdots & \ddots & \ddots & \vdots \\
+    0      & \cdots & \cdots & 0      & u_{nn}
+  \end{bmatrix}
+\]
+且 $u_{ii}\neq0\ (i=1,2,\ldots,n)$. 从 \eqref{eq:2-2} 的最后一个方程出发, 可逐步求得 $x_n,x_{n-1},\ldots,x_1$. 其中 $x_n=y_n/u_{nn}$, 而 $x_i$ 由下式给出
+\[
+  x_i=\frac{1}{u_{ii}}\left(y_i-\sum_{j=i+1}^{n}u_{ij}x_j\right)
+\]
+对 $i=n-1,\ldots,1$ 计算. 该算法称为\newterm{backwardsubstitution}{回代法}{backward substitution}, 同样需要 $\mathcal{O}(n^2)$ 次运算.
+
+对于一般线性方程组
+\begin{equation}
+  A\mathbf{x}=\mathbf{b},
+  \label{eq:2-3}
+\end{equation}
+其中 $A\in\R^{n\times n}$ 与 $\mathbf{b}\in\R^n$ 为已知. 若能把矩阵 $A$ 分解为
+\[
+  A=LU,
+\]
+其中 $L$ 为下三角矩阵, $U$ 为上三角矩阵, 则可通过以下两个步骤求出 \eqref{eq:2-3} 的解:
+
+\begin{parenlist}
+  \item 用前代法求出 $L\mathbf{y}=\mathbf{b}$ 的解 $\mathbf{y}$.
+  \item 用回代法求出 $U\mathbf{x}=\mathbf{y}$ 的解 $\mathbf{x}$.
+\end{parenlist}
+
+现在面临的问题是如何把矩阵 $A$ 分解为 $A=LU$. 为此引入高斯变换矩阵.
+
+\subsection{高斯变换矩阵}
+
+令
+\[
+  L_k=I-\mathbf{l}_k\mathbf{e}_k^T,
+\]
+其中 $I\in\R^{n\times n}$ 为单位矩阵, $\mathbf{l}_k=[0,\ldots,0,l_{k+1,k},\ldots,l_{nk}]^T\in\R^n$, 而 $\mathbf{e}_k\in\R^n$ 为第 $k$ 个单位向量. 则对任意 $k$,
+\[
+  L_k=
+  \begin{bmatrix}
+    1      & 0      & \cdots & \cdots & \cdots & 0 \\
+    0      & \ddots &        &        &        & \vdots \\
+    \vdots &        & 1      &        &        & \vdots \\
+    \vdots &        & -l_{k+1,k} & 1  &        & \vdots \\
+    \vdots &        & \vdots &        & \ddots & 0 \\
+    0      & \cdots & -l_{nk}& \cdots & 0      & 1
+  \end{bmatrix}
+\]
+称为\newterm{gaussiantransform}{高斯变换矩阵}{Gaussian transform matrix}. 这样的矩阵是单位下三角矩阵. 这里指出, \newterm{unittriangular}{单位三角矩阵}{unit triangular matrix}指对角元全为 $1$ 的三角矩阵. 对任意给定向量
+\[
+  \mathbf{x}=[x_1,x_2,\ldots,x_n]^T\in\R^n,
+\]
+有
+\[
+  \begin{aligned}
+    L_k\mathbf{x}
+    &=[x_1,\ldots,x_k,x_{k+1}-x_kl_{k+1,k},\ldots,x_n-x_kl_{nk}]^T\\
+    &=[x_1,\ldots,x_k,0,\ldots,0]^T
+  \end{aligned}
+\]
+只要取
+\[
+  l_{ik}=\frac{x_i}{x_k},\qquad i=k+1,\ldots,n
+\]
+且 $x_k\neq0$. 注意 $\mathbf{e}_k^T\mathbf{l}_k=0$, 容易验证
+\[
+  L_k^{-1}=I+\mathbf{l}_k\mathbf{e}_k^T.
+\]
+
+对给定矩阵 $A\in\R^{n\times n}$, 有
+\[
+  L_kA=(I-\mathbf{l}_k\mathbf{e}_k^T)A=A-\mathbf{l}_k(\mathbf{e}_k^TA)
+\]
+以及
+\[
+  \rank\bigl(\mathbf{l}_k(\mathbf{e}_k^TA)\bigr)=1.
+\]
+因此, $L_kA$ 是矩阵 $A$ 的\newterm{rankonemodification}{秩一修正}{rank-one modification}.
+
+\subsection{$LU$ 分解的计算}
+
+考虑下面这个简单例子. 令
+\[
+  A=
+  \begin{bmatrix}
+    1 & 5 & 9 \\
+    2 & 4 & 7 \\
+    3 & 3 & 10
+  \end{bmatrix}.
+\]
+用高斯变换矩阵
+\[
+  L_1=
+  \begin{bmatrix}
+    1  & 0 & 0 \\
+    -2 & 1 & 0 \\
+    -3 & 0 & 1
+  \end{bmatrix},
+\]
+得到
+\[
+  L_1A=
+  \begin{bmatrix}
+    1 & 5  & 9  \\
+    0 & -6 & -11\\
+    0 & -12& -17
+  \end{bmatrix}.
+\]
+接着用高斯变换矩阵
+\[
+  L_2=
+  \begin{bmatrix}
+    1 & 0  & 0 \\
+    0 & 1  & 0 \\
+    0 & -2 & 1
+  \end{bmatrix},
+\]
+得到
+\[
+  L_2(L_1A)\equiv U=
+  \begin{bmatrix}
+    1 & 5  & 9  \\
+    0 & -6 & -11\\
+    0 & 0  & 5
+  \end{bmatrix}.
+\]
+因而最终有
+\[
+  A=LU,
+\]
+其中
+\[
+  L\equiv(L_2L_1)^{-1}=L_1^{-1}L_2^{-1}=
+  \begin{bmatrix}
+    1 & 0 & 0 \\
+    2 & 1 & 0 \\
+    3 & 2 & 1
+  \end{bmatrix}.
+\]
+
+对一般的 $n\times n$ 矩阵 $A$, 可用 $n-1$ 个高斯变换矩阵 $L_1,L_2,\ldots,L_{n-1}$, 使 $L_{n-1}\cdots L_1A$ 为上三角矩阵. 事实上, 令 $A^{(0)}\equiv A$, 并设已求得 $k-1$ 个高斯变换矩阵 $L_1,\ldots,L_{k-1}\in\R^{n\times n}$, 使得
+\[
+  A^{(k-1)}=L_{k-1}\cdots L_1A=
+  \begin{bmatrix}
+    A_{11}^{(k-1)} & A_{12}^{(k-1)}\\
+    \mathbf{0}     & A_{22}^{(k-1)}
+  \end{bmatrix},
+\]
+其中 $A_{11}^{(k-1)}$ 为 $(k-1)\times(k-1)$ 上三角矩阵, 且
+\[
+  A_{22}^{(k-1)}=
+  \begin{bmatrix}
+    a_{kk}^{(k-1)} & \cdots & a_{kn}^{(k-1)}\\
+    \vdots         & \ddots & \vdots\\
+    a_{nk}^{(k-1)} & \cdots & a_{nn}^{(k-1)}
+  \end{bmatrix}.
+\]
+若 $a_{kk}^{(k-1)}\neq0$, 则可取高斯变换矩阵
+\[
+  L_k=I-\mathbf{l}_k\mathbf{e}_k^T,
+\]
+其中
+\[
+  \mathbf{l}_k=[0,\ldots,0,l_{k+1,k},\ldots,l_{nk}]^T,
+\]
+而
+\[
+  l_{ik}=\frac{a_{ik}^{(k-1)}}{a_{kk}^{(k-1)}},\qquad i=k+1,\ldots,n,
+\]
+使 $L_kA^{(k-1)}$ 第 $k$ 列的最后 $n-k$ 个元素变为零. 于是有
+\[
+  A^{(k)}\equiv L_kA^{(k-1)}=
+  \begin{bmatrix}
+    A_{11}^{(k)} & A_{12}^{(k)}\\
+    \mathbf{0}   & A_{22}^{(k)}
+  \end{bmatrix},
+\]
+其中 $A_{11}^{(k)}$ 为 $k\times k$ 上三角矩阵. 经过 $n-1$ 步后, 得到所需的 $A^{(n-1)}$, 它是上三角矩阵. 令
+\[
+  L=(L_{n-1}\cdots L_1)^{-1},\qquad U=A^{(n-1)},
+\]
+则有 $A=LU$. 现在说明 $L$ 是单位下三角矩阵. 注意当 $j<i$ 时 $\mathbf{e}_j^T\mathbf{l}_i=0$, 故
+\[
+  \begin{aligned}
+    L
+    &=L_1^{-1}\cdots L_{n-1}^{-1}\\
+    &=(I+\mathbf{l}_1\mathbf{e}_1^T)(I+\mathbf{l}_2\mathbf{e}_2^T)\cdots(I+\mathbf{l}_{n-1}\mathbf{e}_{n-1}^T)\\
+    &=I+\mathbf{l}_1\mathbf{e}_1^T+\cdots+\mathbf{l}_{n-1}\mathbf{e}_{n-1}^T\\
+    &=I+[\mathbf{l}_1,\mathbf{l}_2,\ldots,\mathbf{l}_{n-1},\mathbf{0}]\\
+    &=
+    \begin{bmatrix}
+      1      & 0      & \cdots & 0      & 0 \\
+      l_{21} & 1      & 0      & \cdots & 0 \\
+      l_{31} & l_{32} & 1      & \ddots & \vdots \\
+      \vdots & \vdots & \vdots & \ddots & 0 \\
+      l_{n1} & l_{n2} & l_{n3} & \cdots & 1
+    \end{bmatrix}.
+  \end{aligned}
+\]
+上述 $LU$ 分解的计算过程称为高斯消去法. 于是有如下算法.
+
+\begin{algorithm}{高斯消去法}
+  \label{alg:2-1}
+\[
+  \left\{
+  \begin{array}{ll}
+    \textbf{for} & k=1:n-1\\
+    & A(k+1:n,k)=A(k+1:n,k)/A(k,k)\\
+    & A(k+1:n,k+1:n)=A(k+1:n,k+1:n)\\
+    & \hphantom{A(k+1:n,k+1:n)={}}-A(k+1:n,k)A(k,k+1:n)\\
+    \textbf{end}
+  \end{array}
+  \right.
+\]
+\end{algorithm}
+
+高斯消去法的运算量为
+\[
+  \begin{aligned}
+    \sum_{k=1}^{n-1}\Bigl((n-k)+2(n-k)^2\Bigr)
+    &=\frac{n(n-1)}{2}+\frac{n(n-1)(2n-1)}{3}\\
+    &=\frac{2}{3}n^3+\mathcal{O}(n^2)=\mathcal{O}(n^3).
+  \end{aligned}
+\]
+注意, 高斯消去法要求 $a_{kk}^{(k-1)}\ (k=1,\ldots,n-1)$ 非零. 我们有如下定理.
+
+\begin{theorem}
+\label{thm:2-1}
+元素 $a_{ii}^{(i-1)}\neq0\ (i=1,\ldots,k)$ 当且仅当 $A$ 的所有\newterm{leadingprincipal}{顺序主子矩阵}{leading principal submatrix} $A_i\ (i=1,\ldots,k)$ 非奇异.
+\end{theorem}
+
+\begin{proof}
+对 $k$ 作归纳. $k=1$ 时显然成立. 设结论对直到 $k-1$ 的情形成立. 我们要证明: 若 $A_1,\ldots,A_{k-1}$ 非奇异, 则
+\[
+  A_k\ \text{非奇异}\iff a_{kk}^{(k-1)}\neq0.
+\]
+由假设知
+\[
+  a_{ii}^{(i-1)}\neq0,\qquad i=1,\ldots,k-1.
+\]
+用 $k-1$ 个高斯变换矩阵 $L_1,\ldots,L_{k-1}$, 得到
+\begin{equation}
+  A^{(k-1)}=L_{k-1}\cdots L_1A=
+  \begin{bmatrix}
+    A_{11}^{(k-1)} & A_{12}^{(k-1)}\\
+    \mathbf{0}     & A_{22}^{(k-1)}
+  \end{bmatrix},
+  \label{eq:2-4}
+\end{equation}
+其中 $A_{11}^{(k-1)}$ 为对角元 $a_{ii}^{(i-1)}\ (i=1,\ldots,k-1)$ 非零的上三角矩阵. 因此 $A^{(k-1)}$ 的第 $k$ 个顺序主子矩阵具有如下形式
+\[
+  \begin{bmatrix}
+    A_{11}^{(k-1)} & *\\
+    \mathbf{0}     & a_{kk}^{(k-1)}
+  \end{bmatrix}.
+\]
+记 $(L_1)_k,\ldots,(L_{k-1})_k$ 分别为 $L_1,\ldots,L_{k-1}$ 的第 $k$ 个顺序主子矩阵. 利用 \eqref{eq:2-4}, 得到
+\[
+  (L_{k-1})_k\cdots(L_1)_kA_k=
+  \begin{bmatrix}
+    A_{11}^{(k-1)} & *\\
+    \mathbf{0}     & a_{kk}^{(k-1)}
+  \end{bmatrix}.
+\]
+注意 $L_i\ (i=1,\ldots,k-1)$ 为单位下三角矩阵, 立即可知
+\[
+  \det(A_k)=a_{kk}^{(k-1)}\det\bigl(A_{11}^{(k-1)}\bigr)\neq0
+\]
+当且仅当 $a_{kk}^{(k-1)}\neq0$.
+\end{proof}
+
+于是有
+
+\begin{theorem}
+\label{thm:2-2}
+若矩阵 $A\in\R^{n\times n}$ 的所有顺序主子矩阵 $A_i\ (i=1,\cdots,n)$ 均非奇异, 则 $A$ 的 $LU$ 分解存在且唯一.
+\end{theorem}
+
+\section{带主元选取的 $LU$ 分解}
+
+在研究主元选取技巧之前, 先看下面这个简单例子:
+\[
+  \begin{bmatrix}
+    0.3\times10^{-11} & 1\\
+    1                 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+    x_1\\ x_2
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    0.7\\ 0.9
+  \end{bmatrix}.
+\]
+若用 10 位十进制浮点算术施行高斯消去法, 则得到
+\[
+  \widehat{L}=
+  \begin{bmatrix}
+    1 & 0\\
+    0.3333333333\times10^{12} & 1
+  \end{bmatrix}
+\]
+以及
+\[
+  \widehat{U}=
+  \begin{bmatrix}
+    0.3\times10^{-11} & 1\\
+    0 & -0.3333333333\times10^{12}
+  \end{bmatrix}.
+\]
+于是计算解为
+\[
+  \hat{\mathbf{x}}=[0.0000000000,\ 0.7000000000]^T,
+\]
+与精确解
+\[
+  \mathbf{x}=[0.20000000000006\ldots,\ 0.69999999999994\ldots]^T
+\]
+相比, 这个结果并不好.
+
+若仅交换第一个方程与第二个方程, 则得到
+\[
+  \begin{bmatrix}
+    1                 & 1\\
+    0.3\times10^{-11} & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+    x_1\\ x_2
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    0.9\\ 0.7
+  \end{bmatrix}.
+\]
+再次用 10 位十进制浮点算术施行高斯消去法, 得到
+\[
+  \widehat{L}=
+  \begin{bmatrix}
+    1 & 0\\
+    0.3\times10^{-11} & 1
+  \end{bmatrix},
+  \qquad
+  \widehat{U}=
+  \begin{bmatrix}
+    1 & 1\\
+    0 & 1
+  \end{bmatrix}.
+\]
+于是计算解为
+\[
+  \hat{\mathbf{x}}=[0.2000000000,\ 0.7000000000]^T,
+\]
+这个结果很好. 可见需要把置换引入高斯消去法. 先定义置换矩阵.
+
+\begin{definition}
+\label{def:2-1}
+\newterm{permutationmatrix}{置换矩阵}{permutation matrix} $P$ 是行经过置换的单位矩阵.
+\end{definition}
+
+置换矩阵的重要性质包含在下面的引理中. 其证明是直接的.
+
+\begin{lemma}
+\label{lem:2-1}
+设 $P,P_1,P_2\in\R^{n\times n}$ 为置换矩阵, $X\in\R^{n\times n}$. 则
+\begin{romanlist}
+  \item $PX$ 等于把 $X$ 的行作相应置换所得矩阵; $XP$ 等于把 $X$ 的列作相应置换所得矩阵.
+  \item $P^{-1}=P^T$.
+  \item $\det(P)=\pm1$.
+  \item $P_1\cdot P_2$ 也是置换矩阵.
+\end{romanlist}
+\end{lemma}
+
+现在介绍本节的主要定理.
+
+\begin{theorem}
+\label{thm:2-3}
+若 $A$ 非奇异, 则存在置换矩阵 $P_1$ 与 $P_2$, 单位下三角矩阵 $L$ 以及非奇异上三角矩阵 $U$, 使得
+\[
+  P_1AP_2=LU.
+\]
+其中 $P_1$ 与 $P_2$ 只需其一.
+\end{theorem}
+
+\begin{proof}
+对维数 $n$ 作归纳. $n=1$ 时显然成立. 设结论对 $n-1$ 成立. 若 $A$ 非奇异, 则它必有非零元素. 选取置换矩阵 $P_1'$ 与 $P_2'$, 使 $P_1'AP_2'$ 的 $(1,1)$ 位置非零. 现在写出所求的分解并对未知分量求解:
+\begin{align}
+  P_1'AP_2'
+  &=
+  \begin{bmatrix}
+    a_{11} & A_{12}\\
+    A_{21} & A_{22}
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    1      & \mathbf{0}\\
+    L_{21} & I
+  \end{bmatrix}\cdot
+  \begin{bmatrix}
+    u_{11} & U_{12}\\
+    \mathbf{0} & \widetilde{A}_{22}
+  \end{bmatrix}\notag\\
+  &=
+  \begin{bmatrix}
+    u_{11} & U_{12}\\
+    L_{21}u_{11} & L_{21}U_{12}+\widetilde{A}_{22}
+  \end{bmatrix},
+  \label{eq:2-5}
+\end{align}
+其中 $A_{22},\widetilde{A}_{22}$ 为 $(n-1)\times(n-1)$ 矩阵, 而 $L_{21},U_{12}^T$ 为 $(n-1)\times1$ 矩阵.
+
+求解该 $2\times2$ 分块分解的各分量, 得到
+\[
+  u_{11}=a_{11}\neq0,\qquad U_{12}=A_{12},
+\]
+以及
+\[
+  L_{21}u_{11}=A_{21},\qquad A_{22}=L_{21}U_{12}+\widetilde{A}_{22}.
+\]
+因此得到
+\[
+  L_{21}=\frac{A_{21}}{a_{11}},\qquad
+  \widetilde{A}_{22}=A_{22}-L_{21}U_{12}.
+\]
+我们希望把归纳假设用于 $\widetilde{A}_{22}$, 但为此需验证
+\[
+  \det(\widetilde{A}_{22})\neq0.
+\]
+由于
+\[
+  \det(P_1'AP_2')=\pm\det(A)\neq0,
+\]
+并且
+\[
+  \begin{aligned}
+    \det(P_1'AP_2')
+    &=\det
+    \begin{bmatrix}
+      1      & \mathbf{0}\\
+      L_{21} & I
+    \end{bmatrix}\cdot
+    \det
+    \begin{bmatrix}
+      u_{11} & U_{12}\\
+      \mathbf{0} & \widetilde{A}_{22}
+    \end{bmatrix}\\
+    &=u_{11}\cdot\det(\widetilde{A}_{22}),
+  \end{aligned}
+\]
+可知
+\[
+  \det(\widetilde{A}_{22})\neq0.
+\]
+因此, 由归纳假设, 存在置换矩阵 $\widetilde{P}_1$ 与 $\widetilde{P}_2$, 使得
+\begin{equation}
+  \widetilde{P}_1\widetilde{A}_{22}\widetilde{P}_2=\widetilde{L}\widetilde{U},
+  \label{eq:2-6}
+\end{equation}
+其中 $\widetilde{L}$ 为单位下三角矩阵, $\widetilde{U}$ 为非奇异上三角矩阵. 把 \eqref{eq:2-6} 代入 \eqref{eq:2-5}, 得到
+\[
+  \begin{aligned}
+    P_1'AP_2'
+    &=
+    \begin{bmatrix}
+      1      & \mathbf{0}\\
+      L_{21} & I
+    \end{bmatrix}
+    \begin{bmatrix}
+      u_{11} & U_{12}\\
+      \mathbf{0} & \widetilde{P}_1^T\widetilde{L}\widetilde{U}\widetilde{P}_2^T
+    \end{bmatrix}\\
+    &=
+    \begin{bmatrix}
+      1      & \mathbf{0}\\
+      L_{21} & I
+    \end{bmatrix}
+    \begin{bmatrix}
+      1      & \mathbf{0}\\
+      \mathbf{0} & \widetilde{P}_1^T\widetilde{L}
+    \end{bmatrix}
+    \begin{bmatrix}
+      u_{11} & U_{12}\\
+      \mathbf{0} & \widetilde{U}\widetilde{P}_2^T
+    \end{bmatrix}\\
+    &=
+    \begin{bmatrix}
+      1      & \mathbf{0}\\
+      L_{21} & \widetilde{P}_1^T\widetilde{L}
+    \end{bmatrix}
+    \begin{bmatrix}
+      u_{11} & U_{12}\widetilde{P}_2\\
+      \mathbf{0} & \widetilde{U}
+    \end{bmatrix}
+    \begin{bmatrix}
+      1      & \mathbf{0}\\
+      \mathbf{0} & \widetilde{P}_2^T
+    \end{bmatrix}\\
+    &=
+    \begin{bmatrix}
+      1      & \mathbf{0}\\
+      \mathbf{0} & \widetilde{P}_1^T
+    \end{bmatrix}
+    \begin{bmatrix}
+      1      & \mathbf{0}\\
+      \widetilde{P}_1L_{21} & \widetilde{L}
+    \end{bmatrix}
+    \begin{bmatrix}
+      u_{11} & U_{12}\widetilde{P}_2\\
+      \mathbf{0} & \widetilde{U}
+    \end{bmatrix}
+    \begin{bmatrix}
+      1      & \mathbf{0}\\
+      \mathbf{0} & \widetilde{P}_2^T
+    \end{bmatrix},
+  \end{aligned}
+\]
+于是得到 $A$ 的所求分解:
+\[
+  \begin{aligned}
+    P_1AP_2
+    &=\left(
+      \begin{bmatrix}
+        1 & \mathbf{0}\\
+        \mathbf{0} & \widetilde{P}_1
+      \end{bmatrix}P_1'
+    \right)
+    A
+    \left(
+      P_2'
+      \begin{bmatrix}
+        1 & \mathbf{0}\\
+        \mathbf{0} & \widetilde{P}_2
+      \end{bmatrix}
+    \right)\\
+    &=
+    \begin{bmatrix}
+      1      & \mathbf{0}\\
+      \widetilde{P}_1L_{21} & \widetilde{L}
+    \end{bmatrix}
+    \begin{bmatrix}
+      u_{11} & U_{12}\widetilde{P}_2\\
+      \mathbf{0} & \widetilde{U}
+    \end{bmatrix}.
+  \end{aligned}
+\]
+\end{proof}
+
+这种行列交换策略称为\newterm{completepivoting}{全主元选取}{complete pivoting}. 于是有如下算法.
+
+\begin{algorithm}{全主元高斯消去法}
+  \label{alg:2-2}
+\[
+  \left\{
+  \begin{array}{ll}
+    \textbf{for} & k=1:n-1\\
+    & \text{choose } p,q,\ (k\leqslant p,q\leqslant n)\ \text{such that}\\
+    & \hphantom{\text{choose }}\bigl|A(p,q)\bigr|=\max\bigl\{\bigl|A(i,j)\bigr|:i=k:n,\ j=k:n\bigr\}\\
+    & A(k,1:n)\leftrightarrow A(p,1:n)\\
+    & A(1:n,k)\leftrightarrow A(1:n,q)\\
+    & \textbf{if}\ \ A(k,k)\neq0\\
+    & \hphantom{\textbf{if}\ \ }A(k+1:n,k)=A(k+1:n,k)/A(k,k)\\
+    & \hphantom{\textbf{if}\ \ }A(k+1:n,k+1:n)=A(k+1:n,k+1:n)\\
+    & \hphantom{\textbf{if}\ \ A(k+1:n,k+1:n)={}}-A(k+1:n,k)A(k,k+1:n)\\
+    & \textbf{else}\\
+    & \hphantom{\textbf{if}\ \ }\textbf{stop}\\
+    & \textbf{end}\\
+    \textbf{end}
+  \end{array}
+  \right.
+\]
+\end{algorithm}
+
+注意, 虽然带全主元选取的 $LU$ 分解能克服不带主元选取的 $LU$ 分解的某些缺点, 但全主元选取的代价很高. 通常, 为选取主元而比较矩阵元素就需要 $\mathcal{O}(n^3)$ 次运算.
+
+为了降低选主元的运算代价, 人们提出了带部分主元选取的 $LU$ 分解. 在部分主元选取中, 第 $k$ 步从子矩阵 $A_{22}^{(k-1)}$ 中选取满足
+\[
+  \left|a_{pk}^{(k-1)}\right|=\max\left\{\left|a_{ik}^{(k-1)}\right|:k\leqslant i\leqslant n\right\}
+\]
+的 $a_{pk}^{(k-1)}$. 当 $A$ 非奇异时, 带部分主元选取的 $LU$ 分解总可进行到底, 最终得到
+\[
+  PA=LU.
+\]
+在该算法中, 为选取主元而比较矩阵元素的运算量为 $\mathcal{O}(n^2)$. 于是有
+
+\begin{algorithm}{部分主元高斯消去法}
+  \label{alg:2-3}
+\[
+  \left\{
+  \begin{array}{ll}
+    \textbf{for} & k=1:n-1\\
+    & \text{choose } p,\ (k\leqslant p\leqslant n)\ \text{such that}\\
+    & \hphantom{\text{choose }}\bigl|A(p,k)\bigr|=\max\bigl\{\bigl|A(i,k)\bigr|:i=k:n\bigr\}\\
+    & A(k,1:n)\leftrightarrow A(p,1:n)\\
+    & \textbf{if}\ \ A(k,k)\neq0\\
+    & \hphantom{\textbf{if}\ \ }A(k+1:n,k)=A(k+1:n,k)/A(k,k)\\
+    & \hphantom{\textbf{if}\ \ }A(k+1:n,k+1:n)=A(k+1:n,k+1:n)\\
+    & \hphantom{\textbf{if}\ \ A(k+1:n,k+1:n)={}}-A(k+1:n,k)A(k,k+1:n)\\
+    & \textbf{else}\\
+    & \hphantom{\textbf{if}\ \ }\textbf{stop}\\
+    & \textbf{end}\\
+    \textbf{end}
+  \end{array}
+  \right.
+\]
+\end{algorithm}
+
+关于秩揭示 $LU$ 分解, 参见 \cite{src:40}. 关于带或不带主元选取的高斯消去法的概率分析, 可参见 \cite{src:34,src:81,src:99}.
+
+\section{Cholesky 分解}
+
+设 $A\in\R^{n\times n}$ 为\newterm{symmetricpositivedefinite}{对称正定}{symmetric positive definite}矩阵, 即它满足
+\[
+  A=A^T,\qquad \mathbf{x}^TA\mathbf{x}>0
+\]
+对所有 $\mathbf{x}\neq\mathbf{0}\in\R^n$ 成立. 我们有
+
+\begin{theorem}
+\label{thm:2-4}
+设 $A\in\R^{n\times n}$ 为对称正定矩阵. 则存在对角元为正的下三角矩阵 $L\in\R^{n\times n}$, 使得
+\[
+  A=LL^T.
+\]
+该分解称为\newterm{choleskyfactorization}{Cholesky 分解}{Cholesky factorization}.
+\end{theorem}
+
+\begin{proof}
+由于 $A$ 正定, $A$ 的所有主子矩阵都应正定. 由定理 \ref{thm:2-2}, 存在单位下三角矩阵 $\widetilde{L}$ 与上三角矩阵 $U$, 使得
+\[
+  A=\widetilde{L}U.
+\]
+令
+\[
+  D=\diag(u_{11},\ldots,u_{nn}),\qquad \widetilde{U}=D^{-1}U,
+\]
+其中 $u_{ii}>0\ (i=1,\ldots,n)$. 则有
+\[
+  \widetilde{U}^TD\widetilde{L}^T=A^T=A=\widetilde{L}D\widetilde{U}.
+\]
+因此
+\[
+  \widetilde{L}^T\widetilde{U}^{-1}=D^{-1}\widetilde{U}^{-T}\widetilde{L}D.
+\]
+注意 $\widetilde{L}^T\widetilde{U}^{-1}$ 是单位上三角矩阵, 而 $D^{-1}\widetilde{U}^{-T}\widetilde{L}D$ 是下三角矩阵. 故
+\[
+  \widetilde{L}^T\widetilde{U}^{-1}=I=D^{-1}\widetilde{U}^{-T}\widetilde{L}D,
+\]
+这说明 $\widetilde{U}=\widetilde{L}^T$. 从而
+\[
+  A=\widetilde{L}D\widetilde{L}^T.
+\]
+令
+\[
+  L=\widetilde{L}\cdot\diag\bigl(\sqrt{u_{11}},\ldots,\sqrt{u_{nn}}\bigr).
+\]
+最终得到
+\[
+  A=LL^T. \qedhere
+\]
+\end{proof}
+
+于是, 当矩阵 $A$ 对称正定时, 可通过以下三个步骤求方程组 $A\mathbf{x}=\mathbf{b}$ 的解:
+
+\begin{parenlist}
+  \item 求 $A$ 的 Cholesky 分解: $A=LL^T$.
+  \item 求 $L\mathbf{y}=\mathbf{b}$ 的解 $\mathbf{y}$.
+  \item 求 $L^T\mathbf{x}=\mathbf{y}$ 的解 $\mathbf{x}$.
+\end{parenlist}
+
+由定理 \ref{thm:2-4} 可知, Cholesky 分解不需要选取主元. 此外, 可通过比较 $A=LL^T$ 两端对应元素来直接计算 $L$. 于是有如下算法.
+
+\begin{algorithm}{Cholesky 分解}
+  \label{alg:2-4}
+\[
+  \left\{
+  \begin{array}{ll}
+    \textbf{for} & k=1:n\\
+    & A(k,k)=\sqrt{A(k,k)}\\
+    & A(k+1:n,k)=A(k+1:n,k)/A(k,k)\\
+    & \textbf{for}\ \ j=k+1:n\\
+    & \hphantom{\textbf{for}\ \ }A(j:n,j)=A(j:n,j)-A(j:n,k)A(j,k)\\
+    & \textbf{end}\\
+    \textbf{end}
+  \end{array}
+  \right.
+\]
+\end{algorithm}
+
+Cholesky 分解的运算量为 $n^3/3$.
+
+\begin{exercises}
+  \item 设 $S,T\in\R^{n\times n}$ 为上三角矩阵, 且
+  \[
+    (ST-\lambda I)\mathbf{x}=\mathbf{b}
+  \]
+  为非奇异方程组. 给出一个 $\mathcal{O}(n^2)$ 次运算的算法来计算 $\mathbf{x}$.
+
+  \item 证明对称正定矩阵 $A$ 的 $LDL^T$ 分解是唯一的, 其中 $L$ 为单位下三角矩阵.
+
+  \item 设 $A\in\R^{n\times n}$ 为对称正定矩阵. 给出一个算法, 计算上三角矩阵 $U\in\R^{n\times n}$, 使得 $A=UU^T$.
+
+  \item 设 $A=[a_{ij}]\in\R^{n\times n}$ 为\newterm{strictlydiagdominant}{严格对角占优}{strictly diagonally dominant}矩阵, 即
+  \[
+    |a_{kk}|>\sum_{\substack{j=1\\ j\neq k}}^{n}|a_{kj}|,\qquad k=1,2,\ldots,n.
+  \]
+  证明: 严格对角占优矩阵非奇异, 且对角元为正的严格对角占优对称矩阵正定.
+
+  \item 设
+  \[
+    A=
+    \begin{bmatrix}
+      A_{11} & A_{12}\\
+      A_{21} & A_{22}
+    \end{bmatrix}
+  \]
+  其中 $A_{11}$ 为 $k\times k$ 非奇异矩阵. 则
+  \[
+    S=A_{22}-A_{21}A_{11}^{-1}A_{12}
+  \]
+  称为 $A_{11}$ 在 $A$ 中的 \newterm{schurcomplement}{Schur 补}{Schur complement}. 证明: 经过 $k$ 步不带主元选取的高斯消去后, $A_{22}^{(k-1)}=S$.
+
+  \item 设 $A$ 为对称正定矩阵. 在高斯消去第一步结束时, 有
+  \[
+    \begin{bmatrix}
+      a_{11} & \mathbf{a}_1^T\\
+      \mathbf{0} & A_{22}
+    \end{bmatrix}.
+  \]
+  证明 $A_{22}$ 也是对称正定的.
+
+  \item 设 $A=[a_{ij}]\in\R^{n\times n}$ 为严格对角占优矩阵. 经过一步高斯消去后, 有
+  \[
+    \begin{bmatrix}
+      a_{11} & \mathbf{a}_1^T\\
+      \mathbf{0} & A_{22}
+    \end{bmatrix}.
+  \]
+  证明 $A_{22}$ 也是严格对角占优的.
+
+  \item 证明: 若 $PAQ=LU$ 由带主元选取的高斯消去法得到, 则 $|u_{ii}|\geqslant|u_{ij}|$ 对 $j=i+1,\ldots,n$ 成立.
+
+  \item 设 $H=A+\ii B$ 为 Hermite 正定矩阵, 其中 $A,B\in\R^{n\times n}$.
+  \subquest 证明矩阵
+  \[
+    C=
+    \begin{bmatrix}
+      A & -B\\
+      B & A
+    \end{bmatrix}
+  \]
+  为对称正定矩阵.
+  \subquest 如何仅用实数运算求解
+  \[
+    (A+\ii B)(\mathbf{x}+\ii\mathbf{y})=\mathbf{b}+\ii\mathbf{c},
+    \qquad \mathbf{x},\mathbf{y},\mathbf{b},\mathbf{c}\in\R^n\ ?
+  \]
+
+  \item 给出一个用带部分主元选取的高斯消去法求解三对角方程组的算法.
+
+  \item 证明: 若奇异矩阵 $A\in\R^{n\times n}$ 具有唯一的 $LU$ 分解, 则 $A_k$ 对 $k=1,2,\ldots,n-1$ 非奇异.
+\end{exercises}

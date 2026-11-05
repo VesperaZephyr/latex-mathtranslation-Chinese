@@ -1,0 +1,1209 @@
+% chapters/ch08.tex —— 第 8 章：对称特征值问题
+% 源书：Chapter 8 Symmetric Eigenvalue Problems，书页 121–143（物理页 135–157）
+% 公式 (8.1)–(8.7)；定理 8.1–8.9；引理 8.1；推论 8.1；算法 8.1–8.7；习题 1–12
+\chapter{对称特征值问题}
+\label{ch:sym-eig}
+
+对称特征值问题性质优良, 数学理论丰富, 是数值线性代数中最令人愉悦的课题之一. 本章研究对称特征值问题. 我们先介绍对称矩阵的一些基本谱性质, 然后讨论对称 QR 方法, Jacobi 方法与对分法, 最后介绍一种分治算法.
+
+\section{基本谱性质}
+\label{sec:8-1}
+
+我们先介绍任一对称矩阵 $A\in\R^{n\times n}$ 的特征值与特征向量的一些基本性质. 众所周知, 任一对称矩阵 $A$ 的特征值都是实数, 且 $A$ 的特征向量构成 $\R^n$ 的一组标准正交基.
+
+\begin{theorem}[谱分解定理 \cite{src:39}]
+\label{thm:8-1}
+设 $A\in\R^{n\times n}$ 为对称矩阵, 则存在正交矩阵 $Q\in\R^{n\times n}$ 使
+\[
+  Q^TAQ=\diag(\lambda_1,\ldots,\lambda_n).
+\]
+\end{theorem}
+
+对称矩阵的特征值具有基于所谓 \newterm{rayleighquot}{Rayleigh 商}{Rayleigh quotient}的极小极大性质:
+\[
+  \frac{\mathbf{x}^TA\mathbf{x}}{\mathbf{x}^T\mathbf{x}}.
+\]
+我们有下述定理, 其证明可在 \cite{src:32} 中找到.
+
+\begin{theorem}[Courant--Fischer 极小极大定理]
+\label{thm:8-2}
+设 $A\in\R^{n\times n}$ 为对称矩阵, 其特征值按如下次序排列:
+\[
+  \lambda_1\geqslant\cdots\geqslant\lambda_n.
+\]
+则
+\[
+  \lambda_i=\max_{\dim(S)=i}\min_{\mathbf{0}\neq\mathbf{u}\in S}
+  \frac{\mathbf{u}^TA\mathbf{u}}{\mathbf{u}^T\mathbf{u}}
+  =\min_{\dim(S)=n-i+1}\max_{\mathbf{0}\neq\mathbf{u}\in S}
+  \frac{\mathbf{u}^TA\mathbf{u}}{\mathbf{u}^T\mathbf{u}},
+\]
+其中 $S$ 是 $\R^n$ 的任一子空间.
+\end{theorem}
+
+下一个定理 \cite{src:95} 刻画对称矩阵特征值的敏感性.
+
+\begin{theorem}[Weyl--Wielandt--Hoffman 定理]
+\label{thm:8-3}
+设 $A,B\in\R^{n\times n}$ 为对称矩阵, 其特征值分别按如下次序排列:
+\[
+  \lambda_1(A)\geqslant\cdots\geqslant\lambda_n(A),
+  \qquad
+  \mu_1(B)\geqslant\cdots\geqslant\mu_n(B),
+\]
+则
+\[
+  \abs{\lambda_i(A)-\mu_i(B)}\leqslant\norm{A-B}_2,
+  \qquad i=1,2,\ldots,n,
+\]
+并且
+\[
+  \sum_{i=1}^{n}\bigl(\lambda_i(A)-\mu_i(B)\bigr)^2\leqslant\norm{A-B}_F^2.
+\]
+\end{theorem}
+
+定理 \ref{thm:8-3} 告诉我们, 任一对称矩阵的特征值都是良态的, 即 $A$ 的元素受到的微小扰动只会引起其特征值的微小变化.
+
+\begin{theorem}[Cauchy 交错定理 \cite{src:39,src:95}]
+\label{thm:8-4}
+设 $A\in\R^{n\times n}$ 对称, $A_r$ 表示 $A$ 的 $r$ 阶顺序主子矩阵, 则
+\[
+  \lambda_{r+1}(A_{r+1})\leqslant\lambda_r(A_r)\leqslant\lambda_r(A_{r+1})
+  \leqslant\cdots\leqslant\lambda_2(A_{r+1})\leqslant\lambda_1(A_r)
+  \leqslant\lambda_1(A_{r+1}),
+\]
+其中 $r=1,2,\ldots,n-1$.
+\end{theorem}
+
+至于特征向量的敏感性, 我们有下述定理 \cite{src:95}.
+
+\begin{theorem}
+\label{thm:8-5}
+设 $A,A+E\in\R^{n\times n}$ 为对称矩阵,
+\[
+  Q=[\mathbf{q}_1\mid Q_2]\in\R^{n\times n}
+\]
+为正交矩阵, 其中 $\mathbf{q}_1$ 是 $A$ 的单位特征向量. 把矩阵 $Q^TAQ$ 与 $Q^TEQ$ 分块如下:
+\[
+  Q^TAQ=\begin{bmatrix}
+    \lambda & \mathbf{0}\\
+    \mathbf{0} & D_{22}
+  \end{bmatrix},
+  \qquad
+  Q^TEQ=\begin{bmatrix}
+    \epsilon & \mathbf{e}^T\\
+    \mathbf{e} & E_{22}
+  \end{bmatrix},
+\]
+其中 $D_{22},E_{22}\in\R^{(n-1)\times(n-1)}$. 若
+\[
+  d=\min_{\mu}\abs{\lambda-\mu}>0,
+  \qquad
+  \norm{E}_2\leqslant d/4,
+\]
+其中 $\mu$ 是 $D_{22}$ 的任一特征值, 则存在单位特征向量 $\tilde{\mathbf{q}}_1$ 使
+\[
+  \sin\theta=\sqrt{1-\abs{\mathbf{q}_1^T\tilde{\mathbf{q}}_1}^2}
+  \leqslant\frac{4}{d}\norm{\mathbf{e}}_2\leqslant\frac{4}{d}\norm{E}_2,
+\]
+其中 $\theta=\arccos\abs{\mathbf{q}_1^T\tilde{\mathbf{q}}_1}$.
+\end{theorem}
+
+看来 $\theta$ 能够很好地度量 $\mathbf{q}_1$ 与 $\tilde{\mathbf{q}}_1$ 之间的接近程度. 可以看出, 单个特征向量对扰动的敏感程度取决于其对应特征值与其余特征值的分离程度.
+
+任一对称矩阵的特征值同该矩阵的奇异值密切相关. \newterm{svdecomp}{奇异值分解}{singular value decomposition} \cite{src:32} 在数值线性代数中至关重要.
+
+\begin{theorem}[奇异值分解定理]
+\label{thm:8-6}
+设 $A\in\R^{m\times n}$ 且 $\rank(A)=r$. 则存在正交矩阵
+\[
+  U=[\mathbf{u}_1\mid\mathbf{u}_2\mid\cdots\mid\mathbf{u}_m]\in\R^{m\times m},
+  \qquad
+  V=[\mathbf{v}_1\mid\mathbf{v}_2\mid\cdots\mid\mathbf{v}_n]\in\R^{n\times n}
+\]
+使
+\[
+  U^TAV=\begin{bmatrix}
+    \Sigma_r & \mathbf{0}\\
+    \mathbf{0} & \mathbf{0}
+  \end{bmatrix},
+\]
+其中
+\[
+  \Sigma_r=\diag(\sigma_1,\ldots,\sigma_r)
+\]
+满足 $\sigma_1\geqslant\sigma_2\geqslant\cdots\geqslant\sigma_r>0$.
+\end{theorem}
+
+称 $\sigma_i$ ($i=1,2,\ldots,n$) 为 $A$ 的奇异值. 向量 $\mathbf{u}_i$ 与 $\mathbf{v}_i$ 分别称为第 $i$ 个左奇异向量与第 $i$ 个右奇异向量. 下一个推论就是关于奇异值的 Weyl--Wielandt--Hoffman 定理.
+
+\begin{corollary}
+\label{cor:8-1}
+设 $A,B\in\R^{n\times n}$, 其奇异值分别按如下次序排列:
+\[
+  \sigma_1(A)\geqslant\cdots\geqslant\sigma_n(A),
+  \qquad
+  \tau_1(B)\geqslant\cdots\geqslant\tau_n(B),
+\]
+则
+\[
+  \abs{\sigma_i(A)-\tau_i(B)}\leqslant\norm{A-B}_2,
+  \qquad i=1,2,\ldots,n,
+\]
+并且
+\[
+  \sum_{i=1}^{n}\bigl(\sigma_i(A)-\tau_i(B)\bigr)^2\leqslant\norm{A-B}_F^2.
+\]
+\end{corollary}
+
+该推论表明, 任一实矩阵的奇异值也是良态的, 即 $A$ 的元素受到的微小扰动只会引起其奇异值的微小变化.
+
+\section{对称 QR 方法}
+\label{sec:8-2}
+
+\newterm{symqrmethod}{对称 QR 方法}{symmetric QR method}是求解对称特征值问题的一种 QR 迭代. 它利用对称性对对称矩阵 $A$ 施行 QR 算法. 为构造高效的 QR 方法, 我们先把对称矩阵 $A$ 约化为三对角矩阵 $T$, 再对矩阵 $T$ 施行 QR 迭代.
+
+\subsection{三对角 QR 迭代}
+\label{sec:8-2-1}
+
+设 $A$ 对称, 且假定 $A$ 可分解为
+\[
+  Q^TAQ=T,
+\]
+其中 $Q$ 为正交矩阵, $T$ 为上 Hessenberg 矩阵. 此时 $T$ 必为对称三对角矩阵. 于是我们只需处理一个对称三对角矩阵 $T$ 的特征值问题.
+
+把 $A$ 分块如下:
+\[
+  A=\begin{bmatrix}
+    \alpha_1 & \mathbf{v}_0^T\\
+    \mathbf{v}_0 & A_0
+  \end{bmatrix},
+\]
+其中 $A_0\in\R^{(n-1)\times(n-1)}$. 利用 Householder 变换, 可按如下方式把矩阵 $A$ 约化为对称三对角矩阵: 在第 $k$ 步,
+\begin{parenlist}
+  \item 计算 Householder 变换 $\tilde{H}_k\in\R^{(n-k)\times(n-k)}$ 使
+    \[
+      \tilde{H}_k\mathbf{v}_{k-1}=\beta_k\mathbf{e}_1,
+      \qquad \beta_k\in\R.
+    \]
+  \item 计算
+    \[
+      \begin{bmatrix}
+        \alpha_{k+1} & \mathbf{v}_k^T\\
+        \mathbf{v}_k & A_k
+      \end{bmatrix}
+      =\tilde{H}_kA_{k-1}\tilde{H}_k,
+    \]
+    其中 $A_k\in\R^{(n-k-1)\times(n-k-1)}$.
+\end{parenlist}
+
+若用上述约化产生的 $\alpha_k$, $\beta_k$ 与 $\tilde{H}_k$ 定义
+\[
+  T=\begin{bmatrix}
+    \alpha_1 & \beta_1 & & \mathbf{0}\\
+    \beta_1 & \alpha_2 & \ddots & \\
+     & \ddots & \ddots & \beta_{n-1}\\
+    \mathbf{0} & & \beta_{n-1} & \alpha_n
+  \end{bmatrix},
+\]
+\[
+  H_k=\diag(I_k,\tilde{H}_k)\in\R^{n\times n},
+  \qquad
+  Q=H_1H_2\cdots H_{n-2},
+\]
+其中
+\[
+  \begin{bmatrix}
+    \alpha_{n-1} & \beta_{n-1}\\
+    \beta_{n-1} & \alpha_n
+  \end{bmatrix}
+  =\tilde{H}_{n-2}A_{n-3}\tilde{H}_{n-2},
+\]
+则有
+\[
+  Q^TAQ=T.
+\]
+由上述约化容易看出, 第 $k$ 步的主要运算量在于计算 $\tilde{H}_kA_{k-1}\tilde{H}_k$. 令
+\[
+  \tilde{H}_k=I-\beta\mathbf{v}\mathbf{v}^T,
+  \qquad \mathbf{v}\in\R^{n-k}.
+\]
+
+利用 $A_{k-1}$ 的对称性, 可得
+\[
+  \tilde{H}_kA_{k-1}\tilde{H}_k=A_{k-1}-\mathbf{v}\mathbf{w}^T-\mathbf{w}\mathbf{v}^T,
+\]
+其中
+\[
+  \mathbf{w}=\mathbf{u}-\frac{1}{2}\beta(\mathbf{v}^T\mathbf{u})\mathbf{v},
+  \qquad
+  \mathbf{u}=\beta A_{k-1}\mathbf{v}.
+\]
+由于只需计算该矩阵的上三角部分, 可见从 $A_{k-1}$ 到 $A_k$ 的过渡只需 $4(n-k)^2$ 次运算. 给定对称矩阵 $A\in\R^{n\times n}$, 下述算法用 $T=Q^TAQ$ 覆盖 $A$, 其中 $T$ 为三对角矩阵, $Q$ 为若干 Householder 变换之积.
+
+\needspace{10\baselineskip}
+\begin{algorithm}{用 Householder 变换作三对角化}
+  \label{alg:8-1}
+  \[
+    \left\{
+    \begin{array}{ll}
+      \textbf{for} & k=1:n-2\\
+        & [\mathbf{v},\beta]=\mathrm{house}(A(k+1:n,k))\\
+        & \mathbf{u}=\beta A(k+1:n,k+1:n)\mathbf{v}\\
+        & \mathbf{w}=\mathbf{u}-(\beta\mathbf{u}^T\mathbf{v}/2)\mathbf{v}\\
+        & A(k+1,k)=\norm{A(k+1:n,k)}_2\\
+        & A(k,k+1)=A(k+1,k)\\
+        & A(k+1:n,k+1:n)=A(k+1:n,k+1:n)-\mathbf{v}\mathbf{w}^T-\mathbf{w}\mathbf{v}^T\\
+      \textbf{end}
+    \end{array}
+    \right.
+  \]
+\end{algorithm}
+
+该算法需要 $4n^3/3$ 次运算. 若需要显式求出 $Q$, 则还要再花 $4n^3/3$ 次运算.
+
+把对称矩阵 $A$ 约化为对称三对角矩阵 $T$ 之后, 我们的目标便转为为 QR 迭代选取合适的位移. 考虑如下带单步位移 $\mu_k$ 的 QR 迭代:
+\begin{equation}
+  \left\{
+  \begin{array}{l}
+    T_k-\mu_kI=Q_kR_k,\\
+    T_{k+1}=R_kQ_k+\mu_kI,
+  \end{array}
+  \right.
+  \label{eq:8-1}
+\end{equation}
+其中 $k=1,2,\ldots$, $T_1=T$ 为对称三对角矩阵, \eqref{eq:8-1} 中的每个矩阵 $T_k$ 也都是对称三对角矩阵. 与非对称情形的 QR 算法一样, 这里假定 $T_k$ 不可约, 即次对角元非零. 下面讨论如何选取位移 $\mu_k$. 可以在每次迭代中取 $\mu_k=T_k(n,n)$, 即 $(n,n)$ 元作为位移. 然而, 更好的选法是取
+\[
+  \mu_k=\alpha_n+\delta-\sign(\delta)\sqrt{\delta^2+\beta_{n-1}^2},
+\]
+其中 $\delta=(\alpha_{n-1}-\alpha_n)/2$. 这就是著名的 \newterm{wilkinsonshift}{Wilkinson 位移}{Wilkinson shift} \cite{src:95}. 注意 $\mu_k$ 恰是矩阵
+\[
+  T_k(n-1:n,n-1:n)=\begin{bmatrix}
+    \alpha_{n-1} & \beta_{n-1}\\
+    \beta_{n-1} & \alpha_n
+  \end{bmatrix}
+\]
+的两个特征值中较接近 $\alpha_n$ 的那一个.
+
+\subsection{隐式对称 QR 迭代}
+\label{sec:8-2-2}
+
+对显式 QR 算法 \eqref{eq:8-1}, 可以不必显式形成矩阵 $T-\mu I$ 而完成从
+\[
+  T-\mu I=QR
+\]
+到
+\[
+  \tilde{T}=RQ+\mu I
+\]
+的过渡. \eqref{eq:8-1} 的实质是用正交相似变换把 $T$ 变成 $\tilde{T}$. 由定理 \ref{thm:7-5} 知, $\tilde{T}$ 可由 $Q$ 的第一列完全确定. 由用 Givens 旋转作 $T-\mu I$ 的 QR 分解的过程可知
+\[
+  Q\mathbf{e}_1=G_1\mathbf{e}_1,
+\]
+其中 $G_1=G(1,2,\theta_1)$ 是使 $T-\mu I$ 第一列中第二个元素变为零的旋转. $\theta_1$ 可由
+\[
+  \begin{bmatrix}
+    \cos\theta_1 & \sin\theta_1\\
+    -\sin\theta_1 & \cos\theta_1
+  \end{bmatrix}
+  \begin{bmatrix}
+    \alpha_1-\mu\\
+    \beta_1
+  \end{bmatrix}
+  =\begin{bmatrix}
+    *\\
+    0
+  \end{bmatrix}
+\]
+算出. 令
+\[
+  B=G_1TG_1^T.
+\]
+则 $B$ 具有如下形式 ($n=4$):
+\[
+  B=\begin{bmatrix}
+    * & * & + & 0\\
+    * & * & * & 0\\
+    + & * & * & *\\
+    0 & 0 & * & *
+  \end{bmatrix}.
+\]
+令 $G_i=G(i,i+1,\theta_i)$, $i=2,3$. 则这种形式的 $G_i$ 可用来把矩阵 $B$ 中不需要的非零元``+''追赶出去, 如下所示:
+\[
+  B\ \xrightarrow{\ G_2\ }\
+  \begin{bmatrix}
+    * & * & 0 & 0\\
+    * & * & * & +\\
+    0 & * & * & *\\
+    0 & + & * & *
+  \end{bmatrix}
+  \ \xrightarrow{\ G_3\ }\
+  \begin{bmatrix}
+    * & * & 0 & 0\\
+    * & * & * & 0\\
+    0 & * & * & *\\
+    0 & 0 & * & *
+  \end{bmatrix}.
+\]
+一般地, 若 $Z=G_1G_2\cdots G_{n-1}$, 则
+\[
+  Z\mathbf{e}_1=G_1\mathbf{e}_1=Q\mathbf{e}_1
+\]
+且 $ZTZ^T$ 三对角. 于是由定理 \ref{thm:7-5} 知, 用这种``追赶零元''技术得到的三对角矩阵 $ZTZ^T$ 与用显式方法 \eqref{eq:8-1} 得到的三对角矩阵 $T$ 本质上是同一个矩阵. 总之, 我们得到
+
+\needspace{10\baselineskip}
+\begin{algorithm}{带 Wilkinson 位移的隐式对称 QR 迭代}
+  \label{alg:8-2}
+  {\footnotesize
+  \[
+    \left\{
+    \begin{array}{l}
+      d=(T(n-1,n-1)-T(n,n))/2\\
+      \mu=T(n,n)-T(n,n-1)^2/\bigl(d+\sign(d)\sqrt{d^2+T(n,n-1)^2}\bigr)\\
+      x=T(1,1)-\mu;\quad z=T(2,1)\\
+      \textbf{for}\ k=1:n-1\\
+      \quad [c,s]=\mathrm{givens}(x,z)\\
+      \quad T=G_kTG_k^T,\quad \text{其中}\ G_k=G(k,k+1,\theta_k)\\
+      \quad \textbf{if}\ k<n-1\\
+      \quad\quad x=T(k+1,k);\quad z=T(k+2,k)\\
+      \quad \textbf{end}\\
+      \textbf{end}
+    \end{array}
+    \right.
+  \]}
+\end{algorithm}
+
+该算法约需 $30n$ 次运算与 $n$ 次开平方. 当然, 在实际实现中三对角矩阵 $T$ 应存放在一对 $n$ 维向量中.
+
+\subsection{隐式对称 QR 算法}
+\label{sec:8-2-3}
+
+算法 \ref{alg:8-2} 是对称 QR 算法的基础——后者是计算任一对称矩阵\newterm{spectraldecomp}{谱分解}{spectral decomposition}的标准手段. 应用算法 \ref{alg:8-2}, 我们得到下述算法.
+
+\needspace{10\baselineskip}
+\begin{algorithm}{隐式对称 QR 算法}
+  \label{alg:8-3}
+  \renewcommand{\labelenumii}{(\roman{enumii})}
+  \begin{parenlist}
+    \item 输入 $A$ (实对称矩阵).
+    \item 三对角化: 用算法 \ref{alg:8-1} 计算 $A$ 的三对角化,
+      \[
+        T=U_0^TAU_0.
+      \]
+      置 $Q=U_0$.
+    \item 收敛性判别:
+      \begin{parenlist}
+        \item 对 $i=1,\ldots,n-1$, 若
+          \[
+            \abs{t_{i+1,i}}=\abs{t_{i,i+1}}
+            \leqslant\bigl(\abs{t_{i,i}}+\abs{t_{i+1,i+1}}\bigr)\mu_\epsilon,
+          \]
+          则令 $t_{i+1,i}$ 与 $t_{i,i+1}$ 为零, 其中 $\mu_\epsilon$ 是机器精度.
+        \item 求最大的整数 $m\geqslant0$ 与最小的整数 $l\geqslant0$ 使
+          \[
+            T=\begin{bmatrix}
+              T_{11} & \mathbf{0} & \mathbf{0}\\
+              \mathbf{0} & T_{22} & \mathbf{0}\\
+              \mathbf{0} & \mathbf{0} & T_{33}
+            \end{bmatrix},
+          \]
+          其中 $T_{11}\in\R^{l\times l}$, $T_{22}\in\R^{(n-l-m)\times(n-l-m)}$ 为不可约三对角矩阵, 而 $T_{33}\in\R^{m\times m}$ 为对角矩阵.
+        \item 若 $m=n$, 则输出; 否则转下一步.
+      \end{parenlist}
+    \item QR 迭代: 对 $T_{22}$ 应用算法 \ref{alg:8-2}:
+      \[
+        T_{22}=GT_{22}G^T,
+        \qquad
+        G=G_1G_2\cdots G_{n-l-m-1}.
+      \]
+    \item 置 $Q=Q\diag(I_l,G,I_m)$, 然后转到第 (3) 步.
+  \end{parenlist}
+\end{algorithm}
+
+若只需计算特征值, 该算法约需 $4n^3/3$ 次运算. 若同时需要特征值与特征向量, 则约需 $9n^3$ 次运算. 可以证明 \cite{src:95}, 由算法 \ref{alg:8-3} 得到的计算特征值 $\tilde{\lambda}_i$ ($i=1,2,\ldots,n$) 满足
+\[
+  Q^T(A+E)Q=\diag(\tilde{\lambda}_1,\ldots,\tilde{\lambda}_n),
+\]
+其中 $Q\in\R^{n\times n}$ 正交, 且 $\norm{E}_2\approx\norm{A}_2\mu_\epsilon$, $\mu_\epsilon$ 为机器精度. 利用定理 \ref{thm:8-3}, 有
+\[
+  \abs{\lambda_i-\tilde{\lambda}_i}\approx\norm{A}_2\mu_\epsilon,
+  \qquad i=1,2,\ldots,n,
+\]
+其中每个 $\lambda_i$ 都是 $A$ 的特征值. 每个 $\tilde{\lambda}_i$ 的绝对误差都很小, 且相对误差小于机器精度 $\mu_\epsilon$. 若记计算所得标准正交特征向量构成的矩阵为 $\tilde{Q}=[\tilde{\mathbf{q}}_1\mid\tilde{\mathbf{q}}_2\mid\cdots\mid\tilde{\mathbf{q}}_n]$, 则每个 $\tilde{\mathbf{q}}_i$ 的精度取决于 $\lambda_i$ 与其余特征值的分离程度.
+
+\section{Jacobi 方法}
+\label{sec:8-3}
+
+Jacobi 方法是计算对称特征值问题最早的方法之一. 它由 Jacobi 于 1846 年提出 (见 \cite{src:32}). 众所周知, 实对称矩阵可用正交相似变换约化为对角矩阵. Jacobi 方法利用矩阵的对称性, 选取适当的旋转把对称矩阵约化为对角形式. Jacobi 方法通常比对称 QR 算法慢得多. 然而, Jacobi 方法至今仍令人感兴趣, 因为该方法易于编程, 而且近年人们认识到它具有内在的并行性.
+
+\subsection{基本思想}
+\label{sec:8-3-1}
+
+设 $A=[a_{ij}]\in\R^{n\times n}$ 为对称矩阵,
+\[
+  \mathrm{off}(A)\equiv\Bigl(\norm{A}_F^2-\sum_{i=1}^{n}a_{ii}^2\Bigr)^{1/2}
+  =\Bigl(\sum_{\substack{i=1\\ j\neq i}}^{n}a_{ij}^2\Bigr)^{1/2}.
+\]
+Jacobi 方法的思想是系统地把 $\mathrm{off}(A)$ 约化为零. 实现这一点的基本工具称为 Jacobi 旋转, 其定义如下:
+\[
+  J(p,q,\theta)=I+\sin\theta\bigl(\mathbf{e}_p\mathbf{e}_q^T-\mathbf{e}_q\mathbf{e}_p^T\bigr)
+  +(\cos\theta-1)\bigl(\mathbf{e}_p\mathbf{e}_p^T+\mathbf{e}_q\mathbf{e}_q^T\bigr),
+\]
+其中 $p<q$, $\mathbf{e}_k$ 表示第 $k$ 个单位向量. 注意 Jacobi 旋转与 Givens 旋转并无区别 (见第 4.2.2 小节). 本节改用这一名称是为了纪念其发明者. Jacobi 过程的每一步包含:
+\begin{parenlist}
+  \item 选取 $p$ 与 $q$ 作旋转, 其中 $1\leqslant p<q\leqslant n$.
+  \item 计算旋转角 $\theta$ 使
+    \begin{equation}
+      \begin{bmatrix}
+        b_{pp} & b_{pq}\\
+        b_{qp} & b_{qq}
+      \end{bmatrix}
+      =\begin{bmatrix}
+        c & s\\
+        -s & c
+      \end{bmatrix}^T
+      \begin{bmatrix}
+        a_{pp} & a_{pq}\\
+        a_{qp} & a_{qq}
+      \end{bmatrix}
+      \begin{bmatrix}
+        c & s\\
+        -s & c
+      \end{bmatrix}
+      \label{eq:8-2}
+    \end{equation}
+    为对角矩阵, 即 $b_{pq}=b_{qp}=0$, 其中 $c=\cos\theta$, $s=\sin\theta$.
+  \item 用 $B=[b_{ij}]=J^TAJ$ 覆盖 $A$, 其中 $J=J(p,q,\theta)$.
+\end{parenlist}
+
+注意矩阵 $B$ 除第 $p$ 行 (列) 与第 $q$ 行 (列) 外与矩阵 $A$ 相同. 具体关系为:
+\[
+  b_{ip}=b_{pi}=ca_{ip}-sa_{iq},
+  \qquad i\neq p,q,
+\]
+\[
+  b_{iq}=b_{qi}=sa_{ip}+ca_{iq},
+  \qquad i\neq p,q,
+\]
+\[
+  b_{pp}=c^2a_{pp}-2sca_{pq}+s^2a_{qq},
+\]
+\[
+  b_{qq}=s^2a_{pp}+2sca_{pq}+c^2a_{qq},
+\]
+\[
+  b_{pq}=b_{qp}=(c^2-s^2)a_{pq}+sc(a_{pp}-a_{qq}).
+\]
+
+我们先考虑如何实际计算 $s=\sin\theta$ 与 $c=\cos\theta$, 使 \eqref{eq:8-2} 中 $b_{pq}=b_{qp}=0$. 这实际上等价于
+\begin{equation}
+  a_{pq}(c^2-s^2)+(a_{pp}-a_{qq})cs=0.
+  \label{eq:8-3}
+\end{equation}
+若 $a_{pq}=0$, 则直接取 $c=1$, $s=0$. 否则定义
+\[
+  \tau=\frac{a_{qq}-a_{pp}}{2a_{pq}},
+  \qquad
+  t=\tan\theta=\frac{s}{c},
+\]
+并由 \eqref{eq:8-3} 推知 $t$ 满足二次方程
+\[
+  t^2+2\tau t-1=0.
+\]
+于是
+\[
+  t=-\tau\pm\sqrt{1+\tau^2}.
+\]
+我们取 $t$ 为两个根中较小者, 这既保证 $\abs{\theta}\leqslant\pi/4$, 又使 $\norm{B-A}_F^2$ 达到极小, 因为
+\[
+  \norm{B-A}_F^2
+  =4(1-c)\sum_{\substack{i=1\\ i\neq p,q}}^{n}\bigl(a_{ip}^2+a_{iq}^2\bigr)
+  +\frac{2a_{pq}^2}{c^2}.
+\]
+$t$ 确定后, 便可由公式
+\[
+  c=\frac{1}{\sqrt{1+t^2}},
+  \qquad
+  s=tc
+\]
+得到 $c$ 与 $s$.
+
+下面总结 Jacobi 旋转 $J(p,q,\theta)$ 的计算. 给定对称矩阵 $A\in\R^{n\times n}$ 与满足 $1\leqslant p<q\leqslant n$ 的下标 $p,q$, 下述算法计算一对余弦–正弦值, 使 $b_{pq}=b_{qp}=0$, 其中 $b_{jk}$ 是矩阵 $B=J(p,q,\theta)^TAJ(p,q,\theta)$ 的第 $(j,k)$ 元.
+
+\par\medskip
+\needspace{8\baselineskip}
+\refstepcounter{algorithm}\label{alg:8-4}
+\noindent{\headfont 算法\ \textbf{\thealgorithm}}\par
+\smallskip
+  \[
+    \left\{
+    \begin{array}{ll}
+      \textbf{function}: & [c,s]=\mathrm{sym}(A,p,q)\\
+        & \textbf{if}\ A(p,q)\neq0\\
+        & \quad \tau=(A(q,q)-A(p,p))/(2A(p,q))\\
+        & \quad \textbf{if}\ \tau\geqslant0\\
+        & \qquad t=1/(\tau+\sqrt{1+\tau^2})\\
+        & \quad \textbf{else}\\
+        & \qquad t=-1/(-\tau+\sqrt{1+\tau^2})\\
+        & \quad \textbf{end}\\
+        & \quad c=1/\sqrt{1+t^2}\\
+        & \quad s=tc\\
+        & \textbf{else}\\
+        & \quad c=1\\
+        & \quad s=0\\
+        & \textbf{end}\\
+      \textbf{end}
+    \end{array}
+    \right.
+  \]
+\par\medskip
+
+$J(p,q,\theta)$ 确定后, 更新
+\[
+  A\leftarrow J(p,q,\theta)^TAJ(p,q,\theta)
+\]
+可用 $6n$ 次运算完成.
+
+那么如何选取整数 $p$ 与 $q$? 由于正交变换保持 Frobenius 范数 (见第 \ref{sec:3-1} 节), 有 $\norm{B}_F=\norm{A}_F$. 注意
+\[
+  a_{pp}^2+a_{qq}^2+2a_{pq}^2=b_{pp}^2+b_{qq}^2+2b_{pq}^2=b_{pp}^2+b_{qq}^2,
+\]
+于是
+\begin{align}
+    \mathrm{off}(B)^2
+    &=\norm{B}_F^2-\sum_{i=1}^{n}b_{ii}^2\notag\\
+    &=\norm{A}_F^2-\sum_{i=1}^{n}a_{ii}^2
+      +\bigl(a_{pp}^2+a_{qq}^2-b_{pp}^2-b_{qq}^2\bigr)\notag\\
+    &=\mathrm{off}(A)^2-2a_{pq}^2.
+  \label{eq:8-4}
+\end{align}
+我们的目标是使 $\mathrm{off}(B)$ 达到极小, 故 $p,q$ 的最佳选取应为
+\[
+  \abs{a_{pq}}=\max_{1\leqslant i<j\leqslant n}\abs{a_{ij}}.
+\]
+这就是\newterm{classicaljacobi}{经典 Jacobi 方法}{classical Jacobi method}的基本思想.
+
+\subsection{经典 Jacobi 方法}
+\label{sec:8-3-2}
+
+给定对称矩阵 $A\in\R^{n\times n}$ 与容差 $\epsilon>0$, 下述算法用 $U^TAU$ 覆盖 $A$, 其中 $U$ 为正交矩阵, 且 $\mathrm{off}(U^TAU)\leqslant\epsilon\norm{A}_F$.
+
+\needspace{10\baselineskip}
+\begin{algorithm}{经典 Jacobi 方法}
+  \label{alg:8-5}
+  \[
+    \left\{
+    \begin{array}{l}
+      U=I_n;\quad \mathrm{eps}=\epsilon\norm{A}_F\\
+      \textbf{while}\ \mathrm{off}(A)>\mathrm{eps}\\
+      \quad \text{选取}\ p,q\ \text{使}\ \abs{a_{pq}}=\max\limits_{i\neq j}\abs{a_{ij}}\\
+      \quad [c,s]=\mathrm{sym}(A,p,q)\\
+      \quad A=J(p,q,\theta)^TAJ(p,q,\theta)\\
+      \quad U=UJ(p,q,\theta)\\
+      \textbf{end}
+    \end{array}
+    \right.
+  \]
+\end{algorithm}
+
+由于 $\abs{a_{pq}}$ 是最大的非对角元, 有
+\[
+  \mathrm{off}(A)^2\leqslant N\bigl(a_{pq}^2+a_{qp}^2\bigr),
+\]
+其中 $N=n(n-1)/2$. 由 \eqref{eq:8-4} 知
+\[
+  \mathrm{off}(B)^2\leqslant\Bigl(1-\frac{1}{N}\Bigr)\mathrm{off}(A)^2.
+\]
+若 $A_k$ 表示第 $k$ 次 Jacobi 迭代后的矩阵, 且 $A_0=A$, 则由归纳法得
+\[
+  \mathrm{off}(A_k)^2\leqslant\Bigl(1-\frac{1}{N}\Bigr)^{k}\mathrm{off}(A_0)^2.
+\]
+这意味着经典 Jacobi 方法线性收敛. 然而实际上, Jacobi 方法的渐近收敛速度是二次的. 我们可以证明, 当 $k$ 充分大时, 存在常数 $c$ 使
+\[
+  \mathrm{off}(A_{k+N})\leqslant c\cdot\mathrm{off}(A_k)^2.
+\]
+参见 \cite{src:32} 及其中的参考文献. 因此, 经过足够多次迭代后, 非对角``范数''以二次速度趋于零.
+
+Jacobi 方法的另一个优点是容易计算特征向量. 若迭代在第 $k$ 次旋转后停止, 则有
+\[
+  A_k=J_k^TJ_{k-1}^T\cdots J_1^TAJ_1J_2\cdots J_k.
+\]
+记
+\[
+  Q_k=J_1J_2\cdots J_k.
+\]
+于是
+\[
+  AQ_k=Q_kA_k.
+\]
+由于 $A_k$ 的非对角元很小, $A_k$ 的对角元便是 $A$ 的特征值的良好近似, 上述恒等式表明 $Q_k$ 的各列是 $A$ 的特征向量的良好近似, 且所有近似特征向量都是标准正交的. 我们可在 Jacobi 迭代过程中同时得到近似特征向量 $Q_k$.
+
+\subsection{并行 Jacobi 方法}
+\label{sec:8-3-3}
+
+用 Jacobi 方法求解对称特征值问题本身具有并行性. 为说明这一点, 设 $A\in\R^{8\times8}$ 对称. 若有一台含 4 个处理器的并行计算机, 则可把 28 个子问题分成如下 7 组旋转:
+\[
+  \begin{array}{ll}
+    \text{group (1)}: & (1,2),(3,4),(5,6),(7,8);\\
+    \text{group (2)}: & (1,3),(2,4),(5,7),(6,8);\\
+    \text{group (3)}: & (1,4),(2,3),(5,8),(6,7);\\
+    \text{group (4)}: & (1,5),(2,6),(3,7),(4,8);\\
+    \text{group (5)}: & (1,6),(2,5),(3,8),(4,7);\\
+    \text{group (6)}: & (1,7),(2,8),(3,5),(4,6);\\
+    \text{group (7)}: & (1,8),(2,7),(3,6),(4,5).
+  \end{array}
+\]
+注意每一组内的 4 个旋转互不冲突. 例如, 第一组中的子问题 $J(2i-1,2i,\theta_i)$ ($i=1,2,3,4$) 可并行完成. 当我们计算 $J(1,2,\theta_1)^TAJ(1,2,\theta_1)$ 时, 它不影响旋转 $(3,4)$, $(5,6)$ 与 $(7,8)$. 于是, 计算
+\[
+  A=AJ(1,2,\theta_1),\qquad A=AJ(3,4,\theta_2),
+\]
+\[
+  A=AJ(5,6,\theta_3),\qquad A=AJ(7,8,\theta_4)
+\]
+可由 4 个处理器并行执行. 类似地, 计算
+\[
+  A=J(1,2,\theta_1)^TA,\qquad A=J(3,4,\theta_2)^TA,
+\]
+\[
+  A=J(5,6,\theta_3)^TA,\qquad A=J(7,8,\theta_4)^TA
+\]
+也可由 4 个处理器并行完成. 对上述例子, 只需单处理器计算机 $1/4$ 的计算时间. 并行 Jacobi 算法可在 \cite{src:32} 中找到.
+
+\section{对分法}
+\label{sec:8-4}
+
+本节介绍求解对称三对角特征值问题的\newterm{bisection}{对分法}{bisection method}. 把对分法与三对角化技巧结合起来, 便可得到计算对称矩阵某个指定特征值及其对应特征向量的一种数值方法. 对给定的三对角矩阵
+\begin{equation}
+  T=\begin{bmatrix}
+    a_1 & b_1 & & \mathbf{0}\\
+    b_1 & a_2 & \ddots & \\
+     & \ddots & \ddots & b_{n-1}\\
+    \mathbf{0} & & b_{n-1} & a_n
+  \end{bmatrix}\in\R^{n\times n},
+  \label{eq:8-5}
+\end{equation}
+我们考虑 $T$ 的特征值的计算. 不失一般性, 假设 $b_i\neq0$ ($i=1,2,\ldots,n-1$), 即 $T$ 是不可约对称三对角矩阵. 否则, $T$ 可分成若干较小的不可约对称三对角矩阵.
+
+对每个 $i$, 令 $p_i(\lambda)$ 为 $T$ 的 $i$ 阶顺序主子矩阵 $T_i$ 的特征多项式. 则这些多项式满足三项递推:
+\begin{equation}
+  \begin{aligned}
+    p_0(\lambda)&\equiv1,\qquad p_1(\lambda)=a_1-\lambda,\\
+    p_i(\lambda)&=(a_i-\lambda)p_{i-1}(\lambda)-b_{i-1}^2p_{i-2}(\lambda),
+    \qquad i=2,3,\ldots,n.
+  \end{aligned}
+  \label{eq:8-6}
+\end{equation}
+由于 $T$ 对称, 多项式 $p_i(\lambda)$ ($i=1,2,\ldots,n$) 的根都是实数. 下述\newterm{interlace}{交错性质}{interlacing property}非常重要.
+
+\begin{theorem}[Sturm 序列性质]
+\label{thm:8-7}
+设 \eqref{eq:8-5} 中的对称三对角矩阵 $T$ 不可约. 则 $T_{i-1}$ 的特征值严格分离 $T_i$ 的特征值:
+\[
+  \lambda_i(T_i)<\lambda_{i-1}(T_{i-1})<\lambda_{i-1}(T_i)
+  <\cdots<\lambda_2(T_i)<\lambda_1(T_{i-1})<\lambda_1(T_i).
+\]
+此外, 若 $s_n(\lambda)$ 表示序列
+\[
+  \{p_0(\lambda),p_1(\lambda),\ldots,p_n(\lambda)\}
+\]
+中变号的次数, 则 $s_n(\lambda)$ 等于 $T$ 的小于 $\lambda$ 的特征值的个数, 其中 $p_i(\lambda)$ 由 \eqref{eq:8-6} 定义. 若 $p_i(\lambda)=0$, 则 $p_{i-1}(\lambda)p_{i+1}(\lambda)<0$.
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:8-4} 知, $T_{i-1}$ 的特征值弱分离 $T_i$ 的特征值. 下面证明这种分离必为严格分离. 设对某个 $i$ 与 $\mu$ 有 $p_i(\mu)=p_{i-1}(\mu)=0$. 由于 $T$ 不可约, 由 \eqref{eq:8-6} 注意到
+\[
+  p_0(\mu)=p_1(\mu)=\cdots=p_i(\mu)=0,
+\]
+这与 $p_0(\lambda)\equiv1$ 矛盾. 故为严格分离. 关于 $s_n(\lambda)$ 的论断在 \cite{src:95} 中有详细论述.
+\end{proof}
+
+计算 $T$ 的某个指定特征值的对分法可陈述如下.
+
+\needspace{10\baselineskip}
+\begin{algorithm}{对分算法}
+  \label{alg:8-6}
+  设 $\lambda_1<\lambda_2<\cdots<\lambda_n$ 为 $T$ 的特征值, 即 $p_n(\lambda)$ 的根, $\epsilon$ 为容差. 设对给定的 $m\leqslant n$, 所求特征值为 $\lambda_m$. 则
+  \begin{parenlist}
+    \item 求包含 $\lambda_m$ 的区间 $[l_0,u_0]$. 由于 $\abs{\lambda_1}\leqslant\rho(T)\leqslant\norm{T}_\infty$, 可取 $l_0=-\norm{T}_\infty$, $u_0=\norm{T}_\infty$.
+    \item 计算 $r_1=\dfrac{l_0+u_0}{2}$ 与 $s_n(r_1)$.
+    \item 若 $s_n(r_1)\geqslant m$, 则 $\lambda_m\in[l_0,r_1]$, 置 $l_1=l_0$, $u_1=r_1$; 否则 $\lambda_m\in[r_1,u_0]$, 置 $l_1=r_1$, $u_1=u_0$.
+    \item 若 $\abs{l_1-u_1}<\epsilon$, 取 $r_2=\dfrac{l_1+u_1}{2}$ 作为 $\lambda_m$ 的近似值. 否则转到第 (2) 步.
+  \end{parenlist}
+\end{algorithm}
+
+由上述算法可见, 主要运算量在于计算 $s_n(\mu)$. 然而在实际计算中, 不能通过计算 $p_i(\mu)$ 的值来得到 $s_n(\mu)$, 因为高次多项式的求值很困难. 为避免这一困难, 定义
+\[
+  q_i(\lambda)=\frac{p_i(\lambda)}{p_{i-1}(\lambda)},
+  \qquad i=1,2,\ldots,n.
+\]
+由 \eqref{eq:8-6} 得
+\[
+  q_1(\lambda)=p_1(\lambda)=a_1-\lambda,
+  \qquad
+  q_i(\lambda)=a_i-\lambda-\frac{b_{i-1}^2}{q_{i-1}(\lambda)},
+  \quad i=2,3,\ldots,n.
+\]
+容易验证, $s_n(\mu)$ 恰好是序列 $q_1(\mu),\ldots,q_n(\mu)$ 中负值的个数. 下述算法是计算 $s_n(\mu)$ 的实用算法.
+
+\needspace{10\baselineskip}
+\begin{algorithm}{计算变号次数}
+  \label{alg:8-7}
+  \[
+    \left\{
+    \begin{array}{l}
+      \mathbf{x}=[a_1,a_2,\ldots,a_n]\\
+      \mathbf{y}=[0,b_1,\ldots,b_{n-1}]\\
+      s=0;\quad q=\mathbf{x}(1)-\mu\\
+      \textbf{for}\ k=1:n\\
+      \quad \textbf{if}\ q<0\\
+      \quad\quad s=s+1\\
+      \quad \textbf{end}\\
+      \quad \textbf{if}\ k<n\\
+      \quad\quad \textbf{if}\ q=0\\
+      \quad\quad\quad q=\abs{\mathbf{y}(k+1)}\mu_\epsilon\\
+      \quad\quad \textbf{end}\\
+      \quad\quad q=\mathbf{x}(k+1)-\mu-\mathbf{y}(k+1)^2/q\\
+      \quad \textbf{end}\\
+      \textbf{end}
+    \end{array}
+    \right.
+  \]
+\end{algorithm}
+
+其中 $\mu_\epsilon$ 是机器精度.
+
+当 $q_i(\mu)=0$ 时, 我们把它当作正数处理. 因此可在算法 \ref{alg:8-7} 中用一个小正数 $\abs{b_i}\mu_\epsilon$ 代替 $q_i(\mu)$. 若事先存好 $b_i^2$, 则算法 \ref{alg:8-7} 需要 $3n$ 次运算. 若用对分法平均 $m$ 次算出一个特征值, 则运算量为 $3nm$. 因此, 用对分法计算任一对称三对角矩阵的特征值是高效的. 另一方面, 舍入误差分析表明对分法是数值稳定的 \cite{src:95}.
+
+\section{分治方法}
+\label{sec:8-5}
+
+\newterm{divideconquer}{分治方法}{divide-and-conquer method}是 Dongarra 与 Sorensen 于 1987 年为计算对称三对角矩阵的全部特征值与特征向量而提出的一种数值方法 \cite{src:32}. 其基本思想是把原来的对称三对角矩阵撕裂成 $2^k$ 个规模较小的对称三对角矩阵, 然后计算每个较小对称三对角矩阵的谱分解. 得到这些较小的谱分解之后, 再把它们合并起来, 形成原矩阵的谱分解. 因此, 该方法适于并行计算.
+
+\subsection{撕裂}
+\label{sec:8-5-1}
+
+设 $T\in\R^{n\times n}$ 给定如下:
+\[
+  T=\begin{bmatrix}
+    a_1 & b_1 & & \mathbf{0}\\
+    b_1 & a_2 & \ddots & \\
+     & \ddots & \ddots & b_{n-1}\\
+    \mathbf{0} & & b_{n-1} & a_n
+  \end{bmatrix}.
+\]
+不失一般性, 设 $n=2m$. 令
+\[
+  \mathbf{v}=[\underbrace{0,\ldots,0}_{m-1},1,\theta,
+  \underbrace{0,\ldots,0}_{m-1}]^T\in\R^n.
+\]
+考虑矩阵
+\[
+  \tilde{T}=T-\rho\mathbf{v}\mathbf{v}^T,
+\]
+其中 $\theta,\rho\in\R$ 待定. 容易看出, $\tilde{T}$ 与 $T$ 除中间的 4 个元素外完全相同:
+\[
+  \begin{bmatrix}
+    a_m-\rho & b_m-\rho\theta\\
+    b_m-\rho\theta & a_{m+1}-\rho\theta^2
+  \end{bmatrix}.
+\]
+若取 $\rho\theta=b_m$, 则
+\[
+  T=\begin{bmatrix}
+    T_1 & \mathbf{0}\\
+    \mathbf{0} & T_2
+  \end{bmatrix}+\rho\mathbf{v}\mathbf{v}^T,
+\]
+其中
+\[
+  T_1=\begin{bmatrix}
+    a_1 & b_1 & & & \mathbf{0}\\
+    b_1 & a_2 & b_2 & & \\
+     & \ddots & \ddots & \ddots & \\
+     & & b_{m-2} & a_{m-1} & b_{m-1}\\
+    \mathbf{0} & & & b_{m-1} & \tilde{a}_m
+  \end{bmatrix}
+\]
+以及
+\[
+  T_2=\begin{bmatrix}
+    \tilde{a}_{m+1} & b_{m+1} & & & \mathbf{0}\\
+    b_{m+1} & a_{m+2} & b_{m+2} & & \\
+     & \ddots & \ddots & \ddots & \\
+     & & b_{n-2} & a_{n-1} & b_{n-1}\\
+    \mathbf{0} & & & b_{n-1} & a_n
+  \end{bmatrix},
+\]
+且
+\[
+  \tilde{a}_m=a_m-\rho,
+  \qquad
+  \tilde{a}_{m+1}=a_{m+1}-\rho\theta^2.
+\]
+因此, $T$ 被分成一个分块矩阵与一个秩一矩阵之和. 若对 $T_1$ 与 $T_2$ 反复施行这样的分裂, 最终可把 $T$ 分成 $2^k$ 块.
+
+\subsection{合并}
+\label{sec:8-5-2}
+
+一旦得到 $T_1$ 与 $T_2$ 的谱分解:
+\[
+  Q_1^TT_1Q_1=D_1,
+  \qquad
+  Q_2^TT_2Q_2=D_2,
+\]
+其中 $Q_1,Q_2\in\R^{m\times m}$ 为正交矩阵, $D_1,D_2\in\R^{m\times m}$ 为对角矩阵, 我们的目标便是由 $T_1$ 与 $T_2$ 的谱分解计算 $T$ 的谱分解, 即求一个正交矩阵 $V$ 使
+\[
+  V^TTV=\diag(\lambda_1,\ldots,\lambda_n).
+\]
+令
+\[
+  U=\begin{bmatrix}
+    Q_1 & \mathbf{0}\\
+    \mathbf{0} & Q_2
+  \end{bmatrix},
+\]
+则
+\[
+  \begin{aligned}
+    U^TTU
+    &=\begin{bmatrix}
+        Q_1 & \mathbf{0}\\
+        \mathbf{0} & Q_2
+      \end{bmatrix}^T
+      \left(\begin{bmatrix}
+        T_1 & \mathbf{0}\\
+        \mathbf{0} & T_2
+      \end{bmatrix}+\rho\mathbf{v}\mathbf{v}^T\right)
+      \begin{bmatrix}
+        Q_1 & \mathbf{0}\\
+        \mathbf{0} & Q_2
+      \end{bmatrix}\\
+    &=D+\rho\mathbf{z}\mathbf{z}^T,
+  \end{aligned}
+\]
+其中
+\[
+  D=\diag(D_1,D_2),
+  \qquad
+  \mathbf{z}=U^T\mathbf{v}.
+\]
+于是, 求 $T$ 的谱分解的问题便归结为计算 $D+\rho\mathbf{z}\mathbf{z}^T$ 的谱分解. 下面考虑如何快速而稳定地计算 $D+\rho\mathbf{z}\mathbf{z}^T$ 的谱分解.
+
+\begin{lemma}
+\label{lem:8-1}
+设 $D=\diag(d_1,\ldots,d_n)\in\R^{n\times n}$ 且 $d_1>d_2>\cdots>d_n$. 假定 $0\neq\rho\in\R$, $\mathbf{z}=[z_1,z_2,\ldots,z_n]^T\in\R^n$ 且对所有 $i$ 有 $z_i\neq0$. 设 $\mathbf{u}\in\R^n$ 与 $\lambda\in\R$ 满足
+\[
+  (D+\rho\mathbf{z}\mathbf{z}^T)\mathbf{u}=\lambda\mathbf{u},
+  \qquad \mathbf{u}\neq\mathbf{0}.
+\]
+则 $\mathbf{z}^T\mathbf{u}\neq0$ 且 $D-\lambda I$ 非奇异.
+\end{lemma}
+
+\begin{proof}
+若 $\mathbf{z}^T\mathbf{u}=0$, 则 $D\mathbf{u}=\lambda\mathbf{u}$ 且 $\mathbf{u}\neq\mathbf{0}$, 即 $\lambda$ 是 $D$ 的特征值, $\mathbf{u}$ 是与 $\lambda$ 相伴的特征向量. 由于 $D$ 是对角元互不相同的对角矩阵, 必存在某个 $i$ 使 $d_i=\lambda$ 且 $\mathbf{u}=\alpha\mathbf{e}_i$, 其中 $\alpha\neq0$, $\mathbf{e}_i$ 是第 $i$ 个单位向量. 于是
+\[
+  0=\mathbf{z}^T\mathbf{u}=\alpha\mathbf{z}^T\mathbf{e}_i=\alpha z_i,
+\]
+推出 $z_i=0$, 矛盾. 因此 $\mathbf{z}^T\mathbf{u}\neq0$.
+
+另一方面, 若 $D-\lambda I$ 奇异, 则存在某个 $i$ 使 $\mathbf{e}_i^T(D-\lambda I)=0$, 于是
+\[
+  0=\mathbf{e}_i^T(D-\lambda I)\mathbf{u}=-\rho\mathbf{z}^T\mathbf{u}\mathbf{e}_i^T\mathbf{z}.
+\]
+由于 $\rho\mathbf{z}^T\mathbf{u}\neq0$, 得 $\mathbf{e}_i^T\mathbf{z}=z_i=0$, 矛盾. 故 $D-\lambda I$ 非奇异.
+\end{proof}
+
+\begin{theorem}
+\label{thm:8-8}
+设 $D=\diag(d_1,\ldots,d_n)\in\R^{n\times n}$ 且 $d_1>d_2>\cdots>d_n$. 假定 $0\neq\rho\in\R$, $\mathbf{z}=[z_1,z_2,\ldots,z_n]^T\in\R^n$ 且对所有 $i$ 有 $z_i\neq0$. 设 $D+\rho\mathbf{z}\mathbf{z}^T$ 的谱分解为
+\[
+  V^T(D+\rho\mathbf{z}\mathbf{z}^T)V=\diag(\lambda_1,\ldots,\lambda_n),
+\]
+其中 $V=[\mathbf{v}_1\mid\mathbf{v}_2\mid\cdots\mid\mathbf{v}_n]$ 为正交矩阵, 且 $\lambda_1\geqslant\cdots\geqslant\lambda_n$. 则
+\begin{romanlist}
+  \item $\lambda_1,\ldots,\lambda_n$ 是函数
+    \[
+      f(\lambda)=1+\rho\mathbf{z}^T(D-\lambda I)^{-1}\mathbf{z}
+    \]
+    的 $n$ 个根.
+  \item 若 $\rho>0$, 则
+    \[
+      \lambda_1>d_1>\lambda_2>\cdots>\lambda_n>d_n;
+    \]
+    若 $\rho<0$, 则
+    \[
+      d_1>\lambda_1>d_2>\cdots>d_n>\lambda_n.
+    \]
+  \item 存在常数 $\alpha_i\neq0$ 使
+    \[
+      \mathbf{v}_i=\alpha_i(D-\lambda_iI)^{-1}\mathbf{z},
+      \qquad i=1,2,\ldots,n.
+    \]
+\end{romanlist}
+\end{theorem}
+
+\begin{proof}
+由假定有
+\[
+  (D+\rho\mathbf{z}\mathbf{z}^T)\mathbf{v}_i=\lambda_i\mathbf{v}_i,
+  \qquad \norm{\mathbf{v}_i}_2=1.
+\]
+由引理 \ref{lem:8-1} 知 $D-\lambda_iI$ 非奇异. 于是
+\begin{equation}
+  \mathbf{v}_i=-\rho\mathbf{z}^T\mathbf{v}_i(D-\lambda_iI)^{-1}\mathbf{z},
+  \qquad i=1,2,\ldots,n,
+  \label{eq:8-7}
+\end{equation}
+这就证明了 (iii). 注意 $D+\rho\mathbf{z}\mathbf{z}^T$ 的特征值互不相同. 否则, 若 $\lambda_i=\lambda_j$, 则 $\mathbf{v}_i$ 与 $\mathbf{v}_j$ 线性相关, 这与 $\mathbf{v}_i$ 和 $\mathbf{v}_j$ 的正交性矛盾.
+
+用 $\mathbf{z}^T$ 乘 \eqref{eq:8-7} 两端, 并注意 $\mathbf{z}^T\mathbf{v}_i\neq0$, 得
+\[
+  1=-\rho\mathbf{z}^T(D-\lambda_iI)^{-1}\mathbf{z},
+\]
+即
+\[
+  f(\lambda_i)=0,
+  \qquad i=1,2,\ldots,n.
+\]
+于是, $\lambda_i$ ($i=1,2,\ldots,n$) 都是 $f(\lambda)$ 的根. 下面证明 $f(\lambda)$ 恰有 $n$ 个零点. 注意
+\[
+  f(\lambda)=1+\rho\left(\frac{z_1^2}{d_1-\lambda}+\cdots+\frac{z_n^2}{d_n-\lambda}\right),
+\]
+并且
+\[
+  f'(\lambda)=\rho\left(\frac{z_1^2}{(d_1-\lambda)^2}+\cdots+\frac{z_n^2}{(d_n-\lambda)^2}\right).
+\]
+因此, $f(\lambda)$ 在相邻极点 $d_i$ 与 $d_{i+1}$ 之间严格单调. 若 $\rho>0$, $f(\lambda)$ 严格递增; 若 $\rho<0$, $f(\lambda)$ 严格递减. 于是容易看出 $f(\lambda)$ 恰有 $n$ 个根: 当 $\rho>0$ 时, 区间
+\[
+  (d_n,d_{n-1}),\ldots,(d_2,d_1),(d_1,\infty)
+\]
+中各有一个; 当 $\rho<0$ 时, 区间
+\[
+  (-\infty,d_n),(d_n,d_{n-1}),\ldots,(d_2,d_1)
+\]
+中各有一个. 故 (i) 与 (ii) 得证.
+\end{proof}
+
+由定理 \ref{thm:8-8}, 可按如下两步高效地计算 $D+\rho\mathbf{z}\mathbf{z}^T$ 的谱分解:
+\begin{parenlist}
+  \item 求 $f(\lambda)$ 的根 $\lambda_1,\lambda_2,\ldots,\lambda_n$. $f(\lambda)$ 在每个区间 $(d_{i+1},d_i)$ 中恰有一个根, 且在该区间内严格单调. 因此这一步可用类 Newton 方法 \cite{src:30} 快速而稳定地实现.
+  \item 计算
+    \[
+      \mathbf{v}_i=\frac{(D-\lambda_iI)^{-1}\mathbf{z}}
+      {\norm{(D-\lambda_iI)^{-1}\mathbf{z}}_2},
+      \qquad i=1,2,\ldots,n.
+    \]
+\end{parenlist}
+
+一般 $D+\rho\mathbf{z}\mathbf{z}^T$ 的谱分解问题可化归为定理 \ref{thm:8-8} 的情形. 为此, 我们可以构造性地证明下述定理.
+
+\begin{theorem}
+\label{thm:8-9}
+设 $D=\diag(d_1,\ldots,d_n)\in\R^{n\times n}$, $\mathbf{z}\in\R^n$. 则存在正交矩阵 $V$ 以及 $\{1,2,\ldots,n\}$ 的一个排列 $\pi$ 使
+\begin{romanlist}
+  \item $V^T\mathbf{z}=[\eta_1,\ldots,\eta_r,0,\ldots,0]^T$, 其中 $\eta_i\neq0$ ($i=1,2,\ldots,r$).
+  \item $V^TDV=\diag(d_{\pi(1)},\ldots,d_{\pi(n)})$, 其中 $d_{\pi(1)}>d_{\pi(2)}>\cdots>d_{\pi(r)}$.
+\end{romanlist}
+\end{theorem}
+
+\begin{proof}
+设两个下标 $i<j$ 满足 $d_i=d_j$. 则可取旋转 $P_{ij}=G(i,j,\theta)$ 使 $P_{ij}\mathbf{z}$ 的第 $j$ 个分量为零. 容易证明 $P_{ij}^TDP_{ij}=D$. 经若干步后, 可找到正交矩阵 $V_1$, 它是若干旋转之积, 使
+\[
+  V_1^TDV_1=D,
+  \qquad
+  V_1^T\mathbf{z}=[\xi_1,\ldots,\xi_n]^T,
+\]
+且具有性质: 若 $\xi_i\xi_j\neq0$ ($i\neq j$), 则 $d_i\neq d_j$.
+
+若 $\xi_i=0$, $\xi_j\neq0$ ($i<j$), 则可找到一个置换矩阵交换第 $i$ 列与第 $j$ 列. 如此便可找到一个置换矩阵 $P_1$, 把所有非零的 $\xi_j$ 都移到前面, 即
+\[
+  P_1^TV_1^T\mathbf{z}=[\xi_{\pi_1(1)},\ldots,\xi_{\pi_1(n)}]^T,
+\]
+满足
+\[
+  \xi_{\pi_1(i)}\neq0,\quad i=1,2,\ldots,r,
+  \qquad
+  \xi_{\pi_1(i)}=0,\quad i=r+1,\ldots,n.
+\]
+这里 $\pi_1$ 是 $\{1,2,\ldots,n\}$ 的一个排列. 由 $P_1$ 的构造知
+\[
+  P_1^TV_1^TDV_1P_1=P_1^TDP_1=\diag\bigl(d_{\pi_1(1)},\ldots,d_{\pi_1(n)}\bigr),
+\]
+其中前 $r$ 个对角元 $d_{\pi_1(1)},\ldots,d_{\pi_1(r)}$ 互不相同.
+
+最后, 可找到另一个 $r$ 阶置换矩阵 $P_2$ 使
+\[
+  P_2^T\diag\bigl(d_{\pi_1(1)},\ldots,d_{\pi_1(r)}\bigr)P_2
+  =\diag(\mu_1,\ldots,\mu_r),
+\]
+其中 $\mu_1>\mu_2>\cdots>\mu_r$. 令
+\[
+  V=V_1P_1\diag(P_2,I_{n-r}),
+\]
+并令 $\pi$ 为 $\{1,2,\ldots,n\}$ 的由 $P_1$ 与 $P_2$ 确定的排列. 则
+\[
+  V^T\mathbf{z}=[\xi_{\pi(1)},\ldots,\xi_{\pi(r)},0,\ldots,0]^T
+  =[\eta_1,\ldots,\eta_r,0,\ldots,0]^T,
+\]
+其中 $\eta_i\neq0$ ($i=1,2,\ldots,r$), 且
+\[
+  V^TDV=\diag\bigl(d_{\pi(1)},\ldots,d_{\pi(n)}\bigr),
+\]
+满足
+\[
+  d_{\pi(1)}>d_{\pi(2)}>\cdots>d_{\pi(r)}.
+\]
+证明完成.
+\end{proof}
+
+对任一 $D=\diag(d_1,\ldots,d_n)\in\R^{n\times n}$ 与 $\mathbf{z}\in\R^n$, 由定理 \ref{thm:8-9} 可构造正交矩阵 $V$ 使
+\[
+  V^T(D+\rho\mathbf{z}\mathbf{z}^T)V=
+  \begin{bmatrix}
+    D_1+\rho\mathbf{w}\mathbf{w}^T & \mathbf{0}\\
+    \mathbf{0} & D_2
+  \end{bmatrix},
+\]
+其中
+\[
+  D_1=\diag(d_{\pi(1)},\ldots,d_{\pi(r)})\in\R^{r\times r},
+  \qquad
+  d_{\pi(1)}>\cdots>d_{\pi(r)};
+\]
+\[
+  D_2=\diag(d_{\pi(r+1)},\ldots,d_{\pi(n)})\in\R^{(n-r)\times(n-r)};
+\]
+并且
+\[
+  \mathbf{w}=[\eta_1,\ldots,\eta_r]^T,
+  \qquad
+  \eta_i\neq0,\quad i=1,2,\ldots,r.
+\]
+于是我们只需计算 $D_1+\rho\mathbf{w}\mathbf{w}^T$ 的谱分解, 而不必计算 $D+\rho\mathbf{z}\mathbf{z}^T$ 的谱分解.
+
+最后, 我们简要介绍分治方法的并行计算. 为简单起见, 用一台含 4 个处理器的并行计算机计算一个 $4N$ 阶对称三对角矩阵 $T$ 的谱分解. 它可归纳为如下 4 步:
+\begin{parenlist}
+  \item 撕裂
+    \[
+      T=\begin{bmatrix}
+        T_1 & \mathbf{0}\\
+        \mathbf{0} & T_2
+      \end{bmatrix}+\rho\mathbf{v}\mathbf{v}^T,
+      \qquad
+      T_1\in\R^{2N\times2N},
+      \qquad
+      \mathbf{v}\in\R^{4N};
+    \]
+    以及
+    \[
+      T_i=\begin{bmatrix}
+        T_{i1} & \mathbf{0}\\
+        \mathbf{0} & T_{i2}
+      \end{bmatrix}+\rho_i\mathbf{w}_i\mathbf{w}_i^T,
+    \]
+    其中 $T_{ij}\in\R^{N\times N}$, $\mathbf{w}_i\in\R^{2N}$ ($i=1,2$).
+  \item 由 4 个处理器并行计算 $T_{11},T_{12},T_{21},T_{22}$ 的谱分解.
+  \item 合并 $T_{11}$, $T_{12}$ 的谱分解, 得到 $T_1$ 的谱分解; 合并 $T_{21}$, $T_{22}$ 的谱分解, 得到 $T_2$ 的谱分解. 这两件事可由 4 个处理器同时完成.
+  \item 由 $T_1$ 与 $T_2$ 的谱分解合并得到 $T$ 的谱分解. 这可由 4 个处理器并行完成.
+\end{parenlist}
+
+由上述讨论可知, 分治方法可用于并行计算任一大型对称三对角矩阵的全部特征值与特征向量.
+
+\needspace{6\baselineskip}
+\begin{exercises}
+  \item 求
+    \[
+      A=\begin{bmatrix}
+        1 & 2\\
+        2 & 3
+      \end{bmatrix}
+    \]
+    的 Schur 分解.
+
+  \item 证明: 若 $X\in\R^{n\times r}$, $r\leqslant n$, 且 $\norm{X^TX-I}_2=\tau<1$, 则
+    \[
+      \sigma_{\min}(X)\geqslant1-\tau,
+    \]
+    其中 $\sigma_{\min}$ 表示最小奇异值.
+
+  \item 证明: $A=B+\ii C$ 为 Hermite 矩阵当且仅当
+    \[
+      M=\begin{bmatrix}
+        B & -C\\
+        C & B
+      \end{bmatrix}
+    \]
+    是对称矩阵. 并给出 $A$ 的特征值, 特征向量与 $M$ 的特征值, 特征向量之间的关系.
+
+  \item 把 $A=B+\ii C$ 的奇异值与奇异向量同
+    \[
+      \begin{bmatrix}
+        B & -C\\
+        C & B
+      \end{bmatrix}
+    \]
+    的奇异值与奇异向量联系起来, 其中 $B,C\in\R^{m\times n}$.
+
+  \item 利用奇异值分解证明: 若 $A\in\R^{m\times n}$ 且 $m\geqslant n$, 则存在矩阵 $Q\in\R^{m\times n}$ ($Q^TQ=I$) 与半正定矩阵 $P\in\R^{n\times n}$ 使 $A=QP$.
+
+  \item 设
+    \[
+      A=\begin{bmatrix}
+        I & B\\
+        B^* & I
+      \end{bmatrix},
+    \]
+    其中 $\norm{B}_2<1$. 证明
+    \[
+      \norm{A}_2\norm{A^{-1}}_2=\frac{1+\norm{B}_2}{1-\norm{B}_2}.
+    \]
+
+  \item 设
+    \[
+      A=\begin{bmatrix}
+        a_1 & b_1 & & & \mathbf{0}\\
+        c_1 & a_2 & b_2 & & \\
+         & \ddots & \ddots & \ddots & \\
+         & & \ddots & \ddots & b_{n-1}\\
+        \mathbf{0} & & & c_{n-1} & a_n
+      \end{bmatrix},
+    \]
+    其中 $b_ic_i>0$. 证明存在对角矩阵 $D$ 使 $D^{-1}AD$ 为对称三对角矩阵.
+
+  \item 设
+    \[
+      T=\begin{bmatrix}
+        2 & -1 & 0 & 0\\
+        -1 & 2 & -1 & 0\\
+        0 & -1 & 2 & -1\\
+        0 & 0 & -1 & 2
+      \end{bmatrix}.
+    \]
+    \subquest $T$ 是否正定?
+    \subquest $T$ 在区间 $[0,2]$ 内有多少个特征值?
+
+  \item 设 $A,E\in\R^{n\times n}$ 为两个对称矩阵. 证明: 若 $A$ 正定且 $\norm{A^{-1}}_2\norm{E}_2<1$, 则 $A+E$ 也正定.
+
+  \item 设 $A\in\R^{m\times n}$ 且 $m\geqslant n$, 并假定 $A$ 的奇异值按如下次序排列:
+    \[
+      \sigma_1\geqslant\sigma_2\geqslant\cdots\geqslant\sigma_n.
+    \]
+    证明
+    \[
+      \sigma_i=\max_{\dim(S)=i}\min_{\mathbf{0}\neq\mathbf{u}\in S}
+      \frac{\norm{A\mathbf{u}}_2}{\norm{\mathbf{u}}_2}
+      =\min_{\dim(S)=n-i+1}\max_{\mathbf{0}\neq\mathbf{u}\in S}
+      \frac{\norm{A\mathbf{u}}_2}{\norm{\mathbf{u}}_2},
+    \]
+    其中 $S$ 是 $\R^n$ 的任一子空间.
+
+  \item 设 $A=[a_{ij}]\in\R^{n\times n}$ 对称, 且满足
+    \subquest $a_{ii}>0$, $i=1,2,\ldots,n$.
+    \subquest $a_{ij}\leqslant0$, $i\neq j$.
+    \subquest $\displaystyle\sum_{i=1}^{n}a_{i1}>0$.
+    \subquest $\displaystyle\sum_{i=1}^{n}a_{ij}=0$, $j=2,3,\ldots,n$.
+
+    \hspace*{2em}证明 $A$ 的特征值非负.
+
+  \item 设 $A$ 对称且带宽为 $p$. 证明: 若作带位移的 QR 迭代 $A-\mu I=QR$, $\tilde{A}=RQ+\mu I$, 则 $\tilde{A}$ 的带宽为 $p$.
+\end{exercises}

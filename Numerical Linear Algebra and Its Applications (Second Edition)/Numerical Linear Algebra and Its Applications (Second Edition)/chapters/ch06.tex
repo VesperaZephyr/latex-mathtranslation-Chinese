@@ -1,0 +1,1456 @@
+% chapters/ch06.tex —— 第 6 章：Krylov 子空间方法
+% 源书：Chapter 6 Krylov Subspace Methods，书页 76–102（物理页 90–116）
+% 公式编号 (6.1)–(6.23)；定理 6.1–6.14；引理 6.1–6.2；推论 6.1；习题 1–11
+\chapter{Krylov 子空间方法}
+\label{ch:krylov}
+
+本章介绍一类称为 \newterm{krylovmethod}{Krylov 子空间方法}{Krylov subspace method}的迭代法. 在为大型稀疏问题发展起来的各类 Krylov 子空间方法中, 我们主要研究两种: 共轭梯度 (CG) 法与广义极小残量 (GMRES) 法. CG 法由 Hestenes 与 Stiefel 于 1952 年提出, 是求解对称正定线性方程组最著名的迭代法之一 \cite{src:37}; GMRES 法由 Saad 与 Schultz 于 1986 年针对非对称线性方程组提出 \cite{src:71}. 与往常一样, 我们先从最速下降法谈起.
+
+\section{最速下降法}
+\label{sec:6-1}
+
+考虑线性方程组
+\[
+  A\mathbf{x}=\mathbf{b},
+\]
+其中 $A=[a_{ij}]\in\R^{n\times n}$ 为对称正定矩阵, $\mathbf{x}=[x_1,x_2,\ldots,x_n]^T\in\R^n$ 为未知向量, $\mathbf{b}=[b_1,b_2,\ldots,b_n]^T\in\R^n$ 为已知向量. 定义如下二次函数:
+\begin{equation}
+  \phi(\mathbf{x})\equiv\mathbf{x}^TA\mathbf{x}-2\mathbf{b}^T\mathbf{x}.
+  \label{eq:6-1}
+\end{equation}
+
+\begin{theorem}
+\label{thm:6-1}
+设 $A\in\R^{n\times n}$ 为对称正定矩阵. 则求 $A\mathbf{x}=\mathbf{b}$ 的解等价于求函数 \eqref{eq:6-1} 的极小值点.
+\end{theorem}
+
+\begin{proof}
+注意
+\[
+  \frac{\partial\phi}{\partial x_i}
+  =2(a_{i1}x_1+\cdots+a_{in}x_n)-2b_i,
+  \qquad i=1,2,\ldots,n.
+\]
+于是
+\begin{equation}
+  \operatorname{grad}\phi(\mathbf{x})=2(A\mathbf{x}-\mathbf{b})=-2\mathbf{r},
+  \label{eq:6-2}
+\end{equation}
+其中 $\operatorname{grad}\phi(\mathbf{x})$ 表示 $\phi(\mathbf{x})$ 的梯度, $\mathbf{r}=\mathbf{b}-A\mathbf{x}$. 若 $\phi(\mathbf{x})$ 在点 $\mathbf{x}_*$ 处达到极小, 则
+\[
+  \operatorname{grad}\phi(\mathbf{x}_*)=\mathbf{0},
+\]
+即 $A\mathbf{x}_*=\mathbf{b}$, 这说明 $\mathbf{x}_*$ 是方程组的解.
+
+反之, 若 $\mathbf{x}_*$ 是方程组的解, 则对任意向量 $\mathbf{y}$, 有
+\[
+  \begin{aligned}
+    \phi(\mathbf{x}_*+\mathbf{y})
+    &=(\mathbf{x}_*+\mathbf{y})^TA(\mathbf{x}_*+\mathbf{y})
+      -2\mathbf{b}^T(\mathbf{x}_*+\mathbf{y})\\
+    &=\mathbf{x}_*^TA\mathbf{x}_*-2\mathbf{b}^T\mathbf{x}_*+\mathbf{y}^TA\mathbf{y}
+     =\phi(\mathbf{x}_*)+\mathbf{y}^TA\mathbf{y}.
+  \end{aligned}
+\]
+由于 $A$ 对称正定, 故 $\mathbf{y}^TA\mathbf{y}\geqslant0$. 因此
+\[
+  \phi(\mathbf{x}_*+\mathbf{y})\geqslant\phi(\mathbf{x}_*),
+\]
+即 $\phi(\mathbf{x})$ 在点 $\mathbf{x}_*$ 处达到极小.
+\end{proof}
+
+那么如何求 \eqref{eq:6-1} 的极小值? 通常, 对给定的初始向量 $\mathbf{x}_0$, 我们先选取一个方向 $\mathbf{p}_0$, 然后在这条直线 $\mathbf{x}=\mathbf{x}_0+\alpha\mathbf{p}_0$ 上寻找一点
+\[
+  \mathbf{x}_1=\mathbf{x}_0+\alpha_0\mathbf{p}_0,
+\]
+使得
+\[
+  \phi(\mathbf{x}_1)=\phi(\mathbf{x}_0+\alpha_0\mathbf{p}_0)
+  \leqslant\phi(\mathbf{x}_0+\alpha\mathbf{p}_0).
+\]
+这表示沿这条直线, $\phi(\mathbf{x})$ 在点 $\mathbf{x}_1$ 处达到极小. 随后, 从 $\mathbf{x}_1$ 出发再选取另一个方向 $\mathbf{p}_1$, 并在直线 $\mathbf{x}=\mathbf{x}_1+\alpha\mathbf{p}_1$ 上寻找一点
+\[
+  \mathbf{x}_2=\mathbf{x}_1+\alpha_1\mathbf{p}_1,
+\]
+使得
+\[
+  \phi(\mathbf{x}_2)=\phi(\mathbf{x}_1+\alpha_1\mathbf{p}_1)
+  \leqslant\phi(\mathbf{x}_1+\alpha\mathbf{p}_1),
+\]
+即沿这条直线, $\phi(\mathbf{x})$ 在点 $\mathbf{x}_2$ 处达到极小. 如此一步一步地进行下去, 便得到
+\[
+  \mathbf{p}_0,\mathbf{p}_1,\ldots,
+  \qquad\text{以及}\qquad
+  \alpha_0,\alpha_1,\ldots,
+\]
+其中 $\{\mathbf{p}_k\}$ 称为\newterm{linesearch}{线搜索方向}{line search direction}, $\{\alpha_k\}$ 称为\newterm{stepsize}{步长}{step size}. 一般地, 在点 $\mathbf{x}_k$ 处选取一个方向 $\mathbf{p}_k$, 再沿直线 $\mathbf{x}=\mathbf{x}_k+\alpha\mathbf{p}_k$ 确定步长 $\alpha_k$, 使得
+\[
+  \phi(\mathbf{x}_k+\alpha_k\mathbf{p}_k)
+  \leqslant\phi(\mathbf{x}_k+\alpha\mathbf{p}_k).
+\]
+于是得到 $\mathbf{x}_{k+1}=\mathbf{x}_k+\alpha_k\mathbf{p}_k$. 我们指出, 选取线搜索方向与步长的不同方式, 就对应着求解 \eqref{eq:6-1} 的不同算法.
+
+下面先考虑如何确定步长 $\alpha_k$. 从点 $\mathbf{x}_k$ 出发沿方向 $\mathbf{p}_k$, 我们希望在直线 $\mathbf{x}=\mathbf{x}_k+\alpha\mathbf{p}_k$ 上找到步长 $\alpha_k$, 使得
+\[
+  \phi(\mathbf{x}_k+\alpha_k\mathbf{p}_k)
+  \leqslant\phi(\mathbf{x}_k+\alpha\mathbf{p}_k).
+\]
+令
+\[
+  \begin{aligned}
+    f(\alpha)&=\phi(\mathbf{x}_k+\alpha\mathbf{p}_k)\\
+    &=(\mathbf{x}_k+\alpha\mathbf{p}_k)^TA(\mathbf{x}_k+\alpha\mathbf{p}_k)
+      -2\mathbf{b}^T(\mathbf{x}_k+\alpha\mathbf{p}_k)\\
+    &=\alpha^2\mathbf{p}_k^TA\mathbf{p}_k-2\alpha\mathbf{r}_k^T\mathbf{p}_k
+      +\phi(\mathbf{x}_k),
+  \end{aligned}
+\]
+其中 $\mathbf{r}_k=\mathbf{b}-A\mathbf{x}_k$. 由
+\[
+  \frac{df}{d\alpha}=2\alpha\mathbf{p}_k^TA\mathbf{p}_k-2\mathbf{r}_k^T\mathbf{p}_k=0
+\]
+即得
+\begin{equation}
+  \alpha_k=\frac{\mathbf{r}_k^T\mathbf{p}_k}{\mathbf{p}_k^TA\mathbf{p}_k}.
+  \label{eq:6-3}
+\end{equation}
+一旦求出 $\alpha_k$, 便可计算
+\[
+  \mathbf{x}_{k+1}=\mathbf{x}_k+\alpha_k\mathbf{p}_k.
+\]
+是否有 $\phi(\mathbf{x}_{k+1})\leqslant\phi(\mathbf{x}_k)$? 考虑
+\[
+  \begin{aligned}
+    \phi(\mathbf{x}_{k+1})-\phi(\mathbf{x}_k)
+    &=\phi(\mathbf{x}_k+\alpha_k\mathbf{p}_k)-\phi(\mathbf{x}_k)\\
+    &=\alpha_k^2\mathbf{p}_k^TA\mathbf{p}_k-2\alpha_k\mathbf{r}_k^T\mathbf{p}_k\\
+    &=-\frac{(\mathbf{r}_k^T\mathbf{p}_k)^2}{\mathbf{p}_k^TA\mathbf{p}_k}\leqslant0.
+  \end{aligned}
+\]
+若 $\mathbf{r}_k^T\mathbf{p}_k\neq0$, 则 $\phi(\mathbf{x}_{k+1})<\phi(\mathbf{x}_k)$.
+
+现在考虑如何选取方向 $\mathbf{p}_k$. 众所周知, $\phi(\mathbf{x})$ 的最速下降方向是梯度的负方向, 即由 \eqref{eq:6-2} 得 $\mathbf{p}_k=\mathbf{r}_k$. 由此便得到\newterm{steepestdescent}{最速下降法}{steepest descent method}. 为了讨论该方法的收敛速度, 先引入如下引理.
+
+\begin{lemma}
+\label{lem:6-1}
+设 $0<\lambda_1\leqslant\cdots\leqslant\lambda_n$ 为对称正定矩阵 $A$ 的特征值, $P(t)$ 为 $t$ 的实系数多项式. 则
+\[
+  \norm{P(A)\mathbf{x}}_A
+  \leqslant\max_{1\leqslant j\leqslant n}|P(\lambda_j)|\cdot\norm{\mathbf{x}}_A,
+  \qquad\mathbf{x}\in\R^n,
+\]
+其中 $\norm{\mathbf{x}}_A\equiv\sqrt{\mathbf{x}^TA\mathbf{x}}$ 称为\newterm{energynorm}{能量范数}{energy norm}.
+\end{lemma}
+
+\begin{proof}
+设 $\mathbf{y}_1,\mathbf{y}_2,\ldots,\mathbf{y}_n$ 依次为 $A$ 对应于特征值 $\lambda_1,\lambda_2,\ldots,\lambda_n$ 的特征向量, 并设 $\mathbf{y}_1,\mathbf{y}_2,\ldots,\mathbf{y}_n$ 同时构成 $\R^n$ 的一组标准正交基. 于是对任意 $\mathbf{x}\in\R^n$, 有 $\mathbf{x}=\sum_{i=1}^n\beta_i\mathbf{y}_i$, 进而
+\[
+  \begin{aligned}
+    \mathbf{x}^TP(A)AP(A)\mathbf{x}
+    &=\left(\sum_{i=1}^n\beta_iP(\lambda_i)\mathbf{y}_i\right)^T
+      A\left(\sum_{i=1}^n\beta_iP(\lambda_i)\mathbf{y}_i\right)\\
+    &=\sum_{i=1}^n\lambda_i\beta_i^2P^2(\lambda_i)
+     \leqslant\max_{1\leqslant j\leqslant n}P^2(\lambda_j)
+      \sum_{i=1}^n\lambda_i\beta_i^2\\
+    &=\max_{1\leqslant j\leqslant n}P^2(\lambda_j)\,\mathbf{x}^TA\mathbf{x}.
+  \end{aligned}
+\]
+因此
+\[
+  \norm{P(A)\mathbf{x}}_A
+  \leqslant\max_{1\leqslant j\leqslant n}|P(\lambda_j)|\cdot\norm{\mathbf{x}}_A.
+  \qedhere
+\]
+\end{proof}
+
+对最速下降法, 有如下收敛性定理.
+
+\begin{theorem}
+\label{thm:6-2}
+设 $0<\lambda_1\leqslant\cdots\leqslant\lambda_n$ 为对称正定矩阵 $A$ 的特征值. 则由最速下降法产生的序列 $\{\mathbf{x}_k\}$ 满足
+\[
+  \norm{\mathbf{x}_k-\mathbf{x}_*}_A
+  \leqslant\left(\frac{\lambda_n-\lambda_1}{\lambda_n+\lambda_1}\right)^k
+  \norm{\mathbf{x}_0-\mathbf{x}_*}_A,
+\]
+其中 $\mathbf{x}_*$ 为 $A\mathbf{x}=\mathbf{b}$ 的精确解.
+\end{theorem}
+
+\begin{proof}
+最速下降法产生的 $\mathbf{x}_k$ 满足
+\[
+  \phi(\mathbf{x}_k)\leqslant\phi(\mathbf{x}_{k-1}+\alpha\mathbf{r}_{k-1}),
+  \qquad\alpha\in\R.
+\]
+注意到
+\[
+  \phi(\mathbf{x})+\mathbf{x}_*^TA\mathbf{x}_*=(\mathbf{x}-\mathbf{x}_*)^TA(\mathbf{x}-\mathbf{x}_*),
+\]
+故对任意 $\alpha\in\R$ 有
+\begin{equation}
+  \begin{aligned}
+    (\mathbf{x}_k-\mathbf{x}_*)^TA(\mathbf{x}_k-\mathbf{x}_*)
+    &\leqslant(\mathbf{x}_{k-1}+\alpha\mathbf{r}_{k-1}-\mathbf{x}_*)^T
+      A(\mathbf{x}_{k-1}+\alpha\mathbf{r}_{k-1}-\mathbf{x}_*)\\
+    &=[(I-\alpha A)(\mathbf{x}_{k-1}-\mathbf{x}_*)]^T
+      A[(I-\alpha A)(\mathbf{x}_{k-1}-\mathbf{x}_*)].
+  \end{aligned}
+  \label{eq:6-4}
+\end{equation}
+令 $P_\alpha(t)=1-\alpha t$. 由 \eqref{eq:6-4} 与引理 \ref{lem:6-1}, 得
+\begin{equation}
+  \begin{aligned}
+    \norm{\mathbf{x}_k-\mathbf{x}_*}_A
+    &\leqslant\norm{P_\alpha(A)(\mathbf{x}_{k-1}-\mathbf{x}_*)}_A\\
+    &\leqslant\max_{1\leqslant j\leqslant n}|P_\alpha(\lambda_j)|
+      \cdot\norm{\mathbf{x}_{k-1}-\mathbf{x}_*}_A
+  \end{aligned}
+  \label{eq:6-5}
+\end{equation}
+对任意 $\alpha\in\R$ 成立. 利用 Chebyshev 逼近的性质 \cite{src:70}, 有
+\begin{equation}
+  \min_\alpha\max_{\lambda_1\leqslant t\leqslant\lambda_n}|1-\alpha t|
+  =\frac{\lambda_n-\lambda_1}{\lambda_n+\lambda_1}.
+  \label{eq:6-6}
+\end{equation}
+把 \eqref{eq:6-6} 代入 \eqref{eq:6-5}, 即得
+\[
+  \norm{\mathbf{x}_k-\mathbf{x}_*}_A
+  \leqslant\frac{\lambda_n-\lambda_1}{\lambda_n+\lambda_1}
+  \norm{\mathbf{x}_{k-1}-\mathbf{x}_*}_A.
+\]
+从而
+\[
+  \norm{\mathbf{x}_k-\mathbf{x}_*}_A
+  \leqslant\left(\frac{\lambda_n-\lambda_1}{\lambda_n+\lambda_1}\right)^k
+  \norm{\mathbf{x}_0-\mathbf{x}_*}_A.
+  \qedhere
+\]
+\end{proof}
+
+\section{共轭梯度法}
+\label{sec:6-2}
+
+本节介绍\newterm{conjugategradient}{共轭梯度法}{conjugate gradient (CG) method}, 它是 Krylov 子空间方法中最重要的方法之一.
+
+\subsection{共轭梯度法}
+\label{subsec:6-2-1}
+
+CG 法的基本思想如下. 对给定的初始向量 $\mathbf{x}_0$, 第一步仍取负梯度方向, 即 $\mathbf{p}_0=\mathbf{r}_0$. 于是
+\[
+  \alpha_0=\frac{\mathbf{r}_0^T\mathbf{p}_0}{\mathbf{p}_0^TA\mathbf{p}_0},
+  \qquad
+  \mathbf{x}_1=\mathbf{x}_0+\alpha_0\mathbf{p}_0,
+  \qquad
+  \mathbf{r}_1=\mathbf{b}-A\mathbf{x}_1.
+\]
+此后, 在第 $(k+1)$ 步 ($k\geqslant1$), 我们希望在平面
+\[
+  \pi_2=\left\{\mathbf{x}=\mathbf{x}_k+\xi\mathbf{r}_k+\eta\mathbf{p}_{k-1}:
+  \ \xi,\eta\in\R\right\}
+\]
+上选取一个方向 $\mathbf{p}_k$, 使 $\phi$ 下降得最快. 考虑 $\phi$ 在 $\pi_2$ 上的限制:
+\[
+  \begin{aligned}
+    \psi(\xi,\eta)&=\phi(\mathbf{x}_k+\xi\mathbf{r}_k+\eta\mathbf{p}_{k-1})\\
+    &=(\mathbf{x}_k+\xi\mathbf{r}_k+\eta\mathbf{p}_{k-1})^T
+      A(\mathbf{x}_k+\xi\mathbf{r}_k+\eta\mathbf{p}_{k-1})\\
+    &\quad-2\mathbf{b}^T(\mathbf{x}_k+\xi\mathbf{r}_k+\eta\mathbf{p}_{k-1}).
+  \end{aligned}
+\]
+直接计算可得
+\[
+  \frac{\partial\psi}{\partial\xi}
+  =2\left(\xi\mathbf{r}_k^TA\mathbf{r}_k+\eta\mathbf{r}_k^TA\mathbf{p}_{k-1}
+  -\mathbf{r}_k^T\mathbf{r}_k\right),
+\]
+\[
+  \frac{\partial\psi}{\partial\eta}
+  =2\left(\xi\mathbf{r}_k^TA\mathbf{p}_{k-1}
+  +\eta\mathbf{p}_{k-1}^TA\mathbf{p}_{k-1}\right),
+\]
+其中用到了 $\mathbf{r}_k^T\mathbf{p}_{k-1}=0$ (见后面的定理 \ref{thm:6-3}). 令
+\[
+  \frac{\partial\psi}{\partial\xi}=\frac{\partial\psi}{\partial\eta}=0,
+\]
+便得到 $\phi$ 在平面 $\pi_2$ 上的唯一极小值点
+\[
+  \tilde{\mathbf{x}}=\mathbf{x}_k+\xi_0\mathbf{r}_k+\eta_0\mathbf{p}_{k-1},
+\]
+其中 $\xi_0$ 与 $\eta_0$ 满足
+\begin{equation}
+  \begin{aligned}
+    \xi_0\mathbf{r}_k^TA\mathbf{r}_k+\eta_0\mathbf{r}_k^TA\mathbf{p}_{k-1}
+    &=\mathbf{r}_k^T\mathbf{r}_k,\\
+    \xi_0\mathbf{r}_k^TA\mathbf{p}_{k-1}
+    +\eta_0\mathbf{p}_{k-1}^TA\mathbf{p}_{k-1}&=0.
+  \end{aligned}
+  \label{eq:6-7}
+\end{equation}
+由 \eqref{eq:6-7} 可见, 若 $\mathbf{r}_k\neq\mathbf{0}$, 则 $\xi_0\neq0$. 因此可以取
+\[
+  \mathbf{p}_k=\frac{1}{\xi_0}(\tilde{\mathbf{x}}-\mathbf{x}_k)
+  =\mathbf{r}_k+\frac{\eta_0}{\xi_0}\mathbf{p}_{k-1}
+\]
+作为新的方向, 它是使 $\phi$ 在平面 $\pi_2$ 上达到极小的最优方向. 令 $\beta_{k-1}=\eta_0/\xi_0$, 则由 \eqref{eq:6-7} 的第二式得
+\[
+  \beta_{k-1}=-\frac{\mathbf{r}_k^TA\mathbf{p}_{k-1}}
+  {\mathbf{p}_{k-1}^TA\mathbf{p}_{k-1}}.
+\]
+注意 $\mathbf{p}_k$ 满足 $\mathbf{p}_k^TA\mathbf{p}_{k-1}=0$ (见后面的定理 \ref{thm:6-3}), 即 $\mathbf{p}_k$ 与 $\mathbf{p}_{k-1}$ 关于 $A$ 共轭.
+
+一旦求出 $\mathbf{p}_k$, 便可利用 \eqref{eq:6-3} 确定 $\alpha_k$, 进而计算
+\[
+  \mathbf{x}_{k+1}=\mathbf{x}_k+\alpha_k\mathbf{p}_k.
+\]
+归纳起来, 我们有如下公式:
+\[
+  \alpha_k=\frac{\mathbf{r}_k^T\mathbf{p}_k}{\mathbf{p}_k^TA\mathbf{p}_k},
+  \qquad
+  \mathbf{x}_{k+1}=\mathbf{x}_k+\alpha_k\mathbf{p}_k,
+  \qquad
+  \mathbf{r}_{k+1}=\mathbf{b}-A\mathbf{x}_{k+1},
+\]
+\[
+  \beta_k=-\frac{\mathbf{r}_{k+1}^TA\mathbf{p}_k}{\mathbf{p}_k^TA\mathbf{p}_k},
+  \qquad
+  \mathbf{p}_{k+1}=\mathbf{r}_{k+1}+\beta_k\mathbf{p}_k.
+\]
+经过几步初等运算后, 可得
+\[
+  \alpha_k=\frac{\mathbf{r}_k^T\mathbf{r}_k}{\mathbf{p}_k^TA\mathbf{p}_k},
+  \qquad
+  \beta_k=\frac{\mathbf{r}_{k+1}^T\mathbf{r}_{k+1}}{\mathbf{r}_k^T\mathbf{r}_k}.
+\]
+于是, 求解对称正定方程组 $A\mathbf{x}=\mathbf{b}$ 的最常用, 最成功的迭代法之一——CG 法的计算格式如下. 在初始化步, 取 $k=0$, 选定 $\mathbf{x}_0$ 后计算
+\[
+  \mathbf{r}_0=\mathbf{b}-A\mathbf{x}_0.
+\]
+当 $\mathbf{r}_k\neq\mathbf{0}$ 时, 迭代步为
+\[
+  \left\{
+  \begin{array}{l}
+    k=k+1\\
+    \textbf{if}\ k=1\\
+    \quad \mathbf{p}_0=\mathbf{r}_0\\
+    \textbf{else}\\
+    \quad \beta_{k-2}=\mathbf{r}_{k-1}^T\mathbf{r}_{k-1}
+      /\mathbf{r}_{k-2}^T\mathbf{r}_{k-2}\\
+    \quad \mathbf{p}_{k-1}=\mathbf{r}_{k-1}+\beta_{k-2}\mathbf{p}_{k-2}\\
+    \textbf{end}\\
+    \alpha_{k-1}=\mathbf{r}_{k-1}^T\mathbf{r}_{k-1}
+      /\mathbf{p}_{k-1}^TA\mathbf{p}_{k-1}\\
+    \mathbf{x}_k=\mathbf{x}_{k-1}+\alpha_{k-1}\mathbf{p}_{k-1}\\
+    \mathbf{r}_k=\mathbf{r}_{k-1}-\alpha_{k-1}A\mathbf{p}_{k-1}
+  \end{array}
+  \right.
+\]
+其中 $\mathbf{r}_k$ 与 $\mathbf{p}_k$ 为向量, $\alpha_k$ 与 $\beta_k$ 为标量, $k=0,1,\ldots$. 这里的 $\mathbf{x}_k$ 是第 $k$ 次迭代后对精确解的近似. 当 $\mathbf{r}_k=\mathbf{0}$ 时, 解即为 $\mathbf{x}=\mathbf{x}_k$.
+
+\subsection{基本性质}
+\label{subsec:6-2-2}
+
+\begin{theorem}
+\label{thm:6-3}
+向量组 $\{\mathbf{r}_i\}$ 与 $\{\mathbf{p}_i\}$ 满足如下性质:
+\begin{parenlist}
+  \item $\mathbf{p}_i^T\mathbf{r}_j=0$, \quad $0\leqslant i<j\leqslant k$;
+  \item $\mathbf{r}_i^T\mathbf{r}_j=0$, \quad $i\neq j$, \ $0\leqslant i,j\leqslant k$;
+  \item $\mathbf{p}_i^TA\mathbf{p}_j=0$, \quad $i\neq j$, \ $0\leqslant i,j\leqslant k$;
+  \item $\spn\{\mathbf{r}_0,\ldots,\mathbf{r}_k\}
+        =\spn\{\mathbf{p}_0,\ldots,\mathbf{p}_k\}
+        =\mathcal{K}(A,\mathbf{r}_0,k+1)$, 其中
+    \[
+      \mathcal{K}(A,\mathbf{r}_0,k+1)
+      \equiv\spn\left\{\mathbf{r}_0,A\mathbf{r}_0,\ldots,A^k\mathbf{r}_0\right\}
+    \]
+    称为 \newterm{krylovsubspace}{Krylov 子空间}{Krylov subspace}.
+\end{parenlist}
+\end{theorem}
+
+\begin{proof}
+对 $k=1$, 用归纳法, 有
+\[
+  \mathbf{p}_0=\mathbf{r}_0,\qquad
+  \mathbf{r}_1=\mathbf{r}_0-\alpha_0A\mathbf{p}_0,\qquad
+  \mathbf{p}_1=\mathbf{r}_1+\beta_0\mathbf{p}_0.
+\]
+于是, 当 $\alpha_0=\mathbf{r}_0^T\mathbf{r}_0/\mathbf{p}_0^TA\mathbf{p}_0$ 时,
+\[
+  \begin{aligned}
+    \mathbf{p}_0^T\mathbf{r}_1&=\mathbf{r}_0^T\mathbf{r}_1
+    =\mathbf{r}_0^T(\mathbf{r}_0-\alpha_0A\mathbf{p}_0)\\
+    &=\mathbf{r}_0^T\mathbf{r}_0-\alpha_0\mathbf{p}_0^TA\mathbf{p}_0=0,
+  \end{aligned}
+\]
+并且
+\[
+  \begin{aligned}
+    \mathbf{p}_1^TA\mathbf{p}_0
+    &=(\mathbf{r}_1+\beta_0\mathbf{r}_0)^TA\mathbf{r}_0\\
+    &=\mathbf{r}_1^TA\mathbf{r}_0
+      -\frac{\mathbf{r}_1^TA\mathbf{r}_0}{\mathbf{r}_0^TA\mathbf{r}_0}
+      \mathbf{r}_0^TA\mathbf{r}_0=0.
+  \end{aligned}
+\]
+现假定定理对 $k$ 成立, 证明它对 $k+1$ 也成立.
+
+对 (1), 利用归纳假设与 $\mathbf{r}_{k+1}=\mathbf{r}_k-\alpha_kA\mathbf{p}_k$, 有
+\[
+  \mathbf{p}_i^T\mathbf{r}_{k+1}
+  =\mathbf{p}_i^T\mathbf{r}_k-\alpha_k\mathbf{p}_i^TA\mathbf{p}_k=0,
+  \qquad 0\leqslant i\leqslant k-1,
+\]
+同时
+\[
+  \mathbf{p}_k^T\mathbf{r}_{k+1}
+  =\mathbf{p}_k^T\mathbf{r}_k
+  -\frac{\mathbf{p}_k^T\mathbf{r}_k}{\mathbf{p}_k^TA\mathbf{p}_k}
+  \mathbf{p}_k^TA\mathbf{p}_k=0.
+\]
+因此 (1) 对 $k+1$ 成立.
+
+对 (2), 由归纳假设有
+\[
+  \spn\{\mathbf{r}_0,\ldots,\mathbf{r}_k\}
+  =\spn\{\mathbf{p}_0,\ldots,\mathbf{p}_k\}.
+\]
+由 (1) 知 $\mathbf{r}_{k+1}$ 与该子空间正交, 因此 (2) 对 $k+1$ 成立.
+
+对 (3), 利用归纳假设, (2) 以及
+\[
+  \mathbf{p}_{k+1}=\mathbf{r}_{k+1}+\beta_k\mathbf{p}_k,
+  \qquad
+  \mathbf{r}_{i+1}=\mathbf{r}_i-\alpha_iA\mathbf{p}_i,
+\]
+得
+\[
+  \mathbf{p}_{k+1}^TA\mathbf{p}_i
+  =\frac{1}{\alpha_i}\mathbf{r}_{k+1}^T(\mathbf{r}_i-\mathbf{r}_{i+1})
+  +\beta_k\mathbf{p}_k^TA\mathbf{p}_i=0,
+  \qquad i=0,1,\ldots,k-1.
+\]
+又由 $\beta_k$ 的定义,
+\[
+  \begin{aligned}
+    \mathbf{p}_{k+1}^TA\mathbf{p}_k
+    &=(\mathbf{r}_{k+1}+\beta_k\mathbf{p}_k)^TA\mathbf{p}_k\\
+    &=\mathbf{r}_{k+1}^TA\mathbf{p}_k
+      -\frac{\mathbf{r}_{k+1}^TA\mathbf{p}_k}{\mathbf{p}_k^TA\mathbf{p}_k}
+      \mathbf{p}_k^TA\mathbf{p}_k=0.
+  \end{aligned}
+\]
+于是 (3) 对 $k+1$ 成立.
+
+对 (4), 由归纳假设知
+\[
+  \mathbf{r}_k,\mathbf{p}_k\in\mathcal{K}(A,\mathbf{r}_0,k+1)
+  =\spn\left\{\mathbf{r}_0,A\mathbf{r}_0,\ldots,A^k\mathbf{r}_0\right\}.
+\]
+因此
+\[
+  \mathbf{r}_{k+1}=\mathbf{r}_k-\alpha_kA\mathbf{p}_k
+  \in\mathcal{K}(A,\mathbf{r}_0,k+2)
+  =\spn\left\{\mathbf{r}_0,A\mathbf{r}_0,\ldots,A^{k+1}\mathbf{r}_0\right\},
+\]
+且
+\[
+  \mathbf{p}_{k+1}=\mathbf{r}_{k+1}+\beta_k\mathbf{p}_k
+  \in\mathcal{K}(A,\mathbf{r}_0,k+2)
+  =\spn\left\{\mathbf{r}_0,A\mathbf{r}_0,\ldots,A^{k+1}\mathbf{r}_0\right\}.
+\]
+由 (2) 与 (3) 可知, 向量组 $\mathbf{r}_0,\ldots,\mathbf{r}_{k+1}$ 与 $\mathbf{p}_0,\ldots,\mathbf{p}_{k+1}$ 均线性无关. 因此 (4) 对 $k+1$ 成立.
+\end{proof}
+
+我们指出, 由定理 \ref{thm:6-3} 可知, 用 CG 法至多 $n$ 步即可得到 $n$ 阶对称正定方程组的精确解. 因此从理论上看, CG 法是一种直接法.
+
+\begin{theorem}
+\label{thm:6-4}
+由 CG 法得到的 $\mathbf{x}_k$ 满足
+\begin{equation}
+  \phi(\mathbf{x}_k)=\min\left\{\phi(\mathbf{x}):
+  \ \mathbf{x}\in\mathbf{x}_0+\mathcal{K}(A,\mathbf{r}_0,k)\right\},
+  \label{eq:6-8}
+\end{equation}
+或
+\begin{equation}
+  \norm{\mathbf{x}_k-\mathbf{x}_*}_A
+  =\min\left\{\norm{\mathbf{x}-\mathbf{x}_*}_A:
+  \ \mathbf{x}\in\mathbf{x}_0+\mathcal{K}(A,\mathbf{r}_0,k)\right\},
+  \label{eq:6-9}
+\end{equation}
+其中 $\norm{\mathbf{x}}_A=\sqrt{\mathbf{x}^TA\mathbf{x}}$, $\mathbf{x}_*$ 为 $A\mathbf{x}=\mathbf{b}$ 的精确解.
+\end{theorem}
+
+\begin{proof}
+由于 \eqref{eq:6-8} 与 \eqref{eq:6-9} 等价, 只需证明 \eqref{eq:6-9}. 设 CG 法进行到第 $l$ 步时 $\mathbf{r}_l=\mathbf{0}$, 则
+\[
+  \begin{aligned}
+    \mathbf{x}_*&=\mathbf{x}_l=\mathbf{x}_{l-1}+\alpha_{l-1}\mathbf{p}_{l-1}\\
+    &=\mathbf{x}_{l-2}+\alpha_{l-2}\mathbf{p}_{l-2}+\alpha_{l-1}\mathbf{p}_{l-1}\\
+    &=\cdots\cdots\\
+    &=\mathbf{x}_0+\alpha_0\mathbf{p}_0+\cdots+\alpha_{l-1}\mathbf{p}_{l-1}.
+  \end{aligned}
+\]
+对 $k<l$, 有
+\[
+  \mathbf{x}_k=\mathbf{x}_0+\alpha_0\mathbf{p}_0+\cdots+\alpha_{k-1}\mathbf{p}_{k-1}
+  \in\mathbf{x}_0+\mathcal{K}(A,\mathbf{r}_0,k).
+\]
+设 $\mathbf{x}$ 为 $\mathbf{x}_0+\mathcal{K}(A,\mathbf{r}_0,k)$ 中的任一向量. 则由定理 \ref{thm:6-3} (4) 知
+\[
+  \mathbf{x}=\mathbf{x}_0+\gamma_0\mathbf{p}_0+\cdots+\gamma_{k-1}\mathbf{p}_{k-1}.
+\]
+进而
+\[
+  \mathbf{x}_*-\mathbf{x}
+  =(\alpha_0-\gamma_0)\mathbf{p}_0+\cdots
+  +(\alpha_{k-1}-\gamma_{k-1})\mathbf{p}_{k-1}
+  +\alpha_k\mathbf{p}_k+\cdots+\alpha_{l-1}\mathbf{p}_{l-1}.
+\]
+由于
+\[
+  \mathbf{x}_*-\mathbf{x}_k=\alpha_k\mathbf{p}_k+\cdots+\alpha_{l-1}\mathbf{p}_{l-1},
+\]
+利用定理 \ref{thm:6-3} (3) 得
+\[
+  \begin{aligned}
+    \norm{\mathbf{x}_*-\mathbf{x}}_A^2
+    &=\norm{(\alpha_0-\gamma_0)\mathbf{p}_0+\cdots
+      +(\alpha_{k-1}-\gamma_{k-1})\mathbf{p}_{k-1}}_A^2\\
+    &\quad+\norm{\alpha_k\mathbf{p}_k+\cdots
+      +\alpha_{l-1}\mathbf{p}_{l-1}}_A^2\\
+    &\geqslant\norm{\alpha_k\mathbf{p}_k+\cdots
+      +\alpha_{l-1}\mathbf{p}_{l-1}}_A^2
+     =\norm{\mathbf{x}_*-\mathbf{x}_k}_A^2.
+    \qedhere
+  \end{aligned}
+\]
+\end{proof}
+
+\section{实用的 CG 方法与收敛性分析}
+\label{sec:6-3}
+
+本节给出 CG 法的一个实用算法, 并分析其收敛速度.
+
+\subsection{实用的 CG 方法}
+\label{subsec:6-3-1}
+
+由定理 \ref{thm:6-3} 可知, 在精确算术下 CG 法经 $n$ 步即可得到精确解, 其中 $n$ 为方程组的阶数. 换言之, CG 法可以被看作直接法而非迭代法. 当 $n$ 很大时, 实践中我们只把 CG 法当作迭代法使用, 并在下列情形之一发生时停止迭代:
+\begin{romanlist}
+  \item $\norm{\mathbf{r}_k}$ 小于 $\epsilon$, 其中 $\mathbf{r}_k=\mathbf{b}-A\mathbf{x}_k$, $\epsilon$ 为事先给定的误差界; 或
+  \item 迭代次数达到 $k_{\max}$, 即事先给定的最大迭代次数, 其中 $k_{\max}\ll n$.
+\end{romanlist}
+于是得到求解对称正定方程组 $A\mathbf{x}=\mathbf{b}$ 的如下实用算法. 在初始化步 $k=0$, 选定初始向量 $\mathbf{x}$ 并计算
+\[
+  \mathbf{r}=\mathbf{b}-A\mathbf{x},\qquad \rho=\mathbf{r}^T\mathbf{r}.
+\]
+当 $\sqrt{\rho}>\epsilon\norm{\mathbf{b}}_2$ 且 $k<k_{\max}$ 时, 迭代步为
+\[
+  \left\{
+  \begin{array}{l}
+    k=k+1\\
+    \textbf{if}\ k=1\\
+    \quad \mathbf{p}=\mathbf{r}\\
+    \textbf{else}\\
+    \quad \beta=\rho/\tilde{\rho};\qquad \mathbf{p}=\mathbf{r}+\beta\mathbf{p}\\
+    \textbf{end}\\
+    \mathbf{w}=A\mathbf{p};\qquad
+    \alpha=\rho/\mathbf{p}^T\mathbf{w};\qquad
+    \mathbf{x}=\mathbf{x}+\alpha\mathbf{p}\\
+    \mathbf{r}=\mathbf{r}-\alpha\mathbf{w};\qquad
+    \tilde{\rho}=\rho;\qquad
+    \rho=\mathbf{r}^T\mathbf{r}
+  \end{array}
+  \right.
+\]
+其中 $\mathbf{r},\mathbf{p},\mathbf{w}$ 为向量, $\rho,\alpha,\beta$ 为标量.
+
+我们指出:
+\begin{parenlist}
+  \item 算法中只出现矩阵与向量的乘法. 通常计算一次这样的乘法需要 $\mathcal{O}(n^2)$ 的运算量. 若矩阵是稀疏的或具有特殊结构, 则可用某些稀疏求解器或快速求解器高效地完成这些乘法.
+  \item 与 SOR 方法不同, 算法中不需要估计任何参数.
+  \item 每次迭代中, 矩阵与向量的运算都可以并行执行.
+\end{parenlist}
+
+下面简要讨论如何用 CG 法求解一般线性方程组 $A\mathbf{x}=\mathbf{b}$. 由于不能直接把 CG 法用于该方程组, 我们可以改为用 CG 法求解正规方程组
+\[
+  A^TA\mathbf{x}=A^T\mathbf{b}.
+\]
+当方程组良态时, 这种正规化 CG 方法是适用的. 但若方程组病态, 则由 $\kappa_2(A^TA)=(\kappa_2(A))^2$ 可知, 正规方程组的条件数可能变得非常大, 因此正规化 CG 方法不适用于病态方程组.
+
+\subsection{收敛性分析}
+\label{subsec:6-3-2}
+
+关于 CG 法的收敛速度, 有如下定理.
+
+\begin{theorem}
+\label{thm:6-5}
+若 $A=I+B$, 其中 $I$ 为单位矩阵且 $\rank(B)=p$, 则 CG 法至多经 $p+1$ 次迭代即可得到 $A\mathbf{x}=\mathbf{b}$ 的精确解.
+\end{theorem}
+
+\begin{proof}
+由 $A=I+B$ 易证
+\[
+  \spn\left\{\mathbf{r}_0,A\mathbf{r}_0,\ldots,A^k\mathbf{r}_0\right\}
+  =\spn\left\{\mathbf{r}_0,B\mathbf{r}_0,\ldots,B^k\mathbf{r}_0\right\}.
+\]
+注意到 $\rank(B)=p$, 于是
+\[
+  \dim\left(\spn\{\mathbf{r}_0,B\mathbf{r}_0,\ldots,B^k\mathbf{r}_0\}\right)\leqslant p+1.
+\]
+由定理 \ref{thm:6-3} 知
+\[
+  \dim\left(\spn\{\mathbf{r}_0,\ldots,\mathbf{r}_p,\mathbf{r}_{p+1}\}\right)\leqslant p+1,
+\]
+并且
+\[
+  \mathbf{r}_i^T\mathbf{r}_{p+1}=0,\qquad i=0,1,\ldots,p.
+\]
+因此 $\mathbf{r}_{p+1}=\mathbf{0}$, 即 $A\mathbf{x}_{p+1}=\mathbf{b}$.
+\end{proof}
+
+\begin{theorem}
+\label{thm:6-6}
+设 $A\in\R^{n\times n}$ 对称正定, $\mathbf{x}_*$ 为 $A\mathbf{x}=\mathbf{b}$ 的精确解. 则
+\[
+  \norm{\mathbf{x}_*-\mathbf{x}_k}_A
+  \leqslant2\left(\frac{\sqrt{\kappa_2}-1}{\sqrt{\kappa_2}+1}\right)^k
+  \norm{\mathbf{x}_*-\mathbf{x}_0}_A,
+\]
+其中 $\mathbf{x}_k$ 由 CG 法产生,
+\[
+  \kappa_2=\kappa_2(A)=\norm{A}_2\norm{A^{-1}}_2.
+\]
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:6-3} 知, 对任意 $\mathbf{x}\in\mathbf{x}_0+\mathcal{K}(A,\mathbf{r}_0,k)$, 有
+\[
+  \begin{aligned}
+    \mathbf{x}_*-\mathbf{x}
+    &=\mathbf{x}_*-\mathbf{x}_0+a_{k1}\mathbf{r}_0+a_{k2}A\mathbf{r}_0
+      +\cdots+a_{kk}A^{k-1}\mathbf{r}_0\\
+    &=A^{-1}\left(\mathbf{r}_0+a_{k1}A\mathbf{r}_0+a_{k2}A^2\mathbf{r}_0
+      +\cdots+a_{kk}A^k\mathbf{r}_0\right)\\
+    &=A^{-1}P_k(A)\mathbf{r}_0,
+  \end{aligned}
+\]
+其中 $P_k(\lambda)=\sum_{j=0}^ka_{kj}\lambda^j$ 且 $P_k(0)=1$. 设 $\mathcal{P}_k$ 为次数不超过 $k$ 且满足 $P_k(0)=1$ 的一切多项式 $P_k$ 的集合. 由定理 \ref{thm:6-4} 与引理 \ref{lem:6-1}, 有
+\begin{equation}
+  \begin{aligned}
+    \norm{\mathbf{x}_k-\mathbf{x}_*}_A
+    &=\min\left\{\norm{\mathbf{x}-\mathbf{x}_*}_A:
+      \ \mathbf{x}\in\mathbf{x}_0+\mathcal{K}(A,\mathbf{r}_0,k)\right\}\\
+    &=\min_{P_k\in\mathcal{P}_k}\norm{A^{-1}P_k(A)\mathbf{r}_0}_A
+     =\min_{P_k\in\mathcal{P}_k}\norm{P_k(A)A^{-1}\mathbf{r}_0}_A\\
+    &\leqslant\min_{P_k\in\mathcal{P}_k}\max_{1\leqslant i\leqslant n}
+      |P_k(\lambda_i)|\cdot\norm{A^{-1}\mathbf{r}_0}_A\\
+    &\leqslant\min_{P_k\in\mathcal{P}_k}\max_{a_1\leqslant\lambda\leqslant a_2}
+      |P_k(\lambda)|\cdot\norm{\mathbf{x}_*-\mathbf{x}_0}_A,
+  \end{aligned}
+  \label{eq:6-10}
+\end{equation}
+其中
+\[
+  0<a_1=\lambda_1\leqslant\cdots\leqslant\lambda_n=a_2
+\]
+为 $A$ 的特征值. 由著名的 Chebyshev 多项式逼近定理 \cite{src:70} 可知, 最优问题
+\[
+  \min_{P_k\in\mathcal{P}_k}\max_{a_1\leqslant\lambda\leqslant a_2}|P_k(\lambda)|
+\]
+存在唯一解
+\[
+  \widetilde{P}_k(\lambda)
+  =\frac{T_k\left(\dfrac{a_2+a_1-2\lambda}{a_2-a_1}\right)}
+  {T_k\left(\dfrac{a_2+a_1}{a_2-a_1}\right)}.
+\]
+这里 $T_k(z)$ 为第 $k$ 个 Chebyshev 多项式, 由递推式
+\[
+  T_k(z)=2zT_{k-1}(z)-T_{k-2}(z)
+\]
+定义, 且 $T_0(z)=1$, $T_1(z)=z$. 再次利用 Chebyshev 多项式的性质 \cite{src:70}, 可知
+\begin{equation}
+  \max_{a_1\leqslant\lambda\leqslant a_2}|\widetilde{P}_k(\lambda)|
+  =\frac{1}{T_k\left(\dfrac{a_2+a_1}{a_2-a_1}\right)}
+  \leqslant2\left(\frac{\sqrt{\kappa_2}-1}{\sqrt{\kappa_2}+1}\right)^k,
+  \label{eq:6-11}
+\end{equation}
+其中 $\kappa_2=\kappa_2(A)=\norm{A}_2\norm{A^{-1}}_2$. 因此
+\[
+  \norm{\mathbf{x}_*-\mathbf{x}_k}_A
+  \leqslant2\left(\frac{\sqrt{\kappa_2}-1}{\sqrt{\kappa_2}+1}\right)^k
+  \norm{\mathbf{x}_*-\mathbf{x}_0}_A.
+  \qedhere
+\]
+\end{proof}
+
+进一步, 还有如下定理 \cite{src:43}.
+
+\begin{theorem}
+\label{thm:6-7}
+若对称正定矩阵 $A$ 的特征值 $\lambda_j$ 满足如下排序:
+\[
+  0<\lambda_1\leqslant\cdots\leqslant\lambda_p\leqslant b_1
+  \leqslant\lambda_{p+1}\leqslant\cdots\leqslant\lambda_{n-q}\leqslant b_2
+  \leqslant\lambda_{n-q+1}\leqslant\cdots\leqslant\lambda_n,
+\]
+其中 $b_1$ 与 $b_2$ 为两个常数, 则
+\[
+  \frac{\norm{\mathbf{x}_*-\mathbf{x}_k}_A}{\norm{\mathbf{x}_*-\mathbf{x}_0}_A}
+  \leqslant2\left(\frac{\alpha-1}{\alpha+1}\right)^{k-p-q}
+  \cdot\max_{\lambda\in[b_1,b_2]}\prod_{j=1}^p
+  \left(\frac{\lambda-\lambda_j}{\lambda_j}\right),
+\]
+其中 $\alpha\equiv(b_2/b_1)^{1/2}\geqslant1$.
+\end{theorem}
+
+\begin{proof}
+令 $\mathbf{e}_k=\mathbf{x}_*-\mathbf{x}_k$. 设 $\mathcal{P}_k$ 为次数不超过 $k$ 且满足 $P_k(0)=1$ 的一切多项式 $P_k$ 的集合. 对任意 $P_k\in\mathcal{P}_k$, 由 \eqref{eq:6-10} 有
+\begin{equation}
+  \norm{\mathbf{e}_k}_A
+  \leqslant\min_{P_k\in\mathcal{P}_k}\max_{1\leqslant j\leqslant n}
+  |P_k(\lambda_j)|\cdot\norm{\mathbf{e}_0}_A
+  \leqslant\max_{1\leqslant i\leqslant n}|P_k(\lambda_i)|
+  \cdot\norm{\mathbf{e}_0}_A.
+  \label{eq:6-12}
+\end{equation}
+给定多项式 $P_{k-p-q}\in\mathcal{P}_{k-p-q}$, 构造如下特殊多项式:
+\[
+  \widehat{P}_k\equiv P_{k-p-q}\cdot(-1)^p
+  \cdot\prod_{j=1}^p\left(\frac{\lambda-\lambda_j}{\lambda_j}\right)
+  \cdot\prod_{j=n-q+1}^n\left(\frac{\lambda_j-\lambda}{\lambda_j}\right).
+\]
+对这样定义的 $\widehat{P}_k$, 当 $i=1,2,\ldots,p,n-q+1,\ldots,n$ 时, 有
+\begin{equation}
+  \widehat{P}_k(\lambda_i)=(-1)^pP_{k-p-q}(\lambda_i)
+  \cdot\prod_{j=1}^p\left(\frac{\lambda_i-\lambda_j}{\lambda_j}\right)
+  \cdot\prod_{j=n-q+1}^n\left(\frac{\lambda_j-\lambda_i}{\lambda_j}\right)=0.
+  \label{eq:6-13}
+\end{equation}
+这里可以看出
+\begin{equation}
+  \widehat{P}_k\in\mathcal{P}_k.
+  \label{eq:6-14}
+\end{equation}
+根据 \eqref{eq:6-12}, \eqref{eq:6-13} 与 \eqref{eq:6-14}, 有
+\[
+  \begin{aligned}
+    \norm{\mathbf{e}_k}_A
+    &\leqslant\max_{1\leqslant i\leqslant n}|\widehat{P}_k(\lambda_i)|
+      \cdot\norm{\mathbf{e}_0}_A\\
+    &\leqslant\max_{p+1\leqslant i\leqslant n-q}
+      \left|P_{k-p-q}(\lambda_i)\right|
+      \cdot\max_{p+1\leqslant i\leqslant n-q}\left|\prod_{j=1}^p
+      \left(\frac{\lambda_i-\lambda_j}{\lambda_j}\right)\right.\\
+    &\qquad\cdot\left.\prod_{j=n-q+1}^n
+      \left(\frac{\lambda_j-\lambda_i}{\lambda_j}\right)\right|
+      \norm{\mathbf{e}_0}_A\\
+    &\leqslant\max_{b_1\leqslant\lambda\leqslant b_2}
+      \left|P_{k-p-q}(\lambda)\right|
+      \cdot\max_{b_1\leqslant\lambda\leqslant b_2}\left|\prod_{j=1}^p
+      \left(\frac{\lambda-\lambda_j}{\lambda_j}\right)\right.\\
+    &\qquad\cdot\left.\prod_{j=n-q+1}^n
+      \left(\frac{\lambda_j-\lambda}{\lambda_j}\right)\right|
+      \norm{\mathbf{e}_0}_A.
+  \end{aligned}
+\]
+由于上述不等式对任意 $P_{k-p-q}\in\mathcal{P}_{k-p-q}$ 成立, 故由 \eqref{eq:6-11} 得
+\begin{equation}
+  \max_{b_1\leqslant\lambda\leqslant b_2}\left|P_{k-p-q}(\lambda)\right|
+  \leqslant2\left(\frac{\alpha-1}{\alpha+1}\right)^{k-p-q},
+  \qquad\alpha=\sqrt{b_2/b_1}.
+  \label{eq:6-15}
+\end{equation}
+此外, 当 $b_1\leqslant\lambda\leqslant b_2$ 时,
+\begin{equation}
+  0\leqslant\frac{\lambda_j-\lambda}{\lambda_j}\leqslant1.
+  \label{eq:6-16}
+\end{equation}
+最后由 \eqref{eq:6-15} 与 \eqref{eq:6-16} 得
+\[
+  \norm{\mathbf{e}_k}_A
+  \leqslant2\left(\frac{\alpha-1}{\alpha+1}\right)^{k-p-q}
+  \cdot\max_{\lambda\in[b_1,b_2]}\prod_{j=1}^p
+  \left(\frac{\lambda-\lambda_j}{\lambda_j}\right)\norm{\mathbf{e}_0}_A.
+  \qedhere
+\]
+\end{proof}
+
+由定理 \ref{thm:6-7} 可见, 当 $n$ 增大时, 若 $p$, $q$ 为不依赖于 $n$ 的常数且 $\lambda_1$ 一致地有正下界, 则收敛速度是线性的, 即迭代次数与 $n$ 无关. 我们还注意到, 特征值聚得越紧, 收敛越快.
+
+\begin{corollary}
+\label{cor:6-1}
+若对称正定矩阵 $A$ 的特征值 $\lambda_j$ 满足如下排序:
+\[
+  0<\delta<\lambda_1\leqslant\cdots\leqslant\lambda_p\leqslant1-\epsilon
+  \leqslant\lambda_{p+1}\leqslant\cdots\leqslant\lambda_{n-q}\leqslant1+\epsilon
+  \leqslant\lambda_{n-q+1}\leqslant\cdots\leqslant\lambda_n,
+\]
+其中 $0<\epsilon<1$, 则
+\[
+  \frac{\norm{\mathbf{x}_*-\mathbf{x}_k}_A}{\norm{\mathbf{x}_*-\mathbf{x}_0}_A}
+  \leqslant2\left(\frac{1+\epsilon}{\delta}\right)^p\epsilon^{k-p-q},
+\]
+其中 $k\geqslant p+q$.
+\end{corollary}
+
+\begin{proof}
+对定理 \ref{thm:6-7} 中的 $\alpha$, 有
+\[
+  \alpha\equiv\left(\frac{b_2}{b_1}\right)^{\frac{1}{2}}
+  =\left(\frac{1+\epsilon}{1-\epsilon}\right)^{\frac{1}{2}}.
+\]
+因此
+\[
+  \frac{\alpha-1}{\alpha+1}=\frac{1-\sqrt{1-\epsilon^2}}{\epsilon}<\epsilon.
+\]
+对 $1\leqslant j\leqslant p$ 与 $\lambda\in[1-\epsilon,1+\epsilon]$, 有
+\[
+  0\leqslant\frac{\lambda-\lambda_j}{\lambda_j}\leqslant\frac{1+\epsilon}{\delta}.
+\]
+于是利用定理 \ref{thm:6-7} 即得
+\[
+  \begin{aligned}
+    \frac{\norm{\mathbf{x}_*-\mathbf{x}_k}_A}{\norm{\mathbf{x}_*-\mathbf{x}_0}_A}
+    &\leqslant2\left(\frac{\alpha-1}{\alpha+1}\right)^{k-p-q}
+      \cdot\max_{\lambda\in[b_1,b_2]}\prod_{j=1}^p
+      \left(\frac{\lambda-\lambda_j}{\lambda_j}\right)\\
+    &\leqslant2\left(\frac{1+\epsilon}{\delta}\right)^p\epsilon^{k-p-q}.
+  \end{aligned}
+  \qedhere
+\]
+\end{proof}
+
+\section{预处理}
+\label{sec:6-4}
+
+由第 3 节可知, 若方程组
+\[
+  A\mathbf{x}=\mathbf{b}
+\]
+的系数矩阵 $A$ 是良态的或其谱是聚簇的, 则 CG 法的收敛速度很快. 因此, 为了加快收敛速度, 通常对方程组作\newterm{preconditioning}{预处理}{preconditioning}, 即不直接求解原方程组, 而求解如下预处理后的方程组
+\begin{equation}
+  \widetilde{A}\tilde{\mathbf{x}}=\tilde{\mathbf{b}},
+  \label{eq:6-17}
+\end{equation}
+其中
+\[
+  \widetilde{A}=C^{-1}AC^{-1},\qquad
+  \tilde{\mathbf{x}}=C\mathbf{x},\qquad
+  \tilde{\mathbf{b}}=C^{-1}\mathbf{b},
+\]
+且 $C$ 对称正定. 我们希望预处理后的矩阵 $\widetilde{A}$ 具有比 $A$ 更好的谱性质.
+
+对 \eqref{eq:6-17} 使用 CG 法, 得
+\begin{equation}
+  \left\{
+  \begin{array}{l}
+    \alpha_k=\dfrac{\tilde{\mathbf{r}}_k^T\tilde{\mathbf{r}}_k}
+      {\tilde{\mathbf{p}}_k^T\widetilde{A}\tilde{\mathbf{p}}_k},\\[1mm]
+    \tilde{\mathbf{x}}_{k+1}=\tilde{\mathbf{x}}_k+\alpha_k\tilde{\mathbf{p}}_k,\\[1mm]
+    \tilde{\mathbf{r}}_{k+1}=\tilde{\mathbf{r}}_k
+      -\alpha_k\widetilde{A}\tilde{\mathbf{p}}_k,\\[1mm]
+    \beta_k=\dfrac{\tilde{\mathbf{r}}_{k+1}^T\tilde{\mathbf{r}}_{k+1}}
+      {\tilde{\mathbf{r}}_k^T\tilde{\mathbf{r}}_k},\\[1mm]
+    \tilde{\mathbf{p}}_{k+1}=\tilde{\mathbf{r}}_{k+1}
+      +\beta_k\tilde{\mathbf{p}}_k,
+  \end{array}
+  \right.
+  \label{eq:6-18}
+\end{equation}
+其中 $\tilde{\mathbf{x}}_0$ 为任意给定的初始向量, $\tilde{\mathbf{r}}_0=\tilde{\mathbf{b}}-\widetilde{A}\tilde{\mathbf{x}}_0$, $\tilde{\mathbf{p}}_0=\tilde{\mathbf{r}}_0$. 令
+\[
+  \tilde{\mathbf{x}}_k=C\mathbf{x}_k,\qquad
+  \tilde{\mathbf{r}}_k=C^{-1}\mathbf{r}_k,\qquad
+  \tilde{\mathbf{p}}_k=C\mathbf{p}_k,\qquad
+  M=C^2.
+\]
+把它们代入 \eqref{eq:6-18}, 实际得到
+\[
+  \begin{array}{ll}
+    \mathbf{w}_k=A\mathbf{p}_k, &
+    \alpha_k=\rho_k/\mathbf{p}_k^T\mathbf{w}_k,\\[1mm]
+    \mathbf{x}_{k+1}=\mathbf{x}_k+\alpha_k\mathbf{p}_k, &
+    \mathbf{r}_{k+1}=\mathbf{r}_k-\alpha_k\mathbf{w}_k,\\[1mm]
+    \mathbf{z}_{k+1}=M^{-1}\mathbf{r}_{k+1}, &
+    \rho_{k+1}=\mathbf{r}_{k+1}^T\mathbf{z}_{k+1},\\[1mm]
+    \beta_k=\rho_{k+1}/\rho_k, &
+    \mathbf{p}_{k+1}=\mathbf{z}_{k+1}+\beta_k\mathbf{p}_k,
+  \end{array}
+\]
+其中 $\mathbf{x}_0$ 为任意给定的初始向量, $\mathbf{r}_0=\mathbf{b}-A\mathbf{x}_0$, $\mathbf{z}_0=M^{-1}\mathbf{r}_0$, $\rho_0=\mathbf{r}_0^T\mathbf{z}_0$, $\mathbf{p}_0=\mathbf{z}_0$.
+
+于是得到如下预处理算法. 在初始化步 $k=0$, 选定初始向量 $\mathbf{x}$ 并计算 $\mathbf{r}=\mathbf{b}-A\mathbf{x}$. 当 $\sqrt{\mathbf{r}^T\mathbf{r}}>\epsilon\norm{\mathbf{b}}_2$ 且 $k<k_{\max}$ 时, 迭代步为
+\[
+  \left\{
+  \begin{array}{l}
+    \text{解}\ M\mathbf{z}=\mathbf{r}\ \text{得}\ \mathbf{z}\\
+    k=k+1\\
+    \textbf{if}\ k=1\\
+    \quad \mathbf{p}=\mathbf{z}\\
+    \textbf{else}\\
+    \quad \beta=\rho/\tilde{\rho};\qquad \mathbf{p}=\mathbf{z}+\beta\mathbf{p}\\
+    \textbf{end}\\
+    \mathbf{w}=A\mathbf{p};\qquad
+    \alpha=\rho/\mathbf{p}^T\mathbf{w};\qquad
+    \mathbf{x}=\mathbf{x}+\alpha\mathbf{p}\\
+    \mathbf{r}=\mathbf{r}-\alpha\mathbf{w};\qquad
+    \tilde{\rho}=\rho;\qquad
+    \rho=\mathbf{r}^T\mathbf{z}
+  \end{array}
+  \right.
+\]
+其中 $\mathbf{z},\mathbf{r},\mathbf{p},\mathbf{w}$ 为向量, $\rho,\alpha,\beta$ 为标量. 该算法称为\newterm{pcg}{预处理共轭梯度 (PCG) 法}{preconditioned conjugate gradient (PCG) method}. 注意 PCG 法具有如下性质:
+\begin{romanlist}
+  \item 当 $i\neq j$ 时, $\mathbf{r}_i^TM^{-1}\mathbf{r}_j=0$;
+  \item 当 $i\neq j$ 时, $\mathbf{p}_i^TA\mathbf{p}_j=0$;
+  \item 近似解 $\mathbf{x}_k$ 满足
+    \[
+      \norm{\mathbf{x}_*-\mathbf{x}_k}_{\widetilde{A}}
+      \leqslant2\left(\frac{\sqrt{\kappa}-1}{\sqrt{\kappa}+1}\right)^k
+      \norm{\mathbf{x}_*-\mathbf{x}_0}_{\widetilde{A}},
+    \]
+    其中 $\kappa=\lambda_n/\lambda_1$, $\lambda_n$ 与 $\lambda_1$ 分别为 $M^{-1}A$ 的最大与最小特征值.
+\end{romanlist}
+
+选取一个好的\newterm{preconditioner}{预条件子}{preconditioner} $M=C^2$ 需考虑三条准则 \cite{src:2,src:16,src:32,src:42,src:43}:
+\begin{parenlist}
+  \item $M$ 易于构造;
+  \item $M\mathbf{z}=\mathbf{d}$ 易于求解;
+  \item $M^{-1}A$ 的谱是聚簇的, 且 (或)$M^{-1}A$ 相对于 $A$ 是良态的. 注意 $\widetilde{A}$ 相似于 $M^{-1}A$.
+\end{parenlist}
+对预处理后的方程组 $\widetilde{A}\tilde{\mathbf{x}}=\tilde{\mathbf{b}}$ 实施 CG 法, 其主要工作量在于每次迭代都要对某个向量 $\mathbf{v}$ 计算矩阵与向量的乘积 $M^{-1}A\mathbf{v}$.
+
+通常很难选出同时满足这三条准则的预条件子. 下面简要讨论三类预条件子.
+\begin{parenlist}
+  \item \textbf{对角预条件子}. 若系数矩阵 $A$ 的对角元彼此相差很大, 可以用矩阵
+    \[
+      M=\diag(a_{11},\ldots,a_{nn})
+    \]
+    作为预条件子, 以期加快 CG 法的收敛速度. 对于分块矩阵
+    \[
+      A=\begin{bmatrix}
+        A_{11} & \cdots & A_{1k}\\
+        \vdots & \ddots & \vdots\\
+        A_{k1} & \cdots & A_{kk}
+      \end{bmatrix},
+    \]
+    若 $A_{ii}^{-1}$ 易于求得, 则可以用分块对角矩阵
+    \[
+      M=\diag(A_{11},\ldots,A_{kk})
+    \]
+    作为预条件子.
+
+  \item \textbf{基于不完全 Cholesky 分解的预条件子}. 若先计算\newterm{incompletecholesky}{不完全 Cholesky 分解}{incomplete Cholesky factorization} \cite{src:32}
+    \[
+      A=LL^T+R,
+    \]
+    则可以用矩阵 $M=LL^T$ 作为预条件子. 我们可以要求矩阵 $L$ 与矩阵 $A$ 具有相同的稀疏结构, 且 $LL^T\approx A$.
+
+  \item \textbf{最优 (循环) 预条件子}. 这类预条件子在文献 \cite{src:16,src:18,src:21,src:42,src:43,src:77} 中研究过. \newterm{circulant}{循环矩阵}{circulant matrix}定义如下:
+    \[
+      C_n=\begin{bmatrix}
+        c_0 & c_{-1} & \cdots & c_{2-n} & c_{1-n}\\
+        c_1 & c_0 & c_{-1} & \cdots & c_{2-n}\\
+        \vdots & c_1 & c_0 & \ddots & \vdots\\
+        c_{n-2} & \cdots & \ddots & \ddots & c_{-1}\\
+        c_{n-1} & c_{n-2} & \cdots & c_1 & c_0
+      \end{bmatrix},
+    \]
+    其中 $c_{-k}=c_{n-k}$, $1\leqslant k\leqslant n-1$. 众所周知, 循环矩阵可被 \newterm{fouriermatrix}{Fourier 矩阵}{Fourier matrix} $F_n$ 对角化 \cite{src:29}, 即
+    \begin{equation}
+      C_n=F_n^*\Lambda_nF_n,
+      \label{eq:6-19}
+    \end{equation}
+    其中 $F_n$ 的元素为
+    \[
+      (F_n)_{j,k}=\frac{1}{\sqrt{n}}e^{2\pi\ii(j-1)(k-1)/n},
+      \qquad \ii\equiv\sqrt{-1},
+    \]
+    $1\leqslant j,k\leqslant n$, 而 $\Lambda_n$ 为以 $C_n$ 的特征值为对角元的对角矩阵. 我们指出, 对 $C_n$ 的第一列作\newterm{fft}{快速 Fourier 变换 (FFT)}{fast Fourier transform (FFT)}, 即可用 $\mathcal{O}(n\log n)$ 次运算得到 $\Lambda_n$. 一旦得到 $\Lambda_n$, 对任意向量 $\mathbf{y}$, 乘积 $C_n\mathbf{y}$ 与 $C_n^{-1}\mathbf{y}$ 都可用 FFT 在 $\mathcal{O}(n\log n)$ 次运算内算出. 对 Fourier 矩阵 $F_n$, 在不引起混淆时我们记其为 $F$.
+\end{parenlist}
+
+下面研究一类称为\newterm{optimalprecond}{最优预条件子}{optimal preconditioner}的预条件子 \cite{src:16,src:18,src:21,src:42,src:43}. 给定任意酉矩阵 $U\in\C^{n\times n}$, 设 $\mathcal{M}_U$ 为所有可被 $U$ 同时对角化的矩阵之集, 即
+\begin{equation}
+  \mathcal{M}_U=\left\{U^*\Lambda U:
+  \ \Lambda\ \text{为}\ n\times n\ \text{对角矩阵}\right\}.
+  \label{eq:6-20}
+\end{equation}
+我们指出, 在 \eqref{eq:6-20} 中取 $U=F$(Fourier 矩阵) 时, $\mathcal{M}_F$ 就是全体循环矩阵之集. 记 $\delta(A)$ 为对角元与矩阵 $A$ 的对角元相同的对角矩阵. 有如下引理 \cite{src:16,src:42,src:43,src:51,src:82}.
+
+\begin{lemma}
+\label{lem:6-2}
+对任意 $A=[a_{pq}]\in\C^{n\times n}$, 设 $c_U(A)$ 为 $\norm{W-A}_F$ 在一切 $W\in\mathcal{M}_U$ 上的极小点. 则
+\begin{romanlist}
+  \item $c_U(A)$ 由 $A$ 唯一确定, 且
+    \[
+      c_U(A)=U^*\delta(UAU^*)U.
+    \]
+  \item 若 $A$ 为 Hermitian 矩阵, 则 $c_U(A)$ 也是 Hermitian 矩阵. 进而, 若 $\lambda_{\min}(\cdot)$ 与 $\lambda_{\max}(\cdot)$ 分别表示最小与最大特征值, 则
+    \[
+      \lambda_{\min}(A)\leqslant\lambda_{\min}(c_U(A))
+      \leqslant\lambda_{\max}(c_U(A))\leqslant\lambda_{\max}(A).
+    \]
+    特别地, 若 $A$ 正定, 则 $c_U(A)$ 也正定.
+  \item 若 $A$ 正规且稳定, 即 $A^*A=AA^*$ 且 $A$ 的所有特征值实部为负, 则 $c_U(A)$ 也稳定.
+  \item 当 $U$ 为 Fourier 矩阵 $F$ 时,
+    \[
+      c_F(A)=\sum_{j=0}^{n-1}
+      \left(\frac{1}{n}\sum_{p-q\equiv j\ (\mathrm{mod}\ n)}a_{pq}\right)Q^j,
+    \]
+    其中 $Q$ 为 $n\times n$ 循环矩阵
+    \[
+      Q\equiv\begin{bmatrix}
+        0 & & & & 1\\
+        1 & 0 & & & \\
+        0 & 1 & \ddots & & \\
+        \vdots & \ddots & \ddots & \ddots & \\
+        0 & \cdots & 0 & 1 & 0
+      \end{bmatrix}.
+    \]
+\end{romanlist}
+\end{lemma}
+
+矩阵 $c_U(A)$ 称为 $A$ 的最优预条件子, 矩阵 $c_F(A)$ 称为 $A$ 的\newterm{optimalcirculant}{最优循环预条件子}{optimal circulant preconditioner}. 我们指出, 对一大类结构型线性方程组 $A\mathbf{x}=\mathbf{b}$ (例如 Toeplitz 方程组, Hankel 方程组等), $c_F(A)$ 是一个良好的预条件子, 参见 \cite{src:16,src:18,src:21,src:25,src:42,src:43,src:49,src:50,src:52}. 其他预条件子的应用可参阅 \cite{src:4,src:67,src:97} 以及第 9, 10 章.
+
+\section{GMRES 方法}
+\label{sec:6-5}
+
+本节介绍求解一般方程组
+\[
+  A\mathbf{x}=\mathbf{b}
+\]
+的\newterm{gmres}{广义极小残量 (GMRES) 法}{generalized minimum residual (GMRES) method}, 其中 $A\in\R^{n\times n}$ 非奇异. GMRES 法由 Saad 与 Schultz 于 1986 年提出, 是求解非对称方程组最重要的 Krylov 子空间方法之一 \cite{src:70,src:71}.
+
+\subsection{GMRES 方法的基本性质}
+\label{subsec:6-5-1}
+
+对 GMRES 法, 在第 $k$ 次迭代中, 我们要求解如下最小二乘问题的解 $\mathbf{x}_k$:
+\[
+  \min_{\mathbf{x}\in\mathbf{x}_0+\mathcal{K}(A,\mathbf{r}_0,k)}
+  \norm{\mathbf{b}-A\mathbf{x}}_2,
+\]
+其中
+\[
+  \mathcal{K}(A,\mathbf{r}_0,k)
+  \equiv\spn\left\{\mathbf{r}_0,A\mathbf{r}_0,\ldots,A^{k-1}\mathbf{r}_0\right\},
+\]
+$\mathbf{r}_0=\mathbf{b}-A\mathbf{x}_0$. 设 $\mathbf{x}\in\mathbf{x}_0+\mathcal{K}(A,\mathbf{r}_0,k)$, 则有
+\[
+  \mathbf{x}=\mathbf{x}_0+\sum_{j=0}^{k-1}\gamma_jA^j\mathbf{r}_0,
+\]
+进而
+\[
+  \mathbf{r}=\mathbf{b}-A\mathbf{x}
+  =\mathbf{b}-A\mathbf{x}_0-\sum_{j=0}^{k-1}\gamma_jA^{j+1}\mathbf{r}_0
+  =\mathbf{r}_0-\sum_{j=1}^{k}\gamma_{j-1}A^j\mathbf{r}_0.
+\]
+因此
+\[
+  \mathbf{r}=\bar{P}_k(A)\mathbf{r}_0,
+\]
+其中 $\bar{P}_k\in\mathcal{P}_k$, $\mathcal{P}_k$ 为次数不超过 $k$ 且满足 $P_k(0)=1$ 的一切多项式 $P_k$ 的集合. 于是有如下定理.
+
+\begin{theorem}
+\label{thm:6-8}
+设 $\mathbf{x}_k$ 为 GMRES 法第 $k$ 次迭代后的解. 则
+\[
+  \norm{\mathbf{r}_k}_2=\min_{P\in\mathcal{P}_k}\norm{P(A)\mathbf{r}_0}_2
+  \leqslant\norm{\bar{P}_k(A)\mathbf{r}_0}_2.
+\]
+进而
+\[
+  \frac{\norm{\mathbf{r}_k}_2}{\norm{\mathbf{r}_0}_2}
+  \leqslant\norm{\bar{P}_k(A)}_2.
+\]
+\end{theorem}
+
+此外还有如下定理.
+
+\begin{theorem}
+\label{thm:6-9}
+设 $A\in\R^{n\times n}$, 则 GMRES 法至多 $n$ 次迭代即可得到 $A\mathbf{x}=\mathbf{b}$ 的精确解.
+\end{theorem}
+
+\begin{proof}
+$A$ 的特征多项式为
+\[
+  p_A(z)=\det(zI-A),
+\]
+其阶为 $n$, 且 $p_A(0)=(-1)^n\det(A)\neq0$. 于是
+\[
+  \bar{P}_n(z)=\frac{p_A(z)}{p_A(0)}\in\mathcal{P}_n.
+\]
+由 Hamilton-Cayley 定理 \cite{src:39} 知
+\[
+  \bar{P}_n(A)=p_A(A)=\mathbf{0}.
+\]
+由定理 \ref{thm:6-8} 得
+\[
+  \mathbf{r}_n=\mathbf{b}-A\mathbf{x}_n=\mathbf{0}.
+\]
+因此 $\mathbf{x}_n$ 为 $A\mathbf{x}=\mathbf{b}$ 的精确解.
+\end{proof}
+
+若 $A$ 可对角化, 即 $A=V\Lambda V^{-1}$, 其中 $\Lambda$ 为对角矩阵, 则
+\[
+  P(A)=VP(\Lambda)V^{-1}.
+\]
+若 $V$ 为正交矩阵, 则 $A$ 为\newterm{normalmatrix}{正规矩阵}{normal matrix}.
+
+\begin{theorem}
+\label{thm:6-10}
+设 $A=V\Lambda V^{-1}$. 则
+\[
+  \frac{\norm{\mathbf{r}_k}_2}{\norm{\mathbf{r}_0}_2}
+  \leqslant\kappa_2(V)\min_{P\in\mathcal{P}_k}
+  \max_{\lambda_i}|P(\lambda_i)|,
+\]
+其中 $\lambda_i$ ($i=1,2,\ldots,n$) 为矩阵 $A$ 的特征值.
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:6-8}, 有
+\[
+  \begin{aligned}
+    \norm{\mathbf{r}_k}_2
+    &=\min_{P\in\mathcal{P}_k}\norm{P(A)\mathbf{r}_0}_2
+     =\min_{P\in\mathcal{P}_k}\norm{VP(\Lambda)V^{-1}\mathbf{r}_0}_2\\
+    &\leqslant\min_{P\in\mathcal{P}_k}\norm{V}_2\norm{V^{-1}}_2
+      \norm{P(\Lambda)}_2\norm{\mathbf{r}_0}_2\\
+    &=\kappa_2(V)\min_{P\in\mathcal{P}_k}\norm{P(\Lambda)}_2
+      \norm{\mathbf{r}_0}_2\\
+    &=\kappa_2(V)\min_{P\in\mathcal{P}_k}\max_{\lambda_i}|P(\lambda_i)|
+      \cdot\norm{\mathbf{r}_0}_2.
+  \end{aligned}
+\]
+\end{proof}
+
+我们指出, 当 $A$ 为正规矩阵时, $\kappa_2(V)=1$. 因此
+\[
+  \frac{\norm{\mathbf{r}_k}_2}{\norm{\mathbf{r}_0}_2}
+  \leqslant\min_{P\in\mathcal{P}_k}\max_{\lambda_i}|P(\lambda_i)|.
+\]
+
+\begin{theorem}
+\label{thm:6-11}
+若 $A$ 可对角化且恰有 $k$ 个互不相同的特征值, 则 GMRES 法至多 $k$ 次迭代即终止.
+\end{theorem}
+
+\begin{proof}
+构造多项式
+\[
+  P(z)=\prod_{i=1}^{k}\frac{\lambda_i-z}{\lambda_i}\in\mathcal{P}_k,
+\]
+其中 $\lambda_i$ 为 $A$ 的特征值. 由定理 \ref{thm:6-10} 知 $\mathbf{r}_k=\mathbf{0}$, 即 $A\mathbf{x}_k=\mathbf{b}$.
+\end{proof}
+
+应当强调, 一般而言 GMRES 法的表现不能仅由特征值决定. 事实上, 文献 \cite{src:35} 指出: 对某个非正规矩阵问题, GMRES 法可以具有任意预先指定的非增收敛速度, 而且该问题的特征值可以具有任意想要的分布. 因此, 例如紧聚在 1 附近的特征值对非正规矩阵未必是好事, 而在正规矩阵情形下却是好事. 不过, 我们仍有如下两个定理.
+
+\begin{theorem}
+\label{thm:6-12}
+若 $\mathbf{b}$ 是 $A$ 的 $k$ 个特征向量的线性组合, 即
+\[
+  \mathbf{b}=\sum_{l=1}^{k}\gamma_l\mathbf{u}_{i_l},
+\]
+则 GMRES 法至多 $k$ 次迭代即终止.
+\end{theorem}
+
+\begin{proof}
+首先把特征向量组 $\{\mathbf{u}_{i_l}\}$ 扩充为 $\R^n$ 的一组基, 即向量
+\[
+  \mathbf{u}_{i_1},\mathbf{u}_{i_2},\ldots,\mathbf{u}_{i_k},
+  \mathbf{v}_1,\ldots,\mathbf{v}_{n-k}
+\]
+构成 $\R^n$ 的一组基. 设 $\mathbf{x}_*$ 为 $A\mathbf{x}=\mathbf{b}$ 的精确解, 则
+\[
+  \mathbf{x}_*=\sum_{l=1}^{k}\alpha_l\mathbf{u}_{i_l}
+  +\sum_{j=1}^{n-k}\beta_j\mathbf{v}_j.
+\]
+进而
+\[
+  \begin{aligned}
+    A\mathbf{x}_*&=\sum_{l=1}^{k}\alpha_lA\mathbf{u}_{i_l}
+      +\sum_{j=1}^{n-k}\beta_jA\mathbf{v}_j\\
+    &=\sum_{l=1}^{k}\alpha_l\lambda_{i_l}\mathbf{u}_{i_l}
+      +\sum_{j=1}^{n-k}\beta_jA\mathbf{v}_j
+     =\mathbf{b}=\sum_{l=1}^{k}\gamma_l\mathbf{u}_{i_l}.
+  \end{aligned}
+\]
+因此
+\[
+  \left\{
+  \begin{array}{ll}
+    \beta_j=0, & j=1,2,\ldots,n-k;\\
+    \alpha_l=\gamma_l/\lambda_{i_l}, & l=1,2,\ldots,k.
+  \end{array}
+  \right.
+\]
+于是
+\[
+  \mathbf{x}_*=\sum_{l=1}^{k}(\gamma_l/\lambda_{i_l})\mathbf{u}_{i_l}.
+\]
+令
+\[
+  \bar{P}_k(z)=\prod_{l=1}^{k}\frac{\lambda_{i_l}-z}{\lambda_{i_l}}
+  \in\mathcal{P}_k.
+\]
+注意当 $1\leqslant l\leqslant k$ 时 $\bar{P}_k(\lambda_{i_l})=0$, 且
+\[
+  \bar{P}_k(A)\mathbf{x}_*=\sum_{l=1}^{k}\bar{P}_k(\lambda_{i_l})
+  (\gamma_l/\lambda_{i_l})\mathbf{u}_{i_l}=\mathbf{0}.
+\]
+于是, 取初始向量 $\mathbf{x}_0=\mathbf{0}$, 得
+\[
+  \begin{aligned}
+    \norm{\mathbf{r}_k}_2
+    &\leqslant\norm{\bar{P}_k(A)\mathbf{r}_0}_2
+     =\norm{\bar{P}_k(A)\mathbf{b}}_2\\
+    &=\norm{\bar{P}_k(A)A\mathbf{x}_*}_2
+     =\norm{A\bar{P}_k(A)\mathbf{x}_*}_2=0.
+  \end{aligned}
+\]
+\end{proof}
+
+\begin{theorem}
+\label{thm:6-13}
+用 GMRES 法求解线性方程组 $A\mathbf{x}=\mathbf{b}$, 其中 $A=I+L$, 则该方法至多 $\rank(L)+1$ 次迭代即收敛.
+\end{theorem}
+
+\begin{proof}
+先回忆: $\mathbf{r}_0$ 关于 $A$ 的\newterm{minimalpoly}{极小多项式}{minimal polynomial}是指使 $p(A)\mathbf{r}_0=\mathbf{0}$ 成立的最低次首一非零多项式 $p$ \cite{src:70}. 由定理 \ref{thm:6-8}, GMRES 法必在 $\nu$ 次迭代内收敛, 其中 $\nu$ 为残差 $\mathbf{r}_0$ 关于 $A=I+L$ 的极小多项式的次数. 设 $\mu$ 为 $\mathbf{r}_0$ 关于 $L$ 的极小多项式的次数. 由于
+\[
+  \sum_{i=0}^{\mu}\alpha_i(I+L)^i\mathbf{r}_0=\mathbf{0}
+\]
+蕴含
+\[
+  \sum_{i=0}^{\mu}\beta_iL^i\mathbf{r}_0=\mathbf{0}
+\]
+(其中 $\beta_i$ 为某些常数), 反之亦然, 故 $\nu=\mu$. 此外, 由 $\mu$ 的定义, 集合
+\[
+  \left\{\mathbf{r}_0,L\mathbf{r}_0,\ldots,L^{\mu-1}\mathbf{r}_0\right\}
+\]
+线性无关. 设 $B$ 为 $L$ 的列向量空间, 则 $B$ 的维数等于 $L$ 的秩. 由于当 $i\geqslant1$ 时 $L^i\mathbf{r}_0\in B$, 故
+\[
+  \left\{L\mathbf{r}_0,\ldots,L^{\mu-1}\mathbf{r}_0\right\}\subseteq B.
+\]
+因此 $\mu-1\leqslant\rank(L)$, 即 $\mu\leqslant\rank(L)+1$. 于是 GMRES 法在
+\[
+  \nu=\mu\leqslant\rank(L)+1
+\]
+次迭代内收敛.
+\end{proof}
+
+\subsection{GMRES 方法的实现}
+\label{subsec:6-5-2}
+
+回忆 GMRES 法第 $k$ 次迭代所要求解的最小二乘问题为
+\[
+  \min_{\mathbf{x}\in\mathbf{x}_0+\mathcal{K}(A,\mathbf{r}_0,k)}
+  \norm{\mathbf{b}-A\mathbf{x}}_2.
+\]
+设已有矩阵
+\[
+  V_k=\left[\mathbf{v}_1^k\mid\mathbf{v}_2^k\mid\cdots\mid\mathbf{v}_k^k\right],
+\]
+其列构成 $\mathcal{K}(A,\mathbf{r}_0,k)$ 的一组标准正交基. 则对任意 $\mathbf{z}\in\mathcal{K}(A,\mathbf{r}_0,k)$, 可写为
+\[
+  \mathbf{z}=\sum_{l=1}^{k}u_l\mathbf{v}_l^k=V_k\mathbf{u},
+\]
+其中 $\mathbf{u}=[u_1,u_2,\ldots,u_k]^T\in\R^k$. 因此, 一旦求出 $V_k$, 就可以把 Krylov 子空间中的原最小二乘问题转化为 $\R^k$ 中的最小二乘问题如下. 设 $\mathbf{x}_k$ 为第 $k$ 次迭代后的解, 则
+\[
+  \mathbf{x}_k=\mathbf{x}_0+V_k\mathbf{y}_k,
+\]
+其中向量 $\mathbf{y}_k$ 极小化
+\[
+  \min_{\mathbf{y}\in\R^k}\norm{\mathbf{b}-A(\mathbf{x}_0+V_k\mathbf{y})}_2
+  =\min_{\mathbf{y}\in\R^k}\norm{\mathbf{r}_0-AV_k\mathbf{y}}_2.
+\]
+这是一个标准线性最小二乘问题, 可用 QR 分解求解.
+
+可以用 Gram-Schmidt 正交化求 $\mathcal{K}(A,\mathbf{r}_0,k)$ 的一组标准正交基. 算法如下:
+\begin{parenlist}
+  \item 定义 $\mathbf{r}_0=\mathbf{b}-A\mathbf{x}_0$ 与
+    $\mathbf{v}_1=\mathbf{r}_0/\norm{\mathbf{r}_0}_2$.
+  \item 对 $i=1,2,\ldots,k-1$, 计算
+    \[
+      \mathbf{v}_{i+1}
+      =\frac{A\mathbf{v}_i-\sum_{j=1}^{i}
+      ((A\mathbf{v}_i)^T\mathbf{v}_j)\mathbf{v}_j}
+      {\norm{A\mathbf{v}_i-\sum_{j=1}^{i}
+      ((A\mathbf{v}_i)^T\mathbf{v}_j)\mathbf{v}_j}_2}.
+    \]
+\end{parenlist}
+该算法产生的矩阵 $V_k$ 的列也构成 $\mathcal{K}(A,\mathbf{r}_0,k)$ 的一组标准正交基. 我们指出, 当出现除以零时, 就发生\newterm{breakdown}{中断}{breakdown}. 关于中断的发生, 有如下定理.
+
+\begin{theorem}
+\label{thm:6-14}
+设 $A$ 非奇异, 向量 $\mathbf{v}_j$ 由上述算法产生, $i$ 为使
+\begin{equation}
+  A\mathbf{v}_i-\sum_{j=1}^{i}((A\mathbf{v}_i)^T\mathbf{v}_j)\mathbf{v}_j
+  =\mathbf{0}
+  \label{eq:6-21}
+\end{equation}
+成立的最小整数. 则 $\mathbf{x}=A^{-1}\mathbf{b}
+\in\mathbf{x}_0+\mathcal{K}(A,\mathbf{r}_0,i)$.
+\end{theorem}
+
+\begin{proof}
+由 \eqref{eq:6-21} 有
+\[
+  A\mathbf{v}_i=\sum_{j=1}^{i}((A\mathbf{v}_i)^T\mathbf{v}_j)\mathbf{v}_j
+  \in\mathcal{K}(A,\mathbf{r}_0,i),
+\]
+故
+\[
+  A\mathcal{K}(A,\mathbf{r}_0,i)\subset\mathcal{K}(A,\mathbf{r}_0,i).
+\]
+注意 $V_i=[\mathbf{v}_1\mid\mathbf{v}_2\mid\cdots\mid\mathbf{v}_i]$ 的列构成 $\mathcal{K}(A,\mathbf{r}_0,i)$ 的一组标准正交基, 即
+\[
+  \mathcal{K}(A,\mathbf{r}_0,i)=\spn\{\mathbf{v}_1,\mathbf{v}_2,\ldots,\mathbf{v}_i\},
+\]
+于是
+\begin{equation}
+  AV_i=V_iH,
+  \label{eq:6-22}
+\end{equation}
+其中 $H\in\R^{i\times i}$ 非奇异 (因 $A$ 非奇异). 由于 $\mathbf{x}_i-\mathbf{x}_0
+\in\mathcal{K}(A,\mathbf{r}_0,i)$, 存在向量 $\mathbf{y}\in\R^i$ 使 $\mathbf{x}_i-\mathbf{x}_0=V_i\mathbf{y}$. 因此
+\begin{equation}
+  \norm{\mathbf{r}_i}_2=\norm{\mathbf{b}-A\mathbf{x}_i}_2
+  =\norm{\mathbf{r}_0-A(\mathbf{x}_i-\mathbf{x}_0)}_2
+  =\norm{\mathbf{r}_0-AV_i\mathbf{y}}_2.
+  \label{eq:6-23}
+\end{equation}
+令 $\beta=\norm{\mathbf{r}_0}_2$, $\mathbf{e}_1=[1,0,\ldots,0]^T\in\R^i$, 则 $\mathbf{r}_0=\beta V_i\mathbf{e}_1$. 由于 $V_i$ 的列标准正交, 由 \eqref{eq:6-22} 与 \eqref{eq:6-23} 得
+\[
+  \norm{\mathbf{r}_i}_2=\norm{V_i(\beta\mathbf{e}_1-H\mathbf{y})}_2
+  =\norm{\beta\mathbf{e}_1-H\mathbf{y}}_2.
+\]
+取 $\mathbf{y}=\beta H^{-1}\mathbf{e}_1$, 即得 $\mathbf{r}_i=\mathbf{0}$, 亦即
+\[
+  \mathbf{x}_i=A^{-1}\mathbf{b}\in\mathbf{x}_0+\mathcal{K}(A,\mathbf{r}_0,i).
+  \qedhere
+\]
+\end{proof}
+
+若 Gram-Schmidt 过程不中断, 就可用如下高效方式实现 GMRES 法. 令 $h_{ij}=(A\mathbf{v}_j)^T\mathbf{v}_i$. 由 Gram-Schmidt 算法得到 $(k+1)\times k$ 矩阵 $H_k$, 它是上 Hessenberg 矩阵, 即当 $i>j+1$ 时 $h_{ij}=0$. 该过程产生一列列标准正交的矩阵序列 $\{V_k\}$, 使得
+\[
+  AV_k=V_{k+1}H_k.
+\]
+因此
+\[
+  \begin{aligned}
+    \mathbf{r}_k&=\mathbf{b}-A\mathbf{x}_k
+    =\mathbf{r}_0-A(\mathbf{x}_k-\mathbf{x}_0)\\
+    &=\beta V_{k+1}\mathbf{e}_1-AV_k\mathbf{y}_k
+    =V_{k+1}(\beta\mathbf{e}_1-H_k\mathbf{y}_k),
+  \end{aligned}
+\]
+其中 $\mathbf{y}_k$ 为如下问题的解:
+\[
+  \min_{\mathbf{y}\in\R^k}\norm{\beta\mathbf{e}_1-H_k\mathbf{y}}_2.
+\]
+于是
+\[
+  \mathbf{x}_k=\mathbf{x}_0+V_k\mathbf{y}_k.
+\]
+
+当找到向量 $\mathbf{x}$, 使对给定的 $\epsilon$ 有
+\[
+  \norm{\mathbf{r}}_2=\norm{\mathbf{b}-A\mathbf{x}}_2
+  \leqslant\epsilon\norm{\mathbf{b}}_2
+\]
+时, 就终止 GMRES 迭代. 于是得到如下求解
+\[
+  A\mathbf{x}=\mathbf{b}
+\]
+的 GMRES 算法 \cite{src:70}, 其中 $A\in\R^{n\times n}$ 与 $\mathbf{b}\in\R^n$ 已知. 在初始化步, 令
+\[
+  \mathbf{r}_0=\mathbf{b}-A\mathbf{x}_0,\qquad
+  \beta=\norm{\mathbf{r}_0}_2,\qquad
+  \mathbf{v}_1=\mathbf{r}_0/\beta.
+\]
+在迭代步, 有
+\[
+  \left\{
+  \begin{array}{l}
+    \textbf{for}\ j=1{:}m\\
+    \quad \mathbf{w}_j=A\mathbf{v}_j\\
+    \quad \textbf{for}\ i=1{:}j\\
+    \quad\quad h_{ij}=\mathbf{w}_j^T\mathbf{v}_i\\
+    \quad\quad \mathbf{w}_j=\mathbf{w}_j-h_{ij}\mathbf{v}_i\\
+    \quad \textbf{end}\\
+    \quad h_{j+1,j}=\norm{\mathbf{w}_j}_2;\ \text{若}\ h_{j+1,j}=0,\
+      \text{则置}\ m=j\ \text{并转至}\ (*)\\
+    \quad \mathbf{v}_{j+1}=\mathbf{w}_j/h_{j+1,j}\\
+    \textbf{end}\\
+    (*)\ \text{计算}\ \mathbf{y}_m,\ \text{使其极小化}\
+      \norm{\beta\mathbf{e}_1-\bar{H}_m\mathbf{y}}_2\\
+    \mathbf{x}_m=\mathbf{x}_0+V_m\mathbf{y}_m
+  \end{array}
+  \right.
+\]
+其中 $\bar{H}_m=(h_{ij})_{1\leqslant i\leqslant m+1,\,1\leqslant j\leqslant m}$. 算法中的矩阵
+\[
+  V_m=[\mathbf{v}_1\mid\mathbf{v}_2\mid\cdots\mid\mathbf{v}_m]\in\R^{n\times m}
+  \quad(m\leqslant n)
+\]
+是列标准正交的矩阵.
+
+\needspace{6\baselineskip}
+\begin{exercises}
+  \item 设 $\mathbf{x}_k$ 由最速下降法产生. 证明
+    \[
+      \phi(\mathbf{x}_k)\leqslant\left(1-\frac{1}{\kappa_2(A)}\right)
+      \phi(\mathbf{x}_{k-1}),
+    \]
+    其中 $\kappa_2(A)=\norm{A}_2\norm{A^{-1}}_2$.
+
+  \item 设 $A$ 为对称正定矩阵, 定义 $\norm{\mathbf{x}}_A\equiv\sqrt{\mathbf{x}^TA\mathbf{x}}$. 证明它是一个向量范数.
+
+  \item 设 $A\in\R^{n\times n}$ 对称正定, $\mathbf{p}_1,\mathbf{p}_2,\ldots,\mathbf{p}_k\in\R^n$ 两两关于 $A$ 共轭, 即当 $i\neq j$ 时 $\mathbf{p}_i^TA\mathbf{p}_j=0$. 证明 $\{\mathbf{p}_1,\mathbf{p}_2,\ldots,\mathbf{p}_k\}$ 线性无关.
+
+  \item 设 $\mathbf{x}_k$ 由 CG 法产生. 证明
+    \[
+      \norm{\mathbf{x}_k-\mathbf{x}_*}_2
+      \leqslant2\sqrt{\kappa_2}
+      \left(\frac{\sqrt{\kappa_2}-1}{\sqrt{\kappa_2}+1}\right)^k
+      \norm{\mathbf{x}_0-\mathbf{x}_*}_2,
+    \]
+    其中 $\kappa_2=\kappa_2(A)=\norm{A}_2\norm{A^{-1}}_2$.
+
+  \item 设 $\mathbf{z}_k$ 与 $\mathbf{r}_k$ 由 PCG 法产生. 证明: 若 $\mathbf{r}_k\neq\mathbf{0}$, 则 $\mathbf{z}_k^T\mathbf{r}_k>0$.
+
+  \item 给出用 CG 法求解 $A^TA\mathbf{x}=A^T\mathbf{b}$ 的一个高效算法.
+
+  \item 证明: 若 $A\in\R^{n\times n}$ 对称正定且恰有 $k$ 个互不相同的特征值, 则 CG 法至多 $k$ 次迭代即终止.
+
+  \item 取初始向量 $\mathbf{x}_0=\mathbf{0}$. 当用 GMRES 法求解线性方程组 $A\mathbf{x}=\mathbf{b}$ 时, 其中
+    \[
+      A=\begin{bmatrix}
+        0 & & & & 1\\
+        1 & 0 & & & \\
+        & 1 & 0 & & \\
+        & & 1 & 0 & \\
+        & & & 1 & 0
+      \end{bmatrix},
+      \qquad
+      \mathbf{b}=[1,0,0,0,0]^T,
+    \]
+    收敛速度是多少?
+
+  \item 设
+    \[
+      A=\begin{bmatrix}
+        I & Y\\
+        0 & I
+      \end{bmatrix}.
+    \]
+    当用 GMRES 法求解 $A\mathbf{x}=\mathbf{b}$ 时, 收敛所需的最大迭代次数是多少?
+
+  \item 证明 GMRES 法中的最小二乘问题具有列满秩.
+
+  \item 证明引理 \ref{lem:6-2}.
+\end{exercises}

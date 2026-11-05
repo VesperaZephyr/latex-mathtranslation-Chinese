@@ -1,0 +1,936 @@
+% chapters/ch07.tex —— 第 7 章：非对称特征值问题
+% 源书：Chapter 7 Nonsymmetric Eigenvalue Problems，书页 103–120（物理页 117–134）
+% 公式编号 (7.1)–(7.31)；定理 7.1–7.5；算法 7.1；习题 1–13
+\chapter{非对称特征值问题}
+\label{ch:nonsym-eig}
+
+特征值问题在数值线性代数中格外引人注目. 本章研究非对称特征值问题, 讨论幂法, 反幂法与 QR 方法等几种著名方法.
+
+\section{基本性质}
+\label{sec:7-1}
+
+设 $A\in\C^{n\times n}$. 回忆: 若存在非零向量 $\mathbf{x}\in\C^n$ 使
+\[
+  A\mathbf{x}=\lambda\mathbf{x},
+\]
+则称复数 $\lambda$ 为 $A$ 的特征值. 这里 $\mathbf{x}$ 称为 $A$ 的与 $\lambda$ 相伴的特征向量. 众所周知, $\lambda$ 是 $A$ 的特征值当且仅当
+\[
+  \det(\lambda I-A)=0.
+\]
+令
+\[
+  p_A(\lambda)=\det(\lambda I-A)
+\]
+为 $A$ 的特征多项式. 由代数基本定理知, $p_A(\lambda)$ 在 $\C$ 中有 $n$ 个根, 即 $A$ 有 $n$ 个特征值.
+
+现设 $p_A(\lambda)$ 有如下分解:
+\[
+  p_A(\lambda)=(\lambda-\lambda_1)^{n_1}(\lambda-\lambda_2)^{n_2}\cdots(\lambda-\lambda_p)^{n_p},
+\]
+其中 $n_1+n_2+\cdots+n_p=n$, 且当 $i\neq j$ 时 $\lambda_i\neq\lambda_j$. 称 $n_i$ 为 $\lambda_i$ 的\newterm{algebraicmultiplicity}{代数重数}{algebraic multiplicity}, 而数
+\[
+  m_i=n-\rank(\lambda_i I-A)
+\]
+称为 $\lambda_i$ 的\newterm{geometricmultiplicity}{几何重数}{geometric multiplicity}. 实际上, $m_i$ 就是 $\lambda_i$ 的\newterm{eigenspace}{特征子空间}{eigenspace}的维数. 我们指出, $\lambda_i$ 的特征子空间是 $(\lambda_i I-A)\mathbf{x}=\mathbf{0}$ 的解空间. 容易看出 $m_i\leqslant n_i$ ($i=1,2,\ldots,p$). 若 $n_i=1$, 则称 $\lambda_i$ 为\newterm{simpleeigenvalue}{单特征值}{simple eigenvalue}. 若对某个特征值 $\lambda_i$ 有 $m_i<n_i$, 则称 $A$ 为\newterm{defective}{亏损的}{defective}. 若 $A$ 的每个特征值的几何重数都等于其代数重数, 则称 $A$ 是\newterm{nondefective}{非亏损的}{nondefective}的. 注意 $A$ 可对角化当且仅当 $A$ 非亏损.
+
+设 $A,B\in\C^{n\times n}$. 回忆: 若存在非奇异矩阵 $X\in\C^{n\times n}$ 使
+\[
+  B=XAX^{-1},
+\]
+则称 $A$ 与 $B$ 为\newterm{similarmatrix}{相似矩阵}{similar matrices}. 变换
+\[
+  A\rightarrow B=XAX^{-1}
+\]
+称为用相似矩阵 $X$ 作的\newterm{similaritytransformation}{相似变换}{similarity transformation}. 相似矩阵有相同的特征值. 若 $\mathbf{x}$ 是 $A$ 的特征向量, 则 $\mathbf{y}=X\mathbf{x}$ 是 $B$ 的特征向量. 由 Jordan 分解定理 (定理 \ref{thm:ch1-jordan}) 知, 任一 $n$ 阶矩阵都相似于其 Jordan 标准形. 若要求相似矩阵为酉矩阵, 便得到数值线性代数中或许最基本, 最有用的下述定理 \cite{src:39}.
+
+\begin{theorem}[Schur 分解定理]
+\label{thm:7-1}
+设 $A\in\C^{n\times n}$, 其特征值为 $\lambda_1,\ldots,\lambda_n$, 可按任意指定的次序排列. 则存在酉矩阵 $U\in\C^{n\times n}$ 使
+\[
+  U^*AU=T=[t_{ij}],
+\]
+其中 $T$ 为上三角矩阵, 对角元 $t_{ii}=\lambda_i$ ($i=1,\ldots,n$). 此外, 若 $A\in\R^{n\times n}$ 且 $A$ 的所有特征值都是实数, 则 $U$ 可取为实正交矩阵.
+\end{theorem}
+
+\begin{proof}
+设 $\mathbf{x}_1\in\C^n$ 是 $A$ 的与特征值 $\lambda_1$ 相伴的标准化特征向量. 向量 $\mathbf{x}_1$ 可扩充为 $\C^n$ 的一组基:
+\[
+  \mathbf{x}_1,\mathbf{y}_2,\ldots,\mathbf{y}_n.
+\]
+对此基施行 Gram-Schmidt 正交规范化, 便得到 $\C^n$ 的一组标准正交基:
+\[
+  \mathbf{x}_1,\mathbf{z}_2,\ldots,\mathbf{z}_n.
+\]
+令
+\[
+  U_1=[\mathbf{x}_1\mid\mathbf{z}_2\mid\cdots\mid\mathbf{z}_n]
+\]
+为酉矩阵. 经简单计算得
+\[
+  U_1^*AU_1=\begin{bmatrix}
+    \lambda_1 & *\\
+    \mathbf{0} & A_1
+  \end{bmatrix}.
+\]
+
+矩阵 $A_1\in\C^{(n-1)\times(n-1)}$ 的特征值为 $\lambda_2,\ldots,\lambda_n$. 设 $\mathbf{x}_2\in\C^{n-1}$ 是 $A_1$ 的与 $\lambda_2$ 相伴的标准化特征向量, 照此重做一遍. 确定酉矩阵 $V_2\in\C^{(n-1)\times(n-1)}$ 使
+\[
+  V_2^*A_1V_2=\begin{bmatrix}
+    \lambda_2 & *\\
+    \mathbf{0} & A_2
+  \end{bmatrix}.
+\]
+令
+\[
+  U_2=\begin{bmatrix}
+    1 & \mathbf{0}\\
+    \mathbf{0} & V_2
+  \end{bmatrix}.
+\]
+则矩阵 $U_2$ 与 $U_1U_2$ 都是酉矩阵, 且
+\[
+  U_2^*U_1^*AU_1U_2=\begin{bmatrix}
+    \lambda_1 &          & *\\
+              & \lambda_2 & \\
+    \mathbf{0} &          & A_2
+  \end{bmatrix}.
+\]
+如此继续, 可作出酉矩阵 $U_1,U_2,\ldots,U_{n-1}$, 使矩阵
+\[
+  U=U_1U_2\cdots U_{n-1}
+\]
+为酉矩阵, 且 $U^*AU$ 具有所需的形式.
+\end{proof}
+
+\begin{theorem}[实 Schur 分解定理 \cite{src:39}]
+\label{thm:7-2}
+设 $A\in\R^{n\times n}$. 则存在正交矩阵 $Q\in\R^{n\times n}$ 使
+\[
+  Q^TAQ=\begin{bmatrix}
+    R_{11} & R_{12} & \cdots & R_{1m}\\
+           & R_{22} & \cdots & R_{2m}\\
+           &        & \ddots & \vdots\\
+    \mathbf{0} &   &        & R_{mm}
+  \end{bmatrix},
+\]
+其中 $R_{ii}$ 或为实数, 或为具有一对共轭复特征值的 $2\times2$ 矩阵.
+\end{theorem}
+
+一般地, 不能指望用正交相似变换把实矩阵约化为严格上三角形式, 因为此时对角元就是特征值, 而它们 (若为复数) 不可能是实数.
+
+\section{幂法}
+\label{sec:7-2}
+
+幂法是计算绝对值最大的特征值及其对应特征向量的迭代算法. 下面介绍该方法的基本思想. 为简单起见, 先设矩阵 $A\in\C^{n\times n}$ 可对角化, 即 $A$ 有如下 Jordan 分解:
+\[
+  A=X\Lambda X^{-1},
+\]
+其中 $\Lambda=\diag(\lambda_1,\ldots,\lambda_n)$, 且其次序为
+\[
+  \abs{\lambda_1}>\abs{\lambda_2}\geqslant\cdots\geqslant\abs{\lambda_n},
+\]
+而 $X=[\mathbf{x}_1\mid\mathbf{x}_2\mid\cdots\mid\mathbf{x}_n]\in\C^{n\times n}$. 设 $\mathbf{u}_0\in\C^n$ 为任意向量. 由于列向量 $\mathbf{x}_1,\ldots,\mathbf{x}_n$ 构成 $\C^n$ 的一组基, 故有
+\[
+  \mathbf{u}_0=\sum_{j=1}^{n}\alpha_j\mathbf{x}_j,
+\]
+其中 $\alpha_j\in\C$. 于是
+\[
+  \begin{aligned}
+    A^k\mathbf{u}_0
+    &=\sum_{j=1}^{n}\alpha_jA^k\mathbf{x}_j
+     =\sum_{j=1}^{n}\alpha_j\lambda_j^k\mathbf{x}_j\\
+    &=\lambda_1^k\left(\alpha_1\mathbf{x}_1
+      +\sum_{j=2}^{n}\alpha_j\left(\frac{\lambda_j}{\lambda_1}\right)^k\mathbf{x}_j\right),
+  \end{aligned}
+\]
+从而
+\[
+  \lim_{k\rightarrow\infty}\frac{A^k\mathbf{u}_0}{\lambda_1^k}=\alpha_1\mathbf{x}_1.
+\]
+当 $\alpha_1\neq0$ 且 $k$ 充分大时, 可知向量
+\begin{equation}
+  \mathbf{u}_k=\frac{A^k\mathbf{u}_0}{\lambda_1^k}
+  \label{eq:7-1}
+\end{equation}
+是 $A$ 的一个好的近似特征向量.
+
+实际计算中不能直接用 \eqref{eq:7-1} 求近似特征向量, 因为事先并不知道特征值 $\lambda_1$, 且 $k$ 很大时 $A^k$ 的运算量极大. 因此提出如下迭代算法:
+\begin{equation}
+  \left\{
+  \begin{array}{l}
+    \mathbf{y}_k=A\mathbf{u}_{k-1},\\
+    \mu_k=\zeta_k,\\
+    \mathbf{u}_k=\mathbf{y}_k/\mu_k,
+  \end{array}
+  \right.
+  \label{eq:7-2}
+\end{equation}
+其中 $\mathbf{u}_0\in\C^n$ 为任意给定的初始向量, 通常取 $\norm{\mathbf{u}_0}_\infty=1$, 而 $\zeta_k$ 是 $\mathbf{y}_k$ 各分量绝对值的最大者. 该迭代算法称为\newterm{powermethod}{幂法}{power method}. 关于幂法的收敛性, 有如下定理.
+
+\begin{theorem}
+\label{thm:7-3}
+设 $A\in\C^{n\times n}$ 有 $p$ 个互不相同的特征值, 满足
+\[
+  \abs{\lambda_1}>\abs{\lambda_2}\geqslant\cdots\geqslant\abs{\lambda_p}.
+\]
+若 $\lambda_1$ 的几何重数等于其代数重数, 且初始向量 $\mathbf{u}_0$ 在 $\lambda_1$ 的特征子空间上的投影非零, 则由 \eqref{eq:7-2} 产生的 $\{\mathbf{u}_k\}$ 收敛到 $A$ 的与 $\lambda_1$ 相伴的一个特征向量 $\mathbf{x}_1$; 同时由 \eqref{eq:7-2} 产生的 $\{\mu_k\}$ 收敛到 $\lambda_1$.
+\end{theorem}
+
+\begin{proof}
+注意 $A$ 有如下 Jordan 分解:
+\begin{equation}
+  A=X\diag(J_1,\ldots,J_p)X^{-1},
+  \label{eq:7-3}
+\end{equation}
+其中 $X\in\C^{n\times n}$, $J_i\in\C^{n_i\times n_i}$ 是 $\lambda_i$ 对应的 Jordan 块 ($i=1,\ldots,p$), 且
+\[
+  n_1+n_2+\cdots+n_p=n.
+\]
+由于 $\lambda_1$ 的几何重数与其代数重数相同, 故
+\[
+  J_1=\lambda_1I_{n_1},
+\]
+其中 $I_{n_1}\in\R^{n_1\times n_1}$ 是单位矩阵. 令 $\mathbf{y}=X^{-1}\mathbf{u}_0$, 并把 $\mathbf{y}$ 与 $X$ 作如下分解:
+\[
+  \mathbf{y}=[\mathbf{y}_1^T,\mathbf{y}_2^T,\ldots,\mathbf{y}_p^T]^T,
+  \qquad
+  X=[X_1\mid X_2\mid\cdots\mid X_p],
+\]
+其中 $\mathbf{y}_i\in\C^{n_i}$, $X_i\in\C^{n\times n_i}$ ($i=1,\ldots,p$). 利用 \eqref{eq:7-3} 得
+\[
+  \begin{aligned}
+    A^k\mathbf{u}_0
+    &=X\diag(J_1^k,\ldots,J_p^k)X^{-1}\mathbf{u}_0\\
+    &=X_1J_1^k\mathbf{y}_1+X_2J_2^k\mathbf{y}_2+\cdots+X_pJ_p^k\mathbf{y}_p\\
+    &=\lambda_1^kX_1\mathbf{y}_1+X_2J_2^k\mathbf{y}_2+\cdots+X_pJ_p^k\mathbf{y}_p\\
+    &=\lambda_1^k\left(X_1\mathbf{y}_1
+      +X_2(\lambda_1^{-1}J_2)^k\mathbf{y}_2
+      +\cdots+X_p(\lambda_1^{-1}J_p)^k\mathbf{y}_p\right).
+  \end{aligned}
+\]
+注意 $\lambda_1^{-1}J_i$ 的谱半径满足
+\[
+  \rho(\lambda_1^{-1}J_i)=\abs{\lambda_i}/\abs{\lambda_1}<1,
+\]
+其中 $i=2,3,\ldots,p$. 因此
+\begin{equation}
+  \lim_{k\rightarrow\infty}\frac{1}{\lambda_1^k}A^k\mathbf{u}_0=X_1\mathbf{y}_1.
+  \label{eq:7-4}
+\end{equation}
+由于初始向量 $\mathbf{u}_0$ 在 $\lambda_1$ 的特征子空间上的投影非零, 故 $X_1\mathbf{y}_1\neq\mathbf{0}$. 令
+\[
+  \mathbf{x}_1=\zeta^{-1}X_1\mathbf{y}_1,
+\]
+其中 $\zeta$ 是 $X_1\mathbf{y}_1$ 各分量绝对值的最大者. 显然, $\mathbf{x}_1$ 是 $A$ 的与 $\lambda_1$ 相伴的特征向量. 设 $\zeta_k$ 是 $A^k\mathbf{u}_0$ 各分量绝对值的最大者, 则 $\lambda_1^{-k}A^k\mathbf{u}_0$ 各分量绝对值的最大者为 $\zeta_k\lambda_1^{-k}$. 由 \eqref{eq:7-2} 有
+\[
+  \mathbf{u}_k=\frac{A\mathbf{u}_{k-1}}{\mu_k}
+  =\frac{A^k\mathbf{u}_0}{\mu_k\mu_{k-1}\cdots\mu_1}
+  =\frac{A^k\mathbf{u}_0}{\zeta_k}
+  =\frac{A^k\mathbf{u}_0/\lambda_1^k}{\zeta_k/\lambda_1^k}.
+\]
+利用 \eqref{eq:7-4} 知 $\{\mathbf{u}_k\}$ 收敛, 且
+\[
+  \lim_{k\rightarrow\infty}\mathbf{u}_k
+  =\frac{\lim_{k\rightarrow\infty}(A^k\mathbf{u}_0/\lambda_1^k)}
+        {\lim_{k\rightarrow\infty}(\zeta_k/\lambda_1^k)}
+  =\frac{X_1\mathbf{y}_1}{\zeta}=\mathbf{x}_1.
+\]
+利用 $A\mathbf{u}_{k-1}=\mu_k\mathbf{u}_k$ 以及 $\{\mathbf{u}_k\}$ 收敛到 $\lambda_1$ 的, 分量绝对值最大者为 $1$ 的特征向量这一事实, 立即可知 $\{\mu_k\}$ 收敛到 $\lambda_1$.
+\end{proof}
+
+我们指出, 由定理 \ref{thm:7-3} 的证明可知, 幂法的收敛速度由 $\abs{\lambda_2}/\abs{\lambda_1}$ 的值决定. 在定理条件下有
+\[
+  \frac{\abs{\lambda_2}}{\abs{\lambda_1}}<1.
+\]
+$\abs{\lambda_2}/\abs{\lambda_1}$ 越小, 收敛越快; 当 $\abs{\lambda_2}/\abs{\lambda_1}$ 接近 $1$ 时, 收敛很慢. 为加快幂法的收敛, 可对 $A-\mu I$ 使用该方法, 其中 $\mu$ 称为位移. 可选取 $\mu$ 使绝对值最大的特征值与其他特征值之间的距离变大, 从而提高幂法的收敛速度.
+
+\section{反幂法}
+\label{sec:7-3}
+
+若对 $A^{-1}$ 使用幂法, 以求 $A$ 的绝对值最小的特征值及其对应特征向量, 则该算法称为\newterm{inversepowermethod}{反幂法}{inverse power method}. 其基本迭代格式如下:
+\[
+  \left\{
+  \begin{array}{l}
+    A\mathbf{y}_k=\mathbf{z}_{k-1},\\
+    \mu_k=\zeta_k,\\
+    \mathbf{z}_k=\mathbf{y}_k/\mu_k,
+  \end{array}
+  \right.
+\]
+其中 $\mathbf{z}_0\in\C^n$ 为任意给定的初始向量, $\zeta_k$ 是 $\mathbf{y}_k$ 各分量绝对值的最大者. 由定理 \ref{thm:7-3} 知, 若 $A$ 的特征值满足
+\[
+  \abs{\lambda_n}<\abs{\lambda_{n-1}}\leqslant\cdots\leqslant\abs{\lambda_1},
+\]
+则 $\{\mathbf{z}_k\}$ 收敛到与 $\lambda_n$ 相伴的特征向量, 而 $\{\mu_k\}$ 收敛到 $\lambda_n^{-1}$. 反幂法的收敛速度由 $\abs{\lambda_n}/\abs{\lambda_{n-1}}$ 决定.
+
+实际计算中, 通常对矩阵
+\[
+  A-\mu I
+\]
+使用反幂法: 当预先得到 $A$ 的某个互异特征值 $\lambda_i$ 的近似值 $\mu$ 后, 用它来计算近似特征向量. 于是有如下带\newterm{shift}{位移}{shift} $\mu$ 的反幂法:
+\begin{equation}
+  \left\{
+  \begin{array}{l}
+    (A-\mu I)\mathbf{v}_k=\mathbf{z}_{k-1},\\
+    \mathbf{z}_k=\mathbf{v}_k/\norm{\mathbf{v}_k}_2.
+  \end{array}
+  \right.
+  \label{eq:7-5}
+\end{equation}
+
+由 \eqref{eq:7-5} 知, 反幂法每迭代一次都要解一个线性方程组, 故其运算量远大于幂法. 不过, 可预先作部分主元 $LU$ 分解, 此后每次迭代只需解两个三角形方程组.
+
+设 $A-\mu I$ 的特征值按如下次序排列:
+\[
+  0<\abs{\lambda_1-\mu}<\abs{\lambda_2-\mu}\leqslant\abs{\lambda_3-\mu}\leqslant\cdots\leqslant\abs{\lambda_n-\mu}.
+\]
+再次由定理 \ref{thm:7-3} 知, 由 \eqref{eq:7-5} 产生的序列 $\{\mathbf{z}_k\}$ 收敛到与 $\lambda_1$ 相伴的特征向量, 收敛速度由 $\abs{\lambda_1-\mu}/\abs{\lambda_2-\mu}$ 的值决定. $\mu$ 越接近 $\lambda_1$, 收敛越快. 但若 $\mu$ 接近 $A$ 的某个特征值, 则 $A-\mu I$ 接近奇异矩阵, 因此反幂法每迭代一次都要解一个病态的线性方程组. 然而由实际计算可知, 方程组的病态性并不影响该方法的收敛速度. 通常, 若 $\mu$ 接近 $A$ 的某个特征值, 只迭代一次就能得到 $A$ 的一个好的近似特征向量.
+
+\section{QR 方法}
+\label{sec:7-4}
+
+本节介绍著名的 QR 方法, 它是矩阵计算中几个最重要的进展之一. 对任意给定的 $A_0=A\in\C^{n\times n}$, QR 算法的基本迭代格式如下:
+\begin{equation}
+  \left\{
+  \begin{array}{l}
+    A_{m-1}=Q_mR_m,\\
+    A_m=R_mQ_m,
+  \end{array}
+  \right.
+  \label{eq:7-6}
+\end{equation}
+其中 $m=1,2,\ldots$, $Q_m$ 为酉矩阵, $R_m$ 为上三角矩阵. 为便于后文分析, 要求 $R_m$ 的对角元非负. 由 \eqref{eq:7-6} 容易得到
+\begin{equation}
+  A_m=Q_m^*A_{m-1}Q_m,
+  \label{eq:7-7}
+\end{equation}
+即序列 $\{A_m\}$ 中每个矩阵都与矩阵 $A$ 相似. 反复使用 \eqref{eq:7-7} 得
+\begin{equation}
+  A_m=\widetilde{Q}_m^*A\widetilde{Q}_m,
+  \label{eq:7-8}
+\end{equation}
+其中 $\widetilde{Q}_m=Q_1Q_2\cdots Q_m$. 把 $A_m=Q_{m+1}R_{m+1}$ 代入 \eqref{eq:7-8} 得
+\[
+  \widetilde{Q}_mQ_{m+1}R_{m+1}=A\widetilde{Q}_m.
+\]
+因此
+\[
+  \widetilde{Q}_mQ_{m+1}R_{m+1}R_m\cdots R_1=A\widetilde{Q}_mR_m\cdots R_1,
+\]
+即
+\[
+  \widetilde{Q}_{m+1}\widetilde{R}_{m+1}=A\widetilde{Q}_m\widetilde{R}_m,
+\]
+其中 $\widetilde{R}_k=R_kR_{k-1}\cdots R_1$ ($k=m,m+1$). 此外还有
+\begin{equation}
+  A^m=\widetilde{Q}_m\widetilde{R}_m.
+  \label{eq:7-9}
+\end{equation}
+
+\begin{theorem}
+\label{thm:7-4}
+设 $A$ 的特征值满足
+\[
+  \abs{\lambda_1}>\abs{\lambda_2}>\cdots>\abs{\lambda_n}>0.
+\]
+设 $Y$ 为矩阵, $\mathbf{y}_i^T$ 表示 $Y$ 的第 $i$ 行, 满足
+\[
+  \mathbf{y}_i^TA=\lambda_i\mathbf{y}_i^T.
+\]
+若 $Y$ 有 $LU$ 分解, 则由 \eqref{eq:7-6} 产生的矩阵 $A_m=[\alpha_{ij}^{(m)}]$ 中位于对角线以下的元素当 $m\rightarrow\infty$ 时趋于零. 同时
+\[
+  \alpha_{ii}^{(m)}\rightarrow\lambda_i,
+\]
+其中 $i=1,2,\ldots,n$.
+\end{theorem}
+
+\begin{proof}
+令
+\[
+  X=Y^{-1},\qquad \Lambda=\diag(\lambda_1,\ldots,\lambda_n).
+\]
+则 $A=X\Lambda Y$. 由假设, $Y$ 有 $LU$ 分解
+\[
+  Y=LU,
+\]
+其中 $L$ 为单位下三角矩阵, $U$ 为上三角矩阵. 因此
+\begin{equation}
+  \begin{aligned}
+    A^m=X\Lambda^mY=X\Lambda^mLU
+    &=X(\Lambda^mL\Lambda^{-m})\Lambda^mU\\
+    &=X(I+E_m)\Lambda^mU,
+  \end{aligned}
+  \label{eq:7-10}
+\end{equation}
+其中 $I+E_m=\Lambda^mL\Lambda^{-m}$. 由于 $L$ 为单位下三角矩阵, 且当 $i>j$ 时 $\abs{\lambda_i}<\abs{\lambda_j}$, 故有
+\begin{equation}
+  \lim_{m\rightarrow\infty}E_m=\mathbf{0}.
+  \label{eq:7-11}
+\end{equation}
+令 $X=QR$, 其中 $Q$ 为酉矩阵, $R$ 为上三角矩阵. 由于 $X$ 非奇异, 可要求 $R$ 的对角元为正. 把 $X=QR$ 代入 \eqref{eq:7-10} 得
+\begin{equation}
+  A^m=QR(I+E_m)\Lambda^mU
+  =Q(I+RE_mR^{-1})R\Lambda^mU.
+  \label{eq:7-12}
+\end{equation}
+
+当 $m$ 充分大时, $I+RE_mR^{-1}$ 非奇异, 且有如下 QR 分解:
+\begin{equation}
+  I+RE_mR^{-1}=\widehat{Q}_m\widehat{R}_m,
+  \label{eq:7-13}
+\end{equation}
+其中 $\widehat{R}_m$ 的对角元为正. 利用 \eqref{eq:7-11} 与 \eqref{eq:7-13} 容易证明
+\begin{equation}
+  \lim_{m\rightarrow\infty}\widehat{Q}_m
+  =\lim_{m\rightarrow\infty}\widehat{R}_m=I.
+  \label{eq:7-14}
+\end{equation}
+把 \eqref{eq:7-13} 代入 \eqref{eq:7-12} 得
+\[
+  A^m=(Q\widehat{Q}_m)(\widehat{R}_mR\Lambda^mU),
+\]
+这是 $A^m$ 的一个 QR 分解. 为保证上三角矩阵的所有对角元为正, 定义
+\[
+  D_1=\diag\left(\frac{\lambda_1}{\abs{\lambda_1}},\ldots,\frac{\lambda_n}{\abs{\lambda_n}}\right),
+\]
+以及
+\[
+  D_2=\diag\left(\frac{u_{11}}{\abs{u_{11}}},\ldots,\frac{u_{nn}}{\abs{u_{nn}}}\right),
+\]
+其中 $u_{ii}$ 是 $U$ 的第 $i$ 个对角元. 于是
+\[
+  A^m=(Q\widehat{Q}_mD_1^mD_2)
+  (D_2^{-1}D_1^{-m}\widehat{R}_mR\Lambda^mU).
+\]
+与 \eqref{eq:7-9} 比较, 并注意 QR 分解的唯一性, 得
+\[
+  \widetilde{Q}_m=Q\widehat{Q}_mD_1^mD_2,
+  \qquad
+  \widetilde{R}_m=D_2^{-1}D_1^{-m}\widehat{R}_mR\Lambda^mU.
+\]
+把它们代入 \eqref{eq:7-8} 得
+\[
+  A_m=D_2^*(D_1^*)^m\widehat{Q}_m^*Q^*AQ\widehat{Q}_mD_1^mD_2.
+\]
+注意
+\[
+  A=X\Lambda Y=X\Lambda X^{-1}=QR\Lambda R^{-1}Q^*.
+\]
+最终得到
+\[
+  A_m=D_2^*(D_1^*)^m\widehat{Q}_m^*R\Lambda R^{-1}\widehat{Q}_mD_1^mD_2.
+\]
+当 $m\rightarrow\infty$ 时, 由 \eqref{eq:7-14} 知, 由 \eqref{eq:7-6} 产生的矩阵 $A_m$ 中位于对角线以下的元素趋于零. 同时
+\[
+  \alpha_{ii}^{(m)}\rightarrow\lambda_i,
+\]
+其中 $i=1,2,\ldots,n$.
+\end{proof}
+
+由定理 \ref{thm:7-4} 知, 由 \eqref{eq:7-6} 产生的序列 $\{A_m\}$ 收敛到 $A$ 的 Schur 分解.
+
+\section{QR 算法的实形式}
+\label{sec:7-5}
+
+若 $A\in\R^{n\times n}$, 我们希望找到一种只用实数运算的快速而有效的 QR 算法. 我们集中发展 \eqref{eq:7-6} 的实形式如下: 令 $A_1=A$, 然后构造迭代算法
+\begin{equation}
+  \left\{
+  \begin{array}{l}
+    A_m=Q_mR_m,\\
+    A_{m+1}=R_mQ_m,
+  \end{array}
+  \right.
+  \label{eq:7-15}
+\end{equation}
+其中 $m=1,2,\ldots$, $Q_m\in\R^{n\times n}$ 为正交矩阵, $R_m\in\R^{n\times n}$ 为上三角矩阵. 与 \eqref{eq:7-15} 相关的一个困难在于: 当 $A$ 有复特征值时, $A_m$ 绝不可能收敛到严格上三角形式. 由定理 \ref{thm:7-2} 可以期望 \eqref{eq:7-15} 收敛到 $A$ 的实 Schur 分解.
+
+我们指出, 实际上 \eqref{eq:7-15} 并不是一个好的迭代法, 原因有二:
+\begin{romanlist}
+  \item 每次迭代的运算量太大;
+  \item 收敛速度太慢.
+\end{romanlist}
+因此需要减少每次迭代的运算量并提高方法的收敛速度. 于是引入上 Hessenberg 化与位移策略.
+
+\subsection{上 Hessenberg 化}
+\label{sec:7-5-1}
+
+构造正交矩阵 $Q_0$ 使
+\begin{equation}
+  Q_0^TAQ_0=H
+  \label{eq:7-16}
+\end{equation}
+具有某种特殊结构 (Hessenberg 型), 含有大量零元. 此后即可对 \eqref{eq:7-16} 中的矩阵 $H$ 应用 QR 算法 \eqref{eq:7-15}, 每次迭代的运算量便可大幅减少.
+
+对 $A=[\alpha_{ij}]\in\R^{n\times n}$, 第一步可选取 Householder 变换 $H_1$ 使 $H_1A$ 的第一列含有大量零元 (至多 $n-1$ 个零元). 为保持相似变换, 还需再作一次列变换:
+\[
+  H_1AH_1.
+\]
+因此 $H_1$ 可取如下形式
+\begin{equation}
+  H_1=\begin{bmatrix}
+    1 & \mathbf{0}\\
+    \mathbf{0} & \widetilde{H}_1
+  \end{bmatrix}
+  \label{eq:7-17}
+\end{equation}
+以使第一列中的零元保持不变. 利用 \eqref{eq:7-17} 定义的 $H_1$, 有
+\begin{equation}
+  H_1AH_1=\begin{bmatrix}
+    \alpha_{11} & \mathbf{a}_2^T\widetilde{H}_1\\
+    \widetilde{H}_1\mathbf{a}_1 & \widetilde{H}_1A_{22}\widetilde{H}_1
+  \end{bmatrix},
+  \label{eq:7-18}
+\end{equation}
+其中 $\mathbf{a}_1^T=[\alpha_{21},\alpha_{31},\ldots,\alpha_{n1}]$, $\mathbf{a}_2^T=[\alpha_{12},\alpha_{13},\ldots,\alpha_{1n}]$, 而 $A_{22}$ 是 $A$ 右下角的 $(n-1)$ 阶主子矩阵. 由 \eqref{eq:7-18} 知, Householder 变换 $\widetilde{H}_1$ 的最佳选择应是
+\begin{equation}
+  \widetilde{H}_1\mathbf{a}_1=p\mathbf{e}_1,
+  \label{eq:7-19}
+\end{equation}
+其中 $p\in\R$, $\mathbf{e}_1\in\R^{n-1}$ 是第一个单位向量. 因此, 利用 \eqref{eq:7-17} 与 \eqref{eq:7-19} 定义的 $H_1$, \eqref{eq:7-18} 中矩阵的第一列有 $n-2$ 个零元.
+
+此后, 对 $\widetilde{A}_{22}=\widetilde{H}_1A_{22}\widetilde{H}_1$, 可找到 Householder 变换
+\[
+  \widetilde{H}_2=\begin{bmatrix}
+    1 & \mathbf{0}\\
+    \mathbf{0} & \widehat{H}_2
+  \end{bmatrix}
+\]
+使
+\[
+  (\widetilde{H}_2\widetilde{A}_{22}\widetilde{H}_2)\mathbf{e}_1
+  =[*,*,0,\ldots,0]^T.
+\]
+令
+\[
+  H_2=\begin{bmatrix}
+    1 & \mathbf{0}\\
+    \mathbf{0} & \widetilde{H}_2
+  \end{bmatrix}.
+\]
+于是有
+\[
+  H_2H_1AH_1H_2=\begin{bmatrix}
+    h_{11} & h_{12} & \cdots & *\\
+    h_{21} & h_{22} & \vdots & \vdots\\
+    0 & h_{32} & \vdots & *\\
+    0 & 0 & \vdots & *\\
+    \vdots & \vdots & \vdots & \vdots\\
+    0 & 0 & \cdots & *
+  \end{bmatrix}.
+\]
+经 $n-2$ 步后, 求得 $n-2$ 个 Householder 变换 $H_1,H_2,\ldots,H_{n-2}$, 使
+\[
+  H_{n-2}\cdots H_2H_1AH_1H_2\cdots H_{n-2}=H,
+\]
+其中
+\[
+  H=\begin{bmatrix}
+    h_{11} & h_{12} & h_{13} & \cdots & h_{1,n-1} & h_{1n}\\
+    h_{21} & h_{22} & h_{23} & \cdots & h_{2,n-1} & h_{2n}\\
+    0 & h_{32} & h_{33} & \cdots & h_{3,n-1} & h_{3n}\\
+    \vdots & 0 & h_{43} & & \vdots & \vdots\\
+    \vdots & \vdots & & \ddots & \vdots & \vdots\\
+    0 & 0 & 0 & \cdots & h_{n,n-1} & h_{nn}
+  \end{bmatrix}
+\]
+满足当 $i>j+1$ 时 $h_{ij}=0$, 称为\newterm{hessenberg}{上 Hessenberg 矩阵}{upper Hessenberg matrix}. 令
+\[
+  Q_0=H_1H_2\cdots H_{n-2},
+\]
+则
+\[
+  Q_0^TAQ_0=H,
+\]
+它称为 $A$ 的\newterm{hessenbergdecomp}{上 Hessenberg 分解}{upper Hessenberg decomposition}. 用 Householder 变换可得如下算法.
+
+\begin{algorithm}{上 Hessenberg 分解}
+  \label{alg:7-1}
+  \[
+    \left\{
+    \begin{array}{ll}
+      \textbf{for} & k=1:n-2\\
+        & [\mathbf{v},\beta]=\mathrm{house}(A(k+1:n,k))\\
+        & A(k+1:n,k:n)=(I-\beta\mathbf{v}\mathbf{v}^T)A(k+1:n,k:n)\\
+        & A(1:n,k+1:n)=A(1:n,k+1:n)(I-\beta\mathbf{v}\mathbf{v}^T)\\
+      \textbf{end}
+    \end{array}
+    \right.
+  \]
+\end{algorithm}
+
+用 Householder 变换作 Hessenberg 分解的运算量为 $\mathcal{O}(n^3)$. 当然, 也可用 Givens 旋转得到 Hessenberg 分解, 但其运算量是用 Householder 变换时的两倍. 虽然矩阵的 Hessenberg 分解不唯一, 但有下述定理.
+
+\begin{theorem}
+\label{thm:7-5}
+设 $A\in\R^{n\times n}$ 有如下两个上 Hessenberg 分解:
+\begin{equation}
+  U^TAU=H,\qquad V^TAV=G,
+  \label{eq:7-20}
+\end{equation}
+其中
+\[
+  U=[\mathbf{u}_1\mid\mathbf{u}_2\mid\cdots\mid\mathbf{u}_n],
+  \qquad
+  V=[\mathbf{v}_1\mid\mathbf{v}_2\mid\cdots\mid\mathbf{v}_n]
+\]
+为 $n$ 阶正交矩阵, 而 $H=[h_{ij}]$, $G=[g_{ij}]$ 为上 Hessenberg 矩阵. 若 $\mathbf{u}_1=\mathbf{v}_1$ 且所有元素 $h_{i+1,i}$ 均不为零, 则存在对角元为 $1$ 或 $-1$ 的对角矩阵 $D$ 使
+\[
+  U=VD,\qquad H=DGD.
+\]
+\end{theorem}
+
+\begin{proof}
+设已对某个 $m$ ($1\leqslant m<n$) 证明了
+\begin{equation}
+  \mathbf{u}_j=\epsilon_j\mathbf{v}_j,\qquad j=1,2,\ldots,m,
+  \label{eq:7-21}
+\end{equation}
+其中 $\epsilon_1=1$, $\epsilon_j=1$ 或 $-1$ ($j=2,3,\ldots,m$). 现在要证明存在 $\epsilon_{m+1}=1$ 或 $-1$ 使
+\[
+  \mathbf{u}_{m+1}=\epsilon_{m+1}\mathbf{v}_{m+1}.
+\]
+
+由 \eqref{eq:7-20} 有
+\[
+  AU=UH,\qquad AV=VG.
+\]
+分别比较上述矩阵等式的第 $m$ 列, 得
+\begin{equation}
+  A\mathbf{u}_m=h_{1m}\mathbf{u}_1+\cdots+h_{mm}\mathbf{u}_m+h_{m+1,m}\mathbf{u}_{m+1},
+  \label{eq:7-22}
+\end{equation}
+以及
+\begin{equation}
+  A\mathbf{v}_m=g_{1m}\mathbf{v}_1+\cdots+g_{mm}\mathbf{v}_m+g_{m+1,m}\mathbf{v}_{m+1}.
+  \label{eq:7-23}
+\end{equation}
+用 $\mathbf{u}_i^T$ 与 $\mathbf{v}_i^T$ 分别乘 \eqref{eq:7-22} 与 \eqref{eq:7-23}, 得
+\[
+  h_{im}=\mathbf{u}_i^TA\mathbf{u}_m,\qquad
+  g_{im}=\mathbf{v}_i^TA\mathbf{v}_m,\qquad
+  i=1,2,\ldots,m.
+\]
+因此由 \eqref{eq:7-21} 得
+\begin{equation}
+  h_{im}=\epsilon_i\epsilon_mg_{im},\qquad i=1,2,\ldots,m.
+  \label{eq:7-24}
+\end{equation}
+把 \eqref{eq:7-24} 代入 \eqref{eq:7-22}, 并利用 \eqref{eq:7-21} 与 \eqref{eq:7-23}, 得
+\begin{equation}
+  \begin{aligned}
+    h_{m+1,m}\mathbf{u}_{m+1}
+    &=\epsilon_m(A\mathbf{v}_m-\epsilon_1^2g_{1m}\mathbf{v}_1-\cdots-\epsilon_m^2g_{mm}\mathbf{v}_m)\\
+    &=\epsilon_m(A\mathbf{v}_m-g_{1m}\mathbf{v}_1-\cdots-g_{mm}\mathbf{v}_m)\\
+    &=\epsilon_mg_{m+1,m}\mathbf{v}_{m+1}.
+  \end{aligned}
+  \label{eq:7-25}
+\end{equation}
+于是
+\[
+  \abs{h_{m+1,m}}=\abs{g_{m+1,m}}.
+\]
+由于 $h_{m+1,m}\neq0$, 由 \eqref{eq:7-25} 知
+\[
+  \mathbf{u}_{m+1}=\epsilon_{m+1}\mathbf{v}_{m+1},
+\]
+其中 $\epsilon_{m+1}=1$ 或 $-1$. 由归纳法, 证明完成.
+\end{proof}
+
+我们指出, 对上 Hessenberg 矩阵 $H=[h_{ij}]$, 若 $h_{i+1,i}\neq0$ ($i=1,2,\ldots,n-1$), 则它是不可约的. 定理 \ref{thm:7-5} 表明: 若 $Q^TAQ=H$ 是不可约上 Hessenberg 矩阵, 其中 $Q$ 为正交矩阵, 则 $Q$ 与 $H$ 完全由 $Q$ 的第一列确定 (相差 $\pm1$).
+
+现设 $H\in\R^{n\times n}$ 为上 Hessenberg 矩阵, 要对 $H$ 作一次 QR 迭代. 首先需构造 $H$ 的 QR 分解. 由于 $H$ 具有特殊结构, 可用 $n-1$ 个 Givens 旋转得到 QR 分解. 为简单起见, 下面考虑 $n=5$ 的情形. 设已求得两个 Givens 旋转 $P_{12}$ 与 $P_{23}$ 使
+\[
+  P_{23}P_{12}H=\begin{bmatrix}
+    \times & \times & \times & \times & \times\\
+    0 & \times & \times & \times & \times\\
+    0 & 0 & h_{33} & \times & \times\\
+    0 & 0 & h_{43} & \times & \times\\
+    0 & 0 & 0 & \times & \times
+  \end{bmatrix}.
+\]
+然后构造 Givens 旋转 $P_{34}=G(3,4,\theta_3)$, 使 $\theta_3$ 满足
+\[
+  \begin{bmatrix}
+    \cos\theta_3 & \sin\theta_3\\
+    -\sin\theta_3 & \cos\theta_3
+  \end{bmatrix}
+  \begin{bmatrix}
+    h_{33}\\ h_{43}
+  \end{bmatrix}
+  =\begin{bmatrix}
+    \times\\ 0
+  \end{bmatrix}.
+\]
+于是
+\[
+  P_{34}P_{23}P_{12}H=\begin{bmatrix}
+    \times & \times & \times & \times & \times\\
+    0 & \times & \times & \times & \times\\
+    0 & 0 & \times & \times & \times\\
+    0 & 0 & 0 & \times & \times\\
+    0 & 0 & 0 & \times & \times
+  \end{bmatrix}.
+\]
+因此容易看出: 对 $n$ 阶上 Hessenberg 矩阵 $H$, 可构造 $n-1$ 个 Givens 旋转 $P_{12},P_{23},\ldots,P_{n-1,n}$ 使
+\[
+  P_{n-1,n}P_{n-2,n-1}\cdots P_{12}H=R
+\]
+为上三角矩阵. 令
+\[
+  Q=(P_{n-1,n}P_{n-2,n-1}\cdots P_{12})^T.
+\]
+则有 $H=QR$. 为完成一次 QR 迭代, 还须计算
+\[
+  \widetilde{H}=RQ=RP_{12}^TP_{23}^T\cdots P_{n-1,n}^T.
+\]
+注意 $RP_{12}^T$ 与 $R$ 只在头两列不同. 由于 $R$ 为上三角矩阵, $RP_{12}^T$ 应具有如下形式 ($n=5$):
+\[
+  RP_{12}^T=\begin{bmatrix}
+    \times & \times & \times & \times & \times\\
+    \times & \times & \times & \times & \times\\
+    0 & 0 & \times & \times & \times\\
+    0 & 0 & 0 & \times & \times\\
+    0 & 0 & 0 & 0 & \times
+  \end{bmatrix}.
+\]
+类似地, $RP_{12}^TP_{23}^T$ 与 $RP_{12}^T$ 只在第二列与第三列不同. 因此
+\[
+  RP_{12}^TP_{23}^T=\begin{bmatrix}
+    \times & \times & \times & \times & \times\\
+    \times & \times & \times & \times & \times\\
+    0 & \times & \times & \times & \times\\
+    0 & 0 & 0 & \times & \times\\
+    0 & 0 & 0 & 0 & \times
+  \end{bmatrix}.
+\]
+如此继续, 最终得到矩阵 $\widetilde{H}$, 它也是上 Hessenberg 矩阵. 容易知道, 对上 Hessenberg 矩阵作一次 QR 迭代的运算量为 $\mathcal{O}(n^2)$; 而对一般矩阵作一次 QR 迭代的运算量为 $\mathcal{O}(n^3)$.
+
+\subsection{单步位移 QR 迭代}
+\label{sec:7-5-2}
+
+现在只需讨论 Hessenberg 形式. 由定理 \ref{thm:7-4} 知, 基本 QR 算法的收敛速度是线性的, 且取决于特征值之间的距离. 为加快收敛速度, 引入位移策略. 带单步位移的 QR 迭代如下:
+\begin{equation}
+  \left\{
+  \begin{array}{l}
+    H_m-\mu_mI=Q_mR_m,\\
+    H_{m+1}=R_mQ_m+\mu_mI,
+  \end{array}
+  \right.
+  \label{eq:7-26}
+\end{equation}
+其中 $m=1,2,\ldots$, $H_1=H\in\R^{n\times n}$ 是给定的上 Hessenberg 矩阵, 满足定理 \ref{thm:7-4} 的条件, 而 $\mu_m\in\R$. 若 $H$ 的所有特征值都假定为实数, 我们来考虑如何选取位移. 由于 $H_m$ 是上 Hessenberg 矩阵, 其最后一行只有两个非零元 $h_{n,n-1}^{(m)}$ 与 $h_{nn}^{(m)}$ ($n=5$):
+\[
+  H_m=\begin{bmatrix}
+    \times & \times & \times & \times & \times\\
+    \times & \times & \times & \times & \times\\
+    0 & \times & \times & \times & \times\\
+    0 & 0 & \times & \times & \times\\
+    0 & 0 & 0 & h_{n,n-1}^{(m)} & h_{nn}^{(m)}
+  \end{bmatrix}.
+\]
+当 QR 算法收敛时, $h_{n,n-1}^{(m)}$ 很小, 而 $h_{nn}^{(m)}$ 趋于 $H$ 的某个特征值. 因此可取位移 $\mu_m=h_{nn}^{(m)}$. 事实上可以证明: 若 $h_{n,n-1}^{(m)}=\epsilon$ 很小, 则 QR 算法迭代一次后有
+\begin{equation}
+  h_{n,n-1}^{(m+1)}=\mathcal{O}(\epsilon^2).
+  \label{eq:7-27}
+\end{equation}
+
+由上述讨论知, 把 $H_m-h_{nn}^{(m)}I$ 化为上三角矩阵需要 $n-1$ 步. 设前 $n-2$ 步已完成:
+\[
+  \widehat{H}=\begin{bmatrix}
+    \times & \times & \times & \times & \times\\
+    0 & \times & \times & \times & \times\\
+    0 & 0 & \times & \times & \times\\
+    0 & 0 & 0 & \alpha & \beta\\
+    0 & 0 & 0 & \epsilon & 0
+  \end{bmatrix}.
+\]
+实际上只需研究矩阵 $\widehat{H}$ 右下角的 $2\times2$ 子矩阵
+\[
+  H_{m2}=\begin{bmatrix}
+    \alpha & \beta\\
+    \epsilon & 0
+  \end{bmatrix}.
+\]
+在第 $(n-1)$ 步约化中, 要确定 $c=\cos\theta$ 与 $s=\sin\theta$ 使
+\[
+  \begin{bmatrix}
+    c & s\\
+    -s & c
+  \end{bmatrix}
+  \begin{bmatrix}
+    \alpha\\ \epsilon
+  \end{bmatrix}
+  =\begin{bmatrix}
+    \sigma\\ 0
+  \end{bmatrix}.
+\]
+容易看出
+\[
+  c=\alpha/\sigma,\qquad s=\epsilon/\sigma,\qquad
+  \sigma=\sqrt{\alpha^2+\epsilon^2}.
+\]
+于是, 对矩阵 $H_{m+1}=R_mQ_m+h_{nn}^{(m)}I$ 右下角的 $2\times2$ 子矩阵作若干简单计算后得
+\[
+  h_{n,n-1}^{(m+1)}=-s^2\beta=-\beta\epsilon^2/\sigma^2=\mathcal{O}(\epsilon^2),
+\]
+即 \eqref{eq:7-27} 成立. 通过一次位移, QR 迭代的收敛速度可望达到二次. 若 $H$ 有复特征值, 则可用双步位移策略加快 QR 迭代的收敛速度.
+
+\subsection{双步位移 QR 迭代}
+\label{sec:7-5-3}
+
+注意若 $H_m$ 右下角的子矩阵
+\[
+  G=\begin{bmatrix}
+    h_{pp}^{(m)} & h_{pn}^{(m)}\\
+    h_{np}^{(m)} & h_{nn}^{(m)}
+  \end{bmatrix},
+  \qquad p=n-1
+\]
+有一对共轭复特征值 $\mu_1$ 与 $\mu_2$, 则对 \eqref{eq:7-26} 可以预料会出现困难: 不能指望 $h_{nn}^{(m)}$ 趋于 $A$ 的某个特征值. 绕开这一困难的办法是施行如下带双步位移的 QR 算法:
+\begin{equation}
+  \left\{
+  \begin{array}{l}
+    H-\mu_1I=Q_1R_1,\\
+    H_1=R_1Q_1+\mu_1I,\\
+    H_1-\mu_2I=Q_2R_2,\\
+    H_2=R_2Q_2+\mu_2I,
+  \end{array}
+  \right.
+  \label{eq:7-28}
+\end{equation}
+其中 $H=H_m$. 令
+\begin{equation}
+  M\equiv(H-\mu_1I)(H-\mu_2I).
+  \label{eq:7-29}
+\end{equation}
+经若干简单计算, 有
+\begin{equation}
+  M=QR,
+  \label{eq:7-30}
+\end{equation}
+以及
+\begin{equation}
+  H_2=Q^THQ,
+  \label{eq:7-31}
+\end{equation}
+其中
+\[
+  Q=Q_1Q_2,\qquad R=R_2R_1.
+\]
+由 \eqref{eq:7-29} 得
+\[
+  M=H^2-sH+tI,
+\]
+其中
+\[
+  s=\mu_1+\mu_2=h_{pp}^{(m)}+h_{nn}^{(m)}\in\R,
+\]
+以及
+\[
+  t=\mu_1\mu_2=\det(G)\in\R.
+\]
+因此 $M$ 也是实矩阵. 若 $\mu_1$, $\mu_2$ 不是 $H$ 的特征值, 且每次迭代中 $R_1$, $R_2$ 的对角元取为正, 则由 \eqref{eq:7-30} 知 $Q$ 也是实矩阵; 再由 \eqref{eq:7-31} 便知 $H_2$ 是实矩阵. 因此, 在不计舍入误差的假设下, 由 \eqref{eq:7-28} 得到的 $H_2$ 仍是实上 Hessenberg 矩阵. 实际计算中, 由于舍入误差, $H_2$ 通常不是实矩阵. 为保持 $H_2$ 的实性, 利用 \eqref{eq:7-30} 与 \eqref{eq:7-31} 提出如下计算 $H_2$ 的过程:
+\begin{parenlist}
+  \item 计算 $M=H^2-sH+tI$.
+  \item 计算 $M$ 的 QR 分解: $M=QR$.
+  \item 计算 $H_2=Q^THQ$.
+\end{parenlist}
+注意第 (1) 步中形成矩阵 $M$ 的运算量为 $\mathcal{O}(n^3)$. 我们指出, 实际上不必显式形成矩阵 $M$ \cite{src:30}. 关于带位移策略的 QR 算法的实用实现, 参见 \cite{src:30,src:32,src:98}.
+
+\needspace{6\baselineskip}
+\begin{exercises}
+  \item 证明: 若 $T\in\C^{n\times n}$ 为上三角矩阵且正规, 则 $T$ 是对角矩阵.
+
+  \item 设 $A,B\in\C^{n\times n}$. 证明 $AB$ 的谱等于 $BA$ 的谱.
+
+  \item 设 $A\in\C^{n\times n}$, $\mathbf{x}\in\C^n$, $X=[\mathbf{x}\mid A\mathbf{x}\mid\cdots\mid A^{n-1}\mathbf{x}]$. 证明: 若 $X$ 非奇异, 则 $X^{-1}AX$ 是上 Hessenberg 矩阵.
+
+  \item 设 $A\in\C^{n\times n}$ 有互不相同的特征值. 证明: 若 $Q^*AQ=T$ 是 Schur 分解, 且 $AB=BA$, 则 $Q^*BQ$ 是上三角矩阵.
+
+  \item 设 $A\in\R^{n\times n}$, $\mathbf{z}\in\R^n$. 给出一个详细算法, 用以计算正交矩阵 $Q$, 使 $Q^TAQ$ 为上 Hessenberg 矩阵, 且 $Q^T\mathbf{z}$ 是 $\mathbf{e}_1$ 的倍数, 其中 $\mathbf{e}_1$ 是第一个单位向量.
+
+  \item 设 $W,Y\in\R^{n\times n}$, 定义矩阵 $C,B$ 为
+    \[
+      C=W+\ii Y,\qquad
+      B=\begin{bmatrix}
+        W & -Y\\
+        Y & W
+      \end{bmatrix}.
+    \]
+    证明: 若 $\lambda\in\R$ 是 $C$ 的特征值, 则 $\lambda$ 也是 $B$ 的特征值. 两个对应的特征向量之间有何关系?
+
+  \item 设
+    \[
+      A=\begin{bmatrix}
+        w & x\\
+        y & z
+      \end{bmatrix}\in\R^{2\times2}
+    \]
+    有特征值 $\lambda\pm\ii\mu$, 其中 $\mu\neq0$. 求一个稳定地确定 $c=\cos\theta$ 与 $s=\sin\theta$ 的算法, 使
+    \[
+      \begin{bmatrix}
+        c & s\\
+        -s & c
+      \end{bmatrix}^T
+      \begin{bmatrix}
+        w & x\\
+        y & z
+      \end{bmatrix}
+      \begin{bmatrix}
+        c & s\\
+        -s & c
+      \end{bmatrix}
+      =\begin{bmatrix}
+        \lambda & \beta\\
+        \alpha & \lambda
+      \end{bmatrix},
+    \]
+    其中 $\alpha\beta=-\mu^2$.
+
+  \item 求一个 $2\times2$ 对角矩阵 $D$, 使 $\norm{D^{-1}AD}_F$ 达到极小, 其中
+    \[
+      A=\begin{bmatrix}
+        w & x\\
+        y & z
+      \end{bmatrix}.
+    \]
+
+  \item 设 $H=H_1$ 为给定矩阵. 按下式生成矩阵 $H_k$:
+    \[
+      H_k-\mu_kI=Q_kR_k,\qquad
+      H_{k+1}=R_kQ_k+\mu_kI.
+    \]
+    证明
+    \[
+      (Q_1\cdots Q_j)(R_j\cdots R_1)=(H-\mu_1I)\cdots(H-\mu_jI).
+    \]
+
+  \item 证明: 若
+    \[
+      Y=\begin{bmatrix}
+        I & Z\\
+        \mathbf{0} & I
+      \end{bmatrix},
+    \]
+    则
+    \[
+      \kappa_2(Y)\equiv\norm{Y}_2\norm{Y^{-1}}_2
+      =\frac{1}{2}\left(2+\sigma^2+\sqrt{4\sigma^2+\sigma^4}\right),
+    \]
+    其中 $\sigma=\norm{Z}_2$.
+
+  \item 设 $A$ 的对角元为实数. 证明
+    \[
+      \abs{\operatorname{Im}(\lambda)}
+      \leqslant\max_i\sum_{j\neq i}\abs{a_{ij}},
+    \]
+    其中 $\lambda$ 是 $A$ 的任一特征值, $\operatorname{Im}(\cdot)$ 表示复数的虚部.
+
+  \item 证明: 若
+    \[
+      \frac{1}{2}(A+A^T)
+    \]
+    正定, 则 $\operatorname{Re}(\lambda)>0$, 其中 $\lambda$ 是 $A$ 的任一特征值, $\operatorname{Re}(\cdot)$ 表示复数的实部.
+
+  \item 设 $B$ 满足 $\norm{B}_2<1$. 证明 $I-B$ 非奇异, 且 $I+2(B-I)^{-1}$ 的特征值有负实部.
+\end{exercises}

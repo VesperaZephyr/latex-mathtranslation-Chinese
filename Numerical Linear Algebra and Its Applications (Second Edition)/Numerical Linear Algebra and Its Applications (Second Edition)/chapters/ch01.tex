@@ -1,0 +1,311 @@
+% chapters/ch01.tex —— 第 1 章 绪论
+% 内容权威：源 PDF 物理页 15--22（书页 1--8）。
+% 源书本章公式仅 (1.1) 一个编号；定理 1.1；章末习题 15 道。
+\chapter{绪论}
+\label{ch:introduction}
+
+数值线性代数 (NLA) 又称\newterm{matrixcomputation}{矩阵计算}{matrix computation}. 自 1946 年前后第一台现代计算机问世以来, 它一直是科学与工程计算的核心. 科学与工程中的绝大多数问题, 最终都会转化为数值线性代数问题. 因此, 研究数值线性代数对我们而言极为重要. 本书对数值线性代数作初等介绍, 同时也纳入了近年来取得的一些新成果.
+
+\section{基本记号}
+\label{sec:ch1-basicsymbols}
+
+本书通篇采用下列记号.
+
+\begin{itemize}
+  \item 令 $\R$ 表示实数集, $\C$ 表示复数集, 且 $\ii \equiv \sqrt{-1}$.
+
+  \item 令 $\R^n$ 表示实 $n$ 维向量的集合, $\C^n$ 表示复 $n$ 维向量的集合. 向量几乎总取列向量.
+
+  \item 令 $\R^{m\times n}$ 表示 $m\times n$ 实\newterm{matrix}{矩阵}{matrix}的线性向量空间, $\C^{m\times n}$ 表示 $m\times n$ 复矩阵的线性向量空间.
+
+  \item 用大写字母如 $A,B,C,\Delta,\Lambda$ 等表示矩阵, 用粗体小写字母如 $\mathbf{x},\mathbf{y},\mathbf{z}$ 等表示向量; 小写字母如 $\alpha,\beta,\lambda$ 等表示标量.
+
+  \item 符号 $a_{ij}$ 表示矩阵 $A$ 的第 $ij$ 个\newterm{entry}{元素}{entry}.
+
+  \item 符号 $A^T$ 表示矩阵 $A$ 的\newterm{transpose}{转置}{transpose}, $A^*$ 表示其\newterm{conjtranspose}{共轭转置}{conjugate transpose}.
+
+  \item 设 $\mathbf{a}_1,\ldots,\mathbf{a}_m\in\R^n$ (或 $\C^n$). 用 $\spn\{\mathbf{a}_1,\ldots,\mathbf{a}_m\}$ 表示由 $\mathbf{a}_1,\ldots,\mathbf{a}_m$ 的所有线性组合构成的线性向量空间.
+
+  \item 令 $\rank(A)$ 表示矩阵 $A$ 的\newterm{rank}{秩}{rank}.
+
+  \item 令 $\dim(S)$ 表示向量空间 $S$ 的维数.
+
+  \item 用 $\det(A)$ 表示矩阵 $A$ 的\newterm{determinant}{行列式}{determinant}; 用 $\diag(a_{11},\cdots,a_{nn})$ 表示如下的 $n\times n$\newterm{diagmatrix}{对角矩阵}{diagonal matrix}:
+  \[
+    \diag(a_{11},\dots,a_{nn}) = \begin{bmatrix}
+      a_{11} & 0      & \cdots & 0      \\
+      0      & a_{22} & \ddots & \vdots \\
+      \vdots & \ddots & \ddots & 0      \\
+      0      & \cdots & 0      & a_{nn}
+    \end{bmatrix}.
+  \]
+
+  \item 对矩阵 $A=[a_{ij}]$, 符号 $|A|$ 表示元素为 $(|A|)_{ij}=|a_{ij}|$ 的矩阵.
+
+  \item 符号 $I$ 表示\newterm{identity}{单位矩阵}{identity matrix}, 即
+  \[
+    I = \begin{bmatrix}
+      1      & 0      & \cdots & 0      \\
+      0      & 1      & \ddots & \vdots \\
+      \vdots & \ddots & \ddots & 0      \\
+      0      & \cdots & 0      & 1
+    \end{bmatrix},
+  \]
+  而 $\mathbf{e}_i$ 表示第 $i$ 个单位向量, 即 $I$ 的第 $i$ 列.
+
+  \item 符号 $\mathbf{0}$ 表示尺寸适当的\newterm{zeromatrix}{零矩阵}{zero matrix}或零向量.
+
+  \item 用 $\norm{\cdot}$ 表示矩阵或向量的\newterm{norm}{范数}{norm}; 符号 $\norm{\cdot}_1,\norm{\cdot}_2,\norm{\cdot}_\infty$ 分别表示 $p=1,2,\infty$ 时的 $p$ 范数.
+
+  \item 仿照 MATLAB, 在算法中 $A(i,j)$ 表示矩阵 $A$ 的第 $(i,j)$ 个元素; $A(i,:)$ 与 $A(:,j)$ 分别表示 $A$ 的第 $i$ 行与第 $j$ 列; $A(i_1:i_2,k)$ 表示由 $A$ 的第 $k$ 列中从第 $i_1$ 个到第 $i_2$ 个元素构成的列向量; $A(k,j_1:j_2)$ 表示由 $A$ 的第 $k$ 行中从第 $j_1$ 个到第 $j_2$ 个元素构成的行向量; $A(k:l,p:q)$ 表示由 $A$ 的第 $k$ 行至第 $l$ 行, 第 $p$ 列至第 $q$ 列所构成的 $(l-k+1)\times(q-p+1)$ 子矩阵.
+\end{itemize}
+
+\section{数值线性代数中的基本问题}
+\label{sec:ch1-basicproblems}
+
+数值线性代数包含下列三个主要问题, 它们正是本书的研究对象.
+
+\begin{parenlist}
+  \item 求线性方程组
+    \[
+      A\mathbf{x}=\mathbf{b},
+    \]
+    的解, 其中 $A$ 为 $n\times n$ 非奇异矩阵, $\mathbf{b}$ 为 $n$ 维向量.
+
+  \item 线性最小二乘问题: 对任意 $m\times n$ 矩阵 $A$ 与 $m$ 维向量 $\mathbf{b}$, 求一个 $n$ 维向量 $\mathbf{x}$, 使得
+    \[
+      \norm{A\mathbf{x}-\mathbf{b}}_2 = \min_{\mathbf{y}\in\R^n}\norm{A\mathbf{y}-\mathbf{b}}_2.
+    \]
+
+  \item 特征值问题: 对任意 $n\times n$ 矩阵 $A$, 求其部分 (或全部) 特征值及相应的特征向量. 我们在此指出, 若存在非零向量 $\mathbf{x}\in\C^n$ 使得
+    \[
+      A\mathbf{x}=\lambda\mathbf{x},
+    \]
+    则称复数 $\lambda$ 为 $A$ 的\newterm{eigenvalue}{特征值}{eigenvalue}, 其中 $\mathbf{x}$ 称为 $A$ 的属于 $\lambda$ 的\newterm{eigenvector}{特征向量}{eigenvector}.
+\end{parenlist}
+
+除这些主要问题外, 数值线性代数中还有许多其他基本问题, 例如总体最小二乘问题, 矩阵方程, 广义逆, 逆特征值问题, 非线性特征值问题, 奇异值问题以及逆奇异值问题等. 关于这些问题的文献, 我们参见 \cite{src:3,src:6,src:13,src:26,src:27,src:53,src:72,src:73,src:76,src:84,src:86,src:88,src:100}.
+
+\section{为何要研究数值方法?}
+\label{sec:ch1-whynumerical}
+
+为回答这一问题, 让我们考虑如下线性方程组
+\[
+  A\mathbf{x}=\mathbf{b},
+\]
+其中 $A$ 为 $n\times n$ 非奇异矩阵, $\mathbf{x}=[x_1,x_2,\ldots,x_n]^T$. 若使用著名的 Cramer 法则, 则可得如下解:
+\[
+  x_1=\frac{\det(A_1)}{\det(A)},\quad
+  x_2=\frac{\det(A_2)}{\det(A)},\quad
+  \ldots,\quad
+  x_n=\frac{\det(A_n)}{\det(A)},
+\]
+其中 $A_i$ ($i=1,2,\ldots,n$) 是把第 $i$ 列换成向量 $\mathbf{b}$ 后所得的矩阵. 于是需要计算 $n+1$ 个行列式, 即 $\det(A_i)$ ($i=1,2,\ldots,n$) 与 $\det(A)$. 这共需
+\[
+  [n!(n-1)](n+1)=(n-1)(n+1)!
+\]
+次乘法. 当 $n=25$ 时, 若用一台每秒运算 $10^{10}$ 次的计算机, 则需要
+\[
+  \frac{24\times 26!}{10^{10}\times 3600\times 24\times 365}\approx 30.6\times 10^{9}\ \text{年}.
+\]
+而若采用高斯消去法, 则只需
+\[
+  \sum_{i=1}^{n}(i-1)(i+1)=\sum_{i=1}^{n}i^{2}-n=\frac{1}{6}n(n+1)(2n+1)-n=\mathcal{O}(n^{3})
+\]
+次乘法. 于是用同一台计算机, 不到 1 秒即可解出一个 $25\times 25$ 的线性方程组. 由上述讨论可见, 用不同的数值方法求解同一个问题, 效果差别竟如此之大. 因此, 研究数值方法的性质对我们而言是必不可少的.
+
+\section{矩阵分解}
+\label{sec:ch1-factorization}
+
+对任意线性方程组 $A\mathbf{x}=\mathbf{b}$, 若能把 $A$ 分解为 $A=LU$, 其中 $L$ 为下三角矩阵, $U$ 为上三角矩阵, 则有
+\begin{equation}
+  \begin{cases}
+    L\mathbf{y}=\mathbf{b},\\
+    U\mathbf{x}=\mathbf{y}.
+  \end{cases}
+  \label{eq:ch1-lu}
+\end{equation}
+通过回代, 容易解出 \eqref{eq:ch1-lu}, 进而解出 $A\mathbf{x}=\mathbf{b}$. 因此, 矩阵分解是数值线性代数中非常重要的工具. 下面这个定理是线性代数中最基本, 也最有用的结果之一 \cite{src:39}.
+
+\begin{theorem}[Jordan 分解定理]
+\label{thm:ch1-jordan}
+设 $A\in\C^{n\times n}$, 则存在非奇异矩阵 $X\in\C^{n\times n}$ 使得
+\[
+  X^{-1}AX=J\equiv\diag(J_1,J_2,\ldots,J_p),
+\]
+亦即 $A=XJX^{-1}$, 其中 $J$ 称为 $A$ 的\newterm{jordanform}{Jordan 标准形}{Jordan canonical form}, 而
+\[
+  J_i=\begin{bmatrix}
+    \lambda_i & 1         & 0      & \cdots & 0      \\
+    0         & \lambda_i & 1      & \ddots & \vdots \\
+    \vdots    & 0         & \ddots & \ddots & 0      \\
+    \vdots    &           & \ddots & \ddots & 1      \\
+    0         & \cdots    & \cdots & 0      & \lambda_i
+  \end{bmatrix}\in\C^{n_i\times n_i},\qquad i=1,2,\ldots,p,
+\]
+称为\newterm{jordanblock}{Jordan 块}{Jordan block}, 且 $n_1+\cdots+n_p=n$. 除对角 Jordan 块的排列次序外, $A$ 的 Jordan 标准形是唯一的. 若 $A\in\R^{n\times n}$ 且仅有实特征值, 则矩阵 $X$ 可取为实矩阵.
+\end{theorem}
+
+\section{扰动与误差分析}
+\label{sec:ch1-perturbation}
+
+数值算法给出的解很少是绝对正确的. 误差通常有两类: 其一, 输入数据本身带有误差, 它由先前的计算或测量产生; 其二, 算法内部的近似会引入误差. 因此, 我们需要进行扰动与误差分析 \cite{src:12,src:69,src:96}.
+
+\medskip
+\noindent (1) 扰动.
+
+给定 $x$, 欲计算函数 $f(x)$ 的值. 设 $x$ 有一个扰动 $\delta x$, 且 $|\delta x|/|x|$ 非常小. 我们希望找到尽可能小的正数 $c(x)$, 使得
+\[
+  \frac{|f(x+\delta x)-f(x)|}{|f(x)|}\leqslant c(x)\frac{|\delta x|}{|x|}.
+\]
+此时称 $c(x)$ 为 $f(x)$ 在 $x$ 处的\newterm{condnum}{条件数}{condition number}. 若 $c(x)$ 很大, 则称函数 $f$ 在 $x$ 处是病态的; 若 $c(x)$ 很小, 则称 $f$ 在 $x$ 处是良态的.
+
+\begin{mremark}
+一个计算问题是否病态, 与我们所采用的数值方法无关.
+\end{mremark}
+
+\medskip
+\noindent (2) 误差.
+
+用某种数值方法计算函数 $f$ 在点 $x$ 处的值, 得到 $\hat{y}$. 由于舍入误差 (或截断误差), 通常有
+\[
+  \hat{y}\neq f(x).
+\]
+若存在 $\delta x$ 使得
+\[
+  \hat{y}=f(x+\delta x),\qquad |\delta x|\leqslant\epsilon|x|,
+\]
+其中 $\epsilon$ 是一个与所用数值方法及计算机密切相关的正常数, 则当 $\epsilon$ 很小时, 称该方法是\newterm{stable}{稳定的}{stable}; 当 $\epsilon$ 很大时, 称该方法是不稳定的.
+
+\begin{mremark}
+一个数值方法是否稳定, 与我们所面临的计算问题无关.
+\end{mremark}
+
+综合扰动与误差分析, 可得
+\[
+  \frac{|\hat{y}-f(x)|}{|f(x)|}
+  =\frac{|f(x+\delta x)-f(x)|}{|f(x)|}
+  \leqslant c(x)\frac{|\delta x|}{|x|}
+  \leqslant \epsilon c(x).
+\]
+因此, 一个数值结果是否准确, 既取决于数值方法的稳定性, 也取决于计算问题的条件数.
+
+\section{运算量与收敛速度}
+\label{sec:ch1-cost}
+
+数值算法通常分为两类:
+\[
+  \begin{cases}
+    \text{(i) 直接法;}\\
+    \text{(ii) 迭代法.}
+  \end{cases}
+\]
+用直接法, 可在精确算术下经有限步得到计算问题的精确解; 用迭代法, 经有限步只能得到计算问题的近似解.
+
+运算量是衡量算法的重要指标. 一个算法的运算量, 是指算法中所用的「加, 减, 乘, 除」运算的总次数. 需要指出, 算法的速度只部分地取决于运算量. 在现代计算机中, 运算的速度远快于数据传输的速度. 因此, 有时算法的速度主要取决于数据传输的总量.
+
+对直接法, 我们通常以运算量作为衡量算法速度的主要指标; 对迭代法, 则需要考虑
+\[
+  \begin{cases}
+    \text{(i) 每次迭代的运算量;}\\
+    \text{(ii) 方法的收敛速度.}
+  \end{cases}
+\]
+
+对迭代算法所产生的序列 $\{\mathbf{x}_k\}$, 若 $\{\mathbf{x}_k\}\to\mathbf{x}$ (精确解), 且满足
+\[
+  \norm{\mathbf{x}_k-\mathbf{x}}\leqslant c\norm{\mathbf{x}_{k-1}-\mathbf{x}},\quad k=1,2,\ldots,
+\]
+其中 $0<c<1$, $\norm{\cdot}$ 为任一向量范数 (详见\autoref{ch:perturbation}), 则称其收敛速度是线性的. 若满足
+\[
+  \norm{\mathbf{x}_k-\mathbf{x}}\leqslant c\norm{\mathbf{x}_{k-1}-\mathbf{x}}^{p},\quad k=1,2,\ldots,
+\]
+其中 $0<c<1$, $p>1$, 则称其收敛速度是超线性的.
+
+\begin{exercises}
+
+\item 若上三角矩阵的对角元全为零, 则称之为严格上三角矩阵. 证明: 若 $A$ 为 $n$ 阶严格上三角矩阵, 则 $A^{n}=\mathbf{0}$.
+
+\item 设 $A\in\C^{n\times m}$, $B\in\C^{m\times l}$. 证明
+  \[
+    \rank(AB)\geqslant\rank(A)+\rank(B)-m.
+  \]
+
+\item 设
+  \[
+    A=\begin{bmatrix} A_{11} & A_{12}\\ A_{21} & A_{22}\end{bmatrix},
+  \]
+  其中 $A_{ij}$ ($i,j=1,2$) 均为方阵, $\det(A_{11})\neq 0$, 且满足
+  \[
+    A_{11}A_{21}=A_{21}A_{11}.
+  \]
+  则
+  \[
+    \det(A)=\det(A_{11}A_{22}-A_{21}A_{12}).
+  \]
+
+\item 证明 $\det(I-\mathbf{u}\mathbf{v}^{*})=1-\mathbf{v}^{*}\mathbf{u}$, 其中 $\mathbf{u},\mathbf{v}\in\C^{m}$ 为列向量.
+
+\item 证明 Hadamard 不等式: 对 $A\in\C^{n\times n}$ 有
+  \[
+    |\det(A)|\leqslant\prod_{j=1}^{n}\norm{\mathbf{a}_j}_2,
+  \]
+  其中 $\mathbf{a}_j=A(:,j)$, $\norm{\mathbf{a}_j}_2=\left(\sum_{i=1}^{n}|A(i,j)|^{2}\right)^{\frac{1}{2}}$. 等号何时成立?
+
+\item 设 $B$ 为幂零矩阵, 即存在整数 $k>0$ 使得 $B^{k}=\mathbf{0}$. 证明: 若 $AB=BA$, 则
+  \[
+    \det(A+B)=\det(A).
+  \]
+
+\item 设 $A$ 为 $m\times n$ 矩阵, $B$ 为 $n\times m$ 矩阵. 证明矩阵
+  \[
+    \begin{bmatrix} AB & \mathbf{0}\\ B & \mathbf{0}\end{bmatrix}
+    \quad\text{与}\quad
+    \begin{bmatrix} \mathbf{0} & \mathbf{0}\\ B & BA\end{bmatrix}
+  \]
+  相似. 由此推出: $AB$ 的非零特征值与 $BA$ 的非零特征值相同, 且
+  \[
+    \det(I_m+AB)=\det(I_n+BA).
+  \]
+
+\item 若矩阵 $M\in\C^{n\times n}$ 满足
+  \[
+    M=M^{*},\qquad \mathbf{x}^{*}M\mathbf{x}>0,
+  \]
+  对一切 $\mathbf{x}\neq\mathbf{0}\in\C^{n}$ 成立, 则称 $M$ 为 Hermite 正定矩阵. 设 $A$ 与 $B$ 均为 Hermite 正定矩阵.
+  \subquest 证明矩阵乘积 $AB$ 的特征值全为正.
+  \subquest 证明 $AB$ 为 Hermite 矩阵当且仅当 $A$ 与 $B$ 可交换.
+
+\item 证明任意矩阵 $A\in\C^{n\times n}$ 都可唯一地写成如下形式
+  \[
+    A=B+\ii C,
+  \]
+  其中 $B$ 与 $C$ 均为 Hermite 矩阵.
+
+\item 证明: 若 $A$ 为反 Hermite 矩阵, 即 $A^{*}=-A$, 则 $A$ 的全部特征值都落在虚轴上.
+
+\item 设
+  \[
+    A=\begin{bmatrix} A_{11} & A_{12}\\ A_{21} & A_{22}\end{bmatrix}.
+  \]
+  假设 $A_{11}$, $A_{22}$ 为方阵, 且 $A_{11}$, $A_{22}-A_{21}A_{11}^{-1}A_{12}$ 均非奇异. 设
+  \[
+    B=\begin{bmatrix} B_{11} & B_{12}\\ B_{21} & B_{22}\end{bmatrix}
+  \]
+  为 $A$ 的逆. 证明
+  \begin{align*}
+    B_{22}&=(A_{22}-A_{21}A_{11}^{-1}A_{12})^{-1}, &
+    B_{12}&=-A_{11}^{-1}A_{12}B_{22},\\
+    B_{21}&=-B_{22}A_{21}A_{11}^{-1}, &
+    B_{11}&=A_{11}^{-1}-B_{12}A_{21}A_{11}^{-1}.
+  \end{align*}
+
+\item 设 $A$ 与 $B$ 均为 Hermite 矩阵, 且 $A$ 正定. 证明: $A+B$ 正定当且仅当 $A^{-1}B$ 的全部特征值都大于 $-1$.
+
+\item 设 $A$ 为幂等矩阵, 即 $A^{2}=A$. 证明 $A$ 的每个特征值或为 $0$, 或为 $1$.
+
+\item 设 $A$ 为所有元素都等于 $1$ 的矩阵. 证明 $A$ 可写成 $A=\mathbf{e}\mathbf{e}^{T}$, 其中 $\mathbf{e}^{T}=[1,1,\ldots,1]$, 且 $A$ 为半正定矩阵. 求 $A$ 的特征值与特征向量.
+
+\item 证明任意矩阵 $A\in\C^{n\times n}$ 都有极分解 $A=HQ$, 其中 $H$ 为 Hermite 半正定矩阵, $Q$ 为酉矩阵. 回忆: 若 $M^{-1}=M^{*}$, 则称 $M\in\C^{n\times n}$ 为酉矩阵. 此外, 若 $A$ 非奇异, 则 $H$ 为 Hermite 正定矩阵, 且 $A$ 的极分解是唯一的.
+
+\end{exercises}

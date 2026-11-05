@@ -1,0 +1,442 @@
+% chapters/ch10.tex —— 第 10 章：在分数阶扩散方程中的应用
+% 源书：Chapter 10 Applications in FDEs（正文首段明确 FDEs = fractional diffusion equations）
+%       书页 170–180（物理页 184–194）
+% 公式 (10.1)–(10.5)；引理 10.1；算法 10.1；例 10.1；表 10.1；本章无习题
+\chapter{在分数阶扩散方程中的应用}
+\label{ch:fde}
+
+本章简要研究用于求解二维空间分数阶扩散方程的 Crank--Nicolson 加权与移位 Grünwald 差分 (CN-WSGD) 格式. 该方法需要求解一个或多个非对称, 大型且满的线性方程组. 我们使用第 6 章介绍的 GMRES 方法, 并结合重启策略与预处理技术来求解这些方程组. 主要结果之一是: 对预处理后的方程组施用重启 GMRES 方法时, 每个时间层的计算量为 $\mathcal{O}(N^{2}\log N)$, 其中 $N=N_{1}=N_{2}$ 为 $x$ 方向与 $y$ 方向的空间剖分数 (见 \ref{sec:10-2} 节). 关于分数阶扩散方程 (FDE) 的文献, 可参阅 \cite{src:7,src:31,src:56,src:60,src:68}.
+
+\section{引言}
+\label{sec:10-1}
+
+考虑如下二维空间分数阶扩散方程的初边值问题 \cite{src:62,src:89}:
+\begin{equation}
+\left\{
+\begin{array}{l}
+\displaystyle \frac{\partial u(x,y,t)}{\partial t}
+ =d_{+}(x,y,t)\,{}_{a}D_{x}^{\alpha}u(x,y,t)+d_{-}(x,y,t)\,{}_{x}D_{b}^{\alpha}u(x,y,t)\\[1.5mm]
+\qquad{}+e_{+}(x,y,t)\,{}_{c}D_{y}^{\beta}u(x,y,t)+e_{-}(x,y,t)\,{}_{y}D_{d}^{\beta}u(x,y,t)+f(x,y,t),\\[1.5mm]
+\qquad\qquad (x,y,t)\in\Omega\times(0,T],\\[1.5mm]
+u(x,y,0)=u_{0}(x,y),\qquad (x,y)\in\overline{\Omega},\\[1.5mm]
+u(x,y,t)=0,\qquad (x,y,t)\in\partial\Omega\times[0,T],
+\end{array}
+\right.
+\label{eq:10-1}
+\end{equation}
+其中 $1<\alpha,\beta<2$, $d_{\pm}(x,y,t),e_{\pm}(x,y,t)\geqslant 0$, $\Omega=(a,b)\times(c,d)$. 此外, ${}_{a}D_{x}^{\alpha}$, ${}_{x}D_{b}^{\alpha}$, ${}_{c}D_{y}^{\beta}$ 与 ${}_{y}D_{d}^{\beta}$ 是如下定义的左, 右 \newterm{riemannliouville}{Riemann--Liouville 分数阶导数}{Riemann--Liouville fractional derivative}:
+\[
+\left\{
+\begin{array}{l}
+\displaystyle {}_{a}D_{x}^{\alpha}u(x,y,t)\equiv\frac{1}{\Gamma(2-\alpha)}\frac{\mathrm{d}^{2}}{\mathrm{d}x^{2}}\int_{a}^{x}\frac{u(\xi,y,t)}{(x-\xi)^{\alpha-1}}\,\mathrm{d}\xi,\\[4mm]
+\displaystyle {}_{x}D_{b}^{\alpha}u(x,y,t)\equiv\frac{1}{\Gamma(2-\alpha)}\frac{\mathrm{d}^{2}}{\mathrm{d}x^{2}}\int_{x}^{b}\frac{u(\xi,y,t)}{(\xi-x)^{\alpha-1}}\,\mathrm{d}\xi,\\[4mm]
+\displaystyle {}_{c}D_{y}^{\beta}u(x,y,t)\equiv\frac{1}{\Gamma(2-\beta)}\frac{\mathrm{d}^{2}}{\mathrm{d}y^{2}}\int_{c}^{y}\frac{u(x,\eta,t)}{(y-\eta)^{\beta-1}}\,\mathrm{d}\eta,\\[4mm]
+\displaystyle {}_{y}D_{d}^{\beta}u(x,y,t)\equiv\frac{1}{\Gamma(2-\beta)}\frac{\mathrm{d}^{2}}{\mathrm{d}y^{2}}\int_{y}^{d}\frac{u(x,\eta,t)}{(\eta-y)^{\beta-1}}\,\mathrm{d}\eta.
+\end{array}
+\right.
+\]
+这里, \newterm{gammafunction}{Gamma 函数}{Gamma function} $\Gamma(z)$ 由如下积分定义 \cite{src:68}:
+\[
+  \Gamma(z)\equiv\int_{0}^{\infty}e^{-t}t^{z-1}\,\mathrm{d}t,\qquad\operatorname{Re}(z)>0,
+\]
+其中 $\operatorname{Re}(\cdot)$ 表示复数的实部.
+
+为逼近含左分数阶导数的 FDE 与含双边 Riemann--Liouville 分数阶导数的 FDE, Meerschaert 与 Tadjeran 提出了 \newterm{shiftedgrunwald}{移位 Grünwald 差分格式}{shifted Grünwald difference scheme} \cite{src:61,src:62}. 他们的方法被证明是无条件稳定的. 2012 年, Tian, Zhou 与 Deng 提出了 Crank--Nicolson 加权与移位 Grünwald 差分 (CN-WSGD) 格式 \cite{src:79}. 用 CN-WSGD 格式离散 \eqref{eq:10-1}, 可得一列线性方程组
+\[
+  \underline{\mathbf{A}}^{(m+1)}\mathbf{u}^{(m+1)}=\mathbf{b}^{(m+1)},\qquad m=0,1,\ldots,M-1,
+\]
+其中 $M$ 为时间剖分数.
+
+上述系数矩阵具有特殊的\newterm{toeplitzlike}{类 Toeplitz 结构}{Toeplitz-like structure}: 它可写成若干对角乘 Toeplitz 矩阵之和 \cite{src:46,src:79,src:90}. 这些线性方程组非对称且规模大, 故用重启 GMRES 方法求解. 数值结果表明, 当扩散系数不小且网格尺寸较小时, 离散后的方程组可能变得非常病态. 为加速重启 GMRES 方法的收敛, 通过推广 \cite{src:59} 中提出的\newterm{bandedprecond}{带状预条件子}{banded preconditioner}, 用系数矩阵的一个块-带状-带状-块近似的\newterm{ilufact}{不完全 LU 分解}{incomplete LU factorization}来构造预条件子. 该预处理迭代法的一个优点是: 利用系数矩阵的类 Toeplitz 结构, 它在每个时间层只需 $\mathcal{O}(N^{2}\log N)$ 次运算.
+
+本章安排如下. \ref{sec:10-2} 节用 CN-WSGD 格式离散 FDE \eqref{eq:10-1}, 并给出该有限差分方法的矩阵形式. 随后在 \ref{sec:10-3} 节为 FDE \eqref{eq:10-1} 的离散线性方程组构造预条件子. 最后给出数值结果以说明预条件子的效率.
+
+\section{CN-WSGD 格式}
+\label{sec:10-2}
+
+\subsection{分数阶扩散方程的离散}
+\label{sec:10-2-1}
+
+本小节用 CN-WSGD 格式离散 FDE \eqref{eq:10-1}. 将时间区间 $[0,T]$ 分成 $M$ 个长度为 $\tau=T/M$ 的子区间, 空间区域 $\Omega$ 以网格尺寸 $h_{x}=(b-a)/(N_{1}+1)$ 与 $h_{y}=(d-c)/(N_{2}+1)$ 均匀剖分, 其中 $M$, $N_{1}$, $N_{2}$ 为正整数. 令 $x_{i}=a+ih_{x}$ ($i=0,1,\ldots,N_{1}+1$), $y_{j}=c+jh_{y}$ ($j=0,1,\ldots,N_{2}+1$), $t^{(m)}=m\tau$ ($m=0,1,\ldots,M$). 令 $t^{(m+1/2)}=(t^{(m)}+t^{(m+1)})/2$ ($m=1,2,\ldots,M-1$).
+
+下面考虑离散后线性方程组的数值解法, 这些方程组由带移位参数 $(p,q)=(1,0)$ 的二阶精度 CN-WSGD 格式 \cite{src:79} 得到:
+\[
+\left\{
+\begin{array}{l}
+\displaystyle {}_{L}\mathcal{D}_{h_{x}}^{\alpha}u(x_{i},y_{j},t^{(m)})=\frac{1}{h_{x}^{\alpha}}\sum_{k=0}^{i}w_{k}^{(\alpha)}u(x_{i-k+1},y_{j},t^{(m)}),\\[4mm]
+\displaystyle {}_{R}\mathcal{D}_{h_{x}}^{\alpha}u(x_{i},y_{j},t^{(m)})=\frac{1}{h_{x}^{\alpha}}\sum_{k=0}^{N_{1}-i+1}w_{k}^{(\alpha)}u(x_{i+k-1},y_{j},t^{(m)}),\\[4mm]
+\displaystyle {}_{L}\mathcal{D}_{h_{y}}^{\beta}u(x_{i},y_{j},t^{(m)})=\frac{1}{h_{y}^{\beta}}\sum_{k=0}^{j}w_{k}^{(\beta)}u(x_{i},y_{j-k+1},t^{(m)}),\\[4mm]
+\displaystyle {}_{R}\mathcal{D}_{h_{y}}^{\beta}u(x_{i},y_{j},t^{(m)})=\frac{1}{h_{y}^{\beta}}\sum_{k=0}^{N_{2}-j+1}w_{k}^{(\beta)}u(x_{i},y_{j+k-1},t^{(m)}).
+\end{array}
+\right.
+\]
+这里, 系数 $w_{k}^{(\gamma)}$ 由
+\[
+  w_{0}^{(\gamma)}=\frac{\gamma}{2}g_{0}^{(\gamma)},\qquad
+  w_{k}^{(\gamma)}=\frac{\gamma}{2}g_{k}^{(\gamma)}+\frac{2-\gamma}{2}g_{k-1}^{(\gamma)},\quad k\geqslant 1,
+\]
+给出, 其中 $g_{k}^{(\gamma)}=(-1)^{k}\binom{\gamma}{k}$, $\binom{\gamma}{k}$ 为分数阶二项式系数. 对 $\gamma=\alpha,\beta$, 分数阶二项式系数 $g_{j}^{(\gamma)}$ 具有如下性质 \cite{src:61,src:62,src:66,src:87}:
+\begin{equation}
+\left\{
+\begin{array}{l}
+g_{0}^{(\gamma)}=1,\quad g_{1}^{(\gamma)}=-\gamma,\quad g_{2}^{(\gamma)}>g_{3}^{(\gamma)}>\cdots>0,\\[2mm]
+\displaystyle \sum_{j=0}^{\infty}g_{j}^{(\gamma)}=0,\quad \sum_{j=0}^{n}g_{j}^{(\gamma)}<0,\quad n\geqslant 1,\\[2mm]
+g_{j}^{(\gamma)}=\mathcal{O}(j^{-(\gamma+1)}).
+\end{array}
+\right.
+\label{eq:10-2}
+\end{equation}
+
+类似地, 系数 $w_{k}^{(\gamma)}$ 具有如下基本性质 \cite{src:79}.
+
+\begin{lemma}
+\label{lem:10-1}
+对 $1<\gamma<2$, 系数 $w_{k}^{(\gamma)}$ 满足如下性质:
+\[
+\left\{
+\begin{array}{l}
+\displaystyle w_{0}^{(\gamma)}=\frac{\gamma}{2},\quad
+w_{1}^{(\gamma)}=\frac{2-\gamma-\gamma^{2}}{2}<0,\quad
+w_{2}^{(\gamma)}=\frac{\gamma(\gamma^{2}+\gamma-4)}{4},\\[3mm]
+1\geqslant w_{0}^{(\gamma)}\geqslant w_{3}^{(\gamma)}\geqslant w_{4}^{(\gamma)}\geqslant\cdots\geqslant 0,\\[2mm]
+\displaystyle \sum_{j=0}^{\infty}w_{j}^{(\gamma)}=0,\quad \sum_{j=0}^{n}w_{j}^{(\gamma)}<0,\quad n\geqslant 2.
+\end{array}
+\right.
+\]
+此外, 还有
+\[
+  w_{j}^{(\gamma)}=\mathcal{O}(j^{-(\gamma+1)}).
+\]
+\end{lemma}
+
+令
+\[
+\left\{
+\begin{array}{l}
+\displaystyle \delta_{x}^{\alpha,(m)}=\frac{d_{i,j}^{+,(m)}\tau}{2}\,{}_{L}\mathcal{D}_{h_{x}}^{\alpha}+\frac{d_{i,j}^{-,(m)}\tau}{2}\,{}_{R}\mathcal{D}_{h_{x}}^{\alpha},\\[4mm]
+\displaystyle \delta_{y}^{\beta,(m)}=\frac{e_{i,j}^{+,(m)}\tau}{2}\,{}_{L}\mathcal{D}_{h_{y}}^{\beta}+\frac{e_{i,j}^{-,(m)}\tau}{2}\,{}_{R}\mathcal{D}_{h_{y}}^{\beta},
+\end{array}
+\right.
+\]
+其中
+\[
+\begin{array}{ll}
+d_{i,j}^{+,(m)}=d_{+}(x_{i},y_{j},t^{(m)}), & d_{i,j}^{-,(m)}=d_{-}(x_{i},y_{j},t^{(m)}),\\[1mm]
+e_{i,j}^{+,(m)}=e_{+}(x_{i},y_{j},t^{(m)}), & e_{i,j}^{-,(m)}=e_{-}(x_{i},y_{j},t^{(m)}).
+\end{array}
+\]
+二维 CN-WSGD 有限差分方法可表述如下:
+\begin{equation}
+  \bigl(1-\delta_{x}^{\alpha,(m+1)}-\delta_{y}^{\beta,(m+1)}\bigr)u_{i,j}^{(m+1)}
+  =\bigl(1+\delta_{x}^{\alpha,(m)}+\delta_{y}^{\beta,(m)}\bigr)u_{i,j}^{(m)}
+  +\tau f_{i,j}^{(m+1/2)},
+\label{eq:10-3}
+\end{equation}
+其中 $u_{i,j}^{(m)}=u(x_{i},y_{j},t^{(m)})$, $f_{i,j}^{(m+1/2)}=f(x_{i},y_{j},t^{(m+1/2)})$.
+
+\subsection{CN-WSGD 格式的矩阵形式}
+\label{sec:10-2-2}
+
+为给出格式 \eqref{eq:10-3} 的矩阵形式, 先定义如下记号.
+
+(1) 令 $N=N_{1}=N_{2}$. $N^{2}$ 维向量 $\mathbf{u}^{(m)}$, $\mathbf{d}_{+}^{(m)}$, $\mathbf{d}_{-}^{(m)}$, $\mathbf{e}_{+}^{(m)}$, $\mathbf{e}_{-}^{(m)}$ 与 $\mathbf{f}^{(m+1/2)}$ 定义如下:
+\[
+\left\{
+\begin{array}{l}
+\mathbf{u}^{(m)}=\bigl[u_{1,1}^{(m)},\ldots,u_{N_{1},1}^{(m)},u_{1,2}^{(m)},\ldots,u_{N_{1},2}^{(m)},\ldots,u_{1,N_{2}}^{(m)},\ldots,u_{N_{1},N_{2}}^{(m)}\bigr]^{T},\\[2mm]
+\mathbf{d}_{+}^{(m)}=\bigl[d_{1,1}^{+,(m)},\ldots,d_{N_{1},1}^{+,(m)},d_{1,2}^{+,(m)},\ldots,d_{N_{1},2}^{+,(m)},\ldots,d_{1,N_{2}}^{+,(m)},\ldots,d_{N_{1},N_{2}}^{+,(m)}\bigr]^{T},\\[2mm]
+\mathbf{d}_{-}^{(m)}=\bigl[d_{1,1}^{-,(m)},\ldots,d_{N_{1},1}^{-,(m)},d_{1,2}^{-,(m)},\ldots,d_{N_{1},2}^{-,(m)},\ldots,d_{1,N_{2}}^{-,(m)},\ldots,d_{N_{1},N_{2}}^{-,(m)}\bigr]^{T},\\[2mm]
+\mathbf{e}_{+}^{(m)}=\bigl[e_{1,1}^{+,(m)},\ldots,e_{N_{1},1}^{+,(m)},e_{1,2}^{+,(m)},\ldots,e_{N_{1},2}^{+,(m)},\ldots,e_{1,N_{2}}^{+,(m)},\ldots,e_{N_{1},N_{2}}^{+,(m)}\bigr]^{T},\\[2mm]
+\mathbf{e}_{-}^{(m)}=\bigl[e_{1,1}^{-,(m)},\ldots,e_{N_{1},1}^{-,(m)},e_{1,2}^{-,(m)},\ldots,e_{N_{1},2}^{-,(m)},\ldots,e_{1,N_{2}}^{-,(m)},\ldots,e_{N_{1},N_{2}}^{-,(m)}\bigr]^{T},\\[2mm]
+\begin{array}{l}
+\mathbf{f}^{(m+1/2)}=\bigl[f_{1,1}^{(m+1/2)},\ldots,f_{N_{1},1}^{(m+1/2)},f_{1,2}^{(m+1/2)},\ldots,f_{N_{1},2}^{(m+1/2)},\ldots,f_{1,N_{2}}^{(m+1/2)},\\
+\qquad\qquad\qquad \ldots,f_{N_{1},N_{2}}^{(m+1/2)}\bigr]^{T}.
+\end{array}
+\end{array}
+\right.
+\]
+
+(2) 定义如下 $N^{2}\times N^{2}$ 对角矩阵:
+\[
+  D_{+}^{(m+1)}=\operatorname{diag}\bigl(r\mathbf{d}_{+}^{(m+1)}\bigr),\qquad
+  D_{-}^{(m+1)}=\operatorname{diag}\bigl(r\mathbf{d}_{-}^{(m+1)}\bigr),
+\]
+\[
+  E_{+}^{(m+1)}=\operatorname{diag}\bigl(s\mathbf{e}_{+}^{(m+1)}\bigr),\qquad
+  E_{-}^{(m+1)}=\operatorname{diag}\bigl(s\mathbf{e}_{-}^{(m+1)}\bigr),
+\]
+其中 $r=\dfrac{\tau}{2h_{x}^{\alpha}}$, $s=\dfrac{\tau}{2h_{y}^{\beta}}$.
+
+(3) 定义 Toeplitz 矩阵 $A_{Q}^{\gamma,L}$ 与 $A_{Q}^{\gamma,R}$:
+\[
+  A_{Q}^{\gamma,L}=
+  \begin{bmatrix}
+    w_{1}^{(\gamma)} & w_{0}^{(\gamma)} & 0 & \cdots & 0 & 0\\
+    w_{2}^{(\gamma)} & w_{1}^{(\gamma)} & w_{0}^{(\gamma)} & \ddots & & 0\\
+    \vdots & w_{2}^{(\gamma)} & w_{1}^{(\gamma)} & \ddots & \ddots & \vdots\\
+    \vdots & \ddots & \ddots & \ddots & \ddots & 0\\
+    w_{Q-1}^{(\gamma)} & & \ddots & \ddots & w_{1}^{(\gamma)} & w_{0}^{(\gamma)}\\
+    w_{Q}^{(\gamma)} & w_{Q-1}^{(\gamma)} & \cdots & \cdots & w_{2}^{(\gamma)} & w_{1}^{(\gamma)}
+  \end{bmatrix},
+  \qquad
+  A_{Q}^{\gamma,R}=\bigl(A_{Q}^{\gamma,L}\bigr)^{T}.
+\]
+
+(4) 定义 $N^{2}\times N^{2}$ 矩阵 $A_{x}^{(m+1)}$ 与 $A_{y}^{(m+1)}$:
+\[
+\left\{
+\begin{array}{l}
+A_{x}^{(m+1)}=D_{+}^{(m+1)}\bigl(I_{N_{2}}\otimes A_{N_{1}}^{\alpha,L}\bigr)+D_{-}^{(m+1)}\bigl(I_{N_{2}}\otimes A_{N_{1}}^{\alpha,R}\bigr),\\[2mm]
+A_{y}^{(m+1)}=E_{+}^{(m+1)}\bigl(A_{N_{2}}^{\beta,L}\otimes I_{N_{1}}\bigr)+E_{-}^{(m+1)}\bigl(A_{N_{2}}^{\beta,R}\otimes I_{N_{1}}\bigr).
+\end{array}
+\right.
+\]
+
+(5) 定义 $A^{(m+1)}=A_{x}^{(m+1)}+A_{y}^{(m+1)}$.
+
+于是 CN-WSGD 有限差分方法 \eqref{eq:10-3} 可写成如下矩阵形式
+\[
+  \bigl(I_{N^{2}}-A^{(m+1)}\bigr)\mathbf{u}^{(m+1)}
+  =\bigl(I_{N^{2}}+A^{(m)}\bigr)\mathbf{u}^{(m)}+\tau\mathbf{f}^{(m+1/2)},
+\]
+其中 $I_{Q}$ 表示 $Q\times Q$ 单位矩阵. 令
+\[
+  \underline{\mathbf{A}}^{(m+1)}=I_{N^{2}}-A^{(m+1)},\qquad
+  \mathbf{b}^{(m+1)}=\bigl(I_{N^{2}}+A^{(m)}\bigr)\mathbf{u}^{(m)}+\tau\mathbf{f}^{(m+1/2)}.
+\]
+上述线性方程组可写成
+\begin{equation}
+  \underline{\mathbf{A}}^{(m+1)}\mathbf{u}^{(m+1)}=\mathbf{b}^{(m+1)}.
+\label{eq:10-4}
+\end{equation}
+
+令 $\gamma_{0}=(-1+\sqrt{17})/2\approx 1.562$. 由引理 \ref{lem:10-1} 可知, 若 $\gamma\in[\gamma_{0},2)$, 则 $w_{2}^{(\gamma)}\geqslant 0$, 且系数矩阵 $\underline{\mathbf{A}}^{(m+1)}$ 是严格对角占优的 \newterm{mmatrix}{M-矩阵}{M-matrix}. 此外, 矩阵 $(I_{N^{2}}-A^{(m+1)})^{-1}(I_{N^{2}}+A^{(m+1)})$ 的谱半径小于 $1$. 当扩散系数与时间无关时, CN-WSGD 格式 \cite{src:79} 是无条件稳定的, 且截断误差为 $\mathcal{O}(h_{x}^{2}+h_{y}^{2}+\tau^{2})$. 与 \cite{src:78} 中给出的方法相比, CN-WSGD 格式无需 Richardson 外推即为二阶精度.
+
+\section{分数阶扩散方程的稀疏带状预条件子}
+\label{sec:10-3}
+
+离散线性方程组 \eqref{eq:10-4} 通常规模很大, 且具有特殊的类 Toeplitz 结构, 求解这类结构方程组是 CN-WSGD 格式应用中的核心问题. 我们用第 6 章介绍的重启 GMRES 方法求解 \eqref{eq:10-4}. 为加快重启 GMRES 方法的收敛速度, 使用由系数矩阵的一个块-带状-带状-块近似的不完全 LU 分解所定义的预条件子.
+
+\subsection{预条件子的构造}
+\label{sec:10-3-1}
+
+注意 Toeplitz 矩阵 $A_{N_{1}}^{\alpha,L}$, $A_{N_{1}}^{\alpha,R}$, $A_{N_{2}}^{\beta,L}$ 与 $A_{N_{2}}^{\beta,R}$ 具有特殊的对角衰减性质: 上述每个矩阵的第 $(i,j)$ 个元素为 $\mathcal{O}(\abs{i-j}^{-\gamma})$ 阶, 其中 $\gamma=\alpha,\beta$; 参见 \eqref{eq:10-2}. 因此, 我们考虑基于系数矩阵带状近似来构造预条件子. 由于对角补偿是设计预条件子的一种有用技巧 \cite{src:2,src:59}, 我们也考虑使用这一技巧.
+
+先考虑离散方程组 \eqref{eq:10-4} 的带状预条件子. 令
+\[
+  A_{Q,k}^{\gamma,L}=
+  \begin{bmatrix}
+    w_{1}^{(\gamma)} & w_{0}^{(\gamma)} & & & \\
+    \vdots & w_{1}^{(\gamma)} & w_{0}^{(\gamma)} & & \\
+    w_{k}^{(\gamma)} & & \ddots & \ddots & \\
+    & \ddots & & \ddots & w_{0}^{(\gamma)}\\
+    & & w_{k}^{(\gamma)} & \cdots & w_{1}^{(\gamma)}
+  \end{bmatrix}_{Q\times Q},
+  \qquad
+  A_{Q,k}^{\gamma,R}=\bigl(A_{Q,k}^{\gamma,L}\bigr)^{T}.
+\]
+令 $C_{Q}^{(\gamma)}$ 为由
+\[
+  C_{Q}^{\gamma}=
+  \begin{bmatrix}
+    0 & & & & & \\
+    & \ddots & & & & \\
+    & & 0 & & & \\
+    & & & w_{k+1}^{(\gamma)} & & \\
+    & & & & \ddots & \\
+    & & & & & \displaystyle\sum_{j=k+1}^{Q}w_{j}^{(\gamma)}
+  \end{bmatrix}_{Q\times Q}
+\]
+定义的对角矩阵. 矩阵 $A_{x,k}^{(m+1)}$ 与 $A_{y,k}^{(m+1)}$ 定义为
+\[
+\left\{
+\begin{array}{l}
+A_{x,k}^{(m+1)}=D_{+}^{(m+1)}\Bigl(I_{N_{2}}\otimes\bigl(A_{N_{1},k}^{\alpha,L}+C_{N_{1}}^{\alpha}\bigr)\Bigr)
+ +D_{-}^{(m+1)}\Bigl(I_{N_{2}}\otimes\bigl(A_{N_{1},k}^{\alpha,R}+C_{N_{1}}^{\alpha}\bigr)\Bigr),\\[2mm]
+A_{y,k}^{(m+1)}=E_{+}^{(m+1)}\Bigl(\bigl(A_{N_{2},k}^{\beta,L}+C_{N_{2}}^{\beta}\bigr)\otimes I_{N_{1}}\Bigr)
+ +E_{-}^{(m+1)}\Bigl(\bigl(A_{N_{2},k}^{\beta,R}+C_{N_{2}}^{\beta}\bigr)\otimes I_{N_{1}}\Bigr).
+\end{array}
+\right.
+\]
+于是矩阵 $A^{(m+1)}$ 可分裂为两部分
+\[
+  A^{(m+1)}=A_{k}^{(m+1)}+B_{k}^{(m+1)},
+\]
+其中
+\[
+  A_{k}^{(m+1)}=A_{x,k}^{(m+1)}+A_{y,k}^{(m+1)},\qquad
+  B_{k}^{(m+1)}=A^{(m+1)}-A_{k}^{(m+1)}.
+\]
+矩阵 $A_{k}^{(m+1)}$ 是稀疏带状矩阵, 只含 $A^{(m+1)}$ 的 $4k-3$ 条非零对角线, 而 $I_{N^{2}}-A_{k}^{(m+1)}$ 的带宽为 $2N_{1}(k-1)+1$. 由于对 $\gamma=\alpha,\beta$ 有 $w_{k}^{(\gamma)}=\mathcal{O}(k^{-(\gamma+1)})$, 故
+\[
+  \frac{\norm{\bigl(I_{N^{2}}-A^{(m+1)}\bigr)-\bigl(I_{N^{2}}-A_{k}^{(m+1)}\bigr)}_{\infty}}
+       {\norm{I_{N^{2}}-A^{(m+1)}}_{\infty}}
+  =\frac{\norm{B_{k}^{(m+1)}}_{\infty}}{\norm{I_{N^{2}}-A^{(m+1)}}_{\infty}}
+  =\mathcal{O}(k^{-\varsigma}),
+\]
+其中 $\varsigma=\min\{\alpha,\beta\}$. 若 $k$ 充分大, 则 $I_{N^{2}}-A_{k}^{(m+1)}$ 与 $I_{N^{2}}-A^{(m+1)}$ 的相对距离很小. 因此, 稀疏带状矩阵 $I_{N^{2}}-A_{k}^{(m+1)}$ 是系数矩阵 $\underline{\mathbf{A}}^{(m+1)}$ 的一个良好近似. 于是可考虑用稀疏带状矩阵 $I_{N^{2}}-A_{k}^{(m+1)}$ 的不完全 LU 分解来为 $\underline{\mathbf{A}}^{(m+1)}$ 构造预条件子.
+
+由于带状矩阵 $I_{N^{2}}-A_{k}^{(m+1)}$ 只含 $4k-3$ 条非零对角线, 它非常稀疏. 然而 $I_{N^{2}}-A_{k}^{(m+1)}$ 的带宽为 $2N_{1}(k-1)+1$, 其逆或 LU 分解的计算代价很高, 因为矩阵的稀疏性会被破坏. 为克服这一困难, 我们对带状矩阵 $I_{N^{2}}-A_{k}^{(m+1)}$ 计算无填充的不完全 LU 分解 (ILU(0)). 设 $L$ 与 $U$ 是其 ILU(0) 分解的因子, 则二者都只含 $2k-1$ 条非零对角线. 因此 $P_{k}^{(m+1)}=LU$ 也是稀疏矩阵. 由于 $P_{k}^{(m+1)}$ 可以是 $I_{N^{2}}-A_{k}^{(m+1)}$ 的良好近似, 它也可作为系数矩阵 $\underline{\mathbf{A}}^{(m+1)}$ 的良好近似. 对矩阵 $P_{k}^{(m+1)}$ 及其逆 $(P_{k}^{(m+1)})^{-1}$ 作用于向量 $\mathbf{x}\in\R^{N^{2}}$, 有
+\[
+  P_{k}^{(m+1)}\mathbf{x}=LU\mathbf{x},\qquad
+  \bigl(P_{k}^{(m+1)}\bigr)^{-1}\mathbf{x}=U^{-1}L^{-1}\mathbf{x}.
+\]
+于是, 预条件子 $P_{k}^{(m+1)}$ 是通过稀疏带状矩阵 $I_{N^{2}}-A_{k}^{(m+1)}$ 的不完全 LU 分解隐式构造的.
+
+\subsection{预处理 GMRES($\rho$) 方法}
+\label{sec:10-3-2}
+
+现已为 $\underline{\mathbf{A}}^{(m+1)}$ 构造了预条件子 $P_{k}^{(m+1)}$. 我们不去直接求解线性方程组 \eqref{eq:10-4}, 而是求解如下预处理后的线性方程组
+\begin{equation}
+  \bigl(P_{k}^{(m+1)}\bigr)^{-1}\underline{\mathbf{A}}^{(m+1)}\mathbf{u}^{(m+1)}
+  =\bigl(P_{k}^{(m+1)}\bigr)^{-1}\mathbf{b}^{(m+1)}.
+\label{eq:10-5}
+\end{equation}
+我们把第 6 章介绍的 GMRES 方法与重启策略结合起来求解上述预处理后的线性方程组. 这里用 $\mathrm{GMRES}(\rho)$ 表示在 $\rho$ 步迭代后重启的重启 GMRES 方法. 关于重启 GMRES 方法的介绍, 可参阅 \cite{src:70}. 为完整起见, 我们对预处理后的线性方程组 \eqref{eq:10-5} 陈述在每次迭代时检验残差的预处理 $\mathrm{GMRES}(\rho)$ 方法 \cite{src:59}. 这里使用如下记号: 符号 $\mathbf{r}_{t}$ 与 $\mathbf{r}_{p}$ 分别表示原线性方程组与预处理后线性方程组的当前残差. 用 \textit{IterMax} 表示最大迭代次数, $\epsilon>0$ 表示给定的残差相对精度.
+
+在每个时间层 $t^{(m+1)}$, 选取 $u_{0}$ 作为 $\mathbf{u}^{(m+1)}$ 的初始猜测. 计算 $I_{N^{2}}-A_{k}^{(m+1)}$ 的 ILU(0) 分解: $P^{(m+1)}=LU$. 然后计算残差 $\mathbf{r}=\mathbf{b}^{(m+1)}-\underline{\mathbf{A}}^{(m+1)}\mathbf{u}^{(m+1)}$, 并令 $\mathbf{r}_{t}=\mathbf{r}$. 初始时 $\mu=0$. 在迭代步中, 有
+
+% 算法 10.1 是不能断行的大块伪代码，若作普通段落会整体跳到次页，
+% 以致上一页底部只剩标题（孤行）且页面被 \flushbottom 强行拉伸。
+% 故包进 figure 浮动体（无 \caption，不影响算法编号），让后文回填该页。
+\begin{figure}[!t]
+\begin{algorithm}{预处理 GMRES($\rho$) 方法}
+  \label{alg:10-1}
+  \[
+    \left\{
+    \begin{array}{l}
+      \textbf{While}\ \mu\leqslant \textit{IterMax}\ \text{and}\ \norm{\mathbf{r}_{t}}_{2}/\norm{\mathbf{b}^{(m+1)}}_{2}>\epsilon\\
+      \quad \mu=\mu+1\\
+      \quad \mathbf{r}_{p}=U^{-1}L^{-1}\mathbf{r};\quad \beta=\norm{\mathbf{r}_{p}};\quad \mathbf{v}_{1}=\mathbf{r}_{p}/\beta\\
+      \quad j=0\\
+      \quad \textbf{While}\ j\leqslant\rho\ \text{and}\ \norm{\mathbf{r}_{t}}_{2}/\norm{\mathbf{b}^{(m+1)}}_{2}>\epsilon\\
+      \qquad j=j+1\\
+      \qquad \mathbf{w}_{j}=U^{-1}L^{-1}\underline{\mathbf{A}}^{(m+1)}\mathbf{v}_{j}\\
+      \qquad \textbf{for}\ i=1:j\\
+      \qquad\quad h_{ij}=\mathbf{w}_{j}^{T}\mathbf{v}_{i}\\
+      \qquad\quad \mathbf{w}_{j}=\mathbf{w}_{j}-h_{ij}\mathbf{v}_{i}\\
+      \qquad \textbf{end}\\
+      \qquad h_{j+1,j}=\norm{\mathbf{w}_{j}}_{2}\\
+      \qquad \mathbf{v}_{j+1}=\mathbf{w}_{j}/h_{j+1,j}\\
+      \qquad \textbf{compute}\ \mathbf{y}_{j}\ \text{the minimizer of}\ \norm{\beta\mathbf{e}_{1}-\bar{H}_{j}\mathbf{y}}_{2}\\
+      \qquad \mathbf{r}_{t}=\mathbf{r}-LUV_{j+1}\bar{H}_{j}\mathbf{y}_{j}\\
+      \quad \textbf{end}\\
+      \quad \mathbf{r}=\mathbf{r}_{t}\\
+      \quad \mathbf{u}^{(m+1)}=\mathbf{u}^{(m+1)}+V_{j}\mathbf{y}_{j}\\
+      \textbf{end}
+    \end{array}
+    \right.
+  \]
+\end{algorithm}
+\end{figure}
+
+其中 $\bar{H}_{j}=(h_{ik})_{1\leqslant i\leqslant j+1,\,1\leqslant k\leqslant j}$, $\mathbf{e}_{1}=[1,0,\ldots,0]^{T}\in\R^{j+1}$. 算法中的矩阵 $V_{j}=[\mathbf{v}_{1}\mid\mathbf{v}_{2}\mid\cdots\mid\mathbf{v}_{j}]\in\R^{N^{2}\times j}$ ($j\leqslant N^{2}$) 是列标准正交的矩阵.
+
+在预处理 $\mathrm{GMRES}(\rho)$ 方法中, 每次迭代的主要计算工作如下:
+\begin{enumerate}
+  \item[(1)] 计算 $\mathbf{w}=U^{-1}L^{-1}\underline{\mathbf{A}}^{(m+1)}\mathbf{v}_{j}$;
+  \item[(2)] 计算 $\mathbf{r}_{t}=\mathbf{r}-LUV_{j+1}\bar{H}_{j}\mathbf{y}_{j}$.
+\end{enumerate}
+
+由于 $\underline{\mathbf{A}}^{(m+1)}$ 具有特殊的类 Toeplitz 结构, 对 $\mathbf{x}\in\R^{N^{2}}$ 的矩阵-向量乘法 $\underline{\mathbf{A}}^{(m+1)}\mathbf{x}$ 可以非常高效地计算 \cite{src:16,src:43}. 注意
+\[
+\begin{array}{rl}
+  \underline{\mathbf{A}}^{(m+1)}\mathbf{x}
+  = & \mathbf{x}-D_{+}^{(m+1)}\bigl(I_{N_{2}}\otimes A_{L}^{\alpha,N_{1}}\bigr)\mathbf{x}
+    -D_{-}^{(m+1)}\bigl(I_{N_{2}}\otimes A_{R}^{\alpha,N_{1}}\bigr)\mathbf{x}\\[1.5mm]
+  & -E_{+}^{(m+1)}\bigl(A_{L}^{\beta,N_{2}}\otimes I_{N_{1}}\bigr)\mathbf{x}
+    -E_{-}^{(m+1)}\bigl(A_{R}^{\beta,N_{2}}\otimes I_{N_{1}}\bigr)\mathbf{x},
+\end{array}
+\]
+以及
+\[
+  I_{N_{2}}\otimes A_{R}^{\alpha,N_{1}}=\bigl(I_{N_{2}}\otimes A_{L}^{\alpha,N_{1}}\bigr)^{T},\qquad
+  A_{R}^{\beta,N_{2}}\otimes I_{N_{1}}=\bigl(A_{L}^{\beta,N_{2}}\otimes I_{N_{1}}\bigr)^{T}.
+\]
+计算 $\underline{\mathbf{A}}^{(m+1)}\mathbf{x}$ 的主要开销在于
+\[
+  \bigl(I_{N_{2}}\otimes A_{L}^{\alpha,N_{1}}\bigr)\mathbf{x},\quad
+  \bigl(I_{N_{2}}\otimes A_{R}^{\alpha,N_{1}}\bigr)\mathbf{x},\quad
+  \bigl(A_{L}^{\beta,N_{2}}\otimes I_{N_{1}}\bigr)\mathbf{x},\quad
+  \bigl(A_{R}^{\beta,N_{2}}\otimes I_{N_{1}}\bigr)\mathbf{x}.
+\]
+乘法 $(I_{N_{2}}\otimes A_{L}^{\alpha,N_{1}})\mathbf{x}$ 与 $(I_{N_{2}}\otimes A_{R}^{\alpha,N_{1}})\mathbf{x}$ 可通过计算 $(I_{N_{2}}\otimes A_{L}^{\alpha,N_{1}})(\mathbf{x}+\sqrt{-1}\,\breve{\mathbf{x}})$ 同时得到, 其中 $\breve{\mathbf{x}}=[x_{N},x_{N-1},\ldots,x_{1}]^{T}$ \cite{src:66}. 类似地, 也可同时计算 $(A_{L}^{\beta,N_{2}}\otimes I_{N_{1}})\mathbf{x}$ 与 $(A_{R}^{\beta,N_{2}}\otimes I_{N_{1}})\mathbf{x}$. 利用 FFT, 矩阵-向量乘法 $\underline{\mathbf{A}}^{(m+1)}\mathbf{x}$ 只需 $\mathcal{O}(N^{2}\log N)$ 次运算.
+
+此外, 由于 $L$ 与 $U$ 都是只含 $2k-1$ 条非零对角线的稀疏三角矩阵, 计算 $L\mathbf{x}$, $U\mathbf{x}$, $L^{-1}\mathbf{x}$ 与 $U^{-1}\mathbf{x}$ 只需 $\mathcal{O}(N^{2}k)$ 次运算. 因此, 计算 $\mathbf{w}=U^{-1}L^{-1}\underline{\mathbf{A}}^{(m+1)}\mathbf{v}_{j}$ 需要 $\mathcal{O}(N^{2}\log N)$ 次运算. 至于 $\mathbf{r}_{t}$ 的计算, 由于 $V_{j+1}$ 与 $\bar{H}_{j}$ 分别是 $N^{2}\times(j+1)$ 与 $(j+1)\times j$ 矩阵, 可在 $\mathcal{O}(N^{2}(j+k))$ 次运算内得到. 于是, 对大的 $N$, 预处理 GMRES 方法每个时间层的计算量为 $\mathcal{O}(N^{2}\log N)$.
+
+\subsection{数值结果}
+\label{sec:10-3-3}
+
+本小节给出一个数值例子, 以说明预处理 $\mathrm{GMRES}(\rho)$ 方法相对于无预条件子的 $\mathrm{GMRES}(\rho)$ 方法的表现. 对 CN-WSGD 格式 \eqref{eq:10-4}, 选取初始猜测为
+\[
+  \mathbf{u}_{0}=
+  \left\{
+  \begin{array}{ll}
+    \mathbf{u}^{(0)}, & m=0,\\[1mm]
+    \tilde{\mathbf{u}}^{(m+1)}\equiv 2\mathbf{u}^{(m)}-\mathbf{u}^{(m-1)}, & m>0.
+  \end{array}
+  \right.
+\]
+由于 $\tilde{\mathbf{u}}^{(m+1)}$ 是 $\mathbf{u}^{(m+1)}$ 的良好近似 \cite{src:90}, 我们取其为初始猜测. 停机准则为
+\[
+  \frac{\norm{\mathbf{r}_{j}}_{2}}{\norm{\mathbf{b}^{(m+1)}}_{2}}<10^{-7},
+\]
+其中 $\mathbf{r}_{j}$ 是第 $j$ 步迭代后的残差向量. 在数值实验中, 取参数 $k=4$. 此外, 对 $\mathrm{GMRES}(\rho)$ 方法取 $\rho=20$.
+
+下表中, 用 $N_{1}$ 与 $N_{2}$ 分别表示 $x$ 方向与 $y$ 方向的空间剖分数, 用 $M$ 表示时间剖分数. 最后一个时间层上真解与数值解之间的最大误差记为 Error. 此外, 预处理 $\mathrm{GMRES}(\rho)$ 方法记为 $\mathrm{PGMRES}(\rho)$.
+
+\begin{example}
+\label{ex:10-1}
+考虑方程 \eqref{eq:10-1}, 其中 $\alpha=1.8$, $\beta=1.9$. 左, 右扩散系数由
+\[
+\begin{array}{ll}
+  d_{+}(x,y,t)=4(1+t)x^{1.8}(1+y), & d_{-}(x,y,t)=4(1+t)(1-x)^{1.8}(1+y),\\[1mm]
+  e_{+}(x,y,t)=4(1+t)(1+x)y^{1.9}, & e_{-}(x,y,t)=4(1+t)(1+x)(1-y)^{1.9}
+\end{array}
+\]
+给出. 空间区间为 $\Omega=(0,1)\times(0,1)$, 时间区间为 $[0,T]=[0,1]$. 初始条件为 $u_{0}(x,y)=x^{3}y^{3}(1-x)^{3}(1-y)^{3}$. 源项由
+\[
+\begin{array}{rcl}
+  f(x,y,t) & = & -e^{-t}\Bigl[\bigl(x^{3}(1-x)^{3}y^{3}(1-y)^{3}\bigr)\\[1mm]
+  & & +4(1+t)\Bigl(\dfrac{\Gamma(4)}{\Gamma(2.2)}\bigl(x^{3}+(1-x)^{3}\bigr)
+        -\dfrac{3\Gamma(5)}{\Gamma(3.2)}\bigl(x^{4}+(1-x)^{4}\bigr)\\[1mm]
+  & & +\dfrac{3\Gamma(6)}{\Gamma(4.2)}\bigl(x^{5}+(1-x)^{5}\bigr)
+        -\dfrac{\Gamma(7)}{\Gamma(5.2)}\bigl(x^{6}+(1-x)^{6}\bigr)\Bigr)y^{3}(1-y)^{3}(1+y)\\[1mm]
+  & & +4(1+t)\Bigl(\dfrac{\Gamma(4)}{\Gamma(2.1)}\bigl(y^{3}+(1-y)^{3}\bigr)
+        -\dfrac{3\Gamma(5)}{\Gamma(3.1)}\bigl(y^{4}+(1-y)^{4}\bigr)\\[1mm]
+  & & +\dfrac{3\Gamma(6)}{\Gamma(4.1)}\bigl(y^{5}+(1-y)^{5}\bigr)
+        -\dfrac{\Gamma(7)}{\Gamma(5.1)}\bigl(y^{6}+(1-y)^{6}\bigr)\Bigr)x^{3}(1-x)^{3}(1+x)\Bigr].
+\end{array}
+\]
+给出. 该分数阶扩散方程的解为
+\[
+  u(x,y,t)=e^{-t}x^{3}(1-x)^{3}y^{3}(1-y)^{3}.
+\]
+\end{example}
+
+% 本章末页只余「一段收尾 + 表 10.1」，若沿用全书 \flushbottom 会被强行撑开
+% （Underfull vbox badness 10000）。此处在分组内局部改为 \raggedbottom，
+% 并在组内 \clearpage 让末页以自然高度出页，组结束后自动恢复全书的 \flushbottom。
+\begingroup
+\raggedbottom
+\needspace{14\baselineskip}
+例 \ref{ex:10-1} 的数值结果见表 \ref{tab:10-1}. 由表 \ref{tab:10-1} 可见, $\mathrm{GMRES}(20)$ 方法所需的迭代次数远多于 $\mathrm{PGMRES}(20)$ 方法. 随着 $N_{1}$ 与 $N_{2}$ 增大, $\mathrm{PGMRES}(20)$ 方法所需的迭代次数增长缓慢.
+
+\begin{table}[htbp]
+  \centering
+  \caption{例 \ref{ex:10-1} 的数值结果}
+  \label{tab:10-1}
+  \begin{tabular}{cccc}
+    \toprule
+    $N_{1}=N_{2}=M$ & GMRES(20) & PGMRES(20) & Error \\
+    \midrule
+    $2^{4}$ & 48.750  & 11.000 & $1.1386\times10^{-6}$ \\
+    $2^{5}$ & 81.594  & 12.406 & $3.0206\times10^{-7}$ \\
+    $2^{6}$ & 157.750 & 14.250 & $7.6918\times10^{-8}$ \\
+    $2^{7}$ & 273.914 & 17.055 & $1.9381\times10^{-8}$ \\
+    $2^{8}$ & 416.625 & 20.477 & $4.8489\times10^{-9}$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+\clearpage
+\endgroup

@@ -1,0 +1,227 @@
+% !TeX program = xelatex
+% ================================================================
+% 《数值线性代数及其应用》（Numerical Linear Algebra and Its Applications, 2e）
+% 作者：Xiao-Qing Jin（金小庆）, Yi-Min Wei（魏益民）, Zhi Zhao（赵志）
+% 出版社：Science Press（科学出版社），2015
+% 中文译本 —— 基于数译(mathtranslations.org)排版模板 mathtranslation.cls v3.3
+% 构建：bash tools/build.sh full  （xelatex×2 → biber → xelatex×2）
+% 注意：所有 .tex/.cls 须 UTF-8 无 BOM + CRLF 行尾。
+% ================================================================
+\documentclass[
+  BookTitleCN={数值线性代数及其应用},
+  BookTitleEN={Numerical Linear Algebra and Its Applications},
+  OriginalAuthor={Xiao-Qing Jin, Yi-Min Wei, Zhi Zhao},
+  OriginalEdition={Second Edition},
+  OriginalPublisher={Science Press},
+  OriginalYear={2015},
+  Translator={Fingolfin},
+  ModelUsed={DeepSeek-V4.1-Flash},
+  BibStyle=numeric,
+  TranslationDate={2026年11月3日}
+]{mathtranslation}
+
+\usepackage{chngcntr}
+\usepackage{needspace}% 避免“习题”等小标题落在页末成为孤行
+
+% openright 换章/换篇时会插入空白页。本模板的空白页会沿用上一页的页眉
+% 与页码（实测：空白页上印有“iv  《信息与计算科学丛书》序”），故重定义
+% \cleardoublepage，令该空白页使用 empty 样式，成为真正的空白页。
+\makeatletter
+\renewcommand{\cleardoublepage}{%
+  \clearpage
+  \if@twoside
+    \ifodd\c@page\else
+      \hbox{}\thispagestyle{empty}\newpage
+      \if@twocolumn\hbox{}\newpage\fi
+    \fi
+  \fi}
+\makeatother
+
+% 允许版心稍微拉伸以避免孤立过宽行（不影响数学正确性）
+\setlength{\emergencystretch}{3em}
+
+% ---------- 编号体系（待按源书复核后最终确定） ----------
+% 公式随章编号：(1.1), (1.2), ...
+\numberwithin{equation}{chapter}
+% 定理/引理/推论/命题/例/问题 暂保持 cls 默认（按节 X.M），译到各章时据源书调整；
+% 若源书按章编号，取消下行注释并按章重映射：
+% \counterwithout{theorem}{section}   \counterwithin{theorem}{chapter}
+% \counterwithout{lemma}{section}     \counterwithin{lemma}{chapter}
+% \counterwithout{corollary}{section} \counterwithin{corollary}{chapter}
+% \counterwithout{proposition}{section}\counterwithin{proposition}{chapter}
+% \counterwithout{example}{section}   \counterwithin{example}{chapter}
+% \counterwithout{problem}{section}   \counterwithin{problem}{chapter}
+% \counterwithout{figure}{section}    \counterwithin{figure}{chapter}
+
+% 本项目专用宏（不改动 cls；新宏只加在这里）
+\usepackage{mycommand}
+
+% ================================================================
+% 标点体例：正文一律使用半角（英文）句读标点。
+% 注意：ctex 的 punct 默认为 quanjiao —— 即使源文件写 ASCII 的「, . ; :」，
+% 也会被替换成全角字形（实测：PDF 里逗号占一个字宽，文字层还原成「，」）。
+% 故必须显式改为 plain（西文标点），ASCII 标点才按拉丁字体半角排印。
+\ctexset{punct=plain}
+% 正文源文件已由 tools/fix_punct.py 批量转换；此处补上三处由模板/宏
+% 生成的标点，使其与正文一致（不改动 mathtranslation.cls 与 mycommand.sty）：
+%   1) \newterm 的中英对照括注：原来印作「矩阵（matrix）」，改为「矩阵 (matrix)」；
+%   2) 算法标题：原来印作「算法 2.1（高斯消去法）」，改为半角括号（重定义见下）；
+%   3) 「注：」的标题冒号：由全角冒号改为半角冒号（重定义 mremark 环境）。
+% ================================================================
+\makeatletter
+\renewcommand{\newterm}[3]{%
+  \@ifundefined{MT@seen@#1}{%
+    \expandafter\gdef\csname MT@seen@#1\endcsname{}%
+    \phantomsection
+    \label{term:#1}%
+    \protected@write\@auxout{}{%
+      \string\MTRegisterTerm{\unexpanded{#2}}{\unexpanded{#3}}{term:#1}%
+    }%
+  }{}%
+  {\termfont #2} (#3)%
+}
+% 算法环境：与 mycommand.sty 的定义逐字相同，仅把标题两侧的全角括号换成半角
+% （含其后不必再补的间距，见 \newterm 口径）。若将来 mycommand.sty 改动此处，
+% 需同步本定义。
+\renewenvironment{algorithm}[1]{%
+  \par\medskip
+  \refstepcounter{algorithm}%
+  \noindent{\headfont 算法\ \textbf{\thealgorithm} (#1)}\par
+  \smallskip
+}{%
+  \par\medskip
+}
+% 「注：」标题冒号改半角：mycommand.sty 用 \newtheoremstyle{mtcolon} 把冒号
+% 写死在样式里（不改动该文件），故在本地重定义 mremark 环境，间距与字体
+% 保持与 mtcolon 相同（上下各 6pt、正文 \theoremfont、标签 \headfont）。
+\renewenvironment{mremark}{%
+  \par\addvspace{6pt}%
+  \noindent{\headfont 注:}\hspace{0.5em}\theoremfont\ignorespaces
+}{%
+  \par\addvspace{6pt}%
+}
+\makeatother
+
+% ================================================================
+% proof 标题分隔符：v3.3 把分隔符抽成 \proofSeparator，默认 \enspace，
+% 即标题排作「证明 」而不再带冒号（模仿 ntheorem 的 nonumberplain）。
+% 本书此前一直按「证明：」排版且已定稿，故显式恢复旧体例，使本次升级
+% 不改变标题既有观感；\proofColonBack 是 cls 内定义的具名回缩长度。
+% 若将来决定统一为半角冒号，改成 \renewcommand{\proofSeparator}{: } 即可。
+% ================================================================
+\renewcommand{\proofSeparator}{：\hspace*{\proofColonBack}}
+
+% 参考文献（biblatex + biber，numeric 样式，与源书 [n] 引用一致）
+\addbibresource{references.bib}
+% 忠实还原源书引用编号 [1]..[100]：覆盖 cls 默认的 sorting=nyt，
+% 改用 sorting=none，并以 \nocite{*} 让全部 100 条按 .bib 文件顺序（= 源书顺序）编号。
+\ExecuteBibliographyOptions{sorting=none}
+\nocite{*}
+
+% ================================================================
+% 封面（覆盖 cls 的 \makecover，只调版式，不改动 cls 本体）
+% cls 原实现有两个版式缺陷：
+%   1) 用 \hspace{2cm} 做首行缩进 —— 标题自动换行后，第二行落回左边距，
+%      出现“应用”“Applications”“ZHAO”悬出到左侧的现象；
+%   2) 作者名套 \textsc —— XeLaTeX + Fandol 无真小型大写，被伪造成
+%      “XiAO-QiNG JiN” 这种大小混杂的形态。
+% 这里改用 \leftskip 让整段（含换行后的各行）统一缩进，并去掉 \textsc。
+% ================================================================
+\makeatletter
+\renewcommand{\makecover}{%
+  \begin{titlepage}
+    \thispagestyle{empty}%
+    \flushleft
+    \rule{\textwidth}{1.2pt} \\[0.1cm]
+    \rule{\textwidth}{0.8pt} \\[1.5cm]
+    \begingroup
+      \leftskip=2cm\relax
+      {\fontsize{38pt}{48pt}\selectfont\headfont \BookTitleCN\par}%
+    \endgroup
+    \vspace{0.7cm}
+    \begingroup
+      \leftskip=2cm\relax
+      \ifblank{\BookTitleEN}{}{%
+        {\fontsize{22pt}{28pt}\selectfont\itshape \BookTitleEN\par}%
+      }%
+    \endgroup
+    \vspace{1.2cm}
+    \rule{\textwidth}{0.6pt} \\[2cm]
+    \begingroup
+      \leftskip=2cm\relax
+      {\LARGE \OriginalAuthor\par}%
+    \endgroup
+    \vfill
+    \noindent
+    \begin{minipage}[b]{0.46\textwidth}
+      \raggedright
+      \MT@coverlogo
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[b]{0.50\textwidth}
+      \raggedleft
+      \gdef\MT@joinline{}%
+      \MT@join{\OriginalEdition}\MT@join{\OriginalPublisher}\MT@join{\OriginalYear}%
+      \ifx\MT@joinline\@empty\else{\small \MT@joinline} \\[0.25cm]\fi
+      {\normalsize \Translator\ 翻译及重排} \\[0.25cm]
+      \ifdefempty{\ModelUsed}{}{{\small Model: \ModelUsed} \\[0.25cm]}%
+      {\small Updated: \ifdefempty{\TranslationDate}{\today}{\TranslationDate}}%
+    \end{minipage}
+    \vspace*{1cm}
+  \end{titlepage}%
+}
+\makeatother
+
+% ================================================================
+% 后物料：参考文献与术语索引为「无编号」章
+% v3.2 起 cls 的 \makebibliography / \printterminology 已自动 \backmatter
+% 并以 \chapter* + 目录条目 + 页眉排版，故原先为去掉章号而做的两处
+% \patchcmd（匹配 \chapter{参考文献} / \chapter{术语索引}）在 v3.3 下必然失配，
+% 且会打印 MT-WARN 级警告，已删除；此处不再做任何干预。
+% ================================================================
+
+\begin{document}
+\makecover
+
+\frontmatter
+
+% 前置材料各篇长短悬殊，末页若按 flushbottom 拉伸会出现 Underfull \vbox，
+% 故前置部分改为顶齐，进入正文后恢复底齐。
+\raggedbottom
+
+% ---------- 前置材料 ----------
+\input{front/translator-note}% 译者说明（底本、翻译原则、记号与校勘说明）
+\input{front/series-preface}% 原书丛书序（Shi Zhongci, 2005.7）
+\input{front/preface}% 作者前言（含致谢与两版说明）
+
+\makecontents
+
+\mainmatter
+\flushbottom
+
+\include{chapters/ch01}
+\include{chapters/ch02}
+\include{chapters/ch03}
+\include{chapters/ch04}
+\include{chapters/ch05}
+\include{chapters/ch06}
+\include{chapters/ch07}
+\include{chapters/ch08}
+\include{chapters/ch09}
+\include{chapters/ch10}
+
+% ---------- 附录（如有） ----------
+% \appendix
+% \include{chapters/chA}
+
+% ---------- 参考文献 ----------
+\makebibliography
+
+% ---------- 符号表（后置材料）----------
+% 与「术语索引」同为无编号章，进目录；内容见 back/notation.tex。
+\input{back/notation}
+
+% ---------- 术语索引（必须最后） ----------
+\printterminology
+
+\end{document}

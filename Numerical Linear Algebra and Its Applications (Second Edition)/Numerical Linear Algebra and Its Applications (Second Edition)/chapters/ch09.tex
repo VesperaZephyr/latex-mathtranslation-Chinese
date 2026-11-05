@@ -1,0 +1,1447 @@
+% chapters/ch09.tex —— 第 9 章：在常微分方程与时滞微分方程中的应用
+% 源书：Chapter 9 Applications in ODEs and DDEs，书页 144–169（物理页 158–183）
+% 公式编号 (9.1)–(9.31)；定义 9.1；引理 9.1–9.3；定理 9.1–9.7；推论 9.1；
+% 例 9.1–9.4；表 9.1–9.4；本章无习题
+\chapter{在常微分方程与时滞微分方程中的应用}
+\label{ch:ode-dde}
+
+本章简要研究利用\newterm{bvm}{边值法}{boundary value method (BVM)}求解常微分方程组初值问题的一些新近进展. 这类方法需要求解一个或多个非对称, 大型且稀疏的线性方程组. 因此, 我们用第 6 章研究的 GMRES 方法并配以某些预条件子来求解这些线性方程组. 主要结果之一是: 若用 \newterm{astable}{$A_{\nu_1,\nu_2}$-稳定}{$A_{\nu_1,\nu_2}$-stable}的 BVM 求解 $n$ 阶常微分方程组, 则预处理矩阵可分解为 $I+L$, 其中 $I$ 是单位矩阵, $L$ 的秩至多为 $2n(\nu_1+\nu_2)$. 当对预处理后的方程组应用 GMRES 方法时, 该方法至多 $2n(\nu_1+\nu_2)+1$ 次迭代即收敛. 本章还给出对不同类型\newterm{dde}{时滞微分方程}{delay differential equation (DDE)}的应用. 关于用 BVMs 求解 ODEs 与 DDEs 的文献, 参见 \cite{src:5,src:8,src:10,src:17,src:19,src:44,src:45,src:47,src:48,src:55,src:58}.
+
+\section{引言}
+\label{sec:9-1}
+
+我们从下述初值问题开始:
+\begin{equation}
+  \left\{
+  \begin{array}{l}
+    \mathbf{y}'(t)=J_n\mathbf{y}(t)+\mathbf{g}(t),\quad t\in(t_0,T],\\
+    \mathbf{y}(t_0)=\mathbf{z},
+  \end{array}
+  \right.
+  \label{eq:9-1}
+\end{equation}
+其中 $\mathbf{y}(t),\mathbf{g}(t):\R\to\R^n$, $\mathbf{z}\in\R^n$, $J_n\in\R^{n\times n}$. \newterm{ivm}{初值法}{initial value method (IVM)}, 如 Runge-Kutta 方法, 是求解 \eqref{eq:9-1} 的著名方法 \cite{src:83}. 最近, \cite{src:10} 中提出了另一类称为边值法 (BVMs) 的方法. 用 BVMs 离散 \eqref{eq:9-1}, 得到线性方程组
+\[
+  M\mathbf{u}=\mathbf{b}.
+\]
+使用 BVMs 的优点是方法更为稳定, 因而所得的线性方程组 $M\mathbf{u}=\mathbf{b}$ 的条件数也更好. 然而, 该方程组通常是大型且稀疏的 (具有带状结构), 求解它是应用 BVMs 时的主要问题.
+
+第 6 章研究的 GMRES 方法用于求解 $M\mathbf{u}=\mathbf{b}$. 为加快 GMRES 迭代的收敛速度, 用一个称为 \newterm{strangblock}{Strang 型块循环预条件子}{Strang-type block-circulant preconditioner}\cite{src:19} 的预条件子 $S$ 对离散方程组作预处理. Strang 型预条件子的优点是: 若用 $A_{\nu_1,\nu_2}$-稳定的 BVM 求解 \eqref{eq:9-1}, 则 $S$ 可逆, 且预处理矩阵可分解为
+\[
+  S^{-1}M=I+L,
+\]
+其中 $L$ 的秩至多为 $2n(\nu_1+\nu_2)$, 它与积分步长无关. 由此可知, 在精确算术下, 对预处理后的方程组应用 GMRES 方法至多 $2n(\nu_1+\nu_2)+1$ 次迭代即收敛.
+
+本章的安排如下. 9.2 节给出关于线性多步公式 (LMFs) 与 BVMs 的一些背景知识. 然后, 9.3 节研究常微分方程的 Strang 型块循环预条件子的性质, 并连同数值例子给出该方法的收敛性与运算量分析. 最后, 9.4–9.6 节讨论用 BVMs 的 Strang 型预条件子求解不同类型时滞微分方程 (DDEs) 的应用.
+
+\section{边值法的背景}
+\label{sec:9-2}
+
+本节给出关于 LMFs 与 BVMs 的一些背景知识.
+
+\subsection{线性多步公式}
+\label{sec:9-2-1}
+
+考虑初值问题
+\[
+  \left\{
+  \begin{array}{ll}
+    y'=f(t,y), & t\in(t_0,T],\\
+    y(t_0)=y_0,
+  \end{array}
+  \right.
+\]
+其中 $y(t):\R\to\R$, $f(t,y):\R^2\to\R$. 步长为 $h$ 的均匀网格上的 $\mu$ 步\newterm{lmf}{线性多步公式}{linear multistep formula (LMF)}定义如下:
+\begin{equation}
+  \sum_{j=0}^{\mu}\alpha_jy_{m+j}=h\sum_{j=0}^{\mu}\beta_jf_{m+j},\quad m=0,1,\ldots,
+  \label{eq:9-2}
+\end{equation}
+其中 $y_m$ 是 $y(t_m)$ 的离散逼近, $f_m$ 表示 $f(t_m,y_m)$.
+
+为得到 \eqref{eq:9-2} 的解, 需要 $\mu$ 个初值
+\[
+  y_0,y_1,\ldots,y_{\mu-1}.
+\]
+由于原问题只提供 $y_0$, 我们不得不为其余的值
+\[
+  y_1,y_2,\ldots,y_{\mu-1}
+\]
+补充条件. 带 $\mu-1$ 个附加条件的方程 \eqref{eq:9-2} 称为初值法 (IVMs). 若 $\beta_{\mu}\neq0$, 则称 IVM 为隐式的; 若 $\beta_{\mu}=0$, 则称为显式的. 若把 IVM 用于区间 $[t_0,t_{N+\mu-1}]$ 上的初值问题, 则得到如下离散问题
+\begin{equation}
+  A_N\mathbf{y}=hB_N\mathbf{f}-\left[
+  \begin{array}{c}
+    \sum\limits_{i=0}^{\mu-1}(\alpha_iy_i-h\beta_if_i)\\
+    \vdots\\
+    \alpha_0y_{\mu-1}-h\beta_0f_{\mu-1}\\
+    0\\
+    \vdots\\
+    0
+  \end{array}\right],
+  \label{eq:9-3}
+\end{equation}
+其中
+\[
+  \mathbf{y}=[y_{\mu},y_{\mu+1},\ldots,y_{N+\mu-1}]^T,\qquad
+  \mathbf{f}=[f_{\mu},f_{\mu+1},\ldots,f_{N+\mu-1}]^T,
+\]
+\[
+  A_N=\begin{bmatrix}
+    \alpha_{\mu} & & & & \mathbf{0}\\
+    \vdots & \ddots & & & \\
+    \alpha_0 & & \ddots & & \\
+    & \ddots & & \ddots & \\
+    \mathbf{0} & & \alpha_0 & \cdots & \alpha_{\mu}
+  \end{bmatrix},\qquad
+  B_N=\begin{bmatrix}
+    \beta_{\mu} & & & & \mathbf{0}\\
+    \vdots & \ddots & & & \\
+    \beta_0 & & \ddots & & \\
+    & \ddots & & \ddots & \\
+    \mathbf{0} & & \beta_0 & \cdots & \beta_{\mu}
+  \end{bmatrix}.
+\]
+注意矩阵 $A_N,B_N\in\R^{N\times N}$ 是下带宽为 $\mu$ 的下三角带状 \newterm{toeplitzmatrix}{Toeplitz 矩阵}{Toeplitz matrix}. 我们回忆: 若矩阵的元素沿各对角线为常数, 则称之为 Toeplitz 矩阵. 此外, 线性方程组 \eqref{eq:9-3} 容易用前推递推求解. IVM 的一个经典例子是二阶\newterm{bdf}{向后差分公式}{backward differentiation formula (BDF)}
+\[
+  3y_{m+2}-4y_{m+1}+y_m=2hf_{m+1},
+\]
+这是一个两步方法, 其中 $\alpha_0=1$, $\alpha_1=-4$, $\alpha_2=3$, $\beta_1=2$.
+
+除了用带 $\mu$ 个初值的 IVM 求解 \eqref{eq:9-1}, 我们也可以使用所谓的边值法 (BVMs). 给定 $\nu_1,\nu_2\geqslant0$ 使 $\nu_1+\nu_2=\mu$, 则相应的 BVM 需要 $\nu_1$ 个初始附加条件
+\[
+  y_0,y_1,\ldots,y_{\nu_1-1},
+\]
+以及 $\nu_2$ 个末端附加条件
+\[
+  y_N,y_{N+1},\ldots,y_{N+\nu_2-1},
+\]
+它们称为 $(\nu_1,\nu_2)$-边界条件. 注意 BVMs 类包含 IVMs 类 (即 $\nu_1=\mu$, $\nu_2=0$).
+
+由带 $(\nu_1,\nu_2)$-边界条件的 $\mu$ 步 BVM 生成的离散问题可写成如下矩阵形式
+\[
+  A\mathbf{y}=hB\mathbf{f}-\left[
+  \begin{array}{c}
+    \sum\limits_{i=0}^{\nu_1-1}(\alpha_iy_i-h\beta_if_i)\\
+    \vdots\\
+    \alpha_0y_{\nu_1-1}-h\beta_0f_{\nu_1-1}\\
+    0\\
+    \vdots\\
+    0\\
+    \alpha_{\mu}y_N-h\beta_{\mu}f_N\\
+    \vdots\\
+    \sum\limits_{i=1}^{\nu_2}(\alpha_{\nu_1+i}y_{N-1+i}-h\beta_{\nu_1+i}f_{N-1+i})
+  \end{array}\right],
+\]
+其中
+\[
+  \mathbf{y}=[y_{\nu_1},y_{\nu_1+1},\ldots,y_{N-1}]^T,\qquad
+  \mathbf{f}=[f_{\nu_1},f_{\nu_1+1},\ldots,f_{N-1}]^T,
+\]
+而 $A$ 和 $B\in\R^{(N-\nu_1)\times(N-\nu_1)}$ 定义如下,
+\begin{equation}
+  A=\begin{bmatrix}
+    \alpha_{\nu_1} & \cdots & \alpha_{\mu} & & \mathbf{0}\\
+    \vdots & \ddots & \ddots & \ddots & \\
+    \alpha_0 & \ddots & \ddots & \ddots & \alpha_{\mu}\\
+    & \ddots & & \ddots & \vdots\\
+    \mathbf{0} & & \alpha_0 & \cdots & \alpha_{\nu_1}
+  \end{bmatrix},\qquad
+  B=\begin{bmatrix}
+    \beta_{\nu_1} & \cdots & \beta_{\mu} & & \mathbf{0}\\
+    \vdots & \ddots & \ddots & \ddots & \\
+    \beta_0 & \ddots & \ddots & \ddots & \beta_{\mu}\\
+    & \ddots & & \ddots & \vdots\\
+    \mathbf{0} & & \beta_0 & \cdots & \beta_{\nu_1}
+  \end{bmatrix}.
+  \label{eq:9-4}
+\end{equation}
+注意系数矩阵是下带宽为 $\nu_1$, 上带宽为 $\nu_2$ 的带状 Toeplitz 矩阵. BVMs 的一个例子是三阶\newterm{gbdf}{广义向后差分公式}{generalized backward differentiation formula (GBDF)}
+\[
+  2y_{m+1}+3y_m-6y_{m-1}+y_{m-2}=6hf_m,
+\]
+这是一个带 $(2,1)$-边界条件的三步方法, 其中
+\[
+  \alpha_0=1,\quad\alpha_1=-6,\quad\alpha_2=3,\quad\alpha_3=2,\quad\beta_2=6.
+\]
+
+虽然 IVMs 比 BVMs 更有效 (后者不能用前推递推求解), 但使用 BVMs 相对于 IVMs 的优点来自其稳定性性质. 例如, 通常的 BDF 对 $\mu>2$ 不是 $A$-稳定的, 而 GBDF 对任意 $\mu\geqslant1$ 都是 $A_{\nu_1,\nu_2}$-稳定的. 参见例如 \cite{src:1} 与 \cite{src:10} 第 79 页及图 5.1–5.3.
+
+\subsection{块-BVMs 及其矩阵形式}
+\label{sec:9-2-2}
+
+令 $\mu=\nu_1+\nu_2$. 用基于 LMF 的 $\mu$ 步块-BVM 在均匀网格 $h=(T-t_0)/s$ 上求解 \eqref{eq:9-1}, 得
+\begin{equation}
+  \sum_{i=-\nu_1}^{\nu_2}\alpha_{i+\nu_1}\mathbf{y}_{m+i}
+  =h\sum_{i=-\nu_1}^{\nu_2}\beta_{i+\nu_1}\mathbf{f}_{m+i},
+  \quad m=\nu_1,\ldots,s-\nu_2.
+  \label{eq:9-5}
+\end{equation}
+这里, $\mathbf{y}_m$ 是 $\mathbf{y}(t_m)$ 的离散逼近,
+\[
+  \mathbf{f}_m=J_n\mathbf{y}_m+\mathbf{g}_m,\qquad
+  \mathbf{g}_m=\mathbf{g}(t_m).
+\]
+此外, \eqref{eq:9-5} 需要 $\nu_1$ 个初始条件与 $\nu_2$ 个末端条件, 它们由下述 $\mu-1$ 个附加方程提供:
+\begin{equation}
+  \sum_{i=0}^{\mu}\alpha_i^{(j)}\mathbf{y}_i
+  =h\sum_{i=0}^{\mu}\beta_i^{(j)}\mathbf{f}_i,
+  \quad j=1,\ldots,\nu_1-1,
+  \label{eq:9-6}
+\end{equation}
+以及
+\begin{equation}
+  \sum_{i=0}^{\mu}\alpha_{\mu-i}^{(j)}\mathbf{y}_{s-i}
+  =h\sum_{i=0}^{\mu}\beta_{\mu-i}^{(j)}\mathbf{f}_{s-i},
+  \quad j=s-\nu_2+1,\ldots,s.
+  \label{eq:9-7}
+\end{equation}
+\eqref{eq:9-6} 与 \eqref{eq:9-7} 中的系数 $\{\alpha^{(j)}\}$, $\{\beta^{(j)}\}$ 应选得使这些初始条件与末端条件的截断误差与 \eqref{eq:9-5} 中的同阶. 把 \eqref{eq:9-5}, \eqref{eq:9-6}, \eqref{eq:9-7} 与初始条件 $\mathbf{y}(t_0)=\mathbf{y}_0=\mathbf{z}$ 结合起来, \eqref{eq:9-1} 的离散方程组由如下块形式给出
+\begin{equation}
+  M\mathbf{y}\equiv(\widetilde{A}\otimes I_n-h\widetilde{B}\otimes J_n)\mathbf{y}
+  =\mathbf{e}_1\otimes\mathbf{z}+h(\widetilde{B}\otimes I_n)\mathbf{g}.
+  \label{eq:9-8}
+\end{equation}
+这里
+\[
+  \mathbf{e}_1=[1,0,\ldots,0]^T\in\R^{s+1},\qquad
+  \mathbf{y}=[\mathbf{y}_0^T,\ldots,\mathbf{y}_s^T]^T\in\R^{(s+1)n},
+\]
+\[
+  \mathbf{g}=[\mathbf{g}_0^T,\ldots,\mathbf{g}_s^T]^T\in\R^{(s+1)n},
+\]
+而 $\widetilde{A},\widetilde{B}\in\R^{(s+1)\times(s+1)}$ 由下式给出:
+\[
+  \widetilde{A}=\begin{bmatrix}
+    1 & \cdots & 0 & & & & \\
+    \alpha_0^{(1)} & \cdots & \alpha_{\mu}^{(1)} & & & & \\
+    \vdots & \vdots & \vdots & & & & \\
+    \alpha_0^{(\nu_1-1)} & \cdots & \alpha_{\mu}^{(\nu_1-1)} & & & & \\
+    \alpha_0 & \cdots & \alpha_{\mu} & & & \mathbf{0} & \\
+    & \alpha_0 & \cdots & \alpha_{\mu} & & & \\
+    & & \ddots & \ddots & \ddots & & \\
+    & & & \ddots & \ddots & \ddots & \\
+    & & & & \alpha_0 & \cdots & \alpha_{\mu}\\
+    & & & & \alpha_0^{(s-\nu_2+1)} & \cdots & \alpha_{\mu}^{(s-\nu_2+1)}\\
+    & & \mathbf{0} & & \vdots & & \vdots\\
+    & & & & \alpha_0^{(s)} & \cdots & \alpha_{\mu}^{(s)}
+  \end{bmatrix},
+\]
+\[
+  \widetilde{B}=\begin{bmatrix}
+    0 & \cdots & 0 & & & & \\
+    \beta_0^{(1)} & \cdots & \beta_{\mu}^{(1)} & & & & \\
+    \vdots & \vdots & \vdots & & & & \\
+    \beta_0^{(\nu_1-1)} & \cdots & \beta_{\mu}^{(\nu_1-1)} & & & & \\
+    \beta_0 & \cdots & \beta_{\mu} & & & \mathbf{0} & \\
+    & \beta_0 & \cdots & \beta_{\mu} & & & \\
+    & & \ddots & \ddots & \ddots & & \\
+    & & & \ddots & \ddots & \ddots & \\
+    & & & & \beta_0 & \cdots & \beta_{\mu}\\
+    & & & & \beta_0^{(s-\nu_2+1)} & \cdots & \beta_{\mu}^{(s-\nu_2+1)}\\
+    & & \mathbf{0} & & \vdots & & \vdots\\
+    & & & & \beta_0^{(s)} & \cdots & \beta_{\mu}^{(s)}
+  \end{bmatrix},
+\]
+而 ``$\otimes$'' 是\newterm{tensorproduct}{张量积}{tensor product}.
+
+我们回忆: $A=[a_{ij}]\in\R^{m\times n}$ 与 $B\in\R^{p\times q}$ 的张量积定义如下:
+\[
+  A\otimes B\equiv\begin{bmatrix}
+    a_{11}B & a_{12}B & \cdots & a_{1n}B\\
+    a_{21}B & a_{22}B & \cdots & a_{2n}B\\
+    \vdots & \vdots & & \vdots\\
+    a_{m1}B & a_{m2}B & \cdots & a_{mn}B
+  \end{bmatrix},
+\]
+它是一个 $mp$ 行乘 $nq$ 列的矩阵. 张量积的基本性质可在 \cite{src:32,src:42} 中找到.
+
+我们指出, 通常线性方程组 \eqref{eq:9-8} 是大型且稀疏的 (具有带状结构), 求解它是应用 BVMs 时的主要问题. 我们用第 6 章的 GMRES 方法求解 \eqref{eq:9-8}. 为加快 GMRES 迭代的收敛速度, 我们使用一个称为 Strang 型块循环预条件子的预条件子 $S$.
+
+\section{常微分方程的 Strang 型预条件子}
+\label{sec:9-3}
+
+现在, 我们构造用于求解 \eqref{eq:9-8} 的 Strang 型块循环预条件子 $S$. 我们将说明 Strang 型预条件子的主要优点:
+
+\begin{parenlist}
+  \item 若使用 $A_{\nu_1,\nu_2}$-稳定的 BVM, 则 $S$ 可逆.
+  \item 预处理后系统的谱是聚集的.
+  \item 预处理 GMRES 方法每次迭代的运算量小于直接解法的运算量.
+\end{parenlist}
+
+\subsection{预条件子的构造}
+\label{sec:9-3-1}
+
+我们首先回忆 Strang 关于 Toeplitz 矩阵的\newterm{strangcirc}{循环预条件子}{circulant preconditioner}的定义. 给定 Toeplitz 矩阵
+\[
+  T_l=[t_{i-j}]_{i,j=1}^{l}=[t_q],
+\]
+Strang 预条件子 $s(T_l)$ 是一个循环矩阵, 其各对角线由下式给出:
+\[
+  [s(T_l)]_q=\begin{cases}
+    t_q, & 0\leqslant q\leqslant\lfloor l/2\rfloor,\\
+    t_{q-l}, & \lfloor l/2\rfloor<q<l,\\
+    [s(T_l)]_{l+q}, & 0<-q<l.
+  \end{cases}
+\]
+参见 \cite{src:16,src:18,src:42,src:43,src:77}.
+
+忽略 $\widetilde{A}$ 与 $\widetilde{B}$ 的扰动, 我们提出下述预条件子 $S\in\R^{(s+1)n\times(s+1)n}$, 它称为 \eqref{eq:9-8} 中 $M$ 的 Strang 型块循环预条件子:
+\begin{equation}
+  S=s(A)\otimes I_n-hs(B)\otimes J_n,
+  \label{eq:9-9}
+\end{equation}
+其中
+\[
+  s(A)=\begin{bmatrix}
+    \alpha_{\nu_1} & \cdots & \alpha_{\mu} & & & \alpha_0 & \cdots & \alpha_{\nu_1-1}\\
+    \vdots & \ddots & & \ddots & & & \ddots & \vdots\\
+    \alpha_0 & & \ddots & & \ddots & & & \alpha_0\\
+    & \ddots & & \ddots & & \mathbf{0} & & \\
+    & & \ddots & & \ddots & & \ddots & \\
+    \alpha_{\mu} & & \ddots & & \ddots & & & \alpha_{\mu}\\
+    \vdots & \mathbf{0} & & \ddots & & \ddots & & \vdots\\
+    \alpha_{\nu_1+1} & \cdots & \alpha_{\mu} & & & \alpha_0 & \cdots & \alpha_{\nu_1}
+  \end{bmatrix},
+\]
+而 $s(B)$ 通过把 $s(A)$ 中的 $\{\alpha_i\}_{i=0}^{\mu}$ 换成 $\{\beta_i\}_{i=0}^{\mu}$ 类似地定义. 这里的 $\{\alpha_i\}_{i=0}^{\mu}$ 与 $\{\beta_i\}_{i=0}^{\mu}$ 是 \eqref{eq:9-5} 中给出的系数. 我们指出, $s(A)$, $s(B)$ 实际上只是 Toeplitz 矩阵 $A$, $B$ 的 Strang 循环预条件子, 其中 $A$, $B$ 由 \eqref{eq:9-4} 给出.
+
+我们证明: 只要给定的 BVM 是 $A_{\nu_1,\nu_2}$-稳定的, 且 $J_n$ 的特征值属于
+\[
+  \C^-=\{q\in\C:\ \operatorname{Re}(q)<0\},
+\]
+则预条件子 $S$ 可逆. 其中 $\operatorname{Re}(\cdot)$ 表示复数的实部. BVM 的稳定性与两个 $\mu=\nu_1+\nu_2$ 次特征多项式密切相关, 它们定义如下:
+\begin{equation}
+  \rho(z)\equiv\sum_{j=-\nu_1}^{\nu_2}\alpha_{j+\nu_1}z^{j+\nu_1}
+  \qquad\text{与}\qquad
+  \sigma(z)\equiv\sum_{j=-\nu_1}^{\nu_2}\beta_{j+\nu_1}z^{j+\nu_1}.
+  \label{eq:9-10}
+\end{equation}
+$A_{\nu_1,\nu_2}$-稳定多项式定义为
+\begin{equation}
+  \pi(z,q)\equiv\rho(z)-q\sigma(z),
+  \label{eq:9-11}
+\end{equation}
+其中 $z,q\in\C$.
+
+现在考虑方程 $\pi(z,q)=0$. 它定义了复 $z$ 平面与复 $q$ 平面之间的一个映射. 对每个使 $\pi(z,q)$ 有定义的根 $z\in\C$, \eqref{eq:9-11} 给出
+\[
+  q=q(z)=\frac{\rho(z)}{\sigma(z)}.
+\]
+令
+\begin{equation}
+  \Gamma\equiv\left\{q\in\C:\ q=\frac{\rho(e^{\ii\theta})}{\sigma(e^{\ii\theta})},\ 0\leqslant\theta<2\pi\right\}.
+  \label{eq:9-12}
+\end{equation}
+$\Gamma$ 是对应于单位圆周上根的点集, 称为\newterm{boundarylocus}{边界轨迹}{boundary locus}. 我们有下述定义与引理 \cite{src:10}.
+
+\begin{definition}[$A_{\nu_1,\nu_2}$-稳定区域]
+\label{def:9-1}
+考虑具有由 \eqref{eq:9-10} 定义的 $A_{\nu_1,\nu_2}$-稳定多项式 $\pi(z,q)$ 的 BVM. 区域
+\[
+  \mathcal{D}_{\nu_1,\nu_2}
+  =\bigl\{q\in\C:\ \pi(z,q)\ \text{在}\ \abs{z}=1\ \text{内有}\ \nu_1\ \text{个零点,
+  在}\ \abs{z}=1\ \text{外有}\ \nu_2\ \text{个零点}\bigr\}
+\]
+称为该 BVM 的 $A_{\nu_1,\nu_2}$-稳定区域. 此外, 若 $\C^-\subseteq\mathcal{D}_{\nu_1,\nu_2}$, 则称该 BVM 是 $A_{\nu_1,\nu_2}$-稳定的.
+\end{definition}
+
+\begin{lemma}
+\label{lem:9-1}
+若 BVM 是 $A_{\nu_1,\nu_2}$-稳定的, 且 $\Gamma$ 由 \eqref{eq:9-12} 定义, 则对所有 $q\in\Gamma$ 有 $\operatorname{Re}(q)\geqslant0$.
+\end{lemma}
+
+现在, 我们要证明在稳定性条件下预条件子 $S$ 可逆.
+
+\begin{theorem}
+\label{thm:9-1}
+若用于 \eqref{eq:9-1} 的 BVM 是 $A_{\nu_1,\nu_2}$-稳定的, 且 $h\lambda_k(J_n)\in\mathcal{D}_{\nu_1,\nu_2}$, 其中 $\lambda_k(J_n)$ ($k=1,\ldots,n$) 是 $J_n$ 的特征值, 则由 \eqref{eq:9-9} 定义的预条件子 $S$ 可逆.
+\end{theorem}
+
+\begin{proof}
+由于 $s(A)$ 与 $s(B)$ 是循环矩阵, 它们的特征值由
+\[
+  g_A(z)=\alpha_{\mu}z^{\nu_2}+\cdots+\alpha_{\nu_1}
+  +\alpha_{\nu_1-1}\frac{1}{z}+\cdots+\alpha_0\frac{1}{z^{\nu_1}}
+  =\frac{\rho(z)}{z^{\nu_1}}
+\]
+与
+\[
+  g_B(z)=\beta_{\mu}z^{\nu_2}+\cdots+\beta_{\nu_1}
+  +\beta_{\nu_1-1}\frac{1}{z}+\cdots+\beta_0\frac{1}{z^{\nu_1}}
+  =\frac{\sigma(z)}{z^{\nu_1}}
+\]
+给出, 取值点为 $\omega_j=e^{\frac{2\pi\ii j}{s+1}}$, 其中 $\ii\equiv\sqrt{-1}$, $j=0,\ldots,s$. 参见 \cite{src:18,src:29}. $S$ 的特征值 $\lambda_{jk}(S)$ 因而由
+\[
+  \lambda_{jk}(S)=g_A(\omega_j)-h\lambda_k(J_n)g_B(\omega_j),
+  \qquad j=0,\ldots,s,\quad k=1,\ldots,n
+\]
+给出. 由于 BVM 是 $A_{\nu_1,\nu_2}$-稳定的, $\mu$ 次多项式
+\[
+  \pi[z,h\lambda_k(J_n)]=\rho(z)-h\lambda_k(J_n)\sigma(z)
+\]
+在单位圆 $\abs{z}=1$ 上没有根. 于是, 对所有 $k=1,\ldots,n$ 与任意 $\abs{z}=1$, 有
+\[
+  g_A(z)-h\lambda_k(J_n)g_B(z)
+  =\frac{1}{z^{\nu_1}}\pi[z,h\lambda_k(J_n)]\neq0.
+\]
+由此推出
+\[
+  \lambda_{jk}(S)\neq0,\qquad j=0,\ldots,s,\quad k=1,\ldots,n.
+\]
+故 $S$ 可逆.
+\end{proof}
+
+特别地, 我们有
+
+\begin{corollary}
+\label{cor:9-1}
+若 BVM 是 $A_{\nu_1,\nu_2}$-稳定的, 且 $\lambda_k(J_n)\in\C^-$, 则预条件子 $S$ 可逆.
+\end{corollary}
+
+\subsection{收敛率与运算量}
+\label{sec:9-3-2}
+
+关于收敛率, 我们有下述定理.
+
+\begin{theorem}
+\label{thm:9-2}
+有
+\[
+  S^{-1}M=I_{n(s+1)}+L,
+\]
+其中
+\[
+  \rank(L)\leqslant2n\mu.
+\]
+\end{theorem}
+
+\begin{proof}
+令 $E=M-S$. 由 \eqref{eq:9-8} 与 \eqref{eq:9-9},
+\[
+  E=\bigl(\widetilde{A}-s(A)\bigr)\otimes I_n
+  -h\bigl(\widetilde{B}-s(B)\bigr)\otimes J_n
+  =L_A\otimes I_n-hL_B\otimes J_n.
+\]
+容易验证, $L_A$ 与 $L_B$ 是 $(s+1)$ 阶矩阵, 其非零元仅出现在以下四个角: 左上角一个 $\nu_1$ 行乘 $(\mu+1)$ 列的块; 右上角一个 $\nu_1$ 阶块; 右下角一个 $\nu_2$ 行乘 $(\mu+1)$ 列的块; 左下角一个 $\nu_2$ 阶块. 注意 $\mu=\nu_1+\nu_2$, 于是有
+\[
+  \rank(L_A)\leqslant\mu,\qquad \rank(L_B)\leqslant\mu.
+\]
+因此,
+\[
+  \rank(L_A\otimes I_n)=\rank(L_A)\cdot n\leqslant n\mu
+\]
+与
+\[
+  \rank(L_B\otimes J_n)=\rank(L_B)\cdot n\leqslant n\mu.
+\]
+故
+\[
+  S^{-1}M=I_{n(s+1)}+S^{-1}E=I_{n(s+1)}+L,
+\]
+其中 $L$ 的秩至多为 $2n\mu$.
+\end{proof}
+
+因此, 当把 GMRES 方法用于
+\[
+  S^{-1}M\mathbf{y}=S^{-1}\mathbf{b}
+\]
+时, 由定理 \ref{thm:6-13} 与 \ref{thm:9-2} 知, 在精确算术下该方法至多 $2n\mu+1$ 次迭代即收敛.
+
+关于每次迭代的运算量, GMRES 方法每次迭代的主要工作是矩阵-向量乘法
+\[
+  S^{-1}M\mathbf{z}
+  =(s(A)\otimes I_n-hs(B)\otimes J_n)^{-1}
+   (\widetilde{A}\otimes I_n-h\widetilde{B}\otimes J_n)\mathbf{z}
+\]
+(见 \ref{sec:6-5} 节). 由于 $\widetilde{A}$, $\widetilde{B}$ 是带状矩阵, 且假定 $J_n$ 稀疏, 矩阵-向量乘法
+\[
+  M\mathbf{z}=(\widetilde{A}\otimes I_n-h\widetilde{B}\otimes J_n)\mathbf{z}
+\]
+可以很快完成.
+
+现在我们计算 $S^{-1}(M\mathbf{z})$. 注意任何循环矩阵都可由 Fourier 矩阵 $F$ 对角化 (见 \ref{sec:6-4} 节与 \cite{src:29}). 由于 $s(A)$ 与 $s(B)$ 是循环矩阵, 由 \eqref{eq:6-19} 有分解
+\[
+  s(A)=F\Lambda_AF^*,\qquad s(B)=F\Lambda_BF^*,
+\]
+其中 $\Lambda_A$, $\Lambda_B$ 分别是含 $s(A)$, $s(B)$ 特征值的对角矩阵. 由此可得
+\[
+  S^{-1}(M\mathbf{z})
+  =(F^*\otimes I_n)(\Lambda_A\otimes I_n-h\Lambda_B\otimes J_n)^{-1}
+   (F\otimes I_n)(M\mathbf{z}).
+\]
+该乘积可用 FFT 与求解 $s+1$ 个 $n$ 阶线性方程组得到. 由于 $J_n$ 稀疏, 矩阵
+\[
+  \Lambda_A\otimes I_n-h\Lambda_B\otimes J_n
+\]
+也稀疏. 因此 $S^{-1}(M\mathbf{z})$ 可通过求解 $s+1$ 个 $n$ 阶稀疏线性方程组得到. 于是每次迭代的总运算量为
+\[
+  \gamma_1n(s+1)\log(s+1)+\gamma_2(s+1)nq,
+\]
+其中 $q$ 是 $J_n$ 的非零元个数, $\gamma_1$ 与 $\gamma_2$ 是某些正常数. 关于本方法的运算量与直接解法 (对线性方程组 \eqref{eq:9-8}) 的比较, 参见 \cite{src:19}.
+
+\subsection{数值结果}
+\label{sec:9-3-3}
+
+现在我们通过求解 \cite{src:8} 中给出的一个测试问题来说明预条件子 $S$ 的效率. 实验在 MATLAB 中进行. 我们用 MATLAB 提供的 M 文件 ``gmres'' 求解预处理后的方程组. 我们应当强调, 本章所有试验中, 零向量都取作初始猜测, 停止准则为
+\[
+  \frac{\norm{\mathbf{r}_q}_2}{\norm{\mathbf{r}_0}_2}<10^{-6},
+\]
+其中 $\mathbf{r}_q$ 是 $q$ 次迭代后的残差. 我们使用的 BVM 是三阶\newterm{gam}{广义 Adams 方法}{generalized Adams method (GAM)}. 其公式与初始, 末端附加条件可在 \cite{src:10} 中找到.
+
+\begin{example}[热传导方程]
+\label{ex:9-1}
+\[
+  \left\{
+  \begin{array}{ll}
+    \dfrac{\partial u}{\partial t}=\dfrac{\partial^2u}{\partial x^2}, & \\[2ex]
+    u(0,t)=\dfrac{\partial u}{\partial x}(\pi,t)=0, & t\in[0,2\pi],\\[1ex]
+    u(x,0)=x, & x\in[0,\pi].
+  \end{array}
+  \right.
+\]
+\end{example}
+
+我们用中心差分, 步长等于 $\pi/(n+1)$ 离散偏微分算子 $\partial^2/\partial x^2$. 所得的常微分方程组为
+\[
+  \left\{
+  \begin{array}{ll}
+    \mathbf{y}'(t)=T_n\mathbf{y}(t), & t\in[0,2\pi],\\
+    \mathbf{y}(0)=[x_1,x_2,\ldots,x_n]^T,
+  \end{array}
+  \right.
+\]
+其中 $T_n$ 是缩放后的离散 Laplacian 矩阵
+\[
+  T_n=\frac{(n+1)^2}{\pi^2}\begin{bmatrix}
+    -2 & 1 & & & \mathbf{0}\\
+    1 & \ddots & \ddots & & \\
+    & \ddots & \ddots & \ddots & \\
+    & & \ddots & -2 & 1\\
+    \mathbf{0} & & & 1 & -1
+  \end{bmatrix}.
+\]
+
+表 \ref{tab:9-1} 列出了不同 $n$ 与 $s$ 时 GMRES 方法收敛所需的迭代次数. 表中 $I$ 表示不使用预条件子, $S$ 表示由 \eqref{eq:9-9} 定义的 Strang 型块循环预条件子. 我们看到, 使用 $S$ 时收敛所需的迭代次数远少于不使用预条件子时的迭代次数. $S$ 列下的数在 $s$ 与 $n$ 增大时几乎保持不变.
+
+\begin{table}[htbp]
+  \centering
+  \caption{收敛所需的迭代次数}
+  \label{tab:9-1}
+  \begin{tabular}{cccc}
+    \toprule
+    $n$ & $s$ & $I$ & $S$\\ \midrule
+    24 & 6  & 19  & 4\\
+       & 12 & 70  & 4\\
+       & 24 & 152 & 4\\
+       & 48 & 227 & 3\\
+       & 96 & 314 & 3\\ \bottomrule
+  \end{tabular}
+  \hspace{2em}
+  \begin{tabular}{cccc}
+    \toprule
+    $n$ & $s$ & $I$ & $S$\\ \midrule
+    48 & 6  & 47   & 4\\
+       & 12 & 167  & 4\\
+       & 24 & 359  & 4\\
+       & 48 & $>\!400$ & 3\\
+       & 96 & $>\!400$ & 3\\ \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{时滞微分方程的 Strang 型预条件子}
+\label{sec:9-4}
+
+现在, 我们研究时滞微分方程 (DDEs).
+
+\subsection{多时滞微分方程}
+\label{sec:9-4-1}
+
+考虑多时滞微分方程的解:
+\begin{equation}
+  \left\{
+  \begin{array}{ll}
+    \mathbf{y}'(t)=J_n\mathbf{y}(t)+D_n^{(1)}\mathbf{y}(t-\tau_1)
+      +\cdots+D_n^{(s)}\mathbf{y}(t-\tau_s)+\mathbf{f}(t), & t\geqslant t_0,\\
+    \mathbf{y}(t)=\boldsymbol{\phi}(t), & t\leqslant t_0,
+  \end{array}
+  \right.
+  \label{eq:9-13}
+\end{equation}
+其中 $\mathbf{y}(t),\mathbf{f}(t),\boldsymbol{\phi}(t):\R\to\R^n$; $J_n,D_n^{(1)},\ldots,D_n^{(s)}\in\R^{n\times n}$; 而 $\tau_1,\ldots,\tau_s>0$ 是某些有理数.
+
+为求得合理的数值解, 我们要求 \eqref{eq:9-13} 的解是渐近稳定的. 我们有下述引理 \cite{src:63,src:64,src:91}.
+
+\begin{lemma}
+\label{lem:9-2}
+对任意 $s\geqslant1$, 若
+\[
+  \eta(J_n)\equiv\frac{1}{2}\lambda_{\max}(J_n+J_n^T)<0
+\]
+且
+\begin{equation}
+  \eta(J_n)+\sum_{j=1}^{s}\norm{D_n^{(j)}}_2<0,
+  \label{eq:9-14}
+\end{equation}
+则 \eqref{eq:9-13} 的解是渐近稳定的.
+\end{lemma}
+
+下面为简单起见, 我们只考虑 \eqref{eq:9-13} 中 $s=2$ 的情形; 对任意 $s$ 的推广是直接的. 令
+\[
+  h=\tau_1/m_1=\tau_2/m_2
+\]
+为步长, 其中 $m_1$ 与 $m_2$ 是正整数且 $m_2>m_1$ ($\tau_2>\tau_1$). 对 \eqref{eq:9-13}, 在区间 $[t_0,t_0+r_1h]$ 的均匀网格
+\[
+  t_j=t_0+jh,\qquad j=0,\ldots,r_1
+\]
+上使用带 $(\nu_1,\nu_2)$-边界条件的 BVM, 得
+\begin{equation}
+  \begin{aligned}
+    \sum_{i=0}^{\mu}\alpha_i\mathbf{y}_{p+i-\nu_1}
+    ={}&h\sum_{i=0}^{\mu}\beta_i\Bigl(J_n\mathbf{y}_{p+i-\nu_1}
+      +D_n^{(1)}\mathbf{y}_{p+i-\nu_1-m_1}\\
+    &\quad+D_n^{(2)}\mathbf{y}_{p+i-\nu_1-m_2}
+      +\mathbf{f}_{p+i-\nu_1}\Bigr),
+  \end{aligned}
+  \label{eq:9-15}
+\end{equation}
+其中 $p=\nu_1,\ldots,r_1-1$, $\mu=\nu_1+\nu_2$. 通过提供值
+\begin{equation}
+  \mathbf{y}_{-m_2},\ldots,\mathbf{y}_{-m_1},\ldots,\mathbf{y}_0,\qquad
+  \mathbf{y}_1,\ldots,\mathbf{y}_{\nu_1-1},\qquad
+  \mathbf{y}_{r_1},\ldots,\mathbf{y}_{r_1+\nu_2-1},
+  \label{eq:9-16}
+\end{equation}
+\eqref{eq:9-15} 可写成矩阵形式
+\[
+  R\mathbf{y}=\mathbf{b},
+\]
+其中
+\begin{equation}
+  \begin{aligned}
+    R&\equiv A\otimes I_n-hB\otimes J_n-hC^{(1)}\otimes D_n^{(1)}
+      -hC^{(2)}\otimes D_n^{(2)},\\
+    \mathbf{y}&=[\mathbf{y}_{\nu_1}^T,\mathbf{y}_{\nu_1+1}^T,\ldots,
+      \mathbf{y}_{r_1-1}^T]^T\in\R^{n(r_1-\nu_1)},
+  \end{aligned}
+  \label{eq:9-17}
+\end{equation}
+$\mathbf{b}\in\R^{n(r_1-\nu_1)}$ 依赖于 $\mathbf{f}$, 边界值以及方法的系数. 矩阵 $A$, $B\in\R^{(r_1-\nu_1)\times(r_1-\nu_1)}$ 按 \eqref{eq:9-4} 定义, 而 $C^{(1)}$, $C^{(2)}\in\R^{(r_1-\nu_1)\times(r_1-\nu_1)}$ 定义如下:
+\[
+  C^{(1)}=\begin{bmatrix}
+    \mathbf{0} & & & & & \mathbf{0}\\
+    \beta_{\mu} & \ddots & & & & \\
+    \vdots & \ddots & \ddots & & & \\
+    \beta_0 & \cdots & \beta_{\mu} & \ddots & & \\
+    & \ddots & & \ddots & \beta_{\mu} & \\
+    \mathbf{0} & & \beta_0 & \cdots & \beta_{\mu} & \mathbf{0}
+  \end{bmatrix},\qquad
+  C^{(2)}=\begin{bmatrix}
+    \mathbf{0} & & & & & \mathbf{0}\\
+    \beta_{\mu} & \ddots & & & & \\
+    \vdots & \ddots & \ddots & & & \\
+    \beta_0 & \cdots & \beta_{\mu} & \ddots & & \\
+    & \ddots & & \ddots & \beta_{\mu} & \\
+    \mathbf{0} & & \beta_0 & \cdots & \beta_{\mu} & \mathbf{0}
+  \end{bmatrix}.
+\]
+我们指出, $C^{(1)}$ 的第一列由下式给出:
+\[
+  \Bigl[\,\underbrace{0,\ldots,0}_{m_1-\nu_2},\beta_{\mu},\ldots,\beta_0,
+  \underbrace{0,\ldots,0}_{r_1-m_1-2\nu_1-1}\,\Bigr]^T,
+\]
+而 $C^{(2)}$ 的第一列由下式给出:
+\[
+  \Bigl[\,\underbrace{0,\ldots,0}_{m_2-\nu_2},\beta_{\mu},\ldots,\beta_0,
+  \underbrace{0,\ldots,0}_{r_1-m_2-2\nu_1-1}\,\Bigr]^T.
+\]
+
+\subsection{预条件子的构造}
+\label{sec:9-4-2}
+
+\eqref{eq:9-17} 的 Strang 型块循环预条件子定义如下:
+\begin{equation}
+  \widetilde{S}\equiv s(A)\otimes I_n-hs(B)\otimes J_n
+  -hs(C^{(1)})\otimes D_n^{(1)}-hs(C^{(2)})\otimes D_n^{(2)},
+  \label{eq:9-18}
+\end{equation}
+其中 $s(E)$ 是 Toeplitz 矩阵 $E$ 的 Strang 循环预条件子, $E$ 分别取 $A$, $B$, $C^{(1)}$, $C^{(2)}$.
+
+现在讨论由 \eqref{eq:9-18} 定义的 Strang 型预条件子 $\widetilde{S}$ 的可逆性. 由于任何循环矩阵都可由 Fourier 矩阵 $F$ 对角化, 由 \eqref{eq:6-19} 有
+\[
+  s(E)=F^*\Lambda_EF,
+\]
+其中 $\Lambda_E$ 是含 $s(E)$ 特征值的对角矩阵, $E$ 分别取 $A$, $B$, $C^{(1)}$, $C^{(2)}$. 因此得到
+\[
+  \widetilde{S}=(F^*\otimes I_n)\bigl(\Lambda_A\otimes I_n-h\Lambda_B\otimes J_n
+  -h\Lambda_{C^{(1)}}\otimes D_n^{(1)}-h\Lambda_{C^{(2)}}\otimes D_n^{(2)}\bigr)
+  (F\otimes I_n).
+\]
+
+注意
+\[
+  \Lambda_A\otimes I_n-h\Lambda_B\otimes J_n
+  -h\Lambda_{C^{(1)}}\otimes D_n^{(1)}-h\Lambda_{C^{(2)}}\otimes D_n^{(2)}
+\]
+的第 $j$ 块由
+\[
+  \widetilde{S}_j=[\Lambda_A]_{jj}I_n-h[\Lambda_B]_{jj}J_n
+  -h[\Lambda_{C^{(1)}}]_{jj}D_n^{(1)}-h[\Lambda_{C^{(2)}}]_{jj}D_n^{(2)}
+\]
+给出, $j=1,2,\ldots,r_1-\nu_1$. 令
+\[
+  w_j=e^{-\frac{2\pi\ii j}{r_1-\nu_1}}.
+\]
+我们有
+\[
+  [\Lambda_A]_{jj}=\frac{\rho(w_j)}{w_j^{\nu_1}},\qquad
+  [\Lambda_B]_{jj}=\frac{\sigma(w_j)}{w_j^{\nu_1}},
+\]
+\[
+  [\Lambda_{C^{(1)}}]_{jj}
+  =\beta_{\mu}w_j^{-m_1+\nu_2}+\cdots+\beta_0w_j^{-m_1-\nu_1}
+  =\frac{\sigma(w_j)}{w_j^{m_1+\nu_1}},
+\]
+以及
+\[
+  [\Lambda_{C^{(2)}}]_{jj}
+  =\beta_{\mu}w_j^{-m_2+\nu_2}+\cdots+\beta_0w_j^{-m_2-\nu_1}
+  =\frac{\sigma(w_j)}{w_j^{m_2+\nu_1}},
+\]
+其中 $\rho(z)$ 与 $\sigma(z)$ 如 \eqref{eq:9-10} 定义. 因此,
+\[
+  \widetilde{S}_j=\frac{1}{w_j^{m_2+\nu_1}}
+  \Bigl[w_j^{m_2}\bigl(\rho(w_j)I_n-h\sigma(w_j)J_n
+  -hw_j^{-m_1}\sigma(w_j)D_n^{(1)}\bigr)
+  -h\sigma(w_j)D_n^{(2)}\Bigr].
+\]
+因此我们只需证明 $\widetilde{S}_j$ ($j=1,2,\ldots,r_1-\nu_1$) 可逆. 我们有下述定理.
+
+\begin{theorem}
+\label{thm:9-3}
+若带 $(\nu_1,\nu_2)$-边界条件的 BVM 是 $A_{\nu_1,\nu_2}$-稳定的, 且 \eqref{eq:9-14} 成立, 则对任意 $\theta\in\R$, 矩阵
+\[
+  e^{\ii m_2\theta}\bigl(\rho(e^{\ii\theta})I_n-h\sigma(e^{\ii\theta})J_n
+  -he^{-\ii m_1\theta}\sigma(e^{\ii\theta})D_n^{(1)}\bigr)
+  -h\sigma(e^{\ii\theta})D_n^{(2)}
+\]
+可逆. 由此可知, 由 \eqref{eq:9-18} 定义的 Strang 型预条件子 $\widetilde{S}$ 也可逆.
+\end{theorem}
+
+\begin{proof}
+假设存在 $\mathbf{x}\in\C^n$ 且 $\norm{\mathbf{x}}_2=1$ 以及 $\theta\in\R$ 使
+\[
+  \Bigl[e^{\ii m_2\theta}\bigl(\rho(e^{\ii\theta})I_n-h\sigma(e^{\ii\theta})J_n
+  -he^{-\ii m_1\theta}\sigma(e^{\ii\theta})D_n^{(1)}\bigr)
+  -h\sigma(e^{\ii\theta})D_n^{(2)}\Bigr]\mathbf{x}=\mathbf{0}.
+\]
+则
+\[
+  \mathbf{x}^*\Bigl[\rho(e^{\ii\theta})I_n-h\sigma(e^{\ii\theta})J_n
+  -he^{-\ii m_1\theta}\sigma(e^{\ii\theta})D_n^{(1)}
+  -he^{-\ii m_2\theta}\sigma(e^{\ii\theta})D_n^{(2)}\Bigr]\mathbf{x}=0,
+\]
+即
+\[
+  \rho(e^{\ii\theta})-h\sigma(e^{\ii\theta})\mathbf{x}^*J_n\mathbf{x}
+  -he^{-\ii m_1\theta}\sigma(e^{\ii\theta})\mathbf{x}^*D_n^{(1)}\mathbf{x}
+  -he^{-\ii m_2\theta}\sigma(e^{\ii\theta})\mathbf{x}^*D_n^{(2)}\mathbf{x}=0.
+\]
+于是有
+\[
+  \begin{aligned}
+    &\rho(e^{\ii\theta})
+    -\bigl(h\mathbf{x}^*J_n\mathbf{x}
+      +he^{-\ii m_1\theta}\mathbf{x}^*D_n^{(1)}\mathbf{x}
+      +he^{-\ii m_2\theta}\mathbf{x}^*D_n^{(2)}\mathbf{x}\bigr)\sigma(e^{\ii\theta})\\
+    &\qquad=\pi\Bigl(e^{\ii\theta},
+      h\bigl(\mathbf{x}^*J_n\mathbf{x}+e^{-\ii m_1\theta}\mathbf{x}^*D_n^{(1)}\mathbf{x}
+      +e^{-\ii m_2\theta}\mathbf{x}^*D_n^{(2)}\mathbf{x}\bigr)\Bigr)=0,
+  \end{aligned}
+\]
+其中 $\pi(z,q)$ 由 \eqref{eq:9-11} 给出. 因此,
+\[
+  h\bigl(\mathbf{x}^*J_n\mathbf{x}+e^{-\ii m_1\theta}\mathbf{x}^*D_n^{(1)}\mathbf{x}
+  +e^{-\ii m_2\theta}\mathbf{x}^*D_n^{(2)}\mathbf{x}\bigr)\in\Gamma,
+\]
+其中 $\Gamma$ 是由 \eqref{eq:9-12} 定义的边界轨迹. 由于 BVM 是 $A_{\nu_1,\nu_2}$-稳定的, 由引理 \ref{lem:9-1} 知
+\[
+  \operatorname{Re}\bigl(\mathbf{x}^*J_n\mathbf{x}
+  +e^{-\ii m_1\theta}\mathbf{x}^*D_n^{(1)}\mathbf{x}
+  +e^{-\ii m_2\theta}\mathbf{x}^*D_n^{(2)}\mathbf{x}\bigr)\geqslant0.
+\]
+由 Cauchy-Schwarz 不等式, 有
+\[
+  \operatorname{Re}\bigl(e^{-\ii m_1\theta}\mathbf{x}^*D_n^{(1)}\mathbf{x}\bigr)
+  \leqslant\abs{\mathbf{x}^*D_n^{(1)}\mathbf{x}}
+  \leqslant\norm{\mathbf{x}}_2\norm{D_n^{(1)}\mathbf{x}}_2
+  \leqslant\norm{D_n^{(1)}}_2\norm{\mathbf{x}}_2^2
+  =\norm{D_n^{(1)}}_2,
+\]
+类似地有
+\[
+  \operatorname{Re}\bigl(e^{-\ii m_2\theta}\mathbf{x}^*D_n^{(2)}\mathbf{x}\bigr)
+  \leqslant\norm{D_n^{(2)}}_2.
+\]
+注意
+\[
+  \eta(J_n)=\max_{\norm{\mathbf{x}}_2=1}\operatorname{Re}(\mathbf{x}^*J_n\mathbf{x})
+  \geqslant\operatorname{Re}(\mathbf{x}^*J_n\mathbf{x}).
+\]
+于是有
+\[
+  \eta(J_n)+\norm{D_n^{(1)}}_2+\norm{D_n^{(2)}}_2\geqslant0,
+\]
+这与 \eqref{eq:9-14} 矛盾. 因此, 矩阵
+\[
+  e^{\ii m_2\theta}\bigl(\rho(e^{\ii\theta})I_n-h\sigma(e^{\ii\theta})J_n
+  -he^{-\ii m_1\theta}\sigma(e^{\ii\theta})D_n^{(1)}\bigr)
+  -h\sigma(e^{\ii\theta})D_n^{(2)}
+\]
+可逆, 从而 Strang 型预条件子 $\widetilde{S}$ 也可逆.
+\end{proof}
+
+\subsection{收敛率}
+\label{sec:9-4-3}
+
+现在, 我们讨论带 Strang 型块循环预条件子的预处理 GMRES 方法的收敛率. 关于预处理矩阵的谱, 我们有下述结果 \cite{src:44}.
+
+\begin{theorem}
+\label{thm:9-4}
+设 $R$ 由 \eqref{eq:9-17} 给出, $\widetilde{S}$ 由 \eqref{eq:9-18} 给出. 则有
+\[
+  \widetilde{S}^{-1}R=I_{n(r_1-\nu_1)}+L,
+\]
+其中
+\[
+  \rank(L)\leqslant(2\mu+m_1+m_2+2\nu_1+2)n.
+\]
+\end{theorem}
+
+由定理 \ref{thm:6-13} 与 \ref{thm:9-4}, 当把 GMRES 方法用于
+\[
+  \widetilde{S}^{-1}R\mathbf{y}=\widetilde{S}^{-1}\mathbf{b}
+\]
+时, 在精确算术下该方法至多 $(2\mu+m_1+m_2+2\nu_1+2)n+1$ 次迭代即收敛.
+
+由定理 \ref{thm:9-4} 我们知道, 若步长 $h=\tau_1/m_1=\tau_2/m_2$ 固定, 则对预处理后方程组
+\[
+  \widetilde{S}^{-1}R\mathbf{y}=\widetilde{S}^{-1}\mathbf{b}
+\]
+应用 GMRES 方法时收敛所需的迭代次数与 $r_1$ 无关, 因而与我们考虑区间的长度无关. 我们应当强调, 9.4.4 小节的数值例子表明收敛速度比定理 \ref{thm:9-4} 所给估计预示的快得多. 关于本算法的运算量, 参见 \cite{src:44,src:58}.
+
+\subsection{数值结果}
+\label{sec:9-4-4}
+
+我们通过求解下述例子来说明预条件子的效率. 我们使用的 BVM 在 $t\in[0,4]$ 上是三阶 GBDF.
+
+\begin{example}
+\label{ex:9-2}
+考虑
+\[
+  \left\{
+  \begin{array}{ll}
+    \mathbf{y}'(t)=J_n\mathbf{y}(t)+D_n^{(1)}\mathbf{y}(t-0.5)
+      +D_n^{(2)}\mathbf{y}(t-1), & t\geqslant0,\\
+    \mathbf{y}(t)=[\sin t,1,\ldots,1]^T, & t\leqslant0,
+  \end{array}
+  \right.
+\]
+其中
+\[
+  J_n=\begin{bmatrix}
+    -10 & 2 & & & \mathbf{0}\\
+    2 & \ddots & \ddots & & \\
+    1 & \ddots & \ddots & \ddots & \\
+    & \ddots & \ddots & \ddots & 2\\
+    \mathbf{0} & & 1 & 2 & -10
+  \end{bmatrix},\qquad
+  D_n^{(1)}=\frac{1}{n}\begin{bmatrix}
+    2 & -1 & & & \mathbf{0}\\
+    -1 & \ddots & \ddots & & \\
+    & \ddots & \ddots & \ddots & \\
+    & & \ddots & \ddots & -1\\
+    \mathbf{0} & & & -1 & 2
+  \end{bmatrix},
+\]
+而
+\[
+  D_n^{(2)}=\frac{1}{n}\begin{bmatrix}
+    2 & 1 & & & \mathbf{0}\\
+    1 & \ddots & \ddots & & \\
+    & \ddots & \ddots & \ddots & \\
+    & & \ddots & \ddots & 1\\
+    \mathbf{0} & & & 1 & 2
+  \end{bmatrix}.
+\]
+\end{example}
+
+实际上, 我们并没有由 \eqref{eq:9-16} 提供的边界值
+\[
+  \mathbf{y}_1,\ldots,\mathbf{y}_{\nu_1-1},\qquad
+  \mathbf{y}_{r_1},\ldots,\mathbf{y}_{r_1+\nu_2-1}.
+\]
+与 9.2 节的做法一样, 改为给出 $\nu_1-1$ 个初始附加方程与 $\nu_2$ 个末端附加方程. 我们指出, 引入附加方程之后, \eqref{eq:9-17} 中的矩阵 $A$, $B$, $C^{(1)}$ 与 $C^{(2)}$ 是带小秩扰动的 Toeplitz 矩阵. 忽略这些小秩扰动, 我们也可以构造 Strang 型预条件子 \eqref{eq:9-18}.
+
+表 \ref{tab:9-2} 列出了不同矩阵规模 $n$ 与步长 $h$ 的组合下 GMRES 方法收敛所需的迭代次数. 表中 $I$ 表示不使用预条件子, $\widetilde{S}$ 表示由 \eqref{eq:9-18} 定义的 Strang 型块循环预条件子. 我们看到, 在 $\widetilde{S}$ 列下, 收敛所需的迭代次数随 $n$ 增大与 $h$ 减小而缓慢增加.
+
+\begin{table}[htbp]
+  \centering
+  \caption{收敛所需的迭代次数}
+  \label{tab:9-2}
+  \begin{tabular}{cccc}
+    \toprule
+    $n$ & $h$ & $I$ & $\widetilde{S}$\\ \midrule
+    24 & $1/10$ & 52  & 9\\
+       & $1/20$ & 97  & 11\\
+       & $1/40$ & 185 & 15\\
+       & $1/80$ & 367 & 19\\ \bottomrule
+  \end{tabular}
+  \hspace{2em}
+  \begin{tabular}{cccc}
+    \toprule
+    $n$ & $h$ & $I$ & $\widetilde{S}$\\ \midrule
+    48 & $1/10$ & 53  & 12\\
+       & $1/20$ & 98  & 14\\
+       & $1/40$ & 189 & 14\\
+       & $1/80$ & 378 & 17\\ \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{中立型时滞微分方程的 Strang 型预条件子}
+\label{sec:9-5}
+
+本节研究\newterm{ndde}{中立型时滞微分方程}{neutral delay differential equation (NDDE)}.
+
+\subsection{中立型时滞微分方程}
+\label{sec:9-5-1}
+
+考虑 NDDE 的解:
+\begin{equation}
+  \left\{
+  \begin{array}{ll}
+    \mathbf{y}'(t)=L_n\mathbf{y}'(t-\tau)+M_n\mathbf{y}(t)
+      +N_n\mathbf{y}(t-\tau), & t\geqslant t_0,\\
+    \mathbf{y}(t)=\boldsymbol{\phi}(t), & t\leqslant t_0,
+  \end{array}
+  \right.
+  \label{eq:9-19}
+\end{equation}
+其中 $\mathbf{y}(t),\boldsymbol{\phi}(t):\R\to\R^n$; $L_n,M_n,N_n\in\R^{n\times n}$; 而 $\tau>0$ 为常数.
+
+与 9.4.1 小节一样, 我们要求 \eqref{eq:9-19} 的解渐近稳定. 我们有下述引理 \cite{src:41,src:54}.
+
+\begin{lemma}
+\label{lem:9-3}
+设 $L_n$, $M_n$, $N_n$ 是任意满足 $\norm{L_n}_2<1$ 的矩阵. 则 \eqref{eq:9-19} 的解是渐近稳定的, 若 $\operatorname{Re}(\lambda_i)<0$, 其中 $\lambda_i$ ($i=1,2,\ldots,n$) 是矩阵
+\[
+  (I_n-\eta L_n)^{-1}(M_n+\eta N_n)
+\]
+的特征值, 且 $\abs{\eta}\leqslant1$.
+\end{lemma}
+
+令 $h=\tau/k_1$ 为步长, 其中 $k_1$ 是正整数. 对 \eqref{eq:9-19}, 在均匀网格
+\[
+  t_j=t_0+jh,\qquad j=0,\ldots,r_2
+\]
+上使用带 $(\nu_1,\nu_2)$-边界条件的 BVM, 得
+\begin{equation}
+  \begin{aligned}
+    \sum_{i=0}^{\mu}\alpha_i\mathbf{y}_{p+i-\nu_1}
+    ={}&\sum_{i=0}^{\mu}\alpha_iL_n\mathbf{y}_{p+i-\nu_1-k_1}\\
+    &+h\sum_{i=0}^{\mu}\beta_i\bigl(M_n\mathbf{y}_{p+i-\nu_1}
+      +N_n\mathbf{y}_{p+i-\nu_1-k_1}\bigr),
+  \end{aligned}
+  \label{eq:9-20}
+\end{equation}
+其中 $p=\nu_1,\ldots,r_2-1$, $\mu=\nu_1+\nu_2$. 通过提供值
+\begin{equation}
+  \mathbf{y}_{-k_1},\ldots,\mathbf{y}_0,\qquad
+  \mathbf{y}_1,\ldots,\mathbf{y}_{\nu_1-1},\qquad
+  \mathbf{y}_{r_2},\ldots,\mathbf{y}_{r_2+\nu_2-1},
+  \label{eq:9-21}
+\end{equation}
+\eqref{eq:9-20} 可写成矩阵形式
+\[
+  H\mathbf{y}=\mathbf{b},
+\]
+其中
+\begin{equation}
+  \begin{aligned}
+    H&\equiv A\otimes I_n-A^{(1)}\otimes L_n-hB\otimes M_n
+      -hB^{(1)}\otimes N_n,\\
+    \mathbf{y}&=[\mathbf{y}_{\nu_1}^T,\mathbf{y}_{\nu_1+1}^T,\ldots,
+      \mathbf{y}_{r_2-1}^T]^T\in\R^{n(r_2-\nu_1)},
+  \end{aligned}
+  \label{eq:9-22}
+\end{equation}
+$\mathbf{b}\in\R^{n(r_2-\nu_1)}$ 依赖于边界值与方法的系数. 在 \eqref{eq:9-22} 中, 矩阵 $A$, $B\in\R^{(r_2-\nu_1)\times(r_2-\nu_1)}$ 按 \eqref{eq:9-4} 定义, 而 $A^{(1)}$, $B^{(1)}\in\R^{(r_2-\nu_1)\times(r_2-\nu_1)}$ 定义如下 \cite{src:5}:
+\[
+  A^{(1)}=\begin{bmatrix}
+    \mathbf{0} & & & & & \mathbf{0}\\
+    \alpha_{\mu} & \ddots & & & & \\
+    \vdots & \ddots & \ddots & & & \\
+    \alpha_0 & \cdots & \alpha_{\mu} & \ddots & & \\
+    & \ddots & & \ddots & \alpha_{\mu} & \\
+    \mathbf{0} & & \alpha_0 & \cdots & \alpha_{\mu} & \mathbf{0}
+  \end{bmatrix},\qquad
+  B^{(1)}=\begin{bmatrix}
+    \mathbf{0} & & & & & \mathbf{0}\\
+    \beta_{\mu} & \ddots & & & & \\
+    \vdots & \ddots & \ddots & & & \\
+    \beta_0 & \cdots & \beta_{\mu} & \ddots & & \\
+    & \ddots & & \ddots & \beta_{\mu} & \\
+    \mathbf{0} & & \beta_0 & \cdots & \beta_{\mu} & \mathbf{0}
+  \end{bmatrix}.
+\]
+我们指出, $A^{(1)}$ 的第一列由下式给出:
+\[
+  \Bigl[\,\underbrace{0,\ldots,0}_{k_1-\nu_2},\alpha_{\mu},\ldots,\alpha_0,
+  \underbrace{0,\ldots,0}_{r_2-k_1-2\nu_1-1}\,\Bigr]^T,
+\]
+而 $B^{(1)}$ 的第一列由下式给出:
+\[
+  \Bigl[\,\underbrace{0,\ldots,0}_{k_1-\nu_2},\beta_{\mu},\ldots,\beta_0,
+  \underbrace{0,\ldots,0}_{r_2-k_1-2\nu_1-1}\,\Bigr]^T.
+\]
+
+\subsection{预条件子的构造}
+\label{sec:9-5-2}
+
+\eqref{eq:9-22} 的 Strang 型块循环预条件子定义如下:
+\begin{equation}
+  \widetilde{S}\equiv s(A)\otimes I_n-s(A^{(1)})\otimes L_n
+  -hs(B)\otimes M_n-hs(B^{(1)})\otimes N_n,
+  \label{eq:9-23}
+\end{equation}
+其中 $s(E)$ 是 Toeplitz 矩阵 $E$ 的 Strang 循环预条件子, $E$ 分别取 $A$, $B$, $A^{(1)}$, $B^{(1)}$. 由 \eqref{eq:6-19} 再次得到
+\[
+  \widetilde{S}=(F^*\otimes I_n)\bigl(\Lambda_A\otimes I_n-\Lambda_{A^{(1)}}\otimes L_n
+  -h\Lambda_B\otimes M_n-h\Lambda_{B^{(1)}}\otimes N_n\bigr)(F\otimes I_n),
+\]
+其中 $\Lambda_E$ 是含 $s(E)$ 特征值的对角矩阵, $E$ 分别取 $A$, $B$, $A^{(1)}$, $B^{(1)}$.
+
+现在讨论 Strang 型预条件子 $\widetilde{S}$ 的可逆性. 令
+\[
+  w_j=e^{-\frac{2\pi\ii j}{r_2-\nu_1}}.
+\]
+我们有
+\[
+  [\Lambda_A]_{jj}=\frac{\rho(w_j)}{w_j^{\nu_1}},\qquad
+  [\Lambda_B]_{jj}=\frac{\sigma(w_j)}{w_j^{\nu_1}},
+\]
+\[
+  [\Lambda_{A^{(1)}}]_{jj}
+  =\alpha_{\mu}w_j^{-k_1+\nu_2}+\cdots+\alpha_0w_j^{-k_1-\nu_1}
+  =\frac{\rho(w_j)}{w_j^{k_1+\nu_1}},
+\]
+以及
+\[
+  [\Lambda_{B^{(1)}}]_{jj}
+  =\beta_{\mu}w_j^{-k_1+\nu_2}+\cdots+\beta_0w_j^{-k_1-\nu_1}
+  =\frac{\sigma(w_j)}{w_j^{k_1+\nu_1}},
+\]
+其中 $\rho(z)$ 与 $\sigma(z)$ 如 \eqref{eq:9-10} 定义. 因此, $\widetilde{S}$ 中
+\[
+  \Lambda_A\otimes I_n-\Lambda_{A^{(1)}}\otimes L_n
+  -h\Lambda_B\otimes M_n-h\Lambda_{B^{(1)}}\otimes N_n
+\]
+的第 $j$ 块由
+\[
+  \begin{aligned}
+    \widetilde{S}_j
+    &=[\Lambda_A]_{jj}I_n-[\Lambda_{A^{(1)}}]_{jj}L_n
+      -h[\Lambda_B]_{jj}M_n-h[\Lambda_{B^{(1)}}]_{jj}N_n\\
+    &=\frac{1}{w_j^{k_1+\nu_1}}
+      \Bigl[w_j^{k_1}\bigl(\rho(w_j)I_n-h\sigma(w_j)M_n\bigr)
+      -\rho(w_j)L_n-h\sigma(w_j)N_n\Bigr]
+  \end{aligned}
+\]
+给出, $j=1,2,\ldots,r_2-\nu_1$. 为证明 $\widetilde{S}$ 可逆, 我们只需证明 $\widetilde{S}_j$ ($j=1,2,\ldots,r_2-\nu_1$) 可逆. 令
+\[
+  \begin{aligned}
+    \Delta&\equiv e^{\ii k_1\theta}
+      \bigl(\rho(e^{\ii\theta})I_n-h\sigma(e^{\ii\theta})M_n\bigr)
+      -\rho(e^{\ii\theta})L_n-h\sigma(e^{\ii\theta})N_n\\
+    &=e^{\ii k_1\theta}\bigl(I_n-e^{-\ii k_1\theta}L_n\bigr)D,
+  \end{aligned}
+\]
+其中
+\begin{equation}
+  D\equiv\rho(e^{\ii\theta})I_n
+  -h\bigl(I_n-e^{-\ii k_1\theta}L_n\bigr)^{-1}
+  \bigl(M_n+e^{-\ii k_1\theta}N_n\bigr)\sigma(e^{\ii\theta}).
+  \label{eq:9-24}
+\end{equation}
+因此, 为证明 $\widetilde{S}_j$ 可逆, 只需证明对任意 $\theta\in\R$, $\Delta$ 可逆. 假设 $\norm{L_n}_2<1$, 则 $I_n-e^{-\ii k_1\theta}L_n$ 对任意 $\theta\in\R$ 非奇异. 因此, 我们只需证明 $D$ 对任意 $\theta\in\R$ 可逆. 我们有下述定理 \cite{src:5}.
+
+\begin{theorem}
+\label{thm:9-5}
+若带 $(\nu_1,\nu_2)$-边界条件的 BVM 是 $A_{\nu_1,\nu_2}$-稳定的, 且 $\operatorname{Re}(\lambda_i)<0$, 其中 $\lambda_i$ ($i=1,2,\ldots,n$) 是矩阵 $(I_n-\eta L_n)^{-1}(M_n+\eta N_n)$ 的特征值, $\abs{\eta}\leqslant1$, 则对任意 $\theta\in\R$, 由 \eqref{eq:9-24} 定义的矩阵 $D$ 可逆. 由此可知, 由 \eqref{eq:9-23} 定义的 Strang 型预条件子 $\widetilde{S}$ 也可逆.
+\end{theorem}
+
+\begin{proof}
+令
+\[
+  U\equiv(I_n-e^{-\ii m\theta}L_n)^{-1}(M_n+e^{-\ii m\theta}N_n).
+\]
+则 $D$ 可写成
+\[
+  D=\rho(z)I_n-hU\sigma(z).
+\]
+注意 $D$ 的特征值由
+\[
+  \lambda_i(D)=\rho(z)-h\lambda_i(U)\sigma(z),\qquad i=1,\ldots,n
+\]
+给出, 其中 $\lambda_i(U)$ ($i=1,2,\ldots,n$) 表示 $U$ 的特征值. 由于已知
+\[
+  \operatorname{Re}[\lambda_i(U)]<0,\qquad i=1,\ldots,n,
+\]
+故 $h\lambda_i(U)\in\C^-$. 注意 BVM 是 $A_{\nu_1,\nu_2}$-稳定的, 于是有
+\[
+  h\lambda_i(U)\in\C^-\subseteq\mathcal{D}_{\nu_1,\nu_2}.
+\]
+因此, 由 \eqref{eq:9-11} 定义的 $A_{\nu_1,\nu_2}$-稳定多项式
+\[
+  \pi[z,h\lambda_i(U)]\equiv\rho(z)-h\lambda_i(U)\sigma(z)
+\]
+在单位圆 $\abs{z}=1$ 上没有根. 于是, 对任意 $\abs{z}=1$, 有
+\[
+  \lambda_i(D)=\rho(z)-h\lambda_i(U)\sigma(z)=\pi[z,h\lambda_i(U)]\neq0,
+  \qquad i=1,\ldots,n.
+\]
+由此可知 $D$ 可逆. 因此, 由 \eqref{eq:9-23} 定义的 Strang 型预条件子 $\widetilde{S}$ 也可逆.
+\end{proof}
+
+\subsection{收敛率}
+\label{sec:9-5-3}
+
+关于预处理矩阵的谱, 我们有下述结果 \cite{src:5}.
+
+\begin{theorem}
+\label{thm:9-6}
+设 $H$ 由 \eqref{eq:9-22} 给出, $\widetilde{S}$ 由 \eqref{eq:9-23} 给出. 则有
+\[
+  \widetilde{S}^{-1}H=I_{n(r_2-\nu_1)}+L,
+\]
+其中
+\[
+  \rank(L)\leqslant2(\mu+k_1+\nu_1+1)n.
+\]
+\end{theorem}
+
+由定理 \ref{thm:6-13} 与 \ref{thm:9-6}, 当把 GMRES 方法用于
+\[
+  \widetilde{S}^{-1}H\mathbf{y}=\widetilde{S}^{-1}\mathbf{b}
+\]
+时, 在精确算术下该方法至多 $2(\mu+k_1+\nu_1+1)n+1$ 次迭代即收敛.
+
+由定理 \ref{thm:9-6} 我们观察到, 若步长 $h=\tau/k_1$ 固定, 则对
+\[
+  \widetilde{S}^{-1}H\mathbf{y}=\widetilde{S}^{-1}\mathbf{b}
+\]
+应用 GMRES 方法时收敛所需的迭代次数与 $r_2$ 无关, 即与我们考虑区间的长度无关.
+
+\subsection{数值结果}
+\label{sec:9-5-4}
+
+我们通过求解下述例子来说明预条件子的效率.
+
+\begin{example}
+\label{ex:9-3}
+考虑
+\[
+  \left\{
+  \begin{array}{ll}
+    \mathbf{y}'(t)=L_n\mathbf{y}'(t-1)+M_n\mathbf{y}(t)+N_n\mathbf{y}(t-1),
+      & t\geqslant0,\\
+    \mathbf{y}(t)=[1,1,\ldots,1]^T, & t\leqslant0,
+  \end{array}
+  \right.
+\]
+其中
+\[
+  L_n=\frac{1}{n}\begin{bmatrix}
+    2 & 1 & & & \mathbf{0}\\
+    1 & \ddots & \ddots & & \\
+    & \ddots & \ddots & \ddots & \\
+    & & \ddots & \ddots & 1\\
+    \mathbf{0} & & & 1 & 2
+  \end{bmatrix},\qquad
+  M_n=\begin{bmatrix}
+    -8 & 2 & 1 & & \mathbf{0}\\
+    2 & \ddots & \ddots & \ddots & \\
+    1 & \ddots & \ddots & \ddots & 1\\
+    & \ddots & \ddots & \ddots & 2\\
+    \mathbf{0} & & 1 & 2 & -8
+  \end{bmatrix},
+\]
+而
+\[
+  N_n=\frac{1}{n}\begin{bmatrix}
+    2 & -1 & & & \mathbf{0}\\
+    -1 & \ddots & \ddots & & \\
+    & \ddots & \ddots & \ddots & \\
+    & & \ddots & \ddots & -1\\
+    \mathbf{0} & & & -1 & 2
+  \end{bmatrix}.
+\]
+\end{example}
+
+例 \ref{ex:9-3} 用五阶 GAM 在 $t\in[0,4]$ 上求解. 实际上, 我们并没有由 \eqref{eq:9-21} 提供的边界值
+\[
+  \mathbf{y}_1,\ldots,\mathbf{y}_{\nu_1-1},\qquad
+  \mathbf{y}_{r_2},\ldots,\mathbf{y}_{r_2+\nu_2-1}.
+\]
+与 9.2 节一样, 改为给出 $\nu_1-1$ 个初始附加方程与 $\nu_2$ 个末端附加方程. 引入附加方程之后, \eqref{eq:9-22} 中的矩阵 $A$, $A^{(1)}$, $B$ 与 $B^{(1)}$ 是带小秩扰动的 Toeplitz 矩阵. 同样可以忽略这些小秩扰动来构造 Strang 型预条件子 \eqref{eq:9-23}.
+
+表 \ref{tab:9-3} 列出了不同 $n$ 与 $k_1$ 时 GMRES 方法收敛所需的迭代次数. 表中 $I$ 表示不使用预条件子, $\widetilde{S}$ 表示由 \eqref{eq:9-23} 定义的 Strang 型块循环预条件子. 我们看到, 使用 $\widetilde{S}$ 时收敛所需的迭代次数远少于不使用预条件子时的迭代次数. 我们应当强调, 我们的数值例子表明收敛速度比定理 \ref{thm:9-6} 所给估计预示的快得多.
+
+\begin{table}[htbp]
+  \centering
+  \caption{收敛所需的迭代次数 (``$*$'' 表示内存不足)}
+  \label{tab:9-3}
+  \begin{tabular}{cccc}
+    \toprule
+    $n$ & $k_1$ & $I$ & $\widetilde{S}$\\ \midrule
+    24 & 10 & 43  & 7\\
+       & 20 & 83  & 7\\
+       & 40 & 161 & 7\\
+       & 80 & $*$ & 7\\ \bottomrule
+  \end{tabular}
+  \hspace{2em}
+  \begin{tabular}{cccc}
+    \toprule
+    $n$ & $k_1$ & $I$ & $\widetilde{S}$\\ \midrule
+    48 & 10 & 44  & 6\\
+       & 20 & 83  & 6\\
+       & 40 & 163 & 6\\
+       & 80 & $*$ & 6\\ \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{奇摄动时滞微分方程的 Strang 型预条件子}
+\label{sec:9-6}
+
+本节研究\newterm{spdde}{奇摄动时滞微分方程}{singular perturbation delay differential equation (SPDDE)}的求解.
+
+\subsection{奇摄动时滞微分方程}
+\label{sec:9-6-1}
+
+考虑 SPDDE 的解:
+\begin{equation}
+  \left\{
+  \begin{array}{ll}
+    \mathbf{x}'(t)=V^{(1)}\mathbf{x}(t)+V^{(2)}\mathbf{x}(t-\tau)
+      +C^{(1)}\mathbf{y}(t)+C^{(2)}\mathbf{y}(t-\tau), & t\geqslant t_0,\\
+    \epsilon\mathbf{y}'(t)=F^{(1)}\mathbf{x}(t)+F^{(2)}\mathbf{x}(t-\tau)
+      +G^{(1)}\mathbf{y}(t)+G^{(2)}\mathbf{y}(t-\tau), & t\geqslant t_0,\\
+    \mathbf{x}(t)=\boldsymbol{\phi}(t), & t\leqslant t_0,\\
+    \mathbf{y}(t)=\boldsymbol{\psi}(t), & t\leqslant t_0,
+  \end{array}
+  \right.
+  \label{eq:9-25}
+\end{equation}
+其中
+\[
+  \mathbf{x}(t),\boldsymbol{\phi}(t):\R\to\R^m;\qquad
+  \mathbf{y}(t),\boldsymbol{\psi}(t):\R\to\R^n;
+\]
+\[
+  V^{(1)},V^{(2)}\in\R^{m\times m};\qquad
+  C^{(1)},C^{(2)}\in\R^{m\times n};
+\]
+\[
+  F^{(1)},F^{(2)}\in\R^{n\times m};\qquad
+  G^{(1)},G^{(2)}\in\R^{n\times n};
+\]
+而 $\tau>0$, $0<\epsilon\ll1$ 为常数. 我们可以把 SPDDE \eqref{eq:9-25} 改写为下述初值问题 \cite{src:45}:
+\begin{equation}
+  \left\{
+  \begin{array}{ll}
+    \mathbf{z}'(t)=P\mathbf{z}(t)+Q\mathbf{z}(t-\tau), & t\geqslant t_0,\\
+    \mathbf{z}(t)=\left[\begin{array}{c}
+      \boldsymbol{\phi}(t)\\
+      \boldsymbol{\psi}(t)
+    \end{array}\right], & t\leqslant t_0,
+  \end{array}
+  \right.
+  \label{eq:9-26}
+\end{equation}
+其中 $P$ 与 $Q\in\R^{(m+n)\times(m+n)}$ 定义如下,
+\[
+  P=\begin{bmatrix}
+    V^{(1)} & C^{(1)}\\
+    \epsilon^{-1}F^{(1)} & \epsilon^{-1}G^{(1)}
+  \end{bmatrix},\qquad
+  Q=\begin{bmatrix}
+    V^{(2)} & C^{(2)}\\
+    \epsilon^{-1}F^{(2)} & \epsilon^{-1}G^{(2)}
+  \end{bmatrix}.
+\]
+
+令
+\[
+  h=\tau/k_2
+\]
+为步长, 其中 $k_2$ 是正整数. 对 \eqref{eq:9-26}, 在区间 $[t_0,t_0+vh]$ 的均匀网格
+\[
+  t_j=t_0+jh,\qquad j=0,\ldots,v
+\]
+上使用带 $(\nu_1,\nu_2)$-边界条件的 BVM, 得
+\begin{equation}
+  \sum_{i=0}^{\mu}\alpha_i\mathbf{z}_{p+i-\nu_1}
+  =h\sum_{i=0}^{\mu}\beta_i\bigl(P\mathbf{z}_{p+i-\nu_1}
+  +Q\mathbf{z}_{p+i-\nu_1-k_2}\bigr),
+  \label{eq:9-27}
+\end{equation}
+其中 $p=\nu_1,\ldots,v-1$, $\mu=\nu_1+\nu_2$. 通过提供值
+\begin{equation}
+  \mathbf{z}_{-k_2},\ldots,\mathbf{z}_0,\qquad
+  \mathbf{z}_1,\ldots,\mathbf{z}_{\nu_1-1},\qquad
+  \mathbf{z}_{v},\ldots,\mathbf{z}_{v+\nu_2-1},
+  \label{eq:9-28}
+\end{equation}
+\eqref{eq:9-27} 可写成矩阵形式
+\begin{equation}
+  K\mathbf{v}=\mathbf{b},
+  \label{eq:9-29}
+\end{equation}
+其中
+\begin{equation}
+  K\equiv A\otimes I_{m+n}-hB\otimes P-hU\otimes Q.
+  \label{eq:9-30}
+\end{equation}
+\eqref{eq:9-29} 中的向量 $\mathbf{v}$ 由
+\[
+  \mathbf{v}=[\mathbf{z}_{\nu_1}^T,\mathbf{z}_{\nu_1+1}^T,\ldots,
+  \mathbf{z}_{v-1}^T]^T\in\R^{(m+n)(v-\nu_1)}
+\]
+定义.
+
+\eqref{eq:9-29} 的右端 $\mathbf{b}\in\R^{(m+n)(v-\nu_1)}$ 依赖于边界值与方法的系数. 在 \eqref{eq:9-30} 中, 矩阵 $A$, $B\in\R^{(v-\nu_1)\times(v-\nu_1)}$ 按 \eqref{eq:9-4} 定义, 而 $U\in\R^{(v-\nu_1)\times(v-\nu_1)}$ 定义为 \eqref{eq:9-17} 中的矩阵 $C^{(1)}$.
+
+\subsection{预条件子的构造}
+\label{sec:9-6-2}
+
+可以为求解 \eqref{eq:9-29} 构造 Strang 型块循环预条件子:
+\begin{equation}
+  \widehat{S}\equiv s(A)\otimes I_{m+n}-hs(B)\otimes P-hs(U)\otimes Q,
+  \label{eq:9-31}
+\end{equation}
+其中 $s(E)$ 是矩阵 $E$ 的 Strang 循环预条件子, $E$ 分别取 $A$, $B$, $U$. 关于我们的预条件子的可逆性以及方法的收敛率, 我们有下述定理 \cite{src:45}.
+
+\begin{theorem}
+\label{thm:9-7}
+若带 $(\nu_1,\nu_2)$-边界条件的 BVM 是 $A_{\nu_1,\nu_2}$-稳定的,
+\[
+  \eta(P)\equiv\frac{1}{2}\lambda_{\max}(P+P^T)<0,\qquad
+  \eta(P)+\norm{Q}_2<0,
+\]
+则由 \eqref{eq:9-31} 定义的 Strang 型预条件子 $\widehat{S}$ 可逆. 此外, 当把 GMRES 方法用于
+\[
+  \widehat{S}^{-1}K\mathbf{v}=\widehat{S}^{-1}\mathbf{b}
+\]
+时, 在精确算术下该方法至多 $\mathcal{O}(m+n)$ 次迭代即收敛.
+\end{theorem}
+
+\subsection{数值结果}
+\label{sec:9-6-3}
+
+我们测试下述 SPDDE.
+
+\begin{example}
+\label{ex:9-4}
+考虑
+\[
+  \left\{
+  \begin{array}{ll}
+    \mathbf{x}'(t)=A\mathbf{x}(t)+B\mathbf{x}(t-1)+C\mathbf{y}(t)
+      +D\mathbf{y}(t-1), & t\geqslant0,\\
+    \epsilon\mathbf{y}'(t)=E\mathbf{x}(t)+F\mathbf{x}(t-1)+G\mathbf{y}(t)
+      +H\mathbf{y}(t-1), & t\geqslant0,\ \epsilon=0.001,\\
+    \mathbf{x}(t)=[1,1,\ldots,1]^T, & t\leqslant0,\\
+    \mathbf{y}(t)=[2,2,\ldots,2]^T, & t\leqslant0,
+  \end{array}
+  \right.
+\]
+其中
+\[
+  A=\begin{bmatrix}
+    -10 & 2 & 1 & & \mathbf{0}\\
+    2 & \ddots & \ddots & \ddots & \\
+    1 & \ddots & \ddots & \ddots & 1\\
+    & \ddots & \ddots & \ddots & 2\\
+    \mathbf{0} & & 1 & 2 & -10
+  \end{bmatrix}_{m\times m},\qquad
+  B=\begin{bmatrix}
+    -2 & 1 & & & \mathbf{0}\\
+    1 & \ddots & \ddots & & \\
+    & \ddots & \ddots & \ddots & \\
+    & & \ddots & \ddots & 1\\
+    \mathbf{0} & & & 1 & -2
+  \end{bmatrix}_{m\times m},
+\]
+\[
+  C=\begin{bmatrix}
+    1 & & \mathbf{0}\\
+    & \ddots & \\
+    \mathbf{0} & & 1
+  \end{bmatrix}_{m\times n},\qquad
+  D=3C,\qquad
+  E=\begin{bmatrix}
+    2 & -1 & & & \mathbf{0}\\
+    1 & \ddots & \ddots & & \\
+    & \ddots & \ddots & \ddots & \\
+    & & \ddots & \ddots & -1\\
+    \mathbf{0} & & 1 & 2 & -1
+  \end{bmatrix}_{n\times m},
+\]
+\[
+  F=\begin{bmatrix}
+    1 & -1 & & & \mathbf{0}\\
+    & \ddots & \ddots & & \\
+    & & \ddots & \ddots & \\
+    & & & \ddots & -1\\
+    \mathbf{0} & & & 1 & -1
+  \end{bmatrix}_{n\times m},\qquad
+  G=\begin{bmatrix}
+    -2 & & & & \mathbf{0}\\
+    1 & \ddots & & & \\
+    & \ddots & \ddots & & \\
+    & & \ddots & \ddots & \\
+    \mathbf{0} & & & 1 & -2
+  \end{bmatrix}_{n\times n},
+\]
+以及
+\[
+  H=\begin{bmatrix}
+    -5 & -1 & & & \mathbf{0}\\
+    2 & \ddots & \ddots & & \\
+    & \ddots & \ddots & \ddots & \\
+    & & \ddots & \ddots & -1\\
+    \mathbf{0} & & & 2 & -5
+  \end{bmatrix}_{n\times n}.
+\]
+\end{example}
+
+例 \ref{ex:9-4} 用三阶 GAM 在 $t\in[0,4]$ 上求解. 表 \ref{tab:9-4} 列出了不同 $m$, $n$ 与 $k_2$ 时 GMRES 方法收敛所需的迭代次数. 表中 $\widehat{S}$ 表示由 \eqref{eq:9-31} 定义的 Strang 型块循环预条件子.
+
+\begin{table}[htbp]
+  \centering
+  \caption{收敛所需的迭代次数}
+  \label{tab:9-4}
+  \begin{tabular}{ccccc}
+    \toprule
+    $k_2$ & $m$ & $n$ & $I$ & $\widehat{S}$\\ \midrule
+    24 & 8  & 2 & 55  & 29\\
+       & 16 & 4 & 83  & 57\\
+       & 32 & 8 & 109 & 90\\ \bottomrule
+  \end{tabular}
+  \hspace{2em}
+  \begin{tabular}{ccccc}
+    \toprule
+    $k_2$ & $m$ & $n$ & $I$ & $\widehat{S}$\\ \midrule
+    48 & 8  & 2 & 100 & 34\\
+       & 16 & 4 & 131 & 63\\
+       & 32 & 8 & 177 & 90\\ \bottomrule
+  \end{tabular}
+\end{table}
